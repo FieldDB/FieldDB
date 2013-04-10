@@ -1,80 +1,72 @@
 <div class="row">
-	<div class="span8">
-		<div class="row">
-			<div class="span4">
-				<div class="bulletSectionHeader">
-					<h3>Principles of LingSync</h3>
-				</div>
-				<div class="bulletSection">
-					
-						<span>We designed LingSync from the ground up to be
-							user-friendly, but also to conform to <a
-							href="http://emeld.org/school/what.html">EMELD</a> and <a
-							href="http://www.dataone.org/sites/all/documents/DataONE_BP_Primer_020212.pdf">DataOne</a>
-							best practices on formatting, archiving, open access, and
-							security.
-						</span>
-						<hr>
-						<span>LingSync uses Unicode and XML, which are open standards,
-							and follows Leipzig glossing conventions</span>
-						<hr>
-						<span>For more information, see the data management sections of
-							<a
-							href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true">our
-								white paper</a>.
-						</span>
-						<hr>
-						<span>We vow never to use your private data -- you can find out
-							more in <a href="https://www.lingsync.org/privacy.html">our
-								privacy policy</a>.
-						</span>
-					
-				</div>
-			</div>
-			<div class="span4">
-				<div class="bulletSectionHeader">
-					<h3>Works with Your Data</h3>
-				</div>
-				<div class="bulletSection">
-					
-						<span>LingSync uses machine learning and computational
-							linguistics to adapt to your existing organization of the data
-							you import, and predict how to gloss it.</span>
-						<hr>
-						<span>Add custom fields for extra transcription styles,
-							additional languages of translation, semantic representations,
-							audio timestamps, etc.</span>
-						<hr>
-						<span>LingSync already supports import and export of many
-							common formats, including ELAN, Praat, Toolbox, FLEx, Filemaker
-							Pro, LaTeX, xml, csv and more, but if you have another format
-							you'd like to import or export, <a
-							href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ">Contact
-								Us</a>.
-						</span>
-					
-				</div>
-			</div>
+	<div class="span3">
+		<div class="bulletSectionHeader" ng-click="show_section='principles'">
+			<h3 ng-class="{active: show_section=='principles'}">Principles
+				of LingSync</h3>
 		</div>
-		<div class="row">
-			<div class="span6 offset1">
-				<div class="bulletSectionHeader">
-					<h3>Open Source</h3>
-				</div>
-				<div class="bulletSection">
-					
-						<span>All our code is available on <a
-							href="https://github.com/OpenSourceFieldlinguistics/FieldDB">our
-								Github</a>.
-						</span>
-						<hr>
-						<span>We use CouchDB and Javascript.</span>
-						<hr>
-						<span>Power users can write and share scripts to clean up,
-							visualize, or mass-edit lots of data.</span>
-					
-				</div>
-			</div>
+		<div class="bulletSectionHeader" ng-click="show_section='works'">
+			<h3 ng-class="{active: show_section=='works'}">Works with Your
+				Data</h3>
+		</div>
+		<div class="bulletSectionHeader" ng-click="show_section='open_source'">
+			<h3 ng-class="{active: show_section=='open_source'}">Open Source</h3>
+		</div>
+	</div>
+	<div class="span5">
+		<div class="bulletSection" ng-show="show_section=='principles'">
+
+			<span>We designed LingSync from the ground up to be
+				user-friendly, but also to conform to <a
+				href="http://emeld.org/school/what.html">EMELD</a> and <a
+				href="http://www.dataone.org/sites/all/documents/DataONE_BP_Primer_020212.pdf">DataOne</a>
+				best practices on formatting, archiving, open access, and security.
+			</span>
+			<hr>
+			<span>LingSync uses Unicode and XML, which are open standards,
+				and follows Leipzig glossing conventions</span>
+			<hr>
+			<span>For more information, see the data management sections
+				of <a
+				href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true">our
+					white paper</a>.
+			</span>
+			<hr>
+			<span>We vow never to use your private data -- you can find
+				out more in <a href="https://www.lingsync.org/privacy.html">our
+					privacy policy</a>.
+			</span>
+		</div>
+		<div class="bulletSection" ng-show="show_section=='works'">
+
+			<span>LingSync uses machine learning and computational
+				linguistics to adapt to your existing organization of the data you
+				import, and predict how to gloss it.</span>
+			<hr>
+			<span>Add custom fields for extra transcription styles,
+				additional languages of translation, semantic representations, audio
+				timestamps, etc.</span>
+			<hr>
+			<span>LingSync already supports import and export of many
+				common formats, including ELAN, Praat, Toolbox, FLEx, Filemaker Pro,
+				LaTeX, xml, csv and more, but if you have another format you'd like
+				to import or export, <a
+				href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ">Contact
+					Us</a>.
+			</span>
+
+		</div>
+		<div class="bulletSection" ng-show="show_section=='open_source'">
+
+			<span>All our code is available on <a
+				href="https://github.com/OpenSourceFieldlinguistics/FieldDB">our
+					Github</a>.
+			</span>
+			<hr>
+			<span>We use CouchDB and Javascript.</span>
+			<hr>
+			<span>Power users can write and share scripts to clean up,
+				visualize, or mass-edit lots of data.</span>
+
 		</div>
 	</div>
 </div>

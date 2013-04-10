@@ -6,7 +6,7 @@ angular.module('LingSyncWebsite', [ ]).config(
       $routeProvider.when('/home', {
         templateUrl : 'partials/home.html'
       }).when('/technology', {
-        templateUrl : 'partials/technology.html'
+        templateUrl : 'partials/technology.html' , controller: LingSyncWebsiteTechnologyController
       }).when('/people', {
         templateUrl : 'partials/people.html'
       }).when('/tutorials', {

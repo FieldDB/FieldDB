@@ -17,19 +17,19 @@
 <div class="row">
 	<div class="span2">
 		<div class="bulletSectionHeader">
-			<h3 ng-click="show_section='share'">Share</h3>
+			<h3 ng-click="show_section='share'" ng-class="{active: show_section=='share'}">Share</h3>
 		</div>
 		<div class="bulletSectionHeader">
-			<h3 ng-click="show_section='search'">Search</h3>
+			<h3 ng-click="show_section='search'" ng-class="{active: show_section=='search'}">Search</h3>
 		</div>
 		<div class="bulletSectionHeader">
-			<h3 ng-click="show_section='revitalize'">Revitalize</h3>
+			<h3 ng-click="show_section='revitalize'" ng-class="{active: show_section=='revitalize'}">Revitalize</h3>
 		</div>
 		<div class="bulletSectionHeader">
-			<h3 ng-click="show_section='key_features'">Key Features</h3>
+			<h3 ng-click="show_section='key_features'" ng-class="{active: show_section=='key_features'}">Key Features</h3>
 		</div>
 	</div>
-	<div class="span5">
+	<div class="span6">
 		<div class="bulletSection" ng-show="show_section=='share'">
 					<span>Speakers, linguists, and learners can contribute
 						remotely to one centralized database, distributing the
