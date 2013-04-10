@@ -17,21 +17,23 @@
 <body id="app" class="LingSyncBody"
 	ng-controller="LingSyncSpreadsheetController">
 
-	<div class="navbar">
-		<div class="navbar-inner">
-			<a class="brand" href="#" ng-click="dataentry=false"><h3>| LingSync |</h3></a>
-			<ul class="nav">
-				<li ng-hide="data==undefined"><a href="#/lingsync/{{template}}" ng-click="dataentry=true">Data Entry</a></li>
-				<li ng-hide="data==undefined"><a href="#/settings" ng-click="dataentry=false">Settings</a></li>
-				<li><a href="#/sandbox" ng-click="dataentry=false">Sandbox</a></li>
-			</ul>
-			<ul class="nav pull-right" ng-show="dataentry==true">
-				<li>Filter results: <input type="text" ng-model=filterTerm></li>
-			</ul>
-		</div>
+	<div class="menubar">
+		<span class="menuTitle">|<a href="#" ng-click="dataentry=false">LingSync</a>|
+		</span> <span ng-hide="data==undefined"><a
+			href="#/lingsync/{{template}}" ng-click="dataentry=true">Data
+				Entry</a></span> <span ng-hide="data==undefined"><a href="#/settings"
+			ng-click="dataentry=false">Settings</a></span> <span><a
+			href="#/sandbox" ng-click="dataentry=false" ng-hide="username!='senhorzinho'">Sandbox</a></span> <span
+			class="rightMenuItems" ng-show="authenticated==true"><div
+				class="rightMenuItemsDiv">
+				Filter results: <input type="text" ng-model='filterTerm'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-warning" ng-click="reloadPage()">Log
+					out</button>
+			</div></span>
 	</div>
-
-	<ng-view></ng-view>
+	<div class="mainBody">
+		<ng-view></ng-view>
+	</div>
 
 
 	<!-- Le javascript

@@ -14,27 +14,16 @@ define(
         var availableFields = {};
 
         LingSyncData
-            .async($rootScope.DB)
+            .datumFields($rootScope.DB)
             .then(
                 function(availableDatumFields) {
                   var availableFieldsFromServer = {};
-                  console.log(JSON.stringify(availableDatumFields));
                   for (i in availableDatumFields) {
                     for (keyValue in availableDatumFields[i].key) {
                       availableFieldsFromServer[keyValue] = keyValue;
                     }
                   }
 
-                  console.log(JSON.stringify(availableFieldsFromServer));
-
-                  // for (i in availableDatumFields) {
-                  // for (j in availableDatumFields[i].key) {
-                  // if
-                  // (!availableFieldsFromServer[availableDatumFields[i].key[j]])
-                  // availableFieldsFromServer[availableDatumFields[i].key[j]] =
-                  // availableDatumFields[i].key[j];
-                  // }
-                  // }
                   for (field in availableFieldsFromServer) {
                     availableFieldsFromServer[field] = {};
                     availableFieldsFromServer[field].label = field;

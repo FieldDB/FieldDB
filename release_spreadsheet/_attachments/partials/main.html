@@ -1,11 +1,15 @@
 <div id="data_entry">
 	<div class="row">
 		<div class="span12 pagination-centered">
-			<img src="img/lingsync.png"> <br />
+			<img src="img/lingsync-logo.png"> <br />
 			<h1>LingSync Quick Data Entry Module</h1>
 			<div ng-hide="authenticated==true">
-				Log in <br>
+				Select Server and Log in <br>
 				<form ng-submit='loginUser(auth)'>
+					<select multiple="multiple" ng-model='auth.server'>
+						<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill Prosody Lab</option>
+						<option value='https://ifielddevs.iriscouch.com/'>iFieldDevs</option>
+					</select><br><br>
 					<input type="text" ng-model='auth.user' placeholder="username"><br>
 					<input type="password" ng-model='auth.password'
 						placeholder="password"><br>
@@ -20,13 +24,9 @@
 					</select><br>
 					<button class="btn btn-primary">Access</button>
 				</form>
-				<br>
 				<span ng-show="loading==true">Please wait while we load your
 					data...</span><span ng-show="loading==false && data!=undefined">Data loaded. Click
 					on <a href="#/lingsync/{{template}}" ng-click="dataentry=true">Data Entry</a> to begin</span><br>
-				<br>
-				<br>
-				<button class="btn btn-warning" ng-click="reloadPage()">Log out</button>
 			</div>
 		</div>
 	</div>

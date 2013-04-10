@@ -3,7 +3,7 @@
   "description": "Promotional Web Site for LingSync.",
   "version": "1.0",
   "manifest_version" : 2,
-  "content_security_policy" : "default-src 'self' https://fonts.googleapis.com/ https://themes.googleusercontent.com/ ; img-src 'self'; script-src 'self' 'unsafe-eval'; connect-src 'self' ; object-src 'self' ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ ; ",
+  "content_security_policy" : "default-src 'self' https://www.youtube.com/ https://fonts.googleapis.com/ https://themes.googleusercontent.com/ ; img-src 'self'; script-src 'self' 'unsafe-eval'; connect-src 'self' ; object-src 'self' ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ ; ",
   "app": {
     "launch": {
       "local_path" : "index.html"
@@ -13,6 +13,7 @@
     "128": "img/icon128_dev.png"
   },
   "permissions": [
-    "https://fonts.googleapis.com/"
+    "https://fonts.googleapis.com/",
+    "https://www.youtube.com/"
   ]
 }

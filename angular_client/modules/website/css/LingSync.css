@@ -78,8 +78,8 @@ span.headerTagLine {
 	border-radius: 5px;
 }
 
-.menubar a.active {
-	text-decoration: underline;
+.menubar a.active { /* 	text-decoration: underline; */
+	text-shadow: 2px 2px 5px #FFFFFF;
 }
 
 .menubar span {
@@ -100,10 +100,14 @@ span.headerTagLine {
 	font-weight: 900;
 	padding: 0 15px;
 	background: #74C2E1;
+	transition: text-shadow 700ms;
+	-moz-transition: text-shadow 700ms; /* Firefox 4 */
+	-webkit-transition: text-shadow 700ms; /* Safari and Chrome */
+	-o-transition: text-shadow 700ms; /* Opera */
 }
 
 .menubar a:hover {
-	color: #5100FF;
+	text-shadow: 2px 2px 10px #0011FF;
 }
 
 .mainContentDiv {
@@ -114,7 +118,7 @@ span.headerTagLine {
 	padding: 15px;
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
-	min-height: 400px;
+	min-height: 420px;
 }
 
 #mainBodyTitle {
@@ -137,6 +141,10 @@ span.headerTagLine {
 	color: #000000;
 }
 
+.contentSection {
+	margin-top: 25px;
+}
+
 .bulletSectionHeader {
 	background-color: #D2EAFA;
 	min-height: 20px;
@@ -152,7 +160,7 @@ span.headerTagLine {
 	font-family: "Ubuntu";
 	letter-spacing: 1px;
 	color: #000000;
-	margin-left: 10px;
+	margin-left: 8px;
 	text-transform: uppercase;
 	margin-top: -5px;
 	margin-bottom: -5px;
@@ -161,14 +169,19 @@ span.headerTagLine {
 .bulletSectionHeader h3.active {
 	color: #5100FF;
 }
-.bulletSectionHeader h3:hover {
-	color: #5100FF;
+
+.bulletSectionHeader h3.clickable:hover {
+	color: #74C2E1;
 }
+
 .bulletSection {
-	background-color: #FFFFFF;
+/* 	background-color: #FFFFFF; */
+/* 	box-shadow: 3px 3px 1px #DEDEDE; */
+/* border: 1px solid #DEDEDE; */
 	border-radius: 10px;
-	margin-left: 20px;
+	margin-left: 10px;
 	margin-top: 20px;
+	padding: 10px;
 	margin-right: 25px;
 }
 
@@ -184,6 +197,10 @@ span.headerTagLine {
 	width: 100%;
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+.youtube-player {
+	min-height: 275px;
 }
 
 input:focus {

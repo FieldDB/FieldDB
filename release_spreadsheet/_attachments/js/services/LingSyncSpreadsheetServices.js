@@ -5,12 +5,12 @@ define([ "angular" ], function(angular) {
   var LingSyncSpreadsheetServices = angular.module('LingSyncSpreadsheet.services', [ 'ngResource' ])
       .factory(
           'LingSyncData',
-          function($http) {
+          function($http, $rootScope) {
             return {
               'async' : function(DB, UUID) {
                 var couchInfo;
                 if (UUID != undefined) {
-                  couchInfo = "https://ifielddevs.iriscouch.com/" + DB
+                  couchInfo = $rootScope.server + DB
                   + "/" + UUID;
                   console.log("Contacting the DB to get LingSync record data "
                       + couchInfo);
@@ -20,8 +20,8 @@ define([ "angular" ], function(angular) {
                   });
                   return promise;
                 } else {
-                  couchInfo = "https://ifielddevs.iriscouch.com/" + DB
-                  + "/_design/get_datum_field/_view/get_datum_fields";
+                  couchInfo = $rootScope.server + DB
+                  + "/_design/get_ids/_view/by_date";
                   console.log("Contacting the DB to get all LingSync corpus data for " + DB + " " 
                       + couchInfo);
                   var promise = $http.get(couchInfo).then(function(response) {
@@ -30,22 +30,30 @@ define([ "angular" ], function(angular) {
                   });
                   return promise;
                 }
-                
-                
+              },'datumFields' : function(DB) {
+                var couchInfo = $rootScope.server + DB
+                + "/_design/get_datum_field/_view/get_datum_fields";
+                console.log("Contacting the DB to get LingSync datum fields for "
+                    + couchInfo);
+                var promise = $http.get(couchInfo).then(function(response) {
+                  console.log("Receiving LingSync datum fields ");
+                  return response.data.rows;
+                });
+                return promise;
               },
               'login' : function(user, password) {
-                var couchInfo = "https://ifielddevs.iriscouch.com/_session";
+                var couchInfo = $rootScope.server + "_session";
                 var userInfo = {
                     "name" : user,
                     "password" : password
                 };
                 var promise = $http.post(couchInfo, userInfo).then(function(response) {
                   return response;
-                });
+                }, function() {window.alert("Error logging in.\nPlease check username/password.");});
                 return promise;
               },
               'saveNew' : function(DB, newRecord) {
-                var couchInfo = "https://ifielddevs.iriscouch.com/" + DB;
+                var couchInfo = $rootScope.server + DB;
                 console.log("Contacting the DB to save new record. "
                     + couchInfo);
                 var promise = $http.post(couchInfo, newRecord).then(function(response) {
@@ -54,7 +62,7 @@ define([ "angular" ], function(angular) {
                 return promise;
               },
               'saveEditedRecord' : function(DB, UUID, newRecord) {
-                var couchInfo = "https://ifielddevs.iriscouch.com/" + DB + "/" + UUID;
+                var couchInfo = $rootScope.server + DB + "/" + UUID;
                 console.log("Contacting the DB to save edited record. "
                     + couchInfo);
                 var promise = $http.put(couchInfo, newRecord).then(function(response) {
@@ -63,12 +71,11 @@ define([ "angular" ], function(angular) {
                 return promise;
               },
               'removeRecord' : function(DB, UUID, rev) {
-                  var couchInfo = "https://ifielddevs.iriscouch.com/" + DB + "/" + UUID + "?rev=" + rev;
+                  var couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
                   console.log("Contacting the DB to delete record. "
                       + couchInfo);
                   var promise = $http.delete(couchInfo).then(function(response) {
                     return response;
-                    console.loge("response: " + JSON.stringify(response));
                   });
                   return promise;
                 },

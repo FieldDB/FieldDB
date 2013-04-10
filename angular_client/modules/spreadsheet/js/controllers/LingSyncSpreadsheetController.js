@@ -92,57 +92,69 @@ define(
 
         // Fetch data from server and put into template scope
         function loadData() {
-            $scope.loading = true;
-          LingSyncData.async($rootScope.DB).then(function(fieldData) {
-            var scopeData = [];
-            for ( var i = 0; i < fieldData.length; i++) {
-              scopeData[i] = {};
-              scopeData[i].id = fieldData[i].id;
-              for (j in fieldData[i].key) {
-                scopeData[i][j] = fieldData[i].key[j];
-              }
-              if (fieldData[i].dateModified) {
-                scopeData[i].dateModified = fieldData[i].dateModified;
-              } else {
-                scopeData[i].dateModified = "TODO"; //ADD TO MAP/REDUCE; UPDATE REFERENCES ACCORDINGLY
-              }
-            }
+          $scope.loading = true;
+          LingSyncData
+              .async($rootScope.DB)
+              .then(
+                  function(dataFromServer) {
+                    var scopeData = [];
+                    for ( var i = 0; i < dataFromServer.length; i++) {
+                      if (dataFromServer[i].value.datumFields) {
+                        var newDatumFromServer = {};
+                        newDatumFromServer.id = dataFromServer[i].id;
 
-            $scope.data = scopeData;
-            $scope.loading = false;
-          });
+                        for (j in dataFromServer[i].value.datumFields) {
+                          newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
+                        }
+                        if (dataFromServer[i].value.dateModified) {
+                          newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
+                        } else {
+                          newDatumFromServer.dateModified = "TODO"; 
+                        }
+                        scopeData.push(newDatumFromServer);
+                      }
+                    }
+                    $scope.data = scopeData;
+                    $scope.loading = false;
+                  });
         }
         $scope.loginUser = function(auth) {
           $rootScope.DB = auth.user + "-firstcorpus";
+          $rootScope.server = auth.server;
           LingSyncData.login(auth.user, auth.password).then(function(response) {
-            console.log("testCookie response: " + JSON.stringify(response));
+            if (response == undefined) {
+              return;
+            }
+
+            // console.log("testCookie response: " + JSON.stringify(response));
             $rootScope.authenticated = true;
             $scope.username = auth.user;
             var DBs = response.data.roles;
             for (i in DBs) {
-            	DBs[i] = DBs[i].split("_")[0];
-            	DBs[i] = DBs[i].replace(/[\"]/g,"");
+              DBs[i] = DBs[i].split("_")[0];
+              DBs[i] = DBs[i].replace(/[\"]/g, "");
             }
             DBs.sort();
             var scopeDBs = [];
-            for (var i = 0; i < DBs.length; i++) {
-            	if (DBs[i+1] != DBs[i] && DBs[i] != "fielddbuser") {
-            		scopeDBs.push(DBs[i]);
-            	}
+            for ( var i = 0; i < DBs.length; i++) {
+              if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
+                scopeDBs.push(DBs[i]);
+              }
             }
             $rootScope.availableDBs = scopeDBs;
           });
-          
+
           $scope.selectDB = function(selectedDB) {
-        	  $rootScope.DB = selectedDB;
-        	  loadData();
-//            window.location.assign("#/lingsync/" + $scope.template);
+            $rootScope.DB = selectedDB;
+            loadData();
+            window.location.assign("#/lingsync/" + $scope.template);
 
           };
-          
+
           $scope.reloadPage = function() {
+            window.location.assign("#/");
             window.location.reload();
-          }
+          };
 
         };
 

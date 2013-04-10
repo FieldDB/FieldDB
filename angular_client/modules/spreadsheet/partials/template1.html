@@ -27,10 +27,14 @@
 			ng-click="saveNew(newFieldData)">Save</button>
 	</div>
 </div>
-<div class="row" ng-show="data==undefined || loading==true">
+<div class="row" ng-show="loading==true">
 	<div class="span12 pagination-centered">
-		<img src="img/loading-spinner.gif">
+		<img src="img/loading-spinner.gif" width="100px">
 	</div>
+</div>
+<div class="row" ng-show="data==undefined && loading!=true">
+	<div class="span12 pagination-centered">No data to display.
+		Please click on LINGSYNC above and log in.</div>
 </div>
 
 <div arrow-key class="row"
@@ -101,7 +105,8 @@
 
 <br />
 
-<div class="pagination-centered">
+<div class="pagination-centered" ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
+	filterTerm).length)==1">
 	<button class="btn btn-inverse btn-mini"
 		ng-disabled="currentResult == 0"
 		ng-click="currentResult=currentResult-1">
