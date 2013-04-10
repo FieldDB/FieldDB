@@ -102,6 +102,7 @@ define(
                       if (dataFromServer[i].value.datumFields) {
                         var newDatumFromServer = {};
                         newDatumFromServer.id = dataFromServer[i].id;
+                        newDatumFromServer.rev = dataFromServer[i].value._rev;
 
                         for (j in dataFromServer[i].value.datumFields) {
                           newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
@@ -109,8 +110,10 @@ define(
                         if (dataFromServer[i].value.dateModified) {
                           newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
                         } else {
-                          newDatumFromServer.dateModified = "TODO"; 
+                          newDatumFromServer.dateModified = "TODO";
                         }
+                        newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
+
                         scopeData.push(newDatumFromServer);
                       }
                     }
@@ -184,6 +187,17 @@ define(
                 }
                 newRecord.dateEntered = new Date();
                 newRecord.dateModified = new Date();
+                // Save tags
+                var newDatumFields = fieldData.datumTags.split(",");
+                var newDatumFieldsArray = [];
+                for (i in newDatumFields) {
+                  var newDatumTagObject = {};
+                  // Trim spaces
+                  var trimmedTag = trim(newDatumFields[i]);
+                  newDatumTagObject.tag = trimmedTag;
+                  newDatumFieldsArray.push(newDatumTagObject);
+                }
+                newRecord.datumTags = newDatumFieldsArray;
                 LingSyncData.saveNew($rootScope.DB, newRecord).then(
                     function(savedRecord) {
                       // Update UI with updated
@@ -222,6 +236,18 @@ define(
                 }
                 editedRecord.dateModified = new Date();
 
+                // Save tags
+                var newDatumFields = fieldData.datumTags.split(",");
+                var newDatumFieldsArray = [];
+                for (i in newDatumFields) {
+                  var newDatumTagObject = {};
+                  // Trim spaces
+                  var trimmedTag = trim(newDatumFields[i]);
+                  newDatumTagObject.tag = trimmedTag;
+                  newDatumFieldsArray.push(newDatumTagObject);
+                }
+                editedRecord.datumTags = newDatumFieldsArray;
+
                 // Save edited record and refresh data
                 // in scope
                 LingSyncData.saveEditedRecord($rootScope.DB, docID,
@@ -237,12 +263,26 @@ define(
             LingSyncData.removeRecord($rootScope.DB, id, rev).then(
                 function(response) {
                   loadData();
+                }, function() {
+                  window.alert("Error deleting record.");
                 });
           }
         };
 
         $scope.selectRow = function(datum) {
           $scope.selected = datum;
+        };
+
+        $scope.commaList = function(tags) {
+          var tagString = "";
+          for ( var i = 0; i < tags.length; i++) {
+            if (i < (tags.length - 1)) {
+              tagString = tagString + tags[i].tag + ", ";
+            } else {
+              tagString = tagString + tags[i].tag;
+            }
+          }
+          return tagString;
         };
 
         // Paginate data tables
@@ -252,6 +292,13 @@ define(
               .ceil(numberOfRecords / $rootScope.resultSize);
           return numberOfPages;
         };
+
+        function trim(s) {
+          s = s.replace(/(^\s*)|(\s*$)/gi, "");
+          s = s.replace(/[ ]{2,}/gi, " ");
+          s = s.replace(/\n /, "\n");
+          return s;
+        }
 
         $scope.testFunction = function() {
           window.alert($rootScope.currentResult);
