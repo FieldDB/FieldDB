@@ -62,6 +62,39 @@ define(
                   availableFields = availableFieldsFromServer;
                   $scope.availableFields = availableFieldsFromServer;
                 });
+        
+              //Get all tags
+        LingSyncData
+        .async($rootScope.DB)
+        .then(
+            function(dataFromServer) {
+              var tags = {};
+              for ( var i = 0; i < dataFromServer.length; i++) {
+                if (dataFromServer[i].value.datumTags) {
+                  for (j in dataFromServer[i].value.datumTags) {
+                    if (tags[dataFromServer[i].value.datumTags[j].tag] == undefined) {
+                      tags[dataFromServer[i].value.datumTags[j].tag] = dataFromServer[i].value.datumTags[j].tag;
+                    }
+                  }
+//                  var newDatumFromServer = {};
+//                  newDatumFromServer.id = dataFromServer[i].id;
+//                  newDatumFromServer.rev = dataFromServer[i].value._rev;
+//
+//                  for (j in dataFromServer[i].value.datumFields) {
+//                    newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
+//                  }
+//                  if (dataFromServer[i].value.dateModified) {
+//                    newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
+//                  } else {
+//                    newDatumFromServer.dateModified = "TODO";
+//                  }
+//                  newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
+//
+//                  scopeData.push(newDatumFromServer);
+                }
+              }
+              $scope.tags = tags;
+            });
 
         $scope.saveNewPreferences = function(template, newFieldPreferences) {
           LingSyncPreferences = JSON.parse(localStorage
