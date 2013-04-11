@@ -86,6 +86,7 @@ define(
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
+        $rootScope.dataentry = false;
 
         // Set data size for pagination
         $rootScope.resultSize = LingSyncPreferences.resultSize;
@@ -158,6 +159,7 @@ define(
             window.alert("Please select a database.");
           } else {
             $rootScope.DB = selectedDB;
+            $rootScope.dataentry = true;
             $scope.loadData();
             window.location.assign("#/lingsync/" + $scope.template);
           }

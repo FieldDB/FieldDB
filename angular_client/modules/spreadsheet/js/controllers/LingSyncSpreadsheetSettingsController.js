@@ -71,45 +71,50 @@ define(
           var r = confirm("Are you sure you want to change all '" + oldTag
               + "' to '" + newTag + "'?\nThis may take a while.");
           if (r == true) {
+            var changeThisRecord;
             for ( var i = 0; i < $scope.dataCopy.length; i++) {
+              changeThisRecord = false;
               (function(indexi) {
                 var UUID = $scope.dataCopy[indexi].id;
                 for ( var j = 0; j < $scope.dataCopy[indexi].value.datumTags.length; j++) {
                   if ($scope.dataCopy[indexi].value.datumTags[j].tag == oldTag) {
-                    $scope.loading = true;
-                    (function(indexj) {
-                      var timeOut = setTimeout(
-                          function() {
+                    changeThisRecord = true;
+                  }
+                  ;
+                }
+                if (changeThisRecord == true) {
+                  $scope.loading = true;
+                  LingSyncData
+                      .async($rootScope.DB, UUID)
+                      .then(
+                          function(editedRecord) {
+                            // Edit record with updated tag data
+                            for ( var k = 0; k < editedRecord.datumTags.length; k++) {
+                              (function(indexk) {
+                                if (editedRecord.datumTags[indexk].tag == oldTag) {
+                                  editedRecord.datumTags[indexk].tag = newTag;
+                                }
+                              })(k);
+                            }
+                            // Save edited record
                             LingSyncData
-                                .async($rootScope.DB, UUID)
+                                .saveEditedRecord($rootScope.DB, UUID,
+                                    editedRecord, editedRecord._rev)
                                 .then(
-                                    function(editedRecord) {
-                                      // Edit record with updated tag data
-                                      editedRecord.datumTags[indexj].tag = newTag;
-                                      // Save edited record
-                                      LingSyncData
-                                          .saveEditedRecord($rootScope.DB,
-                                              UUID, editedRecord,
-                                              editedRecord._rev)
-                                          .then(
-                                              function() {
-                                                console.log("Changed " + oldTag
-                                                    + " to " + newTag + " in "
-                                                    + UUID);
-                                                $scope.loading = false;
-                                              },
-                                              function() {
-                                                window
-                                                    .alert("There was an error saving the record. Please try again.");
-                                              });
+                                    function() {
+                                      console.log("Changed " + oldTag + " to "
+                                          + newTag + " in " + UUID);
+                                      $scope.loading = false;
                                     },
                                     function() {
                                       window
-                                          .alert("There was an error retrieving the record. Please try again.");
+                                          .alert("There was an error saving the record. Please try again.");
                                     });
-                          }, 0);
-                    })(j);
-                  }
+                          },
+                          function() {
+                            window
+                                .alert("There was an error retrieving the record. Please try again.");
+                          });
                 }
               })(i);
             }
