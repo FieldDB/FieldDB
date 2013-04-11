@@ -91,7 +91,7 @@ define(
         $rootScope.resultSize = LingSyncPreferences.resultSize;
 
         // Fetch data from server and put into template scope
-        function loadData() {
+        $scope.loadData = function() {
           $scope.loading = true;
           LingSyncData
               .async($rootScope.DB)
@@ -120,45 +120,52 @@ define(
                     $scope.data = scopeData;
                     $scope.loading = false;
                   });
-        }
+        };
         $scope.loginUser = function(auth) {
-          $rootScope.DB = auth.user + "-firstcorpus";
-          $rootScope.server = auth.server;
-          LingSyncData.login(auth.user, auth.password).then(function(response) {
-            if (response == undefined) {
-              return;
-            }
+          if (!auth || !auth.server) {
+            window.alert("Please choose a server.");
+          } else {
+            $rootScope.DB = auth.user + "-firstcorpus";
+            $rootScope.server = auth.server;
+            LingSyncData.login(auth.user, auth.password).then(
+                function(response) {
+                  if (response == undefined) {
+                    return;
+                  }
 
-            // console.log("testCookie response: " + JSON.stringify(response));
-            $rootScope.authenticated = true;
-            $scope.username = auth.user;
-            var DBs = response.data.roles;
-            for (i in DBs) {
-              DBs[i] = DBs[i].split("_")[0];
-              DBs[i] = DBs[i].replace(/[\"]/g, "");
-            }
-            DBs.sort();
-            var scopeDBs = [];
-            for ( var i = 0; i < DBs.length; i++) {
-              if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
-                scopeDBs.push(DBs[i]);
-              }
-            }
-            $rootScope.availableDBs = scopeDBs;
-          });
-
-          $scope.selectDB = function(selectedDB) {
+                  // console.log("testCookie response: " +
+                  // JSON.stringify(response));
+                  $rootScope.authenticated = true;
+                  $scope.username = auth.user;
+                  var DBs = response.data.roles;
+                  for (i in DBs) {
+                    DBs[i] = DBs[i].split("_")[0];
+                    DBs[i] = DBs[i].replace(/[\"]/g, "");
+                  }
+                  DBs.sort();
+                  var scopeDBs = [];
+                  for ( var i = 0; i < DBs.length; i++) {
+                    if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
+                      scopeDBs.push(DBs[i]);
+                    }
+                  }
+                  $rootScope.availableDBs = scopeDBs;
+                });
+          }
+        };
+        $scope.selectDB = function(selectedDB) {
+          if (!selectedDB) {
+            window.alert("Please select a database.");
+          } else {
             $rootScope.DB = selectedDB;
-            loadData();
+            $scope.loadData();
             window.location.assign("#/lingsync/" + $scope.template);
+          }
+        };
 
-          };
-
-          $scope.reloadPage = function() {
-            window.location.assign("#/");
-            window.location.reload();
-          };
-
+        $scope.reloadPage = function() {
+          window.location.assign("#/");
+          window.location.reload();
         };
 
         $scope.saveNew = function(fieldData) {
@@ -202,7 +209,7 @@ define(
                     function(savedRecord) {
                       // Update UI with updated
                       // corpus
-                      loadData();
+                      $scope.loadData();
                     });
 
               });
@@ -252,7 +259,7 @@ define(
                 // in scope
                 LingSyncData.saveEditedRecord($rootScope.DB, docID,
                     editedRecord).then(function() {
-                  loadData();
+                  $scope.loadData();
                 });
               });
         };
@@ -262,7 +269,7 @@ define(
           if (r == true) {
             LingSyncData.removeRecord($rootScope.DB, id, rev).then(
                 function(response) {
-                  loadData();
+                  $scope.loadData();
                 }, function() {
                   window.alert("Error deleting record.");
                 });
@@ -277,10 +284,17 @@ define(
           var tagString = "";
           for ( var i = 0; i < tags.length; i++) {
             if (i < (tags.length - 1)) {
-              tagString = tagString + tags[i].tag + ", ";
+              if (tags[i].tag) {
+                tagString = tagString + tags[i].tag + ", ";
+              }
+              ;
             } else {
-              tagString = tagString + tags[i].tag;
+              if (tags[i].tag) {
+                tagString = tagString + tags[i].tag;
+              }
+              ;
             }
+            ;
           }
           return tagString;
         };
@@ -299,6 +313,7 @@ define(
           s = s.replace(/\n /, "\n");
           return s;
         }
+        ;
 
         $scope.testFunction = function() {
           window.alert($rootScope.currentResult);

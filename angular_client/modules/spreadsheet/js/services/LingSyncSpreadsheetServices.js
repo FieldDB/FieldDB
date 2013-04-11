@@ -61,8 +61,13 @@ define([ "angular" ], function(angular) {
                 });
                 return promise;
               },
-              'saveEditedRecord' : function(DB, UUID, newRecord) {
-                var couchInfo = $rootScope.server + DB + "/" + UUID;
+              'saveEditedRecord' : function(DB, UUID, newRecord, rev) {
+                var couchInfo;
+                if (rev) {
+                  couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
+                } else {
+                  couchInfo = $rootScope.server + DB + "/" + UUID;
+                }
                 console.log("Contacting the DB to save edited record. "
                     + couchInfo);
                 var promise = $http.put(couchInfo, newRecord).then(function(response) {

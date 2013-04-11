@@ -20,7 +20,7 @@
 	<div class="menubar">
 		<span class="menuTitle">|<a href="#" ng-click="dataentry=false">LingSync</a>|
 		</span> <span ng-hide="data==undefined"><a
-			href="#/lingsync/{{template}}" ng-click="dataentry=true">Data
+			href="#/lingsync/{{template}}" ng-click="dataentry=true;loadData()">Data
 				Entry</a></span> <span ng-hide="data==undefined"><a href="#/settings"
 			ng-click="dataentry=false">Settings</a></span> <span><a
 			href="#/sandbox" ng-click="dataentry=false" ng-hide="username!='senhorzinho'">Sandbox</a></span> <span

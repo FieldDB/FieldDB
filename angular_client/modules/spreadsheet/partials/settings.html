@@ -11,7 +11,8 @@
 	<div class="row settingsRow">
 		<div class="span6 offset5">
 			Number of records to display per page: <select
-				ng-model="numberOfRecordsToDisplay" ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
+				ng-model="numberOfRecordsToDisplay"
+				ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
 				<option value="5">5</option>
 				<option value="10">10</option>
 				<option value="25" selected>25</option>
@@ -123,10 +124,11 @@
 				<option value="">Empty</option>
 				<option select-dropdown2=field6 ng-repeat="field in availableFields"
 					value={{field.label}}>{{field.title}}</option>
-			</select> 
-			
-			<textarea class="span2" rows="3" disabled='disabled' placeholder="Tags"></textarea>
-			
+			</select>
+
+			<textarea class="span2" rows="3" disabled='disabled'
+				placeholder="Tags"></textarea>
+
 		</div>
 		<div class="span1">&nbsp;</div>
 		<div class="span1">
@@ -136,11 +138,28 @@
 		</div>
 	</div>
 
-<span ng-repeat="tag in tags | orderBy: tag">{{tag}}<br /></span>
 
 	<!-- TEMPLATE 3 -->
 
-
+	<!-- TAGS -->
+	<br />
+	<div class="span8 offset1">
+		<button class="btn btn-primary" ng-click="editTags=!editTags">Click here to edit
+			tags</button>
+		<div class="row" ng-show="editTags==true">
+			<div class="span6">
+				Click on tag to edit:
+				<div ng-repeat="tag in tags">
+					<input type="text" value="{{tag}}" disabled=true>
+					<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
+					<span ng-show="tagToEdit==tag"><input type="text"
+						ng-model='newTag' placeholder="Change to ...">
+						<button class="btn btn-primary"
+							ng-click="editTagInfo(tag, newTag)">Update</button> </span> <img ng-show="loading==true" src="img/spinner-small.gif">
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 </div>

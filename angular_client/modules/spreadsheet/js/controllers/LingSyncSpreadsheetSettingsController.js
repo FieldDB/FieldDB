@@ -62,39 +62,93 @@ define(
                   availableFields = availableFieldsFromServer;
                   $scope.availableFields = availableFieldsFromServer;
                 });
-        
-              //Get all tags
-        LingSyncData
-        .async($rootScope.DB)
-        .then(
-            function(dataFromServer) {
-              var tags = {};
-              for ( var i = 0; i < dataFromServer.length; i++) {
-                if (dataFromServer[i].value.datumTags) {
-                  for (j in dataFromServer[i].value.datumTags) {
-                    if (tags[dataFromServer[i].value.datumTags[j].tag] == undefined) {
-                      tags[dataFromServer[i].value.datumTags[j].tag] = dataFromServer[i].value.datumTags[j].tag;
-                    }
+
+        $scope.changeTagToEdit = function(tag) {
+          $scope.tagToEdit = tag;
+        };
+
+        $scope.editTagInfo = function(oldTag, newTag) {
+          var r = confirm("Are you sure you want to change all '" + oldTag
+              + "' to '" + newTag + "'?\nThis may take a while.");
+          if (r == true) {
+            for ( var i = 0; i < $scope.dataCopy.length; i++) {
+              (function(indexi) {
+                var UUID = $scope.dataCopy[indexi].id;
+                for ( var j = 0; j < $scope.dataCopy[indexi].value.datumTags.length; j++) {
+                  if ($scope.dataCopy[indexi].value.datumTags[j].tag == oldTag) {
+                    $scope.loading = true;
+                    (function(indexj) {
+                      var timeOut = setTimeout(
+                          function() {
+                            LingSyncData
+                                .async($rootScope.DB, UUID)
+                                .then(
+                                    function(editedRecord) {
+                                      // Edit record with updated tag data
+                                      editedRecord.datumTags[indexj].tag = newTag;
+                                      // Save edited record
+                                      LingSyncData
+                                          .saveEditedRecord($rootScope.DB,
+                                              UUID, editedRecord,
+                                              editedRecord._rev)
+                                          .then(
+                                              function() {
+                                                console.log("Changed " + oldTag
+                                                    + " to " + newTag + " in "
+                                                    + UUID);
+                                                $scope.loading = false;
+                                              },
+                                              function() {
+                                                window
+                                                    .alert("There was an error saving the record. Please try again.");
+                                              });
+                                    },
+                                    function() {
+                                      window
+                                          .alert("There was an error retrieving the record. Please try again.");
+                                    });
+                          }, 0);
+                    })(j);
                   }
-//                  var newDatumFromServer = {};
-//                  newDatumFromServer.id = dataFromServer[i].id;
-//                  newDatumFromServer.rev = dataFromServer[i].value._rev;
-//
-//                  for (j in dataFromServer[i].value.datumFields) {
-//                    newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
-//                  }
-//                  if (dataFromServer[i].value.dateModified) {
-//                    newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
-//                  } else {
-//                    newDatumFromServer.dateModified = "TODO";
-//                  }
-//                  newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
-//
-//                  scopeData.push(newDatumFromServer);
                 }
+              })(i);
+            }
+            for (i in $scope.tags) {
+              if ($scope.tags[i] == oldTag) {
+                $scope.tags[i] = newTag;
               }
-              $scope.tags = tags;
-            });
+            }
+          }
+        };
+
+        // Get all tags
+        $scope.getTags = function() {
+          LingSyncData
+              .async($rootScope.DB)
+              .then(
+                  function(dataFromServer) {
+                    var tags = {};
+                    // While getting tags, make a copy of all datums so other
+                    // editing won't have to query the server again
+                    var dataCopy = [];
+                    for ( var i = 0; i < dataFromServer.length; i++) {
+                      if (dataFromServer[i].value.datumFields) {
+                        dataCopy.push(dataFromServer[i]);
+                      }
+                      if (dataFromServer[i].value.datumTags) {
+                        for (j in dataFromServer[i].value.datumTags) {
+                          if (tags[dataFromServer[i].value.datumTags[j].tag] == undefined
+                              && dataFromServer[i].value.datumTags[j].tag != undefined) {
+                            tags[dataFromServer[i].value.datumTags[j].tag] = dataFromServer[i].value.datumTags[j].tag;
+                          }
+                        }
+                      }
+                    }
+                    $scope.dataCopy = dataCopy;
+                    $scope.tags = tags;
+                  });
+        };
+        $scope.getTags();
 
         $scope.saveNewPreferences = function(template, newFieldPreferences) {
           LingSyncPreferences = JSON.parse(localStorage

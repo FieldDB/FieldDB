@@ -82,16 +82,6 @@
 				<textarea rows="3" class="span2" ng-model="fieldData.datumTags"
 				ng-init="commaList(datum.datumTags)"
 				value={{commaList(datum.datumTags)}}></textarea>
-				
-<!-- 				<input class="span2" -->
-<!-- 				type="text" ng-model="fieldData.field7" -->
-<!-- 				ng-init="fieldData.field7=datum[fields.field7.label]" -->
-<!-- 				value={{datum[fields.field7.label]}} -->
-<!-- 				ng-hide="fields.field7.label==''"> <input class="span2" -->
-<!-- 				type="text" ng-model="fieldData.field8" -->
-<!-- 				ng-init="fieldData.field8=datum[fields.field8.label]" -->
-<!-- 				value={{datum[fields.field8.label]}} -->
-<!-- 				ng-hide="fields.field8.label==''"> -->
 		</div>
 		<div class="span2">
 			<button class="btn btn-primary"
@@ -126,14 +116,7 @@
 			<span class="span2" title="{{fields.field6.title}}"
 				ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
 				| neverEmpty}}</span><br /> 
-<!-- 				<span class="span2" -->
-<!-- 				title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">{{datum[fields.field7.label] -->
-<!-- 				| neverEmpty}}</span><br />  -->
 				<span class="span2" rows="3">{{commaList(datum.datumTags)}}</span><br />
-				
-<!-- 				<span class="span2" -->
-<!-- 				title="{{fields.field8.title}}" ng-hide="fields.field8.label==''">{{datum[fields.field8.label] -->
-<!-- 				| neverEmpty}}</span><br /> -->
 		</div>
 		<div class="span2">
 			<span title="Date modified">Last modified:<br />{{datum.dateModified
