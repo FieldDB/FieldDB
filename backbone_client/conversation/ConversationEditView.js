@@ -5,6 +5,7 @@ define( [
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -16,6 +17,7 @@ define( [
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -65,7 +67,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
@@ -264,7 +266,6 @@ define( [
         }
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
@@ -293,7 +294,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -322,7 +322,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
@@ -390,7 +389,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         
       } else if (this.format == "minimized") {
@@ -408,7 +406,8 @@ define( [
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
           // Display the CommentReadView
-          this.commentReadView.el = this.$el.find(".comments");
+//          this.commentReadView.el = this.$el.find(".comments");
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           
           //localization of edit data list 

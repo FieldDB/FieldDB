@@ -2,10 +2,9 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
-OPrime.apptype = "testing";
+OPrime.apptype = "myaamia";
 
-
-OPrime.websiteUrl = "https://wwwdev.lingsync.org";
+OPrime.websiteUrl = "http://myaamiacenter.org/";
 OPrime.authUrl = "https://authdev.lingsync.org";
 OPrime.audioUrl = "https://audiodev.lingsync.org";
 OPrime.lexiconUrl = "https://lexicondev.lingsync.org";
@@ -70,7 +69,16 @@ OPrime.defaultCouchConnection = function() {
     authUrl : "https://prosody.linguistics.mcgill.ca/auth",
     userFriendlyServerName : "McGill ProsodyLab"
   };
-  OPrime.servers = [ localhost, testing, production, mcgill ];
+  var myaammia = {
+      protocol : "https://",
+      domain : "corpusdev.lingsync.org",
+      port : "443",
+      pouchname : "default",
+      path : "",
+      authUrl : "https://authdev.lingsync.org",
+      userFriendlyServerName : "LingSync Myaamia"
+    };
+  OPrime.servers = [ localhost, testing, production, mcgill, myaamia ];
   /*
    * If its a couch app, it can only contact databases on its same origin, so
    * modify the domain to be that origin. the chrome extension can contact any
@@ -103,6 +111,10 @@ OPrime.defaultCouchConnection = function() {
         .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
+    } else if (window.location.origin
+        .indexOf("docjbffdphmligpdknoebnljjgmfamfd") >= 0) {
+      connection = myaamia;
+      OPrime.authUrl = myaammia.authUrl;
     } else {
       /*
        * its probably a dev's chrome extension, use the corresponding connection
@@ -122,6 +134,8 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
     return;
     authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("LingSync Testing") >= 0) {
+    authUrl = "https://authdev.lingsync.org";
+  } if (authUrl.indexOf("LingSync Myaamia") >= 0) {
     authUrl = "https://authdev.lingsync.org";
   } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
     authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
@@ -193,6 +207,8 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
     mostLikelyAuthUrl = "LingSync Testing";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
     mostLikelyAuthUrl = "LingSync Testing";
+  } else if (window.location.origin.indexOf("docjbffdphmligpdknoebnljjgmfamfd") >= 0) {
+    mostLikelyAuthUrl = "LingSync Myaamia";
   } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
     OPrime
         .debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
@@ -214,6 +230,7 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
 
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
+/* TODO create your own public users prefs and save them to local storage, and then copy paste them here. */
 OPrime.publicUserStaleDetails = function() {
   return JSON.stringify({
     token : "$2a$10$TpNxdbXtDQuFGBYW5BfnA.F7D0PUftrH1W9ERS7IdxkDdM.k7A5oy",

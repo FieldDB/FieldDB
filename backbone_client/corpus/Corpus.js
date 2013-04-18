@@ -523,6 +523,26 @@ define([
       comments: Comments,
       team: UserMask
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */ 
+    putInTrash : function(){
+      OPrime.bug("Sorry deleting corpora is not available right now. Too risky... ");
+      return;
+      /* TODO contact server to delte the corpus, if the success comes back, then do this */
+      this.set("trashed", "deleted"+Date.now());
+      this.saveAndInterConnectInApp(function(){
+      window.location.href="user.html";
+      });
+    },
+        
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(commentstring) {
       var m = new Comment({
@@ -795,7 +815,7 @@ define([
 
                       var sucessorfailcallbackforcorpusmask = function(){
                         window.app.get("authentication").saveAndInterConnectInApp(function(){
-                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus...");
+                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                           window.setTimeout(function(){
                             window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
                           },10000);
@@ -1367,7 +1387,7 @@ define([
         type : 'GET',
         url : jsonUrl,
         success : function(serverResults) {
-          console.log("serverResults"
+          OPrime.debug("serverResults"
               + JSON.stringify(serverResults));
 
           var counts = _.pluck(serverResults.rows, "value");
