@@ -5,6 +5,7 @@ define( [
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -16,6 +17,7 @@ define( [
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -65,17 +67,33 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the datalist when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
         
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
         
-      },      
+//        this.model.get("comments").unshift(this.commentEditView.model);
+//        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
 
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
@@ -85,6 +103,9 @@ define( [
 
       "click .icon-book" :"showReadonly",
       
+//      Issue #797
+      "click .trash-button" : "putInTrash",
+        
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
@@ -231,10 +252,12 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
-      if(window.appView.currentEditDataListView){
-        appView.currentEditDataListView.destroy_view();
+      if (this.format && this.format.indexOf("search") == -1){
+        if(window.appView.currentEditDataListView){
+          appView.currentEditDataListView.destroy_view();
+        }
+        appView.currentReadDataListView.destroy_view();
       }
-      appView.currentReadDataListView.destroy_view();
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.dateCreated = OPrime.prettyDate(jsonToRender.dateCreated);
@@ -291,7 +314,6 @@ define( [
         }
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
@@ -320,7 +342,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -349,7 +370,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
@@ -435,9 +455,14 @@ define( [
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
-          // Display the CommentReadView
-          this.commentReadView.el = this.$el.find(".comments");
+          // Display the CommentReadView          this.commentReadView.el = this.$el.find(".comments");
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
+          
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+          
           
           //localization of edit data list 
           $(this.el).find(".locale_Title").html(Locale.get("locale_Title"));
@@ -449,16 +474,34 @@ define( [
       }
       
       return this;
+    }, 
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this datalist in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
     },
+
     
     changeViewsOfInternalModels : function() {
    
-      // Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
-      });  
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
+      }); 
     },
     /**
      * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items. 
@@ -553,6 +596,8 @@ define( [
         e.stopPropagation();
         e.preventDefault();
       }
+      
+     
 //      var self = this;
 //      this.model.saveAndInterConnectInApp(function(){
 //          self.format = "search-minimized";
@@ -562,6 +607,14 @@ define( [
 //      });
       
       var searchself = appView.searchEditView.searchDataListView; //TODO this was because the wrong tempalte was in the serach data list.for some reason the model is a function here when i click on the save button on the temp serach data list. this is a workaround.
+
+      /* if there is no call back, make this the full screen data list. */
+      if(!callback){
+        callback = function(){
+          window.appView.currentReadDataListView.format = "leftSide";
+          window.appView.currentReadDataListView.render();
+        };
+      }
       searchself.model.saveAndInterConnectInApp(function(){
         searchself.format = "search-minimized";
         searchself.render();

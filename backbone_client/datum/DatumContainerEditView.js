@@ -148,40 +148,35 @@ define([
             self.newDatum();
           }
         } else {
-          // If the user has increased the number of Datum to display in the container
-          if (nextNumberOfDatum > self.model.length) {
-            for (var i = 0; i < rows.length; i++) {
-              //If you've filled it up, stop filling.
-              if(self.model.length >= nextNumberOfDatum){
-                return;
+          var howManyToPop = self.model.length
+          for (var i = 0; i < howManyToPop; i++) {
+            self.model.pop();
+          }
+          for (var i = 0; i < rows.length; i++) {
+            //If you've filled it up, stop filling.
+            if(self.model.length >= nextNumberOfDatum){
+              return;
+            }
+
+            // Add the next most recent Datum from the Corpus to the stack
+            if (rows[i]) {
+              var m = rows[i];
+              var value = m;
+              /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
+              if(!OPrime.isBackboneCouchDBApp()){
+                value = m.value;
+                var d = new Datum();
+                d.set(d.parse(value));
+                value = d;
               }
-              
-              // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              if (rows[i]) {
-                var m = rows[i];
-                var value = m;
-                /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
-                if(!OPrime.isBackboneCouchDBApp()){
-                  value = m.value;
-                  var d = new Datum();
-                  d.set(d.parse(value));
-                  value = d;
-                }
-                //Only add datum objects to the container
-                if(value.jsonType == "Datum"){
-                  self.model.add(value);
-                }
+              //Only add datum objects to the container
+              if(value.jsonType == "Datum"){
+                self.model.add(value);
               }
             }
-            if(self.model.length == 0){
-              self.newDatum();
-            }
-          // If the user has decreased the number of Datum to display in the container
-          } else if (nextNumberOfDatum < self.model.length) {
-            // Pop the excess Datum from the bottom of the stack
-            for (var i = nextNumberOfDatum; i < self.model.length; i++) {
-              self.model.pop();
-            }
+          }
+          if(self.model.length == 0){
+            self.newDatum();
           }
         }
       });
