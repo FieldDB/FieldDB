@@ -1,0 +1,187 @@
+
+
+<div class="row">
+	<div class="span8 pagination-centered">
+		<div id="mainBodyTitle">
+			<h1>LingSync</h1>
+		</div>
+
+
+		<div id="mainBodyHeader">
+			<span>A Free Tool for Creating and Maintaining a Shared
+				Database For Communities, Linguists and Language Learners</span>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="span8">
+		<div class="row contentSection">
+			<div class="span2 sideMenuContainerDiv">
+					<div class="bulletSectionHeader bulletSectionHeaderTop">
+						<span class="clickable" ng-click="show_section='share'"
+							ng-class="{active: show_section=='share'}"><i
+							class="icon-share-alt"></i> Share</span>
+					</div>
+					<div class="bulletSectionHeader">
+						<span class="clickable" ng-click="show_section='search'"
+							ng-class="{active: show_section=='search'}"><i
+							class="icon-search"></i> Search</span>
+					</div>
+					<div class="bulletSectionHeader">
+						<span class="clickable" ng-click="show_section='revitalize'"
+							ng-class="{active: show_section=='revitalize'}"><i
+							class="icon-refresh"></i> Revitalize</span>
+					</div>
+					<div class="bulletSectionHeader">
+						<span class="clickable" ng-click="show_section='key_features'"
+							ng-class="{active: show_section=='key_features'}"><i
+							class="icon-key"></i> Features</span>
+					</div>
+					<div class="bulletSectionHeader bulletSectionHeaderBottom">
+						<span class="clickable" ng-click="show_section='watch_video'"
+							ng-class="{active: show_section=='watch_video'}"><i
+							class="icon-facetime-video"></i> Video</span>
+					</div>
+			</div>
+			<div class="span5">
+				<div class="bulletSection" ng-show="show_section=='share'">
+					<span>Speakers, linguists, and learners can contribute
+						remotely to one centralized database, distributing the
+						responsibility of documentation.</span>
+					<hr>
+					<span>The database is shared between researchers and the
+						community. Everyone with permission has access to the data,
+						ensuring that language information is not just on the computers of
+						a few people.</span>
+					<hr>
+					<span>While it is easy to share data, the database is secure
+						and encrypted. Permission settings control who can see what.</span>
+				</div>
+				<div class="bulletSection" ng-show="show_section=='search'">
+					<span>LingSync is customizable. You decide what is important
+						and how much detail goes into your database.</span>
+					<hr>
+					<span>Data is easy to tag, search, and sort by factors you
+						can create (i.e., speaker, date, morpheme or construction type).</span>
+					<hr>
+					<span>It is very easy to import and export data in a variety
+						of formats.</span>
+				</div>
+				<div class="bulletSection" ng-show="show_section=='revitalize'">
+					<span>Learners can participate in recording and transcribing
+						their language.</span> <span>Users can easily search the database
+						for specific words or phrases, and discover patterns on their own.</span>
+					<hr>
+					<span>Material can be easily converted from LingSync to
+						language lessons on a complementary language learning app (still
+						under development).</span>
+				</div>
+				<div class="bulletSection" ng-show="show_section=='key_features'">
+					<span>LingSync is a Chrome app, which means it works on
+						Windows, Mac, Linux, Android, iPad, and also offline.</span>
+					<hr>
+					<span>LingSync is free and open source. You maintain control
+						of your data.</span>
+					<hr>
+					<span>LingSync learns from your data to streamline morpheme
+						glossing.</span>
+					<hr>
+					<span>LingSync automatically backs up your database.
+						Previous versions are accessible, making it easy to undo any
+						mistakes.</span>
+				</div>
+				<div class="bulletSection" ng-show="show_section=='watch_video'">
+					<iframe title="YouTube video player" class="youtube-player span5"
+						src="http://www.youtube.com/embed/4XrO8AhGNqo?feature=player_detailpage"
+						frameborder="0" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<!-- <div class="row"> -->
+<!-- 	<div class="span2 offset1"> -->
+<!-- 		<div class="row"> -->
+<!-- 			<div class="span4"> -->
+<!-- 				<div class="bulletSectionHeader"> -->
+<!-- 					<h3 ng-click="show_section='share'">Share</h3> -->
+<!-- 				</div> -->
+<!-- 				<div class="bulletSection" ng-show="show_section=='share'"> -->
+<!-- 					<span>Speakers, linguists, and learners can contribute -->
+<!-- 						remotely to one centralized database, distributing the -->
+<!-- 						responsibility of documentation.</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>The database is shared between researchers and the -->
+<!-- 						community. Everyone with permission has access to the data, -->
+<!-- 						ensuring that language information is not just on the computers of -->
+<!-- 						a few people.</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>While it is easy to share data, the database is secure -->
+<!-- 						and encrypted. Permission settings control who can see what.</span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 		<div class="row"> -->
+<!-- 			<div class="span4"> -->
+<!-- 				<div class="bulletSectionHeader"> -->
+<!-- 					<h3 ng-click="show_section='search'">Search</h3> -->
+<!-- 				</div> -->
+<!-- 				<div class="bulletSection" ng-show="show_section=='search'"> -->
+<!-- 					<span>LingSync is customizable. You decide what is important -->
+<!-- 						and how much detail goes into your database.</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>Data is easy to tag, search, and sort by factors you -->
+<!-- 						can create (i.e., speaker, date, morpheme or construction type).</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>It is very easy to import and export data in a variety -->
+<!-- 						of formats.</span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+
+<!-- 		<div class="row"> -->
+<!-- 			<div class="span4"> -->
+<!-- 				<div class="bulletSectionHeader"> -->
+<!-- 					<h3 ng-click="show_section='revitalize'">Revitalize</h3> -->
+<!-- 				</div> -->
+<!-- 				<div class="bulletSection" ng-show="show_section=='revitalize'"> -->
+<!-- 					<span>Learners can participate in recording and transcribing -->
+<!-- 						their language.</span> <span>Users can easily search the database -->
+<!-- 						for specific words or phrases, and discover patterns on their own.</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>Material can be easily converted from LingSync to -->
+<!-- 						language lessons on a complementary language learning app (still -->
+<!-- 						under development).</span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 		<div class="row"> -->
+<!-- 			<div class="span4"> -->
+<!-- 				<div class="bulletSectionHeader"> -->
+<!-- 					<h3 ng-click="show_section='key_features'">Key features of -->
+<!-- 						LingSync</h3> -->
+<!-- 				</div> -->
+<!-- 				<div class="bulletSection" ng-show="show_section=='key_features'"> -->
+<!-- 					<span>LingSync is a Chrome app, which means it works on -->
+<!-- 						Windows, Mac, Linux, Android, iPad, and also offline.</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>LingSync is free and open source. You maintain control -->
+<!-- 						of your data.</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>LingSync learns from your data to streamline morpheme -->
+<!-- 						glossing.</span> -->
+<!-- 					<hr> -->
+<!-- 					<span>LingSync automatically backs up your database. -->
+<!-- 						Previous versions are accessible, making it easy to undo any -->
+<!-- 						mistakes.</span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	TEST -->
+<!-- </div> -->

@@ -121,6 +121,33 @@ span.headerTagLine {
 	min-height: 420px;
 }
 
+.mainTitleBackground {
+	color: #000000;
+	min-height: 50px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom: 1px solid #DEDEDE;
+	background-image: linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -o-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -moz-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -webkit-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -ms-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.17, rgb(159,
+		216, 242) ), color-stop(0.56, rgb(205, 255, 255) ),
+		color-stop(0.95, rgb(205, 255, 255) ) );
+	padding: 10px;
+	margin-top: -15px;
+	margin-right: -15px;
+	margin-left: -15px;
+	margin-bottom: 10px;
+	box-shadow: 0px 3px 2px #DEDEDE;
+}
+
 #mainBodyTitle {
 	text-align: center;
 	text-shadow: 1px 1px 1px #D2EAFA;
@@ -136,57 +163,116 @@ span.headerTagLine {
 	padding-left: 10px;
 	margin-left: 15%;
 	margin-right: 15%;
-	margin-top: -15px;
-	text-align: center;
+	margin-top: 0px; text-align : center;
 	color: #000000;
+	text-align: center;
 }
 
 .contentSection {
 	margin-top: 25px;
 }
 
-.bulletSectionHeader {
-	background-color: #D2EAFA;
-	min-height: 20px;
-	border-radius: 10px;
-	border: 1px solid #DEDEDE;
-	box-shadow: 3px 3px 1px #DEDEDE;
-	margin-top: 10px;
+.imageMenuContainer {
+	margin-top: 25px;
+	margin-bottom: 0px;
+	height: 115px;
 }
 
-.bulletSectionHeader h3 {
+.imageMenu img {
+	margin-top: 0px;
+	-webkit-transition: margin 0.5s ease-out;
+	-moz-transition: margin 0.5s ease-out;
+	-o-transition: margin 0.5s ease-out;
+}
+
+.imageMenu img:hover {
+	margin-top: -25px;
+}
+
+.sideMenuContainerDiv {
+	padding-right: 10px;
+	padding-top: 30px;
+	margin-top: -30px;
+	min-height: 400px;
+	background: url(../img/test_background.jpg) no-repeat right top;
+	min-height: 400px;
+}
+
+.bulletSectionHeaderTop {
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	border-top: 1px solid #DEDEDE;
+}
+
+.bulletSectionHeaderBottom {
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom: 1px solid #DEDEDE;
+}
+
+.bulletSectionHeader_noMenu {
+	border-radius: 10px;
+	background-color: #D2EAFA;
+	border: 1px solid #DEDEDE;
+	margin: 0px;
+	padding: 10px;
 	font-size: 1.3em;
 	font-weight: 700;
 	font-family: "Ubuntu";
 	letter-spacing: 1px;
 	color: #000000;
-	margin-left: 8px;
-	text-transform: uppercase;
-	margin-top: -5px;
-	margin-bottom: -5px;
 }
 
-.bulletSectionHeader h3.active {
+.bulletSectionHeader {
+	background-color: #D2EAFA;
+	min-height: 20px;
+	margin-top: 0px;
+	padding: 10px;
+	border-right: 1px solid #DEDEDE;
+	border-left: 1px solid #DEDEDE;
+}
+
+.bulletSectionHeader:hover {
+	background-color: #74C2E1;
+}
+
+.bulletSectionHeader span {
+	font-size: 1.3em;
+	font-weight: 700;
+	font-family: "Ubuntu";
+	letter-spacing: 1px;
+	color: #000000;
+}
+
+.bulletSectionHeader span.active {
 	color: #5100FF;
 }
 
-.bulletSectionHeader h3.clickable:hover {
-	color: #74C2E1;
-}
-
 .bulletSection {
-/* 	background-color: #FFFFFF; */
-/* 	box-shadow: 3px 3px 1px #DEDEDE; */
-/* border: 1px solid #DEDEDE; */
 	border-radius: 10px;
-	margin-left: 10px;
-	margin-top: 20px;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-top: 0px;
 	padding: 10px;
 	margin-right: 25px;
+	background: url(../img/lingsync_transparent.png) no-repeat;
+	background-position: center top;
+	text-shadow: 1px 1px 1px #FFFFFF; min-height : 300px;
+	margin-right: 10px;
+	min-height: 300px;
+	font-size: 1.2em;
+	line-height: 1.5em;
 }
 
-.bulletSection span {
-	font-size: 1em;
+.bulletSection td {
+	vertical-align: top;
+}
+
+.bullet {
+	padding: 5px;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .bulletSection hr {
@@ -197,10 +283,6 @@ span.headerTagLine {
 	width: 100%;
 	margin-top: 10px;
 	margin-bottom: 10px;
-}
-
-.youtube-player {
-	min-height: 275px;
 }
 
 input:focus {
