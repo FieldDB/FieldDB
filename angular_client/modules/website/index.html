@@ -14,44 +14,35 @@
 <!-- END Stylesheets -->
 </head>
 <body class="LingSyncBody" ng-controller="LingSyncWebsiteMainController">
-	<!-- 	<div class="mainContainer"> -->
-	<div class="row">
-		<div class="mainHeader span8 offset2">
-			<div class="row">
-				<div class="span4">
-					<div class="mainHeaderLogo ">
-						<img src="img/lingsync-logo.png"><br> <span
-							class="headerTagLine">An App for Field Linguistics</span>
-					</div>
-				</div>
-				<div class="span4 pagination-right">
-					<div class="mainHeaderButton">
-						<a href="https://chrome.google.com/webstore/search-apps/lingsync"
-							class="btn btn-primary">Get LingSync for Chrome</a>
-					</div>
-				</div>
+	<div class="mainContainer">
+		<div class="mainHeader">
+			<div class="mainHeaderLogo ">
+				<img src="img/lingsync-logo.png"><br> <span
+					class="headerTagLine">An App for Field Linguistics</span>
 			</div>
+			<div class="mainHeaderButton">
+				<a href="https://chrome.google.com/webstore/search-apps/lingsync"
+					class="btn btn-primary">Get LingSync for Chrome</a>
+			</div>
+			<div class="clearBoth"></div>
 		</div>
-	</div>
 
 
-	<div class="row">
-		<div class="span10 offset1">
-			<div class="row">
-				<div class="span10 pagination-centered menubar">
-					<span><a href="#" ng-click="activePage='home'" ng-class="{'active': activePage=='home'}">Home</a></span> <span><a
-						href="#/technology" ng-click="activePage='technology'" ng-class="{'active': activePage=='technology'}">Technology</a></span> <span><a
-						href="#/people" ng-click="activePage='people'" ng-class="{'active': activePage=='people'}">People</a></span> <span><a
-						href="https://www.lingsync.org/dev.html">Developer Blog</a></span> <span><a
-						href="#/tutorials" ng-click="activePage='tutorials'" ng-class="{'active': activePage=='tutorials'}">Tutorials</a></span> <span><a
-						href="https://www.facebook.com/LingSyncApp">Facebook</a></span> <span><a
-						href="#/projects" ng-click="activePage='projects'" ng-class="{'active': activePage=='projects'}">Projects</a></span>
-				</div>
-			</div>
+		<div class="menubar">
+			<span><a href="#" ng-click="activePage='home'"
+				ng-class="{'active': activePage=='home'}">Home</a></span> <span><a
+				href="#/technology" ng-click="activePage='technology'"
+				ng-class="{'active': activePage=='technology'}">Technology</a></span> <span><a
+				href="#/people" ng-click="activePage='people'"
+				ng-class="{'active': activePage=='people'}">People</a></span> <span><a
+				href="https://www.lingsync.org/dev.html">Developer Blog</a></span> <span><a
+				href="#/tutorials" ng-click="activePage='tutorials'"
+				ng-class="{'active': activePage=='tutorials'}">Tutorials</a></span> <span><a
+				href="https://www.facebook.com/LingSyncApp">Facebook</a></span> <span><a
+				href="#/projects" ng-click="activePage='projects'"
+				ng-class="{'active': activePage=='projects'}">Projects</a></span>
 		</div>
-	</div>
-	<div class="row">
-		<div class="mainContentDiv span8 offset2" ng-view></div>
+		<div class="mainContentDiv" ng-view></div>
 	</div>
 </body>
 </html>

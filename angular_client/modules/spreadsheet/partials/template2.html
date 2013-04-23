@@ -128,7 +128,8 @@
 </div>
 <br />
 <div class="pagination-centered" ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
-	filterTerm).length)==1">
+	filterTerm).length)==1 || numberOfResultPages((data | filter:
+	filterTerm).length)==0">
 	<button class="btn btn-inverse btn-mini"
 		ng-disabled="currentResult == 0"
 		ng-click="currentResult=currentResult-1">

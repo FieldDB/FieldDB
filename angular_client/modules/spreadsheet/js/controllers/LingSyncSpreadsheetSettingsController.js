@@ -126,6 +126,26 @@ define(
           }
         };
 
+        $scope.deleteDuplicateTags = function() {
+          var changeThisRecord;
+          for ( var i = 0; i < $scope.dataCopy.length; i++) {
+            changeThisRecord = false;
+            (function(indexi) {
+              var tagsArray = $scope.dataCopy[indexi].value.datumTags;
+              if (tagsArray.length > 1) {
+                for ( var j = 0; j < tagsArray.length; j++) {
+                  for (var k = 0; k < tagsArray.length; k++) {
+                    if (tagsArray[j].tag == tagsArray[k].tag) {
+                      console.log(tagsArray[j].tag + " = " + tagsArray[k].tag);
+                    }
+                  }
+                }
+                console.log(JSON.stringify(tagsArray));
+              }
+            })(i);
+          }
+        };
+
         // Get all tags
         $scope.getTags = function() {
           LingSyncData

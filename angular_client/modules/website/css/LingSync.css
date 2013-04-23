@@ -32,9 +32,14 @@ h3 {
 	font-family: 'Droid Sans', sans-serif;
 }
 
+.mainContainer {
+	margin-right: 12%;
+	margin-left: 12%;
+}
+
 .mainHeader {
 	color: #000000;
-	min-height: 130px;
+	min-height: 100px;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	background-image: linear-gradient(left, rgb(159, 216, 242) 17%,
@@ -50,12 +55,15 @@ h3 {
 	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.17, rgb(159,
 		216, 242) ), color-stop(0.56, rgb(205, 255, 255) ),
 		color-stop(0.95, rgb(205, 255, 255) ) );
-	padding: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
 	margin-top: 10px;
 }
 
 .mainHeaderLogo {
 	padding-left: 25px;
+	float: left;
 }
 
 span.headerTagLine {
@@ -66,8 +74,9 @@ span.headerTagLine {
 }
 
 .mainHeaderButton {
-	padding-top: 50px;
+	padding-top: 45px;
 	padding-right: 50px;
+	float: right;
 }
 
 .menubar {
@@ -75,7 +84,10 @@ span.headerTagLine {
 	border: 1px solid #000000;
 	background: #74C2E1;
 	min-height: 40px;
-	border-radius: 5px;
+	border-radius: 15px;
+	text-align: center;
+	margin-left: -15px;
+	margin-right: -15px;
 }
 
 .menubar a.active { /* 	text-decoration: underline; */
@@ -163,8 +175,8 @@ span.headerTagLine {
 	padding-left: 10px;
 	margin-left: 15%;
 	margin-right: 15%;
-	margin-top: 0px; text-align : center;
-	color: #000000;
+	margin-top: 5px;
+	margin-bottom: 0px;
 	text-align: center;
 }
 
@@ -172,10 +184,11 @@ span.headerTagLine {
 	margin-top: 25px;
 }
 
-.imageMenuContainer {
+.imageMenu {
 	margin-top: 25px;
 	margin-bottom: 0px;
-	height: 115px;
+	min-height: 115px;
+	text-align: center;
 }
 
 .imageMenu img {
@@ -189,13 +202,33 @@ span.headerTagLine {
 	margin-top: -25px;
 }
 
+.imageMenu img.active {
+	margin-top: -25px;
+}
+
 .sideMenuContainerDiv {
+	width: 25%;
 	padding-right: 10px;
 	padding-top: 30px;
 	margin-top: -30px;
 	min-height: 400px;
 	background: url(../img/test_background.jpg) no-repeat right top;
-	min-height: 400px;
+	float: left;
+}
+
+.floatRight {
+	float: right;
+	width: 65%;
+	margin-right: 4%;
+}
+
+.clearBoth {
+	clear: both;
+}
+
+.singleHeaderPage {
+	margin-right: 20%;
+	margin-left: 20%;
 }
 
 .bulletSectionHeaderTop {
@@ -257,7 +290,8 @@ span.headerTagLine {
 	margin-right: 25px;
 	background: url(../img/lingsync_transparent.png) no-repeat;
 	background-position: center top;
-	text-shadow: 1px 1px 1px #FFFFFF; min-height : 300px;
+	text-shadow: 1px 1px 1px #FFFFFF;
+	min-height: 300px;
 	margin-right: 10px;
 	min-height: 300px;
 	font-size: 1.2em;

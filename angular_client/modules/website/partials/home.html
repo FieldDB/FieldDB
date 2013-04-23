@@ -1,139 +1,120 @@
 
 <div class="mainTitleBackground">
-	<div class="row">
-		<div class="span8 pagination-centered">
-			<!-- 			<div id="mainBodyTitle"> -->
-			<!-- 				<h1>LingSync</h1> -->
-			<!-- 			</div> -->
-
-
-			<div id="mainBodyHeader">
-				<span>A Free Tool for Creating and Maintaining a Shared
-					Database For Communities, Linguists and Language Learners</span>
-			</div>
-		</div>
+	<div id="mainBodyHeader">
+		<span>A Free Tool for Creating and Maintaining a Shared
+			Database For Communities, Linguists and Language Learners</span>
 	</div>
 </div>
-<!-- NEW -->
 
-<div class="row imageMenuContainer">
-	<div class="span8 pagination-centered imageMenu">
-		<img src="img/share.png" width=115 ng-click="show_section='share'">&nbsp;<img
-			src="img/search.png" width=115 ng-click="show_section='search'">&nbsp;<img
-			src="img/revitalize.png" width=115
-			ng-click="show_section='revitalize'">&nbsp;<img
-			src="img/features.png" width=115
-			ng-click="show_section='key_features'">&nbsp;<img
-			src="img/video.png" width=115 ng-click="show_section='watch_video'">
-	</div>
+<div class="imageMenu">
+	<img src="img/share.png" width=115 ng-click="show_section='share'"
+		ng-class="{active: show_section=='share'}">&nbsp;<img
+		src="img/search.png" width=115 ng-click="show_section='search'"
+		ng-class="{active: show_section=='search'}">&nbsp;<img
+		src="img/revitalize.png" width=115
+		ng-click="show_section='revitalize'"
+		ng-class="{active: show_section=='revitalize'}">&nbsp;<img
+		src="img/features.png" width=115
+		ng-click="show_section='key_features'"
+		ng-class="{active: show_section=='key_features'}">&nbsp;<img
+		src="img/video.png" width=115 ng-click="show_section='watch_video'"
+		ng-class="{active: show_section=='watch_video'}">
 </div>
-<div class="row">
-	<div class="span8">
-		<div class="row">
-			<div class="bulletSection" ng-show="show_section=='share'">
-				<table width="100%">
-					<tr>
-						<td width="33%"><div class="bullet">
-								<hr>
-								Speakers, linguists, and learners can contribute remotely to one
-								centralized database, distributing the responsibility of
-								documentation.
-							</div></td>
-						<td width="33%"><div class="bullet">
-								<hr>
-								The database is shared between researchers and the community.
-								Everyone with permission has access to the data, ensuring that
-								language information is not just on the computers of a few
-								people.
-							</div></td>
-						<td width="33%"><div class="bullet">
-								<hr>
-								While it is easy to share data, the database is secure and
-								encrypted. Permission settings control who can see what.
-							</div></td>
-					</tr>
-				</table>
-			</div>
+<div class="bulletSection" ng-show="show_section=='share'">
+	<table width="100%">
+		<tr>
+			<td width="33%"><div class="bullet">
+					<hr>
+					Speakers, linguists, and learners can contribute remotely to one
+					centralized database, distributing the responsibility of
+					documentation.
+				</div></td>
+			<td width="33%"><div class="bullet">
+					<hr>
+					The database is shared between researchers and the community.
+					Everyone with permission has access to the data, ensuring that
+					language information is not just on the computers of a few people.
+				</div></td>
+			<td width="33%"><div class="bullet">
+					<hr>
+					While it is easy to share data, the database is secure and
+					encrypted. Permission settings control who can see what.
+				</div></td>
+		</tr>
+	</table>
+</div>
 
-			<div class="bulletSection" ng-show="show_section=='search'">
-				<table width="100%">
-					<tr>
-						<td width="33%"><div class="bullet">
-								<hr>
-								LingSync is customizable. You decide what is important and how
-								much detail goes into your database.
-							</div></td>
-						<td width="33%"><div class="bullet">
-								<hr>
-								Data is easy to tag, search, and sort by factors you can create
-								(i.e., speaker, date, morpheme or construction type).
-							</div></td>
-						<td width="33%"><div class="bullet">
-								<hr>
-								It is very easy to import and export data in a variety of
-								formats.
-							</div></td>
-					</tr>
-				</table>
-			</div>
+<div class="bulletSection" ng-show="show_section=='search'">
+	<table width="100%">
+		<tr>
+			<td width="33%"><div class="bullet">
+					<hr>
+					LingSync is customizable. You decide what is important and how much
+					detail goes into your database.
+				</div></td>
+			<td width="33%"><div class="bullet">
+					<hr>
+					Data is easy to tag, search, and sort by factors you can create
+					(i.e., speaker, date, morpheme or construction type).
+				</div></td>
+			<td width="33%"><div class="bullet">
+					<hr>
+					It is very easy to import and export data in a variety of formats.
+				</div></td>
+		</tr>
+	</table>
+</div>
 
-			<div class="bulletSection" ng-show="show_section=='revitalize'">
-				<table width="100%">
-					<tr>
-						<td width="48%"><div class="bullet">
-								<hr>
-								Learners can participate in recording and transcribing their
-								language.</span> <span>Users can easily search the database for
-									specific words or phrases, and discover patterns on their own.
+<div class="bulletSection" ng-show="show_section=='revitalize'">
+	<table width="100%">
+		<tr>
+			<td width="48%"><div class="bullet">
+					<hr>
+					Learners can participate in recording and transcribing their
+					language.</span> <span>Users can easily search the database for
+						specific words or phrases, and discover patterns on their own. 
+				</div></td>
+			<td width="48%"><div class="bullet">
+					<hr>
+					Material can be easily converted from LingSync to language lessons
+					on a complementary language learning app (still under development).
+				</div></td>
+		</tr>
+	</table>
+</div>
 
+<div class="bulletSection" ng-show="show_section=='key_features'">
+	<table width="100%">
+		<tr>
+			<td width="48%"><div class="bullet">
+					<hr>
+					LingSync is a Chrome app, which means it works on Windows, Mac,
+					Linux, Android, iPad, and also offline.
+				</div></td>
+			<td width="48%"><div class="bullet">
+					<hr>
+					LingSync is free and open source. You maintain control of your
+					data.
+				</div></td>
+		</tr>
+		<tr>
+			<td width="48%"><div class="bullet">
+					<hr>
+					LingSync learns from your data to streamline morpheme glossing.
+				</div></td>
+			<td width="48%"><div class="bullet">
+					<hr>
+					LingSync automatically backs up your database. Previous versions
+					are accessible, making it easy to undo any mistakes.
+				</div></td>
+		</tr>
+	</table>
+</div>
 
-
-								
-							</div></td>
-						<td width="48%"><div class="bullet">
-								<hr>
-								Material can be easily converted from LingSync to language
-								lessons on a complementary language learning app (still under
-								development).
-							</div></td>
-					</tr>
-				</table>
-			</div>
-
-			<div class="bulletSection" ng-show="show_section=='key_features'">
-				<table width="100%">
-					<tr>
-						<td width="48%"><div class="bullet">
-								<hr>
-								LingSync is a Chrome app, which means it works on Windows, Mac,
-								Linux, Android, iPad, and also offline.
-							</div></td>
-						<td width="48%"><div class="bullet">
-								<hr>
-								LingSync is free and open source. You maintain control of your
-								data.
-							</div></td>
-					</tr>
-					<tr>
-						<td width="48%"><div class="bullet">
-								<hr>
-								LingSync learns from your data to streamline morpheme glossing.
-							</div></td>
-						<td width="48%"><div class="bullet">
-								<hr>
-								LingSync automatically backs up your database. Previous versions
-								are accessible, making it easy to undo any mistakes.
-							</div></td>
-					</tr>
-				</table>
-			</div>
-
-			<div class="bulletSection pagination-centered" ng-show="show_section=='watch_video'">
-				<iframe width="420" height="315"
-					src="http://www.youtube.com/embed/4XrO8AhGNqo" frameborder="0"
-					allowfullscreen></iframe>
-			</div>
-		</div>
-	</div>
+<div class="bulletSection pagination-centered"
+	ng-show="show_section=='watch_video'">
+	<iframe width="420" height="315"
+		src="http://www.youtube.com/embed/4XrO8AhGNqo" frameborder="0"
+		allowfullscreen></iframe>
 </div>
 

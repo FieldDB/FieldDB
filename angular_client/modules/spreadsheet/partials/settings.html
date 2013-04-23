@@ -148,7 +148,7 @@
 			tags</button>
 		<div class="row" ng-show="editTags==true">
 			<div class="span6">
-				Click on tag to edit:
+				Click EDIT button to rename tag:
 				<div ng-repeat="tag in tags">
 					<input type="text" value="{{tag}}" disabled=true>
 					<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
@@ -161,5 +161,23 @@
 		</div>
 	</div>
 
+
+<br />
+	<div class="span8 offset1">
+		<button class="btn btn-primary" ng-click="deleteDuplicateTags();">Delete Duplicate Tags</button>
+		<div class="row" ng-show="editTags==true">
+			<div class="span6">
+				Click EDIT button to rename tag:
+				<div ng-repeat="tag in tags">
+					<input type="text" value="{{tag}}" disabled=true>
+					<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
+					<span ng-show="tagToEdit==tag"><input type="text"
+						ng-model='newTag' placeholder="Change to ...">
+						<button class="btn btn-primary"
+							ng-click="editTagInfo(tag, newTag)">Update</button> </span> <img ng-show="loading==true" src="img/spinner-small.gif">
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>

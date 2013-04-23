@@ -126,7 +126,7 @@ define(
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
           } else {
-            $rootScope.DB = auth.user + "-firstcorpus";
+//            $rootScope.DB = auth.user + "-firstcorpus";
             $rootScope.server = auth.server;
             LingSyncData.login(auth.user, auth.password).then(
                 function(response) {
