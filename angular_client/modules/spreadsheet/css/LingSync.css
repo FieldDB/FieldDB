@@ -11,7 +11,6 @@
 	background: #000000;
 	height: 40px;
 	position: fixed;
-	top: 0;
 	left: 0;
 	right: 0;
 	margin-left: 0px;
@@ -56,9 +55,22 @@
 .rightMenuItems {
 	float: right;
 }
+
 .rightMenuItemsDiv {
 	margin-top: 5px;
 	margin-right: 5px;
+}
+
+.clearDiv {
+	clear: both;
+}
+
+.mainMenubar {
+	top: 0;
+}
+
+.subMenubar {
+	top: 40;
 }
 
 .mainBody {
@@ -66,6 +78,10 @@
 	margin-bottom: 10px;
 	position: relative;
 	z-index: 1;
+}
+
+.lowerMainDiv {
+	padding-top: 40px !important;
 }
 
 #login_screen {
@@ -115,7 +131,6 @@ h1 {
 h2 {
 	color: #FFFFFF;
 }
-
 
 input:focus {
 	background-color: #EAFFFF;

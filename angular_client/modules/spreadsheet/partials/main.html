@@ -1,29 +1,42 @@
 <div id="login_screen">
-			<img src="img/lingsync-logo.png"> <br />
-			<h1>LingSync Quick Data Entry Module</h1><br><br>
-			<div ng-hide="authenticated==true">
-				Select Server and Log in <br>
-				<form ng-submit='loginUser(auth)'>
-					<select multiple="multiple" ng-model='auth.server'>
-						<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill Prosody Lab</option>
-						<option value='https://ifielddevs.iriscouch.com/'>iFieldDevs</option>
-					</select><br><br>
-					<input type="text" ng-model='auth.user' placeholder="username"><br>
-					<input type="password" ng-model='auth.password'
-						placeholder="password"><br>
-					<button class="btn btn-primary">Log In</button>
-				</form>
-			</div>
-			<div ng-show="authenticated==true">
-				Logged in as {{username}}<br> Select Database and click Access:<br>
-				<form ng-submit='selectDB(selectedDB)'>
-					<select multiple="multiple" ng-model='selectedDB'>
-						<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option>
-					</select><br>
-					<button class="btn btn-primary">Access</button>
-				</form>
-				<span ng-show="loading==true">Please wait while we load your
-					data...</span><span ng-show="loading==false && data!=undefined">Data loaded. Click
-					on <a href="#/lingsync/{{template}}" ng-click="dataentry=true">Data Entry</a> to begin</span><br>
-			</div>
+	<img src="img/lingsync-logo.png"> <br />
+	<h1>LingSync Quick Data Entry Module</h1>
+	<br>
+	<br>
+	<div ng-hide="authenticated==true">
+		Select Server and Log in <br>
+		<form ng-submit='loginUser(auth)'>
+			<select multiple="multiple" ng-model='auth.server'>
+				<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill
+					Prosody Lab</option>
+				<option value='https://ifielddevs.iriscouch.com/'>iFieldDevs</option>
+			</select><br>
+			<br> <input type="text" ng-model='auth.user'
+				placeholder="username"><br> <input type="password"
+				ng-model='auth.password' placeholder="password"><br>
+			<button class="btn btn-primary">Log In</button>
+		</form>
+	</div>
+	<div ng-show="authenticated==true">
+		Logged in as {{username}}<br> Select Database and click Access:<br>
+		<form ng-submit='selectDB(selectedDB)'>
+			<select multiple="multiple" ng-model='selectedDB'>
+				<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option>
+			</select><br>
+			<button class="btn btn-primary">Access</button>
+		</form>
+		<span ng-show="loading==true">Please wait while we load your
+			data...</span><span ng-show="loading==false && data!=undefined">Data
+			loaded. Click on <a href="#/lingsync/{{template}}"
+			ng-click="dataentry=true">Data Entry</a> to begin
+		</span><br>
+	</div>
+	<div ng-show="data!=undefined">
+		SELECT/CREATE SESSION<br /> <form ng-submit="dataentry=true;selectSession(activeSession)"><select ng-model='activeSession'>
+			<option value="">All sessions</option>
+			<option ng-repeat="session in sessions | orderBy:'dateCreated'"
+				value={{session._id}}>{{session.dateCreated | shortDate}}</option>
+		</select>
+		<button class="btn btn-info">Go</button></form>
+	</div>
 </div>

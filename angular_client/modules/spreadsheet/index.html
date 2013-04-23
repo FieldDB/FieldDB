@@ -17,22 +17,42 @@
 <body id="app" class="LingSyncBody"
 	ng-controller="LingSyncSpreadsheetController" ng-cloak>
 
-	<div class="menubar">
+	<div class="menubar mainMenubar">
 		<span class="menuTitle">|<a href="#" ng-click="dataentry=false">LingSync</a>|
 		</span> <span ng-hide="data==undefined"><a
 			href="#/lingsync/{{template}}" ng-click="dataentry=true;loadData()">Data
 				Entry</a></span> <span ng-hide="data==undefined"><a href="#/settings"
-			ng-click="dataentry=false">Settings</a></span> <span><a
-			href="#/sandbox" ng-click="dataentry=false" ng-hide="username!='senhorzinho'">Sandbox</a></span> <span
-			class="rightMenuItems" ng-show="authenticated==true"><div
-				class="rightMenuItemsDiv">
-				<span ng-hide="dataentry==false">Filter results: <input type="text" ng-model='filterTerm'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			ng-click="dataentry=false">Settings</a></span> <span
+			ng-hide="dataentry==false"> <a href="#/lingsync/{{template}}"
+			ng-click="changeActiveSubMenu('searchMenu')">Search</a>
+		</span> <span ng-show="dataentry==true"> <a
+			href="#/lingsync/{{template}}"
+			ng-click="changeActiveSubMenu('editSession')">Session Info</a>
+		</span> <span><a href="#/sandbox" ng-click="dataentry=false"
+			ng-hide="username!='senhorzinho'">Sandbox</a></span> <span
+			class="rightMenuItems" ng-show="authenticated==true">
+			<div class="rightMenuItemsDiv">
 				{{DB[0]}}
 				<button class="btn btn-warning" ng-click="reloadPage()">Log
 					out</button>
-			</div></span>
+			</div>
+			<div class="clearDiv"></div>
+		</span>
 	</div>
-	<div class="mainBody">
+	<div class="menubar subMenubar" ng-show="activeSubMenu=='editSession'">
+		<span>Change Session Info</span> <select ng-model='activeSession'>
+			<option value="">All sessions</option>
+			<option ng-repeat="session in sessions | orderBy:'dateCreated'"
+				value={{session._id}}>{{session.dateCreated | shortDate}}</option>
+		</select>
+	</div>
+
+	<div class="menubar subMenubar" ng-show="activeSubMenu=='searchMenu'">
+		<span>SEARCH</span>
+	</div>
+
+	<div class="mainBody"
+		ng-class='{lowerMainDiv: activeSubMenu!=undefined}'>
 		<ng-view></ng-view>
 	</div>
 

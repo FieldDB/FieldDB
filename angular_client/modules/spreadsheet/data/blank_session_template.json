@@ -1,0 +1,72 @@
+{
+   "pouchname": "senhorzinho-firstcorpus",
+   "sessionFields": [
+       {
+           "label": "goal",
+           "value": "Continue to create gibberish.",
+           "mask": "Continue to create gibberish.",
+           "encrypted": "",
+           "shouldBeEncrypted": "",
+           "help": "This describes the goals of the session.",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "consultants",
+           "value": "Myself.",
+           "mask": "Myself.",
+           "encrypted": "",
+           "shouldBeEncrypted": "",
+           "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "dialect",
+           "value": "Mid-Atlantic North America",
+           "mask": "Mid-Atlantic North America",
+           "encrypted": "",
+           "shouldBeEncrypted": "",
+           "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "language",
+           "value": "English",
+           "mask": "English",
+           "encrypted": "",
+           "shouldBeEncrypted": "",
+           "help": "This is the langauge (or language family) if you would like to use it.",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "dateElicited",
+           "value": "1-Nov-12",
+           "mask": "1-Nov-12",
+           "encrypted": "",
+           "shouldBeEncrypted": "",
+           "help": "This is the date in which the session took place.",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "user",
+           "value": "Me",
+           "mask": "Me",
+           "encrypted": "",
+           "shouldBeEncrypted": "",
+           "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "dateSEntered",
+           "value": "1-Nov-12",
+           "mask": "1-Nov-12",
+           "encrypted": "",
+           "shouldBeEncrypted": "",
+           "help": "This is the date in which the session was entered.",
+           "userchooseable": "disabled"
+       }
+   ],
+   "comments": [
+   ],
+   "dateCreated": "",
+   "dateModified": ""
+}

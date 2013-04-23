@@ -45,7 +45,7 @@
 
 <div arrow-key class="row"
 	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
-	ng-repeat="datum in data | filter: filterTerm | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
+	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
 	ng-click="selectRow(datum)" ng-hide="loading==true">
 
 	<!-- Show when editing -->
@@ -128,15 +128,15 @@
 </div>
 <br />
 <div class="pagination-centered" ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
-	filterTerm).length)==1 || numberOfResultPages((data | filter:
-	filterTerm).length)==0">
+	activeSession).length)==1 || numberOfResultPages((data | filter:
+	activeSession).length)==0">
 	<button class="btn btn-inverse btn-mini"
 		ng-disabled="currentResult == 0"
 		ng-click="currentResult=currentResult-1">
 		<i class="icon-white icon-arrow-left"></i>
 	</button>
 	{{currentResult+1}}/{{numberOfResultPages((data | filter:
-	filterTerm).length)}}
+	activeSession).length)}}
 	<button class="btn btn-inverse btn-mini"
 		ng-disabled="currentResult >= (data | filter: filterTerm).length/resultSize - 1"
 		ng-click="currentResult=currentResult+1">

@@ -86,11 +86,22 @@ define(
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
-        $rootScope.dataentry = false;
+        $scope.dataentry = false;
+        $rootScope.activeSubMenu = undefined;
+        $rootScope.activeSession = undefined;
+
 
         // Set data size for pagination
         $rootScope.resultSize = LingSyncPreferences.resultSize;
 
+        $scope.changeActiveSubMenu = function(subMenu) {
+          if ($rootScope.activeSubMenu == subMenu) {
+            $rootScope.activeSubMenu = undefined;
+          } else {
+            $rootScope.activeSubMenu = subMenu;
+          }
+        };
+        
         // Fetch data from server and put into template scope
         $scope.loadData = function() {
           $scope.loading = true;
@@ -99,7 +110,15 @@ define(
               .then(
                   function(dataFromServer) {
                     var scopeData = [];
+                    var scopeSessions = [];
+                    var tempObj = {};
                     for ( var i = 0; i < dataFromServer.length; i++) {
+                      //Create array of sessions
+                      if (dataFromServer[i].value.sessionFields) {
+                        scopeSessions.push(dataFromServer[i].value);
+                      }
+                      
+                      //Create array of datums
                       if (dataFromServer[i].value.datumFields) {
                         var newDatumFromServer = {};
                         newDatumFromServer.id = dataFromServer[i].id;
@@ -114,11 +133,12 @@ define(
                           newDatumFromServer.dateModified = "TODO";
                         }
                         newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
-
+                        newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
                         scopeData.push(newDatumFromServer);
                       }
                     }
                     $scope.data = scopeData;
+                    $scope.sessions = scopeSessions;
                     $scope.loading = false;
                   });
         };
@@ -159,10 +179,14 @@ define(
             window.alert("Please select a database.");
           } else {
             $rootScope.DB = selectedDB;
-            $rootScope.dataentry = true;
             $scope.loadData();
-            window.location.assign("#/lingsync/" + $scope.template);
           }
+        };
+        
+        $scope.selectSession = function(activeSession) {
+          $rootScope.activeSession = activeSession;
+          $scope.dataentry = true;
+          window.location.assign("#/lingsync/" + $scope.template);
         };
 
         $scope.reloadPage = function() {
@@ -216,7 +240,7 @@ define(
 
               });
         };
-
+        
         $scope.saveChanges = function(fieldData, docID) {
           $scope.loading = true;
           $rootScope.currentResult = 0;
