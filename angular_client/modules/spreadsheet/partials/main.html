@@ -27,16 +27,16 @@
 		</form>
 		<span ng-show="loading==true">Please wait while we load your
 			data...</span><span ng-show="loading==false && data!=undefined">Data
-			loaded. Click on <a href="#/lingsync/{{template}}"
-			ng-click="dataentry=true">Data Entry</a> to begin
+			loaded. Select a session and click Go, or create a new session.
 		</span><br>
 	</div>
 	<div ng-show="data!=undefined">
-		SELECT/CREATE SESSION<br /> <form ng-submit="dataentry=true;selectSession(activeSession)"><select ng-model='activeSession'>
+		<form ng-submit="dataentry=true;selectSession(activeSession)"><select ng-model='activeSession'>
 			<option value="">All sessions</option>
 			<option ng-repeat="session in sessions | orderBy:'dateCreated'"
 				value={{session._id}}>{{session.dateCreated | shortDate}}</option>
 		</select>
-		<button class="btn btn-info">Go</button></form>
+		<button class="btn btn-primary">Go</button></form><br />
+		CREATE NEW SESSION
 	</div>
 </div>
