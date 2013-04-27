@@ -207,7 +207,7 @@ define(
         };
 
         $scope.changeActiveSession = function(activeSessionToSwitchTo) {
-          if (activeSessionToSwitchTo == 'none') {
+          if (activeSessionToSwitchTo == 'none' || activeSessionToSwitchTo == undefined) {
             $scope.activeSession = undefined;
             $scope.currentSessionName = "All Sessions";
           } else {

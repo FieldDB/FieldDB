@@ -17,7 +17,7 @@
 <body id="app" class="LingSyncBody"
 	ng-controller="LingSyncSpreadsheetController" ng-cloak>
 
-	<div class="menubar mainMenubar">
+	<div class="menubar mainMenubar" ng-cloak>
 		<span class="menuTitle">|<a href="#"
 			ng-click="dataentry=false;changeActiveSubMenu('none')">LingSync</a>|
 		</span> <span ng-hide="data==undefined"><a
@@ -42,7 +42,7 @@
 			<div class="clearDiv"></div>
 		</span>
 	</div>
-	<div class="menubar subMenubar" ng-show="activeSubMenu=='editSession'">
+	<div class="menubar subMenubar" ng-show="activeSubMenu=='editSession'" ng-cloak>
 		<span>Change Session:</span> <select class="span3"
 			ng-model='activeSessionToSwitchTo'>
 			<option value='none'>All sessions</option>
@@ -63,7 +63,7 @@
 			ng-click="deleteEmptySession(activeSession)"
 			ng-show="(data | filter: activeSession).length==0">Delete
 			Session</button>
-		<div class="menubar subSubMenubar" ng-show="editSessionDetails==true && activeSession!=undefined">
+		<div class="menubar subSubMenubar" ng-show="editSessionDetails==true && activeSession!=undefined" ng-cloak>
 			<form ng-model='editedSessionInfo'>
 				<table cellpadding="5px">
 					<tr>

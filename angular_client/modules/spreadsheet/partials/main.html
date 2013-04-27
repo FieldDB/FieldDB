@@ -1,4 +1,4 @@
-<div id="login_screen">
+<div id="login_screen" ng-cloak>
 	<img src="img/lingsync-logo.png"> <br />
 	<h1>LingSync Quick Data Entry Module</h1>
 	<br> <br>
@@ -28,9 +28,14 @@
 			</select><br>
 			<button class="btn btn-primary">Access</button>
 		</form>
-		<span ng-show="loading==true">Please wait while we access the
-			database...</span><span ng-show="loading==false && data!=undefined">Data
-			loaded. Select a session and click Go, or create a new session. </span><br>
+		<div class="row" ng-show="loading==true">
+			<div class="span12 pagination-centered">
+				<span>Please wait while we access the database...</span><br />
+				<img src="img/loading-spinner.gif" width="100px">
+			</div>
+		</div>
+		<span ng-show="loading==false && data!=undefined"><h2>Data
+				loaded. Select a session and click Go, or create a new session.</h2> </span><br>
 	</div>
 	<div ng-show="data!=undefined">
 		<form ng-submit="selectSession(activeSessionToView)">
@@ -46,12 +51,12 @@
 			ng-click="showCreateSessionDiv=!showCreateSessionDiv">Create
 			New Session</button>
 		<br /> <br />
-		<div ng-show="showCreateSessionDiv==true">
-			<div class="row" ng-show="loading==true">
-				<div class="span12 pagination-centered">
-					<img src="img/loading-spinner.gif" width="100px">
-				</div>
+		<div class="row" ng-show="loading==true">
+			<div class="span12 pagination-centered">
+				<img src="img/loading-spinner.gif" width="100px">
 			</div>
+		</div>
+		<div ng-show="showCreateSessionDiv==true">
 			<div ng-show="loading==false" class="newSessionDiv">
 				<h3>Create New Session</h3>
 				<br />
@@ -92,7 +97,7 @@
 						</tr>
 					</table>
 					<button class="btn btn-primary"
-						ng-click="createNewSession(newSession);">Create</button>
+						ng-click="createNewSession(newSession);showCreateSessionDiv=false">Create</button>
 				</form>
 			</div>
 		</div>
