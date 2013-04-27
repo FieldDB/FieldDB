@@ -83,7 +83,7 @@ define(
                   ;
                 }
                 if (changeThisRecord == true) {
-                  $scope.loading = true;
+                  $rootScope.loading = true;
                   LingSyncData
                       .async($rootScope.DB, UUID)
                       .then(
@@ -104,7 +104,7 @@ define(
                                     function() {
                                       console.log("Changed " + oldTag + " to "
                                           + newTag + " in " + UUID);
-                                      $scope.loading = false;
+                                      $rootScope.loading = false;
                                     },
                                     function() {
                                       window

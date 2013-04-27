@@ -49,7 +49,7 @@ define([ "angular" ], function(angular) {
                 };
                 var promise = $http.post(couchInfo, userInfo).then(function(response) {
                   return response;
-                }, function() {window.alert("Error logging in.\nPlease check username/password.");});
+                }, function() {window.alert("Error logging in.\nPlease check username/password."); $rootScope.loading=false;});
                 return promise;
               },
               'saveNew' : function(DB, newRecord) {
@@ -86,6 +86,12 @@ define([ "angular" ], function(angular) {
                 },
               'blankTemplate' : function() {
                 var promise = $http.get('data/blank_template.json').then(function(response) {
+                  return response.data;
+                });
+                return promise;
+              },
+              'blankSessionTemplate' : function() {
+                var promise = $http.get('data/blank_session_template.json').then(function(response) {
                   return response.data;
                 });
                 return promise;

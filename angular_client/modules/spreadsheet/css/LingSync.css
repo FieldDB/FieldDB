@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Droid+Sans);
 
+h3 {
+	color: #000000;
+}
+
 .LingSyncBody {
 	background-color: #74C2E1;
 	font-family: 'Droid Sans', sans-serif;
@@ -71,6 +75,14 @@
 
 .subMenubar {
 	top: 40;
+	display: inline-block;
+}
+
+.subSubMenubar {
+	top: 80;
+	height: 125px !important;
+	color: #FFFFFF;
+	padding-top: 10px;
 }
 
 .mainBody {
@@ -86,6 +98,18 @@
 
 #login_screen {
 	text-align: center;
+}
+
+.newSessionDiv {
+	background-color: #CDFFFF;
+	border-radius: 10px;
+	border: 1px solid #000000;
+	margin-right: 25%;
+	margin-left: 25%;
+}
+
+.newSessionTable {
+	text-align: left;
 }
 
 .selectedRow {

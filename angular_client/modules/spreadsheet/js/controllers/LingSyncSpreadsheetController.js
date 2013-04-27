@@ -87,38 +87,40 @@ define(
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
         $scope.dataentry = false;
-        $rootScope.activeSubMenu = undefined;
-        $rootScope.activeSession = undefined;
-
+        $rootScope.activeSubMenu = 'none';
+        $scope.activeSession = undefined;
+        $scope.currentSessionName = "All Sessions";
+        $scope.showCreateSessionDiv = false;
+        $scope.editSessionDetails = false;
+        $scope.currentDate = new Date().toDateString();
 
         // Set data size for pagination
         $rootScope.resultSize = LingSyncPreferences.resultSize;
 
         $scope.changeActiveSubMenu = function(subMenu) {
           if ($rootScope.activeSubMenu == subMenu) {
-            $rootScope.activeSubMenu = undefined;
+            $rootScope.activeSubMenu = 'none';
           } else {
             $rootScope.activeSubMenu = subMenu;
           }
         };
-        
+
         // Fetch data from server and put into template scope
         $scope.loadData = function() {
-          $scope.loading = true;
+          $rootScope.loading = true;
           LingSyncData
               .async($rootScope.DB)
               .then(
                   function(dataFromServer) {
                     var scopeData = [];
                     var scopeSessions = [];
-                    var tempObj = {};
                     for ( var i = 0; i < dataFromServer.length; i++) {
-                      //Create array of sessions
+                      // Create array of sessions
                       if (dataFromServer[i].value.sessionFields) {
                         scopeSessions.push(dataFromServer[i].value);
                       }
-                      
-                      //Create array of datums
+
+                      // Create array of datums
                       if (dataFromServer[i].value.datumFields) {
                         var newDatumFromServer = {};
                         newDatumFromServer.id = dataFromServer[i].id;
@@ -138,15 +140,26 @@ define(
                       }
                     }
                     $scope.data = scopeData;
+
+                    for (i in scopeSessions) {
+                      for (j in scopeSessions[i].sessionFields) {
+                        if (scopeSessions[i].sessionFields[j].label == "goal") {
+                          if (scopeSessions[i].sessionFields[j].mask) {
+                            scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
+                                .substr(0, 20);
+                          }
+                        }
+                      }
+                    }
                     $scope.sessions = scopeSessions;
-                    $scope.loading = false;
+                    $rootScope.loading = false;
                   });
         };
         $scope.loginUser = function(auth) {
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
           } else {
-//            $rootScope.DB = auth.user + "-firstcorpus";
+            $rootScope.loading = true;
             $rootScope.server = auth.server;
             LingSyncData.login(auth.user, auth.password).then(
                 function(response) {
@@ -171,6 +184,7 @@ define(
                     }
                   }
                   $rootScope.availableDBs = scopeDBs;
+                  $rootScope.loading = false;
                 });
           }
         };
@@ -182,11 +196,167 @@ define(
             $scope.loadData();
           }
         };
-        
-        $scope.selectSession = function(activeSession) {
-          $rootScope.activeSession = activeSession;
+
+        $scope.selectSession = function(activeSessionID) {
+          $scope.changeActiveSession(activeSessionID);
+          // Make sure that following variable is set (ng-model in select won't
+          // assign variable until chosen)
+          $scope.activeSessionToSwitchTo = activeSessionID;
           $scope.dataentry = true;
           window.location.assign("#/lingsync/" + $scope.template);
+        };
+
+        $scope.changeActiveSession = function(activeSessionToSwitchTo) {
+          if (activeSessionToSwitchTo == 'none') {
+            $scope.activeSession = undefined;
+            $scope.currentSessionName = "All Sessions";
+          } else {
+            $scope.activeSession = activeSessionToSwitchTo;
+            for (i in $scope.sessions) {
+              if ($scope.sessions[i]._id == activeSessionToSwitchTo) {
+                var newDate = $scope.sessions[i].dateCreated.replace(/\"/g, "");
+                var d = new Date(newDate);
+                var goal = "";
+                for (j in $scope.sessions[i].sessionFields) {
+                  if ($scope.sessions[i].sessionFields[j].label == "goal") {
+                    if ($scope.sessions[i].sessionFields[j].mask) {
+                      goal = $scope.sessions[i].sessionFields[j].mask.substr(0,
+                          20);
+                    }
+                  }
+                }
+                $scope.fullCurrentSession = $scope.sessions[i];
+
+                // Set up object to make session editing easier
+                var fullCurrentSessionToEdit = {};
+                fullCurrentSessionToEdit._id = $scope.fullCurrentSession._id;
+                fullCurrentSessionToEdit._rev = $scope.fullCurrentSession._rev;
+                for (k in $scope.fullCurrentSession.sessionFields) {
+                  fullCurrentSessionToEdit[$scope.fullCurrentSession.sessionFields[k].label] = $scope.fullCurrentSession.sessionFields[k].mask;
+                }
+                $scope.fullCurrentSessionToEdit = fullCurrentSessionToEdit;
+                $scope.currentSessionName = d.getDate() + "-"
+                    + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + goal;
+                return;
+              }
+            }
+          }
+        };
+
+        $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
+          var r = confirm("Are you sure you want to edit the session information?\nThis could take a while.");
+          if (r == true) {
+            $scope.editSessionDetails = false;
+            $scope.loading = true;
+            var newSession = $scope.fullCurrentSession;
+            for (i in newSession.sessionFields) {
+              for (key in editSessionInfo) {
+                if (newSession.sessionFields[i].label == key) {
+                  newSession.sessionFields[i].value = editSessionInfo[key];
+                  newSession.sessionFields[i].mask = editSessionInfo[key];
+                }
+              }
+            }
+            // Save new session record
+            LingSyncData.saveEditedRecord($rootScope.DB, newSession._id,
+                newSession).then(function() {
+            });
+
+            // Update all records tied to this session
+            for (i in scopeDataToEdit) {
+              $scope.loading = true;
+              (function(index) {
+                if (scopeDataToEdit[index].sessionID == newSession._id) {
+                  LingSyncData
+                      .async($rootScope.DB, scopeDataToEdit[index].id)
+                      .then(
+                          function(editedRecord) {
+                            // Edit record with updated session info and save
+
+                            editedRecord.session = newSession;
+                            LingSyncData.saveEditedRecord($rootScope.DB,
+                                scopeDataToEdit[index].id, editedRecord,
+                                editedRecord._rev).then(function() {
+                              $scope.loading = false;
+                            });
+
+                          },
+                          function() {
+                            window
+                                .alert("There was an error accessing the record.");
+                          });
+                }
+              })(i);
+            }
+            $scope.loadData();
+          }
+        };
+
+        $scope.deleteEmptySession = function(activeSessionID) {
+          var r = confirm("Are you sure you want to delete this session permanently?");
+          if (r == true) {
+            var revID = "";
+            for (i in $scope.sessions) {
+              if ($scope.sessions[i]._id == activeSessionID) {
+                revID = $scope.sessions[i]._rev;
+                $scope.sessions.splice(i, 1);
+              }
+            }
+            LingSyncData.removeRecord($rootScope.DB, activeSessionID, revID)
+                .then(function(response) {
+                  $scope.changeActiveSession('none');
+                  $rootScope.activeSubMenu = 'none';
+                  // $scope.loadData();
+                }, function() {
+                  window.alert("Error deleting record.");
+                });
+          }
+        };
+
+        $scope.createNewSession = function(newSession) {
+          $rootScope.loading = true;
+          // Get blank template to build new record
+          LingSyncData
+              .blankSessionTemplate()
+              .then(
+                  function(newSessionRecord) {
+                    newSessionRecord.pouchname = $rootScope.DB[0];
+                    newSessionRecord.dateCreated = new Date().toString();
+                    newSessionRecord.dateModified = new Date().toString();
+                    for (key in newSession) {
+                      for (i in newSessionRecord.sessionFields) {
+                        if (newSessionRecord.sessionFields[i].label == "user") {
+                          newSessionRecord.sessionFields[i].value = $scope.username;
+                          newSessionRecord.sessionFields[i].mask = $scope.username;
+                        }
+                        if (newSessionRecord.sessionFields[i].label == "dateSEntered") {
+                          newSessionRecord.sessionFields[i].value = new Date()
+                              .toString();
+                          newSessionRecord.sessionFields[i].mask = new Date()
+                              .toString();
+                        }
+                        if (key == newSessionRecord.sessionFields[i].label) {
+                          newSessionRecord.sessionFields[i].value = newSession[key];
+                          newSessionRecord.sessionFields[i].mask = newSession[key];
+                        }
+                      }
+                    }
+                    LingSyncData.saveNew($rootScope.DB, newSessionRecord).then(
+                        function(savedRecord) {
+                          $scope.loadData();
+                          newSessionRecord._id = savedRecord.data.id;
+                          newSessionRecord._rev = savedRecord.data.rev;
+                          $scope.sessions.push(newSessionRecord);
+                          $scope.dataentry = true;
+                          $scope.changeActiveSession(savedRecord.data.id);
+                          window.location.assign("#/lingsync/"
+                              + $scope.template);
+                          // Update UI with updated
+                          // corpus
+                          // $scope.loadData();
+                        });
+                    $rootScope.loading = false;
+                  });
         };
 
         $scope.reloadPage = function() {
@@ -195,7 +365,7 @@ define(
         };
 
         $scope.saveNew = function(fieldData) {
-          $scope.loading = true;
+          $rootScope.loading = true;
           // Get blank template to build new record
           LingSyncData.blankTemplate().then(
               function(newRecord) {
@@ -218,19 +388,23 @@ define(
                     }
                   }
                 }
-                newRecord.dateEntered = new Date();
-                newRecord.dateModified = new Date();
+                newRecord.dateEntered = new Date().toString();
+                newRecord.dateModified = new Date().toString();
+                // Save session
+                newRecord.session = $scope.fullCurrentSession;
                 // Save tags
-                var newDatumFields = fieldData.datumTags.split(",");
-                var newDatumFieldsArray = [];
-                for (i in newDatumFields) {
-                  var newDatumTagObject = {};
-                  // Trim spaces
-                  var trimmedTag = trim(newDatumFields[i]);
-                  newDatumTagObject.tag = trimmedTag;
-                  newDatumFieldsArray.push(newDatumTagObject);
+                if (fieldData.datumTags) {
+                  var newDatumFields = fieldData.datumTags.split(",");
+                  var newDatumFieldsArray = [];
+                  for (i in newDatumFields) {
+                    var newDatumTagObject = {};
+                    // Trim spaces
+                    var trimmedTag = trim(newDatumFields[i]);
+                    newDatumTagObject.tag = trimmedTag;
+                    newDatumFieldsArray.push(newDatumTagObject);
+                  }
+                  newRecord.datumTags = newDatumFieldsArray;
                 }
-                newRecord.datumTags = newDatumFieldsArray;
                 LingSyncData.saveNew($rootScope.DB, newRecord).then(
                     function(savedRecord) {
                       // Update UI with updated
@@ -240,9 +414,9 @@ define(
 
               });
         };
-        
+
         $scope.saveChanges = function(fieldData, docID) {
-          $scope.loading = true;
+          $rootScope.loading = true;
           $rootScope.currentResult = 0;
           // Get latest version of record from server
           LingSyncData.async($rootScope.DB, docID).then(
@@ -270,17 +444,18 @@ define(
                 editedRecord.dateModified = new Date();
 
                 // Save tags
-                var newDatumFields = fieldData.datumTags.split(",");
-                var newDatumFieldsArray = [];
-                for (i in newDatumFields) {
-                  var newDatumTagObject = {};
-                  // Trim spaces
-                  var trimmedTag = trim(newDatumFields[i]);
-                  newDatumTagObject.tag = trimmedTag;
-                  newDatumFieldsArray.push(newDatumTagObject);
+                if (fieldData.datumTags) {
+                  var newDatumFields = fieldData.datumTags.split(",");
+                  var newDatumFieldsArray = [];
+                  for (i in newDatumFields) {
+                    var newDatumTagObject = {};
+                    // Trim spaces
+                    var trimmedTag = trim(newDatumFields[i]);
+                    newDatumTagObject.tag = trimmedTag;
+                    newDatumFieldsArray.push(newDatumTagObject);
+                  }
+                  editedRecord.datumTags = newDatumFieldsArray;
                 }
-                editedRecord.datumTags = newDatumFieldsArray;
-
                 // Save edited record and refresh data
                 // in scope
                 LingSyncData.saveEditedRecord($rootScope.DB, docID,

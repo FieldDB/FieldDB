@@ -28,7 +28,15 @@ define(
                     element[0].selected = true;
                   }
                 };
-              }).directive(
+              }).directive('selectDropdownSession', function() {
+            return function(scope, element, attrs) {
+              scope.$watch('activeSession', function() {
+                if (scope.session._id == scope.activeSession) {
+                  element[0].selected = true;
+                }
+              });
+            };
+          }).directive(
               'arrowKey',
               function() {
                 return function(scope, element, attrs) {
@@ -61,6 +69,7 @@ define(
                         element[0].focus();
                       }, 0);
                     }
+                    ;
                   });
                 };
               });

@@ -3,8 +3,8 @@
    "sessionFields": [
        {
            "label": "goal",
-           "value": "Continue to create gibberish.",
-           "mask": "Continue to create gibberish.",
+           "value": "",
+           "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
            "help": "This describes the goals of the session.",
@@ -12,8 +12,8 @@
        },
        {
            "label": "consultants",
-           "value": "Myself.",
-           "mask": "Myself.",
+           "value": "",
+           "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
            "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
@@ -21,8 +21,8 @@
        },
        {
            "label": "dialect",
-           "value": "Mid-Atlantic North America",
-           "mask": "Mid-Atlantic North America",
+           "value": "",
+           "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
            "help": "You can use this field to be as precise as you would like about the dialect of this session.",
@@ -30,8 +30,8 @@
        },
        {
            "label": "language",
-           "value": "English",
-           "mask": "English",
+           "value": "",
+           "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
            "help": "This is the langauge (or language family) if you would like to use it.",
@@ -39,8 +39,8 @@
        },
        {
            "label": "dateElicited",
-           "value": "1-Nov-12",
-           "mask": "1-Nov-12",
+           "value": "",
+           "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
            "help": "This is the date in which the session took place.",
@@ -48,8 +48,8 @@
        },
        {
            "label": "user",
-           "value": "Me",
-           "mask": "Me",
+           "value": "",
+           "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
            "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
@@ -57,8 +57,8 @@
        },
        {
            "label": "dateSEntered",
-           "value": "1-Nov-12",
-           "mask": "1-Nov-12",
+           "value": "",
+           "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
            "help": "This is the date in which the session was entered.",

@@ -1,7 +1,7 @@
 <div arrow-key class="row"
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
-	ng-show="data!=undefined || loading==false">
+	ng-hide="data==undefined || loading==true || activeSession==undefined">
 	<div class="span4">
 		<input focus class="span4" type="text" ng-model="newFieldData.field1"
 			placeholder="{{fields.field1.title}}"
@@ -24,15 +24,22 @@
 	<div class="span2">
 		<input class="span2" type="text" ng-model="newFieldData.field6"
 			placeholder="{{fields.field6.title}}"
-			ng-hide="fields.field6.label==''"> 
-			<textarea rows="3" class="span2" ng-model="newFieldData.datumTags"
-				placeholder="Tags"></textarea>
+			ng-hide="fields.field6.label==''">
+		<textarea rows="3" class="span2" ng-model="newFieldData.datumTags"
+			placeholder="Tags"></textarea>
 	</div>
 	<div class="span2">
 		<button ng-show="selected=='newEntry'" class="btn btn-primary"
 			ng-click="saveNew(newFieldData)">Save New</button>
 	</div>
 </div>
+
+<div class="row" ng-show="activeSession==undefined && loading==false">
+	<div class="span12 pagination-centered">
+		<h2>Please select a session before entering data.</h2>
+	</div>
+</div>
+
 <div class="row" ng-show="loading==true">
 	<div class="span12 pagination-centered">
 		<img src="img/loading-spinner.gif" width="100px">
@@ -78,8 +85,8 @@
 			<input class="span2" type="text" ng-model="fieldData.field6"
 				ng-init="fieldData.field6=datum[fields.field6.label]"
 				value={{datum[fields.field6.label]}}
-				ng-hide="fields.field6.label==''"> 
-				<textarea rows="3" class="span2" ng-model="fieldData.datumTags"
+				ng-hide="fields.field6.label==''">
+			<textarea rows="3" class="span2" ng-model="fieldData.datumTags"
 				ng-init="commaList(datum.datumTags)"
 				value={{commaList(datum.datumTags)}}></textarea>
 		</div>
@@ -115,8 +122,7 @@
 		<div class="span2">
 			<span class="span2" title="{{fields.field6.title}}"
 				ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
-				| neverEmpty}}</span><br /> 
-				<span class="span2" rows="3">{{commaList(datum.datumTags)}}</span><br />
+				| neverEmpty}}</span><br /> <span class="span2" rows="3">{{commaList(datum.datumTags)}}</span><br />
 		</div>
 		<div class="span2">
 			<span title="Date modified">Last modified:<br />{{datum.dateModified
@@ -127,7 +133,8 @@
 
 </div>
 <br />
-<div class="pagination-centered" ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
+<div class="pagination-centered"
+	ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
 	activeSession).length)==1 || numberOfResultPages((data | filter:
 	activeSession).length)==0">
 	<button class="btn btn-inverse btn-mini"
