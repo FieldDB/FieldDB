@@ -19,7 +19,7 @@ require([ "sinon", "$" ], function(sinon, $) {
 			clock.restore();
 		});
 
-		it("calls callback after 100ms", function() {
+		it("should call callback after 100ms", function() {
 			var callback = sinon.spy();
 			var throttled = throttle(callback);
 
@@ -38,7 +38,7 @@ require([ "sinon", "$" ], function(sinon, $) {
 		 * Can test DOM/UserInterface maniulation times
 		 * http://msdn.microsoft.com/en-us/magazine//gg649850.aspx
 		 */
-		it("jquery test should animate quicker than 510ms (1/2 second)", function() {
+		it("should animate quicker than 510ms (1/2 second)", function() {
 			/* :DOC += */
 			var element = jQuery(document.createElement("div"));
 			element.animate({

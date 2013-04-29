@@ -15,6 +15,8 @@ require.config({
 		"sinon" : "../tests/libs/sinon/sinon",
 
 		/* load FieldDB dependencies */
+		"handlebars" : "libs/handlebars.runtime",
+		"compiledTemplates" : "libs/compiled_handlebars",
 		"$" : "libs/jquery",
 		"_" : "libs/underscore",
 		"backbone" : "libs/backbone",
@@ -60,16 +62,26 @@ require.config({
 		"backbone" : {
 			deps : [ "_", "$" ],
 			exports : "Backbone"
+		},
+		"handlebars" : {
+			deps : [ "backbone", "$" ],
+			exports : "Handlebars"
+		},
+		"compiledTemplates" : {
+			deps : [ "handlebars" ],
+			exports : "Handlebars"
 		}
 	}
 
 });
 
 // Run the tests!
-require([ "jasmine-jquery-spec", "PlayerSpec",
+require([ "jasmine-html", "compiledTemplates",
+/* These tests need to run, or no backbone tests will run */
+"PlayerSpec", "../tests/libs/backbone/JQueryTest",
 		"../tests/libs/backbone/BackboneModelTest",
-		"../tests/libs/backbone/JQueryTest"
-
+/* Test dependancies, run once in a while */
+// "jasmine-jquery-spec"
 ], function(jasmine) {
 	var jasmineEnv = jasmine.getEnv();
 	jasmineEnv.updateInterval = 1000;
