@@ -79,7 +79,7 @@ require([ "jasmine-jquery-spec", "PlayerSpec",
 
 	if (/PhantomJS/.test(navigator.userAgent)) {
 		jasmineEnv.addReporter(new jasmine.TrivialReporter());
-		jasmineEnv.addReporter(new jasmine.JUnitXmlReporter('../test-reports/'));
+		jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
 	} else {
 		var htmlReporter = new jasmine.HtmlReporter();
 
