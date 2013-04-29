@@ -1,28 +1,28 @@
 //Set the RequireJS configuration
 
 require.config({
-	baseUrl : "",
+	baseUrl : "../backbone_client/",
 
 	paths : {
-		"jasmine" : "libs/jasmine/jasmine",
-		"jasmine-html" : "libs/jasmine/jasmine-html",
+		"jasmine" : "../tests/libs/jasmine/jasmine",
+		"jasmine-html" : "../tests/libs/jasmine/jasmine-html",
 		/* Tests to ensure jasmine is running */
-		"Player" : "libs/jasmine/src/Player",
-		"Song" : "libs/jasmine/src/Song",
-		"PlayerSpec" : "libs/jasmine/spec/PlayerSpec",
-		"SpecHelper" : "libs/jasmine/spec/SpecHelper",
+		"Player" : "../tests/libs/jasmine/src/Player",
+		"Song" : "../tests/libs/jasmine/src/Song",
+		"PlayerSpec" : "../tests/libs/jasmine/spec/PlayerSpec",
+		"SpecHelper" : "../tests/libs/jasmine/spec/SpecHelper",
 
-		"sinon" : "libs/sinon/sinon",
+		"sinon" : "../tests/libs/sinon/sinon",
 
 		/* load FieldDB dependencies */
-		"$" : "../backbone_client/libs/jquery",
-		"_" : "../backbone_client/libs/underscore",
-		"backbone" : "../backbone_client/libs/backbone",
+		"$" : "libs/jquery",
+		"_" : "libs/underscore",
+		"backbone" : "libs/backbone",
 
 		/* load tests for dependencies */
-		"jasmine-jquery" : "libs/backbone/jasmine-jquery",
-		"jasmine-ajax" : "libs/backbone/mock-ajax",
-		"jasmine-jquery-spec" : "libs/backbone/jasmine-jquery-spec",
+		"jasmine-jquery" : "../tests/libs/backbone/jasmine-jquery",
+		"jasmine-ajax" : "../tests/libs/backbone/mock-ajax",
+		"jasmine-jquery-spec" : "../tests/libs/backbone/jasmine-jquery-spec",
 
 	},
 	shim : {
@@ -67,7 +67,8 @@ require.config({
 
 // Run the tests!
 require([ "jasmine-jquery-spec", "PlayerSpec",
-		"libs/backbone/BackboneModelTest", "libs/backbone/JQueryTest"
+		"../tests/libs/backbone/BackboneModelTest",
+		"../tests/libs/backbone/JQueryTest"
 
 ], function(jasmine) {
 	var jasmineEnv = jasmine.getEnv();
