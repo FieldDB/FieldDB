@@ -11,7 +11,10 @@ require.config({
 		"Song" : "libs/jasmine/src/Song",
 		"PlayerSpec" : "libs/jasmine/spec/PlayerSpec",
 		"SpecHelper" : "libs/jasmine/spec/SpecHelper",
-
+		
+		/* Additional Jasmine runner files for XML and console output */
+		"JUnitReporter" : "libs/jasmine-reporters/src/jasmine.junit_reporter",
+		
 		"sinon" : "libs/sinon/sinon",
 
 		/* load FieldDB dependencies */
@@ -30,6 +33,10 @@ require.config({
 			deps : [ "jasmine" ],
 			exports : "jasmine"
 		},
+		"JUnitReporter" : {
+			deps : [ "jasmine-html" ],
+			exports : "jasmine"
+		},		
 		"SpecHelper" : {
 			deps : [ "jasmine-html" ],
 			exports : "jasmine"
@@ -38,12 +45,10 @@ require.config({
 			deps : [ "SpecHelper", "Player", "Song" ],
 			exports : "PlayerSpec"
 		},
-
 		"sinon" : {
 			deps : [ "jasmine-html" ],
 			exports : "sinon"
 		},
-
 		"jasmine-jquery" : {
 			deps : [ "jasmine-html", "$" ],
 			exports : "jasmine"
@@ -56,7 +61,6 @@ require.config({
 			deps : [ "jasmine-ajax" ],
 			exports : "jasmine"
 		},
-
 		"backbone" : {
 			deps : [ "_", "$" ],
 			exports : "Backbone"
@@ -67,19 +71,24 @@ require.config({
 
 // Run the tests!
 require([ "jasmine-jquery-spec", "PlayerSpec",
-		"libs/backbone/BackboneModelTest", "libs/backbone/JQueryTest"
+		"libs/backbone/BackboneModelTest", "libs/backbone/JQueryTest", "JUnitReporter"
 
 ], function(jasmine) {
 	var jasmineEnv = jasmine.getEnv();
 	jasmineEnv.updateInterval = 1000;
 
-	var htmlReporter = new jasmine.HtmlReporter();
+	if (/PhantomJS/.test(navigator.userAgent)) {
+		jasmineEnv.addReporter(new jasmine.TrivialReporter());
+		jasmineEnv.addReporter(new jasmine.JUnitXmlReporter('../test-reports/'));
+	} else {
+		var htmlReporter = new jasmine.HtmlReporter();
 
-	jasmineEnv.addReporter(htmlReporter);
+		jasmineEnv.addReporter(htmlReporter);
 
-	jasmineEnv.specFilter = function(spec) {
-		return htmlReporter.specFilter(spec);
-	};
+		jasmineEnv.specFilter = function(spec) {
+			return htmlReporter.specFilter(spec);
+		};
+	}
 
 	jasmineEnv.execute();
 
