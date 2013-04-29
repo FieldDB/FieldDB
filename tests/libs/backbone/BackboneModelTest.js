@@ -4,7 +4,7 @@
  */
 require([
          "backbone",
-         "../tests/sinon"
+         "sinon"
          ], function(Backbone) {
 	describe("Sinon spy on Backbone Episode model", function() {
 		beforeEach(function() {
