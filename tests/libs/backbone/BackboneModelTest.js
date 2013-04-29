@@ -5,7 +5,7 @@
 require([
          "backbone",
          "sinon"
-         ], function(Backbone) {
+         ], function(Backbone, sinon) {
 	describe("Sinon spy on Backbone Episode model", function() {
 		beforeEach(function() {
 			this.server = sinon.fakeServer.create();
