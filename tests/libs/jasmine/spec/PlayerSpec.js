@@ -1,4 +1,4 @@
-describe("Player", function() {
+describe("Jasmine basic tests", function() {
   var player;
   var song;
 

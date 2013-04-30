@@ -1,12 +1,14 @@
 /*
- * 
- * Spies are functions that keep track of how and often they were called, and what values were returned. This is phenomenally useful in asynchronous and event-driven applications as you can send a spy function off to keep track of whatâ€™s going on inside your methods, even if those methods are anonymous or closed off from direct inspection.
+ * Spies are functions that keep track of how and often they were called,
+ *  and what values were returned. This is phenomenally useful in asynchronous 
+ *  and event-driven applications as you can send a spy function off to keep track of whatâ
+ *   going on inside your methods, even if those methods are anonymous or closed off from direct inspection.
  */
 require(
     [ "backbone", "sinon" ],
     function() {
       describe(
-          "Backbone Model's change events",
+          "Backbone-CouchDB Connection",
           function() {
             beforeEach(function() {
               this.server = sinon.fakeServer.create();
@@ -14,39 +16,15 @@ require(
               Backbone.couch_connector.config.db_name = "episode";
               OPrime.debug("Backbone.couch_connector.config",
                   Backbone.couch_connector.config);
+
             });
 
             afterEach(function() {
               this.server.restore();
             });
-            it("should fire a callback when a Backbone event is triggered",
-                function() {
-                  var Episode = Backbone.Model.extend({
-                    url : function() {
-                      return "/episode/" + this.id;
-                    }
-                  });
-
-                  // Create an anonymous spy
-                  var spy = sinon.spy();
-
-                  // Create a new Backbone 'Episode' model
-                  var episode = new Episode({
-                    title : "Hollywood - Part 2"
-                  });
-
-                  // Call the anonymous spy method when 'foo' is triggered
-                  episode.bind('foo', spy);
-
-                  // Trigger the foo event
-                  episode.trigger('foo');
-
-                  // Expect that the spy was called at least once
-                  expect(spy.called).toBeTruthy();
-                });
 
             it(
-                "should fire the change event after a fetch from mocked server",
+                "should be able to recieve a doc from a mocked couchdb server",
                 function() {
 
                   var Episode = Backbone.Model.extend({
@@ -57,10 +35,11 @@ require(
 
                   var callback = sinon.spy();
 
-                  // Set how the fake server will respond
-                  // This reads: a GET request for /episode/123
-                  // will return a 200 response of type
-                  // application/json with the given JSON response body
+                  /*
+                   * Set how the fake server will respond This reads: a GET
+                   * request for /episode/123 will return a 200 response of type
+                   * application/json with the given JSON response body
+                   */
                   this.server
                       .respondWith(
                           "GET",
@@ -75,7 +54,7 @@ require(
                   var episode = new Episode({
                     _id : "123"
                   });
-                  // It should have set the model's id
+                  // Backbone-CouchDB adaptor should have set the model's id
                   expect(episode.id).toEqual(episode.get("_id"));
 
                   // Bind to the change event on the model
@@ -84,12 +63,13 @@ require(
                   // makes an ajax request to the server
                   episode.fetch();
 
+                  OPrime.debug("episode", episode);
                   // Fake server responds to the request
                   this.server.respond();
 
                   // Expect that the spy was called with the new model
                   expect(callback.called).toBeTruthy();
-                  expect(callback.getCall(0).args[0].attributes).toEqual({
+                  expect(episode.attributes).toEqual({
                     _id : "123",
                     _rev : "1-3c03fe04b1d1c00582fa1c1992897a84",
                     title : "Hollywood - Part 2"
