@@ -127,7 +127,7 @@ require([ //"handlebars",
  * (first), or no FieldDB tests will run
  */
     "PlayerSpec", 
-    "../tests/libs/backbone/JQueryTest",
+//    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
 	"../tests/app/AppTest", 
@@ -148,8 +148,8 @@ require([ //"handlebars",
     "../tests/user/UserTest",
 
     /* Test dependancies, only run these once in a while */
-    "../tests/libs/backbone/BackboneModelTest",
-    "../tests/libs/backbone/BackboneCouchdbTest",
+//    "../tests/libs/backbone/BackboneModelTest",
+//    "../tests/libs/backbone/BackboneCouchdbTest",
 
     /* Test DOM manipulation, only run these (199 tests) once in a while */
 //    "jasmine-jquery-spec",
