@@ -127,7 +127,7 @@ require([ //"handlebars",
  * (first), or no FieldDB tests will run
  */
     "PlayerSpec", 
-    "../tests/libs/backbone/JQueryTest",
+//    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
 	"../tests/app/AppTest", 
@@ -135,16 +135,21 @@ require([ //"handlebars",
 	"../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
-    "../tests/corpus/CorpusTest", "../tests/export/ExportTest",
-    "../tests/glosser/GlosserTest", "../tests/hotkey/HotKeyTest",
-    "../tests/import/ImportTest", "../tests/insert_unicode/InsertUnicodeTest",
-    "../tests/lexicon/LexiconTest", "../tests/permission/PermissionTest",
-    "../tests/search/SearchTest", "../tests/datum/SessionTest",
+    "../tests/corpus/CorpusTest", 
+    "../tests/export/ExportTest",
+    "../tests/glosser/GlosserTest", 
+    "../tests/hotkey/HotKeyTest",
+    "../tests/import/ImportTest", 
+    "../tests/insert_unicode/InsertUnicodeTest",
+    "../tests/lexicon/LexiconTest", 
+    "../tests/permission/PermissionTest",
+    "../tests/search/SearchTest", 
+    "../tests/datum/SessionTest",
     "../tests/user/UserTest",
 
     /* Test dependancies, only run these once in a while */
-//    "../tests/libs/backbone/BackboneModelTest",
-//    "../tests/libs/backbone/BackboneCouchdbTest",
+    "../tests/libs/backbone/BackboneModelTest",
+    "../tests/libs/backbone/BackboneCouchdbTest",
 
     /* Test DOM manipulation, only run these (199 tests) once in a while */
     // "jasmine-jquery-spec"
