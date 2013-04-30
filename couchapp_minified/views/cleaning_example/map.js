@@ -6,6 +6,8 @@
  * Conventions state that all Plurals in the nominal domain should be marked for animacy)
  */
 function(doc) {
+  /* if this document has been deleted, the ignore it and return immediately */
+  if(doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
   /* If its a datum (datum have datumFields and session) */
   if ((doc.datumFields) && (doc.session)) {
     /*
