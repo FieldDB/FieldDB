@@ -127,7 +127,7 @@ require([ //"handlebars",
  * (first), or no FieldDB tests will run
  */
     "PlayerSpec", 
-//    "../tests/libs/backbone/JQueryTest",
+    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
 	"../tests/app/AppTest", 
