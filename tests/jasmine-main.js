@@ -152,7 +152,7 @@ require([ //"handlebars",
     "../tests/libs/backbone/BackboneCouchdbTest",
 
     /* Test DOM manipulation, only run these (199 tests) once in a while */
-    // "jasmine-jquery-spec"
+    "jasmine-jquery-spec",
     "JUnitReporter" ], function() {
 
   OPrime.debugMode = false;
