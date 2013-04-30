@@ -121,6 +121,7 @@ require.config({
  * Initialize Jasmine, and run the tests
  */
 require([ //"handlebars",
+          "OPrime",
 /*
  * For some mysterious reason as yet unknown to us, these tests need to run
  * (first), or no FieldDB tests will run
