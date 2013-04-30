@@ -4,8 +4,8 @@ require.config({
   baseUrl : "../backbone_client/",
 
   paths : {
-    "jasmine" : "../tests/libs/jasmine/jasmine",
-    "jasmine-html" : "../tests/libs/jasmine/jasmine-html",
+    // "jasmine" : "../tests/libs/jasmine/jasmine",
+    // "jasmine-html" : "../tests/libs/jasmine/jasmine-html",
     /* Tests to ensure jasmine is running */
     "Player" : "../tests/libs/jasmine/src/Player",
     "Song" : "../tests/libs/jasmine/src/Song",
@@ -15,8 +15,8 @@ require.config({
     "sinon" : "../tests/libs/sinon/sinon",
 
     /* load Backbone dependencies */
-    "handlebars" : "libs/handlebars.runtime",
-    "compiledTemplates" : "libs/compiled_handlebars",
+    "handlebarsjs" : "libs/handlebars.runtime",
+    "handlebars" : "libs/compiled_handlebars",
     "$" : "libs/jquery",
     "_" : "libs/underscore",
     "backbonejs" : "libs/backbone",
@@ -40,22 +40,22 @@ require.config({
 
   },
   shim : {
-    "jasmine-html" : {
-      deps : [ "jasmine" ],
-      exports : "jasmine"
-    },
-    "SpecHelper" : {
-      deps : [ "jasmine-html" ],
-      exports : "jasmine"
-    },
+    // "jasmine-html" : {
+    // deps : [ "jasmine" ],
+    // exports : "jasmine"
+    // },
+    // "SpecHelper" : {
+    // deps : [ "jasmine-html" ],
+    // exports : "jasmine"
+    // },
     "PlayerSpec" : {
       deps : [ "SpecHelper", "Player", "Song" ],
       exports : "PlayerSpec"
     },
-    "sinon" : {
-      deps : [ "jasmine-html" ],
-      exports : "sinon"
-    },
+    // "sinon" : {
+    // deps : [ "jasmine-html" ],
+    // exports : "sinon"
+    // },
 
     /* Shim Backbone dependencies for use in require statements */
     "jquery-couch" : {
@@ -66,12 +66,12 @@ require.config({
       deps : [ "_", "$", "OPrime" ],
       exports : "Backbone"
     },
-    "handlebars" : {
+    "handlebarsjs" : {
       deps : [ "backbonejs", "$" ],
       exports : "Handlebars"
     },
-    "compiledTemplates" : {
-      deps : [ "handlebars" ],
+    "handlebars" : {
+      deps : [ "handlebarsjs" ],
       exports : "Handlebars"
     },
     "backbone" : {
@@ -95,25 +95,24 @@ require.config({
 
     /* Shim jquery test dependencies to get them to load in the right order */
     "jasmine-jquery" : {
-      deps : [ "jasmine-html", "$" ],
+      deps : [ "$" ],
       exports : "jasmine"
     },
     "jasmine-ajax" : {
-      deps : [ "jasmine-jquery", "jasmine-html", "$" ],
+      deps : [ "jasmine-jquery", "$" ],
       exports : "jasmine"
     },
     "jasmine-jquery-spec" : {
       deps : [ "jasmine-ajax" ],
       exports : "jasmine"
     },
-
   }
 
 });
 /*
  * Initialize Jasmine, and run the tests
  */
-require([ "jasmine-html", "backbone", "compiledTemplates",
+require([ "handlebars",
 /*
  * For some mysterious reason as yet unknown to us, these tests need to run
  * (first), or no FieldDB tests will run
@@ -124,17 +123,19 @@ require([ "jasmine-html", "backbone", "compiledTemplates",
     "../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
-    // "../tests/corpus/CorpusTest",
-    "../tests/export/ExportTest", "../tests/glosser/GlosserTest",
-    "../tests/hotkey/HotKeyTest",
-// "../tests/import/ImportTest",
+    "../tests/corpus/CorpusTest", "../tests/export/ExportTest",
+    "../tests/glosser/GlosserTest", "../tests/hotkey/HotKeyTest",
+    "../tests/import/ImportTest", "../tests/insert_unicode/InsertUnicodeTest",
+    "../tests/lexicon/LexiconTest", "../tests/permission/PermissionTest",
+    "../tests/search/SearchTest", "../tests/datum/SessionTest",
+    "../tests/user/UserTest",
 
-/* Test dependancies, only run these once in a while */
-// "../tests/libs/backbone/BackboneModelTest",
-// "../tests/libs/backbone/BackboneCouchdbTest",
+    /* Test dependancies, only run these once in a while */
+    "../tests/libs/backbone/BackboneModelTest",
+    "../tests/libs/backbone/BackboneCouchdbTest",
 /* Test DOM manipulation, only run these (199 tests) once in a while */
 // "jasmine-jquery-spec"
-], function(jasmine, Backbone) {
+], function() {
 
   OPrime.debugMode = true;
 
@@ -148,7 +149,6 @@ require([ "jasmine-html", "backbone", "compiledTemplates",
   jasmineEnv.specFilter = function(spec) {
     return htmlReporter.specFilter(spec);
   };
-
   jasmineEnv.execute();
 
 });
