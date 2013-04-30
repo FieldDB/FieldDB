@@ -10,7 +10,7 @@ define([
     "search/Search",
     "app/UpdatingCollectionView",
     "app/PaginatedUpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 

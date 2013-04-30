@@ -11,7 +11,7 @@ define([
     "datum/DatumTagReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars,

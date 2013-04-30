@@ -4,21 +4,21 @@ require.config({
     /* Bootstrap user interface javascript files */
     "bootstrap" : "libs/bootstrap/js/bootstrap.min",
 
-    "crypto" : "libs/Crypto_AES",
+    "CryptoJS" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "jquery" : "libs/jquery",
+    "$" : "libs/jquery",
 
     /* Handlebars html templating libraries and compiled templates */
-    "compiledTemplates" : "libs/compiled_handlebars",
-    "handlebars" : "libs/handlebars.runtime",
+    "handlebars" : "libs/compiled_handlebars",
+    "handlebarsjs" : "libs/handlebars.runtime",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
     "backbone" : "libs/backbone",
     "backbone_pouchdb" : "libs/backbone-pouchdb",
     "backbone_couchdb" : "libs/backbone-couchdb",
     "pouch" : "libs/pouch.alpha",
-    "underscore" : "libs/underscore",
+    "_" : "libs/underscore",
 
     "terminal" : "libs/terminal/terminal",
 
@@ -27,32 +27,21 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_devserver"
+    "OPrime" : "libs/webservicesconfig_devserver"
   },
   shim : {
-    "underscore" : {
-      exports : "_"
-    },
-
-    "jquery" : {
-      exports : "$"
-    },
-
     "xml2json" : {
-      deps : [ "jquery" ],
+      deps : [ "$" ],
       exports : "X2JS"
     },
 
-    "oprime" : {
-      exports : "OPrime"
-    },
     "webservicesconfig" : {
       deps : [ "oprime" ],
       exports : "OPrime"
     },
 
     "bootstrap" : {
-      deps : [ "jquery" ],
+      deps : [ "$" ],
       exports : "bootstrap"
     },
 
@@ -60,7 +49,7 @@ require.config({
       exports : "Pouch"
     },
     "backbone" : {
-      deps : [ "underscore", "bootstrap", "compiledTemplates" ],
+      deps : [ "_", "bootstrap", "handlebars" ],
       exports : "Backbone"
     },
     "backbone_pouchdb" : {
@@ -72,21 +61,17 @@ require.config({
       exports : "Backbone"
     },
 
-    "handlebars" : {
-      deps : [ "bootstrap", "jquery" ],
+    "handlebarsjs" : {
+      deps : [ "bootstrap", "$" ],
       exports : "Handlebars"
     },
 
-    "crypto" : {
-      exports : "CryptoJS"
-    },
-
-    "compiledTemplates" : {
-      deps : [ "handlebars" ],
+    "handlebars" : {
+      deps : [ "handlebarsjs" ],
       exports : "Handlebars"
     },
     "terminal" : {
-      deps : [ "bootstrap", "jquery" ],
+      deps : [ "bootstrap", "$" ],
       exports : "Terminal"
     }
 
@@ -103,8 +88,7 @@ require([
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
-    "libs/webservicesconfig_devserver",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     App,
     User,
