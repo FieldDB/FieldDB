@@ -120,13 +120,13 @@ require.config({
 /*
  * Initialize Jasmine, and run the tests
  */
-require([ "handlebars",
+require([ //"handlebars",
 /*
  * For some mysterious reason as yet unknown to us, these tests need to run
  * (first), or no FieldDB tests will run
  */
     "PlayerSpec", 
-    "../tests/libs/backbone/JQueryTest",
+//    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
 	"../tests/app/AppTest", 
