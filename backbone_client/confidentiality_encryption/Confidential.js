@@ -1,9 +1,8 @@
 define( [
     "backbone",
-    "crypto"
+    "CryptoJS"
 ],function(
-    Backbone, 
-    CryptoJS
+    Backbone
 ) {
   var Confidential = Backbone.Model.extend(
   /** @lends Confidential.prototype */

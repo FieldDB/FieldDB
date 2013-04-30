@@ -15,7 +15,7 @@ define([
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 

@@ -40,7 +40,7 @@ define([
     "user/UserEditView",
     "user/UserReadView",
     "terminal",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars,

@@ -9,7 +9,7 @@ define([
     "datum/Session",
     "app/PaginatedUpdatingCollectionView",
     "xml2json",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Handlebars,

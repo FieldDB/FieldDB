@@ -1,6 +1,6 @@
 define([ 
-    "backbone",
-], function(Backbone) {
+    "backbone", "handlebars"
+], function(Backbone, Handlebars) {
 var PaginatedUpdatingCollectionView = Backbone.View.extend(
     /** @lends PaginatedUpdatingCollectionView.prototype */
 {

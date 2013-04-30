@@ -6,7 +6,7 @@ define([
     "corpus/CorpusLinkView",
     "user/User",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
