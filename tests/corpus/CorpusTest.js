@@ -1,6 +1,6 @@
 require(
-    [ "corpus/Corpus" ],
-    function(Corpus) {
+    [ ],
+    function() {
 
       describe(
           "Corpus: as a team we want to be able to go back in time in the corpus revisions",
