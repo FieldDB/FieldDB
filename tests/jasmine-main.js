@@ -56,10 +56,10 @@ require.config({
       deps : [ "SpecHelper", "Player", "Song" ],
       exports : "PlayerSpec"
     },
-     "JUnitReporter" : {
-    // deps : [ "jasmine-html" ],
-     exports : "jasmine"
-     },
+//     "JUnitReporter" : {
+//     deps : [ "jasmine-html" ],
+//     exports : "jasmine"
+//     },
     // "sinon" : {
     // deps : [ "jasmine-html" ],
     // exports : "sinon"
@@ -142,8 +142,8 @@ require([ "handlebars",
     "../tests/user/UserTest",
 
     /* Test dependancies, only run these once in a while */
-    "../tests/libs/backbone/BackboneModelTest",
-    "../tests/libs/backbone/BackboneCouchdbTest",
+//    "../tests/libs/backbone/BackboneModelTest",
+//    "../tests/libs/backbone/BackboneCouchdbTest",
 
     /* Test DOM manipulation, only run these (199 tests) once in a while */
     // "jasmine-jquery-spec"
