@@ -56,10 +56,10 @@ require.config({
       deps : [ "SpecHelper", "Player", "Song" ],
       exports : "PlayerSpec"
     },
-    // "JUnitReporter" : {
+     "JUnitReporter" : {
     // deps : [ "jasmine-html" ],
-    // exports : "jasmine"
-    // },
+     exports : "jasmine"
+     },
     // "sinon" : {
     // deps : [ "jasmine-html" ],
     // exports : "sinon"
@@ -125,10 +125,13 @@ require([ "handlebars",
  * For some mysterious reason as yet unknown to us, these tests need to run
  * (first), or no FieldDB tests will run
  */
-"PlayerSpec", "../tests/libs/backbone/JQueryTest",
-/* FieldDB tests */
-"../tests/app/AppTest", "../tests/activity/ActivityTest",
-    "../tests/authentication/AuthenticationTest",
+    "PlayerSpec", 
+    "../tests/libs/backbone/JQueryTest",
+
+    /* FieldDB tests */
+	"../tests/app/AppTest", 
+	"../tests/activity/ActivityTest",
+	"../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
     "../tests/corpus/CorpusTest", "../tests/export/ExportTest",
@@ -141,6 +144,7 @@ require([ "handlebars",
     /* Test dependancies, only run these once in a while */
     "../tests/libs/backbone/BackboneModelTest",
     "../tests/libs/backbone/BackboneCouchdbTest",
+
     /* Test DOM manipulation, only run these (199 tests) once in a while */
     // "jasmine-jquery-spec"
     "JUnitReporter" ], function() {
