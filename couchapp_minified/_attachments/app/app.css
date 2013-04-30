@@ -107,7 +107,9 @@ a { /* color: #550; */
 .brand { /* font-size: .85em !important; */
 	
 }
-
+.thisIsEditable{
+  background: #fff;
+}
 .timestamp,.timestamp
  
 a {
