@@ -1,7 +1,7 @@
 (function() {
 
-    if (! jasmine) {
-        throw new Exception("jasmine library does not exist in global namespace!");
+    if (typeof jasmine == 'undefined') {
+        throw new Error("jasmine library does not exist in global namespace!");
     }
 
     function elapsed(startTime, endTime) {
@@ -11,12 +11,12 @@
     function ISODateString(d) {
         function pad(n) { return n < 10 ? '0'+n : n; }
 
-        return d.getFullYear() + '-'
-            + pad(d.getMonth()+1) +'-'
-            + pad(d.getDate()) + 'T'
-            + pad(d.getHours()) + ':'
-            + pad(d.getMinutes()) + ':'
-            + pad(d.getSeconds());
+        return d.getFullYear() + '-' +
+            pad(d.getMonth()+1) + '-' +
+            pad(d.getDate()) + 'T' +
+            pad(d.getHours()) + ':' +
+            pad(d.getMinutes()) + ':' +
+            pad(d.getSeconds());
     }
 
     function trim(str) {
@@ -32,45 +32,36 @@
     }
 
     /**
-     * PhantomJS Reporter generates JUnit XML for the given spec run.
-     * Allows the test results to be used in java based CI.
-     * It appends some DOM elements/containers, so that a PhantomJS script can pick that up.
+     * Generates JUnit XML for the given spec run.
+     * Allows the test results to be used in java based CI
+     * systems like CruiseControl and Hudson.
      *
+     * @param {string} savePath where to save the files
      * @param {boolean} consolidate whether to save nested describes within the
      *                  same file as their parent; default: true
      * @param {boolean} useDotNotation whether to separate suite names with
      *                  dots rather than spaces (ie "Class.init" not
      *                  "Class init"); default: true
      */
-    var PhantomJSReporter =  function(consolidate, useDotNotation) {
+    var JUnitXmlReporter = function(savePath, consolidate, useDotNotation) {
+        this.savePath = savePath || '';
         this.consolidate = consolidate === jasmine.undefined ? true : consolidate;
         this.useDotNotation = useDotNotation === jasmine.undefined ? true : useDotNotation;
-    };  
+    };
+    JUnitXmlReporter.finished_at = null; // will be updated after all files have been written
 
-    PhantomJSReporter.prototype = {
-        reportRunnerStarting: function(runner) {
-            this.log("Runner Started.");
-        },
-
+    JUnitXmlReporter.prototype = {
         reportSpecStarting: function(spec) {
             spec.startTime = new Date();
 
-            if (! spec.suite.startTime) {
+            if (!spec.suite.startTime) {
                 spec.suite.startTime = spec.startTime;
             }
-
-            this.log(spec.suite.description + ' : ' + spec.description + ' ... ');
         },
 
         reportSpecResults: function(spec) {
             var results = spec.results();
             spec.didFail = !results.passed();
-            spec.status = spec.didFail ? 'Failed.' : 'Passed.';
-            if (results.skipped) {
-                spec.status = 'Skipped.';
-            }
-            this.log(spec.status);
-
             spec.duration = elapsed(spec.startTime, new Date());
             spec.output = '<testcase classname="' + this.getFullName(spec.suite) +
                 '" name="' + escapeInvalidXmlChars(spec.description) + '" time="' + spec.duration + '">';
@@ -83,11 +74,13 @@
 
                 if (result.type == 'expect' && result.passed && !result.passed()) {
                     failures += 1;
-                    failure += (failures + ": " + escapeInvalidXmlChars(result.message) + " ");
+                    failure += '<failure type="' + result.type + '" message="' + trim(escapeInvalidXmlChars(result.message)) + '">';
+                    failure += escapeInvalidXmlChars(result.trace.stack || result.message);
+                    failure += "</failure>";
                 }
             }
             if (failure) {
-                spec.output += "<failure>" + trim(failure) + "</failure>";
+                spec.output += failure;
             }
             spec.output += "</testcase>";
         },
@@ -100,7 +93,6 @@
             var failedCount = 0;
 
             suite.status = results.passed() ? 'Passed.' : 'Failed.';
-            suite.statusPassed = results.passed();
             if (results.totalCount === 0) { // todo: change this to check results.skipped
                 suite.status = 'Skipped.';
             }
@@ -119,20 +111,14 @@
                 '" time="' + suite.duration + '" timestamp="' + ISODateString(suite.startTime) + '">';
             suite.output += specOutput;
             suite.output += "\n</testsuite>";
-            this.log(suite.description + ": " + results.passedCount + " of " + results.totalCount + " expectations passed.");
         },
 
         reportRunnerResults: function(runner) {
-            this.log("Runner Finished.");
-            var suites = runner.suites(),
-                passed = true;
+            var suites = runner.suites();
             for (var i = 0; i < suites.length; i++) {
-                var suite = suites[i],
-                    filename = 'TEST-' + this.getFullName(suite, true) + '.xml',
-                    output = '<?xml version="1.0" encoding="UTF-8" ?>';
-                    
-                passed = !suite.statusPassed ? false : passed;
-
+                var suite = suites[i];
+                var fileName = 'TEST-' + this.getFullName(suite, true) + '.xml';
+                var output = '<?xml version="1.0" encoding="UTF-8" ?>';
                 // if we are consolidating, only write out top-level suites
                 if (this.consolidate && suite.parentSuite) {
                     continue;
@@ -141,14 +127,15 @@
                     output += "\n<testsuites>";
                     output += this.getNestedOutput(suite);
                     output += "\n</testsuites>";
-                    this.createSuiteResultContainer(filename, output);
+                    this.writeFile(this.savePath, fileName, output);
                 }
                 else {
                     output += suite.output;
-                    this.createSuiteResultContainer(filename, output);
+                    this.writeFile(this.savePath, fileName, output);
                 }
             }
-            this.createTestFinishedContainer(passed);
+            // When all done, make it known on JUnitXmlReporter
+            JUnitXmlReporter.finished_at = (new Date()).getTime();
         },
 
         getNestedOutput: function(suite) {
@@ -159,16 +146,48 @@
             return output;
         },
 
-        createSuiteResultContainer: function(filename, xmloutput) {
-            jasmine.phantomjsXMLReporterResults = jasmine.phantomjsXMLReporterResults || [];
-            jasmine.phantomjsXMLReporterResults.push({
-                "xmlfilename" : filename,
-                "xmlbody" : xmloutput
-            });
-        },
-        
-        createTestFinishedContainer: function(passed) {
-            jasmine.phantomjsXMLReporterPassed = passed
+        writeFile: function(path, filename, text) {
+            function getQualifiedFilename(separator) {
+                if (path && path.substr(-1) !== separator && filename.substr(0) !== separator) {
+                    path += separator;
+                }
+                return path + filename;
+            }
+
+            // Rhino
+            try {
+                // turn filename into a qualified path
+                if (path) {
+                    filename = getQualifiedFilename(java.lang.System.getProperty("file.separator"));
+                    // create parent dir and ancestors if necessary
+                    var file = java.io.File(filename);
+                    var parentDir = file.getParentFile();
+                    if (!parentDir.exists()) {
+                        parentDir.mkdirs();
+                    }
+                }
+                // finally write the file
+                var out = new java.io.BufferedWriter(new java.io.FileWriter(filename));
+                out.write(text);
+                out.close();
+                return;
+            } catch (e) {}
+            // PhantomJS, via a method injected by phantomjs-testrunner.js
+            try {
+                // turn filename into a qualified path
+                filename = getQualifiedFilename(window.fs_path_separator);
+                __phantom_writeFile(filename, text);
+                return;
+            } catch (f) {}
+            // Node.js
+            try {
+                var fs = require("fs");
+                var nodejs_path = require("path");
+                var fd = fs.openSync(nodejs_path.join(path, filename), "w");
+                fs.writeSync(fd, text, 0);
+                fs.closeSync(fd);
+                return;
+            } catch (g) {}
         },
 
         getFullName: function(suite, isFilename) {
@@ -200,5 +219,5 @@
     };
 
     // export public
-    jasmine.PhantomJSReporter = PhantomJSReporter;
+    jasmine.JUnitXmlReporter = JUnitXmlReporter;
 })();
