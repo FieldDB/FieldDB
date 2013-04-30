@@ -149,7 +149,7 @@ require([ "handlebars",
     // "jasmine-jquery-spec"
     "JUnitReporter" ], function() {
 
-  OPrime.debugMode = true;
+  OPrime.debugMode = false;
 
   var jasmineEnv = jasmine.getEnv();
   jasmineEnv.updateInterval = 1000;
