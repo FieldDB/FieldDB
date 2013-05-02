@@ -265,6 +265,14 @@ define([
             userchooseable: "disabled",
             help: "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
           }),
+         /* new DatumField({
+	            label : "french_keyword",
+	            shouldBeEncrypted: "",
+	            showToUserTypes: "all",
+	            userchooseable: "disabled",
+	            help: "Unparsed french_keyword in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
+	         
+		  }),*/
           new DatumField({
             label : "morphemes",
             shouldBeEncrypted: "checked",

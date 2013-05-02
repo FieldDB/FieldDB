@@ -6,6 +6,7 @@ define([
     "comment/Comments",
     "comment/CommentReadView",
     "confidentiality_encryption/Confidential",
+    "datum/DatumField",
     "datum/Datum",
     "datum/DatumFieldEditView",
     "datum/DatumTag",
@@ -23,6 +24,7 @@ define([
     Comments,
     CommentReadView,
     Confidential,
+    DatumField,
     Datum,
     DatumFieldEditView,
     DatumTag,
@@ -152,8 +154,11 @@ define([
       "click .add-comment-datum" : 'insertNewComment',
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
+      //"blur .xianli" : "updateFrenchKeyword",
+      "blur .french_keyword" : "updateFrenchKeyword",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
       "click .save-datum" : "saveButton",
+      
     	  "click .show_original_details" : function(e){
               $(this.el).find(".original_french_details").removeAttr("hidden");
               e.preventDefault();
@@ -217,12 +222,33 @@ define([
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
-      jsonToRender.french_keyword = "bouger";
+    
+     var existingFrenchKeywordFieldsInThisDatum=this.model.get("datumFields").where({label: "french_keyword4"});
+      
+    	if(existingFrenchKeywordFieldsInThisDatum.length == 0){
+    		 jsonToRender.page = "456";
+    		 alert("it works.");
+
+    		  this.model.get("datumFields").add(new DatumField({
+    	            label : "french_keyword4",
+    	            shouldBeEncrypted: "",
+    	            showToUserTypes: "all",
+    	            userchooseable: "disabled",
+    	            help: "Unparsed french_keyword in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
+    	         
+    		  }));
+    		  jsonToRender.french_keyword = ""; 
+    	}
+    	else{
+    		jsonToRender.french_keyword = existingFrenchKeywordFieldsInThisDatum[0].get("mask");
+    	}
+    
+     
       jsonToRender.document_source = "9qjx2j9qizqirqx9ij qrqjxroqi.html";
       jsonToRender.image_src = "lessons_corpus/happyface.jpg";
       jsonToRender.original_french = "Je sais pas.";
       jsonToRender.original_miami = "original miami.";
-      jsonToRender.cognates = "some cognates.";
+           jsonToRender.cognates = "some cognates.";
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
       try{
@@ -565,6 +591,16 @@ define([
       this.needsSave = true;
 
     },
+    
+    updateFrenchKeyword : function(e){
+    	// var selectedValue = this.$el.find(".datum_state_select").val();
+    	alert("This input field has lost its focus.");
+        var value=e.target.value;
+        this.model.get("datumFields").where({label: "french_keyword"})[0].set("mask",value);
+        this.needsSave = true;
+
+      },
+    
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {
         var glossLine = Glosser.glossFinder(morphemesLine);

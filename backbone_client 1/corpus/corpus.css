@@ -1,0 +1,10 @@
+.skin{
+	background: transparent;
+height: 40px;
+width: 40px;
+float: right;
+}
+
+#session{
+	float: left;
+}
