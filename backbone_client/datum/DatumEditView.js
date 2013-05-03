@@ -73,8 +73,8 @@ define([
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "li",
-        childViewClass   : "datum-field",
+        childViewTagName     : "div",
+        childViewClass   : "datum-field span5",
         childViewFormat      : "datum"
       });
       
