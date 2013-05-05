@@ -13,7 +13,7 @@ define( [
     "datum/Session",
     "datum/SessionEditView",
     "app/PaginatedUpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 
 ], function(
     Backbone,

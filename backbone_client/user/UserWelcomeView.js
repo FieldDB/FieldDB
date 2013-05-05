@@ -12,7 +12,7 @@ define([
     "datum/Sessions",
     "user/User",
     "text!locales/en/messages.json",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 

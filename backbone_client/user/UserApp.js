@@ -8,7 +8,7 @@ define([
     "user/User",
     "user/UserMask",
     "text!locales/en/messages.json",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Authentication, 
