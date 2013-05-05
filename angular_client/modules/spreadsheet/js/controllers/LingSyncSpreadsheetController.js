@@ -111,12 +111,12 @@ define(
           if ($scope.saved == 'no') {
             window.alert("Please save changes before continuing");
           } else {
-            
+
             if ($scope.searching == true) {
-              $scope.searching=false;
+              $scope.searching = false;
               $scope.loadData();
             }
-            
+
             if (itemToDisplay == "settings") {
               $scope.dataentry = false;
               $scope.changeActiveSubMenu('none');
@@ -204,9 +204,25 @@ define(
                   $rootScope.authenticated = true;
                   $scope.username = auth.user;
                   var DBs = response.data.roles;
+                  // Format available databases (pluck final string after
+                  // underscore) TODO Implement underscore pluck?
                   for (i in DBs) {
-                    DBs[i] = DBs[i].split("_")[0];
-                    DBs[i] = DBs[i].replace(/[\"]/g, "");
+                    DBs[i] = DBs[i].split("_");
+                    DBs[i].pop();
+                    if (DBs[i].length > 1) {
+                      var newDBString = DBs[i][0];
+                      for ( var j = 1; j < DBs[i].length; j++) {
+                        (function(index) {
+                          newDBString = newDBString + "_" + DBs[i][index];
+                        })(j);
+                      }
+                      DBs[i] = newDBString;
+                    } else {
+                      DBs[i] = DBs[i][0];
+                    }
+                    if (DBs[i]) {
+                      DBs[i] = DBs[i].replace(/[\"]/g, "");
+                    }
                   }
                   DBs.sort();
                   var scopeDBs = [];
@@ -579,7 +595,6 @@ define(
                 if (key == "datumTags") {
                   var tagString = JSON.stringify($scope.data[i].datumTags);
                   tagString = tagString.toLowerCase();
-                  console.log(tagString);
                   if (tagString.indexOf(searchTerm) > -1) {
                     newScopeData.push($scope.data[i]);
                     break;
@@ -600,7 +615,6 @@ define(
                   if (key == "datumTags") {
                     var tagString = JSON.stringify($scope.data[i].datumTags);
                     tagString = tagString.toLowerCase();
-                    console.log(tagString);
                     if (tagString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
                       break;

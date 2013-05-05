@@ -21,7 +21,7 @@ define([ "angular" ], function(angular) {
                   return promise;
                 } else {
                   couchInfo = $rootScope.server + DB
-                  + "/_design/get_ids/_view/by_date";
+                  + "/_design/pages/_view/by_date";
                   console.log("Contacting the DB to get all LingSync corpus data for " + DB + " " 
                       + couchInfo);
                   var promise = $http.get(couchInfo).then(function(response) {
@@ -32,7 +32,7 @@ define([ "angular" ], function(angular) {
                 }
               },'datumFields' : function(DB) {
                 var couchInfo = $rootScope.server + DB
-                + "/_design/get_datum_field/_view/get_datum_fields";
+                + "/_design/pages/_view/get_datum_fields";
                 console.log("Contacting the DB to get LingSync datum fields for "
                     + couchInfo);
                 var promise = $http.get(couchInfo).then(function(response) {
