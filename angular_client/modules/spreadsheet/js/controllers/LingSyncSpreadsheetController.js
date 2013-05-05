@@ -446,7 +446,20 @@ define(
 
         $scope.markAsEdited = function(fieldData, datum) {
           for (key in fieldData) {
-            datum[$scope.fields[key].label] = fieldData[key];
+            if (key == "datumTags" && typeof fieldData.datumTags === 'string') {
+              var newDatumFields = fieldData.datumTags.split(",");
+              var newDatumFieldsArray = [];
+              for (i in newDatumFields) {
+                var newDatumTagObject = {};
+                // Trim spaces
+                var trimmedTag = trim(newDatumFields[i]);
+                newDatumTagObject.tag = trimmedTag;
+                newDatumFieldsArray.push(newDatumTagObject);
+              }
+              datum.datumTags = newDatumFieldsArray;
+            } else {
+              datum[$scope.fields[key].label] = fieldData[key];
+            }
           }
           datum.saved = "no";
           datum.dateModified = new Date().toString();
