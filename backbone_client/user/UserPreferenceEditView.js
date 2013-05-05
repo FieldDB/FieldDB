@@ -2,7 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "user/UserPreference",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 

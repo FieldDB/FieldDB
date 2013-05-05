@@ -8,7 +8,7 @@ define([
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Handlebars, 

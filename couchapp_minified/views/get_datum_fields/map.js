@@ -1,4 +1,6 @@
 function(doc) {
+  /* if this document has been deleted, the ignore it and return immediately */
+  if(doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
   if ((doc.datumFields) && (doc.session)) {
     var obj = {};
     for (i = 0; i < doc.datumFields.length; i++) {

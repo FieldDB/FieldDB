@@ -2,7 +2,7 @@ define( [
     "backbone", 
     "handlebars", 
     "datum/DatumState",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
