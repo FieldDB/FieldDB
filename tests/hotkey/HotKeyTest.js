@@ -1,6 +1,6 @@
 require(
-    [ "hotkey/HotKey" ],
-    function(Export) {
+    [  ],
+    function() {
 
       describe(
           "HotKey: as a user I want to use keyboard shortcuts for frequent actions",
