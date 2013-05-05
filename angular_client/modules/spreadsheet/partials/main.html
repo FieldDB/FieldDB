@@ -9,6 +9,7 @@
 				<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill
 					Prosody Lab</option>
 				<option value='https://ifielddevs.iriscouch.com/'>iFieldDevs</option>
+				<option value='https://corpusdev.lingsync.org/'>LingSync Dev</option>
 			</select><br> <br> <input type="text" ng-model='auth.user'
 				placeholder="username"><br> <input type="password"
 				ng-model='auth.password' placeholder="password"><br>
@@ -30,8 +31,8 @@
 		</form>
 		<div class="row" ng-show="loading==true">
 			<div class="span12 pagination-centered">
-				<span>Please wait while we access the database...</span><br />
-				<img src="img/loading-spinner.gif" width="100px">
+				<span>Please wait while we access the database...</span><br /> <img
+					src="img/loading-spinner.gif" width="100px">
 			</div>
 		</div>
 		<span ng-show="loading==false && data!=undefined"><h2>Data

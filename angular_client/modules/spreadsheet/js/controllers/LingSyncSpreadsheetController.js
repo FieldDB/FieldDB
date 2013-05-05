@@ -11,7 +11,7 @@ define(
                                            * @param LingSyncData
                                            * @returns {LingSyncSpreadsheetController}
                                            */
-      function($scope, $rootScope, $resource, LingSyncData) {
+      function($scope, $rootScope, $resource, $filter, LingSyncData) {
 
         var LingSyncPreferences = localStorage.getItem('LingSyncPreferences');
         if (LingSyncPreferences == undefined) {
@@ -87,6 +87,7 @@ define(
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
         $scope.dataentry = false;
+        $scope.searching = false;
         $rootScope.activeSubMenu = 'none';
         $scope.activeSession = undefined;
         $scope.currentSessionName = "All Sessions";
@@ -100,6 +101,8 @@ define(
         $scope.changeActiveSubMenu = function(subMenu) {
           if ($rootScope.activeSubMenu == subMenu) {
             $rootScope.activeSubMenu = 'none';
+          } else if (subMenu == 'none' && $scope.searching == true) {
+            return;
           } else {
             $rootScope.activeSubMenu = subMenu;
           }
@@ -117,6 +120,14 @@ define(
               $scope.dataentry = false;
               $scope.changeActiveSubMenu('none');
               window.location.assign("#/");
+            } else if (itemToDisplay == "searchMenu") {
+              $scope.selectRow('newEntry');
+              $scope.changeActiveSubMenu(itemToDisplay);
+              if ($scope.searching == true) {
+                $scope.searching = false;
+              } else {
+                $scope.searching = true;
+              }
             } else {
               $scope.changeActiveSubMenu(itemToDisplay);
             }
@@ -185,8 +196,6 @@ define(
                     return;
                   }
 
-                  // console.log("testCookie response: " +
-                  // JSON.stringify(response));
                   $rootScope.authenticated = true;
                   $scope.username = auth.user;
                   var DBs = response.data.roles;
@@ -399,8 +408,6 @@ define(
           }
         };
 
-        // NEW FUNCTIONS
-
         $scope.createRecord = function(fieldData) {
           // Edit record fields with labels from prefs
           for (dataKey in fieldData) {
@@ -539,10 +546,67 @@ define(
           $scope.saved = "yes";
         };
 
-        // END NEW FUNCTIONS
-
         $scope.selectRow = function(datum) {
-          $scope.selected = datum;
+          if ($scope.searching != true) {
+            $scope.selected = datum;
+          }
+        };
+
+        $scope.runSearch = function(searchTerm) {
+          var newScopeData = [];
+          if (!$scope.activeSession) {
+            for (i in $scope.data) {
+              for (key in $scope.data[i]) {
+                if ($scope.data[i][key]
+                    && $scope.data[i][key].indexOf(searchTerm) > -1) {
+                  newScopeData.push($scope.data[i]);
+                  break;
+                }
+              }
+            }
+          } else {
+            for (i in $scope.data) {
+              if ($scope.data[i].sessionID == $scope.activeSession) {
+                for (key in $scope.data[i]) {
+                  if ($scope.data[i][key]
+                      && $scope.data[i][key].indexOf(searchTerm) > -1) {
+                    newScopeData.push($scope.data[i]);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+          if (newScopeData.length > 0) {
+            $scope.data = newScopeData;
+          } else {
+            window.alert("No records matched your search.");
+          }
+        };
+
+        $scope.selectAll = function() {
+          if (!$scope.activeSession) {
+            for (i in $scope.data) {
+              $scope.data[i].checked = true;
+            }
+          } else {
+            for (i in $scope.data) {
+              if ($scope.data[i].sessionID == $scope.activeSession) {
+                $scope.data[i].checked = true;
+              }
+            }
+          }
+        };
+
+        $scope.exportResults = function() {
+          var results = $filter('filter')($scope.data, {
+            checked : true
+          });
+          if (results.length > 0) {
+            window.alert("TODO\n" + JSON.stringify(results));
+          } else {
+            window.alert("Please select records to export.");
+          }
         };
 
         $scope.commaList = function(tags) {
@@ -586,6 +650,6 @@ define(
 
       };
       LingSyncSpreadsheetController.$inject = [ '$scope', '$rootScope',
-          '$resource', 'LingSyncData' ];
+          '$resource', '$filter', 'LingSyncData' ];
       return LingSyncSpreadsheetController;
     });

@@ -1,7 +1,7 @@
 <div arrow-key class="row"
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
-	ng-hide="data==undefined || loading==true || activeSession==undefined">
+	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
 	<div class="span4">
 		<input focus class="span4" type="text" ng-model="newFieldData.field1"
 			placeholder="{{fields.field1.title}}"
@@ -30,7 +30,8 @@
 	</div>
 	<div class="span2">
 		<button ng-show="selected=='newEntry'" class="btn btn-primary"
-			ng-click="createRecord(newFieldData);newFieldData=''">Create New</button>
+			ng-click="createRecord(newFieldData);newFieldData=''">Create
+			New</button>
 	</div>
 </div>
 
@@ -103,8 +104,11 @@
 
 	<!-- Show when not editing -->
 	<div ng-show="selected!=datum">
-		<div class="span4">
-			<span class="span4" title="{{fields.field1.title}}"
+		<div class="span1">
+			<input type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked" ng-show="searching==true">
+		</div>
+		<div class="span3">
+			<span class="span3" title="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''">{{datum[fields.field1.label]
 				| neverEmpty}}</span><br /> <span class="span4"
 				title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">{{datum[fields.field2.label]
