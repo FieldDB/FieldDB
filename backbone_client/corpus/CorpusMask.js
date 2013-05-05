@@ -18,7 +18,7 @@ define([
     "datum/Sessions",
     "user/User",
     "glosser/Glosser",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Activity,

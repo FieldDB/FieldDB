@@ -5,7 +5,7 @@ define([
     "datum/Session",
     "datum/SessionEditView",
     "user/UserMask",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Datum,

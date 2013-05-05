@@ -7,7 +7,7 @@ define([
     "user/User", 
     "user/UserMask",
     "user/UserReadView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 

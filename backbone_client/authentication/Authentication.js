@@ -3,7 +3,7 @@ define([
     "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
-    "libs/OPrime" 
+    "OPrime" 
 ], function(
     Backbone, 
     Confidential,

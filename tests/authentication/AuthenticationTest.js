@@ -1,7 +1,7 @@
 require([
     "authentication/Authentication"
 ], function(Authentication) {
-    describe("Authentication Tests", function() {
+    describe("Authentication ", function() {
         it("should look up the user on the server if the app is online", function() {
         	 expect(true).toBeTruthy();
         });

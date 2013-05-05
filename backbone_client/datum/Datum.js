@@ -11,7 +11,7 @@ define([
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     AudioVideo, 

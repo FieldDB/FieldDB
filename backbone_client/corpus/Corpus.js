@@ -23,7 +23,7 @@ define([
     "user/Users",
     "user/UserMask",
     "glosser/Glosser",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Comment, 
