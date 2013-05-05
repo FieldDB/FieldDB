@@ -4,7 +4,7 @@ require.config({
     /* Bootstrap user interface javascript files */
     "bootstrap" : "libs/bootstrap/js/bootstrap.min",
 
-    "crypto" : "libs/Crypto_AES",
+    "CryptoJS" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
     "jquery" : "libs/jquery",
@@ -27,7 +27,7 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_devserver"
+    "OPrime" : "libs/webservicesconfig_devserver"
   },
   shim : {
     "underscore" : {
@@ -77,10 +77,6 @@ require.config({
       exports : "Handlebars"
     },
 
-    "crypto" : {
-      exports : "CryptoJS"
-    },
-
     "compiledTemplates" : {
       deps : [ "handlebars" ],
       exports : "Handlebars"
@@ -98,7 +94,7 @@ require.config({
 require([ 
       "user/UserApp",  
       "backbone_pouchdb",
-      "libs/webservicesconfig_devserver"
+      "OPrime"
       ], function(
           App,
           forcingpouchtoloadearly

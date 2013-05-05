@@ -4,7 +4,7 @@ define([
     "backbone", 
     "handlebars", 
     "datum/DatumTag",
-    "libs/OPrime"
+    "OPrime"
 ], function(Backbone,
     Handlebars, 
     DatumTag

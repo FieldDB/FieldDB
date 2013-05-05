@@ -1,7 +1,7 @@
 define([ 
          "backbone", 
          "datum/DatumField",
-         "libs/OPrime"
+         "OPrime"
 ], function(
          Backbone,
          DatumField) {
