@@ -85,6 +85,7 @@ define(
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
+        $scope.developer = false;
         $scope.dataentry = false;
         $scope.searching = false;
         $rootScope.activeSubMenu = 'none';
@@ -193,6 +194,12 @@ define(
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
           } else {
+            if (auth.user == "senhorzinho") {
+              var r = confirm("Hello, developer! Would you like to enter developer mode?");
+              if (r == true) {
+                $scope.developer = true;
+              }
+            }
             $rootScope.loading = true;
             $rootScope.server = auth.server;
             LingSyncData.login(auth.user, auth.password).then(
