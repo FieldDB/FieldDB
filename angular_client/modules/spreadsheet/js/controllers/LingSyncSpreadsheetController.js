@@ -570,7 +570,13 @@ define(
           if (!$scope.activeSession) {
             for (i in $scope.data) {
               for (key in $scope.data[i]) {
-                if ($scope.data[i][key]
+                if (key == "datumTags") {
+                  var tagString = JSON.stringify($scope.data[i].datumTags);
+                  if (tagString.indexOf(searchTerm) > -1) {
+                    newScopeData.push($scope.data[i]);
+                    break;
+                  }
+                } else if ($scope.data[i][key]
                     && $scope.data[i][key].indexOf(searchTerm) > -1) {
                   newScopeData.push($scope.data[i]);
                   break;
@@ -581,7 +587,13 @@ define(
             for (i in $scope.data) {
               if ($scope.data[i].sessionID == $scope.activeSession) {
                 for (key in $scope.data[i]) {
-                  if ($scope.data[i][key]
+                  if (key == "datumTags") {
+                    var tagString = JSON.stringify($scope.data[i].datumTags);
+                    if (tagString.indexOf(searchTerm) > -1) {
+                      newScopeData.push($scope.data[i]);
+                      break;
+                    }
+                  } else if ($scope.data[i][key]
                       && $scope.data[i][key].indexOf(searchTerm) > -1) {
                     newScopeData.push($scope.data[i]);
                     break;
