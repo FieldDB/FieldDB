@@ -105,6 +105,24 @@ define(
           }
         };
 
+        $scope.navigateVerifySaved = function(itemToDisplay) {
+          if ($scope.saved == 'no') {
+            window.alert("Please save changes before continuing");
+          } else {
+            if (itemToDisplay == "settings") {
+              $scope.dataentry = false;
+              $scope.changeActiveSubMenu('none');
+              window.location.assign("#/settings");
+            } else if (itemToDisplay == "home") {
+              $scope.dataentry = false;
+              $scope.changeActiveSubMenu('none');
+              window.location.assign("#/");
+            } else {
+              $scope.changeActiveSubMenu(itemToDisplay);
+            }
+          }
+        };
+
         // Fetch data from server and put into template scope
         $scope.loadData = function() {
           $rootScope.loading = true;
@@ -207,7 +225,8 @@ define(
         };
 
         $scope.changeActiveSession = function(activeSessionToSwitchTo) {
-          if (activeSessionToSwitchTo == 'none' || activeSessionToSwitchTo == undefined) {
+          if (activeSessionToSwitchTo == 'none'
+              || activeSessionToSwitchTo == undefined) {
             $scope.activeSession = undefined;
             $scope.currentSessionName = "All Sessions";
           } else {
@@ -360,109 +379,12 @@ define(
         };
 
         $scope.reloadPage = function() {
-          window.location.assign("#/");
-          window.location.reload();
-        };
-
-        $scope.saveNew = function(fieldData) {
-          $rootScope.loading = true;
-          // Get blank template to build new record
-          LingSyncData.blankTemplate().then(
-              function(newRecord) {
-                for (dataKey in fieldData) {
-                  for (fieldKey in $scope.fields) {
-                    if (dataKey == fieldKey) {
-                      var newDataKey = $scope.fields[fieldKey].label;
-                      fieldData[newDataKey] = fieldData[dataKey];
-                      delete fieldData[dataKey];
-                    }
-                  }
-                }
-
-                // Populate new record with fields from
-                // scope
-                for ( var i = 0; i < newRecord.datumFields.length; i++) {
-                  for (key in fieldData) {
-                    if (newRecord.datumFields[i].label == key) {
-                      newRecord.datumFields[i].mask = fieldData[key];
-                    }
-                  }
-                }
-                newRecord.dateEntered = new Date().toString();
-                newRecord.dateModified = new Date().toString();
-                // Save session
-                newRecord.session = $scope.fullCurrentSession;
-                // Save tags
-                if (fieldData.datumTags) {
-                  var newDatumFields = fieldData.datumTags.split(",");
-                  var newDatumFieldsArray = [];
-                  for (i in newDatumFields) {
-                    var newDatumTagObject = {};
-                    // Trim spaces
-                    var trimmedTag = trim(newDatumFields[i]);
-                    newDatumTagObject.tag = trimmedTag;
-                    newDatumFieldsArray.push(newDatumTagObject);
-                  }
-                  newRecord.datumTags = newDatumFieldsArray;
-                }
-                LingSyncData.saveNew($rootScope.DB, newRecord).then(
-                    function(savedRecord) {
-                      // Update UI with updated
-                      // corpus
-                      $scope.loadData();
-                    });
-
-              });
-        };
-
-        $scope.saveChanges = function(fieldData, docID) {
-          $rootScope.loading = true;
-          $rootScope.currentResult = 0;
-          // Get latest version of record from server
-          LingSyncData.async($rootScope.DB, docID).then(
-              function(editedRecord) {
-                // Edit record with updated data
-                for (dataKey in fieldData) {
-                  for (fieldKey in $scope.fields) {
-                    if (dataKey == fieldKey) {
-                      var newDataKey = $scope.fields[fieldKey].label;
-                      fieldData[newDataKey] = fieldData[dataKey];
-                      delete fieldData[dataKey];
-                    }
-                  }
-                }
-
-                // Populate new record with fields from
-                // scope
-                for ( var i = 0; i < editedRecord.datumFields.length; i++) {
-                  for (key in fieldData) {
-                    if (editedRecord.datumFields[i].label == key) {
-                      editedRecord.datumFields[i].mask = fieldData[key];
-                    }
-                  }
-                }
-                editedRecord.dateModified = new Date();
-
-                // Save tags
-                if (fieldData.datumTags) {
-                  var newDatumFields = fieldData.datumTags.split(",");
-                  var newDatumFieldsArray = [];
-                  for (i in newDatumFields) {
-                    var newDatumTagObject = {};
-                    // Trim spaces
-                    var trimmedTag = trim(newDatumFields[i]);
-                    newDatumTagObject.tag = trimmedTag;
-                    newDatumFieldsArray.push(newDatumTagObject);
-                  }
-                  editedRecord.datumTags = newDatumFieldsArray;
-                }
-                // Save edited record and refresh data
-                // in scope
-                LingSyncData.saveEditedRecord($rootScope.DB, docID,
-                    editedRecord).then(function() {
-                  $scope.loadData();
-                });
-              });
+          if ($scope.saved == "no") {
+            window.alert("Please save changes before continuing.");
+          } else {
+            window.location.assign("#/");
+            window.location.reload();
+          }
         };
 
         $scope.deleteRecord = function(id, rev) {
@@ -476,6 +398,148 @@ define(
                 });
           }
         };
+
+        // NEW FUNCTIONS
+
+        $scope.createRecord = function(fieldData) {
+          // Edit record fields with labels from prefs
+          for (dataKey in fieldData) {
+            for (fieldKey in $scope.fields) {
+              if (dataKey == fieldKey) {
+                var newDataKey = $scope.fields[fieldKey].label;
+                fieldData[newDataKey] = fieldData[dataKey];
+                delete fieldData[dataKey];
+              }
+            }
+          }
+
+          // Save tags
+          if (fieldData.datumTags) {
+            var newDatumFields = fieldData.datumTags.split(",");
+            var newDatumFieldsArray = [];
+            for (i in newDatumFields) {
+              var newDatumTagObject = {};
+              // Trim spaces
+              var trimmedTag = trim(newDatumFields[i]);
+              newDatumTagObject.tag = trimmedTag;
+              newDatumFieldsArray.push(newDatumTagObject);
+            }
+            fieldData.datumTags = newDatumFieldsArray;
+          } else {
+            fieldData.datumTags = [];
+          }
+
+          fieldData.dateEntered = new Date().toString();
+          fieldData.dateModified = new Date().toString();
+          fieldData.sessionID = $scope.activeSession;
+          fieldData.saved = "no";
+          $scope.data.push(fieldData);
+          $scope.saved = "no";
+        };
+
+        $scope.markAsEdited = function(fieldData, datum) {
+          for (key in fieldData) {
+            datum[$scope.fields[key].label] = fieldData[key];
+          }
+          datum.saved = "no";
+          datum.dateModified = new Date().toString();
+          $scope.saved = "no";
+        };
+
+        $scope.saveChanges = function() {
+          for (i in $scope.data) {
+            (function(index) {
+              if ($scope.data[index].saved && $scope.data[index].saved == "no") {
+
+                // Save edited record
+                if ($scope.data[index].id) {
+                  console.log("Saving edited record: " + $scope.data[index].id);
+                  var fieldData = $scope.data[index];
+                  var docID = fieldData.id;
+                  LingSyncData
+                      .async($rootScope.DB, docID)
+                      .then(
+                          function(editedRecord) {
+                            // Populate new record with fields from
+                            // scope
+                            for ( var i = 0; i < editedRecord.datumFields.length; i++) {
+                              for (key in fieldData) {
+                                if (editedRecord.datumFields[i].label == key) {
+                                  editedRecord.datumFields[i].mask = fieldData[key];
+                                  editedRecord.datumFields[i].value = fieldData[key];
+                                }
+                              }
+                            }
+                            editedRecord.dateModified = new Date();
+
+                            // Save tags
+                            if (fieldData.datumTags) {
+                              editedRecord.datumTags = fieldData.datumTags;
+                            }
+
+                            // Save edited record and refresh data
+                            // in scope
+                            LingSyncData
+                                .saveEditedRecord($rootScope.DB, docID,
+                                    editedRecord)
+                                .then(
+                                    function(response) {
+                                      $scope.data[index].saved = "yes";
+                                    },
+                                    function() {
+                                      window
+                                          .alert("There was an error saving the record. Please try again.");
+                                    });
+                          });
+
+                } else {
+                  // Save new record
+                  console.log("Saving new record.");
+
+                  var fieldData = $scope.data[index];
+                  LingSyncData
+                      .blankTemplate()
+                      .then(
+                          function(newRecord) {
+                            // Populate new record with fields from
+                            // scope
+                            for ( var i = 0; i < newRecord.datumFields.length; i++) {
+                              for (key in fieldData) {
+                                if (newRecord.datumFields[i].label == key) {
+                                  newRecord.datumFields[i].mask = fieldData[key];
+                                }
+                              }
+                            }
+                            newRecord.dateModified = new Date().toString();
+                            // Save session
+                            newRecord.session = $scope.fullCurrentSession;
+                            // Save tags
+                            if (fieldData.datumTags) {
+                              newRecord.datumTags = fieldData.datumTags;
+                            }
+
+                            LingSyncData
+                                .saveNew($rootScope.DB, newRecord)
+                                .then(
+                                    function(response) {
+                                      $scope.data[index].id = response.data.id;
+                                      $scope.data[index].saved = "yes";
+                                      console.log("Saved new record: "
+                                          + $scope.data[index].id);
+                                    },
+                                    function() {
+                                      window
+                                          .alert("There was an error saving the record. Please try again.");
+                                    });
+                          });
+                }
+              }
+            })(i);
+          }
+          $scope.saved = "yes";
+        };
+
+        // END NEW FUNCTIONS
 
         $scope.selectRow = function(datum) {
           $scope.selected = datum;

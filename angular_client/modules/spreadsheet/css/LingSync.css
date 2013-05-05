@@ -61,8 +61,15 @@ h3 {
 }
 
 .rightMenuItemsDiv {
+	float: right;
 	margin-top: 5px;
 	margin-right: 5px;
+}
+
+.rightMenuItemsDiv div {
+	display: inline-block;
+	vertical-align: top;
+	text-align: left;
 }
 
 .clearDiv {

@@ -24,7 +24,7 @@
 	</div>
 	<div class="span1">
 		<button ng-show="selected=='newEntry'" class="btn btn-primary"
-			ng-click="saveNew(newFieldData)">Save</button>
+			ng-click="createRecord(newFieldData);newFieldData=''">Create</button>
 	</div>
 </div>
 
@@ -77,7 +77,7 @@
 		</div>
 		<div class="span1">
 			<button class="btn btn-primary"
-				ng-click="saveChanges(fieldData, datum.id)">Save</button>
+				ng-click="markAsEdited(fieldData, datum);">Done</button>
 		</div>
 	</div>
 

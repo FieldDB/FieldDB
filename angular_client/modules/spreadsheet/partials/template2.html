@@ -30,7 +30,7 @@
 	</div>
 	<div class="span2">
 		<button ng-show="selected=='newEntry'" class="btn btn-primary"
-			ng-click="saveNew(newFieldData)">Save New</button>
+			ng-click="createRecord(newFieldData);newFieldData=''">Create New</button>
 	</div>
 </div>
 
@@ -92,9 +92,9 @@
 		</div>
 		<div class="span2">
 			<button class="btn btn-primary"
-				ng-click="saveChanges(fieldData, datum.id)">Save Changes</button>
+				ng-click="markAsEdited(fieldData, datum);">Done</button>
 			<br />
-			<button class="btn btn-primary"
+			<button class="btn btn-danger"
 				ng-click="deleteRecord(datum.id, datum.rev)">Delete</button>
 		</div>
 

@@ -18,31 +18,40 @@
 	ng-controller="LingSyncSpreadsheetController" ng-cloak>
 
 	<div class="menubar mainMenubar" ng-cloak>
-		<span class="menuTitle">|<a href="#"
-			ng-click="dataentry=false;changeActiveSubMenu('none')">LingSync</a>|
+		<span class="menuTitle">|<a
+			ng-click="navigateVerifySaved('home')">LingSync</a>|
 		</span> <span ng-hide="data==undefined"><a
-			href="#/lingsync/{{template}}" ng-click="dataentry=true;loadData()">Data
+			href="#/lingsync/{{template}}" ng-click="dataentry=true">Data
 				Entry</a></span> <span ng-hide="dataentry==false"> <a
 			href="#/lingsync/{{template}}"
-			ng-click="changeActiveSubMenu('searchMenu')">Search</a>
+			ng-click="navigateVerifySaved('searchMenu')">Search</a>
 		</span> <span ng-show="dataentry==true"> <a
 			href="#/lingsync/{{template}}"
-			ng-click="changeActiveSubMenu('editSession')">Session</a>
-		</span> <span ng-hide="data==undefined"><a href="#/settings"
-			ng-click="dataentry=false;changeActiveSubMenu('none')">Settings</a></span> <span><a
+			ng-click="navigateVerifySaved('editSession')">Session</a>
+		</span> <span ng-hide="data==undefined"><a
+			ng-click="navigateVerifySaved('settings')">Settings</a></span> <span><a
 			href="#/sandbox"
 			ng-click="dataentry=false;changeActiveSubMenu('none')"
 			ng-hide="username!='senhorzinho'">Sandbox</a></span> <span
 			class="rightMenuItems" ng-show="authenticated==true">
 			<div class="rightMenuItemsDiv">
-				Current Session: {{currentSessionName}}&nbsp;&nbsp;&nbsp; {{DB[0]}}
-				<button class="btn btn-warning" ng-click="reloadPage()">Log
-					out</button>
+				<div>
+					Current Session: {{currentSessionName}}<br />{{DB[0]}}
+				</div>
+				<div>
+					<button class="btn btn-success" ng-click="saveChanges();"
+						ng-show="saved!='no'">Saved</button>
+					<button class="btn btn-danger" ng-click="saveChanges();"
+						ng-show="saved=='no'">Save</button>
+					<button class="btn btn-warning" ng-click="reloadPage()">Log
+						out</button>
+				</div>
 			</div>
 			<div class="clearDiv"></div>
 		</span>
 	</div>
-	<div class="menubar subMenubar" ng-show="activeSubMenu=='editSession'" ng-cloak>
+	<div class="menubar subMenubar" ng-show="activeSubMenu=='editSession'"
+		ng-cloak>
 		<span>Change Session:</span> <select class="span3"
 			ng-model='activeSessionToSwitchTo'>
 			<option value='none'>All sessions</option>
@@ -56,50 +65,60 @@
 			Session</button>
 		&nbsp;&nbsp;&nbsp;
 		<button class="btn"
-			ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails" ng-hide="activeSession==undefined">Edit
-			Session Info</button>
+			ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails"
+			ng-hide="activeSession==undefined">Edit Session Info</button>
 		&nbsp;&nbsp;&nbsp;
 		<button class="btn btn-danger"
 			ng-click="deleteEmptySession(activeSession)"
 			ng-show="(data | filter: activeSession).length==0">Delete
 			Session</button>
-		<div class="menubar subSubMenubar" ng-show="editSessionDetails==true && activeSession!=undefined" ng-cloak>
+		<div class="menubar subSubMenubar"
+			ng-show="editSessionDetails==true && activeSession!=undefined"
+			ng-cloak>
 			<form ng-model='editedSessionInfo'>
 				<table cellpadding="5px">
 					<tr>
 						<td>Goal:</td>
 						<td><input class="span3" type="text"
 							ng-model="editSessionInfo.goal"
-							value={{fullCurrentSessionToEdit.goal}} placeholder="{{fullCurrentSessionToEdit.goal}}"></td>
+							value={{fullCurrentSessionToEdit.goal}}
+							placeholder="{{fullCurrentSessionToEdit.goal}}"></td>
 						<td>Consultants:</td>
 						<td><input class="span3" type="text"
 							ng-model="editSessionInfo.consultants"
-							value={{fullCurrentSessionToEdit.consultants}} placeholder="{{fullCurrentSessionToEdit.consultants}}"></td>
+							value={{fullCurrentSessionToEdit.consultants}}
+							placeholder="{{fullCurrentSessionToEdit.consultants}}"></td>
 						<td>User:</td>
 						<td><input class="span3" type="text"
 							ng-model="editSessionInfo.user"
-							value={{fullCurrentSessionToEdit.user}} placeholder="{{fullCurrentSessionToEdit.user}}"></td>
+							value={{fullCurrentSessionToEdit.user}}
+							placeholder="{{fullCurrentSessionToEdit.user}}"></td>
 					</tr>
 					<tr>
 						<td>Language:</td>
 						<td><input class="span3" type="text"
 							ng-model="editSessionInfo.language"
-							value={{fullCurrentSessionToEdit.language}} placeholder="{{fullCurrentSessionToEdit.language}}"></td>
+							value={{fullCurrentSessionToEdit.language}}
+							placeholder="{{fullCurrentSessionToEdit.language}}"></td>
 						<td>Dialect:</td>
 						<td><input class="span3" type="text"
 							ng-model="editSessionInfo.dialect"
-							value={{fullCurrentSessionToEdit.dialect}} placeholder="{{fullCurrentSessionToEdit.dialect}}"></td>
+							value={{fullCurrentSessionToEdit.dialect}}
+							placeholder="{{fullCurrentSessionToEdit.dialect}}"></td>
 						<td>Date Elicited</td>
 						<td><input class="span3" type="text"
 							ng-model="editSessionInfo.dateElicited"
-							value={{fullCurrentSessionToEdit.dateElicited}} placeholder="{{fullCurrentSessionToEdit.dateElicited}}"></td>
+							value={{fullCurrentSessionToEdit.dateElicited}}
+							placeholder="{{fullCurrentSessionToEdit.dateElicited}}"></td>
 					</tr>
 				</table>
 			</form>
 			<div class="rightMenuItems">
-			<button class="btn" ng-click="editSession(editSessionInfo, data);">Save
-				Changes</button>&nbsp;<button class="btn" ng-click="editSessionDetails=false">Cancel</button>
-				</div>
+				<button class="btn" ng-click="editSession(editSessionInfo, data);">Save
+					Changes</button>
+				&nbsp;
+				<button class="btn" ng-click="editSessionDetails=false">Cancel</button>
+			</div>
 		</div>
 	</div>
 
