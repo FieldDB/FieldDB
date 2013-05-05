@@ -111,6 +111,12 @@ define(
           if ($scope.saved == 'no') {
             window.alert("Please save changes before continuing");
           } else {
+            
+            if ($scope.searching == true) {
+              $scope.searching=false;
+              $scope.loadData();
+            }
+            
             if (itemToDisplay == "settings") {
               $scope.dataentry = false;
               $scope.changeActiveSubMenu('none');
@@ -634,7 +640,7 @@ define(
             checked : true
           });
           if (results.length > 0) {
-            $scope.resultsMessage = results.length + " Records:";
+            $scope.resultsMessage = results.length + " Record(s):";
             $scope.results = results;
           } else {
             $scope.resultsMessage = "Please select records to export.";

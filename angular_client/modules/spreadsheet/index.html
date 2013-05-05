@@ -19,20 +19,20 @@
 
 	<div class="menubar mainMenubar" ng-cloak>
 		<span class="menuTitle">|<a
-			ng-click="navigateVerifySaved('home');searching=false">LingSync</a>|
+			ng-click="navigateVerifySaved('home')">LingSync</a>|
 		</span> <span ng-hide="data==undefined"><a
 			href="#/lingsync/{{template}}"
-			ng-click="dataentry=true;searching=false;changeActiveSubMenu('none')">Data
+			ng-click="dataentry=true;navigateVerifySaved('none')">Data
 				Entry</a></span> <span ng-hide="dataentry==false"> <a
 			href="#/lingsync/{{template}}"
 			ng-click="navigateVerifySaved('searchMenu');">Search</a>
 		</span> <span ng-show="dataentry==true"> <a
 			href="#/lingsync/{{template}}"
-			ng-click="navigateVerifySaved('editSession');searching=false">Session</a>
+			ng-click="navigateVerifySaved('editSession')">Session</a>
 		</span> <span ng-hide="data==undefined"><a
-			ng-click="navigateVerifySaved('settings');searching=false">Settings</a></span>
+			ng-click="navigateVerifySaved('settings');">Settings</a></span>
 		<span><a href="#/sandbox"
-			ng-click="dataentry=false;searching=false;changeActiveSubMenu('none')"
+			ng-click="dataentry=false;navigateVerifySaved(('none')"
 			ng-hide="username!='senhorzinho'">Sandbox</a></span> <span
 			class="rightMenuItems" ng-show="authenticated==true">
 			<div class="rightMenuItemsDiv">
