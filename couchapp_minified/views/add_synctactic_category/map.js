@@ -13,6 +13,9 @@
  * Distributed Morphology tree...
  */
 function(doc) {
+  /* if this document has been deleted, the ignore it and return immediately */
+  if(doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
+  
   /*
    * If its not a datum (ie if its not the case that it has datumFields AND
    * session)

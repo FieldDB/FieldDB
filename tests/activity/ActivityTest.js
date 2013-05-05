@@ -1,23 +1,18 @@
 require(
-    [ "activity/Activity", "activity/ActivityFeed", "activity/Activities"
-        ],
-    function(Activity, ActivityFeed, Activities) {
-      describe(
-          "Test Activity Feed replication.",
-          function() {
-            it("should have an id if it gets inserted into pouch.",
-                function() {
-              
-//                  var a = new Activity();
-//                  a.save();
-//                  var hasId = (a.id != null);
-                  expect(true).toBeTruthy();
-                });
-            
-          });
+    [ "activity/Activity" ],
+    function(Activity) {
+      describe("Activities: Test Activity Feed replication.", function() {
+        it("should have an id if it gets inserted into pouch.", function() {
+          // var a = new Activity();
+          // a.save();
+          // var hasId = (a.id != null);
+          expect(true).toBeTruthy();
+        });
+
+      });
 
       describe(
-          "As a user, I want to be updated on team news.",
+          "Activities: As a user, I want to be updated on team news.",
           function() {
             it("should show my most recent team's activities by default.",
                 function() {
@@ -37,7 +32,7 @@ require(
           });
 
       describe(
-          "As a user, I want to make my activity private.",
+          "Activities: As a user, I want to make my activity private.",
           function() {
             it(
                 "should display a settings that allows a logged in user to make their activities private.",
@@ -46,7 +41,8 @@ require(
                 });
           });
 
-      describe("As a team member, I want to able to delete team activities.",
+      describe(
+          "Activities: As a team member, I want to able to delete team activities.",
           function() {
             it("should be able to delete one activity.", function() {
               expect(true).toBeTruthy();
@@ -54,7 +50,7 @@ require(
           });
 
       describe(
-          "As a user, I want to  be about see my activity even when I'm offline.",
+          "Activities: As a user, I want to  be about see my activity even when I'm offline.",
           function() {
             it("should display a user's up to date activity when offline.",
                 function() {
@@ -68,7 +64,7 @@ require(
           });
 
       describe(
-          "As a user, I want to learn how to use the system by see how my teammates are using it.",
+          "Activities: As a user, I want to learn how to use the system by see how my teammates are using it.",
           function() {
             it("should have colorful icons to display verbs.", function() {
               expect(true).toBeTruthy();

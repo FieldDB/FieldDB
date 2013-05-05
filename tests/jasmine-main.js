@@ -1,166 +1,168 @@
-// Set the RequireJS configuration
+//Set the RequireJS configuration
 
 require.config({
-  baseUrl: "./../public",
-  
+  baseUrl : "../backbone_client/",
+
   paths : {
+    // "jasmine" : "../tests/libs/jasmine/jasmine",
+    // "jasmine-html" : "../tests/libs/jasmine/jasmine-html",
+    /* Tests to ensure jasmine is running */
+    "Player" : "../tests/libs/jasmine/src/Player",
+    "Song" : "../tests/libs/jasmine/src/Song",
+    "PlayerSpec" : "../tests/libs/jasmine/spec/PlayerSpec",
+    "SpecHelper" : "../tests/libs/jasmine/spec/SpecHelper",
+
+    "sinon" : "../tests/libs/sinon/sinon",
+
+    /* Additional Jasmine runner files for XML and console output */
+    "JUnitReporter" : "../tests/libs/jasmine-reporters/src/jasmine.junit_reporter",
+
+    /* load Backbone dependencies */
+    "handlebarsjs" : "libs/handlebars.runtime",
+    "handlebars" : "libs/compiled_handlebars",
+    "$" : "libs/jquery",
+    "_" : "libs/underscore",
+    "backbonejs" : "libs/backbone",
+    "jquery-couch" : "libs/backbone_couchdb/jquery.couch",
+    "backbone" : "libs/backbone_couchdb/backbone-couchdb",
+
+    /* load FieldDB dependencies */
     "text" : "libs/text",
-    "jquery" : "libs/jquery",
-    "hotkeys" : "libs/jquery.hotkeys",
+    "CryptoJS" : "libs/Crypto_AES",
     "terminal" : "libs/terminal/terminal",
-    "underscore" : "libs/underscore",
-    "backbone" : "libs/backbone",
-    "handlebars" : "libs/handlebars.runtime",
-    "compiledTemplates" : "libs/compiled_handlebars",
-    "crypto" : "libs/Crypto_AES",
-    "pouch" : "libs/pouch.alpha",
-    "backbone_pouchdb" : "libs/backbone-pouchdb",
-    "backbone_couchdb" : "libs/backbone-couchdb",
-    "bootstrap" : "bootstrap/js/bootstrap",
-    "bootstrap-transition" : "bootstrap/js/bootstrap-transition",
-    "bootstrap-alert" : "bootstrap/js/bootstrap-alert",
-    "bootstrap-modal" : "bootstrap/js/bootstrap-modal",
-    "bootstrap-dropdown" : "bootstrap/js/bootstrap-dropdown",
-    "bootstrap-scrollspy" : "bootstrap/js/bootstrap-scrollspy",
-    "bootstrap-tab" : "bootstrap/js/bootstrap-tab",
-    "bootstrap-tooltip" : "bootstrap/js/bootstrap-tooltip",
-    "bootstrap-popover" : "bootstrap/js/bootstrap-popover",
-    "bootstrap-button" : "bootstrap/js/bootstrap-button",
-    "bootstrap-collapse" : "bootstrap/js/bootstrap-collapse",
-    "bootstrap-carousel" : "bootstrap/js/bootstrap-carousel",
-    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead",
+    "xml2json" : "libs/xml2json",
+    "oprime" : "libs/OPrime",
+    "OPrime" : "libs/webservicesconfig_devserver",
+    // Bootstrap kills click events in jquery, so dont include in tests
+    // "bootstrap" : "libs/bootstrap/js/bootstrap.min",
 
-      "xml2json" : "libs/xml2json"
+    /* load tests for dependencies */
+    "jasmine-jquery" : "../tests/libs/backbone/jasmine-jquery",
+    "jasmine-ajax" : "../tests/libs/backbone/mock-ajax",
+    "jasmine-jquery-spec" : "../tests/libs/backbone/jasmine-jquery-spec",
 
-     // "jquery.couch" : "libs/jquery.couch"
   },
   shim : {
-    "underscore" : {
-      exports : "_"
+    // "jasmine-html" : {
+    // deps : [ "jasmine" ],
+    // exports : "jasmine"
+    // },
+    // "SpecHelper" : {
+    // deps : [ "jasmine-html" ],
+    // exports : "jasmine"
+    // },
+
+    "PlayerSpec" : {
+      deps : [ "SpecHelper", "Player", "Song" ],
+      exports : "PlayerSpec"
     },
-    
-    "jquery" : {
+    // "JUnitReporter" : {
+    // deps : [ "jasmine-html" ],
+    // exports : "jasmine"
+    // },
+    // "sinon" : {
+    // deps : [ "jasmine-html" ],
+    // exports : "sinon"
+    // },
+
+    /* Shim Backbone dependencies for use in require statements */
+    "jquery-couch" : {
+      deps : [ "$" ],
       exports : "$"
     },
-
-    "bootstrap" :{
-      deps : [ "jquery" ],
-      exports : function($) {
-        return $;
-      }
+    "backbonejs" : {
+      deps : [ "_", "$", "OPrime" ],
+      exports : "Backbone"
     },
-    
-    "bootstrap-typeahead" :{
-      deps : [ "jquery", "bootstrap","bootstrap-transition", "bootstrap-alert",
-          "bootstrap-modal", "bootstrap-dropdown", "bootstrap-scrollspy",
-          "bootstrap-tab", "bootstrap-tooltip", "bootstrap-popover",
-          "bootstrap-button", "bootstrap-collapse", "bootstrap-carousel"
-           ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "pouch" :{
-      exports: "Pouch"
-    },
-
-    "backbone" : {
-      deps : [ "underscore", "jquery", "compiledTemplates" ],
-      exports : function(_, $) {
-        return Backbone;
-      }
-    },
-    "backbone_pouchdb" :{
-      deps : ["backbone", "pouch", "backbone_couchdb"],
-      exports : function(Backbone, Pouch, backbone_couchdb) {
-        return Backbone;
-      }
-    },
-    
-    "backbone_couchdb" :{
-      deps : ["backbone", "pouch"],
-      exports : function(Backbone, Pouch) {
-        return Backbone;
-      }
-    },
-
-    "handlebars" : {
-      deps : ["bootstrap","jquery"],
+    "handlebarsjs" : {
+      deps : [ "backbonejs", "$" ],
       exports : "Handlebars"
     },
-
-    "crypto" : {
-      exports : "CryptoJS"
+    "handlebars" : {
+      deps : [ "handlebarsjs" ],
+      exports : "Handlebars"
+    },
+    "backbone" : {
+      deps : [ "backbonejs", "jquery-couch" ],
+      exports : "Backbone"
     },
 
-    "compiledTemplates" : {
-      deps : [ "handlebars" ],
-      exports : function(Handlebars) {
-        return Handlebars;
-      }
+    /* Shim FieldDB dependencies for use in require statements */
+    "xml2json" : {
+      deps : [ "$" ],
+      exports : "X2JS"
+    },
+    "OPrime" : {
+      deps : [ "oprime" ],
+      exports : "OPrime"
     },
     "terminal" : {
-      deps : ["bootstrap","jquery"],
+      deps : [ "$" ],
       exports : "Terminal"
-    }
-    
+    },
+
+    /* Shim jquery test dependencies to get them to load in the right order */
+    "jasmine-jquery" : {
+      deps : [ "$" ],
+      exports : "jasmine"
+    },
+    "jasmine-ajax" : {
+      deps : [ "jasmine-jquery", "$" ],
+      exports : "jasmine"
+    },
+    "jasmine-jquery-spec" : {
+      deps : [ "jasmine-ajax" ],
+      exports : "jasmine"
+    },
   }
+
 });
-// Run the tests!
-require([
-    // Put all your tests here. Otherwise they won't run
-    "../tests/activity/ActivityTest",
+/*
+ * Initialize Jasmine, and run the tests
+ */
+require([ "handlebars",
+/*
+ * For some mysterious reason as yet unknown to us, these tests need to run
+ * (first), or no FieldDB tests will run
+ */
+"PlayerSpec", "../tests/libs/backbone/JQueryTest",
+/* FieldDB tests */
+"../tests/app/AppTest", "../tests/activity/ActivityTest",
     "../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",
-   "../tests/confidentiality_encryption/ConfidentialTest", 
-   "../tests/corpus/CorpusTest",
-// "../tests/dashboard/DashboardTest",
-   "../tests/data_list/DataListTest",
-   "../tests/datum/DatumTest",
-   "../tests/export/ExportTest",
-   "../tests/glosser/GlosserTest",
-   "../tests/hotkey/HotKeyTest",
-   "../tests/import/ImportTest",
-   "../tests/insert_unicode/InsertUnicodeTest",
-   "../tests/lexicon/LexiconTest",
-   "../tests/permission/PermissionTest",
-   "../tests/user/UserPreferenceTest",
-   "../tests/search/SearchTest",
-  "../tests/session/SessionTest",
-   "../tests/user/UserGenericTest",
+    "../tests/confidentiality_encryption/ConfidentialTest",
+    "../tests/corpus/CorpusTest", "../tests/export/ExportTest",
+    "../tests/glosser/GlosserTest", "../tests/hotkey/HotKeyTest",
+    "../tests/import/ImportTest", "../tests/insert_unicode/InsertUnicodeTest",
+    "../tests/lexicon/LexiconTest", "../tests/permission/PermissionTest",
+    "../tests/search/SearchTest", "../tests/datum/SessionTest",
+    "../tests/user/UserTest",
 
+    /* Test dependancies, only run these once in a while */
+    "../tests/libs/backbone/BackboneModelTest",
+    "../tests/libs/backbone/BackboneCouchdbTest",
+    /* Test DOM manipulation, only run these (199 tests) once in a while */
+    // "jasmine-jquery-spec"
+    "JUnitReporter" ], function() {
 
-], function() {
-    // Standard Jasmine initialization
-    (function() {
-        var jasmineEnv = jasmine.getEnv();
-        jasmineEnv.up  ,
-        dateInterval = 1000;
+  OPrime.debugMode = true;
 
-        // Decent HTML output for local testing
-        var trivialReporter = new jasmine.TrivialReporter();
-        jasmineEnv.addReporter(trivialReporter);
-        
-        // JUnit-formatted output for Jenkins
-        var junitReporter = new jasmine.PhantomJSReporter();
-        jasmineEnv.addReporter(junitReporter);
+  var jasmineEnv = jasmine.getEnv();
+  jasmineEnv.updateInterval = 1000;
 
-        jasmineEnv.specFilter = function(spec) {
-            return trivialReporter.specFilter(spec);
-        };
+  if (/PhantomJS/.test(navigator.userAgent)) {
+    jasmineEnv.addReporter(new jasmine.TrivialReporter());
+    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
+  } else {
+    var htmlReporter = new jasmine.HtmlReporter();
 
-        var currentWindowOnload = window.onload;
+    jasmineEnv.addReporter(htmlReporter);
 
-        window.onload = function() {
-            if(currentWindowOnload) {
-                currentWindowOnload();
-            }
-            execJasmine();
-        };
+    jasmineEnv.specFilter = function(spec) {
+      return htmlReporter.specFilter(spec);
+    };
+  }
 
-        function execJasmine() {
-            jasmineEnv.execute();
-        }
-    })();
+  jasmineEnv.execute();
+
 });

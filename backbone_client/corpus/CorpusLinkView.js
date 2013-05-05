@@ -2,7 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "corpus/CorpusMask",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 

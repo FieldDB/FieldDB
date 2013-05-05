@@ -1,6 +1,6 @@
 define( [ "backbone",
           "comment/Comment",
-          "libs/OPrime"
+          "OPrime"
 ], function(Backbone, Comment) {
   var Comments = Backbone.Collection.extend(
 

@@ -4,7 +4,7 @@ define([
     "user/UserGeneric",
     "permission/Permission",
     "user/UserPreference",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     HotKey,

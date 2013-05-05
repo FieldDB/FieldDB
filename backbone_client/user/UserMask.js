@@ -1,6 +1,5 @@
 define([ 
-    "backbone",
-    "libs/OPrime"
+    "backbone"
 ], function(
     Backbone
 ) {

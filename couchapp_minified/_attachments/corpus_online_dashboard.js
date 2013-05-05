@@ -1059,12 +1059,7 @@
 
 }).call(this);
 
-define("underscore", (function (global) {
-    return function () {
-        var ret, fn;
-        return ret || global._;
-    };
-}(this)));
+define("_", function(){});
 
 /*!
  * jQuery JavaScript Library v1.9.1
@@ -10663,6 +10658,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 }
 
 })( window );
+define("$", function(){});
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -11748,7 +11745,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 })(jQuery);
 
-define("jquery-couch", ["jquery"], (function (global) {
+define("jquery-couch", ["$"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global.$;
@@ -11760,7 +11757,7 @@ define("jquery-couch", ["jquery"], (function (global) {
 * Copyright 2012 Twitter, Inc.
 * http://www.apache.org/licenses/LICENSE-2.0.txt
 */
-!function(e){e(function(){e.support.transition=function(){var e=function(){var e=document.createElement("bootstrap"),t={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"},n;for(n in t)if(e.style[n]!==undefined)return t[n]}();return e&&{end:e}}()})}(window.jQuery),!function(e){var t='[data-dismiss="alert"]',n=function(n){e(n).on("click",t,this.close)};n.prototype.close=function(t){function s(){i.trigger("closed").remove()}var n=e(this),r=n.attr("data-target"),i;r||(r=n.attr("href"),r=r&&r.replace(/.*(?=#[^\s]*$)/,"")),i=e(r),t&&t.preventDefault(),i.length||(i=n.hasClass("alert")?n:n.parent()),i.trigger(t=e.Event("close"));if(t.isDefaultPrevented())return;i.removeClass("in"),e.support.transition&&i.hasClass("fade")?i.on(e.support.transition.end,s):s()},e.fn.alert=function(t){return this.each(function(){var r=e(this),i=r.data("alert");i||r.data("alert",i=new n(this)),typeof t=="string"&&i[t].call(r)})},e.fn.alert.Constructor=n,e(document).on("click.alert.data-api",t,n.prototype.close)}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.options=e.extend({},e.fn.button.defaults,n)};t.prototype.setState=function(e){var t="disabled",n=this.$element,r=n.data(),i=n.is("input")?"val":"html";e+="Text",r.resetText||n.data("resetText",n[i]()),n[i](r[e]||this.options[e]),setTimeout(function(){e=="loadingText"?n.addClass(t).attr(t,t):n.removeClass(t).removeAttr(t)},0)},t.prototype.toggle=function(){var e=this.$element.closest('[data-toggle="buttons-radio"]');e&&e.find(".active").removeClass("active"),this.$element.toggleClass("active")},e.fn.button=function(n){return this.each(function(){var r=e(this),i=r.data("button"),s=typeof n=="object"&&n;i||r.data("button",i=new t(this,s)),n=="toggle"?i.toggle():n&&i.setState(n)})},e.fn.button.defaults={loadingText:"loading..."},e.fn.button.Constructor=t,e(document).on("click.button.data-api","[data-toggle^=button]",function(t){var n=e(t.target);n.hasClass("btn")||(n=n.closest(".btn")),n.button("toggle")})}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.options=n,this.options.slide&&this.slide(this.options.slide),this.options.pause=="hover"&&this.$element.on("mouseenter",e.proxy(this.pause,this)).on("mouseleave",e.proxy(this.cycle,this))};t.prototype={cycle:function(t){return t||(this.paused=!1),this.options.interval&&!this.paused&&(this.interval=setInterval(e.proxy(this.next,this),this.options.interval)),this},to:function(t){var n=this.$element.find(".item.active"),r=n.parent().children(),i=r.index(n),s=this;if(t>r.length-1||t<0)return;return this.sliding?this.$element.one("slid",function(){s.to(t)}):i==t?this.pause().cycle():this.slide(t>i?"next":"prev",e(r[t]))},pause:function(t){return t||(this.paused=!0),this.$element.find(".next, .prev").length&&e.support.transition.end&&(this.$element.trigger(e.support.transition.end),this.cycle()),clearInterval(this.interval),this.interval=null,this},next:function(){if(this.sliding)return;return this.slide("next")},prev:function(){if(this.sliding)return;return this.slide("prev")},slide:function(t,n){var r=this.$element.find(".item.active"),i=n||r[t](),s=this.interval,o=t=="next"?"left":"right",u=t=="next"?"first":"last",a=this,f;this.sliding=!0,s&&this.pause(),i=i.length?i:this.$element.find(".item")[u](),f=e.Event("slide",{relatedTarget:i[0]});if(i.hasClass("active"))return;if(e.support.transition&&this.$element.hasClass("slide")){this.$element.trigger(f);if(f.isDefaultPrevented())return;i.addClass(t),i[0].offsetWidth,r.addClass(o),i.addClass(o),this.$element.one(e.support.transition.end,function(){i.removeClass([t,o].join(" ")).addClass("active"),r.removeClass(["active",o].join(" ")),a.sliding=!1,setTimeout(function(){a.$element.trigger("slid")},0)})}else{this.$element.trigger(f);if(f.isDefaultPrevented())return;r.removeClass("active"),i.addClass("active"),this.sliding=!1,this.$element.trigger("slid")}return s&&this.cycle(),this}},e.fn.carousel=function(n){return this.each(function(){var r=e(this),i=r.data("carousel"),s=e.extend({},e.fn.carousel.defaults,typeof n=="object"&&n),o=typeof n=="string"?n:s.slide;i||r.data("carousel",i=new t(this,s)),typeof n=="number"?i.to(n):o?i[o]():s.interval&&i.cycle()})},e.fn.carousel.defaults={interval:5e3,pause:"hover"},e.fn.carousel.Constructor=t,e(document).on("click.carousel.data-api","[data-slide]",function(t){var n=e(this),r,i=e(n.attr("data-target")||(r=n.attr("href"))&&r.replace(/.*(?=#[^\s]+$)/,"")),s=e.extend({},i.data(),n.data());i.carousel(s),t.preventDefault()})}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.options=e.extend({},e.fn.collapse.defaults,n),this.options.parent&&(this.$parent=e(this.options.parent)),this.options.toggle&&this.toggle()};t.prototype={constructor:t,dimension:function(){var e=this.$element.hasClass("width");return e?"width":"height"},show:function(){var t,n,r,i;if(this.transitioning)return;t=this.dimension(),n=e.camelCase(["scroll",t].join("-")),r=this.$parent&&this.$parent.find("> .accordion-group > .in");if(r&&r.length){i=r.data("collapse");if(i&&i.transitioning)return;r.collapse("hide"),i||r.data("collapse",null)}this.$element[t](0),this.transition("addClass",e.Event("show"),"shown"),e.support.transition&&this.$element[t](this.$element[0][n])},hide:function(){var t;if(this.transitioning)return;t=this.dimension(),this.reset(this.$element[t]()),this.transition("removeClass",e.Event("hide"),"hidden"),this.$element[t](0)},reset:function(e){var t=this.dimension();return this.$element.removeClass("collapse")[t](e||"auto")[0].offsetWidth,this.$element[e!==null?"addClass":"removeClass"]("collapse"),this},transition:function(t,n,r){var i=this,s=function(){n.type=="show"&&i.reset(),i.transitioning=0,i.$element.trigger(r)};this.$element.trigger(n);if(n.isDefaultPrevented())return;this.transitioning=1,this.$element[t]("in"),e.support.transition&&this.$element.hasClass("collapse")?this.$element.one(e.support.transition.end,s):s()},toggle:function(){this[this.$element.hasClass("in")?"hide":"show"]()}},e.fn.collapse=function(n){return this.each(function(){var r=e(this),i=r.data("collapse"),s=typeof n=="object"&&n;i||r.data("collapse",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.collapse.defaults={toggle:!0},e.fn.collapse.Constructor=t,e(document).on("click.collapse.data-api","[data-toggle=collapse]",function(t){var n=e(this),r,i=n.attr("data-target")||t.preventDefault()||(r=n.attr("href"))&&r.replace(/.*(?=#[^\s]+$)/,""),s=e(i).data("collapse")?"toggle":n.data();n[e(i).hasClass("in")?"addClass":"removeClass"]("collapsed"),e(i).collapse(s)})}(window.jQuery),!function(e){function r(){e(t).each(function(){i(e(this)).removeClass("open")})}function i(t){var n=t.attr("data-target"),r;return n||(n=t.attr("href"),n=n&&/#/.test(n)&&n.replace(/.*(?=#[^\s]*$)/,"")),r=e(n),r.length||(r=t.parent()),r}var t="[data-toggle=dropdown]",n=function(t){var n=e(t).on("click.dropdown.data-api",this.toggle);e("html").on("click.dropdown.data-api",function(){n.parent().removeClass("open")})};n.prototype={constructor:n,toggle:function(t){var n=e(this),s,o;if(n.is(".disabled, :disabled"))return;return s=i(n),o=s.hasClass("open"),r(),o||(s.toggleClass("open"),n.focus()),!1},keydown:function(t){var n,r,s,o,u,a;if(!/(38|40|27)/.test(t.keyCode))return;n=e(this),t.preventDefault(),t.stopPropagation();if(n.is(".disabled, :disabled"))return;o=i(n),u=o.hasClass("open");if(!u||u&&t.keyCode==27)return n.click();r=e("[role=menu] li:not(.divider) a",o);if(!r.length)return;a=r.index(r.filter(":focus")),t.keyCode==38&&a>0&&a--,t.keyCode==40&&a<r.length-1&&a++,~a||(a=0),r.eq(a).focus()}},e.fn.dropdown=function(t){return this.each(function(){var r=e(this),i=r.data("dropdown");i||r.data("dropdown",i=new n(this)),typeof t=="string"&&i[t].call(r)})},e.fn.dropdown.Constructor=n,e(document).on("click.dropdown.data-api touchstart.dropdown.data-api",r).on("click.dropdown touchstart.dropdown.data-api",".dropdown form",function(e){e.stopPropagation()}).on("click.dropdown.data-api touchstart.dropdown.data-api",t,n.prototype.toggle).on("keydown.dropdown.data-api touchstart.dropdown.data-api",t+", [role=menu]",n.prototype.keydown)}(window.jQuery),!function(e){var t=function(t,n){this.options=n,this.$element=e(t).delegate('[data-dismiss="modal"]',"click.dismiss.modal",e.proxy(this.hide,this)),this.options.remote&&this.$element.find(".modal-body").load(this.options.remote)};t.prototype={constructor:t,toggle:function(){return this[this.isShown?"hide":"show"]()},show:function(){var t=this,n=e.Event("show");this.$element.trigger(n);if(this.isShown||n.isDefaultPrevented())return;this.isShown=!0,this.escape(),this.backdrop(function(){var n=e.support.transition&&t.$element.hasClass("fade");t.$element.parent().length||t.$element.appendTo(document.body),t.$element.show(),n&&t.$element[0].offsetWidth,t.$element.addClass("in").attr("aria-hidden",!1),t.enforceFocus(),n?t.$element.one(e.support.transition.end,function(){t.$element.focus().trigger("shown")}):t.$element.focus().trigger("shown")})},hide:function(t){t&&t.preventDefault();var n=this;t=e.Event("hide"),this.$element.trigger(t);if(!this.isShown||t.isDefaultPrevented())return;this.isShown=!1,this.escape(),e(document).off("focusin.modal"),this.$element.removeClass("in").attr("aria-hidden",!0),e.support.transition&&this.$element.hasClass("fade")?this.hideWithTransition():this.hideModal()},enforceFocus:function(){var t=this;e(document).on("focusin.modal",function(e){t.$element[0]!==e.target&&!t.$element.has(e.target).length&&t.$element.focus()})},escape:function(){var e=this;this.isShown&&this.options.keyboard?this.$element.on("keyup.dismiss.modal",function(t){t.which==27&&e.hide()}):this.isShown||this.$element.off("keyup.dismiss.modal")},hideWithTransition:function(){var t=this,n=setTimeout(function(){t.$element.off(e.support.transition.end),t.hideModal()},500);this.$element.one(e.support.transition.end,function(){clearTimeout(n),t.hideModal()})},hideModal:function(e){this.$element.hide().trigger("hidden"),this.backdrop()},removeBackdrop:function(){this.$backdrop.remove(),this.$backdrop=null},backdrop:function(t){var n=this,r=this.$element.hasClass("fade")?"fade":"";if(this.isShown&&this.options.backdrop){var i=e.support.transition&&r;this.$backdrop=e('<div class="modal-backdrop '+r+'" />').appendTo(document.body),this.$backdrop.click(this.options.backdrop=="static"?e.proxy(this.$element[0].focus,this.$element[0]):e.proxy(this.hide,this)),i&&this.$backdrop[0].offsetWidth,this.$backdrop.addClass("in"),i?this.$backdrop.one(e.support.transition.end,t):t()}else!this.isShown&&this.$backdrop?(this.$backdrop.removeClass("in"),e.support.transition&&this.$element.hasClass("fade")?this.$backdrop.one(e.support.transition.end,e.proxy(this.removeBackdrop,this)):this.removeBackdrop()):t&&t()}},e.fn.modal=function(n){return this.each(function(){var r=e(this),i=r.data("modal"),s=e.extend({},e.fn.modal.defaults,r.data(),typeof n=="object"&&n);i||r.data("modal",i=new t(this,s)),typeof n=="string"?i[n]():s.show&&i.show()})},e.fn.modal.defaults={backdrop:!0,keyboard:!0,show:!0},e.fn.modal.Constructor=t,e(document).on("click.modal.data-api",'[data-toggle="modal"]',function(t){var n=e(this),r=n.attr("href"),i=e(n.attr("data-target")||r&&r.replace(/.*(?=#[^\s]+$)/,"")),s=i.data("modal")?"toggle":e.extend({remote:!/#/.test(r)&&r},i.data(),n.data());t.preventDefault(),i.modal(s).one("hide",function(){n.focus()})})}(window.jQuery),!function(e){var t=function(e,t){this.init("tooltip",e,t)};t.prototype={constructor:t,init:function(t,n,r){var i,s;this.type=t,this.$element=e(n),this.options=this.getOptions(r),this.enabled=!0,this.options.trigger=="click"?this.$element.on("click."+this.type,this.options.selector,e.proxy(this.toggle,this)):this.options.trigger!="manual"&&(i=this.options.trigger=="hover"?"mouseenter":"focus",s=this.options.trigger=="hover"?"mouseleave":"blur",this.$element.on(i+"."+this.type,this.options.selector,e.proxy(this.enter,this)),this.$element.on(s+"."+this.type,this.options.selector,e.proxy(this.leave,this))),this.options.selector?this._options=e.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()},getOptions:function(t){return t=e.extend({},e.fn[this.type].defaults,t,this.$element.data()),t.delay&&typeof t.delay=="number"&&(t.delay={show:t.delay,hide:t.delay}),t},enter:function(t){var n=e(t.currentTarget)[this.type](this._options).data(this.type);if(!n.options.delay||!n.options.delay.show)return n.show();clearTimeout(this.timeout),n.hoverState="in",this.timeout=setTimeout(function(){n.hoverState=="in"&&n.show()},n.options.delay.show)},leave:function(t){var n=e(t.currentTarget)[this.type](this._options).data(this.type);this.timeout&&clearTimeout(this.timeout);if(!n.options.delay||!n.options.delay.hide)return n.hide();n.hoverState="out",this.timeout=setTimeout(function(){n.hoverState=="out"&&n.hide()},n.options.delay.hide)},show:function(){var e,t,n,r,i,s,o;if(this.hasContent()&&this.enabled){e=this.tip(),this.setContent(),this.options.animation&&e.addClass("fade"),s=typeof this.options.placement=="function"?this.options.placement.call(this,e[0],this.$element[0]):this.options.placement,t=/in/.test(s),e.detach().css({top:0,left:0,display:"block"}).insertAfter(this.$element),n=this.getPosition(t),r=e[0].offsetWidth,i=e[0].offsetHeight;switch(t?s.split(" ")[1]:s){case"bottom":o={top:n.top+n.height,left:n.left+n.width/2-r/2};break;case"top":o={top:n.top-i,left:n.left+n.width/2-r/2};break;case"left":o={top:n.top+n.height/2-i/2,left:n.left-r};break;case"right":o={top:n.top+n.height/2-i/2,left:n.left+n.width}}e.offset(o).addClass(s).addClass("in")}},setContent:function(){var e=this.tip(),t=this.getTitle();e.find(".tooltip-inner")[this.options.html?"html":"text"](t),e.removeClass("fade in top bottom left right")},hide:function(){function r(){var t=setTimeout(function(){n.off(e.support.transition.end).detach()},500);n.one(e.support.transition.end,function(){clearTimeout(t),n.detach()})}var t=this,n=this.tip();return n.removeClass("in"),e.support.transition&&this.$tip.hasClass("fade")?r():n.detach(),this},fixTitle:function(){var e=this.$element;(e.attr("title")||typeof e.attr("data-original-title")!="string")&&e.attr("data-original-title",e.attr("title")||"").removeAttr("title")},hasContent:function(){return this.getTitle()},getPosition:function(t){return e.extend({},t?{top:0,left:0}:this.$element.offset(),{width:this.$element[0].offsetWidth,height:this.$element[0].offsetHeight})},getTitle:function(){var e,t=this.$element,n=this.options;return e=t.attr("data-original-title")||(typeof n.title=="function"?n.title.call(t[0]):n.title),e},tip:function(){return this.$tip=this.$tip||e(this.options.template)},validate:function(){this.$element[0].parentNode||(this.hide(),this.$element=null,this.options=null)},enable:function(){this.enabled=!0},disable:function(){this.enabled=!1},toggleEnabled:function(){this.enabled=!this.enabled},toggle:function(t){var n=e(t.currentTarget)[this.type](this._options).data(this.type);n[n.tip().hasClass("in")?"hide":"show"]()},destroy:function(){this.hide().$element.off("."+this.type).removeData(this.type)}},e.fn.tooltip=function(n){return this.each(function(){var r=e(this),i=r.data("tooltip"),s=typeof n=="object"&&n;i||r.data("tooltip",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.tooltip.Constructor=t,e.fn.tooltip.defaults={animation:!0,placement:"top",selector:!1,template:'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover",title:"",delay:0,html:!1}}(window.jQuery),!function(e){var t=function(e,t){this.init("popover",e,t)};t.prototype=e.extend({},e.fn.tooltip.Constructor.prototype,{constructor:t,setContent:function(){var e=this.tip(),t=this.getTitle(),n=this.getContent();e.find(".popover-title")[this.options.html?"html":"text"](t),e.find(".popover-content > *")[this.options.html?"html":"text"](n),e.removeClass("fade top bottom left right in")},hasContent:function(){return this.getTitle()||this.getContent()},getContent:function(){var e,t=this.$element,n=this.options;return e=t.attr("data-content")||(typeof n.content=="function"?n.content.call(t[0]):n.content),e},tip:function(){return this.$tip||(this.$tip=e(this.options.template)),this.$tip},destroy:function(){this.hide().$element.off("."+this.type).removeData(this.type)}}),e.fn.popover=function(n){return this.each(function(){var r=e(this),i=r.data("popover"),s=typeof n=="object"&&n;i||r.data("popover",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.popover.Constructor=t,e.fn.popover.defaults=e.extend({},e.fn.tooltip.defaults,{placement:"right",trigger:"click",content:"",template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'})}(window.jQuery),!function(e){function t(t,n){var r=e.proxy(this.process,this),i=e(t).is("body")?e(window):e(t),s;this.options=e.extend({},e.fn.scrollspy.defaults,n),this.$scrollElement=i.on("scroll.scroll-spy.data-api",r),this.selector=(this.options.target||(s=e(t).attr("href"))&&s.replace(/.*(?=#[^\s]+$)/,"")||"")+" .nav li > a",this.$body=e("body"),this.refresh(),this.process()}t.prototype={constructor:t,refresh:function(){var t=this,n;this.offsets=e([]),this.targets=e([]),n=this.$body.find(this.selector).map(function(){var t=e(this),n=t.data("target")||t.attr("href"),r=/^#\w/.test(n)&&e(n);return r&&r.length&&[[r.position().top,n]]||null}).sort(function(e,t){return e[0]-t[0]}).each(function(){t.offsets.push(this[0]),t.targets.push(this[1])})},process:function(){var e=this.$scrollElement.scrollTop()+this.options.offset,t=this.$scrollElement[0].scrollHeight||this.$body[0].scrollHeight,n=t-this.$scrollElement.height(),r=this.offsets,i=this.targets,s=this.activeTarget,o;if(e>=n)return s!=(o=i.last()[0])&&this.activate(o);for(o=r.length;o--;)s!=i[o]&&e>=r[o]&&(!r[o+1]||e<=r[o+1])&&this.activate(i[o])},activate:function(t){var n,r;this.activeTarget=t,e(this.selector).parent(".active").removeClass("active"),r=this.selector+'[data-target="'+t+'"],'+this.selector+'[href="'+t+'"]',n=e(r).parent("li").addClass("active"),n.parent(".dropdown-menu").length&&(n=n.closest("li.dropdown").addClass("active")),n.trigger("activate")}},e.fn.scrollspy=function(n){return this.each(function(){var r=e(this),i=r.data("scrollspy"),s=typeof n=="object"&&n;i||r.data("scrollspy",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.scrollspy.Constructor=t,e.fn.scrollspy.defaults={offset:10},e(window).on("load",function(){e('[data-spy="scroll"]').each(function(){var t=e(this);t.scrollspy(t.data())})})}(window.jQuery),!function(e){var t=function(t){this.element=e(t)};t.prototype={constructor:t,show:function(){var t=this.element,n=t.closest("ul:not(.dropdown-menu)"),r=t.attr("data-target"),i,s,o;r||(r=t.attr("href"),r=r&&r.replace(/.*(?=#[^\s]*$)/,""));if(t.parent("li").hasClass("active"))return;i=n.find(".active:last a")[0],o=e.Event("show",{relatedTarget:i}),t.trigger(o);if(o.isDefaultPrevented())return;s=e(r),this.activate(t.parent("li"),n),this.activate(s,s.parent(),function(){t.trigger({type:"shown",relatedTarget:i})})},activate:function(t,n,r){function o(){i.removeClass("active").find("> .dropdown-menu > .active").removeClass("active"),t.addClass("active"),s?(t[0].offsetWidth,t.addClass("in")):t.removeClass("fade"),t.parent(".dropdown-menu")&&t.closest("li.dropdown").addClass("active"),r&&r()}var i=n.find("> .active"),s=r&&e.support.transition&&i.hasClass("fade");s?i.one(e.support.transition.end,o):o(),i.removeClass("in")}},e.fn.tab=function(n){return this.each(function(){var r=e(this),i=r.data("tab");i||r.data("tab",i=new t(this)),typeof n=="string"&&i[n]()})},e.fn.tab.Constructor=t,e(document).on("click.tab.data-api",'[data-toggle="tab"], [data-toggle="pill"]',function(t){t.preventDefault(),e(this).tab("show")})}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.options=e.extend({},e.fn.typeahead.defaults,n),this.matcher=this.options.matcher||this.matcher,this.sorter=this.options.sorter||this.sorter,this.highlighter=this.options.highlighter||this.highlighter,this.updater=this.options.updater||this.updater,this.$menu=e(this.options.menu).appendTo("body"),this.source=this.options.source,this.shown=!1,this.listen()};t.prototype={constructor:t,select:function(){var e=this.$menu.find(".active").attr("data-value");return this.$element.val(this.updater(e)).change(),this.hide()},updater:function(e){return e},show:function(){var t=e.extend({},this.$element.offset(),{height:this.$element[0].offsetHeight});return this.$menu.css({top:t.top+t.height,left:t.left}),this.$menu.show(),this.shown=!0,this},hide:function(){return this.$menu.hide(),this.shown=!1,this},lookup:function(t){var n;return this.query=this.$element.val(),!this.query||this.query.length<this.options.minLength?this.shown?this.hide():this:(n=e.isFunction(this.source)?this.source(this.query,e.proxy(this.process,this)):this.source,n?this.process(n):this)},process:function(t){var n=this;return t=e.grep(t,function(e){return n.matcher(e)}),t=this.sorter(t),t.length?this.render(t.slice(0,this.options.items)).show():this.shown?this.hide():this},matcher:function(e){return~e.toLowerCase().indexOf(this.query.toLowerCase())},sorter:function(e){var t=[],n=[],r=[],i;while(i=e.shift())i.toLowerCase().indexOf(this.query.toLowerCase())?~i.indexOf(this.query)?n.push(i):r.push(i):t.push(i);return t.concat(n,r)},highlighter:function(e){var t=this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&");return e.replace(new RegExp("("+t+")","ig"),function(e,t){return"<strong>"+t+"</strong>"})},render:function(t){var n=this;return t=e(t).map(function(t,r){return t=e(n.options.item).attr("data-value",r),t.find("a").html(n.highlighter(r)),t[0]}),t.first().addClass("active"),this.$menu.html(t),this},next:function(t){var n=this.$menu.find(".active").removeClass("active"),r=n.next();r.length||(r=e(this.$menu.find("li")[0])),r.addClass("active")},prev:function(e){var t=this.$menu.find(".active").removeClass("active"),n=t.prev();n.length||(n=this.$menu.find("li").last()),n.addClass("active")},listen:function(){this.$element.on("blur",e.proxy(this.blur,this)).on("keypress",e.proxy(this.keypress,this)).on("keyup",e.proxy(this.keyup,this)),this.eventSupported("keydown")&&this.$element.on("keydown",e.proxy(this.keydown,this)),this.$menu.on("click",e.proxy(this.click,this)).on("mouseenter","li",e.proxy(this.mouseenter,this))},eventSupported:function(e){var t=e in this.$element;return t||(this.$element.setAttribute(e,"return;"),t=typeof this.$element[e]=="function"),t},move:function(e){if(!this.shown)return;switch(e.keyCode){case 9:case 13:case 27:e.preventDefault();break;case 38:e.preventDefault(),this.prev();break;case 40:e.preventDefault(),this.next()}e.stopPropagation()},keydown:function(t){this.suppressKeyPressRepeat=!~e.inArray(t.keyCode,[40,38,9,13,27]),this.move(t)},keypress:function(e){if(this.suppressKeyPressRepeat)return;this.move(e)},keyup:function(e){switch(e.keyCode){case 40:case 38:case 16:case 17:case 18:break;case 9:case 13:if(!this.shown)return;this.select();break;case 27:if(!this.shown)return;this.hide();break;default:this.lookup()}e.stopPropagation(),e.preventDefault()},blur:function(e){var t=this;setTimeout(function(){t.hide()},150)},click:function(e){e.stopPropagation(),e.preventDefault(),this.select()},mouseenter:function(t){this.$menu.find(".active").removeClass("active"),e(t.currentTarget).addClass("active")}},e.fn.typeahead=function(n){return this.each(function(){var r=e(this),i=r.data("typeahead"),s=typeof n=="object"&&n;i||r.data("typeahead",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.typeahead.defaults={source:[],items:8,menu:'<ul class="typeahead dropdown-menu"></ul>',item:'<li><a href="#"></a></li>',minLength:1},e.fn.typeahead.Constructor=t,e(document).on("focus.typeahead.data-api",'[data-provide="typeahead"]',function(t){var n=e(this);if(n.data("typeahead"))return;t.preventDefault(),n.typeahead(n.data())})}(window.jQuery),!function(e){var t=function(t,n){this.options=e.extend({},e.fn.affix.defaults,n),this.$window=e(window).on("scroll.affix.data-api",e.proxy(this.checkPosition,this)).on("click.affix.data-api",e.proxy(function(){setTimeout(e.proxy(this.checkPosition,this),1)},this)),this.$element=e(t),this.checkPosition()};t.prototype.checkPosition=function(){if(!this.$element.is(":visible"))return;var t=e(document).height(),n=this.$window.scrollTop(),r=this.$element.offset(),i=this.options.offset,s=i.bottom,o=i.top,u="affix affix-top affix-bottom",a;typeof i!="object"&&(s=o=i),typeof o=="function"&&(o=i.top()),typeof s=="function"&&(s=i.bottom()),a=this.unpin!=null&&n+this.unpin<=r.top?!1:s!=null&&r.top+this.$element.height()>=t-s?"bottom":o!=null&&n<=o?"top":!1;if(this.affixed===a)return;this.affixed=a,this.unpin=a=="bottom"?r.top-n:null,this.$element.removeClass(u).addClass("affix"+(a?"-"+a:""))},e.fn.affix=function(n){return this.each(function(){var r=e(this),i=r.data("affix"),s=typeof n=="object"&&n;i||r.data("affix",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.affix.Constructor=t,e.fn.affix.defaults={offset:0},e(window).on("load",function(){e('[data-spy="affix"]').each(function(){var t=e(this),n=t.data();n.offset=n.offset||{},n.offsetBottom&&(n.offset.bottom=n.offsetBottom),n.offsetTop&&(n.offset.top=n.offsetTop),t.affix(n)})})}(window.jQuery);
+!function(e){e(function(){e.support.transition=function(){var e=function(){var e=document.createElement("bootstrap"),t={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"},n;for(n in t)if(e.style[n]!==undefined)return t[n]}();return e&&{end:e}}()})}(window.jQuery),!function(e){var t='[data-dismiss="alert"]',n=function(n){e(n).on("click",t,this.close)};n.prototype.close=function(t){function s(){i.trigger("closed").remove()}var n=e(this),r=n.attr("data-target"),i;r||(r=n.attr("href"),r=r&&r.replace(/.*(?=#[^\s]*$)/,"")),i=e(r),t&&t.preventDefault(),i.length||(i=n.hasClass("alert")?n:n.parent()),i.trigger(t=e.Event("close"));if(t.isDefaultPrevented())return;i.removeClass("in"),e.support.transition&&i.hasClass("fade")?i.on(e.support.transition.end,s):s()};var r=e.fn.alert;e.fn.alert=function(t){return this.each(function(){var r=e(this),i=r.data("alert");i||r.data("alert",i=new n(this)),typeof t=="string"&&i[t].call(r)})},e.fn.alert.Constructor=n,e.fn.alert.noConflict=function(){return e.fn.alert=r,this},e(document).on("click.alert.data-api",t,n.prototype.close)}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.options=e.extend({},e.fn.button.defaults,n)};t.prototype.setState=function(e){var t="disabled",n=this.$element,r=n.data(),i=n.is("input")?"val":"html";e+="Text",r.resetText||n.data("resetText",n[i]()),n[i](r[e]||this.options[e]),setTimeout(function(){e=="loadingText"?n.addClass(t).attr(t,t):n.removeClass(t).removeAttr(t)},0)},t.prototype.toggle=function(){var e=this.$element.closest('[data-toggle="buttons-radio"]');e&&e.find(".active").removeClass("active"),this.$element.toggleClass("active")};var n=e.fn.button;e.fn.button=function(n){return this.each(function(){var r=e(this),i=r.data("button"),s=typeof n=="object"&&n;i||r.data("button",i=new t(this,s)),n=="toggle"?i.toggle():n&&i.setState(n)})},e.fn.button.defaults={loadingText:"loading..."},e.fn.button.Constructor=t,e.fn.button.noConflict=function(){return e.fn.button=n,this},e(document).on("click.button.data-api","[data-toggle^=button]",function(t){var n=e(t.target);n.hasClass("btn")||(n=n.closest(".btn")),n.button("toggle")})}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.$indicators=this.$element.find(".carousel-indicators"),this.options=n,this.options.pause=="hover"&&this.$element.on("mouseenter",e.proxy(this.pause,this)).on("mouseleave",e.proxy(this.cycle,this))};t.prototype={cycle:function(t){return t||(this.paused=!1),this.interval&&clearInterval(this.interval),this.options.interval&&!this.paused&&(this.interval=setInterval(e.proxy(this.next,this),this.options.interval)),this},getActiveIndex:function(){return this.$active=this.$element.find(".item.active"),this.$items=this.$active.parent().children(),this.$items.index(this.$active)},to:function(t){var n=this.getActiveIndex(),r=this;if(t>this.$items.length-1||t<0)return;return this.sliding?this.$element.one("slid",function(){r.to(t)}):n==t?this.pause().cycle():this.slide(t>n?"next":"prev",e(this.$items[t]))},pause:function(t){return t||(this.paused=!0),this.$element.find(".next, .prev").length&&e.support.transition.end&&(this.$element.trigger(e.support.transition.end),this.cycle(!0)),clearInterval(this.interval),this.interval=null,this},next:function(){if(this.sliding)return;return this.slide("next")},prev:function(){if(this.sliding)return;return this.slide("prev")},slide:function(t,n){var r=this.$element.find(".item.active"),i=n||r[t](),s=this.interval,o=t=="next"?"left":"right",u=t=="next"?"first":"last",a=this,f;this.sliding=!0,s&&this.pause(),i=i.length?i:this.$element.find(".item")[u](),f=e.Event("slide",{relatedTarget:i[0],direction:o});if(i.hasClass("active"))return;this.$indicators.length&&(this.$indicators.find(".active").removeClass("active"),this.$element.one("slid",function(){var t=e(a.$indicators.children()[a.getActiveIndex()]);t&&t.addClass("active")}));if(e.support.transition&&this.$element.hasClass("slide")){this.$element.trigger(f);if(f.isDefaultPrevented())return;i.addClass(t),i[0].offsetWidth,r.addClass(o),i.addClass(o),this.$element.one(e.support.transition.end,function(){i.removeClass([t,o].join(" ")).addClass("active"),r.removeClass(["active",o].join(" ")),a.sliding=!1,setTimeout(function(){a.$element.trigger("slid")},0)})}else{this.$element.trigger(f);if(f.isDefaultPrevented())return;r.removeClass("active"),i.addClass("active"),this.sliding=!1,this.$element.trigger("slid")}return s&&this.cycle(),this}};var n=e.fn.carousel;e.fn.carousel=function(n){return this.each(function(){var r=e(this),i=r.data("carousel"),s=e.extend({},e.fn.carousel.defaults,typeof n=="object"&&n),o=typeof n=="string"?n:s.slide;i||r.data("carousel",i=new t(this,s)),typeof n=="number"?i.to(n):o?i[o]():s.interval&&i.pause().cycle()})},e.fn.carousel.defaults={interval:5e3,pause:"hover"},e.fn.carousel.Constructor=t,e.fn.carousel.noConflict=function(){return e.fn.carousel=n,this},e(document).on("click.carousel.data-api","[data-slide], [data-slide-to]",function(t){var n=e(this),r,i=e(n.attr("data-target")||(r=n.attr("href"))&&r.replace(/.*(?=#[^\s]+$)/,"")),s=e.extend({},i.data(),n.data()),o;i.carousel(s),(o=n.attr("data-slide-to"))&&i.data("carousel").pause().to(o).cycle(),t.preventDefault()})}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.options=e.extend({},e.fn.collapse.defaults,n),this.options.parent&&(this.$parent=e(this.options.parent)),this.options.toggle&&this.toggle()};t.prototype={constructor:t,dimension:function(){var e=this.$element.hasClass("width");return e?"width":"height"},show:function(){var t,n,r,i;if(this.transitioning||this.$element.hasClass("in"))return;t=this.dimension(),n=e.camelCase(["scroll",t].join("-")),r=this.$parent&&this.$parent.find("> .accordion-group > .in");if(r&&r.length){i=r.data("collapse");if(i&&i.transitioning)return;r.collapse("hide"),i||r.data("collapse",null)}this.$element[t](0),this.transition("addClass",e.Event("show"),"shown"),e.support.transition&&this.$element[t](this.$element[0][n])},hide:function(){var t;if(this.transitioning||!this.$element.hasClass("in"))return;t=this.dimension(),this.reset(this.$element[t]()),this.transition("removeClass",e.Event("hide"),"hidden"),this.$element[t](0)},reset:function(e){var t=this.dimension();return this.$element.removeClass("collapse")[t](e||"auto")[0].offsetWidth,this.$element[e!==null?"addClass":"removeClass"]("collapse"),this},transition:function(t,n,r){var i=this,s=function(){n.type=="show"&&i.reset(),i.transitioning=0,i.$element.trigger(r)};this.$element.trigger(n);if(n.isDefaultPrevented())return;this.transitioning=1,this.$element[t]("in"),e.support.transition&&this.$element.hasClass("collapse")?this.$element.one(e.support.transition.end,s):s()},toggle:function(){this[this.$element.hasClass("in")?"hide":"show"]()}};var n=e.fn.collapse;e.fn.collapse=function(n){return this.each(function(){var r=e(this),i=r.data("collapse"),s=e.extend({},e.fn.collapse.defaults,r.data(),typeof n=="object"&&n);i||r.data("collapse",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.collapse.defaults={toggle:!0},e.fn.collapse.Constructor=t,e.fn.collapse.noConflict=function(){return e.fn.collapse=n,this},e(document).on("click.collapse.data-api","[data-toggle=collapse]",function(t){var n=e(this),r,i=n.attr("data-target")||t.preventDefault()||(r=n.attr("href"))&&r.replace(/.*(?=#[^\s]+$)/,""),s=e(i).data("collapse")?"toggle":n.data();n[e(i).hasClass("in")?"addClass":"removeClass"]("collapsed"),e(i).collapse(s)})}(window.jQuery),!function(e){function r(){e(t).each(function(){i(e(this)).removeClass("open")})}function i(t){var n=t.attr("data-target"),r;n||(n=t.attr("href"),n=n&&/#/.test(n)&&n.replace(/.*(?=#[^\s]*$)/,"")),r=n&&e(n);if(!r||!r.length)r=t.parent();return r}var t="[data-toggle=dropdown]",n=function(t){var n=e(t).on("click.dropdown.data-api",this.toggle);e("html").on("click.dropdown.data-api",function(){n.parent().removeClass("open")})};n.prototype={constructor:n,toggle:function(t){var n=e(this),s,o;if(n.is(".disabled, :disabled"))return;return s=i(n),o=s.hasClass("open"),r(),o||s.toggleClass("open"),n.focus(),!1},keydown:function(n){var r,s,o,u,a,f;if(!/(38|40|27)/.test(n.keyCode))return;r=e(this),n.preventDefault(),n.stopPropagation();if(r.is(".disabled, :disabled"))return;u=i(r),a=u.hasClass("open");if(!a||a&&n.keyCode==27)return n.which==27&&u.find(t).focus(),r.click();s=e("[role=menu] li:not(.divider):visible a",u);if(!s.length)return;f=s.index(s.filter(":focus")),n.keyCode==38&&f>0&&f--,n.keyCode==40&&f<s.length-1&&f++,~f||(f=0),s.eq(f).focus()}};var s=e.fn.dropdown;e.fn.dropdown=function(t){return this.each(function(){var r=e(this),i=r.data("dropdown");i||r.data("dropdown",i=new n(this)),typeof t=="string"&&i[t].call(r)})},e.fn.dropdown.Constructor=n,e.fn.dropdown.noConflict=function(){return e.fn.dropdown=s,this},e(document).on("click.dropdown.data-api",r).on("click.dropdown.data-api",".dropdown form",function(e){e.stopPropagation()}).on("click.dropdown-menu",function(e){e.stopPropagation()}).on("click.dropdown.data-api",t,n.prototype.toggle).on("keydown.dropdown.data-api",t+", [role=menu]",n.prototype.keydown)}(window.jQuery),!function(e){var t=function(t,n){this.options=n,this.$element=e(t).delegate('[data-dismiss="modal"]',"click.dismiss.modal",e.proxy(this.hide,this)),this.options.remote&&this.$element.find(".modal-body").load(this.options.remote)};t.prototype={constructor:t,toggle:function(){return this[this.isShown?"hide":"show"]()},show:function(){var t=this,n=e.Event("show");this.$element.trigger(n);if(this.isShown||n.isDefaultPrevented())return;this.isShown=!0,this.escape(),this.backdrop(function(){var n=e.support.transition&&t.$element.hasClass("fade");t.$element.parent().length||t.$element.appendTo(document.body),t.$element.show(),n&&t.$element[0].offsetWidth,t.$element.addClass("in").attr("aria-hidden",!1),t.enforceFocus(),n?t.$element.one(e.support.transition.end,function(){t.$element.focus().trigger("shown")}):t.$element.focus().trigger("shown")})},hide:function(t){t&&t.preventDefault();var n=this;t=e.Event("hide"),this.$element.trigger(t);if(!this.isShown||t.isDefaultPrevented())return;this.isShown=!1,this.escape(),e(document).off("focusin.modal"),this.$element.removeClass("in").attr("aria-hidden",!0),e.support.transition&&this.$element.hasClass("fade")?this.hideWithTransition():this.hideModal()},enforceFocus:function(){var t=this;e(document).on("focusin.modal",function(e){t.$element[0]!==e.target&&!t.$element.has(e.target).length&&t.$element.focus()})},escape:function(){var e=this;this.isShown&&this.options.keyboard?this.$element.on("keyup.dismiss.modal",function(t){t.which==27&&e.hide()}):this.isShown||this.$element.off("keyup.dismiss.modal")},hideWithTransition:function(){var t=this,n=setTimeout(function(){t.$element.off(e.support.transition.end),t.hideModal()},500);this.$element.one(e.support.transition.end,function(){clearTimeout(n),t.hideModal()})},hideModal:function(){var e=this;this.$element.hide(),this.backdrop(function(){e.removeBackdrop(),e.$element.trigger("hidden")})},removeBackdrop:function(){this.$backdrop&&this.$backdrop.remove(),this.$backdrop=null},backdrop:function(t){var n=this,r=this.$element.hasClass("fade")?"fade":"";if(this.isShown&&this.options.backdrop){var i=e.support.transition&&r;this.$backdrop=e('<div class="modal-backdrop '+r+'" />').appendTo(document.body),this.$backdrop.click(this.options.backdrop=="static"?e.proxy(this.$element[0].focus,this.$element[0]):e.proxy(this.hide,this)),i&&this.$backdrop[0].offsetWidth,this.$backdrop.addClass("in");if(!t)return;i?this.$backdrop.one(e.support.transition.end,t):t()}else!this.isShown&&this.$backdrop?(this.$backdrop.removeClass("in"),e.support.transition&&this.$element.hasClass("fade")?this.$backdrop.one(e.support.transition.end,t):t()):t&&t()}};var n=e.fn.modal;e.fn.modal=function(n){return this.each(function(){var r=e(this),i=r.data("modal"),s=e.extend({},e.fn.modal.defaults,r.data(),typeof n=="object"&&n);i||r.data("modal",i=new t(this,s)),typeof n=="string"?i[n]():s.show&&i.show()})},e.fn.modal.defaults={backdrop:!0,keyboard:!0,show:!0},e.fn.modal.Constructor=t,e.fn.modal.noConflict=function(){return e.fn.modal=n,this},e(document).on("click.modal.data-api",'[data-toggle="modal"]',function(t){var n=e(this),r=n.attr("href"),i=e(n.attr("data-target")||r&&r.replace(/.*(?=#[^\s]+$)/,"")),s=i.data("modal")?"toggle":e.extend({remote:!/#/.test(r)&&r},i.data(),n.data());t.preventDefault(),i.modal(s).one("hide",function(){n.focus()})})}(window.jQuery),!function(e){var t=function(e,t){this.init("tooltip",e,t)};t.prototype={constructor:t,init:function(t,n,r){var i,s,o,u,a;this.type=t,this.$element=e(n),this.options=this.getOptions(r),this.enabled=!0,o=this.options.trigger.split(" ");for(a=o.length;a--;)u=o[a],u=="click"?this.$element.on("click."+this.type,this.options.selector,e.proxy(this.toggle,this)):u!="manual"&&(i=u=="hover"?"mouseenter":"focus",s=u=="hover"?"mouseleave":"blur",this.$element.on(i+"."+this.type,this.options.selector,e.proxy(this.enter,this)),this.$element.on(s+"."+this.type,this.options.selector,e.proxy(this.leave,this)));this.options.selector?this._options=e.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()},getOptions:function(t){return t=e.extend({},e.fn[this.type].defaults,this.$element.data(),t),t.delay&&typeof t.delay=="number"&&(t.delay={show:t.delay,hide:t.delay}),t},enter:function(t){var n=e.fn[this.type].defaults,r={},i;this._options&&e.each(this._options,function(e,t){n[e]!=t&&(r[e]=t)},this),i=e(t.currentTarget)[this.type](r).data(this.type);if(!i.options.delay||!i.options.delay.show)return i.show();clearTimeout(this.timeout),i.hoverState="in",this.timeout=setTimeout(function(){i.hoverState=="in"&&i.show()},i.options.delay.show)},leave:function(t){var n=e(t.currentTarget)[this.type](this._options).data(this.type);this.timeout&&clearTimeout(this.timeout);if(!n.options.delay||!n.options.delay.hide)return n.hide();n.hoverState="out",this.timeout=setTimeout(function(){n.hoverState=="out"&&n.hide()},n.options.delay.hide)},show:function(){var t,n,r,i,s,o,u=e.Event("show");if(this.hasContent()&&this.enabled){this.$element.trigger(u);if(u.isDefaultPrevented())return;t=this.tip(),this.setContent(),this.options.animation&&t.addClass("fade"),s=typeof this.options.placement=="function"?this.options.placement.call(this,t[0],this.$element[0]):this.options.placement,t.detach().css({top:0,left:0,display:"block"}),this.options.container?t.appendTo(this.options.container):t.insertAfter(this.$element),n=this.getPosition(),r=t[0].offsetWidth,i=t[0].offsetHeight;switch(s){case"bottom":o={top:n.top+n.height,left:n.left+n.width/2-r/2};break;case"top":o={top:n.top-i,left:n.left+n.width/2-r/2};break;case"left":o={top:n.top+n.height/2-i/2,left:n.left-r};break;case"right":o={top:n.top+n.height/2-i/2,left:n.left+n.width}}this.applyPlacement(o,s),this.$element.trigger("shown")}},applyPlacement:function(e,t){var n=this.tip(),r=n[0].offsetWidth,i=n[0].offsetHeight,s,o,u,a;n.offset(e).addClass(t).addClass("in"),s=n[0].offsetWidth,o=n[0].offsetHeight,t=="top"&&o!=i&&(e.top=e.top+i-o,a=!0),t=="bottom"||t=="top"?(u=0,e.left<0&&(u=e.left*-2,e.left=0,n.offset(e),s=n[0].offsetWidth,o=n[0].offsetHeight),this.replaceArrow(u-r+s,s,"left")):this.replaceArrow(o-i,o,"top"),a&&n.offset(e)},replaceArrow:function(e,t,n){this.arrow().css(n,e?50*(1-e/t)+"%":"")},setContent:function(){var e=this.tip(),t=this.getTitle();e.find(".tooltip-inner")[this.options.html?"html":"text"](t),e.removeClass("fade in top bottom left right")},hide:function(){function i(){var t=setTimeout(function(){n.off(e.support.transition.end).detach()},500);n.one(e.support.transition.end,function(){clearTimeout(t),n.detach()})}var t=this,n=this.tip(),r=e.Event("hide");this.$element.trigger(r);if(r.isDefaultPrevented())return;return n.removeClass("in"),e.support.transition&&this.$tip.hasClass("fade")?i():n.detach(),this.$element.trigger("hidden"),this},fixTitle:function(){var e=this.$element;(e.attr("title")||typeof e.attr("data-original-title")!="string")&&e.attr("data-original-title",e.attr("title")||"").attr("title","")},hasContent:function(){return this.getTitle()},getPosition:function(){var t=this.$element[0];return e.extend({},typeof t.getBoundingClientRect=="function"?t.getBoundingClientRect():{width:t.offsetWidth,height:t.offsetHeight},this.$element.offset())},getTitle:function(){var e,t=this.$element,n=this.options;return e=t.attr("data-original-title")||(typeof n.title=="function"?n.title.call(t[0]):n.title),e},tip:function(){return this.$tip=this.$tip||e(this.options.template)},arrow:function(){return this.$arrow=this.$arrow||this.tip().find(".tooltip-arrow")},validate:function(){this.$element[0].parentNode||(this.hide(),this.$element=null,this.options=null)},enable:function(){this.enabled=!0},disable:function(){this.enabled=!1},toggleEnabled:function(){this.enabled=!this.enabled},toggle:function(t){var n=t?e(t.currentTarget)[this.type](this._options).data(this.type):this;n.tip().hasClass("in")?n.hide():n.show()},destroy:function(){this.hide().$element.off("."+this.type).removeData(this.type)}};var n=e.fn.tooltip;e.fn.tooltip=function(n){return this.each(function(){var r=e(this),i=r.data("tooltip"),s=typeof n=="object"&&n;i||r.data("tooltip",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.tooltip.Constructor=t,e.fn.tooltip.defaults={animation:!0,placement:"top",selector:!1,template:'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover focus",title:"",delay:0,html:!1,container:!1},e.fn.tooltip.noConflict=function(){return e.fn.tooltip=n,this}}(window.jQuery),!function(e){var t=function(e,t){this.init("popover",e,t)};t.prototype=e.extend({},e.fn.tooltip.Constructor.prototype,{constructor:t,setContent:function(){var e=this.tip(),t=this.getTitle(),n=this.getContent();e.find(".popover-title")[this.options.html?"html":"text"](t),e.find(".popover-content")[this.options.html?"html":"text"](n),e.removeClass("fade top bottom left right in")},hasContent:function(){return this.getTitle()||this.getContent()},getContent:function(){var e,t=this.$element,n=this.options;return e=(typeof n.content=="function"?n.content.call(t[0]):n.content)||t.attr("data-content"),e},tip:function(){return this.$tip||(this.$tip=e(this.options.template)),this.$tip},destroy:function(){this.hide().$element.off("."+this.type).removeData(this.type)}});var n=e.fn.popover;e.fn.popover=function(n){return this.each(function(){var r=e(this),i=r.data("popover"),s=typeof n=="object"&&n;i||r.data("popover",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.popover.Constructor=t,e.fn.popover.defaults=e.extend({},e.fn.tooltip.defaults,{placement:"right",trigger:"click",content:"",template:'<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'}),e.fn.popover.noConflict=function(){return e.fn.popover=n,this}}(window.jQuery),!function(e){function t(t,n){var r=e.proxy(this.process,this),i=e(t).is("body")?e(window):e(t),s;this.options=e.extend({},e.fn.scrollspy.defaults,n),this.$scrollElement=i.on("scroll.scroll-spy.data-api",r),this.selector=(this.options.target||(s=e(t).attr("href"))&&s.replace(/.*(?=#[^\s]+$)/,"")||"")+" .nav li > a",this.$body=e("body"),this.refresh(),this.process()}t.prototype={constructor:t,refresh:function(){var t=this,n;this.offsets=e([]),this.targets=e([]),n=this.$body.find(this.selector).map(function(){var n=e(this),r=n.data("target")||n.attr("href"),i=/^#\w/.test(r)&&e(r);return i&&i.length&&[[i.position().top+(!e.isWindow(t.$scrollElement.get(0))&&t.$scrollElement.scrollTop()),r]]||null}).sort(function(e,t){return e[0]-t[0]}).each(function(){t.offsets.push(this[0]),t.targets.push(this[1])})},process:function(){var e=this.$scrollElement.scrollTop()+this.options.offset,t=this.$scrollElement[0].scrollHeight||this.$body[0].scrollHeight,n=t-this.$scrollElement.height(),r=this.offsets,i=this.targets,s=this.activeTarget,o;if(e>=n)return s!=(o=i.last()[0])&&this.activate(o);for(o=r.length;o--;)s!=i[o]&&e>=r[o]&&(!r[o+1]||e<=r[o+1])&&this.activate(i[o])},activate:function(t){var n,r;this.activeTarget=t,e(this.selector).parent(".active").removeClass("active"),r=this.selector+'[data-target="'+t+'"],'+this.selector+'[href="'+t+'"]',n=e(r).parent("li").addClass("active"),n.parent(".dropdown-menu").length&&(n=n.closest("li.dropdown").addClass("active")),n.trigger("activate")}};var n=e.fn.scrollspy;e.fn.scrollspy=function(n){return this.each(function(){var r=e(this),i=r.data("scrollspy"),s=typeof n=="object"&&n;i||r.data("scrollspy",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.scrollspy.Constructor=t,e.fn.scrollspy.defaults={offset:10},e.fn.scrollspy.noConflict=function(){return e.fn.scrollspy=n,this},e(window).on("load",function(){e('[data-spy="scroll"]').each(function(){var t=e(this);t.scrollspy(t.data())})})}(window.jQuery),!function(e){var t=function(t){this.element=e(t)};t.prototype={constructor:t,show:function(){var t=this.element,n=t.closest("ul:not(.dropdown-menu)"),r=t.attr("data-target"),i,s,o;r||(r=t.attr("href"),r=r&&r.replace(/.*(?=#[^\s]*$)/,""));if(t.parent("li").hasClass("active"))return;i=n.find(".active:last a")[0],o=e.Event("show",{relatedTarget:i}),t.trigger(o);if(o.isDefaultPrevented())return;s=e(r),this.activate(t.parent("li"),n),this.activate(s,s.parent(),function(){t.trigger({type:"shown",relatedTarget:i})})},activate:function(t,n,r){function o(){i.removeClass("active").find("> .dropdown-menu > .active").removeClass("active"),t.addClass("active"),s?(t[0].offsetWidth,t.addClass("in")):t.removeClass("fade"),t.parent(".dropdown-menu")&&t.closest("li.dropdown").addClass("active"),r&&r()}var i=n.find("> .active"),s=r&&e.support.transition&&i.hasClass("fade");s?i.one(e.support.transition.end,o):o(),i.removeClass("in")}};var n=e.fn.tab;e.fn.tab=function(n){return this.each(function(){var r=e(this),i=r.data("tab");i||r.data("tab",i=new t(this)),typeof n=="string"&&i[n]()})},e.fn.tab.Constructor=t,e.fn.tab.noConflict=function(){return e.fn.tab=n,this},e(document).on("click.tab.data-api",'[data-toggle="tab"], [data-toggle="pill"]',function(t){t.preventDefault(),e(this).tab("show")})}(window.jQuery),!function(e){var t=function(t,n){this.$element=e(t),this.options=e.extend({},e.fn.typeahead.defaults,n),this.matcher=this.options.matcher||this.matcher,this.sorter=this.options.sorter||this.sorter,this.highlighter=this.options.highlighter||this.highlighter,this.updater=this.options.updater||this.updater,this.source=this.options.source,this.$menu=e(this.options.menu),this.shown=!1,this.listen()};t.prototype={constructor:t,select:function(){var e=this.$menu.find(".active").attr("data-value");return this.$element.val(this.updater(e)).change(),this.hide()},updater:function(e){return e},show:function(){var t=e.extend({},this.$element.position(),{height:this.$element[0].offsetHeight});return this.$menu.insertAfter(this.$element).css({top:t.top+t.height,left:t.left}).show(),this.shown=!0,this},hide:function(){return this.$menu.hide(),this.shown=!1,this},lookup:function(t){var n;return this.query=this.$element.val(),!this.query||this.query.length<this.options.minLength?this.shown?this.hide():this:(n=e.isFunction(this.source)?this.source(this.query,e.proxy(this.process,this)):this.source,n?this.process(n):this)},process:function(t){var n=this;return t=e.grep(t,function(e){return n.matcher(e)}),t=this.sorter(t),t.length?this.render(t.slice(0,this.options.items)).show():this.shown?this.hide():this},matcher:function(e){return~e.toLowerCase().indexOf(this.query.toLowerCase())},sorter:function(e){var t=[],n=[],r=[],i;while(i=e.shift())i.toLowerCase().indexOf(this.query.toLowerCase())?~i.indexOf(this.query)?n.push(i):r.push(i):t.push(i);return t.concat(n,r)},highlighter:function(e){var t=this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&");return e.replace(new RegExp("("+t+")","ig"),function(e,t){return"<strong>"+t+"</strong>"})},render:function(t){var n=this;return t=e(t).map(function(t,r){return t=e(n.options.item).attr("data-value",r),t.find("a").html(n.highlighter(r)),t[0]}),t.first().addClass("active"),this.$menu.html(t),this},next:function(t){var n=this.$menu.find(".active").removeClass("active"),r=n.next();r.length||(r=e(this.$menu.find("li")[0])),r.addClass("active")},prev:function(e){var t=this.$menu.find(".active").removeClass("active"),n=t.prev();n.length||(n=this.$menu.find("li").last()),n.addClass("active")},listen:function(){this.$element.on("focus",e.proxy(this.focus,this)).on("blur",e.proxy(this.blur,this)).on("keypress",e.proxy(this.keypress,this)).on("keyup",e.proxy(this.keyup,this)),this.eventSupported("keydown")&&this.$element.on("keydown",e.proxy(this.keydown,this)),this.$menu.on("click",e.proxy(this.click,this)).on("mouseenter","li",e.proxy(this.mouseenter,this)).on("mouseleave","li",e.proxy(this.mouseleave,this))},eventSupported:function(e){var t=e in this.$element;return t||(this.$element.setAttribute(e,"return;"),t=typeof this.$element[e]=="function"),t},move:function(e){if(!this.shown)return;switch(e.keyCode){case 9:case 13:case 27:e.preventDefault();break;case 38:e.preventDefault(),this.prev();break;case 40:e.preventDefault(),this.next()}e.stopPropagation()},keydown:function(t){this.suppressKeyPressRepeat=~e.inArray(t.keyCode,[40,38,9,13,27]),this.move(t)},keypress:function(e){if(this.suppressKeyPressRepeat)return;this.move(e)},keyup:function(e){switch(e.keyCode){case 40:case 38:case 16:case 17:case 18:break;case 9:case 13:if(!this.shown)return;this.select();break;case 27:if(!this.shown)return;this.hide();break;default:this.lookup()}e.stopPropagation(),e.preventDefault()},focus:function(e){this.focused=!0},blur:function(e){this.focused=!1,!this.mousedover&&this.shown&&this.hide()},click:function(e){e.stopPropagation(),e.preventDefault(),this.select(),this.$element.focus()},mouseenter:function(t){this.mousedover=!0,this.$menu.find(".active").removeClass("active"),e(t.currentTarget).addClass("active")},mouseleave:function(e){this.mousedover=!1,!this.focused&&this.shown&&this.hide()}};var n=e.fn.typeahead;e.fn.typeahead=function(n){return this.each(function(){var r=e(this),i=r.data("typeahead"),s=typeof n=="object"&&n;i||r.data("typeahead",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.typeahead.defaults={source:[],items:8,menu:'<ul class="typeahead dropdown-menu"></ul>',item:'<li><a href="#"></a></li>',minLength:1},e.fn.typeahead.Constructor=t,e.fn.typeahead.noConflict=function(){return e.fn.typeahead=n,this},e(document).on("focus.typeahead.data-api",'[data-provide="typeahead"]',function(t){var n=e(this);if(n.data("typeahead"))return;n.typeahead(n.data())})}(window.jQuery),!function(e){var t=function(t,n){this.options=e.extend({},e.fn.affix.defaults,n),this.$window=e(window).on("scroll.affix.data-api",e.proxy(this.checkPosition,this)).on("click.affix.data-api",e.proxy(function(){setTimeout(e.proxy(this.checkPosition,this),1)},this)),this.$element=e(t),this.checkPosition()};t.prototype.checkPosition=function(){if(!this.$element.is(":visible"))return;var t=e(document).height(),n=this.$window.scrollTop(),r=this.$element.offset(),i=this.options.offset,s=i.bottom,o=i.top,u="affix affix-top affix-bottom",a;typeof i!="object"&&(s=o=i),typeof o=="function"&&(o=i.top()),typeof s=="function"&&(s=i.bottom()),a=this.unpin!=null&&n+this.unpin<=r.top?!1:s!=null&&r.top+this.$element.height()>=t-s?"bottom":o!=null&&n<=o?"top":!1;if(this.affixed===a)return;this.affixed=a,this.unpin=a=="bottom"?r.top-n:null,this.$element.removeClass(u).addClass("affix"+(a?"-"+a:""))};var n=e.fn.affix;e.fn.affix=function(n){return this.each(function(){var r=e(this),i=r.data("affix"),s=typeof n=="object"&&n;i||r.data("affix",i=new t(this,s)),typeof n=="string"&&i[n]()})},e.fn.affix.Constructor=t,e.fn.affix.defaults={offset:0},e.fn.affix.noConflict=function(){return e.fn.affix=n,this},e(window).on("load",function(){e('[data-spy="affix"]').each(function(){var t=e(this),n=t.data();n.offset=n.offset||{},n.offsetBottom&&(n.offset.bottom=n.offsetBottom),n.offsetTop&&(n.offset.top=n.offsetTop),t.affix(n)})})}(window.jQuery);
 define("bootstrap", ["jquery-couch"], (function (global) {
     return function () {
         var ret, fn;
@@ -13200,7 +13197,7 @@ define("bootstrap", ["jquery-couch"], (function (global) {
 
 }).call(this);
 
-define("backbonejs", ["underscore","bootstrap"], (function (global) {
+define("backbonejs", ["_","bootstrap"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global.Backbone;
@@ -13430,7 +13427,7 @@ Handlebars.VM = {
 
 Handlebars.template = Handlebars.VM.template;
 ;
-define("handlebars", ["backbonejs","jquery"], (function (global) {
+define("handlebarsjs", ["backbonejs","$"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global.Handlebars;
@@ -13440,2117 +13437,2279 @@ define("handlebars", ["backbonejs","jquery"], (function (global) {
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_all_the_data'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n				class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
-  foundHelper = helpers.corpustitle;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " -\n							";
-  foundHelper = helpers.elicitationgoal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n\n		<!-- Elements on Right hand side -->\n		<div class=\"span6\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.corpustitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " -\n							";
+  if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n\n		<!-- Elements on Right hand side -->\n		<div class=\"span6\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_compare_datalists'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n				class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
-  foundHelper = helpers.corpustitle;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " -\n							";
-  foundHelper = helpers.elicitationgoal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.corpustitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " -\n							";
+  if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_everything_at_once'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n				class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
-  foundHelper = helpers.corpustitle;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " - ";
-  foundHelper = helpers.elicitationgoal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
-  foundHelper = helpers.theme;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ".html#/user/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
-  foundHelper = helpers.theme;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ".html#/user/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.corpustitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " - ";
+  if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_just_entering'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n				class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
-  foundHelper = helpers.corpustitle;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " -\n							";
-  foundHelper = helpers.elicitationgoal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"\">\n		<!--Elements in the middle (things that get hidden)  -->\n\n		<div id=\"search-data-list-quickview\" class=\"well hide \">\n			<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n			<div class=\"  \">\n				<ul\n					class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n		<div class=\"clear-spacing\"></div>\n		\n		<div id=\"insert-unicode\" class=\"well\"></div>\n\n		<div id=\"datums-embedded\" class=\"middle well\"></div>\n		<div id=\"session-embedded\" class=\"middle well\"></div>\n		<div id=\"corpus-embedded\" class=\"middle well\"></div>\n		<div id=\"search-embedded\" class=\"middle well\"></div>\n\n		<div id=\"data-list-embedded\" class=\"well\">\n			<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n			<div>\n				<ul\n					class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n\n\n		<div id=\"conversation-embedded\" class=\"middle well\">\n			<div class=\"scrollable\">\n				<div class=\"conversation-text-audio-wrapper\">\n					<div class=\"jp-load-bar\" style=\"width: 960;\">\n						<div class=\"jp-play-bar\" style=\"width: 330;\">\n							<i class=\"icon-gift\"></i><strong></strong>\n							<h4>'Conversations' will let you have multiple speakers with\n								overlapping speech.</h4>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.corpustitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " -\n							";
+  if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"\">\n		<!--Elements in the middle (things that get hidden)  -->\n\n		<div id=\"search-data-list-quickview\" class=\"well hide \">\n			<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n			<div class=\"  \">\n				<ul\n					class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n		<div class=\"clear-spacing\"></div>\n		\n		<div id=\"insert-unicode\" class=\"well\"></div>\n\n		<div id=\"datums-embedded\" class=\"middle well\"></div>\n		<div id=\"session-embedded\" class=\"middle well\"></div>\n		<div id=\"corpus-embedded\" class=\"middle well\"></div>\n		<div id=\"search-embedded\" class=\"middle well\"></div>\n\n		<div id=\"data-list-embedded\" class=\"well\">\n			<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n			<div>\n				<ul\n					class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n\n\n		<div id=\"conversation-embedded\" class=\"middle well\">\n			<div class=\"scrollable\">\n				<div class=\"conversation-text-audio-wrapper\">\n					<div class=\"jp-load-bar\" style=\"width: 960;\">\n						<div class=\"jp-play-bar\" style=\"width: 330;\">\n							<i class=\"icon-gift\"></i><strong></strong>\n							<h4>'Conversations' will let you have multiple speakers with\n								overlapping speech.</h4>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_whats_happening'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n				class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
-  foundHelper = helpers.corpustitle;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " -\n							";
-  foundHelper = helpers.elicitationgoal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n\n\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
-  foundHelper = helpers.theme;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ".html#/user/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
-  foundHelper = helpers.theme;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ".html#/user/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.corpustitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " -\n							";
+  if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n\n\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['audio_video_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<!-- this is done in the code see AudioVideoEditView -->";});
+  return "<!-- this is done in the code see AudioVideoEditView -->";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['audio_video_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<audio preload=\"\" controls=\"\" \n	class=\"datum-audio-player\">\n	<source\n		src=\"";
-  foundHelper = helpers.URL;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.URL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n		type=\"";
-  foundHelper = helpers.audioType;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.audioType; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\">\n</audio>";
-  return buffer;});
+  if (stack1 = helpers.URL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.URL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n		type=\"";
+  if (stack1 = helpers.audioType) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.audioType; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\">\n</audio>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['authentication_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<li class=\"not-a \">\n	<div>\n		<img class=\"gravatar-large\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n		<h4>";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n	</div>\n</li>\n<li class=\"not-a\">\n	<button id=\"logout\" class=\"btn btn-inverse logout locale_Log_Out\"></button>\n</li>\n<li class=\"not-a \">\n	<div id=\"login_form\" class=\"\">\n\n		<p class=\"wordwrap\">\n			<i class=\"locale_An_offline_online_fieldlinguistics_database\"></i> <span\n				class=\"welcome_version_number\"></span>\n		</p>\n\n		<div class=\"btn-group\">\n			<a href=\"#\"\n				class=\"btn btn-success sync-lingllama-data locale_Close_and_login_as_LingLlama locale_Close_and_login_as_LingLlama_Tooltip\"\n				rel=\"tooltip\"></a> <a class=\"btn btn-success \" data-toggle=\"modal\"\n				href=\"#login_modal\"> <i class=\"icon-user icon-white\"></i> <span\n				class=\"locale_Log_In\"></span> <span class=\"caret\"></span>\n			</a>\n		</div>\n\n		<hr />\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n\n		<div class=\"breadcrumb create_new_user_password \">\n			<h3 class=\"locale_Create_a_new_user\"></h3>\n			<p>\n				http://www.lingsync.org/<span class=\"potentialUsername\">yourusernamegoeshere</span>\n			</p>\n			<!-- <label class = \"locale_What_is_your_username_going_to_be\">  </label> -->\n			<span class=\"like-form-inline\"> <input\n				class=\"registerusername\" value=\"yourusernamegoeshere\" type=\"text\" />\n				<button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n			</span>\n			<div class=\"hide confirm-password\">\n				<label class=\"locale_Password\"></label> <input\n					class=\"registerpassword\" type=\"password\" /> <label\n					class=\"locale_Confirm_Password\"></label> <input\n					class=\"to-confirm-password\" type=\"password\" /> <label class=\"\">Email:</label>\n				<input class=\"registeruseremail\" type=\"email\" /> <br />\n				<button\n					class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n				</button>\n				<!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n			</div>\n		</div>\n	</div>\n</li>\n\n\n<li><a data-toggle=\"modal\" href=\"#user-modal\"><i\n		class=\" icon-user\"></i> <span class=\"locale_Private_Profile\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#help/illustratedguide\"><i\n		class=\"icon-gift\"></i> New! Quick Start Illustrated Guide</a></li>\n<li><a tabindex=\"-1\" href=\"http://lingsync.org\"\n	target=\"_blank\"><i class=\"icon-film\"></i> Help Videos and User\n		Guide</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n	target=\"_blank\"><i class=\" icon-beaker\"></i> Bug Report/Contact Us</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n	target=\"_blank\"><i class=\" icon-github\"></i> OpenSource v<span\n		class=\"fielddb-version\"></span></a></li>\n<li class=\"power-users-link\"><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#terminal-modal\"><i class=\" icon-magic\"></i> <span\n		class=\"locale_Terminal_Power_Users\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#user-preferences-modal\"><i class=\" icon-cog\"></i> <span\n		class=\"locale_User_Settings\"></span> </a></li>\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#hotkey-settings-modal\"><i class=\" icon-hdd\"></i> <span\n		class=\"locale_Keyboard_Shortcuts\"></span></a></li>\n<li><a tabindex=\"-1\" class=\"corpus-settings\"><i\n		class=\" icon-cogs\"></i> <span class=\"locale_Corpus_Settings\"></span></a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#\" class=\" sync-everything\"> <i\n		class=\" icon-upload\"></i> Back-up your\n		preferences\n</a></li>\n\n\n";
-  return buffer;});
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n		<h4>";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n	</div>\n</li>\n<li class=\"not-a\">\n	<button id=\"logout\" class=\"btn btn-inverse logout locale_Log_Out\"></button>\n</li>\n<li class=\"not-a \">\n	<div id=\"login_form\" class=\"\">\n\n		<p class=\"wordwrap\">\n			<i class=\"locale_An_offline_online_fieldlinguistics_database\"></i> <span\n				class=\"welcome_version_number\"></span>\n		</p>\n\n		<div class=\"btn-group\">\n			<a href=\"#\"\n				class=\"btn btn-success sync-lingllama-data locale_Close_and_login_as_LingLlama locale_Close_and_login_as_LingLlama_Tooltip\"\n				rel=\"tooltip\"></a> <a class=\"btn btn-success \" data-toggle=\"modal\"\n				href=\"#login_modal\"> <i class=\"icon-user icon-white\"></i> <span\n				class=\"locale_Log_In\"></span> <span class=\"caret\"></span>\n			</a>\n		</div>\n\n		<hr />\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n\n		<div class=\"breadcrumb create_new_user_password \">\n			<h3 class=\"locale_Create_a_new_user\"></h3>\n			<p>\n				http://www.lingsync.org/<span class=\"potentialUsername\">yourusernamegoeshere</span>\n			</p>\n			<!-- <label class = \"locale_What_is_your_username_going_to_be\">  </label> -->\n			<span class=\"like-form-inline\"> <input\n				class=\"registerusername\" value=\"yourusernamegoeshere\" type=\"text\" />\n				<button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n			</span>\n			<div class=\"hide confirm-password\">\n				<label class=\"locale_Password\"></label> <input\n					class=\"registerpassword\" type=\"password\" /> <label\n					class=\"locale_Confirm_Password\"></label> <input\n					class=\"to-confirm-password\" type=\"password\" /> <label class=\"\">Email:</label>\n				<input class=\"registeruseremail\" type=\"email\" /> <br />\n				<button\n					class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n				</button>\n				<!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n			</div>\n		</div>\n	</div>\n</li>\n\n\n<li><a data-toggle=\"modal\" href=\"#user-modal\"><i\n		class=\" icon-user\"></i> <span class=\"locale_Private_Profile\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#help/illustratedguide\"><i\n		class=\"icon-gift\"></i> New! Quick Start Illustrated Guide</a></li>\n<li><a tabindex=\"-1\" href=\"http://lingsync.org\"\n	target=\"_blank\"><i class=\"icon-film\"></i> Help Videos and User\n		Guide</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n	target=\"_blank\"><i class=\" icon-beaker\"></i> Bug Report/Contact Us</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n	target=\"_blank\"><i class=\" icon-github\"></i> OpenSource v<span\n		class=\"fielddb-version\"></span></a></li>\n<li class=\"power-users-link\"><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#terminal-modal\"><i class=\" icon-magic\"></i> <span\n		class=\"locale_Terminal_Power_Users\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#user-preferences-modal\"><i class=\" icon-cog\"></i> <span\n		class=\"locale_User_Settings\"></span> </a></li>\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#hotkey-settings-modal\"><i class=\" icon-hdd\"></i> <span\n		class=\"locale_Keyboard_Shortcuts\"></span></a></li>\n<li><a tabindex=\"-1\" class=\"corpus-settings\"><i\n		class=\" icon-cogs\"></i> <span class=\"locale_Corpus_Settings\"></span></a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#\" class=\" sync-everything\"> <i\n		class=\" icon-upload\"></i> Back-up your\n		preferences\n</a></li>\n\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['comment_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"alert alert-info\">\n\n<span> <img class=\"gravatar-small\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"/></span>\n\n<span>";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n<i class=\"icons icon-comment\"></i>\n\n<div class= \"pull-right\">  ";
-  foundHelper = helpers.timestamp;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.timestamp; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</div>\n\n<textarea class=\"comment-new-text\">";
-  foundHelper = helpers.text;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.text; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n</div>\n\n\n  \n";
-  return buffer;});
+  buffer += "<div class=\"alert alert-info\">\n<span> <img class=\"gravatar-small\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"/></span>\n<div class= \"pull-right\">  \n</div>\n<span>";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n<!--  <i class=\"icons icon-comment\"></i>  -->\n<textarea class=\"comment-new-text\">";
+  if (stack1 = helpers.text) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.text; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-button\">\n    <span class=\"locale_Add\"></span> \n    <i class=\"icon-comment\"></i>\n  </button>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['comment_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"alert alert-info\">\n\n<span> <img class=\"gravatar-small\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"/></span>\n\n<span> ";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "   </span>\n<i class=\"icons icon-comment\"></i>\n\n<div class= \"pull-right\">  ";
-  foundHelper = helpers.timestamp;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.timestamp; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</div>\n\n<div class=\"comment-text\">";
-  foundHelper = helpers.text;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.text; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</div>\n\n</div>\n\n";
-  return buffer;});
+  buffer += "<div class=\"alert alert-info\">\n	<span> <img class=\"gravatar-small\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" /></span> <span>\n		";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " </span> <i class=\"icons icon-comment\"></i>\n\n	<div class=\"pull-right\">\n		<span title=\"";
+  if (stack1 = helpers.localTime) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.localTime; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\">";
+  if (stack1 = helpers.timestamp) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.timestamp; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span> <i\n			class=\"icon-pencil edit-comment-button\"> </i> <i\n			class=\"icon-remove-sign remove-comment-button\"> </i>\n	</div>\n\n	<div class=\"comment-text\">";
+  if (stack1 = helpers.text) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.text; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<button class=\"btn btn-success pull-left save-datalist locale_Save\" value=\"Save\"></button>\n<br>\n<br>\n<label class = \"locale_Title\"></label> <i class=\"icon-pushpin\"></i> \n<small>";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<h4>";
-  foundHelper = helpers.dateCreated;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\"\n>";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<textarea class=\"data-list-title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<h4>";
+  if (stack1 = helpers.dateCreated) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\"\n>";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_import_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<label class = \"locale_Title\"></label> <i class=\"icon-pushpin\"></i> \n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" rel=\"tooltip\" class=\"locale_Edit_Datalist\">\n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a> \n</div>\n\n<h3><i class=\"icon-pushpin\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h3>\n<h4>";
-  foundHelper = helpers.dateCreated;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n<small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h3>\n<h4>";
+  if (stack1 = helpers.dateCreated) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n\n";
-  return buffer;});
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "  <a href=\"#data/";
-  foundHelper = helpers._id;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"> \n	  <i class=\"icon-pushpin\"></i> \n	  ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n  </a>\n  <small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>";
-  return buffer;});
+  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"> \n	  <i class=\"icon-pushpin\"></i> \n	  ";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n  </a>\n  <small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_search_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<!--  Search Data lists icons -->\n<div class=\"pull-right\">\n  <button class=\"btn btn-success save-search-datalist locale_Save\" value=\"Save\"></button>\n  <a href=\"#\" class= \"locale_Hide_Datalist\" rel=\"tooltip\">\n      <i class=\"icons icon-minus-sign\"></i>\n  </a>  \n</div>\n\n<label class=\"locale_Title\"></label> <i class=\"icon-pushpin\"></i> \n<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<label class=\"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<!--Search DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <!--This cannot be included in search or import <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a> -->\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<textarea class=\"data-list-title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<label class=\"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<!--Search DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <!--This cannot be included in search or import <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a> -->\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<div class=\"pull-right\">\n  <button class=\"btn btn-success save-datalist locale_Save\" value=\"Save\">\n  </button>\n  <a href=\"#\" class= \"locale_Hide_Datalist\" rel=\"tooltip\">\n     <i class=\"icons icon-minus-sign\"></i></a>      \n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n     <i class=\"icons icon-book\"></i></a>      \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n     <i class=\"icons icon-resize-full\"></i></a>     \n</div>\n\n<label class = \"locale_Title\"></label> <i class=\"icon-pushpin\"></i> \n<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<textarea class=\"data-list-title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Hide_Datalist\" rel=\"tooltip\">\n      <i class=\"icons icon-minus-sign\"></i></a>      \n  <a href=\"#\" class = \"locale_Edit_Datalist\" rel=\"tooltip\">\n      <i class=\"icons icon-edit\"></i></a>      \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n      <i class=\"icons icon-resize-full\"></i></a>\n</div>\n\n<h3><i class=\"icon-pushpin\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h3>\n<h4>";
-  foundHelper = helpers.dateCreated;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h3>\n<h4>";
+  if (stack1 = helpers.dateCreated) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_read_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"pull-right\">\n  <a  href=\"#\" class= \"locale_Show_Datalist\" rel=\"tooltip\" title=\"Show data list\" >\n      <i class=\"icons icon-plus-sign\"></i></a>\n</div>\n<h4><i class=\"icon-pushpin\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h4>\n";
-  return buffer;});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h4>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_turn_read_latex'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n    <span class = \"latex-judgement\">";
-  foundHelper = helpers.speaker;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.speaker; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span> \n  ";
-  return buffer;}
+  if (stack1 = helpers.speaker) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.speaker; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span> \n  ";
+  return buffer;
+  }
 
 function program3(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n	  <span class=\"glossCouplet\">\n	    ";
-  foundHelper = helpers.utteranceSegment;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.utteranceSegment; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n	    <br />\n	    ";
-  foundHelper = helpers.glossSegment;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.glossSegment; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n	  </span>\n	";
-  return buffer;}
+  if (stack1 = helpers.utteranceSegment) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.utteranceSegment; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n	    <br />\n	    ";
+  if (stack1 = helpers.glossSegment) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.glossSegment; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n	  </span>\n	";
+  return buffer;
+  }
 
   buffer += "<div class=\"span1\">\n\n</div>\n<div class=\"span1\">\n  ";
-  stack1 = depth0.speaker;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
+  stack1 = helpers['if'].call(depth0, depth0.speaker, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</div>\n<div class=\"span10\">\n	";
-  stack1 = depth0.couplet;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data)});
+  stack1 = helpers.each.call(depth0, depth0.couplet, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	<br />\n	<span class=\"datum-latex-translation\">";
-  foundHelper = helpers.translation;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.translation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.translation) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.translation; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<!-- create new stuff in same dashboard -->\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<!-- modify URL -->\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
-  foundHelper = helpers.exportAllDatumURL;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n		<!-- Corpus Save and Toggle to Readonly - Edit View Only-->\n		<div class=\"btn-group\">\n			<button class=\"btn btn-success save-corpus\">\n				<span class=\"locale_Save\"></span>\n			</button>\n		</div>\n	</div>\n</div>\n\n\n\n<label class=\"locale_Title\"></label>\n<i class=\"icon-cloud\"></i>\n<input class=\"corpus-title-input\" value=\"";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\" />\n<small>";
-  foundHelper = helpers.publicCorpus;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n\n<label class=locale_Description></label>\n<textarea class=\"corpus-description-input\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<small>Shareable URL:\n	http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.titleAsUrl;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n\n<div class=\"accordion\" id=\"accordion-edit-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n					glosser from any LingSync corpus, you need to have permission (ask\n					them to add you as a reader on their corpus). For example, if you\n					and your collaborators are working on Mi'gmaq, you might have a\n					master corpus with the most data that you all can use to gloss your\n					corpus. For an example url, see LingLlama's sample Quechua corpus:\n					https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n				<br /> <span>You can also create your own glosser web\n					service or use an existing glosser/morpheme segmenter you have\n					access too as long as it is available on a URL, and uses a similar\n					data schema. <a\n					href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n					target=\"_new\">Contact us</a> if you would like more details about how to do this.\n				</span> <label>Glosser URL:</label>\n				<textarea class=\"glosserURL\">";
-  foundHelper = helpers.glosserURL;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseSessionsEE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseSessionsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatalistsEE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatalistsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"accordion-edit-embedded\" href=\"#collapsePermissionsEE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapsePermissionsEE\">\n			<div class=\"accordion-inner container span12\">\n				<span class=\"locale_permissions_explanation\"></span> <label\n					class=\"locale_Public_or_Private\"></label> <input type=\"text\"\n					value=\"";
-  foundHelper = helpers.publicCorpus;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" class=\" public-or-private\"\n					data-provide=\"typeahead\" data-items=\"4\"\n					data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" /> <a\n					href=\"http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.titleAsUrl;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					target=\"_blank\"><i class=\" icon-link\"></i></a> <small>Shareable\n					URL: http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.titleAsUrl;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumFieldSettingsEE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_shouldBeEncrypted\"";
-  foundHelper = helpers.shouldBeEncrypted;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea class=\"add_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Datum_Field_Tooltip btn btn-primary add-datum-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumStateSettingsEE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumStateSettingsEE\">\n			<span class=\"locale_datum_states_explanation\"></span>\n			<ul class=\"datum_state_settings unstyled\"></ul>\n			<input class=\"add_input locale_Add_Placeholder\" value=\"\" type=\"text\"></input>\n			<select class=\"add_color_chooser\">\n				<option value=\"success\" class=\"locale_Green\"></option>\n				<option value=\"warning\" class=\"locale_Orange\"></option>\n				<option value=\"important\" class=\"locale_Red\"></option>\n				<option value=\"info\" class=\"locale_Teal\"></option>\n				<option value=\"inverse\" class=\"locale_Black\"></option>\n				<option value=\"\" class=\"locale_Default\"></option>\n			</select> <a href=\"#\"\n				class=\"locale_Add_New_Datum_State_Tooltip btn btn-primary add-datum-state locale_Add\"\n				rel=\"tooltip\"> </a>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseConversationFieldSettingsEE\"> <i\n				class=\"icon-comments-alt\"></i> <strong\n				class=\"locale_Conversation_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\"\n			id=\"collapseConversationFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_conversation_fields_explanation\"></span>\n				<ul class=\"conversation_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_conversationShouldBeEncrypted\"";
-  foundHelper = helpers.shouldBeEncrypted;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n	<textarea class=\"comment-new-text\"></textarea>\n	<button class=\"btn btn-mini btn-primary add-comment-corpus\" value=\"Add\">\n		<i class=\"icon-comment\"></i> <span class=\"locale_Add\"></span>\n	</button>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<!-- modify URL -->\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
+  if (stack1 = helpers.exportAllDatumURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n		<!-- Corpus Save and Toggle to Readonly - Edit View Only-->\n\n			<button class=\"btn btn-success save-corpus\">\n				<span class=\"locale_Save\"></span></button>\n		<!-- Issue #797 -->\n      <button class=\"btn btn-danger trash-button\">\n       <i class=\"icon-trash \"></i> </button>	\n	</div>\n</div>\n\n\n\n<label class=\"locale_Title\"></label>\n<i class=\"icon-cloud\"></i>\n<input class=\"corpus-title-input\" value=\"";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\" />\n<small>";
+  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n\n<label class=locale_Description></label>\n<textarea class=\"corpus-description-input\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<small>Shareable URL:\n	http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n\n<div class=\"accordion\" id=\"accordion-edit-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n					glosser from any LingSync corpus, you need to have permission (ask\n					them to add you as a reader on their corpus). For example, if you\n					and your collaborators are working on Mi'gmaq, you might have a\n					master corpus with the most data that you all can use to gloss your\n					corpus. For an example url, see LingLlama's sample Quechua corpus:\n					https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n				<br /> <span>You can also create your own glosser web\n					service or use an existing glosser/morpheme segmenter you have\n					access too as long as it is available on a URL, and uses a similar\n					data schema. <a\n					href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n					target=\"_new\">Contact us</a> if you would like more details about how to do this.\n				</span> <label>Glosser URL:</label>\n				<textarea class=\"glosserURL\">";
+  if (stack1 = helpers.glosserURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseSessionsEE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseSessionsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatalistsEE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatalistsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"accordion-edit-embedded\" href=\"#collapsePermissionsEE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapsePermissionsEE\">\n			<div class=\"accordion-inner container span12\">\n				<span class=\"locale_permissions_explanation\"></span> <label\n					class=\"locale_Public_or_Private\"></label> <input type=\"text\"\n					value=\"";
+  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\" public-or-private\"\n					data-provide=\"typeahead\" data-items=\"4\"\n					data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" /> <a\n					href=\"http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					target=\"_blank\"><i class=\" icon-link\"></i></a> <small>Shareable\n					URL: http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumFieldSettingsEE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_shouldBeEncrypted\"";
+  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea class=\"add_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Datum_Field_Tooltip btn btn-primary add-datum-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumStateSettingsEE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumStateSettingsEE\">\n			<span class=\"locale_datum_states_explanation\"></span>\n			<ul class=\"datum_state_settings unstyled\"></ul>\n			<input class=\"add_input locale_Add_Placeholder\" value=\"\" type=\"text\"></input>\n			<select class=\"add_color_chooser\">\n				<option value=\"success\" class=\"locale_Green\"></option>\n				<option value=\"warning\" class=\"locale_Orange\"></option>\n				<option value=\"important\" class=\"locale_Red\"></option>\n				<option value=\"info\" class=\"locale_Teal\"></option>\n				<option value=\"inverse\" class=\"locale_Black\"></option>\n				<option value=\"\" class=\"locale_Default\"></option>\n			</select> <a href=\"#\"\n				class=\"locale_Add_New_Datum_State_Tooltip btn btn-primary add-datum-state locale_Add\"\n				rel=\"tooltip\"> </a>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseConversationFieldSettingsEE\"> <i\n				class=\"icon-comments-alt\"></i> <strong\n				class=\"locale_Conversation_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\"\n			id=\"collapseConversationFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_conversation_fields_explanation\"></span>\n				<ul class=\"conversation_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_conversationShouldBeEncrypted\"";
+  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_edit_new_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"modal-header\">\n  <h1> <i class=\"icon-cloud\"></i>  <span class = \"locale_New_Corpus\"></span> <small class=\"new-corpus-pouchname\">";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h1>\n  <p class = \"locale_New_Corpus_Instructions\"></p>\n  <p class=\"alert alert-danger hide\">\n    <strong class=\"locale_Warning\"></strong> \n    <span class = \"locale_New_Corpus_Warning\"></span>\n  </p>\n</div>\n\n<div class=\"modal-body\">\n	<label class = \"locale_Title\"></label>  \n	<textarea class=\"corpus-title-input\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n	<label class = \" locale_Description\">Description:</label>\n	<textarea class=\" corpus-description-input\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n  <label class = \" locale_Public_or_Private\"></label>\n  <input type=\"text\" value=\"";
-  foundHelper = helpers.publicCorpus;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"  class=\" public-or-private\" data-provide=\"typeahead\" data-items=\"4\" \n        data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\"/>\n</div>\n\n<div class=\"modal-footer\">\n  <a href=\"#\" class=\"btn locale_Cancel\" data-dismiss=\"modal\"></a>\n  <button class=\"btn btn-success pull-right save-corpus locale_Save\" value=\"Save\"></button>  \n</div>\n";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h1>\n  <p class = \"locale_New_Corpus_Instructions\"></p>\n  <p class=\"alert alert-danger hide\">\n    <strong class=\"locale_Warning\"></strong> \n    <span class = \"locale_New_Corpus_Warning\"></span>\n  </p>\n</div>\n\n<div class=\"modal-body\">\n	<label class = \"locale_Title\"></label>  \n	<textarea class=\"corpus-title-input\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n	<label class = \" locale_Description\">Description:</label>\n	<textarea class=\" corpus-description-input\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n  <label class = \" locale_Public_or_Private\"></label>\n  <input type=\"text\" value=\"";
+  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"  class=\" public-or-private\" data-provide=\"typeahead\" data-items=\"4\" \n        data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\"/>\n</div>\n\n<div class=\"modal-footer\">\n  <a href=\"#\" class=\"btn locale_Cancel\" data-dismiss=\"modal\"></a>\n  <button class=\"btn btn-success pull-right save-corpus locale_Save\" value=\"Save\"></button>  \n</div>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Edit_corpus\" rel=\"tooltip\"> <i\n		class=\"icons icon-edit\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
-  foundHelper = helpers.exportAllDatumURL;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n	</div>\n</div>\n\n<h2>\n	<i class=\"icon-cloud\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " <small>";
-  foundHelper = helpers.publicCorpus;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n</h2>\n<a href=\"http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.titleAsUrl;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n	target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL:\n	http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.titleAsUrl;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<div class=\"description\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</div>\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\"\n	id=\"corpus-precedence-rules-visualization-fullscreen\"></div>\n\n<div class=\"accordion\" id=\"accordion-read-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n          glosser from any LingSync corpus, you need to have permission\n          (ask them to add you as a reader on their corpus). For example, if\n          you and your collaborators are working on Mi'gmaq, you might have a\n          master corpus with the most data that you all can use to gloss your\n          corpus. For an example url, see LingLlama's sample Quechua corpus:\n          https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n        <br /> <span>You can also create your own glosser web\n          service or use an existing glosser/morpheme segmenter you have\n          access too as long as it is available on a URL and uses a similar data schema. <a\n          href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n          target=\"_new\">Contact us</a> if you would like more details.\n        </span>\n        <label>Glosser URL:</label>\n				<p class=\"glosserURL\"><strong>";
-  foundHelper = helpers.glosserURL;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</strong></p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n	<textarea class=\"comment-new-text\"></textarea>\n	<button class=\"btn btn-mini btn-primary add-comment-corpus\" value=\"Add\">\n		<i class=\"icon-comment\"></i> <span class=\"locale_Add\"></span>\n	</button>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
+  if (stack1 = helpers.exportAllDatumURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n	</div>\n</div>\n\n<h2>\n	<i class=\"icon-cloud\"></i> ";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " <small>";
+  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n</h2>\n<a href=\"http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n	target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL:\n	http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<div class=\"description\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\"\n	id=\"corpus-precedence-rules-visualization-fullscreen\"></div>\n\n<div class=\"accordion\" id=\"accordion-read-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n          glosser from any LingSync corpus, you need to have permission\n          (ask them to add you as a reader on their corpus). For example, if\n          you and your collaborators are working on Mi'gmaq, you might have a\n          master corpus with the most data that you all can use to gloss your\n          corpus. For an example url, see LingLlama's sample Quechua corpus:\n          https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n        <br /> <span>You can also create your own glosser web\n          service or use an existing glosser/morpheme segmenter you have\n          access too as long as it is available on a URL and uses a similar data schema. <a\n          href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n          target=\"_new\">Contact us</a> if you would like more details.\n        </span>\n        <label>Glosser URL:</label>\n				<p class=\"glosserURL\"><strong>";
+  if (stack1 = helpers.glosserURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</strong></p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<a href=\"user.html#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.corpusid;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.corpusid; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\">\n<i class=\"icon-cloud\"></i>\n";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " ";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " ";
-  foundHelper = helpers.corpusid;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.corpusid; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</a>\n<small> ";
-  foundHelper = helpers.publicCorpus;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.corpusid) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.corpusid; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\">\n<i class=\"icon-cloud\"></i>\n";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  if (stack1 = helpers.corpusid) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.corpusid; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n<small> ";
+  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n    <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class = \"locale_Show_corpus_settings\" rel=\"tooltip\">\n    <i class=\"icons icon-cogs resize-full\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n  <!-- Corpus Menu - Identical for all Corpus Handlebars -->\n  <div class=\"btn-toolbar\">\n    <div class=\"btn-group\">\n      <button class=\"btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_New_menu\"></span>  <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li class=\"new-datum\"><a href=\"#\" class = \"locale_New_Datum\"></a></li>\n        <li class=\"new-conversation\"><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li><!--if put corpus modal on user page user.html#corpus/new -->\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"";
-  foundHelper = helpers.exportAllDatumURL;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"  class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldata\" class = \"locale_All_Data\"></a></li>\n        \n      </ul>\n    </div>\n    <!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n  </div>\n</div>\n\n<div class=\"corpus-description\">\n	<label class=\"locale_Title\"></label> <i class=\"icon-cloud\"></i> \n	<!-- <a href = \"http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.titleAsUrl;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target = \"_blank\"><small><i class=\" icon-link\"></i></small></a> -->\n	<textarea class=\"corpus-title-input save-corpus-blur\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n	<label class=\"locale_Description\"></label>\n	<textarea class=\"corpus-description-input save-corpus-blur\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n	<input type=\"text\" value=\"";
-  foundHelper = helpers.publicCorpus;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" class=\" public-or-private\"\n		data-provide=\"typeahead\" data-items=\"4\"\n		data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" />\n</div>\n\n\n\n\n\n\n";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li><!--if put corpus modal on user page user.html#corpus/new -->\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"";
+  if (stack1 = helpers.exportAllDatumURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\"  class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/alldata\" class = \"locale_All_Data\"></a></li>\n        \n      </ul>\n    </div>\n    <!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n  </div>\n</div>\n\n<div class=\"corpus-description\">\n	<label class=\"locale_Title\"></label> <i class=\"icon-cloud\"></i> \n	<!-- <a href = \"http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target = \"_blank\"><small><i class=\" icon-link\"></i></small></a> -->\n	<textarea class=\"corpus-title-input save-corpus-blur\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n	<label class=\"locale_Description\"></label>\n	<textarea class=\"corpus-description-input save-corpus-blur\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n	<input type=\"text\" value=\"";
+  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\" public-or-private\"\n		data-provide=\"typeahead\" data-items=\"4\"\n		data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" />\n</div>\n\n\n\n\n\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Edit_corpus\" rel=\"tooltip\"> <i\n		class=\"icons icon-edit\"></i></a> <a href=\"#\"\n		class=\"locale_Show_corpus_settings\" rel=\"tooltip\"> <i\n		class=\"icons icon-cogs resize-full\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
-  foundHelper = helpers.exportAllDatumURL;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\" \n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n	</div>\n</div>\n\n<div class=\"corpus-description\">\n	<h4>\n		<i class=\"icon-cloud\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<small> ";
-  foundHelper = helpers.publicCorpus;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n	</h4>\n	<p>\n		<!-- <a href = \"http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/";
-  foundHelper = helpers.titleAsUrl;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target = \"_blank\"><i class=\" icon-link\"></i></a> -->\n		";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n	</p>\n</div>\n\n\n\n";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
+  if (stack1 = helpers.exportAllDatumURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\" \n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n	</div>\n</div>\n\n<div class=\"corpus-description\">\n	<h4>\n		<i class=\"icon-cloud\"></i> ";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<small> ";
+  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n	</h4>\n	<p>\n		<!-- <a href = \"http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target = \"_blank\"><i class=\" icon-link\"></i></a> -->\n		";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n	</p>\n</div>\n\n\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
 function program5(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n          <option value=\"";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" ";
-  foundHelper = helpers.selected;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ">";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</option>\n      ";
-  return buffer;}
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" ";
+  if (stack1 = helpers.selected) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ">";
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</option>\n      ";
+  return buffer;
+  }
 
-  buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<button class=\"btn btn-success pull-left save-datalist locale_Save\" value=\"Save\"></button>\n<br>\n<br>\n <i class=\"icon-pushpin\"></i> \n<small>";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<label class = \"locale_Title\"></label>\n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<h4>";
-  foundHelper = helpers.dateCreated;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\"\n>";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"pull-left\">\n<button class=\"btn btn-success pull-left save-datalist locale_Save\" value=\"Save\"></button>\n<!-- Issue #797 -->\n  <button class=\"btn btn-danger trash-button\">\n    <i class=\"icon-trash \"></i> </button>\n</div>\n    \n<br>\n<br>\n <i class=\"icon-pushpin\"></i> \n<small>";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<label class = \"locale_Title\"></label>\n<textarea class=\"data-list-title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<h4>";
+  if (stack1 = helpers.dateCreated) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\"\n>";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n \n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
-  foundHelper = helpers.statecolor;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
-  foundHelper = helpers.datumstate;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
-  stack1 = depth0.datumStates;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
+  if (stack1 = helpers.statecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+  if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
+  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </select>\n\n</div>\n -->\n";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_import_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += " <i class=\"icon-pushpin\"></i> \n <label class = \"locale_Title\"></label>\n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-button\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" rel=\"tooltip\" class=\"locale_Edit_Datalist\">\n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a> \n</div>\n\n<h3><i class=\"icon-pushpin\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h3>\n<h4>";
-  foundHelper = helpers.dateCreated;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n<small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h3>\n<h4>";
+  if (stack1 = helpers.dateCreated) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "  <a href=\"#data/";
-  foundHelper = helpers._id;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"> \n	  <i class=\"icon-pushpin\"></i> \n	  ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n  </a>\n  <small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>";
-  return buffer;});
+  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"> \n	  <i class=\"icon-pushpin\"></i> \n	  ";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n  </a>\n  <small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_search_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<!--  Search Data lists icons -->\n<div class=\"pull-right\">\n  <button class=\"btn btn-success save-search-datalist locale_Save\" value=\"Save\"></button>\n  <a href=\"#\" class= \"locale_Hide_Datalist\" rel=\"tooltip\">\n      <i class=\"icons icon-minus-sign\"></i>\n  </a>  \n</div>\n<h4><i class=\"icon-search\"></i> Search Result</h4>\n<label class=\"locale_Title\"></label> \n<i class=\"icon-pushpin\"></i> <small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<label class=\"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<!--Search DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <!--This cannot be included in search or import <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a> -->\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<textarea class=\"data-list-title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<label class=\"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<!--Search DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <!--This cannot be included in search or import <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a> -->\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<div class=\"pull-right\">\n  <button class=\"btn btn-success save-datalist locale_Save\" value=\"Save\">\n  </button>\n  <a href=\"#\" class= \"locale_Hide_Datalist\" rel=\"tooltip\">\n     <i class=\"icons icon-minus-sign\"></i></a>      \n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n     <i class=\"icons icon-book\"></i></a>      \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n     <i class=\"icons icon-resize-full\"></i></a>     \n</div>\n\n<i class=\"icon-pushpin\"></i> \n<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<label class = \"locale_Title\"></label> \n<textarea class=\"data-list-title\">";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<label class = \"locale_Title\"></label> \n<textarea class=\"data-list-title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n<label class = \"locale_Description\"></label>\n<textarea class=\"data-list-description locale_Datalist_Description\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Hide_Datalist\" rel=\"tooltip\">\n      <i class=\"icons icon-minus-sign\"></i></a>      \n  <a href=\"#\" class = \"locale_Edit_Datalist\" rel=\"tooltip\">\n      <i class=\"icons icon-edit\"></i></a>      \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n      <i class=\"icons icon-resize-full\"></i></a>\n</div>\n\n<h3><i class=\"icon-pushpin\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h3>\n<p><strong>";
-  foundHelper = helpers.dateCreated;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</strong>\n";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n</p>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datalist\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h3>\n<p><strong>";
+  if (stack1 = helpers.dateCreated) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateCreated; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</strong>\n";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n</p>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_read_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"pull-right\">\n  <a  href=\"#\" class= \"locale_Show_Datalist\" rel=\"tooltip\" title=\"Show data list\" >\n      <i class=\"icons icon-plus-sign\"></i></a>\n</div>\n<h4><i class=\"icon-pushpin\"></i> ";
-  foundHelper = helpers.title;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<small> ";
-  foundHelper = helpers.datumCount;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h4>\n";
-  return buffer;});
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<small> ";
+  if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h4>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<!-- full screen button -->\n<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>        \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n      <i class=\"icons icon-resize-full\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";});
+  return "<!-- full screen button -->\n<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>        \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n      <i class=\"icons icon-resize-full\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<!-- shrink button -->\n<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>    \n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";});
+  return "<!-- shrink button -->\n<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>    \n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<div class=\"pull-right\">\n  <a href=\"#\" class = \"locale_Edit_Datum\" rel=\"tooltip\" >\n    <i class=\"icons icon-edit\"></i></a>     \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n    <i class=\"icons icon-resize-full\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";});
+  return "<div class=\"pull-right\">\n  <a href=\"#\" class = \"locale_Edit_Datum\" rel=\"tooltip\" >\n    <i class=\"icons icon-edit\"></i></a>     \n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">\n    <i class=\"icons icon-resize-full\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_read_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<div class=\"pull-right\">\n  <a href=\"#\" class = \"locale_Edit_Datum\" rel=\"tooltip\" > \n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";});
+  return "<div class=\"pull-right\">\n  <a href=\"#\" class = \"locale_Edit_Datum\" rel=\"tooltip\" > \n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<h4 class=\"locale_Data_Entry_Area\"></h4>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n\n<!-- list of datum -->\n<ul class=\"datum-embedded-ul unstyled\"></ul>";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-lock";}
+  return "icon-lock";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-unlock";}
+  return "icon-unlock";
+  }
 
 function program5(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program7(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
 function program9(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n          <option value=\"";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" ";
-  foundHelper = helpers.selected;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ">";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</option>\n      ";
-  return buffer;}
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" ";
+  if (stack1 = helpers.selected) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ">";
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</option>\n      ";
+  return buffer;
+  }
 
-  buffer += "<div class=\"pull-right\">\n	<button class=\"btn btn-success save-datum locale_Save pull-right\" value=\"Save\"></button><br/>\n	<span class=\"last-modified\">";
-  foundHelper = helpers.dateModified;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span><i class=\" icon-save \"></i><br/>\n	<span class=\"date-created\">";
-  foundHelper = helpers.dateEntered;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateEntered; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span><i class=\" icon-time\"></i><br/>\n  \n</div>\n<!-- list for the fields -->\n<ul class=\"datum_fields_ul unstyled\"></ul>\n<a  href=\"#\" class= \"locale_See_Fields\" rel=\"tooltip\" >\n  <i class=\"icons icon-list-alt pull-right\"> </i></a>\n<!-- Datum Edit view specialized fields and menu area -->\n<div class=\"row-fluid\">\n	<div class=\"span6\">\n		<!-- Buttons for various actions -->\n	  <div class=\" btn-group\">\n	    <a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/datum/new\" class = \"locale_Insert_New_Datum btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" icon-plus\"></i></a>\n	    <a  href=\"#\" class = \"locale_Duplicate btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" icon-copy\"></i></a>  \n	    <a  href=\"#\" class= \"locale_Encrypt btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" ";
-  stack1 = depth0.confidential;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  buffer += "<div class=\"pull-right\">\n	 <!-- Issue #797 -->\n	<button class=\"btn btn-danger trash-button\">\n		<i class=\"icon-trash \"></i>\n	</button>\n	<button class=\"btn btn-success save-datum locale_Save\"\n		value=\"Save\"></button>\n</div>\n\n<span class=\"last-modified\">";
+  if (stack1 = helpers.dateModified) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span><i class=\" icon-save \"></i><br/>\n<span class=\"date-created\">";
+  if (stack1 = helpers.dateEntered) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateEntered; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span><i class=\" icon-time\"></i><br/>\n\n<!-- list for the fields -->\n<ul class=\"datum_fields_ul unstyled\"></ul>\n<a  href=\"#\" class= \"locale_See_Fields\" rel=\"tooltip\" >\n  <i class=\"icons icon-list-alt pull-right\"> </i></a>\n<!-- Datum Edit view specialized fields and menu area -->\n<div class=\"row-fluid\">\n	<div class=\"span6\">\n		<!-- Buttons for various actions -->\n	  <div class=\" btn-group\">\n	    <a href=\"#corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/datum/new\" class = \"locale_Insert_New_Datum btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" icon-plus\"></i></a>\n	    <a  href=\"#\" class = \"locale_Duplicate btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" icon-copy\"></i></a>  \n	    <a  href=\"#\" class= \"locale_Encrypt btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.confidential, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a> \n	    <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data)});
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i>\n	    </a>\n	    <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n	      <i class=\" icon-paste\"></i></a>\n	    <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">LaTeX</i>\n	    </a>\n	    <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">CSV</i>\n	    </a>\n	  </div>\n	  <br/>\n		<a href=\"#\" class=\"audio_video locale_Drag_and_Drop_Audio_Tooltip\" rel=\"tooltip\"></a>\n		<span class=\"session-link\"></span>\n	</div>\n  <div class=\"span3 border-left hide\">\n		<!-- list for the tags -->\n		<ul class=\"datum_tags_ul unstyled\"></ul>\n		<div class=\"controls  no-margin-left\">\n			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->\n			<div class=\"input-append \">\n			  <input class=\"add_tag span6\" type=\"text\" data-provide=\"typeahead\" data-items=\"4\" \n	            data-source=\"[&quot;Passive&quot;,&quot;Nominalization&quot;]\" \n	      /><button class=\" btn btn-small btn-primary add_datum_tag\" type=\"button\">\n	        <i class=\" icon-tag\"></i>\n	        <span class=\"locale_Add\">Add</span> \n	      </button>\n	    </div>\n		</div>\n	</div>\n  <div class=\"datum_state span3 border-left\">\n    <span class=\"label label-";
-  foundHelper = helpers.statecolor;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
-  foundHelper = helpers.datumstate;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span></span><br/>\n		<!-- drop down for the states -->\n    <select class=\"datum_state_select span12 hide\" >\n      ";
-  stack1 = depth0.datumStates;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(9, program9, data)});
+  if (stack1 = helpers.statecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+  if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span></span><br/>\n		<!-- drop down for the states -->\n    <select class=\"datum_state_select span12 hide\" >\n      ";
+  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n  </div>\n</div>\n\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datum\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n";
-  return buffer;});
+  buffer += "\n    </select>\n  </div>\n</div>\n\n\n<!-- Datum comments -->\n<div class=\"new-comment-area\"></div>  \n<ul class=\"comments unstyled\"></ul> \n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_settings_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<span class=\"pull-right ";
-  foundHelper = helpers.label;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\">\n\n<span class =\"locale_Encrypt_if_confidential\"></span>\n  <input type=\"checkbox\" class=\"shouldBeEncrypted \" ";
-  foundHelper = helpers.shouldBeEncrypted;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "></input>\n</span>\n\n<input class=\"choose-field \" ";
-  foundHelper = helpers.userchooseable;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.userchooseable; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " value=\"";
-  foundHelper = helpers.label;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"/>\n<label class = \"locale_Help_Text\"></label>\n<textarea class=\"help-text locale_Help_Text_Placeholder\">";
-  foundHelper = helpers.help;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n";
-  return buffer;});
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"> <span\n	class=\"locale_Encrypt_if_confidential\"></span> <input type=\"checkbox\"\n	class=\"shouldBeEncrypted \"";
+  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "></input> <!-- Issue #797 -->\n	<i class=\"remove-datum-field icon-remove-sign\"></i></span>\n\n<input class=\"choose-field \" ";
+  if (stack1 = helpers.userchooseable) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.userchooseable; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " value=\"";
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n	type=\"text\" />\n\n\n\n<label class=\"locale_Help_Text\"></label>\n<textarea class=\"help-text locale_Help_Text_Placeholder\">";
+  if (stack1 = helpers.help) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_settings_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<!-- this is a read-only version.  -->\n<span class=\"pull-right\">\n\n<span class =\"locale_Encrypt_if_confidential\"></span>\n<input type=\"checkbox\" class=\"shouldBeEncrypted\" ";
-  foundHelper = helpers.shouldBeEncrypted;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " disabled></input>\n</span>\n<h4>";
-  foundHelper = helpers.label;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4> \n<p>";
-  foundHelper = helpers.help;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</p>\n\n";
-  return buffer;});
+  buffer += "<!-- this is a read-only version.  -->\n<span class=\"pull-right\"><span\n	class=\"locale_Encrypt_if_confidential\"></span> <input type=\"checkbox\"\n	class=\"shouldBeEncrypted\" ";
+  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " disabled></input> </span>\n<h4>";
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n<p>";
+  if (stack1 = helpers.help) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_value_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n<a  href=\"#\" class=\"help-conventions\" rel=\"popover\" data-placement=\"bottom\" data-content=\"";
-  foundHelper = helpers.help;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" \n  data-original-title=\"Conventions/Help\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a>\n";
-  return buffer;}
+  if (stack1 = helpers.help) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" \n  data-original-title=\"Conventions/Help\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a>\n";
+  return buffer;
+  }
 
 function program3(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n<br>\n<input class=\"datum_field_input small-field\" type=\"text\" value=\"";
-  foundHelper = helpers.mask;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n";
-  return buffer;}
+  if (stack1 = helpers.mask) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n";
+  return buffer;
+  }
 
 function program5(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n<textarea class=\"datum_field_input\">";
-  foundHelper = helpers.mask;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n";
-  return buffer;}
+  if (stack1 = helpers.mask) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n";
+  return buffer;
+  }
 
   buffer += "<label class=\"datum_field_label\">";
-  foundHelper = helpers.label;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</label>\n";
-  stack1 = depth0.helpText;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</label>\n";
+  stack1 = helpers['if'].call(depth0, depth0.helpText, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n";
-  stack1 = depth0.size;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data)});
+  stack1 = helpers['if'].call(depth0, depth0.size, {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_value_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n<a  href=\"#\" class=\"help-conventions\" rel=\"popover\" data-placement=\"bottom\" data-content=\"";
-  foundHelper = helpers.help;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" \n  data-original-title=\"Conventions/Help\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a>\n";
-  return buffer;}
+  if (stack1 = helpers.help) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" \n  data-original-title=\"Conventions/Help\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a>\n";
+  return buffer;
+  }
 
   buffer += "<h4 class=\"datum_field_h4\">";
-  foundHelper = helpers.label;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n";
-  stack1 = depth0.helpText;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n";
+  stack1 = helpers['if'].call(depth0, depth0.helpText, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n<p>";
-  foundHelper = helpers.mask;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</p>\n\n";
-  return buffer;});
+  if (stack1 = helpers.mask) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "icon-eye-close";}
+  return "icon-eye-close";
+  }
 
 function program3(depth0,data) {
   
   
-  return "icon-eye-open";}
+  return "icon-eye-open";
+  }
 
 function program5(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n	  ";
-  stack1 = depth0.selected;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(6, program6, data)});
+  stack1 = helpers['if'].call(depth0, depth0.selected, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	  ";
-  return buffer;}
+  return buffer;
+  }
 function program6(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n	  <span class=\"label label-";
-  foundHelper = helpers.color;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"><i class = \" icon-flag\"></i>";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n	  ";
-  return buffer;}
+  if (stack1 = helpers.color) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><i class = \" icon-flag\"></i>";
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n	  ";
+  return buffer;
+  }
 
   buffer += "<!-- list for the fields -->\n<ul class=\"datum_fields_ul unstyled\"></ul>\n<div class=\"\">\n  <i class=\" icon-save \"></i><span class=\"last-modified\">";
-  foundHelper = helpers.dateModified;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span><br/>\n  <i class=\" icon-time\"></i><span class=\"date-created\">";
-  foundHelper = helpers.dateEntered;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateEntered; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span><br/>\n  <span class=\"session-link\"></span>\n</div>\n<hr/>\n<!-- Datum Read only specialized fields and menu area -->\n<div class=\"row-fluid\">\n  <div class=\"span5\">\n    <!-- Buttons for various read only actions -->\n    <div class=\" btn-group\">\n      <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n        <i class=\" ";
-  stack1 = depth0.decryptedMode;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
+  if (stack1 = helpers.dateModified) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span><br/>\n  <i class=\" icon-time\"></i><span class=\"date-created\">";
+  if (stack1 = helpers.dateEntered) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateEntered; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span><br/>\n  <span class=\"session-link\"></span>\n</div>\n<hr/>\n<!-- Datum Read only specialized fields and menu area -->\n<div class=\"row-fluid\">\n  <div class=\"span5\">\n    <!-- Buttons for various read only actions -->\n    <div class=\" btn-group\">\n      <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n        <i class=\" ";
+  stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i>\n      </a>\n      <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n        <i class=\" icon-paste\"></i></a>\n      <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">LaTeX</i>\n      </a>\n      <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">CSV</i>\n      </a>\n    </div>\n    <br/>\n    <div class=\"audio_video \"></div>\n  </div>\n  <div class=\"span4 border-left hide\">\n    <!-- list for the tags -->\n    <ul class=\"datum_tags_ul unstyled  \"></ul>\n  </div>\n  <div class=\"datum_state span3 border-left\">\n    ";
-  stack1 = depth0.datumStates;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
+  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </div>\n</div>\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datum\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>";
-  return buffer;});
+  buffer += "\n  </div>\n</div>\n\n<!-- Datum comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>  \n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_read_latex'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n    <span class = \"latex-judgement\">";
-  foundHelper = helpers.judgement;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.judgement; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span> \n  ";
-  return buffer;}
+  if (stack1 = helpers.judgement) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.judgement; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span> \n  ";
+  return buffer;
+  }
 
 function program3(depth0,data) {
   
-  var buffer = "";
+  var buffer = "", stack1;
   buffer += "\n	  <span class=\"glossCouplet\">\n	    ";
-  depth0 = typeof depth0 === functionType ? depth0() : depth0;
-  if(depth0 || depth0 === 0) { buffer += depth0; }
+  stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	  </span>\n	";
-  return buffer;}
+  return buffer;
+  }
 
 function program5(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n		<dt>";
-  foundHelper = helpers.label;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dt>\n		<dd>";
-  foundHelper = helpers.value;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dt>\n		<dd>";
+  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</dd>\n		";
-  return buffer;}
+  return buffer;
+  }
 
   buffer += "<div class=\"span1\">\n  <input type=\"checkbox\" class=\"datum-checkboxes\"></input>\n</div>\n<div class=\"span1\">\n  ";
-  stack1 = depth0.judgement;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
+  stack1 = helpers['if'].call(depth0, depth0.judgement, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</div>\n<div class=\"span10\">\n	";
-  stack1 = depth0.tuple;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data)});
+  stack1 = helpers.each.call(depth0, depth0.tuple, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	<br />\n	<span class=\"datum-latex-translation\">";
-  foundHelper = helpers.translation;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.translation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  if (stack1 = helpers.translation) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.translation; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</span>\n	<dl>\n		";
-  stack1 = depth0.additionalFields;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
+  stack1 = helpers.each.call(depth0, depth0.additionalFields, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	</dl>\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_state_settings_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<input class=\"datum_state_input\" value=\"";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input>\n<select class=\"color_chooser\">\n  <option value=\"success\" class=\"locale_Green\"></option>\n  <option value=\"warning\" class=\"locale_Orange\"></option>\n  <option value=\"important\" class=\"locale_Red\"></option>\n  <option value=\"info\" class=\"locale_Teal\"></option>\n  <option value=\"inverse\" class=\"locale_Black\"></option>\n  <option value=\"\" class=\"locale_Default\"></option>\n</select>\n<span class=\"label label-";
-  foundHelper = helpers.color;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"><i class = \" icon-flag\"></i>";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n\n";
-  return buffer;});
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input>\n<select class=\"color_chooser\">\n  <option value=\"success\" class=\"locale_Green\"></option>\n  <option value=\"warning\" class=\"locale_Orange\"></option>\n  <option value=\"important\" class=\"locale_Red\"></option>\n  <option value=\"info\" class=\"locale_Teal\"></option>\n  <option value=\"inverse\" class=\"locale_Black\"></option>\n  <option value=\"\" class=\"locale_Default\"></option>\n</select>\n<span class=\"label label-";
+  if (stack1 = helpers.color) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><i class = \" icon-flag\"></i>";
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_state_settings_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- this is a read-only version.  -->\n\n\n<span class=\"label label-";
-  foundHelper = helpers.color;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"><i class = \" icon-flag\"></i>";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n\n";
-  return buffer;});
+  if (stack1 = helpers.color) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><i class = \" icon-flag\"></i>";
+  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_tag_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<input class=\"datum_tag input-small span12\" value=\"";
-  foundHelper = helpers.tag;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.tag; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input>\n\n";
-  return buffer;});
+  if (stack1 = helpers.tag) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.tag; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input>\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_tag_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<span class=\"label label-info\"><i class = \" icon-tag\"></i>";
-  foundHelper = helpers.tag;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.tag; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>";
-  return buffer;});
+  if (stack1 = helpers.tag) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.tag; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['paging_footer'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, self=this, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
   
-  return "\n    <a href=\"#\" class=\"nextinfinitepagination\"><span class = \"locale_More\"></span></a>\r\n    ";}
+  return "\n    <a href=\"#\" class=\"nextinfinitepagination\"><span class = \"locale_More\"></span></a>\r\n    ";
+  }
 
 function program3(depth0,data) {
   
   
-  return "\r\n        (All)\r\n      ";}
+  return "\r\n        (All)\r\n      ";
+  }
 
   buffer += "<div class=\"\">\r\n  <span class=\"cell\">\r\n    ";
-  stack1 = depth0.morePages;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
+  stack1 = helpers['if'].call(depth0, depth0.morePages, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    <span class=\"cell howmanyperpagination\">\r\n        <span class = \"locale_Show\"></span>\r\n      <a href=\"#\" class=\"selected\">10</a>      |\r\n      <a href=\"#\" class=\"\">50</a>\r\n     |\n      <a href=\"#\" class=\"\">100</a>\r\n       <span class = \"locale_per_page\"></span>\n    </span>\r\n    <span class=\"divider\">/</span>\r\n    <span class=\"cell first records\">\r\n      <span class=\"current\">";
-  foundHelper = helpers.currentPage;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.currentPage; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\r\n\r\n <span class = \"locale_of\"></span>\r\n      <span class=\"total\">";
-  foundHelper = helpers.totalPages;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.totalPages; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\r\n  <span class = \"locale_pages_shown\"></span>\r\n      ";
-  stack1 = depth0.allShown;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data)});
+  if (stack1 = helpers.currentPage) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.currentPage; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\r\n\r\n <span class = \"locale_of\"></span>\r\n      <span class=\"total\">";
+  if (stack1 = helpers.totalPages) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.totalPages; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\r\n  <span class = \"locale_pages_shown\"></span>\r\n      ";
+  stack1 = helpers['if'].call(depth0, depth0.allShown, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </span>\r\n  </span>\r\n</div>";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<button class=\"btn btn-success pull-left btn-save-session locale_Save\"\n	value=\"Save\"></button>\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n<h1>\n	<i class=\"icon-calendar\"></i> <span class=\"locale_Elicitation_Session\"></span>\n</h1>\n<ul class=\"session-fields-ul unstyled\"></ul>\n\n<a\n	href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/session/";
-  foundHelper = helpers._id;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldatainthissession/";
-  foundHelper = helpers.goal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n	<textarea class=\"comment-new-text\"></textarea>\n	<button class=\"btn btn-mini btn-primary add-comment-session\"\n		value=\"Add\">\n		<i class=\"icon-comment\"></i> <span class=\"locale_Add\"></span>\n	</button>\n</div>";
-  return buffer;});
+  buffer += "<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<button class=\"btn btn-success pull-left btn-save-session locale_Save\"\n	value=\"Save\"></button>\n	<!-- Issue #797 -->\n  <button class=\"btn btn-danger trash-button\">\n    <i class=\"icon-trash \"></i> </button>\n	\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n<h1>\n	<i class=\"icon-calendar\"></i> <span class=\"locale_Elicitation_Session\"></span>\n</h1>\n<ul class=\"session-fields-ul unstyled\"></ul>\n\n<a\n	href=\"#corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/session/";
+  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/alldatainthissession/";
+  if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<div class=\"new-comment-area\"></div>  \n<ul class=\"comments unstyled\"></ul>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_import'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<i class=\"icon-calendar\"></i> <strong class = \"locale_Elicitation_Session\"></strong>\n<br />\n<label class=\"locale_Goal\"></label>\n<textarea class=\"session-goal-input\">";
-  foundHelper = helpers.goal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea><br />\n\n<label class=\"locale_Consultants\"></label>\n<textarea class=\"session-consultant-input\">";
-  foundHelper = helpers.consultants;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea> <br />\n\n<label class = \"locale_When\"></label>\n<textarea class=\"session-elicitation-date-input\">";
-  foundHelper = helpers.dateElicited;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n";
-  return buffer;});
+  if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea><br />\n\n<label class=\"locale_Consultants\"></label>\n<textarea class=\"session-consultant-input\">";
+  if (stack1 = helpers.consultants) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea> <br />\n\n<label class = \"locale_When\"></label>\n<textarea class=\"session-elicitation-date-input\">";
+  if (stack1 = helpers.dateElicited) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"modal-header\">\n  <h1><i class=\"icon-calendar\"></i> <span class = \"locale_New_Session\"></span><small>";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h1>\n  <span  class= \"locale_New_Session_Instructions\"></span>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"session-fields-ul unstyled\"></ul>\n  <a href=\"#\" class=\"btn locale_Cancel\" data-dismiss=\"modal\"></a>\n  <button class=\"btn btn-success pull-right btn-save-session locale_Save\" value=\"Save\"></button>  \n</div>\n";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small></h1>\n  <span  class= \"locale_New_Session_Instructions\"></span>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"session-fields-ul unstyled\"></ul>\n  <a href=\"#\" class=\"btn locale_Cancel\" data-dismiss=\"modal\"></a>\n  <button class=\"btn btn-success pull-right btn-save-session locale_Save\" value=\"Save\"></button>  \n</div>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class = \"locale_Edit_Session\" rel=\"tooltip\">\n      <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n\n<h1 ><i class=\"icon-calendar\"> </i><span class = \"locale_Elicitation_Session\"></span></h1>\n<ul class=\"session-fields-ul unstyled\"></ul>\n\n<a\n	href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/session/";
-  foundHelper = helpers._id;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldatainthissession/";
-  foundHelper = helpers.goal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-session\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/session/";
+  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/alldatainthissession/";
+  if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<div class=\"new-comment-area\"></div>\n<ul class=\"comments unstyled\"></ul> \n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<a href=\"#session/";
-  foundHelper = helpers._id;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\">\n<i class=\"icon-calendar\"></i>\n  <span>";
-  foundHelper = helpers.dateElicited;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span> \n</a>\n--\n<span class= \"locale_Consultants\"></span> <span>";
-  foundHelper = helpers.consultants;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n<br/>\n<span class = \"locale_Goal\"></span> <span>";
-  foundHelper = helpers.goal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n\n";
-  return buffer;});
+  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\">\n<i class=\"icon-calendar\"></i>\n  <span>";
+  if (stack1 = helpers.dateElicited) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span> \n</a>\n--\n<span class= \"locale_Consultants\"></span> <span>";
+  if (stack1 = helpers.consultants) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n<br/>\n<span class = \"locale_Goal\"></span> <span>";
+  if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"pull-right\">\n   <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n    <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class = \"locale_Show_Fullscreen\" rel=\"tooltip\">    \n    <i class=\"icons icon-resize-full\"></i></a>\n</div>\n  \n<i class=\"icon-calendar\"></i> <strong class = \"locale_Elicitation_Session\"></strong>\n<br />\n<label class=\"locale_Goal\"></label>\n<textarea class=\"session-goal-input\">";
-  foundHelper = helpers.goal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea><br />\n\n<label class=\"locale_Consultants\"></label>\n<textarea class=\"session-consultant-input\">";
-  foundHelper = helpers.consultants;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea> <br />\n\n<label class = \"locale_When\"></label>\n<textarea class=\"session-elicitation-date-input\">";
-  foundHelper = helpers.dateElicited;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n";
-  return buffer;});
+  if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea><br />\n\n<label class=\"locale_Consultants\"></label>\n<textarea class=\"session-consultant-input\">";
+  if (stack1 = helpers.consultants) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea> <br />\n\n<label class = \"locale_When\"></label>\n<textarea class=\"session-elicitation-date-input\">";
+  if (stack1 = helpers.dateElicited) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Edit_Session\" rel=\"tooltip\"> <i\n		class=\"icons icon-edit\"></i></a> <a href=\"#\"\n		class=\"locale_Show_Fullscreen\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-full\"></i></a>\n</div>\n\n<h4>\n	<i class=\"icon-calendar\"></i> <span class=\"locale_Elicitation_Session\"></span>\n</h4>\n<p>\n	<strong class=\"locale_Goal\"></strong> <span>";
-  foundHelper = helpers.goal;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span> <br /> <strong\n		class=\"locale_Consultants\"></strong> <span>";
-  foundHelper = helpers.consultants;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span> <br />\n	<strong class=\"locale_When\"></strong> <span>";
-  foundHelper = helpers.dateElicited;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n</p>";
-  return buffer;});
+  if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span> <br /> <strong\n		class=\"locale_Consultants\"></strong> <span>";
+  if (stack1 = helpers.consultants) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.consultants; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span> <br />\n	<strong class=\"locale_When\"></strong> <span>";
+  if (stack1 = helpers.dateElicited) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.dateElicited; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n</p>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['export_read_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<div class=\"modeal-header\">\n  <h1 ><span class = \"locale_Export\"> </span> <small id=\"export-type-description\"></small></h1>\n</div>\n<div class=\"modal-body export\">\n<textarea class=\"export-large-textarea\" id=\"export-text-area\"></textarea>  \n\n</div>\n<div class=\"modal-footer\">\n  <a href=\"#\" class=\"btn locale_Close\" data-dismiss=\"modal\"></a>\n</div>";});
+  return "<div class=\"modeal-header\">\n  <h1 ><span class = \"locale_Export\"> </span> <small id=\"export-type-description\"></small></h1>\n</div>\n<div class=\"modal-body export\">\n<textarea class=\"export-large-textarea\" id=\"export-text-area\"></textarea>  \n\n</div>\n<div class=\"modal-footer\">\n  <a href=\"#\" class=\"btn locale_Close\" data-dismiss=\"modal\"></a>\n</div>";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['hot_key_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "  <div class=\"modal-header\">\n    <h1 class = \"locale_Keyboard_Shortcuts\"></h1>\n  </div>\n  <div class=\"modal-body\">\n     <table class=\"table\">  \n        <thead>  \n          <tr>  \n            <th class = \"locale_Actions\"></th>  \n            <th></th>\n            <th class = \"locale_Navigation\"></th>  \n          </tr>  \n        </thead>  \n        <tbody>  \n          <tr>  \n            <td> <label class = \"locale_Datum_Status_Checked\"></label><input value =\"";
-  foundHelper = helpers.user;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input></td>  \n            <td></td>  \n            <td> <label class = \"locale_Next_Datum\"></label><input value =\"";
-  foundHelper = helpers.user;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input></td>  \n            <td></td>  \n          </tr>  \n          <tr>  \n            <td><label class = \"locale_New_Datum\"></label><input value =\"";
-  foundHelper = helpers.user;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input></td>  \n            <td></td>  \n            <td><label class = \"locale_Previous_Datum\"></label><input value =\"";
-  foundHelper = helpers.user;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input></td>  \n            <td></td>  \n          </tr>  \n          <tr>  \n            <td><label class = \"locale_New_Session\"></label><input value =\"";
-  foundHelper = helpers.user;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input></td>  \n            <td></td>  \n            <td><label class = \"locale_Search\"></label><input value =\"";
-  foundHelper = helpers.user;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></input></td>  \n            <td></td>  \n          </tr>  \n        </tbody>  \n      </table>  \n  </div>\n  \n  <div class=\"modal-footer\">\n    <a href=\"#\" class=\"btn locale_Close\" data-dismiss=\"modal\"> </a>\n    <a href=\"#\" class=\"btn btn-success locale_Save\" data-dismiss=\"modal\"></a>\n  </div>\n\n\n\n\n\n\n\n\n\n\n\n           \n     \n";
-  return buffer;});
+  if (stack1 = helpers.user) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input></td>  \n            <td></td>  \n            <td> <label class = \"locale_Next_Datum\"></label><input value =\"";
+  if (stack1 = helpers.user) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input></td>  \n            <td></td>  \n          </tr>  \n          <tr>  \n            <td><label class = \"locale_New_Datum\"></label><input value =\"";
+  if (stack1 = helpers.user) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input></td>  \n            <td></td>  \n            <td><label class = \"locale_Previous_Datum\"></label><input value =\"";
+  if (stack1 = helpers.user) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input></td>  \n            <td></td>  \n          </tr>  \n          <tr>  \n            <td><label class = \"locale_New_Session\"></label><input value =\"";
+  if (stack1 = helpers.user) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input></td>  \n            <td></td>  \n            <td><label class = \"locale_Search\"></label><input value =\"";
+  if (stack1 = helpers.user) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.user; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></input></td>  \n            <td></td>  \n          </tr>  \n        </tbody>  \n      </table>  \n  </div>\n  \n  <div class=\"modal-footer\">\n    <a href=\"#\" class=\"btn locale_Close\" data-dismiss=\"modal\"> </a>\n    <a href=\"#\" class=\"btn btn-success locale_Save\" data-dismiss=\"modal\"></a>\n  </div>\n\n\n\n\n\n\n\n\n\n\n\n           \n     \n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['import_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"container-fluid well\">\n	<div class=\"row-fluid \">\n\n		<div class=\"\">\n			<!--Body content-->\n			<h1>\n				<span class=\"locale_Import\"></span> <small>";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n			</h1>\n\n			<h5>\n				<span class=\"locale_Import_Instructions\"></span> <a\n					href=\"http://www.facebook.com/LingSyncApp\" target=\"_blank\"><i\n					class=\"icons icon-facebook\"></i></a> <a\n					href=\"https://twitter.com/lingsync\" target=\"_blank\"><i\n					class=\"icons icon-twitter\"></i></a>\n			</h5>\n			<div>";
-  foundHelper = helpers.status;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</div>\n\n		</div>\n	</div>\n	<div class=\"row-fluid \"></div>\n\n	<div class=\"well\" id=\"import-first-step\">\n		<span class=\"locale_Import_First_Step\"></span>\n		<textarea\n			class=\"export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder\">";
-  foundHelper = helpers.rawText;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.rawText; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n		<div class=\"btn-group pull-right\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span>Import from</span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a class=\"import-format\" id=\"format-csv\" tabindex=\"-1\"\n					href=\"#\">CSV</a></li>\n				<li><a class=\"import-format\" id=\"format-tabbed\" tabindex=\"-1\"\n					href=\"#\">Tabbed</a></li>\n				<li><a class=\"import-format\" id=\"format-xml\" tabindex=\"-1\"\n					href=\"#\">XML</a></li>\n				<li><a class=\"import-format\" id=\"format-elanxml\" tabindex=\"-1\"\n					href=\"#\">ElanXML</a></li>\n				<li><a class=\"import-format\" id=\"format-toolbox\" tabindex=\"-1\"\n					href=\"#\">Toolbox</a></li>\n				<li><a class=\"import-format\" id=\"format-praat\" tabindex=\"-1\"\n					href=\"#\">Praat Text Grid</a></li>\n				<li><a class=\"import-format\" id=\"format-latex\" tabindex=\"-1\"\n					href=\"#\">LaTex</a></li>\n				<li><a class=\"import-format\" id=\"format-handout\" tabindex=\"-1\"\n					href=\"#\">Handout</a></li>\n			</ul>\n		</div>\n		<span class=\"pull-right\">Did the app guess the wrong format?</span>\n	</div>\n\n	<div class=\"well hidden \" id=\"import-second-step\">\n		<span class=\"locale_Import_Second_Step\"></span>\n\n		<button\n			class=\"btn btn-info add-column pull-right hide locale_Add_Extra_Columns\"></button>\n\n		<div class=\" container span11\">\n\n			<div id=\"import-datum-field-labels\" class=\"row-fluid\"></div>\n		</div>\n\n		<div class=\"scrollable\">\n			<table id=\"csv-table-area\"\n				class=\" table table-striped table-bordered table-condensed \"></table>\n		</div>\n\n		<button\n			class=\"btn btn-success approve-import hide locale_Attempt_Import\"></button>\n\n	</div>\n\n	<div class=\"well hidden container-fluid \" id=\"import-third-step\">\n		<span class=\"locale_Import_Third_Step\"></span>\n\n		<div id=\"import-data-list\" class=\" row-fluid\">\n\n			<div id=\"import-data-list-header\" class=\" \"></div>\n			<div class=\" container span11 \">\n				<ul class=\"unstyled  import-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control row span11\"></div>\n			</div>\n\n		</div>\n\n\n		<div id=\"import-session\" class=\"well\"></div>\n\n		<button\n			class=\"btn btn-success approve-save disabled locale_Save_And_Import\"></button>\n\n		<progress class=\"import-progress\" max=\"5\" value=\"0\">\n			<strong class=\"locale_percent_completed\"></strong>\n		</progress>\n\n	</div>\n</div>";
-  return buffer;});
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n			</h1>\n\n			<h5>\n				<span class=\"locale_Import_Instructions\"></span> <a\n					href=\"http://www.facebook.com/LingSyncApp\" target=\"_blank\"><i\n					class=\"icons icon-facebook\"></i></a> <a\n					href=\"https://twitter.com/lingsync\" target=\"_blank\"><i\n					class=\"icons icon-twitter\"></i></a>\n			</h5>\n			<div>";
+  if (stack1 = helpers.status) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n\n		</div>\n	</div>\n	<div class=\"row-fluid \"></div>\n\n	<div class=\"well\" id=\"import-first-step\">\n		<span class=\"locale_Import_First_Step\"></span>\n		<textarea\n			class=\"export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder\">";
+  if (stack1 = helpers.rawText) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.rawText; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n		<div class=\"btn-group pull-right\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span>Import from</span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a class=\"import-format\" id=\"format-csv\" tabindex=\"-1\"\n					href=\"#\">CSV</a></li>\n				<li><a class=\"import-format\" id=\"format-tabbed\" tabindex=\"-1\"\n					href=\"#\">Tabbed</a></li>\n				<li><a class=\"import-format\" id=\"format-xml\" tabindex=\"-1\"\n					href=\"#\">XML</a></li>\n				<li><a class=\"import-format\" id=\"format-elanxml\" tabindex=\"-1\"\n					href=\"#\">ElanXML</a></li>\n				<li><a class=\"import-format\" id=\"format-toolbox\" tabindex=\"-1\"\n					href=\"#\">Toolbox</a></li>\n				<li><a class=\"import-format\" id=\"format-praat\" tabindex=\"-1\"\n					href=\"#\">Praat Text Grid</a></li>\n				<li><a class=\"import-format\" id=\"format-latex\" tabindex=\"-1\"\n					href=\"#\">LaTex</a></li>\n				<li><a class=\"import-format\" id=\"format-handout\" tabindex=\"-1\"\n					href=\"#\">Handout</a></li>\n			</ul>\n		</div>\n		<span class=\"pull-right\">Did the app guess the wrong format?</span>\n	</div>\n\n	<div class=\"well hidden \" id=\"import-second-step\">\n		<span class=\"locale_Import_Second_Step\"></span>\n\n		<button\n			class=\"btn btn-info add-column pull-right hide locale_Add_Extra_Columns\"></button>\n\n		<div class=\" container span11\">\n\n			<div id=\"import-datum-field-labels\" class=\"row-fluid\"></div>\n		</div>\n\n		<div class=\"scrollable\">\n			<table id=\"csv-table-area\"\n				class=\" table table-striped table-bordered table-condensed \"></table>\n		</div>\n\n		<button\n			class=\"btn btn-success approve-import hide locale_Attempt_Import\"></button>\n\n	</div>\n\n	<div class=\"well hidden container-fluid \" id=\"import-third-step\">\n		<span class=\"locale_Import_Third_Step\"></span>\n\n		<div id=\"import-data-list\" class=\" row-fluid\">\n\n			<div id=\"import-data-list-header\" class=\" \"></div>\n			<div class=\" container span11 \">\n				<ul class=\"unstyled  import-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control row span11\"></div>\n			</div>\n\n		</div>\n\n\n		<div id=\"import-session\" class=\"well\"></div>\n\n		<button\n			class=\"btn btn-success approve-save disabled locale_Save_And_Import\"></button>\n\n		<progress class=\"import-progress\" max=\"5\" value=\"0\">\n			<strong class=\"locale_percent_completed\"></strong>\n		</progress>\n\n	</div>\n</div>";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicode'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<button class=\"btn btn-info btn-mini\">\n	<b class=\"unicode-symbol infrequent-unicode-symbol\" draggable=\"true\">";
-  foundHelper = helpers.symbol;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</b>\n</button>\n<!-- <span class=\"dropdown \" id=\"menu";
-  foundHelper = helpers.symbol;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"> \n  <a class=\"btn-mini btn show-unicode-details dropdown-toggle btn-info\" data-toggle=\"dropdown\" href=\"#menu";
-  foundHelper = helpers.symbol;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"> \n    <b class=\"unicode-symbol infrequent-unicode-symbol\" draggable=\"true\">";
-  foundHelper = helpers.symbol;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</b>\n  </a>\n	<ul class=\"dropdown-menu\">\n		<li class = \"locale_LaTeX_Code\"></li>\n		<li><input class=\"edit-tipa-input input-small\" value=\"";
-  foundHelper = helpers.tipa;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.tipa; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></li>\n		<li class = \"locale_Unicode_Instructions\"></li>\n		<li><a data-toggle=\"modal\" href=\"#hotkey-settings-modal\">\n		  <i class=\"icon-hdd\"></i>\n		  <span class = \"locale_Keyboard_Shortcuts\"></span> </a></li>\n		<li class=\"remove-unicode\"><a>\n		  <i class=\"icon-remove-sign\"></i>\n		  <span class = \"locale_Remove_Unicode\"></span></a></li>\n	</ul>\n</span> -->";
-  return buffer;});
+  if (stack1 = helpers.symbol) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</b>\n</button>\n<!-- <span class=\"dropdown \" id=\"menu";
+  if (stack1 = helpers.symbol) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"> \n  <a class=\"btn-mini btn show-unicode-details dropdown-toggle btn-info\" data-toggle=\"dropdown\" href=\"#menu";
+  if (stack1 = helpers.symbol) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"> \n    <b class=\"unicode-symbol infrequent-unicode-symbol\" draggable=\"true\">";
+  if (stack1 = helpers.symbol) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</b>\n  </a>\n	<ul class=\"dropdown-menu\">\n		<li class = \"locale_LaTeX_Code\"></li>\n		<li><input class=\"edit-tipa-input input-small\" value=\"";
+  if (stack1 = helpers.tipa) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.tipa; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"></li>\n		<li class = \"locale_Unicode_Instructions\"></li>\n		<li><a data-toggle=\"modal\" href=\"#hotkey-settings-modal\">\n		  <i class=\"icon-hdd\"></i>\n		  <span class = \"locale_Keyboard_Shortcuts\"></span> </a></li>\n		<li class=\"remove-unicode\"><a>\n		  <i class=\"icon-remove-sign\"></i>\n		  <span class = \"locale_Remove_Unicode\"></span></a></li>\n	</ul>\n</span> -->";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicodes'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<div class=\"pull-right\">\n  <a href=\"#\" class =\"locale_Hide_Unicode_Palette\" rel=\"tooltip\" >\n    <i class=\"icons icon-minus-sign\"></i></a>\n</div>\n<h3><span class = \"locale_Unicode\"></span>\n<span class = \"locale_Drag_and_Drop\">\n  </span>\n</h3>\n<div id=\"unicodes\" class=\"unicode-buttons row-fluid\"></div>\n<!-- <br />\n<span class=\"like-form-inline\">\n  <input class=\"insert-unicode-input input-small locale_Paste_Type_Unicode_Symbol_Placeholder\"  type=\"text\"/>\n  <input class=\"insert-unicode-tipa-input input-small locale_TIPA_shortcut\" type=\"text\"/>\n  <a href=\"#\" class = \"locale_Add_new_symbol btn btn-primary add-unicode locale_Add\" rel=\"tooltip\">\n    </a>\n</span> -->";});
+  return "<div class=\"pull-right\">\n  <a href=\"#\" class =\"locale_Hide_Unicode_Palette\" rel=\"tooltip\" >\n    <i class=\"icons icon-minus-sign\"></i></a>\n</div>\n<h3><span class = \"locale_Unicode\"></span>\n<span class = \"locale_Drag_and_Drop\">\n  </span>\n</h3>\n<div id=\"unicodes\" class=\"unicode-buttons row-fluid\"></div>\n<!-- <br />\n<span class=\"like-form-inline\">\n  <input class=\"insert-unicode-input input-small locale_Paste_Type_Unicode_Symbol_Placeholder\"  type=\"text\"/>\n  <input class=\"insert-unicode-tipa-input input-small locale_TIPA_shortcut\" type=\"text\"/>\n  <a href=\"#\" class = \"locale_Add_new_symbol btn btn-primary add-unicode locale_Add\" rel=\"tooltip\">\n    </a>\n</span> -->";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicodes_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<div class=\"pull-right\">\n  <a href=\"#\" class=\"locale_Show_Unicode_Palette\" rel=\"tooltip\" >\n    <i class=\"icons icon-plus-sign\"></i></a>\n</div>\n<h3><span class = \"locale_Unicode\"></span>\n<span class = \"locale_Drag_and_Drop\"> </span>\n</h3>";});
+  return "<div class=\"pull-right\">\n  <a href=\"#\" class=\"locale_Show_Unicode_Palette\" rel=\"tooltip\" >\n    <i class=\"icons icon-plus-sign\"></i></a>\n</div>\n<h3><span class = \"locale_Unicode\"></span>\n<span class = \"locale_Drag_and_Drop\"> </span>\n</h3>";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['permissions_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n		<li class=\"breadcrumb  ";
-  foundHelper = helpers.status;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\">  <img class=\"gravatar-small\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"/>\n		";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " </li> ";
-  return buffer;}
+  if (stack1 = helpers.status) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\">  <img class=\"gravatar-small\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"/>\n		";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " </li> ";
+  return buffer;
+  }
 
   buffer += "\n<div class=\"span5\">\n	<h4>\n		<i class=\"icon-group\"></i> ";
-  foundHelper = helpers.role;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "s\n	</h4>\n	<ul>\n		";
-  stack1 = depth0.users;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
+  if (stack1 = helpers.role) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "s\n	</h4>\n	<ul>\n		";
+  stack1 = helpers.each.call(depth0, depth0.users, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	</ul>\n</div>\n\n<div class=\"span6\">\n	<label class=\"locale_Modify_Username_TODO \">Username:</label> <input type=\"text\"\n		class=\"  choose-add-permission-username\" data-provide=\"typeahead\"\n		data-items=\"4\" data-source='";
-  foundHelper = helpers.typeaheadusers;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.typeaheadusers; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "'>\n	<button class=\"btn btn-primary  add-user-to-permission-role\"\n		value=\"Add\">Add</button>\n	<!-- <button class=\"btn btn-primary  delete-user-permission-role\"\n		value=\"Add\">Delete</button> -->\n</div>\n\n";
-  return buffer;});
+  if (stack1 = helpers.typeaheadusers) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.typeaheadusers; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "'>\n	<button class=\"btn btn-primary  add-user-to-permission-role\"\n		value=\"Add\">Add</button>\n	<!-- <button class=\"btn btn-primary  delete-user-permission-role\"\n		value=\"Add\">Delete</button> -->\n</div>\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['permissions_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "", stack1;
   buffer += "\n	<li><img class=\"gravatar-small\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" /><br />\n		";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</li> ";
-  return buffer;}
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" /><br />\n		";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</li> ";
+  return buffer;
+  }
 
   buffer += "<h4>\n	<i class=\"icon-group\"></i> ";
-  foundHelper = helpers.role;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "s\n</h4>\n<ul>\n	";
-  stack1 = depth0.users;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
+  if (stack1 = helpers.role) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "s\n</h4>\n<ul>\n	";
+  stack1 = helpers.each.call(depth0, depth0.users, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ul>\n";
-  return buffer;});
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['search_advanced_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<div class=\"title\">\n	<h1 class = \"locale_Advanced_Search\"></h1>\n</div>\n<div class=\"alert alert-info alert-block\">\n	<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> \n	<strong class=\"alert-heading \">How Search Works:</strong> \n	<span class=\"locale_advanced_search_explanation\"></span>\n</div>\n\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n<ul class=\"advanced_search_datum unstyled\"></ul>\n<ul class=\"advanced_search_session unstyled\"></ul>\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n";});
+  return "<div class=\"title\">\n	<h1 class = \"locale_Advanced_Search\"></h1>\n</div>\n<div class=\"alert alert-info alert-block\">\n	<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> \n	<strong class=\"alert-heading \">How Search Works:</strong> \n	<span class=\"locale_advanced_search_explanation\"></span>\n</div>\n\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n<ul class=\"advanced_search_datum unstyled\"></ul>\n<ul class=\"advanced_search_session unstyled\"></ul>\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['search_top'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n<a href=\"#\" class=\"locale_Search_Tooltip\" rel=\"tooltip\"> <i\n	class=\"icons trigger-quick-search icon-search icon-white\"></i>\n</a> -->\n&nbsp;\n<input type=\"text\" id=\"search_box\" class=\"search-query input-small\"\n	placeholder=\"Search\" value=\"";
-  foundHelper = helpers.searchKeywords;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.searchKeywords; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"></input>\n\n<span> <a tabindex=\"-1\" href=\"#corpus/";
-  foundHelper = helpers.pouchname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/search\"\n	id=\"advanced_search_drop_down_trigger\"\n	class=\"trigger-advanced-search locale_Advanced_Search_Tooltip\"\n	rel=\"tooltip\"> <i class=\" icon-search icon-white\"></i>\n</a></span>\n";
-  return buffer;});
+  if (stack1 = helpers.searchKeywords) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.searchKeywords; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"></input>\n\n<span> <a tabindex=\"-1\" href=\"#corpus/";
+  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/search\"\n	id=\"advanced_search_drop_down_trigger\"\n	class=\"trigger-advanced-search locale_Advanced_Search_Tooltip\"\n	rel=\"tooltip\"> <i class=\" icon-search icon-white\"></i>\n</a></span>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_app'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
   
 
 
-  return "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n        class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n\n\n          <!--  Customize dropdown -->\n          <li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i class=\"icon-info-sign icon-white\"></i>\n              Information <b class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"customize_dropdown_trigger\">\n\n\n              \n              <li class=\"power-users-link\"><a tabindex=\"-1\"\n                data-toggle=\"modal\" href=\"#terminal-modal\"><i\n                  class=\" icon-magic\"></i> <span\n                  class=\"locale_Terminal_Power_Users\"></span> </a></li>\n              <li><a tabindex=\"-1\" href=\"http://lingsync.org\"\n                target=\"_blank\"><i class=\"icons icon-film\"></i> Help Videos and\n                  User Guide</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n                target=\"_blank\"><i class=\"icons icon-beaker\"></i> Bug\n                  Report/Contact Us</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n                target=\"_blank\"><i class=\"icons icon-github\"></i> OpenSource v<span\n                  class=\"fielddb-version\"></span></a></li>\n\n              <!-- <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n                  Clear all customization</a></li> -->\n\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown hide\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!-- <li><span class=\"locale_Need_save\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Save_on_this_Computer \" rel=\"tooltip\">\n                  <i class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider\"></li>\n\n              <!-- <li><span class=\"locale_Need_sync\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Sync_and_Share \" rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsynced-changes\" max=\"100\" value=\"80\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Differences_with_the_central_server\"></li>\n\n\n              <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span> <b class=\"caret\"></b>\n          </a>\n            <ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n\n  <!-- FullScreen Views -->\n  <div id=\"user-fullscreen\" class=\"well \"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"quick-authenticate-modal\"  class=\"modal hide\">\n  <div class=\"modal-header\">\n    <h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n  </div>\n  <div class=\"modal-body\">\n  <label class = \"locale_Password\"></label>\n      <input type=\"password\" id=\"quick-authenticate-password\"/>\n  </div>\n  <div class=\"modal-footer\">\n    <button class=\"btn btn-success locale_Yep_its_me\" id=\"quick-authentication-okay-btn\"></button>\n  </div>\n</div>\n";});
+  return "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n        class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n\n\n          <!--  Customize dropdown -->\n          <li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i class=\"icon-info-sign icon-white\"></i>\n              Information <b class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"customize_dropdown_trigger\">\n\n\n              \n              <li class=\"power-users-link\"><a tabindex=\"-1\"\n                data-toggle=\"modal\" href=\"#terminal-modal\"><i\n                  class=\" icon-magic\"></i> <span\n                  class=\"locale_Terminal_Power_Users\"></span> </a></li>\n              <li><a tabindex=\"-1\" href=\"http://lingsync.org\"\n                target=\"_blank\"><i class=\"icons icon-film\"></i> Help Videos and\n                  User Guide</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n                target=\"_blank\"><i class=\"icons icon-beaker\"></i> Bug\n                  Report/Contact Us</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n                target=\"_blank\"><i class=\"icons icon-github\"></i> OpenSource v<span\n                  class=\"fielddb-version\"></span></a></li>\n\n              <!-- <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n                  Clear all customization</a></li> -->\n\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown hide\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!-- <li><span class=\"locale_Need_save\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Save_on_this_Computer \" rel=\"tooltip\">\n                  <i class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider\"></li>\n\n              <!-- <li><span class=\"locale_Need_sync\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Sync_and_Share \" rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsynced-changes\" max=\"100\" value=\"80\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Differences_with_the_central_server\"></li>\n\n\n              <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span> <b class=\"caret\"></b>\n          </a>\n            <ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n\n  <!-- FullScreen Views -->\n  <div id=\"user-fullscreen\" class=\"well \"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"quick-authenticate-modal\"  class=\"modal hide\">\n  <div class=\"modal-header\">\n    <h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n  </div>\n  <div class=\"modal-body\">\n  <label class = \"locale_Password\"></label>\n      <input type=\"password\" id=\"quick-authenticate-password\"/>\n  </div>\n  <div class=\"modal-footer\">\n    <button class=\"btn btn-success locale_Yep_its_me\" id=\"quick-authentication-okay-btn\"></button>\n  </div>\n</div>\n";
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> \n   <i class=\"icons icon-book pull-right\"> </i>\n  </a>\n<button class=\"btn btn-success pull-right save-user-profile locale_Save\"\n    value=\"Save\"></button>\n\n<h1>\n	<span class=\"locale_User_Profile\"> </span> <small>";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " 	(";
-  foundHelper = helpers.firstname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " ";
-  foundHelper = helpers.lastname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ") </small>\n</h1>\n<a href = \"http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<p class = \"locale_Public_Profile_Instructions\"></p>\n<hr/>\n<dl>\n    <dt class=\"locale_Gravatar\"></dt>\n    <dd>\n      <img class=\"gravatar-image gravatar-large\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n    </dd>\n    <dt class=\"locale_Gravatar_URL\"></dt>\n    <dd>\n      <input class=\"gravatar\" type=\"email\" value=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n    </dd>\n    <dt class=\"locale_Firstname\"></dt>\n    <dd>\n      <input class=\"firstname\" value=\"";
-  foundHelper = helpers.firstname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n    </dd>\n    <dt class=\"locale_Lastname\"></dt>\n    <dd>\n      <input class=\"lastname\" value=\"";
-  foundHelper = helpers.lastname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n    </dd>\n    <dt class=\"locale_Email\"></dt>\n    <dd>\n      <input class=\"email\" type=\"email\" value=\"";
-  foundHelper = helpers.email;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n    </dd>\n    <dt class=\"locale_Research_Interests\"></dt>\n    <dd>\n      <textarea class=\"researchInterest\">";
-  foundHelper = helpers.researchInterest;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " \n      </textarea>\n    </dd>\n    <dt class=\"locale_Affiliation\"></dt>\n    <dd>\n      <textarea class=\"affiliation\">";
-  foundHelper = helpers.affiliation;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " \n      </textarea>\n    </dd>\n    <dt class=\"locale_Description\"></dt>\n    <dd>\n      <textarea class=\"description\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " \n      </textarea>\n    </dd>\n    <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n    <dd>\n      <ul class=\"corpuses\">\n      </ul>\n    </dd>\n  </dl>\n";
-  return buffer;});
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " 	(";
+  if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ") </small>\n</h1>\n<a href = \"http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<p class = \"locale_Public_Profile_Instructions\"></p>\n<hr/>\n<dl>\n    <dt class=\"locale_Gravatar\"></dt>\n    <dd>\n      <img class=\"gravatar-image gravatar-large\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n    </dd>\n    <dt class=\"locale_Gravatar_URL\"></dt>\n    <dd>\n      <input class=\"gravatar\" type=\"email\" value=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n    </dd>\n    <dt class=\"locale_Firstname\"></dt>\n    <dd>\n      <input class=\"firstname\" value=\"";
+  if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n    </dd>\n    <dt class=\"locale_Lastname\"></dt>\n    <dd>\n      <input class=\"lastname\" value=\"";
+  if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n    </dd>\n    <dt class=\"locale_Email\"></dt>\n    <dd>\n      <input class=\"email\" type=\"email\" value=\"";
+  if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n    </dd>\n    <dt class=\"locale_Research_Interests\"></dt>\n    <dd>\n      <textarea class=\"researchInterest\">";
+  if (stack1 = helpers.researchInterest) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " \n      </textarea>\n    </dd>\n    <dt class=\"locale_Affiliation\"></dt>\n    <dd>\n      <textarea class=\"affiliation\">";
+  if (stack1 = helpers.affiliation) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " \n      </textarea>\n    </dd>\n    <dt class=\"locale_Description\"></dt>\n    <dd>\n      <textarea class=\"description\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " \n      </textarea>\n    </dd>\n    <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n    <dd>\n      <ul class=\"corpuses\">\n      </ul>\n    </dd>\n  </dl>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"modal-header\">\n\n	<button class=\"btn locale_Close pull-right\" data-dismiss=\"modal\">\n	</button>\n	\n	<button\n		class=\"btn btn-success pull-right save-user-profile locale_Save\"\n		value=\"Save\"></button>\n		\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book pull-right\"> </i>\n	</a>\n	\n	<h1>\n		<span class=\"locale_User_Profile\"> </span> <small>";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n			(";
-  foundHelper = helpers.firstname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " ";
-  foundHelper = helpers.lastname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\"edit-public-user-profile locale_Edit_Public_User_Profile \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n		</dd>\n		<dt class=\"locale_Gravatar_URL\"></dt>\n		<dd>\n			<input class=\"gravatar\" type=\"email\" value=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n		</dd>\n		<dt class=\"locale_Firstname\"></dt>\n		<dd>\n			<input class=\"firstname\" value=\"";
-  foundHelper = helpers.firstname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n		</dd>\n		<dt class=\"locale_Lastname\"></dt>\n		<dd>\n			<input class=\"lastname\" value=\"";
-  foundHelper = helpers.lastname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd>\n			<input class=\"email\" type=\"email\" value=\"";
-  foundHelper = helpers.email;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n		</dd>\n		<dt class=\"locale_Research_Interests\"></dt>\n		<dd>\n			<textarea class=\"researchInterest\">";
-  foundHelper = helpers.researchInterest;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " \n      </textarea>\n		</dd>\n		<dt class=\"locale_Affiliation\"></dt>\n		<dd>\n			<textarea class=\"affiliation\">";
-  foundHelper = helpers.affiliation;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " \n      </textarea>\n		</dd>\n		<dt class=\"locale_Description\"></dt>\n		<dd>\n			<textarea class=\"description\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " \n      </textarea>\n		</dd>\n		<dt>\n			<i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span>\n		</dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n";
-  return buffer;});
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n			(";
+  if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\"edit-public-user-profile locale_Edit_Public_User_Profile \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n		</dd>\n		<dt class=\"locale_Gravatar_URL\"></dt>\n		<dd>\n			<input class=\"gravatar\" type=\"email\" value=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n		</dd>\n		<dt class=\"locale_Firstname\"></dt>\n		<dd>\n			<input class=\"firstname\" value=\"";
+  if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n		</dd>\n		<dt class=\"locale_Lastname\"></dt>\n		<dd>\n			<input class=\"lastname\" value=\"";
+  if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd>\n			<input class=\"email\" type=\"email\" value=\"";
+  if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n		</dd>\n		<dt class=\"locale_Research_Interests\"></dt>\n		<dd>\n			<textarea class=\"researchInterest\">";
+  if (stack1 = helpers.researchInterest) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " \n      </textarea>\n		</dd>\n		<dt class=\"locale_Affiliation\"></dt>\n		<dd>\n			<textarea class=\"affiliation\">";
+  if (stack1 = helpers.affiliation) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " \n      </textarea>\n		</dd>\n		<dt class=\"locale_Description\"></dt>\n		<dd>\n			<textarea class=\"description\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " \n      </textarea>\n		</dd>\n		<dt>\n			<i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span>\n		</dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_preference_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"modal-header\">\n	<button class=\"btn locale_Close pull-right\" data-dismiss=\"modal\"></button>\n	<h1 class=\"locale_User_Settings\"></h1>\n</div>\n<div class=\"modal-body\">\n	<div class=\"border-bottom\">\n		<p class=\"locale_user_settings_instructions\">This is where you can\n			adjust settings that are mostly for you as a user, settings which\n			aren't really tied to a corpus. Your settings are backed up when you\n			authenticate with the server (this usually happens when the \"I need\n			to make sure its you\" box pops up) so that you can get your\n			preferences if you log in on another device.</p>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Skin\"></h5>\n		<p class=\"locale_skin_instructions\">You can use a combinations of\n			background colors or pictures, and transparency to create the entire\n			range between high contrast, to low contrast, low eyestrain screens\n			to make it easier on your eyes to enter data for long periods of\n			time. You can also keep the background picture on random if you feel\n			it might help you stop procrastinating and enter your data.</p>\n		<span class=\"user-pref-skin-filename\">";
-  foundHelper = helpers.skin;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.skin; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n		<div class=\"control-group\">\n			<button class=\"preference btn change-skin locale_Change_Background\"></button>\n			<button\n				class=\"preference btn randomize-backgound locale_Background_on_Random\">\n			</button>\n			<button\n				class=\"preference btn transparent-dashboard locale_Transparent_Dashboard\">\n			</button>\n			<button\n				class=\"preference btn high-contrast-dashboard locale_High_Contrast_Dashboard\">High\n				Contrast</button>\n		</div>\n	</div>\n\n	<div class=\"border-bottom\">\n		<!-- TODO put a title and description abotu what layouts are  here? -->\n		<div class=\"control-group\">\n			<input\n				class=\" btn  set-prefered-dashboard-layoutJustEntering user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout1_just_entering.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutAllTheData user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout2_all_the_data.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutWhatsHappening user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout3_whats_happening.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutCompareDataLists user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout4_compare_datalists.png\" /> <input\n				class=\" btn  set-prefered-dashboard-layoutEverythingAtOnce user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout5_everything_at_once.png\" />\n		</div>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Number_Datum\"></h5>\n		<p class=\"locale_number_datum_instructions\">You can change the\n			number of datum in the data entry area of your dashboard, if you like\n			to enter data surrounded by context (ie see the datum that you just\n			entered as you would in Word or Excel), you can set it to a high\n			number (5). This can be confusing because the datum are inserted at\n			the top, not at the bottom of the data entry area (if this annoys\n			you, let us know using the bug form, it probably wouldn't take long\n			to make it into an option.)</p>\n		<p>You can also have the app show only one datum, and even make\n			that datum full screen using the arrows in its widget (if you like to\n			enter data like you would in FileMaker Pro). A pretty good middle\n			ground is 2 datum visible. With two datum you can see when you are\n			creating minimal pairs, or creating new datum to be checked with a\n			language consultant, based on an existing datum.</p>\n		<label class=\"locale_Number_Datum\"></label> <select\n			class=\"num_datum_dropdown\">\n			<option value=\"1\">1</option>\n			<option value=\"2\">2</option>\n			<option value=\"3\" selected>3</option>\n			<option value=\"4\">4</option>\n			<option value=\"5\">5</option>\n		</select>\n	</div>\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Font_Size\">Font Size</h5>\n		<p class=\"locale_font_size_instructions\">It is very easy to adjust\n			the font size in LingSync, you can use the standard browser features\n			(this is one reason we wanted to make the app in a browser).</p>\n		<h5>Larger Font</h5>\n		<ul>\n			<li>Mac: ⌘+ (Command - Shift - +)</li>\n			<li>Linux/Windows: Control - Shift - +</li>\n			<li>Android: On most Androids you can double tap the screen to\n				zoom in and out, or use your fingers to pinch zoom in and out.</li>\n			<li>iPad/iPhone: use your fingers to pinch zoom in and out as\n				you would on any other app.</li>\n		</ul>\n		<h5>Smaller Font</h5>\n		<ul>\n			<li>Mac: ⌘- (Command -)</li>\n			<li>Linux/Windows: Control -</li>\n			<li>Android: On most Androids you can double tap the screen to\n				zoom in and out, or use your fingers to pinch zoom in and out.</li>\n			<li>iPad/iPhone: use your fingers to pinch zoom in and out as\n				you would on any other app.</li>\n		</ul>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Full_Screen\">How to go fullscreen</h5>\n		<p class=\"locale_full_screen_instructions\">It is very easy to go\n			full screen and make LingSync look like a native desktop application,\n			(either with a toolbar) or in complete full screen presentation mode.</p>\n		<h5>Full screen</h5>\n		<ul>\n			<li>Mac: ⌘⇧F (Command - Shift - F)</li>\n			<li>Linux: let us know if you figure it out.</li>\n			<li>Windows: F11</li>\n			<li>Android: let us know if you figure it out.</li>\n			<li>iPad/iPhone: let us know if you figure it out</li>\n		</ul>\n		<h5>Full screen (can still see tabs)</h5>\n		<ul>\n			<li>Mac: ⌘^F (Command - Control - F)</li>\n			<li>Linux/Windows: (This how Chrome is normally)</li>\n			<li>Android: (This how Chrome is normally)</li>\n			<li>iPad/iPhone: (This how Chrome is normally)</li>\n		</ul>\n	</div>\n\n</div>\n";
-  return buffer;});
+  if (stack1 = helpers.skin) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.skin; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n		<div class=\"control-group\">\n			<button class=\"preference btn change-skin locale_Change_Background\"></button>\n			<button\n				class=\"preference btn randomize-backgound locale_Background_on_Random\">\n			</button>\n			<button\n				class=\"preference btn transparent-dashboard locale_Transparent_Dashboard\">\n			</button>\n			<button\n				class=\"preference btn high-contrast-dashboard locale_High_Contrast_Dashboard\">High\n				Contrast</button>\n		</div>\n	</div>\n\n	<div class=\"border-bottom\">\n		<!-- TODO put a title and description abotu what layouts are  here? -->\n		<div class=\"control-group\">\n			<input\n				class=\" btn  set-prefered-dashboard-layoutJustEntering user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout1_just_entering.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutAllTheData user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout2_all_the_data.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutWhatsHappening user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout3_whats_happening.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutCompareDataLists user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout4_compare_datalists.png\" /> <input\n				class=\" btn  set-prefered-dashboard-layoutEverythingAtOnce user-pref-dashboard-layout-tile\"\n				type=\"image\" src=\"user/layouts/layout5_everything_at_once.png\" />\n		</div>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Number_Datum\"></h5>\n		<p class=\"locale_number_datum_instructions\">You can change the\n			number of datum in the data entry area of your dashboard, if you like\n			to enter data surrounded by context (ie see the datum that you just\n			entered as you would in Word or Excel), you can set it to a high\n			number (5). This can be confusing because the datum are inserted at\n			the top, not at the bottom of the data entry area (if this annoys\n			you, let us know using the bug form, it probably wouldn't take long\n			to make it into an option.)</p>\n		<p>You can also have the app show only one datum, and even make\n			that datum full screen using the arrows in its widget (if you like to\n			enter data like you would in FileMaker Pro). A pretty good middle\n			ground is 2 datum visible. With two datum you can see when you are\n			creating minimal pairs, or creating new datum to be checked with a\n			language consultant, based on an existing datum.</p>\n		<label class=\"locale_Number_Datum\"></label> <select\n			class=\"num_datum_dropdown\">\n			<option value=\"1\">1</option>\n			<option value=\"2\">2</option>\n			<option value=\"3\" selected>3</option>\n			<option value=\"4\">4</option>\n			<option value=\"5\">5</option>\n		</select>\n	</div>\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Font_Size\">Font Size</h5>\n		<p class=\"locale_font_size_instructions\">It is very easy to adjust\n			the font size in LingSync, you can use the standard browser features\n			(this is one reason we wanted to make the app in a browser).</p>\n		<h5>Larger Font</h5>\n		<ul>\n			<li>Mac: ⌘+ (Command - Shift - +)</li>\n			<li>Linux/Windows: Control - Shift - +</li>\n			<li>Android: On most Androids you can double tap the screen to\n				zoom in and out, or use your fingers to pinch zoom in and out.</li>\n			<li>iPad/iPhone: use your fingers to pinch zoom in and out as\n				you would on any other app.</li>\n		</ul>\n		<h5>Smaller Font</h5>\n		<ul>\n			<li>Mac: ⌘- (Command -)</li>\n			<li>Linux/Windows: Control -</li>\n			<li>Android: On most Androids you can double tap the screen to\n				zoom in and out, or use your fingers to pinch zoom in and out.</li>\n			<li>iPad/iPhone: use your fingers to pinch zoom in and out as\n				you would on any other app.</li>\n		</ul>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Full_Screen\">How to go fullscreen</h5>\n		<p class=\"locale_full_screen_instructions\">It is very easy to go\n			full screen and make LingSync look like a native desktop application,\n			(either with a toolbar) or in complete full screen presentation mode.</p>\n		<h5>Full screen</h5>\n		<ul>\n			<li>Mac: ⌘⇧F (Command - Shift - F)</li>\n			<li>Linux: let us know if you figure it out.</li>\n			<li>Windows: F11</li>\n			<li>Android: let us know if you figure it out.</li>\n			<li>iPad/iPhone: let us know if you figure it out</li>\n		</ul>\n		<h5>Full screen (can still see tabs)</h5>\n		<ul>\n			<li>Mac: ⌘^F (Command - Control - F)</li>\n			<li>Linux/Windows: (This how Chrome is normally)</li>\n			<li>Android: (This how Chrome is normally)</li>\n			<li>iPad/iPhone: (This how Chrome is normally)</li>\n		</ul>\n	</div>\n\n</div>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "\n<a href=\"#\" class=\"locale_Edit_Public_User_Profile pull-right\" 	rel=\"tooltip\"> <i\n	class=\"icons icon-edit edit-user-profile \"></i></a>\n<h1>\n	<span class=\"locale_User_Profile\"> </span> <small>";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " (";
-  foundHelper = helpers.firstname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " ";
-  foundHelper = helpers.lastname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ") </small>\n</h1>\n<a href = \"http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n<hr/>\n<dl>\n	<dt class=\"locale_Gravatar\"></dt>\n	<dd>\n		<img class=\"gravatar-image gravatar-large\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n	</dd>\n	<dt class=\"locale_Email\"></dt>\n	<dd class=\"email\">";
-  foundHelper = helpers.email;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n	<dt class=\"locale_Research_Interests\"></dt>\n	<dd class=\"researchInterest\">";
-  foundHelper = helpers.researchInterest;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n	<dt class=\"locale_Affiliation\"></dt>\n	<dd class=\"affiliation\">";
-  foundHelper = helpers.affiliation;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n	<dt class=\"locale_Description\"></dt>\n	<dd class=\"description\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n  <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n	<dd>\n		<ul class=\"corpuses\">\n		</ul>\n	</dd>\n</dl>\n\n\n";
-  return buffer;});
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " (";
+  if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ") </small>\n</h1>\n<a href = \"http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n<hr/>\n<dl>\n	<dt class=\"locale_Gravatar\"></dt>\n	<dd>\n		<img class=\"gravatar-image gravatar-large\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n	</dd>\n	<dt class=\"locale_Email\"></dt>\n	<dd class=\"email\">";
+  if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n	<dt class=\"locale_Research_Interests\"></dt>\n	<dd class=\"researchInterest\">";
+  if (stack1 = helpers.researchInterest) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n	<dt class=\"locale_Affiliation\"></dt>\n	<dd class=\"affiliation\">";
+  if (stack1 = helpers.affiliation) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n	<dt class=\"locale_Description\"></dt>\n	<dd class=\"description\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n  <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n	<dd>\n		<ul class=\"corpuses\">\n		</ul>\n	</dd>\n</dl>\n\n\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<a href=\"#user/";
-  foundHelper = helpers._id;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" class = \"locale_View_Profile_Tooltip \" rel=\"tooltip\">\n  <img class=\"gravatar-small\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" border=\"0\" >\n</a>\n";
-  return buffer;});
+  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" class = \"locale_View_Profile_Tooltip \" rel=\"tooltip\">\n  <img class=\"gravatar-small\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" border=\"0\" >\n</a>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"modal-header\">\n\n	<button class=\"btn locale_Close pull-right\" data-dismiss=\"modal\">\n	</button>\n\n	<a href=\"#\" class=\"locale_Edit_User_Profile_Tooltip pull-right\"\n		rel=\"tooltip\"> <i class=\"icons icon-edit edit-user-profile \"></i>\n	</a>\n	<h1>\n		<span class=\"locale_User_Profile\"> </span> <small>";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n			(";
-  foundHelper = helpers.firstname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " ";
-  foundHelper = helpers.lastname;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\" view-public-profile locale_View_Public_Profile_Tooltip \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
-  foundHelper = helpers.gravatar;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd class=\"email\">";
-  foundHelper = helpers.email;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n		<dt class=\"locale_Research_Interests\"></dt>\n		<dd class=\"researchInterest\">";
-  foundHelper = helpers.researchInterest;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n		<dt class=\"locale_Affiliation\"></dt>\n		<dd class=\"affiliation\">";
-  foundHelper = helpers.affiliation;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n		<dt class=\"locale_Description\"></dt>\n		<dd class=\"description\">";
-  foundHelper = helpers.description;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n		<dt>\n			<i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span>\n		</dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n";
-  return buffer;});
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n			(";
+  if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\" view-public-profile locale_View_Public_Profile_Tooltip \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd class=\"email\">";
+  if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n		<dt class=\"locale_Research_Interests\"></dt>\n		<dd class=\"researchInterest\">";
+  if (stack1 = helpers.researchInterest) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.researchInterest; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n		<dt class=\"locale_Affiliation\"></dt>\n		<dd class=\"affiliation\">";
+  if (stack1 = helpers.affiliation) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.affiliation; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n		<dt class=\"locale_Description\"></dt>\n		<dd class=\"description\">";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</dd>\n		<dt>\n			<i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span>\n		</dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n";
+  return buffer;
+  });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_welcome_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  helpers = helpers || Handlebars.helpers;
-  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<div class=\"modal-header\">\n  <div class=\"btn-group pull-right\">\n    <a href=\"#\" class=\"btn btn-success sync-lingllama-data locale_Close_and_login_as_LingLlama locale_Close_and_login_as_LingLlama_Tooltip\" rel=\"tooltip\"></a>\n    <a class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\"> \n      <i class=\"icon-user icon-white\"></i> \n      <span class = \"locale_Log_In\"></span>\n      <span class=\"caret\"></span> \n    </a>\n    <ul class=\"dropdown-menu\">\n      <li class=\"not-a\">\n        <span class = \"locale_Username\"></span>\n        <input class=\"welcomeusername\" size=\"16\" type=\"text\" />\n      </li>\n      <li class=\"not-a\"> \n        <span class = \"locale_Password\"></span>\n        <input class=\"welcomepassword\" size=\"16\" type=\"password\" />\n      </li>\n      <li class=\"not-a\"> \n        <span class = \"locale_authUrl\">Server:</span>\n        <input class=\"welcomeauthurl\" size=\"16\" type=\"text\" />\n      </li>\n      <li class=\"not-a\">\n        <button class=\"btn btn-success sync-my-data\">\n          <span class = \"locale_Sync_my_data_to_this_computer\"></span>\n        </button>\n      </li>\n    </ul>\n  </div>\n  <div>\n    <!-- <h1 class = \"locale_Welcome_to_FieldDB\"></h1> -->\n    <img src=\"images/icon.png\" /><br/>\n    <i class = \"locale_An_offline_online_fieldlinguistics_database\"></i> <span class=\"welcome_version_number\"></span> \n  </div>\n</div>\n\n<div class=\"modal-body\">\n  <!-- <div class = \"locale_Welcome_Beta_Testers\"></div> -->\n \n  <div class=\"breadcrumb create_new_user_password\">\n    <h3 class = \"locale_Create_a_new_user\"></h3>\n    <p>\n      http://www.lingsync.org/";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n    </p>\n    <!-- <label class = \"locale_What_is_your_username_going_to_be\">  </label> -->\n    <span class=\"like-form-inline\">\n      <input class=\"registerusername\" value=\"";
-  foundHelper = helpers.username;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"/>\n      <button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n    </span>\n    <div class=\"hide confirm-password\">\n      <label class = \"locale_Password\"></label>\n      <input class=\"registerpassword\" type=\"password\"/>\n      <label class = \"locale_Confirm_Password\"></label>\n      <input class=\"to-confirm-password\" type=\"password\"/>\n      <label class = \"\">Email:</label>\n      <input class=\"registeruseremail\" type=\"email\"/>\n      <br />\n      <button class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n      </button>\n      <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n    </div>\n    </div>\n    <div class=\" alert alert-error hide welcome-screen-alerts\"></div>\n  <div class=\"welcome_video_iframe\">\n    <iframe class=\"welcome_video_iframe\" width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/videoseries?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT\" frameborder=\"0\" allowfullscreen></iframe>\n  \n  </div>\n  <!-- <div class=\"alert alert-block\">moved here so that it can be seen on smaller screens by scrolling\n    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a>\n    <h4 class=\"alert-heading locale_Warning\"></h4>\n   <span class = \"locale_Instructions_to_show_on_dashboard\"></span>  \n  </div> -->\n</div>\n";
-  return buffer;});
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n    </p>\n    <!-- <label class = \"locale_What_is_your_username_going_to_be\">  </label> -->\n    <span class=\"like-form-inline\">\n      <input class=\"registerusername\" value=\"";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"text\"/>\n      <button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n    </span>\n    <div class=\"hide confirm-password\">\n      <label class = \"locale_Password\"></label>\n      <input class=\"registerpassword\" type=\"password\"/>\n      <label class = \"locale_Confirm_Password\"></label>\n      <input class=\"to-confirm-password\" type=\"password\"/>\n      <label class = \"\">Email:</label>\n      <input class=\"registeruseremail\" type=\"email\"/>\n      <br />\n      <button class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n      </button>\n      <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n    </div>\n    </div>\n    <div class=\" alert alert-error hide welcome-screen-alerts\"></div>\n  <div class=\"welcome_video_iframe\">\n    <iframe class=\"welcome_video_iframe\" width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/videoseries?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT\" frameborder=\"0\" allowfullscreen></iframe>\n  \n  </div>\n  <!-- <div class=\"alert alert-block\">moved here so that it can be seen on smaller screens by scrolling\n    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a>\n    <h4 class=\"alert-heading locale_Warning\"></h4>\n   <span class = \"locale_Instructions_to_show_on_dashboard\"></span>  \n  </div> -->\n</div>\n";
+  return buffer;
+  });
 })();
-define("compiledTemplates", ["handlebars"], (function (global) {
+define("handlebars", ["handlebarsjs"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global.Handlebars;
@@ -16030,7 +16189,7 @@ backbone-couchdb.js is licensed under the MIT license.
   })(Backbone.Collection);
 
 }).call(this);
-define("backbone", ["backbonejs","jquery-couch","compiledTemplates"], (function (global) {
+define("backbone", ["backbonejs","jquery-couch","handlebars"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global.Backbone;
@@ -16076,6 +16235,269 @@ define('audio_video/AudioVideo',[
   });
 
   return AudioVideo;
+});
+define('user/UserMask',[ 
+    "backbone"
+], function(
+    Backbone
+) {
+  var UserMask = Backbone.Model.extend(
+  /** @lends UserMask.prototype */
+  {
+    /**
+     * @class A mask of a user which can be saved along with the corpus. It is
+     *        generally just a username and gravatar but could be more depending
+     *        on what the user allows to be public.
+     * 
+     * 
+     * @extends Backbone.Model
+     * @constructs
+     */
+    initialize : function() {
+      if (OPrime.debugMode) OPrime.debug("UserMask init");
+      
+    },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/users",
+    
+    defaults : {
+      gravatar :  "user/user_gravatar.png"
+    },
+    
+    /**
+     * this function makes it possible to save the UserMask with a
+     * hardcoded id, it uses pouch's API directly for the first save, and then backbone/pouch save for the rest
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      if (OPrime.debugMode) OPrime.debug("Saving the UserMask");
+      var self = this;
+        
+        if(OPrime.isBackboneCouchDBApp()){
+          if(self.get("pouchname")){
+            self.unset("pouchname");
+          }
+          self.save(null, {
+            success : function(model, response) {
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            },error : function(e,f,g) {
+              if (OPrime.debugMode) OPrime.debug('UserMask save error ' + f.reason);
+              self.fetch({
+                error : function(model, xhr, options) {
+                  if (OPrime.debugMode) OPrime.debug("There was an error fetching your UserMask in this corpus.");
+                  if(typeof successcallback == "function"){
+                    successcallback();
+                  }
+                },
+                success : function(model, response, options) {
+                  if (OPrime.debugMode) OPrime.debug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
+                  self._rev = model.get("_rev");
+                  self.set("_rev", model.get("_rev"));
+                  self.save();
+                  
+                  if(typeof successcallback == "function"){
+                    successcallback();
+                  }
+                }
+              });
+            }
+          });
+          return;
+        }
+        
+        self.pouch(function(err,db){
+//          self.set("id", this.id); //TODO might not be necessary
+          var modelwithhardcodedid = self.toJSON();
+//          modelwithhardcodedid._id = this.id; //this is set by authentication when it first creates the usermask
+          if(! modelwithhardcodedid._id){
+            if(modelwithhardcodedid.id){
+              modelwithhardcodedid._id = modelwithhardcodedid.id; //this is set by authentication when it first creates the usermask
+            }else{
+              if (OPrime.debugMode) OPrime.debug("Trying to save user mask too early, before it has an _id. not saving...but pretending it worked", modelwithhardcodedid);
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+              return;
+              if (OPrime.debugMode) OPrime.debug("bug: the user mask doesnt have an _id, it wont save properly, trying to take the id from the user "+window.app.get("authentication").get("userPrivate").id);
+              modelwithhardcodedid._id = window.app.get("authentication").get("userPrivate").id;
+            }
+          }
+          
+          db.put(modelwithhardcodedid, function(err, response) {
+            if(err){
+              if (OPrime.debugMode) OPrime.debug("UserMask put error", err);
+              if(err.status == "409"){
+                  //find out what the rev is in the database by fetching
+                  self.fetch({
+                    success : function(model, response) {
+                      if (OPrime.debugMode) OPrime.debug("UserMask fetch revision number success, after getting a Document update conflict", response);
+                      
+                      modelwithhardcodedid._rev = self.get("_rev");
+                      if (OPrime.debugMode) OPrime.debug("Usermask old version", self.toJSON());
+                      if (OPrime.debugMode) OPrime.debug("Usermask replaced with new version", modelwithhardcodedid );
+                      
+                      db.put(modelwithhardcodedid, function(err, response) {
+                        if(err){
+                          if (OPrime.debugMode) OPrime.debug("UserMask put error, even after fetching the version number",err);
+                          if(typeof failurecallback == "function"){
+                            failurecallback();
+                          }
+                        }else{
+                          if (OPrime.debugMode) OPrime.debug("UserMask put success, after fetching its version number and overwriting it", response);
+                          //this happens on subsequent save into pouch of this usermask's id
+                          if(typeof successcallback == "function"){
+                            successcallback();
+                          }
+                        }
+                      });
+                      
+                    },
+                    //fetch error
+                    error : function(e) {
+                      if (OPrime.debugMode) OPrime.debug('UserMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
+                      if(typeof failurecallback == "function"){
+                        failurecallback();
+                      }
+                    }
+                  });
+              }else{
+                if (OPrime.debugMode) OPrime.debug('UserMask put error that was not a conflict' + JSON.stringify(err));
+                //this is a real error, not a conflict error
+                if(typeof failurecallback == "function"){
+                  failurecallback();
+                }
+              }
+            //this happens on the first save into pouch of this usermask's id
+            }else{
+              if (OPrime.debugMode) OPrime.debug("UserMask put success", response);
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            }
+          });
+        });
+    }
+  });
+
+  return UserMask;
+});
+define('comment/Comment', [
+    "backbone",
+    "user/UserMask"
+], function(
+    Backbone,
+    UserMask
+) {
+	var Comment = Backbone.Model.extend(
+  /** @lends Comment.prototype */
+  {
+    /**
+     * @class Comments allow users to collaborate between each other and take
+     *        note of important things, issues to be fixed, etc. These can
+     *        appear on datum, sessions corpora, and dataLists. Comments can
+     *        also be edited and removed.
+     * 
+     * @property {String} text Describe text here.
+     * @property {Number} username Describe username here.
+     * @property {Date} timestamp Describe timestamp here.
+     * 
+     * @description Initialize function has a timestamp and a username and waits
+     *              until text is entered.
+     * 
+     * @extends Backbone.Model
+     * @constructs
+     */
+    initialize : function() {
+      
+      if(!this.get("timestamp")){
+        this.set("timestamp", Date.now()); //copied from upstream code timestamp is back 
+        this.set("gravatar", window.app.get("authentication").get("userPublic").get("gravatar"));
+        this.set("username", window.app.get("authentication").get("userPublic").get("username"));
+      }else{
+        /* if the timestamp is an old one, replace it with a timestamp v 1.47 */
+        if((""+this.get("timestamp")).indexOf("Z")  > -1){
+          var olddate = new Date(this.get("timestamp"));
+          this.set("timestamp", olddate.getTime());
+        }
+      }
+      
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
+      
+    },
+    defaults : {
+      text: "",
+      username: ""
+    },
+    
+    // Internal models: used by the parse function
+    internalModels : {
+      // There are no nested models
+    },
+
+    /**
+     * The remove function removes a comment.
+     */
+    remove : function() {
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    /**
+     * The edit function allows users to edit a comment.
+     * 
+     * @param {String}
+     *          newtext Takes new text and replaces old one.
+     * 
+     */
+    edit : function(newtext) {
+      this.set("text", newtext);
+      this.set("timestampModified", Date.now());
+    }
+    ,
+    commentCreatedActivity : function(indirectObjectString) {
+      var commentstring = this.get("text");
+      window.app.addActivity({
+        verb : "commented",
+        verbicon : "icon-comment",
+        directobjecticon : "",
+        directobject : "'" + commentstring + "'",
+        indirectobject : indirectObjectString ,
+        teamOrPersonal : "team",
+        context : " via Offline App."
+      });
+
+      window.app.addActivity({
+        verb : "commented",
+        verbicon : "icon-comment",
+        directobjecticon : "",
+        directobject : "'" + commentstring + "'",
+        indirectobject : indirectObjectString ,
+        teamOrPersonal : "personal",
+        context : " via Offline App."
+      });
+
+    }
+  });
+
+  return Comment;
 });
 var OPrime = OPrime || {};
 
@@ -16927,246 +17349,259 @@ OPrime.standardDeviation = function(list) {
 OPrime.hub = {};
 OPrime.makePublisher(OPrime.hub);
 
-define("libs/OPrime", function(){});
+define("oprime", function(){});
 
-define('user/UserMask',[ 
-    "backbone",
-    "libs/OPrime"
-], function(
-    Backbone
-) {
-  var UserMask = Backbone.Model.extend(
-  /** @lends UserMask.prototype */
-  {
-    /**
-     * @class A mask of a user which can be saved along with the corpus. It is
-     *        generally just a username and gravatar but could be more depending
-     *        on what the user allows to be public.
-     * 
-     * 
-     * @extends Backbone.Model
-     * @constructs
-     */
-    initialize : function() {
-      if (OPrime.debugMode) OPrime.debug("UserMask init");
-      
-    },
-    /**
-     * backbone-couchdb adaptor set up
-     */
-    
-    // The couchdb-connector is capable of mapping the url scheme
-    // proposed by the authors of Backbone to documents in your database,
-    // so that you don't have to change existing apps when you switch the sync-strategy
-    url : "/users",
-    
-    defaults : {
-      gravatar :  "user/user_gravatar.png"
-    },
-    
-    /**
-     * this function makes it possible to save the UserMask with a
-     * hardcoded id, it uses pouch's API directly for the first save, and then backbone/pouch save for the rest
-     * 
-     * @param successcallback
-     * @param failurecallback
-     */
-    saveAndInterConnectInApp : function(successcallback, failurecallback){
-      if (OPrime.debugMode) OPrime.debug("Saving the UserMask");
-      var self = this;
-        
-        if(OPrime.isBackboneCouchDBApp()){
-          if(self.get("pouchname")){
-            self.unset("pouchname");
-          }
-          self.save(null, {
-            success : function(model, response) {
-              if(typeof successcallback == "function"){
-                successcallback();
-              }
-            },error : function(e,f,g) {
-              if (OPrime.debugMode) OPrime.debug('UserMask save error ' + f.reason);
-              self.fetch({
-                error : function(model, xhr, options) {
-                  if (OPrime.debugMode) OPrime.debug("There was an error fetching your UserMask in this corpus.");
-                  if(typeof successcallback == "function"){
-                    successcallback();
-                  }
-                },
-                success : function(model, response, options) {
-                  if (OPrime.debugMode) OPrime.debug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
-                  self._rev = model.get("_rev");
-                  self.set("_rev", model.get("_rev"));
-                  self.save();
-                  
-                  if(typeof successcallback == "function"){
-                    successcallback();
-                  }
-                }
-              });
-            }
-          });
-          return;
-        }
-        
-        self.pouch(function(err,db){
-//          self.set("id", this.id); //TODO might not be necessary
-          var modelwithhardcodedid = self.toJSON();
-//          modelwithhardcodedid._id = this.id; //this is set by authentication when it first creates the usermask
-          if(! modelwithhardcodedid._id){
-            if(modelwithhardcodedid.id){
-              modelwithhardcodedid._id = modelwithhardcodedid.id; //this is set by authentication when it first creates the usermask
-            }else{
-              if (OPrime.debugMode) OPrime.debug("Trying to save user mask too early, before it has an _id. not saving...but pretending it worked", modelwithhardcodedid);
-              if(typeof successcallback == "function"){
-                successcallback();
-              }
-              return;
-              if (OPrime.debugMode) OPrime.debug("bug: the user mask doesnt have an _id, it wont save properly, trying to take the id from the user "+window.app.get("authentication").get("userPrivate").id);
-              modelwithhardcodedid._id = window.app.get("authentication").get("userPrivate").id;
-            }
-          }
-          
-          db.put(modelwithhardcodedid, function(err, response) {
-            if(err){
-              if (OPrime.debugMode) OPrime.debug("UserMask put error", err);
-              if(err.status == "409"){
-                  //find out what the rev is in the database by fetching
-                  self.fetch({
-                    success : function(model, response) {
-                      if (OPrime.debugMode) OPrime.debug("UserMask fetch revision number success, after getting a Document update conflict", response);
-                      
-                      modelwithhardcodedid._rev = self.get("_rev");
-                      if (OPrime.debugMode) OPrime.debug("Usermask old version", self.toJSON());
-                      if (OPrime.debugMode) OPrime.debug("Usermask replaced with new version", modelwithhardcodedid );
-                      
-                      db.put(modelwithhardcodedid, function(err, response) {
-                        if(err){
-                          if (OPrime.debugMode) OPrime.debug("UserMask put error, even after fetching the version number",err);
-                          if(typeof failurecallback == "function"){
-                            failurecallback();
-                          }
-                        }else{
-                          if (OPrime.debugMode) OPrime.debug("UserMask put success, after fetching its version number and overwriting it", response);
-                          //this happens on subsequent save into pouch of this usermask's id
-                          if(typeof successcallback == "function"){
-                            successcallback();
-                          }
-                        }
-                      });
-                      
-                    },
-                    //fetch error
-                    error : function(e) {
-                      if (OPrime.debugMode) OPrime.debug('UserMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
-                      if(typeof failurecallback == "function"){
-                        failurecallback();
-                      }
-                    }
-                  });
-              }else{
-                if (OPrime.debugMode) OPrime.debug('UserMask put error that was not a conflict' + JSON.stringify(err));
-                //this is a real error, not a conflict error
-                if(typeof failurecallback == "function"){
-                  failurecallback();
-                }
-              }
-            //this happens on the first save into pouch of this usermask's id
-            }else{
-              if (OPrime.debugMode) OPrime.debug("UserMask put success", response);
-              if(typeof successcallback == "function"){
-                successcallback();
-              }
-            }
-          });
-        });
+console.log("Loading Webservices info");
+/* Extends the OPrime class */
+var OPrime = OPrime || {};
+
+OPrime.apptype = "testing";
+
+
+OPrime.websiteUrl = "https://wwwdev.lingsync.org";
+OPrime.authUrl = "https://authdev.lingsync.org";
+OPrime.audioUrl = "https://audiodev.lingsync.org";
+OPrime.lexiconUrl = "https://lexicondev.lingsync.org";
+OPrime.corpusUrl = "https://corpusdev.lingsync.org";
+OPrime.activityUrl = "https://activitydev.lingsync.org";
+OPrime.widgetUrl = "https://widgetdev.lingsync.org";
+
+/*
+ * Use the current app's chrome url, assuming if its a dev, they will have their
+ * own url that is not from the market, and if its a bleeding edge user, they
+ * will have the market one. In both cases it is save to return the
+ * window.location.href but this code is added to be clear that there is also a
+ * bleeding edge url for users.
+ */
+OPrime.chromeClientUrl = function(){
+  if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa"){
+    return window.location.origin;
+  }else{
+    return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
+  }
+};
+
+/*
+ * This function is the same in all webservicesconfig, now any couchapp can
+ * login to any server, and register on the corpus server which matches its
+ * origin.
+ */
+OPrime.defaultCouchConnection = function() {
+  var localhost = {
+    protocol : "https://",
+    domain : "localhost",
+    port : "6984",
+    pouchname : "default",
+    path : "",
+    authUrl : "https://localhost:3183",
+    userFriendlyServerName : "Localhost"
+  };
+  var testing = {
+    protocol : "https://",
+    domain : "corpusdev.lingsync.org",
+    port : "443",
+    pouchname : "default",
+    path : "",
+    authUrl : "https://authdev.lingsync.org",
+    userFriendlyServerName : "LingSync Testing"
+  };
+  var production = {
+    protocol : "https://",
+    domain : "corpus.lingsync.org",
+    port : "443",
+    pouchname : "default",
+    path : "",
+    authUrl : "https://auth.lingsync.org",
+    userFriendlyServerName : "LingSync.org"
+  };
+  var mcgill = {
+    protocol : "https://",
+    domain : "prosody.linguistics.mcgill.ca",
+    port : "443",
+    pouchname : "default",
+    path : "/corpus",
+    authUrl : "https://prosody.linguistics.mcgill.ca/auth",
+    userFriendlyServerName : "McGill ProsodyLab"
+  };
+  OPrime.servers = [ localhost, testing, production, mcgill ];
+  /*
+   * If its a couch app, it can only contact databases on its same origin, so
+   * modify the domain to be that origin. the chrome extension can contact any
+   * authorized server that is authorized in the chrome app's manifest
+   */
+  var connection = testing;
+  if (OPrime.isCouchApp()) {
+    if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+      connection = testing;
+      OPrime.authUrl = "https://authdev.lingsync.org";
+    } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
+    } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+      connection = mcgill;
+      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+    } else if (window.location.origin.indexOf("localhost") >= 0) {
+      connection = localhost;
+      OPrime.authUrl = "https://localhost:3183";
     }
-  });
-
-  return UserMask;
-});
-define('comment/Comment', [
-    "backbone",
-    "user/UserMask"
-], function(
-    Backbone,
-    UserMask
-) {
-	var Comment = Backbone.Model.extend(
-  /** @lends Comment.prototype */
-  {
-    /**
-     * @class Comments allow users to collaborate between each other and take
-     *        note of important things, issues to be fixed, etc. These can
-     *        appear on datum, sessions corpora, and dataLists. Comments can
-     *        also be edited and removed.
-     * 
-     * @property {String} text Describe text here.
-     * @property {Number} username Describe username here.
-     * @property {Date} timestamp Describe timestamp here.
-     * 
-     * @description Initialize function has a timestamp and a username and waits
-     *              until text is entered.
-     * 
-     * @extends Backbone.Model
-     * @constructs
-     */
-    initialize : function() {
-      
-      var t = JSON.stringify(new Date());
-      if(!this.get("timestamp")){
-        this.set("timestamp", new Date(JSON.parse(t)));
-        this.set("gravatar", window.appView.authView.model.get("userPublic").get("gravatar"));
-        this.set("username", window.appView.authView.model.get("userPublic").get("username"));
-      }
-      
-      if(this.get("filledWithDefaults")){
-        this.fillWithDefaults();
-        this.unset("filledWithDefaults");
-      }
-    },
-    fillWithDefaults : function(){
-      
-    },
-    defaults : {
-      text : "",
-      username: ""
-    },
-    
-    // Internal models: used by the parse function
-    internalModels : {
-      // There are no nested models
-    },
-
-    /**
-     * The remove function removes a comment.
-     */
-    remove : function() {
-    },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
-    },
-    /**
-     * The edit function allows users to edit a comment.
-     * 
-     * @param {String}
-     *          newtext Takes new text and replaces old one.
-     * 
-     */
-    edit : function(newtext) {
-      this.set("text", newtext);
+  } else if (OPrime.isChromeApp()) {
+    if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+      connection = mcgill;
+      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+    } else if (window.location.origin
+        .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+      connection = testing;
+      OPrime.authUrl = "https://authdev.lingsync.org";
+    } else if (window.location.origin
+        .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
+    } else {
+      /*
+       * its probably a dev's chrome extension, use the corresponding connection
+       * for this build
+       */
+      connection = testing;
+      OPrime.authUrl = "https://authdev.lingsync.org";
     }
-    
-  });
+  }
+  return connection;
+};
+OPrime.getAuthUrl = function(userFriendlyServerName) {
+  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
+  var authUrl = userFriendlyServerName;
+  if (authUrl.indexOf("LingSync.org") >= 0) {
+    alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
+    return;
+    authUrl = "https://auth.lingsync.org";
+  } else if (authUrl.indexOf("LingSync Testing") >= 0) {
+    authUrl = "https://authdev.lingsync.org";
+  } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
+    authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
+  } else if (authUrl.indexOf("Localhost") >= 0) {
+    authUrl = "https://localhost:3183";
+  } else {
+    if (authUrl.indexOf("https://") >= 0) {
+      var userWantsToUseUnknownServer = confirm("Are you sure you would like to use this server: "
+          + authUrl);
+      if (userWantsToUseUnknownServer == true) {
+        OPrime
+            .debug("User is using an unknown server, hope they know what they are doing...");
+      } else {
+        /*
+         * TODO change this back to the lingsync server once the lingsync server
+         * supports 1.38
+         */
+        authUrl = "https://authdev.lingsync.org";
+      }
+    } else {
+      alert("I don't know how to connect to : "
+          + authUrl
+          + ", I only know how to connect to https servers. Please double check the server URL and ask one of your team members for help if this does this again.");
+      return;
+    }
+  }
+  /*
+   * Make sure user uses the auth server for their corresponding couchapp or
+   * chrome extension. for now dont let them switch between servers. to do that
+   * we should do it manually to besure its safe. instead, simply take them to
+   * that couchapp and let them log in there.
+   */
+  if (authUrl != OPrime.authUrl) {
+    var userWantsToUseAMisMatchingServer = confirm("Are you sure you would like to use the "
+        + userFriendlyServerName + " server?");
+    if (userWantsToUseAMisMatchingServer == true) {
+      var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(
+          authUrl);
+      if (appropriateserver == -1) {
+        OPrime
+            .bug("We don't know which corpus server to use, so we will just let the user do what they are trying to do.");
+      } else {
+        var couchConnection = OPrime.defaultCouchConnection();
+        OPrime
+            .bug("We know which corpus server to use, so we will just let the user do what they are trying to do but only in the couchapp.");
+        couchConnection = OPrime.servers[appropriateserver];
+        window.location.replace(OPrime.getCouchUrl(couchConnection, "")
+            + "/public-firstcorpus/_design/pages/index.html");
+      }
+    } else {
+      authUrl = OPrime.authUrl;
+    }
+  }
 
-  return Comment;
-});
+  return authUrl;
+};
+
+OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
+  if (!mostLikelyAuthUrl) {
+    mostLikelyAuthUrl = "LingSync.org";
+  }
+  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
+  var authUrl = OPrime.authUrl;
+  if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+    mostLikelyAuthUrl = "McGill ProsodyLab";
+  } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+    mostLikelyAuthUrl = "McGill ProsodyLab";
+  } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+    mostLikelyAuthUrl = "LingSync Testing";
+  } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+    mostLikelyAuthUrl = "LingSync Testing";
+  } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
+    OPrime
+        .debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
+  } else if (window.location.origin.indexOf("localhost") >= 0) {
+    mostLikelyAuthUrl = "Localhost";
+  } else if (OPrime.isChromeApp()) {
+    if (OPrime.debugMode) OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
+    var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(authUrl);
+    if (appropriateserver == -1) {
+      OPrime.bug("This shouldn't happen. Please report this bug.");
+    } else {
+      mostLikelyAuthUrl = OPrime.servers[appropriateserver].userFriendlyServerName;
+    }
+  }
+  //TODO add Production when it can support 1.38+ ocmdknddgpmjngkhcbcofoogkommjfoj
+  
+  return mostLikelyAuthUrl;
+};
+
+OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
+
+OPrime.publicUserStaleDetails = function() {
+  return JSON.stringify({
+    token : "$2a$10$TpNxdbXtDQuFGBYW5BfnA.F7D0PUftrH1W9ERS7IdxkDdM.k7A5oy",
+    encryptedUser : "confidential:VTJGc2RHVmtYMStIK3J2WU9kZWFGUS9WUS80S2EzbTk3ZFBKcTNTQ0pqclZIak41SHJYZng3RGk5Q1RkaUZKZmpWK1l5MmVYQUYzNnJUclZ6LzJ1enEvbHltVnhISlBtSFpSOVJrdm1EMWRCREl4VWY3cWpadG0rWHhwaEExQ3A5Q1d0SVpjVkZuQXkwT1JNaVZKV1dTL3I5Z3lDYmxiNEdRNkMyVU5vbmxqdzBRcnB2OTBBc2xWV1NUUmFuMEhlaDZGTnJZWS9rNUo4NDJyc1ZveTl1WHhSeUZ6bEhHTHREQ21TdG5yWmk1VDJHSFo1NVdZN2FNKzNFVURrV3g1RTZ1ako2Zlp1UUN6Y0pKN0xwNjh0RXBkNlhpaTNoQi9wbXppdTErajNzWkN1eGoxWjZLWG4yTnAzVm00aTZwbytCRFFEOHhkSzhreDZ4SXFJZTYxUy9LTG5rdTJDQzZ4Y0RRQkVobCtpaFhGQ3RHc1Z0cDBCVmxlcXh5THpiSC9EMWQ3UkFKbjVYWDQ3MXJKcFZ2UkQ2RnJocFd4Ti9uUFRmNjlZcS9HZFZmem5YTE1LM1l5SEJPa3JUYlVUcHYydGZMaFRPQmp5ekRoS0ozY3g3d3JNajFrVWlhQjVQeHNZZmxmbDlza2VFMVJaVFBqenltV2xEakR4Qy9USlhKaFkyMHl1SnBaSThwVkhVVEpkWW1rL1pqMU0vbzdKRlUwVWF2N0E5cjJpQ2g5QURqV2hWT0o4U1pWSFJSYnZoV0xmQ0NSbzdhZlBSbEpJWmFJRnk2VFpYMkNSQ0VmYWlYUEI0YUhRdytWVGpKbHZxZlVtWC9YNkgrZkhaYlMwaVdSdlVhdHdpZzJqK3BrWGlJWElmUW1mano4QlFpSmcyTDI3ZnY5eEFuV0VrTndNaVg2Um95a1B0UWJkODduaDhzNGZ3c1FYWVNnRUYwRWFmT0hwZ3VtdThLUzNTVlFDUEhUVUlqYzZQZTVPVjg0YUt3cVBiQmhXRTZjNlRaRjBXLzR0aDhma2hvTWZzUzJ5UHRRa2w2UTB0eitkYXpuVzFRcVdoanM4cTRqbVBRMW9JYjdMb2ZvYjdYbW5XR1Z4RDRtQ0N4czdKRFpEZHhHd3ExOG1zT1ZhOE9EeFErZU9Mc293eVZHaUZEWUk3S0ZiL1BwNHpKcWw3UjE2TExtN294VTI4N1VBeTNZMCtsMkZ3TDRNcVEwZlR3dTA2WERGNGE2SzZpbVNPRk0xRFB2SUdjRllESUptcC95OHRuUzZaNjNkeUJwNmVYcm1aWUEzNU5ZSUJFVk00Um5mamJaT1ZrL21jajkwc3FlZzVyV1A2R21GK3FZZUI3THY4OGt3a1o2UDc5NTh5WEUrSWY2Vkh6aTJKK1pJV2xqSExZQnZ5SmRyVHA3UmgxT25WaFNuNW5MQTA5ellFb1RpNzdwMkMrRFBnRlJkdlJuZEtYWmJ1MFRCaXdpSWZLd2krbUQ3anFKclBXQkNodEN6Y3gwMElud3pLWG9xWXpBTFB5S0g5ZFBjRmN4dHZhU3pMdDExMWdOclBKNGJ1Z1NGbzd2clpTSjR6Q3dDSDFud2RMNVpGWFZQcDliUXhwcGlpNE9Rc2M5dnFnRG5UeEQ2dVQ4NkJaOGMwL0gzMUFwLzVvRGFNNU9MMHM4dXR5MUhxVHA5T2QxN0ZOelZka2xTbWFRMTR4elpxcE95M0JwYnJNTmZxWEpBUmNURUlnM3NYUG4vSWlLRTBRa1V1Vm1LTHR5OTdOUVdXMHBLUi95Sm5BUFI0ZFFlQURReXpDRGxiWUp0K2dSQy9rVkVQTklscVM5TnJBR0FOL0YzbUdhUVUrN2kzcmxzT1lxSS9rcTJUZnlBMkxJR28relFWVVAybFVSNWV6WGwwdElOMm0wSE9ZTHovOXkxZ2JyWlFkcU5XODhNOTVscVFvYXd3aEZhRm8rU1g0dWxmdzBRcFVacytRUDhCeGw1R1FqU3RQYnFyMm1NclI1cW9LNnpzOUFsSXJYbzZ1L1laS2x2bFdnUWJEVVk5V0QxSzJ5ZGdsRFE1cXlCdFVFUEhpSTJBcENKRXVqTmIwc3hia3FBUW1LdEJvNHczL3VjUkM5R2xRdGlocCtsMlhNOUFqSTk4aUJYckI4RkhIUkd2d3FZeTBoTWNzcnZ6MU13UHp3Rk9tVmVhbWpNTVNqRVgxRjlOcEJNRlpzRTZYUGNLbW9vU3BkSXh2TTJnNVJUam9lZ3hRbXFyYXFMdXU3ZUhPVk12aThjRUcrNjZlTVhQTTF6VXdDaTVvVGI1ZlBEOFBuZ3didmVJMVIzbUFvNUl4NzhxUHZ6Y3MzUUwyYjZyOXFRaDFuMnFwZGZLUk5TNkVlb1BJbkpBNXgwb3BONXVWWmpXdU52VVB3VkhkTWFwVUwvTUhhQU4xa3hhWXdiMnlLYWhRcDg0bHhGVVloeVFrSGhGVVBqOTVQOURDcUQyWDFLd011RW1EallLeldtenpNcXloYjBaWUlzaFZaTmlFYTdoRUNIUmpBV3I1a3VXa2VVYlVjcXlERmpTNWwyVFdtNWE0elpwY3FpcXBlN1JGMjBjMlUxVGF2OUorZ1RrUzJSdDFPalRaMG1NY1JOUXd4dlozaXFhb3BsdE1vbmhkZXlWWnZPQnlVdEx6SWVkRUJNbkZlaVBGc1g1SFJKWnpsdkxvVVhvZHQzWW5mZGczWDRVb1dCNGVodDQ0dGhQQlZ5OWZlVUlrTXltWkpYdkNhWFB4MUgzb0svVVl6KzJ2ZUpXLzl2UmZIbTZabGgwOS9WNWZ0UzZrMFRjUnhGRzlxcG9yQ01HNnBnenlQT1FESy9KaThaWHd0dG0yQXV4cEYwc1d6TmFkYzB0UGNvMG9tTjU3NzNFUjQxSkllRjJiWFJSaU9nK0diSmZ3MTdWb2ZRTU5OaEpmbVlqR1ZLbGs5RVdKYlNydU5KVWRzdGpFNGplRzdCNk9zd3VqYzlzSjNUaGhzWFhtZU5iWlFqYjQva3VhR2l2WENjamZBZUQwNVZwbTdXbWd4ZUFoU1dNdkc1SjhqdWFZWEFsUmtxbFk3U0F1SDd6bVZZbmhBYW5SUmExYnF1ZU5FVmsrTXM0MnJreWhtUjlkcVZCOGdZbnBCTHo5dHE3eXJoSlFGbFlnM3dqaURmcFJ2TEsvUGtBVUtiUnB0SS9uZ3RLdERKcTlwSm5KVnpMeFhyMUFxMk1UWEJSYmtQN1pXK0UreGxTTURnM2MvWUlldFdGeDJ4R2tLbHVzWXcwckdSYXloaFNsejNjYTFCSHV1QStmYVFNSWxCYnlmUDI2bmpFM3N5RVU2bEVuT1c0Y2RlT1UvdmdQV3dLNEx0SDJjdlo3UTB1ck1qMTdnbHAyUzU5TWt2aVU5MUFQZWRZWlF1Q0REZy8wa1lHWFFhK05sS2ZnbFd0anA1dThmTWF6YlVKUXJiMjZLRCtSRTMyMllmb2Q4OFFxR3k3T2FvSm0yV0dic0s2MVZQQ05icURSNndJU2V2U0dvdnNqWHRnMXp0MW1aVTA3Mmc4dXU1SXRRaktzQTY3MThMWGVEWmZLUGNhbnNEM1ZwbmpWTTN1RmdYMzJZU1ljTWdoZTlPQW9VZEtXV2ZCYUI2THRuak5peUdaL09XVzhHdFhKMHlYeURYUVllSThEQkpjU1k2bDkyRFR3d3R2dk9BZUR1NmRVbGkyaFVZNWxXNktucmY4THR5dzhhNXFoZWp0OGg5eWFCVExvSUpPeS80TUEwUUxZU2N1eG5XS2hNaWx6QlRuL1NxVVh4SFZ2OFFzdjJra2Q4Mk05TkJ3ZlljbllScmhrWkFnQzUzZmxsVG9sVVZhRmxxYWtEVHpKOFFibmZlcmtDNnkzdDlQWkNLekllNWVvMk9sN21yY1lVbGw1enJrZ1JSYkcxNml2WjY2OGkvRkR5SXhhem9IZHBwWXR4K0JDK0d6cmpRMHFLeWpjRVdETUNSb1RicWEwamw0WVFkVndwTjRVSXpNRHJhazE2NmpzSWxXYkRISnRuVUdPTXdnTnJoS0k3clZTb2xkV0tEakcyWTNJbnByS3BBeHpFbE5jd1liOG9IMC92TkRSN1Focnc3OGNIdGpBaXNXRG5BYlB0SWR6aUpTaWVLS0VXMURjR21kOENnVFdPSUdTdjVkZUc2TTQzWjl2Uk1rU0d1OUIzL0NYQTlNaUNRWnJ5b1cyY2hnZEJvcGVvd05mQVhwV1A4YTh4TXR0MTdIdG9GbWlhSm56K2tpeENJcWhYWlZpMG0wVmpzdjlMQ3lneGNZZEhvWE9vRnhpRU9ocXB5THlERmlkcFpGSVVDeGRwS0hYKytSNVpPbmJTQy83TE14YlRSd3JsMmdnWGxGMWlLbzZ3aSs3MFhLNmV6LzVxck5pVWlTcVFBQy9sd1IvcE1KMlJYSGtBSFJkbVE0TytVR1RESndjUDRLTEZvQ0RPVTFOdDlSTk9mbnVERWdkVVk2SVlkMjltV2ZScFVpNFZITGloK3k1K1FPSmRzMC81NVY1dXNYNmdLMHJ0VVhac25YTkNheGFpMU54Q1JNL0pxUmZxNmoyTDQrRVdEeWx1RDJkdTBpc2dFU0lDQXBGVEJCaHN0aTk3S2hJeERGVk9sait1b0dJbmJyUGJhR3F4MmNMRDZBQ092TTVNVjlmK2NIejRFazRiTXZ0TkFRK0hEK2o2SUZsUWtFZlk3QWNPS0x3aU51SmJwYkRETHlxMjBnSHgrb0xvOVVGRk5oYXpsM0NKUXdYVTRmTnNkY2pvc3AvYk54UWEwNEo3Z0pzVDBZaXJGb2Y3OWZXTXplRmRJTGl2NDJyTDBFMzVYcEdBSTExSTlBZGtIY2ZSRXVzalZQQUZTMVhhOVU4LzFuWU9GdGFhd09NbGVmUlZxWDh3OWkwQy9rS0V2V2MzZW11SUQwV0V3eFR6R1RtaHhKVmhXVW9GVGlqaG1RM2pZWHlHK0RNTjNCU2MwZGdabWZFbmRpNGpPUDNTSW43OWVDUnI1YTljclRFODk4OFRzelkvYzhzZVp3NGVOY3RsT0U0KzBFdUM1eEhaUDZDc0FIdkZRZ0FQc3c3T0ZUUTRjQ2h6U0hKdkMwUEhGWHh3aDFCRWNXeTZmQjQ3NytBVldwT3NTN0VsZ1MvVEtseFBjVmVmOWJEd3F6MjQvMHZGQzUxY1RwTmtiTWUyd291bVBjOUNnQzRpV2NmbjlINUFUcnVmb2ZFWis4V1BMN0FGM0lvMUd6b0U9",
+    username : "public"
+  });
+};
+
+OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
+  var optionalCouchAppPath = "";
+  if(OPrime.isCouchApp()){
+    var corpusURL = window.location.origin;
+    if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
+      corpusURL = "https://corpusdev.lingsync.org";
+    } else if (corpusURL.indexOf("lingsync.org") >= 0) {
+      corpusURL = "https://corpus.lingsync.org";
+    } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
+      corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
+    } else if (corpusURL.indexOf("localhost") >= 0) {
+      // use the window origin
+    }
+    optionalCouchAppPath = corpusURL+"/"+dbname+"/_design/pages/";
+  }
+  return optionalCouchAppPath;
+};
+define("OPrime", ["oprime"], (function (global) {
+    return function () {
+        var ret, fn;
+        return ret || global.OPrime;
+    };
+}(this)));
+
 define('comment/Comments', [ "backbone",
           "comment/Comment",
-          "libs/OPrime"
+          "OPrime"
 ], function(Backbone, Comment) {
   var Comments = Backbone.Collection.extend(
 
@@ -17196,6 +17631,11 @@ define('comment/Comments', [ "backbone",
 //        
 //        return newCollection;
 //      }
+    
+    insertNewCommentFromObject : function(commentObject){
+      commentObject.timestamp = Date.now();
+      this.unshift(new Comment(commentObject));
+    }
     
   });
 
@@ -17522,7 +17962,7 @@ define('datum/DatumField',[
 define('datum/DatumFields',[ 
          "backbone", 
          "datum/DatumField",
-         "libs/OPrime"
+         "OPrime"
 ], function(
          Backbone,
          DatumField) {
@@ -18266,7 +18706,7 @@ define('user/UserGeneric',[
     "permission/Permission",
     "user/UserPreference",
     "user/UserMask",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     HotKey,
@@ -18345,7 +18785,7 @@ define('user/Team',[
     "user/UserGeneric",
     "permission/Permission",
     "user/UserPreference",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     HotKey,
@@ -18448,7 +18888,7 @@ define('user/User',[
     "hotkey/HotKey",
     "user/UserGeneric",
     "user/UserPreference",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     HotKey,
@@ -18729,6 +19169,43 @@ define('datum/Session',[
             context : " via Offline App."
           });
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */    
+    putInTrash : function() {
+      this.set("trashed", "deleted" + Date.now());
+      var whichSessionToUse = 0;
+      if (window.app.get("corpus").sessions.models[whichSessionToUse].id == this.id) {
+        whichSessionToUse = 1;
+      }
+      
+      this.saveAndInterConnectInApp(function(){
+        window.app.get("corpus").sessions.models[whichSessionToUse]
+        .setAsCurrentSession(function() {
+          if (window.appView) {
+            /* TODO test this */
+            window.app.get("corpus").sessions = null;
+            window.appView.currentCorpusReadView.model
+            .makeSureCorpusHasASession(function() {
+              window.appView.currentCorpusEditView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.appView.currentCorpusReadView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.app.router.navigate("render/true", {trigger: true});
+            });
+          }
+        });
+      });
+    },
     /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
@@ -18854,31 +19331,30 @@ define('datum/Session',[
           alert("This is a bug, cannot load the session you asked for, it is not in this corpus.");
         }
         return;
-      }else{
-        if (window.app.get("currentSession").id != this.id ) {
-          window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-//          window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+      }
+      
+      if (window.app.get("currentSession").id != this.id ) {
+        window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
+//      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+      }
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
+      window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
 
-        }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
-
-        if(window.appView) {
-          window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
-            if (typeof successcallback == "function") {
-              successcallback();
-            }else{
-              window.appView.currentSessionReadView.format = "leftSide";
-              window.appView.currentSessionReadView.render();
-              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
-//            window.appView.renderEditableSessionViews("leftSide");
-//            window.appView.renderReadonlySessionViews("leftSide");
-            }
-          });
-        }else{
+      if(window.appView) {
+        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
           if (typeof successcallback == "function") {
             successcallback();
+          }else{
+            window.appView.currentSessionReadView.format = "leftSide";
+            window.appView.currentSessionReadView.render();
+            window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
+//          window.appView.renderEditableSessionViews("leftSide");
+//          window.appView.renderReadonlySessionViews("leftSide");
           }
+        });
+      }else{
+        if (typeof successcallback == "function") {
+          successcallback();
         }
       }
     },
@@ -18923,7 +19399,7 @@ define('datum/Datum',[
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     AudioVideo, 
@@ -19344,7 +19820,9 @@ define('datum/Datum',[
       
       return queryTokens;
     },
-    
+    getDisplayableFieldForActivitiesEtc : function(){
+      return  this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+    },
     /**
      * Clone the current Datum and return the clone. The clone is put in the current
      * Session, regardless of the origin Datum's Session. //TODO it doesn tlook liek this is the case below:
@@ -19367,6 +19845,14 @@ define('datum/Datum',[
 
       return datum;
     },
+    
+    /**
+     * This function is used to get the most prominent datumstate (now called
+     * ValidationStatus) eg "CheckedWithSeberina" or "Deleted" or "ToBeChecked"
+     * 
+     * @returns {String} a string which is the first item in the
+     *          validationSatuts field
+     */
     getValidationStatus : function(){
       var validationStatus = "";
       var stati = this.get("datumFields").where({"label": "validationStatus"});
@@ -19386,12 +19872,24 @@ define('datum/Datum',[
       this.updateDatumState(validationStatus);
       return validationStatus;
     },
+    /**
+     * This function is used to colour a datum background to make
+     * visually salient the validation status of the datum.
+     * 
+     * @param status
+     *            This is an optional string which is used to find the
+     *            colour for a particular DatumState. If the string is
+     *            not provided it gets the first element from the
+     *            validation status field.
+     * @returns {String} This is the colour using Bootstrap (warning is
+     *          Orange, success Green etc.)
+     */
     getValidationStatusColor :function(status){
       if(!status){
         status = this.getValidationStatus();
       }
       /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
-      if(status.indexOf("deleted") > -1){
+      if(status.toLowerCase().indexOf("deleted") > -1){
         return "danger";
       }
       if(status.toLowerCase().indexOf("tobechecked") > -1){
@@ -19401,6 +19899,16 @@ define('datum/Datum',[
         return "success";
       }
     },
+    
+
+    /**
+     * This function is used to set the primary status of the datum,
+     * eg. put Deleted as the first item in the validation status.
+     * 
+     * @param selectedValue
+     *            This is a string which is the validation status
+     *            you want the datum to be
+     */
     updateDatumState : function(selectedValue){
       if(!selectedValue){
         return;
@@ -19445,6 +19953,28 @@ define('datum/Datum',[
 //      this.save();
       //TODO save it
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */ 
+    putInTrash : function(){
+      this.set("trashed", "deleted"+Date.now());
+      this.updateDatumState("Deleted");
+      this.saveAndInterConnectInApp(function(){
+        /* This actually removes it from the database */
+        //thisdatum.destroy();
+        if(window.appView){
+          window.appView.datumsEditView.showMostRecentDatum();
+        }
+      });
+    },
+    
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
      * (\exg. \"a) and then copies it on the export modal so that when the user
@@ -20101,6 +20631,45 @@ define('data_list/DataList',[
     },
     
     /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */    
+
+    putInTrash : function() {
+      this.set("trashed", "deleted" + Date.now());
+      var whichDatalistToUse = 0;
+      if (window.app.get("corpus").datalists.models[whichDatalistToUse].id == this.id) {
+        whichDatalistToUse = 1;
+      }
+      
+      this.saveAndInterConnectInApp(function(){
+        window.app.get("corpus").datalists.models[whichDatalistToUse]
+        .setAsCurrentDataList(function() {
+          if (window.appView) {
+            /* TODO test this */
+            window.app.get("corpus").datalists = null;
+            window.appView.currentCorpusReadView.model
+            .makeSureCorpusHasADataList(function() {
+              window.appView.currentCorpusEditView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.appView.currentCorpusReadView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.app.router.navigate("render/true", {trigger: true});
+
+            });
+          }
+        });
+      });
+    },
+    
+    /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.
@@ -20234,26 +20803,22 @@ define('data_list/DataList',[
           alert("This is a bug, cannot load the dataList you asked for, it is not in this corpus.");
         }
         return;
-      }else{
-        if (window.app.get("currentDataList").id != this.id ) {
-          //remove reference between current dataList and the model  TODO check this..
-//          delete window.app.attributes.currentDataList; //this seems to delte the datalist from the corpus too. :(
-//          window.app.attributes.currentDataList = this; //trying to get backbone not to notice we are switching the current data list.
-          window.app.set("currentDataList", this); //This results in a non-identical copy in the currentDatalist, it doesn't change when the one in the corpus changes. 
-//          window.app.set("currentDataList", app.get("corpus").datalists.get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
-        }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp();
-        if(window.appView) {
-          window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
-            if (typeof successcallback == "function") {
-              successcallback();
-            }
-          });
-        }else{
+      }
+
+      if (window.app.get("currentDataList").id != this.id ) {
+        window.app.set("currentDataList", this); 
+      }
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
+      window.app.get("authentication").saveAndInterConnectInApp();
+      if(window.appView) {
+        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
           if (typeof successcallback == "function") {
             successcallback();
           }
+        });
+      }else{
+        if (typeof successcallback == "function") {
+          successcallback();
         }
       }
     }
@@ -20294,7 +20859,8 @@ define('comment/CommentReadView',[
      * Events that the CommentReadView is listening to and their handlers.
      */
     events : {
-      "blur .comment-text" : "updateComment",
+    "click .edit-comment-button" : "showHideCommentEdit",
+    "click .remove-comment-button" : "removeComment",
     },
 
     /**
@@ -20314,15 +20880,121 @@ define('comment/CommentReadView',[
       return this;
     },
     
-    /**
-     * Change the model's state.
-     */
-    updateComment : function() {
-      this.model.set("value", this.$el.children(".comment-text").val());
-    }
+    
+    showHideCommentEdit : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      if($(this.el).find(".comment-text").attr("contenteditable")){
+        $(this.el).find(".comment-text").removeAttr("contenteditable");
+        $(this.el).find(".comment-text").removeClass("thisIsEditable");
+        $(this.el).find(".icon-save").toggleClass("icon-pencil icon-save");
+      }else{
+        $(this.el).find(".comment-text").attr("contenteditable","true");
+        $(this.el).find(".comment-text").addClass("thisIsEditable");
+        $(this.el).find(".icon-pencil").toggleClass("icon-save icon-pencil");
+      }
+    },
+    
+    removeComment : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to remove this comment?");
+      if (r == true) {
+        this.model.destroy();
+      }
+    },
+    
+    
   });
 
   return CommentReadView;
+});
+define('comment/CommentEditView',[ 
+         "backbone",
+         "handlebars", 
+         "comment/Comment"
+  ], function(
+      Backbone, 
+      Handlebars,
+      Comment
+) {
+  var CommentEditView = Backbone.View.extend(
+  /** @lends CommentEditView.prototype */
+  {
+    /**
+     * @class This is the view of the Comment Model. The Comment is a
+     *        textarea that includes a username and a timestamp.
+     * 
+     * @extends Backbone.View
+     * @constructs
+     */
+    initialize : function() {
+      if (OPrime.debugMode) OPrime.debug("COMMENT init");
+    },
+    
+    /**
+     * The underlying model of the CommentEditView is a Comment.
+     */
+    model : Comment,
+    
+    /**
+     * Events that the CommentEditView is listening to and their handlers.
+     */
+    events : {
+      "keyup .comment-new-text" : "updateComment", 
+//      "click .remove-comment-button" : "removeComment"
+    },
+
+    /**
+     * The Handlebars template rendered as the CommentEditView.
+     */
+    template : Handlebars.templates.comment_edit_embedded,
+    
+    /**
+     * Renders the DatumFieldView.
+     */
+    render : function() {
+      if (OPrime.debugMode) OPrime.debug("COMMENT render");
+//      var JSONtorender = {};
+//      if ( typeof this.model != undefined){
+//    	  JSONtorender.timestamp = this.model.timestamp.toString();
+//    	  JSONtorender.username = this.model.username;
+//      }
+      $(this.el).html(this.template(this.model.toJSON()));
+
+      $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
+
+      return this;
+    },
+    
+    /**
+     * Add new or edit comments, put the timestamp if there isn't one
+     */
+    updateComment : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+//    This timestamp thing doesn't seem to be working       
+//      if(!this.model.get("timestamp")){
+//        this.model.set("timestamp", new Date(JSON.stringify(new Date())));
+//      }
+      this.model.edit($(this.el).find(".comment-new-text").val());
+    },
+    clearCommentForReuse : function(){
+      this.model.set("timestamp", Date.now());
+      this.model.set("gravatar", window.appView.authView.model.get("userPublic").get("gravatar"));
+      this.model.set("username", window.appView.authView.model.get("userPublic").get("username"));
+      this.model.edit("");
+      this.render();
+    }
+   
+
+  });
+
+  return CommentEditView;
 });
 define('datum/DatumFieldEditView',[ 
      "backbone",
@@ -20366,13 +21038,28 @@ define('datum/DatumFieldEditView',[
      */
     events : {
       "blur .choose-field" : "updateFieldLabel",
+      // issue #797
+      "click .remove-datum-field" : "removeDatumField",
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
       "click .icon-question-sign" : "showHelpConvention",
       "hover .icon-question-sign" : "hideHelpConvention"  
     },
-
+    
+    /*
+     * TODO Only Admin users can trash datum fields?
+     * 
+     */
+    removeDatumField : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to remove this DatumField? (It won't be listed in the Advanced Search anymore, but any Datum which have it will keep it).");
+      if (r == true) {
+        this.model.destroy();
+      }
+    },
     /**
      * The Handlebars template rendered as the DatumFieldSettingsEditView.
      */
@@ -20579,16 +21266,18 @@ define('datum/SessionEditView',[
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Handlebars, 
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -20631,18 +21320,39 @@ define('datum/SessionEditView',[
     events : {
       "click .btn-save-session" : "updatePouch",
       
+//      Issue#797
+      "click .trash-button" : "putInTrash", 
+      
       //Add button inserts new Comment
-      "click .add-comment-session" : function(e) {
+
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the session when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
         
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+
+//        this.model.get("comments").unshift(this.commentEditView.model);
+//        this.commentEditView.model = new Comment();
+        }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
@@ -20758,16 +21468,19 @@ define('datum/SessionEditView',[
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           
-          // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
-          this.commentReadView.render();
+//          // Display the CommentReadView
+//          this.commentReadView.el = $(this.el).find('.comments'); 
+//          this.commentReadView.render();
+//          
+//          // Display the CommentEditView
+//          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+//          this.commentEditView.render();
           
           //Localization for centerWell
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
@@ -20779,15 +21492,18 @@ define('datum/SessionEditView',[
           this.sessionFieldsView.render();
          
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = $(this.el).find('.comments'); 
           this.commentReadView.render();
+          
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
           
           //Localization for fullscreen
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
           
         } else if (this.format == "modal") {
@@ -20799,10 +21515,15 @@ define('datum/SessionEditView',[
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
-          this.commentReadView.render();
           
+          // Display the CommentReadView
+          this.commentReadView.el = $(this.el).find('.comments');
+          this.commentReadView.render();
+
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+
           //Localization for modal
           $(this.el).find(".locale_New_Session").html(Locale.get("locale_New_Session"));
           $(this.el).find(".locale_New_Session_Instructions").html(Locale.get("locale_New_Session_Instructions"));
@@ -20817,6 +21538,20 @@ define('datum/SessionEditView',[
       return this;
     },    
     
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this session in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },
+    
     changeViewsOfInternalModels : function(){
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
@@ -20829,6 +21564,10 @@ define('datum/SessionEditView',[
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
     },
     /**
@@ -20920,7 +21659,7 @@ define('app/AppRouter',[
     "datum/Session",
     "datum/SessionEditView",
     "user/UserMask",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Datum,
@@ -21202,49 +21941,51 @@ define('app/AppRouter',[
     showFullscreenDataList : function(dataListid, pouchname) {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
-
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
-      if(dataListid == app.get("currentDataList").id || ! dataListid ){
-    	  if($("#data-list-fullscreen-header").html() == ""){
-    	        window.appView.renderReadonlyDataListViews("fullscreen");
-    	      }
-    	      this.hideEverything();
-    	      $("#data-list-fullscreen").show();    
-    	      window.scrollTo(0,0);
-    	      return;
-      }else{
-        if(!pouchname){
-          pouchname = window.app.get("corpus").get("pouchname");
+      if( !dataListid || dataListid == app.get("currentDataList").id  ){
+        if($("#data-list-fullscreen-header").html() == ""){
+          window.appView.renderReadonlyDataListViews("fullscreen");
         }
-        var dl = new DataList({
-          "pouchname" : pouchname});
-        dl.id = dataListid;
-        //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-        if(window.app.get("corpus").get("pouchname") != pouchname ){
-          alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
-          return;
-        }
-
-        /*
-         * If it isnt the default data list, just fetch it.
-         */
-          dl.fetch({
-            success : function(e) {
-              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
-              app.get("currentDataList").saveAndInterConnectInApp(function(){
-                dl.setAsCurrentDataList( function(){
-                  window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                    window.appView.renderReadonlyDataListViews("fullscreen");
-                  });
-                });
-              });
-            },
-            error : function(e) {
-              alert("There was an error fetching the data list. Loading defaults..."+e);
-            }
-        });
-
+        this.hideEverything();
+        $("#data-list-fullscreen").show();    
+        window.scrollTo(0,0);
+        return;
       }
+
+      if(!pouchname){
+        pouchname = window.app.get("corpus").get("pouchname");
+      }
+      var dl = new DataList({
+        "pouchname" : pouchname});
+      dl.id = dataListid;
+      //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
+      if(window.app.get("corpus").get("pouchname") != pouchname ){
+        alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
+        return;
+      }
+
+      /*
+       * If it isnt the default data list, just fetch it.
+       */
+      dl.fetch({
+        success : function(e) {
+          if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
+          app.get("currentDataList").saveAndInterConnectInApp(function(){
+            dl.setAsCurrentDataList( function(){
+              window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                window.appView.renderReadonlyDataListViews("fullscreen");
+                window.app.router.hideEverything();
+                $("#data-list-fullscreen").show();    
+                window.scrollTo(0,0);
+              });
+            });
+          });
+        },
+        error : function(e) {
+          alert("There was an error fetching the data list. Loading defaults..."+e);
+        }
+      });
+
      //TODO test other cases where datalist id needs to be changed
 
     },
@@ -21536,19 +22277,13 @@ encrypt:function(a,b,e,j){j=this.cfg.extend(j);e=j.kdf.execute(e,a.keySize,a.ivS
 var d=[0,1,2,4,8,16,32,64,128,27,54],f=f.AES=i.extend({_doReset:function(){for(var b=this._key,c=b.words,g=b.sigBytes/4,b=4*((this._nRounds=g+6)+1),k=this._keySchedule=[],j=0;j<b;j++)if(j<g)k[j]=c[j];else{var f=k[j-1];j%g?6<g&&4==j%g&&(f=l[f>>>24]<<24|l[f>>>16&255]<<16|l[f>>>8&255]<<8|l[f&255]):(f=f<<8|f>>>24,f=l[f>>>24]<<24|l[f>>>16&255]<<16|l[f>>>8&255]<<8|l[f&255],f^=d[j/g|0]<<24);k[j]=k[j-g]^f}c=this._invKeySchedule=[];for(g=0;g<b;g++)j=b-g,f=g%4?k[j]:k[j-4],c[g]=4>g||4>=j?f:p[l[f>>>24]]^e[l[f>>>
 16&255]]^h[l[f>>>8&255]]^a[l[f&255]]},encryptBlock:function(a,c){this._doCryptBlock(a,c,this._keySchedule,n,m,s,o,l)},decryptBlock:function(b,c){var d=b[c+1];b[c+1]=b[c+3];b[c+3]=d;this._doCryptBlock(b,c,this._invKeySchedule,p,e,h,a,r);d=b[c+1];b[c+1]=b[c+3];b[c+3]=d},_doCryptBlock:function(a,c,d,e,f,h,l,i){for(var p=this._nRounds,m=a[c]^d[0],n=a[c+1]^d[1],o=a[c+2]^d[2],q=a[c+3]^d[3],r=4,s=1;s<p;s++)var u=e[m>>>24]^f[n>>>16&255]^h[o>>>8&255]^l[q&255]^d[r++],v=e[n>>>24]^f[o>>>16&255]^h[q>>>8&255]^
 l[m&255]^d[r++],w=e[o>>>24]^f[q>>>16&255]^h[m>>>8&255]^l[n&255]^d[r++],q=e[q>>>24]^f[m>>>16&255]^h[n>>>8&255]^l[o&255]^d[r++],m=u,n=v,o=w;u=(i[m>>>24]<<24|i[n>>>16&255]<<16|i[o>>>8&255]<<8|i[q&255])^d[r++];v=(i[n>>>24]<<24|i[o>>>16&255]<<16|i[q>>>8&255]<<8|i[m&255])^d[r++];w=(i[o>>>24]<<24|i[q>>>16&255]<<16|i[m>>>8&255]<<8|i[n&255])^d[r++];q=(i[q>>>24]<<24|i[m>>>16&255]<<16|i[n>>>8&255]<<8|i[o&255])^d[r++];a[c]=u;a[c+1]=v;a[c+2]=w;a[c+3]=q},keySize:8});q.AES=i._createHelper(f)})();
-define("crypto", (function (global) {
-    return function () {
-        var ret, fn;
-        return ret || global.CryptoJS;
-    };
-}(this)));
+define("CryptoJS", function(){});
 
 define('confidentiality_encryption/Confidential', [
     "backbone",
-    "crypto"
+    "CryptoJS"
 ],function(
-    Backbone, 
-    CryptoJS
+    Backbone
 ) {
   var Confidential = Backbone.Model.extend(
   /** @lends Confidential.prototype */
@@ -21702,7 +22437,7 @@ define('authentication/Authentication',[
     "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
-    "libs/OPrime" 
+    "OPrime" 
 ], function(
     Backbone, 
     Confidential,
@@ -23152,7 +23887,7 @@ define('corpus/CorpusMask',[
     "datum/Sessions",
     "user/User",
     "glosser/Glosser",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Activity,
@@ -23535,7 +24270,7 @@ define('corpus/Corpus',[
     "user/Users",
     "user/UserMask",
     "glosser/Glosser",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Comment, 
@@ -24035,6 +24770,26 @@ define('corpus/Corpus',[
       comments: Comments,
       team: UserMask
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */ 
+    putInTrash : function(){
+      OPrime.bug("Sorry deleting corpora is not available right now. Too risky... ");
+      return;
+      /* TODO contact server to delte the corpus, if the success comes back, then do this */
+      this.set("trashed", "deleted"+Date.now());
+      this.saveAndInterConnectInApp(function(){
+      window.location.href="user.html";
+      });
+    },
+        
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(commentstring) {
       var m = new Comment({
@@ -24307,7 +25062,7 @@ define('corpus/Corpus',[
 
                       var sucessorfailcallbackforcorpusmask = function(){
                         window.app.get("authentication").saveAndInterConnectInApp(function(){
-                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus...");
+                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                           window.setTimeout(function(){
                             window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
                           },10000);
@@ -24879,7 +25634,7 @@ define('corpus/Corpus',[
         type : 'GET',
         url : jsonUrl,
         success : function(serverResults) {
-          console.log("serverResults"
+          OPrime.debug("serverResults"
               + JSON.stringify(serverResults));
 
           var counts = _.pluck(serverResults.rows, "value");
@@ -25043,7 +25798,7 @@ define('corpus/CorpusLinkView',[
     "backbone", 
     "handlebars", 
     "corpus/CorpusMask",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -25114,7 +25869,7 @@ define('user/UserReadView',[
     "corpus/CorpusLinkView",
     "user/User",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -25307,7 +26062,7 @@ define('authentication/AuthenticationEditView',[
     "user/User", 
     "user/UserMask",
     "user/UserReadView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -25865,7 +26620,7 @@ define('authentication/AuthenticationEditView',[
                           localStorage.setItem("encryptedUser", u);
                           
                           var sucessorfailcallbackforcorpusmask = function(){
-                            $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus...");
+                            $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                             window.setTimeout(function(){
                               window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
                             },10000);
@@ -26138,7 +26893,7 @@ define('datum/DatumStateReadView', [
     "backbone", 
     "handlebars", 
     "datum/DatumState",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -26227,7 +26982,7 @@ define('datum/DatumTagReadView',[
     "backbone", 
     "handlebars", 
     "datum/DatumTag",
-    "libs/OPrime"
+    "OPrime"
 ], function(Backbone,
     Handlebars, 
     DatumTag
@@ -26278,16 +27033,18 @@ define('datum/SessionReadView',[
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Handlebars, 
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DatumFieldReadView,
     Session,
     UpdatingCollectionView
@@ -26326,17 +27083,29 @@ define('datum/SessionReadView',[
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-session" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
-        
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        this.updatePouch();
+        this.commentReadView.render();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -26413,14 +27182,17 @@ define('datum/SessionReadView',[
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render(); 
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = $(this.el).find('.comments'); 
           this.commentReadView.render();
+
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
           
           //Localization for centerWell
           $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
           if (OPrime.debugMode) OPrime.debug("SESSION READ FULLSCREEN render: " );
@@ -26430,15 +27202,19 @@ define('datum/SessionReadView',[
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+
           //Localization for fullscreen
           $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "link") {
           if (OPrime.debugMode) OPrime.debug("SESSION READ LINK render: " );
@@ -26471,8 +27247,11 @@ define('datum/SessionReadView',[
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
-      });     
+      });
       
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
+      });
     },
     
     //functions associated with corner icons
@@ -26520,7 +27299,28 @@ define('datum/SessionReadView',[
       //Remove view from DOM
 //      this.remove();  
 //      Backbone.View.prototype.remove.call(this);
+      },
+      /* ReadView is supposed to save no change but we want the comments to
+       * be saved. This function saves the change/addition/deletion of the comments. 
+       * Changes in other parts of Session is taken care of the server according to 
+       * users' permissions. */
+      updatePouch : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var self = this;
+        if(this.format == "modal"){
+          $("#new-corpus-modal").modal("hide");
+        }
+        this.model.saveAndInterConnectInApp(function(){
+          self.render();
+        },function(){
+          self.render();
+        });
       }
+
+    
   });
   
   return SessionReadView;
@@ -26539,7 +27339,7 @@ define('datum/DatumReadView',[
     "datum/DatumTagReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars,
@@ -26689,10 +27489,17 @@ define('datum/DatumReadView',[
         if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
+      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-
+      try{
+        jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
+        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
+      }catch(e){
+        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
+      }
+      
       if (this.format == "well") {        
         // Display the DatumReadView
         $(this.el).html(this.template(jsonToRender));
@@ -26867,7 +27674,7 @@ define('datum/DatumReadView',[
         //  }
         //}
 
-        var jsonToRender = {};
+        //var jsonToRender = {};
         jsonToRender.additionalFields = [];
 
     	//corpus's most frequent fields
@@ -26929,7 +27736,7 @@ define('datum/DatumReadView',[
               if (p) {
                 return _.map(p.split(' '), randomStrings2highlightSpans);
               } else {
-              return null;
+                return null;
               }
             }))), function (t) { return t.join('<br />') });
           }
@@ -26963,13 +27770,7 @@ define('datum/DatumReadView',[
           }
     	}
 
-        try {
-          jsonToRender.datumstatecolor = this.model.get("datumStates")
-                                .where({selected : "selected"})[0].get("color");
-        } catch (e) {
-          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-//          this.model.get("datumStates").models[0].set("selected","selected");
-        }
+       
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
         if(jsonToRender.datumstatecolor){
@@ -26982,7 +27783,7 @@ define('datum/DatumReadView',[
           $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
         }
         try{
-          if(this.model.get("datumStates").where({selected : "selected"})[0].get("state") == "Deleted"){
+          if(jsonToRender.datumstate.indexOf("Deleted") > -1){
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){
@@ -27066,6 +27867,7 @@ define('data_list/DataListReadView', [
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
 	  "data_list/DataList",
 	  "datum/Datum",
   	"datum/DatumReadView",
@@ -27077,6 +27879,7 @@ define('data_list/DataListReadView', [
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -27122,17 +27925,32 @@ define('data_list/DataListReadView', [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        this.updatePouch();
+        this.commentReadView.render();
         
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+//        this.model.get("comments").unshift(this.commentEditView.model);
+//        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
       "click .icon-edit" : "showEditable",
@@ -27194,8 +28012,7 @@ define('data_list/DataListReadView', [
         if (r==true) {
         	this.removeDatumFromThisList(this.getAllCheckedDatums());
         	return false;
-        }
-        else {
+        }else {
         	return false;
         }
       },
@@ -27358,9 +28175,13 @@ define('data_list/DataListReadView', [
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
-          // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          // Display the commentReadView
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
+          
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
           
           //localization of data list menu
           $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale.get("locale_Play_Audio_checked"));
@@ -27375,7 +28196,6 @@ define('data_list/DataListReadView', [
           }          
           $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
           $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
           
         }
       }catch(e){
@@ -27391,6 +28211,10 @@ define('data_list/DataListReadView', [
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
     },
     /**
@@ -27475,7 +28299,29 @@ define('data_list/DataListReadView', [
       //Remove view from DOM
 //      this.remove();  
 //      Backbone.View.prototype.remove.call(this);
+      },
+
+      /* ReadView is supposed to save no change but we want the comments to
+       * be saved. This function saves the change/addition/deletion of the comments. 
+       * Changes in other parts of Datalist is taken care of the server according to 
+       * users' permissions. */
+      updatePouch : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var self = this;
+        if(this.format == "modal"){
+          $("#new-corpus-modal").modal("hide");
+        }
+        this.model.saveAndInterConnectInApp(function(){
+          self.render();
+        },function(){
+          self.render();
+        });
       }
+      
+      
   });
 
   return DataListReadView;
@@ -27485,7 +28331,7 @@ define('datum/DatumStateEditView', [
     "backbone", 
     "handlebars", 
     "datum/DatumState",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -27712,6 +28558,7 @@ define('corpus/CorpusEditView',[
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
@@ -27728,7 +28575,7 @@ define('corpus/CorpusEditView',[
     "datum/Sessions",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars,
@@ -27736,6 +28583,7 @@ define('corpus/CorpusEditView',[
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList,
     DataLists,
     DataListReadView,
@@ -27807,18 +28655,32 @@ define('corpus/CorpusEditView',[
      */
     events : {
       "click .icon-book": "showReadonly",
+
       //Add button inserts new Comment
-      "click .add-comment-corpus" : function(e) {
-          if(e){
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          var commentstring = this.$el.find(".comment-new-text").val();
-          
-          this.model.insertNewComment(commentstring);
-          this.$el.find(".comment-new-text").val("");
-          
-      },
+      "click .add-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the corpus when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+
       "click .reload-corpus-team-permissions" :function(e){
         if(e){
           e.preventDefault();
@@ -27868,6 +28730,9 @@ define('corpus/CorpusEditView',[
         this.model.set("glosserURL", $(e.target).val());
       },
       "click .save-corpus" : "updatePouch",
+//      Issue #797
+//      Only Admin users can trash corpus 
+      "click .trash-button" : "putInTrash" 
       
     },
 
@@ -27922,9 +28787,13 @@ define('corpus/CorpusEditView',[
           $(this.el).html(this.templateCentreWell(jsonToRender));
 
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+             
           // Display the DataListsView
          this.dataListsView.el = this.$('.datalists-updating-collection'); 
          this.dataListsView.render();
@@ -27963,7 +28832,6 @@ define('corpus/CorpusEditView',[
           $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
           $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
           $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
           
           
@@ -27983,6 +28851,7 @@ define('corpus/CorpusEditView',[
           $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
           $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
@@ -27991,8 +28860,12 @@ define('corpus/CorpusEditView',[
         $(this.el).html(this.templateFullscreen(jsonToRender));
 
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
+        
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
         
         // Display the DataListsView
         this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -28032,7 +28905,6 @@ define('corpus/CorpusEditView',[
         $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -28051,6 +28923,7 @@ define('corpus/CorpusEditView',[
         $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
         $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "leftSide"){
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
@@ -28112,12 +28985,31 @@ define('corpus/CorpusEditView',[
 //    this.remove();  
 //    Backbone.View.prototype.remove.call(this);
     },
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this corpus in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },    
+    
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       if(!this.model.datalists){
@@ -28514,6 +29406,8 @@ define('corpus/CorpusReadView',[
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
+    "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
@@ -28526,7 +29420,7 @@ define('corpus/CorpusReadView',[
     "datum/Sessions",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -28534,6 +29428,8 @@ define('corpus/CorpusReadView',[
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
+    DataList,
     DataLists,
     DataListReadView,
     DatumFieldReadView,
@@ -28590,17 +29486,30 @@ define('corpus/CorpusReadView',[
       "click .resize-full" : "resizeFullscreen",
       
       //Add button inserts new Comment
-      "click .add-comment-corpus" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
-        
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },   
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the datum when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+      
       "click .reload-corpus-team-permissions" :function(e){
         if(e){
           e.preventDefault();
@@ -28714,9 +29623,13 @@ define('corpus/CorpusReadView',[
         
 
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
  
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
+        
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
@@ -28755,7 +29668,6 @@ define('corpus/CorpusReadView',[
         $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         
       } else if (this.format == "centreWell"){
@@ -28765,8 +29677,12 @@ define('corpus/CorpusReadView',[
         $(this.el).html(this.templateCentreWell(jsonToRender));
 
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
+        
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -28800,7 +29716,6 @@ define('corpus/CorpusReadView',[
         $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }
       
@@ -28844,6 +29759,10 @@ define('corpus/CorpusReadView',[
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       // Create a list of DataLists
@@ -28984,7 +29903,29 @@ define('corpus/CorpusReadView',[
         window.appView.currentCorpusEditView.format = this.format;
         window.appView.currentCorpusEditView.render();
       }
+    },
+    
+    /* ReadView is supposed to save no change but we want the comments to
+     * be saved. This function saves the change/addition/deletion of the comments. 
+     * Changes in other parts of Corpus is taken care of the server according to 
+     * users' permissions. */
+    updatePouch : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      var self = this;
+      if(this.format == "modal"){
+        $("#new-corpus-modal").modal("hide");
+      }
+      this.model.saveAndInterConnectInApp(function(){
+        self.render();
+      },function(){
+        self.render();
+      });
     }
+    
+    
   });
 
   return CorpusReadView;
@@ -28997,6 +29938,7 @@ define('data_list/DataListEditView', [
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -29008,6 +29950,7 @@ define('data_list/DataListEditView', [
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -29057,17 +30000,33 @@ define('data_list/DataListEditView', [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the datalist when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
         
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
         
-      },      
+//        this.model.get("comments").unshift(this.commentEditView.model);
+//        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
 
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
@@ -29077,6 +30036,9 @@ define('data_list/DataListEditView', [
 
       "click .icon-book" :"showReadonly",
       
+//      Issue #797
+      "click .trash-button" : "putInTrash",
+        
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
@@ -29223,10 +30185,12 @@ define('data_list/DataListEditView', [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
-      if(window.appView.currentEditDataListView){
-        appView.currentEditDataListView.destroy_view();
+      if (this.format && this.format.indexOf("search") == -1){
+        if(window.appView.currentEditDataListView){
+          appView.currentEditDataListView.destroy_view();
+        }
+        appView.currentReadDataListView.destroy_view();
       }
-      appView.currentReadDataListView.destroy_view();
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.dateCreated = OPrime.prettyDate(jsonToRender.dateCreated);
@@ -29283,7 +30247,6 @@ define('data_list/DataListEditView', [
         }
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
@@ -29312,7 +30275,6 @@ define('data_list/DataListEditView', [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -29341,7 +30303,6 @@ define('data_list/DataListEditView', [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
@@ -29427,9 +30388,14 @@ define('data_list/DataListEditView', [
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
-          // Display the CommentReadView
-          this.commentReadView.el = this.$el.find(".comments");
+          // Display the CommentReadView          this.commentReadView.el = this.$el.find(".comments");
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
+          
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+          
           
           //localization of edit data list 
           $(this.el).find(".locale_Title").html(Locale.get("locale_Title"));
@@ -29441,16 +30407,34 @@ define('data_list/DataListEditView', [
       }
       
       return this;
+    }, 
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this datalist in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
     },
+
     
     changeViewsOfInternalModels : function() {
    
-      // Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
-      });  
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
+      }); 
     },
     /**
      * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items. 
@@ -29545,6 +30529,8 @@ define('data_list/DataListEditView', [
         e.stopPropagation();
         e.preventDefault();
       }
+      
+     
 //      var self = this;
 //      this.model.saveAndInterConnectInApp(function(){
 //          self.format = "search-minimized";
@@ -29554,6 +30540,14 @@ define('data_list/DataListEditView', [
 //      });
       
       var searchself = appView.searchEditView.searchDataListView; //TODO this was because the wrong tempalte was in the serach data list.for some reason the model is a function here when i click on the save button on the temp serach data list. this is a workaround.
+
+      /* if there is no call back, make this the full screen data list. */
+      if(!callback){
+        callback = function(){
+          window.appView.currentReadDataListView.format = "leftSide";
+          window.appView.currentReadDataListView.render();
+        };
+      }
       searchself.model.saveAndInterConnectInApp(function(){
         searchself.format = "search-minimized";
         searchself.render();
@@ -29769,7 +30763,7 @@ define('datum/DatumTagEditView',[
     "backbone", 
     "handlebars", 
     "datum/DatumTag",
-    "libs/OPrime"
+    "OPrime"
 ], function(Backbone,
     Handlebars, 
     DatumTag
@@ -29832,6 +30826,7 @@ define('datum/DatumEditView',[
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
@@ -29841,7 +30836,7 @@ define('datum/DatumEditView',[
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -29849,6 +30844,7 @@ define('datum/DatumEditView',[
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     Confidential,
     Datum,
     DatumFieldEditView,
@@ -29881,6 +30877,10 @@ define('datum/DatumEditView',[
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       // Create a DatumTagView
@@ -29976,11 +30976,39 @@ define('datum/DatumEditView',[
         }
       },
       "change .datum_state_select" : "updateDatumStates",
-      "click .add-comment-datum" : 'insertNewComment',
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "click .save-datum" : "saveButton"
+      "click .save-datum" : "saveButton",
+
+      // Issue #797
+       "click .trash-button" : "putInTrash",
+
+      //Add button inserts new Comment
+      "click .add-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the datum when the comment is added, and render it*/
+        this.saveButton();
+        this.commentReadView.render();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      },     
+    
     },
 
     /**
@@ -30025,8 +31053,12 @@ define('datum/DatumEditView',[
         this.datumTagsView.render();
         
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
+        
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
         
         // Display the SessionView
         this.sessionView.el = this.$('.session-link'); 
@@ -30045,7 +31077,6 @@ define('datum/DatumEditView',[
         //localization for edit well view
         $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
 //      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
         $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale.get("locale_Insert_New_Datum"));
         $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
@@ -30191,44 +31222,6 @@ define('datum/DatumEditView',[
       return false;
     },
     
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      var commentstring = this.$el.find(".comment-new-text").val();
-      var m = new Comment({
-        "text" : commentstring,
-      });
-      this.model.get("comments").add(m);
-      this.$el.find(".comment-new-text").val("");
-      
-      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
-
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "team",
-            context : " via Offline App."
-          });
-      
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "personal",
-            context : " via Offline App."
-          });
-      
-    },
-    
     updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
       try{
@@ -30277,6 +31270,22 @@ define('datum/DatumEditView',[
       d.set("session", app.get("currentSession"));
       window.appView.datumsEditView.prependDatum(d);
     },
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this datum in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },
+    
+    
     /*
      * this function can be used to play datum automatically
      */
@@ -30535,40 +31544,35 @@ define('datum/DatumContainerEditView',[
             self.newDatum();
           }
         } else {
-          // If the user has increased the number of Datum to display in the container
-          if (nextNumberOfDatum > self.model.length) {
-            for (var i = 0; i < rows.length; i++) {
-              //If you've filled it up, stop filling.
-              if(self.model.length >= nextNumberOfDatum){
-                return;
+          var howManyToPop = self.model.length
+          for (var i = 0; i < howManyToPop; i++) {
+            self.model.pop();
+          }
+          for (var i = 0; i < rows.length; i++) {
+            //If you've filled it up, stop filling.
+            if(self.model.length >= nextNumberOfDatum){
+              return;
+            }
+
+            // Add the next most recent Datum from the Corpus to the stack
+            if (rows[i]) {
+              var m = rows[i];
+              var value = m;
+              /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
+              if(!OPrime.isBackboneCouchDBApp()){
+                value = m.value;
+                var d = new Datum();
+                d.set(d.parse(value));
+                value = d;
               }
-              
-              // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              if (rows[i]) {
-                var m = rows[i];
-                var value = m;
-                /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
-                if(!OPrime.isBackboneCouchDBApp()){
-                  value = m.value;
-                  var d = new Datum();
-                  d.set(d.parse(value));
-                  value = d;
-                }
-                //Only add datum objects to the container
-                if(value.jsonType == "Datum"){
-                  self.model.add(value);
-                }
+              //Only add datum objects to the container
+              if(value.jsonType == "Datum"){
+                self.model.add(value);
               }
             }
-            if(self.model.length == 0){
-              self.newDatum();
-            }
-          // If the user has decreased the number of Datum to display in the container
-          } else if (nextNumberOfDatum < self.model.length) {
-            // Pop the excess Datum from the bottom of the stack
-            for (var i = nextNumberOfDatum; i < self.model.length; i++) {
-              self.model.pop();
-            }
+          }
+          if(self.model.length == 0){
+            self.newDatum();
           }
         }
       });
@@ -30828,27 +31832,23 @@ define('datum/DatumContainerReadView',[
   return DatumContainerReadView;
 });
 
-define('export/Export',[ 
-    "backbone",
-    "data_list/DataList"
-], function(
-    Backbone, 
-    DataList
-) {
+define('export/Export',[ "backbone" ], function(Backbone) {
   var Export = Backbone.Model.extend(
   /** @lends Export.prototype */
   {
     /**
-     * @class The export class helps export a set of selected data into csv, xml and LaTex file. 
-     *
+     * @class The export class helps export a set of selected data into csv, xml
+     *        and LaTex file.
+     * 
      * @property {Collection} datalist This is the data selected for export.
-     * @property {String} dataListName This is the name of the data set which appears as a filename when exported.  
+     * @property {String} dataListName This is the name of the data set which
+     *           appears as a filename when exported.
      * @property {Array} fields The fields array contains titles of the fields.
      * @property {Event} event The export event (e.g. click "LatexIt").
      * 
      * @description The initialize serves to bind export to e.g. LaTexIt event.
-
-     *
+     * 
+     * 
      * @extends Backbone.Model
      * @constructs
      */
@@ -30860,36 +31860,37 @@ define('export/Export',[
       fields : [],
       dataList : null,
       dataListName : "",
-      event : null 
+      event : null
     },
-    
+
     // Internal models: used by the parse function
     internalModels : {
-      // There are no nested models
+    // There are no nested models
     },
-    
+
     /**
      * Describe the validation here.
-     *
-     * @param {Object} attributes The set of attributes to validate.
-     *
-     * @returns {String} The validation error, if there is one. Otherwise, doesn't
-     * return anything.
+     * 
+     * @param {Object}
+     *          attributes The set of attributes to validate.
+     * 
+     * @returns {String} The validation error, if there is one. Otherwise,
+     *          doesn't return anything.
      */
     validate : function(attributes) {
     },
-    
+
     exportCSV : function() {
     },
-    
+
     exportXML : function() {
     },
-    
+
     exportLaTex : function() {
     },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
+    saveAndInterConnectInApp : function(callback) {
+
+      if (typeof callback == "function") {
         callback();
       }
     }
@@ -31004,8 +32005,8 @@ define('hotkey/HotKeyEditView',[
 }); 
 
 define('app/PaginatedUpdatingCollectionView',[ 
-    "backbone",
-], function(Backbone) {
+    "backbone", "handlebars"
+], function(Backbone, Handlebars) {
 var PaginatedUpdatingCollectionView = Backbone.View.extend(
     /** @lends PaginatedUpdatingCollectionView.prototype */
 {
@@ -31662,7 +32663,7 @@ define('import/Import',[
     "datum/Session",
     "app/PaginatedUpdatingCollectionView",
     "xml2json",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Handlebars,
@@ -32287,7 +33288,7 @@ define('import/ImportEditView', [
     "datum/Session",
     "datum/SessionEditView",
     "app/PaginatedUpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 
 ], function(
     Backbone,
@@ -33531,7 +34532,7 @@ define('user/UserPreferenceEditView',[
     "backbone", 
     "handlebars", 
     "user/UserPreference",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -33865,7 +34866,7 @@ define('user/UserPreferenceEditView',[
 
 define('search/Search',[ 
     "backbone",
-    "libs/OPrime" 
+    "OPrime" 
 ], function(
     Backbone
 ) {
@@ -33929,7 +34930,7 @@ define('search/SearchEditView',[
     "search/Search",
     "app/UpdatingCollectionView",
     "app/PaginatedUpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -34336,7 +35337,7 @@ define('user/UserEditView',[
     "corpus/CorpusLinkView",
     "user/User",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -35425,7 +36426,7 @@ var Terminal = Terminal || function(containerId) {
 };
 
 
-define("terminal", ["bootstrap","jquery"], (function (global) {
+define("terminal", ["bootstrap","$"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global.Terminal;
@@ -35474,7 +36475,7 @@ define('app/AppView',[
     "user/UserEditView",
     "user/UserReadView",
     "terminal",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars,
@@ -36710,7 +37711,7 @@ define('app/App',[
     "user/User",
     "user/UserMask",
     "text!locales/en/messages.json",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     AppView,
@@ -37666,252 +38667,13 @@ define('app/App',[
   return App;
 });
 
-console.log("Loading Webservices info");
-/* Extends the OPrime class */
-var OPrime = OPrime || {};
-
-
-OPrime.websiteUrl = "https://wwwdev.lingsync.org";
-OPrime.authUrl = "https://authdev.lingsync.org";
-OPrime.audioUrl = "https://audiodev.lingsync.org";
-OPrime.lexiconUrl = "https://lexicondev.lingsync.org";
-OPrime.corpusUrl = "https://corpusdev.lingsync.org";
-OPrime.activityUrl = "https://activitydev.lingsync.org";
-OPrime.widgetUrl = "https://widgetdev.lingsync.org";
-
-/*
- * Use the current app's chrome url, assuming if its a dev, they will have their
- * own url that is not from the market, and if its a bleeding edge user, they
- * will have the market one. In both cases it is save to return the
- * window.location.href but this code is added to be clear that there is also a
- * bleeding edge url for users.
- */
-OPrime.chromeClientUrl = function(){
-  if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa"){
-    return window.location.origin;
-  }else{
-    return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
-  }
-};
-
-/*
- * This function is the same in all webservicesconfig, now any couchapp can
- * login to any server, and register on the corpus server which matches its
- * origin.
- */
-OPrime.defaultCouchConnection = function() {
-  var localhost = {
-    protocol : "https://",
-    domain : "localhost",
-    port : "6984",
-    pouchname : "default",
-    path : "",
-    authUrl : "https://localhost:3183",
-    userFriendlyServerName : "Localhost"
-  };
-  var testing = {
-    protocol : "https://",
-    domain : "corpusdev.lingsync.org",
-    port : "443",
-    pouchname : "default",
-    path : "",
-    authUrl : "https://authdev.lingsync.org",
-    userFriendlyServerName : "LingSync Testing"
-  };
-  var production = {
-    protocol : "https://",
-    domain : "corpus.lingsync.org",
-    port : "443",
-    pouchname : "default",
-    path : "",
-    authUrl : "https://auth.lingsync.org",
-    userFriendlyServerName : "LingSync.org"
-  };
-  var mcgill = {
-    protocol : "https://",
-    domain : "prosody.linguistics.mcgill.ca",
-    port : "443",
-    pouchname : "default",
-    path : "/corpus",
-    authUrl : "https://prosody.linguistics.mcgill.ca/auth",
-    userFriendlyServerName : "McGill ProsodyLab"
-  };
-  OPrime.servers = [ localhost, testing, production, mcgill ];
-  /*
-   * If its a couch app, it can only contact databases on its same origin, so
-   * modify the domain to be that origin. the chrome extension can contact any
-   * authorized server that is authorized in the chrome app's manifest
-   */
-  var connection = testing;
-  if (OPrime.isCouchApp()) {
-    if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
-    } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
-      connection = production;
-      OPrime.authUrl = "https://auth.lingsync.org";
-    } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
-      connection = mcgill;
-      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
-    } else if (window.location.origin.indexOf("localhost") >= 0) {
-      connection = localhost;
-      OPrime.authUrl = "https://localhost:3183";
-    }
-  } else if (OPrime.isChromeApp()) {
-    if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-      connection = mcgill;
-      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
-    } else if (window.location.origin
-        .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
-    } else if (window.location.origin
-        .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
-      connection = production;
-      OPrime.authUrl = "https://auth.lingsync.org";
-    } else {
-      /*
-       * its probably a dev's chrome extension, use the corresponding connection
-       * for this build
-       */
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
-    }
-  }
-  return connection;
-};
-OPrime.getAuthUrl = function(userFriendlyServerName) {
-  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
-  var authUrl = userFriendlyServerName;
-  if (authUrl.indexOf("LingSync.org") >= 0) {
-    alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
-    return;
-    authUrl = "https://auth.lingsync.org";
-  } else if (authUrl.indexOf("LingSync Testing") >= 0) {
-    authUrl = "https://authdev.lingsync.org";
-  } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
-    authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
-  } else if (authUrl.indexOf("Localhost") >= 0) {
-    authUrl = "https://localhost:3183";
-  } else {
-    if (authUrl.indexOf("https://") >= 0) {
-      var userWantsToUseUnknownServer = confirm("Are you sure you would like to use this server: "
-          + authUrl);
-      if (userWantsToUseUnknownServer == true) {
-        OPrime
-            .debug("User is using an unknown server, hope they know what they are doing...");
-      } else {
-        /*
-         * TODO change this back to the lingsync server once the lingsync server
-         * supports 1.38
-         */
-        authUrl = "https://authdev.lingsync.org";
-      }
-    } else {
-      alert("I don't know how to connect to : "
-          + authUrl
-          + ", I only know how to connect to https servers. Please double check the server URL and ask one of your team members for help if this does this again.");
-      return;
-    }
-  }
-  /*
-   * Make sure user uses the auth server for their corresponding couchapp or
-   * chrome extension. for now dont let them switch between servers. to do that
-   * we should do it manually to besure its safe. instead, simply take them to
-   * that couchapp and let them log in there.
-   */
-  if (authUrl != OPrime.authUrl) {
-    var userWantsToUseAMisMatchingServer = confirm("Are you sure you would like to use the "
-        + userFriendlyServerName + " server?");
-    if (userWantsToUseAMisMatchingServer == true) {
-      var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(
-          authUrl);
-      if (appropriateserver == -1) {
-        OPrime
-            .bug("We don't know which corpus server to use, so we will just let the user do what they are trying to do.");
-      } else {
-        var couchConnection = OPrime.defaultCouchConnection();
-        OPrime
-            .bug("We know which corpus server to use, so we will just let the user do what they are trying to do but only in the couchapp.");
-        couchConnection = OPrime.servers[appropriateserver];
-        window.location.replace(OPrime.getCouchUrl(couchConnection, "")
-            + "/public-firstcorpus/_design/pages/index.html");
-      }
-    } else {
-      authUrl = OPrime.authUrl;
-    }
-  }
-
-  return authUrl;
-};
-
-OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
-  if (!mostLikelyAuthUrl) {
-    mostLikelyAuthUrl = "LingSync.org";
-  }
-  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
-  var authUrl = OPrime.authUrl;
-  if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
-    mostLikelyAuthUrl = "McGill ProsodyLab";
-  } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-    mostLikelyAuthUrl = "McGill ProsodyLab";
-  } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-    mostLikelyAuthUrl = "LingSync Testing";
-  } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-    mostLikelyAuthUrl = "LingSync Testing";
-  } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
-    OPrime
-        .debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
-  } else if (window.location.origin.indexOf("localhost") >= 0) {
-    mostLikelyAuthUrl = "Localhost";
-  } else if (OPrime.isChromeApp()) {
-    if (OPrime.debugMode) OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
-    var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(authUrl);
-    if (appropriateserver == -1) {
-      OPrime.bug("This shouldn't happen. Please report this bug.");
-    } else {
-      mostLikelyAuthUrl = OPrime.servers[appropriateserver].userFriendlyServerName;
-    }
-  }
-  //TODO add Production when it can support 1.38+ ocmdknddgpmjngkhcbcofoogkommjfoj
-  
-  return mostLikelyAuthUrl;
-};
-
-OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
-
-OPrime.publicUserStaleDetails = function() {
-  return JSON.stringify({
-    token : "$2a$10$TpNxdbXtDQuFGBYW5BfnA.F7D0PUftrH1W9ERS7IdxkDdM.k7A5oy",
-    encryptedUser : "confidential:VTJGc2RHVmtYMStIK3J2WU9kZWFGUS9WUS80S2EzbTk3ZFBKcTNTQ0pqclZIak41SHJYZng3RGk5Q1RkaUZKZmpWK1l5MmVYQUYzNnJUclZ6LzJ1enEvbHltVnhISlBtSFpSOVJrdm1EMWRCREl4VWY3cWpadG0rWHhwaEExQ3A5Q1d0SVpjVkZuQXkwT1JNaVZKV1dTL3I5Z3lDYmxiNEdRNkMyVU5vbmxqdzBRcnB2OTBBc2xWV1NUUmFuMEhlaDZGTnJZWS9rNUo4NDJyc1ZveTl1WHhSeUZ6bEhHTHREQ21TdG5yWmk1VDJHSFo1NVdZN2FNKzNFVURrV3g1RTZ1ako2Zlp1UUN6Y0pKN0xwNjh0RXBkNlhpaTNoQi9wbXppdTErajNzWkN1eGoxWjZLWG4yTnAzVm00aTZwbytCRFFEOHhkSzhreDZ4SXFJZTYxUy9LTG5rdTJDQzZ4Y0RRQkVobCtpaFhGQ3RHc1Z0cDBCVmxlcXh5THpiSC9EMWQ3UkFKbjVYWDQ3MXJKcFZ2UkQ2RnJocFd4Ti9uUFRmNjlZcS9HZFZmem5YTE1LM1l5SEJPa3JUYlVUcHYydGZMaFRPQmp5ekRoS0ozY3g3d3JNajFrVWlhQjVQeHNZZmxmbDlza2VFMVJaVFBqenltV2xEakR4Qy9USlhKaFkyMHl1SnBaSThwVkhVVEpkWW1rL1pqMU0vbzdKRlUwVWF2N0E5cjJpQ2g5QURqV2hWT0o4U1pWSFJSYnZoV0xmQ0NSbzdhZlBSbEpJWmFJRnk2VFpYMkNSQ0VmYWlYUEI0YUhRdytWVGpKbHZxZlVtWC9YNkgrZkhaYlMwaVdSdlVhdHdpZzJqK3BrWGlJWElmUW1mano4QlFpSmcyTDI3ZnY5eEFuV0VrTndNaVg2Um95a1B0UWJkODduaDhzNGZ3c1FYWVNnRUYwRWFmT0hwZ3VtdThLUzNTVlFDUEhUVUlqYzZQZTVPVjg0YUt3cVBiQmhXRTZjNlRaRjBXLzR0aDhma2hvTWZzUzJ5UHRRa2w2UTB0eitkYXpuVzFRcVdoanM4cTRqbVBRMW9JYjdMb2ZvYjdYbW5XR1Z4RDRtQ0N4czdKRFpEZHhHd3ExOG1zT1ZhOE9EeFErZU9Mc293eVZHaUZEWUk3S0ZiL1BwNHpKcWw3UjE2TExtN294VTI4N1VBeTNZMCtsMkZ3TDRNcVEwZlR3dTA2WERGNGE2SzZpbVNPRk0xRFB2SUdjRllESUptcC95OHRuUzZaNjNkeUJwNmVYcm1aWUEzNU5ZSUJFVk00Um5mamJaT1ZrL21jajkwc3FlZzVyV1A2R21GK3FZZUI3THY4OGt3a1o2UDc5NTh5WEUrSWY2Vkh6aTJKK1pJV2xqSExZQnZ5SmRyVHA3UmgxT25WaFNuNW5MQTA5ellFb1RpNzdwMkMrRFBnRlJkdlJuZEtYWmJ1MFRCaXdpSWZLd2krbUQ3anFKclBXQkNodEN6Y3gwMElud3pLWG9xWXpBTFB5S0g5ZFBjRmN4dHZhU3pMdDExMWdOclBKNGJ1Z1NGbzd2clpTSjR6Q3dDSDFud2RMNVpGWFZQcDliUXhwcGlpNE9Rc2M5dnFnRG5UeEQ2dVQ4NkJaOGMwL0gzMUFwLzVvRGFNNU9MMHM4dXR5MUhxVHA5T2QxN0ZOelZka2xTbWFRMTR4elpxcE95M0JwYnJNTmZxWEpBUmNURUlnM3NYUG4vSWlLRTBRa1V1Vm1LTHR5OTdOUVdXMHBLUi95Sm5BUFI0ZFFlQURReXpDRGxiWUp0K2dSQy9rVkVQTklscVM5TnJBR0FOL0YzbUdhUVUrN2kzcmxzT1lxSS9rcTJUZnlBMkxJR28relFWVVAybFVSNWV6WGwwdElOMm0wSE9ZTHovOXkxZ2JyWlFkcU5XODhNOTVscVFvYXd3aEZhRm8rU1g0dWxmdzBRcFVacytRUDhCeGw1R1FqU3RQYnFyMm1NclI1cW9LNnpzOUFsSXJYbzZ1L1laS2x2bFdnUWJEVVk5V0QxSzJ5ZGdsRFE1cXlCdFVFUEhpSTJBcENKRXVqTmIwc3hia3FBUW1LdEJvNHczL3VjUkM5R2xRdGlocCtsMlhNOUFqSTk4aUJYckI4RkhIUkd2d3FZeTBoTWNzcnZ6MU13UHp3Rk9tVmVhbWpNTVNqRVgxRjlOcEJNRlpzRTZYUGNLbW9vU3BkSXh2TTJnNVJUam9lZ3hRbXFyYXFMdXU3ZUhPVk12aThjRUcrNjZlTVhQTTF6VXdDaTVvVGI1ZlBEOFBuZ3didmVJMVIzbUFvNUl4NzhxUHZ6Y3MzUUwyYjZyOXFRaDFuMnFwZGZLUk5TNkVlb1BJbkpBNXgwb3BONXVWWmpXdU52VVB3VkhkTWFwVUwvTUhhQU4xa3hhWXdiMnlLYWhRcDg0bHhGVVloeVFrSGhGVVBqOTVQOURDcUQyWDFLd011RW1EallLeldtenpNcXloYjBaWUlzaFZaTmlFYTdoRUNIUmpBV3I1a3VXa2VVYlVjcXlERmpTNWwyVFdtNWE0elpwY3FpcXBlN1JGMjBjMlUxVGF2OUorZ1RrUzJSdDFPalRaMG1NY1JOUXd4dlozaXFhb3BsdE1vbmhkZXlWWnZPQnlVdEx6SWVkRUJNbkZlaVBGc1g1SFJKWnpsdkxvVVhvZHQzWW5mZGczWDRVb1dCNGVodDQ0dGhQQlZ5OWZlVUlrTXltWkpYdkNhWFB4MUgzb0svVVl6KzJ2ZUpXLzl2UmZIbTZabGgwOS9WNWZ0UzZrMFRjUnhGRzlxcG9yQ01HNnBnenlQT1FESy9KaThaWHd0dG0yQXV4cEYwc1d6TmFkYzB0UGNvMG9tTjU3NzNFUjQxSkllRjJiWFJSaU9nK0diSmZ3MTdWb2ZRTU5OaEpmbVlqR1ZLbGs5RVdKYlNydU5KVWRzdGpFNGplRzdCNk9zd3VqYzlzSjNUaGhzWFhtZU5iWlFqYjQva3VhR2l2WENjamZBZUQwNVZwbTdXbWd4ZUFoU1dNdkc1SjhqdWFZWEFsUmtxbFk3U0F1SDd6bVZZbmhBYW5SUmExYnF1ZU5FVmsrTXM0MnJreWhtUjlkcVZCOGdZbnBCTHo5dHE3eXJoSlFGbFlnM3dqaURmcFJ2TEsvUGtBVUtiUnB0SS9uZ3RLdERKcTlwSm5KVnpMeFhyMUFxMk1UWEJSYmtQN1pXK0UreGxTTURnM2MvWUlldFdGeDJ4R2tLbHVzWXcwckdSYXloaFNsejNjYTFCSHV1QStmYVFNSWxCYnlmUDI2bmpFM3N5RVU2bEVuT1c0Y2RlT1UvdmdQV3dLNEx0SDJjdlo3UTB1ck1qMTdnbHAyUzU5TWt2aVU5MUFQZWRZWlF1Q0REZy8wa1lHWFFhK05sS2ZnbFd0anA1dThmTWF6YlVKUXJiMjZLRCtSRTMyMllmb2Q4OFFxR3k3T2FvSm0yV0dic0s2MVZQQ05icURSNndJU2V2U0dvdnNqWHRnMXp0MW1aVTA3Mmc4dXU1SXRRaktzQTY3MThMWGVEWmZLUGNhbnNEM1ZwbmpWTTN1RmdYMzJZU1ljTWdoZTlPQW9VZEtXV2ZCYUI2THRuak5peUdaL09XVzhHdFhKMHlYeURYUVllSThEQkpjU1k2bDkyRFR3d3R2dk9BZUR1NmRVbGkyaFVZNWxXNktucmY4THR5dzhhNXFoZWp0OGg5eWFCVExvSUpPeS80TUEwUUxZU2N1eG5XS2hNaWx6QlRuL1NxVVh4SFZ2OFFzdjJra2Q4Mk05TkJ3ZlljbllScmhrWkFnQzUzZmxsVG9sVVZhRmxxYWtEVHpKOFFibmZlcmtDNnkzdDlQWkNLekllNWVvMk9sN21yY1lVbGw1enJrZ1JSYkcxNml2WjY2OGkvRkR5SXhhem9IZHBwWXR4K0JDK0d6cmpRMHFLeWpjRVdETUNSb1RicWEwamw0WVFkVndwTjRVSXpNRHJhazE2NmpzSWxXYkRISnRuVUdPTXdnTnJoS0k3clZTb2xkV0tEakcyWTNJbnByS3BBeHpFbE5jd1liOG9IMC92TkRSN1Focnc3OGNIdGpBaXNXRG5BYlB0SWR6aUpTaWVLS0VXMURjR21kOENnVFdPSUdTdjVkZUc2TTQzWjl2Uk1rU0d1OUIzL0NYQTlNaUNRWnJ5b1cyY2hnZEJvcGVvd05mQVhwV1A4YTh4TXR0MTdIdG9GbWlhSm56K2tpeENJcWhYWlZpMG0wVmpzdjlMQ3lneGNZZEhvWE9vRnhpRU9ocXB5THlERmlkcFpGSVVDeGRwS0hYKytSNVpPbmJTQy83TE14YlRSd3JsMmdnWGxGMWlLbzZ3aSs3MFhLNmV6LzVxck5pVWlTcVFBQy9sd1IvcE1KMlJYSGtBSFJkbVE0TytVR1RESndjUDRLTEZvQ0RPVTFOdDlSTk9mbnVERWdkVVk2SVlkMjltV2ZScFVpNFZITGloK3k1K1FPSmRzMC81NVY1dXNYNmdLMHJ0VVhac25YTkNheGFpMU54Q1JNL0pxUmZxNmoyTDQrRVdEeWx1RDJkdTBpc2dFU0lDQXBGVEJCaHN0aTk3S2hJeERGVk9sait1b0dJbmJyUGJhR3F4MmNMRDZBQ092TTVNVjlmK2NIejRFazRiTXZ0TkFRK0hEK2o2SUZsUWtFZlk3QWNPS0x3aU51SmJwYkRETHlxMjBnSHgrb0xvOVVGRk5oYXpsM0NKUXdYVTRmTnNkY2pvc3AvYk54UWEwNEo3Z0pzVDBZaXJGb2Y3OWZXTXplRmRJTGl2NDJyTDBFMzVYcEdBSTExSTlBZGtIY2ZSRXVzalZQQUZTMVhhOVU4LzFuWU9GdGFhd09NbGVmUlZxWDh3OWkwQy9rS0V2V2MzZW11SUQwV0V3eFR6R1RtaHhKVmhXVW9GVGlqaG1RM2pZWHlHK0RNTjNCU2MwZGdabWZFbmRpNGpPUDNTSW43OWVDUnI1YTljclRFODk4OFRzelkvYzhzZVp3NGVOY3RsT0U0KzBFdUM1eEhaUDZDc0FIdkZRZ0FQc3c3T0ZUUTRjQ2h6U0hKdkMwUEhGWHh3aDFCRWNXeTZmQjQ3NytBVldwT3NTN0VsZ1MvVEtseFBjVmVmOWJEd3F6MjQvMHZGQzUxY1RwTmtiTWUyd291bVBjOUNnQzRpV2NmbjlINUFUcnVmb2ZFWis4V1BMN0FGM0lvMUd6b0U9",
-    username : "public"
-  });
-};
-
-OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
-  var optionalCouchAppPath = "";
-  if(OPrime.isCouchApp()){
-    var corpusURL = window.location.origin;
-    if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
-      corpusURL = "https://corpusdev.lingsync.org";
-    } else if (corpusURL.indexOf("lingsync.org") >= 0) {
-      corpusURL = "https://corpus.lingsync.org";
-    } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
-      corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
-    } else if (corpusURL.indexOf("localhost") >= 0) {
-      // use the window origin
-    }
-    optionalCouchAppPath = corpusURL+"/"+dbname+"/_design/pages/";
-  }
-  return optionalCouchAppPath;
-};
-define("libs/webservicesconfig_devserver", function(){});
-
 /* If they have an old link, redirect them */
-if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0 ){
-  var newTestingServerWithCORS = window.location.href.replace("ifielddevs.iriscouch.com", "corpusdev.lingsync.org");
+if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
+  var newTestingServerWithCORS = window.location.href.replace(
+      "ifielddevs.iriscouch.com", "corpusdev.lingsync.org");
   if (window.location.protocol == "http:") {
-    newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
+    newTestingServerWithCORS = newTestingServerWithCORS
+        .replace("http", "https");
   }
   window.location.replace(newTestingServerWithCORS);
 }
@@ -37923,25 +38685,23 @@ if (window.location.origin.indexOf("localhost") == -1) {
   }
 }
 
-
-
-//Set the RequireJS configuration
+// Set the RequireJS configuration
 require.config({
   paths : {
     /* Bootstrap user interface javascript files */
     "bootstrap" : "libs/bootstrap/js/bootstrap.min",
 
-    "crypto" : "libs/Crypto_AES",
+    "CryptoJS" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "jquery" : "libs/jquery",
+    "$" : "libs/jquery",
 
     /* Handlebars html templating libraries and compiled templates */
-    "compiledTemplates" : "libs/compiled_handlebars",
-    "handlebars" : "libs/handlebars.runtime",
+    "handlebars" : "libs/compiled_handlebars",
+    "handlebarsjs" : "libs/handlebars.runtime",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
-    "underscore" : "libs/underscore",
+    "_" : "libs/underscore",
     "backbonejs" : "libs/backbone",
     "jquery-couch" : "libs/backbone_couchdb/jquery.couch",
     "backbone" : "libs/backbone_couchdb/backbone-couchdb",
@@ -37953,33 +38713,22 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_devserver"
+    "OPrime" : "libs/webservicesconfig_devserver"
   },
   shim : {
-    
+
     "xml2json" : {
       deps : [ "jquery" ],
       exports : "X2JS"
     },
-    
-    "oprime" : {
-      exports : "OPrime"
-    },
-    "webservicesconfig" : {
+
+    "OPrime" : {
       deps : [ "oprime" ],
       exports : "OPrime"
     },
-    
-    "underscore" : {
-      exports : "_"
-    },
 
-    "jquery" : {
-      exports : "$"
-    },
-    
     "jquery-couch" : {
-      deps : [ "jquery" ],
+      deps : [ "$" ],
       exports : "$"
     },
 
@@ -37987,48 +38736,39 @@ require.config({
       deps : [ "jquery-couch" ],
       exports : "bootstrap"
     },
-    
+
     "backbonejs" : {
-      deps : [ "underscore", "bootstrap" ],
+      deps : [ "_", "bootstrap" ],
       exports : "Backbone"
     },
+    "handlebarsjs" : {
+      deps : [ "backbonejs", "$" ],
+      exports : "Handlebars"
+    },
+    "handlebars" : {
+      deps : [ "handlebarsjs" ],
+      exports : "Handlebars"
+    },
     "backbone" : {
-      deps : [ "backbonejs", "jquery-couch", "compiledTemplates" ],
+      deps : [ "backbonejs", "jquery-couch", "handlebars" ],
       exports : "Backbone"
     },
 
-    "handlebars" : {
-      deps : [ "backbonejs", "jquery" ],
-      exports : "Handlebars"
-    },
-    "compiledTemplates" : {
-      deps : [ "handlebars" ],
-      exports : "Handlebars"
-    },
-    
-    "crypto" : {
-      exports : "CryptoJS"
-    },
-    
     "terminal" : {
-      deps : [ "bootstrap", "jquery" ],
+      deps : [ "bootstrap", "$" ],
       exports : "Terminal"
     }
 
   }
 });
 
-//Initialization
-require([ 
-    "app/App",  
-    "backbone",
-    "libs/webservicesconfig_devserver"
-    ], function(
-        App,
-        forcingpouchtoloadearly
-    ) {
-  
-  window.app = new App({filledWithDefaults: true});
+// Initialization
+require([ "app/App", "backbone", "OPrime" ], function(App,
+    forcingpouchtoloadearly) {
+
+  window.app = new App({
+    filledWithDefaults : true
+  });
 });
 
 define("corpus_online_dashboard", function(){});
