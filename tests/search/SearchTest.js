@@ -1,6 +1,6 @@
-require([ "search/Search"
+require([ 
 
-], function(Search) {
+], function() {
 
   describe("Search: as a user I want my data at my finger tips", function() {
     it("should be able search", function() {
