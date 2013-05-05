@@ -1,4 +1,4 @@
-require([ "permission/Permission" ], function(Permission) {
+require([  ], function() {
   describe("Permission Tests", function() {
     it("should have a read permission by default", function() {
       // var permission = new Permission();
