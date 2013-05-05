@@ -12,7 +12,6 @@ define(
                                            * @returns {LingSyncSpreadsheetController}
                                            */
       function($scope, $rootScope, $resource, $filter, LingSyncData) {
-
         var LingSyncPreferences = localStorage.getItem('LingSyncPreferences');
         if (LingSyncPreferences == undefined) {
           LingSyncPreferences = {
@@ -566,20 +565,25 @@ define(
         };
 
         $scope.runSearch = function(searchTerm) {
+          searchTerm = searchTerm.toLowerCase();
           var newScopeData = [];
           if (!$scope.activeSession) {
             for (i in $scope.data) {
               for (key in $scope.data[i]) {
                 if (key == "datumTags") {
                   var tagString = JSON.stringify($scope.data[i].datumTags);
+                  tagString = tagString.toLowerCase();
+                  console.log(tagString);
                   if (tagString.indexOf(searchTerm) > -1) {
                     newScopeData.push($scope.data[i]);
                     break;
                   }
-                } else if ($scope.data[i][key]
-                    && $scope.data[i][key].indexOf(searchTerm) > -1) {
-                  newScopeData.push($scope.data[i]);
-                  break;
+                } else if ($scope.data[i][key]) {
+                  var dataString = $scope.data[i][key].toLowerCase();
+                  if (dataString.indexOf(searchTerm) > -1) {
+                    newScopeData.push($scope.data[i]);
+                    break;
+                  }
                 }
               }
             }
@@ -589,6 +593,8 @@ define(
                 for (key in $scope.data[i]) {
                   if (key == "datumTags") {
                     var tagString = JSON.stringify($scope.data[i].datumTags);
+                    tagString = tagString.toLowerCase();
+                    console.log(tagString);
                     if (tagString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
                       break;
@@ -628,9 +634,10 @@ define(
             checked : true
           });
           if (results.length > 0) {
-            window.alert("TODO\n" + JSON.stringify(results));
+            $scope.resultsMessage = results.length + " Records:";
+            $scope.results = results;
           } else {
-            window.alert("Please select records to export.");
+            $scope.resultsMessage = "Please select records to export.";
           }
         };
 

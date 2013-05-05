@@ -9,17 +9,16 @@
 				<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill
 					Prosody Lab</option>
 				<option value='https://ifielddevs.iriscouch.com/'>iFieldDevs</option>
-				<option value='https://corpusdev.lingsync.org/'>LingSync Dev</option>
+				<option value='https://corpusdev.lingsync.org/'>LingSync
+					Dev</option>
 			</select><br> <br> <input type="text" ng-model='auth.user'
 				placeholder="username"><br> <input type="password"
 				ng-model='auth.password' placeholder="password"><br>
 			<button class="btn btn-primary">Log In</button>
 		</form>
 	</div>
-	<div class="row" ng-show="loading==true && authenticated==false">
-		<div class="span12 pagination-centered">
-			<img src="img/loading-spinner.gif" width="100px">
-		</div>
+	<div ng-show="loading==true && authenticated==false">
+		<img src="img/loading-spinner.gif" width="100px">
 	</div>
 	<div ng-show="authenticated==true">
 		Logged in as {{username}}<br> Select Database and click Access:<br>
@@ -29,11 +28,9 @@
 			</select><br>
 			<button class="btn btn-primary">Access</button>
 		</form>
-		<div class="row" ng-show="loading==true">
-			<div class="span12 pagination-centered">
-				<span>Please wait while we access the database...</span><br /> <img
-					src="img/loading-spinner.gif" width="100px">
-			</div>
+		<div ng-show="loading==true">
+			<span>Please wait while we access the database...</span><br /> <img
+				src="img/loading-spinner.gif" width="100px">
 		</div>
 		<span ng-show="loading==false && data!=undefined"><h2>Data
 				loaded. Select a session and click Go, or create a new session.</h2> </span><br>

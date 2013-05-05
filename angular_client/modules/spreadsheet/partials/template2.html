@@ -105,7 +105,9 @@
 	<!-- Show when not editing -->
 	<div ng-show="selected!=datum">
 		<div class="span1">
-			<input type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked" ng-show="searching==true">
+			<input type="checkbox" value="{{datum.id}}"
+				ng-checked="datum.checked" ng-model="datum.checked"
+				ng-show="searching==true">
 		</div>
 		<div class="span3">
 			<span class="span3" title="{{fields.field1.title}}"
