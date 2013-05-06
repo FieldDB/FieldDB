@@ -151,10 +151,16 @@ define(
                     var scopeSessions = [];
                     for ( var i = 0; i < dataFromServer.length; i++) {
                       // Create array of sessions
-                      if (dataFromServer[i].value.sessionFields) {
-                        scopeSessions.push(dataFromServer[i].value);
+                      var addThisSession = true;
+                      for ( var m in scopeSessions) {
+                        if (dataFromServer[i].value.session._id == scopeSessions[m]._id) {
+                          addThisSession = false;
+                          continue;
+                        }
                       }
-
+                      if (addThisSession == true) {
+                        scopeSessions.push(dataFromServer[i].value.session);
+                      }
                       // Create array of datums
                       if (dataFromServer[i].value.datumFields) {
                         var newDatumFromServer = {};

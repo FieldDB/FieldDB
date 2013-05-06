@@ -21,7 +21,7 @@ define([ "angular" ], function(angular) {
                   return promise;
                 } else {
                   couchInfo = $rootScope.server + DB
-                  + "/_design/pages/_view/by_date";
+                  + "/_design/pages/_view/datums";
                   console.log("Contacting the DB to get all LingSync corpus data for " + DB + " " 
                       + couchInfo);
                   var promise = $http.get(couchInfo).then(function(response) {
