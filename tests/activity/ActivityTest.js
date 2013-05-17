@@ -1,6 +1,6 @@
 require(
-    [ "activity/Activity" ],
-    function(Activity) {
+    [  ],
+    function() {
       describe("Activities: Test Activity Feed replication.", function() {
         it("should have an id if it gets inserted into pouch.", function() {
           // var a = new Activity();
