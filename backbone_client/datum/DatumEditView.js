@@ -530,6 +530,7 @@ define([
       }
       this.guessUtterance($(e.currentTarget).val());
       this.guessGlosses($(e.currentTarget).val());
+      this.buildQTree($(e.currentTarget).val());
       this.needsSave = true;
 
     },
@@ -556,6 +557,58 @@ define([
 //          },500);
           }
         }
+      }
+    },
+    buildQTree : function(morphemesLine) {
+      if (morphemesLine) {
+        if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "") {
+          // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
+//        this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+
+
+/* 
+add QTree brackets
+
+*/
+          var qtree = morphemesLine;
+          morphemesLine = "tusu-naya-wa-mi";
+          morphemesLine = "x-y-z-w";
+
+          //qtree = "x-y-z-w";
+          var parses = [];
+          var groupInPairs = function(demitedungroupeditem, delimiter, prefix){
+            if(!prefix) prefix = "";
+            var pieces = demitedungroupeditem.split(delimiter);
+            var newdelimitedgroup = [];
+            for(var i in pieces){
+              if(i == 0) continue;
+              newdelimitedgroup.push(prefix+"9"+ pieces.slice(0,i).join("-")+"8"+pieces.slice(i,pieces.length).join("-") );
+            }
+            parses = parses.concat(newdelimitedgroup);
+
+            return newdelimitedgroup;
+          }
+
+          var firstpass =  groupInPairs(morphemesLine, "-") ;
+          for( var itemInFirstPass in firstpass){
+            var prefix = firstpass[itemInFirstPass].replace(/8[^8]*$/, "");
+            var twopieces = [prefix , firstpass[itemInFirstPass].replace(prefix, "")];
+          
+            var secondpass =  groupInPairs(twopieces[1], "-", twopieces[0] )) ;
+            for( var itenInSecondPass in secondpass){
+              var twopieces = secondpass[secondpass].split(/8[^8]*$/);
+              if(twopieces.length <2){
+                twopieces.unshift("");
+              }
+               var thirdpass =   groupInPairs(twopieces[1], "-", twopieces[0] )) ;
+
+            }
+          }
+          //qtree = qtree.replace(/ /g," ] [ ");
+          //qtree = "[ "+morphemesLine+" ]";
+          this.needsSave = true;
+        }
+        
       }
     },
     guessUtterance : function(morphemesLine) {
