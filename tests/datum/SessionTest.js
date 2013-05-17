@@ -1,4 +1,4 @@
-require([ "datum/Session" ], function(Session) {
+require([  ], function() {
 
   // No longer needed since session ID will be in the PouchDB
   describe(

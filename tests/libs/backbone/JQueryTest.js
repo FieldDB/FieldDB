@@ -1,4 +1,4 @@
-require([ "sinon", "$" ], function() {
+require([ "$", "sinon" ], function() {
   describe("JQuery DOM manipulation and Sinon timers", function() {
     var clock;
     function throttle(callback) {

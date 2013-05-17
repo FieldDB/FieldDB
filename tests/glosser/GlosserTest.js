@@ -1,6 +1,6 @@
 require(
-    [ "glosser/Glosser" ],
-    function(Glosser) {
+    [  ],
+    function() {
 
       describe(
           "Glosser: as a user I don't want to enter glosses that are already in my data",

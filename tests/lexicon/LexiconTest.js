@@ -1,6 +1,6 @@
 require([
-    "lexicon/Lexicon"
-], function(Lexicon) {
+    
+], function() {
     describe("Lexicon: as a user I want to search for anything, even things that don't exist", function() {
         it("should be able to build morphemes from a text file of segmented morphemes", function() {
         	 expect(true).toBeTruthy();
