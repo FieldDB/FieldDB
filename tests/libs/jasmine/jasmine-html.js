@@ -647,8 +647,12 @@ jasmine.TrivialReporter.prototype.reportSpecResults = function(spec) {
   if (messagesDiv.childNodes.length > 0) {
     specDiv.appendChild(messagesDiv);
   }
-
-  this.suiteDivs[spec.suite.id].appendChild(specDiv);
+  if(spec && spec.suite && this.suiteDivs && this.suiteDivs[spec.suite.id]){
+    this.suiteDivs[spec.suite.id].appendChild(specDiv);
+  }else{
+    var id = spec.suite.id || "unknown";
+    console.log("Error appending div for "+ id);
+  }
 };
 
 jasmine.TrivialReporter.prototype.log = function() {
