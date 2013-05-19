@@ -166,13 +166,15 @@ require([ //"handlebars",
     jasmineEnv.addReporter(new jasmine.TrivialReporter());
     jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   } else {
-    var htmlReporter = new jasmine.HtmlReporter();
-
-    jasmineEnv.addReporter(htmlReporter);
-
-    jasmineEnv.specFilter = function(spec) {
-      return htmlReporter.specFilter(spec);
-    };
+//    var htmlReporter = new jasmine.HtmlReporter();
+//
+//    jasmineEnv.addReporter(htmlReporter);
+//
+//    jasmineEnv.specFilter = function(spec) {
+//      return htmlReporter.specFilter(spec);
+//    };
+    jasmineEnv.addReporter(new jasmine.TrivialReporter());
+    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   }
 
   jasmineEnv.execute();

@@ -604,7 +604,12 @@ jasmine.TrivialReporter.prototype.reportSuiteResults = function(suite) {
   if (results.totalCount === 0) { // todo: change this to check results.skipped
     status = 'skipped';
   }
-  this.suiteDivs[suite.id].className += " " + status;
+  if (this.suiteDivs && suite.id && this.suiteDivs[suite.id] ) {
+    this.suiteDivs[suite.id].className += " " + status;
+  } else {
+    var id = suite.id || "unknown";
+    console.log("Problem setting classname on a suiteDiv: " + id);
+  }
 };
 
 jasmine.TrivialReporter.prototype.reportSpecStarting = function(spec) {
