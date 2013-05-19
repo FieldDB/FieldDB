@@ -26,6 +26,7 @@ else {
         console.log("Loading " + address);
 
         // if provided a url without a protocol, try to use file://
+        /* This line causes runnning specifically in the Travis CI to fail */
 //        address = address.indexOf("://") === -1 ? "file://" + address : address;
 
         // create a WebPage object to work with
