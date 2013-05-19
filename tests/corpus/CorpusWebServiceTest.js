@@ -1,6 +1,16 @@
 require([ "../tests/corpus/CouchDBConnection" ], function(CouchDBConnection) {
 
   var runCORSTests = function(whichServer) {
+    
+    /*
+     * Turn off CORS alerts
+     */
+    OPrime.bug = function(message) {
+      console.log(message);
+//      expect(false).toBeTruthy();
+    };
+    
+   
     var serverURL = "https://corpusdev.lingsync.org/_session";
     if (whichServer == "Testing") {
       serverURL = "https://corpusdev.lingsync.org/_session";
@@ -11,7 +21,7 @@ require([ "../tests/corpus/CouchDBConnection" ], function(CouchDBConnection) {
     } else if (whichServer == "Localhost") {
       serverURL = "https://localhost:6984/_session";
     }
-
+    console.log("Testing with: "+serverURL);
     /*
      * Declare an object and its functions which will be in scope
      */
@@ -117,15 +127,16 @@ require([ "../tests/corpus/CouchDBConnection" ], function(CouchDBConnection) {
     });
 
   };
-
+ 
   describe("CorpusWebService Testing: ", function() {
     runCORSTests("Testing");
   });
 
   /* Turn this on if you want to test your localhost config */
-  // describe("CorpusWebService Localhost: ", function() {
-  // runCORSTests("Localhost");
-  // });
+//   describe("CorpusWebService Localhost: ", function() {
+//    runCORSTests("Localhost");
+//  });
+//   
   /* TODO Turn these on when the other servers support CORS too */
   // describe("CorpusWebService Stable: ", function() {
   // runCORSTests("Stable");
