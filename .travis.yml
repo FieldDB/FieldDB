@@ -1,1 +1,1 @@
-script: phantomjs tests/jasmine-1.2.0/phantomjs_jasminexml_runner.js tests/jasmine.html test-reports
+script: phantomjs tests/libs/jasmine-reporters/test/phantomjs-testrunner.js tests/SpecRunner.html
