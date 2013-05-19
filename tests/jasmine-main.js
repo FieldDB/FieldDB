@@ -126,7 +126,8 @@ require([ //"handlebars",
  * For some mysterious reason as yet unknown to us, these tests need to run
  * (first), or no FieldDB tests will run
  */
-    "PlayerSpec", 
+          "PlayerSpec", 
+          "../tests/libs/jasmine/spec/AsyncSpec", 
 //    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
@@ -136,6 +137,7 @@ require([ //"handlebars",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
     "../tests/corpus/CorpusTest", 
+    "../tests/corpus/CorpusBackupTest", 
     "../tests/export/ExportTest",
     "../tests/glosser/GlosserTest", 
     "../tests/hotkey/HotKeyTest",
