@@ -7,13 +7,7 @@ define(
         this.result = {};
         this.uploadResult = {};
         this.login = function(optionalCallback) {
-          /*
-           * Turn off CORS alerts
-           */
-          OPrime.bug = function(message) {
-            console.log(message);
-            expect(false).toBeTruthy();
-          };
+         
 
           var that = this;
           OPrime.makeCORSRequest({
