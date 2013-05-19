@@ -220,10 +220,11 @@ require(
         runCORSTests("Testing");
       });
 
-      describe("CorpusWebService Localhost: ", function() {
-        runCORSTests("Localhost");
-      });
-
+      /* Turn this on if you want to test your localhost config */
+      // describe("CorpusWebService Localhost: ", function() {
+      // runCORSTests("Localhost");
+      // });
+      
       /* TODO Turn these on when the other servers support CORS too */
       // describe("CorpusWebService Stable: ", function() {
       // runCORSTests("Stable");
@@ -232,5 +233,4 @@ require(
       // describe("CorpusWebService McGill: ", function() {
       // runCORSTests("McGill");
       // });
-
     });

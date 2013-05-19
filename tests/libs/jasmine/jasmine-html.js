@@ -41,7 +41,7 @@ jasmine.HtmlReporterHelpers.appendToSummary = function(child, childElement) {
   var parentSuite = (typeof child.parentSuite == 'undefined') ? 'suite' : 'parentSuite';
   var parent = child[parentSuite];
 
-  if (parent) {
+  if (parent && this.views) {
     if (typeof this.views.suites[parent.id] == 'undefined') {
       this.views.suites[parent.id] = new jasmine.HtmlReporter.SuiteView(parent, this.dom, this.views);
     }

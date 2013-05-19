@@ -54,7 +54,7 @@ require(
                    * Poll until success
                    */
                   waitsFor(function() {
-                    console.log("Waiting for faked login");
+//                    console.log("Waiting for faked login");
                     return serverResult.loggedIn();
                   }, "User never logged in successfully", 300);
 
@@ -98,7 +98,7 @@ require(
                * Poll until success
                */
               waitsFor(function() {
-                console.log("Waiting for faked login");
+//                console.log("Waiting for faked login");
                 return serverResult.loggedIn();
               }, "User never logged in successfully", 3000);
 
@@ -133,7 +133,7 @@ require(
                * Poll until success
                */
               waitsFor(function() {
-                console.log("Waiting for faked login");
+//                console.log("Waiting for faked login");
                 return serverResult.loggedIn();
               }, "User never logged in successfully", 3000);
 
