@@ -705,6 +705,22 @@ define([
             }catch(e){
               OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
             }
+            try{
+              var tags = corpusModel.get("datumFields").where({label : "syntacticTreeLatex"});
+              if(tags.length == 0){
+                /* If its missing syntacticTreeLatex, add upgrade the corpus to version v1.54+ */
+                corpusModel.get("datumFields").add(new DatumField({
+                  label : "syntacticTreeLatex",
+                  showToUserTypes: "machine",
+                  shouldBeEncrypted: "",
+                  userchooseable: "disabled",
+                  help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
+                }));
+               
+              }
+            }catch(e){
+              OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
+            }
             
             $(".spinner-status").html("Opened Corpus...");
             

@@ -289,6 +289,13 @@ define([
             		" or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
           }),
           new DatumField({
+            label : "syntacticTreeLatex",
+            shouldBeEncrypted: "checked",
+            showToUserTypes: "machine",
+            userchooseable: "disabled",
+            help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
+          }),
+          new DatumField({
             label : "translation",
             shouldBeEncrypted: "checked",
             showToUserTypes: "all",
@@ -1420,6 +1427,10 @@ define([
           var doesThisCorpusHaveSyntacticCategory = frequentFields.indexOf("syntacticCategory");
           if(doesThisCorpusHaveSyntacticCategory > -1){
             frequentFields.splice(doesThisCorpusHaveSyntacticCategory, 1);
+          }
+          var doesThisCorpusHaveSyntacticTreeLatex = frequentFields.indexOf("syntacticTreeLatex");
+          if(doesThisCorpusHaveSyntacticTreeLatex > -1){
+            frequentFields.splice(doesThisCorpusHaveSyntacticTreeLatex, 1);
           }
           
           self.frequentDatumFields = frequentFields;
