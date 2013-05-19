@@ -741,7 +741,7 @@ OPrime.makeCORSRequest = function(options) {
 
   xhr.onerror = function(e,f,g) {
     if (OPrime.debugMode) OPrime.debug(e,f,g);
-    OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
+    OPrime.bug('There was an error making the CORS request to '+options.url+ " from "+window.location.href+" the app will not function normally. Please report this.");
     if(typeof options.error == "function"){
       options.error(e,f,g);
     }
