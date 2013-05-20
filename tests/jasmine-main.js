@@ -139,7 +139,7 @@ require([ //"handlebars",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
     "../tests/corpus/CorpusTest", 
-    "../tests/corpus/CorpusWebServiceTest", 
+//    "../tests/corpus/CorpusWebServiceTest", 
     "../tests/export/ExportTest",
     "../tests/glosser/GlosserTest", 
     "../tests/hotkey/HotKeyTest",
@@ -167,8 +167,8 @@ require([ //"handlebars",
 
   if (/PhantomJS/.test(navigator.userAgent)) {
     jasmineEnv.addReporter(new jasmine.TrivialReporter());
-    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
-    jasmineEnv.addReporter(new jasmine.TerminalReporter());
+//    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
+//    jasmineEnv.addReporter(new jasmine.TerminalReporter());
     jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   } else {
 //    var htmlReporter = new jasmine.HtmlReporter();
@@ -179,8 +179,8 @@ require([ //"handlebars",
 //      return htmlReporter.specFilter(spec);
 //    };
     jasmineEnv.addReporter(new jasmine.TrivialReporter());
-    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
-    jasmineEnv.addReporter(new jasmine.TerminalReporter());
+//    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
+//    jasmineEnv.addReporter(new jasmine.TerminalReporter());
     jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   }
 
