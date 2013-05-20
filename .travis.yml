@@ -1,1 +1,1 @@
-script: phantomjs --web-security=no tests/libs/jasmine-reporters/test/phantomjs-testrunner.js tests/SpecRunner.html
+script: ./scripts/run_fielddb_tests.sh
