@@ -38,7 +38,7 @@ define([], function() {
       var that = this;
       OPrime.makeCORSRequest({
         type : 'POST',
-        url : that.url + "/textgrids/a3e2323q",
+        url : that.url + "/textgrids",
         data : dataToSend,
         success : function(serverResults) {
           that.result = serverResults;
@@ -94,9 +94,9 @@ define([], function() {
         
         OPrime.makeCORSRequest({
           type : 'POST',
-          url : self.url + "/upload/a3e2323q",
+          url : self.url + "/upload",
 //          headers: {"Content-type": "multipart/form-data; boundary=----WebKitFormBoundarypnqzcal9A5yjKaAb"},
-          data : formdata,
+          data : filesToBeSent,
           success : function(serverResults) {
             self.uploadResult = serverResults;
             console.log("server contacted", serverResults);
@@ -130,10 +130,10 @@ define([], function() {
       }
     };
     this.assertRetrievedTextGridsSuccessful = function() {
-      expect(this.result.textGrids.length > 0).toBeFalsy();
+      expect(this.result.textGrids.length > 0).toBe(true);
     };
     this.assertUploadSuccessful = function() {
-      expect(this.uploadResult.ok).toBeFalsy();
+      expect(this.uploadResult.ok).toBe(true);
     };
   };
 
