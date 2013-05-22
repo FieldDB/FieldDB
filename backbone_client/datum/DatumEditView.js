@@ -574,6 +574,9 @@ define([
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
         if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
           var utteranceLine = morphemesLine.replace(/-/g,"");
+          /* uppercase the first letter of the line */
+          utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
+
           this.$el.find(".utterance").find(".datum_field_input").val(utteranceLine);
           this.needsSave = true;
         }
