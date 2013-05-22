@@ -73,7 +73,7 @@ define([
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "li",
+        childViewTagName     : "tr",
         childViewClass   : "datum-field",
         childViewFormat      : "datum"
       });
@@ -483,16 +483,16 @@ define([
       $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
     utteranceBlur : function(e){
-      var utteranceLine = $(e.currentTarget).val();
+      var utteranceLine = $(e.currentTarget).text();
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       if (utteranceLine) {
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
-        if (this.$el.find(".morphemes .datum_field_input").val() == "") {
+        if (this.$el.find(".morphemes .datum_field_input").text() == "") {
           // If the morphemes line is empty, make it a copy of the utterance
-          this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
+          this.$el.find(".morphemes .datum_field_input").text(utteranceLine);
           this.needsSave = true;
           
 //          //autosize the morphemes field
@@ -508,7 +508,7 @@ define([
           // Ask the user if they want to use the guessed morphemes
           if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
             // Replace the morphemes line with the guessed morphemes
-            this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+            this.$el.find(".morphemes .datum_field_input").text(morphemesLine);
             this.needsSave = true;
             //redo the gloss guessing
             this.guessGlosses(morphemesLine);
@@ -528,17 +528,17 @@ define([
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
-      this.guessUtterance($(e.currentTarget).val());
-      this.guessGlosses($(e.currentTarget).val());
+      this.guessUtterance($(e.currentTarget).text());
+      this.guessGlosses($(e.currentTarget).text());
       this.needsSave = true;
 
     },
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {
         var glossLine = Glosser.glossFinder(morphemesLine);
-        if (this.$el.find(".gloss .datum_field_input").val() == "") {
+        if (this.$el.find(".gloss .datum_field_input").text() == "") {
           // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
-//        this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+//        this.$el.find(".gloss .datum_field_input").text(morphemesLine);
 
           this.needsSave = true;
         }
@@ -547,7 +547,7 @@ define([
           // Ask the user if they want to use the guessed gloss
           if (confirm("Would you like to use this gloss:\n" + glossLine)) {
             // Replace the gloss line with the guessed gloss
-            this.$el.find(".gloss .datum_field_input").val(glossLine);
+            this.$el.find(".gloss .datum_field_input").text(glossLine);
             this.needsSave = true;
             //autosize the gloss field
 //          var datumself = this;
@@ -561,9 +561,9 @@ define([
     guessUtterance : function(morphemesLine) {
       if (morphemesLine) {
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
-        if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
+        if (this.$el.find(".utterance").find(".datum_field_input").text() == "") {
           var utteranceLine = morphemesLine.replace(/-/g,"");
-          this.$el.find(".utterance").find(".datum_field_input").val(utteranceLine);
+          this.$el.find(".utterance").find(".datum_field_input").text(utteranceLine);
           this.needsSave = true;
         }
       }
