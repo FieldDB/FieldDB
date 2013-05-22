@@ -4,7 +4,7 @@ if (phantom.args.length === 0) {
     console.log("Usage: phantomjs-testrunner.js url_to_runner.html");
     console.log("Accepts http:// and file:// urls");
     console.log("");
-    console.log("NOTE: This script depends on jasmine.TrivialReporter being used\non the page, for the DOM elements it creates.\n");
+    console.log("NOTE: This script depends on jasmine. TrivialReporter being used\non the page, for the DOM elements it creates.\n");
     phantom.exit(2);
 }
 else {
@@ -26,7 +26,8 @@ else {
         console.log("Loading " + address);
 
         // if provided a url without a protocol, try to use file://
-        address = address.indexOf("://") === -1 ? "file://" + address : address;
+        /* This line causes runnning specifically in the Travis CI to fail */
+//        address = address.indexOf("://") === -1 ? "file://" + address : address;
 
         // create a WebPage object to work with
         page = require("webpage").create();
@@ -40,6 +41,7 @@ else {
         pages.push(page);
 
         page.onConsoleMessage = logAndWorkAroundDefaultLineBreaking;
+        page.onAlert = logAndWorkAroundDefaultLineBreaking;
     }
 
     // bail when all pages have been processed

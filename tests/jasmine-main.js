@@ -16,6 +16,8 @@ require.config({
 
     /* Additional Jasmine runner files for XML and console output */
     "JUnitReporter" : "../tests/libs/jasmine-reporters/src/jasmine.junit_reporter",
+    "ConsoleReporter" : "../tests/libs/jasmine-reporters/src/jasmine.console_reporter",
+    "TerminalReporter" : "../tests/libs/jasmine-reporters/src/jasmine.terminal_reporter",
 
     /* load Backbone dependencies */
     "handlebarsjs" : "libs/handlebars.runtime",
@@ -126,16 +128,20 @@ require([ //"handlebars",
  * For some mysterious reason as yet unknown to us, these tests need to run
  * (first), or no FieldDB tests will run
  */
-    "PlayerSpec", 
+          "PlayerSpec", 
+          "../tests/libs/jasmine/spec/AsyncSpec", 
 //    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
+          "../tests/audioVideo/AudioWebServiceTest", 
+
 	"../tests/app/AppTest", 
 	"../tests/activity/ActivityTest",
 	"../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
     "../tests/corpus/CorpusTest", 
+    "../tests/corpus/CorpusWebServiceTest", 
     "../tests/export/ExportTest",
     "../tests/glosser/GlosserTest", 
     "../tests/hotkey/HotKeyTest",
@@ -153,7 +159,8 @@ require([ //"handlebars",
 
     /* Test DOM manipulation, only run these (199 tests) once in a while */
 //    "jasmine-jquery-spec",
-    "JUnitReporter" ], function() {
+    "JUnitReporter" , "ConsoleReporter", "TerminalReporter"], function() {
+  
 
   OPrime.debugMode = false;
 
@@ -162,6 +169,8 @@ require([ //"handlebars",
 
   if (/PhantomJS/.test(navigator.userAgent)) {
     jasmineEnv.addReporter(new jasmine.TrivialReporter());
+//    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
+//    jasmineEnv.addReporter(new jasmine.TerminalReporter());
     jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   } else {
     var htmlReporter = new jasmine.HtmlReporter();
@@ -171,6 +180,10 @@ require([ //"handlebars",
     jasmineEnv.specFilter = function(spec) {
       return htmlReporter.specFilter(spec);
     };
+//    jasmineEnv.addReporter(new jasmine.TrivialReporter());
+////    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
+////    jasmineEnv.addReporter(new jasmine.TerminalReporter());
+//    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   }
 
   jasmineEnv.execute();

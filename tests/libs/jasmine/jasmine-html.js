@@ -41,7 +41,7 @@ jasmine.HtmlReporterHelpers.appendToSummary = function(child, childElement) {
   var parentSuite = (typeof child.parentSuite == 'undefined') ? 'suite' : 'parentSuite';
   var parent = child[parentSuite];
 
-  if (parent) {
+  if (parent && this.views) {
     if (typeof this.views.suites[parent.id] == 'undefined') {
       this.views.suites[parent.id] = new jasmine.HtmlReporter.SuiteView(parent, this.dom, this.views);
     }
@@ -604,7 +604,12 @@ jasmine.TrivialReporter.prototype.reportSuiteResults = function(suite) {
   if (results.totalCount === 0) { // todo: change this to check results.skipped
     status = 'skipped';
   }
-  this.suiteDivs[suite.id].className += " " + status;
+  if (this.suiteDivs && suite.id && this.suiteDivs[suite.id] ) {
+    this.suiteDivs[suite.id].className += " " + status;
+  } else {
+    var id = suite.id || "unknown";
+    console.log("Problem setting classname on a suiteDiv: " + id);
+  }
 };
 
 jasmine.TrivialReporter.prototype.reportSpecStarting = function(spec) {
@@ -647,8 +652,12 @@ jasmine.TrivialReporter.prototype.reportSpecResults = function(spec) {
   if (messagesDiv.childNodes.length > 0) {
     specDiv.appendChild(messagesDiv);
   }
-
-  this.suiteDivs[spec.suite.id].appendChild(specDiv);
+  if(spec && spec.suite && this.suiteDivs && this.suiteDivs[spec.suite.id]){
+    this.suiteDivs[spec.suite.id].appendChild(specDiv);
+  }else{
+    var id = spec.suite.id || "unknown";
+    console.log("Error appending div for "+ id);
+  }
 };
 
 jasmine.TrivialReporter.prototype.log = function() {

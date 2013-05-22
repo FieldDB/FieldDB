@@ -512,7 +512,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     // completed
   } else {
     this.debug("Recording Audio via HTML5: " + resultfilename);
-    alert("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that it was sucessful")
+    OPrime.bug("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that it was sucessful")
     // fake publish it was sucessfully started
     this.hub.publish('audioRecordingSucessfullyStarted', resultfilename);
   }
@@ -545,9 +545,9 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
     // the android will publish if its successfully started
   } else {
     this.debug("Stopping Recording Audio via HTML5: " + resultfilename);
-    alert("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that stopped and saved sucessfully")
+    OPrime.bug("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that stopped and saved sucessfully");
     // fake publish it was sucessfully started
-    resultfilename = "chime.mp3"
+    resultfilename = "chime.mp3";
     this.hub.publish('audioRecordingSucessfullyStopped', resultfilename);
     // fake publish it finished
     this.hub.publish('audioRecordingCompleted', resultfilename);
@@ -601,7 +601,7 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
     // the android will publish if its successfully started and completed
   } else {
     this.debug("Starting picture capture via HTML5: " + resultfilename);
-    alert("Taking a picture only works on Android, because it has a camera, and your computer might not.\n\n Faking that taken a picture and saved sucessfully");
+    OPrime.bug("Taking a picture only works on Android, because it has a camera, and your computer might not.\n\n Faking that taken a picture and saved sucessfully");
     // fake publish it was sucessfully started
     resultfilename = "happyface.png";
     this.hub.publish('pictureCaptureSucessfullyStarted', resultfilename);
@@ -715,7 +715,7 @@ OPrime.makeCORSRequest = function(options) {
   
   var xhr = createCORSRequest(options.method, options.url);
   if (!xhr) {
-    alert('CORS not supported, your browser is unable to contact the database.');
+    OPrime.bug('CORS not supported, your browser is unable to contact the database.');
     return;
   }
 
@@ -741,7 +741,7 @@ OPrime.makeCORSRequest = function(options) {
 
   xhr.onerror = function(e,f,g) {
     if (OPrime.debugMode) OPrime.debug(e,f,g);
-    OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
+    OPrime.bug('There was an error making the CORS request to '+options.url+ " from "+window.location.href+" the app will not function normally. Please report this.");
     if(typeof options.error == "function"){
       options.error(e,f,g);
     }
@@ -782,7 +782,7 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
         },
         success : function(serverResults) {
           console.log("serverResults" + JSON.stringify(serverResults));
-          alert("Your database is ready.");
+          OPrime.bug("Your database is ready.");
           if (typeof readycallback == "function") {
             readycallback();
           }
@@ -796,7 +796,7 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
           if (response.responseText) {
             if (response.responseText.indexOf("<html") >= 0) {
               localStorage.setItem("urlIsCouchAppReady", urlIsCouchAppReady);
-              alert("Your database is ready.");
+              OPrime.bug("Your database is ready.");
               if (typeof OPrime.checkToSeeIfCouchAppIsReadyreadycallback == "function") {
                 OPrime.checkToSeeIfCouchAppIsReadyreadycallback();
               }
@@ -805,9 +805,9 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
             }
             var error = JSON.parse(response.responseText);
             if (error.error == "unauthorized") {
-              alert("CouchDB ready but you need to get a session token, this can only happen when you are online.");
+              OPrime.bug("CouchDB ready but you need to get a session token, this can only happen when you are online.");
             } else {
-              alert("Waiting for database to be created...");
+              OPrime.bug("Waiting for database to be created...");
               // Loop every 2 sec waiting for the database to load
             }
           }
