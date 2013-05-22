@@ -4,7 +4,6 @@ var OPrime = OPrime || {};
 
 OPrime.apptype = "localhost";
 
-
 OPrime.websiteUrl = "https://localhost:3182";
 OPrime.authUrl = "https://localhost:3183";
 OPrime.audioUrl = "https://localhost:3184";
@@ -51,11 +50,11 @@ OPrime.defaultCouchConnection = function() {
   };
   var mcgill = {
     protocol : "https://",
-    domain : "prosody.linguistics.mcgill.ca",
+    domain : "corpusdev.lingsync.org",
     port : "443",
     pouchname : "default",
-    path : "/corpus",
-    authUrl : "https://prosody.linguistics.mcgill.ca/auth",
+    path : "",
+    authUrl : "https://authdev.lingsync.org",
     userFriendlyServerName : "McGill ProsodyLab"
   };
   OPrime.servers = [ localhost, testing, production, mcgill ];
@@ -74,7 +73,7 @@ OPrime.defaultCouchConnection = function() {
       OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
       connection = mcgill;
-      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+      OPrime.authUrl = "https://authdev.lingsync.org";
     } else if (window.location.origin.indexOf("localhost") >= 0) {
       connection = localhost;
       OPrime.authUrl = "https://localhost:3183";
@@ -82,7 +81,7 @@ OPrime.defaultCouchConnection = function() {
   } else if (OPrime.isChromeApp()) {
     if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
       connection = mcgill;
-      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+      OPrime.authUrl = "https://authdev.lingsync.org";
     } else if (window.location.origin
         .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
       connection = testing;
@@ -112,7 +111,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
   } else if (authUrl.indexOf("LingSync Testing") >= 0) {
     authUrl = "https://authdev.lingsync.org";
   } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
-    authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
+    authUrl = "https://authdev.lingsync.org";
   } else if (authUrl.indexOf("Localhost") >= 0) {
     authUrl = "https://localhost:3183";
   } else {
@@ -187,7 +186,9 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   } else if (window.location.origin.indexOf("localhost") >= 0) {
     mostLikelyAuthUrl = "Localhost";
   } else if (OPrime.isChromeApp()) {
-    if (OPrime.debugMode) OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
+    if (OPrime.debugMode)
+      OPrime
+          .debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
     var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(authUrl);
     if (appropriateserver == -1) {
       OPrime.bug("This shouldn't happen. Please report this bug.");
@@ -195,8 +196,9 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
       mostLikelyAuthUrl = OPrime.servers[appropriateserver].userFriendlyServerName;
     }
   }
-  //TODO add Production when it can support 1.38+ ocmdknddgpmjngkhcbcofoogkommjfoj
-  
+  // TODO add Production when it can support 1.38+
+  // ocmdknddgpmjngkhcbcofoogkommjfoj
+
   return mostLikelyAuthUrl;
 };
 
@@ -220,7 +222,7 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
     } else if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
-      corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
+      corpusURL = "https://corpusdev.lingsync.org";
     } else if (corpusURL.indexOf("localhost") >= 0) {
       // use the window origin
     }
