@@ -10,6 +10,7 @@
     }
   },
   "icons": {
+    "16": "img/icon16_dev.png",
     "128": "img/icon128_dev.png"
   },
   "permissions": [

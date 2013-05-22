@@ -12,75 +12,85 @@ define(
                                            * @returns {LingSyncSpreadsheetController}
                                            */
       function($scope, $rootScope, $resource, $filter, LingSyncData) {
-        var LingSyncPreferences = localStorage.getItem('LingSyncPreferences');
-        if (LingSyncPreferences == undefined) {
-          LingSyncPreferences = {
-            "userTemplate" : "template2",
-            "resultSize" : 5,
-            "template1" : {
-              "field1" : {
-                "label" : "utterance",
-                "title" : "Utterance"
-              },
-              "field2" : {
-                "label" : "morphemes",
-                "title" : "Morphemes"
-              },
-              "field3" : {
-                "label" : "gloss",
-                "title" : "Gloss"
-              },
-              "field4" : {
-                "label" : "translation",
-                "title" : "Translation"
-              }
-            },
-            "template2" : {
-              "field1" : {
-                "label" : "utterance",
-                "title" : "Utterance"
-              },
-              "field2" : {
-                "label" : "morphemes",
-                "title" : "Morphemes"
-              },
-              "field3" : {
-                "label" : "gloss",
-                "title" : "Gloss"
-              },
-              "field4" : {
-                "label" : "translation",
-                "title" : "Translation"
-              },
-              "field5" : {
-                "label" : "notes",
-                "title" : "Notes"
-              },
-              "field6" : {
-                "label" : "judgement",
-                "title" : "Judgement"
-              },
-              "field7" : {
-                "label" : "",
-                "title" : ""
-              },
-              "field8" : {
-                "label" : "",
-                "title" : ""
-              }
-            }
-          };
-          localStorage.setItem('LingSyncPreferences', JSON
-              .stringify(LingSyncPreferences));
-          console.log("Setting default preferences in localStorage.");
-        } else {
-          console.log("Loading LingSyncPreferences from localStorage.");
-          LingSyncPreferences = JSON.parse(LingSyncPreferences);
-        }
 
-        // Set scope variables
-        $rootScope.template = LingSyncPreferences.userTemplate;
-        $rootScope.fields = LingSyncPreferences[LingSyncPreferences.userTemplate];
+        var LingSyncPreferences;
+
+        chrome.storage.sync
+            .get(
+                'LingSyncPreferences',
+                function(value) {
+                  if (value.LingSyncPreferences) {
+                    LingSyncPreferences = value.LingSyncPreferences;
+                  } else {
+                    LingSyncPreferences = {
+                      "userTemplate" : "template2",
+                      "resultSize" : 5,
+                      "template1" : {
+                        "field1" : {
+                          "label" : "utterance",
+                          "title" : "Utterance"
+                        },
+                        "field2" : {
+                          "label" : "morphemes",
+                          "title" : "Morphemes"
+                        },
+                        "field3" : {
+                          "label" : "gloss",
+                          "title" : "Gloss"
+                        },
+                        "field4" : {
+                          "label" : "translation",
+                          "title" : "Translation"
+                        }
+                      },
+                      "template2" : {
+                        "field1" : {
+                          "label" : "utterance",
+                          "title" : "Utterance"
+                        },
+                        "field2" : {
+                          "label" : "morphemes",
+                          "title" : "Morphemes"
+                        },
+                        "field3" : {
+                          "label" : "gloss",
+                          "title" : "Gloss"
+                        },
+                        "field4" : {
+                          "label" : "translation",
+                          "title" : "Translation"
+                        },
+                        "field5" : {
+                          "label" : "notes",
+                          "title" : "Notes"
+                        },
+                        "field6" : {
+                          "label" : "judgement",
+                          "title" : "Judgement"
+                        },
+                        "field7" : {
+                          "label" : "",
+                          "title" : ""
+                        },
+                        "field8" : {
+                          "label" : "",
+                          "title" : ""
+                        }
+                      }
+                    };
+                    chrome.storage.sync.set({
+                      'LingSyncPreferences' : LingSyncPreferences
+                    });
+                    console.log("Setting default preferences in localStorage.");
+                  }
+
+                  // Set scope variables from preferences
+                  $rootScope.template = LingSyncPreferences.userTemplate;
+                  $rootScope.fields = LingSyncPreferences[LingSyncPreferences.userTemplate];
+                  $rootScope.resultSize = LingSyncPreferences.resultSize;
+                });
+
+        // Set general scope variables
         $scope.orderProp = "dateModified";
         $scope.reverse = true;
         $scope.selected = 'newEntry';
@@ -95,9 +105,6 @@ define(
         $scope.editSessionDetails = false;
         $scope.currentDate = new Date().toDateString();
 
-        // Set data size for pagination
-        $rootScope.resultSize = LingSyncPreferences.resultSize;
-
         $scope.changeActiveSubMenu = function(subMenu) {
           if ($rootScope.activeSubMenu == subMenu) {
             $rootScope.activeSubMenu = 'none';
@@ -110,7 +117,10 @@ define(
 
         $scope.navigateVerifySaved = function(itemToDisplay) {
           if ($scope.saved == 'no') {
-            window.alert("Please save changes before continuing");
+            chrome.app.window.create('popup_unsaved.html', {
+              width : 200,
+              height : 100
+            });
           } else {
 
             if ($scope.searching == true) {
@@ -198,14 +208,12 @@ define(
         };
         $scope.loginUser = function(auth) {
           if (!auth || !auth.server) {
-            window.alert("Please choose a server.");
+            chrome.app.window.create('popup_choose_server.html', {
+              width : 200,
+              height : 100
+            });
+
           } else {
-            if (auth.user == "senhorzinho") {
-              var r = confirm("Hello, developer! Would you like to enter developer mode?");
-              if (r == true) {
-                $scope.developer = true;
-              }
-            }
             $rootScope.loading = true;
             $rootScope.server = auth.server;
             LingSyncData.login(auth.user, auth.password).then(
@@ -251,7 +259,10 @@ define(
         };
         $scope.selectDB = function(selectedDB) {
           if (!selectedDB) {
-            window.alert("Please select a database.");
+            chrome.app.window.create('popup_choose_db.html', {
+              width : 200,
+              height : 100
+            });
           } else {
             $rootScope.DB = selectedDB;
             $scope.loadData();
@@ -370,8 +381,10 @@ define(
                   $rootScope.activeSubMenu = 'none';
                   // $scope.loadData();
                 }, function() {
-                  window.alert("Error deleting record.");
-                });
+                  chrome.app.window.create('popup_error.html', {
+                    width : 200,
+                    height : 100
+                  });                });
           }
         };
 
@@ -423,10 +436,11 @@ define(
 
         $scope.reloadPage = function() {
           if ($scope.saved == "no") {
-            window.alert("Please save changes before continuing.");
-          } else {
-            window.location.assign("#/");
-            window.location.reload();
+            chrome.app.window.create('popup_unsaved.html', {
+              width : 200,
+              height : 100
+            });          } else {
+            chrome.runtime.reload();
           }
         };
 
@@ -437,8 +451,10 @@ define(
                 function(response) {
                   $scope.loadData();
                 }, function() {
-                  window.alert("Error deleting record.");
-                });
+                  chrome.app.window.create('popup_error.html', {
+                    width : 200,
+                    height : 100
+                  });                });
           }
         };
 
@@ -646,8 +662,10 @@ define(
           if (newScopeData.length > 0) {
             $scope.data = newScopeData;
           } else {
-            window.alert("No records matched your search.");
-          }
+            chrome.app.window.create('popup_no_results.html', {
+              width : 200,
+              height : 100
+            });          }
         };
 
         $scope.selectAll = function() {
@@ -712,7 +730,7 @@ define(
         ;
 
         $scope.testFunction = function() {
-          window.alert($rootScope.currentResult);
+          return;
         };
 
       };
