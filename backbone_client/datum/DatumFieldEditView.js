@@ -27,6 +27,9 @@ define([
       this.model.bind('change:mask', function(){
         this.render();
       }, this);
+      this.model.bind('change:alternates', function(){
+        this.render();
+      }, this);
       
     },
     
@@ -45,6 +48,7 @@ define([
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
+      "keyup .datum_field_input" : "resizeInputFieldToFit",
       "click .icon-question-sign" : "showHelpConvention",
       "hover .icon-question-sign" : "hideHelpConvention"  
     },
@@ -90,6 +94,7 @@ define([
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
+        jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
         $(this.el).html(this.templateValue(jsonToRender));
         
         //Add the label class to this element so that it can be found for other purposes like hiding rare fields
@@ -106,11 +111,11 @@ define([
 //          $(this).autosize();
         });
         
+//        This replaces the jquery autosize library which makes the datum text areas fit their size.http://www.impressivewebs.com/textarea-auto-resize/ (see comments) https://github.com/jackmoore/autosize/blob/master/demo.html
         var fieldself = this;
-//        This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-//        window.setTimeout(function(){
-//          $(fieldself.el).find(".datum_field_input").autosize();
-//        },500);
+        window.setTimeout(function(){
+          fieldself.resizeInputFieldToFit();
+        },200);
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = false;
@@ -154,6 +159,29 @@ define([
     updateFieldValue : function() {
       this.model.set("mask", this.$el.find(".datum_field_input").val());
     }, 
+    
+    /**
+     * This is a function which can take in an event or be called directly, it
+     * will take the scrollheight of the current datum field input area, and
+     * then expand the textarea to be that height, using 50 px as the size of
+     * one em.
+     * 
+     * @param e
+     *          the event (optional) otherwise it looks for the
+     *          datum_field_input
+     */
+    resizeInputFieldToFit : function(e) {
+      var it;
+      if (e) {
+        it = e.target;
+      } else {
+        it = $(this.el).find(".datum_field_input")[0];
+      }
+      var sh = it.scrollHeight;
+      if(sh > 20){
+        it.style.height =  sh + "px";
+      }
+    },
     
     /**
      * Show help convention in popover  

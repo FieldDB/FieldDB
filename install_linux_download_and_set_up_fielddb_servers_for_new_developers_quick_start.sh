@@ -114,9 +114,9 @@ git remote rm origin
 
 echo "Downloading Couch Database files, this is where the activity feeds and corpus databases are stored."
 cd $HOME/fielddbworkspace
-curl -O --retry 999 --retry-max-time 0 -C - http://apache.skazkaforyou.com/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz 
-tar -zxvf apache-couchdb-1.2.0.tar.gz
-cd apache-couchdb-1.2.0
+curl -O --retry 999 --retry-max-time 0 -C - http://mirror.csclub.uwaterloo.ca/apache/couchdb/source/1.3.0/apache-couchdb-1.3.0.tar.gz
+tar -zxvf apache-couchdb-1.3.0.tar.gz
+cd apache-couchdb-1.3.0
 ./configure --prefix=$HOME/fielddbworkspace/couchdb
 make
 make install
@@ -141,13 +141,16 @@ node $HOME/fielddbworkspace/AudioWebService/service.js &
 echo "Testing if FieldDB LexiconWebService will run, it should say 'Listening on 3185' "
 bash  $HOME/fielddbworkspace/LexiconWebService/service.sh &
 
-echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
+echo "If the above webservices succeeded you should kill them now using (where xxx is the process id) $ kill xxxx "
 
-sudo apt-get install nginx
-sudo cp $HOME/fielddbworkspace/AuthenticationWebService/nginx_config /etc/nginx/conf.d/default.conf 
-mkdir fielddbworkspace/CorpusService
-cp $HOME/fielddbworkspace/AuthenticationWebService/fielddb_debug.crt $HOME/fielddbworkspace/CorpusService/fielddb_production.crt
-cp $HOME/fielddbworkspace/AuthenticationWebService/fielddb_debug.key $HOME/fielddbworkspace/CorpusService/fielddb_production.key
-sudo service nginx configtest
-sudo service nginx start
+read -p "Do you want to use Nginx to proxy the services on ports 80 and 443? If you're not sure, just look at the source of this file to see how you can do it yourself." -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+  # do dangerous stuff
+	sudo apt-get install nginx
+	sudo cp $HOME/fielddbworkspace/AuthenticationWebService/nginx_sample.conf /etc/nginx/conf.d/default.conf 
+	sudo cp $HOME/fielddbworkspace/AuthenticationWebService/nginx_sample_proxy.conf /etc/nginx/proxy.conf 
+	sudo service nginx configtest
+	sudo service nginx start
+fi
 
