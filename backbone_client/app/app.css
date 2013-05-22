@@ -39,7 +39,8 @@ a
 	font-style: normal;
 	font-weight: 400;
 	src: local('Gentium Basic'),
-		url(https://themes.googleusercontent.com/static/fonts/gentiumbasic/v4/KCktj43blvLkhOTolFn-MU3vq9dAc3DuCNWjMJNKvGE.woff) format('woff');
+		url(https://themes.googleusercontent.com/static/fonts/gentiumbasic/v4/KCktj43blvLkhOTolFn-MU3vq9dAc3DuCNWjMJNKvGE.woff)
+		format('woff');
 }
 
 h1,h2,h3,h4 {
@@ -107,9 +108,11 @@ a { /* color: #550; */
 .brand { /* font-size: .85em !important; */
 	
 }
-.thisIsEditable{
-  background: #fff;
+
+.thisIsEditable {
+	background: #fff;
 }
+
 .timestamp,.timestamp
  
 a {
@@ -225,8 +228,40 @@ button { /* margin: 5px 0px 5px 0px;  */
 	color: #fff !important;
 }
 
-textarea {
+textarea.datum_field_input {
 	width: 98%;
+	padding: 0px;
+	margin: 0px;
+	/* background-color: #ff00ff; */
+	outline: none;
+	overflow: hidden;
+	resize: none;
+	line-height: 1.2em;
+	min-height: 1.2em;
+	font-size: 1em;
+	border: none;
+	box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+	height: 1.5em;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+	line-height: 1.2em;
+}
+
+.datum_fields_ul {
+	width: 100%
+}
+
+.datum_field_input_cell {
+	width: 90%;
+	/* background-color: white;
+  color: #333;
+  border-bottom: 1px solid #999; */
+}
+
+.datum_field_label_cell {
+	text-align: right;
+	white-space: nowrap;
 }
 
 .drop-zone {
@@ -631,7 +666,6 @@ line
 		display: block;
 	}
 }
-
 
 h1 {
 	font-size: 1.6em;
