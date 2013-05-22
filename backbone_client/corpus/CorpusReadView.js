@@ -176,6 +176,10 @@ define([
       }
       window.appView.currentCorpusReadView.destroy_view();
       
+
+      // Build the lexicon
+      this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
+      
       // Get the corpus' current precedence rules
       this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("pouchname"));
      
