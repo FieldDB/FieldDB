@@ -632,11 +632,15 @@ define(
                       newScopeData.push($scope.data[i]);
                       break;
                     }
-                  } else if ($scope.data[i][key]
-                      && $scope.data[i][key].indexOf(searchTerm) > -1) {
-                    newScopeData.push($scope.data[i]);
-                    break;
+                  } else if ($scope.data[i][key]) {
+                    var dataString = $scope.data[i][key].toLowerCase();
+                    if (dataString.indexOf(searchTerm) > -1) {
+                      newScopeData.push($scope.data[i]);
+                      break;
+                    }
                   }
+                  console.log("TEST");
+                  console.log($scope.data[i]);
                 }
               }
             }

@@ -124,15 +124,15 @@
 	</div>
 
 	<div class="menubar subMenubar" ng-show="activeSubMenu=='searchMenu'">
-		<span>Search: <input type="text" ng-model='searchTerm'>
-			<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
+		<form class="form-search" ng-submit="runSearch(searchTerm);"><span>Search: <input type="text" class="input-medium search-query" ng-model='searchTerm'>
+			<button class="btn btn-primary" type="submit">Go</button>
 			<button class="btn btn-primary" ng-click="selectAll();">Select
 				All</button>
 			<button class="btn btn-primary" href="#searchModal"
 				ng-click="exportResults();" data-toggle="modal">Export</button></span>
 
 		<button class="btn btn-warning" ng-click="loadData();searchTerm='';">Clear
-			Search</button>
+			Search</button></form>
 		</span>
 	</div>
 
