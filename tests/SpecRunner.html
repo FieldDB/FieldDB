@@ -4,16 +4,27 @@
 <head>
 <title>Jasmine Spec Runner</title>
 
-<link rel="shortcut icon" type="image/png" href="libs/jasmine/jasmine_favicon.png">
+<link rel="shortcut icon" type="image/png"
+	href="libs/jasmine/jasmine_favicon.png">
 <link rel="stylesheet" type="text/css" href="libs/jasmine/jasmine.css">
 
 </head>
 
 <body>
+
+	<form id="uploadForm" enctype="multipart/form-data" action="http://localhost:3184/upload/ewiormao"
+		method="post">
+		<input type="text" name="filesToBeAligned" value=""> <input
+			type="text" name="user" value=""> <input type="file"
+			id="userFileInput" name="userFile[]" multiple="multiple" /><br>
+		<input type="submit" value="Upload to server" />
+	</form>
+
 	<script type="text/javascript" src="libs/jasmine/jasmine.js"></script>
 	<script type="text/javascript" src="libs/jasmine/jasmine-html.js"></script>
 
-	<script type="text/javascript" src="../backbone_client/libs/require.js"	data-main="jasmine-main"></script>
+	<script type="text/javascript" src="../backbone_client/libs/require.js"
+		data-main="jasmine-main"></script>
 
 </body>
 </html>
