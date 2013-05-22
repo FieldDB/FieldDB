@@ -151,9 +151,8 @@ define([
     /**
      * Change the model's state.
      */
-    updateFieldValue : function(e) {
-      this.model.set("mask", this.$el.find(".datum_field_input")
-          .text());
+    updateFieldValue : function() {
+      this.model.set("mask", this.$el.find(".datum_field_input").val());
     }, 
     
     /**

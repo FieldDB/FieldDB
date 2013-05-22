@@ -34,30 +34,12 @@ a
 	white-space: nowrap;
 }
 
-.datum_fields_ul {
-	width: 100%
-}
-
-.datum_field_input {
-	width: 90%;
-	background-color: white;
-	color: #333;
-	border-bottom: 1px solid #999;
-	
-}
-
-.datum_field_label_cell {
-	text-align: right;
-	white-space: nowrap;
-}
-
 @font-face {
 	font-family: 'Gentium Basic';
 	font-style: normal;
 	font-weight: 400;
 	src: local('Gentium Basic'),
-		url(https://themes.googleusercontent.com/static/fonts/gentiumbasic/v4/KCktj43blvLkhOTolFn-MU3vq9dAc3DuCNWjMJNKvGE.woff)
-		format('woff');
+		url(https://themes.googleusercontent.com/static/fonts/gentiumbasic/v4/KCktj43blvLkhOTolFn-MU3vq9dAc3DuCNWjMJNKvGE.woff) format('woff');
 }
 
 h1,h2,h3,h4 {
@@ -125,11 +107,9 @@ a { /* color: #550; */
 .brand { /* font-size: .85em !important; */
 	
 }
-
-.thisIsEditable {
-	background: #fff;
+.thisIsEditable{
+  background: #fff;
 }
-
 .timestamp,.timestamp
  
 a {
@@ -651,6 +631,7 @@ line
 		display: block;
 	}
 }
+
 
 h1 {
 	font-size: 1.6em;
