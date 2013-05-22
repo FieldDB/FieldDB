@@ -8,7 +8,6 @@
     }
   },
   "offline_enabled" : true,
-
   "permissions" : [ "unlimitedStorage" ],
   "icons" : {
     "16" : "images/icon16_dev.png",
@@ -16,7 +15,5 @@
     "128" : "images/icon128_dev.png"
   },
   "manifest_version" : 2,
-
-  "content_security_policy" : "default-src 'self' https://secure.gravatar.com https://docs.google.com https://themes.googleusercontent.com  https://auth.lingsync.org https://corpus.lingsync.org https://authdev.lingsync.org https://corpusdev.lingsync.org  https://localhost:6984 https://ssl.google-analytics.com "
-
+  "content_security_policy" : "default-src 'self' https://secure.gravatar.com https://prosody.linguistics.mcgill.ca https://docs.google.com https://themes.googleusercontent.com  https://auth.lingsync.org https://corpus.lingsync.org https://authdev.lingsync.org https://corpusdev.lingsync.org  https://localhost:6984 https://ssl.google-analytics.com "
 }
