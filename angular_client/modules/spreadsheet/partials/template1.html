@@ -2,30 +2,32 @@
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined">
-	<div class="span3">
-		<input focus class="span3" type="text" ng-model="newFieldData.field1"
-			placeholder="{{fields.field1.title}}"
-			ng-hide="fields.field1.label==''">
-	</div>
-	<div class="span3">
-		<input class="span3" type="text" ng-model="newFieldData.field2"
-			placeholder="{{fields.field2.title}}"
-			ng-hide="fields.field2.label==''">
-	</div>
-	<div class="span3">
-		<input class="span3" type="text" ng-model="newFieldData.field3"
-			placeholder="{{fields.field3.title}}"
-			ng-hide="fields.field3.label==''">
-	</div>
-	<div class="span2">
-		<input class="span2" type="text" ng-model="newFieldData.field4"
-			placeholder="{{fields.field4.title}}"
-			ng-hide="fields.field4.label==''">
-	</div>
-	<div class="span1">
-		<button ng-show="selected=='newEntry'" class="btn btn-primary"
-			ng-click="createRecord(newFieldData);newFieldData=''">Create</button>
-	</div>
+	<form ng-submit="createRecord(newFieldData);newFieldData=''">
+		<div class="span3">
+			<input focus class="span3" type="text" ng-model="newFieldData.field1"
+				placeholder="{{fields.field1.title}}"
+				ng-hide="fields.field1.label==''">
+		</div>
+		<div class="span3">
+			<input class="span3" type="text" ng-model="newFieldData.field2"
+				placeholder="{{fields.field2.title}}"
+				ng-hide="fields.field2.label==''">
+		</div>
+		<div class="span3">
+			<input class="span3" type="text" ng-model="newFieldData.field3"
+				placeholder="{{fields.field3.title}}"
+				ng-hide="fields.field3.label==''">
+		</div>
+		<div class="span2">
+			<input class="span2" type="text" ng-model="newFieldData.field4"
+				placeholder="{{fields.field4.title}}"
+				ng-hide="fields.field4.label==''">
+		</div>
+		<div class="span1">
+			<button ng-show="selected=='newEntry'" class="btn btn-primary"
+				type="submit">Create</button>
+		</div>
+	</form>
 </div>
 
 <div class="row" ng-show="activeSession==undefined && loading==false">
@@ -51,39 +53,44 @@
 
 	<!-- Show when editing -->
 	<div ng-show="selected==datum">
-		<div class="span3">
-			<input focus class="span3" type="text" ng-model="fieldData.field1"
-				ng-init="fieldData.field1=datum[fields.field1.label]"
-				value={{datum[fields.field1.label]}}
-				ng-hide="fields.field1.label==''">
-		</div>
-		<div class="span3">
-			<input class="span3" type="text" ng-model="fieldData.field2"
-				ng-init="fieldData.field2=datum[fields.field2.label]"
-				value={{datum[fields.field2.label]}}
-				ng-hide="fields.field2.label==''">
-		</div>
-		<div class="span3">
-			<input class="span3" type="text" ng-model="fieldData.field3"
-				ng-init="fieldData.field3=datum[fields.field3.label]"
-				value={{datum[fields.field3.label]}}
-				ng-hide="fields.field3.label==''">
-		</div>
-		<div class="span2">
-			<input class="span2" type="text" ng-model="fieldData.field4"
-				ng-init="fieldData.field4=datum[fields.field4.label]"
-				value={{datum[fields.field4.label]}}
-				ng-hide="fields.field4.label==''">
-		</div>
-		<div class="span1">
-			<button class="btn btn-primary"
-				ng-click="markAsEdited(fieldData, datum);">Done</button>
-		</div>
+		<form ng-submit="markAsEdited(fieldData, datum);">
+			<div class="span3">
+				<input focus class="span3" type="text" ng-model="fieldData.field1"
+					ng-init="fieldData.field1=datum[fields.field1.label]"
+					value={{datum[fields.field1.label]}}
+					ng-hide="fields.field1.label==''">
+			</div>
+			<div class="span3">
+				<input class="span3" type="text" ng-model="fieldData.field2"
+					ng-init="fieldData.field2=datum[fields.field2.label]"
+					value={{datum[fields.field2.label]}}
+					ng-hide="fields.field2.label==''">
+			</div>
+			<div class="span3">
+				<input class="span3" type="text" ng-model="fieldData.field3"
+					ng-init="fieldData.field3=datum[fields.field3.label]"
+					value={{datum[fields.field3.label]}}
+					ng-hide="fields.field3.label==''">
+			</div>
+			<div class="span2">
+				<input class="span2" type="text" ng-model="fieldData.field4"
+					ng-init="fieldData.field4=datum[fields.field4.label]"
+					value={{datum[fields.field4.label]}}
+					ng-hide="fields.field4.label==''">
+			</div>
+			<div class="span1">
+				<button class="btn btn-primary" type="submit">Done</button>
+			</div>
 	</div>
 
 
 	<!-- Show when not editing -->
 	<div ng-show="selected!=datum">
+		<div class="span1">
+			<input type="checkbox" value="{{datum.id}}"
+				ng-checked="datum.checked" ng-model="datum.checked"
+				ng-show="searching==true">
+		</div>
 		<div class="span3">
 			<span class="span3" title="{{fields.field1.title}}">{{datum[fields.field1.label]
 				| neverEmpty}}</span>
@@ -112,7 +119,8 @@
 
 <br />
 
-<div class="pagination-centered" ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
+<div class="pagination-centered"
+	ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
 	activeSession).length)==1 || numberOfResultPages((data | filter:
 	activeSession).length)==0">
 	<button class="btn btn-inverse btn-mini"

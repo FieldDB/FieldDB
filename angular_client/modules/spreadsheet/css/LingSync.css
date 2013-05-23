@@ -107,12 +107,23 @@ h3 {
 	text-align: center;
 }
 
+.mainPageDiv {
+	border-radius: 10px;
+	border: 3px solid #000000;
+	margin-left: 20%;
+	margin-right: 20%;
+	padding: 10px;
+	font-weight: 700;
+	font-size: 1.3em;
+}
+
 .newSessionDiv {
 	background-color: #CDFFFF;
 	border-radius: 10px;
 	border: 1px solid #000000;
 	margin-right: 25%;
 	margin-left: 25%;
+	padding: 10px;
 }
 
 .newSessionTable {
@@ -160,7 +171,7 @@ h1 {
 }
 
 h2 {
-	color: #FFFFFF;
+	color: #000000;
 }
 
 input:focus {

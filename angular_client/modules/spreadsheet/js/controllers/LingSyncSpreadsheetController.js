@@ -200,7 +200,7 @@ define(
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
           } else {
-            if (auth.user == "senhorzinho") {
+            if (auth.user == "senhorzinho" || auth.user == "gina") {
               var r = confirm("Hello, developer! Would you like to enter developer mode?");
               if (r == true) {
                 $scope.developer = true;

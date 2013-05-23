@@ -2,389 +2,470 @@ console.log("Loading the SandboxController.");
 
 'use strict';
 define(
-		[ "angular" ],
-		function(angular) {
-			var SandboxController = function($scope, $rootScope, $resource,
-					LingSyncData) {
+    [ "angular" ],
+    function(angular) {
+      var SandboxController = function($scope, $rootScope, $resource,
+          LingSyncData) {
 
-				$scope.data = getData();
-				$scope.data.sort(function(a, b) {
-					var dateA = new Date(a.date), dateB = new Date(b.date);
-					return dateA - dateB;
-				});
+        $scope.data = getData();
+        $scope.data.sort(function(a, b) {
+          var dateA = new Date(a.date), dateB = new Date(b.date);
+          return dateA - dateB;
+        });
 
-				var availableMonths = [];
-				availableMonths.push($scope.data[0].date.substring(0,
-						$scope.data[0].date.lastIndexOf("-")));
-				var monthDay = "";
-				var previousMonthDay = "";
-				for (i in $scope.data) {
-					monthDay = $scope.data[i].date.substring(0,
-							$scope.data[i].date.lastIndexOf("-"));
-					if ($scope.data[i - 1]) {
-						previousMonthDay = $scope.data[i - 1].date.substring(0,
-								$scope.data[i - 1].date.lastIndexOf("-"));
-						if (monthDay != previousMonthDay) {
-							availableMonths.push(monthDay);
-						}
-					}
-				}
-				$scope.availableMonths = availableMonths;
+        var availableMonths = [];
+        availableMonths.push($scope.data[0].date.substring(0,
+            $scope.data[0].date.lastIndexOf("-")));
+        var monthDay = "";
+        var previousMonthDay = "";
+        for (i in $scope.data) {
+          monthDay = $scope.data[i].date.substring(0, $scope.data[i].date
+              .lastIndexOf("-"));
+          if ($scope.data[i - 1]) {
+            previousMonthDay = $scope.data[i - 1].date.substring(0,
+                $scope.data[i - 1].date.lastIndexOf("-"));
+            if (monthDay != previousMonthDay) {
+              availableMonths.push(monthDay);
+            }
+          }
+        }
+        $scope.availableMonths = availableMonths;
 
-				// d3 Graph function
-				$scope.makeGraph = function(yearMonth) {
+        // d3 BAR GRAPH
+        $scope.makeGraph = function(yearMonth) {
 
-					var allData = getData();
+          var allData = getData();
 
-					var data = [];
-					var yearMonthInAllData = "";
-					if (yearMonth && yearMonth != 'all') {
-						for ( var i = 0; i < allData.length; i++) {
-							(function(index) {
-								yearMonthInAllData = allData[i].date.substring(
-										0, allData[i].date.lastIndexOf("-"));
-								if (yearMonthInAllData == yearMonth) {
-									data.push(allData[i]);
-								}
-							})(i)
-						}
+          var data = [];
+          var yearMonthInAllData = "";
+          if (yearMonth && yearMonth != 'all') {
+            for ( var i = 0; i < allData.length; i++) {
+              (function(index) {
+                yearMonthInAllData = allData[i].date.substring(0,
+                    allData[i].date.lastIndexOf("-"));
+                if (yearMonthInAllData == yearMonth) {
+                  data.push(allData[i]);
+                }
+              })(i)
+            }
 
-					} else {
-						data = allData.slice();
-					}
-					
-					// Sort data by date ascending
-					data.sort(function(a, b) {
-						var dateA = new Date(a.date), dateB = new Date(b.date);
-						return dateA - dateB;
-					});
+          } else {
+            data = allData.slice();
+          }
 
-					// Find the size of the largest column
-					var maxEntries = data[0].entries;
-					var maxValuesObj = {};
-					var currentDate = "";
+          // Sort data by date ascending
+          data.sort(function(a, b) {
+            var dateA = new Date(a.date), dateB = new Date(b.date);
+            return dateA - dateB;
+          });
 
-					maxValuesObj[data[0].date] = data[0].entries;
-					
-					for (var i = 0; i < data.length; i++) {
-						(function(index) {
-							currentDate = data[i].date;
-							//Test for multiple dates and add together
-							if (data[i - 1] && data[i].date == data[i - 1].date) {
-								maxValuesObj[currentDate] = maxValuesObj[currentDate] + data[i].entries;
-							}
-							else {
-								maxValuesObj[currentDate] = data[i].entries
-							}
-						})(i)
-					}
-					
-					for (var prop in maxValuesObj) {
-						if (maxValuesObj.hasOwnProperty(prop)) {
-							var value = maxValuesObj[prop];
-							if (value > maxEntries) {
-								maxEntries = value;
-							}
-						}
-					}
+          // Find the size of the largest column
+          var maxEntries = data[0].entries;
+          var maxValuesObj = {};
+          var currentDate = "";
 
-					// Set colors TODO Randomize this
-					for (i in data) {
-						if (data[i].user == "migmaqresearchpartnership") {
-							data[i].color = "#CC0000";
-						} else if (data[i].user == "elise") {
-							data[i].color = "#66FF66";
-						} else if (data[i].user == "janinemetallic") {
-							data[i].color = "#FFFF00";
-						} else {
-							data[i].color = "#999999";
-						}
-						if (data[i].user == "") {
-							data[i].user = "N/A";
-						}
-					}
+          maxValuesObj[data[0].date] = data[0].entries;
 
-					// Create array with unique users/color codes for legend
-					var uniqueUsers = data.slice();
-					uniqueUsers.sort(function(a, b) {
-						var nameA = a.user.toLowerCase(), nameB = b.user
-								.toLowerCase();
-						if (nameA < nameB) { // sort string ascending
-							return -1;
-						}
-						if (nameA > nameB) {
-							return 1;
-						}
-						return 0; // default return value (no sorting)
-					});
+          for ( var i = 0; i < data.length; i++) {
+            (function(index) {
+              currentDate = data[i].date;
+              // Test for multiple dates and add together
+              if (data[i - 1] && data[i].date == data[i - 1].date) {
+                maxValuesObj[currentDate] = maxValuesObj[currentDate]
+                    + data[i].entries;
+              } else {
+                maxValuesObj[currentDate] = data[i].entries
+              }
+            })(i)
+          }
 
-					for ( var j = 0; j < uniqueUsers.length; j++) {
-						if (uniqueUsers[j].user == "") {
-							uniqueUsers[j].user = "N/A";
-						}
-						if (uniqueUsers[j] && uniqueUsers[j - 1]) {
-							if (uniqueUsers[j].user == uniqueUsers[j - 1].user) {
-								uniqueUsers[j - 1].user = "";
-							}
-						}
-					}
+          for ( var prop in maxValuesObj) {
+            if (maxValuesObj.hasOwnProperty(prop)) {
+              var value = maxValuesObj[prop];
+              if (value > maxEntries) {
+                maxEntries = value;
+              }
+            }
+          }
 
-					var uniqueUsersArray = [];
-					for (k in uniqueUsers) {
-						if (uniqueUsers[k].user != "") {
-							uniqueUsersArray.push(uniqueUsers[k]);
-						}
-					}
+          // Set random user colors
+          for (i in data) {
+            data[i].color = '#'
+                + Math.floor(Math.random() * 16777215).toString(16);
+            if (data[i].user == "") {
+              data[i].user = "N/A";
+            }
+          }
 
-					// Render chart
+          // Create array with unique users/color codes for legend
+          var uniqueUsers = data.slice();
+          uniqueUsers.sort(function(a, b) {
+            var nameA = a.user.toLowerCase(), nameB = b.user.toLowerCase();
+            if (nameA < nameB) { // sort string ascending
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0; // default return value (no sorting)
+          });
 
-					var barWidth = 40;
-					var width = (barWidth + 40) * data.length;
+          for ( var j = 0; j < uniqueUsers.length; j++) {
+            if (uniqueUsers[j].user == "") {
+              uniqueUsers[j].user = "N/A";
+            }
+            if (uniqueUsers[j] && uniqueUsers[j - 1]) {
+              if (uniqueUsers[j].user == uniqueUsers[j - 1].user) {
+                uniqueUsers[j - 1].user = "";
+              }
+            }
+          }
 
-					// Set minimum width
-					if (width < 200) {
-						width = 200;
-					}
+          var uniqueUsersArray = [];
+          for (k in uniqueUsers) {
+            if (uniqueUsers[k].user != "") {
+              uniqueUsersArray.push(uniqueUsers[k]);
+            }
+          }
 
-					var height = 200;
-					var padding = 40;
+          // Render chart
 
-					var x = d3.scale.linear().domain([ 0, data.length ]).range(
-							[ 0, width ]);
-					var y = d3.scale.linear().domain(
-							[ 0, d3.max(data, function(datum) {
-								return maxEntries;
-							}) ]).rangeRound([ 0, height ]);
+          var barWidth = 40;
+          var width = (barWidth + 40) * data.length;
 
-					// Create array of y axis tick intervals
-					var yAxisTickIntervals = [];
-					for ( var i = 0; i <= height; i++) {
-						if (i == Math.round(i / 20) * 20) {
-							yAxisTickIntervals.push(i);
-						}
-					}
+          // Set minimum width
+          if (width < 200) {
+            width = 200;
+          }
 
-					// Remove current contents of div
-					d3.select("svg").remove();
+          var height = 200;
+          var padding = 40;
 
-					// Add the canvas to the DOM
-					var mainArea = d3.select("#bar-graph").append("svg:svg")
-							.attr("width", width + padding * 2).attr("height",
-									(height * 2) + padding * 2);
+          var x = d3.scale.linear().domain([ 0, data.length ]).range(
+              [ 0, width ]);
+          var y = d3.scale.linear().domain([ 0, d3.max(data, function(datum) {
+            return maxEntries;
+          }) ]).rangeRound([ 0, height ]);
 
-					// Add group object to canvas, which will contain graph
-					var barGraph = mainArea.append("svg:g").attr("transform",
-							"translate(" + padding + "," + padding + ")");
+          // Create array of y axis tick intervals
+          var yAxisTickIntervals = [];
+          for ( var i = 0; i <= height; i++) {
+            if (i == Math.round(i / 20) * 20) {
+              yAxisTickIntervals.push(i);
+            }
+          }
 
-					var indexOffset = 0;
-					var duplicatesInARow = 0;
+          // Remove current contents of div
+          d3.select("svg").remove();
 
-					// Draw bars, checking for identical dates; if dates are
-					// identical, bars are stacked
-					barGraph
-							.selectAll("rect")
-							.data(data)
-							.enter()
-							.append("svg:rect")
-							.attr(
-									"x",
-									function(datum, index) {
-										if (index > 0
-												&& datum.date == data[index - 1].date) {
-											var xvalue = x((index - 1 - indexOffset)) + 20;
-											indexOffset++;
-											return xvalue;
-										} else {
-											return x((index - indexOffset)) + 20;
-										}
-									})
-							.attr(
-									"y",
-									function(datum, index) {
-										if (index > 0
-												&& datum.date == data[index - 1].date) {
-											duplicatesInARow++;
-											var decreasedyvalue = 0;
-											for ( var i = 0; i < duplicatesInARow; i++) {
-												decreasedyvalue = decreasedyvalue
-														+ y(data[index - i - 1].entries);
-											}
-											return height - y(datum.entries)
-													- decreasedyvalue;
-										} else {
-											duplicatesInARow = 0;
-											return height - y(datum.entries);
-										}
-									}).attr("height", function(datum) {
-								return y(datum.entries);
-							}).attr("width", barWidth).attr("fill",
-									function(datum) {
-										return datum.color;
-									});
+          // Add the canvas to the DOM
+          var mainArea = d3.select("#svg-graph").append("svg:svg").attr(
+              "width", width + padding * 2).attr("height",
+              (height * 2) + padding * 2);
 
-					// Label x axis
-					var xaxisindexOffset = 0;
+          // Add group object to canvas, which will contain graph
+          var barGraph = mainArea.append("svg:g").attr("transform",
+              "translate(" + padding + "," + padding + ")");
 
-					barGraph.selectAll("text.yAxis").data(data).enter().append(
-							"svg:text").attr("x", function(datum, index) {
-						if (index > 0 && datum.date == data[index - 1].date) {
-							var xvalue = x((index - 1 - xaxisindexOffset));
-							xaxisindexOffset++;
+          var indexOffset = 0;
+          var duplicatesInARow = 0;
 
-							return xvalue + barWidth;
-						} else {
-							return x((index - xaxisindexOffset)) + barWidth;
-						}
+          // Draw bars, checking for identical dates; if dates are
+          // identical, bars are stacked
+          barGraph.selectAll("rect").data(data).enter().append("svg:rect")
+              .attr("x", function(datum, index) {
+                if (index > 0 && datum.date == data[index - 1].date) {
+                  var xvalue = x((index - 1 - indexOffset)) + 20;
+                  indexOffset++;
+                  return xvalue;
+                } else {
+                  return x((index - indexOffset)) + 20;
+                }
+              }).attr(
+                  "y",
+                  function(datum, index) {
+                    if (index > 0 && datum.date == data[index - 1].date) {
+                      duplicatesInARow++;
+                      var decreasedyvalue = 0;
+                      for ( var i = 0; i < duplicatesInARow; i++) {
+                        decreasedyvalue = decreasedyvalue
+                            + y(data[index - i - 1].entries);
+                      }
+                      return height - y(datum.entries) - decreasedyvalue;
+                    } else {
+                      duplicatesInARow = 0;
+                      return height - y(datum.entries);
+                    }
+                  }).attr("height", function(datum) {
+                return y(datum.entries);
+              }).attr("width", barWidth).attr("fill", function(datum) {
+                return datum.color;
+              });
 
-					}).attr("y", height).attr("dx", -barWidth / 2).attr(
-							"text-anchor", "middle").attr("style",
-							"font-size: 12; font-family: Arial").text(
-							function(datum, index) {
-								if (index > 0
-										&& datum.date == data[index - 1].date) {
-									return null;
-								} else {
-									return datum.date;
-								}
+          // Label x axis
+          var xaxisindexOffset = 0;
 
-							}).attr("class", "yAxis").attr("transform",
-							"translate(20, 20)");
+          barGraph.selectAll("text.yAxis").data(data).enter()
+              .append("svg:text").attr("x", function(datum, index) {
+                if (index > 0 && datum.date == data[index - 1].date) {
+                  var xvalue = x((index - 1 - xaxisindexOffset));
+                  xaxisindexOffset++;
 
-					// Add y ticks
-					barGraph
-							.selectAll(".yTicks")
-							.data(yAxisTickIntervals)
-							.enter()
-							.append("svg:line")
-							.attr("x1", -5)
-							.attr("y1", function(d) {
-								return d;
-							})
-							.attr(
-									"x2",
-									function(d) {
-										if (d == height) {
-											return width
-													+ 5
-													- (barWidth * indexOffset * 2);
-										} else {
-											return 5;
-										}
-									}).attr("y2", function(d) {
-								return d;
-							}).attr("stroke", function(d) {
-								if (d == height) {
-									return "#000000";
-								} else {
-									return "lightgray";
-								}
-							}).attr("class", "yTicks");
+                  return xvalue + barWidth;
+                } else {
+                  return x((index - xaxisindexOffset)) + barWidth;
+                }
 
-					// Add labels to y ticks
-					barGraph.selectAll("text.yAxisLeft").data(
-							yAxisTickIntervals).enter().append("svg:text")
-							.text(
-									function(d) {
-										if (d == 0) {
-											return maxEntries;
-										} else {
-											return Math.round((height - d)
-													/ height * maxEntries);
-										}
-									}).attr("x", -7).attr("y", function(d) {
-								return d;
-							}).attr("dy", "3").attr("class", "yAxisLeft").attr(
-									"text-anchor", "end");
+              }).attr("y", height).attr("dx", -barWidth / 2).attr(
+                  "text-anchor", "middle").attr("style",
+                  "font-size: 12; font-family: Arial").text(
+                  function(datum, index) {
+                    if (index > 0 && datum.date == data[index - 1].date) {
+                      return null;
+                    } else {
+                      return datum.date;
+                    }
 
-					barGraph.append("text").attr("class", "y label").attr(
-							"text-anchor", "end").attr("y", -40).attr("dy",
-							".75em").attr("transform", "rotate(-90)").text(
-							"Number of modifications");
+                  }).attr("class", "yAxis").attr("transform",
+                  "translate(20, 20)");
 
-					// Append color/user legend
-					var legend = mainArea.append("svg:g").attr(
-							"transform",
-							"translate(" + padding + "," + (padding + height)
-									+ ")");
+          // Add y ticks
+          barGraph.selectAll(".yTicks").data(yAxisTickIntervals).enter()
+              .append("svg:line").attr("x1", -5).attr("y1", function(d) {
+                return d;
+              }).attr("x2", function(d) {
+                if (d == height) {
+                  return width + 5 - (barWidth * indexOffset * 2);
+                } else {
+                  return 5;
+                }
+              }).attr("y2", function(d) {
+                return d;
+              }).attr("stroke", function(d) {
+                if (d == height) {
+                  return "#000000";
+                } else {
+                  return "lightgray";
+                }
+              }).attr("class", "yTicks");
 
-					legend.selectAll("text").data(uniqueUsersArray).enter()
-							.append("svg:text").attr("x", 50).attr("y",
-									function(datum, index) {
-										return (index * 40) + padding;
-									}).attr("dx", -barWidth / 2).attr("style",
-									"font-size: 12; font-family: Arial").text(
-									function(datum) {
-										return datum.user;
-									}).attr("class", "yAxis").attr(
-									"text-anchor", "start");
+          // Add labels to y ticks
+          barGraph.selectAll("text.yAxisLeft").data(yAxisTickIntervals).enter()
+              .append("svg:text").text(function(d) {
+                if (d == 0) {
+                  return maxEntries;
+                } else {
+                  return Math.round((height - d) / height * maxEntries);
+                }
+              }).attr("x", -7).attr("y", function(d) {
+                return d;
+              }).attr("dy", "3").attr("class", "yAxisLeft").attr("text-anchor",
+                  "end");
 
-					legend.selectAll("rect").data(uniqueUsersArray).enter()
-							.append("svg:rect").attr("x", 0).attr("y",
-									function(datum, index) {
-										return (index * 40) + padding - 15;
-									}).attr("height", 20).attr("width", 20)
-							.attr("fill", function(datum) {
-								return datum.color;
-							});
+          barGraph.append("text").attr("class", "y label").attr("text-anchor",
+              "end").attr("y", -40).attr("dy", ".75em").attr("transform",
+              "rotate(-90)").text("Number of modifications");
 
-				};
+          // Append color/user legend
+          var legend = mainArea.append("svg:g").attr("transform",
+              "translate(" + padding + "," + (padding + height) + ")");
 
-				// Return fake data
-				function getData() {
-					return [ {
-						"user" : "migmaqresearchpartnership",
-						"date" : "2012-12-06",
-						"entries" : 50
-					}, {
-						"user" : "elise",
-						"date" : "2013-01-18",
-						"entries" : 18
-					}, {
-						"user" : "",
-						"date" : "2013-01-11",
-						"entries" : 10
-					}, {
-						"user" : "elise",
-						"date" : "2013-01-11",
-						"entries" : 26
-					}, {
-						"user" : "janinemetallic",
-						"date" : "2013-01-18",
-						"entries" : 13
-					}, {
-						"user" : "migmaqresearchpartnership",
-						"date" : "2013-01-18",
-						"entries" : 8
-					}, {
-						"user" : "migmaqresearchpartnership",
-						"date" : "2013-02-06",
-						"entries" : 24
-					}, {
-						"user" : "migmaqresearchpartnership",
-						"date" : "2013-02-07",
-						"entries" : 27
-					}, {
-						"user" : "elise",
-						"date" : "2013-02-07",
-						"entries" : 6
-					}, {
-						"user" : "",
-						"date" : "2013-02-09",
-						"entries" : 29
-					}, {
-						"user" : "elise",
-						"date" : "2013-02-10",
-						"entries" : 31
-					}, {
-						"user" : "migmaqresearchpartnership",
-						"date" : "2013-02-11",
-						"entries" : 12
-					} ];
-				}
-				;
+          legend.selectAll("text").data(uniqueUsersArray).enter().append(
+              "svg:text").attr("x", 50).attr("y", function(datum, index) {
+            return (index * 40) + padding;
+          }).attr("dx", -barWidth / 2).attr("style",
+              "font-size: 12; font-family: Arial").text(function(datum) {
+            return datum.user;
+          }).attr("class", "yAxis").attr("text-anchor", "start");
 
-			};
-			SandboxController.$inject = [ '$scope', '$rootScope', '$resource',
-					'LingSyncData' ];
-			return SandboxController;
-		});
+          legend.selectAll("rect").data(uniqueUsersArray).enter().append(
+              "svg:rect").attr("x", 0).attr("y", function(datum, index) {
+            return (index * 40) + padding - 15;
+          }).attr("height", 20).attr("width", 20).attr("fill", function(datum) {
+            return datum.color;
+          });
+
+        };
+
+        // FOCUS CONTEXT GRAPH
+
+        $scope.makeFocusContextGraph = function() {
+
+          // Remove current contents of div
+          d3.select("svg").remove();
+
+          var margin = {
+            top : 10,
+            right : 10,
+            bottom : 100,
+            left : 40
+          }, margin2 = {
+            top : 430,
+            right : 10,
+            bottom : 20,
+            left : 40
+          }, width = 960 - margin.left - margin.right, height = 500
+              - margin.top - margin.bottom, height2 = 500 - margin2.top
+              - margin2.bottom;
+
+          // var parseDate = d3.time.format("%b %Y").parse;
+
+          var x = d3.time.scale().range([ 0, width ]), x2 = d3.time.scale()
+              .range([ 0, width ]), y = d3.scale.linear().range([ height, 0 ]), y2 = d3.scale
+              .linear().range([ height2, 0 ]);
+
+          var xAxis = d3.svg.axis().scale(x).orient("bottom"), xAxis2 = d3.svg
+              .axis().scale(x2).orient("bottom"), yAxis = d3.svg.axis()
+              .scale(y).orient("left");
+
+          var brush = d3.svg.brush().x(x2).on("brush", brushed);
+
+          var area = d3.svg.area().interpolate("monotone").x(function(d) {
+            return x(d.date);
+          }).y0(height).y1(function(d) {
+            return y(d.entries);
+          });
+
+          var area2 = d3.svg.area().interpolate("monotone").x(function(d) {
+            return x2(d.date);
+          }).y0(height2).y1(function(d) {
+            return y2(d.entries);
+          });
+
+          var svg = d3.select("#svg-graph").append("svg").attr("width",
+              width + margin.left + margin.right).attr("height",
+              height + margin.top + margin.bottom);
+
+          svg.append("defs").append("clipPath").attr("id", "clip").append(
+              "rect").attr("width", width).attr("height", height);
+
+          var focus = svg.append("g").attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+          var context = svg.append("g").attr("transform",
+              "translate(" + margin2.left + "," + margin2.top + ")");
+
+          // Get unique dates and sum entries for each date
+          var dataToReduce = {};
+          for (i in $scope.data) {
+            if (dataToReduce[$scope.data[i].date]) {
+              dataToReduce[$scope.data[i].date] = dataToReduce[$scope.data[i].date]
+                  + $scope.data[i].entries;
+            } else {
+              dataToReduce[$scope.data[i].date] = $scope.data[i].entries;
+            }
+          }
+
+          var newData = [];
+          for (key in dataToReduce) {
+            var newDatum = {
+              "date" : key,
+              "entries" : dataToReduce[key]
+            };
+            newData.push(newDatum);
+          }
+
+          data = newData;
+
+          data.forEach(function(d) {
+            d.date = new Date(d.date);
+            d.entries = +d.entries;
+          });
+
+          x.domain(d3.extent(data.map(function(d) {
+            return d.date;
+          })));
+          y.domain([ 0, d3.max(data.map(function(d) {
+            return d.entries;
+          })) ]);
+          x2.domain(x.domain());
+          y2.domain(y.domain());
+
+          focus.append("path").datum(data).attr("clip-path", "url(#clip)")
+              .attr("d", area);
+
+          focus.append("g").attr("class", "x axis").attr("transform",
+              "translate(0," + height + ")").call(xAxis);
+
+          focus.append("g").attr("class", "y axis").call(yAxis);
+
+          context.append("path").datum(data).attr("d", area2);
+
+          context.append("g").attr("class", "x axis").attr("transform",
+              "translate(0," + height2 + ")").call(xAxis2);
+
+          context.append("g").attr("class", "x brush").call(brush).selectAll(
+              "rect").attr("y", -6).attr("height", height2 + 7);
+          // });
+
+          function brushed() {
+            x.domain(brush.empty() ? x2.domain() : brush.extent());
+            focus.select("path").attr("d", area);
+            focus.select(".x.axis").call(xAxis);
+          }
+        };
+
+        // Return fake data
+        function getData() {
+          //TODO GET REAL DATA, WRITE MAP-REDUCE FUNCTIONS
+          LingSyncData.async($rootScope.DB).then(function(dataFromServer) {
+            console.log("TODO get real data.");
+          });
+
+          return [ {
+            "user" : "migmaqresearchpartnership",
+            "date" : "2012-12-06",
+            "entries" : 50
+          }, {
+            "user" : "elise",
+            "date" : "2013-01-18",
+            "entries" : 18
+          }, {
+            "user" : "",
+            "date" : "2013-01-11",
+            "entries" : 10
+          }, {
+            "user" : "elise",
+            "date" : "2013-01-11",
+            "entries" : 26
+          }, {
+            "user" : "janinemetallic",
+            "date" : "2013-01-18",
+            "entries" : 13
+          }, {
+            "user" : "migmaqresearchpartnership",
+            "date" : "2013-01-18",
+            "entries" : 8
+          }, {
+            "user" : "migmaqresearchpartnership",
+            "date" : "2013-02-06",
+            "entries" : 24
+          }, {
+            "user" : "migmaqresearchpartnership",
+            "date" : "2013-02-07",
+            "entries" : 27
+          }, {
+            "user" : "elise",
+            "date" : "2013-02-07",
+            "entries" : 6
+          }, {
+            "user" : "",
+            "date" : "2013-02-09",
+            "entries" : 29
+          }, {
+            "user" : "elise",
+            "date" : "2013-02-10",
+            "entries" : 31
+          }, {
+            "user" : "migmaqresearchpartnership",
+            "date" : "2013-02-11",
+            "entries" : 12
+          } ];
+        }
+        ;
+
+      };
+      SandboxController.$inject = [ '$scope', '$rootScope', '$resource',
+          'LingSyncData' ];
+      return SandboxController;
+    });

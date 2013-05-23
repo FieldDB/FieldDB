@@ -1,16 +1,31 @@
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css" href="css/visualization.css">
+<!-- END Stylesheets -->
+
 <div id="sandbox">
 	<div class="row">
 		<div class="span12 pagination-centered">
 			<h1>Developer Sandbox</h1>
 			<br />
-			Month to display (optional):<br />
-			<select ng-model='month'>
-				<option value="all" selected="selected">All</option>
-				<option ng-repeat="availableMonth in availableMonths" value={{availableMonth}}>{{availableMonth}}</option>
-			</select><br />
-			<button class="btn btn-success" ng-click="makeGraph(month)">Generate Bar Graph</button>
+
+			<div class="row">
+				<div class="span4">
+
+					Month to display (optional):<br /> <select ng-model='month'>
+						<option value="all" selected="selected">All</option>
+						<option ng-repeat="availableMonth in availableMonths"
+							value={{availableMonth}}>{{availableMonth}}</option>
+					</select><br />
+					<button class="btn btn-success" ng-click="makeGraph(month)">Generate
+						Bar Graph</button>
+				</div>
+				<div class="span4">
+					<button class="btn btn-success" ng-click="makeFocusContextGraph();">Generate
+						Focus Context Graph</button>
+				</div>
+			</div>
 			<br>
-			<div id="bar-graph"></div>
+			<div id="svg-graph"></div>
 		</div>
 	</div>
 </div>

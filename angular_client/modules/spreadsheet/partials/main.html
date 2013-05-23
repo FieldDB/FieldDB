@@ -2,8 +2,9 @@
 	<img src="img/lingsync-logo.png"> <br />
 	<h1>LingSync Quick Data Entry Module</h1>
 	<br> <br>
+	<div class="mainPageDiv">
 	<div ng-hide="authenticated==true || loading==true">
-		Select Server and Log in <br>
+		Select Server and Log in <br /><br />
 		<form ng-submit='loginUser(auth)'>
 			<select multiple="multiple" ng-model='auth.server'>
 				<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill
@@ -20,7 +21,7 @@
 		<img src="img/loading-spinner.gif" width="100px">
 	</div>
 	<div ng-show="authenticated==true">
-		Logged in as {{username}}<br> Select Database and click Access:<br>
+		Logged in as {{username}}<br> Select Database and click Access:<br /><br />
 		<form ng-submit='selectDB(selectedDB)'>
 			<select multiple="multiple" ng-model='selectedDB'>
 				<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option>
@@ -31,9 +32,10 @@
 			<span>Please wait while we access the database...</span><br /> <img
 				src="img/loading-spinner.gif" width="100px">
 		</div>
-		<span ng-show="loading==false && data!=undefined"><h2>Data
-				loaded. Select a session and click Go, or create a new session.</h2> </span><br>
 	</div>
+	</div>
+	<span ng-show="loading==false && data!=undefined"><h2>Data
+				loaded. Select a session and click Go, or create a new session.</h2> </span><br>
 	<div ng-show="data!=undefined">
 		<form ng-submit="selectSession(activeSessionToView)">
 			<select ng-model='activeSessionToView'>
@@ -44,18 +46,18 @@
 			</select>
 			<button class="btn btn-primary">Go</button>
 		</form>
-		<button class="btn"
-			ng-click="showCreateSessionDiv=!showCreateSessionDiv">Create
-			New Session</button>
-		<br /> <br />
+		<br />
 		<div class="row" ng-show="loading==true">
 			<div class="span12 pagination-centered">
 				<img src="img/loading-spinner.gif" width="100px">
 			</div>
 		</div>
-		<div ng-show="showCreateSessionDiv==true">
-			<div ng-show="loading==false" class="newSessionDiv">
-				<h3>Create New Session</h3>
+
+		<div ng-show="loading==false" class="newSessionDiv">
+			<button class="btn"
+				ng-click="showCreateSessionDiv=!showCreateSessionDiv">Create
+				New Session</button>
+			<div ng-show="showCreateSessionDiv==true">
 				<br />
 				<h3>Database: {{DB[0]}}</h3>
 				<form ng-model="newSession">
