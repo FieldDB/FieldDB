@@ -158,38 +158,33 @@
 
 	<!-- TAGS -->
 	<br />
-	<div class="span8 offset1" ng-hide="developer==false">
 
-		<div class="row" ng-show="editTags==true">
-			<div class="span6">
-				Click EDIT button to rename tag:
-				<div ng-repeat="tag in tags">
-					<input type="text" value="{{tag}}" disabled=true>
-					<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
-					<span ng-show="tagToEdit==tag"><input type="text"
-						ng-model='newTag' placeholder="Change to ...">
-						<button class="btn btn-primary"
-							ng-click="editTagInfo(tag, newTag)">Update</button> </span> <img
-						ng-show="loading==true" src="img/spinner-small.gif">
-				</div>
+	<div class="row" ng-show="editTags==true">
+		<div class="span8">
+			Click EDIT button to rename tag:
+			<div ng-repeat="tag in tags">
+				<input type="text" value="{{tag}}" disabled=true>
+				<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
+				<span ng-show="tagToEdit==tag"><input type="text"
+					ng-model='newTag' placeholder="Change to ...">
+					<button class="btn btn-primary" ng-click="editTagInfo(tag, newTag)">Update</button>
+				</span> <img ng-show="loading==true" src="img/spinner-small.gif">
 			</div>
 		</div>
 	</div>
 
 	<!-- FIELDS -->
-	<div class="span8 offset1" ng-hide="developer==false">
-		<div class="row" ng-show="editFields==true">
-			<div class="span6">
-				Click EDIT button to rename field:
-				<div ng-repeat="field in availableFields">
-					<input type="text" value="{{field.title}}" disabled=true>
-					<button class="btn btn-primary" ng-click="changeFieldToEdit(field)">Edit</button>
-					<span ng-show="fieldToEdit==field"><input type="text"
-						ng-model='newFieldTitle' placeholder="Change to ...">
-						<button class="btn btn-primary"
-							ng-click="editFieldTitle(field, newFieldTitle)">Update</button> </span> <img
-						ng-show="loading==true" src="img/spinner-small.gif">
-				</div>
+	<div class="row" ng-show="editFields==true">
+		<div class="span8">
+			Click EDIT button to rename field:
+			<div ng-repeat="field in availableFields">
+				<input type="text" value="{{field.title}}" disabled=true>
+				<button class="btn btn-primary" ng-click="changeFieldToEdit(field)">Edit</button>
+				<span ng-show="fieldToEdit==field"><input type="text"
+					ng-model='newFieldTitle' placeholder="Change to ...">
+					<button class="btn btn-primary"
+						ng-click="editFieldTitle(field, newFieldTitle)">Update</button> </span> <img
+					ng-show="loading==true" src="img/spinner-small.gif">
 			</div>
 		</div>
 	</div>

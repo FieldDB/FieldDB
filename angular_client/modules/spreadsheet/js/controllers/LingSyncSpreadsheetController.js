@@ -689,6 +689,7 @@ define(
                     break;
                   }
                 } else if ($scope.data[i][key]) {
+                  console.log($scope.data[i][key]);
                   var dataString = $scope.data[i][key].toLowerCase();
                   if (dataString.indexOf(searchTerm) > -1) {
                     newScopeData.push($scope.data[i]);
