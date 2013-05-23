@@ -9,19 +9,23 @@
 			<br />
 
 			<div class="row">
-				<div class="span4">
-
-					Month to display (optional):<br /> <select ng-model='month'>
+				<div class="span3">
+					<button class="btn btn-success" ng-click="makeGraph(month)">Generate
+						Bar Graph</button>
+					<br /> Month to display (optional):<br /> <select
+						ng-model='month'>
 						<option value="all" selected="selected">All</option>
 						<option ng-repeat="availableMonth in availableMonths"
 							value={{availableMonth}}>{{availableMonth}}</option>
-					</select><br />
-					<button class="btn btn-success" ng-click="makeGraph(month)">Generate
-						Bar Graph</button>
+					</select>
 				</div>
-				<div class="span4">
+				<div class="span3">
 					<button class="btn btn-success" ng-click="makeFocusContextGraph();">Generate
 						Focus Context Graph</button>
+				</div>
+				<div class="span3">
+					<button class="btn btn-success" ng-click="makeLineChart();">Generate
+						Line Chart</button>
 				</div>
 			</div>
 			<br>

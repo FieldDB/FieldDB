@@ -334,7 +334,7 @@ define(
 
           var svg = d3.select("#svg-graph").append("svg").attr("width",
               width + margin.left + margin.right).attr("height",
-              height + margin.top + margin.bottom);
+              height + margin.top + margin.bottom).attr("class", "focus-context");
 
           svg.append("defs").append("clipPath").attr("id", "clip").append(
               "rect").attr("width", width).attr("height", height);
@@ -405,9 +405,91 @@ define(
           }
         };
 
+        // BASIC LINE CHART
+        $scope.makeLineChart = function() {
+
+          // Remove current contents of div
+          d3.select("svg").remove();
+
+          var margin = {
+            top : 20,
+            right : 20,
+            bottom : 30,
+            left : 50
+          }, width = 960 - margin.left - margin.right, height = 500
+              - margin.top - margin.bottom;
+
+          var x = d3.time.scale().range([ 0, width ]);
+
+          var y = d3.scale.linear().range([ height, 0 ]);
+
+          var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+          var yAxis = d3.svg.axis().scale(y).orient("left");
+
+          var line = d3.svg.line().x(function(d) {
+            return x(d.date);
+          }).y(function(d) {
+            return y(d.entries);
+          });
+
+          var svg = d3.select("#svg-graph").append("svg").attr("width",
+              width + margin.left + margin.right).attr("height",
+              height + margin.top + margin.bottom).attr("class", "line-chart").append("g").attr(
+              "transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          // d3.tsv("data.tsv", function(error, data) {
+
+          // Get unique dates and sum entries for each date
+          var dataToReduce = {};
+          for (i in $scope.data) {
+            if (dataToReduce[$scope.data[i].date]) {
+              dataToReduce[$scope.data[i].date] = dataToReduce[$scope.data[i].date]
+                  + $scope.data[i].entries;
+            } else {
+              dataToReduce[$scope.data[i].date] = $scope.data[i].entries;
+            }
+          }
+
+          var newData = [];
+          for (key in dataToReduce) {
+            var newDatum = {
+              "date" : key,
+              "entries" : dataToReduce[key]
+            };
+            newData.push(newDatum);
+          }
+
+          data = newData;
+
+          data.forEach(function(d) {
+            d.date = new Date(d.date);
+            d.entries = +d.entries;
+          });
+
+          x.domain(d3.extent(data, function(d) {
+            return d.date;
+          }));
+          y.domain(d3.extent(data, function(d) {
+            return d.entries;
+          }));
+
+          svg.append("g").attr("class", "x axis").attr("transform",
+              "translate(0," + height + ")").call(xAxis);
+
+          svg.append("g").attr("class", "y axis").call(yAxis).append("text")
+              .attr("transform", "rotate(-90)").attr("y", 6)
+              .attr("dy", ".71em").style("text-anchor", "end")
+              .text("Entries");
+
+          svg.append("path").datum(data).attr("class", "line").attr("d", line);
+          // });
+
+        };
+
         // Return fake data
         function getData() {
-          //TODO GET REAL DATA, WRITE MAP-REDUCE FUNCTIONS
+          // TODO GET REAL DATA, WRITE MAP-REDUCE FUNCTIONS
           LingSyncData.async($rootScope.DB).then(function(dataFromServer) {
             console.log("TODO get real data.");
           });
