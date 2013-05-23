@@ -1451,6 +1451,161 @@ define([
           dataType : "json"
         });
     },
+    /**
+     * This function takes in a pouchname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more representative datum 
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+     * 
+     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+     * 
+     * If a url is passed, it contacts the server for fresh info. 
+     * 
+     * @param pouchname
+     * @param callback
+     */
+    getFrequentDatumValidationStates : function(jsonUrl, pouchname, callback){
+      if(window.getFrequentDatumValidationStatesPending){
+        return;
+      }
+      window.getFrequentDatumValidationStatesPending = true;
+      if(!jsonUrl){
+        /* if we have already asked the server in this session, return */
+        if(this.frequentDatumValidationStates){
+          if(typeof callback == "function"){
+            callback(this.frequentDatumValidationStates);
+          }
+          return;
+        }
+        var couchConnection = this.get("couchConnection");
+        var couchurl = OPrime.getCouchUrl(couchConnection);
+        if(!pouchname){
+          pouchname = couchConnection.pouchname;
+          /* if the user has overriden the frequent fields, use their preferences */
+          if(this.get("frequentDatumValidationStates")){
+            if(typeof callback == "function"){
+              callback(this.get("frequentDatumValidationStates"));
+            }
+            return;
+          }
+        }
+        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_validationStati?group=true";
+      }
+     
+      var self = this;
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : jsonUrl,
+        success : function(serverResults) {
+          OPrime.debug("serverResults"
+              + JSON.stringify(serverResults));
+
+          var counts = _.pluck(serverResults.rows, "value");
+          if (OPrime.debugMode) OPrime.debug(counts);
+          var frequentStates = _.pluck(serverResults.rows, "key");
+          if(frequentStates == []){
+            frequentStates = ["Checked","Deleted","ToBeCheckedWithAnna","ToBeCheckedWithBill", "ToBeCheckedWithClaude"];
+          }
+          
+          
+          self.frequentDatumValidationStates = frequentStates;
+          if (typeof callback == "function") {
+            callback(frequentStates);
+          }
+          window.getFrequentDatumValidationStatesPending = false;
+
+        },// end successful fetch
+        error : function(response) {
+          OPrime
+          .debug("There was a problem getting the frequentDatumValidationStates, using defaults."
+              + JSON.stringify(response));
+          if (typeof callback == "function") {
+            callback(["Checked","Deleted","ToBeCheckedWithAnna","ToBeCheckedWithBill", "ToBeCheckedWithClaude"]);
+          }
+          window.getFrequentDatumValidationStatesPending = false;
+
+          //end error 
+        },
+          dataType : "json"
+        });
+    },
+    /**
+     * This function takes in a pouchname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more representative datum 
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+     * 
+     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+     * 
+     * If a url is passed, it contacts the server for fresh info. 
+     * 
+     * @param pouchname
+     * @param callback
+     */
+    getFrequentDatumTags : function(jsonUrl, pouchname, callback){
+      if(window.getFrequentDatumTagsPending){
+        return;
+      }
+      window.getFrequentDatumTagsPending = true;
+      if(!jsonUrl){
+        /* if we have already asked the server in this session, return */
+        if(this.frequentDatumTags){
+          if(typeof callback == "function"){
+            callback(this.frequentDatumTags);
+          }
+          return;
+        }
+        var couchConnection = this.get("couchConnection");
+        var couchurl = OPrime.getCouchUrl(couchConnection);
+        if(!pouchname){
+          pouchname = couchConnection.pouchname;
+          /* if the user has overriden the frequent fields, use their preferences */
+          if(this.get("frequentDatumTags")){
+            if(typeof callback == "function"){
+              callback(this.get("frequentDatumTags"));
+            }
+            return;
+          }
+        }
+        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_datum_tags?group=true";
+      }
+     
+      var self = this;
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : jsonUrl,
+        success : function(serverResults) {
+          OPrime.debug("serverResults"
+              + JSON.stringify(serverResults));
+
+          var counts = _.pluck(serverResults.rows, "value");
+          if (OPrime.debugMode) OPrime.debug(counts);
+          var frequentTags = _.pluck(serverResults.rows, "key");
+          if(frequentTags == []){
+            frequentTags = ["Passive","WH","Indefinte","Generic", "Agent-y","Causative","Pro-drop","Ambigous"];
+          }
+          
+          self.frequentDatumTags = frequentTags;
+          if (typeof callback == "function") {
+            callback(frequentTags);
+          }
+          window.getFrequentDatumTagsPending = false;
+
+        },// end successful fetch
+        error : function(response) {
+          OPrime
+          .debug("There was a problem getting the frequentDatumTags, using defaults."
+              + JSON.stringify(response));
+          if (typeof callback == "function") {
+            callback(["Passive","WH","Indefinte","Generic", "Agent-y","Causative","Pro-drop","Ambigous"]);
+          }
+          window.getFrequentDatumTagsPending = false;
+
+          //end error 
+        },
+          dataType : "json"
+        });
+    },
     changeCorpusPublicPrivate : function(){
 //      alert("TODO contact server to change the public private of the corpus");
     }

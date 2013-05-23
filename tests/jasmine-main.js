@@ -133,6 +133,8 @@ require([ //"handlebars",
 //    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
+//          "../tests/audioVideo/AudioWebServiceTest", 
+
 	"../tests/app/AppTest", 
 	"../tests/activity/ActivityTest",
 	"../tests/authentication/AuthenticationTest",
@@ -171,17 +173,17 @@ require([ //"handlebars",
 //    jasmineEnv.addReporter(new jasmine.TerminalReporter());
     jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   } else {
-//    var htmlReporter = new jasmine.HtmlReporter();
-//
-//    jasmineEnv.addReporter(htmlReporter);
-//
-//    jasmineEnv.specFilter = function(spec) {
-//      return htmlReporter.specFilter(spec);
-//    };
-    jasmineEnv.addReporter(new jasmine.TrivialReporter());
-//    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
-//    jasmineEnv.addReporter(new jasmine.TerminalReporter());
-    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
+    var htmlReporter = new jasmine.HtmlReporter();
+
+    jasmineEnv.addReporter(htmlReporter);
+
+    jasmineEnv.specFilter = function(spec) {
+      return htmlReporter.specFilter(spec);
+    };
+//    jasmineEnv.addReporter(new jasmine.TrivialReporter());
+////    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
+////    jasmineEnv.addReporter(new jasmine.TerminalReporter());
+//    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
   }
 
   jasmineEnv.execute();
