@@ -133,7 +133,7 @@ require([ //"handlebars",
 //    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
-          "../tests/audioVideo/AudioWebServiceTest", 
+//          "../tests/audioVideo/AudioWebServiceTest", 
 
 	"../tests/app/AppTest", 
 	"../tests/activity/ActivityTest",
@@ -141,7 +141,7 @@ require([ //"handlebars",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
     "../tests/corpus/CorpusTest", 
-    "../tests/corpus/CorpusWebServiceTest", 
+//    "../tests/corpus/CorpusWebServiceTest", 
     "../tests/export/ExportTest",
     "../tests/glosser/GlosserTest", 
     "../tests/hotkey/HotKeyTest",
