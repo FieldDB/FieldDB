@@ -208,8 +208,6 @@ define([
         return this;
       }
 
-      // Build the lexicon
-      this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
       
       if (OPrime.debugMode) OPrime.debug("CORPUS EDIT render: ");
       if( this.format != "modal"){
