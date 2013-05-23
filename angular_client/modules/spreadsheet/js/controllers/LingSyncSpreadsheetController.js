@@ -17,6 +17,76 @@ define(
           LingSyncPreferences = {
             "userTemplate" : "template2",
             "resultSize" : 5,
+            "availableFields" : {
+              "judgement" : {
+                "label" : "judgement",
+                "title" : "Judgement"
+              },
+              "utterance" : {
+                "label" : "utterance",
+                "title" : "Utterance"
+              },
+              "morphemes" : {
+                "label" : "morphemes",
+                "title" : "Morphemes"
+              },
+              "gloss" : {
+                "label" : "gloss",
+                "title" : "Gloss"
+              },
+              "translation" : {
+                "label" : "translation",
+                "title" : "Translation"
+              },
+              "notes" : {
+                "label" : "notes",
+                "title" : "Notes"
+              },
+              "refs" : {
+                "label" : "refs",
+                "title" : "References"
+              },
+              "goal" : {
+                "label" : "goal",
+                "title" : "Goal"
+              },
+              "consultants" : {
+                "label" : "consultants",
+                "title" : "Consultants"
+              },
+              "dialect" : {
+                "label" : "dialect",
+                "title" : "Dialect"
+              },
+              "language" : {
+                "label" : "language",
+                "title" : "language"
+              },
+              "dateElicited" : {
+                "label" : "dateElicited",
+                "title" : "Date Elicited"
+              },
+              "user" : {
+                "label" : "user",
+                "title" : "User"
+              },
+              "dateSEntered" : {
+                "label" : "dateSEntered",
+                "title" : "Date entered"
+              },
+              "tags" : {
+                "label" : "tags",
+                "title" : "tags"
+              },
+              "validationStatus" : {
+                "label" : "validationStatus",
+                "title" : "validationStatus"
+              },
+              "syntacticCategory" : {
+                "label" : "syntacticCategory",
+                "title" : "syntacticCategory"
+              }
+            },
             "template1" : {
               "field1" : {
                 "label" : "utterance",
@@ -200,15 +270,16 @@ define(
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
           } else {
-            //MAKING EVERYONE A DEVELEPOR NOW FOR ACCESS TO SANDBOX
+            // MAKING EVERYONE A DEVELEPOR NOW FOR ACCESS TO SANDBOX
             $scope.developer = true;
-            
-//            if (auth.user == "senhorzinho" || auth.user == "gina") {
-//              var r = confirm("Hello, developer! Would you like to enter developer mode?");
-//              if (r == true) {
-//                $scope.developer = true;
-//              }
-//            }
+
+            // if (auth.user == "senhorzinho" || auth.user == "gina") {
+            // var r = confirm("Hello, developer! Would you like to enter
+            // developer mode?");
+            // if (r == true) {
+            // $scope.developer = true;
+            // }
+            // }
             $rootScope.loading = true;
             $rootScope.server = auth.server;
             LingSyncData.login(auth.user, auth.password).then(
@@ -408,17 +479,19 @@ define(
                     }
                     LingSyncData.saveNew($rootScope.DB, newSessionRecord).then(
                         function(savedRecord) {
-                          $scope.loadData();
                           newSessionRecord._id = savedRecord.data.id;
                           newSessionRecord._rev = savedRecord.data.rev;
+                          for (i in newSessionRecord.sessionFields) {
+                            if (newSessionRecord.sessionFields[i].label == "goal") {
+                              newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0,20);
+                            }
+                          }
+                          console.log(newSessionRecord);
                           $scope.sessions.push(newSessionRecord);
                           $scope.dataentry = true;
                           $scope.changeActiveSession(savedRecord.data.id);
                           window.location.assign("#/lingsync/"
                               + $scope.template);
-                          // Update UI with updated
-                          // corpus
-                          // $scope.loadData();
                         });
                     $rootScope.loading = false;
                   });

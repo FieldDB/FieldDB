@@ -10,61 +10,82 @@ define(
         $scope.scopePreferences = JSON.parse(localStorage
             .getItem('LingSyncPreferences'));
 
+        $scope.availableFields = $scope.scopePreferences.availableFields;
+
         // Get all available datum fields from server
-        var availableFields = {};
-
-        LingSyncData
-            .datumFields($rootScope.DB)
-            .then(
-                function(availableDatumFields) {
-                  var availableFieldsFromServer = {};
-                  for (i in availableDatumFields) {
-                    for (keyValue in availableDatumFields[i].key) {
-                      availableFieldsFromServer[keyValue] = keyValue;
-                    }
-                  }
-
-                  for (field in availableFieldsFromServer) {
-                    availableFieldsFromServer[field] = {};
-                    availableFieldsFromServer[field].label = field;
-                    if (field == "utterance") {
-                      availableFieldsFromServer[field].title = "Utterance";
-                    } else if (field == "translation") {
-                      availableFieldsFromServer[field].title = "Translation";
-                    } else if (field == "refs") {
-                      availableFieldsFromServer[field].title = "References";
-                    } else if (field == "notes") {
-                      availableFieldsFromServer[field].title = "Notes";
-                    } else if (field == "morphemes") {
-                      availableFieldsFromServer[field].title = "Morphemes";
-                    } else if (field == "judgement") {
-                      availableFieldsFromServer[field].title = "Judgement";
-                    } else if (field == "gloss") {
-                      availableFieldsFromServer[field].title = "Gloss";
-                    } else if (field == "dialect") {
-                      availableFieldsFromServer[field].title = "Dialect";
-                    } else if (field == "dateElicited") {
-                      availableFieldsFromServer[field].title = "Date Elicited";
-                    } else if (field == "checkedWithConsultant") {
-                      availableFieldsFromServer[field].title = "Checked with consultant";
-                    } else if (field == "goal") {
-                      availableFieldsFromServer[field].title = "Goal";
-                    } else if (field == "user") {
-                      availableFieldsFromServer[field].title = "User";
-                    } else if (field == "dateSEntered") {
-                      availableFieldsFromServer[field].title = "Date entered";
-                    } else if (field == "consultants") {
-                      availableFieldsFromServer[field].title = "Consultants";
-                    } else {
-                      availableFieldsFromServer[field].title = field;
-                    }
-                  }
-                  availableFields = availableFieldsFromServer;
-                  $scope.availableFields = availableFieldsFromServer;
-                });
+        // var availableFields = {};
+        //
+        // LingSyncData
+        // .datumFields($rootScope.DB)
+        // .then(
+        // function(availableDatumFields) {
+        // var availableFieldsFromServer = {};
+        // for (i in availableDatumFields) {
+        // for (keyValue in availableDatumFields[i].key) {
+        // availableFieldsFromServer[keyValue] = keyValue;
+        // }
+        // }
+        //
+        // for (field in availableFieldsFromServer) {
+        // availableFieldsFromServer[field] = {};
+        // availableFieldsFromServer[field].label = field;
+        // if (field == "utterance") {
+        // availableFieldsFromServer[field].title = "Utterance";
+        // } else if (field == "translation") {
+        // availableFieldsFromServer[field].title = "Translation";
+        // } else if (field == "refs") {
+        // availableFieldsFromServer[field].title = "References";
+        // } else if (field == "notes") {
+        // availableFieldsFromServer[field].title = "Notes";
+        // } else if (field == "morphemes") {
+        // availableFieldsFromServer[field].title = "Morphemes";
+        // } else if (field == "judgement") {
+        // availableFieldsFromServer[field].title = "Judgement";
+        // } else if (field == "gloss") {
+        // availableFieldsFromServer[field].title = "Gloss";
+        // } else if (field == "dialect") {
+        // availableFieldsFromServer[field].title = "Dialect";
+        // } else if (field == "dateElicited") {
+        // availableFieldsFromServer[field].title = "Date Elicited";
+        // } else if (field == "checkedWithConsultant") {
+        // availableFieldsFromServer[field].title = "Checked with consultant";
+        // } else if (field == "goal") {
+        // availableFieldsFromServer[field].title = "Goal";
+        // } else if (field == "user") {
+        // availableFieldsFromServer[field].title = "User";
+        // } else if (field == "dateSEntered") {
+        // availableFieldsFromServer[field].title = "Date entered";
+        // } else if (field == "consultants") {
+        // availableFieldsFromServer[field].title = "Consultants";
+        // } else {
+        // availableFieldsFromServer[field].title = field;
+        // }
+        // }
+        // console.log(JSON.stringify(availableFieldsFromServer));
+        // availableFields = availableFieldsFromServer;
+        // $scope.availableFields = availableFieldsFromServer;
+        // });
 
         $scope.changeTagToEdit = function(tag) {
           $scope.tagToEdit = tag;
+        };
+
+        $scope.changeFieldToEdit = function(field) {
+          $scope.fieldToEdit = field;
+        }
+
+        $scope.editFieldTitle = function(field, newFieldTitle) {
+          var LingSyncPreferences = JSON.parse(localStorage
+              .getItem('LingSyncPreferences'));
+          for (key in LingSyncPreferences.availableFields) {
+            if (key == field.label) {
+              LingSyncPreferences.availableFields[key].title = newFieldTitle;
+            }
+          }
+          localStorage.setItem('LingSyncPreferences', JSON
+              .stringify(LingSyncPreferences));
+          $scope.scopePreferences = LingSyncPreferences;
+          $scope.availableFields = LingSyncPreferences.availableFields;
         };
 
         $scope.editTagInfo = function(oldTag, newTag) {
@@ -127,6 +148,7 @@ define(
         };
 
         $scope.deleteDuplicateTags = function() {
+          window.alert("Coming soon.");
           var changeThisRecord;
           for ( var i = 0; i < $scope.dataCopy.length; i++) {
             changeThisRecord = false;
@@ -134,7 +156,7 @@ define(
               var tagsArray = $scope.dataCopy[indexi].value.datumTags;
               if (tagsArray.length > 1) {
                 for ( var j = 0; j < tagsArray.length; j++) {
-                  for (var k = 0; k < tagsArray.length; k++) {
+                  for ( var k = 0; k < tagsArray.length; k++) {
                     if (tagsArray[j].tag == tagsArray[k].tag) {
                       console.log(tagsArray[j].tag + " = " + tagsArray[k].tag);
                     }
@@ -178,14 +200,14 @@ define(
         $scope.saveNewPreferences = function(template, newFieldPreferences) {
           LingSyncPreferences = JSON.parse(localStorage
               .getItem('LingSyncPreferences'));
-          for (availableField in availableFields) {
+          for (availableField in $scope.availableFields) {
             for (newField in newFieldPreferences) {
               if (newFieldPreferences[newField] == "") {
                 LingSyncPreferences[template][newField].title = "";
                 LingSyncPreferences[template][newField].label = "";
-              } else if (availableFields[availableField].label == newFieldPreferences[newField]) {
-                LingSyncPreferences[template][newField].title = availableFields[availableField].title;
-                LingSyncPreferences[template][newField].label = availableFields[availableField].label;
+              } else if ($scope.availableFields[availableField].label == newFieldPreferences[newField]) {
+                LingSyncPreferences[template][newField].title = $scope.availableFields[availableField].title;
+                LingSyncPreferences[template][newField].label = $scope.availableFields[availableField].label;
               }
             }
           }
@@ -198,6 +220,7 @@ define(
               .stringify(LingSyncPreferences));
           window.alert("Settings saved.");
         };
+
         $scope.saveNumberOfRecordsToDisplay = function(numberOfRecordsToDisplay) {
           LingSyncPreferences = JSON.parse(localStorage
               .getItem('LingSyncPreferences'));

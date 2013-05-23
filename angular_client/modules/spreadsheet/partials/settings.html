@@ -141,11 +141,25 @@
 
 	<!-- TEMPLATE 3 -->
 
+	<!-- EDIT BUTTONS -->
+	<br />
+	<div class="row">
+		<div class="span8 offset1">
+			<button class="btn btn-primary" ng-click="editTags=!editTags">Click
+				here to edit tags</button>
+			&nbsp;
+			<button class="btn btn-primary" ng-click="deleteDuplicateTags();">Delete
+				Duplicate Tags</button>
+			&nbsp;
+			<button class="btn btn-primary" ng-click="editFields=!editFields">Click
+				here to edit fields</button>
+		</div>
+	</div>
+
 	<!-- TAGS -->
 	<br />
 	<div class="span8 offset1" ng-hide="developer==false">
-		<button class="btn btn-primary" ng-click="editTags=!editTags">Click here to edit
-			tags</button>
+
 		<div class="row" ng-show="editTags==true">
 			<div class="span6">
 				Click EDIT button to rename tag:
@@ -155,29 +169,30 @@
 					<span ng-show="tagToEdit==tag"><input type="text"
 						ng-model='newTag' placeholder="Change to ...">
 						<button class="btn btn-primary"
-							ng-click="editTagInfo(tag, newTag)">Update</button> </span> <img ng-show="loading==true" src="img/spinner-small.gif">
+							ng-click="editTagInfo(tag, newTag)">Update</button> </span> <img
+						ng-show="loading==true" src="img/spinner-small.gif">
 				</div>
 			</div>
 		</div>
 	</div>
 
-
-<br />
+	<!-- FIELDS -->
 	<div class="span8 offset1" ng-hide="developer==false">
-		<button class="btn btn-primary" ng-click="deleteDuplicateTags();">Delete Duplicate Tags</button>
-		<div class="row" ng-show="editTags==true">
+		<div class="row" ng-show="editFields==true">
 			<div class="span6">
-				Click EDIT button to rename tag:
-				<div ng-repeat="tag in tags">
-					<input type="text" value="{{tag}}" disabled=true>
-					<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
-					<span ng-show="tagToEdit==tag"><input type="text"
-						ng-model='newTag' placeholder="Change to ...">
+				Click EDIT button to rename field:
+				<div ng-repeat="field in availableFields">
+					<input type="text" value="{{field.title}}" disabled=true>
+					<button class="btn btn-primary" ng-click="changeFieldToEdit(field)">Edit</button>
+					<span ng-show="fieldToEdit==field"><input type="text"
+						ng-model='newFieldTitle' placeholder="Change to ...">
 						<button class="btn btn-primary"
-							ng-click="editTagInfo(tag, newTag)">Update</button> </span> <img ng-show="loading==true" src="img/spinner-small.gif">
+							ng-click="editFieldTitle(field, newFieldTitle)">Update</button> </span> <img
+						ng-show="loading==true" src="img/spinner-small.gif">
 				</div>
 			</div>
 		</div>
 	</div>
+
 
 </div>
