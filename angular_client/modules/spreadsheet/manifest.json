@@ -3,7 +3,7 @@
   "description": "Streamlined data entry for LingSync app; written in AngularJS.",
   "version": "1.0",
   "manifest_version" : 2,
-  "content_security_policy" : "img-src 'self' https://ifielddevs.iriscouch.com; default-src 'self' https://fonts.googleapis.com/ https://themes.googleusercontent.com/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; script-src 'self' 'unsafe-eval' https://ifielddevs.iriscouch.com; connect-src 'self' https://corpusdev.lingsync.org/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; object-src 'self' https://ifielddevs.iriscouch.com ; style-src 'self' 'unsafe-inline' https://ifielddevs.iriscouch.com https://fonts.googleapis.com/ https://themes.googleusercontent.com/;",
+  "content_security_policy" : "img-src 'self' https://ifielddevs.iriscouch.com; default-src 'self' https://corpusdev.lingsync.org https://fonts.googleapis.com/ https://themes.googleusercontent.com/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; script-src 'self' 'unsafe-eval' https://ifielddevs.iriscouch.com; connect-src 'self' https://corpusdev.lingsync.org/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; object-src 'self' https://ifielddevs.iriscouch.com ; style-src 'self' 'unsafe-inline' https://ifielddevs.iriscouch.com https://fonts.googleapis.com/ https://themes.googleusercontent.com/;",
   "app": {
     "launch": {
       "local_path" : "index.html"
@@ -14,9 +14,5 @@
     "128": "img/icon128_dev.png"
   },
   "permissions": [
-    "https://ifielddevs.iriscouch.com/",
-    "https://prosody.linguistics.mcgill.ca/",
-    "https://fonts.googleapis.com/",
-    "https://corpusdev.lingsync.org/"
   ]
 }

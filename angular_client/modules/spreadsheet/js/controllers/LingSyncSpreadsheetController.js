@@ -273,6 +273,12 @@ define(
             // MAKING EVERYONE A DEVELEPOR NOW FOR ACCESS TO SANDBOX
             $scope.developer = true;
 
+            $rootScope.userInfo = {
+                "name" : auth.user,
+                "password" : auth.password
+//                "withCredentials" : true
+                };
+            
             // if (auth.user == "senhorzinho" || auth.user == "gina") {
             // var r = confirm("Hello, developer! Would you like to enter
             // developer mode?");
