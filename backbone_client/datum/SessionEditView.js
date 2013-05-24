@@ -294,7 +294,7 @@ define([
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "li",
+        childViewTagName     : "tr",
         childViewFormat      : "session"
       });
       
