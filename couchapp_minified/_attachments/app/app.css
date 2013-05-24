@@ -227,9 +227,11 @@ button { /* margin: 5px 0px 5px 0px;  */
 :hover {
 	color: #fff !important;
 }
-
-textarea.datum_field_input {
+textarea{
 	width: 98%;
+}
+
+.datum_fields_ul textarea.datum_field_input {
 	padding: 0px;
 	margin: 0px;
 	/* background-color: #ff00ff; */
