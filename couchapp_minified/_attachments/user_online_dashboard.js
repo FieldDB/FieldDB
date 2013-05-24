@@ -5528,7 +5528,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small></h1>\n  <span  class= \"locale_New_Session_Instructions\"></span>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"session-fields-ul unstyled\"></ul>\n  <a href=\"#\" class=\"btn locale_Cancel\" data-dismiss=\"modal\"></a>\n  <button class=\"btn btn-success pull-right btn-save-session locale_Save\" value=\"Save\"></button>  \n</div>\n";
+    + "</small></h1>\n  <span  class= \"locale_New_Session_Instructions\"></span>\n</div>\n<div class=\"modal-body\">\n  <table class=\"session-fields-ul unstyled\"></table>\n  <a href=\"#\" class=\"btn locale_Cancel\" data-dismiss=\"modal\"></a>\n  <button class=\"btn btn-success pull-right btn-save-session locale_Save\" value=\"Save\"></button>  \n</div>\n";
   return buffer;
   });
 })();(function() {
