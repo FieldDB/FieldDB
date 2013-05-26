@@ -205,6 +205,8 @@ define(
               } else {
                 $scope.searching = true;
               }
+            } else if (itemToDisplay == "reload") {
+              $scope.loadData();
             } else {
               $scope.changeActiveSubMenu(itemToDisplay);
             }
@@ -264,6 +266,7 @@ define(
                       }
                     }
                     $scope.sessions = scopeSessions;
+                    $scope.saved = "yes";
                     $rootScope.loading = false;
                   });
         };
@@ -423,7 +426,7 @@ define(
                           },
                           function() {
                             window
-                                .alert("There was an error accessing the record.");
+                                .alert("There was an error accessing the record.\nTry refreshing the data first by clicking ↻.");
                           });
                 }
               })(i);
@@ -448,7 +451,7 @@ define(
                   $rootScope.activeSubMenu = 'none';
                   // $scope.loadData();
                 }, function() {
-                  window.alert("Error deleting record.");
+                  window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
                 });
           }
         };
@@ -514,14 +517,18 @@ define(
         };
 
         $scope.deleteRecord = function(id, rev) {
-          var r = confirm("Are you sure you want to delete this record permanently?");
-          if (r == true) {
-            LingSyncData.removeRecord($rootScope.DB, id, rev).then(
-                function(response) {
-                  $scope.loadData();
-                }, function() {
-                  window.alert("Error deleting record.");
-                });
+          if (!id) {
+            window.alert("Please save records before continuing.");
+          } else {
+            var r = confirm("Are you sure you want to delete this record permanently?");
+            if (r == true) {
+              LingSyncData.removeRecord($rootScope.DB, id, rev).then(
+                  function(response) {
+                    $scope.loadData();
+                  }, function() {
+                    window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                  });
+            }
           }
         };
 
@@ -660,6 +667,7 @@ define(
                                 .then(
                                     function(response) {
                                       $scope.data[index].id = response.data.id;
+                                      $scope.data[index].rev = response.data.rev;
                                       $scope.data[index].saved = "yes";
                                       console.log("Saved new record: "
                                           + $scope.data[index].id);

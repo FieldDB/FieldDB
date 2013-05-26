@@ -33,7 +33,8 @@
 			ng-click="navigateVerifySaved('settings');">Settings</a></span>
 		<span><a href="#/sandbox"
 			ng-click="dataentry=false;navigateVerifySaved('none')"
-			ng-show="developer==true">Statistics</a></span> <span
+			ng-show="developer==true">Statistics</a></span><span ng-hide="data==undefined || dataentry==false"><a
+			ng-click="navigateVerifySaved('reload');">↻</a></span> <span
 			class="rightMenuItems" ng-show="authenticated==true">
 			<div class="rightMenuItemsDiv">
 				<div>
