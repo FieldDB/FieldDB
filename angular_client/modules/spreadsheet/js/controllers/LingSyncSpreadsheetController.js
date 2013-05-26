@@ -12,6 +12,14 @@ define(
                                            * @returns {LingSyncSpreadsheetController}
                                            */
       function($scope, $rootScope, $resource, $filter, LingSyncData) {
+        
+        //TEST FOR CHROME BROWSER
+        var is_chrome = window.chrome;
+        if (!is_chrome) {
+         $scope.not_chrome = true; 
+        }
+        
+        
         var LingSyncPreferences = localStorage.getItem('LingSyncPreferences');
         if (LingSyncPreferences == undefined) {
           LingSyncPreferences = {
