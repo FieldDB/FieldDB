@@ -16,6 +16,7 @@
 </head>
 <body id="app" class="LingSyncBody"
 	ng-controller="LingSyncSpreadsheetController" ng-cloak>
+	<div id="hideOnLoad">
 
 	<div class="menubar mainMenubar" ng-cloak>
 		<span class="menuTitle">|<a
@@ -53,7 +54,6 @@
 			<div class="clearDiv"></div>
 		</span>
 	</div>
-	<div id="hideOnLoad">
 		<div class="menubar subMenubar" ng-show="activeSubMenu=='editSession'"
 			ng-cloak>
 			<span>Change Session:</span> <select class="span3"
@@ -143,7 +143,6 @@
 			</form>
 			</span>
 		</div>
-	</div>
 	<!-- Export Search Results Modal -->
 	<div id="searchModal" class="modal hide fade" tabindex="-1"
 		role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
@@ -173,7 +172,7 @@
 		ng-click="changeActiveSubMenu('none');">
 		<ng-view></ng-view>
 	</div>
-
+</div>
 
 	<!-- Le javascript
     ================================================== -->
