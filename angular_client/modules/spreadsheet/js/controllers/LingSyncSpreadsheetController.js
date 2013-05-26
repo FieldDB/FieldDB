@@ -206,6 +206,9 @@ define(
                 $scope.searching = true;
               }
             } else if (itemToDisplay == "reload") {
+              $scope.searchTerm = '';
+              $scope.searchHistory = null;
+              window.location.assign("#/lingsync/" + $scope.template)
               $scope.loadData();
             } else {
               $scope.changeActiveSubMenu(itemToDisplay);
