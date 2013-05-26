@@ -821,6 +821,8 @@ define(
         }
         ;
 
+        document.getElementById("hideOnLoad").style.visibility = "visible";
+        
         $scope.testFunction = function() {
           window.alert($rootScope.currentResult);
         };
