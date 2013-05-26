@@ -436,23 +436,31 @@ define(
         };
 
         $scope.deleteEmptySession = function(activeSessionID) {
-          var r = confirm("Are you sure you want to delete this session permanently?");
-          if (r == true) {
-            var revID = "";
-            for (i in $scope.sessions) {
-              if ($scope.sessions[i]._id == activeSessionID) {
-                revID = $scope.sessions[i]._rev;
-                $scope.sessions.splice(i, 1);
+          if ($scope.currentSessionName == "All Sessions") {
+            window.alert("You must select a session to delete.");
+          } else {
+            var r = confirm("Are you sure you want to delete this session permanently?");
+            if (r == true) {
+              var revID = "";
+              for (i in $scope.sessions) {
+                if ($scope.sessions[i]._id == activeSessionID) {
+                  revID = $scope.sessions[i]._rev;
+                  $scope.sessions.splice(i, 1);
+                }
               }
+              LingSyncData
+                  .removeRecord($rootScope.DB, activeSessionID, revID)
+                  .then(
+                      function(response) {
+                        $scope.changeActiveSession('none');
+                        $rootScope.activeSubMenu = 'none';
+                        // $scope.loadData();
+                      },
+                      function() {
+                        window
+                            .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                      });
             }
-            LingSyncData.removeRecord($rootScope.DB, activeSessionID, revID)
-                .then(function(response) {
-                  $scope.changeActiveSession('none');
-                  $rootScope.activeSubMenu = 'none';
-                  // $scope.loadData();
-                }, function() {
-                  window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
-                });
           }
         };
 
@@ -522,12 +530,16 @@ define(
           } else {
             var r = confirm("Are you sure you want to delete this record permanently?");
             if (r == true) {
-              LingSyncData.removeRecord($rootScope.DB, id, rev).then(
-                  function(response) {
-                    $scope.loadData();
-                  }, function() {
-                    window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
-                  });
+              LingSyncData
+                  .removeRecord($rootScope.DB, id, rev)
+                  .then(
+                      function(response) {
+                        $scope.loadData();
+                      },
+                      function() {
+                        window
+                            .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                      });
             }
           }
         };
@@ -822,7 +834,7 @@ define(
         ;
 
         document.getElementById("hideOnLoad").style.visibility = "visible";
-        
+
         $scope.testFunction = function() {
           window.alert($rootScope.currentResult);
         };
