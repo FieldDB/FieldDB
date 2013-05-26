@@ -33,7 +33,7 @@
 			ng-click="navigateVerifySaved('settings');">Settings</a></span>
 		<span><a href="#/sandbox"
 			ng-click="dataentry=false;navigateVerifySaved('none')"
-			ng-hide="developer==false">Statistics</a></span> <span
+			ng-show="developer==true">Statistics</a></span> <span
 			class="rightMenuItems" ng-show="authenticated==true">
 			<div class="rightMenuItemsDiv">
 				<div>
@@ -131,8 +131,8 @@
 			<button class="btn btn-primary" href="#searchModal"
 				ng-click="exportResults();" data-toggle="modal">Export</button></span>
 
-		<button class="btn btn-warning" ng-click="loadData();searchTerm='';">Clear
-			Search</button></form>
+		<button class="btn btn-warning" ng-click="loadData();searchTerm='';searchHistory=null">Clear
+			Results</button> <span>{{searchHistory}}</span></form>
 		</span>
 	</div>
 

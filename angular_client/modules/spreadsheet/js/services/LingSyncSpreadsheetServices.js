@@ -86,7 +86,7 @@ define(
                     var promise = $http(config)
                         .then(
                             function(response) {
-                              console.log(JSON.stringify(response));
+                              console.log("Logging in/Keeping session alive.");
                               return response;
                             },
                             function() {

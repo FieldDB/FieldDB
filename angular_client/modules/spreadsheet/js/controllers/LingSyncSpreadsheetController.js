@@ -151,6 +151,7 @@ define(
         // Set scope variables
         $rootScope.template = LingSyncPreferences.userTemplate;
         $rootScope.fields = LingSyncPreferences[LingSyncPreferences.userTemplate];
+        $scope.scopePreferences = LingSyncPreferences;
         $scope.orderProp = "dateModified";
         $scope.reverse = true;
         $scope.selected = 'newEntry';
@@ -270,22 +271,19 @@ define(
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
           } else {
-            // MAKING EVERYONE A DEVELEPOR NOW FOR ACCESS TO SANDBOX
-            $scope.developer = true;
 
             $rootScope.userInfo = {
-                "name" : auth.user,
-                "password" : auth.password
-//                "withCredentials" : true
-                };
-            
-            // if (auth.user == "senhorzinho" || auth.user == "gina") {
-            // var r = confirm("Hello, developer! Would you like to enter
-            // developer mode?");
-            // if (r == true) {
-            // $scope.developer = true;
-            // }
-            // }
+              "name" : auth.user,
+              "password" : auth.password
+            // "withCredentials" : true
+            };
+
+            if (auth.user == "senhorzinho" || auth.user == "gina") {
+              var r = confirm("Hello, developer! Would you like to enter developer mode?");
+              if (r == true) {
+                $scope.developer = true;
+              }
+            }
             $rootScope.loading = true;
             $rootScope.server = auth.server;
             LingSyncData.login(auth.user, auth.password).then(
@@ -483,22 +481,25 @@ define(
                         }
                       }
                     }
-                    LingSyncData.saveNew($rootScope.DB, newSessionRecord).then(
-                        function(savedRecord) {
-                          newSessionRecord._id = savedRecord.data.id;
-                          newSessionRecord._rev = savedRecord.data.rev;
-                          for (i in newSessionRecord.sessionFields) {
-                            if (newSessionRecord.sessionFields[i].label == "goal") {
-                              newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0,20);
-                            }
-                          }
-                          console.log(newSessionRecord);
-                          $scope.sessions.push(newSessionRecord);
-                          $scope.dataentry = true;
-                          $scope.changeActiveSession(savedRecord.data.id);
-                          window.location.assign("#/lingsync/"
-                              + $scope.template);
-                        });
+                    LingSyncData
+                        .saveNew($rootScope.DB, newSessionRecord)
+                        .then(
+                            function(savedRecord) {
+                              newSessionRecord._id = savedRecord.data.id;
+                              newSessionRecord._rev = savedRecord.data.rev;
+                              for (i in newSessionRecord.sessionFields) {
+                                if (newSessionRecord.sessionFields[i].label == "goal") {
+                                  newSessionRecord.title = newSessionRecord.sessionFields[i].mask
+                                      .substr(0, 20);
+                                }
+                              }
+                              console.log(newSessionRecord);
+                              $scope.sessions.push(newSessionRecord);
+                              $scope.dataentry = true;
+                              $scope.changeActiveSession(savedRecord.data.id);
+                              window.location.assign("#/lingsync/"
+                                  + $scope.template);
+                            });
                     $rootScope.loading = false;
                   });
         };
@@ -675,6 +676,19 @@ define(
           $scope.saved = "yes";
         };
 
+        // Set auto-save interval for 5 minutes
+        var autoSave = window.setInterval(function() {
+          if ($scope.saved == "no") {
+            $scope.saveChanges();
+          } else {
+            // TODO FIND BETTER WAY TO KEEP SESSION ALIVE;
+            if ($rootScope.userInfo) {
+              LingSyncData.login($rootScope.userInfo.name,
+                  $rootScope.userInfo.password);
+            }
+          }
+        }, 300000);
+
         $scope.selectRow = function(datum) {
           if ($scope.searching != true) {
             $scope.selected = datum;
@@ -682,6 +696,11 @@ define(
         };
 
         $scope.runSearch = function(searchTerm) {
+          if ($scope.searchHistory) {
+            $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
+          } else {
+            $scope.searchHistory = searchTerm;
+          }
           searchTerm = searchTerm.toLowerCase();
           var newScopeData = [];
           if (!$scope.activeSession) {
