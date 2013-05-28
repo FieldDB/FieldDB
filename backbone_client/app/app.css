@@ -227,7 +227,8 @@ button { /* margin: 5px 0px 5px 0px;  */
 :hover {
 	color: #fff !important;
 }
-textarea{
+
+textarea {
 	width: 98%;
 }
 
@@ -909,6 +910,14 @@ textarea {
 	/* padding: 1em; */
 	border: dashed #333 2px;
 	color: #000;
+}
+
+.droparea {
+	border: dashed #4d90fe 2px;
+	min-height: 2em;
+	width: 100%;
+	color: #000;
+  background-color: rgba(238, 238, 238, 0.5);
 }
 
 .dropdown-menu .not-a {
