@@ -100,4 +100,12 @@ require([ "app/App", "backbone", "OPrime" ], function(App,
   window.app = new App({
     filledWithDefaults : true
   });
+  
+  window.uploadAndGenerateTextGrid = function(files){
+//    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
+//    alert("I'm going to submit the upload form.");
+//    document.getElementById("uploadAudioForTextGridform").submit();
+  };
+  
+  
 });
