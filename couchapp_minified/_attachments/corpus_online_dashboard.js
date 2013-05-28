@@ -21336,6 +21336,7 @@ define('audio_video/AudioVideoEditView',[
       //Use the terminal to put the file into the file system
       window.appView.term.addDroppedFiles(e.dataTransfer.files);
       window.filesToUpload = e.dataTransfer.files;
+      window.uploadAndGenerateTextGrid(e.dataTransfer.files);
       window.appView.term.output('<div>File(s) added!</div>');
       var audiojs = $(audio);
       audiojs.empty();
@@ -29425,6 +29426,14 @@ require([ "app/App", "backbone", "OPrime" ], function(App,
   window.app = new App({
     filledWithDefaults : true
   });
+  
+  window.uploadAndGenerateTextGrid = function(files){
+    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
+    alert("Im going to submit the upload form.");
+    document.getElementById("uploadAudioForTextGridform").submit();
+  };
+  
+  
 });
 
 define("corpus_online_dashboard", function(){});
