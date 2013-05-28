@@ -49,7 +49,7 @@ OPrime.defaultCouchConnection = function() {
     pouchname : "default",
     path : "",
     authUrl : "https://authdev.lingsync.org",
-    userFriendlyServerName : "LingSync Testing"
+    userFriendlyServerName : "LingSync Beta"
   };
   var production = {
     protocol : "https://",
@@ -133,7 +133,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
     alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
     return;
     authUrl = "https://auth.lingsync.org";
-  } else if (authUrl.indexOf("LingSync Testing") >= 0) {
+  } else if (authUrl.indexOf("LingSync Beta") >= 0) {
     authUrl = "https://authdev.lingsync.org";
   } if (authUrl.indexOf("LingSync Myaamia") >= 0) {
     authUrl = "https://authdev.lingsync.org";
@@ -204,9 +204,9 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
   } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-    mostLikelyAuthUrl = "LingSync Testing";
+    mostLikelyAuthUrl = "LingSync Beta";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-    mostLikelyAuthUrl = "LingSync Testing";
+    mostLikelyAuthUrl = "LingSync Beta";
   } else if (window.location.origin.indexOf("docjbffdphmligpdknoebnljjgmfamfd") >= 0) {
     mostLikelyAuthUrl = "LingSync Myaamia";
   } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
