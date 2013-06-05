@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html lang="en" ng-csp>
+<head>
+<title>LingSync</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css"
+	href="libs/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css"
+	href="libs/bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="css/LingSync.css">
+<!-- END Stylesheets -->
+
+</head>
+<body id="app" class="LingSyncBody"
+	ng-controller="LingSyncSpreadsheetController">
+
+	<div class="menubar">
+		<span class="menuTitle">|<a href="#" ng-click="dataentry=false">LingSync</a>|
+		</span> <span ng-hide="data==undefined"><a
+			href="#/lingsync/{{template}}" ng-click="dataentry=true">Data
+				Entry</a></span> <span ng-hide="data==undefined"><a href="#/settings"
+			ng-click="dataentry=false">Settings</a></span> <span><a
+			href="#/sandbox" ng-click="dataentry=false" ng-hide="username!='senhorzinho'">Sandbox</a></span> <span
+			class="rightMenuItems" ng-show="authenticated==true"><div
+				class="rightMenuItemsDiv">
+				Filter results: <input type="text" ng-model='filterTerm'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-warning" ng-click="reloadPage()">Log
+					out</button>
+			</div></span>
+	</div>
+	<div class="mainBody">
+		<ng-view></ng-view>
+	</div>
+
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script src="libs/require.js"></script>
+	<script src="libs/d3.v3.js"></script>
+	<script src="LingSyncSpreadsheet.js"></script>
+</body>
+</html>

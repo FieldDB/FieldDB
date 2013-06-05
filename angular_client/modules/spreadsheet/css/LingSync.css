@@ -1,5 +1,137 @@
+@import url(https://fonts.googleapis.com/css?family=Droid+Sans);
+
+#hideOnLoad {
+	visibility: hidden;
+}
+
+h3 {
+	color: #000000;
+}
+
 .LingSyncBody {
 	background-color: #74C2E1;
+	font-family: 'Droid Sans', sans-serif;
+}
+
+.menubar {
+	background-color: #000000;
+	border: 1px solid #000000;
+	background: #000000;
+	height: 40px;
+	position: fixed;
+	left: 0;
+	right: 0;
+	margin-left: 0px;
+	margin-right: 0px;
+	z-index: 100;
+	padding-left: 10px;
+}
+
+.menubar span {
+	margin-top: 0;
+	padding: 0;
+	text-align: center;
+	height: 40px;
+	border-radius: 5px;
+	display: inline;
+	color: #FFFFFF;
+}
+
+.menubar span a {
+	text-decoration: none;
+	line-height: 40px;
+	color: #FFFFFF;
+	text-transform: uppercase;
+	font-size: 1.1em;
+	font-weight: 900;
+	padding: 0 15px;
+	background: #000000;
+	transition: color 700ms;
+	-moz-transition: color 700ms; /* Firefox 4 */
+	-webkit-transition: color 700ms; /* Safari and Chrome */
+	-o-transition: color 700ms; /* Opera */
+}
+
+.menubar a:hover {
+	color: #74C2E1;
+}
+
+.menuTitle {
+	font-size: 1.3em;
+}
+
+.rightMenuItems {
+	float: right;
+}
+
+.rightMenuItemsDiv {
+	float: right;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+.rightMenuItemsDiv div {
+	display: inline-block;
+	vertical-align: top;
+	text-align: left;
+}
+
+.clearDiv {
+	clear: both;
+}
+
+.mainMenubar {
+	top: 0;
+}
+
+.subMenubar {
+	top: 40;
+	display: inline-block;
+}
+
+.subSubMenubar {
+	top: 80;
+	height: 125px !important;
+	color: #FFFFFF;
+	padding-top: 10px;
+}
+
+.mainBody {
+	margin-top: 40px;
+	margin-bottom: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.lowerMainDiv {
+	padding-top: 40px !important;
+}
+
+#login_screen {
+	text-align: center;
+}
+
+.mainPageDiv {
+	border-radius: 10px;
+	border: 3px solid #000000;
+	margin-left: 20%;
+	margin-right: 20%;
+	padding: 10px;
+	font-weight: 700;
+	font-size: 1.3em;
+}
+
+.newSessionDiv {
+	background-color: #CDFFFF;
+	border-radius: 10px;
+	border: 1px solid #000000;
+	margin-right: 25%;
+	margin-left: 25%;
+	padding: 10px;
+}
+
+.newSessionTable {
+	text-align: left;
 }
 
 .selectedRow {
@@ -40,10 +172,14 @@ div.row {
 
 h1 {
 	color: #000000;
-	font-family: "Palatino"
 }
 
 h2 {
-	color: #FFFFFF;
-	font-family: "Palatino"
+	color: #000000;
+}
+
+input:focus {
+	background-color: #EAFFFF;
+	outline-size: 6px;
+	outline: #000000;
 }
