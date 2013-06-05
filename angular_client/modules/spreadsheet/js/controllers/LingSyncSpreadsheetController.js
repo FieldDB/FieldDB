@@ -19,7 +19,6 @@ define(
          $scope.not_chrome = true; 
         }
         
-        
         var LingSyncPreferences = localStorage.getItem('LingSyncPreferences');
         if (LingSyncPreferences == undefined) {
           LingSyncPreferences = {
