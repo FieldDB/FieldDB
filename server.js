@@ -1,12 +1,12 @@
 var https = require('https'),
   express = require('express'),
-  app = express(),
-  Q = require('q'),
-  md5 = require('MD5'),
-  fs = require('fs'),
-  util = require('util'),
+  app     = express(),
+  Q       = require('q'),
+  md5     = require('MD5'),
+  fs      = require('fs'),
+  util    = require('util'),
   node_config = require("./lib/nodeconfig_local"),
-  couch_keys = require("./lib/couchkeys_devserver");
+  couch_keys  = require("./lib/couchkeys_devserver");
 
 //read in the specified filenames as the security key and certificate
 node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
@@ -38,22 +38,26 @@ app.configure(function() {
  * Routes
  */
 
-app.get('/jadetest', function(req, res) {
-  var ghash = md5('josh.horner@gmail.com');
-  res.render('user', {
-    ghash: ghash,
-    json: {
-      team: {
-        firstname: 'Josh',
-        username: 'jdhorner'
-      }
-    }
-  });
-});
-
 app.get('/:user/:corpus', function(req, res) {
+
   var user = req.params.user;
   var corpus = req.params.corpus;
+
+  getUser(user)
+    .then(function(result) {
+      // return getCorpus(result.corpuses[0].pouchname);
+      return getRequestedCorpus(result.corpuses, corpus);
+    })
+    .then(function(result) {
+      res.send(result);
+    })
+    .fail(function(error) {
+      console.log(error);
+      res.send(404, 'test test');
+    })
+    .done();
+
+  return;
 
   findById(user, function(error, userdoc) {
     if (error) {
@@ -91,29 +95,13 @@ app.get('/:user', function(req, res) {
 
   var user = req.params.user;
 
-  // findById(user, function(error, userdoc) {
-  //   if (error) {
-  //     res.send(error);
-  //   } else {
-  //     var userCorpora = [];
-  //     for (var i = userdoc.corpuses.length - 1; i >= 0; i--) {
-  //       var thisUser = userdoc.corpuses[i].pouchname.substring(0, userdoc.corpuses[i].pouchname.indexOf('-'));
-  //       if (thisUser == user) {
-  //         userCorpora.push(userdoc.corpuses[i]);
-  //       }
-  //     }
-  //     // res.send(userdoc);
-  //     res.render('user', {json: userdoc});
-  //   }
-  // });
-
   getUser(user)
-    .then(function(body) {
-      res.render('user', {json: body});
-      // res.send(body);
+    .then(function(result) {
+      var ghash = md5(result.email);
+      res.render('user', {json: result, ghash: ghash});
     }, function(error) {
       console.log(error);
-      res.render('user', {json: {}});
+      res.render('user', {json: {}, ghash: {}});
     })
     .done();
 
@@ -124,26 +112,83 @@ app.get('/:user', function(req, res) {
  * provided id, returns the call of the fn with (error_message, user)
  */
 
-var getUser = function(userId) {
+function getUser(userId) {
 
   var df = Q.defer();
   var usersdb = nano.db.use(node_config.usersDbConnection.dbname);
 
-  usersdb.get(userId, function(error, body) {
+  usersdb.get(userId, function(error, result) {
     if (error) {
       df.reject(new Error(error));
     } else {
-      if (!body) {
-        df.resolve(0);
+      if (!result) {
+        df.resolve({});
       } else {
-        df.resolve(body);
+        df.resolve(result);
       }
     }
   });
 
   return df.promise;
 
-};
+}
+
+function getCorpus(pouchId, titleAsUrl, corpusid) {
+
+  var df = Q.defer();
+  var corpusdb = nano.db.use(pouchId);
+
+  corpusdb.get(corpusid, function(error, result) {
+    if (error) {
+      console.log(error);
+      df.reject(new Error(error));
+    } else {
+      if (!result) {
+        console.log('No result');
+        df.reject(new Error('No result'));
+      } else {
+        if (titleAsUrl && (result.titleAsUrl == titleAsUrl)) {
+          console.log('Match found: ' + result.titleAsUrl);
+          // console.log(titleAsUrl);
+          // console.log(result);
+          df.resolve(result);
+        } else {
+          console.log('No match: ' + result.titleAsUrl);
+          df.reject(new Error('No match'));
+        }
+      }
+    }
+  });
+
+  return df.promise;
+
+}
+
+function getRequestedCorpus(corporaArray, titleAsUrl) {
+
+  var df = Q.defer();
+  var resultingPromises = [];
+
+  for (corpus in corporaArray) {
+    resultingPromises[corpus] = getCorpus(corporaArray[corpus].pouchname, 'titleAsUrl', corporaArray[corpus].corpusid);
+  }
+
+  Q.allSettled(resultingPromises)
+    .then(function(results) {
+      results.forEach(function(result) {
+          if (result.state === 'fulfilled') {
+              var value = result.value;
+              df.resolve(value);
+          } else {
+              var reason = result.reason;
+              df.reject(reason);
+          }
+      });
+  });
+
+  return df.promise;
+
+}
 
 function findById(id, fn) {
   var usersdb = nano.db.use(node_config.usersDbConnection.dbname);
