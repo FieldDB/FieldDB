@@ -45,7 +45,6 @@ app.get('/:user/:corpus', function(req, res) {
 
   getUser(user)
     .then(function(result) {
-      // return getCorpus(result.corpuses[0].pouchname);
       return getRequestedCorpus(result.corpuses, corpus);
     })
     .then(function(result) {
@@ -53,41 +52,9 @@ app.get('/:user/:corpus', function(req, res) {
     })
     .fail(function(error) {
       console.log(error);
-      res.send(404, 'test test');
+      res.send(404, 'Internal error');
     })
     .done();
-
-  return;
-
-  findById(user, function(error, userdoc) {
-    if (error) {
-      res.send(error);
-    } else {
-      var userCorpora = [];
-      for (var i = userdoc.corpuses.length - 1; i >= 0; i--) {
-        var thisUser = userdoc.corpuses[i].pouchname.substring(0, userdoc.corpuses[i].pouchname.indexOf('-'));
-        if (thisUser == user) {
-          userCorpora.push(userdoc.corpuses[i]);
-        }
-      }
-      for (var i = userCorpora.length - 1; i >= 0; i--) {
-        findCorpusByPouchname(userCorpora[i].pouchname, function(error, corpusdoc) {
-          if (error) {
-            console.log(error);
-          } else {
-            if (corpusdoc.titleAsUrl == corpus) {
-              // res.send(corpusdoc);
-              var ghash = md5(corpusdoc.team.email);
-              res.render('corpus', {
-                ghash: ghash,
-                json: corpusdoc
-              });
-            }
-          }
-        });
-      }
-    }
-  });
 
 });
 
@@ -107,9 +74,8 @@ app.get('/:user', function(req, res) {
 
 });
 
-/**
- * This function connects to the usersdb, tries to retrieve the doc with the
- * provided id, returns the call of the fn with (error_message, user)
+/*
+ * Promise handlers
  */
 
 function getUser(userId) {
@@ -149,8 +115,6 @@ function getCorpus(pouchId, titleAsUrl, corpusid) {
       } else {
         if (titleAsUrl && (result.titleAsUrl == titleAsUrl)) {
           console.log('Match found: ' + result.titleAsUrl);
-          // console.log(titleAsUrl);
-          // console.log(result);
           df.resolve(result);
         } else {
           console.log('No match: ' + result.titleAsUrl);
@@ -170,7 +134,7 @@ function getRequestedCorpus(corporaArray, titleAsUrl) {
   var resultingPromises = [];
 
   for (corpus in corporaArray) {
-    resultingPromises[corpus] = getCorpus(corporaArray[corpus].pouchname, 'titleAsUrl', corporaArray[corpus].corpusid);
+    resultingPromises[corpus] = getCorpus(corporaArray[corpus].pouchname, titleAsUrl, corporaArray[corpus].corpusid);
   }
 
   Q.allSettled(resultingPromises)
@@ -188,70 +152,6 @@ function getRequestedCorpus(corporaArray, titleAsUrl) {
 
   return df.promise;
 
-}
-
-function findById(id, fn) {
-  var usersdb = nano.db.use(node_config.usersDbConnection.dbname);
-  usersdb.get(id, function(error, result) {
-    if (error) {
-      if (error.error == 'not_found') {
-        console.log(new Date() + ' No User found: ' + id);
-        return fn('User ' + id + ' does not exist', null);
-      } else {
-        console.log(new Date() + ' Error looking up the user: ' + id + '\n' + util.inspect(error));
-        return fn('Error looking up the user ' + id + ' please report this bug. ', null);
-      }
-    } else {
-      if (result) {
-        // console.log(new Date() + ' User ' + id + ' found: \n' + util.inspect(result));
-        return fn(null, result);
-      } else {
-        console.log(new Date() + ' No User found: ' + id);
-        return fn('User ' + id + ' does not exist', null);
-      }
-    }
-  });
-}
-
-function findCorpusByPouchname(pouchname, fn) {
-  var corpusdb = nano.db.use(pouchname);
-  corpusdb.get('corpus', function(error, result) {
-    if (error) {
-      if (error.error == 'not_found') {
-        console.log(new Date() + ' No corpus found: ' + pouchname);
-        return fn('Corpus ' + pouchname + ' does not exist', null);
-      } else {
-        console.log(new Date() + ' Error looking up the corpus: ' + pouchname + '\n' + util.inspect(error));
-        return fn('Error looking up the corpus ' + pouchname + ' please report this bug. ', null);
-      }
-    } else {
-      if (result) {
-        // console.log(new Date() + ' Corpus ' + pouchname + ' found: \n' + util.inspect(result));
-        corpusdb.get(result.corpusid, function(error, result) {
-          if (error) {
-            if (error.error == 'not_found') {
-              console.log(new Date() + ' No corpus found: ' + pouchname);
-              return fn('Corpus ' + pouchname + ' does not exist', null);
-            } else {
-              console.log(new Date() + ' Error looking up the corpus: ' + pouchname + '\n' + util.inspect(error));
-              return fn('Error looking up the corpus ' + pouchname + ' please report this bug. ', null);
-            }
-          } else {
-            if (result) {
-              // console.log(new Date() + ' Corpus ' + pouchname + ' found: \n' + util.inspect(result));
-              return fn(null, result);
-            } else {
-              console.log(new Date() + ' No corpus found: ' + pouchname);
-              return fn('Corpus ' + pouchname + ' does not exist', null);
-            }
-          }
-        });
-      } else {
-        console.log(new Date() + ' No corpus found: ' + pouchname);
-        return fn('Corpus ' + pouchname + ' does not exist', null);
-      }
-    }
-  });
 }
 
 https.createServer(node_config.httpsOptions, app).listen(node_config.port);
