@@ -42,17 +42,20 @@ app.get('/:user/:corpus', function(req, res) {
 
   var user = req.params.user;
   var corpus = req.params.corpus;
+  var userdetails = {};
 
   getUser(user)
     .then(function(result) {
+      userdetails = result;
       return getRequestedCorpus(result.corpuses, corpus);
     })
     .then(function(result) {
-      res.send(result);
+      var ghash = md5(userdetails.email);
+      res.render('corpus', {json: result, ghash: ghash, user: userdetails});
     })
     .fail(function(error) {
       console.log(error);
-      res.send(404, 'Internal error');
+      res.render('user', {json: {}, user: userdetails});
     })
     .done();
 
