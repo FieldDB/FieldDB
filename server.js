@@ -55,7 +55,7 @@ app.get('/:user/:corpus', function(req, res) {
     })
     .fail(function(error) {
       console.log(error);
-      res.render('user', {json: {}, user: userdetails});
+      res.redirect('/' + user);
     })
     .done();
 
@@ -69,7 +69,9 @@ app.get('/:user', function(req, res) {
     .then(function(result) {
       var ghash = md5(result.email);
       res.render('user', {json: result, ghash: ghash});
-    }, function(error) {
+      // res.send(result);
+    })
+    .fail(function(error) {
       console.log(error);
       res.render('user', {json: {}, ghash: {}});
     })
@@ -93,6 +95,9 @@ function getUser(userId) {
       if (!result) {
         df.resolve({});
       } else {
+        for (pouch in result.corpuses) {
+          result.corpuses[pouch].phash = md5(result.corpuses[pouch].pouchname);
+        }
         df.resolve(result);
       }
     }
