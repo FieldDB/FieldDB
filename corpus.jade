@@ -1,0 +1,52 @@
+extends index
+
+block content
+  .container
+    .row
+      .span3
+        p.text-center
+          img.img-polaroid(src='https://secure.gravatar.com/avatar/#{ghash}.jpg?s=200&d=retro&r=pg', alt='Your gravatar.com profile image')
+        div(style='margin: 10px; padding:10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
+          if user.firstname
+            h2= user.firstname
+            p= user.username
+          else
+            h2.text-center Welcome!
+          a.btn.btn-primary.btn-block(href="#") Load your corpus »
+      .span9
+        if json
+          h2 Here's your corpus.
+          p
+            +showJson(json)
+        else
+          h2 We need more chocolate.
+    .row
+      .span4
+        h2 Heading
+        p.
+          The look in your eyes, I recognize it. You used to have it for me. Computer, 
+          lights up! Your shields were failing, sir. We have a saboteur aboard. Travel 
+          time to the nearest starbase? About four years. I got tired of hearing how young 
+          I looked. I can't. As much as I care about you, my first duty is to the ship. Damage report!
+        p
+          a.btn(href='#') View details »
+      .span4
+        h2 Heading
+        p.
+          This should be interesting. Not if I weaken first. The look in your eyes, I recognize it. 
+          You used to have it for me. They were just sucked into space. Shields up! Rrrrred alert! 
+          Ensign Babyface! Mr. Worf, you do remember how to fire phasers?
+        p
+          a.btn(href='#') View details »
+      .span4
+        h2 Heading
+        p.
+          Fear is the true enemy, the only enemy. I think you've let your personal feelings cloud 
+          your judgement. Your head is not an artifact! Computer, belay that order. Computer, 
+          ights up! Did you come here for something in particular or just general Riker-bashing? 
+          Our neural pathways have become accustomed to your sensory input patterns.
+        p
+          a.btn(href='#') View details »
+    hr
+    footer
+      p © Company 2013

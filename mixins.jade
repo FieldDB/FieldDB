@@ -1,0 +1,70 @@
+mixin prettyDate(uglyDate)
+  daysAgo = ((((new Date() - uglyDate) / 1000) / 60) / 60) / 24
+  hours = uglyDate.getHours()
+  minutes = uglyDate.getMinutes()
+  ampm = hours >= 12 ? 'pm' : 'am'
+  hours = hours % 12
+  hours = hours ? hours : 12 
+  minutes = minutes < 10 ? '0'+minutes : minutes
+  strTime = hours + ':' + minutes + ' ' + ampm
+
+  if daysAgo < 1
+    | Today at #{strTime}
+  else if daysAgo <= 7
+    weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    day = uglyDate.getDay()
+    #{weekDays[day + 1]} at #{strTime}
+  else
+    #{uglyDate.getMonth() + 1}/#{uglyDate.getDate()}/#{uglyDate.getFullYear()}
+
+mixin showJson(myJsonObject, level)
+  if typeof level == 'undefined'
+    - var level = 0
+  - level++
+  .well(style='background-color:white')
+    .badge(style='width:1em;text-align:center;background-color:#cccccc').pull-center #{level}
+    unless typeof myJsonObject == 'undefined'
+      each value, key in myJsonObject
+        if value instanceof Array
+          p(style='margin:0') #{key}: (Array[#{value.length}])
+            if value.length == 0
+              | &nbsp;(empty)
+            else
+              .well(style='background-color:white')
+                each aValue, aIndex  in value
+                  p(style='margin:0') [#{aIndex}]: 
+                    if typeof aValue == 'undefined'
+                      | &nbsp;(empty)
+                    else if aValue instanceof Date
+                      mixin prettyDate(aValue)
+                    else if aValue instanceof Object
+                      | (Object)
+                      mixin showJson(aValue, level)
+                    else
+                      #{aValue}
+        else if value instanceof Date
+          p(style='margin:0') #{key}:&nbsp;
+            mixin prettyDate(value)
+        else if value instanceof Object
+          - var plusone = key + 1
+          p(style='margin:0') #{plusone}:
+          if typeof value == 'undefined' || value.length == 0
+            | &nbsp;(empty)
+          else
+            mixin showJson(value, level)
+        else if key == 'pouchname'
+          p(style='margin:0') #{key}: 
+            a(href= value) #{value}
+        else
+          p(style='margin:0') #{key}: #{value}
+
+mixin renderCorporaList(myJsonObject)
+  for c in myJsonObject.corpuses
+    .media(style='margin-bottom:40px')
+      a(href="#").pull-left
+        img(src='https://secure.gravatar.com/avatar/#{c.phash}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+      .media-body
+        h4.media-heading Lorem ipsum dolor sit amet.
+        - var text = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.'
+        - var shortDesc = text.substr(0,200) + '…'
+        p #{shortDesc}
