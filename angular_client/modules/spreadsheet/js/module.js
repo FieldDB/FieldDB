@@ -1,33 +1,35 @@
-console.log("Loading the LingSync Angular UI module.");
+console.log("Loading the Spreadsheet module.");
 
 'use strict';
-define([ "angular", "js/controllers/LingSyncController", "js/controllers/SettingsController",
-		"js/directives/LingSyncDirectives", "js/filters/LingSyncFilters",
-		"js/services/LingSyncServices" ], function(angular, LingSyncController, SettingsController,
-				LingSyncDirectives, LingSyncFilters, LingSyncServices) {
+define([ "angular", "js/controllers/SpreadsheetController", "js/controllers/SettingsController",
+		"js/directives", "js/filters",
+		"js/services", "js/controllers/SandboxController" ], function(angular, SpreadsheetStyleDataEntryController, SpreadsheetStyleDataEntrySettingsController,
+				SpreadsheetStyleDataEntryDirectives, SpreadsheetStyleDataEntryFilters, SpreadsheetStyleDataEntryServices, SandboxController) {
 	/**
-	 * The main LingSync Angular UI module.
+	 * The main Spreadsheet Angular UI module.
 	 * 
 	 * @type {angular.Module}
 	 */
 
-	var LingSync = angular.module('LingSync',
-			[ 'LingSync.services', 'LingSync.directives', 'LingSync.filters' ]).config(
+	var SpreadsheetStyleDataEntry = angular.module('SpreadsheetStyleDataEntry',
+			[ 'SpreadsheetStyleDataEntry.services', 'SpreadsheetStyleDataEntry.directives', 'SpreadsheetStyleDataEntry.filters', 'ui.bootstrap' ]).config(
 			[ '$routeProvider', function($routeProvider) {
-				window.LingSyncController = LingSyncController;
-				console.log("Initializing the LingSync Angular UI module.");
-				$routeProvider.when('/lingsync', {
+				window.SpreadsheetStyleDataEntryController = SpreadsheetStyleDataEntryController;
+				console.log("Initializing the Spreadsheet module.");
+				$routeProvider.when('/spreadsheet_main', {
 					templateUrl : 'partials/main.html',
 				}).when('/settings', {
 					templateUrl : 'partials/settings.html',
-					controller : SettingsController
-				}).when('/lingsync/template1', {
+					controller : SpreadsheetStyleDataEntrySettingsController
+				}).when('/sandbox', {
+					templateUrl : 'partials/sandbox.html', controller: SandboxController,
+				}).when('/spreadsheet/template1', {
 					templateUrl : 'partials/template1.html',
-				}).when('/lingsync/template2', {
+				}).when('/spreadsheet/template2', {
 					templateUrl : 'partials/template2.html',
 				}).otherwise({
-					redirectTo : '/lingsync'
+					redirectTo : '/spreadsheet_main'
 				});
 			} ]);
-	return LingSync;
+	return SpreadsheetStyleDataEntry;
 });
