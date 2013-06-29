@@ -6,7 +6,8 @@
     ,"bcrypt": "latest"
     ,"forever":"latest"
     ,"nano": "latest"
-    ,"nodemailer" : "latest"
+    ,"nodemailer": "latest"
+    ,"MD5": "latest"
     ,"cradle": "latest"
     ,"underscore":"latest"
   }
