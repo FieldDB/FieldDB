@@ -86,6 +86,9 @@ define([
         this.set("gravatar", hash);
         return hash;
       }
+      if(existingGravatar.indexOf("/") > -1){
+        existingGravatar = existingGravatar.replace(/\//g,"");
+      }
       return existingGravatar;
     }
   });
