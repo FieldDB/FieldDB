@@ -45,6 +45,7 @@ define([
     render : function() {
       if (OPrime.debugMode) OPrime.debug("COMMENT render");
       var jsonToRender = this.model.toJSON();
+      jsonToRender.gravatar = jsonToRender.gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","");
       jsonToRender.timestamp = OPrime.prettyTimestamp(jsonToRender.timestamp);
       $(this.el).html(this.template(jsonToRender));
      
