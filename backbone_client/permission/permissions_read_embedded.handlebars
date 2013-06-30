@@ -1,8 +1,8 @@
 <h4>
 	<i class="icon-group"></i> {{role}}s
 </h4>
-<ul>
+<ul class="inline">
 	{{#each users}}
-	<li><img class="gravatar-small" src="{{gravatar}}" /><br />
-		{{username}}</li> {{/each}}
+	<li class="pagination-centered well">{{username}}<br/><a href="http://www.lingsync.org/{{username}}"><img  src="https://secure.gravatar.com/avatar/{{gravatar}}?d=identicon" /></a>
+		</li> {{/each}}
 </ul>
