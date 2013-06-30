@@ -10,7 +10,7 @@ define([ "angular", "OPrime" ], function(angular, OPrime) {
         };
       } ]).filter('gravatar', function(){
         return function(gravatar, scope) {
-          return gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","");
+          return gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"");
         };
       });
 
