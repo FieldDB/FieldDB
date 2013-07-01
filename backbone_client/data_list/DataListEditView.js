@@ -446,6 +446,9 @@ define( [
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
+
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-quickview").find(".current-data-list-paginated-view") );
         
         //localization of the minimized data list icons
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
