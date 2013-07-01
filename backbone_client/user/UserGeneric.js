@@ -4,6 +4,7 @@ define([
     "permission/Permission",
     "user/UserPreference",
     "user/UserMask",
+    "CryptoJS",
     "OPrime"
 ], function(
     Backbone,
@@ -72,6 +73,23 @@ define([
       if(typeof callback == "function"){
         callback();
       }
+    }, 
+     getGravatar : function(email){
+      var existingGravatar = this.get("gravatar");
+      if(existingGravatar.indexOf("gravatar.com") > -1){
+        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","");
+        this.set("gravatar", existingGravatar);
+        return existingGravatar;
+      }
+      if(email){
+        var hash = CryptoJS.MD5(email).toString();
+        this.set("gravatar", hash);
+        return hash;
+      }
+      if(existingGravatar.indexOf("/") > -1){
+        existingGravatar = existingGravatar.replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+      }
+      return existingGravatar;
     }
   });
 

@@ -16,7 +16,7 @@ define(
        * @returns
        */
       var ActivityFeedController = function ActivityFeedController($scope,
-          $routeParams, $resource, MostRecentActivities, GetSessionToken) {
+          $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken) {
         console.log("Loading ActivityFeedController");
         /*
          * TODO get a corpus item out of the non-activity feed, or out of the
@@ -41,17 +41,25 @@ define(
         if (feedParams.corpusid) {
           /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
           if(feedParams.corpusid.indexOf(feedParams.username) > -1){
-            feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+            feedParams.corpusid = feedParams.corpusid.replace($routeParams.username,"");
           }else{
             feedParams.username = "";
           }
           $scope.corpus.title = "Corpus Activity Feed";
+          CorpusDetails.async({username: $routeParams.corpusid.split("-")[0], corpusid: $routeParams.corpusid}).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }else{
           feedParams.corpusid = "";
           $scope.corpus.title = "User Activity Feed";
+          UserDetails.async(feedParams).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }
 
-        
+
 //        GetSessionToken.run({
 //          "name" : "public",
 //          "password" : "none"
@@ -64,7 +72,7 @@ define(
       };
 
       ActivityFeedController.$inject = [ '$scope', '$routeParams', '$resource',
-          'MostRecentActivities', 'GetSessionToken' ];
+          'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken' ];
 
       OPrime.debug("Defining ActivityFeedController.");
 

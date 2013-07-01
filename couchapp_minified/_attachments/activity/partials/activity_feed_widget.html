@@ -1,7 +1,7 @@
 <div class="activity_feed_widget_header">{{username}} - {{corpusid}}
-	<a href="http://lingsync.org/{{corpus.team._id}}/{{corpus.pouchname}}"
+	<a href="http://www.lingsync.org/{{corpus.team._id}}/{{corpus.pouchname}}"
 		target="_blank"><img class="gravatar-small"
-		ng-src="{{corpus.gravatar}}" /></a><span class="team_name"
+		ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar | gravatar}}?d=identicon" /></a><span class="team_name"
 		title="{{corpus.description}}"><a
 		href="http://lingsync.org/{{corpus.team._id}}/{{corpus.pouchname}}"
 		target="_blank">{{corpus.title}}</a></span>
@@ -9,8 +9,8 @@
 <div class="activity_feed_body zebra">
 	<ul>
 		<li ng-repeat="activity in activities"><a
-			href="http://lingsync.org#user/{{activity.user._id}}" target="_blank">
-				<img class="gravatar-small" ng-src="{{activity.user.gravatar}}"
+			href="http://www.lingsync.org/{{activity.user._id}}" target="_blank">
+				<img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/{{activity.user.gravatar | gravatar}}?d=identicon"
 				border="0"
 				title="Click here to see {{activity.user.username}}'s page" />
 		</a> <span class="timestamp pull-right hover_link"

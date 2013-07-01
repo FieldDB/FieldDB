@@ -921,6 +921,7 @@ define([
       var activitydb = couchConnection.pouchname + "-activity_feed";
       if (bareActivityObject.teamOrPersonal != "team") {
         activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
+        backboneActivity.attributes.user.set("gravatar", this.get("authentication").get("userPrivate").get("gravatar"));
       }
       var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
       
@@ -979,7 +980,7 @@ define([
         }, failurecallback);
       }, failurecallback);
     }
-    
+
    
   });
 
