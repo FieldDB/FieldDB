@@ -49,7 +49,9 @@ define([
 //    	  JSONtorender.timestamp = this.model.timestamp.toString();
 //    	  JSONtorender.username = this.model.username;
 //      }
-      $(this.el).html(this.template(this.model.toJSON()));
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.gravatar = jsonToRender.gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"");
+      $(this.el).html(this.template(jsonToRender));
 
       $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 

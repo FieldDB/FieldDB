@@ -4015,11 +4015,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<li class=\"not-a \">\n	<div>\n		<img class=\"gravatar-large\" src=\"";
+  buffer += "<li class=\"not-a \">\n	<div>\n		<img class=\"gravatar-large\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		<h4>";
+    + "?d=identicon\" />\n		<h4>";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4034,11 +4034,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"alert alert-info\">\n<span> <img class=\"gravatar-small\" src=\"";
+  buffer += "<div class=\"alert alert-info\">\n<span> <img class=\"gravatar-small\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"/></span>\n<div class= \"pull-right\">  \n</div>\n<span>";
+    + "?d=identicon\"/></span>\n<div class= \"pull-right\">  \n</div>\n<span>";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4057,11 +4057,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"alert alert-info\">\n	<span> <img class=\"gravatar-small\" src=\"";
+  buffer += "<div class=\"alert alert-info\">\n	<span> <img class=\"gravatar-small\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" /></span> <span>\n		";
+    + "?d=identicon\" /></span> <span>\n		";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5756,19 +5756,19 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n		<li class=\"breadcrumb  ";
+  buffer += "\n		<li class=\"breadcrumb  pagination-centered ";
   if (stack1 = helpers.status) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">  <img class=\"gravatar-small\" src=\"";
-  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"/>\n		";
+    + "\"> ";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " </li> ";
+    + "<br/> <img  src=\"https://secure.gravatar.com/avatar/";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "?d=identicon\"/>\n		 </li> ";
   return buffer;
   }
 
@@ -5776,7 +5776,7 @@ function program1(depth0,data) {
   if (stack1 = helpers.role) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "s\n	</h4>\n	<ul>\n		";
+    + "s\n	</h4>\n	<ul class=\"inline\">\n		";
   stack1 = helpers.each.call(depth0, depth0.users, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	</ul>\n</div>\n\n<div class=\"span6\">\n	<label class=\"locale_Modify_Username_TODO \">Username:</label> <input type=\"text\"\n		class=\"  choose-add-permission-username\" data-provide=\"typeahead\"\n		data-items=\"4\" data-source='";
@@ -5796,15 +5796,19 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n	<li><img class=\"gravatar-small\" src=\"";
-  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" /><br />\n		";
+  buffer += "\n	<li class=\"pagination-centered well\">";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</li> ";
+    + "<br/><a href=\"http://www.lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><img  src=\"https://secure.gravatar.com/avatar/";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "?d=identicon\" /></a>\n		</li> ";
   return buffer;
   }
 
@@ -5812,7 +5816,7 @@ function program1(depth0,data) {
   if (stack1 = helpers.role) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "s\n</h4>\n<ul>\n	";
+    + "s\n</h4>\n<ul class=\"inline\">\n	";
   stack1 = helpers.each.call(depth0, depth0.users, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ul>\n";
@@ -5885,15 +5889,15 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small>\n<p class = \"locale_Public_Profile_Instructions\"></p>\n<hr/>\n<dl>\n    <dt class=\"locale_Gravatar\"></dt>\n    <dd>\n      <img class=\"gravatar-image gravatar-large\" src=\"";
+    + "</small>\n<p class = \"locale_Public_Profile_Instructions\"></p>\n<hr/>\n<dl>\n    <dt class=\"locale_Gravatar\"></dt>\n    <dd>\n      <img class=\"gravatar-image\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n    </dd>\n    <dt class=\"locale_Gravatar_URL\"></dt>\n    <dd>\n      <input class=\"gravatar\" type=\"email\" value=\"";
+    + "?d=identicon\" />\n    </dd>\n    <!--<dt class=\"locale_Gravatar_URL\"></dt>\n    <dd>\n      <input class=\"gravatar\" type=\"email\" value=\"";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n    </dd>\n    <dt class=\"locale_Firstname\"></dt>\n    <dd>\n      <input class=\"firstname\" value=\"";
+    + "\" />\n    </dd> -->\n    <dt class=\"locale_Firstname\"></dt>\n    <dd>\n      <input class=\"firstname\" value=\"";
   if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5940,15 +5944,15 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\"edit-public-user-profile locale_Edit_Public_User_Profile \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\"edit-public-user-profile locale_Edit_Public_User_Profile \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image \" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		</dd>\n		<dt class=\"locale_Gravatar_URL\"></dt>\n		<dd>\n			<input class=\"gravatar\" type=\"email\" value=\"";
+    + "?d=identicon\" />\n		</dd>\n		<!--<dt class=\"locale_Gravatar_URL\"></dt>\n		<dd>\n			<input class=\"gravatar\" type=\"email\" value=\"";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		</dd>\n		<dt class=\"locale_Firstname\"></dt>\n		<dd>\n			<input class=\"firstname\" value=\"";
+    + "\" />\n		</dd>-->\n		<dt class=\"locale_Firstname\"></dt>\n		<dd>\n			<input class=\"firstname\" value=\"";
   if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -6018,11 +6022,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small>\n<hr/>\n<dl>\n	<dt class=\"locale_Gravatar\"></dt>\n	<dd>\n		<img class=\"gravatar-image gravatar-large\" src=\"";
+    + "</small>\n<hr/>\n<dl>\n	<dt class=\"locale_Gravatar\"></dt>\n	<dd>\n		<img class=\"gravatar-image gravatar-large\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n	</dd>\n	<dt class=\"locale_Email\"></dt>\n	<dd class=\"email\">";
+    + "?d=identicon\" />\n	</dd>\n	<dt class=\"locale_Email\"></dt>\n	<dd class=\"email\">";
   if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -6053,11 +6057,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" class = \"locale_View_Profile_Tooltip \" rel=\"tooltip\">\n  <img class=\"gravatar-small\" src=\"";
+    + "\" class = \"locale_View_Profile_Tooltip \" rel=\"tooltip\">\n  <img class=\"gravatar-small\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" border=\"0\" >\n</a>\n";
+    + "?d=identicon\" border=\"0\" >\n</a>\n";
   return buffer;
   });
 })();(function() {
@@ -6080,11 +6084,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\" view-public-profile locale_View_Public_Profile_Tooltip \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\" view-public-profile locale_View_Public_Profile_Tooltip \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd class=\"email\">";
+    + "?d=identicon\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd class=\"email\">";
   if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -6848,7 +6852,7 @@ define('hotkey/HotKey',[
   return HotKey;
 });
 define('user/UserMask',[ 
-    "backbone"
+    "backbone", "CryptoJS"
 ], function(
     Backbone
 ) {
@@ -6880,7 +6884,25 @@ define('user/UserMask',[
     defaults : {
       gravatar :  "user/user_gravatar.png"
     },
-    
+
+     getGravatar : function(email){
+      var existingGravatar = this.get("gravatar");
+      if(existingGravatar.indexOf("gravatar.com") > -1){
+        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+        this.set("gravatar", existingGravatar);
+        return existingGravatar;
+      }
+      if(email){
+        var hash = CryptoJS.MD5(email).toString();
+        this.set("gravatar", hash);
+        return hash;
+      }
+      if(existingGravatar.indexOf("/") > -1){
+        existingGravatar = existingGravatar.replace(/\//g,"");
+      }
+      return existingGravatar;
+    },
+   
     /**
      * this function makes it possible to save the UserMask with a
      * hardcoded id, it uses pouch's API directly for the first save, and then backbone/pouch save for the rest
@@ -8528,6 +8550,7 @@ define('user/UserGeneric',[
     "permission/Permission",
     "user/UserPreference",
     "user/UserMask",
+    "CryptoJS",
     "OPrime"
 ], function(
     Backbone,
@@ -8596,6 +8619,23 @@ define('user/UserGeneric',[
       if(typeof callback == "function"){
         callback();
       }
+    }, 
+     getGravatar : function(email){
+      var existingGravatar = this.get("gravatar");
+      if(existingGravatar.indexOf("gravatar.com") > -1){
+        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+        this.set("gravatar", existingGravatar);
+        return existingGravatar;
+      }
+      if(email){
+        var hash = CryptoJS.MD5(email).toString();
+        this.set("gravatar", hash);
+        return hash;
+      }
+      if(existingGravatar.indexOf("/") > -1){
+        existingGravatar = existingGravatar.replace(/\//g,"");
+      }
+      return existingGravatar;
     }
   });
 
@@ -15689,7 +15729,7 @@ define('authentication/AuthenticationEditView',[
       }
 
       if(this.model.get("userPublic") != undefined){
-        this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
+        this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
         this.model.set( "username", this.model.get("userPublic").get("username") );
       }
       // Display the AuthenticationEditView
@@ -15990,8 +16030,9 @@ define('authentication/AuthenticationEditView',[
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
-      dataToPost.gravatar = "user/user_gravatar.png";
-     
+      // dataToPost.gravatar = "user/user_gravatar.png";
+      var u = new UserMask();
+      dataToPost.gravatar = u.getGravatar(dataToPost.email);
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
@@ -16667,7 +16708,7 @@ define('user/UserEditView',[
         this.$el.modal("hide");
       },
       "click .save-user-profile" : "saveProfile",
-      "blur .gravatar" : "updateGravatar",
+      "blur .email" : "updateGravatar",
       "click .icon-book" : function(e){
         if(e){
           e.stopPropagation();
@@ -16784,11 +16825,13 @@ define('user/UserEditView',[
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());
-      this.model.set("email", $(this.el).find(".email").val());
+      var email = $(this.el).find(".email").val();
+      this.model.set("email", email);
+      this.model.set("gravatar", this.model.getGravatar(email));
       this.model.set("researchInterest", $(this.el).find(".researchInterest").val());
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
       this.model.set("description", $(this.el).find(".description").val());
-      this.model.set("gravatar", $(this.el).find(".gravatar").val());
+      // this.model.set("gravatar", $(this.el).find(".gravatar").val());
       
       //It is the private self
       if(this.format =="modal"){
@@ -16847,8 +16890,10 @@ define('user/UserEditView',[
       }
     },
     updateGravatar : function(){
-      this.model.set("gravatar", $(this.el).find(".gravatar").val());
-      $(this.el).find(".gravatar").attr("src",$(this.el).find(".gravatar").val());
+      var email = $(this.el).find(".email").val();
+      var gravatar = this.model.getGravatar(email);
+      this.model.set("gravatar", gravatar);
+      $(this.el).find(".gravatar-image").attr("src", "https://secure.gravatar.com/avatar/"+gravatar+"?d=identicon");
     },
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView      TODO add comments to users
