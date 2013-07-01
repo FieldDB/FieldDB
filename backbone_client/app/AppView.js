@@ -371,7 +371,7 @@ define([
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 
-      this.currentEditDataListView.format = "leftSide";
+      this.currentEditDataListView.format = "minimized";
       
       
       if(this.currentReadDataListView){
@@ -380,7 +380,7 @@ define([
       this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
       });  
-      this.currentReadDataListView.format = "leftSide";
+      this.currentReadDataListView.format = "minimized";
       
       
       if(typeof callback == "function"){
@@ -719,7 +719,7 @@ define([
     renderReadonlyDashboardViews : function() {
       this.renderReadonlyCorpusViews("leftSide");
       this.renderReadonlySessionViews("leftSide");
-      this.renderReadonlyDataListViews("leftSide");
+      this.renderReadonlyDataListViews("minimized");
       this.renderEditableDatumsViews("centreWell");
       this.datumsEditView.showMostRecentDatum();
     },
