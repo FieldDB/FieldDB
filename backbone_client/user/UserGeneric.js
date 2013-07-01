@@ -77,7 +77,7 @@ define([
      getGravatar : function(email){
       var existingGravatar = this.get("gravatar");
       if(existingGravatar.indexOf("gravatar.com") > -1){
-        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","");
+        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
         this.set("gravatar", existingGravatar);
         return existingGravatar;
       }
