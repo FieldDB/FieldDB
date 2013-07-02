@@ -37,6 +37,27 @@ app.configure(function() {
 /*
  * Routes
  */
+app.get('/db/:pouchname', function(req, res) {
+
+  var pouchname = req.params.pouchname;
+
+  getCorpusFromPouchname(pouchname)
+    .then(function(result) {
+      var data = {
+        corpora: [result.corpus],
+        ghash: result.team.gravatar,
+        user: result.team
+      };
+      res.render('corpus', data);
+      // res.send(data);
+  })
+    .fail(function(error) {
+    console.log(error);
+    res.redirect('/lingllama');
+  })
+    .done();
+
+});
 
 app.get('/:user/:corpus', function(req, res) {
 
@@ -54,6 +75,10 @@ app.get('/:user', function(req, res) {
   getData(res, user);
 
 });
+
+/*
+ * Promise handlers
+ */
 
 function getData(res, user, corpus) {
 
@@ -85,9 +110,46 @@ function getData(res, user, corpus) {
 
 }
 
-/*
- * Promise handlers
- */
+function getCorpusFromPouchname(pouchname) {
+
+  var df = Q.defer();
+  var corpusdb = nano.db.use(pouchname);
+  var result = {};
+
+  corpusdb.get('corpus', function(error, corpus) {
+    if (error) {
+      df.reject(new Error(error));
+    } else {
+      if (!corpus) {
+        df.resolve({});
+      } else {
+        result.corpus = {corpusinfo: corpus};
+        corpusdb.get('team', function(error, team) {
+          if (error) {
+            df.reject(new Error(error));
+          } else {
+            if (!team) {
+              result.team = {};
+              df.resolve(result);
+            } else {
+              if (team.email) {
+                team.gravatar = md5(team.email);
+              } else {
+                team.gravatar = md5(pouchname);
+              }
+              result.team = team;
+              df.resolve(result);
+            }
+          }
+        });
+
+      }
+    }
+  });
+
+  return df.promise;
+
+}
 
 function getUser(userId) {
 

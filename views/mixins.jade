@@ -70,3 +70,16 @@ mixin renderCorporaList(myJsonObject)
         - var text = myJsonObject[c].corpusinfo.description
         - var shortDesc = text.substr(0,200) + '…'
         p #{shortDesc}
+
+mixin renderCorpus(myJsonObject)
+  - var c = 0
+    .media(style='margin-bottom:40px')
+      a(href="#").pull-left
+        - var phash = myJsonObject[c].phash
+        img(src='https://secure.gravatar.com/avatar/#{phash}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+      .media-body
+        - var title = myJsonObject[c].corpusinfo.title
+        h4.media-heading #{title}
+        - var text = myJsonObject[c].corpusinfo.description
+        - var shortDesc = text.substr(0,200) + '…'
+        p #{shortDesc}
