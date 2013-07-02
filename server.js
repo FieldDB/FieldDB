@@ -49,7 +49,6 @@ app.get('/db/:pouchname', function(req, res) {
         user: result.team
       };
       res.render('corpus', data);
-      // res.send(data);
   })
     .fail(function(error) {
     console.log(error);
@@ -100,7 +99,6 @@ function getData(res, user, corpus) {
     console.log(template);
     console.log(data);
     res.render(template, data);
-    // res.send(data.corpora);
   })
     .fail(function(error) {
     console.log(error);

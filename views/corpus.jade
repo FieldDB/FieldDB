@@ -34,18 +34,9 @@ block content
               | &nbsp;&nbsp;Description:
             dd
               | #{user.description}
-          //-a.btn.btn-primary.btn-block(href="https://localhost:3182/jdhorner/jdhorner_s_corpus") Big button »
       .span6.offset1
-        h1 Corpora
+        h1 Corpus
         br
         +renderCorpus(corpora)
-        //-
-          if `corpuses
-            h2 Here's your list.
-            p
-              +showJson(json.corpuses)
-          else
-            h2 We need more chocolate.
-    hr
-    footer
-      p © Company 2013
+      .span8.offset1
+        +showJson(corpora)
