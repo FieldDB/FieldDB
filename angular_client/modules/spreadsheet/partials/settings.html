@@ -1,7 +1,7 @@
 <div id="Settings">
 	<div class="row">
 		<div class="span12 pagination-centered">
-			<h1>LingSync Quick Data Entry Module Settings</h1>
+			<h1>Settings</h1>
 		</div>
 	</div>
 
@@ -11,11 +11,13 @@
 	<div class="row settingsRow">
 		<div class="span6 offset5">
 			Number of records to display per page: <select
-				ng-model="numberOfRecordsToDisplay" ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
+				ng-model="numberOfRecordsToDisplay"
+				ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
 				<option value="5">5</option>
 				<option value="10">10</option>
 				<option value="25" selected>25</option>
 				<option value="50">50</option>
+				<option value={{data.length}}>All {{data.length}}</option>
 			</select>
 		</div>
 		<div class="span1">
@@ -122,15 +124,11 @@
 				<option value="">Empty</option>
 				<option select-dropdown2=field6 ng-repeat="field in availableFields"
 					value={{field.label}}>{{field.title}}</option>
-			</select> <select class="span2" ng-model="newFieldPreferences2.field7">
-				<option value="">Empty</option>
-				<option select-dropdown2=field7 ng-repeat="field in availableFields"
-					value={{field.label}}>{{field.title}}</option>
-			</select> <select class="span2" ng-model="newFieldPreferences2.field8">
-				<option value="">Empty</option>
-				<option select-dropdown2=field8 ng-repeat="field in availableFields"
-					value={{field.label}}>{{field.title}}</option>
 			</select>
+
+			<textarea class="span2" rows="3" disabled='disabled'
+				placeholder="Tags"></textarea>
+
 		</div>
 		<div class="span1">&nbsp;</div>
 		<div class="span1">
@@ -143,7 +141,53 @@
 
 	<!-- TEMPLATE 3 -->
 
+	<!-- EDIT BUTTONS -->
+	<br />
+	<div class="row">
+		<div class="span8 offset1">
+			<button class="btn btn-primary" ng-click="editTags=!editTags">Click
+				here to edit tags</button>
+			&nbsp;
+			<button class="btn btn-primary" ng-click="deleteDuplicateTags();">Delete
+				Duplicate Tags</button>
+			&nbsp;
+			<button class="btn btn-primary" ng-click="editFields=!editFields">Click
+				here to edit fields</button>
+		</div>
+	</div>
 
+	<!-- TAGS -->
+	<br />
+
+	<div class="row" ng-show="editTags==true">
+		<div class="span8">
+			Click EDIT button to rename tag:
+			<div ng-repeat="tag in tags">
+				<input type="text" value="{{tag}}" disabled=true>
+				<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
+				<span ng-show="tagToEdit==tag"><input type="text"
+					ng-model='newTag' placeholder="Change to ...">
+					<button class="btn btn-primary" ng-click="editTagInfo(tag, newTag)">Update</button>
+				</span> <img ng-show="loading==true" src="img/spinner-small.gif">
+			</div>
+		</div>
+	</div>
+
+	<!-- FIELDS -->
+	<div class="row" ng-show="editFields==true">
+		<div class="span8">
+			Click EDIT button to rename field:
+			<div ng-repeat="field in availableFields">
+				<input type="text" value="{{field.title}}" disabled=true>
+				<button class="btn btn-primary" ng-click="changeFieldToEdit(field)">Edit</button>
+				<span ng-show="fieldToEdit==field"><input type="text"
+					ng-model='newFieldTitle' placeholder="Change to ...">
+					<button class="btn btn-primary"
+						ng-click="editFieldTitle(field, newFieldTitle)">Update</button> </span> <img
+					ng-show="loading==true" src="img/spinner-small.gif">
+			</div>
+		</div>
+	</div>
 
 
 </div>

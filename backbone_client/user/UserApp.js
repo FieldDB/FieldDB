@@ -8,7 +8,7 @@ define([
     "user/User",
     "user/UserMask",
     "text!locales/en/messages.json",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Authentication, 
@@ -459,6 +459,11 @@ define([
           }, 5000);
         }
       });
+    },
+    saveAndInterConnectInApp : function(callback){
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     
     render: function(){

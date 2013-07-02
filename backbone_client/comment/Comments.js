@@ -1,6 +1,6 @@
 define( [ "backbone",
           "comment/Comment",
-          "libs/OPrime"
+          "OPrime"
 ], function(Backbone, Comment) {
   var Comments = Backbone.Collection.extend(
 
@@ -30,6 +30,11 @@ define( [ "backbone",
 //        
 //        return newCollection;
 //      }
+    
+    insertNewCommentFromObject : function(commentObject){
+      commentObject.timestamp = Date.now();
+      this.unshift(new Comment(commentObject));
+    }
     
   });
 

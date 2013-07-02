@@ -1,11 +1,17 @@
 <div class="pull-right">
-	<button class="btn btn-success save-datum locale_Save pull-right" value="Save"></button><br/>
-	<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
-	<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
-  
+	 <!-- Issue #797 -->
+	<button class="btn btn-danger trash-button">
+		<i class="icon-trash "></i>
+	</button>
+	<button class="btn btn-success save-datum locale_Save"
+		value="Save"></button>
 </div>
+
+<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
+<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
+
 <!-- list for the fields -->
-<ul class="datum_fields_ul unstyled"></ul>
+<table class="datum_fields_ul unstyled"></table>
 <a  href="#" class= "locale_See_Fields" rel="tooltip" >
   <i class="icons icon-list-alt pull-right"> </i></a>
 <!-- Datum Edit view specialized fields and menu area -->
@@ -33,7 +39,6 @@
 	  </div>
 	  <br/>
 		<a href="#" class="audio_video locale_Drag_and_Drop_Audio_Tooltip" rel="tooltip"></a>
-		<span class="session-link"></span>
 	</div>
   <div class="span3 border-left hide">
 		<!-- list for the tags -->
@@ -53,7 +58,7 @@
   <div class="datum_state span3 border-left">
     <span class="label label-{{statecolor}} datum-state-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datumstate}}</span></span><br/>
 		<!-- drop down for the states -->
-    <select class="datum_state_select span12 ">
+    <select class="datum_state_select span12 hide" >
       {{#each datumStates}}
           <option value="{{state}}" {{selected}}>{{state}}</option>
       {{/each}}
@@ -61,13 +66,8 @@
   </div>
 </div>
 
+<span class="session-link"></span>
 
 <!-- Datum comments -->
-<ul class="comments unstyled"></ul>
-<div class="alert alert-info">
-  <textarea class="comment-new-text"></textarea>
-  <button class="btn btn-mini btn-primary add-comment-datum" value="Add">
-    <i class="icon-comment"></i>
-    <span class = "locale_Add"></span> 
-  </button>
-</div>
+<div class="new-comment-area"></div>  
+<ul class="comments unstyled"></ul> 

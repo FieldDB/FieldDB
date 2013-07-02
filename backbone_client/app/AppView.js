@@ -40,7 +40,7 @@ define([
     "user/UserEditView",
     "user/UserReadView",
     "terminal",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars,
@@ -301,7 +301,7 @@ define([
       this.insertUnicodesView = new InsertUnicodesView({
         model : this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")
       });
-      this.insertUnicodesView.format = "rightSide"; 
+      this.insertUnicodesView.format = "minimized"; 
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
@@ -371,7 +371,7 @@ define([
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 
-      this.currentEditDataListView.format = "leftSide";
+      this.currentEditDataListView.format = "minimized";
       
       
       if(this.currentReadDataListView){
@@ -380,7 +380,7 @@ define([
       this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
       });  
-      this.currentReadDataListView.format = "leftSide";
+      this.currentReadDataListView.format = "minimized";
       
       
       if(typeof callback == "function"){
@@ -586,6 +586,15 @@ define([
         
         /* Render the users prefered dashboard layout */
         this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+        var username = "";
+        try{
+          username = window.app.get("authentication").get("userPrivate").get("username") || "";
+        }catch(e){
+          //do nothing
+        }
+        if(username == "public"){
+          this.format = "layoutEverythingAtOnce"
+        }
         if(this.format == "default"){
           $(this.el).html(this.template(jsonToRender));
         }else if(this.format == "layoutJustEntering"){
@@ -710,7 +719,7 @@ define([
     renderReadonlyDashboardViews : function() {
       this.renderReadonlyCorpusViews("leftSide");
       this.renderReadonlySessionViews("leftSide");
-      this.renderReadonlyDataListViews("leftSide");
+      this.renderReadonlyDataListViews("minimized");
       this.renderEditableDatumsViews("centreWell");
       this.datumsEditView.showMostRecentDatum();
     },
@@ -819,6 +828,7 @@ define([
           //if you want to flip the innerHTML of the draggee to the dragger
           //window.appView.importView.dragSrcEl.innerHTML = e.target.value;
           e.target.value = e.target.value + window.appView.insertUnicodesView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
+          $(e.target).blur()
           //say that the unicode drag event has been handled
           window.appView.insertUnicodesView.dragSrcEl = null;
           $(this).removeClass("over");
@@ -833,7 +843,8 @@ define([
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      this.className = 'over';
+      
+      $(this).addClass('over');
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       
       return false;

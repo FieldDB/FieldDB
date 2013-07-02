@@ -18,6 +18,8 @@ public/libs/natural/
 .wav
 audio_stimuli
 
+TEST*.xml
+
 .idea
 .project
 .settings

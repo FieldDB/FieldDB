@@ -5,6 +5,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
@@ -21,7 +22,7 @@ define([
     "datum/Sessions",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars,
@@ -29,6 +30,7 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList,
     DataLists,
     DataListReadView,
@@ -100,18 +102,32 @@ define([
      */
     events : {
       "click .icon-book": "showReadonly",
+
       //Add button inserts new Comment
-      "click .add-comment-corpus" : function(e) {
-          if(e){
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          var commentstring = this.$el.find(".comment-new-text").val();
-          
-          this.model.insertNewComment(commentstring);
-          this.$el.find(".comment-new-text").val("");
-          
-      },
+      "click .add-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the corpus when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+
       "click .reload-corpus-team-permissions" :function(e){
         if(e){
           e.preventDefault();
@@ -161,6 +177,9 @@ define([
         this.model.set("glosserURL", $(e.target).val());
       },
       "click .save-corpus" : "updatePouch",
+//      Issue #797
+//      Only Admin users can trash corpus 
+      "click .trash-button" : "putInTrash" 
       
     },
 
@@ -189,8 +208,6 @@ define([
         return this;
       }
 
-      // Build the lexicon
-      this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
       
       if (OPrime.debugMode) OPrime.debug("CORPUS EDIT render: ");
       if( this.format != "modal"){
@@ -215,9 +232,13 @@ define([
           $(this.el).html(this.templateCentreWell(jsonToRender));
 
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+             
           // Display the DataListsView
          this.dataListsView.el = this.$('.datalists-updating-collection'); 
          this.dataListsView.render();
@@ -256,7 +277,6 @@ define([
           $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
           $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
           $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
           
           
@@ -276,6 +296,7 @@ define([
           $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
           $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
@@ -284,8 +305,12 @@ define([
         $(this.el).html(this.templateFullscreen(jsonToRender));
 
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
+        
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
         
         // Display the DataListsView
         this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -325,7 +350,6 @@ define([
         $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -344,6 +368,7 @@ define([
         $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
         $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "leftSide"){
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
@@ -405,12 +430,31 @@ define([
 //    this.remove();  
 //    Backbone.View.prototype.remove.call(this);
     },
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this corpus in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },    
+    
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       if(!this.model.datalists){

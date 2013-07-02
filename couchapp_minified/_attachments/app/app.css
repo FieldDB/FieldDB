@@ -9,12 +9,12 @@ body { /* background-image: url('../user/skins/bamboo_garden.jpg'); */
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center;
-	font-family: 'Andika', sans-serif;
+	font-family: 'Gentium Basic', sans-serif;
 	/* margin-top: 75px; */
 }
 
 input {
-	font-family: 'Andika', sans-serif;
+	font-family: 'Gentium Basic', sans-serif;
 }
 
 a
@@ -35,16 +35,16 @@ a
 }
 
 @font-face {
-	font-family: 'Andika';
+	font-family: 'Gentium Basic';
 	font-style: normal;
 	font-weight: 400;
-	src: local('Andika'),
-		url(https://themes.googleusercontent.com/static/fonts/andika/v3/CMPCzjJE3f8UuWd5B8oprOvvDin1pK8aKteLpeZ5c0A.woff)
+	src: local('Gentium Basic'),
+		url(https://themes.googleusercontent.com/static/fonts/gentiumbasic/v4/KCktj43blvLkhOTolFn-MU3vq9dAc3DuCNWjMJNKvGE.woff)
 		format('woff');
 }
 
 h1,h2,h3,h4 {
-	font-family: 'Andika', sans-serif;
+	font-family: 'Gentium Basic', sans-serif;
 	margin: 0em;
 	margin-bottom: .5em;
 }
@@ -107,6 +107,10 @@ a { /* color: #550; */
 
 .brand { /* font-size: .85em !important; */
 	
+}
+
+.thisIsEditable {
+	background: #fff;
 }
 
 .timestamp,.timestamp
@@ -226,6 +230,41 @@ button { /* margin: 5px 0px 5px 0px;  */
 
 textarea {
 	width: 98%;
+}
+
+.datum_fields_ul textarea.datum_field_input {
+	padding: 0px;
+	margin: 0px;
+	/* background-color: #ff00ff; */
+	outline: none;
+	overflow: hidden;
+	resize: none;
+	line-height: 1.2em;
+	min-height: 1.2em;
+	font-size: 1em;
+	border: none;
+	box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+	height: 1.5em;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+	line-height: 1.2em;
+}
+
+.datum_fields_ul {
+	width: 100%
+}
+
+.datum_field_input_cell {
+	width: 90%;
+	/* background-color: white;
+  color: #333;
+  border-bottom: 1px solid #999; */
+}
+
+.datum_field_label_cell {
+	text-align: right;
+	white-space: nowrap;
 }
 
 .drop-zone {
@@ -631,41 +670,6 @@ line
 	}
 }
 
-input {
-	font-family: 'Andika', sans-serif;
-}
-
-a:hover {
-	text-decoration: none !important;
-}
-
-.search {
-	padding: 10px
-}
-
-.width100 {
-	width: 100%;
-}
-
-.locale_View_Public_Profile_Tooltip {
-	white-space: nowrap;
-}
-
-@font-face {
-	font-family: 'Andika';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Andika'),
-		url(https://themes.googleusercontent.com/static/fonts/andika/v3/CMPCzjJE3f8UuWd5B8oprOvvDin1pK8aKteLpeZ5c0A.woff)
-		format('woff');
-}
-
-h1,h2,h3,h4 {
-	font-family: 'Andika', sans-serif;
-	margin: 0em;
-	margin-bottom: .5em;
-}
-
 h1 {
 	font-size: 1.6em;
 }
@@ -906,6 +910,14 @@ textarea {
 	/* padding: 1em; */
 	border: dashed #333 2px;
 	color: #000;
+}
+
+.droparea {
+	border: dashed #4d90fe 2px;
+	min-height: 2em;
+	width: 100%;
+	color: #000;
+  background-color: rgba(238, 238, 238, 0.5);
 }
 
 .dropdown-menu .not-a {

@@ -5,7 +5,7 @@ define([
     "datum/Session",
     "datum/SessionEditView",
     "user/UserMask",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Datum,
@@ -33,6 +33,7 @@ define([
     },
 
     routes : {
+      "corpus/:pouchname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
       "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
       "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname/conversation/:id" : "showEmbeddedConversation", 
@@ -286,49 +287,51 @@ define([
     showFullscreenDataList : function(dataListid, pouchname) {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
-
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
-      if(dataListid == app.get("currentDataList").id || ! dataListid ){
-    	  if($("#data-list-fullscreen-header").html() == ""){
-    	        window.appView.renderReadonlyDataListViews("fullscreen");
-    	      }
-    	      this.hideEverything();
-    	      $("#data-list-fullscreen").show();    
-    	      window.scrollTo(0,0);
-    	      return;
-      }else{
-        if(!pouchname){
-          pouchname = window.app.get("corpus").get("pouchname");
+      if( !dataListid || dataListid == app.get("currentDataList").id  ){
+        if($("#data-list-fullscreen-header").html() == ""){
+          window.appView.renderReadonlyDataListViews("fullscreen");
         }
-        var dl = new DataList({
-          "pouchname" : pouchname});
-        dl.id = dataListid;
-        //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-        if(window.app.get("corpus").get("pouchname") != pouchname ){
-          alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
-          return;
-        }
-
-        /*
-         * If it isnt the default data list, just fetch it.
-         */
-          dl.fetch({
-            success : function(e) {
-              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
-              app.get("currentDataList").saveAndInterConnectInApp(function(){
-                dl.setAsCurrentDataList( function(){
-                  window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                    window.appView.renderReadonlyDataListViews("fullscreen");
-                  });
-                });
-              });
-            },
-            error : function(e) {
-              alert("There was an error fetching the data list. Loading defaults..."+e);
-            }
-        });
-
+        this.hideEverything();
+        $("#data-list-fullscreen").show();    
+        window.scrollTo(0,0);
+        return;
       }
+
+      if(!pouchname){
+        pouchname = window.app.get("corpus").get("pouchname");
+      }
+      var dl = new DataList({
+        "pouchname" : pouchname});
+      dl.id = dataListid;
+      //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
+      if(window.app.get("corpus").get("pouchname") != pouchname ){
+        alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
+        return;
+      }
+
+      /*
+       * If it isnt the default data list, just fetch it.
+       */
+      dl.fetch({
+        success : function(e) {
+          if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
+          app.get("currentDataList").saveAndInterConnectInApp(function(){
+            dl.setAsCurrentDataList( function(){
+              window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                window.appView.renderReadonlyDataListViews("fullscreen");
+                window.app.router.hideEverything();
+                $("#data-list-fullscreen").show();    
+                window.scrollTo(0,0);
+              });
+            });
+          });
+        },
+        error : function(e) {
+          alert("There was an error fetching the data list. Loading defaults..."+e);
+        }
+      });
+
      //TODO test other cases where datalist id needs to be changed
 
     },
@@ -396,30 +399,75 @@ define([
      * TODO: try saving it, setting it as current datalist and rendering that fullscreen
      */
     showAllData : function(pouchname) {
-//        this.hideEverything();
-//        $("#dashboard-view").show();
-    	window.app.showSpinner();
-        $(".spinner-status").html("Searching all data...");
-        window.appView.searchEditView.search("", function(){
-            window.appView.searchEditView.searchDataListView.model.set("title", "All Data as of " + new Date());
-//            window.appView.searchEditView.searchDataListView.render();
-            $(".spinner-status").html("Opening all data...");
-            window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
-                $(".spinner-status").html("Loading all data...");
-            	window.appView.currentReadDataListView.format = "fullscreen";
-            	window.appView.currentReadDataListView.render();
-            	window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
-            	window.app.stopSpinner();
-            },function(){
-              window.app.stopSpinner();
-              window.location.href="#";
-              if(localStorage.getItem("username") == "public"){
-                alert("Normally this creates a new list of all your data, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
-              }
-            });
+//    this.hideEverything();
+//    $("#dashboard-view").show();
+      window.app.showSpinner();
+      $(".spinner-status").html("Searching all data...");
+      window.appView.searchEditView.search("", function(){
+        window.appView.searchEditView.searchDataListView.model.set("title", "All Data as of " + new Date());
+//      window.appView.searchEditView.searchDataListView.render();
+        $(".spinner-status").html("Opening all data...");
+        window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
+          $(".spinner-status").html("Loading all data...");
+          window.appView.currentReadDataListView.format = "fullscreen";
+          window.appView.currentReadDataListView.render();
+          window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
+          window.app.stopSpinner();
+        },function(){
+          window.app.stopSpinner();
+          window.location.href="#";
+          if(localStorage.getItem("username") == "public"){
+            alert("Normally this creates a new list of all your data, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
+          }
         });
-        
-      },
+      });
+
+    },
+   
+    /**
+     * The showAllData function gives the user a Datalist of all the Datums in
+     * this session (embedded Datalist view) it does this by calling the search
+     * method of searchEditView within appView with the goal of the session. An
+     * alternative is to use the map reduce function for this, which returns the
+     * datum in a session too (more precisely) however, we believe that it is
+     * usually the goal which the user is actually searching for, not the
+     * session itself.
+     * 
+     * @param pouchname
+     *          identifies the database to look in TODO: try saving it, setting
+     *          it as current datalist and rendering that fullscreen
+     * @param id this is the id of the session itself
+     * @param goal this is the goal of the session or what to search for. 
+     */
+    showAllDataInSession : function(pouchname, id, goal) {
+      /* this is the actual url of the map reduce result that is precisely these datum that are in this session, but really we dont htink that is what the user wants to see. */
+      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("couchConnection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
+
+//    this.hideEverything();
+//    $("#dashboard-view").show();
+      window.app.showSpinner();
+      $(".spinner-status").html("Searching all data in this Elicitation Session...");
+      $("#search_box").val("goal:" + goal);
+      window.appView.searchEditView.search("goal:" + goal, function(){
+        window.appView.searchEditView.searchDataListView.model.set("title", "All Data where the session goal was: '"+goal+"' As of today,  "+new Date());
+//      window.appView.searchEditView.searchDataListView.render();
+        $(".spinner-status").html("Opening data...");
+        window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
+          $(".spinner-status").html("Loading  data...");
+          window.appView.currentReadDataListView.format = "fullscreen";
+          window.appView.currentReadDataListView.render();
+          window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
+          window.app.stopSpinner();
+        },function(){
+          window.app.stopSpinner();
+          window.location.href="#";
+          if(localStorage.getItem("username") == "public"){
+            alert("Normally this creates a new list of all the data in this session, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
+          }
+        });
+      });
+
+    },
 
     showEmbeddedDatum : function(pouchname, datumid){
       if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "

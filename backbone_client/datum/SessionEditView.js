@@ -4,16 +4,18 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Handlebars, 
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -56,18 +58,39 @@ define([
     events : {
       "click .btn-save-session" : "updatePouch",
       
+//      Issue#797
+      "click .trash-button" : "putInTrash", 
+      
       //Add button inserts new Comment
-      "click .add-comment-session" : function(e) {
+
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the session when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
         
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+
+//        this.model.get("comments").unshift(this.commentEditView.model);
+//        this.commentEditView.model = new Comment();
+        }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
@@ -136,6 +159,12 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.goal = this.model.get("sessionFields").where({label: "goal"})[0].get("mask");
+        jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
+        jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
+        
+        
         if(this.format != "modal"){
           appView.currentSessionEditView.destroy_view();
           appView.currentSessionReadView.destroy_view();
@@ -143,12 +172,6 @@ define([
         if (this.format == "leftSide") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
 
-          var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
-          };
-          
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
           
@@ -163,12 +186,6 @@ define([
           
         }if (this.format == "import") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  IMPORT render: " );
-
-          var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
-          };
           
           this.setElement("#import-session");
           $(this.el).html(this.templateImport(jsonToRender));
@@ -184,41 +201,47 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT CENTERWELL render: " );
 
           this.setElement("#session-embedded");
-          $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+          $(this.el).html(this.templateEmbedded(jsonToRender));
    
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           
-          // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
-          this.commentReadView.render();
+//          // Display the CommentReadView
+//          this.commentReadView.el = $(this.el).find('.comments'); 
+//          this.commentReadView.render();
+//          
+//          // Display the CommentEditView
+//          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+//          this.commentEditView.render();
           
           //Localization for centerWell
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
-          this.$el.html(this.templateFullscreen(this.model.toJSON()));
+          this.$el.html(this.templateFullscreen(jsonToRender));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
          
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = $(this.el).find('.comments'); 
           this.commentReadView.render();
+          
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
           
           //Localization for fullscreen
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
           
         } else if (this.format == "modal") {
@@ -226,14 +249,19 @@ define([
 
           this.setElement("#new-session-modal");
           this.changeViewsOfInternalModels();
-          this.$el.html(this.templateModal(this.model.toJSON()));
+          this.$el.html(this.templateModal(jsonToRender));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
-          this.commentReadView.render();
           
+          // Display the CommentReadView
+          this.commentReadView.el = $(this.el).find('.comments');
+          this.commentReadView.render();
+
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+
           //Localization for modal
           $(this.el).find(".locale_New_Session").html(Locale.get("locale_New_Session"));
           $(this.el).find(".locale_New_Session_Instructions").html(Locale.get("locale_New_Session_Instructions"));
@@ -248,11 +276,25 @@ define([
       return this;
     },    
     
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this session in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },
+    
     changeViewsOfInternalModels : function(){
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "li",
+        childViewTagName     : "tr",
         childViewFormat      : "session"
       });
       
@@ -260,6 +302,10 @@ define([
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
     },
     /**

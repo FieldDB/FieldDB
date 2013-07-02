@@ -14,7 +14,7 @@ define([
     "user/User",
     "user/UserMask",
     "text!locales/en/messages.json",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     AppView,
@@ -608,7 +608,15 @@ define([
         var corpusPouchName = appids.couchConnection.pouchname;
         if(window.location.href.indexOf(corpusPouchName) == -1){
           if(corpusPouchName != "public-firstcorpus"){
-            OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            var username = "";
+            try{
+              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+            }catch(e){
+              //do nothing
+            }
+            if(username != "public"){
+              OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            }
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
           window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
@@ -697,6 +705,22 @@ define([
             }catch(e){
               OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
             }
+            try{
+              var tags = corpusModel.get("datumFields").where({label : "syntacticTreeLatex"});
+              if(tags.length == 0){
+                /* If its missing syntacticTreeLatex, add upgrade the corpus to version v1.54+ */
+                corpusModel.get("datumFields").add(new DatumField({
+                  label : "syntacticTreeLatex",
+                  showToUserTypes: "machine",
+                  shouldBeEncrypted: "",
+                  userchooseable: "disabled",
+                  help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
+                }));
+               
+              }
+            }catch(e){
+              OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
+            }
             
             $(".spinner-status").html("Opened Corpus...");
             
@@ -780,11 +804,12 @@ define([
           },
           error : function(model, error, options) {
             if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
-            OPrime.bug("There seems to be an error when fetching corpus: "+error.reason);
+            
+            var reason = "";
             if(error.reason){
-              OPrime.bug("You appear to be offline. "+error.reason);
-            }
-            if(error && error.error && error.error.indexOf("unauthorized") >=0 ){
+              reason = error.reason.message || error.reason || "";
+            };
+            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
@@ -794,7 +819,11 @@ define([
 //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
 //            window.location.replace(optionalCouchAppPath+"corpus.html#login");
             }else{
-              OPrime.bug("You appear to be offline.");
+              if(reason.indexOf("nexpected end of input") >=0){
+                OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only. We are waiting for an upgrade in the PouchDB library (this is what makes it possible to have an offline database).");
+              }else{
+                OPrime.bug("You appear to be offline. If you are not offline, please report this.");
+              }
             }
           }
         }); //end corpus fetch
@@ -892,6 +921,7 @@ define([
       var activitydb = couchConnection.pouchname + "-activity_feed";
       if (bareActivityObject.teamOrPersonal != "team") {
         activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
+        backboneActivity.attributes.user.set("gravatar", this.get("authentication").get("userPrivate").get("gravatar"));
       }
       var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
       
@@ -950,7 +980,7 @@ define([
         }, failurecallback);
       }, failurecallback);
     }
-    
+
    
   });
 
