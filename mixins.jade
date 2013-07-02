@@ -59,27 +59,23 @@ mixin showJson(myJsonObject, level)
           p(style='margin:0') #{key}: #{value}
 
 mixin renderCorporaList(myJsonObject)
-  - for (var c = 0; c < 3; c++)
+  each c in myJsonObject
+    - var url = c.corpusinfo.title == 'Unknown' ? '#' : '/db/' + c.corpusinfo.pouchname
     .media(style='margin-bottom:40px')
-      a(href="#").pull-left
-        - var phash = myJsonObject[c].phash
-        img(src='https://secure.gravatar.com/avatar/#{phash}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+      a(href="#{url}").pull-left
+        img(src='https://secure.gravatar.com/avatar/#{c.phash}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
       .media-body
-        - var title = myJsonObject[c].corpusinfo.title
-        h4.media-heading #{title}
-        - var text = myJsonObject[c].corpusinfo.description
-        - var shortDesc = text.substr(0,200) + '…'
-        p #{shortDesc}
+        h4.media-heading
+          a(href="#{url}")= c.corpusinfo.title
+        - var text = c.corpusinfo.description
+        p= text.length > 200 ? text.substr(0,200) + '…' : text
 
 mixin renderCorpus(myJsonObject)
-  - var c = 0
+  each c in myJsonObject
     .media(style='margin-bottom:40px')
       a(href="#").pull-left
-        - var phash = myJsonObject[c].phash
-        img(src='https://secure.gravatar.com/avatar/#{phash}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+        img(src='https://secure.gravatar.com/avatar/#{c.phash}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
       .media-body
-        - var title = myJsonObject[c].corpusinfo.title
-        h4.media-heading #{title}
-        - var text = myJsonObject[c].corpusinfo.description
-        - var shortDesc = text.substr(0,200) + '…'
-        p #{shortDesc}
+        h4.media-heading #{c.corpusinfo.title}
+        - var text = c.corpusinfo.description
+        p= text.length > 200 ? text.substr(0,200) + '…' : text
