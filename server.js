@@ -1,12 +1,12 @@
 var https = require('https'),
   express = require('express'),
-  app     = express(),
-  Q       = require('q'),
-  md5     = require('MD5'),
-  fs      = require('fs'),
-  util    = require('util'),
+  app = express(),
+  Q = require('q'),
+  md5 = require('MD5'),
+  fs = require('fs'),
+  util = require('util'),
   node_config = require("./lib/nodeconfig_local"),
-  couch_keys  = require("./lib/couchkeys_devserver");
+  couch_keys = require("./lib/couchkeys_devserver");
 
 //read in the specified filenames as the security key and certificate
 node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
@@ -42,22 +42,8 @@ app.get('/:user/:corpus', function(req, res) {
 
   var user = req.params.user;
   var corpus = req.params.corpus;
-  var userdetails = {};
 
-  getUser(user)
-    .then(function(result) {
-      userdetails = result;
-      return getRequestedCorpus(result.corpuses, corpus);
-    })
-    .then(function(result) {
-      var ghash = md5(userdetails.email);
-      res.render('corpus', {json: result, ghash: ghash, user: userdetails});
-    })
-    .fail(function(error) {
-      console.log(error);
-      res.redirect('/' + user);
-    })
-    .done();
+  getData(res, user, corpus);
 
 });
 
@@ -65,19 +51,39 @@ app.get('/:user', function(req, res) {
 
   var user = req.params.user;
 
-  getUser(user)
-    .then(function(result) {
-      var ghash = md5(result.email);
-      res.render('user', {json: result, ghash: ghash});
-      // res.send(result);
-    })
-    .fail(function(error) {
-      console.log(error);
-      res.render('user', {json: {}, ghash: {}});
-    })
-    .done();
+  getData(res, user);
 
 });
+
+function getData(res, user, corpus) {
+
+  var userdetails = {};
+
+  getUser(user)
+    .then(function(result) {
+    userdetails = result;
+    return getRequestedCorpus(result.corpuses, corpus);
+  })
+    .then(function(result) {
+    var ghash = md5(userdetails.email);
+    var data = {
+      corpora: result,
+      ghash: ghash,
+      user: userdetails
+    };
+    var template = corpus ? 'corpus' : 'user';
+    console.log(template);
+    console.log(data);
+    res.render(template, data);
+    // res.send(data.corpora);
+  })
+    .fail(function(error) {
+    console.log(error);
+    res.redirect('/' + user);
+  })
+    .done();
+
+}
 
 /*
  * Promise handlers
@@ -121,13 +127,7 @@ function getCorpus(pouchId, titleAsUrl, corpusid) {
         console.log('No result');
         df.reject(new Error('No result'));
       } else {
-        if (titleAsUrl && (result.titleAsUrl == titleAsUrl)) {
-          console.log('Match found: ' + result.titleAsUrl);
-          df.resolve(result);
-        } else {
-          console.log('No match: ' + result.titleAsUrl);
-          df.reject(new Error('No match'));
-        }
+        df.resolve(result);
       }
     }
   });
@@ -147,15 +147,21 @@ function getRequestedCorpus(corporaArray, titleAsUrl) {
 
   Q.allSettled(resultingPromises)
     .then(function(results) {
+    for (corpus in corporaArray) {
+      corporaArray[corpus].corpusinfo = {
+        title: 'Unknown',
+        description: 'Private corpus'
+      };
       results.forEach(function(result) {
-          if (result.state === 'fulfilled') {
-              var value = result.value;
-              df.resolve(value);
-          } else {
-              var reason = result.reason;
-              df.reject(reason);
+        if (result.state === 'fulfilled') {
+          var value = result.value;
+          if (corporaArray[corpus].pouchname == value.pouchname) {
+            corporaArray[corpus].corpusinfo = value;
           }
+        }
       });
+    }
+    df.resolve(corporaArray);
   });
 
   return df.promise;
