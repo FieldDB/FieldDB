@@ -38,3 +38,7 @@ block content
         h1 Corpus
         br
         +renderCorpus(corpora)
+    hr
+    footer
+      - var year = (new Date()).getFullYear()
+      p © #{user.username} #{year} All rights reserved.
