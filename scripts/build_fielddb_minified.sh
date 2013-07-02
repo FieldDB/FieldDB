@@ -23,3 +23,5 @@ cp release/corpus_online_dashboard.js couchapp_minified/_attachments/
 cp backbone_client/app/app.css couchapp_minified/_attachments/app/app.css
 
 cp backbone_client/manifest.json couchapp_minified/_attachments/manifest.json
+
+cp -R couchapp_dev/views/* couchapp_minified/views/

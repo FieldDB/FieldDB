@@ -14675,13 +14675,13 @@ OPrime.prettyDate = function(time) {
   if (day_diff >= 1) {
     return "Yesterday";
   }
-  if(diff >= 86400 ){
+  if(diff >= 4000 ){
     return Math.floor(diff / 3600) + " hours ago";
   }
 //  if(diff >= 7200 ){
 //    Math.floor(diff / 3600) + " 1 hour ago";
 //  }
-  if(diff >= 3600 ){
+  if(diff >= 70 ){
     return Math.floor(diff / 60) + " minutes ago";
   }
   if(diff >= 120 ){
@@ -14715,13 +14715,13 @@ OPrime.prettyTimestamp = function(timestamp) {
   if (day_diff >= 1) {
     return "Yesterday";
   }
-  if(diff >= 86400 ){
+  if(diff >= 4000 ){
     return Math.floor(diff / 3600) + " hours ago";
   }
 //  if(diff >= 7200 ){
 //    Math.floor(diff / 3600) + " 1 hour ago";
 //  }
-  if(diff >= 3600 ){
+  if(diff >= 70 ){
     return Math.floor(diff / 60) + " minutes ago";
   }
   if(diff >= 120 ){
@@ -15220,7 +15220,7 @@ define('js/controllers',
        * @returns
        */
       var ActivityFeedController = function ActivityFeedController($scope,
-          $routeParams, $resource, MostRecentActivities, GetSessionToken) {
+          $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken) {
         console.log("Loading ActivityFeedController");
         /*
          * TODO get a corpus item out of the non-activity feed, or out of the
@@ -15243,14 +15243,27 @@ define('js/controllers',
         feedParams.username = $routeParams.username || "lingllama";
         feedParams.corpusid = $routeParams.corpusid;
         if (feedParams.corpusid) {
-          feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+          /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
+          if(feedParams.corpusid.indexOf(feedParams.username) > -1){
+            feedParams.corpusid = feedParams.corpusid.replace($routeParams.username,"");
+          }else{
+            feedParams.username = "";
+          }
           $scope.corpus.title = "Corpus Activity Feed";
+          CorpusDetails.async({username: $routeParams.corpusid.split("-")[0], corpusid: $routeParams.corpusid}).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }else{
           feedParams.corpusid = "";
           $scope.corpus.title = "User Activity Feed";
+          UserDetails.async(feedParams).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }
 
-        
+
 //        GetSessionToken.run({
 //          "name" : "public",
 //          "password" : "none"
@@ -15263,7 +15276,7 @@ define('js/controllers',
       };
 
       ActivityFeedController.$inject = [ '$scope', '$routeParams', '$resource',
-          'MostRecentActivities', 'GetSessionToken' ];
+          'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken' ];
 
       OPrime.debug("Defining ActivityFeedController.");
 
@@ -15309,7 +15322,11 @@ define('js/filters',[ "angular", "OPrime" ], function(angular, OPrime) {
         return function(text) {
           return String(text).replace(/\%VERSION\%/mg, version);
         };
-      } ]);
+      } ]).filter('gravatar', function(){
+        return function(gravatar, scope) {
+          return gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+        };
+      });
 
   OPrime.debug("Defining ActivityFeedFilters.");
 
@@ -15340,28 +15357,84 @@ define('js/services',
                   'async' : function(params) {
                     console.log("Fetching this activity feed: ", params);
                     var location = OPrime.couchURL();
-                    var promise = $http
-                        (
-                            { method: "GET",
-                              data: {},
-                              url : location.protocol
-                                  + location.domain
-                                  + location.port
-                                  + '/'
-                                  + params.username
-                                  + params.corpusid
-                                  + '-activity_feed/'
-                                  + '_design/activities/_view/activities?limit=20&decending=true',
-                              withCredentials : true
-                            }).then(function(response) {
-                          // + JSON.stringify(response));
-                          // console.log("response", response);
-                          var results = [];
-                          for ( var i = 0; i < response.data.rows.length; i++) {
-                            results.push(response.data.rows[i].value);
-                          }
-                          return results;
-                        });
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.username
+                              + params.corpusid
+                              + '-activity_feed/'
+                              + '_design/activities/_view/activities?descending=true&limit=20',
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      var results = [];
+                      for ( var i = 0; i < response.data.rows.length; i++) {
+                        results.push(response.data.rows[i].value);
+                      }
+                      return results;
+                    });
+                    return promise;
+                  }
+                };
+              }).factory(
+              'UserDetails',
+              function($http) {
+                return {
+                  'async' : function(params) {
+                    console.log("Fetching this activity feed: ", params);
+                    var location = OPrime.couchURL();
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.username
+                              + '-firstcorpus'
+                              + '/'
+                              + params.username,
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      return response.data;
+                    });
+                    return promise;
+                  }
+                };
+              }).factory(
+              'CorpusDetails',
+              function($http) {
+                return {
+                  'async' : function(params) {
+                    console.log("Fetching this activity feed: ", params);
+                    var location = OPrime.couchURL();
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.corpusid
+                              + '/'
+                              + params.username,
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      
+                      return response.data;
+                    });
                     return promise;
                   }
                 };
@@ -15860,8 +15933,8 @@ OPrime.couchURL = function() {
     corpusURL = "https://corpus.lingsync.org";
     couchConnection.domain = "corpus.lingsync.org";
   } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
-    corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
-    couchConnection.domain = "prosody.linguistics.mcgill.ca/corpus";
+    corpusURL = "https://corpusdev.lingsync.org";
+    couchConnection.domain = "corpusdev.lingsync.org";
   } else if (corpusURL.indexOf("localhost") >= 0) {
     corpusURL = window.location.origin;
     couchConnection.port = ":" + window.location.port;
@@ -15874,8 +15947,8 @@ OPrime.couchURL = function() {
     corpusURL = "https://corpusdev.lingsync.org";
     couchConnection.domain = "corpusdev.lingsync.org";
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-    corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
-    couchConnection.domain = "prosody.linguistics.mcgill.ca/corpus";
+    corpusURL = "https://corpusdev.lingsync.org";
+    couchConnection.domain = "corpusdev.lingsync.org";
   } else {
 //    corpusURL = "https://localhost:6984";
 //    couchConnection.port = ":6984";

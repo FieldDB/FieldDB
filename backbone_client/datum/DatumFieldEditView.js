@@ -23,6 +23,14 @@ define([
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW init");
+      
+      this.model.bind('change:mask', function(){
+        this.render();
+      }, this);
+      this.model.bind('change:alternates', function(){
+        this.render();
+      }, this);
+      
     },
     
     /**
@@ -35,13 +43,29 @@ define([
      */
     events : {
       "blur .choose-field" : "updateFieldLabel",
+      // issue #797
+      "click .remove-datum-field" : "removeDatumField",
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
+      "keyup .datum_field_input" : "resizeInputFieldToFit",
       "click .icon-question-sign" : "showHelpConvention",
       "hover .icon-question-sign" : "hideHelpConvention"  
     },
-
+    
+    /*
+     * TODO Only Admin users can trash datum fields?
+     * 
+     */
+    removeDatumField : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to remove this DatumField? (It won't be listed in the Advanced Search anymore, but any Datum which have it will keep it).");
+      if (r == true) {
+        this.model.destroy();
+      }
+    },
     /**
      * The Handlebars template rendered as the DatumFieldSettingsEditView.
      */
@@ -66,10 +90,11 @@ define([
         $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
         
         // Select the correct values from the model TODO is this dead code?
-        $(this.el).children(".choose-field").val(this.model.get("label"));
+        $(this.el).find(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
+        jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
         $(this.el).html(this.templateValue(jsonToRender));
         
         //Add the label class to this element so that it can be found for other purposes like hiding rare fields
@@ -86,11 +111,11 @@ define([
 //          $(this).autosize();
         });
         
+//        This replaces the jquery autosize library which makes the datum text areas fit their size.http://www.impressivewebs.com/textarea-auto-resize/ (see comments) https://github.com/jackmoore/autosize/blob/master/demo.html
         var fieldself = this;
-//        This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-//        window.setTimeout(function(){
-//          $(fieldself.el).find(".datum_field_input").autosize();
-//        },500);
+        window.setTimeout(function(){
+          fieldself.resizeInputFieldToFit();
+        },200);
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = false;
@@ -105,13 +130,13 @@ define([
      * Change the model's state.
      */
     updateFieldLabel : function() {
-      if (OPrime.debugMode) OPrime.debug("Updated label to " + this.$el.children(".choose-field").val());
-      this.model.set("label", this.$el.children(".choose-field").val());
+      if (OPrime.debugMode) OPrime.debug("Updated label to " + this.$el.find(".choose-field").val());
+      this.model.set("label", this.$el.find(".choose-field").val());
     },
     
     // TODO Add description
     updateEncrypted : function() {
-      var checked = this.$el.children(".shouldBeEncrypted").is(':checked');
+      var checked = this.$el.find(".shouldBeEncrypted").is(':checked');
       if (checked ) {
         checked = "checked";
       } else {
@@ -123,7 +148,7 @@ define([
     
     // TODO Add description
     updateHelp : function() {
-      var help = this.$el.children(".help-text").val();
+      var help = this.$el.find(".help-text").val();
       if (OPrime.debugMode) OPrime.debug("Updated help to " + help);
       this.model.set("help",help);
     },
@@ -132,21 +157,44 @@ define([
      * Change the model's state.
      */
     updateFieldValue : function() {
-      this.model.set("mask", this.$el.children(".datum_field_input").val());
+      this.model.set("mask", this.$el.find(".datum_field_input").val());
     }, 
+    
+    /**
+     * This is a function which can take in an event or be called directly, it
+     * will take the scrollheight of the current datum field input area, and
+     * then expand the textarea to be that height, using 50 px as the size of
+     * one em.
+     * 
+     * @param e
+     *          the event (optional) otherwise it looks for the
+     *          datum_field_input
+     */
+    resizeInputFieldToFit : function(e) {
+      var it;
+      if (e) {
+        it = e.target;
+      } else {
+        it = $(this.el).find(".datum_field_input")[0];
+      }
+      var sh = it.scrollHeight;
+      if(sh > 20){
+        it.style.height =  sh + "px";
+      }
+    },
     
     /**
      * Show help convention in popover  
      */
     showHelpConvention : function() {
-    	this.$el.children(".help-conventions").popover("show");
+    	this.$el.find(".help-conventions").popover("show");
     },
     
     /**
      * Don't show help convention in popover if only hover 
      */
     hideHelpConvention : function() {
-        this.$el.children(".help-conventions").popover("hide");
+        this.$el.find(".help-conventions").popover("hide");
     }    
    
   });

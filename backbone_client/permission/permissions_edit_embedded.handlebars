@@ -3,10 +3,10 @@
 	<h4>
 		<i class="icon-group"></i> {{role}}s
 	</h4>
-	<ul>
+	<ul class="inline">
 		{{#each users}}
-		<li class="breadcrumb  {{status}}">  <img class="gravatar-small" src="{{gravatar}}"/>
-		{{username}} </li> {{/each}}
+		<li class="breadcrumb  pagination-centered {{status}}"> {{username}}<br/> <img  src="https://secure.gravatar.com/avatar/{{gravatar}}?d=identicon"/>
+		 </li> {{/each}}
 	</ul>
 </div>
 

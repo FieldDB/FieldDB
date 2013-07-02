@@ -1,5 +1,0 @@
-function(doc) {
-  if (doc.collection == "users") {
-    emit(doc.collection, doc);
-  }
-};

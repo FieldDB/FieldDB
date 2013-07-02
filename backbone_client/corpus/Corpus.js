@@ -23,7 +23,7 @@ define([
     "user/Users",
     "user/UserMask",
     "glosser/Glosser",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Comment, 
@@ -254,44 +254,67 @@ define([
             label : "judgement",
             size : "3",
             shouldBeEncrypted: "",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
           }),
           new DatumField({
             label : "utterance",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
           }),
           new DatumField({
             label : "morphemes",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
           }),
           new DatumField({
             label : "gloss",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
-            help: "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
+            help: "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
+          }),
+          new DatumField({
+            label : "syntacticCategory",
+            shouldBeEncrypted: "checked",
+            showToUserTypes: "machine",
+            userchooseable: "disabled",
+            help: "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish." +
+            		" It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM)," +
+            		" or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
+          }),
+          new DatumField({
+            label : "syntacticTreeLatex",
+            shouldBeEncrypted: "checked",
+            showToUserTypes: "machine",
+            userchooseable: "disabled",
+            help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
           }),
           new DatumField({
             label : "translation",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends"
           }),
           new DatumField({
             label : "tags",
             shouldBeEncrypted: "",
+            showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Tags for constructions or other info that you might want to use to categorize your data."
           }),
           new DatumField({
             label : "validationStatus",
             shouldBeEncrypted: "",
+            showToUserTypes: "all",
             userchooseable: "disabled",
-            help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
+            help: "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
           })
         ]));
       }//end if to set datumFields
@@ -507,6 +530,26 @@ define([
       comments: Comments,
       team: UserMask
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */ 
+    putInTrash : function(){
+      OPrime.bug("Sorry deleting corpora is not available right now. Too risky... ");
+      return;
+      /* TODO contact server to delte the corpus, if the success comes back, then do this */
+      this.set("trashed", "deleted"+Date.now());
+      this.saveAndInterConnectInApp(function(){
+      window.location.href="user.html";
+      });
+    },
+        
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(commentstring) {
       var m = new Comment({
@@ -582,6 +625,10 @@ define([
       attributes.publicSelf = {filledWithDefaults: true};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
       //clear out search terms from the new corpus's datum fields
+      /* use default datum fields if this is going to based on teh users' first practice corpus */
+      if(this.get("pouchname").indexOf("firstcorpus") > -1){
+        attributes.datumFields = [];
+      }
       for(var x in attributes.datumFields){
         attributes.datumFields[x].mask = "";
         attributes.datumFields[x].value = "";
@@ -596,9 +643,13 @@ define([
         attributes.sessionFields[x].mask = "";
         attributes.sessionFields[x].value = "";
       }
+      
+      
       window.appView.corpusNewModalView.model = new Corpus();
       //be sure internal models are parsed and built.
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
+      /* use default datum fields if this is going to based on teh users' first practice corpus */
+      window.appView.corpusNewModalView.model.fillWithDefaults();
       window.appView.corpusNewModalView.render();
     },
     newCorpusSimple : function(){
@@ -771,7 +822,7 @@ define([
 
                       var sucessorfailcallbackforcorpusmask = function(){
                         window.app.get("authentication").saveAndInterConnectInApp(function(){
-                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus...");
+                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                           window.setTimeout(function(){
                             window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
                           },10000);
@@ -881,8 +932,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -895,8 +946,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
@@ -910,8 +961,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -924,8 +975,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
@@ -1343,7 +1394,7 @@ define([
         type : 'GET',
         url : jsonUrl,
         success : function(serverResults) {
-          console.log("serverResults"
+          OPrime.debug("serverResults"
               + JSON.stringify(serverResults));
 
           var counts = _.pluck(serverResults.rows, "value");
@@ -1369,6 +1420,19 @@ define([
           if(frequentFields == []){
             frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
           }
+          
+          /*
+           * Hide machine only fields:
+           */
+          var doesThisCorpusHaveSyntacticCategory = frequentFields.indexOf("syntacticCategory");
+          if(doesThisCorpusHaveSyntacticCategory > -1){
+            frequentFields.splice(doesThisCorpusHaveSyntacticCategory, 1);
+          }
+          var doesThisCorpusHaveSyntacticTreeLatex = frequentFields.indexOf("syntacticTreeLatex");
+          if(doesThisCorpusHaveSyntacticTreeLatex > -1){
+            frequentFields.splice(doesThisCorpusHaveSyntacticTreeLatex, 1);
+          }
+          
           self.frequentDatumFields = frequentFields;
           if (typeof callback == "function") {
             callback(frequentFields);
@@ -1382,6 +1446,161 @@ define([
             callback(["judgement","utterance","morphemes","gloss","translation"]);
           }
           
+          //end error 
+        },
+          dataType : "json"
+        });
+    },
+    /**
+     * This function takes in a pouchname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more representative datum 
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+     * 
+     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+     * 
+     * If a url is passed, it contacts the server for fresh info. 
+     * 
+     * @param pouchname
+     * @param callback
+     */
+    getFrequentDatumValidationStates : function(jsonUrl, pouchname, callback){
+      if(window.getFrequentDatumValidationStatesPending){
+        return;
+      }
+      window.getFrequentDatumValidationStatesPending = true;
+      if(!jsonUrl){
+        /* if we have already asked the server in this session, return */
+        if(this.frequentDatumValidationStates){
+          if(typeof callback == "function"){
+            callback(this.frequentDatumValidationStates);
+          }
+          return;
+        }
+        var couchConnection = this.get("couchConnection");
+        var couchurl = OPrime.getCouchUrl(couchConnection);
+        if(!pouchname){
+          pouchname = couchConnection.pouchname;
+          /* if the user has overriden the frequent fields, use their preferences */
+          if(this.get("frequentDatumValidationStates")){
+            if(typeof callback == "function"){
+              callback(this.get("frequentDatumValidationStates"));
+            }
+            return;
+          }
+        }
+        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_validationStati?group=true";
+      }
+     
+      var self = this;
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : jsonUrl,
+        success : function(serverResults) {
+          OPrime.debug("serverResults"
+              + JSON.stringify(serverResults));
+
+          var counts = _.pluck(serverResults.rows, "value");
+          if (OPrime.debugMode) OPrime.debug(counts);
+          var frequentStates = _.pluck(serverResults.rows, "key");
+          if(frequentStates == []){
+            frequentStates = ["Checked","Deleted","ToBeCheckedWithAnna","ToBeCheckedWithBill", "ToBeCheckedWithClaude"];
+          }
+          
+          
+          self.frequentDatumValidationStates = frequentStates;
+          if (typeof callback == "function") {
+            callback(frequentStates);
+          }
+          window.getFrequentDatumValidationStatesPending = false;
+
+        },// end successful fetch
+        error : function(response) {
+          OPrime
+          .debug("There was a problem getting the frequentDatumValidationStates, using defaults."
+              + JSON.stringify(response));
+          if (typeof callback == "function") {
+            callback(["Checked","Deleted","ToBeCheckedWithAnna","ToBeCheckedWithBill", "ToBeCheckedWithClaude"]);
+          }
+          window.getFrequentDatumValidationStatesPending = false;
+
+          //end error 
+        },
+          dataType : "json"
+        });
+    },
+    /**
+     * This function takes in a pouchname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more representative datum 
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+     * 
+     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+     * 
+     * If a url is passed, it contacts the server for fresh info. 
+     * 
+     * @param pouchname
+     * @param callback
+     */
+    getFrequentDatumTags : function(jsonUrl, pouchname, callback){
+      if(window.getFrequentDatumTagsPending){
+        return;
+      }
+      window.getFrequentDatumTagsPending = true;
+      if(!jsonUrl){
+        /* if we have already asked the server in this session, return */
+        if(this.frequentDatumTags){
+          if(typeof callback == "function"){
+            callback(this.frequentDatumTags);
+          }
+          return;
+        }
+        var couchConnection = this.get("couchConnection");
+        var couchurl = OPrime.getCouchUrl(couchConnection);
+        if(!pouchname){
+          pouchname = couchConnection.pouchname;
+          /* if the user has overriden the frequent fields, use their preferences */
+          if(this.get("frequentDatumTags")){
+            if(typeof callback == "function"){
+              callback(this.get("frequentDatumTags"));
+            }
+            return;
+          }
+        }
+        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_datum_tags?group=true";
+      }
+     
+      var self = this;
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : jsonUrl,
+        success : function(serverResults) {
+          OPrime.debug("serverResults"
+              + JSON.stringify(serverResults));
+
+          var counts = _.pluck(serverResults.rows, "value");
+          if (OPrime.debugMode) OPrime.debug(counts);
+          var frequentTags = _.pluck(serverResults.rows, "key");
+          if(frequentTags == []){
+            frequentTags = ["Passive","WH","Indefinte","Generic", "Agent-y","Causative","Pro-drop","Ambigous"];
+          }
+          
+          self.frequentDatumTags = frequentTags;
+          if (typeof callback == "function") {
+            callback(frequentTags);
+          }
+          window.getFrequentDatumTagsPending = false;
+
+        },// end successful fetch
+        error : function(response) {
+          OPrime
+          .debug("There was a problem getting the frequentDatumTags, using defaults."
+              + JSON.stringify(response));
+          if (typeof callback == "function") {
+            callback(["Passive","WH","Indefinte","Generic", "Agent-y","Causative","Pro-drop","Ambigous"]);
+          }
+          window.getFrequentDatumTagsPending = false;
+
           //end error 
         },
           dataType : "json"

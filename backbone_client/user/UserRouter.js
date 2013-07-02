@@ -3,7 +3,7 @@ define([
     "corpus/Corpus",
     "corpus/CorpusMask",
     "user/User",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone,
     Corpus,

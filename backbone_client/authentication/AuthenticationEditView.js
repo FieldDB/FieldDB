@@ -7,7 +7,7 @@ define([
     "user/User", 
     "user/UserMask",
     "user/UserReadView",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -167,7 +167,7 @@ define([
       }
 
       if(this.model.get("userPublic") != undefined){
-        this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
+        this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
         this.model.set( "username", this.model.get("userPublic").get("username") );
       }
       // Display the AuthenticationEditView
@@ -468,8 +468,9 @@ define([
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
-      dataToPost.gravatar = "user/user_gravatar.png";
-     
+      // dataToPost.gravatar = "user/user_gravatar.png";
+      var u = new UserMask();
+      dataToPost.gravatar = u.getGravatar(dataToPost.email);
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
@@ -492,8 +493,9 @@ define([
           url : dataToPost.authUrl + "/register",
           data : dataToPost,
           success : function(serverResults) {
-            if (serverResults.userFriendlyErrors != null) {
-              $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>")+" "+OPrime.contactUs );
+            var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+            if (userFriendlyErrors) {
+              $(".welcome-screen-alerts").html(userFriendlyErrors.join("<br/>")+" "+OPrime.contactUs );
               $(".welcome-screen-alerts").show();
             } else if (serverResults.user) {
 
@@ -564,7 +566,7 @@ define([
                           localStorage.setItem("encryptedUser", u);
                           
                           var sucessorfailcallbackforcorpusmask = function(){
-                            $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus...");
+                            $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                             window.setTimeout(function(){
                               window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
                             },10000);

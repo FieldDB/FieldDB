@@ -3,7 +3,7 @@ define([
     "hotkey/HotKey",
     "user/UserGeneric",
     "user/UserPreference",
-    "libs/OPrime"
+    "OPrime"
 ], function(
     Backbone, 
     HotKey,
