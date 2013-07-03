@@ -13,6 +13,8 @@ angular.module('LingSyncWebsite', [ ]).config(
         templateUrl : 'partials/tutorials.html'
       }).when('/projects', {
         templateUrl : 'partials/projects.html'
+      }).when('/download', {
+        templateUrl : 'partials/download.html'
       }).otherwise({
         redirectTo : '/home'
       });
