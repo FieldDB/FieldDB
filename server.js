@@ -5,7 +5,7 @@ var https = require('https'),
   md5 = require('MD5'),
   fs = require('fs'),
   util = require('util'),
-  node_config = require("./lib/nodeconfig_local"),
+  node_config = require("./lib/nodeconfig_devserver"),
   couch_keys = require("./lib/couchkeys_devserver");
 
 //read in the specified filenames as the security key and certificate
@@ -52,7 +52,28 @@ app.get('/db/:pouchname', function(req, res) {
   })
     .fail(function(error) {
     console.log(error);
-    res.redirect('/lingllama');
+    res.redirect('/public');
+  })
+    .done();
+
+});
+
+app.get('/:user/:corpus/:pouchname', function(req, res) {
+
+  var pouchname = req.params.pouchname;
+
+  getCorpusFromPouchname(pouchname)
+    .then(function(result) {
+      var data = {
+        corpora: [result.corpus],
+        ghash: result.team.gravatar,
+        user: result.team
+      };
+      res.render('corpus', data);
+  })
+    .fail(function(error) {
+    console.log(error);
+    res.redirect('/public');
   })
     .done();
 
@@ -86,7 +107,7 @@ function getData(res, user, corpus) {
   getUser(user)
     .then(function(result) {
     userdetails = result;
-    return getRequestedCorpus(result.corpuses, corpus);
+    return getRequestedCorpus(result.corpuses, corpus, user);
   })
     .then(function(result) {
     var ghash = md5(userdetails.email);
@@ -102,7 +123,11 @@ function getData(res, user, corpus) {
   })
     .fail(function(error) {
     console.log(error);
-    res.redirect('/' + user);
+    var redirect = '/public/';
+    if(corpus){
+      redirect = '/' + user;
+    }
+    res.redirect(redirect);
   })
     .done();
 
@@ -121,6 +146,7 @@ function getCorpusFromPouchname(pouchname) {
       if (!corpus) {
         df.resolve({});
       } else {
+        corpus.gravatar =  corpus.gravatar || md5(pouchname);
         result.corpus = {corpusinfo: corpus};
         corpusdb.get('team', function(error, team) {
           if (error) {
@@ -130,11 +156,14 @@ function getCorpusFromPouchname(pouchname) {
               result.team = {};
               df.resolve(result);
             } else {
-              if (team.email) {
-                team.gravatar = md5(team.email);
-              } else {
-                team.gravatar = md5(pouchname);
+              if(!team.gravatar){
+                if (team.email) {
+                  team.gravatar = md5(team.email);
+                } else {
+                  teami.gravatar = md5(pouchname);
+                }
               }
+              team.subtitle = team.subtitle || team.firstname + ' ' + team.lastname;
               result.team = team;
               df.resolve(result);
             }
@@ -164,6 +193,7 @@ function getUser(userId) {
         for (pouch in result.corpuses) {
           result.corpuses[pouch].phash = md5(result.corpuses[pouch].pouchname);
         }
+        result.subtitle = result.subtitle || result.firstname + ' ' + result.lastname
         df.resolve(result);
       }
     }
@@ -177,8 +207,12 @@ function getCorpus(pouchId, titleAsUrl, corpusid) {
 
   var df = Q.defer();
   var corpusdb = nano.db.use(pouchId);
-
-  corpusdb.get(corpusid, function(error, result) {
+  var doc = corpusid;
+  var public = true;
+  if (public) {
+    doc = 'corpus';
+  }
+  corpusdb.get(doc, function(error, result) {
     if (error) {
       console.log(error);
       df.reject(new Error(error));
@@ -196,7 +230,7 @@ function getCorpus(pouchId, titleAsUrl, corpusid) {
 
 }
 
-function getRequestedCorpus(corporaArray, titleAsUrl) {
+function getRequestedCorpus(corporaArray, titleAsUrl, corpusowner) {
 
   var df = Q.defer();
   var resultingPromises = [];
@@ -209,13 +243,18 @@ function getRequestedCorpus(corporaArray, titleAsUrl) {
     .then(function(results) {
     for (corpus in corporaArray) {
       corporaArray[corpus].corpusinfo = {
+        url: corpusowner + '/Unknown/' + corpusowner + '-firstcorpus',
         title: 'Unknown',
+        gravatar: md5(corporaArray[corpus].pouchname),
         description: 'Private corpus'
       };
       results.forEach(function(result) {
         if (result.state === 'fulfilled') {
           var value = result.value;
           if (corporaArray[corpus].pouchname == value.pouchname) {
+            corpusowner = value.pouchname.replace(/-.*/,'');
+            value.url = corpusowner + '/' + value.titleAsUrl + '/'+ value.pouchname;
+            value.gravatar = md5(corporaArray[corpus].pouchname);
             corporaArray[corpus].corpusinfo = value;
           }
         }
