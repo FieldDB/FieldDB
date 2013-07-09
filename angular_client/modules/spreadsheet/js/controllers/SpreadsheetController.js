@@ -242,7 +242,7 @@ define(
         $scope.loadData = function() {
           $rootScope.loading = true;
           Data
-              .async($rootScope.DB)
+              .async($rootScope.DB.pouchname)
               .then(
                   function(dataFromServer) {
                     var scopeData = [];
@@ -315,50 +315,75 @@ define(
             }
             $rootScope.loading = true;
             $rootScope.server = auth.server;
-            Data.login(auth.user, auth.password).then(function(response) {
-              if (response == undefined) {
-                return;
-              }
-
-              $rootScope.authenticated = true;
-              $scope.username = auth.user;
-              var DBs = response.data.roles;
-              // Format available databases (pluck final string after
-              // underscore) TODO Implement underscore pluck?
-              for (i in DBs) {
-                DBs[i] = DBs[i].split("_");
-                DBs[i].pop();
-                if (DBs[i].length > 1) {
-                  var newDBString = DBs[i][0];
-                  for ( var j = 1; j < DBs[i].length; j++) {
-                    (function(index) {
-                      newDBString = newDBString + "_" + DBs[i][index];
-                    })(j);
+            Data.login(auth.user, auth.password).then(
+                function(response) {
+                  if (response == undefined) {
+                    return;
                   }
-                  DBs[i] = newDBString;
-                } else {
-                  DBs[i] = DBs[i][0];
-                }
-                if (DBs[i]) {
-                  DBs[i] = DBs[i].replace(/[\"]/g, "");
-                }
-              }
-              DBs.sort();
-              var scopeDBs = [];
-              for ( var i = 0; i < DBs.length; i++) {
-                if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
-                  scopeDBs.push(DBs[i]);
-                }
-              }
-              $rootScope.availableDBs = scopeDBs;
-              $rootScope.loading = false;
-            });
+
+                  $rootScope.authenticated = true;
+                  $scope.username = auth.user;
+                  var DBs = response.data.roles;
+                  // Format available databases (pluck final string after
+                  // underscore) TODO Implement underscore pluck?
+                  for (i in DBs) {
+                    DBs[i] = DBs[i].split("_");
+                    DBs[i].pop();
+                    if (DBs[i].length > 1) {
+                      var newDBString = DBs[i][0];
+                      for ( var j = 1; j < DBs[i].length; j++) {
+                        (function(index) {
+                          newDBString = newDBString + "_" + DBs[i][index];
+                        })(j);
+                      }
+                      DBs[i] = newDBString;
+                    } else {
+                      DBs[i] = DBs[i][0];
+                    }
+                    if (DBs[i]) {
+                      DBs[i] = DBs[i].replace(/[\"]/g, "");
+                    }
+                  }
+                  DBs.sort();
+                  var scopeDBs = [];
+                  for ( var i = 0; i < DBs.length; i++) {
+                    if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
+                      scopeDBs.push(DBs[i]);
+                    }
+                  }
+
+                  $scope.corpora = [];
+
+                  for ( var i = 0; i < scopeDBs.length; i++) {
+                    (function(index) {
+                      Data.async(scopeDBs[index], "corpus").then(
+                          function(response) {
+                            var corpus = {};
+                            corpus.pouchname = scopeDBs[index];
+                            Data.async(scopeDBs[index], response.corpusid)
+                                .then(function(responseWithTitle) {
+                                  corpus.corpustitle = responseWithTitle.title;
+                                  $scope.corpora.push(corpus);
+                                });
+                          }, function(error) {
+                            // If no corpus file, set corpus title and pouchname
+                            // to pouchname
+                            var corpus = {};
+                            corpus.pouchname = scopeDBs[index];
+                            corpus.corpustitle = scopeDBs[index];
+                            $scope.corpora.push(corpus);
+                          });
+                    })(i);
+                  }
+                  $rootScope.loading = false;
+                });
           }
         };
         $scope.selectDB = function(selectedDB) {
           if (!selectedDB) {
             window.alert("Please select a database.");
           } else {
+            selectedDB = JSON.parse(selectedDB);
             $rootScope.DB = selectedDB;
             $scope.loadData();
           }
@@ -426,9 +451,9 @@ define(
               }
             }
             // Save new session record
-            Data.saveEditedRecord($rootScope.DB, newSession._id, newSession)
-                .then(function() {
-                });
+            Data.saveEditedRecord($rootScope.DB.pouchname, newSession._id,
+                newSession).then(function() {
+            });
 
             // Update all records tied to this session
             for (i in scopeDataToEdit) {
@@ -436,13 +461,13 @@ define(
               (function(index) {
                 if (scopeDataToEdit[index].sessionID == newSession._id) {
                   Data
-                      .async($rootScope.DB, scopeDataToEdit[index].id)
+                      .async($rootScope.DB.pouchname, scopeDataToEdit[index].id)
                       .then(
                           function(editedRecord) {
                             // Edit record with updated session info and save
 
                             editedRecord.session = newSession;
-                            Data.saveEditedRecord($rootScope.DB,
+                            Data.saveEditedRecord($rootScope.DB.pouchname,
                                 scopeDataToEdit[index].id, editedRecord,
                                 editedRecord._rev).then(function() {
                               $scope.loading = false;
@@ -474,7 +499,7 @@ define(
                 }
               }
               Data
-                  .removeRecord($rootScope.DB, activeSessionID, revID)
+                  .removeRecord($rootScope.DB.pouchname, activeSessionID, revID)
                   .then(
                       function(response) {
                         $scope.changeActiveSession('none');
@@ -496,7 +521,7 @@ define(
               .blankSessionTemplate()
               .then(
                   function(newSessionRecord) {
-                    newSessionRecord.pouchname = $rootScope.DB[0];
+                    newSessionRecord.pouchname = $rootScope.DB.pouchname;
                     newSessionRecord.dateCreated = new Date().toString();
                     newSessionRecord.dateModified = new Date().toString();
                     for (key in newSession) {
@@ -518,7 +543,7 @@ define(
                       }
                     }
                     Data
-                        .saveNew($rootScope.DB, newSessionRecord)
+                        .saveNew($rootScope.DB.pouchname, newSessionRecord)
                         .then(
                             function(savedRecord) {
                               newSessionRecord._id = savedRecord.data.id;
@@ -556,7 +581,7 @@ define(
             var r = confirm("Are you sure you want to delete this record permanently?");
             if (r == true) {
               Data
-                  .removeRecord($rootScope.DB, id, rev)
+                  .removeRecord($rootScope.DB.pouchname, id, rev)
                   .then(
                       function(response) {
                         $scope.loadData();
@@ -640,6 +665,7 @@ define(
         };
 
         $scope.addComment = function(datum) {
+          console.log("Datum id: " + datum.id);
           var newComment = prompt("Enter new comment.");
           if (newComment == "" || newComment == null) {
             return;
@@ -650,19 +676,46 @@ define(
           comment.timestamp = Date.now();
           comment.gravatar = "./../user/user_gravatar.png";
           comment.timestampModified = Date.now();
+          if (datum.comments == null) {
+            datum.comments = [];
+          }
           datum.comments.push(comment);
+
+          var indirectObjectString = "on <a href='#data/" + datum.id
+              + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle
+              + "</a>";
+          // Update activity feed
+          $scope.addActivity({
+            verb : "commented",
+            verbicon : "icon-comment",
+            directobjecticon : "",
+            directobject : "'" + comment.text + "'",
+            indirectobject : indirectObjectString,
+            teamOrPersonal : "team",
+          });
+
+          $scope.addActivity({
+            verb : "commented",
+            verbicon : "icon-comment",
+            directobjecticon : "",
+            directobject : "'" + comment.text + "'",
+            indirectobject : indirectObjectString,
+            teamOrPersonal : "team",
+          });
+
         };
-        
+
         $scope.deleteComment = function(comment, datum) {
           if (comment.username != $rootScope.userInfo.name) {
             window.alert("You may only delete comments created by you.");
             return;
           }
-          var verifyCommentDelete = confirm("Are you sure you want to delete the comment '" + comment.text + "'?");
+          var verifyCommentDelete = confirm("Are you sure you want to delete the comment '"
+              + comment.text + "'?");
           if (verifyCommentDelete == true) {
             for (i in datum.comments) {
               if (datum.comments[i] == comment) {
-                datum.comments.splice(i,1);
+                datum.comments.splice(i, 1);
                 console.log("Deleted: " + comment.text);
 
               }
@@ -681,7 +734,7 @@ define(
                   var fieldData = $scope.data[index];
                   var docID = fieldData.id;
                   Data
-                      .async($rootScope.DB, docID)
+                      .async($rootScope.DB.pouchname, docID)
                       .then(
                           function(editedRecord) {
                             // Populate new record with fields from
@@ -705,12 +758,12 @@ define(
                             if (fieldData.comments) {
                               editedRecord.comments = fieldData.comments;
                             }
-                            
+
                             // Save edited record and refresh data
                             // in scope
                             Data
-                                .saveEditedRecord($rootScope.DB, docID,
-                                    editedRecord)
+                                .saveEditedRecord($rootScope.DB.pouchname,
+                                    docID, editedRecord)
                                 .then(
                                     function(response) {
                                       $scope.data[index].saved = "yes";
@@ -744,7 +797,7 @@ define(
                             newRecord.session = $scope.fullCurrentSession;
 
                             // Save pouchname
-                            newRecord.pouchname = $rootScope.DB;
+                            newRecord.pouchname = $rootScope.DB.pouchname;
                             // Save tags
                             if (fieldData.datumTags) {
                               newRecord.datumTags = fieldData.datumTags;
@@ -756,7 +809,7 @@ define(
                             }
 
                             Data
-                                .saveNew($rootScope.DB, newRecord)
+                                .saveNew($rootScope.DB.pouchname, newRecord)
                                 .then(
                                     function(response) {
                                       $scope.data[index].id = response.data.id;
@@ -879,6 +932,23 @@ define(
           } else {
             $scope.resultsMessage = "Please select records to export.";
           }
+        };
+
+        $scope.addActivity = function(bareActivityObject) {
+
+          bareActivityObject.verb = bareActivityObject.verb.replace("href=",
+              "target='_blank' href=");
+          bareActivityObject.directobject = bareActivityObject.directobject
+              .replace("href=", "target='_blank' href=");
+          bareActivityObject.indirectobject = bareActivityObject.indirectobject
+              .replace("href=", "target='_blank' href=");
+          
+          Data.blankActivityTemplate().then(function(template) {
+            console.log(JSON.stringify(template));
+          })
+          
+          
+
         };
 
         $scope.commaList = function(tags) {
