@@ -5,36 +5,34 @@ define(
     [ "angular" ],
     function(angular) {
       var SpreadsheetStyleDataEntryController = /**
-                                           * @param $scope
-                                           * @param $rootScope
-                                           * @param $resource
-                                           * @param Data
-                                           * @returns {SpreadsheetStyleDataEntryController}
-                                           */
+                                                 * @param $scope
+                                                 * @param $rootScope
+                                                 * @param $resource
+                                                 * @param Data
+                                                 * @returns {SpreadsheetStyleDataEntryController}
+                                                 */
       function($scope, $rootScope, $resource, $filter, Data) {
-       
+
         /* Modal controller TODO could move somewhere wher the search is? */
-        $scope.open = function () {
-           $scope.shouldBeOpen = true;
-         };
+        $scope.open = function() {
+          $scope.shouldBeOpen = true;
+        };
 
-         $scope.close = function () {
-           $scope.shouldBeOpen = false;
-         };
+        $scope.close = function() {
+          $scope.shouldBeOpen = false;
+        };
 
-         $scope.opts = {
-           backdropFade: true,
-           dialogFade:true
-         };
+        $scope.opts = {
+          backdropFade : true,
+          dialogFade : true
+        };
 
-
-
-        //TEST FOR CHROME BROWSER
+        // TEST FOR CHROME BROWSER
         var is_chrome = window.chrome;
         if (!is_chrome) {
-         $scope.not_chrome = true; 
+          $scope.not_chrome = true;
         }
-        
+
         var Preferences = localStorage.getItem('Preferences');
         if (Preferences == undefined) {
           Preferences = {
@@ -163,8 +161,7 @@ define(
               }
             }
           };
-          localStorage.setItem('Preferences', JSON
-              .stringify(Preferences));
+          localStorage.setItem('Preferences', JSON.stringify(Preferences));
           console.log("Setting default preferences in localStorage.");
         } else {
           console.log("Loading Preferences from localStorage.");
@@ -277,6 +274,7 @@ define(
                           newDatumFromServer.dateModified = "TODO";
                         }
                         newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
+                        newDatumFromServer.comments = dataFromServer[i].value.comments;
                         newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
                         scopeData.push(newDatumFromServer);
                       }
@@ -317,45 +315,44 @@ define(
             }
             $rootScope.loading = true;
             $rootScope.server = auth.server;
-            Data.login(auth.user, auth.password).then(
-                function(response) {
-                  if (response == undefined) {
-                    return;
-                  }
+            Data.login(auth.user, auth.password).then(function(response) {
+              if (response == undefined) {
+                return;
+              }
 
-                  $rootScope.authenticated = true;
-                  $scope.username = auth.user;
-                  var DBs = response.data.roles;
-                  // Format available databases (pluck final string after
-                  // underscore) TODO Implement underscore pluck?
-                  for (i in DBs) {
-                    DBs[i] = DBs[i].split("_");
-                    DBs[i].pop();
-                    if (DBs[i].length > 1) {
-                      var newDBString = DBs[i][0];
-                      for ( var j = 1; j < DBs[i].length; j++) {
-                        (function(index) {
-                          newDBString = newDBString + "_" + DBs[i][index];
-                        })(j);
-                      }
-                      DBs[i] = newDBString;
-                    } else {
-                      DBs[i] = DBs[i][0];
-                    }
-                    if (DBs[i]) {
-                      DBs[i] = DBs[i].replace(/[\"]/g, "");
-                    }
+              $rootScope.authenticated = true;
+              $scope.username = auth.user;
+              var DBs = response.data.roles;
+              // Format available databases (pluck final string after
+              // underscore) TODO Implement underscore pluck?
+              for (i in DBs) {
+                DBs[i] = DBs[i].split("_");
+                DBs[i].pop();
+                if (DBs[i].length > 1) {
+                  var newDBString = DBs[i][0];
+                  for ( var j = 1; j < DBs[i].length; j++) {
+                    (function(index) {
+                      newDBString = newDBString + "_" + DBs[i][index];
+                    })(j);
                   }
-                  DBs.sort();
-                  var scopeDBs = [];
-                  for ( var i = 0; i < DBs.length; i++) {
-                    if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
-                      scopeDBs.push(DBs[i]);
-                    }
-                  }
-                  $rootScope.availableDBs = scopeDBs;
-                  $rootScope.loading = false;
-                });
+                  DBs[i] = newDBString;
+                } else {
+                  DBs[i] = DBs[i][0];
+                }
+                if (DBs[i]) {
+                  DBs[i] = DBs[i].replace(/[\"]/g, "");
+                }
+              }
+              DBs.sort();
+              var scopeDBs = [];
+              for ( var i = 0; i < DBs.length; i++) {
+                if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
+                  scopeDBs.push(DBs[i]);
+                }
+              }
+              $rootScope.availableDBs = scopeDBs;
+              $rootScope.loading = false;
+            });
           }
         };
         $scope.selectDB = function(selectedDB) {
@@ -429,9 +426,9 @@ define(
               }
             }
             // Save new session record
-            Data.saveEditedRecord($rootScope.DB, newSession._id,
-                newSession).then(function() {
-            });
+            Data.saveEditedRecord($rootScope.DB, newSession._id, newSession)
+                .then(function() {
+                });
 
             // Update all records tied to this session
             for (i in scopeDataToEdit) {
@@ -599,6 +596,18 @@ define(
             fieldData.datumTags = [];
           }
 
+          // Save comments
+          if (fieldData.comments) {
+            var comment = {};
+            comment.text = fieldData.comments;
+            comment.username = $rootScope.userInfo.name;
+            comment.timestamp = Date.now();
+            comment.gravatar = "./../user/user_gravatar.png";
+            comment.timestampModified = Date.now();
+            fieldData.comments = [];
+            fieldData.comments.push(comment);
+          }
+
           fieldData.dateEntered = new Date().toString();
           fieldData.dateModified = new Date().toString();
           fieldData.sessionID = $scope.activeSession;
@@ -626,7 +635,39 @@ define(
           }
           datum.saved = "no";
           datum.dateModified = new Date().toString();
+          console.log("NEW DATUM: " + JSON.stringify(datum));
           $scope.saved = "no";
+        };
+
+        $scope.addComment = function(datum) {
+          var newComment = prompt("Enter new comment.");
+          if (newComment == "" || newComment == null) {
+            return;
+          }
+          var comment = {};
+          comment.text = newComment;
+          comment.username = $rootScope.userInfo.name;
+          comment.timestamp = Date.now();
+          comment.gravatar = "./../user/user_gravatar.png";
+          comment.timestampModified = Date.now();
+          datum.comments.push(comment);
+        };
+        
+        $scope.deleteComment = function(comment, datum) {
+          if (comment.username != $rootScope.userInfo.name) {
+            window.alert("You may only delete comments created by you.");
+            return;
+          }
+          var verifyCommentDelete = confirm("Are you sure you want to delete the comment '" + comment.text + "'?");
+          if (verifyCommentDelete == true) {
+            for (i in datum.comments) {
+              if (datum.comments[i] == comment) {
+                datum.comments.splice(i,1);
+                console.log("Deleted: " + comment.text);
+
+              }
+            }
+          }
         };
 
         $scope.saveChanges = function() {
@@ -660,6 +701,11 @@ define(
                               editedRecord.datumTags = fieldData.datumTags;
                             }
 
+                            // Save comments
+                            if (fieldData.comments) {
+                              editedRecord.comments = fieldData.comments;
+                            }
+                            
                             // Save edited record and refresh data
                             // in scope
                             Data
@@ -696,19 +742,18 @@ define(
                             newRecord.dateModified = new Date().toString();
                             // Save session
                             newRecord.session = $scope.fullCurrentSession;
-                            
+
                             // Save pouchname
                             newRecord.pouchname = $rootScope.DB;
                             // Save tags
                             if (fieldData.datumTags) {
                               newRecord.datumTags = fieldData.datumTags;
                             }
-                            
+
                             // Save comments
                             if (fieldData.comments) {
                               newRecord.comments = fieldData.comments;
                             }
-                            
 
                             Data
                                 .saveNew($rootScope.DB, newRecord)
@@ -733,17 +778,18 @@ define(
         };
 
         // Set auto-save interval for 5 minutes
-        var autoSave = window.setInterval(function() {
-          if ($scope.saved == "no") {
-            $scope.saveChanges();
-          } else {
-            // TODO FIND BETTER WAY TO KEEP SESSION ALIVE;
-            if ($rootScope.userInfo) {
-              Data.login($rootScope.userInfo.name,
-                  $rootScope.userInfo.password);
-            }
-          }
-        }, 300000);
+        var autoSave = window.setInterval(
+            function() {
+              if ($scope.saved == "no") {
+                $scope.saveChanges();
+              } else {
+                // TODO FIND BETTER WAY TO KEEP SESSION ALIVE;
+                if ($rootScope.userInfo) {
+                  Data.login($rootScope.userInfo.name,
+                      $rootScope.userInfo.password);
+                }
+              }
+            }, 300000);
 
         $scope.selectRow = function(datum) {
           if ($scope.searching != true) {
