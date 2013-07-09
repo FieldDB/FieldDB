@@ -1,17 +1,16 @@
 <div id="login_screen" ng-cloak>
 	<div ng-show="not_chrome==true">
 		<h3>THIS SITE WAS DEVELOPED FOR GOOGLE CHROME.</h3>
-		It may not work as expected if you are using another browser.<br />
-		<a href="http://chrome.google.com"><button class="btn btn-primary" >Get
-			Google Chrome</button></a>
+		It may not work as expected if you are using another browser.<br /> <a
+			href="http://chrome.google.com"><button class="btn btn-primary">Get
+				Google Chrome</button></a>
 	</div>
 	<img src="img/icon128_dev.png"> <br />
 	<h1>LingSync Spreadsheet</h1>
 	<br> <br>
 	<div class="mainPageDiv">
 		<div ng-hide="authenticated==true || loading==true">
-			Select Server and Log in <br />
-			<br />
+			Select Server and Log in <br /> <br />
 			<form ng-submit='loginUser(auth)'>
 				<select multiple="multiple" ng-model='auth.server'>
 					<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill
@@ -32,7 +31,7 @@
 			<br />
 			<form ng-submit='selectDB(selectedDB)'>
 				<select multiple="multiple" ng-model='selectedDB'>
-					<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option>
+					<option ng-repeat="item in corpora" value={{item}}>{{item.corpustitle}}</option>
 				</select><br>
 				<button class="btn btn-primary">Access</button>
 			</form>
@@ -67,7 +66,7 @@
 				New Session</button>
 			<div ng-show="showCreateSessionDiv==true">
 				<br />
-				<h3>Database: {{DB[0]}}</h3>
+				<h3>Database: {{DB.corpustitle}}</h3>
 				<form ng-model="newSession">
 					<table class="newSessionTable" align='center'>
 						<tr>
