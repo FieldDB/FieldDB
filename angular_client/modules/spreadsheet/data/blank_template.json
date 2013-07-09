@@ -1,13 +1,4 @@
 {
-   "pouchname": "lingllama-cherokee",
-   "audioVideo": {
-       "URL": "",
-       "type": "audio"
-   },
-   "comments": [
-   ],
-   "datumTags": [
-   ],
    "datumFields": [
        {
            "label": "judgement",
@@ -15,8 +6,9 @@
            "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "",
-           "help": "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc). Leaving it blank can mean grammatical/acceptable, or you can add a new symbol to mean grammatical/acceptable.",
+           "help": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning.",
            "size": "3",
+           "showToUserTypes": "linguist",
            "userchooseable": "disabled"
        },
        {
@@ -25,7 +17,8 @@
            "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "checked",
-           "help": "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)",
+           "help": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas",
+           "showToUserTypes": "all",
            "userchooseable": "disabled"
        },
        {
@@ -34,7 +27,8 @@
            "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "checked",
-           "help": "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation.",
+           "help": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+           "showToUserTypes": "linguist",
            "userchooseable": "disabled"
        },
        {
@@ -43,7 +37,28 @@
            "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "checked",
-           "help": "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. ",
+           "help": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl",
+           "showToUserTypes": "linguist",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "syntacticCategory",
+           "value": "",
+           "mask": "",
+           "encrypted": "",
+           "shouldBeEncrypted": "checked",
+           "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+           "showToUserTypes": "machine",
+           "userchooseable": "disabled"
+       },
+       {
+           "label": "syntacticTreeLatex",
+           "value": "",
+           "mask": "",
+           "encrypted": "",
+           "shouldBeEncrypted": "checked",
+           "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: Tree [.S NP VP ]",
+           "showToUserTypes": "machine",
            "userchooseable": "disabled"
        },
        {
@@ -52,53 +67,29 @@
            "mask": "",
            "encrypted": "",
            "shouldBeEncrypted": "checked",
-           "help": "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. ",
+           "help": "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends",
+           "showToUserTypes": "all",
            "userchooseable": "disabled"
        },
        {
-           "label": "dateElicited",
+           "label": "tags",
            "value": "",
            "mask": "",
            "encrypted": "",
-           "shouldBeEncrypted": "checked",
-           "help": "This field came from file import ",
-           "userchooseable": ""
+           "shouldBeEncrypted": "",
+           "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+           "showToUserTypes": "all",
+           "userchooseable": "disabled"
        },
        {
-           "label": "notes",
-           "value": "",
-           "mask": "",
+           "label": "validationStatus",
+           "value": "Checked",
+           "mask": "Checked",
            "encrypted": "",
-           "shouldBeEncrypted": "checked",
-           "help": "This field came from file import ",
-           "userchooseable": ""
-       },
-       {
-           "label": "checkedWithConsultant",
-           "value": "",
-           "mask": "",
-           "encrypted": "",
-           "shouldBeEncrypted": "checked",
-           "help": "This field came from file import ",
-           "userchooseable": ""
-       },
-       {
-           "label": "dialect",
-           "value": "",
-           "mask": "",
-           "encrypted": "",
-           "shouldBeEncrypted": "checked",
-           "help": "This field came from file import ",
-           "userchooseable": ""
-       },
-       {
-           "label": "refs",
-           "value": " ",
-           "mask": " ",
-           "encrypted": "",
-           "shouldBeEncrypted": "checked",
-           "help": "This field came from file import ",
-           "userchooseable": ""
+           "shouldBeEncrypted": "",
+           "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc...",
+           "showToUserTypes": "all",
+           "userchooseable": "disabled"
        }
    ],
    "datumStates": [
@@ -106,45 +97,45 @@
            "color": "success",
            "showInSearchResults": "checked",
            "selected": "selected",
-           "state": "Checked",
-           "consultant": {
-           }
+           "state": "Checked"
        },
        {
            "color": "warning",
            "showInSearchResults": "checked",
            "selected": "",
-           "state": "To be checked",
-           "consultant": {
-           }
+           "state": "To be checked"
        },
        {
            "color": "important",
            "showInSearchResults": "",
            "selected": "",
-           "state": "Deleted",
-           "consultant": {
-           }
+           "state": "Deleted"
        }
    ],
+   "pouchname": "",
    "session": {
+       "pouchname": "",
+       "comments": [
+       ],
+       "_id": "",
+       "_rev": "",
        "sessionFields": [
            {
                "label": "goal",
-               "value": "Collecting a bit of data ",
-               "mask": "Collecting a bit of data ",
+               "value": "Change this session goal to the describe your first elicitiation session.",
+               "mask": "Change this session goal to the describe your first elicitiation session.",
                "encrypted": "",
                "shouldBeEncrypted": "",
-               "help": "This describes the goals of the session.",
+               "help": "The goals of the session.",
                "userchooseable": "disabled"
            },
            {
                "label": "consultants",
-               "value": "Anonymous",
-               "mask": "Anonymous",
+               "value": "XY",
+               "mask": "XY",
                "encrypted": "",
                "shouldBeEncrypted": "",
-               "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+               "help": "Put your team's data entry conventions here (if any)...",
                "userchooseable": "disabled"
            },
            {
@@ -153,7 +144,7 @@
                "mask": "",
                "encrypted": "",
                "shouldBeEncrypted": "",
-               "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+               "help": "The dialect of this session (as precise as you'd like).",
                "userchooseable": "disabled"
            },
            {
@@ -162,25 +153,25 @@
                "mask": "",
                "encrypted": "",
                "shouldBeEncrypted": "",
-               "help": "This is the langauge (or language family) if you would like to use it.",
+               "help": "The language (or language family), if desired.",
                "userchooseable": "disabled"
            },
            {
                "label": "dateElicited",
-               "value": "Summer 2012",
-               "mask": "Summer 2012",
+               "value": "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.",
+               "mask": "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.",
                "encrypted": "",
                "shouldBeEncrypted": "",
-               "help": "This is the date in which the session took place.",
+               "help": "The date when the session took place.",
                "userchooseable": "disabled"
            },
            {
                "label": "user",
-               "value": "",
-               "mask": "",
+               "value": "senhorzinho",
+               "mask": "senhorzinho",
                "encrypted": "",
                "shouldBeEncrypted": "",
-               "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+               "help": "Put your team's data entry conventions here (if any)...",
                "userchooseable": "disabled"
            },
            {
@@ -189,19 +180,25 @@
                "mask": "",
                "encrypted": "",
                "shouldBeEncrypted": "",
-               "help": "This is the date in which the session was entered.",
+               "help": "The date when the session data was entered.",
                "userchooseable": "disabled"
            }
        ],
-       "pouchname": "lingllama-cherokee",
-       "comments": [
-       ],
-       "dateCreated": "\"2012-11-03T23:18:10.324Z\"",
-       "dateModified": "\"2012-11-03T23:18:10.325Z\"",
-       "_rev": "1-1fa30314fcfa85d1e7eacea9d97ec37e",
-       "_id": "F5A8557C-E1CC-4C73-8A78-F4B7A2BCB211"
+       "dateCreated": "",
+       "dateModified": "",
+       "collection": "sessions"
    },
-   "dateEntered": "\"2012-11-03T23:18:17.284Z\"",
-   "dateModified": "\"2012-11-03T23:18:17.285Z\"",
-   "jsonType": "Datum"
+   "audioVideo": {
+       "URL": "",
+       "type": "audio"
+   },
+   "comments": [
+   ],
+   "datumTags": [
+   ],
+   "dateEntered": "",
+   "dateModified": "",
+   "timestamp": 0,
+   "jsonType": "Datum",
+   "collection": "datums"
 }

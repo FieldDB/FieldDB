@@ -61,9 +61,9 @@ define(
                 "label" : "translation",
                 "title" : "Translation"
               },
-              "notes" : {
-                "label" : "notes",
-                "title" : "Notes"
+              "comments" : {
+                "label" : "comments",
+                "title" : "Comments"
               },
               "refs" : {
                 "label" : "refs",
@@ -146,8 +146,8 @@ define(
                 "title" : "Translation"
               },
               "field5" : {
-                "label" : "notes",
-                "title" : "Notes"
+                "label" : "comments",
+                "title" : "Comments"
               },
               "field6" : {
                 "label" : "judgement",
@@ -583,7 +583,6 @@ define(
               }
             }
           }
-
           // Save tags
           if (fieldData.datumTags) {
             var newDatumFields = fieldData.datumTags.split(",");
@@ -697,10 +696,19 @@ define(
                             newRecord.dateModified = new Date().toString();
                             // Save session
                             newRecord.session = $scope.fullCurrentSession;
+                            
+                            // Save pouchname
+                            newRecord.pouchname = $rootScope.DB;
                             // Save tags
                             if (fieldData.datumTags) {
                               newRecord.datumTags = fieldData.datumTags;
                             }
+                            
+                            // Save comments
+                            if (fieldData.comments) {
+                              newRecord.comments = fieldData.comments;
+                            }
+                            
 
                             Data
                                 .saveNew($rootScope.DB, newRecord)
