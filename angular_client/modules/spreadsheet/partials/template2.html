@@ -2,38 +2,38 @@
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
-		<form ng-submit="createRecord(newFieldData);newFieldData=''">
-	<div class="span4">
-		<input focus class="span4" type="text" ng-model="newFieldData.field1"
-			placeholder="{{fields.field1.title}}"
-			ng-hide="fields.field1.label==''"> <input class="span4"
-			type="text" ng-model="newFieldData.field2"
-			placeholder="{{fields.field2.title}}"
-			ng-hide="fields.field2.label==''"> <input class="span4"
-			type="text" ng-model="newFieldData.field3"
-			placeholder="{{fields.field3.title}}"
-			ng-hide="fields.field3.label==''">
-	</div>
-	<div class="span4">
-		<input class="span4" type="text" ng-model="newFieldData.field4"
-			placeholder="{{fields.field4.title}}"
-			ng-hide="fields.field4.label==''">
-		<textarea rows="3" class="span4" ng-model="newFieldData.field5"
-			placeholder="{{fields.field5.title}}"
-			ng-hide="fields.field5.label==''"></textarea>
-	</div>
-	<div class="span2">
-		<input class="span2" type="text" ng-model="newFieldData.field6"
-			placeholder="{{fields.field6.title}}"
-			ng-hide="fields.field6.label==''">
-		<textarea rows="3" class="span2" ng-model="newFieldData.datumTags"
-			placeholder="Tags"></textarea>
-	</div>
-	<div class="span2">
-		<button ng-show="selected=='newEntry'" class="btn btn-primary"
-			type="submit">Create
-			New</button>
-	</div>
+	<form ng-submit="createRecord(newFieldData);newFieldData=''">
+		<div class="span4">
+			<input focus class="span4" type="text" ng-model="newFieldData.field1"
+				placeholder="{{fields.field1.title}}"
+				ng-hide="fields.field1.label==''"> <input class="span4"
+				type="text" ng-model="newFieldData.field2"
+				placeholder="{{fields.field2.title}}"
+				ng-hide="fields.field2.label==''"> <input class="span4"
+				type="text" ng-model="newFieldData.field3"
+				placeholder="{{fields.field3.title}}"
+				ng-hide="fields.field3.label==''">
+		</div>
+		<div class="span4">
+			<input class="span4" type="text" ng-model="newFieldData.field4"
+				placeholder="{{fields.field4.title}}"
+				ng-hide="fields.field4.label==''">
+
+			<textarea rows="3" class="span4" ng-model="newFieldData.field5"
+				placeholder="{{fields.field5.title}}"
+				ng-hide="fields.field5.label==''"></textarea>
+		</div>
+		<div class="span2">
+			<input class="span2" type="text" ng-model="newFieldData.field6"
+				placeholder="{{fields.field6.title}}"
+				ng-hide="fields.field6.label==''">
+			<textarea rows="3" class="span2" ng-model="newFieldData.datumTags"
+				placeholder="Tags"></textarea>
+		</div>
+		<div class="span2">
+			<button ng-show="selected=='newEntry'" class="btn btn-primary"
+				type="submit">Create New</button>
+		</div>
 	</form>
 </div>
 
@@ -49,8 +49,10 @@
 	</div>
 </div>
 <div class="row" ng-show="data==undefined && loading!=true">
-	<div class="span12 pagination-centered">No data to display.
-		Please click on <img src="img/icon16_dev.png" border="0"/> above and log in.</div>
+	<div class="span12 pagination-centered">
+		No data to display. Please click on <img src="img/icon16_dev.png"
+			border="0" /> above and log in.
+	</div>
 </div>
 
 <div arrow-key class="row"
@@ -79,11 +81,13 @@
 				<input class="span4" type="text" ng-model="fieldData.field4"
 					ng-init="fieldData.field4=datum[fields.field4.label]"
 					value={{datum[fields.field4.label]}}
-					ng-hide="fields.field4.label==''">
-				<textarea rows="3" class="span4" ng-model="fieldData.field5"
-					ng-init="fieldData.field5=datum[fields.field5.label]"
-					value={{datum[fields.field5.label]}}
-					ng-hide="fields.field5.label==''"></textarea>
+					ng-hide="fields.field4.label==''"> <span class="span4"
+					ng-hide="fields.field5.label==''"
+					ng-repeat="comment in datum.comments"><span
+					ng-click="deleteComment(comment, datum)"><font size="4em">✗</font></span><i>{{comment.username}}</i>:
+					{{comment.text}}<br /> </span> <span class="span4"
+					ng-click="addComment(datum)"><font size="4em"><b>+</font><i>Add
+						a comment</i></b></span>
 			</div>
 			<div class="span2">
 				<input class="span2" type="text" ng-model="fieldData.field6"
@@ -125,9 +129,10 @@
 		<div class="span4">
 			<span class="span4" title="{{fields.field4.title}}"
 				ng-hide="fields.field4.label==''">{{datum[fields.field4.label]
-				| neverEmpty}}</span><br /> <span class="span4" rows="3"
-				title="{{fields.field5.title}}">{{datum[fields.field5.label]
-				| neverEmpty}}</span>
+				| neverEmpty}}</span><br /> <span class="span4"
+				ng-repeat="comment in datum.comments"><i>{{comment.username}}</i>:
+				{{comment.text}}<br />
+			</span>
 		</div>
 		<div class="span2">
 			<span class="span2" title="{{fields.field6.title}}"
