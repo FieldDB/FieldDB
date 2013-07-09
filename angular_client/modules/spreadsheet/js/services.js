@@ -150,6 +150,13 @@ define(
                         });
                     return promise;
                   },
+                  'blankActivityTemplate' : function() {
+                    var promise = $http.get('data/blank_activity_template.json')
+                        .then(function(response) {
+                          return response.data;
+                        });
+                    return promise;
+                  },
                   'removeRecord' : function(DB, UUID, rev) {
                     var couchInfo = $rootScope.server + DB + "/" + UUID
                         + "?rev=" + rev;

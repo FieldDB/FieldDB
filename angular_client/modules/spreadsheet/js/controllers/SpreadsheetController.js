@@ -185,6 +185,7 @@ define(
         $scope.showCreateSessionDiv = false;
         $scope.editSessionDetails = false;
         $scope.currentDate = new Date().toDateString();
+        $scope.activities = [];
 
         // Set data size for pagination
         $rootScope.resultSize = Preferences.resultSize;
@@ -483,6 +484,10 @@ define(
             }
             $scope.loadData();
           }
+          
+          // TODO UPDATE ACTIVITY FEED
+
+          
         };
 
         $scope.deleteEmptySession = function(activeSessionID) {
@@ -563,6 +568,10 @@ define(
                             });
                     $rootScope.loading = false;
                   });
+          
+          // TODO UPDATE ACTIVITY FEED
+
+          
         };
 
         $scope.reloadPage = function() {
@@ -592,6 +601,8 @@ define(
                       });
             }
           }
+          // TODO UPDATE ACTIVITY FEED
+          
         };
 
         $scope.createRecord = function(fieldData) {
@@ -626,7 +637,7 @@ define(
             var comment = {};
             comment.text = fieldData.comments;
             comment.username = $rootScope.userInfo.name;
-            comment.timestamp = Date.now();
+            comment.timestamp = new Date.now();
             comment.gravatar = "./../user/user_gravatar.png";
             comment.timestampModified = Date.now();
             fieldData.comments = [];
@@ -642,6 +653,7 @@ define(
         };
 
         $scope.markAsEdited = function(fieldData, datum) {
+          var utterance = "";
           for (key in fieldData) {
             if (key == "datumTags" && typeof fieldData.datumTags === 'string') {
               var newDatumFields = fieldData.datumTags.split(",");
@@ -657,11 +669,38 @@ define(
             } else {
               datum[$scope.fields[key].label] = fieldData[key];
             }
+            if (key == "utterance" && fieldData[key].value != undefined) {
+              utterance = fieldData[key].value;
+            }
+
           }
           datum.saved = "no";
           datum.dateModified = new Date().toString();
-          console.log("NEW DATUM: " + JSON.stringify(datum));
           $scope.saved = "no";
+
+          // Update activity feed
+          var indirectObjectString = "in <a href='#corpus/"
+              + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle
+              + "</a>";
+          $scope.addActivity([
+              {
+                verb : "updated",
+                verbicon : "icon-pencil",
+                directobjecticon : "icon-list",
+                directobject : "<a href='#corpus/" + $rootScope.DB.pouchname
+                    + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+                indirectobject : indirectObjectString,
+                teamOrPersonal : "personal"
+              },
+              {
+                verb : "updated",
+                verbicon : "icon-pencil",
+                directobjecticon : "icon-list",
+                directobject : "<a href='#corpus/" + $rootScope.DB.pouchname
+                    + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+                indirectobject : indirectObjectString,
+                teamOrPersonal : "team"
+              } ]);
         };
 
         $scope.addComment = function(datum) {
@@ -685,23 +724,21 @@ define(
               + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle
               + "</a>";
           // Update activity feed
-          $scope.addActivity({
+          $scope.addActivity([ {
             verb : "commented",
             verbicon : "icon-comment",
             directobjecticon : "",
             directobject : "'" + comment.text + "'",
             indirectobject : indirectObjectString,
-            teamOrPersonal : "team",
-          });
-
-          $scope.addActivity({
+            teamOrPersonal : "personal"
+          }, {
             verb : "commented",
             verbicon : "icon-comment",
             directobjecticon : "",
             directobject : "'" + comment.text + "'",
             indirectobject : indirectObjectString,
-            teamOrPersonal : "team",
-          });
+            teamOrPersonal : "team"
+          } ]);
 
         };
 
@@ -767,6 +804,7 @@ define(
                                 .then(
                                     function(response) {
                                       $scope.data[index].saved = "yes";
+                                      $scope.uploadActivities();
                                     },
                                     function() {
                                       window
@@ -817,6 +855,45 @@ define(
                                       $scope.data[index].saved = "yes";
                                       console.log("Saved new record: "
                                           + $scope.data[index].id);
+
+                                      // Update activity feed with newly created
+                                      // records and couch ids (must be done
+                                      // here to have access to couch id)
+                                      
+                                      // TODO DEFINE UTTERANCE
+                                      var indirectObjectString = "in <a href='#corpus/"
+                                          + $rootScope.DB.pouchname
+                                          + "'>"
+                                          + $rootScope.DB.corpustitle + "</a>";
+                                      $scope
+                                          .addActivity([
+                                              {
+                                                verb : "added",
+                                                verbicon : "icon-plus",
+                                                directobjecticon : "icon-list",
+                                                directobject : "<a href='#corpus/"
+                                                    + $rootScope.DB.pouchname
+                                                    + "/datum/"
+                                                    + response.data.id
+                                                    + "'>"
+                                                    + utterance + "</a> ",
+                                                indirectobject : indirectObjectString,
+                                                teamOrPersonal : "personal"
+                                              },
+                                              {
+                                                verb : "added",
+                                                verbicon : "icon-plus",
+                                                directobjecticon : "icon-list",
+                                                directobject : "<a href='#corpus/"
+                                                    + $rootScope.DB.pouchname
+                                                    + "/datum/"
+                                                    + response.data.id
+                                                    + "'>"
+                                                    + utterance + "</a> ",
+                                                indirectobject : indirectObjectString,
+                                                teamOrPersonal : "team"
+                                              } ]);
+                                      $scope.uploadActivities();
                                     },
                                     function() {
                                       window
@@ -827,6 +904,7 @@ define(
               }
             })(i);
           }
+          // Upload activities
           $scope.saved = "yes";
         };
 
@@ -934,22 +1012,65 @@ define(
           }
         };
 
-        $scope.addActivity = function(bareActivityObject) {
+        // Add activities to scope object, to be uploaded when 'SAVE' is clicked
+        $scope.addActivity = function(activityArray) {
 
-          bareActivityObject.verb = bareActivityObject.verb.replace("href=",
-              "target='_blank' href=");
-          bareActivityObject.directobject = bareActivityObject.directobject
-              .replace("href=", "target='_blank' href=");
-          bareActivityObject.indirectobject = bareActivityObject.indirectobject
-              .replace("href=", "target='_blank' href=");
-          
-          Data.blankActivityTemplate().then(function(template) {
-            console.log(JSON.stringify(template));
-          })
-          
-          
+          for ( var i = 0; i < activityArray.length; i++) {
+            (function(index) {
+              var bareActivityObject = activityArray[index];
+              bareActivityObject.verb = bareActivityObject.verb.replace(
+                  "href=", "target='_blank' href=");
+              bareActivityObject.directobject = bareActivityObject.directobject
+                  .replace("href=", "target='_blank' href=");
+              bareActivityObject.indirectobject = bareActivityObject.indirectobject
+                  .replace("href=", "target='_blank' href=");
 
+              Data
+                  .blankActivityTemplate()
+                  .then(
+                      function(template) {
+                        template.verb = bareActivityObject.verb;
+                        template.verbicon = bareActivityObject.verbicon;
+                        template.directobjecticon = bareActivityObject.directobjecticon;
+                        template.directobject = bareActivityObject.directobject;
+                        template.indirectobject = bareActivityObject.indirectobject;
+                        template.teamOrPersonal = bareActivityObject.teamOrPersonal;
+                        template.user.username = $rootScope.userInfo.name;
+                        template.timestamp = new Date().getTime();
+
+                        $scope.activities.push(template);
+                      });
+            })(i);
+          }
         };
+
+        $scope.uploadActivities = function() {
+          // Save activities
+          if ($scope.activities.length > 0) {
+            for ( var i = 0; i < $scope.activities.length; i++) {
+              (function(index) {
+                if ($scope.activities[index]) {
+                  var activitydb;
+                  if ($scope.activities[index].teamOrPersonal == "team") {
+                    activitydb = $rootScope.DB.pouchname + "-activity_feed";
+                  } else {
+                    activitydb = $rootScope.userInfo.name + "-activity_feed";
+                  }
+
+                  Data.saveNew(activitydb, $scope.activities[index]).then(
+                      function(response) {
+                        console.log("Saved new activity");
+                        // Deleting so that indices in scope are unchanged
+                        delete $scope.activities[index];
+                      }, function() {
+                        console.log("There was an error saving the activity.");
+                      });
+                }
+              })(i);
+            }
+          }
+
+        }
 
         $scope.commaList = function(tags) {
           var tagString = "";
