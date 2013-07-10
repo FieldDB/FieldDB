@@ -967,7 +967,7 @@ define(
                   } else if (key == "comments") {
                     for (j in $scope.data[i].comments) {
                       for (commentKey in $scope.data[i].comments[j]) {
-                        if ($scope.data[i].comments[j][commentKey]
+                        if ($scope.data[i].comments[j][commentKey].toString()
                             .indexOf(searchTerm) > -1) {
                           newScopeData.push($scope.data[i]);
                           break;
@@ -1001,7 +1001,7 @@ define(
                     } else if (key == "comments") {
                       for (j in $scope.data[i].comments) {
                         for (commentKey in $scope.data[i].comments[j]) {
-                          if ($scope.data[i].comments[j][commentKey]
+                          if ($scope.data[i].comments[j][commentKey].toString()
                               .indexOf(searchTerm) > -1) {
                             newScopeData.push($scope.data[i]);
                             break;
