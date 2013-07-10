@@ -316,27 +316,35 @@ define(
             }
             $rootScope.loading = true;
             $rootScope.server = auth.server;
-            Data.login(auth.user, auth.password).then(function(response) {
-              if (response == undefined) {
-                return;
-              }
-
-              $rootScope.authenticated = true;
-              $scope.username = auth.user;
-              var DBs = response.data.roles;
-              // Format available databases (pluck final string after
-              // underscore) TODO Implement underscore pluck?
-              for (i in DBs) {
-                DBs[i] = DBs[i].split("_");
-                DBs[i].pop();
-                if (DBs[i].length > 1) {
-                  var newDBString = DBs[i][0];
-                  for ( var j = 1; j < DBs[i].length; j++) {
-                    (function(index) {
-                      newDBString = newDBString + "_" + DBs[i][index];
-                    })(j);
+            Data.login(auth.user, auth.password).then(
+                function(response) {
+                  if (response == undefined) {
+                    return;
                   }
-<<<<<<< HEAD
+
+                  $rootScope.authenticated = true;
+                  $scope.username = auth.user;
+                  var DBs = response.data.roles;
+                  // Format available databases (pluck final string after
+                  // underscore) TODO Implement underscore pluck?
+                  for (i in DBs) {
+                    DBs[i] = DBs[i].split("_");
+                    DBs[i].pop();
+                    if (DBs[i].length > 1) {
+                      var newDBString = DBs[i][0];
+                      for ( var j = 1; j < DBs[i].length; j++) {
+                        (function(index) {
+                          newDBString = newDBString + "_" + DBs[i][index];
+                        })(j);
+                      }
+                      DBs[i] = newDBString;
+                    } else {
+                      DBs[i] = DBs[i][0];
+                    }
+                    if (DBs[i]) {
+                      DBs[i] = DBs[i].replace(/[\"]/g, "");
+                    }
+                  }
                   DBs.sort();
                   var scopeDBs = [];
                   for ( var i = 0; i < DBs.length; i++) {
@@ -344,7 +352,6 @@ define(
                       scopeDBs.push(DBs[i]);
                     }
                   }
-
                   $scope.corpora = [];
 
                   for ( var i = 0; i < scopeDBs.length; i++) {
@@ -370,28 +377,9 @@ define(
                   }
                   $rootScope.loading = false;
                 });
-=======
-                  DBs[i] = newDBString;
-                } else {
-                  DBs[i] = DBs[i][0];
-                }
-                if (DBs[i]) {
-                  DBs[i] = DBs[i].replace(/[\"]/g, "");
-                }
-              }
-              DBs.sort();
-              var scopeDBs = [];
-              for ( var i = 0; i < DBs.length; i++) {
-                if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
-                  scopeDBs.push(DBs[i]);
-                }
-              }
-              $rootScope.availableDBs = scopeDBs;
-              $rootScope.loading = false;
-            });
->>>>>>> 8b331de69c34aea64396d2a16ad40c1af48f7fb0
           }
         };
+
         $scope.selectDB = function(selectedDB) {
           if (!selectedDB) {
             window.alert("Please select a database.");
@@ -464,48 +452,46 @@ define(
               }
             }
             // Save new session record
-<<<<<<< HEAD
-            Data.saveEditedRecord($rootScope.DB.pouchname, newSession._id,
-                newSession).then(function() {
-            });
-=======
-            Data.saveEditedRecord($rootScope.DB, newSession._id, newSession)
-                .then(function() {
-                });
->>>>>>> 8b331de69c34aea64396d2a16ad40c1af48f7fb0
+            Data
+                .saveEditedRecord($rootScope.DB.pouchname, newSession._id,
+                    newSession)
+                .then(
+                    function() {
 
-            // Update all records tied to this session
-            for (i in scopeDataToEdit) {
-              $scope.loading = true;
-              (function(index) {
-                if (scopeDataToEdit[index].sessionID == newSession._id) {
-                  Data
-                      .async($rootScope.DB.pouchname, scopeDataToEdit[index].id)
-                      .then(
-                          function(editedRecord) {
-                            // Edit record with updated session info and save
+                      // Update all records tied to this session
+                      for (i in scopeDataToEdit) {
+                        $scope.loading = true;
+                        (function(index) {
+                          if (scopeDataToEdit[index].sessionID == newSession._id) {
+                            Data
+                                .async($rootScope.DB.pouchname,
+                                    scopeDataToEdit[index].id)
+                                .then(
+                                    function(editedRecord) {
+                                      // Edit record with updated session info
+                                      // and save
 
-                            editedRecord.session = newSession;
-                            Data.saveEditedRecord($rootScope.DB.pouchname,
-                                scopeDataToEdit[index].id, editedRecord,
-                                editedRecord._rev).then(function() {
-                              $scope.loading = false;
-                            });
+                                      editedRecord.session = newSession;
+                                      Data.saveEditedRecord(
+                                          $rootScope.DB.pouchname,
+                                          scopeDataToEdit[index].id,
+                                          editedRecord, editedRecord._rev)
+                                          .then(function() {
+                                            $scope.loading = false;
+                                          });
 
-                          },
-                          function() {
-                            window
-                                .alert("There was an error accessing the record.\nTry refreshing the data first by clicking ↻.");
-                          });
-                }
-              })(i);
-            }
-            $scope.loadData();
+                                    },
+                                    function() {
+                                      window
+                                          .alert("There was an error accessing the record.\nTry refreshing the data first by clicking ↻.");
+                                    });
+                          }
+                        })(i);
+                      }
+                      $scope.loadData();
+                    });
           }
-          
-          // TODO UPDATE ACTIVITY FEED
 
-          
         };
 
         $scope.deleteEmptySession = function(activeSessionID) {
@@ -586,10 +572,7 @@ define(
                             });
                     $rootScope.loading = false;
                   });
-          
-          // TODO UPDATE ACTIVITY FEED
 
-          
         };
 
         $scope.reloadPage = function() {
@@ -619,8 +602,6 @@ define(
                       });
             }
           }
-          // TODO UPDATE ACTIVITY FEED
-          
         };
 
         $scope.createRecord = function(fieldData) {
@@ -655,11 +636,7 @@ define(
             var comment = {};
             comment.text = fieldData.comments;
             comment.username = $rootScope.userInfo.name;
-<<<<<<< HEAD
-            comment.timestamp = new Date.now();
-=======
-            comment.timestamp = Date.now();
->>>>>>> 8b331de69c34aea64396d2a16ad40c1af48f7fb0
+            comment.timestamp = new Date().getTime();
             comment.gravatar = "./../user/user_gravatar.png";
             comment.timestampModified = Date.now();
             fieldData.comments = [];
@@ -675,7 +652,7 @@ define(
         };
 
         $scope.markAsEdited = function(fieldData, datum) {
-          var utterance = "";
+          var utterance = "Datum";
           for (key in fieldData) {
             if (key == "datumTags" && typeof fieldData.datumTags === 'string') {
               var newDatumFields = fieldData.datumTags.split(",");
@@ -691,14 +668,13 @@ define(
             } else {
               datum[$scope.fields[key].label] = fieldData[key];
             }
+
             if (key == "utterance" && fieldData[key].value != undefined) {
               utterance = fieldData[key].value;
             }
-
           }
           datum.saved = "no";
           datum.dateModified = new Date().toString();
-          console.log("NEW DATUM: " + JSON.stringify(datum));
           $scope.saved = "no";
 
           // Update activity feed
@@ -742,6 +718,9 @@ define(
             datum.comments = [];
           }
           datum.comments.push(comment);
+          datum.saved = "no";
+          datum.dateModified = new Date().toString();
+          $scope.saved = "no";
 
           var indirectObjectString = "on <a href='#data/" + datum.id
               + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle
@@ -776,37 +755,6 @@ define(
             for (i in datum.comments) {
               if (datum.comments[i] == comment) {
                 datum.comments.splice(i, 1);
-                console.log("Deleted: " + comment.text);
-
-              }
-            }
-          }
-        };
-
-        $scope.addComment = function(datum) {
-          var newComment = prompt("Enter new comment.");
-          if (newComment == "" || newComment == null) {
-            return;
-          }
-          var comment = {};
-          comment.text = newComment;
-          comment.username = $rootScope.userInfo.name;
-          comment.timestamp = Date.now();
-          comment.gravatar = "./../user/user_gravatar.png";
-          comment.timestampModified = Date.now();
-          datum.comments.push(comment);
-        };
-        
-        $scope.deleteComment = function(comment, datum) {
-          if (comment.username != $rootScope.userInfo.name) {
-            window.alert("You may only delete comments created by you.");
-            return;
-          }
-          var verifyCommentDelete = confirm("Are you sure you want to delete the comment '" + comment.text + "'?");
-          if (verifyCommentDelete == true) {
-            for (i in datum.comments) {
-              if (datum.comments[i] == comment) {
-                datum.comments.splice(i,1);
                 console.log("Deleted: " + comment.text);
 
               }
@@ -876,10 +824,10 @@ define(
                           function(newRecord) {
                             // Populate new record with fields from
                             // scope
-                            for ( var i = 0; i < newRecord.datumFields.length; i++) {
+                            for ( var j = 0; j < newRecord.datumFields.length; j++) {
                               for (key in fieldData) {
-                                if (newRecord.datumFields[i].label == key) {
-                                  newRecord.datumFields[i].mask = fieldData[key];
+                                if (newRecord.datumFields[j].label == key) {
+                                  newRecord.datumFields[j].mask = fieldData[key];
                                 }
                               }
                             }
@@ -912,8 +860,12 @@ define(
                                       // Update activity feed with newly created
                                       // records and couch ids (must be done
                                       // here to have access to couch id)
-                                      
-                                      // TODO DEFINE UTTERANCE
+                                      var utterance = "Datum";
+                                      if ($scope.data[index].utterance
+                                          && $scope.data[index].utterance != "") {
+                                        utterance = $scope.data[index].utterance;
+                                      }
+
                                       var indirectObjectString = "in <a href='#corpus/"
                                           + $rootScope.DB.pouchname
                                           + "'>"
@@ -946,7 +898,10 @@ define(
                                                 indirectobject : indirectObjectString,
                                                 teamOrPersonal : "team"
                                               } ]);
+                                      // Upload new activities from async
+                                      // process
                                       $scope.uploadActivities();
+
                                     },
                                     function() {
                                       window
@@ -957,7 +912,8 @@ define(
               }
             })(i);
           }
-          // Upload activities
+          // Upload Activities
+          $scope.uploadActivities();
           $scope.saved = "yes";
         };
 
@@ -1122,8 +1078,18 @@ define(
               })(i);
             }
           }
+        };
 
-        }
+//        // Un-uploaded activities
+//        $scope.numberOfActivitiesToUpload = function() {
+//          var number = 0;
+//          for (i in $scope.activities) {
+//            if ($scope.activities[i]) {
+//              number += 1;
+//            }
+//          }
+//          return number;
+//        };
 
         $scope.commaList = function(tags) {
           var tagString = "";
@@ -1137,9 +1103,7 @@ define(
               if (tags[i].tag) {
                 tagString = tagString + tags[i].tag;
               }
-              ;
             }
-            ;
           }
           return tagString;
         };
@@ -1158,7 +1122,6 @@ define(
           s = s.replace(/\n /, "\n");
           return s;
         }
-        ;
 
         document.getElementById("hideOnLoad").style.visibility = "visible";
 
