@@ -207,7 +207,6 @@ define(
 
             if ($scope.searching == true) {
               $scope.searching = false;
-              $scope.loadData();
             }
 
             if (itemToDisplay == "settings") {
@@ -273,7 +272,6 @@ define(
                     // Get sessions
                     var scopeSessions = [];
                     Data.sessions($rootScope.DB.pouchname).then(function(response) {
-                      console.log(JSON.stringify(response));
                       for (k in response) {
                         scopeSessions.push(response[k].value);
                       }
@@ -560,7 +558,6 @@ define(
                                       .substr(0, 20);
                                 }
                               }
-                              console.log(newSessionRecord);
                               $scope.sessions.push(newSessionRecord);
                               $scope.dataentry = true;
                               $scope.changeActiveSession(savedRecord.data.id);
@@ -700,7 +697,6 @@ define(
         };
 
         $scope.addComment = function(datum) {
-          console.log("Datum id: " + datum.id);
           var newComment = prompt("Enter new comment.");
           if (newComment == "" || newComment == null) {
             return;
@@ -752,8 +748,6 @@ define(
             for (i in datum.comments) {
               if (datum.comments[i] == comment) {
                 datum.comments.splice(i, 1);
-                console.log("Deleted: " + comment.text);
-
               }
             }
           }
@@ -940,21 +934,20 @@ define(
           } else {
             $scope.searchHistory = searchTerm;
           }
-          searchTerm = searchTerm.toLowerCase();
+          searchTerm = searchTerm.toString().toLowerCase();
           var newScopeData = [];
           if (!$scope.activeSession) {
             for (i in $scope.data) {
               for (key in $scope.data[i]) {
                 if (key == "datumTags") {
                   var tagString = JSON.stringify($scope.data[i].datumTags);
-                  tagString = tagString.toLowerCase();
+                  tagString = tagString.toString().toLowerCase();
                   if (tagString.indexOf(searchTerm) > -1) {
                     newScopeData.push($scope.data[i]);
                     break;
                   }
                 } else if ($scope.data[i][key]) {
-                  console.log($scope.data[i][key]);
-                  var dataString = $scope.data[i][key].toLowerCase();
+                  var dataString = $scope.data[i][key].toString().toLowerCase();
                   if (dataString.indexOf(searchTerm) > -1) {
                     newScopeData.push($scope.data[i]);
                     break;
@@ -968,13 +961,13 @@ define(
                 for (key in $scope.data[i]) {
                   if (key == "datumTags") {
                     var tagString = JSON.stringify($scope.data[i].datumTags);
-                    tagString = tagString.toLowerCase();
+                    tagString = tagString.toString().toLowerCase();
                     if (tagString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
                       break;
                     }
                   } else if ($scope.data[i][key]) {
-                    var dataString = $scope.data[i][key].toLowerCase();
+                    var dataString = $scope.data[i][key].toString().toLowerCase();
                     if (dataString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
                       break;
