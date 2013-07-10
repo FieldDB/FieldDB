@@ -13,6 +13,24 @@ body {
 	font-family: 'Droid Sans', sans-serif;
 }
 
+@media only screen and (min-width : 1001px) {
+	.largeMenuBar {
+		display: inline;
+	}
+	.smallMenuBar {
+		display: none;
+	}
+}
+
+@media only screen and (max-width : 1000px) {
+	.largeMenuBar {
+		display: none;
+	}
+	.smallMenuBar {
+		display: inline;
+	}
+}
+
 .menubar {
 	background-color: #000000;
 	border: 1px solid #000000;
@@ -59,6 +77,18 @@ body {
 
 .menuTitle {
 	font-size: 1.3em;
+}
+
+.smallMenuBarInfo {
+	color: #FFFFFF;
+}
+
+.smallMenuBarInfoItem {
+	padding: 10px;
+}
+
+.floatLeft {
+	float: left;
 }
 
 .rightMenuItems {
