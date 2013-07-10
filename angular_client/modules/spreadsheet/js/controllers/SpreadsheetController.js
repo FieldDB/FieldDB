@@ -233,6 +233,7 @@ define(
               window.location.assign("#/spreadsheet/" + $scope.template);
               $scope.loadData();
             } else {
+              window.location.assign("#/spreadsheet/" + $scope.template);
               $scope.changeActiveSubMenu(itemToDisplay);
             }
           }
@@ -777,7 +778,7 @@ define(
                                 }
                               }
                             }
-                            editedRecord.dateModified = new Date();
+                            editedRecord.dateModified = new Date().toString();
 
                             // Save tags
                             if (fieldData.datumTags) {

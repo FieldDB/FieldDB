@@ -72,7 +72,7 @@ define(
 
         $scope.changeFieldToEdit = function(field) {
           $scope.fieldToEdit = field;
-        }
+        };
 
         $scope.editFieldTitle = function(field, newFieldTitle) {
           var Preferences = JSON.parse(localStorage
@@ -106,7 +106,7 @@ define(
                 if (changeThisRecord == true) {
                   $rootScope.loading = true;
                   Data
-                      .async($rootScope.DB, UUID)
+                      .async($rootScope.DB.pouchname, UUID)
                       .then(
                           function(editedRecord) {
                             // Edit record with updated tag data
@@ -119,7 +119,7 @@ define(
                             }
                             // Save edited record
                             Data
-                                .saveEditedRecord($rootScope.DB, UUID,
+                                .saveEditedRecord($rootScope.DB.pouchname, UUID,
                                     editedRecord, editedRecord._rev)
                                 .then(
                                     function() {
@@ -171,7 +171,7 @@ define(
         // Get all tags
         $scope.getTags = function() {
           Data
-              .async($rootScope.DB)
+              .async($rootScope.DB.pouchname)
               .then(
                   function(dataFromServer) {
                     var tags = {};
