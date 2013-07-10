@@ -247,19 +247,7 @@ define(
               .then(
                   function(dataFromServer) {
                     var scopeData = [];
-                    var scopeSessions = [];
                     for ( var i = 0; i < dataFromServer.length; i++) {
-                      // Create array of sessions
-                      var addThisSession = true;
-                      for ( var m in scopeSessions) {
-                        if (dataFromServer[i].value.session._id == scopeSessions[m]._id) {
-                          addThisSession = false;
-                          continue;
-                        }
-                      }
-                      if (addThisSession == true) {
-                        scopeSessions.push(dataFromServer[i].value.session);
-                      }
                       // Create array of datums
                       if (dataFromServer[i].value.datumFields) {
                         var newDatumFromServer = {};
@@ -282,17 +270,26 @@ define(
                     }
                     $scope.data = scopeData;
 
-                    for (i in scopeSessions) {
-                      for (j in scopeSessions[i].sessionFields) {
-                        if (scopeSessions[i].sessionFields[j].label == "goal") {
-                          if (scopeSessions[i].sessionFields[j].mask) {
-                            scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
-                                .substr(0, 20);
+                    // Get sessions
+                    var scopeSessions = [];
+                    Data.sessions($rootScope.DB.pouchname).then(function(response) {
+                      console.log(JSON.stringify(response));
+                      for (k in response) {
+                        scopeSessions.push(response[k].value);
+                      }
+                      
+                      for (i in scopeSessions) {
+                        for (j in scopeSessions[i].sessionFields) {
+                          if (scopeSessions[i].sessionFields[j].label == "goal") {
+                            if (scopeSessions[i].sessionFields[j].mask) {
+                              scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
+                                  .substr(0, 20);
+                            }
                           }
                         }
                       }
-                    }
-                    $scope.sessions = scopeSessions;
+                      $scope.sessions = scopeSessions;
+                    });
                     $scope.saved = "yes";
                     $rootScope.loading = false;
                   });

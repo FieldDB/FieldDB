@@ -67,6 +67,25 @@ define(
                     });
                     return promise;
                   },
+                  'sessions' : function(DB) {
+                    var couchInfo = $rootScope.server + DB
+                        + "/_design/pages/_view/sessions";
+
+                    var config = {
+                      method : "GET",
+                      url : couchInfo,
+                      withCredentials : true
+                    };
+
+                    console
+                        .log("Contacting the DB to get sessions for "
+                            + couchInfo);
+                    var promise = $http(config).then(function(response) {
+                      console.log("Receiving   datum fields ");
+                      return response.data.rows;
+                    });
+                    return promise;
+                  },
                   'login' : function(user, password) {
 
                     var userInfo = {
