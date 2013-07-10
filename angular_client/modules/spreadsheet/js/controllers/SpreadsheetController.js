@@ -166,6 +166,18 @@ define(
         } else {
           console.log("Loading Preferences from localStorage.");
           Preferences = JSON.parse(Preferences);
+          // Update to v1.2: change 'notes' to 'comments'
+          try {
+            delete Preferences.availableFields.notes;
+            var commentInfo = {"label" : "comments", "title" : "Comments"};
+            Preferences.availableFields.comments = commentInfo;
+            Preferences.template2.field5.label = "comments";
+            Preferences.template2.field5.title = "Comments";
+            localStorage.setItem('Preferences', JSON.stringify(Preferences));
+            console.log("Upgraded user preferences to v1.2");
+          } catch (error) {
+            console.log("Already upgraded.");
+          }
         }
 
         // Set scope variables
