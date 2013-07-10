@@ -272,23 +272,26 @@ define(
 
                     // Get sessions
                     var scopeSessions = [];
-                    Data.sessions($rootScope.DB.pouchname).then(function(response) {
-                      for (k in response) {
-                        scopeSessions.push(response[k].value);
-                      }
-                      
-                      for (i in scopeSessions) {
-                        for (j in scopeSessions[i].sessionFields) {
-                          if (scopeSessions[i].sessionFields[j].label == "goal") {
-                            if (scopeSessions[i].sessionFields[j].mask) {
-                              scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
-                                  .substr(0, 20);
-                            }
-                          }
-                        }
-                      }
-                      $scope.sessions = scopeSessions;
-                    });
+                    Data
+                        .sessions($rootScope.DB.pouchname)
+                        .then(
+                            function(response) {
+                              for (k in response) {
+                                scopeSessions.push(response[k].value);
+                              }
+
+                              for (i in scopeSessions) {
+                                for (j in scopeSessions[i].sessionFields) {
+                                  if (scopeSessions[i].sessionFields[j].label == "goal") {
+                                    if (scopeSessions[i].sessionFields[j].mask) {
+                                      scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
+                                          .substr(0, 20);
+                                    }
+                                  }
+                                }
+                              }
+                              $scope.sessions = scopeSessions;
+                            });
                     $scope.saved = "yes";
                     $rootScope.loading = false;
                   });
@@ -940,18 +943,32 @@ define(
           if (!$scope.activeSession) {
             for (i in $scope.data) {
               for (key in $scope.data[i]) {
-                if (key == "datumTags") {
-                  var tagString = JSON.stringify($scope.data[i].datumTags);
-                  tagString = tagString.toString().toLowerCase();
-                  if (tagString.indexOf(searchTerm) > -1) {
-                    newScopeData.push($scope.data[i]);
-                    break;
-                  }
-                } else if ($scope.data[i][key]) {
-                  var dataString = $scope.data[i][key].toString().toLowerCase();
-                  if (dataString.indexOf(searchTerm) > -1) {
-                    newScopeData.push($scope.data[i]);
-                    break;
+                if ($scope.data[i][key]) {
+
+                  if (key == "datumTags") {
+                    var tagString = JSON.stringify($scope.data[i].datumTags);
+                    tagString = tagString.toString().toLowerCase();
+                    if (tagString.indexOf(searchTerm) > -1) {
+                      newScopeData.push($scope.data[i]);
+                      break;
+                    }
+                  } else if (key == "comments") {
+                    for (j in $scope.data[i].comments) {
+                      for (commentKey in $scope.data[i].comments[j]) {
+                        if ($scope.data[i].comments[j][commentKey]
+                            .indexOf(searchTerm) > -1) {
+                          newScopeData.push($scope.data[i]);
+                          break;
+                        }
+                      }
+                    }
+                  } else {
+                    var dataString = $scope.data[i][key].toString()
+                        .toLowerCase();
+                    if (dataString.indexOf(searchTerm) > -1) {
+                      newScopeData.push($scope.data[i]);
+                      break;
+                    }
                   }
                 }
               }
@@ -960,18 +977,32 @@ define(
             for (i in $scope.data) {
               if ($scope.data[i].sessionID == $scope.activeSession) {
                 for (key in $scope.data[i]) {
-                  if (key == "datumTags") {
-                    var tagString = JSON.stringify($scope.data[i].datumTags);
-                    tagString = tagString.toString().toLowerCase();
-                    if (tagString.indexOf(searchTerm) > -1) {
-                      newScopeData.push($scope.data[i]);
-                      break;
-                    }
-                  } else if ($scope.data[i][key]) {
-                    var dataString = $scope.data[i][key].toString().toLowerCase();
-                    if (dataString.indexOf(searchTerm) > -1) {
-                      newScopeData.push($scope.data[i]);
-                      break;
+                  if ($scope.data[i][key]) {
+
+                    if (key == "datumTags") {
+                      var tagString = JSON.stringify($scope.data[i].datumTags);
+                      tagString = tagString.toString().toLowerCase();
+                      if (tagString.indexOf(searchTerm) > -1) {
+                        newScopeData.push($scope.data[i]);
+                        break;
+                      }
+                    } else if (key == "comments") {
+                      for (j in $scope.data[i].comments) {
+                        for (commentKey in $scope.data[i].comments[j]) {
+                          if ($scope.data[i].comments[j][commentKey]
+                              .indexOf(searchTerm) > -1) {
+                            newScopeData.push($scope.data[i]);
+                            break;
+                          }
+                        }
+                      }
+                    } else {
+                      var dataString = $scope.data[i][key].toString()
+                          .toLowerCase();
+                      if (dataString.indexOf(searchTerm) > -1) {
+                        newScopeData.push($scope.data[i]);
+                        break;
+                      }
                     }
                   }
                 }
@@ -1071,16 +1102,16 @@ define(
           }
         };
 
-//        // Un-uploaded activities
-//        $scope.numberOfActivitiesToUpload = function() {
-//          var number = 0;
-//          for (i in $scope.activities) {
-//            if ($scope.activities[i]) {
-//              number += 1;
-//            }
-//          }
-//          return number;
-//        };
+        // // Un-uploaded activities
+        // $scope.numberOfActivitiesToUpload = function() {
+        // var number = 0;
+        // for (i in $scope.activities) {
+        // if ($scope.activities[i]) {
+        // number += 1;
+        // }
+        // }
+        // return number;
+        // };
 
         $scope.commaList = function(tags) {
           var tagString = "";
