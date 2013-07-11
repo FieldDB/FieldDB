@@ -86,6 +86,25 @@ define(
                     });
                     return promise;
                   },
+                  'glosser' : function(DB) {
+                    var couchInfo = $rootScope.server + DB
+                        + "/_design/pages/_view/precedence_rules?group=true";
+
+                    var config = {
+                      method : "GET",
+                      url : couchInfo,
+                      withCredentials : true
+                    };
+
+                    console
+                        .log("Contacting the DB to get glosser precedence rules for "
+                            + couchInfo);
+                    var promise = $http(config).then(function(response) {
+                      console.log("Receiving precedence rules ");
+                      return response.data.rows;
+                    });
+                    return promise;
+                  },
                   'login' : function(user, password) {
 
                     var userInfo = {

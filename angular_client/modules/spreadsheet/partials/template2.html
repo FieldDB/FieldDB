@@ -1,7 +1,8 @@
 <div arrow-key class="row"
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
-	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
+	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true"
+	ng-controller="SpreadsheetStyleDataEntryGlosserController">
 	<form ng-submit="createRecord(newFieldData);newFieldData=''">
 		<div class="span4">
 			<input focus class="span4" type="text" ng-model="newFieldData.field1"
