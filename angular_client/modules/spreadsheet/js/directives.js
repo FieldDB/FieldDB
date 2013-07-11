@@ -1,4 +1,3 @@
-
 console.log("Loading the SpreadsheetStyleDataEntryDirectives.");
 
 'use strict';
@@ -73,7 +72,36 @@ define(
                     ;
                   });
                 };
-              });
+              }).directive('input', function() {
+            return {
+              restrict : 'E',
+              require : 'ngModel',
+              link : function(scope, element, attrs, ngModel) {
+                // element.bind('keydown', function(e) {
+                if (attrs.type !== 'glossmorpheme') {
+                  return;
+                }
+                // Override the input event and add custom 'glossmorpheme' logic
+
+                scope.$watch('glosserLoaded', function() {
+                  if (attrs.placeholder == "Morphemes") {
+                    scope.$watch('currentUtterance', function() {
+                      element.val(scope.currentUtterance);
+                      console.log("morpheme: " + scope.currentUtterance);
+                    });
+                  }
+
+                  if (attrs.placeholder == "Utterance") {
+                    element.bind('keyup', function(e) {
+                      scope.currentUtterance = this.value;
+                      console.log("utterance: " + scope.currentUtterance);
+                    });
+                  }
+
+                });
+              }
+            };
+          });
 
       return SpreadsheetStyleDataEntryDirectives;
     });

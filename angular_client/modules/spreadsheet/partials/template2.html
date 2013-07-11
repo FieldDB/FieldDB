@@ -3,15 +3,15 @@
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true"
 	ng-controller="SpreadsheetStyleDataEntryGlosserController">
-	<form ng-submit="createRecord(newFieldData);newFieldData=''">
+	<form ng-submit="createRecord(newFieldData);newFieldData=''" >
 		<div class="span4">
-			<input focus class="span4" type="text" ng-model="newFieldData.field1"
+			<input focus class="span4" type="glossmorpheme" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
-				ng-hide="fields.field1.label==''"> <input class="span4"
-				type="text" ng-model="newFieldData.field2"
+				ng-hide="fields.field1.label==''" > <input class="span4"
+				type="glossmorpheme" ng-model="newFieldData.field2"
 				placeholder="{{fields.field2.title}}"
-				ng-hide="fields.field2.label==''"> <input class="span4"
-				type="text" ng-model="newFieldData.field3"
+				ng-hide="fields.field2.label==''" > <input class="span4"
+				type="glossmorpheme" ng-model="newFieldData.field3"
 				placeholder="{{fields.field3.title}}"
 				ng-hide="fields.field3.label==''">
 		</div>
