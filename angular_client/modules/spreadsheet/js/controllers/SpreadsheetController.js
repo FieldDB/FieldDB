@@ -33,151 +33,157 @@ define(
           $scope.not_chrome = true;
         }
 
-        var Preferences = localStorage.getItem('Preferences');
-        if (Preferences == undefined) {
-          Preferences = {
-            "userTemplate" : "template2",
-            "resultSize" : 5,
-            "availableFields" : {
-              "judgement" : {
-                "label" : "judgement",
-                "title" : "Judgement"
-              },
-              "utterance" : {
-                "label" : "utterance",
-                "title" : "Utterance"
-              },
-              "morphemes" : {
-                "label" : "morphemes",
-                "title" : "Morphemes"
-              },
-              "gloss" : {
-                "label" : "gloss",
-                "title" : "Gloss"
-              },
-              "translation" : {
-                "label" : "translation",
-                "title" : "Translation"
-              },
-              "comments" : {
-                "label" : "comments",
-                "title" : "Comments"
-              },
-              "refs" : {
-                "label" : "refs",
-                "title" : "References"
-              },
-              "goal" : {
-                "label" : "goal",
-                "title" : "Goal"
-              },
-              "consultants" : {
-                "label" : "consultants",
-                "title" : "Consultants"
-              },
-              "dialect" : {
-                "label" : "dialect",
-                "title" : "Dialect"
-              },
-              "language" : {
-                "label" : "language",
-                "title" : "language"
-              },
-              "dateElicited" : {
-                "label" : "dateElicited",
-                "title" : "Date Elicited"
-              },
-              "user" : {
-                "label" : "user",
-                "title" : "User"
-              },
-              "dateSEntered" : {
-                "label" : "dateSEntered",
-                "title" : "Date entered"
-              },
-              "tags" : {
-                "label" : "tags",
-                "title" : "tags"
-              },
-              "validationStatus" : {
-                "label" : "validationStatus",
-                "title" : "validationStatus"
-              },
-              "syntacticCategory" : {
-                "label" : "syntacticCategory",
-                "title" : "syntacticCategory"
-              }
+        // Set/get/update user preferences
+        var defaultPreferences = {
+          "userTemplate" : "template2",
+          "resultSize" : 5,
+          "availableFields" : {
+            "judgement" : {
+              "label" : "judgement",
+              "title" : "Judgement"
             },
-            "template1" : {
-              "field1" : {
-                "label" : "utterance",
-                "title" : "Utterance"
-              },
-              "field2" : {
-                "label" : "morphemes",
-                "title" : "Morphemes"
-              },
-              "field3" : {
-                "label" : "gloss",
-                "title" : "Gloss"
-              },
-              "field4" : {
-                "label" : "translation",
-                "title" : "Translation"
-              }
+            "utterance" : {
+              "label" : "utterance",
+              "title" : "Utterance"
             },
-            "template2" : {
-              "field1" : {
-                "label" : "utterance",
-                "title" : "Utterance"
-              },
-              "field2" : {
-                "label" : "morphemes",
-                "title" : "Morphemes"
-              },
-              "field3" : {
-                "label" : "gloss",
-                "title" : "Gloss"
-              },
-              "field4" : {
-                "label" : "translation",
-                "title" : "Translation"
-              },
-              "field5" : {
-                "label" : "comments",
-                "title" : "Comments"
-              },
-              "field6" : {
-                "label" : "judgement",
-                "title" : "Judgement"
-              },
-              "field7" : {
-                "label" : "",
-                "title" : ""
-              },
-              "field8" : {
-                "label" : "",
-                "title" : ""
-              }
+            "morphemes" : {
+              "label" : "morphemes",
+              "title" : "Morphemes"
+            },
+            "gloss" : {
+              "label" : "gloss",
+              "title" : "Gloss"
+            },
+            "translation" : {
+              "label" : "translation",
+              "title" : "Translation"
+            },
+            "comments" : {
+              "label" : "comments",
+              "title" : "Comments"
+            },
+            "refs" : {
+              "label" : "refs",
+              "title" : "References"
+            },
+            "goal" : {
+              "label" : "goal",
+              "title" : "Goal"
+            },
+            "consultants" : {
+              "label" : "consultants",
+              "title" : "Consultants"
+            },
+            "dialect" : {
+              "label" : "dialect",
+              "title" : "Dialect"
+            },
+            "language" : {
+              "label" : "language",
+              "title" : "language"
+            },
+            "dateElicited" : {
+              "label" : "dateElicited",
+              "title" : "Date Elicited"
+            },
+            "user" : {
+              "label" : "user",
+              "title" : "User"
+            },
+            "dateSEntered" : {
+              "label" : "dateSEntered",
+              "title" : "Date entered"
+            },
+            "tags" : {
+              "label" : "tags",
+              "title" : "tags"
+            },
+            "validationStatus" : {
+              "label" : "validationStatus",
+              "title" : "validationStatus"
+            },
+            "syntacticCategory" : {
+              "label" : "syntacticCategory",
+              "title" : "syntacticCategory"
             }
-          };
-          localStorage.setItem('Preferences', JSON.stringify(Preferences));
-          console.log("Setting default preferences in localStorage.");
+          },
+          "template1" : {
+            "field1" : {
+              "label" : "utterance",
+              "title" : "Utterance"
+            },
+            "field2" : {
+              "label" : "morphemes",
+              "title" : "Morphemes"
+            },
+            "field3" : {
+              "label" : "gloss",
+              "title" : "Gloss"
+            },
+            "field4" : {
+              "label" : "translation",
+              "title" : "Translation"
+            }
+          },
+          "template2" : {
+            "field1" : {
+              "label" : "utterance",
+              "title" : "Utterance"
+            },
+            "field2" : {
+              "label" : "morphemes",
+              "title" : "Morphemes"
+            },
+            "field3" : {
+              "label" : "gloss",
+              "title" : "Gloss"
+            },
+            "field4" : {
+              "label" : "translation",
+              "title" : "Translation"
+            },
+            "field5" : {
+              "label" : "comments",
+              "title" : "Comments"
+            },
+            "field6" : {
+              "label" : "judgement",
+              "title" : "Judgement"
+            },
+            "field7" : {
+              "label" : "",
+              "title" : ""
+            },
+            "field8" : {
+              "label" : "",
+              "title" : ""
+            }
+          }
+        };
+
+        var Preferences = localStorage
+            .getItem('LingSyncSpreadsheetPreferences');
+
+        if (Preferences == undefined) {
+          Preferences = defaultPreferences;
+          console
+              .log("No preferences. Setting default preferences in localStorage.");
+          localStorage.clear();
+          localStorage.setItem('LingSyncSpreadsheetPreferences', JSON
+              .stringify(defaultPreferences));
+        } else if (Preferences.availableFields
+            && Preferences.availableFields.notes) {
+          // Update to v1.2
+          Preferences = defaultPreferences;
+          console
+              .log("Preferences need to be upgraded. Clearing and setting defaults.");
+          localStorage.clear();
+          localStorage.setItem('LingSyncSpreadsheetPreferences', JSON
+              .stringify(defaultPreferences));
+          Preferences = localStorage.getItem('LingSyncSpreadsheetPreferences');
         } else {
           console.log("Loading Preferences from localStorage.");
           Preferences = JSON.parse(Preferences);
-          // Update to v1.2: change 'notes' to 'comments'
-          try {
-            delete Preferences.availableFields.notes;
-            var commentInfo = {"label" : "comments", "title" : "Comments"};
-            Preferences.availableFields.comments = commentInfo;
-            Preferences.template2.field5.label = "comments";
-            Preferences.template2.field5.title = "Comments";
-            localStorage.setItem('Preferences', JSON.stringify(Preferences));
-            console.log("Upgraded user preferences to v1.2");
-          } catch (error) {
-            console.log("Already upgraded.");
-          }
         }
 
         // Set scope variables
@@ -312,7 +318,7 @@ define(
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
           } else {
-
+            $rootScope.clickSuccess = true;
             $rootScope.userInfo = {
               "name" : auth.user,
               "password" : auth.password

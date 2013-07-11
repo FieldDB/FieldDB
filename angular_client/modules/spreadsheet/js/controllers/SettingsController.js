@@ -8,7 +8,7 @@ define(
           $resource, Data) {
 
         $scope.scopePreferences = JSON.parse(localStorage
-            .getItem('Preferences'));
+            .getItem('LingSyncSpreadsheetPreferences'));
 
         $scope.availableFields = $scope.scopePreferences.availableFields;
 
@@ -76,13 +76,13 @@ define(
 
         $scope.editFieldTitle = function(field, newFieldTitle) {
           var Preferences = JSON.parse(localStorage
-              .getItem('Preferences'));
+              .getItem('LingSyncSpreadsheetPreferences'));
           for (key in Preferences.availableFields) {
             if (key == field.label) {
               Preferences.availableFields[key].title = newFieldTitle;
             }
           }
-          localStorage.setItem('Preferences', JSON
+          localStorage.setItem('LingSyncSpreadsheetPreferences', JSON
               .stringify(Preferences));
           $scope.scopePreferences = Preferences;
           $scope.availableFields = Preferences.availableFields;
@@ -199,7 +199,7 @@ define(
 
         $scope.saveNewPreferences = function(template, newFieldPreferences) {
           Preferences = JSON.parse(localStorage
-              .getItem('Preferences'));
+              .getItem('LingSyncSpreadsheetPreferences'));
           for (availableField in $scope.availableFields) {
             for (newField in newFieldPreferences) {
               if (newFieldPreferences[newField] == "") {
@@ -216,17 +216,17 @@ define(
           $scope.scopePreferences = Preferences;
           $rootScope.template = Preferences.userTemplate;
           $rootScope.fields = Preferences[Preferences.userTemplate];
-          localStorage.setItem('Preferences', JSON
+          localStorage.setItem('LingSyncSpreadsheetPreferences', JSON
               .stringify(Preferences));
           window.alert("Settings saved.");
         };
 
         $scope.saveNumberOfRecordsToDisplay = function(numberOfRecordsToDisplay) {
           Preferences = JSON.parse(localStorage
-              .getItem('Preferences'));
+              .getItem('LingSyncSpreadsheetPreferences'));
           if (numberOfRecordsToDisplay) {
             Preferences.resultSize = numberOfRecordsToDisplay;
-            localStorage.setItem('Preferences', JSON
+            localStorage.setItem('LingSyncSpreadsheetPreferences', JSON
                 .stringify(Preferences));
             $rootScope.resultSize = numberOfRecordsToDisplay;
             window.alert("Settings saved.");
