@@ -17,7 +17,6 @@
 <body id="app" ng-controller="SpreadsheetStyleDataEntryController"
 	ng-cloak>
 	<div id="hideOnLoad">
-
 		<div class="largeMenuBar">
 			<div class="menubar mainMenubar" ng-cloak>
 				<span class="menuTitle">|<a
@@ -166,20 +165,20 @@
 					ng-click="dataentry=false;navigateVerifySaved('none')"
 					ng-show="developer==true">Statistics</a></span><span
 					ng-hide="data==undefined || dataentry==false"><a
-					ng-click="navigateVerifySaved('reload');">↻</a></span><br /> 
-					<div class="smallMenuBarInfo" ng-show="authenticated==true">
-						<div class="floatLeft smallMenuBarInfoItem">
-							Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
-						</div>
-						<div class="smallMenuBarInfoItem">
-							<button class="btn btn-success"
-								ng-click="saveChanges();searching=false;" ng-show="saved!='no'">Saved</button>
-							<button class="btn btn-danger"
-								ng-click="saveChanges();searching=false;" ng-show="saved=='no'">Save</button>
-							<button class="btn btn-warning" ng-click="reloadPage()">Log
-								out</button>
-						</div>
+					ng-click="navigateVerifySaved('reload');">↻</a></span><br />
+				<div class="smallMenuBarInfo" ng-show="authenticated==true">
+					<div class="floatLeft smallMenuBarInfoItem">
+						Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
 					</div>
+					<div class="smallMenuBarInfoItem">
+						<button class="btn btn-success"
+							ng-click="saveChanges();searching=false;" ng-show="saved!='no'">Saved</button>
+						<button class="btn btn-danger"
+							ng-click="saveChanges();searching=false;" ng-show="saved=='no'">Save</button>
+						<button class="btn btn-warning" ng-click="reloadPage()">Log
+							out</button>
+					</div>
+				</div>
 			</div>
 			<div class="subMenubar" ng-show="activeSubMenu=='editSession'"
 				ng-cloak>
@@ -299,6 +298,10 @@
 		<div class="mainBody" ng-click="changeActiveSubMenu('none');">
 			<ng-view></ng-view>
 		</div>
+		<div ng-hide="clickSuccess==true" class="clearCacheMessage">
+			If you are having trouble viewing the page, you may need to empty your browser's cache.
+		</div>
+
 	</div>
 
 	<!-- Le javascript

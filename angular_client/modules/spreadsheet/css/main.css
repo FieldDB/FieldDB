@@ -224,3 +224,10 @@ input:focus {
 	outline-size: 6px;
 	outline: #000000;
 }
+
+.clearCacheMessage {
+	text-align: center;
+	font-size: .8em;
+	font-weight: 700;
+	
+}
