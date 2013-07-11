@@ -3,12 +3,12 @@ console.log("Loading the SpreadsheetStyleDataEntryGlosserController.");
 'use strict';
 define([ "angular" ], function(angular) {
   var SpreadsheetStyleDataEntryGlosserController = /**
-                                       * @param $scope
-                                       * @param $rootScope
-                                       * @param $resource
-                                       * @param Data
-                                       * @returns {SpreadsheetStyleDataEntryGlosserController}
-                                       */
+                                                     * @param $scope
+                                                     * @param $rootScope
+                                                     * @param $resource
+                                                     * @param Data
+                                                     * @returns {SpreadsheetStyleDataEntryGlosserController}
+                                                     */
   function($scope, $rootScope, $resource, $filter, Data) {
 
     // var Glosser = Glosser || {};
@@ -16,33 +16,24 @@ define([ "angular" ], function(angular) {
 
     Data.glosser($rootScope.DB.pouchname).then(
         function(rules) {
-          console.log(JSON.stringify(rules));
-          localStorage.setItem($rootScope.DB.pouchname + "precendenceRules",
+          localStorage.setItem($rootScope.DB.pouchname + "precedenceRules",
               JSON.stringify(rules));
+
+          // Reduce the rules such that rules which are found in multiple source
+          // words are only used/included once.
+          var reducedRules = _.chain(rules).groupBy(function(rule) {
+            return rule.key.x + "-" + rule.key.y;
+          }).value();
+
+          // Save the reduced precedence rules in localStorage
+          localStorage.setItem($rootScope.DB.pouchname + "reducedRules", JSON
+              .stringify(reducedRules));
+        }, function(error) {
+          console.log("Error retrieving precedence rules.");
         });
 
-    // Reduce the rules such that rules which are found in multiple source
-    // words are only used/included once.
-    // var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
-    // return rule.key.x + "-" + rule.key.y;
-    // }).value();
-    //      
-    // // Save the reduced precedence rules in localStorage
-    // localStorage.setItem(pouchname+"reducedRules",
-    // JSON.stringify(reducedRules));
-    // Glosser.currentCorpusName = pouchname;
-    // if(typeof callback == "function"){
-    // callback();
-    // }
-    // },
-    // error : function(e) {
-    // console.log("error getting precedence rules:", e);
-    // },
-    // dataType : ""
-    // });
-    // };
     /**
-     * Takes in an utterance line and, based on our current set of precendence
+     * Takes in an utterance line and, based on our current set of precedence
      * rules, guesses what the morpheme line would be. The algorithm is very
      * conservative.
      * 
@@ -52,113 +43,112 @@ define([ "angular" ], function(angular) {
      * @return {String} The guessed morphemes line.
      */
     // Glosser.morphemefinder = function(unparsedUtterance) {
-    // var potentialParse = '';
-    //  
-    // // Get the precedence rules from localStorage
-    // var rules =
-    // localStorage.getItem(Glosser.currentCorpusName+"reducedRules");
-    //  
-    // var parsedWords = [];
-    // if (rules) {
-    // // Parse the rules from JSON into an object
-    // rules = JSON.parse(rules);
-    //
-    // // Divide the utterance line into words
-    // var unparsedWords = unparsedUtterance.trim().split(/ +/);
-    //    
-    // for (var word in unparsedWords) {
-    // // Add the start/end-of-word character to the word
-    // unparsedWords[word] = "@" + unparsedWords[word] + "@";
-    //
-    // // Find the rules which match in local precedence
-    // var matchedRules = [];
-    // for (var r in rules) {
-    // if (unparsedWords[word].indexOf(r.replace(/-/, "")) >= 0) {
-    // matchedRules.push({
-    // r : rules[r]
-    // })
-    // }
-    // }
-    //
-    // // Attempt to find the longest template which the matching rules can
-    // // generate from start to end
-    // var prefixtemplate = [];
-    // prefixtemplate.push("@");
-    // for (var i = 0; i < 10; i++) {
-    // if (prefixtemplate[i] == undefined) {
-    // break;
-    // }
-    // for (var j in matchedRules) {
-    // if (prefixtemplate[i] == matchedRules[j].r[0].key.x) {
-    // if (prefixtemplate[i + 1]) { // ambiguity (two potential following
-    // // morphemes)
-    // prefixtemplate.pop();
-    // break;
-    // } else {
-    // prefixtemplate[i + 1] = matchedRules[j].r[0].key.y;
-    // }
-    // }
-    // }
-    // }
-    //
-    // // If the prefix template hit ambiguity in the middle, try from the
-    // suffix
-    // // in until it hits ambiguity
-    // var suffixtemplate = [];
-    // if (prefixtemplate[prefixtemplate.length - 1] != "@" ||
-    // prefixtemplate.length
-    // == 1) {
-    // // Suffix:
-    // suffixtemplate.push("@")
-    // for (var i = 0; i < 10; i++) {
-    // if (suffixtemplate[i] == undefined) {
-    // break;
-    // }
-    // for (var j in matchedRules) {
-    // if (suffixtemplate[i] == matchedRules[j].r[0].key.y) {
-    // if (suffixtemplate[i + 1]) { // ambiguity (two potential
-    // // following morphemes)
-    // suffixtemplate.pop();
-    // break;
-    // } else {
-    // suffixtemplate[i + 1] = matchedRules[j].r[0].key.x;
-    // }
-    // }
-    // }
-    // }
-    // }
-    //      
-    // // Combine prefix and suffix templates into one regular expression which
-    // // can be tested against the word to find a potential parse.
-    // // Regular expressions will look something like
-    // // (@)(.*)(hall)(.*)(o)(.*)(wa)(.*)(n)(.*)(@)
-    // var template = [];
-    // template = prefixtemplate.concat(suffixtemplate.reverse())
-    // for (var slot in template) {
-    // template[slot] = "(" + template[slot] + ")";
-    // }
-    // var regex = new RegExp(template.join("(.*)"), "");
-    //    
-    // // Use the regular expression to find a guessed morphemes line
-    // potentialParse = unparsedWords[word]
-    // .replace(regex, "$1-$2-$3-$4-$5-$6-$7-$8-$9") // Use backreferences to
-    // // parse into morphemes
-    // .replace(/\$[0-9]/g, "")// Remove any backreferences that weren't used
-    // .replace(/@/g, "") // Remove the start/end-of-line symbol
-    // .replace(/--+/g, "-") // Ensure that there is only ever one "-" in a
-    // // row
-    // .replace(/^-/, "") // Remove "-" at the start of the word
-    // .replace(/-$/, ""); // Remove "-" at the end of the word
-    // if (OPrime.debugMode) OPrime.debug("Potential parse of " +
-    // unparsedWords[word].replace(/@/g, "")
-    // + " is " + potentialParse);
-    //          
-    // parsedWords.push(potentialParse);
-    // }
-    // }
-    //  
-    // return parsedWords.join(" ");
-    // };
+    $scope.morphemefinder = function(unparsedUtterance) {
+
+      var potentialParse = '';
+
+      // Get the precedence rules from localStorage
+      var rules = localStorage
+          .getItem($rootScope.DB.pouchname + "reducedRules");
+
+      var parsedWords = [];
+      if (rules) {
+        // Parse the rules from JSON into an object
+        rules = JSON.parse(rules);
+
+        // Divide the utterance line into words
+        var unparsedWords = unparsedUtterance.trim().split(/ +/);
+
+        for (word in unparsedWords) {
+          // Add the start/end-of-word character to the word
+          unparsedWords[word] = "@" + unparsedWords[word] + "@";
+
+          // Find the rules which match in local precedence
+          var matchedRules = [];
+          for (r in rules) {
+            if (unparsedWords[word].indexOf(r.replace(/-/, "")) >= 0) {
+              matchedRules.push({
+                r : rules[r]
+              });
+            }
+          }
+
+          // Attempt to find the longest template which the matching rules can
+          // generate from start to end
+          var prefixtemplate = [];
+          prefixtemplate.push("@");
+          for ( var i = 0; i < 10; i++) {
+            if (prefixtemplate[i] == undefined) {
+              break;
+            }
+            for (j in matchedRules) {
+              if (prefixtemplate[i] == matchedRules[j].r[0].key.x) {
+                if (prefixtemplate[i + 1]) {
+                  // ambiguity (two potential following morphemes)
+                  prefixtemplate.pop();
+                  break;
+                } else {
+                  prefixtemplate[i + 1] = matchedRules[j].r[0].key.y;
+                }
+              }
+            }
+          }
+
+          // If the prefix template hit ambiguity in the middle, try from the
+          // suffix inward until it hits ambiguity
+          var suffixtemplate = [];
+          if (prefixtemplate[prefixtemplate.length - 1] != "@"
+              || prefixtemplate.length == 1) {
+            // Suffix:
+            suffixtemplate.push("@");
+            for ( var i = 0; i < 10; i++) {
+              if (suffixtemplate[i] == undefined) {
+                break;
+              }
+              for (j in matchedRules) {
+                if (suffixtemplate[i] == matchedRules[j].r[0].key.y) {
+                  if (suffixtemplate[i + 1]) {
+                    // ambiguity (two potential following morphemes)
+                    suffixtemplate.pop();
+                    break;
+                  } else {
+                    suffixtemplate[i + 1] = matchedRules[j].r[0].key.x;
+                  }
+                }
+              }
+            }
+          }
+
+          // Combine prefix and suffix templates into one regular expression
+          // which can be tested against the word to find a potential parse.
+          // Regular expressions will look something like
+          // (@)(.*)(hall)(.*)(o)(.*)(wa)(.*)(n)(.*)(@)
+          var template = [];
+          template = prefixtemplate.concat(suffixtemplate.reverse());
+          for (slot in template) {
+            template[slot] = "(" + template[slot] + ")";
+          }
+          var regex = new RegExp(template.join("(.*)"), "");
+
+          // Use the regular expression to find a guessed morphemes line
+          potentialParse = unparsedWords[word].replace(regex,
+              "$1-$2-$3-$4-$5-$6-$7-$8-$9") // Use backreferences to parse into
+          // morphemes
+          .replace(/\$[0-9]/g, "") // Remove any backreferences that weren't
+          // used
+          .replace(/@/g, "") // Remove the start/end-of-line symbol
+          .replace(/--+/g, "-") // Ensure that there is only ever one "-" in a
+                                // row
+          .replace(/^-/, "") // Remove "-" at the start of the word
+          .replace(/-$/, ""); // Remove "-" at the end of the word
+
+          parsedWords.push(potentialParse);
+        }
+      }
+
+      return parsedWords.join(" ");
+    };
+
     // Glosser.toastedUserToSync = false;
     // Glosser.toastedUserToImport = 0;
     // Glosser.glossFinder = function(morphemesLine){
@@ -408,8 +398,11 @@ define([ "angular" ], function(angular) {
     // .attr("cy", function(d) { return d.y; });
     // });
     // }
+    
+    $scope.glosserLoaded = true;
+    
   };
-  SpreadsheetStyleDataEntryGlosserController.$inject = [ '$scope', '$rootScope', '$resource',
-      '$filter', 'Data' ];
+  SpreadsheetStyleDataEntryGlosserController.$inject = [ '$scope',
+      '$rootScope', '$resource', '$filter', 'Data' ];
   return SpreadsheetStyleDataEntryGlosserController;
 });
