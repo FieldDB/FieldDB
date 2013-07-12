@@ -162,14 +162,14 @@ define(
         };
 
         var Preferences = localStorage
-            .getItem('LingSyncSpreadsheetPreferences');
+            .getItem('SpreadsheetPreferences');
 
         if (Preferences == undefined) {
           Preferences = defaultPreferences;
           console
               .log("No preferences. Setting default preferences in localStorage.");
           localStorage.clear();
-          localStorage.setItem('LingSyncSpreadsheetPreferences', JSON
+          localStorage.setItem('SpreadsheetPreferences', JSON
               .stringify(defaultPreferences));
         } else if (Preferences.availableFields
             && Preferences.availableFields.notes) {
@@ -178,9 +178,9 @@ define(
           console
               .log("Preferences need to be upgraded. Clearing and setting defaults.");
           localStorage.clear();
-          localStorage.setItem('LingSyncSpreadsheetPreferences', JSON
+          localStorage.setItem('SpreadsheetPreferences', JSON
               .stringify(defaultPreferences));
-          Preferences = localStorage.getItem('LingSyncSpreadsheetPreferences');
+          Preferences = localStorage.getItem('SpreadsheetPreferences');
         } else {
           console.log("Loading Preferences from localStorage.");
           Preferences = JSON.parse(Preferences);
@@ -202,7 +202,7 @@ define(
         $scope.currentSessionName = "All Sessions";
         $scope.showCreateSessionDiv = false;
         $scope.editSessionDetails = false;
-        $scope.currentDate = new Date().toDateString();
+        $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
         $scope.activities = [];
 
         // Set data size for pagination
@@ -548,8 +548,8 @@ define(
               .then(
                   function(newSessionRecord) {
                     newSessionRecord.pouchname = $rootScope.DB.pouchname;
-                    newSessionRecord.dateCreated = new Date().toString();
-                    newSessionRecord.dateModified = new Date().toString();
+                    newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
+                    newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
                     for (key in newSession) {
                       for (i in newSessionRecord.sessionFields) {
                         if (newSessionRecord.sessionFields[i].label == "user") {
@@ -652,15 +652,15 @@ define(
             var comment = {};
             comment.text = fieldData.comments;
             comment.username = $rootScope.userInfo.name;
-            comment.timestamp = new Date().getTime();
+            comment.timestamp = Date.now();
             comment.gravatar = "./../user/user_gravatar.png";
             comment.timestampModified = Date.now();
             fieldData.comments = [];
             fieldData.comments.push(comment);
           }
 
-          fieldData.dateEntered = new Date().toString();
-          fieldData.dateModified = new Date().toString();
+          fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
+          fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
           fieldData.sessionID = $scope.activeSession;
           fieldData.saved = "no";
           $scope.data.push(fieldData);
@@ -690,7 +690,7 @@ define(
             }
           }
           datum.saved = "no";
-          datum.dateModified = new Date().toString();
+          datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           $scope.saved = "no";
 
           // Update activity feed
@@ -734,7 +734,7 @@ define(
           }
           datum.comments.push(comment);
           datum.saved = "no";
-          datum.dateModified = new Date().toString();
+          datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           $scope.saved = "no";
 
           var indirectObjectString = "on <a href='#data/" + datum.id
@@ -799,7 +799,7 @@ define(
                                 }
                               }
                             }
-                            editedRecord.dateModified = new Date().toString();
+                            editedRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
 
                             // Save tags
                             if (fieldData.datumTags) {
@@ -844,7 +844,7 @@ define(
                                 }
                               }
                             }
-                            newRecord.dateModified = new Date().toString();
+                            newRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
                             // Save session
                             newRecord.session = $scope.fullCurrentSession;
 
@@ -1085,7 +1085,7 @@ define(
                         template.indirectobject = bareActivityObject.indirectobject;
                         template.teamOrPersonal = bareActivityObject.teamOrPersonal;
                         template.user.username = $rootScope.userInfo.name;
-                        template.timestamp = new Date().getTime();
+                        template.timestamp = Date.now();
 
                         $scope.activities.push(template);
                       });
