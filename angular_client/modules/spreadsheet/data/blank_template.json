@@ -112,9 +112,9 @@
            "state": "Deleted"
        }
    ],
-   "pouchname": "",
+   "pouchname": "default",
    "session": {
-       "pouchname": "",
+       "pouchname": "default",
        "comments": [
        ],
        "_id": "",
@@ -167,8 +167,8 @@
            },
            {
                "label": "user",
-               "value": "senhorzinho",
-               "mask": "senhorzinho",
+               "value": "",
+               "mask": "",
                "encrypted": "",
                "shouldBeEncrypted": "",
                "help": "Put your team's data entry conventions here (if any)...",
