@@ -4,11 +4,10 @@ console.log("Loading the Spreadsheet module.");
 define(
     [ "angular", "js/controllers/SpreadsheetController",
         "js/controllers/SettingsController",
-        "js/controllers/GlosserController", "js/directives", "js/filters",
+        "js/directives", "js/filters",
         "js/services", "js/controllers/SandboxController" ],
     function(angular, SpreadsheetStyleDataEntryController,
         SpreadsheetStyleDataEntrySettingsController,
-        SpreadsheetStyleDataEntryGlosserController,
         SpreadsheetStyleDataEntryDirectives, SpreadsheetStyleDataEntryFilters,
         SpreadsheetStyleDataEntryServices, SandboxController) {
       /**
@@ -28,7 +27,6 @@ define(
                   '$routeProvider',
                   function($routeProvider) {
                     window.SpreadsheetStyleDataEntryController = SpreadsheetStyleDataEntryController;
-                    window.SpreadsheetStyleDataEntryGlosserController = SpreadsheetStyleDataEntryGlosserController;
                     console.log("Initializing the Spreadsheet module.");
                     $routeProvider.when('/spreadsheet_main', {
                       templateUrl : 'partials/main.html',
