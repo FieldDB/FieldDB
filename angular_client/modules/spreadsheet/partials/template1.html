@@ -4,22 +4,22 @@
 	ng-hide="data==undefined || loading==true || activeSession==undefined">
 	<form ng-submit="createRecord(newFieldData);newFieldData=''">
 		<div class="span3">
-			<input focus class="span3" type="text" ng-model="newFieldData.field1"
+			<input focus class="span3 glossmorpheme" type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''">
 		</div>
 		<div class="span3">
-			<input class="span3" type="text" ng-model="newFieldData.field2"
+			<input class="span3 glossmorpheme" type="text" ng-model="newFieldData.field2"
 				placeholder="{{fields.field2.title}}"
 				ng-hide="fields.field2.label==''">
 		</div>
 		<div class="span3">
-			<input class="span3" type="text" ng-model="newFieldData.field3"
+			<input class="span3 glossmorpheme" type="text" ng-model="newFieldData.field3"
 				placeholder="{{fields.field3.title}}"
 				ng-hide="fields.field3.label==''">
 		</div>
 		<div class="span2">
-			<input class="span2" type="text" ng-model="newFieldData.field4"
+			<input class="span2 glossmorpheme" type="text" ng-model="newFieldData.field4"
 				placeholder="{{fields.field4.title}}"
 				ng-hide="fields.field4.label==''">
 		</div>
@@ -55,25 +55,25 @@
 	<div ng-show="selected==datum">
 		<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span3">
-				<input focus class="span3" type="text" ng-model="fieldData.field1"
+				<input focus class="span3 glossmorpheme" type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
 					ng-hide="fields.field1.label==''">
 			</div>
 			<div class="span3">
-				<input class="span3" type="text" ng-model="fieldData.field2"
+				<input class="span3 glossmorpheme" type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
 					ng-hide="fields.field2.label==''">
 			</div>
 			<div class="span3">
-				<input class="span3" type="text" ng-model="fieldData.field3"
+				<input class="span3 glossmorpheme" type="text" ng-model="fieldData.field3"
 					ng-init="fieldData.field3=datum[fields.field3.label]"
 					value={{datum[fields.field3.label]}}
 					ng-hide="fields.field3.label==''">
 			</div>
 			<div class="span2">
-				<input class="span2" type="text" ng-model="fieldData.field4"
+				<input class="span2 glossmorpheme" type="text" ng-model="fieldData.field4"
 					ng-init="fieldData.field4=datum[fields.field4.label]"
 					value={{datum[fields.field4.label]}}
 					ng-hide="fields.field4.label==''">

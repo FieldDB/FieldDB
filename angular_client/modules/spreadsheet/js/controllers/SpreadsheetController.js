@@ -161,8 +161,7 @@ define(
           }
         };
 
-        var Preferences = localStorage
-            .getItem('SpreadsheetPreferences');
+        var Preferences = localStorage.getItem('SpreadsheetPreferences');
 
         if (Preferences == undefined) {
           Preferences = defaultPreferences;
@@ -313,6 +312,26 @@ define(
                     $scope.saved = "yes";
                     $rootScope.loading = false;
                   });
+
+          // Get precedence rules for Glosser
+          Data.glosser($rootScope.DB.pouchname).then(
+              function(rules) {
+                localStorage.setItem($rootScope.DB.pouchname
+                    + "precedenceRules", JSON.stringify(rules));
+
+                // Reduce the rules such that rules which are found in multiple
+                // source words are only used/included once.
+                var reducedRules = _.chain(rules).groupBy(function(rule) {
+                  return rule.key.x + "-" + rule.key.y;
+                }).value();
+
+                // Save the reduced precedence rules in localStorage
+                localStorage.setItem($rootScope.DB.pouchname + "reducedRules",
+                    JSON.stringify(reducedRules));
+              }, function(error) {
+                console.log("Error retrieving precedence rules.");
+              });
+
         };
         $scope.loginUser = function(auth) {
           if (!auth || !auth.server) {
@@ -548,8 +567,10 @@ define(
               .then(
                   function(newSessionRecord) {
                     newSessionRecord.pouchname = $rootScope.DB.pouchname;
-                    newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
-                    newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
+                    newSessionRecord.dateCreated = JSON.parse(JSON
+                        .stringify(new Date()));
+                    newSessionRecord.dateModified = JSON.parse(JSON
+                        .stringify(new Date()));
                     for (key in newSession) {
                       for (i in newSessionRecord.sessionFields) {
                         if (newSessionRecord.sessionFields[i].label == "user") {
@@ -799,7 +820,8 @@ define(
                                 }
                               }
                             }
-                            editedRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
+                            editedRecord.dateModified = JSON.parse(JSON
+                                .stringify(new Date()));
 
                             // Save tags
                             if (fieldData.datumTags) {
@@ -844,7 +866,8 @@ define(
                                 }
                               }
                             }
-                            newRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
+                            newRecord.dateModified = JSON.parse(JSON
+                                .stringify(new Date()));
                             // Save session
                             newRecord.session = $scope.fullCurrentSession;
 

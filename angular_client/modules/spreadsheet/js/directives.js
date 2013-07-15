@@ -72,36 +72,41 @@ define(
                     ;
                   });
                 };
-              }).directive('input', function() {
-            return {
-              restrict : 'E',
-              require : 'ngModel',
-              link : function(scope, element, attrs, ngModel) {
-                // element.bind('keydown', function(e) {
-                if (attrs.type !== 'glossmorpheme') {
-                  return;
-                }
-                // Override the input event and add custom 'glossmorpheme' logic
+              }).directive(
+              'input',
+              function() {
+                return {
+                  restrict : 'E',
+                  require : 'ngModel',
+                  link : function(scope, element, attrs, ngModel) {
+                    if (attrs.class == undefined
+                        || attrs.class.indexOf("glossmorpheme") < 0) {
+                      return;
+                    }
+                    // Override the input event and add custom 'glossmorpheme'
+                    // logic
 
-                scope.$watch('glosserLoaded', function() {
-                  if (attrs.placeholder == "Morphemes") {
-                    scope.$watch('currentUtterance', function() {
-                      element.val(scope.currentUtterance);
-                      console.log("morpheme: " + scope.currentUtterance);
+                    scope.$watch('glosserLoaded', function() {
+                      if (attrs.placeholder == "Morphemes") {
+                        scope.$watch('glossGuess', function() {
+                          element.val(scope.glossGuess);
+                          ngModel.$setViewValue(scope.glossGuess);
+                        });
+                      }
+
+                      if (attrs.placeholder == "Utterance") {
+                        element.bind('keyup', function(e) {
+                          var newUtterance = this.value;
+                          scope.$apply(function() {
+                            scope.glossGuess = Glosser.morphemefinder(
+                                newUtterance, scope.DB.pouchname);
+                          });
+                        });
+                      }
                     });
                   }
-
-                  if (attrs.placeholder == "Utterance") {
-                    element.bind('keyup', function(e) {
-                      scope.currentUtterance = this.value;
-                      console.log("utterance: " + scope.currentUtterance);
-                    });
-                  }
-
-                });
-              }
-            };
-          });
+                };
+              });
 
       return SpreadsheetStyleDataEntryDirectives;
     });

@@ -158,7 +158,7 @@
 		<div class="span8">
 			Click EDIT button to rename tag:
 			<div ng-repeat="tag in tags">
-				<input type="text" value="{{tag}}" disabled=true>
+				<input type="text" value="{{tag}}" disabled=true ng-model='none'>
 				<button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
 				<span ng-show="tagToEdit==tag"><input type="text"
 					ng-model='newTag' placeholder="Change to ...">
@@ -173,7 +173,7 @@
 		<div class="span8">
 			Click EDIT button to rename field:
 			<div ng-repeat="field in availableFields">
-				<input type="text" value="{{field.title}}" disabled=true>
+				<input type="text" value="{{field.title}}" disabled=true ng-model='none'>
 				<button class="btn btn-primary" ng-click="changeFieldToEdit(field)">Edit</button>
 				<span ng-show="fieldToEdit==field"><input type="text"
 					ng-model='newFieldTitle' placeholder="Change to ...">
