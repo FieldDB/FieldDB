@@ -87,20 +87,30 @@ define(
                     // logic
 
                     scope.$watch('glosserLoaded', function() {
-                      if (attrs.placeholder == "Morphemes") {
-                        scope.$watch('glossGuess', function() {
-                          element.val(scope.glossGuess);
-                          ngModel.$setViewValue(scope.glossGuess);
-                        });
-                      }
-
                       if (attrs.placeholder == "Utterance") {
                         element.bind('keyup', function(e) {
                           var newUtterance = this.value;
                           scope.$apply(function() {
-                            scope.glossGuess = Glosser.morphemefinder(
+                            scope.morphemesGuess = Glosser.morphemefinder(
                                 newUtterance, scope.DB.pouchname);
                           });
+                        });
+                      }
+
+                      if (attrs.placeholder == "Morphemes") {
+                        scope.$watch('morphemesGuess', function() {
+                          element.val(scope.morphemesGuess);
+                          ngModel.$setViewValue(scope.morphemesGuess);
+                          scope.glossGuess = Glosser
+                              .glossFinder(scope.morphemesGuess, scope.DB.pouchname);
+                        });
+                      }
+
+                      // TODO Set up auto-glosser (question: where do the lexicon nodes come from?)
+                       if (attrs.placeholder == "Gloss") {
+                        scope.$watch('glossGuess', function() {
+                          element.val(scope.glossGuess);
+                          ngModel.$setViewValue(scope.glossGuess);
                         });
                       }
                     });
