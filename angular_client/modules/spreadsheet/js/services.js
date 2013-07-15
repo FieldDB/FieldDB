@@ -105,6 +105,25 @@ define(
                     });
                     return promise;
                   },
+                  'lexicon' : function(DB) {
+                    var couchInfo = $rootScope.server + DB
+                        + "/_design/pages/_view/lexicon_create_tuples?group=true";
+
+                    var config = {
+                      method : "GET",
+                      url : couchInfo,
+                      withCredentials : true
+                    };
+
+                    console
+                        .log("Contacting the DB to get lexicon for "
+                            + couchInfo);
+                    var promise = $http(config).then(function(response) {
+                      console.log("Receiving lexicon ");
+                      return response.data.rows;
+                    });
+                    return promise;
+                  },
                   'login' : function(user, password) {
 
                     var userInfo = {
