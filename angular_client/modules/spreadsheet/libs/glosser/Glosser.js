@@ -124,21 +124,31 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
       // can be tested against the word to find a potential parse.
       // Regular expressions will look something like
       // (@)(.*)(hall)(.*)(o)(.*)(wa)(.*)(n)(.*)(@)
-      var template = [];
-      template = prefixtemplate.concat(suffixtemplate.reverse());
 
-      for ( var slot in template) {
-        template[slot] = "(" + template[slot] + ")";
+      // TS: Regex only works well (notably, with end-of-word suffixes)
+      // if a single template string (i.e. "@....@") is fed to the function;
+      // this seems to solve the problem, but TODO more investigation is needed.
+
+      var template = [];
+      var shortTemplate = prefixtemplate.concat(suffixtemplate.reverse());
+      var limit = 0;
+      for ( var j = 0; j < shortTemplate.length; j++) {
+        shortTemplate[j] = "(" + shortTemplate[j] + ")";
+        template.push(shortTemplate[j]);
+        if (shortTemplate[j] == "(@)") {
+          limit = limit + 1;
+        }
+        if (limit == 2) {
+          break;
+        }
       }
+
       var regex = new RegExp(template.join("(.*)"), "");
       // Use the regular expression to find a guessed morphemes line
-      // Use backreferences to parse into
-      // morphemes
+      // Use backreferences to parse into morphemes
       potentialParse = unparsedWords[word].replace(regex,
-          "$1-$2-$3-$4-$5-$6-$7-$8-$9").replace(/\$[0-9]/g, "")// Remove any
-                                                                // backreferences
-                                                                // that weren't
-                                                                // used
+          "$1-$2-$3-$4-$5-$6-$7-$8-$9").replace(/\$[0-9]/g, "")
+      // Remove any backreferences that weren't used
       .replace(/@/g, "") // Remove the start/end-of-line symbol
       .replace(/--+/g, "-") // Ensure that there is only ever one "-" in a row
       .replace(/^-/, "") // Remove "-" at the start of the word
