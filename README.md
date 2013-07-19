@@ -8,13 +8,17 @@ FieldDB beta was officially launched in English and Spanish on August 1st 2012 i
 
 # Interns and Development Team
 
+* [Louisa Bielig](https://github.com/louisa-bielig) (McGill)
 * [M.E. Cathcart](http://udel.edu/~mdotedot/) (U Delaware)
 * [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab Ltd)
-* [Theresa Deering](http://trisapeace.angelfire.com/) (iLanguage Lab Ltd)
+* [Theresa Deering](http://trisapeace.angelfire.com/) (Visit Scotland)
+* [Josh Horner](https://github.com/jdhorner/) (iLanguage Lab Ltd)
+* [Yuliya Kondratenko](https://github.com/kondrann) (Concordia)
 * [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Stony Brook)
 * [Elise McClay](https://github.com/Kedersha) (McGill)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
 * [Jesse Pollak](http://jessepollak.me/) (Pomona College)
+* [Tobin Skinner](http://tobinskinner.com) (iLanguage Lab Ltd, UQAM)
 * [Xianli Sun](http://www.myaamiaproject.org/index.html) (Miami University)
 
 
