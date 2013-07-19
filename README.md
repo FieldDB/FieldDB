@@ -14,7 +14,7 @@ FieldDB beta was officially launched in English and Spanish on August 1st 2012 i
 * [Theresa Deering](http://trisapeace.angelfire.com/) (Visit Scotland)
 * [Josh Horner](https://github.com/jdhorner/) (iLanguage Lab Ltd)
 * [Yuliya Kondratenko](https://github.com/kondrann) (Concordia)
-* [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Stony Brook)
+* [Yuliya Manyakina](http://egg.auf.net/12/people/manyakinayuliya/) (Stony Brook)
 * [Elise McClay](https://github.com/Kedersha) (McGill)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
 * [Jesse Pollak](http://jessepollak.me/) (Pomona College)
