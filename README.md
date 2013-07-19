@@ -19,7 +19,7 @@ FieldDB beta was officially launched in English and Spanish on August 1st 2012 i
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
 * [Jesse Pollak](http://jessepollak.me/) (Pomona College)
 * [Tobin Skinner](http://tobinskinner.com) (iLanguage Lab Ltd, UQAM)
-* [Xianli Sun](http://www.myaamiaproject.org/index.html) (Miami University)
+* [Xianli Sun](http://myaamiacenter.org/) (Miami University)
 
 
 # Funding
