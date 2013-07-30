@@ -106,7 +106,6 @@ define(
                         });
                       }
 
-                      // TODO Set up auto-glosser (question: where do the lexicon nodes come from?)
                        if (attrs.placeholder == "Gloss") {
                         scope.$watch('glossGuess', function() {
                           element.val(scope.glossGuess);
