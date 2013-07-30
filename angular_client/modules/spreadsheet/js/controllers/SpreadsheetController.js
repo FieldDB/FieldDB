@@ -1166,7 +1166,8 @@ define(
                         // Deleting so that indices in scope are unchanged
                         delete $scope.activities[index];
                       }, function() {
-                        console.log("There was an error saving the activity.");
+                        window.alert("There was an error saving the activity. Please try again.");
+                        $scope.saved = "no";
                       });
                 }
               })(i);
