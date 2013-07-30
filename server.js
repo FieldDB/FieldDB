@@ -37,6 +37,23 @@ app.configure(function() {
 /*
  * Routes
  */
+
+app.get('/activity/:pouchname', function(req, res) {
+
+  var pouchname = req.params.pouchname + '-activity_feed';
+  var activitydb = nano.db.use(pouchname);
+  var data = {'rows': [{'key': {'action': 'testdata', 'week': 50}, 'value': 77},{'key': {'action': 'added', 'week': 21}, 'value': 1},{'key': {'action': 'added', 'week': 22}, 'value': 1},{'key': {'action': 'attempted', 'week': 12}, 'value': 1},{'key': {'action': 'commented', 'week': 12}, 'value': 21},{'key': {'action': 'downloaded', 'week': 4}, 'value': 6},{'key': {'action': 'imported', 'week': 12}, 'value': 31},{'key': {'action': 'modified', 'week': 26}, 'value': 7},{'key': {'action': 'updated', 'week': 4}, 'value': 10},{'key': {'action': 'updated', 'week': 12}, 'value': 13},{'key': {'action': 'updated', 'week': 21}, 'value': 51},{'key': {'action': 'updated', 'week': 22}, 'value': 1},{'key': {'action': 'updated', 'week': 26}, 'value': 64},{'key': {'action': 'uploaded', 'week': 4}, 'value': 3}]};
+
+  activitydb.view('activities', 'one-year-weekly', {group: true}, function(err, body) {
+    if (!err) {
+      res.send(body);
+    } else {
+      res.send(data);
+    }
+  });
+
+});
+
 app.get('/db/:pouchname', function(req, res) {
 
   var pouchname = req.params.pouchname;
@@ -117,14 +134,12 @@ function getData(res, user, corpus) {
       user: userdetails
     };
     var template = corpus ? 'corpus' : 'user';
-    console.log(template);
-    console.log(data);
     res.render(template, data);
   })
     .fail(function(error) {
     console.log(error);
-    var redirect = '/public/';
-    if(corpus){
+    var redirect = '/public';
+    if (corpus) {
       redirect = '/' + user;
     }
     res.redirect(redirect);
@@ -146,7 +161,7 @@ function getCorpusFromPouchname(pouchname) {
       if (!corpus) {
         df.resolve({});
       } else {
-        corpus.gravatar =  corpus.gravatar || md5(pouchname);
+        corpus.gravatar = corpus.gravatar || md5(pouchname);
         result.corpus = {corpusinfo: corpus};
         corpusdb.get('team', function(error, team) {
           if (error) {
@@ -156,11 +171,11 @@ function getCorpusFromPouchname(pouchname) {
               result.team = {};
               df.resolve(result);
             } else {
-              if(!team.gravatar){
+              if (!team.gravatar) {
                 if (team.email) {
                   team.gravatar = md5(team.email);
                 } else {
-                  teami.gravatar = md5(pouchname);
+                  team.gravatar = md5(pouchname);
                 }
               }
               team.subtitle = team.subtitle || team.firstname + ' ' + team.lastname;
@@ -193,7 +208,7 @@ function getUser(userId) {
         for (pouch in result.corpuses) {
           result.corpuses[pouch].phash = md5(result.corpuses[pouch].pouchname);
         }
-        result.subtitle = result.subtitle || result.firstname + ' ' + result.lastname
+        result.subtitle = result.subtitle || result.firstname + ' ' + result.lastname;
         df.resolve(result);
       }
     }
@@ -208,8 +223,8 @@ function getCorpus(pouchId, titleAsUrl, corpusid) {
   var df = Q.defer();
   var corpusdb = nano.db.use(pouchId);
   var doc = corpusid;
-  var public = true;
-  if (public) {
+  var showPublicVersion = true;
+  if (showPublicVersion) {
     doc = 'corpus';
   }
   corpusdb.get(doc, function(error, result) {
@@ -252,8 +267,8 @@ function getRequestedCorpus(corporaArray, titleAsUrl, corpusowner) {
         if (result.state === 'fulfilled') {
           var value = result.value;
           if (corporaArray[corpus].pouchname == value.pouchname) {
-            corpusowner = value.pouchname.replace(/-.*/,'');
-            value.url = corpusowner + '/' + value.titleAsUrl + '/'+ value.pouchname;
+            corpusowner = value.pouchname.replace(/-.*/, '');
+            value.url = corpusowner + '/' + value.titleAsUrl + '/' + value.pouchname;
             value.gravatar = md5(corporaArray[corpus].pouchname);
             corporaArray[corpus].corpusinfo = value;
           }

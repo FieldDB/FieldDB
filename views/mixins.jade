@@ -77,5 +77,4 @@ mixin renderCorpus(myJsonObject)
       a(href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html").pull-right
         img(src='https://secure.gravatar.com/avatar/#{c.corpusinfo.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
       .media-body
-        - var text = c.corpusinfo.description
-        div= text
+        div= c.corpusinfo.description
