@@ -349,7 +349,7 @@ define(
                     } ];
                   }
                 }
-                
+
                 // Sort each morpheme array by descending value
                 for (key in sortedLexicon) {
                   sortedLexicon[key].sort(function(a, b) {
@@ -1005,6 +1005,19 @@ define(
         };
 
         $scope.runSearch = function(searchTerm) {
+          // Create object from fields displayed in scope to later be able to
+          // notify user if search result is from a hidden field
+          var fieldsInScope = {};
+          for (key in $scope.fields) {
+            fieldsInScope[$scope.fields[key].label] = true;
+          }
+          if ($scope.template == "template2") {
+            fieldsInScope.datumTags = true;
+            fieldsInScope.comments = true;
+          }
+          
+          var resultFieldInScope = true;
+          
           if ($scope.searchHistory) {
             $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
           } else {
@@ -1022,6 +1035,9 @@ define(
                     tagString = tagString.toString().toLowerCase();
                     if (tagString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
+                      if(!fieldsInScope[key]) {
+                        resultFieldInScope = false;
+                      }
                       break;
                     }
                   } else if (key == "comments") {
@@ -1030,6 +1046,9 @@ define(
                         if ($scope.data[i].comments[j][commentKey].toString()
                             .indexOf(searchTerm) > -1) {
                           newScopeData.push($scope.data[i]);
+                          if(!fieldsInScope[key]) {
+                            resultFieldInScope = false;
+                          }
                           break;
                         }
                       }
@@ -1039,6 +1058,9 @@ define(
                         .toLowerCase();
                     if (dataString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
+                      if(!fieldsInScope[key]) {
+                        resultFieldInScope = false;
+                      }
                       break;
                     }
                   }
@@ -1056,6 +1078,9 @@ define(
                       tagString = tagString.toString().toLowerCase();
                       if (tagString.indexOf(searchTerm) > -1) {
                         newScopeData.push($scope.data[i]);
+                        if(!fieldsInScope[key]) {
+                          resultFieldInScope = false;
+                        }
                         break;
                       }
                     } else if (key == "comments") {
@@ -1064,6 +1089,9 @@ define(
                           if ($scope.data[i].comments[j][commentKey].toString()
                               .indexOf(searchTerm) > -1) {
                             newScopeData.push($scope.data[i]);
+                            if(!fieldsInScope[key]) {
+                              resultFieldInScope = false;
+                            }
                             break;
                           }
                         }
@@ -1073,6 +1101,9 @@ define(
                           .toLowerCase();
                       if (dataString.indexOf(searchTerm) > -1) {
                         newScopeData.push($scope.data[i]);
+                        if(!fieldsInScope[key]) {
+                          resultFieldInScope = false;
+                        }
                         break;
                       }
                     }
@@ -1083,6 +1114,9 @@ define(
           }
           if (newScopeData.length > 0) {
             $scope.data = newScopeData;
+            if (resultFieldInScope == false) {
+              window.alert("Your search term has matched data in one or more hidden fields.");
+            }
           } else {
             window.alert("No records matched your search.");
           }
@@ -1160,15 +1194,19 @@ define(
                     activitydb = $rootScope.userInfo.name + "-activity_feed";
                   }
 
-                  Data.saveNew(activitydb, $scope.activities[index]).then(
-                      function(response) {
-                        console.log("Saved new activity");
-                        // Deleting so that indices in scope are unchanged
-                        delete $scope.activities[index];
-                      }, function() {
-                        window.alert("There was an error saving the activity. Please try again.");
-                        $scope.saved = "no";
-                      });
+                  Data
+                      .saveNew(activitydb, $scope.activities[index])
+                      .then(
+                          function(response) {
+                            console.log("Saved new activity");
+                            // Deleting so that indices in scope are unchanged
+                            delete $scope.activities[index];
+                          },
+                          function() {
+                            window
+                                .alert("There was an error saving the activity. Please try again.");
+                            $scope.saved = "no";
+                          });
                 }
               })(i);
             }
