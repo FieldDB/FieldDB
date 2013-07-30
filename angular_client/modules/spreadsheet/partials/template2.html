@@ -67,21 +67,25 @@
 				<input focus class="span4 glossmorpheme" type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
-					ng-hide="fields.field1.label==''"> <input class="span4 glossmorpheme"
+					ng-hide="fields.field1.label==''"
+					placeholder="{{fields.field1.title}}"> <input class="span4 glossmorpheme"
 					type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
-					ng-hide="fields.field2.label==''"> <input class="span4 glossmorpheme"
+					ng-hide="fields.field2.label==''"
+					placeholder="{{fields.field2.title}}"> <input class="span4 glossmorpheme"
 					type="text" ng-model="fieldData.field3"
 					ng-init="fieldData.field3=datum[fields.field3.label]"
 					value={{datum[fields.field3.label]}}
-					ng-hide="fields.field3.label==''">
+					ng-hide="fields.field3.label==''"
+					placeholder="{{fields.field3.title}}">
 			</div>
 			<div class="span4">
 				<input class="span4 glossmorpheme" type="text" ng-model="fieldData.field4"
 					ng-init="fieldData.field4=datum[fields.field4.label]"
 					value={{datum[fields.field4.label]}}
-					ng-hide="fields.field4.label==''"> <span class="span4"
+					ng-hide="fields.field4.label==''"
+					placeholder="{{fields.field4.title}}"> <span class="span4"
 					ng-hide="fields.field5.label==''"
 					ng-repeat="comment in datum.comments"><span
 					ng-click="deleteComment(comment, datum)"><font size="4em">✗</font></span><i>{{comment.username}}</i>:
@@ -93,7 +97,8 @@
 				<input class="span2 glossmorpheme" type="text" ng-model="fieldData.field6"
 					ng-init="fieldData.field6=datum[fields.field6.label]"
 					value={{datum[fields.field6.label]}}
-					ng-hide="fields.field6.label==''">
+					ng-hide="fields.field6.label==''"
+					placeholder="{{fields.field6.title}}">
 				<textarea rows="3" class="span2" ng-model="fieldData.datumTags"
 					ng-init='commaList(datum.datumTags)'
 					value={{commaList(datum.datumTags)}}
