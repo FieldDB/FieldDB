@@ -164,8 +164,7 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
 
 Glosser.glossFinder = function(morphemesLine, pouchname) {
   if (!morphemesLine) {
-    console.log("No morphemes.");
-    return;
+    return "";
   }
   // Guess a gloss
   var morphemeGroup = morphemesLine.split(/ +/);
