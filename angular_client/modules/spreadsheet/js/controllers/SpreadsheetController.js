@@ -1174,8 +1174,10 @@ define(
                         template.teamOrPersonal = bareActivityObject.teamOrPersonal;
                         template.user.username = $rootScope.userInfo.name;
                         template.timestamp = Date.now();
+                        template.user.authUrl = $rootScope.server[0];
 
                         $scope.activities.push(template);
+                        console.log(JSON.stringify($scope.activities));
                       });
             })(i);
           }
