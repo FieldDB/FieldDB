@@ -1,6 +1,5 @@
 #!/bin/bash
 
-$HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever stop httpredirectapp.js
 $HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever stop server.js
 
 cd $HOME/fielddbworkspace/FieldDBWebServer

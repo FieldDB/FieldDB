@@ -3,13 +3,6 @@
 cd $HOME/fielddbworkspace/FieldDBWebServer
 bash switch_to_producti.sh
 
-$HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever \
-start \
--al $HOME/fielddbworkspace/logs/httpredirectapp.log \
--ao $HOME/fielddbworkspace/logs/httpredirectout.log \
--ae $HOME/fielddbworkspace/logs/httpredirecterr.log \
-httpredirectapp.js
-
 cd $HOME/fielddbworkspace/FieldDBWebServer
 $HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever \
 start \
