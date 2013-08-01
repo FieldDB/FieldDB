@@ -17,6 +17,7 @@
 						Prosody Lab</option>
 					<option value='https://corpusdev.lingsync.org/'>LingSync
 						Beta</option>
+					<option value='https://localhost:6984/'>Localhost</option>
 				</select><br> <br> <input type="text" ng-model='auth.user'
 					placeholder="username"><br> <input type="password"
 					ng-model='auth.password' placeholder="password"><br>
@@ -109,3 +110,22 @@
 		</div>
 	</div>
 </div>
+
+<!-- TEST -->
+<div>
+	<form>
+		<input placeholder="username" ng-model="newUserInfo.username"><br />
+		<input type="password" placeholder="password"
+			ng-model="newUserInfo.password"><br /> <input
+			type="password" placeholder="confirm password"
+			ng-model="newUserInfo.confirmPassword"><br /> <input
+			placeholder="e-mail" ng-model="newUserInfo.email" type="email"><br />
+		<button class="btn btn-primary"
+			ng-click="registerNewUser(newUserInfo)">Register</button>
+	</form>
+
+</div>
+
+
+
+
