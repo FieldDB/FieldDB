@@ -153,6 +153,28 @@ define(
                             });
                     return promise;
                   },
+                  'register' : function(newUserInfo) {
+                    var config = {
+                      method : "POST",
+                      url : newUserInfo.authUrl + "/register",
+                      data : newUserInfo,
+//                      withCredentials : true
+                    };
+
+                    var promise = $http(config)
+                        .then(
+                            function(response) {
+                              console.log("Registered new user.");
+                              return response;
+                            },
+                            function(err) {
+                              console.log(JSON.stringify(err));
+                              window
+                                  .alert("Error registering new user.");
+                              $rootScope.loading = false;
+                            });
+                    return promise;
+                  },
                   'saveNew' : function(DB, newRecord) {
                     var couchInfo = $rootScope.server + DB;
 

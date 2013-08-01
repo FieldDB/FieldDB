@@ -13,7 +13,7 @@ define(
                                                  */
       function($scope, $rootScope, $resource, $filter, Data) {
 
-        /* Modal controller TODO could move somewhere wher the search is? */
+        /* Modal controller TODO could move somewhere where the search is? */
         $scope.open = function() {
           $scope.shouldBeOpen = true;
         };
@@ -1015,9 +1015,9 @@ define(
             fieldsInScope.datumTags = true;
             fieldsInScope.comments = true;
           }
-          
+
           var resultFieldInScope = true;
-          
+
           if ($scope.searchHistory) {
             $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
           } else {
@@ -1035,7 +1035,7 @@ define(
                     tagString = tagString.toString().toLowerCase();
                     if (tagString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
-                      if(!fieldsInScope[key]) {
+                      if (!fieldsInScope[key]) {
                         resultFieldInScope = false;
                       }
                       break;
@@ -1046,7 +1046,7 @@ define(
                         if ($scope.data[i].comments[j][commentKey].toString()
                             .indexOf(searchTerm) > -1) {
                           newScopeData.push($scope.data[i]);
-                          if(!fieldsInScope[key]) {
+                          if (!fieldsInScope[key]) {
                             resultFieldInScope = false;
                           }
                           break;
@@ -1058,7 +1058,7 @@ define(
                         .toLowerCase();
                     if (dataString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.data[i]);
-                      if(!fieldsInScope[key]) {
+                      if (!fieldsInScope[key]) {
                         resultFieldInScope = false;
                       }
                       break;
@@ -1078,7 +1078,7 @@ define(
                       tagString = tagString.toString().toLowerCase();
                       if (tagString.indexOf(searchTerm) > -1) {
                         newScopeData.push($scope.data[i]);
-                        if(!fieldsInScope[key]) {
+                        if (!fieldsInScope[key]) {
                           resultFieldInScope = false;
                         }
                         break;
@@ -1089,7 +1089,7 @@ define(
                           if ($scope.data[i].comments[j][commentKey].toString()
                               .indexOf(searchTerm) > -1) {
                             newScopeData.push($scope.data[i]);
-                            if(!fieldsInScope[key]) {
+                            if (!fieldsInScope[key]) {
                               resultFieldInScope = false;
                             }
                             break;
@@ -1101,7 +1101,7 @@ define(
                           .toLowerCase();
                       if (dataString.indexOf(searchTerm) > -1) {
                         newScopeData.push($scope.data[i]);
-                        if(!fieldsInScope[key]) {
+                        if (!fieldsInScope[key]) {
                           resultFieldInScope = false;
                         }
                         break;
@@ -1115,7 +1115,8 @@ define(
           if (newScopeData.length > 0) {
             $scope.data = newScopeData;
             if (resultFieldInScope == false) {
-              window.alert("Your search term has matched data in one or more hidden fields.");
+              window
+                  .alert("Your search term has matched data in one or more hidden fields.");
             }
           } else {
             window.alert("No records matched your search.");
@@ -1212,6 +1213,57 @@ define(
                 }
               })(i);
             }
+          }
+        };
+
+        $scope.registerNewUser = function(newUserInfo) {
+          var dataToPost = {};
+          dataToPost.email = trim(newUserInfo.email);
+          dataToPost.username = trim(newUserInfo.username.toLowerCase());
+          dataToPost.password = trim(newUserInfo.password);
+          // TODO Change this so user can select server?
+          // dataToPost.authUrl = "https://authdev.lingsync.org";
+          dataToPost.authUrl = "https://localhost:3183";
+
+          // dataToPost.authUrl = OPrime.authUrl;
+          // TODO Alter how appVersion works?
+          dataToPost.appVersionWhenCreated = "ss1.62.2";
+          // dataToPost.appVersionWhenCreated = this.appVersion;
+
+          var localhost = {
+              protocol : "http://",
+              domain : "localhost",
+              port : "5984",
+              pouchname : "default",
+              path : "",
+              authUrl : "https://localhost:3183",
+              userFriendlyServerName : "Localhost"
+            };
+
+          // Send a pouchname to create
+          var corpusConnection = localhost;
+          corpusConnection.pouchname = "firstcorpus";
+          dataToPost.corpuses = [ corpusConnection ];
+          dataToPost.mostRecentIds = {};
+          dataToPost.mostRecentIds.couchConnection = JSON.parse(JSON
+              .stringify(corpusConnection));
+          dataToPost.mostRecentIds.couchConnection.pouchname = dataToPost.username
+              + "-" + dataToPost.mostRecentIds.couchConnection.pouchname;
+          var activityConnection = JSON.parse(JSON.stringify(localhost));
+          activityConnection.pouchname = dataToPost.username+"-activity_feed";
+          dataToPost.activityCouchConnection = activityConnection;
+          // TODO Update how gravatar is determined
+          dataToPost.gravatar = "user/user_gravatar.png";
+          // var u = new UserMask();
+          // dataToPost.gravatar = u.getGravatar(dataToPost.email);
+          if (dataToPost.username != ""
+              && (dataToPost.password == trim(newUserInfo.confirmPassword))
+              && dataToPost.email != "") {
+            // MAKE CORS REQUEST
+            console.log("SUCCESS! " + JSON.stringify(dataToPost));
+            Data.register(dataToPost);
+          } else {
+            window.alert("Please verify user information.");
           }
         };
 
