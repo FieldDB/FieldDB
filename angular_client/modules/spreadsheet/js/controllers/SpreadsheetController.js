@@ -1217,6 +1217,10 @@ define(
         };
 
         $scope.registerNewUser = function(newUserInfo) {
+          if (!newUserInfo || !newUserInfo.serverCode) {
+            window.alert("Please select a server.");
+            return;
+          }
           var dataToPost = {};
           dataToPost.email = trim(newUserInfo.email);
           dataToPost.username = trim(newUserInfo.username.toLowerCase());
@@ -1230,12 +1234,9 @@ define(
           dataToPost.appVersionWhenCreated = "ss1.62.2";
           // dataToPost.appVersionWhenCreated = this.appVersion;
 
-          dataToPost.serverCode = "localhost";
+          dataToPost.serverCode = newUserInfo.serverCode;
+//          dataToPost.serverCode = "localhost";
 
-          // TODO Update how gravatar is determined
-          dataToPost.gravatar = "user/user_gravatar.png";
-          // var u = new UserMask();
-          // dataToPost.gravatar = u.getGravatar(dataToPost.email);
           if (dataToPost.username != ""
               && (dataToPost.password == trim(newUserInfo.confirmPassword))
               && dataToPost.email != "") {

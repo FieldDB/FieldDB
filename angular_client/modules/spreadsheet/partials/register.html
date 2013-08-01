@@ -1,0 +1,21 @@
+<br />
+<br />
+<div class="mainPageDiv">
+	<form>
+		Server:<select ng-model="newUserInfo.serverCode">
+			<option value="mcgill">McGill</option>
+			<option value="localhost">Localhost</option>
+			<option value="testing">LingSync Beta</option>
+		</select>
+		<br />
+		<input type="text" placeholder="username" ng-model="newUserInfo.username"><br />
+		<input type="password" placeholder="password"
+			ng-model="newUserInfo.password"><br /> <input
+			type="password" placeholder="confirm password"
+			ng-model="newUserInfo.confirmPassword"><br /> <input
+			placeholder="e-mail" ng-model="newUserInfo.email" type="email"><br />
+		<button class="btn btn-primary"
+			ng-click="registerNewUser(newUserInfo)">Register</button>
+	</form>
+
+</div>
