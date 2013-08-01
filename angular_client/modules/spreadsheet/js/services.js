@@ -20,9 +20,8 @@ define(
                         withCredentials : true
                       };
 
-                      console
-                          .log("Contacting the DB to get   record data "
-                              + couchInfo);
+                      console.log("Contacting the DB to get   record data "
+                          + couchInfo);
                       var promise = $http(config).then(function(response) {
                         console.log("Receiving   data results ");
                         return response.data;
@@ -58,9 +57,8 @@ define(
                       withCredentials : true
                     };
 
-                    console
-                        .log("Contacting the DB to get   datum fields for "
-                            + couchInfo);
+                    console.log("Contacting the DB to get   datum fields for "
+                        + couchInfo);
                     var promise = $http(config).then(function(response) {
                       console.log("Receiving   datum fields ");
                       return response.data.rows;
@@ -77,9 +75,8 @@ define(
                       withCredentials : true
                     };
 
-                    console
-                        .log("Contacting the DB to get sessions for "
-                            + couchInfo);
+                    console.log("Contacting the DB to get sessions for "
+                        + couchInfo);
                     var promise = $http(config).then(function(response) {
                       console.log("Receiving   datum fields ");
                       return response.data.rows;
@@ -106,7 +103,8 @@ define(
                     return promise;
                   },
                   'lexicon' : function(DB) {
-                    var couchInfo = $rootScope.server + DB
+                    var couchInfo = $rootScope.server
+                        + DB
                         + "/_design/pages/_view/lexicon_create_tuples?group=true";
 
                     var config = {
@@ -115,9 +113,8 @@ define(
                       withCredentials : true
                     };
 
-                    console
-                        .log("Contacting the DB to get lexicon for "
-                            + couchInfo);
+                    console.log("Contacting the DB to get lexicon for "
+                        + couchInfo);
                     var promise = $http(config).then(function(response) {
                       console.log("Receiving lexicon ");
                       return response.data.rows;
@@ -158,23 +155,27 @@ define(
                       method : "POST",
                       url : newUserInfo.authUrl + "/register",
                       data : newUserInfo,
-//                      withCredentials : true
+                    // withCredentials : true
                     };
 
-                    var promise = $http(config)
-                        .then(
-                            function(response) {
-                              console.log("Registered new user.");
-                              window.alert("Successfully registered new user: " + response.data.user.username + "\nYou may now log in on the main page.");
-                              window.location.assign("#/");
-                              return response;
-                            },
-                            function(err) {
-                              console.log(JSON.stringify(err));
-                              window
-                                  .alert("Error registering new user.");
-                              $rootScope.loading = false;
-                            });
+                    var promise = $http(config).then(
+                        function(response) {
+                          console.log("Registered new user.");
+                          console.log(JSON.stringify(response));
+                          if (response.data.userFriendlyErrors) {
+                            window.alert(response.data.userFriendlyErrors[0]);
+                          } else {
+                            window.alert("Successfully registered new user: "
+                                + response.data.user.username
+                                + "\nYou may now log in on the main page.");
+                            window.location.assign("#/");
+                          }
+                          return response;
+                        }, function(err) {
+                          console.log(JSON.stringify(err));
+                          window.alert("Error registering new user.");
+                          $rootScope.loading = false;
+                        });
                     return promise;
                   },
                   'saveNew' : function(DB, newRecord) {
@@ -232,10 +233,11 @@ define(
                     return promise;
                   },
                   'blankActivityTemplate' : function() {
-                    var promise = $http.get('data/blank_activity_template.json')
-                        .then(function(response) {
-                          return response.data;
-                        });
+                    var promise = $http
+                        .get('data/blank_activity_template.json').then(
+                            function(response) {
+                              return response.data;
+                            });
                     return promise;
                   },
                   'removeRecord' : function(DB, UUID, rev) {
