@@ -1221,37 +1221,17 @@ define(
           dataToPost.email = trim(newUserInfo.email);
           dataToPost.username = trim(newUserInfo.username.toLowerCase());
           dataToPost.password = trim(newUserInfo.password);
+
           // TODO Change this so user can select server?
           // dataToPost.authUrl = "https://authdev.lingsync.org";
           dataToPost.authUrl = "https://localhost:3183";
 
-          // dataToPost.authUrl = OPrime.authUrl;
           // TODO Alter how appVersion works?
           dataToPost.appVersionWhenCreated = "ss1.62.2";
           // dataToPost.appVersionWhenCreated = this.appVersion;
 
-          var localhost = {
-              protocol : "http://",
-              domain : "localhost",
-              port : "5984",
-              pouchname : "default",
-              path : "",
-              authUrl : "https://localhost:3183",
-              userFriendlyServerName : "Localhost"
-            };
+          dataToPost.serverCode = "localhost";
 
-          // Send a pouchname to create
-          var corpusConnection = localhost;
-          corpusConnection.pouchname = "firstcorpus";
-          dataToPost.corpuses = [ corpusConnection ];
-          dataToPost.mostRecentIds = {};
-          dataToPost.mostRecentIds.couchConnection = JSON.parse(JSON
-              .stringify(corpusConnection));
-          dataToPost.mostRecentIds.couchConnection.pouchname = dataToPost.username
-              + "-" + dataToPost.mostRecentIds.couchConnection.pouchname;
-          var activityConnection = JSON.parse(JSON.stringify(localhost));
-          activityConnection.pouchname = dataToPost.username+"-activity_feed";
-          dataToPost.activityCouchConnection = activityConnection;
           // TODO Update how gravatar is determined
           dataToPost.gravatar = "user/user_gravatar.png";
           // var u = new UserMask();
@@ -1259,8 +1239,7 @@ define(
           if (dataToPost.username != ""
               && (dataToPost.password == trim(newUserInfo.confirmPassword))
               && dataToPost.email != "") {
-            // MAKE CORS REQUEST
-            console.log("SUCCESS! " + JSON.stringify(dataToPost));
+            // Create user
             Data.register(dataToPost);
           } else {
             window.alert("Please verify user information.");
