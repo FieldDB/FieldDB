@@ -31,7 +31,11 @@
 				</span> <span ng-show="dataentry==true"> <a
 					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('editSession')">Session</a>
-				</span> <span ng-hide="data==undefined"><a
+				</span>
+				<span ng-hide="authenticated == true">
+					<div class="rightMenuItemsDiv"><a href="#/register"><button class="btn btn-primary">Register</button></a></div>
+				</span> 
+				<span ng-hide="data==undefined"><a
 					ng-click="navigateVerifySaved('settings');">Settings</a></span> <span><a
 					href="#/sandbox"
 					ng-click="dataentry=false;navigateVerifySaved('none')"
@@ -298,9 +302,9 @@
 		<div class="mainBody" ng-click="changeActiveSubMenu('none');">
 			<ng-view></ng-view>
 		</div>
-		<div ng-hide="clickSuccess==true" class="clearCacheMessage">
-			If you are having trouble viewing the page, you may need to empty your browser's cache.
-		</div>
+		<div ng-hide="clickSuccess==true" class="clearCacheMessage">If
+			you are having trouble viewing the page, you may need to empty your
+			browser's cache.</div>
 
 	</div>
 

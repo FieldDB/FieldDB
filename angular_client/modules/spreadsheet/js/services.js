@@ -165,6 +165,8 @@ define(
                         .then(
                             function(response) {
                               console.log("Registered new user.");
+                              window.alert("Successfully registered new user: " + response.data.user.username + "\nYou may now log in on the main page.");
+                              window.location.assign("#/");
                               return response;
                             },
                             function(err) {
