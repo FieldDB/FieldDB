@@ -1,0 +1,50 @@
+var sampleArray = ["*Juanpa much'asqami kanaywan.", "Juanpa much'a-sqa-mi ka-nay-wa-n", "Juan.gen kiss.pass.? be-DES-1OM-3SG", "`I feel like being kissed by Juan.â", "Passive Impulsative", "CheckedWithLucia", "5/21/2010", "Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: 5/16/2013", "Unknown", "Probably Prior to 5/16/2013"];
+var values1 = ["utterance_t", "morphemes_t", "gloss_t", "translation_t", "tags_t", "validationStatus_t", "dateElicited_t", "goal_t", "consultants_t", "dateElicited_t"];
+var values2 = ["utterance_t", "morphemes_t", "gloss_t", "translation_t", "tags_t", "validationStatus_t", "dateElicited_t", "comments_t", "goal_t", "consultants_t", "dateElicited_t"];
+
+function(head, req) {
+  start({
+    "headers": {
+      "Content-Type": "text/csv"
+    }
+  });
+  
+  // TODO: Use AJAX to retrieve field names
+  send('field1,field2,field3');
+  while (row = getRow()) {
+    var rowAsCsv = row.join(',');
+    send(rowAsCsv + '\\n');
+  }
+}
+
+var sampleObject = {
+  "utterance": "*Juanpa much'asqami kanaywan.",
+  "morphemes": "Juanpa much'a-sqa-mi ka-nay-wa-n",
+  "gloss": "Juan.gen kiss.pass.? be-DES-1OM-3SG",
+  "translation": "`I feel like being kissed by Juan.â",
+  "tags": "Passive Impulsative",
+  "validationStatus": "CheckedWithLucia",
+  "dateElicited": "Probably Prior to 5/16/2013",
+  "goal": "Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: 5/16/2013",
+  "consultants": "Unknown"
+}
+
+  function(head, req) {
+    start({
+      "headers": {
+        "Content-Type": "text/csv"
+      }
+    });
+    // TODO: Use AJAX to retrieve field names
+    send('field1,field2,field3');
+    while (row = getRow()) {
+      var rowAsCsv = '';
+      for (label in row.key) {
+        if (rowAsCsv) {
+          rowAsCsv += ',';
+        }
+        rowAsCsv += row.key[label];
+      }
+      send(rowAsCsv + '\\n');
+    }
+  }
