@@ -1,22 +1,46 @@
-var sampleArray = ["*Juanpa much'asqami kanaywan.", "Juanpa much'a-sqa-mi ka-nay-wa-n", "Juan.gen kiss.pass.? be-DES-1OM-3SG", "`I feel like being kissed by Juan.â", "Passive Impulsative", "CheckedWithLucia", "5/21/2010", "Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: 5/16/2013", "Unknown", "Probably Prior to 5/16/2013"];
-var values1 = ["utterance_t", "morphemes_t", "gloss_t", "translation_t", "tags_t", "validationStatus_t", "dateElicited_t", "goal_t", "consultants_t", "dateElicited_t"];
-var values2 = ["utterance_t", "morphemes_t", "gloss_t", "translation_t", "tags_t", "validationStatus_t", "dateElicited_t", "comments_t", "goal_t", "consultants_t", "dateElicited_t"];
-
 function(head, req) {
   start({
     "headers": {
       "Content-Type": "text/csv"
     }
   });
-  
+
   // TODO: Use AJAX to retrieve field names
-  send('field1,field2,field3');
+  // datum_fields represents retrieved map/reduce which contains ALL 
+  // cleaned corpus fields
+  var datum_fields = {"rows":[{"key":"consultants_t","value":73},{"key":"dateElicited_t","value":145},{"key":"datumTotal","value":73},{"key":"dialect_t","value":72},{"key":"gloss_t","value":73},{"key":"goal_t","value":73},{"key":"judgement_t","value":11},{"key":"morphemes_t","value":73},{"key":"notesFromOldDB_t","value":26},{"key":"tags_t","value":55},{"key":"translation_t","value":71},{"key":"utterance_t","value":73},{"key":"validationStatus_t","value":73}]};
+  var fieldsArray = [];
+
+  // Rearrange the retrieved data fields into an array, and then send the 
+  // joined array as column headers.
+  for (var i in datum_fields.rows[0]) {
+    fieldsArray.push(datum_fields.rows[i].key);
+  }
+
+  send(fieldsArray.join(','));
+
+  // Now, process each row returned from the original map/reduce in order
+  // to create data rows for the CSV file.
   while (row = getRow()) {
     var rowAsCsv = row.join(',');
     send(rowAsCsv + '\\n');
   }
 }
 
+/*
+  __________  ____  ____ 
+ /_  __/ __ \/ __ \/ __ \
+  / / / / / / / / / / / /
+ / / / /_/ / /_/ / /_/ / 
+/_/  \____/_____/\____/  
+
+NOTE: the above code will result in mis-aligned CSV data rows, 
+as not all records in the _view will have all the proper data columns.
+*/
+
+// This means that the sample object below, which would be what our list
+// view is processing would have to be cycled through based on the column
+// names from our above array. 
 var sampleObject = {
   "utterance": "*Juanpa much'asqami kanaywan.",
   "morphemes": "Juanpa much'a-sqa-mi ka-nay-wa-n",
@@ -29,22 +53,23 @@ var sampleObject = {
   "consultants": "Unknown"
 }
 
-  function(head, req) {
-    start({
-      "headers": {
-        "Content-Type": "text/csv"
-      }
-    });
-    // TODO: Use AJAX to retrieve field names
-    send('field1,field2,field3');
-    while (row = getRow()) {
-      var rowAsCsv = '';
-      for (label in row.key) {
-        if (rowAsCsv) {
-          rowAsCsv += ',';
-        }
-        rowAsCsv += row.key[label];
-      }
-      send(rowAsCsv + '\\n');
+// Currently not-used object traverser
+function(head, req) {
+  start({
+    "headers": {
+      "Content-Type": "text/csv"
     }
+  });
+  send('field1,field2,field3');
+
+  while (row = getRow()) {
+    var rowAsCsv = '';
+    for (label in row.key) {
+      if (rowAsCsv) {
+        rowAsCsv += ',';
+      }
+      rowAsCsv += row.key[label];
+    }
+    send(rowAsCsv + '\\n');
   }
+}
