@@ -178,6 +178,37 @@ define(
                         });
                     return promise;
                   },
+                  'createcorpus' : function(newCorpusInfo) {
+                    var config = {
+                      method : "POST",
+                      url : newCorpusInfo.authUrl + "/newcorpus",
+                      data : newCorpusInfo,
+                    // withCredentials : true
+                    };
+
+                    var promise = $http(config)
+                        .then(
+                            function(response) {
+                              console.log("Created new corpus.");
+                              console.log(JSON.stringify(response));
+                              if (response.data.userFriendlyErrors) {
+                                window
+                                    .alert(response.data.userFriendlyErrors[0]);
+                              } else {
+                                window
+                                    .alert(JSON.stringify(response.data.info[0])
+                                        + "\nYou may now log in to this corpus.\n"
+                                        + "NOTE: You may need to log out and log back in to see this corpus in your list.");
+                                window.location.assign("#/");
+                              }
+                              return response;
+                            }, function(err) {
+                              console.log(JSON.stringify(err));
+                              window.alert("Error creating new corpus.");
+                              $rootScope.loading = false;
+                            });
+                    return promise;
+                  },
                   'saveNew' : function(DB, newRecord) {
                     var couchInfo = $rootScope.server + DB;
 

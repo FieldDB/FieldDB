@@ -1235,7 +1235,7 @@ define(
           // dataToPost.appVersionWhenCreated = this.appVersion;
 
           dataToPost.serverCode = newUserInfo.serverCode;
-//          dataToPost.serverCode = "localhost";
+          // dataToPost.serverCode = "localhost";
 
           if (dataToPost.username != ""
               && (dataToPost.password == trim(newUserInfo.confirmPassword))
@@ -1247,6 +1247,27 @@ define(
           }
         };
 
+        $scope.createNewCorpus = function(newCorpusInfo) {
+          var dataToPost = {};
+          dataToPost.username = trim($rootScope.userInfo.name);
+          dataToPost.password = trim($rootScope.userInfo.password);
+
+          // TODO Change this so user can select server?
+          // dataToPost.authUrl = "https://authdev.lingsync.org";
+          dataToPost.authUrl = "https://localhost:3183";
+          dataToPost.serverCode = "localhost";
+          dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
+//          dataToPost.serverCode = newUserInfo.serverCode;
+
+          if (dataToPost.newCorpusName != "") {
+            // Create new corpus
+            Data.createcorpus(dataToPost);
+          } else {
+            window.alert("Please verify corpus name.");
+          }
+        };
+
+        
         // // Un-uploaded activities
         // $scope.numberOfActivitiesToUpload = function() {
         // var number = 0;
@@ -1294,6 +1315,23 @@ define(
 
         $scope.testFunction = function() {
           window.alert($rootScope.currentResult);
+        };
+
+        $scope.testAudio = function() {
+          var context = new window.webkitAudioContext();
+
+          navigator.webkitGetUserMedia({
+            audio : true
+          }, function(stream) {
+            var microphone = context.createMediaStreamSource(stream);
+            var filter = context.createBiquadFilter();
+
+            // microphone -> filter -> destination.
+            microphone.connect(filter);
+            filter.connect(context.destination);
+          }, function(err) {
+            console.log("ERROR: " + JSON.stringify(err));
+          });
         };
 
       };

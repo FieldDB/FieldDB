@@ -110,3 +110,10 @@
 		</div>
 	</div>
 </div>
+
+<div ng-hide="userInfo==undefined">
+<input type="text" ng-model='newCorpusInfo.newCorpusName' placeholder="New corpus name">
+<button ng-click="createNewCorpus(newCorpusInfo)">Create</button>
+</div>
+
+
