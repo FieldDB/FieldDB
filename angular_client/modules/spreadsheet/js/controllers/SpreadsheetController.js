@@ -230,6 +230,10 @@ define(
               $scope.dataentry = false;
               $scope.changeActiveSubMenu('none');
               window.location.assign("#/settings");
+            } else if (itemToDisplay == "corpusSettings") {
+              $scope.dataentry = false;
+              $scope.changeActiveSubMenu('none');
+              window.location.assign("#/corpussettings");
             } else if (itemToDisplay == "home") {
               $scope.dataentry = false;
               $scope.changeActiveSubMenu('none');
@@ -286,6 +290,8 @@ define(
                       }
                     }
                     $scope.data = scopeData;
+
+                    $scope.loadUsersAndRoles();
 
                     // Get sessions
                     var scopeSessions = [];
@@ -1257,17 +1263,122 @@ define(
           dataToPost.authUrl = "https://localhost:3183";
           dataToPost.serverCode = "localhost";
           dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
-//          dataToPost.serverCode = newUserInfo.serverCode;
+          // dataToPost.serverCode = newUserInfo.serverCode;
 
           if (dataToPost.newCorpusName != "") {
             // Create new corpus
-            Data.createcorpus(dataToPost);
+            Data.createcorpus(dataToPost).then(function(response) {
+              // Login user again to get most up-to-date corpus info
+              var auth = {};
+              auth.user = $rootScope.userInfo.name;
+              auth.password = $rootScope.userInfo.password;
+              auth.server = $rootScope.server;
+              $scope.loginUser(auth);
+              
+            });
           } else {
             window.alert("Please verify corpus name.");
           }
         };
 
-        
+        $scope.loadUsersAndRoles = function() {
+          // Get all users from server
+          Data.getallusers().then(function(allUsers) {
+            $rootScope.allUsers = allUsers;
+          })
+          
+          // Get current user for this corpus
+          Data.getusers($rootScope.DB.pouchname).then(function(response) {
+            $rootScope.corpusUsers = response;
+          });
+
+          // Get privileges for logged in user
+          Data.async("_users", "org.couchdb.user:" + $scope.username)
+              .then(
+                  function(response) {
+                    if (response.roles.indexOf($rootScope.DB.pouchname
+                        + "_admin") > -1) {
+                      $rootScope.admin = true;
+                    } else {
+                      $rootScope.admin = false;
+                    }
+                  });
+        };
+
+        $scope.updateUserRoles = function(newUserRoles) {
+          if (!newUserRoles || !newUserRoles.usernameToModify) {
+            window.alert("Please enter a username.");
+            return;
+          }
+
+          if (newUserRoles.usernameToModify == $scope.username) {
+            var r = confirm("Are you sure you want to edit roles for your own username?");
+            if (r == false) {
+              return;
+            }
+          }
+
+          if (!newUserRoles.admin) {
+            newUserRoles.admin = false;
+          }
+          if (!newUserRoles.reader) {
+            newUserRoles.reader = false;
+          }
+          if (!newUserRoles.writer) {
+            newUserRoles.writer = false;
+          }
+
+          if (newUserRoles.admin == true) {
+            newUserRoles.reader = true;
+            newUserRoles.writer = true;
+          }
+
+          newUserRoles.pouchname = $rootScope.DB.pouchname;
+
+          var dataToPost = {};
+          dataToPost.username = trim($rootScope.userInfo.name);
+          dataToPost.password = trim($rootScope.userInfo.password);
+
+          // TODO Change this so user can select server?
+          // dataToPost.authUrl = "https://authdev.lingsync.org";
+          dataToPost.authUrl = "https://localhost:3183";
+          dataToPost.serverCode = "localhost";
+          dataToPost.userRoleInfo = newUserRoles;
+
+          Data.updateroles(dataToPost).then(function(response) {
+            $scope.loadUsersAndRoles();
+          });
+        };
+
+        $scope.removeUserFromCorpus = function(userid) {
+          var r = confirm("Are you sure you want to remove " + userid
+              + " from this corpus?");
+          if (r == true) {
+            
+            if (userid == $scope.username) {
+              window.alert("You cannot remove yourself from a corpus.");
+              return;
+            }
+            
+            var dataToPost = {};
+            dataToPost.username = trim($rootScope.userInfo.name);
+            dataToPost.password = trim($rootScope.userInfo.password);
+
+            // TODO Change this so user can select server?
+            // dataToPost.authUrl = "https://authdev.lingsync.org";
+            dataToPost.authUrl = "https://localhost:3183";
+            dataToPost.serverCode = "localhost";
+            dataToPost.userRoleInfo = {};
+            dataToPost.userRoleInfo.usernameToModify = userid;
+            dataToPost.userRoleInfo.pouchname = $rootScope.DB.pouchname;
+            dataToPost.userRoleInfo.removeUser = true;
+
+            Data.updateroles(dataToPost).then(function(response) {
+              $scope.loadUsersAndRoles();
+            });
+          }
+        };
+
         // // Un-uploaded activities
         // $scope.numberOfActivitiesToUpload = function() {
         // var number = 0;

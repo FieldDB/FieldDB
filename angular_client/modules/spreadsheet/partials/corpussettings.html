@@ -1,0 +1,42 @@
+<div>
+	<div ng-hide="userInfo==undefined">
+		Create a new corpus:<br /> <input type="text"
+			ng-model='newCorpusInfo.newCorpusName' placeholder="New corpus name">
+		<button ng-click="createNewCorpus(newCorpusInfo)">Create</button>
+	</div>
+
+	<br />
+	<hr>
+	<br />
+
+	<div ng-hide="DB==undefined || admin==false">
+		<div>
+			Add a user to <b>{{DB.corpustitle}}</b><br /> <select
+				ng-model="newUserRoleInfo.usernameToModify">
+				<option ng-repeat="user in allUsers" value={{user.id}}>{{user.id}}</option>
+			</select>
+			<!--  <input type="text" placeholder="username"
+				ng-model="newUserRoleInfo.usernameToModify"> -->
+			<br /> <input type="checkbox" ng-model="newUserRoleInfo.admin">Admin&nbsp;&nbsp;&nbsp;
+			<input type="checkbox" ng-model="newUserRoleInfo.reader">Reader&nbsp;&nbsp;&nbsp;
+			<input type="checkbox" ng-model="newUserRoleInfo.writer">Writer<br />
+			<br />
+			<button class="btn btn-primary"
+				ng-click="updateUserRoles(newUserRoleInfo)">Update</button>
+
+		</div>
+		<br />
+		<hr>
+		<br />
+
+		<div>
+			Users with access: <br />
+			<div ng-repeat="user in corpusUsers" class="user_thumbnails">
+				<img
+					ng-src="https://www.gravatar.com/avatar/{{user.value.gravatar}}"><br />
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.id)">ⓧ</a>
+				{{user.id}}
+			</div>
+		</div>
+	</div>
+</div>

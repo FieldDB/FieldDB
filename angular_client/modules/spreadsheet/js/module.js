@@ -33,6 +33,8 @@ define(
                     }).when('/settings', {
                       templateUrl : 'partials/settings.html',
                       controller : SpreadsheetStyleDataEntrySettingsController
+                    }).when('/corpussettings', {
+                      templateUrl : 'partials/corpussettings.html'
                     }).when('/register', {
                       templateUrl : 'partials/register.html',
                     }).when('/sandbox', {
