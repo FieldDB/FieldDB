@@ -31,12 +31,19 @@
 				</span> <span ng-show="dataentry==true"> <a
 					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('editSession')">Session</a>
-				</span>
-				<span ng-hide="authenticated == true">
-					<div class="rightMenuItemsDiv"><a href="#/register"><button class="btn btn-primary">Register</button></a></div>
-				</span> 
-				<span ng-hide="data==undefined"><a
-					ng-click="navigateVerifySaved('settings');">Settings</a></span> <span><a
+				</span> <span ng-show="authenticated==true">
+					<ul id="dropdown_nav">
+						<li><a href="#">Settings</a>
+							<ul>
+								<li><a ng-click="navigateVerifySaved('corpusSettings')">Corpus</a></li>
+								<li><a ng-click="navigateVerifySaved('settings');">User Interface</a></li>
+							</ul></li>
+					</ul>
+				</span> <span ng-hide="authenticated == true">
+					<div class="rightMenuItemsDiv">
+						<a href="#/register"><button class="btn btn-primary">Register</button></a>
+					</div>
+				</span> <span ng-hide="data==undefined"></span> <span><a
 					href="#/sandbox"
 					ng-click="dataentry=false;navigateVerifySaved('none')"
 					ng-show="developer==true">Statistics</a></span><span
@@ -163,9 +170,15 @@
 				</span> <span ng-show="dataentry==true"> <a
 					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('editSession')">Session</a>
-				</span> <span ng-hide="data==undefined"><a
-					ng-click="navigateVerifySaved('settings');">Settings</a></span> <span><a
-					href="#/sandbox"
+				</span> <span ng-show="authenticated==true">
+					<ul id="dropdown_nav">
+						<li><a href="#">Settings</a>
+							<ul>
+								<li><a ng-click="navigateVerifySaved('corpusSettings')">Corpus</a></li>
+								<li><a ng-click="navigateVerifySaved('settings');">User Interface</a></li>
+							</ul></li>
+					</ul>
+				</span> <span><a href="#/sandbox"
 					ng-click="dataentry=false;navigateVerifySaved('none')"
 					ng-show="developer==true">Statistics</a></span><span
 					ng-hide="data==undefined || dataentry==false"><a
@@ -315,6 +328,6 @@
 	<script src="libs/d3.v3.js"></script>
 	<script src="libs/require.min.js"
 		data-main="SpreadsheetStyleDataEntry.js"></script>
-		
+
 </body>
 </html>

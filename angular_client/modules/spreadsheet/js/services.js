@@ -121,6 +121,44 @@ define(
                     });
                     return promise;
                   },
+                  'getusers' : function(DB) {
+                    var couchInfo = $rootScope.server
+                        + DB
+                        + "/_design/pages/_view/users";
+
+                    var config = {
+                      method : "GET",
+                      url : couchInfo,
+                      withCredentials : true
+                    };
+
+                    console.log("Contacting the DB to get users for "
+                        + couchInfo);
+                    var promise = $http(config).then(function(response) {
+                      console.log("Receiving users");
+                      return response.data.rows;
+                    });
+                    return promise;
+                  },
+                  'getallusers' : function() {
+                    var couchInfo = $rootScope.server
+                        + "/zfielddbuserscouch/_all_docs";
+
+                    var config = {
+                      method : "GET",
+                      url : couchInfo,
+                      withCredentials : true
+                    };
+
+                    console.log("Contacting the DB to get all users for "
+                        + couchInfo);
+                    var promise = $http(config).then(function(response) {
+                      console.log("Receiving all users");
+                      console.log(JSON.stringify(response));
+                      return response.data.rows;
+                    });
+                    return promise;
+                  },
                   'login' : function(user, password) {
 
                     var userInfo = {
@@ -143,9 +181,10 @@ define(
                               console.log("Logging in/Keeping session alive.");
                               return response;
                             },
-                            function() {
+                            function(err) {
                               window
                                   .alert("Error logging in.\nPlease check username/password.");
+                              console.log(err);
                               $rootScope.loading = false;
                             });
                     return promise;
@@ -197,14 +236,40 @@ define(
                               } else {
                                 window
                                     .alert(JSON.stringify(response.data.info[0])
-                                        + "\nYou may now log in to this corpus.\n"
-                                        + "NOTE: You may need to log out and log back in to see this corpus in your list.");
+                                        + "\nYou may now log in to this corpus.");
                                 window.location.assign("#/");
                               }
                               return response;
                             }, function(err) {
                               console.log(JSON.stringify(err));
                               window.alert("Error creating new corpus.");
+                              $rootScope.loading = false;
+                            });
+                    return promise;
+                  },
+                  'updateroles' : function(newRoleInfo) {
+                    var config = {
+                      method : "POST",
+                      url : newRoleInfo.authUrl + "/updateroles",
+                      data : newRoleInfo,
+                    // withCredentials : true
+                    };
+
+                    var promise = $http(config)
+                        .then(
+                            function(response) {
+                              console.log("Updated user roles.");
+                              if (response.data.userFriendlyErrors) {
+                                window
+                                    .alert(response.data.userFriendlyErrors[0]);
+                              } else {
+                                window
+                                    .alert(JSON.stringify(response.data.info[0]));
+                              }
+                              return response;
+                            }, function(err) {
+                              console.log(JSON.stringify(err));
+                              window.alert("Error updating user roles.");
                               $rootScope.loading = false;
                             });
                     return promise;
