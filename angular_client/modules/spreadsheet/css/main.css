@@ -195,8 +195,8 @@ span ul {
 
 .newSessionDiv {
 	background-color: #F5FAFA;
-/* 	border-radius: 10px; */
-/* 	border: 1px solid #6D929B; */
+	/* 	border-radius: 10px; */
+	/* 	border: 1px solid #6D929B; */
 	margin-right: 5%;
 	margin-left: 5%;
 	padding: 10px;
@@ -210,6 +210,16 @@ span ul {
 	background-color: #F5FAFA;
 	border-radius: 10px;
 	border: 1px solid #6D929B;
+	margin: 5px;
+}
+
+.settings_section_header {
+	background-color: #6D929B;
+	padding: 10px;
+}
+
+.settings_section_header h2 {
+	color: #FFFFFF;
 }
 
 .user_thumbnails {
@@ -225,7 +235,7 @@ a.delete_button {
 	font-weight: 800;
 }
 
-.settingsMainPage {
+.settingsItems {
 	margin: 15px;
 }
 

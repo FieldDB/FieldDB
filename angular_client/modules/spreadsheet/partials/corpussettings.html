@@ -1,42 +1,64 @@
 <br />
 <br />
-<div class="settingsMainPage">
-	<div ng-hide="userInfo==undefined" class="form-horizontal">
-		<h3>Create a new corpus:</h3><br /> <input type="text"
-			ng-model='newCorpusInfo.newCorpusName' placeholder="New corpus name">
+<center>
+	<h1>Corpus Settings</h1>
+</center>
+
+<div ng-hide="userInfo==undefined" class="form-horizontal">
+	<div class="settings_section_header">
+		<h2>Create a new corpus</h2>
+	</div>
+	<br />
+	<div class="settingsItems">
+		<input type="text" ng-model='newCorpusInfo.newCorpusName'
+			placeholder="New corpus name">
 		<button class="btn btn-primary"
 			ng-click="createNewCorpus(newCorpusInfo)">Create</button>
 	</div>
+</div>
 
-	<br />
-	<hr>
-	<br />
+<br />
 
-	<div ng-show="admin==false">
-		You are not an admin for <b>{{DB.corpustitle}}</b>. Please contact an
-		admin if you wish to alter user access to this corpus.
-	</div>
+<div class="settingsItems" ng-show="admin==false">
+	You are not an admin for <b>{{DB.corpustitle}}</b>. Please contact an
+	admin if you wish to alter user access to this corpus.
+</div>
 
-	<div ng-hide="DB==undefined || admin==false">
-		<div>
-			<h3>Add a user to <b>{{DB.corpustitle}}</b></h3><br /> <select
-				ng-model="newUserRoleInfo.usernameToModify">
+<div ng-hide="DB==undefined || admin==false">
+	<div>
+		<div class="settings_section_header">
+			<h2>
+				Add a user to <b>{{DB.corpustitle}}</b>
+			</h2>
+		</div>
+		<br />
+		<div class="settingsItems">
+			<select ng-model="newUserRoleInfo.usernameToModify">
 				<option value="" disabled selected>Choose a user...</option>
 				<option ng-repeat="user in allUsers" value={{user.id}}>{{user.id}}</option>
-			</select> <br /> <input type="checkbox" ng-model="newUserRoleInfo.admin">Admin&nbsp;&nbsp;&nbsp;
-			<input type="checkbox" ng-model="newUserRoleInfo.reader">Reader&nbsp;&nbsp;&nbsp;
-			<input type="checkbox" ng-model="newUserRoleInfo.writer">Writer<br />
+			</select> <br />
+			<div class="form-horizontal">
+				<input type="checkbox" ng-model="newUserRoleInfo.admin">Admin&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" ng-model="newUserRoleInfo.reader">Reader&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" ng-model="newUserRoleInfo.writer">Writer<br />
+			</div>
 			<br />
 			<button class="btn btn-primary"
 				ng-click="updateUserRoles(newUserRoleInfo)">Update</button>
 
 		</div>
-		<br />
-		<hr>
-		<br />
+	</div>
+	<br />
 
-		<div>
-			<h3>Users with access to <b>{{DB.corpustitle}}</b>:</h3> <br />
+	<div>
+		<div class="settings_section_header">
+			<h2>
+				Users with access to <b>{{DB.corpustitle}}</b>
+			</h2>
+		</div>
+		<br />
+		<div class="settingsItems">
+
 			<div ng-repeat="user in corpusUsers" class="user_thumbnails">
 				<img
 					ng-src="https://www.gravatar.com/avatar/{{user.value.gravatar}}"><br />
@@ -47,4 +69,5 @@
 				other users of this corpus.</div>
 		</div>
 	</div>
+</div>
 </div>
