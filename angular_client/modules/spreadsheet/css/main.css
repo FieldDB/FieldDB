@@ -5,11 +5,11 @@
 }
 
 h3 {
-	color: #000000;
+	color: #6D929B;
 }
 
 body {
-	background-color: #74C2E1;
+	background-color: #ACD1E9;
 	font-family: 'Droid Sans', sans-serif;
 }
 
@@ -32,9 +32,9 @@ body {
 }
 
 .menubar {
-	background-color: #000000;
-	border: 1px solid #000000;
-	background: #000000;
+	background-color: #6D929B;
+	border: 1px solid #6D929B;
+	background: #6D929B;
 	min-height: 50px;
 	/* 	position: fixed; */
 	left: 0;
@@ -63,7 +63,7 @@ body {
 	font-size: 1.1em;
 	font-weight: 900;
 	padding: 0 15px;
-	background: #000000;
+	background: #6D929B;
 	transition: color 700ms;
 	-moz-transition: color 700ms; /* Firefox 4 */
 	-webkit-transition: color 700ms; /* Safari and Chrome */
@@ -71,7 +71,7 @@ body {
 }
 
 .menubar a:hover {
-	color: #74C2E1;
+	color: #ACD1E9;
 }
 
 .menuTitle {
@@ -116,9 +116,9 @@ body {
 }
 
 .subMenubar {
-	background-color: #000000;
-	border: 1px solid #000000;
-	background: #000000;
+	background-color: #6D929B;
+	border: 1px solid #6D929B;
+	background: #6D929B;
 	color: #FFFFFF;
 	left: 0;
 	right: 0;
@@ -130,9 +130,9 @@ body {
 
 .subSubMenubar {
 	/* 	top: 80; */
-	background-color: #000000;
-	border: 1px solid #000000;
-	background: #000000;
+	background-color: #6D929B;
+	border: 1px solid #6D929B;
+	background: #6D929B;
 	left: 0;
 	right: 0;
 	margin-left: 0px;
@@ -183,9 +183,9 @@ span ul {
 }
 
 .mainPageDiv {
-	background-color: #CDFFFF;
+	background-color: #F5FAFA;
 	border-radius: 10px;
-	border: 3px solid #000000;
+	border: 3px solid #6D929B;
 	margin-left: 20%;
 	margin-right: 20%;
 	padding: 10px;
@@ -194,9 +194,9 @@ span ul {
 }
 
 .newSessionDiv {
-	background-color: #CDFFFF;
+	background-color: #F5FAFA;
 /* 	border-radius: 10px; */
-/* 	border: 1px solid #000000; */
+/* 	border: 1px solid #6D929B; */
 	margin-right: 5%;
 	margin-left: 5%;
 	padding: 10px;
@@ -207,9 +207,9 @@ span ul {
 }
 
 .settingsTemplate {
-	background-color: #CDFFFF;
+	background-color: #F5FAFA;
 	border-radius: 10px;
-	border: 1px solid #000000;
+	border: 1px solid #6D929B;
 }
 
 .user_thumbnails {
@@ -221,7 +221,7 @@ span ul {
 
 a.delete_button {
 	text-decoration: none;
-	color: #000000;
+	color: #6D929B;
 	font-weight: 800;
 }
 
@@ -230,16 +230,16 @@ a.delete_button {
 }
 
 .selectedRow {
-	background-color: #74C2E1;
+	background-color: #ACD1E9;
 	border: 2px solid;
 }
 
 .unselectedRow:nth-child(odd) {
-	background-color: #CDFFFF;
+	background-color: #F5FAFA;
 }
 
 .unselectedRow {
-	background-color: #9DF3F5;
+	background-color: #C1DAD6;
 }
 
 .unselectedNewRow {
@@ -252,7 +252,7 @@ a.delete_button {
 }
 
 .settingsRow {
-	background-color: #9DF3F5;
+	background-color: #C1DAD6;
 	box-shadow: 10px 10px 5px #888888;
 }
 
@@ -266,17 +266,17 @@ div.row {
 }
 
 h1 {
-	color: #000000;
+	color: #6D929B;
 }
 
 h2 {
-	color: #000000;
+	color: #6D929B;
 }
 
 input:focus {
 	background-color: #EAFFFF;
 	outline-size: 6px;
-	outline: #000000;
+	outline: #6D929B;
 }
 
 .clearCacheMessage {

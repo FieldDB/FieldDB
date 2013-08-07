@@ -32,7 +32,7 @@
 		</div>
 
 		<div ng-show="loading==false" class="newSessionDiv">
-			<button class="btn"
+			<button class="btn btn-primary"
 				ng-click="showCreateSessionDiv=!showCreateSessionDiv">Create
 				New Session</button>
 			<div ng-show="showCreateSessionDiv==true">
@@ -118,8 +118,8 @@
 		</div>
 		<div ng-show="DBselected==true">
 			Logged in as {{username}}<br />Selected corpus: {{DB.corpustitle}}<br />
-			<button class="btn-small btn-primary" ng-click="DBselected=false">
-				<b>Select a Different Corpus</b>
+			<button class="btn btn-primary" ng-click="DBselected=false">
+				Select a Different Corpus
 			</button>
 		</div>
 	</div>
