@@ -1,95 +1,37 @@
-<div id="Settings">
-	<div class="row">
-		<div class="span12 pagination-centered">
-			<h1>Settings</h1>
-		</div>
-	</div>
-
+<br />
+<br />
+<div class="settingsMainPage">
+	<h1>Settings</h1>
+	<hr>
 	<br />
 
 	<!-- Number of records to display -->
-	<div class="row settingsRow">
-		<div class="span6 offset5">
-			Number of records to display per page: <select
-				ng-model="numberOfRecordsToDisplay"
-				ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
-				<option value="5">5</option>
-				<option value="10">10</option>
-				<option value="25" selected>25</option>
-				<option value="50">50</option>
-				<option value={{data.length}}>All {{data.length}}</option>
-			</select>
-		</div>
-		<div class="span1">
-			<button class="btn btn-primary"
-				ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">Save</button>
-		</div>
-	</div>
-
-	<br />
-
-	<!-- TEMPLATE 1 -->
-
-	<div class="row settingsHeader">
-		<div class="span12 pagination-centered">
-			<h2>Template 1</h2>
-		</div>
-		<div class="span2 offset5 pagination-centered activeTemplate"
-			ng-show="template=='template1'">
-			<h3>Active</h3>
-		</div>
-	</div>
-	<div class="row settingsRow">
-		<div class="span3">
-			<select class="span3" ng-model="newFieldPreferences1.field1">
-				<option value="">Empty</option>
-				<option select-dropdown1=field1 ng-repeat="field in availableFields"
-					value={{field.label}}>{{field.title}}</option>
-			</select>
-		</div>
-		<div class="span3">
-			<select class="span3" ng-model="newFieldPreferences1.field2">
-				<option value="">Empty</option>
-				<option select-dropdown1=field2 ng-repeat="field in availableFields"
-					value={{field.label}}>{{field.title}}</option>
-			</select>
-		</div>
-		<div class="span3">
-			<select class="span3" ng-model="newFieldPreferences1.field3">
-				<option value="">Empty</option>
-				<option select-dropdown1=field3 ng-repeat="field in availableFields"
-					value={{field.label}}>{{field.title}}</option>
-			</select>
-		</div>
-		<div class="span2">
-			<select class="span2" ng-model="newFieldPreferences1.field4">
-				<option value="">Empty</option>
-				<option select-dropdown1=field4 ng-repeat="field in availableFields"
-					value={{field.label}}>{{field.title}}</option>
-			</select>
-		</div>
-
-		<div class="span1">
-			<button class="btn btn-primary"
-				ng-click="saveNewPreferences('template1', newFieldPreferences1)">Save/Activate
-				Template</button>
-		</div>
+	<div class="form-horizontal">
+		Number of records to display per page: <select
+			ng-model="numberOfRecordsToDisplay"
+			ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="25" selected>25</option>
+			<option value="50">50</option>
+			<option value={{data.length}}>All {{data.length}}</option>
+		</select>
+		<button class="btn btn-primary"
+			ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">Save</button>
 	</div>
 	<br />
-
+	<hr>
+	<h2>Templates</h2>
+	<center>
+		<hr width="80%">
+	</center>
 
 	<!-- TEMPLATE 2 -->
 
-	<div class="row settingsHeader">
-		<div class="span12 pagination-centered">
-			<h2>Template 2</h2>
-		</div>
-		<div class="span2 offset5 pagination-centered activeTemplate"
-			ng-show="template=='template2'">
-			<h3>Active</h3>
-		</div>
-	</div>
-	<div class="row settingsRow">
+	<h3>
+		<span ng-show="template=='template2'">✓</span> Full Template
+	</h3>
+	<div class="row settingsTemplate">
 		<div class="span4">
 			<select class="span4" ng-model="newFieldPreferences2.field1">
 				<option value="">Empty</option>
@@ -114,31 +56,74 @@
 
 
 		</div>
-		<div class="span2">
-			<select class="span2" ng-model="newFieldPreferences2.field6">
+		<div class="span4">
+			<select class="span4" ng-model="newFieldPreferences2.field6">
 				<option value="">Empty</option>
 				<option select-dropdown2=field6 ng-repeat="field in availableFields"
 					value={{field.label}}>{{field.title}}</option>
 			</select>
 
-			<textarea class="span2" rows="3" disabled='disabled'
+			<textarea class="span4" rows="3" disabled='disabled'
 				placeholder="Tags"></textarea>
 
 		</div>
-		<div class="span1">&nbsp;</div>
-		<div class="span1">
-			<button class="btn btn-primary"
-				ng-click="saveNewPreferences('template2', newFieldPreferences2)">Save/Activate
-				Template</button>
+	</div>
+	<br />
+	<button class="btn btn-primary"
+		ng-click="saveNewPreferences('template2', newFieldPreferences2)">Save/Activate
+		Full Template</button>
+
+	<center>
+		<hr width="80%">
+	</center>
+
+	<!-- TEMPLATE 1 -->
+
+	<h3>
+		<span ng-show="template=='template1'">✓</span> Compact Template
+	</h3>
+	<div class="row settingsTemplate">
+		<div class="span3">
+			<select class="span3" ng-model="newFieldPreferences1.field1">
+				<option value="">Empty</option>
+				<option select-dropdown1=field1 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span3">
+			<select class="span3" ng-model="newFieldPreferences1.field2">
+				<option value="">Empty</option>
+				<option select-dropdown1=field2 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span3">
+			<select class="span3" ng-model="newFieldPreferences1.field3">
+				<option value="">Empty</option>
+				<option select-dropdown1=field3 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span3">
+			<select class="span3" ng-model="newFieldPreferences1.field4">
+				<option value="">Empty</option>
+				<option select-dropdown1=field4 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
 		</div>
 	</div>
-
+	<br />
+	<button class="btn btn-primary"
+		ng-click="saveNewPreferences('template1', newFieldPreferences1)">Save/Activate
+		Compact Template</button>
+	<br />
+	<hr>
 
 	<!-- TEMPLATE 3 -->
 
 
 
-	<div ng-hide="developer!=true">
+	<div ng-show="developer==true">
 		<!-- EDIT BUTTONS -->
 		<br />
 		<div class="row">

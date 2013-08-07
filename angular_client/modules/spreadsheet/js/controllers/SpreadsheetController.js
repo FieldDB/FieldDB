@@ -193,7 +193,7 @@ define(
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
-        $scope.developer = false;
+        $rootScope.developer = false;
         $scope.dataentry = false;
         $scope.searching = false;
         $rootScope.activeSubMenu = 'none';
@@ -203,6 +203,7 @@ define(
         $scope.editSessionDetails = false;
         $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
         $scope.activities = [];
+        $rootScope.DBselected = false;
 
         // Set data size for pagination
         $rootScope.resultSize = Preferences.resultSize;
@@ -221,6 +222,11 @@ define(
           if ($scope.saved == 'no') {
             window.alert("Please save changes before continuing");
           } else {
+
+            if ($rootScope.DB) {
+              $rootScope.DBselected = true;
+            }
+            console.log($rootScope.DB);
 
             if ($scope.searching == true) {
               $scope.searching = false;
@@ -384,11 +390,24 @@ define(
             if (auth.user == "senhorzinho" || auth.user == "gina") {
               var r = confirm("Hello, developer! Would you like to enter developer mode?");
               if (r == true) {
-                $scope.developer = true;
+                $rootScope.developer = true;
               }
             }
             $rootScope.loading = true;
-            $rootScope.server = auth.server;
+            if (auth.server == "mcgill") {
+              $rootScope.server = "https://prosody.linguistics.mcgill.ca/corpus/";
+              $rootScope.serverCode = "mcgill";
+            }
+
+            if (auth.server == "testing") {
+              $rootScope.server = "https://corpusdev.lingsync.org/";
+              $rootScope.serverCode = "testing";
+            }
+
+            if (auth.server == "localhost") {
+              $rootScope.server = "https://localhost:6984/";
+              $rootScope.serverCode = "localhost";
+            }
             Data.login(auth.user, auth.password).then(
                 function(response) {
                   if (response == undefined) {
@@ -1232,16 +1251,15 @@ define(
           dataToPost.username = trim(newUserInfo.username.toLowerCase());
           dataToPost.password = trim(newUserInfo.password);
 
-          // TODO Change this so user can select server?
-          // dataToPost.authUrl = "https://authdev.lingsync.org";
-          dataToPost.authUrl = "https://localhost:3183";
-
-          // TODO Alter how appVersion works?
+          if (newUserInfo.serverCode == "localhost") {
+            dataToPost.authUrl = "https://localhost:3183";
+          } else {
+            dataToPost.authUrl = "https://authdev.lingsync.org";
+          }
           dataToPost.appVersionWhenCreated = "ss1.62.2";
           // dataToPost.appVersionWhenCreated = this.appVersion;
 
           dataToPost.serverCode = newUserInfo.serverCode;
-          // dataToPost.serverCode = "localhost";
 
           if (dataToPost.username != ""
               && (dataToPost.password == trim(newUserInfo.confirmPassword))
@@ -1254,16 +1272,19 @@ define(
         };
 
         $scope.createNewCorpus = function(newCorpusInfo) {
+          console.log($rootScope.serverCode);
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
           dataToPost.password = trim($rootScope.userInfo.password);
 
-          // TODO Change this so user can select server?
-          // dataToPost.authUrl = "https://authdev.lingsync.org";
-          dataToPost.authUrl = "https://localhost:3183";
-          dataToPost.serverCode = "localhost";
+          if ($rootScope.serverCode == "localhost") {
+            dataToPost.authUrl = "https://localhost:3183";
+          } else {
+            dataToPost.authUrl = "https://authdev.lingsync.org";
+          }
+
+          dataToPost.serverCode = $rootScope.serverCode;
           dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
-          // dataToPost.serverCode = newUserInfo.serverCode;
 
           if (dataToPost.newCorpusName != "") {
             // Create new corpus
@@ -1274,7 +1295,7 @@ define(
               auth.password = $rootScope.userInfo.password;
               auth.server = $rootScope.server;
               $scope.loginUser(auth);
-              
+
             });
           } else {
             window.alert("Please verify corpus name.");
@@ -1282,11 +1303,18 @@ define(
         };
 
         $scope.loadUsersAndRoles = function() {
-          // Get all users from server
+          // Get all users from server; push all users except current user;
+          // admins cannot alter their own permissions (to avoid a scenario in
+          // which a corpus has zero admins)
           Data.getallusers().then(function(allUsers) {
-            $rootScope.allUsers = allUsers;
-          })
-          
+            $rootScope.allUsers = [];
+            for (i in allUsers) {
+              if (allUsers[i].id != $scope.username) {
+                $rootScope.allUsers.push(allUsers[i]);
+              }
+            }
+          });
+
           // Get current user for this corpus
           Data.getusers($rootScope.DB.pouchname).then(function(response) {
             $rootScope.corpusUsers = response;
@@ -1307,15 +1335,8 @@ define(
 
         $scope.updateUserRoles = function(newUserRoles) {
           if (!newUserRoles || !newUserRoles.usernameToModify) {
-            window.alert("Please enter a username.");
+            window.alert("Please select a username.");
             return;
-          }
-
-          if (newUserRoles.usernameToModify == $scope.username) {
-            var r = confirm("Are you sure you want to edit roles for your own username?");
-            if (r == false) {
-              return;
-            }
           }
 
           if (!newUserRoles.admin) {
@@ -1339,10 +1360,13 @@ define(
           dataToPost.username = trim($rootScope.userInfo.name);
           dataToPost.password = trim($rootScope.userInfo.password);
 
-          // TODO Change this so user can select server?
-          // dataToPost.authUrl = "https://authdev.lingsync.org";
-          dataToPost.authUrl = "https://localhost:3183";
-          dataToPost.serverCode = "localhost";
+          if ($rootScope.serverCode == "localhost") {
+            dataToPost.authUrl = "https://localhost:3183";
+          } else {
+            dataToPost.authUrl = "https://authdev.lingsync.org";
+          }
+
+          dataToPost.serverCode = $rootScope.serverCode;
           dataToPost.userRoleInfo = newUserRoles;
 
           Data.updateroles(dataToPost).then(function(response) {
@@ -1354,20 +1378,27 @@ define(
           var r = confirm("Are you sure you want to remove " + userid
               + " from this corpus?");
           if (r == true) {
-            
+
+            // Prevent an admin from removing him/herself from a corpus; This
+            // helps to avoid a situation in which there is no admin for a
+            // corpus
             if (userid == $scope.username) {
-              window.alert("You cannot remove yourself from a corpus.");
+              window
+                  .alert("You cannot remove yourself from a corpus.\nOnly another server admin can remove you.");
               return;
             }
-            
+
             var dataToPost = {};
             dataToPost.username = trim($rootScope.userInfo.name);
             dataToPost.password = trim($rootScope.userInfo.password);
 
-            // TODO Change this so user can select server?
-            // dataToPost.authUrl = "https://authdev.lingsync.org";
-            dataToPost.authUrl = "https://localhost:3183";
-            dataToPost.serverCode = "localhost";
+            if ($rootScope.serverCode == "localhost") {
+              dataToPost.authUrl = "https://localhost:3183";
+            } else {
+              dataToPost.authUrl = "https://authdev.lingsync.org";
+            }
+
+            dataToPost.serverCode = $rootScope.serverCode;
             dataToPost.userRoleInfo = {};
             dataToPost.userRoleInfo.usernameToModify = userid;
             dataToPost.userRoleInfo.pouchname = $rootScope.DB.pouchname;
