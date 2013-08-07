@@ -1339,6 +1339,11 @@ define(
             return;
           }
 
+          if (!newUserRoles.admin && !newUserRoles.reader && !newUserRoles.writer) {
+            window.alert("You haven't selected any roles to add to " + newUserRoles.usernameToModify + "!\nPlease select at least one role.");
+            return;
+          }
+          
           if (!newUserRoles.admin) {
             newUserRoles.admin = false;
           }
