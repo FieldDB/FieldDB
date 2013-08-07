@@ -1,23 +1,29 @@
-<div>
-	<div ng-hide="userInfo==undefined">
-		Create a new corpus:<br /> <input type="text"
+<br />
+<br />
+<div class="settingsMainPage">
+	<div ng-hide="userInfo==undefined" class="form-horizontal">
+		<h3>Create a new corpus:</h3><br /> <input type="text"
 			ng-model='newCorpusInfo.newCorpusName' placeholder="New corpus name">
-		<button ng-click="createNewCorpus(newCorpusInfo)">Create</button>
+		<button class="btn btn-primary"
+			ng-click="createNewCorpus(newCorpusInfo)">Create</button>
 	</div>
 
 	<br />
 	<hr>
 	<br />
 
+	<div ng-show="admin==false">
+		You are not an admin for <b>{{DB.corpustitle}}</b>. Please contact an
+		admin if you wish to alter user access to this corpus.
+	</div>
+
 	<div ng-hide="DB==undefined || admin==false">
 		<div>
-			Add a user to <b>{{DB.corpustitle}}</b><br /> <select
+			<h3>Add a user to <b>{{DB.corpustitle}}</b></h3><br /> <select
 				ng-model="newUserRoleInfo.usernameToModify">
+				<option value="" disabled selected>Choose a user...</option>
 				<option ng-repeat="user in allUsers" value={{user.id}}>{{user.id}}</option>
-			</select>
-			<!--  <input type="text" placeholder="username"
-				ng-model="newUserRoleInfo.usernameToModify"> -->
-			<br /> <input type="checkbox" ng-model="newUserRoleInfo.admin">Admin&nbsp;&nbsp;&nbsp;
+			</select> <br /> <input type="checkbox" ng-model="newUserRoleInfo.admin">Admin&nbsp;&nbsp;&nbsp;
 			<input type="checkbox" ng-model="newUserRoleInfo.reader">Reader&nbsp;&nbsp;&nbsp;
 			<input type="checkbox" ng-model="newUserRoleInfo.writer">Writer<br />
 			<br />
@@ -30,13 +36,15 @@
 		<br />
 
 		<div>
-			Users with access: <br />
+			<h3>Users with access to <b>{{DB.corpustitle}}</b>:</h3> <br />
 			<div ng-repeat="user in corpusUsers" class="user_thumbnails">
 				<img
 					ng-src="https://www.gravatar.com/avatar/{{user.value.gravatar}}"><br />
 				<a class="delete_button" ng-click="removeUserFromCorpus(user.id)">ⓧ</a>
 				{{user.id}}
 			</div>
+			<div ng-show="corpusUsers[0]==undefined">There are currently no
+				other users of this corpus.</div>
 		</div>
 	</div>
 </div>

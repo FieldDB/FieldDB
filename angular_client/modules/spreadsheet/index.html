@@ -32,11 +32,12 @@
 					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('editSession')">Session</a>
 				</span> <span ng-show="authenticated==true">
-					<ul id="dropdown_nav">
-						<li><a href="#">Settings</a>
+					<ul class="dropdown_nav">
+						<li><a>Settings</a>
 							<ul>
 								<li><a ng-click="navigateVerifySaved('corpusSettings')">Corpus</a></li>
-								<li><a ng-click="navigateVerifySaved('settings');">User Interface</a></li>
+								<li ng-hide="DB.pouchname==undefined"><a
+									ng-click="navigateVerifySaved('settings');">User Interface</a></li>
 							</ul></li>
 					</ul>
 				</span> <span ng-hide="authenticated == true">
@@ -56,9 +57,11 @@
 						</div>
 						<div>
 							<button class="btn btn-success"
-								ng-click="saveChanges();searching=false;" ng-show="saved!='no'">Saved</button>
+								ng-click="saveChanges();searching=false;"
+								ng-show="saved!='no' && dataentry==true">Saved</button>
 							<button class="btn btn-danger"
-								ng-click="saveChanges();searching=false;" ng-show="saved=='no'">Save</button>
+								ng-click="saveChanges();searching=false;"
+								ng-show="saved=='no' && dataentry==true">Save</button>
 							<button class="btn btn-warning" ng-click="reloadPage()">Log
 								out</button>
 						</div>
@@ -68,26 +71,29 @@
 			</div>
 			<div class="subMenubar" ng-show="activeSubMenu=='editSession'"
 				ng-cloak>
-				<span>Change Session:</span> <select class="span3"
-					ng-model='activeSessionToSwitchTo'>
-					<option value='none'>All sessions</option>
-					<option select-dropdown-session
-						ng-repeat="session in sessions | orderBy:'dateCreated'"
-						value={{session._id}}>{{session.dateCreated | shortDate}}
-						{{session.title}} ({{(data | filter: session._id).length}})</option>
-				</select>
-				<button class="btn btn-primary"
-					ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
-					Session</button>
-				&nbsp;&nbsp;&nbsp;
-				<button class="btn"
-					ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails"
-					ng-hide="activeSession==undefined">Edit Session Info</button>
-				&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-danger"
-					ng-click="deleteEmptySession(activeSession)"
-					ng-show="(data | filter: activeSession).length==0">Delete
-					Session</button>
+				<div class="form-horizontal">
+					<span>Change Session:</span> <select class="span3"
+						ng-model='activeSessionToSwitchTo'>
+						<option value='none'>All sessions</option>
+						<option select-dropdown-session
+							ng-repeat="session in sessions | orderBy:'dateCreated'"
+							value={{session._id}}>{{session.dateCreated |
+							shortDate}} {{session.title}} ({{(data | filter:
+							session._id).length}})</option>
+					</select>
+					<button class="btn btn-primary"
+						ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
+						Session</button>
+					&nbsp;&nbsp;&nbsp;
+					<button class="btn"
+						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails"
+						ng-hide="activeSession==undefined">Edit Session Info</button>
+					&nbsp;&nbsp;&nbsp;
+					<button class="btn btn-danger"
+						ng-click="deleteEmptySession(activeSession)"
+						ng-show="(data | filter: activeSession).length==0">Delete
+						Session</button>
+				</div>
 				<div class="subSubMenubar"
 					ng-show="editSessionDetails==true && activeSession!=undefined"
 					ng-cloak>
@@ -171,11 +177,12 @@
 					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('editSession')">Session</a>
 				</span> <span ng-show="authenticated==true">
-					<ul id="dropdown_nav">
+					<ul class="dropdown_nav">
 						<li><a href="#">Settings</a>
 							<ul>
 								<li><a ng-click="navigateVerifySaved('corpusSettings')">Corpus</a></li>
-								<li><a ng-click="navigateVerifySaved('settings');">User Interface</a></li>
+								<li ng-hide="DB.pouchname==undefined"><a
+									ng-click="navigateVerifySaved('settings');">User Interface</a></li>
 							</ul></li>
 					</ul>
 				</span> <span><a href="#/sandbox"
@@ -189,9 +196,11 @@
 					</div>
 					<div class="smallMenuBarInfoItem">
 						<button class="btn btn-success"
-							ng-click="saveChanges();searching=false;" ng-show="saved!='no'">Saved</button>
+							ng-click="saveChanges();searching=false;"
+							ng-show="saved!='no' && dataentry==true">Saved</button>
 						<button class="btn btn-danger"
-							ng-click="saveChanges();searching=false;" ng-show="saved=='no'">Save</button>
+							ng-click="saveChanges();searching=false;"
+							ng-show="saved=='no' && dataentry==true">Save</button>
 						<button class="btn btn-warning" ng-click="reloadPage()">Log
 							out</button>
 					</div>

@@ -35,8 +35,7 @@ body {
 	background-color: #000000;
 	border: 1px solid #000000;
 	background: #000000;
-	/* 	height: 40px; */
-	min-height: 40px;
+	min-height: 50px;
 	/* 	position: fixed; */
 	left: 0;
 	right: 0;
@@ -50,7 +49,7 @@ body {
 	margin-top: 0;
 	padding: 0;
 	text-align: center;
-	height: 40px;
+	height: 50px;
 	border-radius: 5px;
 	display: inline;
 	color: #FFFFFF;
@@ -58,7 +57,7 @@ body {
 
 .menubar span a {
 	text-decoration: none;
-	line-height: 40px;
+	line-height: 50px;
 	color: #FFFFFF;
 	text-transform: uppercase;
 	font-size: 1.1em;
@@ -146,35 +145,34 @@ span ul {
 	display: inline;
 }
 
-#dropdown_nav, #dropdown_nav ul {
+.dropdown_nav,.dropdown_nav ul {
 	padding: 0;
 	margin: 0;
 	list-style: none;
 	z-index: 1000;
 }
 
-#dropdown_nav a {
+.dropdown_nav a {
 	display: block;
 	width: 10em;
 }
 
-#dropdown_nav li {
+.dropdown_nav li {
 	float: left;
 	width: 10em;
 }
 
-#dropdown_nav li ul {
+.dropdown_nav li ul {
 	position: absolute;
 	width: 10em;
 	left: -999em;
 }
 
-#dropdown_nav li:hover ul {
+.dropdown_nav li:hover ul {
 	left: auto;
 }
 
 .mainBody {
-	/* 	margin-top: 40px; */
 	margin-bottom: 10px;
 	position: relative;
 	z-index: 1;
@@ -185,6 +183,7 @@ span ul {
 }
 
 .mainPageDiv {
+	background-color: #CDFFFF;
 	border-radius: 10px;
 	border: 3px solid #000000;
 	margin-left: 20%;
@@ -196,15 +195,21 @@ span ul {
 
 .newSessionDiv {
 	background-color: #CDFFFF;
-	border-radius: 10px;
-	border: 1px solid #000000;
-	margin-right: 25%;
-	margin-left: 25%;
+/* 	border-radius: 10px; */
+/* 	border: 1px solid #000000; */
+	margin-right: 5%;
+	margin-left: 5%;
 	padding: 10px;
 }
 
 .newSessionTable {
 	text-align: left;
+}
+
+.settingsTemplate {
+	background-color: #CDFFFF;
+	border-radius: 10px;
+	border: 1px solid #000000;
 }
 
 .user_thumbnails {
@@ -218,6 +223,10 @@ a.delete_button {
 	text-decoration: none;
 	color: #000000;
 	font-weight: 800;
+}
+
+.settingsMainPage {
+	margin: 15px;
 }
 
 .selectedRow {
@@ -274,5 +283,4 @@ input:focus {
 	text-align: center;
 	font-size: .8em;
 	font-weight: 700;
-	
 }

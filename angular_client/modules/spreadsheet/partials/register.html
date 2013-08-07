@@ -2,14 +2,16 @@
 <br />
 <div class="mainPageDiv">
 	<form>
-		Server:<br /><select ng-model="newUserInfo.serverCode">
+		Server<sup>*</sup>:<br />
+		<select ng-model="newUserInfo.serverCode">
 			<option value="mcgill">McGill</option>
 			<option value="localhost">Localhost</option>
 			<option value="testing">LingSync Beta</option>
-		</select>
-		<br />
-		<input type="text" placeholder="username" ng-model="newUserInfo.username"><br />
-		<input type="password" placeholder="password"
+		</select> <br /> <font size="1"><i>*Please note that data may be
+				shared only between users who are registered on the same server.</i></font> <br />
+		<input type="text" placeholder="username"
+			ng-model="newUserInfo.username"><br /> <input
+			type="password" placeholder="password"
 			ng-model="newUserInfo.password"><br /> <input
 			type="password" placeholder="confirm password"
 			ng-model="newUserInfo.confirmPassword"><br /> <input
