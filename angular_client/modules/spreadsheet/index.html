@@ -74,6 +74,8 @@
 				<div class="form-horizontal">
 					<span>Change Session:</span> <select class="span3"
 						ng-model='activeSessionToSwitchTo'>
+						<option value="" disabled selected>Choose
+							session...</option>
 						<option value='none'>All sessions</option>
 						<option select-dropdown-session
 							ng-repeat="session in sessions | orderBy:'dateCreated'"
