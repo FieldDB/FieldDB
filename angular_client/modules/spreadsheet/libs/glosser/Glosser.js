@@ -40,10 +40,10 @@ var Glosser = Glosser || {};
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is very
  * conservative.
- * 
+ *
  * @param {String}
  *          unparsedUtterance The raw utterance line.
- * 
+ *
  * @return {String} The guessed morphemes line.
  */
 // Glosser.morphemefinder = function(unparsedUtterance) {
@@ -61,16 +61,16 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
 
     // Divide the utterance line into words
     var unparsedWords = unparsedUtterance.trim().split(/ +/);
-    for ( var word in unparsedWords) {
+    for (var word in unparsedWords) {
       // Add the start/end-of-word character to the word
       unparsedWords[word] = "@" + unparsedWords[word] + "@";
 
       // Find the rules which match in local precedence
       var matchedRules = [];
-      for ( var r in rules) {
+      for (var r in rules) {
         if (unparsedWords[word].indexOf(r.replace(/-/, "")) >= 0) {
           matchedRules.push({
-            r : rules[r]
+            r: rules[r]
           });
         }
       }
@@ -79,11 +79,11 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
       // generate from start to end
       var prefixtemplate = [];
       prefixtemplate.push("@");
-      for ( var i = 0; i < 10; i++) {
+      for (var i = 0; i < 10; i++) {
         if (prefixtemplate[i] == undefined) {
           break;
         }
-        for ( var j in matchedRules) {
+        for (var j in matchedRules) {
           if (prefixtemplate[i] == matchedRules[j].r[0].key.x) {
             if (prefixtemplate[i + 1]) { // ambiguity (two potential following
               // morphemes)
@@ -99,15 +99,14 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
       // If the prefix template hit ambiguity in the middle, try from the suffix
       // in until it hits ambiguity
       var suffixtemplate = [];
-      if (prefixtemplate[prefixtemplate.length - 1] != "@"
-          || prefixtemplate.length == 1) {
+      if (prefixtemplate[prefixtemplate.length - 1] != "@" || prefixtemplate.length == 1) {
         // Suffix:
         suffixtemplate.push("@")
-        for ( var i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
           if (suffixtemplate[i] == undefined) {
             break;
           }
-          for ( var j in matchedRules) {
+          for (var j in matchedRules) {
             if (suffixtemplate[i] == matchedRules[j].r[0].key.y) {
               if (suffixtemplate[i + 1]) { // ambiguity (two potential
                 // following morphemes)
@@ -132,7 +131,7 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
       var template = [];
       var shortTemplate = prefixtemplate.concat(suffixtemplate.reverse());
       var limit = 0;
-      for ( var j = 0; j < shortTemplate.length; j++) {
+      for (var j = 0; j < shortTemplate.length; j++) {
         shortTemplate[j] = "(" + shortTemplate[j] + ")";
         template.push(shortTemplate[j]);
         if (shortTemplate[j] == "(@)") {
@@ -147,7 +146,7 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
       // Use the regular expression to find a guessed morphemes line
       // Use backreferences to parse into morphemes
       potentialParse = unparsedWords[word].replace(regex,
-          "$1-$2-$3-$4-$5-$6-$7-$8-$9").replace(/\$[0-9]/g, "")
+        "$1-$2-$3-$4-$5-$6-$7-$8-$9").replace(/\$[0-9]/g, "")
       // Remove any backreferences that weren't used
       .replace(/@/g, "") // Remove the start/end-of-line symbol
       .replace(/--+/g, "-") // Ensure that there is only ever one "-" in a row
@@ -171,10 +170,10 @@ Glosser.glossFinder = function(morphemesLine, pouchname) {
   var glossGroups = [];
   var lexiconNodes = localStorage.getItem(pouchname + "lexiconResults");
   lexiconNodes = JSON.parse(lexiconNodes);
-  for ( var group in morphemeGroup) {
+  for (var group in morphemeGroup) {
     var morphemes = morphemeGroup[group].split("-");
     var glosses = [];
-    for ( var m in morphemes) {
+    for (var m in morphemes) {
       var key = morphemes[m];
       // Get the most often occurring gloss for this morpheme string
       // TODO Provide selection drop-down for less often used morphemes
@@ -287,7 +286,7 @@ Glosser.glossFinder = function(morphemesLine, pouchname) {
 // }
 /*
  * Some sample D3 from the force-html.html example
- * 
+ *
  */
 // Glosser.rulesGraph = Glosser.rulesGraph || {};
 // Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph,
