@@ -32,7 +32,8 @@
 		</div>
 		<div class="span2">
 			<button ng-show="selected=='newEntry'" class="btn btn-primary"
-				type="submit">Create New</button>
+				type="submit">Create New</button><br />
+				<font size="1" ng-show="audioCompatible==true"><i>*Note that you must create a record before you can attach audio.</i></font>
 		</div>
 	</form>
 </div>
@@ -108,10 +109,19 @@
 				<button class="btn btn-primary" type="submit">Done</button>
 				&nbsp;
 				<button class="btn btn-danger"
-					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button>
+					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br />				    		
+			</form>
 			</div>
-		</form>
-
+			<div class="row">
+				<div class="span10">
+				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img src="img/speaker_icon.png"> {{recordingStatus}}</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span9 offset1">
+				<span ng-repeat="attachment in datum.attachments"><a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a> <audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio> {{attachment.description}} <br /></span>
+			</div>
+		</div>
 	</div>
 
 
@@ -147,7 +157,7 @@
 		<div class="span2">
 			<span title="Date modified">Last modified:<br />{{datum.dateModified
 				| standardDate}}
-			</span> <br />
+			</span> <br /> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span>
 		</div>
 	</div>
 
