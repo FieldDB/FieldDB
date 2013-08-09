@@ -205,6 +205,8 @@ define(
         $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
         $scope.activities = [];
         $rootScope.DBselected = false;
+        $scope.recordingStatus = "Record";
+        $scope.recordingButtonClass = "btn btn-success";
 
         // Set data size for pagination
         $rootScope.resultSize = Preferences.resultSize;
@@ -293,6 +295,22 @@ define(
                     newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
                     newDatumFromServer.comments = dataFromServer[i].value.comments;
                     newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
+                    // Get attachments
+                    newDatumFromServer.attachments = [];
+                    for (key in dataFromServer[i].value._attachments) {
+                      var attachment = {
+                        "filename": key
+                      };
+                      if (dataFromServer[i].value.attachmentInfo && dataFromServer[i].value.attachmentInfo[key]) {
+                        attachment.description = dataFromServer[i].value.attachmentInfo[key].description;
+                      } else {
+                        attachment.description = "Add a description";
+                      }
+                      newDatumFromServer.attachments.push(attachment);
+                    }
+                    if (newDatumFromServer.attachments.length > 0) {
+                      newDatumFromServer.hasAudio = true;
+                    }
                     scopeData.push(newDatumFromServer);
                   }
                 }
@@ -374,8 +392,8 @@ define(
             }, function(error) {
               console.log("Error retrieving lexicon.");
             });
-
         };
+
         $scope.loginUser = function(auth) {
           if (!auth || !auth.server) {
             window.alert("Please choose a server.");
@@ -1430,17 +1448,137 @@ define(
           window.alert($rootScope.currentResult);
         };
 
-        $scope.hasGetUserMedia = function() {
-          // Note: Opera is unprefixed.
+        // Audio recording
+
+        // TODO Rewrite this code for non-testing
+
+        function hasGetUserMedia() {
           return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
             navigator.mozGetUserMedia || navigator.msGetUserMedia);
         }
 
         if (hasGetUserMedia()) {
-          // Good to go!
+          $rootScope.audioCompatible = true;
         } else {
-          alert('getUserMedia() is not supported in your browser');
+          $rootScope.audioCompatible = false;
         }
+
+        var onFail = function(e) {
+          console.log('Audio Rejected!', e);
+        };
+
+        var onSuccess = function(s) {
+          var context = new webkitAudioContext();
+          var mediaStreamSource = context.createMediaStreamSource(s);
+          recorder = new Recorder(mediaStreamSource);
+          recorder.record();
+        };
+
+        window.URL = window.URL || window.webkitURL;
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+        var recorder;
+
+        $scope.startStopRecording = function(datum) {
+          if ($scope.recordingStatus == "Record") {
+            startRecording();
+          } else {
+            stopRecording(datum);
+          }
+        };
+
+        startRecording = function() {
+          if (navigator.getUserMedia) {
+            $scope.recordingButtonClass = "btn btn-danger";
+            $scope.recordingStatus = "Recording";
+            navigator.getUserMedia({
+              audio: true
+            }, onSuccess, onFail);
+          } else {
+            console.log('navigator.getUserMedia not present');
+          }
+        };
+
+        stopRecording = function(datum) {
+          recorder.stop();
+          $scope.recordingStatus = "Record";
+          $scope.recordingButtonClass = "btn btn-success";
+          recorder.exportWAV(function(s) {
+
+            var blobToBase64 = function(blob, cb) {
+              var reader = new FileReader();
+              reader.onload = function() {
+                var dataUrl = reader.result;
+                var base64 = dataUrl.split(',')[1];
+                cb(base64);
+              };
+              reader.readAsDataURL(blob);
+            };
+
+            var base64File;
+            blobToBase64(s, function(x) {
+              base64File = x;
+
+              // Save converted file as attachment
+              Data.async($rootScope.DB.pouchname, datum.id).then(function(originalDoc) {
+                var rev = originalDoc._rev;
+                var filename = Date.now() + ".wav";
+
+                var newAttachment = {};
+                newAttachment = {
+                  "content_type": "audio\/wav",
+                  "data": base64File
+                };
+
+                if (originalDoc._attachments == undefined) {
+                  originalDoc._attachments = {};
+                }
+
+                if (originalDoc.attachmentInfo == undefined) {
+                  originalDoc.attachmentInfo = {};
+                }
+
+                originalDoc._attachments[filename] = newAttachment;
+                originalDoc.attachmentInfo[filename] = {
+                  "description": filename
+                };
+
+                Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
+                  console.log("Successfully uploaded attachment.");
+                  var newScopeAttachment = {
+                    "filename": filename,
+                    "description": filename
+                  };
+                  datum.attachments.push(newScopeAttachment);
+                  datum.hasAudio = true;
+                });
+              });
+            });
+          });
+        };
+
+        $scope.deleteAttachmentFromCorpus = function(datum, filename) {
+          var r = confirm("Are you sure you want to delete the file " + filename + "?");
+          if (r == true) {
+            var record = datum.id + "/" + filename;
+            Data.async($rootScope.DB.pouchname, datum.id).then(function(response) {
+              Data.removeRecord($rootScope.DB.pouchname, record, response._rev).then(function(response) {
+                for (i in datum.attachments) {
+                  if (datum.attachments[i].filename == filename) {
+                    datum.attachments.splice(i, i);
+                  }
+                }
+                if (datum.attachments.length == 0) {
+                  datum.hasAudio = false;
+                }
+                window.alert("File successfully deleted.");
+              });
+            });
+          }
+        };
+        // End Audio test
+
 
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',

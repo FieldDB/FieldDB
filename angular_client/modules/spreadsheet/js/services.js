@@ -126,7 +126,7 @@ define(
               return promise;
             },
             'getallusers': function() {
-              var couchInfo = $rootScope.server + "/zfielddbuserscouch/_all_docs";
+              var couchInfo = $rootScope.server + "zfielddbuserscouch/_all_docs";
 
               var config = {
                 method: "GET",
@@ -176,7 +176,7 @@ define(
               var config = {
                 method: "POST",
                 url: newUserInfo.authUrl + "/register",
-                data: newUserInfo,
+                data: newUserInfo
                 // withCredentials : true
               };
 
@@ -203,7 +203,7 @@ define(
                 method: "POST",
                 url: newCorpusInfo.authUrl + "/newcorpus",
                 data: newCorpusInfo,
-                // withCredentials : true
+                withCredentials: true
               };
 
               var promise = $http(config)
@@ -232,7 +232,7 @@ define(
                 method: "POST",
                 url: newRoleInfo.authUrl + "/updateroles",
                 data: newRoleInfo,
-                // withCredentials : true
+                withCredentials: true
               };
 
               var promise = $http(config)
