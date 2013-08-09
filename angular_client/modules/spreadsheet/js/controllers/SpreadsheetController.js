@@ -1562,17 +1562,29 @@ define(
           var r = confirm("Are you sure you want to delete the file " + filename + "?");
           if (r == true) {
             var record = datum.id + "/" + filename;
-            Data.async($rootScope.DB.pouchname, datum.id).then(function(response) {
-              Data.removeRecord($rootScope.DB.pouchname, record, response._rev).then(function(response) {
+            Data.async($rootScope.DB.pouchname, datum.id).then(function(originalRecord) {
+              Data.removeRecord($rootScope.DB.pouchname, record, originalRecord._rev).then(function(response) {
                 for (i in datum.attachments) {
                   if (datum.attachments[i].filename == filename) {
+                    datum.attachments[i].description = "Deleted";
                     datum.attachments.splice(i, i);
                   }
                 }
-                if (datum.attachments.length == 0) {
-                  datum.hasAudio = false;
-                }
-                window.alert("File successfully deleted.");
+
+                Data.async($rootScope.DB.pouchname, datum.id).then(function(record) {
+                  // Delete attachment info for deleted record
+                  for (key in record.attachmentInfo) {
+                    if (key == filename) {
+                      delete record.attachmentInfo[key];
+                    }
+                  }
+                  Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
+                    if (datum.attachments.length == 0) {
+                      datum.hasAudio = false;
+                    }
+                    window.alert("File successfully deleted.");
+                  });
+                });
               });
             });
           }
