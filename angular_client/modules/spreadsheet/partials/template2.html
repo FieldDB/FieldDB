@@ -39,7 +39,7 @@
 		</form>
 	</div>
 			<div class="row" ng-show="selected=='newEntry'">
-				<div class="span3">
+				<div class="span3 offset1 uploadAudio">
 					<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 				</div>
 				<div class="span6 uploadAudio">
@@ -127,7 +127,7 @@
 			</div>
 		</div>
 			<div class="row">
-				<div class="span3">
+				<div class="span3 offset1 uploadAudio">
 					<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 				</div>
 				<div class="span6 uploadAudio">
@@ -141,9 +141,9 @@
 					<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
 					<span class="form-horizontal">
 					<input type="text" ng-model='attachment.description'> 
-					&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined">Save</button></span><br />
+					&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined">Save Description</button></span><br />
 				</span>
-				<span ng-show="datum.id==undefined">Hit refresh (↻) on the LingSync toolbar to be able to listen to this audio.</span>
+				<span ng-show="datum.id==undefined">Hit refresh (↻) on the LingSync toolbar to be able to listen to this audio.<br/>Note that it may take a few moments for the uploading audio to show up here.</span>
 			</div>
 		</div>
 	</div>
