@@ -229,7 +229,6 @@ define(
             if ($rootScope.DB) {
               $rootScope.DBselected = true;
             }
-            console.log($rootScope.DB);
 
             if ($scope.searching == true) {
               $scope.searching = false;
@@ -1203,7 +1202,6 @@ define(
                     template.user.authUrl = $rootScope.server[0];
 
                     $scope.activities.push(template);
-                    console.log(JSON.stringify($scope.activities));
                   });
             })(i);
           }
@@ -1270,7 +1268,6 @@ define(
         };
 
         $scope.createNewCorpus = function(newCorpusInfo) {
-          console.log($rootScope.serverCode);
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
           dataToPost.password = trim($rootScope.userInfo.password);
@@ -1428,7 +1425,7 @@ define(
             if (i < (tags.length - 1)) {
               if (tags[i].tag) {
                 tagString = tagString + tags[i].tag + ", ";
-              };
+              }
             } else {
               if (tags[i].tag) {
                 tagString = tagString + tags[i].tag;
@@ -1516,6 +1513,7 @@ define(
           recorder.stop();
           $scope.recordingStatus = "Record";
           $scope.recordingButtonClass = "btn btn-success";
+          $scope.processingAudio = true;
           recorder.exportWAV(function(s) {
 
             var blobToBase64 = function(blob, cb) {
@@ -1542,8 +1540,6 @@ define(
 
               // Test to see if this is a new file
               if (!datum || !datum.id) {
-                // window.alert("You may need to refresh data (↻) to be able to access this new recording.");
-
                 if (!datum) {
                   datum = {};
                 }
@@ -1563,20 +1559,7 @@ define(
                 $scope.$apply(function() {
                   $scope.newFieldDatahasAudio = true;
                 });
-                // console.log(JSON.stringify(datum));
-                // $scope.createRecord(datum);
-                // $scope.newFieldData = '';
-                // $scope.saveChanges();
-                // $scope.newFieldData._attachments = {};
-                // $scope.newFieldData._attachments[filename] = newAttachment;
-                // $scope.newFieldData.attachments = [];
-                // var newScopeAttachment = {
-                //   "filename": filename,
-                //   "description": filename
-                // };
-                // $scope.newFieldData.attachments.push(newScopeAttachment);
-                // $scope.newFieldData.hasAudio = true;
-                // $scope.newFieldData = '';
+                $scope.processingAudio = false;
                 return;
               }
 
@@ -1606,8 +1589,19 @@ define(
                   };
                   datum.attachments.push(newScopeAttachment);
                   datum.hasAudio = true;
+                  $scope.processingAudio = false;
                 });
               });
+            });
+          });
+        };
+
+        $scope.saveAttachmentInfo = function(attachment, datumID) {
+          Data.async($rootScope.DB.pouchname, datumID).then(function(originalDoc) {
+            var rev = originalDoc._rev;
+            originalDoc.attachmentInfo[attachment.filename].description = attachment.description;
+            Data.saveEditedRecord($rootScope.DB.pouchname, datumID, originalDoc, rev).then(function(response) {
+              window.alert("Successfully updated description for " + attachment.filename);
             });
           });
         };
@@ -1643,9 +1637,6 @@ define(
             });
           }
         };
-        // End Audio test
-
-
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
       '$resource', '$filter', 'Data'
