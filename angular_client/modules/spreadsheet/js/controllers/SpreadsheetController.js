@@ -207,6 +207,7 @@ define(
         $rootScope.DBselected = false;
         $scope.recordingStatus = "Record";
         $scope.recordingButtonClass = "btn btn-success";
+        $scope.recordingIcon = "speaker_icon.png";
 
         // Set data size for pagination
         $rootScope.resultSize = Preferences.resultSize;
@@ -1472,6 +1473,7 @@ define(
         var onFail = function(e) {
           $scope.recordingStatus = "Record";
           $scope.recordingButtonClass = "btn btn-success";
+          $scope.recordingIcon = "speaker_icon.png";
           console.log('Audio Rejected!', e);
           window.alert("Unable to record audio.");
         };
@@ -1501,6 +1503,7 @@ define(
           if (navigator.getUserMedia) {
             $scope.recordingButtonClass = "btn btn-danger";
             $scope.recordingStatus = "Recording";
+            $scope.recordingIcon = "recording_icon.gif";
             navigator.getUserMedia({
               audio: true
             }, onSuccess, onFail);
@@ -1513,87 +1516,120 @@ define(
           recorder.stop();
           $scope.recordingStatus = "Record";
           $scope.recordingButtonClass = "btn btn-success";
+          $scope.recordingIcon = "speaker_icon.png";
           $scope.processingAudio = true;
           recorder.exportWAV(function(s) {
+            $scope.uploadFile(datum, s);
+          });
+        };
 
-            var blobToBase64 = function(blob, cb) {
-              var reader = new FileReader();
-              reader.onload = function() {
-                var dataUrl = reader.result;
-                var base64 = dataUrl.split(',')[1];
-                cb(base64);
-              };
-              reader.readAsDataURL(blob);
+        $scope.uploadFile = function(datum, file) {
+
+          var blobToBase64 = function(blob, cb) {
+            var reader = new FileReader();
+            reader.onload = function() {
+              var dataUrl = reader.result;
+              var base64 = dataUrl.split(',')[1];
+              cb(base64);
             };
+            reader.readAsDataURL(blob);
+          };
 
-            var base64File;
-            blobToBase64(s, function(x) {
-              base64File = x;
+          var base64File;
+          var filePrefix;
+          // Test to see if this is a new file
+          if (!datum || !datum.id) {
+            filePrefix = "new_datum";
+          } else {
+            filePrefix = datum.id;
+          }
 
-              var filename = Date.now() + ".wav";
-
-              var newAttachment = {};
-              newAttachment = {
-                "content_type": "audio\/wav",
-                "data": base64File
-              };
-
+          blobToBase64(file || document.getElementById(filePrefix + "_audio-file").files[0], function(x) {
+            base64File = x;
+            var filename;
+            var content_type;
+            if (file) {
+              filename = Date.now() + ".wav";
+              content_type = "audio\/wav";
+            } else {
               // Test to see if this is a new file
               if (!datum || !datum.id) {
-                if (!datum) {
-                  datum = {};
-                }
-                datum._attachments = {};
-                datum._attachments[filename] = newAttachment;
-                datum.attachments = [];
+                var fileExt = document.getElementById("new_datum_audio-file").files[0].type.split("\/").pop();
+              } else {
+                var fileExt = document.getElementById(datum.id + "_audio-file").files[0].type.split("\/").pop();
+              }
+              if (fileExt != ("mp3" || "mpeg" || "wav" || "ogg")) {
+                window.alert("You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.");
+                return;
+              }
+              filename = Date.now() + "." + fileExt;
+              content_type = "audio\/" + fileExt;
+            }
+
+            var newAttachment = {};
+            newAttachment = {
+              "content_type": content_type,
+              "data": base64File
+            };
+
+            // Test to see if this is a new file
+            if (!datum || !datum.id) {
+              if (!datum) {
+                datum = {};
+              }
+              datum._attachments = {};
+              datum._attachments[filename] = newAttachment;
+              datum.attachments = [];
+              var newScopeAttachment = {
+                "filename": filename,
+                "description": filename
+              };
+              datum.attachmentInfo = {};
+              datum.attachmentInfo[filename] = {
+                "description": filename
+              };
+              datum.attachments.push(newScopeAttachment);
+
+              $scope.$apply(function() {
+                $scope.newFieldDatahasAudio = true;
+              });
+              $scope.$apply(function() {
+                $scope.processingAudio = false;
+              });
+              return;
+            }
+
+
+            // Save converted file as attachment
+            Data.async($rootScope.DB.pouchname, datum.id).then(function(originalDoc) {
+              var rev = originalDoc._rev;
+
+              if (originalDoc._attachments == undefined) {
+                originalDoc._attachments = {};
+              }
+
+              if (originalDoc.attachmentInfo == undefined) {
+                originalDoc.attachmentInfo = {};
+              }
+
+              originalDoc._attachments[filename] = newAttachment;
+              originalDoc.attachmentInfo[filename] = {
+                "description": filename
+              };
+
+              Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
+                console.log("Successfully uploaded attachment.");
                 var newScopeAttachment = {
                   "filename": filename,
                   "description": filename
                 };
-                datum.attachmentInfo = {};
-                datum.attachmentInfo[filename] = {
-                  "description": filename
-                };
                 datum.attachments.push(newScopeAttachment);
-
-                $scope.$apply(function() {
-                  $scope.newFieldDatahasAudio = true;
-                });
+                datum.hasAudio = true;
                 $scope.processingAudio = false;
-                return;
-              }
-
-
-              // Save converted file as attachment
-              Data.async($rootScope.DB.pouchname, datum.id).then(function(originalDoc) {
-                var rev = originalDoc._rev;
-
-                if (originalDoc._attachments == undefined) {
-                  originalDoc._attachments = {};
-                }
-
-                if (originalDoc.attachmentInfo == undefined) {
-                  originalDoc.attachmentInfo = {};
-                }
-
-                originalDoc._attachments[filename] = newAttachment;
-                originalDoc.attachmentInfo[filename] = {
-                  "description": filename
-                };
-
-                Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
-                  console.log("Successfully uploaded attachment.");
-                  var newScopeAttachment = {
-                    "filename": filename,
-                    "description": filename
-                  };
-                  datum.attachments.push(newScopeAttachment);
-                  datum.hasAudio = true;
-                  $scope.processingAudio = false;
-                });
               });
             });
           });
+
         };
 
         $scope.saveAttachmentInfo = function(attachment, datumID) {
@@ -1630,7 +1666,7 @@ define(
                     if (datum.attachments.length == 0) {
                       datum.hasAudio = false;
                     }
-                    window.alert("File successfully deleted.");
+                    console.log("File successfully deleted.");
                   });
                 });
               });
