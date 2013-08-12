@@ -256,6 +256,13 @@ a.delete_button {
 	background-color: #CCCCCC;
 }
 
+.uploadAudio {
+		border: 2px solid #6D929B;
+		background-color: #C1DAD6;
+		border-radius: 15px;
+		padding: 10px;
+}
+
 .settingsHeader {
 	background-color: #0099CC;
 	border: 1px solid;

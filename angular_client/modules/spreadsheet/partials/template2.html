@@ -2,6 +2,7 @@
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
+	<div class="row">
 	<form ng-submit="createRecord(newFieldData);newFieldData=''" >
 		<div class="span4">
 			<input focus class="span4 glossmorpheme" type="text" ng-model="newFieldData.field1"
@@ -36,9 +37,17 @@
 				<span ng-show="newFieldDatahasAudio==true"><img src="img/speaker_icon.png"></span>
 		</div>
 		</form>
-		<div class="span1">
-				<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img src="img/speaker_icon.png"> {{recordingStatus}}</button>
-		</div>
+	</div>
+			<div class="row" ng-show="selected=='newEntry'">
+				<div class="span3">
+					<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
+				</div>
+				<div class="span6 uploadAudio">
+					<input id="new_datum_audio-file" type="file" ng-model='fileToUpload' /><button class="btn-small btn-primary" ng-click="uploadFile(newFieldData)">Upload File</button>&nbsp;&nbsp;
+					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
+				</div>
+			</div>
+
 </div>
 
 <div class="row" ng-show="activeSession==undefined && loading==false">
@@ -66,7 +75,8 @@
 
 	<!-- Show when editing -->
 	<div ng-show="selected==datum">
-		<form ng-submit="markAsEdited(fieldData, datum);">
+		<div class="row">
+			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span4">
 				<input focus class="span4 glossmorpheme" type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
@@ -115,15 +125,25 @@
 					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br />				    		
 			</form>
 			</div>
-			<div class="span1">
-				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img src="img/speaker_icon.png"> {{recordingStatus}}</button><br />
-				<span ng-show="processingAudio==true"><img src="img/loading-spinner.gif"></span>
 		</div>
 			<div class="row">
+				<div class="span3">
+					<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
+				</div>
+				<div class="span6 uploadAudio">
+					<input id="{{datum.id}}_audio-file" type="file" ng-model='fileToUpload' /><button class="btn-small btn-primary" ng-click="uploadFile(datum)">Upload File</button>&nbsp;&nbsp;
+					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
+				</div>
 			</div>
 			<div class="row">
 				<div class="span9 offset1">
-				<span ng-repeat="attachment in datum.attachments"><a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a> <audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio> <input type="text" ng-model='attachment.description'> <button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined">Save</button><br /></span> <span ng-show="datum.id==undefined">Hit refresh (↻) on the LingSync toolbar to be able to listen to this audio.</span>
+				<span ng-repeat="attachment in datum.attachments"><a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a>
+					<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
+					<span class="form-horizontal">
+					<input type="text" ng-model='attachment.description'> 
+					&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined">Save</button></span><br />
+				</span>
+				<span ng-show="datum.id==undefined">Hit refresh (↻) on the LingSync toolbar to be able to listen to this audio.</span>
 			</div>
 		</div>
 	</div>
