@@ -33,9 +33,12 @@
 		<div class="span2">
 			<button ng-show="selected=='newEntry'" class="btn btn-primary"
 				type="submit">Create New</button><br />
-				<font size="1" ng-show="audioCompatible==true"><i>*Note that you must create a record before you can attach audio.</i></font>
+				<span ng-show="newFieldDatahasAudio==true"><img src="img/speaker_icon.png"></span>
 		</div>
-	</form>
+		</form>
+		<div class="span1">
+				<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img src="img/speaker_icon.png"> {{recordingStatus}}</button>
+		</div>
 </div>
 
 <div class="row" ng-show="activeSession==undefined && loading==false">
@@ -111,15 +114,14 @@
 				<button class="btn btn-danger"
 					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br />				    		
 			</form>
+			<br />
+				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img src="img/speaker_icon.png"> {{recordingStatus}}</button>
 			</div>
 			<div class="row">
-				<div class="span10">
-				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img src="img/speaker_icon.png"> {{recordingStatus}}</button>
-				</div>
 			</div>
 			<div class="row">
 				<div class="span9 offset1">
-				<span ng-repeat="attachment in datum.attachments"><a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a> <audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio> {{attachment.description}} <br /></span>
+				<span ng-repeat="attachment in datum.attachments"><a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a> <audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio> {{attachment.description}} <br /></span> <span ng-show="datum.id==undefined">Hit refresh (↻) on the LingSync toolbar to be able to listen to this audio.</span>
 			</div>
 		</div>
 	</div>

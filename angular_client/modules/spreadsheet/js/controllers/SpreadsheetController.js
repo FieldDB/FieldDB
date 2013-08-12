@@ -713,6 +713,8 @@ define(
         };
 
         $scope.createRecord = function(fieldData) {
+          $scope.newFieldDatahasAudio = false;
+
           // Edit record fields with labels from prefs
           for (dataKey in fieldData) {
             for (fieldKey in $scope.fields) {
@@ -755,6 +757,9 @@ define(
           fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
           fieldData.sessionID = $scope.activeSession;
           fieldData.saved = "no";
+          if (fieldData.attachments) {
+            fieldData.hasAudio = true;
+          }
           $scope.data.push(fieldData);
           $scope.saved = "no";
         };
@@ -943,6 +948,12 @@ define(
                         // Save comments
                         if (fieldData.comments) {
                           newRecord.comments = fieldData.comments;
+                        }
+
+                        // Save attachments
+                        if (fieldData._attachments) {
+                          newRecord._attachments = fieldData._attachments;
+                          newRecord.attachmentInfo = fieldData.attachmentInfo;
                         }
 
                         Data
@@ -1450,8 +1461,6 @@ define(
 
         // Audio recording
 
-        // TODO Rewrite this code for non-testing
-
         function hasGetUserMedia() {
           return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
             navigator.mozGetUserMedia || navigator.msGetUserMedia);
@@ -1464,7 +1473,10 @@ define(
         }
 
         var onFail = function(e) {
+          $scope.recordingStatus = "Record";
+          $scope.recordingButtonClass = "btn btn-success";
           console.log('Audio Rejected!', e);
+          window.alert("Unable to record audio.");
         };
 
         var onSuccess = function(s) {
@@ -1520,16 +1532,58 @@ define(
             blobToBase64(s, function(x) {
               base64File = x;
 
+              var filename = Date.now() + ".wav";
+
+              var newAttachment = {};
+              newAttachment = {
+                "content_type": "audio\/wav",
+                "data": base64File
+              };
+
+              // Test to see if this is a new file
+              if (!datum || !datum.id) {
+                // window.alert("You may need to refresh data (↻) to be able to access this new recording.");
+
+                if (!datum) {
+                  datum = {};
+                }
+                datum._attachments = {};
+                datum._attachments[filename] = newAttachment;
+                datum.attachments = [];
+                var newScopeAttachment = {
+                  "filename": filename,
+                  "description": filename
+                };
+                datum.attachmentInfo = {};
+                datum.attachmentInfo[filename] = {
+                  "description": filename
+                };
+                datum.attachments.push(newScopeAttachment);
+
+                $scope.$apply(function() {
+                  $scope.newFieldDatahasAudio = true;
+                });
+                // console.log(JSON.stringify(datum));
+                // $scope.createRecord(datum);
+                // $scope.newFieldData = '';
+                // $scope.saveChanges();
+                // $scope.newFieldData._attachments = {};
+                // $scope.newFieldData._attachments[filename] = newAttachment;
+                // $scope.newFieldData.attachments = [];
+                // var newScopeAttachment = {
+                //   "filename": filename,
+                //   "description": filename
+                // };
+                // $scope.newFieldData.attachments.push(newScopeAttachment);
+                // $scope.newFieldData.hasAudio = true;
+                // $scope.newFieldData = '';
+                return;
+              }
+
+
               // Save converted file as attachment
               Data.async($rootScope.DB.pouchname, datum.id).then(function(originalDoc) {
                 var rev = originalDoc._rev;
-                var filename = Date.now() + ".wav";
-
-                var newAttachment = {};
-                newAttachment = {
-                  "content_type": "audio\/wav",
-                  "data": base64File
-                };
 
                 if (originalDoc._attachments == undefined) {
                   originalDoc._attachments = {};
