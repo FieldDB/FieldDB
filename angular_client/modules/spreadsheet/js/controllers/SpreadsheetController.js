@@ -1570,7 +1570,7 @@ define(
                 if (file) {
                   filename = Date.now() + ".wav";
                   content_type = "audio\/wav";
-                  description = filename;
+                  description = "Add a description";
                 } else {
                   // Test to see if this is a new file
                   if (!datum || !datum.id) {
@@ -1656,7 +1656,7 @@ define(
               if (!datum.attachments) {
                 datum.attachments = [];
               }
-              
+
               for (key in newAttachments) {
                 var newScopeAttachment = {
                   "filename": key,
@@ -1690,7 +1690,7 @@ define(
                 for (i in datum.attachments) {
                   if (datum.attachments[i].filename == filename) {
                     datum.attachments[i].description = "Deleted";
-                    datum.attachments.splice(i, i);
+                    datum.attachments.splice(i, 1);
                   }
                 }
 
