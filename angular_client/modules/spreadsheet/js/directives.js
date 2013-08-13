@@ -66,51 +66,56 @@ define(
                 $timeout(function() {
                   element[0].focus();
                 }, 0);
-              };
+              }
             });
           };
         }).directive(
-        'input',
+        'glossmorpheme',
         function() {
-          return {
-            restrict: 'E',
-            require: 'ngModel',
-            link: function(scope, element, attrs, ngModel) {
-              if (attrs.class == undefined || attrs.class.indexOf("glossmorpheme") < 0) {
-                return;
-              }
-              // Override the input event and add custom 'glossmorpheme'
-              // logic
+          return function(scope, element) {
+            element.bind('keyup', function(e) {
+              var newUtterance = this.value;
+              var morphemeGuess = Glosser.morphemefinder(
+                newUtterance, scope.DB.pouchname);
+              var glossGuess = Glosser
+                .glossFinder(morphemeGuess, scope.DB.pouchname);
 
-              scope.$watch('glosserLoaded', function() {
-                if (attrs.placeholder == "Utterance") {
-                  element.bind('keyup', function(e) {
-                    var newUtterance = this.value;
+
+              // Set scope data for existing records
+              if (scope.fieldData) {
+                for (key in scope.fields) {
+                  if (scope.fields[key].label == "morphemes") {
                     scope.$apply(function() {
-                      scope.morphemesGuess = Glosser.morphemefinder(
-                        newUtterance, scope.DB.pouchname);
+                      scope.fieldData[key] = morphemeGuess;
                     });
-                  });
-                }
+                  }
 
-                if (attrs.placeholder == "Morphemes") {
-                  scope.$watch('morphemesGuess', function() {
-                    element.val(scope.morphemesGuess);
-                    ngModel.$setViewValue(scope.morphemesGuess);
-                    scope.glossGuess = Glosser
-                      .glossFinder(scope.morphemesGuess, scope.DB.pouchname);
-                  });
+                  if (scope.fields[key].label == "gloss") {
+                    scope.$apply(function() {
+                      scope.fieldData[key] = glossGuess;
+                    });
+                  }
                 }
+              } else {
+                // Set scope data for new record
+                for (key in scope.fields) {
+                  if (scope.fields[key].label == "morphemes") {
+                    scope.$apply(function() {
+                      scope.newFieldData[key] = morphemeGuess;
+                    });
+                  }
 
-                if (attrs.placeholder == "Gloss") {
-                  scope.$watch('glossGuess', function() {
-                    element.val(scope.glossGuess);
-                    ngModel.$setViewValue(scope.glossGuess);
-                  });
+                  if (scope.fields[key].label == "gloss") {
+                    scope.$apply(function() {
+                      scope.newFieldData[key] = glossGuess;
+                    });
+                  }
                 }
-              });
-            }
-          };
+              }
+
+
+            });
+          }
         });
 
     return SpreadsheetStyleDataEntryDirectives;

@@ -1712,6 +1712,7 @@ define(
             });
           }
         };
+
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
       '$resource', '$filter', 'Data'
