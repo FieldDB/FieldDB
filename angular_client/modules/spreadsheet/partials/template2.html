@@ -125,28 +125,42 @@
 				<br /><br />
 				<button class="btn btn-danger"
 					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br />				    		
+			</div>
 			</form>
+		</div>
+		<div class="row">
+			<div class="span3 offset1 uploadAudio">
+				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
+			</div>
+			<div class="span6 uploadAudio">
+				<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum)">Upload File(s)</button>&nbsp;&nbsp;
+			</div>
+			<div class="span1">
+				<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
 			</div>
 		</div>
-			<div class="row">
-				<div class="span3 offset1 uploadAudio">
-					<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
-				</div>
-				<div class="span6 uploadAudio">
-					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum)">Upload File(s)</button>&nbsp;&nbsp;
-				</div>
-				<div class="span1">
-					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span9 offset1">
-				<span ng-repeat="attachment in datum.attachments"><a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a>
-					<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
-					<span class="form-horizontal">
-					<input type="text" ng-model='attachment.description'> 
-					&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined">Save Description</button></span><br />
-				</span>
+		<div class="row">
+			<div class="span9 offset1">
+				<table>
+					<tr ng-repeat="attachment in datum.attachments">
+						<td>
+							<span class="form-horizontal">
+								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a>
+								<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
+							</span>
+						</td>
+						<td>
+							<span class="form-horizontal">
+								<input type="text" ng-model='attachment.description'> 
+								<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined">Save Description</button>
+							</span>
+						</td>
+						<td>
+							<a href="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" target="_blank"><img src="img/link.png"></a>
+						</td>
+					</tr>
+				</table>
+				<br />
 				<span ng-show="datum.id==undefined">Hit refresh (↻) on the LingSync toolbar to be able to listen to this audio.<br/>Note that it may take a few moments for the uploading audio to show up here.</span>
 			</div>
 		</div>
