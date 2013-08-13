@@ -33,10 +33,16 @@
 		</div>
 		<br />
 		<div class="settingsItems">
-			<select ng-model="newUserRoleInfo.usernameToModify">
+			<input list="users" ng-model="newUserRoleInfo.usernameToModify">
+				<datalist id="users">
+  				<option ng-repeat="user in allUsers" value={{user.id}}>{{user.id}}</option>
+  			</datalist>
+
+<!-- 			<select ng-model="newUserRoleInfo.usernameToModify">
 				<option value="" disabled selected>Choose a user...</option>
 				<option ng-repeat="user in allUsers" value={{user.id}}>{{user.id}}</option>
-			</select> <br />
+			</select> --> 
+			<br />
 			<div class="form-horizontal">
 				<input type="checkbox" ng-model="newUserRoleInfo.admin">Admin&nbsp;&nbsp;&nbsp;
 				<input type="checkbox" ng-model="newUserRoleInfo.reader">Reader&nbsp;&nbsp;&nbsp;

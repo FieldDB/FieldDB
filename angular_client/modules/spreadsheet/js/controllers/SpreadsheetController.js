@@ -208,6 +208,7 @@ define(
         $scope.recordingStatus = "Record";
         $scope.recordingButtonClass = "btn btn-success";
         $scope.recordingIcon = "speaker_icon.png";
+        $scope.createNewButtonClass = "btn btn-primary";
 
         // Set data size for pagination
         $rootScope.resultSize = Preferences.resultSize;
@@ -713,7 +714,6 @@ define(
         };
 
         $scope.createRecord = function(fieldData) {
-          $scope.newFieldDatahasAudio = false;
 
           // Edit record fields with labels from prefs
           for (dataKey in fieldData) {
@@ -761,6 +761,8 @@ define(
             fieldData.hasAudio = true;
           }
           $scope.data.push(fieldData);
+          $scope.newFieldDatahasAudio = false;
+          $scope.createNewButtonClass = "btn btn-primary";
           $scope.saved = "no";
         };
 
@@ -1409,17 +1411,6 @@ define(
           }
         };
 
-        // // Un-uploaded activities
-        // $scope.numberOfActivitiesToUpload = function() {
-        // var number = 0;
-        // for (i in $scope.activities) {
-        // if ($scope.activities[i]) {
-        // number += 1;
-        // }
-        // }
-        // return number;
-        // };
-
         $scope.commaList = function(tags) {
           var tagString = "";
           for (var i = 0; i < tags.length; i++) {
@@ -1525,6 +1516,8 @@ define(
 
         $scope.uploadFile = function(datum, file) {
 
+          $scope.processingAudio = true;
+
           var blobToBase64 = function(blob, cb) {
             var reader = new FileReader();
             reader.onload = function() {
@@ -1544,92 +1537,116 @@ define(
             filePrefix = datum.id;
           }
 
-          blobToBase64(file || document.getElementById(filePrefix + "_audio-file").files[0], function(x) {
-            base64File = x;
-            var filename;
-            var content_type;
-            if (file) {
-              filename = Date.now() + ".wav";
-              content_type = "audio\/wav";
-            } else {
-              // Test to see if this is a new file
-              if (!datum || !datum.id) {
-                var fileExt = document.getElementById("new_datum_audio-file").files[0].type.split("\/").pop();
-              } else {
-                var fileExt = document.getElementById(datum.id + "_audio-file").files[0].type.split("\/").pop();
-              }
-              if (fileExt != ("mp3" || "mpeg" || "wav" || "ogg")) {
-                window.alert("You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.");
-                return;
-              }
-              filename = Date.now() + "." + fileExt;
-              content_type = "audio\/" + fileExt;
+          // Create attachments
+
+          var newAttachments = {};
+
+          // If a new file, set up attachments structure, to be saved later
+          if (!datum || !datum.id) {
+            if (!datum) {
+              datum = {};
             }
 
-            var newAttachment = {};
-            newAttachment = {
-              "content_type": content_type,
-              "data": base64File
-            };
+            datum._attachments = {};
+            datum.attachments = [];
+            datum.attachmentInfo = {};
+          }
 
-            // Test to see if this is a new file
-            if (!datum || !datum.id) {
-              if (!datum) {
-                datum = {};
-              }
-              datum._attachments = {};
-              datum._attachments[filename] = newAttachment;
-              datum.attachments = [];
-              var newScopeAttachment = {
-                "filename": filename,
-                "description": filename
-              };
-              datum.attachmentInfo = {};
-              datum.attachmentInfo[filename] = {
-                "description": filename
-              };
-              datum.attachments.push(newScopeAttachment);
+          for (var i = 0; i < (document.getElementById(filePrefix + "_audio-file").files.length || 1); i++) {
+            (function(index) {
 
-              $scope.$apply(function() {
-                $scope.newFieldDatahasAudio = true;
+              blobToBase64(file || document.getElementById(filePrefix + "_audio-file").files[index], function(x) {
+                base64File = x;
+                var filename;
+                var description;
+                var content_type;
+                if (file) {
+                  filename = Date.now() + ".wav";
+                  content_type = "audio\/wav";
+                  description = filename;
+                } else {
+                  // Test to see if this is a new file
+                  if (!datum || !datum.id) {
+                    var fileExt = document.getElementById("new_datum_audio-file").files[index].type.split("\/").pop();
+                  } else {
+                    var fileExt = document.getElementById(datum.id + "_audio-file").files[index].type.split("\/").pop();
+                  }
+                  if (fileExt != ("mp3" || "mpeg" || "wav" || "ogg")) {
+                    window.alert("You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.");
+                    return;
+                  }
+                  filename = Date.now() + "" + index + "." + fileExt; // appending index in case of super-rapid processing on multi-file upload, to avoid duplicate filenames
+                  content_type = "audio\/" + fileExt;
+                  description = document.getElementById(filePrefix + "_audio-file").files[index].name;
+                }
+
+                var newAttachment = {};
+                newAttachment = {
+                  "content_type": content_type,
+                  "data": base64File
+                };
+                newAttachments[filename] = newAttachment;
+                newAttachments[filename].description = description;
+
+                // Push attachment to scope if new record, to be saved later
+                if (!datum || !datum.id) {
+                  datum._attachments[filename] = newAttachments[filename];
+                  var newScopeAttachment = {
+                    "filename": filename,
+                    "description": newAttachments[filename].description
+                  };
+                  datum.attachments.push(newScopeAttachment);
+                  datum.attachmentInfo[filename] = {
+                    "description": newAttachments[filename].description
+                  };
+                }
               });
-              $scope.$apply(function() {
-                $scope.processingAudio = false;
-              });
-              return;
+            })(i);
+          }
+
+          // Stop here if new datum record (i.e. do not upload yet)
+          if (!datum || !datum.id) {
+            $scope.createNewButtonClass = "btn btn-danger";
+            $scope.newFieldDatahasAudio = true;
+            $scope.processingAudio = false;
+            return;
+          }
+
+          // Save new attachments for existing record
+          Data.async($rootScope.DB.pouchname, datum.id).then(function(originalDoc) {
+            var rev = originalDoc._rev;
+
+            if (originalDoc._attachments == undefined) {
+              originalDoc._attachments = {};
             }
 
+            if (originalDoc.attachmentInfo == undefined) {
+              originalDoc.attachmentInfo = {};
+            }
 
-            // Save converted file as attachment
-            Data.async($rootScope.DB.pouchname, datum.id).then(function(originalDoc) {
-              var rev = originalDoc._rev;
-
-              if (originalDoc._attachments == undefined) {
-                originalDoc._attachments = {};
-              }
-
-              if (originalDoc.attachmentInfo == undefined) {
-                originalDoc.attachmentInfo = {};
-              }
-
-              originalDoc._attachments[filename] = newAttachment;
-              originalDoc.attachmentInfo[filename] = {
-                "description": filename
+            for (key in newAttachments) {
+              originalDoc._attachments[key] = newAttachments[key];
+              originalDoc.attachmentInfo[key] = {
+                "description": newAttachments[key].description
               };
+            }
 
-              Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
-                console.log("Successfully uploaded attachment.");
+            Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
+              console.log("Successfully uploaded attachment.");
+
+              // Update scope attachments
+              for (key in newAttachments) {
                 var newScopeAttachment = {
-                  "filename": filename,
-                  "description": filename
+                  "filename": key,
+                  "description": newAttachments[key].description
                 };
                 datum.attachments.push(newScopeAttachment);
-                datum.hasAudio = true;
-                $scope.processingAudio = false;
-              });
+              }
+
+              datum.hasAudio = true;
+              $scope.processingAudio = false;
             });
           });
-
         };
 
         $scope.saveAttachmentInfo = function(attachment, datumID) {
