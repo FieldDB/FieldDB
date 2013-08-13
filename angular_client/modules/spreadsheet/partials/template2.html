@@ -43,7 +43,9 @@
 					<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 				</div>
 				<div class="span6 uploadAudio">
-					<input id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)">Upload File(s)</button>&nbsp;&nbsp;
+					<input id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)">Upload File(s)</button>
+				</div>
+				<div class="span1">
 					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
 				</div>
 			</div>
@@ -132,6 +134,8 @@
 				</div>
 				<div class="span6 uploadAudio">
 					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum)">Upload File(s)</button>&nbsp;&nbsp;
+				</div>
+				<div class="span1">
 					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
 				</div>
 			</div>
