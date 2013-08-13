@@ -1606,9 +1606,19 @@ define(
 
           // Stop here if new datum record (i.e. do not upload yet)
           if (!datum || !datum.id) {
-            $scope.createNewButtonClass = "btn btn-danger";
-            $scope.newFieldDatahasAudio = true;
-            $scope.processingAudio = false;
+
+            // Force digest after recording audio
+            if (file) {
+              $scope.$apply(function() {
+                $scope.createNewButtonClass = "btn btn-danger";
+                $scope.newFieldDatahasAudio = true;
+                $scope.processingAudio = false;
+              });
+            } else {
+              $scope.createNewButtonClass = "btn btn-danger";
+              $scope.newFieldDatahasAudio = true;
+              $scope.processingAudio = false;
+            }
             return;
           }
 
