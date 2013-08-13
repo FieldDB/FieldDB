@@ -1552,7 +1552,14 @@ define(
             datum.attachmentInfo = {};
           }
 
-          for (var i = 0; i < (document.getElementById(filePrefix + "_audio-file").files.length || 1); i++) {
+          var numberOfFiles;
+          if (file) {
+            numberOfFiles = 1;
+          } else {
+            numberOfFiles = document.getElementById(filePrefix + "_audio-file").files.length;
+          }
+
+          for (var i = 0; i < numberOfFiles; i++) {
             (function(index) {
 
               blobToBase64(file || document.getElementById(filePrefix + "_audio-file").files[index], function(x) {
@@ -1644,7 +1651,12 @@ define(
             Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
               console.log("Successfully uploaded attachment.");
 
+
               // Update scope attachments
+              if (!datum.attachments) {
+                datum.attachments = [];
+              }
+              
               for (key in newAttachments) {
                 var newScopeAttachment = {
                   "filename": key,
