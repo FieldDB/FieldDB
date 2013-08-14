@@ -266,6 +266,11 @@ span ul {
 		text-align: center;
 }
 
+.uploadAudio form {
+	margin: 0;
+	padding: 0;
+}
+
 .settingsHeader {
 	background-color: #0099CC;
 	border: 1px solid;
