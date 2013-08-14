@@ -168,7 +168,7 @@
 					</tr>
 				</table>
 				<br />
-				<span ng-show="datum.id==undefined">Hit refresh (↻) on the LingSync toolbar to be able to listen to this audio.<br/>Note that it may take a few moments for the uploading audio to show up here.</span>
+				<span ng-show="datum.attachments.length > 0 && (datum.id==undefined || dataRefreshed==false)"><font size="2">If you cannot play the audio, hit refresh (↻) on the LingSync toolbar to be able to listen to this audio. Note that it may take a few moments for new audio to be uploaded and accessible.</font></span>
 			</div>
 		</div>
 	</div>

@@ -261,6 +261,7 @@ define(
                 $scope.searching = true;
               }
             } else if (itemToDisplay == "reload") {
+              $scope.dataRefreshed = true;
               $scope.searchTerm = '';
               $scope.searchHistory = null;
               $scope.search = false;
@@ -724,6 +725,11 @@ define(
           // Reset new datum form data
           document.getElementById("form_new_datum_audio-file").reset();
           $scope.newFieldData = {};
+
+          // Set dataRefreshed to false to show user notifications for data that
+          // has been created, but not yet updated in scope.
+
+          $scope.dataRefreshed = false;
 
           if (!fieldData) {
             fieldData = {};
