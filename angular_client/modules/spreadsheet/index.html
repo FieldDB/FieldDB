@@ -56,12 +56,7 @@
 							Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
 						</div>
 						<div>
-							<button class="btn btn-success"
-								ng-click="saveChanges();searching=false;"
-								ng-show="saved!='no' && dataentry==true">Saved</button>
-							<button class="btn btn-danger"
-								ng-click="saveChanges();searching=false;"
-								ng-show="saved=='no' && dataentry==true">Save</button>
+							<button ng-class="savedStateButtonClass" ng-click="saveChanges();searching=false;" ng-show="dataentry==true">{{getSavedState()}}</button>
 							<button class="btn btn-warning" ng-click="reloadPage()">Log
 								out</button>
 						</div>
@@ -197,14 +192,8 @@
 						Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
 					</div>
 					<div class="smallMenuBarInfoItem">
-						<button class="btn btn-success"
-							ng-click="saveChanges();searching=false;"
-							ng-show="saved!='no' && dataentry==true">Saved</button>
-						<button class="btn btn-danger"
-							ng-click="saveChanges();searching=false;"
-							ng-show="saved=='no' && dataentry==true">Save</button>
-						<button class="btn btn-warning" ng-click="reloadPage()">Log
-							out</button>
+						<button ng-class="savedStateButtonClass" ng-click="saveChanges();searching=false;" ng-show="dataentry==true">{{getSavedState()}}</button>
+						<button class="btn btn-warning" ng-click="reloadPage()">Log out</button>
 					</div>
 				</div>
 			</div>

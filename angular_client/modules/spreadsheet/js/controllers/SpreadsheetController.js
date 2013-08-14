@@ -210,6 +210,8 @@ define(
         $scope.recordingIcon = "speaker_icon.png";
         $scope.createNewButtonClass = "btn btn-primary";
 
+        $scope.newFieldData = {};
+
         // Set data size for pagination
         $rootScope.resultSize = Preferences.resultSize;
 
@@ -226,6 +228,8 @@ define(
         $scope.navigateVerifySaved = function(itemToDisplay) {
           if ($scope.saved == 'no') {
             window.alert("Please save changes before continuing");
+          } else if ($scope.saved == "saving") {
+            window.alert("Changes are currently being saved.\nPlease wait until this operation is done.");
           } else {
 
             if ($rootScope.DB) {
@@ -687,6 +691,8 @@ define(
         $scope.reloadPage = function() {
           if ($scope.saved == "no") {
             window.alert("Please save changes before continuing.");
+          } else if ($scope.saved == "saving") {
+            window.alert("Changes are currently being saved.\nYou may refresh the data once this operation is done.");
           } else {
             window.location.assign("#/");
             window.location.reload();
@@ -714,6 +720,14 @@ define(
         };
 
         $scope.createRecord = function(fieldData) {
+
+          // Reset new datum form data
+          document.getElementById("form_new_datum_audio-file").reset();
+          $scope.newFieldData = {};
+
+          if (!fieldData) {
+            fieldData = {};
+          }
 
           // Edit record fields with labels from prefs
           for (dataKey in fieldData) {
@@ -870,6 +884,8 @@ define(
             (function(index) {
               if ($scope.data[index].saved && $scope.data[index].saved == "no") {
 
+                $scope.saved = "saving";
+
                 // Save edited record
                 if ($scope.data[index].id) {
                   console.log("Saving edited record: " + $scope.data[index].id);
@@ -910,8 +926,10 @@ define(
                             function(response) {
                               $scope.data[index].saved = "yes";
                               $scope.uploadActivities();
+                              $scope.saved = "yes";
                             },
                             function() {
+                              $scope.saved = "no";
                               window
                                 .alert("There was an error saving the record. Please try again.");
                             });
@@ -962,9 +980,13 @@ define(
                           .saveNew($rootScope.DB.pouchname, newRecord)
                           .then(
                             function(response) {
-                              $scope.data[index].id = response.data.id;
-                              $scope.data[index].rev = response.data.rev;
-                              $scope.data[index].saved = "yes";
+                              // Check to see if newly created record is still in scope and update with response info;
+                              // user may have refreshed data before save was complete
+                              if ($scope.data[index]) {
+                                $scope.data[index].id = response.data.id;
+                                $scope.data[index].rev = response.data.rev;
+                                $scope.data[index].saved = "yes";
+                              }
                               console.log("Saved new record: " + $scope.data[index].id);
 
                               // Update activity feed with newly created
@@ -995,9 +1017,10 @@ define(
                               // Upload new activities from async
                               // process
                               $scope.uploadActivities();
-
+                              $scope.saved = "yes";
                             },
                             function() {
+                              $scope.saved = "no";
                               window
                                 .alert("There was an error saving the record. Please try again.");
                             });
@@ -1008,7 +1031,6 @@ define(
           }
           // Upload Activities
           $scope.uploadActivities();
-          $scope.saved = "yes";
         };
 
         // Set auto-save interval for 5 minutes
@@ -1597,11 +1619,12 @@ define(
 
                 // Push attachment to scope if new record, to be saved later
                 if (!datum || !datum.id) {
-                  datum._attachments[filename] = newAttachments[filename];
                   var newScopeAttachment = {
                     "filename": filename,
                     "description": newAttachments[filename].description
                   };
+
+                  datum._attachments[filename] = newAttachments[filename];
                   datum.attachments.push(newScopeAttachment);
                   datum.attachmentInfo[filename] = {
                     "description": newAttachments[filename].description
@@ -1626,6 +1649,7 @@ define(
               $scope.newFieldDatahasAudio = true;
               $scope.processingAudio = false;
             }
+
             return;
           }
 
@@ -1664,6 +1688,9 @@ define(
                 };
                 datum.attachments.push(newScopeAttachment);
               }
+
+              // Reset file input field
+              document.getElementById("form_" + filePrefix + "_audio-file").reset();
 
               datum.hasAudio = true;
               $scope.processingAudio = false;
@@ -1710,6 +1737,19 @@ define(
                 });
               });
             });
+          }
+        };
+
+        $scope.getSavedState = function() {
+          if ($scope.saved == "yes") {
+            $scope.savedStateButtonClass = "btn btn-success";
+            return "Saved";
+          } else if ($scope.saved == "no") {
+            $scope.savedStateButtonClass = "btn btn-danger";
+            return "Save";
+          } else {
+            $scope.savedStateButtonClass = "pulsing";
+            return "Saving";
           }
         };
 

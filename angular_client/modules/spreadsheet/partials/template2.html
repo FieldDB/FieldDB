@@ -3,7 +3,7 @@
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
 	<div class="row">
-	<form ng-submit="createRecord(newFieldData);newFieldData=''" >
+	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span4">
 			<input focus glossmorpheme class="span4 " type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
@@ -43,7 +43,9 @@
 					<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 				</div>
 				<div class="span6 uploadAudio">
-					<input id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)">Upload File(s)</button>
+					<form id="form_new_datum_audio-file">
+						<input id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)">Upload File(s)</button>
+					</form>
 				</div>
 				<div class="span1">
 					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
@@ -124,9 +126,9 @@
 					placeholder="{{commaList(datum.datumTags)}}"></textarea>
 			</div>
 			<div class="span2">
-				<button class="btn btn-primary" type="submit">Done</button>
+				<button class="btn btn-primary span2" type="submit">Done</button>
 				<br /><br />
-				<button class="btn btn-danger"
+				<button class="btn btn-danger span2"
 					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br />				    		
 			</div>
 			</form>
@@ -136,7 +138,9 @@
 				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 			</div>
 			<div class="span6 uploadAudio">
-				<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum)">Upload File(s)</button>&nbsp;&nbsp;
+				<form id='form_{{datum.id}}_audio-file'>
+					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum)">Upload File(s)</button>&nbsp;&nbsp;
+				</form>
 			</div>
 			<div class="span1">
 				<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
