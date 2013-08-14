@@ -209,7 +209,7 @@ define(
         $scope.recordingButtonClass = "btn btn-success";
         $scope.recordingIcon = "speaker_icon.png";
         $scope.createNewButtonClass = "btn btn-primary";
-
+        $scope.showAudioFeatures = false;
         $scope.newFieldData = {};
 
         // Set data size for pagination
@@ -1743,6 +1743,22 @@ define(
                 });
               });
             });
+          }
+        };
+
+        $scope.changeShowAudioFeatures = function() {
+          if ($scope.showAudioFeatures == true) {
+            $scope.showAudioFeatures = false;
+          } else {
+            $scope.showAudioFeatures = true;
+          }
+        };
+
+        $scope.getShowAudioFeatures = function() {
+          if ($scope.showAudioFeatures == true) {
+            return "Hide Audio";
+          } else {
+            return "Show Audio";
           }
         };
 

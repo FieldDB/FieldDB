@@ -33,17 +33,19 @@
 		</div>
 		<div class="span2">
 			<button ng-show="selected=='newEntry'" ng-class="createNewButtonClass"
-				type="submit">Create New</button><br />
+				type="submit">Create New</button><br /><br />
+			<button ng-show="selected=='newEntry'" class="btn btn-inverse" ng-click="changeShowAudioFeatures()" type="button">{{getShowAudioFeatures()}}</button><br />
 				<span ng-show="newFieldDatahasAudio==true"><img src="img/speaker_icon.png"></span>
 		</div>
 		</form>
 	</div>
-			<div class="row" ng-show="selected=='newEntry'">
+			<div class="row" ng-show="selected=='newEntry' && showAudioFeatures==true">
 				<div class="span3 offset1 uploadAudio">
 					<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 				</div>
 				<div class="span6 uploadAudio">
 					<form id="form_new_datum_audio-file">
+						<img src="img/speaker_icon.png">&nbsp;
 						<input id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)">Upload File(s)</button>
 					</form>
 				</div>
@@ -125,20 +127,22 @@
 					value={{commaList(datum.datumTags)}}
 					placeholder="{{commaList(datum.datumTags)}}"></textarea>
 			</div>
-			<div class="span2">
-				<button class="btn btn-primary span2" type="submit">Done</button>
-				<br /><br />
-				<button class="btn btn-danger span2"
-					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br />				    		
+			<div class="span3">
+				<button class="btn btn-primary" type="submit">Done</button>
+				&nbsp;&nbsp;
+				<button class="btn btn-danger"
+					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br /><br />
+				<button class="btn btn-inverse" ng-click="changeShowAudioFeatures()" type="button">{{getShowAudioFeatures()}}</button><br />			    		
 			</div>
 			</form>
 		</div>
-		<div class="row">
+		<div class="row" ng-show="showAudioFeatures==true">
 			<div class="span3 offset1 uploadAudio">
 				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 			</div>
 			<div class="span6 uploadAudio">
 				<form id='form_{{datum.id}}_audio-file'>
+					<img src="img/speaker_icon.png">&nbsp;
 					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum)">Upload File(s)</button>&nbsp;&nbsp;
 				</form>
 			</div>
@@ -146,7 +150,7 @@
 				<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" ng-show="showAudioFeatures==true">
 			<div class="span9 offset1">
 				<table>
 					<tr ng-repeat="attachment in datum.attachments">

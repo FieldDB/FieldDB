@@ -216,6 +216,8 @@ span ul {
 .settings_section_header {
 	background-color: #585947;
 	padding: 10px;
+	border-radius: 20px;
+	margin: 10px;
 }
 
 .settings_section_header h2 {
