@@ -225,17 +225,20 @@ span ul {
 }
 
 .user_thumbnails {
-	display: inline;
+	/*display: inline;*/
 	text-align: center;
 	float: left;
 	padding: 1em;
 }
 
-.delete_button {
+a.delete_button {
 	text-decoration: none;
 	color: #585947;
 	font-size: 1.6em;
 	font-weight: 800;
+}
+.delete_button:hover {
+	color: #7A012A;
 }
 
 .settingsItems {
