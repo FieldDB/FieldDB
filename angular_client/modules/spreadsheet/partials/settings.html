@@ -35,44 +35,43 @@
 			<span ng-show="template=='template2'"><b>✓</b></span> Full Template
 		</h3>
 		<div class="row settingsTemplate">
-			<div class="span4">
-				<select class="span4" ng-model="newFieldPreferences2.field1">
+			<div class="span5">
+				<select class="span5" ng-model="newFieldPreferences2.field1">
 					<option value="">Empty</option>
 					<option select-dropdown2=field1
 						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
-				</select> <select class="span4" ng-model="newFieldPreferences2.field2">
+				</select>
+				<select class="span5" ng-model="newFieldPreferences2.field2">
 					<option value="">Empty</option>
 					<option select-dropdown2=field2
 						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
-				</select> <select class="span4" ng-model="newFieldPreferences2.field3">
+				</select>
+				<select class="span5" ng-model="newFieldPreferences2.field3">
 					<option value="">Empty</option>
 					<option select-dropdown2=field3
 						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
 				</select>
 			</div>
-			<div class="span4">
-				<select class="span4" ng-model="newFieldPreferences2.field4">
+			<div class="span5">
+				<select class="span5" ng-model="newFieldPreferences2.field4">
 					<option value="">Empty</option>
 					<option select-dropdown2=field4
 						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
-				</select> <span class="span4" rows="3">Comments</span>
-
-
-			</div>
-			<div class="span4">
-				<select class="span4" ng-model="newFieldPreferences2.field6">
+				</select>
+				<select class="span5" ng-model="newFieldPreferences2.field6">
 					<option value="">Empty</option>
 					<option select-dropdown2=field6
 						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
 				</select>
 
-				<textarea class="span4" rows="3" disabled='disabled'
+				<input class="span5" type="text" disabled='disabled'
 					placeholder="Tags"></textarea>
+				<!-- <span class="span4" rows="3">Comments</span> -->
 
 			</div>
-						<div class="span1">
-				<button ng-class="recordingButtonClass"><img src="img/speaker_icon.png"> Audio</button><br />
-		</div>
+			<div class="span1">
+				Audio &amp; Comments
+			</div>
 
 		</div>
 		<br />

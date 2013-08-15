@@ -45,6 +45,14 @@ define(["angular"], function(angular) {
         return input;
       }
     };
+  }).filter('checkDatumTags', function() {
+    return function(input) {
+      if (input == "Tags") {
+        return "--";
+      }else {
+        return input;
+      }
+    }
   });
   return SpreadsheetStyleDataEntryFilters;
 });
