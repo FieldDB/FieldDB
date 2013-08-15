@@ -1590,6 +1590,13 @@ define(
             numberOfFiles = document.getElementById(filePrefix + "_audio-file").files.length;
           }
 
+          // Check to see if user has clicked on upload without recording or uploading files
+          if (numberOfFiles == 0 || numberOfFiles == null) {
+            window.alert("Please record or select audio to upload.");
+            $scope.processingAudio = false;
+            return;
+          }
+
           for (var i = 0; i < numberOfFiles; i++) {
             (function(index) {
 

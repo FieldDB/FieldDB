@@ -270,8 +270,11 @@ a.delete_button {
 		background-color: #F4F5E7;
 		min-height: 35px;
 		border-radius: 15px;
-		padding: 10px;
 		text-align: center;
+}
+
+.expandedDataInner {
+			padding: 10px;
 }
 
 .expandedDataComments {
@@ -279,7 +282,6 @@ a.delete_button {
 		background-color: #F4F5E7;
 		min-height: 35px;
 		border-radius: 15px;
-		padding: 10px;
 }
 
 .expandedData form {
