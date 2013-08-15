@@ -22,7 +22,9 @@
 					value={{session._id}}>{{session.dateCreated | shortDate}}
 					{{session.title}} ({{(data | filter: session._id).length}})</option>
 			</select>
-			<button class="btn btn-primary">Go</button>
+			<button class="btn btn-primary">Go</button>&nbsp;<button class="btn btn-info" type='button'
+				ng-click="showCreateSessionDiv=!showCreateSessionDiv">New Session</button>
+
 		</form>
 		</div>
 		<div class="row" ng-show="loading==true">
@@ -32,9 +34,6 @@
 		</div>
 
 		<div ng-show="loading==false" class="newSessionDiv">
-			<button class="btn btn-primary"
-				ng-click="showCreateSessionDiv=!showCreateSessionDiv">Create
-				New Session</button>
 			<div ng-show="showCreateSessionDiv==true">
 				<br />
 				<h3>

@@ -1452,6 +1452,9 @@ define(
               }
             }
           }
+          if (tagString == "") {
+            return "Tags";
+          }
           return tagString;
         };
 
@@ -1746,19 +1749,19 @@ define(
           }
         };
 
-        $scope.changeShowAudioFeatures = function() {
-          if ($scope.showAudioFeatures == true) {
-            $scope.showAudioFeatures = false;
+        $scope.triggerExpandCollapse = function() {
+          if ($scope.expandCollapse == true) {
+            $scope.expandCollapse = false;
           } else {
-            $scope.showAudioFeatures = true;
+            $scope.expandCollapse = true;
           }
         };
 
-        $scope.getShowAudioFeatures = function() {
-          if ($scope.showAudioFeatures == true) {
-            return "Hide Audio";
+        $scope.getExpandCollapse = function() {
+          if ($scope.expandCollapse == true) {
+            return "Collapse";
           } else {
-            return "Show Audio";
+            return "Expand";
           }
         };
 
