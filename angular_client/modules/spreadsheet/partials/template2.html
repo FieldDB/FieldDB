@@ -29,8 +29,7 @@
 		</div>
 		<div class="span2">
 			<button ng-show="selected=='newEntry'" ng-class="createNewButtonClass"
-				type="submit">Create New</button><br /><br />
-			<button ng-show="selected=='newEntry'" class="btn btn-inverse" ng-click="triggerExpandCollapse()" type="button">{{getExpandCollapse()}}</button><br />
+				type="submit">Create New</button>&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'"><br />
 				<span ng-show="newFieldDatahasAudio==true"><img src="img/speaker_icon.png"></span>
 		</div>
 		</form>
@@ -85,7 +84,7 @@
 	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
 	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
 	ng-click="selectRow(datum)" ng-hide="loading==true">
-	
+
 	<!-- Show when editing -->
 <div ng-show="selected==datum">
 			<form ng-submit="markAsEdited(fieldData, datum);">
@@ -129,8 +128,9 @@
 				<button class="btn btn-primary" type="submit">Done</button>
 				&nbsp;&nbsp;
 				<button class="btn btn-danger"
-					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button> <br /><br />
-				<button class="btn btn-inverse" ng-click="triggerExpandCollapse()" type="button">{{getExpandCollapse()}}</button> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span><br />			    		
+					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button><br /><br />
+					 	<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span><br />
+					 	<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()">			    		
 			</div>
 			</form>
 		<div class="row" ng-show="expandCollapse==true">

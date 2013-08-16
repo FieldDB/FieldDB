@@ -1769,9 +1769,9 @@ define(
 
         $scope.getExpandCollapse = function() {
           if ($scope.expandCollapse == true) {
-            return "Collapse";
+            return "img/collapse.png";
           } else {
-            return "Expand";
+            return "img/expand.png";
           }
         };
 
