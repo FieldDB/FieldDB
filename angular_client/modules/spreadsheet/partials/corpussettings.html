@@ -33,13 +33,8 @@
 		<div class="settingsItems">
 			<input list="users" ng-model="newUserRoleInfo.usernameToModify">
 				<datalist id="users">
-  				<option ng-repeat="user in allUsers" value={{user.id}}>{{user.id}}</option>
+  				<option ng-repeat="user in users.notonteam" value={{user.username}}>{{user.username}}</option>
   			</datalist>
-
-<!-- 			<select ng-model="newUserRoleInfo.usernameToModify">
-				<option value="" disabled selected>Choose a user...</option>
-				<option ng-repeat="user in allUsers" value={{user.id}}>{{user.id}}</option>
-			</select> --> 
 			<br />
 			<div class="form-horizontal">
 				<font size="3">
@@ -63,17 +58,32 @@
 			</h2>
 		</div>
 		<br />
-		<div class="settingsItems">
-
-			<div ng-repeat="user in corpusUsers" class="user_thumbnails">
+		<div class="settingsItems row">
+				<h3>Admins</h3>
+			<div ng-repeat="user in users.admins" class="user_thumbnails">
 				<img
-					ng-src="https://www.gravatar.com/avatar/{{user.value.gravatar}}"><br />
-				<a class="delete_button" ng-click="removeUserFromCorpus(user.id)">ⓧ</a>
-				{{user.id}}
+					ng-src="https://www.gravatar.com/avatar/{{user.gravatar}}"><br />
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+				{{user.username}}
 			</div>
-			<div ng-show="corpusUsers[0]==undefined">There are currently no
-				other users of this corpus.</div>
+		</div>
+		<div class="settingsItems row">
+				<h3>Readers</h3>
+			<div ng-repeat="user in users.readers" class="user_thumbnails">
+				<img
+					ng-src="https://www.gravatar.com/avatar/{{user.gravatar}}"><br />
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+				{{user.username}}
+			</div>
+		</div>
+		<div class="settingsItems row">
+				<h3>Writers</h3>
+			<div ng-repeat="user in users.writers" class="user_thumbnails">
+				<img
+					ng-src="https://www.gravatar.com/avatar/{{user.gravatar}}"><br />
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+				{{user.username}}
+			</div>
 		</div>
 	</div>
-</div>
 </div>

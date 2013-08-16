@@ -109,36 +109,20 @@ define(
               });
               return promise;
             },
-            'getusers': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/users";
-
-              var config = {
-                method: "GET",
-                url: couchInfo,
-                withCredentials: true
-              };
-
-              console.log("Contacting the DB to get users for " + couchInfo);
-              var promise = $http(config).then(function(response) {
-                console.log("Receiving users");
-                return response.data.rows;
-              });
-              return promise;
-            },
-            'getallusers': function() {
+            'getallusers': function(userInfo) {
               var couchInfo = $rootScope.server + "zfielddbuserscouch/_all_docs";
 
               var config = {
-                method: "GET",
-                url: couchInfo,
+                method: "POST",
+                url: userInfo.authUrl + "/corpusteam",
+                data: userInfo,
                 withCredentials: true
               };
 
               console.log("Contacting the DB to get all users for " + couchInfo);
               var promise = $http(config).then(function(response) {
                 console.log("Receiving all users");
-                console.log(JSON.stringify(response));
-                return response.data.rows;
+                return response.data.users;
               });
               return promise;
             },
