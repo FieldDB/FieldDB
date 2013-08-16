@@ -1329,21 +1329,24 @@ define(
         };
 
         $scope.loadUsersAndRoles = function() {
-          // Get all users from server; push all users except current user;
-          // admins cannot alter their own permissions (to avoid a scenario in
-          // which a corpus has zero admins)
-          Data.getallusers().then(function(allUsers) {
-            $rootScope.allUsers = [];
-            for (i in allUsers) {
-              if (allUsers[i].id != $scope.username) {
-                $rootScope.allUsers.push(allUsers[i]);
-              }
-            }
-          });
+          // Get all users and roles (for this corpus) from server
 
-          // Get current user for this corpus
-          Data.getusers($rootScope.DB.pouchname).then(function(response) {
-            $rootScope.corpusUsers = response;
+          dataToPost = {};
+
+          dataToPost.username = $rootScope.userInfo.name;
+          dataToPost.password = $rootScope.userInfo.password;
+          dataToPost.pouchname = $rootScope.DB.pouchname;
+          dataToPost.serverCode = $rootScope.serverCode;
+
+          if ($rootScope.serverCode == "localhost") {
+            dataToPost.authUrl = "https://localhost:3183";
+          } else {
+            dataToPost.authUrl = "https://authdev.lingsync.org";
+          }
+
+          Data.getallusers(dataToPost).then(function(users) {
+            $scope.users = users;
+            console.log(JSON.stringify($scope.users));
           });
 
           // Get privileges for logged in user
@@ -1405,17 +1408,17 @@ define(
         };
 
         $scope.removeUserFromCorpus = function(userid) {
-          var r = confirm("Are you sure you want to remove " + userid + " from this corpus?");
-          if (r == true) {
+          // Prevent an admin from removing him/herself from a corpus; This
+          // helps to avoid a situation in which there is no admin for a
+          // corpus
+          if (userid == $scope.username) {
+            window
+              .alert("You cannot remove yourself from a corpus.\nOnly another server admin can remove you.");
+            return;
+          }
 
-            // Prevent an admin from removing him/herself from a corpus; This
-            // helps to avoid a situation in which there is no admin for a
-            // corpus
-            if (userid == $scope.username) {
-              window
-                .alert("You cannot remove yourself from a corpus.\nOnly another server admin can remove you.");
-              return;
-            }
+          var r = confirm("Are you sure you want to remove " + userid + " from this corpus?\nNOTE: This will remove ALL user roles for " + userid + ". However, you may add this user again with new permissions.");
+          if (r == true) {
 
             var dataToPost = {};
             dataToPost.username = trim($rootScope.userInfo.name);
