@@ -28,7 +28,7 @@ define(
                 return promise;
               } else {
 
-                var couchInfo = $rootScope.server + DB + "/_design/pages/_view/datums"
+                var couchInfo = $rootScope.server + DB + "/_design/pages/_view/datums";
 
                 var config = {
                   method: "GET",

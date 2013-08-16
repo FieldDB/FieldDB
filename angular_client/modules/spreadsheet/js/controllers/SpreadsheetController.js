@@ -38,7 +38,7 @@ define(
         // Set/get/update user preferences
         var defaultPreferences = {
           "userTemplate": "template2",
-          "resultSize": 5,
+          "resultSize": 10,
           "availableFields": {
             "judgement": {
               "label": "judgement",
@@ -1346,7 +1346,6 @@ define(
 
           Data.getallusers(dataToPost).then(function(users) {
             $scope.users = users;
-            console.log(JSON.stringify($scope.users));
           });
 
           // Get privileges for logged in user

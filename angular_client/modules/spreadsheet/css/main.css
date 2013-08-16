@@ -216,7 +216,7 @@ span ul {
 .settings_section_header {
 	background-color: #F0F5FF;
 	border: 1px #102E37 solid;
-	padding: 2px;
+	padding-left: 10px;
 	border-radius: 10px;
 	margin: 10px;
 	/*float: left;*/
