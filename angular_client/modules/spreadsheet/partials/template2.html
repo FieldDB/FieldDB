@@ -1,4 +1,4 @@
-<div arrow-key class="row"
+<div arrow-key
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
@@ -85,10 +85,9 @@
 	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
 	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
 	ng-click="selectRow(datum)" ng-hide="loading==true">
-
+	
 	<!-- Show when editing -->
 <div ng-show="selected==datum">
- 		<div class="row">
 			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span5">
 				<input glossmorpheme focus class="span5" 
@@ -134,7 +133,6 @@
 				<button class="btn btn-inverse" ng-click="triggerExpandCollapse()" type="button">{{getExpandCollapse()}}</button> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span><br />			    		
 			</div>
 			</form>
-		</div>
 		<div class="row" ng-show="expandCollapse==true">
 			<div class="span10 offset1 expandedDataComments">
 			<div class="expandedDataInner">
