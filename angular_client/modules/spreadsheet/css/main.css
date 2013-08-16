@@ -5,11 +5,11 @@
 }
 
 h3 {
-	color: #585947;
+	color: #102E37;
 }
 
 body {
-	background-color: #E8E6DA;
+	background-color: #FCFCFC;
 	font-family: 'Droid Sans', sans-serif;
 }
 
@@ -32,9 +32,9 @@ body {
 }
 
 .menubar {
-	background-color: #585947;
-	border: 1px solid #585947;
-	background: #585947;
+	background-color: #102E37;
+	border: 1px solid #102E37;
+	background: #102E37;
 	min-height: 50px;
 	/* 	position: fixed; */
 	left: 0;
@@ -63,7 +63,7 @@ body {
 	font-size: 1.1em;
 	font-weight: 900;
 	padding: 0 15px;
-	background: #585947;
+	background: #102E37;
 	transition: color 700ms;
 	-moz-transition: color 700ms; /* Firefox 4 */
 	-webkit-transition: color 700ms; /* Safari and Chrome */
@@ -71,7 +71,7 @@ body {
 }
 
 .menubar a:hover {
-	color: #A6AF7A;
+	color: #6D8CA0;
 }
 
 .menuTitle {
@@ -116,9 +116,9 @@ body {
 }
 
 .subMenubar {
-	background-color: #585947;
-	border: 1px solid #585947;
-	background: #585947;
+	background-color: #102E37;
+	border: 1px solid #102E37;
+	background: #102E37;
 	color: #FFFFFF;
 	left: 0;
 	right: 0;
@@ -130,9 +130,9 @@ body {
 
 .subSubMenubar {
 	/* 	top: 80; */
-	background-color: #585947;
-	border: 1px solid #585947;
-	background: #585947;
+	background-color: #102E37;
+	border: 1px solid #102E37;
+	background: #102E37;
 	left: 0;
 	right: 0;
 	margin-left: 0px;
@@ -183,9 +183,9 @@ span ul {
 }
 
 .mainPageDiv {
-	background-color: #F4F5E7;
+	background-color: #F0F5FF;
 	border-radius: 10px;
-	border: 3px solid #585947;
+	border: 1px solid #102E37;
 	margin-left: 20%;
 	margin-right: 20%;
 	padding: 10px;
@@ -194,9 +194,9 @@ span ul {
 }
 
 .newSessionDiv {
-	background-color: #F4F5E7;
+	background-color: #F0F5FF;
 	/* 	border-radius: 10px; */
-	/* 	border: 1px solid #585947; */
+	/* 	border: 1px solid #102E37; */
 	margin-right: 5%;
 	margin-left: 5%;
 	padding: 10px;
@@ -207,21 +207,25 @@ span ul {
 }
 
 .settingsTemplate {
-	background-color: #F4F5E7;
+	background-color: #F0F5FF;
 	border-radius: 10px;
-	border: 1px solid #585947;
+	border: 1px solid #102E37;
 	margin: 5px;
 }
 
 .settings_section_header {
-	background-color: #585947;
-	padding: 10px;
-	border-radius: 20px;
+	background-color: #F0F5FF;
+	border: 1px #102E37 solid;
+	padding: 2px;
+	border-radius: 10px;
 	margin: 10px;
+	/*float: left;*/
 }
 
 .settings_section_header h2 {
-	color: #FFFFFF;
+	font-size: 1.2em;
+	color: #102E37;
+	margin: 0px;
 }
 
 .user_thumbnails {
@@ -233,7 +237,7 @@ span ul {
 
 a.delete_button {
 	text-decoration: none;
-	color: #585947;
+	color: #102E37;
 	font-size: 1.6em;
 	font-weight: 800;
 }
@@ -249,25 +253,25 @@ a.delete_button {
 }
 
 .selectedRow {
-	background-color: #A6AF7A;
+	background-color: #6D8CA0;
 	border: 2px solid;
 }
 
 .unselectedRow:nth-child(odd) {
-	background-color: #CCCEA9;
+	background-color: #F1F0FF;
 }
 
 .unselectedRow {
-	background-color: #E8E6DA;
+	background-color: #FCFCFC;
 }
 
 .unselectedNewRow {
-	background-color: #6D8CA0;
+	background-color: #3399CC;
 }
 
 .expandedData {
-		border: 2px solid #585947;
-		background-color: #F4F5E7;
+		border: 2px solid #102E37;
+		background-color: #F0F5FF;
 		min-height: 35px;
 		border-radius: 15px;
 		text-align: center;
@@ -278,8 +282,8 @@ a.delete_button {
 }
 
 .expandedDataComments {
-		border: 2px solid #585947;
-		background-color: #F4F5E7;
+		border: 2px solid #102E37;
+		background-color: #F0F5FF;
 		min-height: 35px;
 		border-radius: 15px;
 }
@@ -309,17 +313,17 @@ div.row {
 }
 
 h1 {
-	color: #585947;
+	color: #102E37;
 }
 
 h2 {
-	color: #585947;
+	color: #102E37;
 }
 
 input:focus {
 	background-color: #EAFFFF;
 	outline-size: 6px;
-	outline: #585947;
+	outline: #102E37;
 }
 
 .clearCacheMessage {

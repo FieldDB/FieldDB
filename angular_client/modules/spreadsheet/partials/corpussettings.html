@@ -6,7 +6,7 @@
 	<div class="settings_section_header">
 		<h2>Create a new corpus</h2>
 	</div>
-	<br />
+	<div class="clearDiv">&nbsp;</div>
 	<div class="settingsItems">
 		<input type="text" ng-model='newCorpusInfo.newCorpusName'
 			placeholder="New corpus name">
@@ -15,7 +15,7 @@
 	</div>
 </div>
 
-<br />
+<hr />
 
 <div class="settingsItems" ng-show="admin==false">
 	You are not an admin for <b>{{DB.corpustitle}}</b>. Please contact an
@@ -29,7 +29,7 @@
 				Add a user to <b>{{DB.corpustitle}}</b>
 			</h2>
 		</div>
-		<br />
+		<div class="clearDiv">&nbsp;</div>
 		<div class="settingsItems">
 			<input list="users" ng-model="newUserRoleInfo.usernameToModify">
 				<datalist id="users">
@@ -49,7 +49,7 @@
 
 		</div>
 	</div>
-	<br />
+	<hr />
 
 	<div>
 		<div class="settings_section_header">
@@ -57,7 +57,7 @@
 				Users with access to <b>{{DB.corpustitle}}</b>
 			</h2>
 		</div>
-		<br />
+		<div class="clearDiv">&nbsp;</div>
 		<div class="settingsItems row">
 				<h3>Admins</h3>
 			<div ng-repeat="user in users.admins" class="user_thumbnails">
