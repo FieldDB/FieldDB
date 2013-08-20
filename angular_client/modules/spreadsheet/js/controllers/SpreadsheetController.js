@@ -411,12 +411,12 @@ define(
               // "withCredentials" : true
             };
 
-            if (auth.user == "senhorzinho" || auth.user == "gina") {
-              var r = confirm("Hello, developer! Would you like to enter developer mode?");
-              if (r == true) {
-                $rootScope.developer = true;
-              }
-            }
+            // if (auth.user == "senhorzinho") {
+            //   var r = confirm("Hello, developer! Would you like to enter developer mode?");
+            //   if (r == true) {
+            //     $rootScope.developer = true;
+            //   }
+            // }
             $rootScope.loading = true;
             if (auth.server == "mcgill") {
               $rootScope.server = "https://prosody.linguistics.mcgill.ca/corpus/";

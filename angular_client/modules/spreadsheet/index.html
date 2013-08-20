@@ -44,10 +44,7 @@
 					<div class="rightMenuItemsDiv">
 						<a href="#/register"><button class="btn btn-primary">Register</button></a>
 					</div>
-				</span> <span ng-hide="data==undefined"></span> <span><a
-					href="#/sandbox"
-					ng-click="dataentry=false;navigateVerifySaved('none')"
-					ng-show="developer==true">Statistics</a></span><span
+				</span> <span ng-hide="data==undefined"></span> <span
 					ng-hide="data==undefined || dataentry==false"><a
 					ng-click="navigateVerifySaved('reload');">↻</a></span> <span
 					class="rightMenuItems" ng-show="authenticated==true">
@@ -142,7 +139,7 @@
 			</div>
 
 			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
-				<form class="form-search"">
+				<form class="form-search">
 					<span>Search: <input type="text"
 						class="input-medium search-query" ng-model='searchTerm'>
 						<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
@@ -182,9 +179,7 @@
 									ng-click="navigateVerifySaved('settings');">User Interface</a></li>
 							</ul></li>
 					</ul>
-				</span> <span><a href="#/sandbox"
-					ng-click="dataentry=false;navigateVerifySaved('none')"
-					ng-show="developer==true">Statistics</a></span><span
+				</span> <span
 					ng-hide="data==undefined || dataentry==false"><a
 					ng-click="navigateVerifySaved('reload');">↻</a></span><br />
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
