@@ -20,6 +20,16 @@ body {
 	.smallMenuBar {
 		display: none;
 	}
+
+	.menubar {
+		height: 50px;
+	}
+	.subMenubar {
+		top: 50px;
+	}
+	.mainBody {
+		top: 50px;
+	}
 }
 
 @media only screen and (max-width : 1000px) {
@@ -29,27 +39,33 @@ body {
 	.smallMenuBar {
 		display: inline;
 	}
+	.menubar {
+		height: 100px;
+	}
+	.subMenubar {
+		top: 100px;
+	}
+	.mainBody {
+		top: 100px;
+	}
 }
 
 .menubar {
 	background-color: #102E37;
 	border: 1px solid #102E37;
 	background: #102E37;
-	min-height: 50px;
-	/* 	position: fixed; */
+	position: fixed; 
 	left: 0;
 	right: 0;
-	margin-left: 0px;
-	margin-right: 0px;
+	margin-left: 0;
+	margin-right: 0;
 	z-index: 100;
 	padding-left: 10px;
 }
 
 .menubar span {
-	margin-top: 0;
 	padding: 0;
 	text-align: center;
-	height: 50px;
 	border-radius: 5px;
 	display: inline;
 	color: #FFFFFF;
@@ -122,8 +138,9 @@ body {
 	color: #FFFFFF;
 	left: 0;
 	right: 0;
-	margin-left: 0px;
-	margin-right: 0px;
+	position: relative;
+	margin-left: 0;
+	margin-right: 0;
 	padding: 10px;
 	z-index: 99;
 }
