@@ -2,7 +2,7 @@
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
-	<div class="row">
+	<div class="row relativePosition">
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
 			<input focus glossmorpheme class="span5" type="text" ng-model="newFieldData.field1"
@@ -29,7 +29,7 @@
 		</div>
 		<div class="span2">
 			<button ng-show="selected=='newEntry'" ng-class="createNewButtonClass"
-				type="submit">Create New</button>&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'"><br />
+				type="submit">Create New</button>&nbsp;<div class="expandCollapseButton"><img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'"></div><br />
 				<span ng-show="newFieldDatahasAudio==true"><img src="img/speaker_icon.png"></span>
 		</div>
 		</form>
@@ -80,7 +80,7 @@
 	</div>
 </div>
 
-<div arrow-key class="row"
+<div arrow-key class="row relativePosition"
 	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
 	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
 	ng-click="selectRow(datum)" ng-hide="loading==true">
@@ -130,7 +130,7 @@
 				<button class="btn btn-danger"
 					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button><br /><br />
 					 	<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span><br />
-					 	<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()">			    		
+					 	<div class="expandCollapseButton"><img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()"></div>			    		
 			</div>
 			</form>
 		<div class="row" ng-show="expandCollapse==true">
