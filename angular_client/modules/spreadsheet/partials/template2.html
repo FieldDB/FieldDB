@@ -82,7 +82,7 @@
 
 <div arrow-key class="row relativePosition"
 	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
-	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
+	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentPage*resultSize | limitTo:resultSize"
 	ng-click="selectRow(datum)" ng-hide="loading==true">
 
 	<!-- Show when editing -->
@@ -143,7 +143,7 @@
 					{{comment.text}}<br /> </span>
 					<br />
 					<span class="span4 add_button"
-					ng-click="addComment(datum)"><font size="4"><b>+<i>Add
+					ng-click="addComment(datum);"><font size="4"><b>+<i>Add
 						a comment</i></b></font></span>
 			</div>
 		</div>
@@ -261,14 +261,7 @@
 				</table>
 			</div>
 		</div>
-
-
-
-
-
-
 	</div>
-
 </div>
 <br />
 <div class="pagination-centered"
@@ -276,15 +269,15 @@
 	activeSession).length)==1 || numberOfResultPages((data | filter:
 	activeSession).length)==0">
 	<button class="btn btn-inverse btn-mini"
-		ng-disabled="currentResult == 0"
-		ng-click="currentResult=currentResult-1">
+		ng-disabled="currentPage == 0"
+		ng-click="pageBackward();">
 		&larr;
 	</button>
-	{{currentResult+1}}/{{numberOfResultPages((data | filter:
+	{{currentPage+1}} of {{numberOfResultPages((data | filter:
 	activeSession).length)}}
 	<button class="btn btn-inverse btn-mini"
-		ng-disabled="currentResult >= (data | filter: filterTerm).length/resultSize - 1"
-		ng-click="currentResult=currentResult+1">
+		ng-disabled="currentPage >= (data | filter: filterTerm).length/resultSize - 1"
+		ng-click="pageForward()">
 		&rarr;
 	</button>
 </div>
