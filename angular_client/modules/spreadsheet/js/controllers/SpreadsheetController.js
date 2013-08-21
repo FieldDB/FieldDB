@@ -213,6 +213,12 @@ define(
         $scope.showAudioFeatures = false;
         $scope.newFieldData = {};
 
+        $rootScope.serverLabels = {
+          "mcgill" : "McGill Prosody Lab",
+          "testing" : "LingSync Beta",
+          "localhost" : "Localhost"
+        };
+
         // Set data size for pagination
         $scope.resultSize = Preferences.resultSize;
 
@@ -1362,23 +1368,30 @@ define(
             return;
           }
 
-          if (!newUserRoles.admin && !newUserRoles.reader && !newUserRoles.writer) {
+          // if (!newUserRoles.admin && !newUserRoles.read_write && !newUserRoles.reader && !newUserRoles.writer) {
+          if (!newUserRoles.role) {
             window.alert("You haven't selected any roles to add to " + newUserRoles.usernameToModify + "!\nPlease select at least one role.");
             return;
           }
 
-          if (!newUserRoles.admin) {
+          if (newUserRoles.role == "admin") {
+            newUserRoles.admin = true;
+            newUserRoles.reader = true;
+            newUserRoles.writer = true;
+          }
+          if (newUserRoles.role == "read_write") {
             newUserRoles.admin = false;
+            newUserRoles.reader = true;
+            newUserRoles.writer = true;
           }
-          if (!newUserRoles.reader) {
-            newUserRoles.reader = false;
-          }
-          if (!newUserRoles.writer) {
+          if (newUserRoles.role == "read_only") {
+            newUserRoles.admin = false;
+            newUserRoles.reader = true;
             newUserRoles.writer = false;
           }
-
-          if (newUserRoles.admin == true) {
-            newUserRoles.reader = true;
+          if (newUserRoles.role == "write_only") {
+            newUserRoles.admin = false;
+            newUserRoles.reader = false;
             newUserRoles.writer = true;
           }
 
@@ -1398,6 +1411,7 @@ define(
           dataToPost.userRoleInfo = newUserRoles;
 
           Data.updateroles(dataToPost).then(function(response) {
+            document.getElementById("userToModifyInput").value = "";
             $scope.loadUsersAndRoles();
           });
         };
