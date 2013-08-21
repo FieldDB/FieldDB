@@ -26,21 +26,23 @@
 	<div>
 		<div class="settings_section_header">
 			<h2>
-				Add a user to <b>{{DB.corpustitle}}</b>
+				Add an existing user to <b>{{DB.corpustitle}}</b>
 			</h2>
 		</div>
 		<div class="clearDiv">&nbsp;</div>
 		<div class="settingsItems">
-			<input list="users" ng-model="newUserRoleInfo.usernameToModify">
+			<i>*You may only add users already registered on the {{serverLabels[serverCode]}} server</i><br />
+			<input id="userToModifyInput" list="users" ng-model="newUserRoleInfo.usernameToModify">
 				<datalist id="users">
   				<option ng-repeat="user in users.notonteam" value={{user.username}}>{{user.username}}</option>
   			</datalist>
 			<br />
 			<div class="form-horizontal">
 				<font size="3">
-				<input type="checkbox" ng-model="newUserRoleInfo.admin">Admin&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" ng-model="newUserRoleInfo.reader">Reader&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" ng-model="newUserRoleInfo.writer">Writer<br />
+				<input type="radio" name="userroles" value="admin" ng-model="newUserRoleInfo.role">Admin&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="userroles" value="read_write"  ng-model="newUserRoleInfo.role">Read/Write&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="userroles" value="read_only"  ng-model="newUserRoleInfo.role">Read-only&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="userroles" value="write_only"  ng-model="newUserRoleInfo.role">Write-only<br />
 			</font>
 			</div>
 			<br />
