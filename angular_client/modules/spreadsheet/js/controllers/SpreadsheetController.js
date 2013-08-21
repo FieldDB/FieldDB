@@ -476,7 +476,8 @@ define(
                 DBs.sort();
                 var scopeDBs = [];
                 for (var i = 0; i < DBs.length; i++) {
-                  if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser") {
+                  // Hiding public-firstcorpus, per client request
+                  if (DBs[i + 1] != DBs[i] && DBs[i] != "fielddbuser" && DBs[i] != "public-firstcorpus") {
                     // Only show lingllama corpora to lingllama, per client request
                     if (DBs[i].indexOf("lingllama") > -1 && $rootScope.userInfo.name != "lingllama") {
                       continue;
