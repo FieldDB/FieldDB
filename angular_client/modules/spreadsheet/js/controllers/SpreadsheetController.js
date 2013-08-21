@@ -300,8 +300,9 @@ define(
                     }
                     if (dataFromServer[i].value.dateModified) {
                       newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
-                    } else {
-                      newDatumFromServer.dateModified = "TODO";
+                    }
+                    if (dataFromServer[i].value.lastModifiedBy) {
+                      newDatumFromServer.lastModifiedBy = dataFromServer[i].value.lastModifiedBy;
                     }
                     newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
                     newDatumFromServer.comments = dataFromServer[i].value.comments;
@@ -654,6 +655,7 @@ define(
                   .stringify(new Date()));
                 newSessionRecord.dateModified = JSON.parse(JSON
                   .stringify(new Date()));
+                newSessionRecord.lastModifiedBy = $rootScope.userInfo.name;
                 for (key in newSession) {
                   for (i in newSessionRecord.sessionFields) {
                     if (newSessionRecord.sessionFields[i].label == "user") {
@@ -780,6 +782,7 @@ define(
 
           fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
           fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
+          fieldData.lastModifiedBy = $rootScope.userInfo.name;
           fieldData.sessionID = $scope.activeSession;
           fieldData.saved = "no";
           if (fieldData.attachments) {
@@ -815,6 +818,7 @@ define(
           }
           datum.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
+          datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.saved = "no";
           $scope.currentPage = 0;
           // Update activity feed
@@ -853,6 +857,7 @@ define(
           datum.comments.push(comment);
           datum.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
+          datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.currentPage = 0;
 
           var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
@@ -918,6 +923,7 @@ define(
                         }
                         editedRecord.dateModified = JSON.parse(JSON
                           .stringify(new Date()));
+                        editedRecord.lastModifiedBy = $rootScope.userInfo.name;
 
                         // Save tags
                         if (fieldData.datumTags) {
@@ -966,6 +972,8 @@ define(
                         }
                         newRecord.dateModified = JSON.parse(JSON
                           .stringify(new Date()));
+                        newRecord.lastModifiedBy = $rootScope.userInfo.name;
+
                         // Save session
                         newRecord.session = $scope.fullCurrentSession;
 
@@ -1077,6 +1085,7 @@ define(
           }
 
           fieldsInScope.dateModified = true;
+          fieldsInScope.lastModifiedBy = true;
 
           if ($scope.searchHistory) {
             $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
