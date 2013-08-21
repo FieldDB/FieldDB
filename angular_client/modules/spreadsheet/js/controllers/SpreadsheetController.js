@@ -191,6 +191,7 @@ define(
         $rootScope.fields = Preferences[Preferences.userTemplate];
         $scope.scopePreferences = Preferences;
         $scope.orderProp = "dateModified";
+        $scope.currentPage = 0;
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
@@ -213,7 +214,7 @@ define(
         $scope.newFieldData = {};
 
         // Set data size for pagination
-        $rootScope.resultSize = Preferences.resultSize;
+        $scope.resultSize = Preferences.resultSize;
 
         $scope.changeActiveSubMenu = function(subMenu) {
           if ($rootScope.activeSubMenu == subMenu) {
@@ -815,7 +816,7 @@ define(
           datum.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           $scope.saved = "no";
-
+          $scope.currentPage = 0;
           // Update activity feed
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
           $scope.addActivity([{
@@ -835,7 +836,7 @@ define(
           }]);
         };
 
-        $scope.addComment = function(datum) {
+        $rootScope.addComment = function(datum) {
           var newComment = prompt("Enter new comment.");
           if (newComment == "" || newComment == null) {
             return;
@@ -852,7 +853,7 @@ define(
           datum.comments.push(comment);
           datum.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
-          $scope.saved = "no";
+          $scope.currentPage = 0;
 
           var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
           // Update activity feed
@@ -1447,10 +1448,10 @@ define(
         };
 
         // Paginate data tables
-        $rootScope.currentResult = 0;
-        $rootScope.numberOfResultPages = function(numberOfRecords) {
+
+        $scope.numberOfResultPages = function(numberOfRecords) {
           var numberOfPages = Math
-            .ceil(numberOfRecords / $rootScope.resultSize);
+            .ceil(numberOfRecords / $scope.resultSize);
           return numberOfPages;
         };
 
@@ -1464,9 +1465,16 @@ define(
         document.getElementById("hideOnLoad").style.visibility = "visible";
 
         $scope.testFunction = function() {
-          window.alert($rootScope.currentResult);
+          console.log($scope.currentPage);
         };
 
+        $scope.pageForward = function() {
+          $scope.currentPage = $scope.currentPage + 1;
+        };
+
+        $scope.pageBackward = function() {
+          $scope.currentPage = $scope.currentPage - 1;
+        };
         // Audio recording
 
         function hasGetUserMedia() {
