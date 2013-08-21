@@ -128,9 +128,12 @@
 				<button class="btn btn-primary" type="submit">Done</button>
 				&nbsp;&nbsp;
 				<button class="btn btn-danger"
-					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button><br /><br />
-					 	<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span><br />
-					 	<div class="expandCollapseButton"><img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()"></div>			    		
+					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button><br />
+					 	<br />
+					 	<span title="Date modified">Last modified:<br />{{datum.dateModified
+					| standardDate}}
+			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
+					 	<div class="expandCollapseButton"><span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>&nbsp;&nbsp;&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()"></div>			    		
 			</div>
 			</form>
 		<div class="row" ng-show="expandCollapse==true">
@@ -151,14 +154,14 @@
 		<div class="row" ng-show="expandCollapse==true">
 			<div class="span3 offset1 expandedData">
 				<div class="expandedDataInner">
-				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum)" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>
+				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>
 				</div>
 			</div>
 			<div class="span7 expandedData">
 				<div class="expandedDataInner">
 				<form id='form_{{datum.id}}_audio-file'>
 					<img src="img/speaker_icon.png">&nbsp;
-					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum)">Upload File(s)</button>&nbsp;&nbsp;
+					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum);markAsEdited(fieldData, datum);">Upload File(s)</button>&nbsp;&nbsp;
 				</form>
 				</div>
 			</div>
@@ -226,7 +229,7 @@
 		<div class="span2">
 			<span title="Date modified">Last modified:<br />{{datum.dateModified
 				| standardDate}}
-			</span> <br /> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
+			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span> <br /> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
 		</div>
 
 
