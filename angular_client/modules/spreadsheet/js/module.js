@@ -30,21 +30,20 @@ define(
             window.SpreadsheetStyleDataEntryController = SpreadsheetStyleDataEntryController;
             console.log("Initializing the Spreadsheet module.");
             $routeProvider.when('/spreadsheet_main', {
-              templateUrl: 'partials/main.html',
+              templateUrl: 'partials/main.html'
             }).when('/settings', {
               templateUrl: 'partials/settings.html',
               controller: SpreadsheetStyleDataEntrySettingsController
             }).when('/corpussettings', {
               templateUrl: 'partials/corpussettings.html'
             }).when('/register', {
-              templateUrl: 'partials/register.html',
-            }).when('/sandbox', {
-              templateUrl: 'partials/sandbox.html',
-              controller: SandboxController,
+              templateUrl: 'partials/register.html'
+            }).when('/faq', {
+              templateUrl: 'partials/faq.html'
             }).when('/spreadsheet/template1', {
-              templateUrl: 'partials/template1.html',
+              templateUrl: 'partials/template1.html'
             }).when('/spreadsheet/template2', {
-              templateUrl: 'partials/template2.html',
+              templateUrl: 'partials/template2.html'
             }).otherwise({
               redirectTo: '/spreadsheet_main'
             });

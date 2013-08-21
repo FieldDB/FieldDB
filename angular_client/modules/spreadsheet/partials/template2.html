@@ -228,6 +228,45 @@
 				| standardDate}}
 			</span> <br /> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
 		</div>
+
+
+		<div class="row" ng-show="searching==true && datum.comments[0]!=undefined">
+			<div class="span10 offset1 expandedDataComments">
+				<div class="expandedDataInner">
+					<span
+					ng-hide="fields.field5.label==''"
+					ng-repeat="comment in datum.comments"><i><b>{{comment.username}}</b></i>:
+					{{comment.text}}<br /> </span>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-show="searching==true">
+			<div class="span9 offset1">
+				<table>
+					<tr ng-repeat="attachment in datum.attachments">
+						<td>
+							<span class="form-horizontal">
+								<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
+							</span>
+						</td>
+						<td>
+							<span class="form-horizontal">
+								<input type="text" ng-model='attachment.description'> 
+							</span>
+						</td>
+						<td>
+							<a href="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" target="_blank"><img src="img/link.png"></a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+
+
+
+
+
 	</div>
 
 </div>

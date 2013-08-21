@@ -260,6 +260,10 @@ define(
               } else {
                 $scope.searching = true;
               }
+            } else if (itemToDisplay == "faq") {
+              $scope.dataentry = false;
+              $scope.changeActiveSubMenu('none');
+              window.location.assign("#/faq");
             } else if (itemToDisplay == "reload") {
               $scope.dataRefreshed = true;
               $scope.searchTerm = '';
@@ -1071,7 +1075,7 @@ define(
             fieldsInScope.comments = true;
           }
 
-          var resultFieldInScope = true;
+          fieldsInScope.dateModified = true;
 
           if ($scope.searchHistory) {
             $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
@@ -1084,39 +1088,32 @@ define(
             for (i in $scope.data) {
               for (key in $scope.data[i]) {
                 if ($scope.data[i][key]) {
-
-                  if (key == "datumTags") {
-                    var tagString = JSON.stringify($scope.data[i].datumTags);
-                    tagString = tagString.toString().toLowerCase();
-                    if (tagString.indexOf(searchTerm) > -1) {
-                      newScopeData.push($scope.data[i]);
-                      if (!fieldsInScope[key]) {
-                        resultFieldInScope = false;
+                  // Limit search to visible data
+                  if (fieldsInScope[key] == true) {
+                    if (key == "datumTags") {
+                      var tagString = JSON.stringify($scope.data[i].datumTags);
+                      tagString = tagString.toString().toLowerCase();
+                      if (tagString.indexOf(searchTerm) > -1) {
+                        newScopeData.push($scope.data[i]);
+                        break;
                       }
-                      break;
-                    }
-                  } else if (key == "comments") {
-                    for (j in $scope.data[i].comments) {
-                      for (commentKey in $scope.data[i].comments[j]) {
-                        if ($scope.data[i].comments[j][commentKey].toString()
-                          .indexOf(searchTerm) > -1) {
-                          newScopeData.push($scope.data[i]);
-                          if (!fieldsInScope[key]) {
-                            resultFieldInScope = false;
+                    } else if (key == "comments") {
+                      for (j in $scope.data[i].comments) {
+                        for (commentKey in $scope.data[i].comments[j]) {
+                          if ($scope.data[i].comments[j][commentKey].toString()
+                            .indexOf(searchTerm) > -1) {
+                            newScopeData.push($scope.data[i]);
+                            break;
                           }
-                          break;
                         }
                       }
-                    }
-                  } else {
-                    var dataString = $scope.data[i][key].toString()
-                      .toLowerCase();
-                    if (dataString.indexOf(searchTerm) > -1) {
-                      newScopeData.push($scope.data[i]);
-                      if (!fieldsInScope[key]) {
-                        resultFieldInScope = false;
+                    } else {
+                      var dataString = $scope.data[i][key].toString()
+                        .toLowerCase();
+                      if (dataString.indexOf(searchTerm) > -1) {
+                        newScopeData.push($scope.data[i]);
+                        break;
                       }
-                      break;
                     }
                   }
                 }
@@ -1127,39 +1124,32 @@ define(
               if ($scope.data[i].sessionID == $scope.activeSession) {
                 for (key in $scope.data[i]) {
                   if ($scope.data[i][key]) {
-
-                    if (key == "datumTags") {
-                      var tagString = JSON.stringify($scope.data[i].datumTags);
-                      tagString = tagString.toString().toLowerCase();
-                      if (tagString.indexOf(searchTerm) > -1) {
-                        newScopeData.push($scope.data[i]);
-                        if (!fieldsInScope[key]) {
-                          resultFieldInScope = false;
+                    // Limit search to visible data
+                    if (fieldsInScope[key] == true) {
+                      if (key == "datumTags") {
+                        var tagString = JSON.stringify($scope.data[i].datumTags);
+                        tagString = tagString.toString().toLowerCase();
+                        if (tagString.indexOf(searchTerm) > -1) {
+                          newScopeData.push($scope.data[i]);
+                          break;
                         }
-                        break;
-                      }
-                    } else if (key == "comments") {
-                      for (j in $scope.data[i].comments) {
-                        for (commentKey in $scope.data[i].comments[j]) {
-                          if ($scope.data[i].comments[j][commentKey].toString()
-                            .indexOf(searchTerm) > -1) {
-                            newScopeData.push($scope.data[i]);
-                            if (!fieldsInScope[key]) {
-                              resultFieldInScope = false;
+                      } else if (key == "comments") {
+                        for (j in $scope.data[i].comments) {
+                          for (commentKey in $scope.data[i].comments[j]) {
+                            if ($scope.data[i].comments[j][commentKey].toString()
+                              .indexOf(searchTerm) > -1) {
+                              newScopeData.push($scope.data[i]);
+                              break;
                             }
-                            break;
                           }
                         }
-                      }
-                    } else {
-                      var dataString = $scope.data[i][key].toString()
-                        .toLowerCase();
-                      if (dataString.indexOf(searchTerm) > -1) {
-                        newScopeData.push($scope.data[i]);
-                        if (!fieldsInScope[key]) {
-                          resultFieldInScope = false;
+                      } else {
+                        var dataString = $scope.data[i][key].toString()
+                          .toLowerCase();
+                        if (dataString.indexOf(searchTerm) > -1) {
+                          newScopeData.push($scope.data[i]);
+                          break;
                         }
-                        break;
                       }
                     }
                   }
@@ -1169,10 +1159,6 @@ define(
           }
           if (newScopeData.length > 0) {
             $scope.data = newScopeData;
-            if (resultFieldInScope == false) {
-              window
-                .alert("Your search term has matched data in one or more hidden fields.");
-            }
           } else {
             window.alert("No records matched your search.");
           }
