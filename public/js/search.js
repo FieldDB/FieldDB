@@ -1,11 +1,30 @@
-function reindex(id) {
+function reindex(pouchname) {
 
-  var url = 'https://localhost:3185/train/lexicon/' + id;
-  // var data = result.rows[id].key;
-  console.log(url + ' // the url to trigger');
+  $('#thecount').html('&nbsp;&nbsp; Rebuilding index…');
+  $('#thecount').show();
+  var url = 'https://localhost:3185/train/lexicon/' + pouchname;
+  var checks = 0;
 
   $.post(url).done(function(response) {
-    console.log(response);
+
+    var total = response.rows.length;
+    for (var i = 0; i < total; i++) {
+      (function(index) {
+
+        var url = 'https://lexicondev.lingsync.org/' + pouchname + '/datums/' + response.rows[index].id;
+        var data = response.rows[index].key;
+
+        $.post(url, JSON.stringify(data)).done(function(response2) {
+          checks++;
+          if (index === total - 1) {
+            $('#thecount').html('&nbsp;&nbsp;<strong>' + checks + '</strong> records indexed.');
+            $('#thecount').delay(10000).hide(200);
+          }
+        });
+
+      })(i);
+    }
+
   });
 
 }
