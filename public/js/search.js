@@ -28,3 +28,20 @@ function reindex(pouchname) {
   });
 
 }
+
+var searchForm = $('#searchCorpus');
+searchForm.submit(function() {
+
+  var data = JSON.stringify(searchForm.serializeArray()[0]);
+  $.ajax({
+    type: 'POST',
+    url: searchForm.attr('action'),
+    contentType: 'application/json',
+    data: data
+  }).done(function(response) {
+    console.log(response);
+  });
+
+  return false;
+
+});
