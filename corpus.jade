@@ -1,7 +1,7 @@
 extends index
 
 block content
-  script(type="text/javascript", src="/js/search.js")
+  //-script(type="text/javascript", src="/js/search.js")
   .container-fluid
     .row-fluid
       .span3
@@ -35,21 +35,22 @@ block content
         .row-fluid
           .span7.offset1
             +renderCorpus(corpora)
-          .span1
+          .span4
         .row-fluid
-          .span9
+          .span12
             <iframe src="/libs/activities_visualization/index.html?#{corpora[0].corpusinfo.pouchname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
-          .span9
-            form.form-inline
-              input.span3(type='text', placeholder='Enter search terms…')
+        .row-fluid
+          .span11.offset1
+            - var pouchname = corpora[0].corpusinfo.pouchname.toString()
+            form.form-inline#searchCorpus(action='https://localhost:3185/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
+              input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
               | &nbsp;&nbsp;
               button.btn.btn-small.btn-success(type='submit', id='corpus_search') Search…
+            | &nbsp;&nbsp;
+            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{pouchname}\')') Rebuild search lexicon
+            | &nbsp;&nbsp;
+            span.text-success#thecount
               | &nbsp;&nbsp;
-              - var pouchname = corpora[0].corpusinfo.pouchname.toString()
-              button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{pouchname}\')') Rebuild search lexicon
-              | &nbsp;&nbsp;
-              span.text-success#thecount
-                | &nbsp;&nbsp;
     hr
     footer
       - var year = (new Date()).getFullYear()
