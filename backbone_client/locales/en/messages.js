@@ -173,6 +173,15 @@ define(
         "locale_Description" : {
           "message" : "Description:"
         },
+        "locale_Copyright" : {
+          "message" : "Copyright:"
+        },
+        "locale_License" : {
+          "message" : "License:"
+        },
+        "locale_Terms_of_use" : {
+          "message" : "Terms of Use:"
+        },
         "locale_Sessions_associated" : {
           "message" : "Elicitation Sessions associated with this corpus"
         },
