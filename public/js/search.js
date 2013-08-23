@@ -1,11 +1,12 @@
 function reindex(pouchname) {
 
-  $('#thecount').html('&nbsp;&nbsp; Rebuilding index…');
-  $('#thecount').show();
+  $('#innerProgressBar').width(0).html('&nbsp;');
+  $('#progressBar').css('display', 'inline-block');
+  $('#progressBar').show();
   var url = 'https://localhost:3185/train/lexicon/' + pouchname;
   var checks = 0;
 
-  $.post(url).done(function(response) {
+  $.post(url, JSON.stringify({})).done(function(response) {
 
     var total = response.rows.length;
     for (var i = 0; i < total; i++) {
@@ -15,10 +16,15 @@ function reindex(pouchname) {
         var data = response.rows[index].key;
 
         $.post(url, JSON.stringify(data)).done(function(response2) {
+          var pct = Math.round(checks / (total - 1) * 100);
+          if (pct < 99) {
+            progress(pct, $('#progressBar'));
+          }
           checks++;
-          if (index === total - 1) {
-            $('#thecount').html('&nbsp;&nbsp;<strong>' + checks + '</strong> records indexed.');
-            $('#thecount').delay(10000).hide(200);
+          if (checks === total - 1) {
+            $('#innerProgressBar').width($('#progressBar').width());
+            $('#innerProgressBar').html('<strong>' + checks + '</strong> records indexed.&nbsp;&nbsp;');
+            $('#progressBar').delay(9000).hide(600);
           }
         });
 
@@ -29,17 +35,27 @@ function reindex(pouchname) {
 
 }
 
+function progress(percent, $element) {
+  var progressBarWidth = percent * $element.width() / 100;
+  $('#innerProgressBar').width(progressBarWidth).html(percent + '%&nbsp;');
+}
+
+function clearresults() {
+  $('#dataresult').hide();
+  $('#clearresults').hide();
+}
+
 var searchForm = $('#searchCorpus');
 searchForm.submit(function() {
 
-  var data = JSON.stringify(searchForm.serializeArray()[0]);
-  $.ajax({
-    type: 'POST',
-    url: searchForm.attr('action'),
-    contentType: 'application/json',
-    data: data
-  }).done(function(response) {
+  var data = searchForm.serializeArray()[0];
+  var url = searchForm.attr('action');
+  console.log(data);
+  $.post(url, data).done(function(response) {
     console.log(response);
+    $('#dataresult').show();
+    $('#clearresults').show();
+    $('#dataresult').JSONView(JSON.stringify(response.hits));
   });
 
   return false;
