@@ -45,12 +45,23 @@ block content
             form.form-inline#searchCorpus(action='https://localhost:3185/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
               input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
               | &nbsp;&nbsp;
-              button.btn.btn-small.btn-success(type='submit', id='corpus_search') Search…
+              button.btn.btn-small.btn-success(type='submit', id='corpus_search')
+                i.icon-search.icon-white(style='margin-top:2px')
+                | &nbsp;Search…
             | &nbsp;&nbsp;
-            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{pouchname}\')') Rebuild search lexicon
+            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{pouchname}\')')
+              i.icon-refresh.icon-white(style='margin-top:2px')
+              | &nbsp;Rebuild search lexicon
             | &nbsp;&nbsp;
-            span.text-success#thecount
-              | &nbsp;&nbsp;
+            #progressBar.hide(style='width:180px; height:23px; border: 1px solid gray; background-color: #E9E9E9')
+              #innerProgressBar(style='font-size: 12px; height:100%; color: white; text-align: right; line-height: 23px; width: 0px; background-color: #99356B') &nbsp;
+            p.hide#clearresults
+              button.btn.btn-mini.btn-danger(type='button', id='clear_results', onclick='clearresults()')
+                i.icon-remove.icon-white(style='margin-top:2px')
+                | &nbsp;Clear…
+        .row-fluid
+          .span11
+            .well.well-small.hide#dataresult
     hr
     footer
       - var year = (new Date()).getFullYear()
