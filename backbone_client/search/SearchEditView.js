@@ -216,14 +216,14 @@ define([
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
+        childViewTagName     : 'tr',
         childViewFormat      : "datum"
       });
       
       this.advancedSearchSessionView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
+        childViewTagName     : 'tr',
         childViewFormat      : "session"
       });
       
