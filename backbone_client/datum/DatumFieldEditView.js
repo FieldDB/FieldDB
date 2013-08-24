@@ -49,8 +49,7 @@ define([
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
       "keyup .datum_field_input" : "resizeInputFieldToFit",
-      "click .icon-question-sign" : "showHelpConvention",
-      "hover .icon-question-sign" : "hideHelpConvention"  
+      "click .help-conventions" : "toggleHelpConvention"
     },
     
     /*
@@ -118,7 +117,7 @@ define([
         },200);
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
-        jsonToRender.helpText = false;
+        jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       }
       
@@ -184,18 +183,23 @@ define([
     },
     
     /**
-     * Show help convention in popover  
+     * Toggle help convention in popover  
      */
-    showHelpConvention : function() {
-    	this.$el.find(".help-conventions").popover("show");
-    },
-    
-    /**
-     * Don't show help convention in popover if only hover 
-     */
-    hideHelpConvention : function() {
+    toggleHelpConvention : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
         this.$el.find(".help-conventions").popover("hide");
-    }    
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".help-conventions").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    }
+     
    
   });
 

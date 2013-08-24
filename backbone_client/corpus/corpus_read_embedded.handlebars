@@ -43,15 +43,26 @@
 <h2>
 	<i class="icon-cloud"></i> {{title}} <small>{{publicCorpus}}</small>
 </h2>
-<a href="http://www.lingsync.org/{{username}}/{{titleAsUrl}}"
+<a href="http://lingsync.org/{{username}}/{{titleAsUrl}}"
 	target="_blank"><i class=" icon-link"></i></a>
 <small>Shareable URL:
-	http://www.lingsync.org/{{username}}/{{titleAsUrl}}</small>
+	http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
 <div class="description">{{description}}</div>
 
+
+<label class="locale_Terms_of_use"></label>
+<div class="terms">{{termsOfUse}}</div>
+
+<label class="locale_License"></label>
+<div class="license">{{license}}</div>
+
+<label class="locale_Copyright"></label>
+<div class="copyright">{{copyright}}</div>
+
+
+
 <!-- Force directed graph of morphemes in the corpus -->
-<div class="corpus-precedence-rules-visualization"
-	id="corpus-precedence-rules-visualization-fullscreen"></div>
+<div class="corpus-precedence-rules-visualization"></div>
 
 <div class="accordion" id="accordion-read-embedded">
 	<div class="accordion-group">

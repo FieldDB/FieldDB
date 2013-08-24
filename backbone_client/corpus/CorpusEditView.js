@@ -168,6 +168,9 @@ define([
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
+      "blur .corpus-copyright-input" : "updateCopyright",      
+      "blur .corpus-license-input" : "updateLicense",      
+      "blur .corpus-terms-input" : "updateTermsOfUse",      
       "blur .public-or-private" : "updatePublicOrPrivate",
       "blur .glosserURL" : function(e){
         if(e){
@@ -216,6 +219,7 @@ define([
       }
       var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
       
+      this.model.fillInDefaultLicenseAndTermsForUserIfMissing();
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
       
@@ -350,6 +354,9 @@ define([
         $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
+        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
+        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -547,6 +554,24 @@ define([
     
     updateDescription: function(){
       this.model.set("description",this.$el.find(".corpus-description-input").val());
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateCopyright: function(){
+      this.model.set("copyright",this.$el.find(".corpus-copyright-input").val());
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateLicense: function(){
+      this.model.set("license",this.$el.find(".corpus-license-input").val());
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateTermsOfUse: function(){
+      this.model.set("termsOfUse",this.$el.find(".corpus-terms-input").val());
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }

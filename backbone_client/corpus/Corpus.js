@@ -342,11 +342,13 @@ define([
              label : "goal",
              shouldBeEncrypted: "",
              userchooseable: "disabled",
-             help: "The goals of the session."
-           }),  
+             help: "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
+           }),
           new DatumField({
             label : "consultants",
             shouldBeEncrypted: "",
+            userMasks: [],
+            help: "This is a comma seperated field of all the consultants who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the consultants if they are not anonymous or are actual users of the system. ",
             userchooseable: "disabled"
           }),
           new DatumField({
@@ -365,19 +367,33 @@ define([
             label : "dateElicited",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "The date when the session took place."
+            help: "The date when the elicitation session took place."
           }),
           new DatumField({
             label : "user",
             shouldBeEncrypted: "",
+            help: "This is the username of who created this elicitation session. There are other fields contains an array of participants and consultants. ",
+            userchooseable: "disabled"
+          }),
+          new DatumField({
+            label : "participants",
+            shouldBeEncrypted: "",
+            userMasks: [],
+            help: "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. ",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "dateSEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "The date when the session data was entered."
+            help: "This field is deprecated, it was replaced by DateSessionEntered."
           }),
+          new DatumField({
+            label : "DateSessionEntered",
+            shouldBeEncrypted: "",
+            userchooseable: "disabled",
+            help: "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
+          })
         ]));
         
       }//end if to set sessionFields
@@ -393,6 +409,18 @@ define([
         donefillingcallback();
       }
     },
+    fillInDefaultLicenseAndTermsForUserIfMissing : function(){
+      if(!this.get("copyright")){
+        this.set("copyright", "Default: Add names of the copyright holders of the corpus.");
+      }
+      if(!this.get("license")){
+        this.set("license", "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).");
+      }
+      if(!this.get("termsOfUse")){
+        this.set("termsOfUse", "Default: This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.");
+      }
+    },
+
     /**
      * backbone-couchdb adaptor set up
      */

@@ -682,8 +682,8 @@ define([
     				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
     				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
     			} else if(fields[field]){
-            /* If a syntax tree, do something special */
-            if (fieldLabels[field] == "syntacticTreeLatex") {
+            /* If as a field that is designed for LaTex dont excape the LaTeX characters */
+            if (fieldLabels[field].toLowerCase().indexOf("latex") > -1) {
               result = result
                 + "\n " + fields[field];
             } else {

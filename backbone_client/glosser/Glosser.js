@@ -241,7 +241,7 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
   for (m in morphemes) {
     morphemenodes.push({
       name : morphemes[m],
-      group : morphemes[m].length
+      length : morphemes[m].length
     });
   }
   
@@ -293,8 +293,13 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   var width = 800,
   height = 300;
 
-  var color = d3.scale.category20();
-  
+  /*
+  Short morphemes will be blue, long will be red 
+  */
+  var color = d3.scale.linear()
+      .range(['darkblue', 'darkred']) // or use hex values
+      .domain([1, 8]);
+
   var x = d3.scale.linear()
      .range([0, width]);
    
@@ -303,15 +308,16 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   
   var force = d3.layout.force()
     .charge(-120)
+    .linkStrength(0.2)
     .linkDistance(30)
     .size([width, height]);
   
-  var svg = d3.select("#corpus-precedence-rules-visualization-fullscreen").append("svg")
+  var svg = d3.select(divElement).append("svg")
     .attr("width", width)
     .attr('title', "Morphology Visualization for "+ pouchname)
     .attr("height", height);
   
-  var titletext = "Morphemes in your corpus";
+  var titletext = "Click to search morphemes in your corpus";
   if(rulesGraph.nodes.length < 3){
     titletext = "Your morpheme visualizer will appear here after you have synced.";
   }
@@ -320,6 +326,7 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     .attr("class", "vis-title")
     .attr("dy", "1em")
     .attr("dx", "1em")
+    .style("fill", "#cccccc")
 //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(titletext);
   
@@ -342,7 +349,9 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     .enter().append("circle")
       .attr("class", "node")
       .attr("r", 5)
-      .style("fill", function(d) { return color(d.group); })
+      .style("fill", function(d) { 
+        return color(d.length); 
+      })
       .on("mouseover", function(d) {
         tooltip = d3.select("body")
         .append("div")
@@ -354,6 +363,16 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
       })
       .on("mouseout", function() {
         tooltip.style("visibility", "hidden");
+      })
+      .on("click", function(d) {
+        /* show the morpheme as a search result so the user can use the viz to explore the corpus*/
+        if(window.app && window.app.router){
+          // window.app.router.showEmbeddedSearch(pouchname, "morphemes:"+d.name);
+          var url = "corpus/"+pouchname+"/search/"+"morphemes:"+d.name;
+          // window.location.replace(url);    
+          window.app.router.navigate(url, {trigger: true});
+
+        }
       })
       .call(force.drag);
   
