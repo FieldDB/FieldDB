@@ -2,20 +2,24 @@
 
 FieldDB is a free, modular, open source project developed collectively by field linguists and software developers to make an expandable user-friendly app which can be used to collect, search and share your data, both online and offline. It is fundamentally an app written in 100% Javascript which runs entirely client side, backed by a NoSQL database (we are currently using CouchDB and its offline browser wrapper PouchDB alpha). It has a number of webservices which it connects to in order to allow users to perform tasks which require the internet/cloud (ie, syncing data between devices and users, sharing data publicly, running CPU intensive processes to analyze/extract/search audio/video/text). While the app was designed for "field linguists" it can be used by anyone collecting text data or collecting highly structured data where the fields on each data point require encryption or customization from user to user, and where the schema of the data is expected to evolve over the course of data collection while in the "field."
 
-FieldDB beta was officially launched in English and Spanish on August 1st 2012 in Patzun, Guatemala as an [app for fieldlinguists](https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj). 
+FieldDB beta was officially launched in English and Spanish on August 1st 2012 in Patzun, Guatemala as an [app for fieldlinguists](https://chrome.google.com/webstore/search/lingsync). 
 
 [more info...](http://lingsync.org)
 
 # Interns and Development Team
 
+* [Louisa Bielig](https://github.com/louisa-bielig) (McGill)
 * [M.E. Cathcart](http://udel.edu/~mdotedot/) (U Delaware)
 * [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab Ltd)
-* [Theresa Deering](http://trisapeace.angelfire.com/) (iLanguage Lab Ltd)
-* [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Stony Brook)
+* [Theresa Deering](http://trisapeace.angelfire.com/) (Visit Scotland)
+* [Josh Horner](https://github.com/jdhorner/) (iLanguage Lab Ltd)
+* [Yuliya Kondratenko](https://github.com/kondrann) (Concordia)
+* [Yuliya Manyakina](http://egg.auf.net/12/people/manyakinayuliya/) (Stony Brook)
 * [Elise McClay](https://github.com/Kedersha) (McGill)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
 * [Jesse Pollak](http://jessepollak.me/) (Pomona College)
-* [Xianli Sun](http://www.myaamiaproject.org/index.html) (Miami University)
+* [Tobin Skinner](http://tobinskinner.com) (iLanguage Lab Ltd, UQAM)
+* [Xianli Sun](http://myaamiacenter.org/) (Miami University)
 
 
 # Funding
