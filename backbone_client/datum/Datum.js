@@ -682,9 +682,15 @@ define([
     				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
     				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
     			} else if(fields[field]){
-    				result = result
-    				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+            /* If a syntax tree, do something special */
+            if (fieldLabels[field] == "syntacticTreeLatex") {
+              result = result
+                + "\n " + fields[field];
+            } else {
+      				result = result
+      				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+      				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+            }
     			}
     		}
     		if(numInfrequent!=fieldLabels.length){

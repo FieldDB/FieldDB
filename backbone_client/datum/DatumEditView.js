@@ -15,6 +15,7 @@ define([
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
+    "glosser/Tree",
     "OPrime"
 ], function(
     Backbone, 
@@ -511,6 +512,7 @@ define([
       }
       this.guessUtterance($(e.currentTarget).val());
       this.guessGlosses($(e.currentTarget).val());
+      this.guessTree($(e.currentTarget).val());
       this.needsSave = true;
 
     },
@@ -553,9 +555,9 @@ define([
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
         
+        this.previousGlossGuess = this.previousGlossGuess || [];
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
         if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
-          this.previousGlossGuess = this.previousGlossGuess || [];
           this.previousGlossGuess.push(glossLine);
           alternates.unshift(glossLine);
         }
@@ -565,6 +567,34 @@ define([
           // If the gloss line is empty, or its from a previous guess, put our new guess there
 //          this.$el.find(".gloss .datum_field_input").val(glossLine);
           glossField.set("mask", glossLine);
+          this.needsSave = true;
+        }
+      }
+    },
+    /**
+    when pressing tab after filling morpheme line, guess different trees
+    and display them in Latex formatting
+
+    */
+    guessTree: function(morphemesLine) {
+      if (morphemesLine) {
+        var trees = Tree.generate(morphemesLine);
+        OPrime.debug(trees);
+        var syntacticTreeLatex  = "";
+        syntacticTreeLatex +=  " \n  \\item[\\sc{Left}] \\Tree " + trees.left;
+        syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
+        syntacticTreeLatex +=  "\\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
+        // syntacticTreeLatex +=  "Left: "+ trees.left;
+        // syntacticTreeLatex +=  "\nRight:" + trees.right;
+        // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
+        OPrime.debug(syntacticTreeLatex);
+        /* These put the syntacticTree into the actual datum fields on the screen so the user can see them */
+        if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
+          this.$el.find(".syntacticTreeLatex .datum_field_input").val(syntacticTreeLatex);
+        }        
+        var treeField = this.model.get("datumFields").where({label: "syntacticTreeLatex"})[0];
+        if (treeField) {
+          treeField.set("mask", syntacticTreeLatex);
           this.needsSave = true;
         }
       }
