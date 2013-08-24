@@ -35,6 +35,7 @@ define([
     routes : {
       "corpus/:pouchname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
       "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
+      "corpus/:pouchname/search/:searchterm"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname/conversation/:id" : "showEmbeddedConversation", 
       "corpus/:pouchname/alldata"       : "showAllData",//pouchname has to match the pouch of the corpus
@@ -384,7 +385,11 @@ define([
     /**
      * Displays the advanced search in embedded form.
      */
-    showEmbeddedSearch : function(pouchname) {
+    showEmbeddedSearch : function(pouchname, searchterm) {
+      if(searchterm){
+        window.app.get("search").set("searchKeywords", searchterm);
+        window.appView.searchEditView.searchTop();
+      }
       this.hideEverything();
       $("#dashboard-view").show();
       window.appView.searchEditView.format = "centreWell";
