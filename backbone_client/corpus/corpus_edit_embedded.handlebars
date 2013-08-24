@@ -55,11 +55,13 @@
 <i class="icon-cloud"></i>
 <input class="corpus-title-input" value="{{title}}" type="text" />
 <small>{{publicCorpus}}</small>
-
+|
+<a href="http://lingsync.org/{{username}}/{{titleAsUrl}}"
+	target="_blank"><i class=" icon-link"></i></a>
 <small>Shareable URL:
-	http://www.lingsync.org/{{username}}/{{titleAsUrl}}</small>
+	http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
 	
-<label class=locale_Description></label>
+<label class="locale_Description"></label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
 <label class="locale_Terms_of_use"></label>
@@ -153,9 +155,9 @@
 					value="{{publicCorpus}}" class=" public-or-private"
 					data-provide="typeahead" data-items="4"
 					data-source="[&quot;Public&quot;,&quot;Private&quot;]" /> <a
-					href="http://www.lingsync.org/{{username}}/{{titleAsUrl}}"
+					href="http://lingsync.org/{{username}}/{{titleAsUrl}}"
 					target="_blank"><i class=" icon-link"></i></a> <small>Shareable
-					URL: http://www.lingsync.org/{{username}}/{{titleAsUrl}}</small>
+					URL: http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
 				<p>
 					<button class="btn btn-inverse reload-corpus-team-permissions">
 						<i class="icon-refresh"></i> See current team members
