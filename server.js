@@ -177,7 +177,7 @@ function getCorpusFromPouchname(pouchname) {
               result.team = {};
               df.resolve(result);
             } else {
-              if (!team.gravatar) {
+              if (!team.gravatar || team.gravatar.indexOf("anonymousbydefault") > -1) {
                 if (team.email) {
                   team.gravatar = md5(team.email);
                 } else {
