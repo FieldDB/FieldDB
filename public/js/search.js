@@ -3,7 +3,7 @@ function reindex(pouchname) {
   $('#innerProgressBar').width(0).html('&nbsp;');
   $('#progressBar').css('display', 'inline-block');
   $('#progressBar').show();
-  var url = 'https://localhost:3185/train/lexicon/' + pouchname;
+  var url = 'https://lexicondev.lingsync.org/train/lexicon/' + pouchname;
   var checks = 0;
 
   $.post(url, JSON.stringify({})).done(function(response) {
