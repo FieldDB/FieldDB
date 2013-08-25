@@ -3,7 +3,7 @@ var rightBranchingBracketIt = function(pieces) {
     return pieces.join(" ");
   }
 
-  console.log(pieces);
+  // console.log(pieces);
 
   // This is it! Recursion!!
   var piece1 = pieces.pop();
@@ -18,7 +18,7 @@ var leftBranchingBracketIt = function(pieces) {
     return pieces.join(" ");
   }
 
-  console.log(pieces);
+  // console.log(pieces);
 
   // This is it! Recursion!!
   var piece1 = pieces.shift();
@@ -35,7 +35,7 @@ var mixedBranchingBracketIt = function(pieces) {
 
   }
 
-  console.log(pieces);
+  // console.log(pieces);
 
   // This is it! Recursion!!
 

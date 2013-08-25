@@ -180,6 +180,11 @@ p {
 	margin: .2em !important;
 }
 
+.copyright, .terms, .license{
+	opacity: .5;
+}
+
+
 .corpus-description { /* float: left;
 	width: 100%; */
 	
@@ -631,7 +636,7 @@ line
 
 .conversation-text-audio-played {
 	background-color: rgba(0, 0, 0, 0.5);
-	width: 750;
+	width: 750px;
 }
 
 .jp-load-bar {
@@ -1176,7 +1181,7 @@ line.link {
 
 .conversation-text-audio-played {
 	background-color: rgba(0, 0, 0, 0.5);
-	width: 750;
+	width: 750px;
 }
 
 .jp-load-bar {
