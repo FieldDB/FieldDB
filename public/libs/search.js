@@ -12,7 +12,7 @@ function reindex(pouchname) {
     for (var i = 0; i < total; i++) {
       (function(index) {
 
-        var url = 'https://lexicondev.lingsync.org/' + pouchname + '/datums/' + response.rows[index].id;
+        var url = 'http://searchdev.lingsync.org/' + pouchname + '/datums/' + response.rows[index].id;
         var data = response.rows[index].key;
 
         $.post(url, JSON.stringify(data)).done(function(response2) {
