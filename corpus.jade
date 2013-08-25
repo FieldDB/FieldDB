@@ -66,6 +66,25 @@ block content
     footer
       - var year = (new Date()).getFullYear()
       p © #{corpora[0].corpusinfo.copyright} #{year} 
-        a(href="http://creativecommons.org/licenses/by/3.0/", rel="license", title="#{corpora[0].corpusinfo.license}") link
+        a(href="http://creativecommons.org/licenses/by/3.0/", rel="license", title="#{corpora[0].corpusinfo.license}") #{corpora[0].corpusinfo.license}
           img(src="//i.creativecommons.org/l/by/3.0/88x31.png", alt="License")
+      - var pouchname = corpora[0].corpusinfo.pouchname.toString()
+      p #{pouchname} Terms of Use per EMELD reccomendations
+      <blockquote>
+      <ul>
+      <li>
+      <h3>7. Rights</h3>
+      <p>
+      Resource creators, researchers and the speech communities who provide the primary data have different priorities 
+      over who has access to language resources.
+      </p>
+
+      <h3>Solution</h3>
+      <p>
+      Terms of use should be well documented, and enforced if necessary with encryption or licensing.  
+      It is important however to limit the duration of <a href="classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
+      </p>
+      </li> 
+      </ul>
+      </blockquote>
       p #{corpora[0].corpusinfo.terms}
