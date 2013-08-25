@@ -7,7 +7,13 @@ function reindex(pouchname) {
   var checks = 0;
 
   $.post(url, JSON.stringify({})).done(function(response) {
-
+    if(response.error){
+      $('#innerProgressBar').width($('#progressBar').width());
+      $('#innerProgressBar').html('<strong>Unauthorized:</strong> 0 records indexed.&nbsp;&nbsp;');
+      $('#progressBar').delay(9000).hide(600);
+      console.log("Error from server ", response);
+      return;
+    }
     var total = response.rows.length;
     for (var i = 0; i < total; i++) {
       (function(index) {
