@@ -70,30 +70,22 @@ block content
           img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
       - var pouchname = corpora[0].corpusinfo.pouchname.toString()
       <ul class="nav nav-tabs">
-        <li><a href="#terms" data-toggle="tab">Terms of Use for #{pouchname}</a></li>
-        <li><a href="#emeldtermsreccomendations" data-toggle="tab">EMELD reccomendations for Terms of Use</a></li>
+      <li><a href="#terms" data-toggle="tab">Terms of Use for #{pouchname}</a></li>
+      <li><a href="#emeldtermsreccomendations" data-toggle="tab">Why have Terms of Use</a></li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane active" id="terms">
-          p #{corpora[0].corpusinfo.terms}
-        </div>
-        <div class="tab-pane" id="emeldtermsreccomendations">
-        <ul>
-        <li>
-        <label>7. Rights</label>
-        <p>
-        Resource creators, researchers and the speech communities who provide the primary data have different priorities 
-        over who has access to language resources.
-        </p>
-
-        <label>Solution</label>
-        <p>
-        Terms of use should be well documented, and enforced if necessary with encryption or licensing.  
-        It is important however to limit the duration of <a href="http://emeld.org/school/classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
-        </p>
-        </li> 
-        </ul>
-        </div>
-        
+      <div class="tab-pane active" id="terms">
+      p #{corpora[0].corpusinfo.terms}
       </div>
+      <div class="tab-pane" id="emeldtermsreccomendations">
+      <ul>
+      <li>
+      <label>7. Rights</label>
+      p Resource creators, researchers and the speech communities who provide the primary data have different priorities over who has access to language resources.
 
+      <label>Solution</label>
+      p Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of <a target="_blank" href="http://emeld.org/school/classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
+      </li>
+      </ul>
+      </div>
+      </div>
