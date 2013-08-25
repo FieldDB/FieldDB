@@ -98,12 +98,6 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      /* Prevent clicking on the help conventions from reloading the page to # */
-      "click .help-conventions" :function(e){
-        if(e){
-          e.preventDefault();
-        }
-      },
       /* Menu */
       "click .LaTeX" : function(){
         this.model.latexitDatum(true);

@@ -190,6 +190,7 @@ define([
       var couchConnection = this.model.get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection);
 
+      this.model.fillInDefaultLicenseAndTermsForUserIfMissing();
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
@@ -271,7 +272,9 @@ define([
         $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-
+        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
+        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
+        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
         
       } else if (this.format == "centreWell"){
         if (OPrime.debugMode) OPrime.debug("CORPUS READ CENTER render: " );

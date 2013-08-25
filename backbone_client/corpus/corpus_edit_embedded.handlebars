@@ -55,12 +55,24 @@
 <i class="icon-cloud"></i>
 <input class="corpus-title-input" value="{{title}}" type="text" />
 <small>{{publicCorpus}}</small>
-
-<label class=locale_Description></label>
+|
+<a href="http://lingsync.org/{{username}}/{{titleAsUrl}}"
+	target="_blank"><i class=" icon-link"></i></a>
+<small>Shareable URL:
+	http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
+	
+<label class="locale_Description"></label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
-<small>Shareable URL:
-	http://www.lingsync.org/{{username}}/{{titleAsUrl}}</small>
+<label class="locale_Terms_of_use"></label>
+<textarea class="corpus-terms-input">{{termsOfUse}}</textarea>
+
+<label class="locale_License"></label>
+<textarea class="corpus-license-input">{{license}}</textarea> 
+
+<label class="locale_Copyright"></label>
+<textarea class="corpus-copyright-input">{{copyright}}</textarea> 
+
 
 <div class="accordion" id="accordion-edit-embedded">
 	<div class="accordion-group">
@@ -143,9 +155,9 @@
 					value="{{publicCorpus}}" class=" public-or-private"
 					data-provide="typeahead" data-items="4"
 					data-source="[&quot;Public&quot;,&quot;Private&quot;]" /> <a
-					href="http://www.lingsync.org/{{username}}/{{titleAsUrl}}"
+					href="http://lingsync.org/{{username}}/{{titleAsUrl}}"
 					target="_blank"><i class=" icon-link"></i></a> <small>Shareable
-					URL: http://www.lingsync.org/{{username}}/{{titleAsUrl}}</small>
+					URL: http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
 				<p>
 					<button class="btn btn-inverse reload-corpus-team-permissions">
 						<i class="icon-refresh"></i> See current team members

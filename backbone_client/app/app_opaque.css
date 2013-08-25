@@ -1,10 +1,10 @@
 .well{
-  color: #000;
-  background-color:rgba(d,d,d);
+  color: #000000;
+  background-color:rgba(d,d,d,1);
 }
 .breadcrumb{
-  color: #000;
-  background-color:rgba(d,d,d);
+  color: #000000;
+  background-color:rgba(d,d,d,1);
 }
 a {
   color: #0088cc;
