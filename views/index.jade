@@ -1,7 +1,7 @@
 extends layout
 
 block nav
-  .navbar.navbar-fixed-top
+  .navbar.navbar-inverse.navbar-fixed-top
     .navbar-inner
       .container
         a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
@@ -39,3 +39,5 @@ block content
 block scripts
   script(src='/js/jquery.js')
   script(src='/bootstrap/js/bootstrap.min.js')
+  script(src='/js/jquery.jsonview.js')
+  script(src='/js/search.js')
