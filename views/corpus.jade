@@ -1,0 +1,70 @@
+extends index
+
+block content
+  //-script(type="text/javascript", src="/js/search.js")
+  .container-fluid
+    .row-fluid
+      .span3
+        p.text-center
+          a(href="/#{user.username}") 
+            img.img-polaroid(src='https://secure.gravatar.com/avatar/#{ghash}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
+        div(style='margin: 10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
+          if user.username
+            h1= user.subtitle
+            p= user.username
+          else
+            h2.text-center Sorry! User does not exist.
+        .well.well-small
+          dl
+            dt
+              i(style='margin-top:3px').icon-folder-open
+              | &nbsp;&nbsp;Interests:
+            dd
+              | #{user.researchInterest}
+            dt
+              i(style='margin-top:3px').icon-user
+              | &nbsp;&nbsp;Affiliation:
+            dd
+              | #{user.affiliation}
+            dt
+              i(style='margin-top:3px').icon-comment
+              | &nbsp;&nbsp;Description:
+            dd
+              | #{user.description}
+      .span9
+        .row-fluid
+          .span7.offset1
+            +renderCorpus(corpora)
+          .span4
+        .row-fluid
+          .span12
+            <iframe src="/libs/activities_visualization/index.html?#{corpora[0].corpusinfo.pouchname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
+        .row-fluid
+          .span11.offset1
+            - var pouchname = corpora[0].corpusinfo.pouchname.toString()
+            form.form-inline#searchCorpus(action='https://localhost:3185/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
+              input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
+              | &nbsp;&nbsp;
+              button.btn.btn-small.btn-success(type='submit', id='corpus_search')
+                i.icon-search.icon-white(style='margin-top:2px')
+                | &nbsp;Search…
+            | &nbsp;&nbsp;
+            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{pouchname}\')')
+              i.icon-refresh.icon-white(style='margin-top:2px')
+              | &nbsp;Rebuild search lexicon
+            | &nbsp;&nbsp;
+            #progressBar.hide(style='width:180px; height:23px; border: 1px solid gray; background-color: #E9E9E9')
+              #innerProgressBar(style='font-size: 12px; height:100%; color: white; text-align: right; line-height: 23px; width: 0px; background-color: #99356B') &nbsp;
+            p.hide#clearresults
+              button.btn.btn-mini.btn-danger(type='button', id='clear_results', onclick='clearresults()')
+                i.icon-remove.icon-white(style='margin-top:2px')
+                | &nbsp;Clear…
+        .row-fluid
+          .span11
+            .well.well-small.hide#dataresult
+    hr
+    footer
+      - var year = (new Date()).getFullYear()
+      p © #{user.username} #{year} 
+        a(href="http://creativecommons.org/licenses/by/3.0/", rel="license", title="Creative Commons Attribution 3.0 License") link
+          img(src="//i.creativecommons.org/l/by/3.0/88x31.png", alt="License")

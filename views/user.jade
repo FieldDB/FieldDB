@@ -1,0 +1,45 @@
+extends index
+
+block content
+  .container
+    .row
+      .span3
+        p.text-center
+          img.img-polaroid(src='https://secure.gravatar.com/avatar/#{ghash}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
+        div(style='margin: 10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
+          if user.username
+            h1= user.subtitle
+            p= user.username
+          else
+            h2.text-center Sorry! User does not exist.
+        .well.well-small
+          dl
+            dt
+              i(style='margin-top:3px').icon-folder-open
+              | &nbsp;&nbsp;Interests:
+            dd
+              | #{user.researchInterest}
+            dt
+              i(style='margin-top:3px').icon-user
+              | &nbsp;&nbsp;Affiliation:
+            dd
+              | #{user.affiliation}
+            dt
+              i(style='margin-top:3px').icon-comment
+              | &nbsp;&nbsp;Description:
+            dd
+              | #{user.description}
+      .span6.offset1
+        h1 Corpora
+        br
+        +renderCorporaList(corpora)
+    .row
+      .span12
+        h2 Activity Feed
+        <iframe src="libs/activities_visualization/index.html?#{user.username}" width="100%" height="300" frameborder="0" allowtransparency="true"></iframe>
+    hr
+    footer
+      - var year = (new Date()).getFullYear()
+      p © #{user.username} #{year} 
+        a(href="http://creativecommons.org/licenses/by/3.0/", rel="license", title="Creative Commons Attribution 3.0 License") link&nbsp;
+          img(src="//i.creativecommons.org/l/by/3.0/88x31.png", alt="License")
