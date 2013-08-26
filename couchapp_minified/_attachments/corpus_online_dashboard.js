@@ -10105,7 +10105,21 @@ define('datum/Datum',[
         
       }
     },
-    
+    fillWithCorpusFieldsIfMissing : function(){
+      if(!this.get("datumFields")){
+        return;
+      }
+      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
+      var corpusFields = window.app.get("corpus").get("datumFields").models;
+      for(var field in corpusFields){
+        var label = corpusFields[field].get("label");
+        console.log("Label "+label);
+        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
+        if(correspondingFieldInThisDatum.length === 0){
+          this.get("datumFields").push(corpusFields[field]);
+        }
+      }
+    },
     searchByQueryString : function(queryString, callback) {
       var self = this;
       try{
@@ -10619,7 +10633,7 @@ define('datum/Datum',[
     	//this version prints new data as well as previously shown latex'd data (best for datalists)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
-    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
     		$("#export-text-area").val($("#export-text-area").val() + result);
     	}
     	return result;
@@ -10629,8 +10643,16 @@ define('datum/Datum',[
     	//this version prints new data and deletes previously shown latex'd data (best for datums)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
-    		$("#export-type-description").html(" as LaTeX (GB4E)");
-    		$("#export-text-area").val(result);
+        $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
+        var latexDocument = 
+          "\\documentclass[12pt]{article} \n"+
+            "\\usepackage{fullpage} \n"+
+            "\\usepackage{tipa} \n"+
+            "\\usepackage{qtree} \n"+
+            "\\usepackage{gb4e} \n"+
+            "\\begin{document} \n" + result + 
+            "\\end{document}";
+    		$("#export-text-area").val(latexDocument);
     	}
     	return result;
     },
@@ -21760,6 +21782,8 @@ define('datum/DatumEditView',[
         childViewClass   : "datum-field",
         childViewFormat      : "datum"
       });
+
+      this.model.fillWithCorpusFieldsIfMissing();
       
       this.sessionView = new SessionReadView({
         model : this.model.get("session"),
@@ -22257,9 +22281,9 @@ define('datum/DatumEditView',[
         var trees = Tree.generate(morphemesLine);
         OPrime.debug(trees);
         var syntacticTreeLatex  = "";
-        syntacticTreeLatex +=  " \n  \\item[\\sc{Left}] \\Tree " + trees.left;
+        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
         syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
-        syntacticTreeLatex +=  "\\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
+        syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
         // syntacticTreeLatex +=  "Left: "+ trees.left;
         // syntacticTreeLatex +=  "\nRight:" + trees.right;
         // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
