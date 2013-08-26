@@ -17,7 +17,7 @@
 			ng-model="newUserInfo.confirmPassword"><br /> <input
 			placeholder="e-mail" ng-model="newUserInfo.email" type="email"><br />
 		<button class="btn btn-primary"
-			ng-click="registerNewUser(newUserInfo)">Register</button>
+			ng-click="registerNewUser(newUserInfo)" ng-disabled="loading==true">Register</button>&nbsp;<img src="img/spinner-small-mainbg.gif" ng-show="loading==true">
 	</form>
 
 </div>

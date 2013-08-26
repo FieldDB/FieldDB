@@ -11,7 +11,7 @@
 		<input type="text" ng-model='newCorpusInfo.newCorpusName'
 			placeholder="New corpus name">
 		<button class="btn btn-primary"
-			ng-click="createNewCorpus(newCorpusInfo)">Create</button>
+			ng-click="createNewCorpus(newCorpusInfo)" ng-disabled="loading==true">Create</button>&nbsp;<img src="img/spinner-small-mainbg.gif" ng-show="loading==true">
 	</div>
 </div>
 
@@ -47,8 +47,7 @@
 			</div>
 			<br />
 			<button class="btn btn-primary"
-				ng-click="updateUserRoles(newUserRoleInfo)">Update</button>
-
+				ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading==true">Add</button>&nbsp;<img src="img/spinner-small-mainbg.gif" ng-show="loading==true">
 		</div>
 	</div>
 	<hr />
