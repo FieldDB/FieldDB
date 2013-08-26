@@ -203,7 +203,7 @@ define([
       var corpusFields = window.app.get("corpus").get("datumFields").models;
       for(var field in corpusFields){
         var label = corpusFields[field].get("label");
-        console.log("Label "+label);
+        OPrime.debug("Label "+label);
         var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
         if(correspondingFieldInThisDatum.length === 0){
           this.get("datumFields").push(corpusFields[field]);
