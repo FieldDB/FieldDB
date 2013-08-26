@@ -481,13 +481,8 @@ define(
               }
               if (!this.get("termsOfUse")) {
                 this
-                    .set(
-                        "termsOfUse",
-                        {
-                          title : "Default: When you decide to make the corpus public, we recommend that you attach a Terms of Use with the corpus. Below is a sample of “Terms of Use” which you can modify according to the policy of your project. Please also make sure your Terms of use is consistent with the license terms.",
-                          title : "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is  properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus. ",
-                          title : "See also: http://www.aiatsis.gov.au/collections/muraread.html, http://www.paradisec.org.au/services.html, http://linguistics.berkeley.edu/~survey/archive/terms-of-use.php "
-                        });
+                    .set("termsOfUse",
+                        "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is  properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus.");
               }
             },
 
