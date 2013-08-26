@@ -201,9 +201,8 @@ define(
                     } else {
                       window
                         .alert(JSON.stringify(response.data.info[0]) + "\nYou may now log in to this corpus.");
-                      window.location.assign("#/");
                     }
-                    return response;
+                    return response.data;
                   }, function(err) {
                     console.log(JSON.stringify(err));
                     window.alert("Error creating new corpus.");
@@ -275,8 +274,8 @@ define(
               });
               return promise;
             },
-            'blankTemplate': function() {
-              var promise = $http.get('data/blank_template.json').then(
+            'blankDatumTemplate': function() {
+              var promise = $http.get('data/blank_datum_template.json').then(
                 function(response) {
                   return response.data;
                 });
