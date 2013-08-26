@@ -214,9 +214,9 @@ define(
         $scope.newFieldData = {};
 
         $rootScope.serverLabels = {
-          "mcgill" : "McGill Prosody Lab",
-          "testing" : "LingSync Beta",
-          "localhost" : "Localhost"
+          "mcgill": "McGill Prosody Lab",
+          "testing": "LingSync Beta",
+          "localhost": "Localhost"
         };
 
         // Set data size for pagination
@@ -490,18 +490,15 @@ define(
 
                 for (var i = 0; i < scopeDBs.length; i++) {
                   (function(index) {
-                    Data.async(scopeDBs[index], "corpus").then(
+                    // Use map-reduce to get private corpus info
+
+                    Data.async(scopeDBs[index], "_design/pages/_view/private_corpuses").then(
                       function(response) {
                         var corpus = {};
                         corpus.pouchname = scopeDBs[index];
-                        Data.async(scopeDBs[index], response.corpusid)
-                          .then(function(responseWithTitle) {
-                            corpus.corpustitle = responseWithTitle.title;
-                            $scope.corpora.push(corpus);
-                          });
+                        corpus.corpustitle = response.rows[0].value.title;
+                        $scope.corpora.push(corpus);
                       }, function(error) {
-                        // If no corpus file, set corpus title and pouchname
-                        // to pouchname
                         var corpus = {};
                         corpus.pouchname = scopeDBs[index];
                         corpus.corpustitle = scopeDBs[index];
@@ -970,7 +967,7 @@ define(
 
                   var fieldData = $scope.data[index];
                   Data
-                    .blankTemplate()
+                    .blankDatumTemplate()
                     .then(
                       function(newRecord) {
                         // Populate new record with fields from
@@ -1323,13 +1320,12 @@ define(
           if (dataToPost.newCorpusName != "") {
             // Create new corpus
             Data.createcorpus(dataToPost).then(function(response) {
-              // Login user again to get most up-to-date corpus info
-              var auth = {};
-              auth.user = $rootScope.userInfo.name;
-              auth.password = $rootScope.userInfo.password;
-              auth.server = $rootScope.server;
-              $scope.loginUser(auth);
-
+              // Add new corpus to scope
+              var newCorpus = {};
+              newCorpus.pouchname = response.corpus.pouchname;
+              newCorpus.corpustitle = response.corpus.title;
+              $scope.corpora.push(newCorpus);
+              window.location.assign("#/");
             });
           } else {
             window.alert("Please verify corpus name.");
