@@ -107,8 +107,12 @@
 	<h2>Click and clean your corpus using the morpheme visualization</h2>
 	<p>We changed the colors of the morpheme visualizer (blue for short/functional, red for long/content) and made it so that if you click on it, it will run a search for you for that morpheme. We put the visualization into the search widget too so you can click through your morphemes and clean your corpus as you see words that contain the morpheme but didnt have the right segmentation etc. </p>
 
-	<h2>Add a copyright to your corpus</h2>
-	<p>We added some default copyright info to the corpus views so that users can put copyrights on their corpus if they choose. By default we choose the same license as Wikipedia, the Creative Commons Share Alike license:</p>
+	<h2>Add terms of use to your corpus</h2>
+	<p>EMELD data management best practices recomend that <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/207" target="_blank">terms of use of each corpus be well documented.</a> </p>
+	<blockquote>
+		Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of access restrictions: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
+	</blockquote>
+	<p>We added some default license and terms of use to the corpus views so that users can put terms of use  on their corpus if they choose. These also <a href="" target="_blank">show up on the public urls of the corpus.</a> By default we choose the same license as Wikipedia, the Creative Commons Share Alike license:</p>
 	<blockquote>
 		<div class="eight columns omega">
 			<div class="two columns alpha">
@@ -138,6 +142,7 @@
 				</div>
 			</div>
 		</blockquote>
+		<p>We expect most research teams will want to put a short term closed license, usually 3 years exclusive access to the PI(s) of the grant, and then open later.</p>
 
 		<h2>Search your corpus serverside</h2>
 		<p>For the past few weeks @jdhorner has been integrating ElasticSearch as a backend for our Lexicon webservices. This will make it possible to index and search huge corpora. ElasticSearch is designed to run on many machines, in many data centers. It is possible to "shard" your data so that the load of searching your corpus is distributed. None of the corpora have gotten this big yet, but for her internship in the fall @louisa-belig will be working on importing websites into her database which means the data will be too big to search client side. </p>
