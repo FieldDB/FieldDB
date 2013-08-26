@@ -9,7 +9,7 @@ function reindex(pouchname) {
   $.post(url, JSON.stringify({})).done(function(response) {
     if (response.error) {
       $('#innerProgressBar').width($('#progressBar').width());
-      $('#innerProgressBar').html('<strong>Unauthorized:</strong> 0 records indexed.&nbsp;&nbsp;');
+      $('#innerProgressBar').css('font-size', '.7em').html('<strong>Unauthorized:</strong> 0 records indexed.&nbsp;&nbsp;');
       $('#progressBar').delay(9000).hide(600);
       console.log('Error from server ', response);
       return;
