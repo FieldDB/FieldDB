@@ -68,17 +68,20 @@ block content
         a(href="http://creativecommons.org/licenses/by-sa/3.0/", rel="license", title="#{corpora[0].corpusinfo.license}") #{corpora[0].corpusinfo.license}
           img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
       - var pouchname = corpora[0].corpusinfo.pouchname.toString()
-      ul.nav.nav-tabs
-        li:a(href="#terms", data-toggle="tab") Terms of Use for #{pouchname}
-        li:a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
-      .tab-content
-        .tab-pane.active#terms
-          p #{corpora[0].corpusinfo.terms}
-        .tab-pane#emeldtermsreccomendations
-          ul
-            li
-              p EMELD digital language documentation Best Practices #7:
-                label Rights
-                p Resource creators, researchers and the speech communities who provide the primary data have different priorities over who has access to language resources.
-                label Solution
-                p Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of <a target="_blank" href="http://emeld.org/school/classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
+      .tabbable
+        ul.nav.nav-tabs
+          li.active
+            a(href="#terms", data-toggle="tab") Terms of Use for #{pouchname}
+          li
+            a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
+        .tab-content
+          .tab-pane.active#terms
+            p #{corpora[0].corpusinfo.terms}
+          .tab-pane#emeldtermsreccomendations
+            ul
+              li
+                dl EMELD digital language documentation Best Practices #7:
+                  dt Rights
+                  dd Resource creators, researchers and the speech communities who provide the primary data have different priorities over who has access to language resources.
+                  dt Solution
+                  dd Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of <a target="_blank" href="http://emeld.org/school/classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
