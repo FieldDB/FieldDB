@@ -78,6 +78,8 @@ define([
         childViewClass   : "datum-field",
         childViewFormat      : "datum"
       });
+
+      this.model.fillWithCorpusFieldsIfMissing();
       
       this.sessionView = new SessionReadView({
         model : this.model.get("session"),
@@ -575,9 +577,9 @@ define([
         var trees = Tree.generate(morphemesLine);
         OPrime.debug(trees);
         var syntacticTreeLatex  = "";
-        syntacticTreeLatex +=  " \n  \\item[\\sc{Left}] \\Tree " + trees.left;
+        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
         syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
-        syntacticTreeLatex +=  "\\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
+        syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
         // syntacticTreeLatex +=  "Left: "+ trees.left;
         // syntacticTreeLatex +=  "\nRight:" + trees.right;
         // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
