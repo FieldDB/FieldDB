@@ -1280,6 +1280,7 @@ define(
             window.alert("Please select a server.");
             return;
           }
+          $scope.loading = true;
           var dataToPost = {};
           dataToPost.email = trim(newUserInfo.email);
           dataToPost.username = trim(newUserInfo.username.toLowerCase());
@@ -1297,13 +1298,19 @@ define(
 
           if (dataToPost.username != "" && (dataToPost.password == trim(newUserInfo.confirmPassword)) && dataToPost.email != "") {
             // Create user
-            Data.register(dataToPost);
+            Data.register(dataToPost).then(function(response) {
+              $scope.loading = false;
+            }, function(error) {
+              $scope.loading = false;
+            });
           } else {
+            $scope.loading = false;
             window.alert("Please verify user information.");
           }
         };
 
         $scope.createNewCorpus = function(newCorpusInfo) {
+          $scope.loading = true;
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
           dataToPost.password = trim($rootScope.userInfo.password);
@@ -1325,10 +1332,12 @@ define(
               newCorpus.pouchname = response.corpus.pouchname;
               newCorpus.corpustitle = response.corpus.title;
               $scope.corpora.push(newCorpus);
+              $scope.loading = false;
               window.location.assign("#/");
             });
           } else {
             window.alert("Please verify corpus name.");
+            $scope.loading = false;
           }
         };
 
@@ -1376,6 +1385,8 @@ define(
             return;
           }
 
+          $scope.loading = true;
+
           if (newUserRoles.role == "admin") {
             newUserRoles.admin = true;
             newUserRoles.reader = true;
@@ -1414,7 +1425,10 @@ define(
 
           Data.updateroles(dataToPost).then(function(response) {
             document.getElementById("userToModifyInput").value = "";
+            $scope.loading = false;
             $scope.loadUsersAndRoles();
+          }, function(error) {
+            $scope.loading = false;
           });
         };
 
