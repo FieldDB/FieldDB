@@ -182,6 +182,9 @@ define(
         "locale_Terms_of_use" : {
           "message" : "Terms of Use:"
         },
+        "locale_Terms_description" : {
+          "message" : "When you decide to make the corpus public, we recommend that you attach a Terms of Use with the corpus. You can modify the sample of “Terms of Use” in the textbox below according to the policy of your project. Please also make sure your Terms of Use is consistent with your License Terms."
+        },
         "locale_Sessions_associated" : {
           "message" : "Elicitation Sessions associated with this corpus"
         },
