@@ -1,7 +1,7 @@
 extends index
 
 block content
-  //-script(type="text/javascript", src="/js/search.js")
+  //-script(type="text/javascript", src="/libs/search.js")
   .container-fluid
     .row-fluid
       .span3
@@ -42,7 +42,7 @@ block content
         .row-fluid
           .span11.offset1
             - var pouchname = corpora[0].corpusinfo.pouchname.toString()
-            form.form-inline#searchCorpus(action='https://localhost:3185/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
+            form.form-inline#searchCorpus(action='https://lexicondev.lingsync.org/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
               input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
               | &nbsp;&nbsp;
               button.btn.btn-small.btn-success(type='submit', id='corpus_search')
@@ -65,6 +65,28 @@ block content
     hr
     footer
       - var year = (new Date()).getFullYear()
-      p © #{user.username} #{year} 
-        a(href="http://creativecommons.org/licenses/by/3.0/", rel="license", title="Creative Commons Attribution 3.0 License") link
-          img(src="//i.creativecommons.org/l/by/3.0/88x31.png", alt="License")
+      p © #{corpora[0].corpusinfo.copyright} #{year} 
+        a(href="http://creativecommons.org/licenses/by-sa/3.0/", rel="license", title="#{corpora[0].corpusinfo.license}") #{corpora[0].corpusinfo.license}
+          img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
+      - var pouchname = corpora[0].corpusinfo.pouchname.toString()
+      <ul class="nav nav-tabs">
+      <li><a href="#terms" data-toggle="tab">Terms of Use for #{pouchname}</a></li>
+      <li><a href="#emeldtermsreccomendations" data-toggle="tab">Why have a Terms of Use?</a></li>
+      </ul>
+      <div class="tab-content">
+      <div class="tab-pane active" id="terms">
+      p #{corpora[0].corpusinfo.terms}
+      </div>
+      <div class="tab-pane" id="emeldtermsreccomendations">
+      <ul>
+      <li>
+      p  EMELD digital language documentation Best Practices #7:
+      <label>Rights</label>
+      p Resource creators, researchers and the speech communities who provide the primary data have different priorities over who has access to language resources.
+
+      <label>Solution</label>
+      p Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of <a target="_blank" href="http://emeld.org/school/classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
+      </li>
+      </ul>
+      </div>
+      </div>
