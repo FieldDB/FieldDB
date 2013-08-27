@@ -179,6 +179,11 @@ define([
         }
         this.model.set("glosserURL", $(e.target).val());
       },
+
+      //help text around text areas 
+      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
+      "click .explain-license" : "toggleExplainLicense",
+      
       "click .save-corpus" : "updatePouch",
 //      Issue #797
 //      Only Admin users can trash corpus 
@@ -357,6 +362,8 @@ define([
         $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
         $(this.el).find(".locale_License").html(Locale.get("locale_License"));
         $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
+        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
+        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -582,7 +589,40 @@ define([
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
-   
+    
+    //toggle Terms of Use explanation in popover 
+    toggleExplainTermsOfUse : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-terms-of-use").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+    
+    //toggle License explanation in popover 
+    toggleExplainLicense : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-license").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-license").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+
+    
     //Functions assoicate with the corpus menu
     newDatum : function(e) {
       if(e){
