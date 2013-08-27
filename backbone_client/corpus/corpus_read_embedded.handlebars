@@ -50,13 +50,20 @@
 <div class="description">{{description}}</div>
 
 
-<label class="locale_Terms_of_use"></label>
-<div class="terms">{{termsOfUse}}</div>
+<label><span class="locale_Terms_of_use"></span>
+<a class="explain-terms-of-use locale_Terms_explanation" data-html="true" rel="popover" data-placement="right" data-content=""  data-original-title="Why have a Terms of Use for your corpus" tabindex="-1">
+  <i class="icon-question-sign"></i>
+</a></label>
+<div class="terms">{{termsOfUse.humanReadable}}</div>
 
-<label class="locale_License"></label>
-<div class="license">{{license}}</div>
+<label><span class="locale_License"></span>
+<a class="explain-license locale_License_explanation" data-html="true" rel="popover"  data-placement="right" data-content=""   data-original-title="Why have a License for your corpus" tabindex="-1">
+  <i class="icon-question-sign"></i>
+</a></label>
+<div class="license"><a href="{{license.link}}" target="_blank">{{license.title}}</a></div>
+<div class="license">{{license.humanReadable}}</div>
 
-<label class="locale_Copyright"></label>
+<label><span class="locale_Copyright"></span></label>
 <div class="copyright">{{copyright}}</div>
 
 
