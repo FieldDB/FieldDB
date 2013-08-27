@@ -1,6 +1,6 @@
 {
   "name" : "LingSync Beta",
-  "version" : "1.70.2",
+  "version" : "1.70.3",
   "description" : "A bleeding edge version, with new features faster",
   "app" : {
     "background" : {
