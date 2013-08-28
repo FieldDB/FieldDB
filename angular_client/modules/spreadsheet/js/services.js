@@ -177,7 +177,7 @@ define(
                 }, function(err) {
                   console.log(JSON.stringify(err));
                   window.alert("Error registering new user.");
-                  $scope.loading = false;
+                  $rootScope.loading = false;
                 });
               return promise;
             },
@@ -222,14 +222,19 @@ define(
                   function(response) {
                     console.log("Updated user roles.");
                     if (response.data.userFriendlyErrors) {
-                      window
-                        .alert(response.data.userFriendlyErrors[0]);
+                      if (response.data.userFriendlyErrors[0] == null) {
+                        window.alert("Error adding user. Please make sure that user exists.");
+                      } else {
+                        window
+                          .alert(response.data.userFriendlyErrors[0]);
+                      }
                     } else {
                       window
                         .alert(JSON.stringify(response.data.info[0]));
                     }
                     return response;
-                  }, function(err) {
+                  },
+                  function(err) {
                     console.log(JSON.stringify(err));
                     window.alert("Error updating user roles.");
                     $rootScope.loading = false;

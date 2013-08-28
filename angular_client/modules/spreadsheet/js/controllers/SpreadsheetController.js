@@ -570,7 +570,7 @@ define(
           var r = confirm("Are you sure you want to edit the session information?\nThis could take a while.");
           if (r == true) {
             $scope.editSessionDetails = false;
-            $scope.loading = true;
+            $rootScope.loading = true;
             var newSession = $scope.fullCurrentSession;
             for (i in newSession.sessionFields) {
               for (key in editSessionInfo) {
@@ -589,7 +589,7 @@ define(
 
                   // Update all records tied to this session
                   for (i in scopeDataToEdit) {
-                    $scope.loading = true;
+                    $rootScope.loading = true;
                     (function(index) {
                       if (scopeDataToEdit[index].sessionID == newSession._id) {
                         Data
@@ -606,7 +606,7 @@ define(
                                 scopeDataToEdit[index].id,
                                 editedRecord, editedRecord._rev)
                                 .then(function() {
-                                  $scope.loading = false;
+                                  $rootScope.loading = false;
                                 });
 
                             },
@@ -1280,7 +1280,7 @@ define(
             window.alert("Please select a server.");
             return;
           }
-          $scope.loading = true;
+          $rootScope.loading = true;
           var dataToPost = {};
           dataToPost.email = trim(newUserInfo.email);
           dataToPost.username = trim(newUserInfo.username.toLowerCase());
@@ -1299,18 +1299,18 @@ define(
           if (dataToPost.username != "" && (dataToPost.password == trim(newUserInfo.confirmPassword)) && dataToPost.email != "") {
             // Create user
             Data.register(dataToPost).then(function(response) {
-              $scope.loading = false;
+              $rootScope.loading = false;
             }, function(error) {
-              $scope.loading = false;
+              $rootScope.loading = false;
             });
           } else {
-            $scope.loading = false;
+            $rootScope.loading = false;
             window.alert("Please verify user information.");
           }
         };
 
         $scope.createNewCorpus = function(newCorpusInfo) {
-          $scope.loading = true;
+          $rootScope.loading = true;
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
           dataToPost.password = trim($rootScope.userInfo.password);
@@ -1332,12 +1332,12 @@ define(
               newCorpus.pouchname = response.corpus.pouchname;
               newCorpus.corpustitle = response.corpus.title;
               $scope.corpora.push(newCorpus);
-              $scope.loading = false;
+              $rootScope.loading = false;
               window.location.assign("#/");
             });
           } else {
             window.alert("Please verify corpus name.");
-            $scope.loading = false;
+            $rootScope.loading = false;
           }
         };
 
@@ -1385,7 +1385,7 @@ define(
             return;
           }
 
-          $scope.loading = true;
+          $rootScope.loading = true;
 
           if (newUserRoles.role == "admin") {
             newUserRoles.admin = true;
@@ -1425,10 +1425,10 @@ define(
 
           Data.updateroles(dataToPost).then(function(response) {
             document.getElementById("userToModifyInput").value = "";
-            $scope.loading = false;
+            $rootScope.loading = false;
             $scope.loadUsersAndRoles();
           }, function(error) {
-            $scope.loading = false;
+            $rootScope.loading = false;
           });
         };
 
