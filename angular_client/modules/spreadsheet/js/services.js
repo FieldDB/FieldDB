@@ -167,7 +167,6 @@ define(
               var promise = $http(config).then(
                 function(response) {
                   console.log("Registered new user.");
-                  console.log(JSON.stringify(response));
                   if (response.data.userFriendlyErrors) {
                     window.alert(response.data.userFriendlyErrors[0]);
                   } else {
@@ -178,7 +177,7 @@ define(
                 }, function(err) {
                   console.log(JSON.stringify(err));
                   window.alert("Error registering new user.");
-                  $rootScope.loading = false;
+                  $scope.loading = false;
                 });
               return promise;
             },
