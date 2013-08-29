@@ -3612,38 +3612,83 @@ define("backbonejs", ["_","bootstrap"], (function (global) {
     };
 }(this)));
 
-// lib/handlebars/base.js
+/*
+
+Copyright (C) 2011 by Yehuda Katz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+// lib/handlebars/browser-prefix.js
 var Handlebars = {};
 
-Handlebars.VERSION = "1.0.beta.6";
+(function(Handlebars, undefined) {
+;
+// lib/handlebars/base.js
+
+Handlebars.VERSION = "1.0.0";
+Handlebars.COMPILER_REVISION = 4;
+
+Handlebars.REVISION_CHANGES = {
+  1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
+  2: '== 1.0.0-rc.3',
+  3: '== 1.0.0-rc.4',
+  4: '>= 1.0.0'
+};
 
 Handlebars.helpers  = {};
 Handlebars.partials = {};
 
+var toString = Object.prototype.toString,
+    functionType = '[object Function]',
+    objectType = '[object Object]';
+
 Handlebars.registerHelper = function(name, fn, inverse) {
-  if(inverse) { fn.not = inverse; }
-  this.helpers[name] = fn;
+  if (toString.call(name) === objectType) {
+    if (inverse || fn) { throw new Handlebars.Exception('Arg not supported with multiple helpers'); }
+    Handlebars.Utils.extend(this.helpers, name);
+  } else {
+    if (inverse) { fn.not = inverse; }
+    this.helpers[name] = fn;
+  }
 };
 
 Handlebars.registerPartial = function(name, str) {
-  this.partials[name] = str;
+  if (toString.call(name) === objectType) {
+    Handlebars.Utils.extend(this.partials,  name);
+  } else {
+    this.partials[name] = str;
+  }
 };
 
 Handlebars.registerHelper('helperMissing', function(arg) {
   if(arguments.length === 2) {
     return undefined;
   } else {
-    throw new Error("Could not find property '" + arg + "'");
+    throw new Error("Missing helper: '" + arg + "'");
   }
 });
-
-var toString = Object.prototype.toString, functionType = "[object Function]";
 
 Handlebars.registerHelper('blockHelperMissing', function(context, options) {
   var inverse = options.inverse || function() {}, fn = options.fn;
 
-
-  var ret = "";
   var type = toString.call(context);
 
   if(type === functionType) { context = context.call(this); }
@@ -3654,70 +3699,117 @@ Handlebars.registerHelper('blockHelperMissing', function(context, options) {
     return inverse(this);
   } else if(type === "[object Array]") {
     if(context.length > 0) {
-      for(var i=0, j=context.length; i<j; i++) {
-        ret = ret + fn(context[i]);
-      }
+      return Handlebars.helpers.each(context, options);
     } else {
-      ret = inverse(this);
+      return inverse(this);
     }
-    return ret;
   } else {
     return fn(context);
   }
 });
 
+Handlebars.K = function() {};
+
+Handlebars.createFrame = Object.create || function(object) {
+  Handlebars.K.prototype = object;
+  var obj = new Handlebars.K();
+  Handlebars.K.prototype = null;
+  return obj;
+};
+
+Handlebars.logger = {
+  DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3, level: 3,
+
+  methodMap: {0: 'debug', 1: 'info', 2: 'warn', 3: 'error'},
+
+  // can be overridden in the host environment
+  log: function(level, obj) {
+    if (Handlebars.logger.level <= level) {
+      var method = Handlebars.logger.methodMap[level];
+      if (typeof console !== 'undefined' && console[method]) {
+        console[method].call(console, obj);
+      }
+    }
+  }
+};
+
+Handlebars.log = function(level, obj) { Handlebars.logger.log(level, obj); };
+
 Handlebars.registerHelper('each', function(context, options) {
   var fn = options.fn, inverse = options.inverse;
-  var ret = "";
+  var i = 0, ret = "", data;
 
-  if(context && context.length > 0) {
-    for(var i=0, j=context.length; i<j; i++) {
-      ret = ret + fn(context[i]);
-    }
-  } else {
-    ret = inverse(this);
-  }
-  return ret;
-});
-
-Handlebars.registerHelper('if', function(context, options) {
   var type = toString.call(context);
   if(type === functionType) { context = context.call(this); }
 
-  if(!context || Handlebars.OPrime.isEmpty(context)) {
+  if (options.data) {
+    data = Handlebars.createFrame(options.data);
+  }
+
+  if(context && typeof context === 'object') {
+    if(context instanceof Array){
+      for(var j = context.length; i<j; i++) {
+        if (data) { data.index = i; }
+        ret = ret + fn(context[i], { data: data });
+      }
+    } else {
+      for(var key in context) {
+        if(context.hasOwnProperty(key)) {
+          if(data) { data.key = key; }
+          ret = ret + fn(context[key], {data: data});
+          i++;
+        }
+      }
+    }
+  }
+
+  if(i === 0){
+    ret = inverse(this);
+  }
+
+  return ret;
+});
+
+Handlebars.registerHelper('if', function(conditional, options) {
+  var type = toString.call(conditional);
+  if(type === functionType) { conditional = conditional.call(this); }
+
+  if(!conditional || Handlebars.Utils.isEmpty(conditional)) {
     return options.inverse(this);
   } else {
     return options.fn(this);
   }
 });
 
-Handlebars.registerHelper('unless', function(context, options) {
-  var fn = options.fn, inverse = options.inverse;
-  options.fn = inverse;
-  options.inverse = fn;
-
-  return Handlebars.helpers['if'].call(this, context, options);
+Handlebars.registerHelper('unless', function(conditional, options) {
+  return Handlebars.helpers['if'].call(this, conditional, {fn: options.inverse, inverse: options.fn});
 });
 
 Handlebars.registerHelper('with', function(context, options) {
-  return options.fn(context);
+  var type = toString.call(context);
+  if(type === functionType) { context = context.call(this); }
+
+  if (!Handlebars.Utils.isEmpty(context)) return options.fn(context);
 });
 
-Handlebars.registerHelper('log', function(context) {
-  Handlebars.log(context);
+Handlebars.registerHelper('log', function(context, options) {
+  var level = options.data && options.data.level != null ? parseInt(options.data.level, 10) : 1;
+  Handlebars.log(level, context);
 });
 ;
 // lib/handlebars/utils.js
+
+var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
+
 Handlebars.Exception = function(message) {
   var tmp = Error.prototype.constructor.apply(this, arguments);
 
-  for (var p in tmp) {
-    if (tmp.hasOwnProperty(p)) { this[p] = tmp[p]; }
+  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
+  for (var idx = 0; idx < errorProps.length; idx++) {
+    this[errorProps[idx]] = tmp[errorProps[idx]];
   }
-
-  this.message = tmp.message;
 };
-Handlebars.Exception.prototype = new Error;
+Handlebars.Exception.prototype = new Error();
 
 // Build out our basic SafeString type
 Handlebars.SafeString = function(string) {
@@ -3727,98 +3819,142 @@ Handlebars.SafeString.prototype.toString = function() {
   return this.string.toString();
 };
 
-(function() {
-  var escape = {
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#x27;",
-    "`": "&#x60;"
-  };
+var escape = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#x27;",
+  "`": "&#x60;"
+};
 
-  var badChars = /&(?!\w+;)|[<>"'`]/g;
-  var possible = /[&<>"'`]/;
+var badChars = /[&<>"'`]/g;
+var possible = /[&<>"'`]/;
 
-  var escapeChar = function(chr) {
-    return escape[chr] || "&amp;";
-  };
+var escapeChar = function(chr) {
+  return escape[chr] || "&amp;";
+};
 
-  Handlebars.OPrime = {
-    escapeExpression: function(string) {
-      // don't escape SafeStrings, since they're already safe
-      if (string instanceof Handlebars.SafeString) {
-        return string.toString();
-      } else if (string == null || string === false) {
-        return "";
-      }
-
-      if(!possible.test(string)) { return string; }
-      return string.replace(badChars, escapeChar);
-    },
-
-    isEmpty: function(value) {
-      if (typeof value === "undefined") {
-        return true;
-      } else if (value === null) {
-        return true;
-      } else if (value === false) {
-        return true;
-      } else if(Object.prototype.toString.call(value) === "[object Array]" && value.length === 0) {
-        return true;
-      } else {
-        return false;
+Handlebars.Utils = {
+  extend: function(obj, value) {
+    for(var key in value) {
+      if(value.hasOwnProperty(key)) {
+        obj[key] = value[key];
       }
     }
-  };
-})();;
+  },
+
+  escapeExpression: function(string) {
+    // don't escape SafeStrings, since they're already safe
+    if (string instanceof Handlebars.SafeString) {
+      return string.toString();
+    } else if (string == null || string === false) {
+      return "";
+    }
+
+    // Force a string conversion as this will be done by the append regardless and
+    // the regex test will do this transparently behind the scenes, causing issues if
+    // an object's to string has escaped characters in it.
+    string = string.toString();
+
+    if(!possible.test(string)) { return string; }
+    return string.replace(badChars, escapeChar);
+  },
+
+  isEmpty: function(value) {
+    if (!value && value !== 0) {
+      return true;
+    } else if(toString.call(value) === "[object Array]" && value.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+;
 // lib/handlebars/runtime.js
+
 Handlebars.VM = {
   template: function(templateSpec) {
     // Just add water
     var container = {
-      escapeExpression: Handlebars.OPrime.escapeExpression,
+      escapeExpression: Handlebars.Utils.escapeExpression,
       invokePartial: Handlebars.VM.invokePartial,
       programs: [],
       program: function(i, fn, data) {
         var programWrapper = this.programs[i];
         if(data) {
-          return Handlebars.VM.program(fn, data);
-        } else if(programWrapper) {
-          return programWrapper;
-        } else {
-          programWrapper = this.programs[i] = Handlebars.VM.program(fn);
-          return programWrapper;
+          programWrapper = Handlebars.VM.program(i, fn, data);
+        } else if (!programWrapper) {
+          programWrapper = this.programs[i] = Handlebars.VM.program(i, fn);
         }
+        return programWrapper;
+      },
+      merge: function(param, common) {
+        var ret = param || common;
+
+        if (param && common) {
+          ret = {};
+          Handlebars.Utils.extend(ret, common);
+          Handlebars.Utils.extend(ret, param);
+        }
+        return ret;
       },
       programWithDepth: Handlebars.VM.programWithDepth,
-      noop: Handlebars.VM.noop
+      noop: Handlebars.VM.noop,
+      compilerInfo: null
     };
 
     return function(context, options) {
       options = options || {};
-      return templateSpec.call(container, Handlebars, context, options.helpers, options.partials, options.data);
+      var result = templateSpec.call(container, Handlebars, context, options.helpers, options.partials, options.data);
+
+      var compilerInfo = container.compilerInfo || [],
+          compilerRevision = compilerInfo[0] || 1,
+          currentRevision = Handlebars.COMPILER_REVISION;
+
+      if (compilerRevision !== currentRevision) {
+        if (compilerRevision < currentRevision) {
+          var runtimeVersions = Handlebars.REVISION_CHANGES[currentRevision],
+              compilerVersions = Handlebars.REVISION_CHANGES[compilerRevision];
+          throw "Template was precompiled with an older version of Handlebars than the current runtime. "+
+                "Please update your precompiler to a newer version ("+runtimeVersions+") or downgrade your runtime to an older version ("+compilerVersions+").";
+        } else {
+          // Use the embedded version info since the runtime doesn't know about this revision yet
+          throw "Template was precompiled with a newer version of Handlebars than the current runtime. "+
+                "Please update your runtime to a newer version ("+compilerInfo[1]+").";
+        }
+      }
+
+      return result;
     };
   },
 
-  programWithDepth: function(fn, data, $depth) {
-    var args = Array.prototype.slice.call(arguments, 2);
+  programWithDepth: function(i, fn, data /*, $depth */) {
+    var args = Array.prototype.slice.call(arguments, 3);
 
-    return function(context, options) {
+    var program = function(context, options) {
       options = options || {};
 
       return fn.apply(this, [context, options.data || data].concat(args));
     };
+    program.program = i;
+    program.depth = args.length;
+    return program;
   },
-  program: function(fn, data) {
-    return function(context, options) {
+  program: function(i, fn, data) {
+    var program = function(context, options) {
       options = options || {};
 
       return fn(context, options.data || data);
     };
+    program.program = i;
+    program.depth = 0;
+    return program;
   },
   noop: function() { return ""; },
   invokePartial: function(partial, name, context, helpers, partials, data) {
-    options = { helpers: helpers, partials: partials, data: data };
+    var options = { helpers: helpers, partials: partials, data: data };
 
     if(partial === undefined) {
       throw new Handlebars.Exception("The partial " + name + " could not be found");
@@ -3827,7 +3963,7 @@ Handlebars.VM = {
     } else if (!Handlebars.compile) {
       throw new Handlebars.Exception("The partial " + name + " could not be compiled when running in runtime-only mode");
     } else {
-      partials[name] = Handlebars.compile(partial);
+      partials[name] = Handlebars.compile(partial, {data: data !== undefined});
       return partials[name](context, options);
     }
   }
@@ -3835,6 +3971,10 @@ Handlebars.VM = {
 
 Handlebars.template = Handlebars.VM.template;
 ;
+// lib/handlebars/browser-suffix.js
+})(Handlebars);
+;
+
 define("handlebarsjs", ["backbonejs","$"], (function (global) {
     return function () {
         var ret, fn;
@@ -3845,8 +3985,8 @@ define("handlebarsjs", ["backbonejs","$"], (function (global) {
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_all_the_data'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3864,8 +4004,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_compare_datalists'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3883,8 +4023,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_everything_at_once'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3922,8 +4062,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_just_entering'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3941,8 +4081,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_whats_happening'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3980,8 +4120,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['audio_video_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -3990,8 +4130,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['audio_video_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4009,8 +4149,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['authentication_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4028,8 +4168,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['comment_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4051,8 +4191,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['comment_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4082,8 +4222,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4123,8 +4263,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_import_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4156,8 +4296,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4197,8 +4337,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4220,8 +4360,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_search_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4257,8 +4397,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4294,8 +4434,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4335,8 +4475,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_read_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4354,8 +4494,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_turn_read_latex'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4400,9 +4540,9 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<!-- create new stuff in same dashboard -->\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
@@ -4445,58 +4585,58 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<label class=\"locale_Terms_of_use\"></label>\n<textarea class=\"corpus-terms-input\">";
-  if (stack1 = helpers.termsOfUse) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.termsOfUse; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<label class=\"locale_License\"></label>\n<textarea class=\"corpus-license-input\">";
-  if (stack1 = helpers.license) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.license; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain-terms-of-use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-terms-input\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.termsOfUse),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</textarea>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain-license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-license-title-input\" placeholder=\"title\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</textarea> \n<textarea class=\"corpus-license-humanreadable-input\" placeholder=\"human readable version\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</textarea> \n<textarea class=\"corpus-license-link-input\" placeholder=\"link to full license information\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.link)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</textarea> \n\n<label class=\"locale_Copyright\"></label>\n<textarea class=\"corpus-copyright-input\">";
-  if (stack1 = helpers.copyright) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.copyright; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.copyright) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.copyright; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</textarea> \n\n\n<div class=\"accordion\" id=\"accordion-edit-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n					glosser from any LingSync corpus, you need to have permission (ask\n					them to add you as a reader on their corpus). For example, if you\n					and your collaborators are working on Mi'gmaq, you might have a\n					master corpus with the most data that you all can use to gloss your\n					corpus. For an example url, see LingLlama's sample Quechua corpus:\n					https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n				<br /> <span>You can also create your own glosser web\n					service or use an existing glosser/morpheme segmenter you have\n					access too as long as it is available on a URL, and uses a similar\n					data schema. <a\n					href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n					target=\"_new\">Contact us</a> if you would like more details about how to do this.\n				</span> <label>Glosser URL:</label>\n				<textarea class=\"glosserURL\">";
-  if (stack1 = helpers.glosserURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.glosserURL) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.glosserURL; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</textarea>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseSessionsEE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseSessionsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatalistsEE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatalistsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"accordion-edit-embedded\" href=\"#collapsePermissionsEE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapsePermissionsEE\">\n			<div class=\"accordion-inner container span12\">\n				<span class=\"locale_permissions_explanation\"></span> <label\n					class=\"locale_Public_or_Private\"></label> <input type=\"text\"\n					value=\"";
-  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.publicCorpus) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.publicCorpus; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "\" class=\" public-or-private\"\n					data-provide=\"typeahead\" data-items=\"4\"\n					data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" /> <a\n					href=\"http://lingsync.org/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.username) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.username; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "/";
-  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.titleAsUrl) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.titleAsUrl; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "\"\n					target=\"_blank\"><i class=\" icon-link\"></i></a> <small>Shareable\n					URL: http://lingsync.org/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.username) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.username; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "/";
-  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.titleAsUrl) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.titleAsUrl; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</small>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumFieldSettingsEE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_shouldBeEncrypted\"";
-  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.shouldBeEncrypted) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.shouldBeEncrypted; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea class=\"add_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Datum_Field_Tooltip btn btn-primary add-datum-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumStateSettingsEE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumStateSettingsEE\">\n			<span class=\"locale_datum_states_explanation\"></span>\n			<ul class=\"datum_state_settings unstyled\"></ul>\n			<input class=\"add_input locale_Add_Placeholder\" value=\"\" type=\"text\"></input>\n			<select class=\"add_color_chooser\">\n				<option value=\"success\" class=\"locale_Green\"></option>\n				<option value=\"warning\" class=\"locale_Orange\"></option>\n				<option value=\"important\" class=\"locale_Red\"></option>\n				<option value=\"info\" class=\"locale_Teal\"></option>\n				<option value=\"inverse\" class=\"locale_Black\"></option>\n				<option value=\"\" class=\"locale_Default\"></option>\n			</select> <a href=\"#\"\n				class=\"locale_Add_New_Datum_State_Tooltip btn btn-primary add-datum-state locale_Add\"\n				rel=\"tooltip\"> </a>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseConversationFieldSettingsEE\"> <i\n				class=\"icon-comments-alt\"></i> <strong\n				class=\"locale_Conversation_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\"\n			id=\"collapseConversationFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_conversation_fields_explanation\"></span>\n				<ul class=\"conversation_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_conversationShouldBeEncrypted\"";
-  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.shouldBeEncrypted) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.shouldBeEncrypted; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_edit_new_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4522,9 +4662,9 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Edit_corpus\" rel=\"tooltip\"> <i\n		class=\"icons icon-edit\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
@@ -4567,30 +4707,30 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n\n\n<label class=\"locale_Terms_of_use\"></label>\n<div class=\"terms\">";
-  if (stack1 = helpers.termsOfUse) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.termsOfUse; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n\n<label class=\"locale_License\"></label>\n<div class=\"license\">";
-  if (stack1 = helpers.license) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.license; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n\n<label class=\"locale_Copyright\"></label>\n<div class=\"copyright\">";
-  if (stack1 = helpers.copyright) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.copyright; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+    + "</div>\n\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain-terms-of-use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"terms\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.termsOfUse),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain-license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"license\"><a href=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.link)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" target=\"_blank\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</a></div>\n<div class=\"license\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\n\n<label><span class=\"locale_Copyright\"></span></label>\n<div class=\"copyright\">";
+  if (stack2 = helpers.copyright) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.copyright; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</div>\n\n\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\"></div>\n\n<div class=\"accordion\" id=\"accordion-read-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n          glosser from any LingSync corpus, you need to have permission\n          (ask them to add you as a reader on their corpus). For example, if\n          you and your collaborators are working on Mi'gmaq, you might have a\n          master corpus with the most data that you all can use to gloss your\n          corpus. For an example url, see LingLlama's sample Quechua corpus:\n          https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n        <br /> <span>You can also create your own glosser web\n          service or use an existing glosser/morpheme segmenter you have\n          access too as long as it is available on a URL and uses a similar data schema. <a\n          href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n          target=\"_new\">Contact us</a> if you would like more details.\n        </span>\n        <label>Glosser URL:</label>\n				<p class=\"glosserURL\"><strong>";
-  if (stack1 = helpers.glosserURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.glosserURL) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.glosserURL; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</strong></p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4624,8 +4764,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4667,8 +4807,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4710,8 +4850,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4781,8 +4921,8 @@ function program5(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_import_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4814,8 +4954,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4855,8 +4995,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4878,8 +5018,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_search_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4915,8 +5055,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4952,8 +5092,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4993,8 +5133,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_read_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5012,8 +5152,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5022,8 +5162,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5032,8 +5172,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5042,8 +5182,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_read_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5052,8 +5192,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5134,8 +5274,8 @@ function program9(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_settings_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5165,8 +5305,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_settings_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5188,8 +5328,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_value_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5245,8 +5385,8 @@ function program5(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_value_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5277,8 +5417,8 @@ function program1(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5337,8 +5477,8 @@ function program6(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_read_latex'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5396,8 +5536,8 @@ function program5(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_state_settings_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5419,8 +5559,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_state_settings_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5438,8 +5578,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_tag_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5453,8 +5593,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_tag_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5468,8 +5608,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['paging_footer'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
@@ -5504,8 +5644,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5527,8 +5667,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_import'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5550,8 +5690,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5565,8 +5705,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5588,8 +5728,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5615,8 +5755,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5638,8 +5778,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5661,8 +5801,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['export_read_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5671,8 +5811,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['hot_key_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5706,8 +5846,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['import_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5729,8 +5869,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicode'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5760,8 +5900,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicodes'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5770,8 +5910,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicodes_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5780,8 +5920,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['permissions_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5820,8 +5960,8 @@ function program1(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['permissions_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5856,8 +5996,8 @@ function program1(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['search_advanced_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5866,8 +6006,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['search_top'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5885,8 +6025,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_app'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5895,8 +6035,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5958,8 +6098,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6013,8 +6153,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_preference_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6028,8 +6168,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6079,8 +6219,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6098,8 +6238,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6141,8 +6281,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_welcome_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6679,7 +6819,7 @@ var d=[0,1,2,4,8,16,32,64,128,27,54],f=f.AES=i.extend({_doReset:function(){for(v
 l[m&255]^d[r++],w=e[o>>>24]^f[q>>>16&255]^h[m>>>8&255]^l[n&255]^d[r++],q=e[q>>>24]^f[m>>>16&255]^h[n>>>8&255]^l[o&255]^d[r++],m=u,n=v,o=w;u=(i[m>>>24]<<24|i[n>>>16&255]<<16|i[o>>>8&255]<<8|i[q&255])^d[r++];v=(i[n>>>24]<<24|i[o>>>16&255]<<16|i[q>>>8&255]<<8|i[m&255])^d[r++];w=(i[o>>>24]<<24|i[q>>>16&255]<<16|i[m>>>8&255]<<8|i[n&255])^d[r++];q=(i[q>>>24]<<24|i[m>>>16&255]<<16|i[n>>>8&255]<<8|i[o&255])^d[r++];a[c]=u;a[c+1]=v;a[c+2]=w;a[c+3]=q},keySize:8});q.AES=i._createHelper(f)})();
 define("CryptoJS", function(){});
 
-define('confidentiality_encryption/Confidential', [
+define( 'confidentiality_encryption/Confidential',[
     "backbone",
     "CryptoJS"
 ],function(
@@ -7055,8 +7195,8 @@ define('user/UserMask',[
 
   return UserMask;
 });
-define('user/Users',
-    ["backbone",
+define(
+    'user/Users',["backbone",
      "user/UserMask"],
     function(Backbone, UserMask) {
   
@@ -7158,7 +7298,7 @@ define('permission/Permission',[
 
   return Permission;
 });
-define('insert_unicode/InsertUnicode',	[
+define(	'insert_unicode/InsertUnicode',[
     "backbone"
 ], function(
     Backbone
@@ -9269,7 +9409,7 @@ define('authentication/Authentication',[
   return Authentication;
 });
 
-define('comment/Comment', [
+define( 'comment/Comment',[
     "backbone",
     "user/UserMask"
 ], function(
@@ -9377,7 +9517,7 @@ define('comment/Comment', [
 
   return Comment;
 });
-define('comment/Comments', [ "backbone",
+define( 'comment/Comments',[ "backbone",
           "comment/Comment",
           "OPrime"
 ], function(Backbone, Comment) {
@@ -10079,7 +10219,7 @@ define('datum/Datums',[
     
     return Datums;
 });
-define('datum/DatumTag', [
+define( 'datum/DatumTag',[
     "backbone"
 ], function(
     Backbone
@@ -10138,7 +10278,7 @@ define('datum/DatumTags',[
   
   return DatumTags;
 });
-define('user/Consultant', [ 
+define( 'user/Consultant',[ 
     "backbone", 
     "user/UserMask" 
 ], function(
@@ -10901,7 +11041,21 @@ define('datum/Datum',[
         
       }
     },
-    
+    fillWithCorpusFieldsIfMissing : function(){
+      if(!this.get("datumFields")){
+        return;
+      }
+      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
+      var corpusFields = window.app.get("corpus").get("datumFields").models;
+      for(var field in corpusFields){
+        var label = corpusFields[field].get("label");
+        OPrime.debug("Label "+label);
+        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
+        if(correspondingFieldInThisDatum.length === 0){
+          this.get("datumFields").push(corpusFields[field]);
+        }
+      }
+    },
     searchByQueryString : function(queryString, callback) {
       var self = this;
       try{
@@ -11415,7 +11569,7 @@ define('datum/Datum',[
     	//this version prints new data as well as previously shown latex'd data (best for datalists)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
-    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
     		$("#export-text-area").val($("#export-text-area").val() + result);
     	}
     	return result;
@@ -11425,8 +11579,16 @@ define('datum/Datum',[
     	//this version prints new data and deletes previously shown latex'd data (best for datums)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
-    		$("#export-type-description").html(" as LaTeX (GB4E)");
-    		$("#export-text-area").val(result);
+        $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
+        var latexDocument = 
+          "\\documentclass[12pt]{article} \n"+
+            "\\usepackage{fullpage} \n"+
+            "\\usepackage{tipa} \n"+
+            "\\usepackage{qtree} \n"+
+            "\\usepackage{gb4e} \n"+
+            "\\begin{document} \n" + result + 
+            "\\end{document}";
+    		$("#export-text-area").val(latexDocument);
     	}
     	return result;
     },
@@ -13752,14 +13914,41 @@ define('corpus/Corpus',[
       }
     },
     fillInDefaultLicenseAndTermsForUserIfMissing : function(){
-      if(!this.get("copyright")){
-        this.set("copyright", "Default: Add names of the copyright holders of the corpus.");
+      if (!this.get("copyright")) {
+        this.set("copyright",
+          "Default: Add names of the copyright holders of the corpus.");
       }
-      if(!this.get("license")){
-        this.set("license", "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).");
+      var defaultLicense = {
+            title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+            humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+            link: "http://creativecommons.org/licenses/by-sa/3.0/"
+          };
+      if (!this.get("license")) {
+        this.set("license", defaultLicense);
       }
-      if(!this.get("termsOfUse")){
-        this.set("termsOfUse", "Default: This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.");
+      var licenseUpdated = this.get("license");
+      if(typeof licenseUpdated == "string"){
+        licenseUpdated = {};
+      }
+      if (!licenseUpdated.title) {
+        licenseUpdated.title = defaultLicense.title;
+        this.set("license", licenseUpdated);
+      }
+      if (!licenseUpdated.humanReadable) {
+        licenseUpdated.humanReadable = defaultLicense.humanReadable;
+        this.set("license", licenseUpdated);
+      }
+      if (!licenseUpdated.link) {
+        licenseUpdated.link = defaultLicense.link;
+        this.set("license", licenseUpdated);
+      }
+      var defaultTerms = {
+          humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+        };
+      var termsUpdated = this.get("termsOfUse");
+      if(!termsUpdated || typeof termsUpdated == "string"){
+        termsUpdated = defaultTerms;
+        this.set("termsOfUse", defaultTerms);
       }
     },
 
@@ -16999,8 +17188,8 @@ define('user/UserEditView',[
 
   return UserEditView;
 }); 
-define('user/UserAppView',
-    [ "backbone", 
+define(
+    'user/UserAppView',[ "backbone", 
       "handlebars", 
       "user/UserApp", 
       "user/UserRouter",
@@ -17525,7 +17714,7 @@ define('user/UserAppView',
     });
 }());
 
-define('text!locales/en/messages.json',[],function () { return '{\n  "application_title" : {\n    "message" : "LingSync beta",\n    "description" : "The title of the application, displayed in the web store."\n  },\n  "application_description" : {\n    "message" : "An on/offline fieldlinguistics database app which adapts to its user\'s I-Language.",\n    "description" : "The description of the application, displayed in the web store."\n  },\n  "locale_Close_and_login_as_LingLlama" : {\n    "message" : "Login as LingLlama",\n    "description" : "button"\n  },\n  "locale_Close_and_login_as_LingLlama_Tooltip" : {\n    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you\'re new to LingSync this is a great place to start after watching the videos. ",\n    "description" : "tooltip"\n  },\n  "locale_Username" : {\n    "message" : "Username:"\n  },\n  "locale_Password" : {\n    "message" : "Password:"\n  },\n  "locale_Sync_my_data_to_this_computer" : {\n    "message" : "Sync my data to this device"\n  },\n  "locale_Welcome_to_FieldDB" : {\n    "message" : "Welcome to LingSync!"\n  },\n  "locale_An_offline_online_fieldlinguistics_database" : {\n    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."\n  },\n  "locale_Welcome_Beta_Testers" : {\n    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"\n  },\n  "locale_Welcome_Screen" : {\n    "message" : "<p>Curious what this is? <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"\n  },\n  "locale_Create_a_new_user" : {\n    "message" : "Register"\n  },\n  "locale_What_is_your_username_going_to_be" : {\n    "message" : "What is your username going to be?"\n  },\n  "locale_Confirm_Password" : {\n    "message" : "Confirm Password:"\n  },\n  "locale_Sign_in_with_password" : {\n    "message" : "Register"\n  },\n  "locale_Warning" : {\n    "message" : "Warning!"\n  },\n  "locale_Instructions_to_show_on_dashboard" : {\n    "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=\' icon-edit\'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app.     To more information about what a \'Corpus\' is, click <i class=\' icon-cogs resize-full\'></i>.     It will show the corpus settings, which contains explanations of each component of a \'Corpus.\'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>",\n    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=\' icon-edit\'></i>. To see what Corpus consists of, click <i class=\' icon-cogs resize-full\'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=\' icon-edit\'></i>. Click <i class=\' icon icon-resize-full\'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>"\n    \n  },\n  "locale_elicitation_sessions_explanation" : {\n    "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class=\'icons icon-edit\'></i> icon in Dashboard view. For additional options, click on the <i class=\'icon-calendar\'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"\n  },\n  "locale_datalists_explanation" : {\n    "message" : "<p>A Datalist is a collection of Datum that you put together for some reason. Some examples are: making a handout, sharing data with someone, exporting into another program, or simply keeping track of similar Datum for your research.</p> <p> Creating a Datalist is like making a bookmark to a set of custom search results. First, do a search for whatever you want the Datalist to be about. Then, if you don\'t want some of the results to be included in the Datalist, click the <i class=\'icon-remove-sign\'></i> icon by any Datum to remove it. Finally, edit the title and description, and click the save button to create the Datalist.</p> <p>You can see your Datalists on the left side of your dashboard (click plus/minus to expand/minimize) or in the list below (double-click on a title to view details). </p><p>To see all your data, do a search with nothing in the search bar. If you have over 200 Datum in your corpus, this can be pretty slow, so you may prefer to search for a subset. In general, a Datalist with more than 100 Datum will take a few seconds to load.</p> <p> In the Datalist view, the Datum will appear in the colour of their current state (i.e. Checked with a consultant, To be checked, Deleted etc). You can make new states in the Datum State Settings on this page. </p>"\n  },\n  "locale_permissions_explanation" : {\n    "message" : "<p>Permissions are where you give other people access to your corpus.</p><p>To add another LingSync user, you need to know their username. Click the <i class=\'icons icon-edit\'></i> icon at the top right and then come back to Permissions and click the \'See current team members\' button. You can then add users by typing in their username by the appropriate group.</p> <ul><li>Admins can add other people to any group but not do anything with the data unless they are also writers/readers.</li> <li>Writers can enter new data, add comments, change Datum State from \'to be checked to \'checked\' etc, but not see data that is already entered. </li><li>Readers can see data that is already entered in the app but not edit or comment on it. </li></ul><p>If you want someone to be able to both enter data and see existing data, add them as both a writer and a reader.</p><p>If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, type \'Public\' in the \'Public or Private\' field below.</p><p>You can, and should, encrypt any Datum containing sensitive information by clicking the <i class=\' icon-unlock\'></i> button at the bottom of the Datum. Encrypted Datums are shown as \'xxx xx xx xx\' to all users, including on the web. If you want to see the contents of a confidential Datum, click on the <i class=\'icon-eye-open\'></i> and enter your password. This will make the Datum visible for 10 minutes.</p>"\n  },\n  "locale_datum_fields_explanation" : {\n    "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class=\'icon-list-alt\'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class=\'icons icon-edit\'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n    "locale_conversation_fields_explanation" : {\n    "message" : "<p>Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a \'location\' field, but instead choose to encrypt a \'world knowledge\' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n  "locale_datum_states_explanation" : {\n    "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, \'Checked\' with a consultant, \'To be checked\', \'Deleted\' etc. </p> <p>Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team\'s data validation workflow (e.g. \'To be checked with Sophie,\' \'Checked with Gladys\').  You can assign colours to your Datum States, which will appear as the background colour of the Datum in any Datalist. </p> <p> If you flag a Datum as Deleted it won\'t show up in search results anymore, but a Datum in a corpus is never really deleted. It remains in the database complete with its change history so that you can review it at a later date. (In future we might add a button to allow users to \'empty the trash\' and mass-delete old Datum from the system.) </p> "\n  },\n   "locale_advanced_search_explanation" : {\n    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type \'nay\' and search will find the morphemes \'onay\', \'naya\' etc. </p> <p>Search automatically creates a temporary list of data. If you enter new matching data, it will be added automatically this can be a handy way to see the data you have entered recently, as you enter data.. If you want to keep the list of data, click Save and a new DataList will be created. </p> <p>For now, search is offline, running on your device, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"\n   },\n  "locale_New_User" : {\n    "message" : "New User"\n  },\n  "locale_Activity_Feed_Your" : {\n    "message" : "Your Activity Feed"\n  },\n  "locale_Activity_Feed_Team" : {\n    "message" : "Corpus Team Activity Feed"\n  },\n  "locale_Refresh_Activities" : {\n    "message" : "Refresh activity feed to bring it up-to-date."\n  },\n  "locale_Need_save" : {\n    "message" : " Need save:"\n  },\n  "locale_60_unsaved" : {\n    "message" : "<strong>60% unsaved.</strong>"\n  },\n  "locale_Recent_Changes" : {\n    "message" : "Recent Changes:"\n  },\n  "locale_Need_sync" : {\n    "message" : "Need sync:"\n  },\n  "locale_Differences_with_the_central_server" : {\n    "message" : "Differences with the central server:"\n  },\n  "locale_to_beta_testers" : {\n    "message" : "These messages are here to communicate to users what the app is doing. We will gradually reduce the number of messages as the app becomes more stable. <p>You can close these messages by clicking on their x.</p>"\n  },\n  "locale_We_need_to_make_sure_its_you" : {\n    "message" : "We need to make sure it\'s you..."\n  },\n  "locale_Yep_its_me" : {\n    "message" : "Yep, it\'s me"\n  },\n  "locale_Log_Out" : {\n    "message" : "Log Out"\n  },\n  "locale_Log_In" : {\n    "message" : "Log In"\n  },\n  "locale_User_Settings" : {\n    "message" : "User Settings"\n  },\n  "locale_Keyboard_Shortcuts" : {\n    "message" : "Keyboard Shortcuts"\n  },\n  "locale_Corpus_Settings" : {\n    "message" : "Corpus Settings"\n  },\n  "locale_Terminal_Power_Users" : {\n    "message" : "Power Users Backend"\n  },\n  "locale_New_Datum" : {\n    "message" : "New Datum"\n  },\n  "locale_New_menu" : {\n    "message" : "New"\n  },\n  "locale_New_Conversation" : {\n  \t"message" : "New Conversation"\n  },\n  "locale_New_Data_List" : {\n    "message" : "New Data List"\n  },\n  "locale_New_Session" : {\n    "message" : "New Session"\n  },\n  "locale_New_Corpus" : {\n    "message" : "New Corpus"\n  },\n  "locale_Data_menu" : {\n    "message" : "Data"\n  },\n  "locale_Import_Data" : {\n    "message" : "Import Data"\n  },\n  "locale_Export_Data" : {\n    "message" : "Export Data"\n  },\n  "locale_All_Data" : {\n  \t"message" : "All Data"\n  },\n  "locale_Save" : {\n    "message" : "Save"\n  },\n  "locale_Title" : {\n    "message" : "Title:"\n  },\n  "locale_Description" : {\n    "message" : "Description:"\n  },\n    "locale_Copyright" : {\n    "message" : "Copyright:"\n  },\n    "locale_License" : {\n    "message" : "License:"\n  },\n    "locale_Terms_of_use" : {\n    "message" : "Terms of Use:"\n  },\n  "locale_Sessions_associated" : {\n    "message" : "Elicitation Sessions associated with this corpus"\n  },\n  "locale_Datalists_associated" : {\n    "message" : "Datalists associated with this corpus"\n  },\n  "locale_Permissions_associated" : {\n    "message" : "Permissions associated with this corpus"\n  },\n  "locale_Datum_field_settings" : {\n    "message" : "Datum Field Settings"\n  },\n  "locale_Conversation_field_settings" : {\n    "message" : "Conversation Field Settings"\n  },\n  "locale_Encrypt_if_confidential" : {\n    "message" : "Encrypt if confidential:"\n  },\n  "locale_Help_Text" : {\n    "message" : "Help Text:"\n  },\n  "locale_Add" : {\n    "message" : "Add"\n  },\n  "locale_Datum_state_settings" : {\n    "message" : "Datum State Settings"\n  },\n  "locale_Green" : {\n    "message" : "Green"\n  },\n  "locale_Orange" : {\n    "message" : "Orange"\n  },\n  "locale_Red" : {\n    "message" : "Red"\n  },\n  "locale_Blue" : {\n    "message" : "Blue"\n  },\n  "locale_Teal" : {\n    "message" : "Teal"\n  },\n  "locale_Black" : {\n    "message" : "Black"\n  },\n  "locale_Default" : {\n    "message" : "Default"\n  },\n  "locale_Elicitation_Session" : {\n    "message" : "Elicitation Session"\n  },\n  "locale_Export" : {\n    "message" : "Export"\n  },\n  "locale_Actions" : {\n    "message" : "Actions"\n  },\n  "locale_Navigation" : {\n    "message" : "Navigation"\n  },\n  "locale_Datum_Status_Checked" : {\n    "message" : "Mark Datum status as checked/verified with language consultant"\n  },\n  "locale_Next_Datum" : {\n    "message" : "Next Datum"\n  },\n  "locale_Previous_Datum" : {\n    "message" : "Previous Datum"\n  },\n  "locale_Data_Entry_Area" : {\n    "message" : "Data Entry Area <small>(1-5 datum)</small>"\n  },\n  "locale_Search" : {\n    "message" : "Type your search query, or hit enter to see all data"\n  },\n  "locale_View_Profile_Tooltip" : {\n    "message" : "Click to view user\'s page"\n  },\n  "locale_View_Public_Profile_Tooltip" : {\n    "message" : "View/edit your public user\'s page"\n  },\n  "locale_Edit_User_Profile_Tooltip" : {\n    "message" : "Click to edit your user profile"\n  },\n  "locale_Public_Profile_Instructions" : {\n    "message" : "This is your public user\'s page. You can edit it to change/remove information. This is what your team members can see when they click on your gravatar. All of this information (including your gravatar) can be different from the information in your private profile."\n  },\n  "locale_Private_Profile_Instructions" : {\n    "message" : "This is your private profile."\n  },\n  "locale_Edit_Public_User_Profile" : {\n    "message" : "Edit my public user\'s page"\n  },\n  "locale_Close" : {\n    "message" : "Close"\n  },\n  "locale_New_Corpus_Instructions" : {\n    "message" : "Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus"\n  },\n  "locale_New_Corpus_Warning" : {\n    "message" : " The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental."\n  },\n  "locale_Cancel" : {\n    "message" : "Cancel"\n  },\n  "locale_Next" : {\n    "message" : "Next"\n  },\n  "locale_Show" : {\n    "message" : "Show"\n  },\n  "locale_per_page" : {\n    "message" : "per page"\n  },\n  "locale_New_Session_Instructions" : {\n    "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"\n  },\n  "locale_Consultants" : {\n    "message" : "Consultant(s):"\n  },\n  "locale_Goal" : {\n    "message" : "Goal:"\n  },\n  "locale_When" : {\n    "message" : "When:"\n  },\n  "locale_Save_And_Import" : {\n    "message" : "Save and Finish Importing"\n  },\n  "locale_Import" : {\n    "message" : "Import"\n  },\n  "locale_percent_completed" : {\n    "message" : "% completed."\n  },\n  "locale_Import_Instructions" : {\n    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus\'s existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus\' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a \'datum\' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", \n    "message" : "Everyone\'s data is different. <a href=\'http://www.facebook.com/LingSyncApp\'>You might know some fellow users who might be able to help you import yours: </a>"\n  }, \n  "locale_Import_First_Step" : {\n    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area. You can edit the data inside the text area.</p>"\n  },\n    "locale_Import_Second_Step" : {\n    "message" : "<p>Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.</p>"\n  },\n  "locale_Import_Third_Step" : {\n    "message" : "<p>Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import. </p>"\n  },\n  "locale_Drag_Fields_Instructions" : {\n    "message" : "<p>Drag (or type) the coloured datum fields to the column headings which match. Type in any additional column headings which you would like to keep as datum fields. The columns will become default datum fields in your corpus database and will also become fields that you can search through to locate your data. Each row will become a \'datum\' in your corpus database.</p>"\n  },\n  "locale_Add_Extra_Columns" : {\n    "message" : "Insert Extra Columns"\n  },\n  "locale_Attempt_Import" : {\n    "message" : "Preview Import"\n  },\n  "locale_LaTeX_Code" : {\n    "message" : "LaTeX Code:"\n  },\n  "locale_Unicode_Instructions" : {\n    "message" : "By default this is also a keyboard shortcut to type this character in a datum field. To customize the shortcut:"\n  },\n  "locale_Remove_Unicode" : {\n    "message" : "Remove Unicode"\n  },\n  "locale_Unicode" : {\n    "message" : "Unicode"\n  },\n  "locale_Drag_and_Drop" : {\n    "message" : "<small>Drag and Drop</small>"\n  },\n  "locale_AND" : {\n    "message" : "AND"\n  },\n  "locale_OR" : {\n    "message" : "OR"\n  },\n  "locale_Advanced_Search" : {\n    "message" : "Advanced Search"\n  },\n  "locale_Advanced_Search_Tooltip" : {\n    "message" : "Advanced Search allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."\n  },\n  "locale_User_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Private_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Public_Profile" : {\n    "message" : "Public Profile"\n  },\n  "locale_Email" : {\n    "message" : "Email:"\n  },\n  "locale_Research_Interests" : {\n    "message" : "Research Interests:"\n  },\n  "locale_Affiliation" : {\n    "message" : "Affiliation:"\n  },\n  "locale_Corpora" : {\n    "message" : "Corpora:"\n  },\n  "locale_Gravatar" : {\n    "message" : "Gravatar"\n  },\n  "locale_Gravatar_URL" : {\n    "message" : "Gravatar URL:"\n  },\n  "locale_Firstname" : {\n    "message" : "First name:"\n  },\n  "locale_Lastname" : {\n    "message" : "Last name:"\n  },\n  "locale_Skin" : {\n    "message" : "Skin:"\n  },\n  "locale_Background_on_Random" : {\n    "message" : "Background on Random"\n  },\n  "locale_Transparent_Dashboard" : {\n    "message" : "Transparent Dashboard"\n  },\n  "locale_Change_Background" : {\n    "message" : "Change Background"\n  },\n  "locale_Number_Datum" : {\n    "message" : "Number of Datum to appear at a time:"\n  },\n  "locale_Help_Text_Placeholder" : {\n    "message" : "Put a help text or your team data entry conventions for this field here (optional)."\n  },\n  "locale_Add_Placeholder" : {\n    "message" : "Add...."\n  },\n  "locale_Datalist_Description" : {\n    "message" : "You can use Datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."\n  },\n  "locale_Add_Tag" : {\n    "message" : "New Tag..."\n  },\n  "locale_Drag_and_Drop_Placeholder" : {\n    "message" : "Drag and drop, copy-paste or type your data here."\n  },\n  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {\n    "message" : "Paste/type unicode symbol"\n  },\n  "locale_TIPA_shortcut" : {\n    "message" : "TIPA/keyboard shortcut"\n  },\n  "locale_Show_Activities" : {\n    "message" : "Show Activities"\n  },\n  "locale_Hide_Activities" : {\n    "message" : "Hide Activities"\n  },\n  "locale_Show_Dashboard" : {\n    "message" : "Show dashboard with data entry form"\n  },\n  "locale_Save_on_this_Computer" : {\n    "message" : "Save on this device."\n  },\n  "locale_Sync_and_Share" : {\n    "message" : "Sync and share with team"\n  },\n  "locale_Show_Readonly" : {\n    "message" : "Show read only"\n  },\n  "locale_Show_Fullscreen" : {\n    "message" : "Show full screen"\n  },\n  "locale_Add_New_Datum_Field_Tooltip" : {\n    "message" : "Add new datum field"\n  },\n  "locale_Add_New_Conversation_Field_Tooltip" : {\n    "message" : "Add new conversation field"\n  },\n  "locale_Add_New_Datum_State_Tooltip" : {\n    "message" : "Add new datum state"\n  },\n  "locale_Show_in_Dashboard" : {\n    "message" : "Show in dashboard"\n  },\n  "locale_Edit_corpus" : {\n    "message" : "Edit Corpus"\n  },\n  "locale_Show_corpus_settings" : {\n    "message" : "Show Corpus Settings"\n  },\n  "locale_Drag_and_Drop_Audio_Tooltip" : {\n    "message" : "Drag and drop audio over the audio player to attach an audio file. Drag and drop option for YouTube videos coming soon."\n  },\n  "locale_Play_Audio" : {\n    "message" : "Play audio"\n  },\n  "locale_Play_Audio_checked" : {\n    "message" : "Play audio of checked items"\n  },\n  "locale_Remove_checked_from_datalist_tooltip" : {\n    "message" : "Remove checked datum from this data list (they will still be in the corpus). "\n  },\n  "locale_Plain_Text_Export_Tooltip" : {\n    "message" : "Export as plain text/Copy to clipboard"\n  },\n  "locale_Plain_Text_Export_Tooltip_checked" : {\n    "message" : "Export as plain text/Copy checked items to clipboard"\n  },\n  "locale_Duplicate" : {\n    "message" : "Duplicate datum to create a minimal pair"\n  },\n  "locale_Encrypt" : {\n    "message" : "Make this datum confidential"\n  },\n  "locale_Encrypt_checked" : {\n    "message" : "Make checked items confidential"\n  },\n  "locale_Decrypt_checked" : {\n    "message" : "Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you just want to unmask them so you can edit edit them, click on the eye instead."\n  },\n  "locale_Decrypt" : {\n    "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."\n  },\n  "locale_Show_confidential_items_Tooltip" : {\n    "message" : "Unmask confidential/encrypted data so that it can be edited and read for the next 10 minutes."\n  },\n  "locale_Hide_confidential_items_Tooltip" : {\n    "message" : "Return to masked view of confidential/encrypted data"\n  },\n  "locale_Edit_Datalist" : {\n    "message" : "Edit Data List"\n  },\n  "locale_Export_checked_as_LaTeX" : {\n    "message" : "Export checked as LaTeX"\n  },\n  "locale_Export_checked_as_CSV" : {\n    "message" : "Export checked as CSV"\n  },\n  "locale_Hide_Datalist" : {\n    "message" : "Hide datalist"\n  },\n  "locale_Show_Datalist" : {\n    "message" : "Show datalist"\n  },\n  "locale_Edit_Datum" : {\n    "message" : "Edit Datum"\n  },\n  "locale_See_Fields" : {\n    "message" : "Hide/Show infrequent fields"\n  },\n  "locale_Add_Tags_Tooltip" : {\n    "message" : "Add a tag to this datum. Tags can be used to categorize datum, count how many datum of each tag you have, and search datum."\n  },\n  "locale_Edit_Session" : {\n    "message" : "Edit Session"\n  },\n  "locale_Show_Unicode_Palette" : {\n    "message" : "Show Unicode Palette"\n  },\n  "locale_Hide_Unicode_Palette" : {\n    "message" : "Hide Unicode Palette"\n  },\n  "locale_Add_new_symbol" : {\n    "message" : "Add new symbol"\n  },\n  "locale_Public_or_Private" : {\n    "message" : "Public or Private:"\n  },\n  "locale_Insert_New_Datum" : {\n    "message" : "Insert a new datum on top of the dashboard center"\n  },\n  "locale_LaTeX" : {\n    "message" : "Export datum as LaTeX"\n  },\n  "locale_CSV_Tooltip" : {\n    "message" : "Export datum as CSV"\n  },\n  "locale_of" : {\n    "message" : "of"\n  },\n  "locale_pages_shown" : {\n    "message" : "pages shown"\n  },\n  "locale_More" : {\n    "message" : "More"\n  }\n}\n';});
+define('text!locales/en/messages.json',[],function () { return '{\n  "application_title" : {\n    "message" : "LingSync beta",\n    "description" : "The title of the application, displayed in the web store."\n  },\n  "application_description" : {\n    "message" : "An on/offline fieldlinguistics database app which adapts to its user\'s I-Language.",\n    "description" : "The description of the application, displayed in the web store."\n  },\n  "locale_Close_and_login_as_LingLlama" : {\n    "message" : "Login as LingLlama",\n    "description" : "button"\n  },\n  "locale_Close_and_login_as_LingLlama_Tooltip" : {\n    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you\'re new to LingSync this is a great place to start after watching the videos. ",\n    "description" : "tooltip"\n  },\n  "locale_Username" : {\n    "message" : "Username:"\n  },\n  "locale_Password" : {\n    "message" : "Password:"\n  },\n  "locale_Sync_my_data_to_this_computer" : {\n    "message" : "Sync my data to this device"\n  },\n  "locale_Welcome_to_FieldDB" : {\n    "message" : "Welcome to LingSync!"\n  },\n  "locale_An_offline_online_fieldlinguistics_database" : {\n    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."\n  },\n  "locale_Welcome_Beta_Testers" : {\n    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"\n  },\n  "locale_Welcome_Screen" : {\n    "message" : "<p>Curious what this is? <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"\n  },\n  "locale_Create_a_new_user" : {\n    "message" : "Register"\n  },\n  "locale_What_is_your_username_going_to_be" : {\n    "message" : "What is your username going to be?"\n  },\n  "locale_Confirm_Password" : {\n    "message" : "Confirm Password:"\n  },\n  "locale_Sign_in_with_password" : {\n    "message" : "Register"\n  },\n  "locale_Warning" : {\n    "message" : "Warning!"\n  },\n  "locale_Instructions_to_show_on_dashboard" : {\n    "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=\' icon-edit\'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app.     To more information about what a \'Corpus\' is, click <i class=\' icon-cogs resize-full\'></i>.     It will show the corpus settings, which contains explanations of each component of a \'Corpus.\'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>",\n    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=\' icon-edit\'></i>. To see what Corpus consists of, click <i class=\' icon-cogs resize-full\'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=\' icon-edit\'></i>. Click <i class=\' icon icon-resize-full\'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>"\n    \n  },\n  "locale_elicitation_sessions_explanation" : {\n    "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class=\'icons icon-edit\'></i> icon in Dashboard view. For additional options, click on the <i class=\'icon-calendar\'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"\n  },\n  "locale_datalists_explanation" : {\n    "message" : "<p>A Datalist is a collection of Datum that you put together for some reason. Some examples are: making a handout, sharing data with someone, exporting into another program, or simply keeping track of similar Datum for your research.</p> <p> Creating a Datalist is like making a bookmark to a set of custom search results. First, do a search for whatever you want the Datalist to be about. Then, if you don\'t want some of the results to be included in the Datalist, click the <i class=\'icon-remove-sign\'></i> icon by any Datum to remove it. Finally, edit the title and description, and click the save button to create the Datalist.</p> <p>You can see your Datalists on the left side of your dashboard (click plus/minus to expand/minimize) or in the list below (double-click on a title to view details). </p><p>To see all your data, do a search with nothing in the search bar. If you have over 200 Datum in your corpus, this can be pretty slow, so you may prefer to search for a subset. In general, a Datalist with more than 100 Datum will take a few seconds to load.</p> <p> In the Datalist view, the Datum will appear in the colour of their current state (i.e. Checked with a consultant, To be checked, Deleted etc). You can make new states in the Datum State Settings on this page. </p>"\n  },\n  "locale_permissions_explanation" : {\n    "message" : "<p>Permissions are where you give other people access to your corpus.</p><p>To add another LingSync user, you need to know their username. Click the <i class=\'icons icon-edit\'></i> icon at the top right and then come back to Permissions and click the \'See current team members\' button. You can then add users by typing in their username by the appropriate group.</p> <ul><li>Admins can add other people to any group but not do anything with the data unless they are also writers/readers.</li> <li>Writers can enter new data, add comments, change Datum State from \'to be checked to \'checked\' etc, but not see data that is already entered. </li><li>Readers can see data that is already entered in the app but not edit or comment on it. </li></ul><p>If you want someone to be able to both enter data and see existing data, add them as both a writer and a reader.</p><p>If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, type \'Public\' in the \'Public or Private\' field below.</p><p>You can, and should, encrypt any Datum containing sensitive information by clicking the <i class=\' icon-unlock\'></i> button at the bottom of the Datum. Encrypted Datums are shown as \'xxx xx xx xx\' to all users, including on the web. If you want to see the contents of a confidential Datum, click on the <i class=\'icon-eye-open\'></i> and enter your password. This will make the Datum visible for 10 minutes.</p>"\n  },\n  "locale_datum_fields_explanation" : {\n    "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class=\'icon-list-alt\'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class=\'icons icon-edit\'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n    "locale_conversation_fields_explanation" : {\n    "message" : "<p>Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a \'location\' field, but instead choose to encrypt a \'world knowledge\' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n  "locale_datum_states_explanation" : {\n    "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, \'Checked\' with a consultant, \'To be checked\', \'Deleted\' etc. </p> <p>Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team\'s data validation workflow (e.g. \'To be checked with Sophie,\' \'Checked with Gladys\').  You can assign colours to your Datum States, which will appear as the background colour of the Datum in any Datalist. </p> <p> If you flag a Datum as Deleted it won\'t show up in search results anymore, but a Datum in a corpus is never really deleted. It remains in the database complete with its change history so that you can review it at a later date. (In future we might add a button to allow users to \'empty the trash\' and mass-delete old Datum from the system.) </p> "\n  },\n   "locale_advanced_search_explanation" : {\n    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type \'nay\' and search will find the morphemes \'onay\', \'naya\' etc. </p> <p>Search automatically creates a temporary list of data. If you enter new matching data, it will be added automatically this can be a handy way to see the data you have entered recently, as you enter data.. If you want to keep the list of data, click Save and a new DataList will be created. </p> <p>For now, search is offline, running on your device, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"\n   },\n  "locale_New_User" : {\n    "message" : "New User"\n  },\n  "locale_Activity_Feed_Your" : {\n    "message" : "Your Activity Feed"\n  },\n  "locale_Activity_Feed_Team" : {\n    "message" : "Corpus Team Activity Feed"\n  },\n  "locale_Refresh_Activities" : {\n    "message" : "Refresh activity feed to bring it up-to-date."\n  },\n  "locale_Need_save" : {\n    "message" : " Need save:"\n  },\n  "locale_60_unsaved" : {\n    "message" : "<strong>60% unsaved.</strong>"\n  },\n  "locale_Recent_Changes" : {\n    "message" : "Recent Changes:"\n  },\n  "locale_Need_sync" : {\n    "message" : "Need sync:"\n  },\n  "locale_Differences_with_the_central_server" : {\n    "message" : "Differences with the central server:"\n  },\n  "locale_to_beta_testers" : {\n    "message" : "These messages are here to communicate to users what the app is doing. We will gradually reduce the number of messages as the app becomes more stable. <p>You can close these messages by clicking on their x.</p>"\n  },\n  "locale_We_need_to_make_sure_its_you" : {\n    "message" : "We need to make sure it\'s you..."\n  },\n  "locale_Yep_its_me" : {\n    "message" : "Yep, it\'s me"\n  },\n  "locale_Log_Out" : {\n    "message" : "Log Out"\n  },\n  "locale_Log_In" : {\n    "message" : "Log In"\n  },\n  "locale_User_Settings" : {\n    "message" : "User Settings"\n  },\n  "locale_Keyboard_Shortcuts" : {\n    "message" : "Keyboard Shortcuts"\n  },\n  "locale_Corpus_Settings" : {\n    "message" : "Corpus Settings"\n  },\n  "locale_Terminal_Power_Users" : {\n    "message" : "Power Users Backend"\n  },\n  "locale_New_Datum" : {\n    "message" : "New Datum"\n  },\n  "locale_New_menu" : {\n    "message" : "New"\n  },\n  "locale_New_Conversation" : {\n  \t"message" : "New Conversation"\n  },\n  "locale_New_Data_List" : {\n    "message" : "New Data List"\n  },\n  "locale_New_Session" : {\n    "message" : "New Session"\n  },\n  "locale_New_Corpus" : {\n    "message" : "New Corpus"\n  },\n  "locale_Data_menu" : {\n    "message" : "Data"\n  },\n  "locale_Import_Data" : {\n    "message" : "Import Data"\n  },\n  "locale_Export_Data" : {\n    "message" : "Export Data"\n  },\n  "locale_All_Data" : {\n  \t"message" : "All Data"\n  },\n  "locale_Save" : {\n    "message" : "Save"\n  },\n  "locale_Title" : {\n    "message" : "Title:"\n  },\n  "locale_Description" : {\n    "message" : "Description:"\n  },\n    "locale_Copyright" : {\n    "message" : "Corpus Copyright:"\n  },\n    "locale_License" : {\n    "message" : "Corpus License:"\n  },\n    "locale_License_explanation" : {\n    "message" : "If you make a portion of your corpus available to other people, EMELD recommends that you document clearly your terms of use, and apply a license to enforce them. For easy to understand standard licenses, you can consult <a href=\'http://creativecommons.org/licenses/\' target=\'_blank\'>Creative Commons</a>. Creative Commons licenses are applied to most web/community owned/created data, be it Wikipedia or other popular content sharing websites and mobile apps."\n  },\n    "locale_Terms_of_use" : {\n    "message" : "Corpus Terms of Use:"\n  },\n    "locale_Terms_explanation" : {\n    "message" : "When you decide to make a portion of your corpus public, EMELD recommend that you cleary state your Terms of Use with your corpus. You can modify the sample of “Terms of Use” in the textbox below according to the policy of your project (be sure to discuss with other project members and affected parties before deciding on your terms of use). Please also try to choose a license which makes sense with your Terms of Use. For your reference, see also the terms of use for other corpora such as: <a href=\'http://www.aiatsis.gov.au/collections/muraread.html\' target=\'_blank\'>Mura</a>, <a href=\'http://www.paradisec.org.au/services.html\' target=\'_blank\'>PARADISEC</a>, <a href=\'http://linguistics.berkeley.edu/~survey/archive/terms-of-use.php\' target=\'_blank\'>Survey of California and Other Indian Languages</a> "\n  },\n  "locale_Sessions_associated" : {\n    "message" : "Elicitation Sessions associated with this corpus"\n  },\n  "locale_Datalists_associated" : {\n    "message" : "Datalists associated with this corpus"\n  },\n  "locale_Permissions_associated" : {\n    "message" : "Permissions associated with this corpus"\n  },\n  "locale_Datum_field_settings" : {\n    "message" : "Datum Field Settings"\n  },\n  "locale_Conversation_field_settings" : {\n    "message" : "Conversation Field Settings"\n  },\n  "locale_Encrypt_if_confidential" : {\n    "message" : "Encrypt if confidential:"\n  },\n  "locale_Help_Text" : {\n    "message" : "Help Text:"\n  },\n  "locale_Add" : {\n    "message" : "Add"\n  },\n  "locale_Datum_state_settings" : {\n    "message" : "Datum State Settings"\n  },\n  "locale_Green" : {\n    "message" : "Green"\n  },\n  "locale_Orange" : {\n    "message" : "Orange"\n  },\n  "locale_Red" : {\n    "message" : "Red"\n  },\n  "locale_Blue" : {\n    "message" : "Blue"\n  },\n  "locale_Teal" : {\n    "message" : "Teal"\n  },\n  "locale_Black" : {\n    "message" : "Black"\n  },\n  "locale_Default" : {\n    "message" : "Default"\n  },\n  "locale_Elicitation_Session" : {\n    "message" : "Elicitation Session"\n  },\n  "locale_Export" : {\n    "message" : "Export"\n  },\n  "locale_Actions" : {\n    "message" : "Actions"\n  },\n  "locale_Navigation" : {\n    "message" : "Navigation"\n  },\n  "locale_Datum_Status_Checked" : {\n    "message" : "Mark Datum status as checked/verified with language consultant"\n  },\n  "locale_Next_Datum" : {\n    "message" : "Next Datum"\n  },\n  "locale_Previous_Datum" : {\n    "message" : "Previous Datum"\n  },\n  "locale_Data_Entry_Area" : {\n    "message" : "Data Entry Area <small>(1-5 datum)</small>"\n  },\n  "locale_Search" : {\n    "message" : "Type your search query, or hit enter to see all data"\n  },\n  "locale_View_Profile_Tooltip" : {\n    "message" : "Click to view user\'s page"\n  },\n  "locale_View_Public_Profile_Tooltip" : {\n    "message" : "View/edit your public user\'s page"\n  },\n  "locale_Edit_User_Profile_Tooltip" : {\n    "message" : "Click to edit your user profile"\n  },\n  "locale_Public_Profile_Instructions" : {\n    "message" : "This is your public user\'s page. You can edit it to change/remove information. This is what your team members can see when they click on your gravatar. All of this information (including your gravatar) can be different from the information in your private profile."\n  },\n  "locale_Private_Profile_Instructions" : {\n    "message" : "This is your private profile."\n  },\n  "locale_Edit_Public_User_Profile" : {\n    "message" : "Edit my public user\'s page"\n  },\n  "locale_Close" : {\n    "message" : "Close"\n  },\n  "locale_New_Corpus_Instructions" : {\n    "message" : "Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus"\n  },\n  "locale_New_Corpus_Warning" : {\n    "message" : " The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental."\n  },\n  "locale_Cancel" : {\n    "message" : "Cancel"\n  },\n  "locale_Next" : {\n    "message" : "Next"\n  },\n  "locale_Show" : {\n    "message" : "Show"\n  },\n  "locale_per_page" : {\n    "message" : "per page"\n  },\n  "locale_New_Session_Instructions" : {\n    "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"\n  },\n  "locale_Consultants" : {\n    "message" : "Consultant(s):"\n  },\n  "locale_Goal" : {\n    "message" : "Goal:"\n  },\n  "locale_When" : {\n    "message" : "When:"\n  },\n  "locale_Save_And_Import" : {\n    "message" : "Save and Finish Importing"\n  },\n  "locale_Import" : {\n    "message" : "Import"\n  },\n  "locale_percent_completed" : {\n    "message" : "% completed."\n  },\n  "locale_Import_Instructions" : {\n    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus\'s existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus\' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a \'datum\' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", \n    "message" : "Everyone\'s data is different. <a href=\'http://www.facebook.com/LingSyncApp\'>You might know some fellow users who might be able to help you import yours: </a>"\n  }, \n  "locale_Import_First_Step" : {\n    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area. You can edit the data inside the text area.</p>"\n  },\n    "locale_Import_Second_Step" : {\n    "message" : "<p>Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.</p>"\n  },\n  "locale_Import_Third_Step" : {\n    "message" : "<p>Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import. </p>"\n  },\n  "locale_Drag_Fields_Instructions" : {\n    "message" : "<p>Drag (or type) the coloured datum fields to the column headings which match. Type in any additional column headings which you would like to keep as datum fields. The columns will become default datum fields in your corpus database and will also become fields that you can search through to locate your data. Each row will become a \'datum\' in your corpus database.</p>"\n  },\n  "locale_Add_Extra_Columns" : {\n    "message" : "Insert Extra Columns"\n  },\n  "locale_Attempt_Import" : {\n    "message" : "Preview Import"\n  },\n  "locale_LaTeX_Code" : {\n    "message" : "LaTeX Code:"\n  },\n  "locale_Unicode_Instructions" : {\n    "message" : "By default this is also a keyboard shortcut to type this character in a datum field. To customize the shortcut:"\n  },\n  "locale_Remove_Unicode" : {\n    "message" : "Remove Unicode"\n  },\n  "locale_Unicode" : {\n    "message" : "Unicode"\n  },\n  "locale_Drag_and_Drop" : {\n    "message" : "<small>Drag and Drop</small>"\n  },\n  "locale_AND" : {\n    "message" : "AND"\n  },\n  "locale_OR" : {\n    "message" : "OR"\n  },\n  "locale_Advanced_Search" : {\n    "message" : "Advanced Search"\n  },\n  "locale_Advanced_Search_Tooltip" : {\n    "message" : "Advanced Search allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."\n  },\n  "locale_User_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Private_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Public_Profile" : {\n    "message" : "Public Profile"\n  },\n  "locale_Email" : {\n    "message" : "Email:"\n  },\n  "locale_Research_Interests" : {\n    "message" : "Research Interests:"\n  },\n  "locale_Affiliation" : {\n    "message" : "Affiliation:"\n  },\n  "locale_Corpora" : {\n    "message" : "Corpora:"\n  },\n  "locale_Gravatar" : {\n    "message" : "Gravatar"\n  },\n  "locale_Gravatar_URL" : {\n    "message" : "Gravatar URL:"\n  },\n  "locale_Firstname" : {\n    "message" : "First name:"\n  },\n  "locale_Lastname" : {\n    "message" : "Last name:"\n  },\n  "locale_Skin" : {\n    "message" : "Skin:"\n  },\n  "locale_Background_on_Random" : {\n    "message" : "Background on Random"\n  },\n  "locale_Transparent_Dashboard" : {\n    "message" : "Transparent Dashboard"\n  },\n  "locale_Change_Background" : {\n    "message" : "Change Background"\n  },\n  "locale_Number_Datum" : {\n    "message" : "Number of Datum to appear at a time:"\n  },\n  "locale_Help_Text_Placeholder" : {\n    "message" : "Put a help text or your team data entry conventions for this field here (optional)."\n  },\n  "locale_Add_Placeholder" : {\n    "message" : "Add...."\n  },\n  "locale_Datalist_Description" : {\n    "message" : "You can use Datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."\n  },\n  "locale_Add_Tag" : {\n    "message" : "New Tag..."\n  },\n  "locale_Drag_and_Drop_Placeholder" : {\n    "message" : "Drag and drop, copy-paste or type your data here."\n  },\n  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {\n    "message" : "Paste/type unicode symbol"\n  },\n  "locale_TIPA_shortcut" : {\n    "message" : "TIPA/keyboard shortcut"\n  },\n  "locale_Show_Activities" : {\n    "message" : "Show Activities"\n  },\n  "locale_Hide_Activities" : {\n    "message" : "Hide Activities"\n  },\n  "locale_Show_Dashboard" : {\n    "message" : "Show dashboard with data entry form"\n  },\n  "locale_Save_on_this_Computer" : {\n    "message" : "Save on this device."\n  },\n  "locale_Sync_and_Share" : {\n    "message" : "Sync and share with team"\n  },\n  "locale_Show_Readonly" : {\n    "message" : "Show read only"\n  },\n  "locale_Show_Fullscreen" : {\n    "message" : "Show full screen"\n  },\n  "locale_Add_New_Datum_Field_Tooltip" : {\n    "message" : "Add new datum field"\n  },\n  "locale_Add_New_Conversation_Field_Tooltip" : {\n    "message" : "Add new conversation field"\n  },\n  "locale_Add_New_Datum_State_Tooltip" : {\n    "message" : "Add new datum state"\n  },\n  "locale_Show_in_Dashboard" : {\n    "message" : "Show in dashboard"\n  },\n  "locale_Edit_corpus" : {\n    "message" : "Edit Corpus"\n  },\n  "locale_Show_corpus_settings" : {\n    "message" : "Show Corpus Settings"\n  },\n  "locale_Drag_and_Drop_Audio_Tooltip" : {\n    "message" : "Drag and drop audio over the audio player to attach an audio file. Drag and drop option for YouTube videos coming soon."\n  },\n  "locale_Play_Audio" : {\n    "message" : "Play audio"\n  },\n  "locale_Play_Audio_checked" : {\n    "message" : "Play audio of checked items"\n  },\n  "locale_Remove_checked_from_datalist_tooltip" : {\n    "message" : "Remove checked datum from this data list (they will still be in the corpus). "\n  },\n  "locale_Plain_Text_Export_Tooltip" : {\n    "message" : "Export as plain text/Copy to clipboard"\n  },\n  "locale_Plain_Text_Export_Tooltip_checked" : {\n    "message" : "Export as plain text/Copy checked items to clipboard"\n  },\n  "locale_Duplicate" : {\n    "message" : "Duplicate datum to create a minimal pair"\n  },\n  "locale_Encrypt" : {\n    "message" : "Make this datum confidential"\n  },\n  "locale_Encrypt_checked" : {\n    "message" : "Make checked items confidential"\n  },\n  "locale_Decrypt_checked" : {\n    "message" : "Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you just want to unmask them so you can edit edit them, click on the eye instead."\n  },\n  "locale_Decrypt" : {\n    "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."\n  },\n  "locale_Show_confidential_items_Tooltip" : {\n    "message" : "Unmask confidential/encrypted data so that it can be edited and read for the next 10 minutes."\n  },\n  "locale_Hide_confidential_items_Tooltip" : {\n    "message" : "Return to masked view of confidential/encrypted data"\n  },\n  "locale_Edit_Datalist" : {\n    "message" : "Edit Data List"\n  },\n  "locale_Export_checked_as_LaTeX" : {\n    "message" : "Export checked as LaTeX"\n  },\n  "locale_Export_checked_as_CSV" : {\n    "message" : "Export checked as CSV"\n  },\n  "locale_Hide_Datalist" : {\n    "message" : "Hide datalist"\n  },\n  "locale_Show_Datalist" : {\n    "message" : "Show datalist"\n  },\n  "locale_Edit_Datum" : {\n    "message" : "Edit Datum"\n  },\n  "locale_See_Fields" : {\n    "message" : "Hide/Show infrequent fields"\n  },\n  "locale_Add_Tags_Tooltip" : {\n    "message" : "Add a tag to this datum. Tags can be used to categorize datum, count how many datum of each tag you have, and search datum."\n  },\n  "locale_Edit_Session" : {\n    "message" : "Edit Session"\n  },\n  "locale_Show_Unicode_Palette" : {\n    "message" : "Show Unicode Palette"\n  },\n  "locale_Hide_Unicode_Palette" : {\n    "message" : "Hide Unicode Palette"\n  },\n  "locale_Add_new_symbol" : {\n    "message" : "Add new symbol"\n  },\n  "locale_Public_or_Private" : {\n    "message" : "Public or Private:"\n  },\n  "locale_Insert_New_Datum" : {\n    "message" : "Insert a new datum on top of the dashboard center"\n  },\n  "locale_LaTeX" : {\n    "message" : "Export datum as LaTeX"\n  },\n  "locale_CSV_Tooltip" : {\n    "message" : "Export datum as CSV"\n  },\n  "locale_of" : {\n    "message" : "of"\n  },\n  "locale_pages_shown" : {\n    "message" : "pages shown"\n  },\n  "locale_More" : {\n    "message" : "More"\n  }\n}\n';});
 
 define('user/UserApp',[
     "backbone", 
