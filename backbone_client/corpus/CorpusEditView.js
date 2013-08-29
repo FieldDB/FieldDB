@@ -168,9 +168,11 @@ define([
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
-      "blur .corpus-copyright-input" : "updateCopyright",      
-      "blur .corpus-license-input" : "updateLicense",      
-      "blur .corpus-terms-input" : "updateTermsOfUse",      
+      "blur .corpus-copyright-input" : "updateCopyright",
+      "blur .corpus-license-title-input" : "updateLicense",
+      "blur .corpus-license-humanreadable-input" : "updateLicense",
+      "blur .corpus-license-link-input" : "updateLicense",
+      "blur .corpus-terms-input" : "updateTermsOfUse",
       "blur .public-or-private" : "updatePublicOrPrivate",
       "blur .glosserURL" : function(e){
         if(e){
@@ -560,25 +562,33 @@ define([
     },
     
     updateDescription: function(){
-      this.model.set("description",this.$el.find(".corpus-description-input").val());
+      this.model.set("description", this.$el.find(".corpus-description-input").val());
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
     updateCopyright: function(){
-      this.model.set("copyright",this.$el.find(".corpus-copyright-input").val());
+      this.model.set("copyright", this.$el.find(".corpus-copyright-input").val());
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
     updateLicense: function(){
-      this.model.set("license",this.$el.find(".corpus-license-input").val());
+      var license = {
+        title: this.$el.find(".corpus-license-title-input").val(),
+        link: this.$el.find(".corpus-license-link-input").val(),
+        humanReadable : this.$el.find(".corpus-license-humanreadable-input").val()
+      };
+      this.model.set("license", license);
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
     updateTermsOfUse: function(){
-      this.model.set("termsOfUse",this.$el.find(".corpus-terms-input").val());
+      var terms = {
+        humanReadable : this.$el.find(".corpus-terms-input").val()
+      };
+      this.model.set("termsOfUse", terms);
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }
