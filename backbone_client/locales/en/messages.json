@@ -176,8 +176,14 @@
     "locale_License" : {
     "message" : "License:"
   },
+    "locale_License_explanation" : {
+    "message" : "We recommend that you license your copy right. Please consult with <a href='http://creativecommons.org/licenses/' target='_blank'>Creative Commons</a>. Please make sure that the licensing terms are consistent with your Terms Of Use."
+  },
     "locale_Terms_of_use" : {
     "message" : "Terms of Use:"
+  },
+    "locale_Terms_explanation" : {
+    "message" : "When you decide to make the corpus public, we recommend that you attach a Terms of Use with the corpus. You can modify the sample of “Terms of Use” in the textbox below according to the policy of your project. Please also make sure your Terms of Use is consistent with your License Terms. For your reference, see also: <a href='http://www.aiatsis.gov.au/collections/muraread.html' target='_blank'>Mura</a>, <a href='http://www.paradisec.org.au/services.html' target='_blank'>PARADISEC</a>, <a href='http://linguistics.berkeley.edu/~survey/archive/terms-of-use.php' target='_blank'>Survey of California and Other Indian Languages</a> "
   },
   "locale_Sessions_associated" : {
     "message" : "Elicitation Sessions associated with this corpus"
