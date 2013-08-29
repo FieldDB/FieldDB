@@ -1,0 +1,7 @@
+{
+  "name": "FieldDB",
+  "version": "1.70.1",
+  "dependencies": {
+    "handlebars" : "latest"
+  }
+}
