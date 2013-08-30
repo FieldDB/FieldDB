@@ -1,60 +1,32 @@
+<br />
+<br />
 <div id="login_screen" ng-cloak>
 	<div ng-show="not_chrome==true">
 		<h3>THIS SITE WAS DEVELOPED FOR GOOGLE CHROME.</h3>
-		It may not work as expected if you are using another browser.<br />
-		<a href="http://chrome.google.com"><button class="btn btn-primary" >Get
-			Google Chrome</button></a>
+		It may not work as expected if you are using another browser.<br /> <a
+			href="http://chrome.google.com"><button class="btn btn-primary">Get
+				Google Chrome</button></a>
 	</div>
-	<img src="img/icon128_dev.png"> <br />
-	<h1>LingSync Spreadsheet</h1>
-	<br> <br>
-	<div class="mainPageDiv">
-		<div ng-hide="authenticated==true || loading==true">
-			Select Server and Log in <br />
-			<br />
-			<form ng-submit='loginUser(auth)'>
-				<select multiple="multiple" ng-model='auth.server'>
-					<option value='https://prosody.linguistics.mcgill.ca/corpus/'>McGill
-						Prosody Lab</option>
-					<option value='https://corpusdev.lingsync.org/'>LingSync
-						Beta</option>
-				</select><br> <br> <input type="text" ng-model='auth.user'
-					placeholder="username"><br> <input type="password"
-					ng-model='auth.password' placeholder="password"><br>
-				<button class="btn btn-primary">Log In</button>
-			</form>
-		</div>
-		<div ng-show="loading==true && authenticated==false">
-			<img src="img/loading-spinner.gif" width="100px">
-		</div>
-		<div ng-show="authenticated==true">
-			Logged in as {{username}}<br> Select Database and click Access:<br />
-			<br />
-			<form ng-submit='selectDB(selectedDB)'>
-				<select multiple="multiple" ng-model='selectedDB'>
-					<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option>
-				</select><br>
-				<button class="btn btn-primary">Access</button>
-			</form>
-			<div ng-show="loading==true">
-				<span>Please wait while we access the database...</span><br /> <img
-					src="img/loading-spinner.gif" width="100px">
-			</div>
-		</div>
-	</div>
-	<span ng-show="loading==false && data!=undefined"><h2>Data
-			loaded. Select a session and click Go, or create a new session.</h2> </span><br>
-	<div ng-show="data!=undefined">
+	<img src="img/lingsync_spreadsheet_main_page_logo.png"> <br /><br />
+	<div ng-show="data!=undefined" class="mainPageDiv">
+		<span ng-show="loading==false && data!=undefined">{{DB.corpustitle}} loaded.<br />Select
+			a session and click Go, or create a new session.
+		</span><br>
+		<div class="form-horizontal">
 		<form ng-submit="selectSession(activeSessionToView)">
 			<select ng-model='activeSessionToView'>
+				<option value="" disabled selected>Choose existing
+					session...</option>
 				<option value='none'>View all sessions</option>
 				<option ng-repeat="session in sessions | orderBy:'dateCreated'"
 					value={{session._id}}>{{session.dateCreated | shortDate}}
 					{{session.title}} ({{(data | filter: session._id).length}})</option>
 			</select>
-			<button class="btn btn-primary">Go</button>
+			<button class="btn btn-primary">Go</button>&nbsp;<button class="btn btn-info" type='button'
+				ng-click="showCreateSessionDiv=!showCreateSessionDiv">New Session</button>
+
 		</form>
-		<br />
+		</div>
 		<div class="row" ng-show="loading==true">
 			<div class="span12 pagination-centered">
 				<img src="img/loading-spinner.gif" width="100px">
@@ -62,21 +34,16 @@
 		</div>
 
 		<div ng-show="loading==false" class="newSessionDiv">
-			<button class="btn"
-				ng-click="showCreateSessionDiv=!showCreateSessionDiv">Create
-				New Session</button>
 			<div ng-show="showCreateSessionDiv==true">
 				<br />
-				<h3>Database: {{DB[0]}}</h3>
+				<h3>
+					New Session for <i>{{DB.corpustitle}}</i>
+				</h3>
 				<form ng-model="newSession">
 					<table class="newSessionTable" align='center'>
 						<tr>
-							<td>Goal:</td>
+							<td>Title:</td>
 							<td><input type="text" ng-model='newSession.goal'></td>
-						</tr>
-						<tr>
-							<td><b>Note: </b></td>
-							<td><i>Goal is used to create session title.</i></td>
 						</tr>
 						<tr>
 							<td>Consultants:</td>
@@ -100,13 +67,56 @@
 						</tr>
 						<tr>
 							<td>Date Entered:</td>
-							<td>{{currentDate}} <!-- 						<td><input type="date" ng-model='newSession.dateSEntered'></td> -->
+							<td>{{currentDate | shortDate}}
 						</tr>
 					</table>
 					<button class="btn btn-primary"
-						ng-click="createNewSession(newSession);showCreateSessionDiv=false">Create</button>
+						ng-click="createNewSession(newSession);showCreateSessionDiv=false">Create
+						and Access New Session</button>
 				</form>
 			</div>
 		</div>
 	</div>
+	<br />
+	<div class="mainPageDiv">
+		<div ng-hide="authenticated==true || loading==true">
+			Select Server and Log in <br /> <br />
+			<form ng-submit='loginUser(auth)'>
+				<select ng-model='auth.server'>
+					<option value="" disabled selected>Choose server...</option>
+					<option value='mcgill'>McGill Prosody Lab</option>
+					<option value='testing'>LingSync Beta</option>
+					<!-- <option value='localhost'>Localhost</option> -->
+				</select><br> <br> <input type="text" ng-model='auth.user'
+					placeholder="username"><br> <input type="password"
+					ng-model='auth.password' placeholder="password"><br>
+				<button class="btn btn-primary" ng-disabled="loading==true">Log In</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-show="loading==true">
+			</form>
+		</div>
+		<div ng-show="loading==true && authenticated==false">
+			<img src="img/loading-spinner.gif" width="100px">
+		</div>
+		<div ng-show="authenticated==true && DBselected==false">
+			Logged in as {{username}}<br /> Select Corpus and click Access:<br />
+			<br />
+			<form ng-submit='selectDB(selectedDB);DBselected=true'>
+				<select ng-model='selectedDB'>
+					<option value="" disabled selected>Choose corpus...</option>
+					<option ng-repeat="item in corpora" value={{item}}>{{item.corpustitle}}</option>
+				</select><br>
+				<button class="btn btn-primary" ng-disabled="loading==true">Access</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-show="loading==true">
+			</form>
+			<div ng-show="loading==true">
+				<span>Please wait while we access the corpus...</span><br /> <img
+					src="img/loading-spinner.gif" width="100px">
+			</div>
+		</div>
+		<div ng-show="DBselected==true">
+			Logged in as {{username}}<br />Selected corpus: {{DB.corpustitle}}<br />
+			<button class="btn btn-primary" ng-click="DBselected=false">
+				Select a Different Corpus
+			</button>
+		</div>
+	</div>
 </div>
+    
