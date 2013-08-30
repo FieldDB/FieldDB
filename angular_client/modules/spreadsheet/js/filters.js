@@ -1,9 +1,9 @@
 console.log("Loading the SpreadsheetStyleDataEntryFilters.");
 
 'use strict';
-define([ "angular" ], function(angular) {
+define(["angular"], function(angular) {
   var SpreadsheetStyleDataEntryFilters = angular.module(
-      'SpreadsheetStyleDataEntry.filters', []).filter('startFrom', function() {
+    'SpreadsheetStyleDataEntry.filters', []).filter('startFrom', function() {
     return function(input, start) {
       if (input == undefined) {
         return;
@@ -45,6 +45,14 @@ define([ "angular" ], function(angular) {
         return input;
       }
     };
+  }).filter('checkDatumTags', function() {
+    return function(input) {
+      if (input == "Tags") {
+        return "--";
+      }else {
+        return input;
+      }
+    }
   });
   return SpreadsheetStyleDataEntryFilters;
 });
