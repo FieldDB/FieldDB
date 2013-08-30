@@ -1,0 +1,23 @@
+<br />
+<br />
+<div class="mainPageDiv">
+	<form>
+		Server<sup>*</sup>:<br />
+		<select ng-model="newUserInfo.serverCode">
+			<option value="mcgill">{{serverLabels.mcgill}}</option>
+			<!-- <option value="localhost">{{serverLabels.localhost}}</option> -->
+			<option value="testing">{{serverLabels.testing}}</option>
+		</select> <br /> <font size="1"><i>*Please note that data may be
+				shared only between users who are registered on the same server.</i></font> <br />
+		<input type="text" placeholder="username"
+			ng-model="newUserInfo.username"><br /> <input
+			type="password" placeholder="password"
+			ng-model="newUserInfo.password"><br /> <input
+			type="password" placeholder="confirm password"
+			ng-model="newUserInfo.confirmPassword"><br /> <input
+			placeholder="e-mail" ng-model="newUserInfo.email" type="email"><br />
+		<button class="btn btn-primary"
+			ng-click="registerNewUser(newUserInfo)" ng-disabled="loading==true">Register</button>&nbsp;<img src="img/spinner-small-mainbg.gif" ng-show="loading==true">
+	</form>
+
+</div>
