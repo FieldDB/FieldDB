@@ -1101,6 +1101,7 @@ define(
           } else {
             $scope.searchHistory = searchTerm;
           }
+          // Converting searchTerm to string to allow for integer searching
           searchTerm = searchTerm.toString().toLowerCase();
           var newScopeData = [];
           if (!$scope.activeSession) {
