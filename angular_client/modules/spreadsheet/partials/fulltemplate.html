@@ -62,7 +62,7 @@
 
 </div>
 
-<div class="row" ng-show="activeSession==undefined && loading==false">
+<div class="row" ng-show="activeSession==undefined && loading==false && searching==false">
 	<div class="span12 pagination-centered">
 		<h2>Please select a session before entering data.</h2>
 	</div>
@@ -198,7 +198,7 @@
 
 	<!-- Show when not editing -->
 	<div ng-show="selected!=datum">
-		<div class="span1">
+		<div class="span1 search_checkbox">
 			<input type="checkbox" value="{{datum.id}}"
 				ng-checked="datum.checked" ng-model="datum.checked"
 				ng-show="searching==true">
@@ -227,6 +227,7 @@
 				| neverEmpty}}</span><br /> <span class="span4" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
 		</div>
 		<div class="span2">
+			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults(datum)">Edit</button><br /></span>
 			<span title="Date modified">Last modified:<br />{{datum.dateModified
 				| standardDate}}
 			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span> <br /> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
