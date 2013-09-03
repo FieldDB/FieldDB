@@ -623,34 +623,34 @@ define(
 
         };
 
+
         $scope.deleteEmptySession = function(activeSessionID) {
           if ($scope.currentSessionName == "All Sessions") {
             window.alert("You must select a session to delete.");
           } else {
             var r = confirm("Are you sure you want to delete this session permanently?");
             if (r == true) {
-              var revID = "";
-              for (i in $scope.sessions) {
-                if ($scope.sessions[i]._id == activeSessionID) {
-                  revID = $scope.sessions[i]._rev;
-                  $scope.sessions.splice(i, 1);
-                }
-              }
-              Data
-                .removeRecord($rootScope.DB.pouchname, activeSessionID, revID)
+              Data.async($rootScope.DB.pouchname, activeSessionID)
                 .then(
-                  function(response) {
-                    $scope.changeActiveSession('none');
-                    $rootScope.activeSubMenu = 'none';
-                    // $scope.loadData();
-                  },
-                  function() {
-                    window
-                      .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                  function(sessionToMarkAsDeleted) {
+                    sessionToMarkAsDeleted.trashed = "deleted";
+                    var rev = sessionToMarkAsDeleted._rev;
+                    Data.saveEditedRecord($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
+                      // Remove session from scope
+                      for (i in $scope.sessions) {
+                        if ($scope.sessions[i]._id == activeSessionID) {
+                          $scope.sessions.splice(i, 1);
+                        }
+                      }
+                    }, function(error) {
+                      window
+                        .alert("Error deleting session.\nTry refreshing the data first by clicking ↻.");
+                    });
                   });
             }
           }
         };
+
 
         $scope.createNewSession = function(newSession) {
           $rootScope.loading = true;
@@ -716,21 +716,28 @@ define(
           }
         };
 
-        $scope.deleteRecord = function(id, rev) {
-          if (!id) {
+        $scope.deleteRecord = function(datum) {
+          if (!datum.id) {
             window.alert("Please save records before continuing.");
           } else {
             var r = confirm("Are you sure you want to delete this record permanently?");
             if (r == true) {
+
               Data
-                .removeRecord($rootScope.DB.pouchname, id, rev)
+                .async($rootScope.DB.pouchname, datum.id)
                 .then(
-                  function(response) {
-                    $scope.loadData();
-                  },
-                  function() {
-                    window
-                      .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                  function(recordToMarkAsDeleted) {
+                    recordToMarkAsDeleted.trashed = "deleted";
+                    var rev = recordToMarkAsDeleted._rev;
+                    Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
+                      // Remove record from scope
+                      var index = $scope.data.indexOf(datum);
+                      $scope.data.splice(index, 1);
+                      $scope.saved = "yes";
+                    }, function(error) {
+                      window
+                        .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                    });
                   });
             }
           }
