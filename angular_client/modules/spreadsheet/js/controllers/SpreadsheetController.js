@@ -256,39 +256,49 @@ define(
               $rootScope.DBselected = true;
             }
 
-            if ($scope.searching == true) {
-              $scope.searching = false;
-            }
+            console.log($rootScope.loading);
+            $rootScope.loading = false;
+
+            // if ($scope.searching == true) {
+            //   $scope.searching = false;
+            // }
 
             if (itemToDisplay == "settings") {
               $scope.dataentry = false;
+              $scope.searching = false;
               $scope.changeActiveSubMenu('none');
               window.location.assign("#/settings");
             } else if (itemToDisplay == "corpusSettings") {
               $scope.dataentry = false;
+              $scope.searching = false;
               $scope.changeActiveSubMenu('none');
               window.location.assign("#/corpussettings");
             } else if (itemToDisplay == "home") {
               $scope.dataentry = false;
+              $scope.searching = false;
               $scope.changeActiveSubMenu('none');
               window.location.assign("#/");
             } else if (itemToDisplay == "searchMenu") {
-              $scope.selectRow('newEntry');
               $scope.changeActiveSubMenu(itemToDisplay);
-              if ($scope.searching == true) {
-                $scope.searching = false;
-              } else {
-                $scope.searching = true;
-              }
+              $scope.searching = true;
+              window.location.assign("#/spreadsheet/" + $scope.template);
             } else if (itemToDisplay == "faq") {
               $scope.dataentry = false;
+              $scope.searching = false;
               $scope.changeActiveSubMenu('none');
               window.location.assign("#/faq");
             } else if (itemToDisplay == "reload") {
               $scope.dataRefreshed = true;
               $scope.searchTerm = '';
               $scope.searchHistory = null;
-              $scope.search = false;
+              $scope.searching = false;
+              $scope.changeActiveSubMenu('none');
+              window.location.assign("#/spreadsheet/" + $scope.template);
+              $scope.loadData();
+            } else if (itemToDisplay == "none") {
+              $scope.dataentry = true;
+              $scope.searching = false;
+              $scope.selectRow('newEntry');
               $scope.changeActiveSubMenu('none');
               window.location.assign("#/spreadsheet/" + $scope.template);
               $scope.loadData();
@@ -861,6 +871,7 @@ define(
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.saved = "no";
+          $scope.selected = null;
           $scope.currentPage = 0;
           // Update activity feed
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
@@ -1112,6 +1123,10 @@ define(
           if ($scope.searching != true) {
             $scope.selected = datum;
           }
+        };
+
+        $scope.editSearchResults = function(datum) {
+          $scope.selected = datum;
         };
 
         $scope.runSearch = function(searchTerm) {
