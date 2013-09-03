@@ -766,8 +766,10 @@ define(
 
         $scope.createRecord = function(fieldData) {
 
-          // Reset new datum form data
-          document.getElementById("form_new_datum_audio-file").reset();
+          // Reset new datum form data; only resent audio field if present
+          if ($rootScope.template == "template2") {
+            document.getElementById("form_new_datum_audio-file").reset();
+          }
           $scope.newFieldData = {};
 
           // Set dataRefreshed to false to show user notifications for data that
