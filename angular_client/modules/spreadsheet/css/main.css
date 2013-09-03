@@ -117,6 +117,10 @@ body {
 	float: left;
 }
 
+.floatRight {
+	float: right;
+}
+
 .rightMenuItems {
 	float: right;
 }

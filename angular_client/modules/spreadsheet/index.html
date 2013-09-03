@@ -16,6 +16,12 @@
 </head>
 <body id="app" ng-controller="SpreadsheetStyleDataEntryController"
 	ng-cloak>
+	<div class="row-fluid" ng-hide="documentReady==true">
+		<div class="span4 offset4 pagination-centered">
+			<img src="img/spinner-small-maindiv.gif">
+		</div>
+	</div>
+
 	<div id="hideOnLoad">
 		<div class="largeMenuBar">
 			<div class="menubar mainMenubar" ng-cloak>
