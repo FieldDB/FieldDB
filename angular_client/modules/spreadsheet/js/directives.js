@@ -40,7 +40,7 @@ define(
         };
       }).directive(
         'arrowKey',
-        function() {
+        function($rootScope) {
           return function(scope, element, attrs) {
             element.bind('keydown', function(e) {
               if (e.keyCode === 40 && scope.$index == undefined) {
@@ -55,6 +55,19 @@ define(
                 return;
               }
               scope.$apply();
+            });
+          };
+        }).directive(
+        'keypressMarkAsEdited',
+        function($rootScope) {
+          return function(scope, element, attrs) {
+            element.bind('keydown', function(e) {
+              if (e.keyCode != 40 && e.keyCode != 38) {
+                $rootScope.editsHaveBeenMade = true;
+                console.log(e.keyCode);
+              } else {
+                return;
+              }
             });
           };
         }).directive(
