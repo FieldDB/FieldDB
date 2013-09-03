@@ -326,6 +326,19 @@
         </div>
     </div>
 
+    <!-- Generic Notification Modal-->
+		<div modal="notificationShouldBeOpen" close="closeNotification()" options="opts">
+        <div class="modal-header">
+            <h3>Notification</h3>
+        </div>
+        <div class="modal-body">
+        		{{notificationMessage}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary cancel" ng-click="closeNotification()">OK</button>
+        </div>
+    </div>
+
 		<div class="mainBody" ng-click="changeActiveSubMenu('none');">
 			<ng-view></ng-view>
 		</div>
