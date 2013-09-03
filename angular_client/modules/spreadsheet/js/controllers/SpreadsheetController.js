@@ -430,7 +430,7 @@ define(
           } else {
             $rootScope.clickSuccess = true;
             $rootScope.userInfo = {
-              "name": auth.user,
+              "name": auth.user.toLowerCase(),
               "password": auth.password
               // "withCredentials" : true
             };
@@ -456,14 +456,14 @@ define(
               $rootScope.server = "https://localhost:6984/";
               $rootScope.serverCode = "localhost";
             }
-            Data.login(auth.user, auth.password).then(
+            Data.login(auth.user.toLowerCase(), auth.password).then(
               function(response) {
                 if (response == undefined) {
                   return;
                 }
 
                 $rootScope.authenticated = true;
-                $scope.username = auth.user;
+                $scope.username = auth.user.toLowerCase();
                 var DBs = response.data.roles;
                 // Format available databases (pluck final string after
                 // underscore) TODO Implement underscore pluck?
