@@ -1,8 +1,9 @@
 <div arrow-key
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
+	class="relativePosition"
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
-	<div class="row relativePosition">
+	<div class="row">
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
 			<input focus glossmorpheme class="span5" type="text" ng-model="newFieldData.field1"
@@ -145,9 +146,7 @@
 					ng-click="deleteComment(comment, datum)"><font size="5">✗</font></span><i><b>{{comment.username}}</b></i>:
 					{{comment.text}}<br /> </span>
 					<br />
-					<span class="span4 add_button"
-					ng-click="addComment(datum);"><font size="4"><b>+<i>Add
-						a comment</i></b></font></span>
+					<button class="btn btn-primary" ng-click="addComment(datum);">Add Comment</button>
 			</div>
 		</div>
 		</div>
