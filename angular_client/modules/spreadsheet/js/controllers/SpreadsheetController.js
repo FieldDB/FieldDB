@@ -1912,6 +1912,10 @@ define(
           }
         };
 
+        $scope.contactUs = function() {
+          window.open("https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ");
+        };
+
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
       '$resource', '$filter', 'Data'

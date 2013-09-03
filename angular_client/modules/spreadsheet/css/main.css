@@ -50,6 +50,16 @@ body {
 	}
 }
 
+.loading_trouble_message {
+	position: fixed;
+	text-align: center;
+	background-color: #F0F5FF;
+	color: #000000;
+	width: 100%;
+	bottom: 0;
+	z-index: 100;
+}
+
 .menubar {
 	background-color: #102E37;
 	border: 1px solid #102E37;
