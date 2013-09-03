@@ -259,10 +259,6 @@ define(
             console.log($rootScope.loading);
             $rootScope.loading = false;
 
-            // if ($scope.searching == true) {
-            //   $scope.searching = false;
-            // }
-
             if (itemToDisplay == "settings") {
               $scope.dataentry = false;
               $scope.searching = false;
@@ -281,6 +277,7 @@ define(
             } else if (itemToDisplay == "searchMenu") {
               $scope.changeActiveSubMenu(itemToDisplay);
               $scope.searching = true;
+              $scope.selected = null;
               window.location.assign("#/spreadsheet/" + $scope.template);
             } else if (itemToDisplay == "faq") {
               $scope.dataentry = false;
