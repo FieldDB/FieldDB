@@ -128,10 +128,10 @@
 			<div class="span2">
 				<button class="btn btn-primary" type="submit">Done</button>
 				&nbsp;&nbsp;
-				<button class="btn btn-danger"
+				<button class="btn btn-danger" type="button"
 					ng-click="deleteRecord(datum)">Delete</button><br />
 					 	<br />
-					 	<span title="Date modified">Last modified:<br />{{datum.dateModified
+					 	<span title="Date modified">Last modified<br />{{datum.dateModified
 					| standardDate}}
 			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
 					 	<div class="expandCollapseButton"><span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>&nbsp;&nbsp;&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()"></div>			    		

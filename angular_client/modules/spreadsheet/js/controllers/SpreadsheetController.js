@@ -752,6 +752,11 @@ define(
           if (!datum.id) {
             $rootScope.notificationMessage = "Please save changes before continuing.";
             $rootScope.openNotification();
+            $scope.selected = datum;
+          } else if (datum.attachments[0]) {
+            $rootScope.notificationMessage = "You must delete all recordings from this record first.";
+            $rootScope.openNotification();
+            $scope.selected = datum;
           } else {
             var r = confirm("Are you sure you want to delete this record permanently?");
             if (r == true) {
