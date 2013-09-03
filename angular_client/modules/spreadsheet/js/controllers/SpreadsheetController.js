@@ -246,10 +246,13 @@ define(
 
         $scope.navigateVerifySaved = function(itemToDisplay) {
           if ($scope.saved == 'no') {
-            $rootScope.notificationMessage = "Please save changes before continuing";
+            $rootScope.notificationMessage = "Please save changes before continuing.";
             $rootScope.openNotification();
           } else if ($scope.saved == "saving") {
             $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
+            $rootScope.openNotification();
+          } else if ($rootScope.editsHaveBeenMade == true) {
+            $rootScope.notificationMessage = "Please click 'Done' and then save your changes before continuing.";
             $rootScope.openNotification();
           } else {
 
