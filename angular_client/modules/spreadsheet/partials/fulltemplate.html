@@ -124,7 +124,7 @@
 					value={{commaList(datum.datumTags)}}
 					placeholder="{{commaList(datum.datumTags)}}"></textarea>
 			</div>
-			<div class="span3">
+			<div class="span2">
 				<button class="btn btn-primary" type="submit">Done</button>
 				&nbsp;&nbsp;
 				<button class="btn btn-danger"
@@ -203,28 +203,28 @@
 				ng-checked="datum.checked" ng-model="datum.checked"
 				ng-show="searching==true">
 		</div>
-		<div class="span5">
-			<span class="span5" title="{{fields.field1.title}}"
+		<div class="span4">
+			<span class="span4" title="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''">{{datum[fields.field1.label]
 				| neverEmpty}}</span><br /> 
-			<span class="span5"
+			<span class="span4"
 				title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">{{datum[fields.field2.label]
 				| neverEmpty}}</span><br />
-			<span class="span5"
+			<span class="span4"
 				title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">{{datum[fields.field3.label]
 				| neverEmpty}}</span><br />
 		</div>
-		<div class="span5">
-			<span class="span5" title="{{fields.field4.title}}"
+		<div class="span4">
+			<span class="span4" title="{{fields.field4.title}}"
 				ng-hide="fields.field4.label==''">{{datum[fields.field4.label]
 				| neverEmpty}}</span><br /> 
 			<!-- <span class="span5"
 				ng-repeat="comment in datum.comments"><i>{{comment.username}}</i>:
 				{{comment.text}}<br />
 			</span> -->
-			<span class="span5" title="{{fields.field6.title}}"
+			<span class="span4" title="{{fields.field6.title}}"
 				ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
-				| neverEmpty}}</span><br /> <span class="span2" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
+				| neverEmpty}}</span><br /> <span class="span4" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
 		</div>
 		<div class="span2">
 			<span title="Date modified">Last modified:<br />{{datum.dateModified
