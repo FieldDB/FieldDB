@@ -149,8 +149,8 @@ define(
                     return response;
                   },
                   function(err) {
-                    window
-                      .alert("Error logging in.\nPlease check username/password.");
+                    $rootScope.notificationMessage = "Error logging in.\nPlease check username/password.";
+                    $rootScope.openNotification();
                     console.log(err);
                     $rootScope.loading = false;
                   });
@@ -168,15 +168,18 @@ define(
                 function(response) {
                   console.log("Registered new user.");
                   if (response.data.userFriendlyErrors) {
-                    window.alert(response.data.userFriendlyErrors[0]);
+                    $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
+                    $rootScope.openNotification();
                   } else {
-                    window.alert("Successfully registered new user: " + response.data.user.username + "\nYou may now log in on the main page.");
+                    $rootScope.notificationMessage = "Successfully registered new user: " + response.data.user.username + "\nYou may now log in on the main page.";
+                    $rootScope.openNotification();
                     window.location.assign("#/");
                   }
                   return response;
                 }, function(err) {
                   console.log(JSON.stringify(err));
-                  window.alert("Error registering new user.");
+                  $rootScope.notificationMessage = "Error registering new user.";
+                  $rootScope.openNotification();
                   $rootScope.loading = false;
                 });
               return promise;
@@ -195,16 +198,17 @@ define(
                     console.log("Created new corpus.");
                     console.log(JSON.stringify(response));
                     if (response.data.userFriendlyErrors) {
-                      window
-                        .alert(response.data.userFriendlyErrors[0]);
+                      $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
+                      $rootScope.openNotification();
                     } else {
-                      window
-                        .alert(JSON.stringify(response.data.info[0]) + "\nYou may now log in to this corpus.");
+                      $rootScope.notificationMessage = JSON.stringify(response.data.info[0]) + "\nYou may now log in to this corpus.";
+                      $rootScope.openNotification();
                     }
                     return response.data;
                   }, function(err) {
                     console.log(JSON.stringify(err));
-                    window.alert("Error creating new corpus.");
+                    $rootScope.notificationMessage = "Error creating new corpus.";
+                    $rootScope.openNotification();
                     $rootScope.loading = false;
                   });
               return promise;
@@ -223,20 +227,22 @@ define(
                     console.log("Updated user roles.");
                     if (response.data.userFriendlyErrors) {
                       if (response.data.userFriendlyErrors[0] == null) {
-                        window.alert("Error adding user. Please make sure that user exists.");
+                        $rootScope.notificationMessage = "Error adding user. Please make sure that user exists.";
+                        $rootScope.openNotification();
                       } else {
-                        window
-                          .alert(response.data.userFriendlyErrors[0]);
+                        $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
+                        $rootScope.openNotification();
                       }
                     } else {
-                      window
-                        .alert(JSON.stringify(response.data.info[0]));
+                      $rootScope.notificationMessage = JSON.stringify(response.data.info[0]);
+                      $rootScope.openNotification();
                     }
                     return response;
                   },
                   function(err) {
                     console.log(JSON.stringify(err));
-                    window.alert("Error updating user roles.");
+                    $rootScope.notificationMessage = "Error updating user roles.";
+                    $rootScope.openNotification();
                     $rootScope.loading = false;
                   });
               return promise;

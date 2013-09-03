@@ -29,6 +29,15 @@ define(
           dialogFade: true
         };
 
+        // Functions to open/close generic notification modal
+        $rootScope.openNotification = function() {
+          $scope.notificationShouldBeOpen = true;
+        };
+
+        $rootScope.closeNotification = function() {
+          $scope.notificationShouldBeOpen = false;
+        };
+
         // TEST FOR CHROME BROWSER
         var is_chrome = window.chrome;
         if (!is_chrome) {
@@ -234,9 +243,11 @@ define(
 
         $scope.navigateVerifySaved = function(itemToDisplay) {
           if ($scope.saved == 'no') {
-            window.alert("Please save changes before continuing");
+            $rootScope.notificationMessage = "Please save changes before continuing";
+            $rootScope.openNotification();
           } else if ($scope.saved == "saving") {
-            window.alert("Changes are currently being saved.\nPlease wait until this operation is done.");
+            $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
+            $rootScope.openNotification();
           } else {
 
             if ($rootScope.DB) {
@@ -414,7 +425,8 @@ define(
 
         $scope.loginUser = function(auth) {
           if (!auth || !auth.server) {
-            window.alert("Please choose a server.");
+            $rootScope.notificationMessage = "Please choose a server.";
+            $rootScope.openNotification();
           } else {
             $rootScope.clickSuccess = true;
             $rootScope.userInfo = {
@@ -517,7 +529,8 @@ define(
 
         $scope.selectDB = function(selectedDB) {
           if (!selectedDB) {
-            window.alert("Please select a database.");
+            $rootScope.notificationMessage = "Please select a database.";
+            $rootScope.openNotification();
           } else {
             selectedDB = JSON.parse(selectedDB);
             $rootScope.DB = selectedDB;
@@ -630,7 +643,8 @@ define(
 
         $scope.deleteEmptySession = function(activeSessionID) {
           if ($scope.currentSessionName == "All Sessions") {
-            window.alert("You must select a session to delete.");
+            $rootScope.notificationMessage = "You must select a session to delete.";
+            $rootScope.openNotification();
           } else {
             var r = confirm("Are you sure you want to delete this session permanently?");
             if (r == true) {
@@ -711,9 +725,11 @@ define(
 
         $scope.reloadPage = function() {
           if ($scope.saved == "no") {
-            window.alert("Please save changes before continuing.");
+            $rootScope.notificationMessage = "Please save changes before continuing.";
+            $rootScope.openNotification();
           } else if ($scope.saved == "saving") {
-            window.alert("Changes are currently being saved.\nYou may refresh the data once this operation is done.");
+            $rootScope.notificationMessage = "Changes are currently being saved.\nYou may refresh the data once this operation is done.";
+            $rootScope.openNotification();
           } else {
             window.location.assign("#/");
             window.location.reload();
@@ -722,7 +738,8 @@ define(
 
         $scope.deleteRecord = function(datum) {
           if (!datum.id) {
-            window.alert("Please save records before continuing.");
+            $rootScope.notificationMessage = "Please save changes before continuing.";
+            $rootScope.openNotification();
           } else {
             var r = confirm("Are you sure you want to delete this record permanently?");
             if (r == true) {
@@ -902,7 +919,8 @@ define(
 
         $scope.deleteComment = function(comment, datum) {
           if (comment.username != $rootScope.userInfo.name) {
-            window.alert("You may only delete comments created by you.");
+            $rootScope.notificationMessage = "You may only delete comments created by you.";
+            $rootScope.openNotification();
             return;
           }
           var verifyCommentDelete = confirm("Are you sure you want to delete the comment '" + comment.text + "'?");
@@ -1191,7 +1209,8 @@ define(
           if (newScopeData.length > 0) {
             $scope.data = newScopeData;
           } else {
-            window.alert("No records matched your search.");
+            $rootScope.notificationMessage = "No records matched your search.";
+            $rootScope.openNotification();
           }
         };
 
@@ -1289,7 +1308,8 @@ define(
 
         $scope.registerNewUser = function(newUserInfo) {
           if (!newUserInfo || !newUserInfo.serverCode) {
-            window.alert("Please select a server.");
+            $rootScope.notificationMessage = "Please select a server.";
+            $rootScope.openNotification();
             return;
           }
           $rootScope.loading = true;
@@ -1317,11 +1337,18 @@ define(
             });
           } else {
             $rootScope.loading = false;
-            window.alert("Please verify user information.");
+            $rootScope.notificationMessage = "Please verify user information.";
+            $rootScope.openNotification();
           }
         };
 
         $scope.createNewCorpus = function(newCorpusInfo) {
+          if (!newCorpusInfo) {
+            $rootScope.notificationMessage = "Please enter a corpus name.";
+            $rootScope.openNotification();
+            return;
+          }
+
           $rootScope.loading = true;
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
@@ -1348,7 +1375,8 @@ define(
               window.location.assign("#/");
             });
           } else {
-            window.alert("Please verify corpus name.");
+            $rootScope.notificationMessage = "Please verify corpus name.";
+            $rootScope.openNotification();
             $rootScope.loading = false;
           }
         };
@@ -1387,13 +1415,14 @@ define(
 
         $scope.updateUserRoles = function(newUserRoles) {
           if (!newUserRoles || !newUserRoles.usernameToModify) {
-            window.alert("Please select a username.");
+            $rootScope.notificationMessage = "Please select a username.";
+            $rootScope.openNotification();
             return;
           }
 
-          // if (!newUserRoles.admin && !newUserRoles.read_write && !newUserRoles.reader && !newUserRoles.writer) {
           if (!newUserRoles.role) {
-            window.alert("You haven't selected any roles to add to " + newUserRoles.usernameToModify + "!\nPlease select at least one role.");
+            $rootScope.notificationMessage = "You haven't selected any roles to add to " + newUserRoles.usernameToModify + "!\nPlease select at least one role..";
+            $rootScope.openNotification();
             return;
           }
 
@@ -1544,7 +1573,8 @@ define(
           $scope.recordingButtonClass = "btn btn-success";
           $scope.recordingIcon = "speaker_icon.png";
           console.log('Audio Rejected!', e);
-          window.alert("Unable to record audio.");
+          $rootScope.notificationMessage = "Unable to record audio.";
+          $rootScope.openNotification();
         };
 
         var onSuccess = function(s) {
@@ -1682,7 +1712,8 @@ define(
 
           // Check to see if user has clicked on upload without recording or uploading files
           if (numberOfFiles == 0 || numberOfFiles == null) {
-            window.alert("Please record or select audio to upload.");
+            $rootScope.notificationMessage = "Please record or select audio to upload.";
+            $rootScope.openNotification();
             $scope.processingAudio = false;
             return;
           }
@@ -1707,7 +1738,8 @@ define(
                     var fileExt = document.getElementById(datum.id + "_audio-file").files[index].type.split("\/").pop();
                   }
                   if (fileExt != ("mp3" || "mpeg" || "wav" || "ogg")) {
-                    window.alert("You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.");
+                    $rootScope.notificationMessage = "You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.";
+                    $rootScope.openNotification();
                     return;
                   }
                   filename = Date.now() + "" + index + "." + fileExt; // appending index in case of super-rapid processing on multi-file upload, to avoid duplicate filenames
@@ -1809,7 +1841,8 @@ define(
             var rev = originalDoc._rev;
             originalDoc.attachmentInfo[attachment.filename].description = attachment.description;
             Data.saveEditedRecord($rootScope.DB.pouchname, datumID, originalDoc, rev).then(function(response) {
-              window.alert("Successfully updated description for " + attachment.filename);
+              $rootScope.notificationMessage = "Successfully updated description for " + attachment.filename;
+              $rootScope.openNotification();
             });
           });
         };
