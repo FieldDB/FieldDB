@@ -13,7 +13,7 @@ define(
      * @returns {SpreadsheetStyleDataEntryController}
      */
 
-      function($scope, $rootScope, $resource, $filter, Data) {
+      function($scope, $rootScope, $resource, $filter, $document, Data) {
 
         /* Modal controller TODO could move somewhere where the search is? */
         $scope.open = function() {
@@ -1931,9 +1931,24 @@ define(
           window.open("https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ");
         };
 
+        // Use this function to show objects on loading without displacing other elements
+        $scope.hiddenOnLoading = function() {
+          if ($rootScope.loading != true) {
+            return {
+              'visibility': 'hidden'
+            };
+          } else {
+            return {};
+          }
+        };
+
+        $document.ready(function() {
+          $scope.documentReady = true;
+        });
+
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
-      '$resource', '$filter', 'Data'
+      '$resource', '$filter', '$document', 'Data'
     ];
     return SpreadsheetStyleDataEntryController;
   });
