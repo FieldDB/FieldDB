@@ -1942,7 +1942,8 @@ define(
           }
         };
 
-        $document.ready(function() {
+        // Hide loader when all content is ready
+        $scope.$on('$viewContentLoaded', function() {
           $scope.documentReady = true;
         });
 
