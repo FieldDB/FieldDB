@@ -46,7 +46,7 @@ define(
 
         // Set/get/update user preferences
         var defaultPreferences = {
-          "userTemplate": "template2",
+          "userTemplate": "fulltemplate",
           "resultSize": 10,
           "availableFields": {
             "judgement": {
@@ -118,7 +118,7 @@ define(
               "title": "syntacticCategory"
             }
           },
-          "template1": {
+          "compacttemplate": {
             "field1": {
               "label": "utterance",
               "title": "Utterance"
@@ -136,7 +136,7 @@ define(
               "title": "Translation"
             }
           },
-          "template2": {
+          "fulltemplate": {
             "field1": {
               "label": "utterance",
               "title": "Utterance"
@@ -181,18 +181,20 @@ define(
           localStorage.clear();
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(defaultPreferences));
-        } else if (Preferences.availableFields && Preferences.availableFields.notes) {
-          // Update to v1.2
+        } else {
+          console.log("Loading Preferences from localStorage.");
+          Preferences = JSON.parse(Preferences);
+        }
+
+        if ((Preferences.template1 != undefined) || (Preferences.availableFields && Preferences.availableFields.notes)) {
+          // Update to v1.3
           Preferences = defaultPreferences;
           console
             .log("Preferences need to be upgraded. Clearing and setting defaults.");
           localStorage.clear();
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(defaultPreferences));
-          Preferences = localStorage.getItem('SpreadsheetPreferences');
-        } else {
-          console.log("Loading Preferences from localStorage.");
-          Preferences = JSON.parse(Preferences);
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
         }
 
         // Set scope variables
@@ -767,7 +769,7 @@ define(
         $scope.createRecord = function(fieldData) {
 
           // Reset new datum form data; only resent audio field if present
-          if ($rootScope.template == "template2") {
+          if ($rootScope.template == "fulltemplate") {
             document.getElementById("form_new_datum_audio-file").reset();
           }
           $scope.newFieldData = {};
@@ -1119,7 +1121,7 @@ define(
           for (key in $scope.fields) {
             fieldsInScope[$scope.fields[key].label] = true;
           }
-          if ($scope.template == "template2") {
+          if ($scope.template == "fulltemplate") {
             fieldsInScope.datumTags = true;
             fieldsInScope.comments = true;
           }
