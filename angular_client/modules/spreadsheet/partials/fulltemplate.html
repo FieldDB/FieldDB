@@ -90,19 +90,19 @@
 <div ng-show="selected==datum">
 			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span5">
-				<input glossmorpheme focus class="span5" 
+				<input glossmorpheme keypress-mark-as-edited focus class="span5" 
 					type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
 					ng-hide="fields.field1.label==''"
 					placeholder="{{fields.field1.title}}">
-				<input class="span5"
+				<input keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
 					ng-hide="fields.field2.label==''"
 					placeholder="{{fields.field2.title}}">
-				<input class="span5"
+				<input keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field3"
 					ng-init="fieldData.field3=datum[fields.field3.label]"
 					value={{datum[fields.field3.label]}}
@@ -110,23 +110,23 @@
 					placeholder="{{fields.field3.title}}">
 			</div>
 			<div class="span5">
-				<input class="span5 " type="text" ng-model="fieldData.field4"
+				<input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field4"
 					ng-init="fieldData.field4=datum[fields.field4.label]"
 					value={{datum[fields.field4.label]}}
 					ng-hide="fields.field4.label==''"
 					placeholder="{{fields.field4.title}}">
-				<input class="span5 " type="text" ng-model="fieldData.field6"
+				<input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6"
 					ng-init="fieldData.field6=datum[fields.field6.label]"
 					value={{datum[fields.field6.label]}}
 					ng-hide="fields.field6.label==''"
 					placeholder="{{fields.field6.title}}">
-				<input class="span5" type="text" ng-model="fieldData.datumTags"
+				<input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.datumTags"
 					ng-init='commaList(datum.datumTags)'
 					value={{commaList(datum.datumTags)}}
 					placeholder="{{commaList(datum.datumTags)}}"></textarea>
 			</div>
 			<div class="span2">
-				<button class="btn btn-primary" type="submit">Done</button>
+				<button class="btn btn-primary" type="submit" ng-disabled="editsHaveBeenMade==false">Done</button>
 				&nbsp;&nbsp;
 				<button class="btn btn-danger" type="button"
 					ng-click="deleteRecord(datum)">Delete</button><br />

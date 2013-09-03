@@ -223,6 +223,7 @@ define(
         $scope.createNewButtonClass = "btn btn-primary";
         $scope.showAudioFeatures = false;
         $scope.newFieldData = {};
+        $rootScope.editsHaveBeenMade = false;
 
         $rootScope.serverLabels = {
           "mcgill": "McGill Prosody Lab",
@@ -874,6 +875,7 @@ define(
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.saved = "no";
           $scope.selected = null;
+          $rootScope.editsHaveBeenMade = false;
           $scope.currentPage = 0;
           // Update activity feed
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
@@ -1122,8 +1124,17 @@ define(
           }, 300000);
 
         $scope.selectRow = function(datum) {
+          // Do nothing if clicked row is currently selected
+          if ($scope.selected == datum) {
+            return;
+          }
           if ($scope.searching != true) {
-            $scope.selected = datum;
+            if ($rootScope.editsHaveBeenMade != true) {
+              $scope.selected = datum;
+            } else {
+              $rootScope.notificationMessage = "Click 'Done' to queue your changes before continuing.";
+              $rootScope.openNotification();
+            }
           }
         };
 
