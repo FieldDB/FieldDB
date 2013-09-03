@@ -64,7 +64,6 @@ define(
             element.bind('keydown', function(e) {
               if (e.keyCode != 40 && e.keyCode != 38) {
                 $rootScope.editsHaveBeenMade = true;
-                console.log(e.keyCode);
               } else {
                 return;
               }

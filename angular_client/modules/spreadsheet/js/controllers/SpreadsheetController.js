@@ -879,6 +879,8 @@ define(
           $scope.saved = "no";
           $scope.selected = null;
           $rootScope.editsHaveBeenMade = false;
+          // Close notification modal in case user hits enter while editsHaveBeenMade modal is open (which would call this function)
+          $rootScope.closeNotification();
           $scope.currentPage = 0;
           // Update activity feed
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
@@ -1135,7 +1137,7 @@ define(
             if ($rootScope.editsHaveBeenMade != true) {
               $scope.selected = datum;
             } else {
-              $rootScope.notificationMessage = "Click 'Done' to queue your changes before continuing.";
+              $rootScope.notificationMessage = "You must hit enter or click 'Done' to queue your changes before continuing.";
               $rootScope.openNotification();
             }
           }
