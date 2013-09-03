@@ -496,7 +496,11 @@ define(
                       function(response) {
                         var corpus = {};
                         corpus.pouchname = scopeDBs[index];
-                        corpus.corpustitle = response.rows[0].value.title;
+                        if (response.rows[0]) {
+                          corpus.corpustitle = response.rows[0].value.title;
+                        } else {
+                          corpus.corpustitle = scopeDBs[index];
+                        }
                         $scope.corpora.push(corpus);
                       }, function(error) {
                         var corpus = {};
@@ -1556,23 +1560,66 @@ define(
 
         var recorder;
 
+        // Functions to open/close audio warning modal
+        var openAudioWarning = function() {
+          $scope.audioWarningShouldBeOpen = true;
+        };
+
+        $scope.closeAudioWarning = function() {
+          $scope.audioWarningShouldBeOpen = false;
+        };
+
+        var audioRecordingInterval;
+
         $scope.startStopRecording = function(datum) {
           if ($scope.recordingStatus == "Record") {
+            $scope.datumForAudio = datum;
+            openAudioWarning();
+            $scope.timeLeftForAudio = "5 minutes 0 seconds";
+            // Begin countdown
+            var minutes = 5;
+            var seconds = 0;
+            audioRecordingInterval = setInterval(function() {
+              if (seconds == 0) {
+                if (minutes == 0) {
+                  clearInterval(audioRecordingInterval);
+                  stopRecording(datum);
+                  $scope.closeAudioWarning();
+                  return;
+                } else {
+                  minutes--;
+                  seconds = 59;
+                }
+              }
+              if (minutes > 0) {
+                var minute_text = minutes + (minutes > 1 ? ' minutes' : ' minute');
+              } else {
+                var minute_text = '';
+              }
+              var second_text = seconds + (seconds > 1 ? ' seconds' : ' second');
+              seconds--;
+              $scope.$apply(function() {
+                $scope.timeLeftForAudio = minute_text + " " + second_text;
+              });
+            }, 1000);
             startRecording();
           } else {
+            clearInterval(audioRecordingInterval);
+            $scope.closeAudioWarning();
             stopRecording(datum);
           }
         };
 
         startRecording = function() {
           if (navigator.getUserMedia) {
-            $scope.recordingButtonClass = "btn btn-danger";
+            $scope.recordingButtonClass = "btn btn-success disabled";
             $scope.recordingStatus = "Recording";
             $scope.recordingIcon = "recording_icon.gif";
             navigator.getUserMedia({
               audio: true
             }, onSuccess, onFail);
           } else {
+            $scope.recordingStatus = "Record";
             console.log('navigator.getUserMedia not present');
           }
         };
@@ -1699,12 +1746,12 @@ define(
             // Force digest after recording audio
             if (file) {
               $scope.$apply(function() {
-                $scope.createNewButtonClass = "btn btn-danger";
+                $scope.createNewButtonClass = "btn btn-success";
                 $scope.newFieldDatahasAudio = true;
                 $scope.processingAudio = false;
               });
             } else {
-              $scope.createNewButtonClass = "btn btn-danger";
+              $scope.createNewButtonClass = "btn btn-success";
               $scope.newFieldDatahasAudio = true;
               $scope.processingAudio = false;
             }
@@ -1767,8 +1814,8 @@ define(
           });
         };
 
-        $scope.deleteAttachmentFromCorpus = function(datum, filename) {
-          var r = confirm("Are you sure you want to delete the file " + filename + "?");
+        $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
+          var r = confirm("Are you sure you want to delete the file " + description + " (" + filename + ")?");
           if (r == true) {
             var record = datum.id + "/" + filename;
             Data.async($rootScope.DB.pouchname, datum.id).then(function(originalRecord) {

@@ -310,6 +310,21 @@
 			</div>
 		</div>
 
+		<!-- Audio Warning Modal-->
+		<div modal="audioWarningShouldBeOpen" close="closeAudioWarning()" options="opts">
+        <div class="modal-header">
+            <h3>Recording Audio</h3>
+        </div>
+        <div class="modal-body">
+        		<b>Please make sure to click "Allow" above to begin recording audio.</b><br />
+            Once clicked, your audio will begin recording.<br /><br />
+            Please note that recording will stop automatically after five minutes.<br />
+            Time left: {{timeLeftForAudio}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger cancel" ng-click="startStopRecording(datumForAudio)">Stop Recording</button>
+        </div>
+    </div>
 
 		<div class="mainBody" ng-click="changeActiveSubMenu('none');">
 			<ng-view></ng-view>

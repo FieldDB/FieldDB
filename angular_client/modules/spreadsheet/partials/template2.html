@@ -175,7 +175,7 @@
 					<tr ng-repeat="attachment in datum.attachments">
 						<td>
 							<span class="form-horizontal">
-								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a>
+								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename, attachment.description)">ⓧ</a>
 								<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
 							</span>
 						</td>
