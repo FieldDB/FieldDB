@@ -1,7 +1,6 @@
 extends index
 
 block content
-  //-script(type="text/javascript", src="/libs/search.js")
   .container-fluid
     .row-fluid
       .span3
@@ -54,7 +53,7 @@ block content
               | &nbsp;Rebuild search lexicon
             | &nbsp;&nbsp;
             #progressBar.hide(style='width:180px; height:23px; border: 1px solid gray; background-color: #E9E9E9')
-              #innerProgressBar(style='font-size: 12px; height:100%; color: white; text-align: right; line-height: 23px; width: 0px; background-color: #99356B') &nbsp;
+              #innerProgressBar(style='font-size: .7em; height:100%; color: white; text-align: right; line-height: 23px; width: 0px; background-color: #99356B') &nbsp;
             p.hide#clearresults
               button.btn.btn-mini.btn-danger(type='button', id='clear_results', onclick='clearresults()')
                 i.icon-remove.icon-white(style='margin-top:2px')
@@ -69,24 +68,20 @@ block content
         a(href="http://creativecommons.org/licenses/by-sa/3.0/", rel="license", title="#{corpora[0].corpusinfo.license}") #{corpora[0].corpusinfo.license}
           img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
       - var pouchname = corpora[0].corpusinfo.pouchname.toString()
-      <ul class="nav nav-tabs">
-      <li><a href="#terms" data-toggle="tab">Terms of Use for #{pouchname}</a></li>
-      <li><a href="#emeldtermsreccomendations" data-toggle="tab">Why have a Terms of Use?</a></li>
-      </ul>
-      <div class="tab-content">
-      <div class="tab-pane active" id="terms">
-      p #{corpora[0].corpusinfo.terms}
-      </div>
-      <div class="tab-pane" id="emeldtermsreccomendations">
-      <ul>
-      <li>
-      p  EMELD digital language documentation Best Practices #7:
-      <label>Rights</label>
-      p Resource creators, researchers and the speech communities who provide the primary data have different priorities over who has access to language resources.
-
-      <label>Solution</label>
-      p Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of <a target="_blank" href="http://emeld.org/school/classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
-      </li>
-      </ul>
-      </div>
-      </div>
+      .tabbable
+        ul.nav.nav-tabs
+          li.active
+            a(href="#terms", data-toggle="tab") Terms of Use for #{pouchname}
+          li
+            a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
+        .tab-content
+          .tab-pane.active#terms
+            p #{corpora[0].corpusinfo.terms}
+          .tab-pane#emeldtermsreccomendations
+            ul
+              li
+                dl EMELD digital language documentation Best Practices #7:
+                  dt Rights
+                  dd Resource creators, researchers and the speech communities who provide the primary data have different priorities over who has access to language resources.
+                  dt Solution
+                  dd Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of <a target="_blank" href="http://emeld.org/school/classroom/ethics/access.html">access restrictions</a>: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
