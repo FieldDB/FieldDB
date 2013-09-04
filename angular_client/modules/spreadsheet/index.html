@@ -54,12 +54,12 @@
 					ng-click="navigateVerifySaved('reload');">↻</a></span> <span
 					class="rightMenuItems" ng-show="authenticated==true">
 					<div class="rightMenuItemsDiv">
-						<div>
-							Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
+						<div ng-hide="DB==undefined">
+							Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 						</div>
 						<div>
 							<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
-							<button class="btn btn-warning" ng-click="reloadPage()">Log
+							<button class="btn btn-warning" ng-click="logOut()">Log
 								out</button>
 						</div>
 					</div>
@@ -187,12 +187,12 @@
 					ng-hide="data==undefined || dataentry==false"><a
 					ng-click="navigateVerifySaved('reload');">↻</a></span><br />
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
-					<div class="floatLeft smallMenuBarInfoItem">
-						Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
+					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
+						Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 					</div>
 					<div class="smallMenuBarInfoItem">
 						<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
-						<button class="btn btn-warning" ng-click="reloadPage()">Log out</button>
+						<button class="btn btn-warning" ng-click="logOut()">Log out</button>
 					</div>
 				</div>
 			</div>

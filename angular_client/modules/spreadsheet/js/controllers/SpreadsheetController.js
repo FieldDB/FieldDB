@@ -48,6 +48,13 @@ define(
         var defaultPreferences = {
           "userTemplate": "fulltemplate",
           "resultSize": 10,
+          "savedState": {
+            "server": "",
+            "username": "",
+            "password": "",
+            "DB": "",
+            "sessionID": ""
+          },
           "availableFields": {
             "judgement": {
               "label": "judgement",
@@ -198,6 +205,7 @@ define(
         }
 
         // Set scope variables
+        $scope.documentReady = false;
         $rootScope.template = Preferences.userTemplate;
         $rootScope.fields = Preferences[Preferences.userTemplate];
         $scope.scopePreferences = Preferences;
@@ -256,11 +264,12 @@ define(
             $rootScope.openNotification();
           } else {
 
+            $scope.appReloaded = true;
+
             if ($rootScope.DB) {
               $rootScope.DBselected = true;
             }
 
-            console.log($rootScope.loading);
             $rootScope.loading = false;
 
             if (itemToDisplay == "settings") {
@@ -277,12 +286,12 @@ define(
               $scope.dataentry = false;
               $scope.searching = false;
               $scope.changeActiveSubMenu('none');
-              window.location.assign("#/");
+              window.location.assign("#/spreadsheet_main");
             } else if (itemToDisplay == "searchMenu") {
               $scope.changeActiveSubMenu(itemToDisplay);
               $scope.searching = true;
               $scope.selected = null;
-              window.location.assign("#/spreadsheet/" + $scope.template);
+              window.location.assign("#/spreadsheet/" + $rootScope.template);
             } else if (itemToDisplay == "faq") {
               $scope.dataentry = false;
               $scope.searching = false;
@@ -294,24 +303,24 @@ define(
               $scope.searchHistory = null;
               $scope.searching = false;
               $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet/" + $scope.template);
+              window.location.assign("#/spreadsheet/" + $rootScope.template);
               $scope.loadData();
             } else if (itemToDisplay == "none") {
               $scope.dataentry = true;
               $scope.searching = false;
               $scope.selectRow('newEntry');
               $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet/" + $scope.template);
+              window.location.assign("#/spreadsheet/" + $rootScope.template);
               $scope.loadData();
             } else {
-              window.location.assign("#/spreadsheet/" + $scope.template);
+              window.location.assign("#/spreadsheet/" + $rootScope.template);
               $scope.changeActiveSubMenu(itemToDisplay);
             }
           }
         };
 
         // Fetch data from server and put into template scope
-        $scope.loadData = function() {
+        $scope.loadData = function(sessionID) {
           $rootScope.loading = true;
           Data
             .async($rootScope.DB.pouchname)
@@ -336,6 +345,7 @@ define(
                     }
                     newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
                     newDatumFromServer.comments = dataFromServer[i].value.comments;
+                    console.log(dataFromServer[i].value);
                     newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
                     // Get attachments
                     newDatumFromServer.attachments = [];
@@ -381,9 +391,22 @@ define(
                         }
                       }
                       $scope.sessions = scopeSessions;
+                      // Load session; saved state must have access to scope sessions before calling function
+                      if (sessionID) {
+                        $scope.changeActiveSession(sessionID);
+                      }
                     });
                 $scope.saved = "yes";
                 $rootScope.loading = false;
+              }, function(error) {
+                // On error loading data, reset saved state
+                // Update saved state in Preferences
+                Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+                Preferences.savedState = {};
+                localStorage.setItem('SpreadsheetPreferences', JSON
+                  .stringify(Preferences));
+                $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
+                $rootScope.openNotification();
               });
 
           // Get precedence rules for Glosser
@@ -445,7 +468,6 @@ define(
             $rootScope.userInfo = {
               "name": auth.user.toLowerCase(),
               "password": auth.password
-              // "withCredentials" : true
             };
 
             // if (auth.user == "senhorzinho") {
@@ -475,8 +497,16 @@ define(
                   return;
                 }
 
+
+                // Update saved state in Preferences
+                Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+                Preferences.savedState.server = $rootScope.serverCode;
+                Preferences.savedState.username = $rootScope.userInfo.name;
+                Preferences.savedState.password = $rootScope.userInfo.password;
+                localStorage.setItem('SpreadsheetPreferences', JSON
+                  .stringify(Preferences));
+
                 $rootScope.authenticated = true;
-                $scope.username = auth.user.toLowerCase();
                 var DBs = response.data.roles;
                 // Format available databases (pluck final string after
                 // underscore) TODO Implement underscore pluck?
@@ -540,6 +570,14 @@ define(
           }
         };
 
+        $scope.logOut = function() {
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+          Preferences.savedState = {};
+          localStorage.setItem('SpreadsheetPreferences', JSON
+            .stringify(Preferences));
+          $scope.reloadPage();
+        };
+
         $scope.selectDB = function(selectedDB) {
           if (!selectedDB) {
             $rootScope.notificationMessage = "Please select a database.";
@@ -547,6 +585,13 @@ define(
           } else {
             selectedDB = JSON.parse(selectedDB);
             $rootScope.DB = selectedDB;
+
+            // Update saved state in Preferences
+            Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+            Preferences.savedState.DB = selectedDB;
+            localStorage.setItem('SpreadsheetPreferences', JSON
+              .stringify(Preferences));
+
             $scope.loadData();
           }
         };
@@ -557,28 +602,45 @@ define(
           // assign variable until chosen)
           $scope.activeSessionToSwitchTo = activeSessionID;
           $scope.dataentry = true;
-          window.location.assign("#/spreadsheet/" + $scope.template);
+
+          // Update saved state in Preferences
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+          Preferences.savedState.sessionID = activeSessionID;
+          localStorage.setItem('SpreadsheetPreferences', JSON
+            .stringify(Preferences));
+          window.location.assign("#/spreadsheet/" + $rootScope.template);
+        };
+
+        $scope.getCurrentSessionName = function() {
+          if ($scope.activeSession == undefined) {
+            return "All Sessions";
+          } else {
+            var sessionTitle;
+            for (i in $scope.sessions) {
+              if ($scope.sessions[i]._id == $scope.activeSession) {
+                for (j in $scope.sessions[i].sessionFields) {
+                  if ($scope.sessions[i].sessionFields[j].label == "goal") {
+                    if ($scope.sessions[i].sessionFields[j].mask) {
+                      return $scope.sessions[i].sessionFields[j].mask.substr(0,
+                        20);
+                    } else {
+                      return $scope.sessions[i].sessionFields[j].value.substr(0,
+                        20);
+                    }
+                  }
+                }
+              }
+            }
+          }
         };
 
         $scope.changeActiveSession = function(activeSessionToSwitchTo) {
           if (activeSessionToSwitchTo == 'none' || activeSessionToSwitchTo == undefined) {
             $scope.activeSession = undefined;
-            $scope.currentSessionName = "All Sessions";
           } else {
             $scope.activeSession = activeSessionToSwitchTo;
             for (i in $scope.sessions) {
               if ($scope.sessions[i]._id == activeSessionToSwitchTo) {
-                var newDate = $scope.sessions[i].dateCreated.replace(/\"/g, "");
-                var d = new Date(newDate);
-                var goal = "";
-                for (j in $scope.sessions[i].sessionFields) {
-                  if ($scope.sessions[i].sessionFields[j].label == "goal") {
-                    if ($scope.sessions[i].sessionFields[j].mask) {
-                      goal = $scope.sessions[i].sessionFields[j].mask.substr(0,
-                        20);
-                    }
-                  }
-                }
                 $scope.fullCurrentSession = $scope.sessions[i];
 
                 // Set up object to make session editing easier
@@ -589,11 +651,16 @@ define(
                   fullCurrentSessionToEdit[$scope.fullCurrentSession.sessionFields[k].label] = $scope.fullCurrentSession.sessionFields[k].mask;
                 }
                 $scope.fullCurrentSessionToEdit = fullCurrentSessionToEdit;
-                $scope.currentSessionName = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + goal;
-                return;
               }
             }
           }
+          console.log($scope.fullCurrentSession);
+          // Update saved state in Preferences
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+          Preferences.savedState.sessionID = $scope.activeSession;
+          Preferences.savedState.sessionTitle = $scope.currentSessionName;
+          localStorage.setItem('SpreadsheetPreferences', JSON
+            .stringify(Preferences));
         };
 
         $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
@@ -699,8 +766,8 @@ define(
                 for (key in newSession) {
                   for (i in newSessionRecord.sessionFields) {
                     if (newSessionRecord.sessionFields[i].label == "user") {
-                      newSessionRecord.sessionFields[i].value = $scope.username;
-                      newSessionRecord.sessionFields[i].mask = $scope.username;
+                      newSessionRecord.sessionFields[i].value = $rootScope.userInfo.name;
+                      newSessionRecord.sessionFields[i].mask = $rootScope.userInfo.name;
                     }
                     if (newSessionRecord.sessionFields[i].label == "dateSEntered") {
                       newSessionRecord.sessionFields[i].value = new Date()
@@ -729,7 +796,7 @@ define(
                       $scope.sessions.push(newSessionRecord);
                       $scope.dataentry = true;
                       $scope.changeActiveSession(savedRecord.data.id);
-                      window.location.assign("#/spreadsheet/" + $scope.template);
+                      window.location.assign("#/spreadsheet/" + $rootScope.template);
                     });
                 $rootScope.loading = false;
               });
@@ -920,6 +987,7 @@ define(
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.currentPage = 0;
+          $rootScope.editsHaveBeenMade = true;
 
           var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
           // Update activity feed
@@ -1037,6 +1105,7 @@ define(
                         newRecord.lastModifiedBy = $rootScope.userInfo.name;
 
                         // Save session
+                        console.log($scope.fullCurrentSession);
                         newRecord.session = $scope.fullCurrentSession;
 
                         // Save pouchname
@@ -1154,7 +1223,7 @@ define(
           for (key in $scope.fields) {
             fieldsInScope[$scope.fields[key].label] = true;
           }
-          if ($scope.template == "fulltemplate") {
+          if ($rootScope.template == "fulltemplate") {
             fieldsInScope.datumTags = true;
             fieldsInScope.comments = true;
           }
@@ -1439,7 +1508,7 @@ define(
           });
 
           // Get privileges for logged in user
-          Data.async("_users", "org.couchdb.user:" + $scope.username)
+          Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
             .then(
               function(response) {
                 if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
@@ -1514,7 +1583,7 @@ define(
           // Prevent an admin from removing him/herself from a corpus; This
           // helps to avoid a situation in which there is no admin for a
           // corpus
-          if (userid == $scope.username) {
+          if (userid == $rootScope.userInfo.name) {
             window
               .alert("You cannot remove yourself from a corpus.\nOnly another server admin can remove you.");
             return;
@@ -1962,7 +2031,27 @@ define(
 
         // Hide loader when all content is ready
         $scope.$on('$viewContentLoaded', function() {
-          $scope.documentReady = true;
+          // Return user to saved state, if it exists; only recover saved state on reload, not menu navigate
+          if ($scope.appReloaded != true) {
+            Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+            if (Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
+              var auth = {};
+              auth.server = Preferences.savedState.server;
+              auth.user = Preferences.savedState.username;
+              auth.password = Preferences.savedState.password;
+              $scope.loginUser(auth);
+              if (Preferences.savedState.DB) {
+                $rootScope.DB = Preferences.savedState.DB;
+                $scope.navigateVerifySaved('none');
+                // Load data with session ID so that scope has access to session
+                $scope.loadData(Preferences.savedState.sessionID);
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+              }
+              $scope.documentReady = true;
+            } else {
+              $scope.documentReady = true;
+            }
+          }
         });
 
       };
