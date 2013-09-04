@@ -1,6 +1,6 @@
 <br />
 <br />
-<div id="login_screen" ng-cloak>
+<div id="login_screen" ng-show="documentReady==true">
 	<div ng-show="not_chrome==true">
 		<h3>THIS SITE WAS DEVELOPED FOR GOOGLE CHROME.</h3>
 		It may not work as expected if you are using another browser.<br /> <a
@@ -58,7 +58,7 @@
 						</tr>
 						<tr>
 							<td>User:</td>
-							<td>{{username}}</td>
+							<td>{{userInfo.name}}</td>
 						</tr>
 						<tr>
 							<td>Date Entered:</td>
@@ -89,7 +89,7 @@
 			</form>
 		</div>
 		<div ng-show="authenticated==true && DBselected==false">
-			Logged in as {{username}}<br /> Select Corpus and click Access:<br />
+			Logged in as {{userInfo.name}}<br /> Select Corpus and click Access:<br />
 			<br />
 			<form ng-submit='selectDB(selectedDB);DBselected=true'>
 				<select ng-model='selectedDB' ng-disabled="loading==true">
@@ -100,7 +100,7 @@
 			</form>
 		</div>
 		<div ng-show="DBselected==true">
-			Logged in as {{username}}<br />Selected corpus: {{DB.corpustitle}}<br />
+			Logged in as {{userInfo.name}}<br />Selected corpus: {{DB.corpustitle}}<br />
 			<button class="btn btn-primary" ng-click="DBselected=false">
 				Select a Different Corpus
 			</button>
