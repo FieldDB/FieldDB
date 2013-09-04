@@ -345,7 +345,6 @@ define(
                     }
                     newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
                     newDatumFromServer.comments = dataFromServer[i].value.comments;
-                    console.log(dataFromServer[i].value);
                     newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
                     // Get attachments
                     newDatumFromServer.attachments = [];
@@ -2034,7 +2033,14 @@ define(
           // Return user to saved state, if it exists; only recover saved state on reload, not menu navigate
           if ($scope.appReloaded != true) {
             Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-            if (Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
+            // Update users to new saved state preferences if they were absent
+            if (!Preferences.savedState) {
+              Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+              Preferences.savedState = {};
+              localStorage.setItem('SpreadsheetPreferences', JSON
+                .stringify(Preferences));
+              $scope.documentReady = true;
+            } else if (Preferences.savedState && Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
               var auth = {};
               auth.server = Preferences.savedState.server;
               auth.user = Preferences.savedState.username;
