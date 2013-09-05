@@ -228,7 +228,6 @@ define(
         $scope.recordingStatus = "Record";
         $scope.recordingButtonClass = "btn btn-success";
         $scope.recordingIcon = "speaker_icon.png";
-        $scope.createNewButtonClass = "btn btn-primary";
         $scope.showAudioFeatures = false;
         $scope.newFieldData = {};
         $rootScope.editsHaveBeenMade = false;
@@ -824,7 +823,7 @@ define(
             $rootScope.notificationMessage = "Please save changes before continuing.";
             $rootScope.openNotification();
             $scope.selected = datum;
-          } else if (datum.attachments[0]) {
+          } else if (datum.attachments && datum.attachments[0]) {
             $rootScope.notificationMessage = "You must delete all recordings from this record first.";
             $rootScope.openNotification();
             $scope.selected = datum;
@@ -854,10 +853,12 @@ define(
 
         $scope.createRecord = function(fieldData) {
 
-          // Reset new datum form data; only resent audio field if present
+          // // Reset new datum form data and enable upload button; only reset audio field if present
           if ($rootScope.template == "fulltemplate") {
             document.getElementById("form_new_datum_audio-file").reset();
+            $scope.newDatumHasAudioToUpload = false;
           }
+          $rootScope.editsHaveBeenMade = false;
           $scope.newFieldData = {};
 
           // Set dataRefreshed to false to show user notifications for data that
@@ -917,7 +918,6 @@ define(
           }
           $scope.data.push(fieldData);
           $scope.newFieldDatahasAudio = false;
-          $scope.createNewButtonClass = "btn btn-primary";
           $scope.saved = "no";
         };
 
@@ -1208,7 +1208,7 @@ define(
             if ($rootScope.editsHaveBeenMade != true) {
               $scope.selected = datum;
             } else {
-              $rootScope.notificationMessage = "You must hit enter or click 'Done' to queue your changes before continuing.";
+              $rootScope.notificationMessage = "Please confirm your changes before continuing.\n\nFor a new record, click \'Create New\'.\n\nFor an edited record, click \'Done\'.";
               $rootScope.openNotification();
             }
           }
@@ -1766,7 +1766,7 @@ define(
         };
 
         $scope.uploadFile = function(datum, file) {
-
+          $rootScope.editsHaveBeenMade = true;
           $scope.processingAudio = true;
 
           var blobToBase64 = function(blob, cb) {
@@ -1780,24 +1780,23 @@ define(
           };
 
           var base64File;
-          var filePrefix;
-          // Test to see if this is a new file
+          var inputBoxPrefix;
+          // Test to see if this is a new datum
           if (!datum || !datum.id) {
-            filePrefix = "new_datum";
+            inputBoxPrefix = "new_datum";
           } else {
-            filePrefix = datum.id;
+            inputBoxPrefix = datum.id;
           }
 
           // Create attachments
 
           var newAttachments = {};
 
-          // If a new file, set up attachments structure, to be saved later
+          // // If a new file, set up attachments structure, to be saved later
           if (!datum || !datum.id) {
             if (!datum) {
               datum = {};
             }
-
             datum._attachments = {};
             datum.attachments = [];
             datum.attachmentInfo = {};
@@ -1807,21 +1806,27 @@ define(
           if (file) {
             numberOfFiles = 1;
           } else {
-            numberOfFiles = document.getElementById(filePrefix + "_audio-file").files.length;
+            numberOfFiles = document.getElementById(inputBoxPrefix + "_audio-file").files.length;
+            // Disable upload button after uploading file(s) once in new datum; cannot reset file input in non-async task
+            if (!datum || !datum.id) {
+              $scope.newDatumHasAudioToUpload = true;
+            }
           }
 
           // Check to see if user has clicked on upload without recording or uploading files
           if (numberOfFiles == 0 || numberOfFiles == null) {
+            $rootScope.editsHaveBeenMade = false;
+            $scope.processingAudio = false;
+            $scope.newDatumHasAudioToUpload = false;
+            document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
             $rootScope.notificationMessage = "Please record or select audio to upload.";
             $rootScope.openNotification();
-            $scope.processingAudio = false;
             return;
           }
 
           for (var i = 0; i < numberOfFiles; i++) {
             (function(index) {
-
-              blobToBase64(file || document.getElementById(filePrefix + "_audio-file").files[index], function(x) {
+              blobToBase64(file || document.getElementById(inputBoxPrefix + "_audio-file").files[index], function(x) {
                 base64File = x;
                 var filename;
                 var description;
@@ -1831,7 +1836,7 @@ define(
                   content_type = "audio\/wav";
                   description = "Add a description";
                 } else {
-                  // Test to see if this is a new file
+                  // Test to see if this is a new datum
                   if (!datum || !datum.id) {
                     var fileExt = document.getElementById("new_datum_audio-file").files[index].type.split("\/").pop();
                   } else {
@@ -1844,7 +1849,7 @@ define(
                   }
                   filename = Date.now() + "" + index + "." + fileExt; // appending index in case of super-rapid processing on multi-file upload, to avoid duplicate filenames
                   content_type = "audio\/" + fileExt;
-                  description = document.getElementById(filePrefix + "_audio-file").files[index].name;
+                  description = document.getElementById(inputBoxPrefix + "_audio-file").files[index].name;
                 }
 
                 var newAttachment = {};
@@ -1862,11 +1867,13 @@ define(
                     "description": newAttachments[filename].description
                   };
 
-                  datum._attachments[filename] = newAttachments[filename];
-                  datum.attachments.push(newScopeAttachment);
-                  datum.attachmentInfo[filename] = {
-                    "description": newAttachments[filename].description
-                  };
+                  $scope.$apply(function() {
+                    datum._attachments[filename] = newAttachments[filename];
+                    datum.attachments.push(newScopeAttachment);
+                    datum.attachmentInfo[filename] = {
+                      "description": newAttachments[filename].description
+                    };
+                  });
                 }
               });
             })(i);
@@ -1878,16 +1885,13 @@ define(
             // Force digest after recording audio
             if (file) {
               $scope.$apply(function() {
-                $scope.createNewButtonClass = "btn btn-success";
                 $scope.newFieldDatahasAudio = true;
                 $scope.processingAudio = false;
               });
             } else {
-              $scope.createNewButtonClass = "btn btn-success";
               $scope.newFieldDatahasAudio = true;
               $scope.processingAudio = false;
             }
-
             return;
           }
 
@@ -1927,8 +1931,8 @@ define(
                 datum.attachments.push(newScopeAttachment);
               }
 
-              // Reset file input field
-              document.getElementById("form_" + filePrefix + "_audio-file").reset();
+              // // Reset file input field
+              document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
 
               datum.hasAudio = true;
               $scope.processingAudio = false;
@@ -2055,6 +2059,14 @@ define(
             }
           }
         });
+
+        $scope.editsHaveBeenMadeButtonClass = function() {
+          if ($rootScope.editsHaveBeenMade == true) {
+            return "btn btn-danger";
+          } else {
+            return "btn btn-primary";
+          }
+        };
 
         window.onbeforeunload = function(e) {
           if ($scope.saved == "no") {
