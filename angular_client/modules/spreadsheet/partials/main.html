@@ -1,6 +1,6 @@
 <br />
 <br />
-<div id="login_screen" ng-cloak>
+<div id="login_screen" ng-show="documentReady==true">
 	<div ng-show="not_chrome==true">
 		<h3>THIS SITE WAS DEVELOPED FOR GOOGLE CHROME.</h3>
 		It may not work as expected if you are using another browser.<br /> <a
@@ -9,7 +9,7 @@
 	</div>
 	<img src="img/lingsync_spreadsheet_main_page_logo.png"> <br /><br />
 	<div ng-show="data!=undefined" class="mainPageDiv">
-		<span ng-show="loading==false && data!=undefined">{{DB.corpustitle}} loaded.<br />Select
+		<span ng-show="data!=undefined">{{DB.corpustitle}} loaded.<br />Select
 			a session and click Go, or create a new session.
 		</span><br>
 		<div class="form-horizontal">
@@ -27,13 +27,8 @@
 
 		</form>
 		</div>
-		<div class="row" ng-show="loading==true">
-			<div class="span12 pagination-centered">
-				<img src="img/loading-spinner.gif" width="100px">
-			</div>
-		</div>
 
-		<div ng-show="loading==false" class="newSessionDiv">
+		<div class="newSessionDiv">
 			<div ng-show="showCreateSessionDiv==true">
 				<br />
 				<h3>
@@ -63,7 +58,7 @@
 						</tr>
 						<tr>
 							<td>User:</td>
-							<td>{{username}}</td>
+							<td>{{userInfo.name}}</td>
 						</tr>
 						<tr>
 							<td>Date Entered:</td>
@@ -79,44 +74,41 @@
 	</div>
 	<br />
 	<div class="mainPageDiv">
-		<div ng-hide="authenticated==true || loading==true">
+		<div ng-hide="authenticated==true">
 			Select Server and Log in <br /> <br />
 			<form ng-submit='loginUser(auth)'>
-				<select ng-model='auth.server'>
+				<select ng-model='auth.server' ng-disabled="loading==true">
 					<option value="" disabled selected>Choose server...</option>
 					<option value='mcgill'>McGill Prosody Lab</option>
 					<option value='testing'>LingSync Beta</option>
-					<!-- <option value='localhost'>Localhost</option> -->
+					<option value='localhost'>Localhost</option>
 				</select><br> <br> <input type="text" ng-model='auth.user'
-					placeholder="username"><br> <input type="password"
-					ng-model='auth.password' placeholder="password"><br>
-				<button class="btn btn-primary" ng-disabled="loading==true">Log In</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-show="loading==true">
+					placeholder="username" ng-disabled="loading==true"><br> <input type="password"
+					ng-model='auth.password' placeholder="password" ng-disabled="loading==true"><br>
+				<button class="btn btn-primary" ng-disabled="loading==true">Log In</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
 			</form>
 		</div>
-		<div ng-show="loading==true && authenticated==false">
-			<img src="img/loading-spinner.gif" width="100px">
-		</div>
 		<div ng-show="authenticated==true && DBselected==false">
-			Logged in as {{username}}<br /> Select Corpus and click Access:<br />
+			Logged in as {{userInfo.name}}<br /> Select Corpus and click Access:<br />
 			<br />
 			<form ng-submit='selectDB(selectedDB);DBselected=true'>
-				<select ng-model='selectedDB'>
+				<select ng-model='selectedDB' ng-disabled="loading==true">
 					<option value="" disabled selected>Choose corpus...</option>
 					<option ng-repeat="item in corpora" value={{item}}>{{item.corpustitle}}</option>
 				</select><br>
-				<button class="btn btn-primary" ng-disabled="loading==true">Access</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-show="loading==true">
+				<button class="btn btn-primary" ng-disabled="loading==true">Access</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
 			</form>
-			<div ng-show="loading==true">
-				<span>Please wait while we access the corpus...</span><br /> <img
-					src="img/loading-spinner.gif" width="100px">
-			</div>
 		</div>
 		<div ng-show="DBselected==true">
-			Logged in as {{username}}<br />Selected corpus: {{DB.corpustitle}}<br />
+			Logged in as {{userInfo.name}}<br />Selected corpus: {{DB.corpustitle}}<br />
 			<button class="btn btn-primary" ng-click="DBselected=false">
 				Select a Different Corpus
 			</button>
 		</div>
 	</div>
+	<div class="row-fluid pagination-centered">
+		<br /><br />
+		<button class="btn btn-info" ng-click="contactUs()">Contact Us</button>
+</div>
 </div>
     

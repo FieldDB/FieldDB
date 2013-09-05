@@ -4,6 +4,10 @@
 	visibility: hidden;
 }
 
+.document_not_ready_spinner {
+	margin-top: 150px;
+}
+
 h3 {
 	color: #102E37;
 }
@@ -48,6 +52,16 @@ body {
 	.mainBody {
 		top: 100px;
 	}
+}
+
+.loading_trouble_message {
+	position: fixed;
+	text-align: center;
+	background-color: #F0F5FF;
+	color: #000000;
+	width: 100%;
+	bottom: 0;
+	z-index: 100;
 }
 
 .menubar {
@@ -105,6 +119,10 @@ body {
 
 .floatLeft {
 	float: left;
+}
+
+.floatRight {
+	float: right;
 }
 
 .rightMenuItems {
@@ -262,9 +280,6 @@ a.delete_button {
 	color: #7A012A;
 }
 
-.add_button:hover {
-	color: #7A012A;
-}
 .settingsItems {
 	margin: 15px;
 }
