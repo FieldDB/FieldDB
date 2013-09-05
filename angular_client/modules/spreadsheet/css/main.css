@@ -156,7 +156,7 @@ body {
 	color: #FFFFFF;
 	left: 0;
 	right: 0;
-	position: relative;
+	position: fixed;
 	margin-left: 0;
 	margin-right: 0;
 	padding: 10px;
