@@ -13,7 +13,7 @@ define(
      * @returns {SpreadsheetStyleDataEntryController}
      */
 
-      function($scope, $rootScope, $resource, $filter, Data) {
+      function($scope, $rootScope, $resource, $filter, $document, Data) {
 
         /* Modal controller TODO could move somewhere where the search is? */
         $scope.open = function() {
@@ -29,6 +29,15 @@ define(
           dialogFade: true
         };
 
+        // Functions to open/close generic notification modal
+        $rootScope.openNotification = function() {
+          $scope.notificationShouldBeOpen = true;
+        };
+
+        $rootScope.closeNotification = function() {
+          $scope.notificationShouldBeOpen = false;
+        };
+
         // TEST FOR CHROME BROWSER
         var is_chrome = window.chrome;
         if (!is_chrome) {
@@ -37,8 +46,15 @@ define(
 
         // Set/get/update user preferences
         var defaultPreferences = {
-          "userTemplate": "template2",
+          "userTemplate": "fulltemplate",
           "resultSize": 10,
+          "savedState": {
+            "server": "",
+            "username": "",
+            "password": "",
+            "DB": "",
+            "sessionID": ""
+          },
           "availableFields": {
             "judgement": {
               "label": "judgement",
@@ -109,7 +125,7 @@ define(
               "title": "syntacticCategory"
             }
           },
-          "template1": {
+          "compacttemplate": {
             "field1": {
               "label": "utterance",
               "title": "Utterance"
@@ -127,7 +143,7 @@ define(
               "title": "Translation"
             }
           },
-          "template2": {
+          "fulltemplate": {
             "field1": {
               "label": "utterance",
               "title": "Utterance"
@@ -172,21 +188,24 @@ define(
           localStorage.clear();
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(defaultPreferences));
-        } else if (Preferences.availableFields && Preferences.availableFields.notes) {
-          // Update to v1.2
+        } else {
+          console.log("Loading Preferences from localStorage.");
+          Preferences = JSON.parse(Preferences);
+        }
+
+        if ((Preferences.template1 != undefined) || (Preferences.availableFields && Preferences.availableFields.notes)) {
+          // Update to v1.3
           Preferences = defaultPreferences;
           console
             .log("Preferences need to be upgraded. Clearing and setting defaults.");
           localStorage.clear();
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(defaultPreferences));
-          Preferences = localStorage.getItem('SpreadsheetPreferences');
-        } else {
-          console.log("Loading Preferences from localStorage.");
-          Preferences = JSON.parse(Preferences);
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
         }
 
         // Set scope variables
+        $scope.documentReady = false;
         $rootScope.template = Preferences.userTemplate;
         $rootScope.fields = Preferences[Preferences.userTemplate];
         $scope.scopePreferences = Preferences;
@@ -212,6 +231,7 @@ define(
         $scope.createNewButtonClass = "btn btn-primary";
         $scope.showAudioFeatures = false;
         $scope.newFieldData = {};
+        $rootScope.editsHaveBeenMade = false;
 
         $rootScope.serverLabels = {
           "mcgill": "McGill Prosody Lab",
@@ -234,60 +254,73 @@ define(
 
         $scope.navigateVerifySaved = function(itemToDisplay) {
           if ($scope.saved == 'no') {
-            window.alert("Please save changes before continuing");
+            $rootScope.notificationMessage = "Please save changes before continuing.";
+            $rootScope.openNotification();
           } else if ($scope.saved == "saving") {
-            window.alert("Changes are currently being saved.\nPlease wait until this operation is done.");
+            $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
+            $rootScope.openNotification();
+          } else if ($rootScope.editsHaveBeenMade == true) {
+            $rootScope.notificationMessage = "Please click 'Done' and then save your changes before continuing.";
+            $rootScope.openNotification();
           } else {
+
+            $scope.appReloaded = true;
 
             if ($rootScope.DB) {
               $rootScope.DBselected = true;
             }
 
-            if ($scope.searching == true) {
-              $scope.searching = false;
-            }
+            $rootScope.loading = false;
 
-            if (itemToDisplay == "settings") {
-              $scope.dataentry = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/settings");
-            } else if (itemToDisplay == "corpusSettings") {
-              $scope.dataentry = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/corpussettings");
-            } else if (itemToDisplay == "home") {
-              $scope.dataentry = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/");
-            } else if (itemToDisplay == "searchMenu") {
-              $scope.selectRow('newEntry');
-              $scope.changeActiveSubMenu(itemToDisplay);
-              if ($scope.searching == true) {
+
+            switch (itemToDisplay) {
+              case "settings":
+                $scope.dataentry = false;
                 $scope.searching = false;
-              } else {
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/settings");
+                break;
+              case "corpusSettings":
+                $scope.dataentry = false;
+                $scope.searching = false;
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/corpussettings");
+                break;
+              case "home":
+                $scope.dataentry = false;
+                $scope.searching = false;
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/spreadsheet_main");
+                break;
+              case "searchMenu":
+                $scope.changeActiveSubMenu(itemToDisplay);
                 $scope.searching = true;
-              }
-            } else if (itemToDisplay == "faq") {
-              $scope.dataentry = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/faq");
-            } else if (itemToDisplay == "reload") {
-              $scope.dataRefreshed = true;
-              $scope.searchTerm = '';
-              $scope.searchHistory = null;
-              $scope.search = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet/" + $scope.template);
-              $scope.loadData();
-            } else {
-              window.location.assign("#/spreadsheet/" + $scope.template);
-              $scope.changeActiveSubMenu(itemToDisplay);
+                $scope.selected = null;
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+                break;
+              case "faq":
+                $scope.dataentry = false;
+                $scope.searching = false;
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/faq");
+                break;
+              case "none":
+                $scope.dataentry = true;
+                $scope.searching = false;
+                $scope.selectRow('newEntry');
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+                $scope.loadData();
+                break;
+              default:
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+                $scope.changeActiveSubMenu(itemToDisplay);
             }
           }
         };
 
         // Fetch data from server and put into template scope
-        $scope.loadData = function() {
+        $scope.loadData = function(sessionID) {
           $rootScope.loading = true;
           Data
             .async($rootScope.DB.pouchname)
@@ -357,9 +390,27 @@ define(
                         }
                       }
                       $scope.sessions = scopeSessions;
+                      // Load session; saved state must have access to scope sessions before calling function
+                      if (sessionID) {
+                        $scope.changeActiveSession(sessionID);
+                      }
+                      $scope.documentReady = true;
+                    }, function(error) {
+                      $scope.documentReady = true;
+                      console.log("Error loading sessions.");
                     });
                 $scope.saved = "yes";
                 $rootScope.loading = false;
+              }, function(error) {
+                // On error loading data, reset saved state
+                // Update saved state in Preferences
+                Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+                Preferences.savedState = {};
+                localStorage.setItem('SpreadsheetPreferences', JSON
+                  .stringify(Preferences));
+                $scope.documentReady = true;
+                $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
+                $rootScope.openNotification();
               });
 
           // Get precedence rules for Glosser
@@ -414,13 +465,13 @@ define(
 
         $scope.loginUser = function(auth) {
           if (!auth || !auth.server) {
-            window.alert("Please choose a server.");
+            $rootScope.notificationMessage = "Please choose a server.";
+            $rootScope.openNotification();
           } else {
             $rootScope.clickSuccess = true;
             $rootScope.userInfo = {
-              "name": auth.user,
+              "name": auth.user.toLowerCase(),
               "password": auth.password
-              // "withCredentials" : true
             };
 
             // if (auth.user == "senhorzinho") {
@@ -444,14 +495,22 @@ define(
               $rootScope.server = "https://localhost:6984/";
               $rootScope.serverCode = "localhost";
             }
-            Data.login(auth.user, auth.password).then(
+            Data.login(auth.user.toLowerCase(), auth.password).then(
               function(response) {
                 if (response == undefined) {
                   return;
                 }
 
+
+                // Update saved state in Preferences
+                Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+                Preferences.savedState.server = $rootScope.serverCode;
+                Preferences.savedState.username = $rootScope.userInfo.name;
+                Preferences.savedState.password = $rootScope.userInfo.password;
+                localStorage.setItem('SpreadsheetPreferences', JSON
+                  .stringify(Preferences));
+
                 $rootScope.authenticated = true;
-                $scope.username = auth.user;
                 var DBs = response.data.roles;
                 // Format available databases (pluck final string after
                 // underscore) TODO Implement underscore pluck?
@@ -496,7 +555,11 @@ define(
                       function(response) {
                         var corpus = {};
                         corpus.pouchname = scopeDBs[index];
-                        corpus.corpustitle = response.rows[0].value.title;
+                        if (response.rows[0]) {
+                          corpus.corpustitle = response.rows[0].value.title;
+                        } else {
+                          corpus.corpustitle = scopeDBs[index];
+                        }
                         $scope.corpora.push(corpus);
                       }, function(error) {
                         var corpus = {};
@@ -511,12 +574,28 @@ define(
           }
         };
 
+        $scope.logOut = function() {
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+          Preferences.savedState = {};
+          localStorage.setItem('SpreadsheetPreferences', JSON
+            .stringify(Preferences));
+          $scope.reloadPage();
+        };
+
         $scope.selectDB = function(selectedDB) {
           if (!selectedDB) {
-            window.alert("Please select a database.");
+            $rootScope.notificationMessage = "Please select a database.";
+            $rootScope.openNotification();
           } else {
             selectedDB = JSON.parse(selectedDB);
             $rootScope.DB = selectedDB;
+
+            // Update saved state in Preferences
+            Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+            Preferences.savedState.DB = selectedDB;
+            localStorage.setItem('SpreadsheetPreferences', JSON
+              .stringify(Preferences));
+
             $scope.loadData();
           }
         };
@@ -527,28 +606,45 @@ define(
           // assign variable until chosen)
           $scope.activeSessionToSwitchTo = activeSessionID;
           $scope.dataentry = true;
-          window.location.assign("#/spreadsheet/" + $scope.template);
+
+          // Update saved state in Preferences
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+          Preferences.savedState.sessionID = activeSessionID;
+          localStorage.setItem('SpreadsheetPreferences', JSON
+            .stringify(Preferences));
+          window.location.assign("#/spreadsheet/" + $rootScope.template);
+        };
+
+        $scope.getCurrentSessionName = function() {
+          if ($scope.activeSession == undefined) {
+            return "All Sessions";
+          } else {
+            var sessionTitle;
+            for (i in $scope.sessions) {
+              if ($scope.sessions[i]._id == $scope.activeSession) {
+                for (j in $scope.sessions[i].sessionFields) {
+                  if ($scope.sessions[i].sessionFields[j].label == "goal") {
+                    if ($scope.sessions[i].sessionFields[j].mask) {
+                      return $scope.sessions[i].sessionFields[j].mask.substr(0,
+                        20);
+                    } else {
+                      return $scope.sessions[i].sessionFields[j].value.substr(0,
+                        20);
+                    }
+                  }
+                }
+              }
+            }
+          }
         };
 
         $scope.changeActiveSession = function(activeSessionToSwitchTo) {
           if (activeSessionToSwitchTo == 'none' || activeSessionToSwitchTo == undefined) {
             $scope.activeSession = undefined;
-            $scope.currentSessionName = "All Sessions";
           } else {
             $scope.activeSession = activeSessionToSwitchTo;
             for (i in $scope.sessions) {
               if ($scope.sessions[i]._id == activeSessionToSwitchTo) {
-                var newDate = $scope.sessions[i].dateCreated.replace(/\"/g, "");
-                var d = new Date(newDate);
-                var goal = "";
-                for (j in $scope.sessions[i].sessionFields) {
-                  if ($scope.sessions[i].sessionFields[j].label == "goal") {
-                    if ($scope.sessions[i].sessionFields[j].mask) {
-                      goal = $scope.sessions[i].sessionFields[j].mask.substr(0,
-                        20);
-                    }
-                  }
-                }
                 $scope.fullCurrentSession = $scope.sessions[i];
 
                 // Set up object to make session editing easier
@@ -559,11 +655,15 @@ define(
                   fullCurrentSessionToEdit[$scope.fullCurrentSession.sessionFields[k].label] = $scope.fullCurrentSession.sessionFields[k].mask;
                 }
                 $scope.fullCurrentSessionToEdit = fullCurrentSessionToEdit;
-                $scope.currentSessionName = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + goal;
-                return;
               }
             }
           }
+          // Update saved state in Preferences
+          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+          Preferences.savedState.sessionID = $scope.activeSession;
+          Preferences.savedState.sessionTitle = $scope.currentSessionName;
+          localStorage.setItem('SpreadsheetPreferences', JSON
+            .stringify(Preferences));
         };
 
         $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
@@ -612,7 +712,7 @@ define(
                             },
                             function() {
                               window
-                                .alert("There was an error accessing the record.\nTry refreshing the data first by clicking ↻.");
+                                .alert("There was an error accessing the record.\nTry refreshing the page");
                             });
                       }
                     })(i);
@@ -623,34 +723,35 @@ define(
 
         };
 
+
         $scope.deleteEmptySession = function(activeSessionID) {
           if ($scope.currentSessionName == "All Sessions") {
-            window.alert("You must select a session to delete.");
+            $rootScope.notificationMessage = "You must select a session to delete.";
+            $rootScope.openNotification();
           } else {
             var r = confirm("Are you sure you want to delete this session permanently?");
             if (r == true) {
-              var revID = "";
-              for (i in $scope.sessions) {
-                if ($scope.sessions[i]._id == activeSessionID) {
-                  revID = $scope.sessions[i]._rev;
-                  $scope.sessions.splice(i, 1);
-                }
-              }
-              Data
-                .removeRecord($rootScope.DB.pouchname, activeSessionID, revID)
+              Data.async($rootScope.DB.pouchname, activeSessionID)
                 .then(
-                  function(response) {
-                    $scope.changeActiveSession('none');
-                    $rootScope.activeSubMenu = 'none';
-                    // $scope.loadData();
-                  },
-                  function() {
-                    window
-                      .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                  function(sessionToMarkAsDeleted) {
+                    sessionToMarkAsDeleted.trashed = "deleted";
+                    var rev = sessionToMarkAsDeleted._rev;
+                    Data.saveEditedRecord($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
+                      // Remove session from scope
+                      for (i in $scope.sessions) {
+                        if ($scope.sessions[i]._id == activeSessionID) {
+                          $scope.sessions.splice(i, 1);
+                        }
+                      }
+                    }, function(error) {
+                      window
+                        .alert("Error deleting session.\nTry refreshing the page.");
+                    });
                   });
             }
           }
         };
+
 
         $scope.createNewSession = function(newSession) {
           $rootScope.loading = true;
@@ -668,8 +769,8 @@ define(
                 for (key in newSession) {
                   for (i in newSessionRecord.sessionFields) {
                     if (newSessionRecord.sessionFields[i].label == "user") {
-                      newSessionRecord.sessionFields[i].value = $scope.username;
-                      newSessionRecord.sessionFields[i].mask = $scope.username;
+                      newSessionRecord.sessionFields[i].value = $rootScope.userInfo.name;
+                      newSessionRecord.sessionFields[i].mask = $rootScope.userInfo.name;
                     }
                     if (newSessionRecord.sessionFields[i].label == "dateSEntered") {
                       newSessionRecord.sessionFields[i].value = new Date()
@@ -698,7 +799,7 @@ define(
                       $scope.sessions.push(newSessionRecord);
                       $scope.dataentry = true;
                       $scope.changeActiveSession(savedRecord.data.id);
-                      window.location.assign("#/spreadsheet/" + $scope.template);
+                      window.location.assign("#/spreadsheet/" + $rootScope.template);
                     });
                 $rootScope.loading = false;
               });
@@ -707,30 +808,45 @@ define(
 
         $scope.reloadPage = function() {
           if ($scope.saved == "no") {
-            window.alert("Please save changes before continuing.");
+            $rootScope.notificationMessage = "Please save changes before continuing.";
+            $rootScope.openNotification();
           } else if ($scope.saved == "saving") {
-            window.alert("Changes are currently being saved.\nYou may refresh the data once this operation is done.");
+            $rootScope.notificationMessage = "Changes are currently being saved.\nYou may refresh the data once this operation is done.";
+            $rootScope.openNotification();
           } else {
             window.location.assign("#/");
             window.location.reload();
           }
         };
 
-        $scope.deleteRecord = function(id, rev) {
-          if (!id) {
-            window.alert("Please save records before continuing.");
+        $scope.deleteRecord = function(datum) {
+          if (!datum.id) {
+            $rootScope.notificationMessage = "Please save changes before continuing.";
+            $rootScope.openNotification();
+            $scope.selected = datum;
+          } else if (datum.attachments[0]) {
+            $rootScope.notificationMessage = "You must delete all recordings from this record first.";
+            $rootScope.openNotification();
+            $scope.selected = datum;
           } else {
             var r = confirm("Are you sure you want to delete this record permanently?");
             if (r == true) {
+
               Data
-                .removeRecord($rootScope.DB.pouchname, id, rev)
+                .async($rootScope.DB.pouchname, datum.id)
                 .then(
-                  function(response) {
-                    $scope.loadData();
-                  },
-                  function() {
-                    window
-                      .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                  function(recordToMarkAsDeleted) {
+                    recordToMarkAsDeleted.trashed = "deleted";
+                    var rev = recordToMarkAsDeleted._rev;
+                    Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
+                      // Remove record from scope
+                      var index = $scope.data.indexOf(datum);
+                      $scope.data.splice(index, 1);
+                      $scope.saved = "yes";
+                    }, function(error) {
+                      window
+                        .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                    });
                   });
             }
           }
@@ -738,8 +854,10 @@ define(
 
         $scope.createRecord = function(fieldData) {
 
-          // Reset new datum form data
-          document.getElementById("form_new_datum_audio-file").reset();
+          // Reset new datum form data; only resent audio field if present
+          if ($rootScope.template == "fulltemplate") {
+            document.getElementById("form_new_datum_audio-file").reset();
+          }
           $scope.newFieldData = {};
 
           // Set dataRefreshed to false to show user notifications for data that
@@ -829,6 +947,10 @@ define(
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.saved = "no";
+          $scope.selected = null;
+          $rootScope.editsHaveBeenMade = false;
+          // Close notification modal in case user hits enter while editsHaveBeenMade modal is open (which would call this function)
+          $rootScope.closeNotification();
           $scope.currentPage = 0;
           // Update activity feed
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
@@ -868,6 +990,7 @@ define(
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.currentPage = 0;
+          $rootScope.editsHaveBeenMade = true;
 
           var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
           // Update activity feed
@@ -891,7 +1014,8 @@ define(
 
         $scope.deleteComment = function(comment, datum) {
           if (comment.username != $rootScope.userInfo.name) {
-            window.alert("You may only delete comments created by you.");
+            $rootScope.notificationMessage = "You may only delete comments created by you.";
+            $rootScope.openNotification();
             return;
           }
           var verifyCommentDelete = confirm("Are you sure you want to delete the comment '" + comment.text + "'?");
@@ -1076,9 +1200,22 @@ define(
           }, 300000);
 
         $scope.selectRow = function(datum) {
-          if ($scope.searching != true) {
-            $scope.selected = datum;
+          // Do nothing if clicked row is currently selected
+          if ($scope.selected == datum) {
+            return;
           }
+          if ($scope.searching != true) {
+            if ($rootScope.editsHaveBeenMade != true) {
+              $scope.selected = datum;
+            } else {
+              $rootScope.notificationMessage = "You must hit enter or click 'Done' to queue your changes before continuing.";
+              $rootScope.openNotification();
+            }
+          }
+        };
+
+        $scope.editSearchResults = function(datum) {
+          $scope.selected = datum;
         };
 
         $scope.runSearch = function(searchTerm) {
@@ -1088,7 +1225,7 @@ define(
           for (key in $scope.fields) {
             fieldsInScope[$scope.fields[key].label] = true;
           }
-          if ($scope.template == "template2") {
+          if ($rootScope.template == "fulltemplate") {
             fieldsInScope.datumTags = true;
             fieldsInScope.comments = true;
           }
@@ -1180,7 +1317,8 @@ define(
           if (newScopeData.length > 0) {
             $scope.data = newScopeData;
           } else {
-            window.alert("No records matched your search.");
+            $rootScope.notificationMessage = "No records matched your search.";
+            $rootScope.openNotification();
           }
         };
 
@@ -1278,7 +1416,8 @@ define(
 
         $scope.registerNewUser = function(newUserInfo) {
           if (!newUserInfo || !newUserInfo.serverCode) {
-            window.alert("Please select a server.");
+            $rootScope.notificationMessage = "Please select a server.";
+            $rootScope.openNotification();
             return;
           }
           $rootScope.loading = true;
@@ -1306,11 +1445,18 @@ define(
             });
           } else {
             $rootScope.loading = false;
-            window.alert("Please verify user information.");
+            $rootScope.notificationMessage = "Please verify user information.";
+            $rootScope.openNotification();
           }
         };
 
         $scope.createNewCorpus = function(newCorpusInfo) {
+          if (!newCorpusInfo) {
+            $rootScope.notificationMessage = "Please enter a corpus name.";
+            $rootScope.openNotification();
+            return;
+          }
+
           $rootScope.loading = true;
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
@@ -1337,7 +1483,8 @@ define(
               window.location.assign("#/");
             });
           } else {
-            window.alert("Please verify corpus name.");
+            $rootScope.notificationMessage = "Please verify corpus name.";
+            $rootScope.openNotification();
             $rootScope.loading = false;
           }
         };
@@ -1363,7 +1510,7 @@ define(
           });
 
           // Get privileges for logged in user
-          Data.async("_users", "org.couchdb.user:" + $scope.username)
+          Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
             .then(
               function(response) {
                 if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
@@ -1376,13 +1523,14 @@ define(
 
         $scope.updateUserRoles = function(newUserRoles) {
           if (!newUserRoles || !newUserRoles.usernameToModify) {
-            window.alert("Please select a username.");
+            $rootScope.notificationMessage = "Please select a username.";
+            $rootScope.openNotification();
             return;
           }
 
-          // if (!newUserRoles.admin && !newUserRoles.read_write && !newUserRoles.reader && !newUserRoles.writer) {
           if (!newUserRoles.role) {
-            window.alert("You haven't selected any roles to add to " + newUserRoles.usernameToModify + "!\nPlease select at least one role.");
+            $rootScope.notificationMessage = "You haven't selected any roles to add to " + newUserRoles.usernameToModify + "!\nPlease select at least one role..";
+            $rootScope.openNotification();
             return;
           }
 
@@ -1437,7 +1585,7 @@ define(
           // Prevent an admin from removing him/herself from a corpus; This
           // helps to avoid a situation in which there is no admin for a
           // corpus
-          if (userid == $scope.username) {
+          if (userid == $rootScope.userInfo.name) {
             window
               .alert("You cannot remove yourself from a corpus.\nOnly another server admin can remove you.");
             return;
@@ -1533,7 +1681,8 @@ define(
           $scope.recordingButtonClass = "btn btn-success";
           $scope.recordingIcon = "speaker_icon.png";
           console.log('Audio Rejected!', e);
-          window.alert("Unable to record audio.");
+          $rootScope.notificationMessage = "Unable to record audio.";
+          $rootScope.openNotification();
         };
 
         var onSuccess = function(s) {
@@ -1549,29 +1698,64 @@ define(
 
         var recorder;
 
-        $scope.startStopRecording = function(datum) {
-          if ($scope.recordingStatus == "Record") {
-            startRecording();
-          } else {
-            stopRecording(datum);
-          }
+        // Functions to open/close audio warning modal
+        var openAudioWarning = function() {
+          $scope.audioWarningShouldBeOpen = true;
         };
 
-        startRecording = function() {
+        $scope.closeAudioWarning = function() {
+          $scope.audioWarningShouldBeOpen = false;
+        };
+
+        var audioRecordingInterval;
+
+        $scope.startRecording = function(datum) {
           if (navigator.getUserMedia) {
-            $scope.recordingButtonClass = "btn btn-danger";
+            $scope.datumForAudio = datum;
+            openAudioWarning();
+            $scope.timeLeftForAudio = "5 minutes 0 seconds";
+            // Begin countdown
+            var minutes = 5;
+            var seconds = 0;
+            audioRecordingInterval = setInterval(function() {
+              if (seconds == 0) {
+                if (minutes == 0) {
+                  clearInterval(audioRecordingInterval);
+                  stopRecording(datum);
+                  $scope.audioWarningShouldBeOpen = false;
+                  return;
+                } else {
+                  minutes--;
+                  seconds = 59;
+                }
+              }
+              if (minutes > 0) {
+                var minute_text = minutes + (minutes > 1 ? ' minutes' : ' minute');
+              } else {
+                var minute_text = '';
+              }
+              var second_text = seconds + (seconds > 1 ? ' seconds' : ' second');
+              seconds--;
+              $scope.$apply(function() {
+                $scope.timeLeftForAudio = minute_text + " " + second_text;
+              });
+            }, 1000);
+            $scope.recordingButtonClass = "btn btn-success disabled";
             $scope.recordingStatus = "Recording";
             $scope.recordingIcon = "recording_icon.gif";
             navigator.getUserMedia({
               audio: true
             }, onSuccess, onFail);
           } else {
+            $scope.recordingStatus = "Record";
             console.log('navigator.getUserMedia not present');
           }
         };
 
-        stopRecording = function(datum) {
+        $scope.stopRecording = function(datum) {
           recorder.stop();
+          $scope.closeAudioWarning();
+          clearInterval(audioRecordingInterval);
           $scope.recordingStatus = "Record";
           $scope.recordingButtonClass = "btn btn-success";
           $scope.recordingIcon = "speaker_icon.png";
@@ -1628,7 +1812,8 @@ define(
 
           // Check to see if user has clicked on upload without recording or uploading files
           if (numberOfFiles == 0 || numberOfFiles == null) {
-            window.alert("Please record or select audio to upload.");
+            $rootScope.notificationMessage = "Please record or select audio to upload.";
+            $rootScope.openNotification();
             $scope.processingAudio = false;
             return;
           }
@@ -1653,7 +1838,8 @@ define(
                     var fileExt = document.getElementById(datum.id + "_audio-file").files[index].type.split("\/").pop();
                   }
                   if (fileExt != ("mp3" || "mpeg" || "wav" || "ogg")) {
-                    window.alert("You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.");
+                    $rootScope.notificationMessage = "You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.";
+                    $rootScope.openNotification();
                     return;
                   }
                   filename = Date.now() + "" + index + "." + fileExt; // appending index in case of super-rapid processing on multi-file upload, to avoid duplicate filenames
@@ -1692,12 +1878,12 @@ define(
             // Force digest after recording audio
             if (file) {
               $scope.$apply(function() {
-                $scope.createNewButtonClass = "btn btn-danger";
+                $scope.createNewButtonClass = "btn btn-success";
                 $scope.newFieldDatahasAudio = true;
                 $scope.processingAudio = false;
               });
             } else {
-              $scope.createNewButtonClass = "btn btn-danger";
+              $scope.createNewButtonClass = "btn btn-success";
               $scope.newFieldDatahasAudio = true;
               $scope.processingAudio = false;
             }
@@ -1755,13 +1941,14 @@ define(
             var rev = originalDoc._rev;
             originalDoc.attachmentInfo[attachment.filename].description = attachment.description;
             Data.saveEditedRecord($rootScope.DB.pouchname, datumID, originalDoc, rev).then(function(response) {
-              window.alert("Successfully updated description for " + attachment.filename);
+              $rootScope.notificationMessage = "Successfully updated description for " + attachment.filename;
+              $rootScope.openNotification();
             });
           });
         };
 
-        $scope.deleteAttachmentFromCorpus = function(datum, filename) {
-          var r = confirm("Are you sure you want to delete the file " + filename + "?");
+        $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
+          var r = confirm("Are you sure you want to delete the file " + description + " (" + filename + ")?");
           if (r == true) {
             var record = datum.id + "/" + filename;
             Data.async($rootScope.DB.pouchname, datum.id).then(function(originalRecord) {
@@ -1821,9 +2008,65 @@ define(
           }
         };
 
+        $scope.contactUs = function() {
+          window.open("https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ");
+        };
+
+        // Use this function to show objects on loading without displacing other elements
+        $scope.hiddenOnLoading = function() {
+          if ($rootScope.loading != true) {
+            return {
+              'visibility': 'hidden'
+            };
+          } else {
+            return {};
+          }
+        };
+
+        // Hide loader when all content is ready
+        $scope.$on('$viewContentLoaded', function() {
+          // Return user to saved state, if it exists; only recover saved state on reload, not menu navigate
+          if ($scope.appReloaded != true) {
+            Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+            // Update users to new saved state preferences if they were absent
+            if (!Preferences.savedState) {
+              Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+              Preferences.savedState = {};
+              localStorage.setItem('SpreadsheetPreferences', JSON
+                .stringify(Preferences));
+              $scope.documentReady = true;
+            } else if (Preferences.savedState && Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
+              var auth = {};
+              auth.server = Preferences.savedState.server;
+              auth.user = Preferences.savedState.username;
+              auth.password = Preferences.savedState.password;
+              $scope.loginUser(auth);
+              if (Preferences.savedState.DB) {
+                $rootScope.DB = Preferences.savedState.DB;
+                $scope.navigateVerifySaved('none');
+                // Load data with session ID so that scope has access to session
+                $scope.loadData(Preferences.savedState.sessionID);
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+              } else {
+                $scope.documentReady = true;
+              }
+            } else {
+              $scope.documentReady = true;
+            }
+          }
+        });
+
+        window.onbeforeunload = function(e) {
+          if ($scope.saved == "no") {
+            return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
+          } else {
+            return;
+          }
+        };
+
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
-      '$resource', '$filter', 'Data'
+      '$resource', '$filter', '$document', 'Data'
     ];
     return SpreadsheetStyleDataEntryController;
   });
