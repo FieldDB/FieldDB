@@ -49,9 +49,7 @@
 					</div>
 				</span> <span ng-hide="data==undefined"></span>
 				<span><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
-				<span
-					ng-hide="data==undefined || dataentry==false"><a
-					ng-click="navigateVerifySaved('reload');">↻</a></span> <span
+			  <span
 					class="rightMenuItems" ng-show="authenticated==true">
 					<div class="rightMenuItemsDiv">
 						<div ng-hide="DB==undefined">
@@ -183,9 +181,7 @@
 					</ul>
 				</span>
 				<span><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
-				<span
-					ng-hide="data==undefined || dataentry==false"><a
-					ng-click="navigateVerifySaved('reload');">↻</a></span><br />
+				<br />
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
 					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
 						Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}

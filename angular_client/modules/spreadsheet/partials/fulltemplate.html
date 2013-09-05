@@ -63,7 +63,7 @@
 
 </div>
 
-<div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true">
+<div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined">
 	<div class="span12 pagination-centered">
 		<h2>Please select a session before entering data.</h2>
 	</div>
@@ -190,7 +190,7 @@
 					</tr>
 				</table>
 				<br />
-				<span ng-show="datum.attachments.length > 0 && (datum.id==undefined || dataRefreshed==false)"><font size="2">If you cannot play the audio, hit refresh (↻) on the LingSync toolbar to be able to listen to this audio. Note that it may take a few moments for new audio to be uploaded and accessible.</font></span>
+				<span ng-show="datum.attachments.length > 0 && (datum.id==undefined || dataRefreshed==false)"><font size="2">If you cannot play the audio, refresh the page to be able to listen to this audio. Note that it may take a few moments for new audio to be uploaded and accessible.</font></span>
 			</div>
 		</div>
 	</div>

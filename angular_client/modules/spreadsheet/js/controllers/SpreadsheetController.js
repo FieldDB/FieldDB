@@ -708,7 +708,7 @@ define(
                             },
                             function() {
                               window
-                                .alert("There was an error accessing the record.\nTry refreshing the data first by clicking ↻.");
+                                .alert("There was an error accessing the record.\nTry refreshing the page");
                             });
                       }
                     })(i);
@@ -741,7 +741,7 @@ define(
                       }
                     }, function(error) {
                       window
-                        .alert("Error deleting session.\nTry refreshing the data first by clicking ↻.");
+                        .alert("Error deleting session.\nTry refreshing the page.");
                     });
                   });
             }
@@ -2059,6 +2059,14 @@ define(
             }
           }
         });
+
+        window.onbeforeunload = function(e) {
+          if ($scope.saved == "no") {
+            return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
+          } else {
+            return;
+          }
+        };
 
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
