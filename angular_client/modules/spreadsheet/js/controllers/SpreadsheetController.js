@@ -394,6 +394,10 @@ define(
                       if (sessionID) {
                         $scope.changeActiveSession(sessionID);
                       }
+                      $scope.documentReady = true;
+                    }, function(error) {
+                      $scope.documentReady = true;
+                      console.log("Error loading sessions.");
                     });
                 $scope.saved = "yes";
                 $rootScope.loading = false;
@@ -404,6 +408,7 @@ define(
                 Preferences.savedState = {};
                 localStorage.setItem('SpreadsheetPreferences', JSON
                   .stringify(Preferences));
+                $scope.documentReady = true;
                 $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
                 $rootScope.openNotification();
               });
@@ -2052,8 +2057,9 @@ define(
                 // Load data with session ID so that scope has access to session
                 $scope.loadData(Preferences.savedState.sessionID);
                 window.location.assign("#/spreadsheet/" + $rootScope.template);
+              } else {
+                $scope.documentReady = true;
               }
-              $scope.documentReady = true;
             } else {
               $scope.documentReady = true;
             }
