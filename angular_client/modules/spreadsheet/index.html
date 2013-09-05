@@ -16,9 +16,9 @@
 </head>
 <body id="app" ng-controller="SpreadsheetStyleDataEntryController"
 	ng-cloak>
-	<div class="row-fluid" ng-hide="documentReady==true">
+	<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady==true">
 		<div class="span4 offset4 pagination-centered">
-			<img src="img/spinner-small-maindiv.gif">
+			<img src="img/loading-spinner.gif" width="75">
 		</div>
 	</div>
 
@@ -307,7 +307,7 @@
 		</div>
 
 		<!-- Audio Warning Modal-->
-		<div modal="audioWarningShouldBeOpen" close="closeAudioWarning()" options="opts">
+		<div modal="audioWarningShouldBeOpen" close="stopRecording(datumForAudio)" options="opts">
         <div class="modal-header">
             <h3>Recording Audio</h3>
         </div>
@@ -318,7 +318,7 @@
             Time left: {{timeLeftForAudio}}
         </div>
         <div class="modal-footer">
-            <button class="btn btn-danger cancel" ng-click="startStopRecording(datumForAudio)">Stop Recording</button>
+            <button class="btn btn-danger cancel" ng-click="stopRecording(datumForAudio)">Stop Recording</button>
         </div>
     </div>
 

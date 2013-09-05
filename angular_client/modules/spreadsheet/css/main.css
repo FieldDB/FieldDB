@@ -4,6 +4,10 @@
 	visibility: hidden;
 }
 
+.document_not_ready_spinner {
+	margin-top: 150px;
+}
+
 h3 {
 	color: #102E37;
 }
