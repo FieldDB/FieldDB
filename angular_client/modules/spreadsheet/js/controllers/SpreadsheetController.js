@@ -272,49 +272,49 @@ define(
 
             $rootScope.loading = false;
 
-            if (itemToDisplay == "settings") {
-              $scope.dataentry = false;
-              $scope.searching = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/settings");
-            } else if (itemToDisplay == "corpusSettings") {
-              $scope.dataentry = false;
-              $scope.searching = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/corpussettings");
-            } else if (itemToDisplay == "home") {
-              $scope.dataentry = false;
-              $scope.searching = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet_main");
-            } else if (itemToDisplay == "searchMenu") {
-              $scope.changeActiveSubMenu(itemToDisplay);
-              $scope.searching = true;
-              $scope.selected = null;
-              window.location.assign("#/spreadsheet/" + $rootScope.template);
-            } else if (itemToDisplay == "faq") {
-              $scope.dataentry = false;
-              $scope.searching = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/faq");
-            } else if (itemToDisplay == "reload") {
-              $scope.dataRefreshed = true;
-              $scope.searchTerm = '';
-              $scope.searchHistory = null;
-              $scope.searching = false;
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet/" + $rootScope.template);
-              $scope.loadData();
-            } else if (itemToDisplay == "none") {
-              $scope.dataentry = true;
-              $scope.searching = false;
-              $scope.selectRow('newEntry');
-              $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet/" + $rootScope.template);
-              $scope.loadData();
-            } else {
-              window.location.assign("#/spreadsheet/" + $rootScope.template);
-              $scope.changeActiveSubMenu(itemToDisplay);
+
+            switch (itemToDisplay) {
+              case "settings":
+                $scope.dataentry = false;
+                $scope.searching = false;
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/settings");
+                break;
+              case "corpusSettings":
+                $scope.dataentry = false;
+                $scope.searching = false;
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/corpussettings");
+                break;
+              case "home":
+                $scope.dataentry = false;
+                $scope.searching = false;
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/spreadsheet_main");
+                break;
+              case "searchMenu":
+                $scope.changeActiveSubMenu(itemToDisplay);
+                $scope.searching = true;
+                $scope.selected = null;
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+                break;
+              case "faq":
+                $scope.dataentry = false;
+                $scope.searching = false;
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/faq");
+                break;
+              case "none":
+                $scope.dataentry = true;
+                $scope.searching = false;
+                $scope.selectRow('newEntry');
+                $scope.changeActiveSubMenu('none');
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+                $scope.loadData();
+                break;
+              default:
+                window.location.assign("#/spreadsheet/" + $rootScope.template);
+                $scope.changeActiveSubMenu(itemToDisplay);
             }
           }
         };
@@ -658,7 +658,6 @@ define(
               }
             }
           }
-          console.log($scope.fullCurrentSession);
           // Update saved state in Preferences
           Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
           Preferences.savedState.sessionID = $scope.activeSession;
@@ -1109,7 +1108,6 @@ define(
                         newRecord.lastModifiedBy = $rootScope.userInfo.name;
 
                         // Save session
-                        console.log($scope.fullCurrentSession);
                         newRecord.session = $scope.fullCurrentSession;
 
                         // Save pouchname
@@ -1710,44 +1708,6 @@ define(
         };
 
         var audioRecordingInterval;
-
-        $scope.startStopRecording = function(datum) {
-          if ($scope.recordingStatus == "Record") {
-            // $scope.datumForAudio = datum;
-            // openAudioWarning();
-            // $scope.timeLeftForAudio = "5 minutes 0 seconds";
-            // // Begin countdown
-            // var minutes = 5;
-            // var seconds = 0;
-            // audioRecordingInterval = setInterval(function() {
-            //   if (seconds == 0) {
-            //     if (minutes == 0) {
-            //       clearInterval(audioRecordingInterval);
-            //       stopRecording(datum);
-            //       $scope.audioWarningShouldBeOpen = false;
-            //       return;
-            //     } else {
-            //       minutes--;
-            //       seconds = 59;
-            //     }
-            //   }
-            //   if (minutes > 0) {
-            //     var minute_text = minutes + (minutes > 1 ? ' minutes' : ' minute');
-            //   } else {
-            //     var minute_text = '';
-            //   }
-            //   var second_text = seconds + (seconds > 1 ? ' seconds' : ' second');
-            //   seconds--;
-            //   $scope.$apply(function() {
-            //     $scope.timeLeftForAudio = minute_text + " " + second_text;
-            //   });
-            // }, 1000);
-            // startRecording();
-          } else {
-            $scope.audioWarningShouldBeOpen = false;
-            stopRecording(datum);
-          }
-        };
 
         $scope.startRecording = function(datum) {
           if (navigator.getUserMedia) {
