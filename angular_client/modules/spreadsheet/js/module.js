@@ -40,10 +40,10 @@ define(
               templateUrl: 'partials/register.html'
             }).when('/faq', {
               templateUrl: 'partials/faq.html'
-            }).when('/spreadsheet/template1', {
-              templateUrl: 'partials/template1.html'
-            }).when('/spreadsheet/template2', {
-              templateUrl: 'partials/template2.html'
+            }).when('/spreadsheet/compacttemplate', {
+              templateUrl: 'partials/compacttemplate.html'
+            }).when('/spreadsheet/fulltemplate', {
+              templateUrl: 'partials/fulltemplate.html'
             }).otherwise({
               redirectTo: '/spreadsheet_main'
             });
