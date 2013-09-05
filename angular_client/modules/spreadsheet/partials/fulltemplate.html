@@ -2,7 +2,7 @@
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	class="relativePosition"
 	ng-click="selectRow('newEntry')"
-	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
+	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || currentPage!=0">
 	<div class="row">
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
