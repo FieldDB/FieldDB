@@ -1713,6 +1713,44 @@ define(
 
         $scope.startStopRecording = function(datum) {
           if ($scope.recordingStatus == "Record") {
+            // $scope.datumForAudio = datum;
+            // openAudioWarning();
+            // $scope.timeLeftForAudio = "5 minutes 0 seconds";
+            // // Begin countdown
+            // var minutes = 5;
+            // var seconds = 0;
+            // audioRecordingInterval = setInterval(function() {
+            //   if (seconds == 0) {
+            //     if (minutes == 0) {
+            //       clearInterval(audioRecordingInterval);
+            //       stopRecording(datum);
+            //       $scope.audioWarningShouldBeOpen = false;
+            //       return;
+            //     } else {
+            //       minutes--;
+            //       seconds = 59;
+            //     }
+            //   }
+            //   if (minutes > 0) {
+            //     var minute_text = minutes + (minutes > 1 ? ' minutes' : ' minute');
+            //   } else {
+            //     var minute_text = '';
+            //   }
+            //   var second_text = seconds + (seconds > 1 ? ' seconds' : ' second');
+            //   seconds--;
+            //   $scope.$apply(function() {
+            //     $scope.timeLeftForAudio = minute_text + " " + second_text;
+            //   });
+            // }, 1000);
+            // startRecording();
+          } else {
+            $scope.audioWarningShouldBeOpen = false;
+            stopRecording(datum);
+          }
+        };
+
+        $scope.startRecording = function(datum) {
+          if (navigator.getUserMedia) {
             $scope.datumForAudio = datum;
             openAudioWarning();
             $scope.timeLeftForAudio = "5 minutes 0 seconds";
@@ -1724,7 +1762,7 @@ define(
                 if (minutes == 0) {
                   clearInterval(audioRecordingInterval);
                   stopRecording(datum);
-                  $scope.closeAudioWarning();
+                  $scope.audioWarningShouldBeOpen = false;
                   return;
                 } else {
                   minutes--;
@@ -1742,16 +1780,6 @@ define(
                 $scope.timeLeftForAudio = minute_text + " " + second_text;
               });
             }, 1000);
-            startRecording();
-          } else {
-            clearInterval(audioRecordingInterval);
-            $scope.closeAudioWarning();
-            stopRecording(datum);
-          }
-        };
-
-        startRecording = function() {
-          if (navigator.getUserMedia) {
             $scope.recordingButtonClass = "btn btn-success disabled";
             $scope.recordingStatus = "Recording";
             $scope.recordingIcon = "recording_icon.gif";
@@ -1764,8 +1792,10 @@ define(
           }
         };
 
-        stopRecording = function(datum) {
+        $scope.stopRecording = function(datum) {
           recorder.stop();
+          $scope.closeAudioWarning();
+          clearInterval(audioRecordingInterval);
           $scope.recordingStatus = "Record";
           $scope.recordingButtonClass = "btn btn-success";
           $scope.recordingIcon = "speaker_icon.png";
