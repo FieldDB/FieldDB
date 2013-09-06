@@ -142,21 +142,19 @@
 			</div>
 
 			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
-				<form class="form-search">
-					<span>Search: <input type="text"
+				<form class="form-horizontal">
+					Search: <input type="text"
 						class="input-medium search-query" ng-model='searchTerm'>
 						<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
 						<button class="btn btn-primary" ng-click="selectAll();">Select
 							All</button>
 						<button class="btn btn-primary" href="#searchModal"
-							ng-click="exportResults();">Export</button></span>
-
+							ng-click="exportResults();">Export</button>
 					<button class="btn btn-warning"
 						ng-click="loadData();searchTerm='';searchHistory=null">Clear
-						Results</button>
+						Results</button>&nbsp;
 					<span>{{searchHistory}}</span>
 				</form>
-				</span>
 			</div>
 		</div>
 		<div class="smallMenuBar">
@@ -335,7 +333,7 @@
         </div>
     </div>
 
-		<div class="mainBody" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
+		<div ng-class="mainBodyClass()" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
 			<ng-view></ng-view>
 		</div>
 	</div>
