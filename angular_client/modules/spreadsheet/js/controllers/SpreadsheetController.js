@@ -271,6 +271,7 @@ define(
 
             $rootScope.loading = false;
 
+            $scope.activeMenu = itemToDisplay;
 
             switch (itemToDisplay) {
               case "settings":
