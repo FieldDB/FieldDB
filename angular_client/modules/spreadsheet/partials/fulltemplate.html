@@ -131,11 +131,15 @@
 					placeholder="{{commaList(datum.datumTags)}}"></textarea>
 			</div>
 			<div class="span2">
-				<span title="Date created">Created:<br />{{datum.dateEntered | standardDate}}<br />
-				<span title="Date modified">Last modified:<br />{{datum.dateModified
-					| standardDate}}
-			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
-					 	<div class="expandCollapseButton"><span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>&nbsp;&nbsp;&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()"></div>			    		
+				<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}</span><br />
+				<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span>
+				<span title="Date modified">Modified: {{datum.dateModified | standardDate}}</span><br />
+				<span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
+				<div class="expandCollapseButton">
+					<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span>
+					<span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
+					&nbsp;&nbsp;&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()">
+				</div>			    		
 			</div>
 			</form>
 			<div class="row" ng-show="expandCollapse==true && !datum.id">
@@ -149,10 +153,9 @@
 			<div class="expandedDataInner">
 				<span
 					ng-hide="fields.field5.label==''"
-					ng-repeat="comment in datum.comments"><span
-					ng-click="deleteComment(comment, datum)"><font size="5">✗</font></span><i><b>{{comment.username}}</b></i>:
+					ng-repeat="comment in datum.comments"><a
+					ng-click="deleteComment(comment, datum)" class="delete_button">✗</a><i><b>{{comment.username}}</b></i>:
 					{{comment.text}}<br /> </span>
-					<br />
 					<button class="btn btn-primary" ng-click="addComment(datum);">Add Comment</button>
 			</div>
 		</div>
@@ -181,7 +184,7 @@
 					<tr ng-repeat="attachment in datum.attachments">
 						<td>
 							<span class="form-horizontal">
-								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename, attachment.description)">ⓧ</a>
+								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename, attachment.description)">✗</a>
 								<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
 							</span>
 						</td>
@@ -232,10 +235,11 @@
 		</div>
 		<div class="span2">
 			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /></span>
-			<span title="Date created">Created:<br />{{datum.dateEntered | standardDate}}<br />
-			<span title="Date modified">Last modified:<br />{{datum.dateModified
-				| standardDate}}
-			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span> <br /> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
+			<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}<br />
+			<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span>
+			<span title="Date modified">Modified: {{datum.dateModified | standardDate}}</span><br />
+			<span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
+			<span ng-show="datum.hasAudio==true"><br /><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
 		</div>
 
 
