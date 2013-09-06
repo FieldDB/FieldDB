@@ -209,7 +209,7 @@ define(
         $rootScope.template = Preferences.userTemplate;
         $rootScope.fields = Preferences[Preferences.userTemplate];
         $scope.scopePreferences = Preferences;
-        $scope.orderProp = "dateModified";
+        $scope.orderProp = "dateEntered";
         $scope.currentPage = 0;
         $scope.reverse = true;
         $scope.selected = 'newEntry';
@@ -230,7 +230,7 @@ define(
         $scope.recordingIcon = "speaker_icon.png";
         $scope.showAudioFeatures = false;
         $scope.newFieldData = {};
-        $rootScope.editsHaveBeenMade = false;
+        $rootScope.newRecordHasBeenEdited = false;
 
         $rootScope.serverLabels = {
           "mcgill": "McGill Prosody Lab",
@@ -258,8 +258,8 @@ define(
           } else if ($scope.saved == "saving") {
             $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
             $rootScope.openNotification();
-          } else if ($rootScope.editsHaveBeenMade == true) {
-            $rootScope.notificationMessage = "Please click 'Done' and then save your changes before continuing.";
+          } else if ($rootScope.newRecordHasBeenEdited == true) {
+            $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
             $rootScope.openNotification();
           } else {
 
@@ -335,6 +335,14 @@ define(
 
                     for (j in dataFromServer[i].value.datumFields) {
                       newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
+                    }
+
+                    // Update users to add a dateEntered to all datums (oversight in original code)
+                    if (!dataFromServer[i].value.dateEntered || dataFromServer[i].value.dateEntered == "" || dataFromServer[i].value.dateEntered == "N/A") {
+                      newDatumFromServer.dateEntered = "2000-09-06T16:31:30.988Z";
+                      newDatumFromServer.saved = "no";
+                    } else {
+                      newDatumFromServer.dateEntered = dataFromServer[i].value.dateEntered;
                     }
                     if (dataFromServer[i].value.dateModified) {
                       newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
@@ -858,7 +866,7 @@ define(
             document.getElementById("form_new_datum_audio-file").reset();
             $scope.newDatumHasAudioToUpload = false;
           }
-          $rootScope.editsHaveBeenMade = false;
+          $rootScope.newRecordHasBeenEdited = false;
           $scope.newFieldData = {};
 
           // Set dataRefreshed to false to show user notifications for data that
@@ -909,6 +917,7 @@ define(
           }
 
           fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
+          fieldData.timestamp = Date.now();
           fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
           fieldData.lastModifiedBy = $rootScope.userInfo.name;
           fieldData.sessionID = $scope.activeSession;
@@ -921,7 +930,7 @@ define(
           $scope.saved = "no";
         };
 
-        $scope.markAsEdited = function(fieldData, datum) {
+        $rootScope.markAsEdited = function(fieldData, datum) {
           var utterance = "Datum";
           for (key in fieldData) {
             if (key == "datumTags" && typeof fieldData.datumTags === 'string') {
@@ -943,32 +952,38 @@ define(
               utterance = fieldData[key].value;
             }
           }
-          datum.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.saved = "no";
-          $scope.selected = null;
-          $rootScope.editsHaveBeenMade = false;
+          // $scope.selected = null;
+          // $rootScope.editsHaveBeenMade = false;
           // Close notification modal in case user hits enter while editsHaveBeenMade modal is open (which would call this function)
           $rootScope.closeNotification();
-          $scope.currentPage = 0;
-          // Update activity feed
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
-          $scope.addActivity([{
-            verb: "updated",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "personal"
-          }, {
-            verb: "updated",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
-          }]);
+          // $scope.currentPage = 0;
+
+          if (!datum.saved || datum.saved == "yes") {
+            datum.saved = "no";
+            // Update activity feed
+            console.log("ACTIVITY");
+            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            $scope.addActivity([{
+              verb: "updated",
+              verbicon: "icon-pencil",
+              directobjecticon: "icon-list",
+              directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "personal"
+            }, {
+              verb: "updated",
+              verbicon: "icon-pencil",
+              directobjecticon: "icon-list",
+              directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "team"
+            }]);
+          } else {
+            datum.saved = "no";
+          }
         };
 
         $rootScope.addComment = function(datum) {
@@ -987,10 +1002,11 @@ define(
           }
           datum.comments.push(comment);
           datum.saved = "no";
+          $scope.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
-          $scope.currentPage = 0;
-          $rootScope.editsHaveBeenMade = true;
+          // $scope.currentPage = 0;
+          // $rootScope.editsHaveBeenMade = true;
 
           var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
           // Update activity feed
@@ -1054,9 +1070,12 @@ define(
                             }
                           }
                         }
-                        editedRecord.dateModified = JSON.parse(JSON
-                          .stringify(new Date()));
-                        editedRecord.lastModifiedBy = $rootScope.userInfo.name;
+
+                        // Save date info
+                        editedRecord.dateModified = fieldData.dateModified;
+                        editedRecord.lastModifiedBy = fieldData.lastModifiedBy;
+                        editedRecord.dateEntered = fieldData.dateEntered;
+
 
                         // Save tags
                         if (fieldData.datumTags) {
@@ -1090,6 +1109,7 @@ define(
                   console.log("Saving new record.");
 
                   var fieldData = $scope.data[index];
+                  console.log(fieldData);
                   Data
                     .blankDatumTemplate()
                     .then(
@@ -1103,9 +1123,12 @@ define(
                             }
                           }
                         }
-                        newRecord.dateModified = JSON.parse(JSON
-                          .stringify(new Date()));
-                        newRecord.lastModifiedBy = $rootScope.userInfo.name;
+
+                        // Save date info
+                        newRecord.dateModified = fieldData.dateModified;
+                        newRecord.timestamp = fieldData.timestamp;
+                        newRecord.lastModifiedBy = fieldData.lastModifiedBy;
+                        newRecord.dateEntered = fieldData.dateEntered;
 
                         // Save session
                         newRecord.session = $scope.fullCurrentSession;
@@ -1199,23 +1222,23 @@ define(
             }
           }, 300000);
 
-        $scope.selectRow = function(datum) {
+        $scope.selectRow = function(scopeIndex) {
           // Do nothing if clicked row is currently selected
-          if ($scope.selected == datum) {
+          if ($scope.selected == scopeIndex) {
             return;
           }
           if ($scope.searching != true) {
-            if ($rootScope.editsHaveBeenMade != true) {
-              $scope.selected = datum;
+            if ($rootScope.newRecordHasBeenEdited != true) {
+              $scope.selected = scopeIndex;
             } else {
-              $rootScope.notificationMessage = "Please confirm your changes before continuing.\n\nFor a new record, click \'Create New\'.\n\nFor an edited record, click \'Done\'.";
+              $rootScope.notificationMessage = "Please Please click \'Create New\' before continuing.";
               $rootScope.openNotification();
             }
           }
         };
 
-        $scope.editSearchResults = function(datum) {
-          $scope.selected = datum;
+        $scope.editSearchResults = function(scopeIndex) {
+          $scope.selected = scopeIndex;
         };
 
         $scope.runSearch = function(searchTerm) {
@@ -1766,7 +1789,7 @@ define(
         };
 
         $scope.uploadFile = function(datum, file) {
-          $rootScope.editsHaveBeenMade = true;
+          // $rootScope.editsHaveBeenMade = true;
           $scope.processingAudio = true;
 
           var blobToBase64 = function(blob, cb) {
@@ -1815,7 +1838,7 @@ define(
 
           // Check to see if user has clicked on upload without recording or uploading files
           if (numberOfFiles == 0 || numberOfFiles == null) {
-            $rootScope.editsHaveBeenMade = false;
+            // $rootScope.editsHaveBeenMade = false;
             $scope.processingAudio = false;
             $scope.newDatumHasAudioToUpload = false;
             document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
@@ -2060,8 +2083,8 @@ define(
           }
         });
 
-        $scope.editsHaveBeenMadeButtonClass = function() {
-          if ($rootScope.editsHaveBeenMade == true) {
+        $scope.newRecordHasBeenEditedButtonClass = function() {
+          if ($rootScope.newRecordHasBeenEdited == true) {
             return "btn btn-danger";
           } else {
             return "btn btn-primary";

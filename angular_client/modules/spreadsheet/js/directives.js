@@ -42,28 +42,42 @@ define(
         'arrowKey',
         function($rootScope) {
           return function(scope, element, attrs) {
-            element.bind('keydown', function(e) {
-              if (e.keyCode === 40 && scope.$index == undefined) {
-                scope.selectRow(scope.$$childHead.datum);
-              } else if (e.keyCode === 40 && scope.$index < scope.data.length && scope.$$nextSibling) {
-                scope.selectRow(scope.$$nextSibling.datum);
-              } else if (e.keyCode === 38 && scope.$index == 0) {
-                scope.selectRow('newEntry');
-              } else if (e.keyCode === 38 && scope.$index > 0 && scope.$$prevSibling) {
-                scope.selectRow(scope.$$prevSibling.datum);
-              } else {
-                return;
-              }
-              scope.$apply();
+            element.bind('keyup', function(e) {
+              console.log(scope.$index);
+              scope.$apply(function() {
+                if (e.keyCode === 40 && scope.$index == undefined) {
+                  scope.selectRow(0);
+                } else if (e.keyCode === 40 && scope.$index < scope.data.length) {
+                  scope.selectRow(scope.$index + 1);
+                } else if (e.keyCode === 38 && scope.$index == 0) {
+                  scope.selectRow('newEntry');
+                } else if (e.keyCode === 38 && scope.$index > 0) {
+                  scope.selectRow(scope.$index - 1);
+                } else {
+                  return;
+                }
+              });
             });
           };
         }).directive(
         'keypressMarkAsEdited',
         function($rootScope) {
           return function(scope, element, attrs) {
-            element.bind('keydown', function(e) {
+            element.bind('keyup', function(e) {
               if (e.keyCode != 40 && e.keyCode != 38) {
-                $rootScope.editsHaveBeenMade = true;
+                $rootScope.markAsEdited(scope.fieldData, scope.datum);
+              } else {
+                return;
+              }
+            });
+          };
+        }).directive(
+        'keypressMarkAsNew',
+        function($rootScope) {
+          return function(scope, element, attrs) {
+            element.bind('keyup', function(e) {
+              if (e.keyCode != 40 && e.keyCode != 38 && e.keyCode != 13) {
+                $rootScope.newRecordHasBeenEdited = true;
               } else {
                 return;
               }
@@ -74,7 +88,7 @@ define(
         function($timeout) {
           return function(scope, element) {
             scope.$watch('selected', function() {
-              if (scope.selected == scope.datum || scope.selected == 'newEntry') {
+              if (scope.selected == scope.$index || scope.selected == 'newEntry') {
                 $timeout(function() {
                   element[0].focus();
                 }, 0);
