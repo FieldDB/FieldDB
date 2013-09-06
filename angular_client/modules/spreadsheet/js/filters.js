@@ -22,7 +22,11 @@ define(["angular"], function(angular) {
         var newDate = input.replace(/\"/g, "");
         var d = new Date(newDate);
         var t = new Date(newDate);
-        return d.toLocaleDateString() + " " + t.toLocaleTimeString();
+        var minutes = t.getMinutes();
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        return d.toLocaleDateString() + " " + t.getHours() + ":" + minutes;
       }
     };
   }).filter('shortDate', function() {
@@ -49,7 +53,7 @@ define(["angular"], function(angular) {
     return function(input) {
       if (input == "Tags") {
         return "--";
-      }else {
+      } else {
         return input;
       }
     }

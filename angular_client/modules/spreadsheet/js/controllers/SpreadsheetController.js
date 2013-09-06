@@ -338,12 +338,15 @@ define(
                       newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
                     }
 
-                    // Update users to add a dateEntered to all datums (oversight in original code)
+                    // Update users to add a dateEntered to all datums (oversight in original code; needed so that datums are ordered properly)
                     if (!dataFromServer[i].value.dateEntered || dataFromServer[i].value.dateEntered == "" || dataFromServer[i].value.dateEntered == "N/A") {
                       newDatumFromServer.dateEntered = "2000-09-06T16:31:30.988Z";
                       newDatumFromServer.saved = "no";
                     } else {
                       newDatumFromServer.dateEntered = dataFromServer[i].value.dateEntered;
+                    }
+                    if (dataFromServer[i].value.enteredByUser) {
+                      newDatumFromServer.enteredByUser = dataFromServer[i].value.enteredByUser;
                     }
                     if (dataFromServer[i].value.dateModified) {
                       newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
@@ -851,6 +854,7 @@ define(
                       var index = $scope.data.indexOf(datum);
                       $scope.data.splice(index, 1);
                       $scope.saved = "yes";
+                      $scope.selected = null;
                     }, function(error) {
                       window
                         .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
@@ -918,6 +922,7 @@ define(
           }
 
           fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
+          fieldData.enteredByUser = $rootScope.userInfo.name;
           fieldData.timestamp = Date.now();
           fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
           fieldData.lastModifiedBy = $rootScope.userInfo.name;
@@ -1076,7 +1081,7 @@ define(
                         editedRecord.dateModified = fieldData.dateModified;
                         editedRecord.lastModifiedBy = fieldData.lastModifiedBy;
                         editedRecord.dateEntered = fieldData.dateEntered;
-
+                        editedRecord.enteredByUser = fieldData.enteredByUser;
 
                         // Save tags
                         if (fieldData.datumTags) {
@@ -1130,6 +1135,7 @@ define(
                         newRecord.timestamp = fieldData.timestamp;
                         newRecord.lastModifiedBy = fieldData.lastModifiedBy;
                         newRecord.dateEntered = fieldData.dateEntered;
+                        newRecord.enteredByUser = fieldData.enteredByUser;
 
                         // Save session
                         newRecord.session = $scope.fullCurrentSession;
