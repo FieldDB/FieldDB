@@ -108,6 +108,11 @@ body {
 
 .menubar a:hover {
 	color: #6D8CA0;
+	text-shadow: 0 0 10px #6D8CA0;
+}
+
+.active_menu_class a {
+	color: #6D8CA0 !important;
 }
 
 .menuTitle {
