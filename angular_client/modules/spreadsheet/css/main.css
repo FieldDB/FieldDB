@@ -34,6 +34,9 @@ body {
 	.mainBody {
 		top: 50px;
 	}
+	.mainBodySearching {
+		top: 125px;
+	}
 }
 
 @media only screen and (max-width : 1100px) {
@@ -51,6 +54,9 @@ body {
 	}
 	.mainBody {
 		top: 100px;
+	}
+	.mainBodySearching {
+		top: 175px;
 	}
 }
 
@@ -208,6 +214,12 @@ span ul {
 }
 
 .mainBody {
+	margin-bottom: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.mainBodySearching {
 	margin-bottom: 10px;
 	position: relative;
 	z-index: 1;

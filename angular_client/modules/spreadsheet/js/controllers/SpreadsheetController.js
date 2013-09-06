@@ -2093,6 +2093,14 @@ define(
           }
         };
 
+        $scope.mainBodyClass = function() {
+          if ($rootScope.activeSubMenu == 'searchMenu') {
+            return "mainBodySearching";
+          } else {
+            return "mainBody";
+          }
+        };
+
         window.onbeforeunload = function(e) {
           if ($scope.saved == "no") {
             return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
