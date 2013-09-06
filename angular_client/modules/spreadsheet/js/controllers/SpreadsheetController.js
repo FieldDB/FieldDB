@@ -1231,8 +1231,10 @@ define(
             if ($rootScope.newRecordHasBeenEdited != true) {
               $scope.selected = scopeIndex;
             } else {
-              $rootScope.notificationMessage = "Please Please click \'Create New\' before continuing.";
-              $rootScope.openNotification();
+              $scope.selected = scopeIndex + 1;
+              $scope.createRecord($scope.newFieldData);
+              // $rootScope.notificationMessage = "Please Please click \'Create New\' before continuing.";
+              // $rootScope.openNotification();
             }
           }
         };
