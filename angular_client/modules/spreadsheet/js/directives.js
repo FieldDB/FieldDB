@@ -80,7 +80,8 @@ define(
         function($rootScope) {
           return function(scope, element, attrs) {
             element.bind('keyup', function(e) {
-              if (e.keyCode != 40 && e.keyCode != 38) {
+              if (e.keyCode != 40 && e.keyCode != 38 && e.keyCode != 13 && e.keyCode != 39 && e.keyCode != 37 && e.keyCode != 9) {
+                console.log(e.keyCode);
                 $rootScope.markAsEdited(scope.fieldData, scope.datum);
               } else {
                 return;
@@ -92,7 +93,7 @@ define(
         function($rootScope) {
           return function(scope, element, attrs) {
             element.bind('keyup', function(e) {
-              if (e.keyCode != 40 && e.keyCode != 38 && e.keyCode != 13) {
+              if (e.keyCode != 40 && e.keyCode != 38 && e.keyCode != 13 && e.keyCode != 39 && e.keyCode != 37 && e.keyCode != 9) {
                 $rootScope.newRecordHasBeenEdited = true;
               } else {
                 return;
