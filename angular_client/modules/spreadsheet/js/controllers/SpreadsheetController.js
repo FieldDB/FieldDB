@@ -239,7 +239,7 @@ define(
         };
 
         // Set data size for pagination
-        $scope.resultSize = Preferences.resultSize;
+        $rootScope.resultSize = Preferences.resultSize;
 
         $scope.changeActiveSubMenu = function(subMenu) {
           if ($rootScope.activeSubMenu == subMenu) {
@@ -1671,7 +1671,7 @@ define(
 
         $scope.numberOfResultPages = function(numberOfRecords) {
           var numberOfPages = Math
-            .ceil(numberOfRecords / $scope.resultSize);
+            .ceil(numberOfRecords / $rootScope.resultSize);
           return numberOfPages;
         };
 
