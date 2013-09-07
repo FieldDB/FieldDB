@@ -43,15 +43,31 @@ define(
         function($rootScope) {
           return function(scope, element, attrs) {
             element.bind('keyup', function(e) {
-              console.log(scope.$index);
               scope.$apply(function() {
+                // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
+                var lastRecord = ((($rootScope.currentPage + 1) * scope.resultSize) - (scope.resultSize - (scope.$index + 1)));
                 if (e.keyCode === 40 && scope.$index == undefined) {
+                  // Select first record if arrowing down from new record
                   scope.selectRow(0);
-                } else if (e.keyCode === 40 && scope.$index < scope.data.length) {
-                  scope.selectRow(scope.$index + 1);
-                } else if (e.keyCode === 38 && scope.$index == 0) {
+                } else if (e.keyCode === 40 && lastRecord >= scope.data.length) {
+                  // Do not go past very last record
+                  return;
+                } else if (e.keyCode === 40) {
+                  if (scope.$index + 2 > scope.scopePreferences.resultSize) {
+                    // If the next record down is on another page, change to that page and select the first record
+                    $rootScope.currentPage = $rootScope.currentPage + 1;
+                    scope.selectRow(0);
+                  } else {
+                    scope.selectRow(scope.$index + 1);
+                  }
+                } else if (e.keyCode === 38 && $rootScope.currentPage == 0 && (scope.$index == 0 || scope.$index == undefined)) {
+                  // Select new entry if coming from most recent record
                   scope.selectRow('newEntry');
-                } else if (e.keyCode === 38 && scope.$index > 0) {
+                } else if (e.keyCode === 38 && scope.$index == 0) {
+                  // Go back one page and select last record
+                  $rootScope.currentPage = $rootScope.currentPage - 1;
+                  scope.selectRow(scope.scopePreferences.resultSize - 1);
+                } else if (e.keyCode === 38) {
                   scope.selectRow(scope.$index - 1);
                 } else {
                   return;
