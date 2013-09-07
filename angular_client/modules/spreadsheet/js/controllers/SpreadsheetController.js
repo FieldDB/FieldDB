@@ -1798,7 +1798,10 @@ define(
         };
 
         $scope.uploadFile = function(datum, file) {
-          // $rootScope.editsHaveBeenMade = true;
+          if (!datum || !datum.id) {
+            $rootScope.newRecordHasBeenEdited = true;
+          }
+
           $scope.processingAudio = true;
 
           var blobToBase64 = function(blob, cb) {
