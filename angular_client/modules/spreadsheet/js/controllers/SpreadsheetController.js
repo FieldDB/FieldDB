@@ -210,7 +210,7 @@ define(
         $rootScope.fields = Preferences[Preferences.userTemplate];
         $scope.scopePreferences = Preferences;
         $scope.orderProp = "dateEntered";
-        $scope.currentPage = 0;
+        $rootScope.currentPage = 0;
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
@@ -965,7 +965,7 @@ define(
           // $rootScope.editsHaveBeenMade = false;
           // Close notification modal in case user hits enter while editsHaveBeenMade modal is open (which would call this function)
           $rootScope.closeNotification();
-          // $scope.currentPage = 0;
+          // $rootScope.currentPage = 0;
 
           if (!datum.saved || datum.saved == "yes") {
             datum.saved = "no";
@@ -1011,7 +1011,7 @@ define(
           $scope.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
-          // $scope.currentPage = 0;
+          // $rootScope.currentPage = 0;
           // $rootScope.editsHaveBeenMade = true;
 
           var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
@@ -1685,15 +1685,15 @@ define(
         document.getElementById("hideOnLoad").style.visibility = "visible";
 
         $scope.testFunction = function() {
-          console.log($scope.currentPage);
+          console.log($rootScope.currentPage);
         };
 
         $scope.pageForward = function() {
-          $scope.currentPage = $scope.currentPage + 1;
+          $rootScope.currentPage = $rootScope.currentPage + 1;
         };
 
         $scope.pageBackward = function() {
-          $scope.currentPage = $scope.currentPage - 1;
+          $rootScope.currentPage = $rootScope.currentPage - 1;
         };
         // Audio recording
 
