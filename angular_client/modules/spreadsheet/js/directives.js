@@ -17,7 +17,7 @@ define(
         'selectDropdown1',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.template1[attrs.selectDropdown1].label) {
+            if (scope.field.label == scope.scopePreferences.compacttemplate[attrs.selectDropdown1].label) {
               element[0].selected = true;
             }
           };
@@ -26,7 +26,7 @@ define(
         'selectDropdown2',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.template2[attrs.selectDropdown2].label) {
+            if (scope.field.label == scope.scopePreferences.fulltemplate[attrs.selectDropdown2].label) {
               element[0].selected = true;
             }
           };
@@ -40,7 +40,7 @@ define(
         };
       }).directive(
         'arrowKey',
-        function() {
+        function($rootScope) {
           return function(scope, element, attrs) {
             element.bind('keydown', function(e) {
               if (e.keyCode === 40 && scope.$index == undefined) {
@@ -55,6 +55,18 @@ define(
                 return;
               }
               scope.$apply();
+            });
+          };
+        }).directive(
+        'keypressMarkAsEdited',
+        function($rootScope) {
+          return function(scope, element, attrs) {
+            element.bind('keydown', function(e) {
+              if (e.keyCode != 40 && e.keyCode != 38) {
+                $rootScope.editsHaveBeenMade = true;
+              } else {
+                return;
+              }
             });
           };
         }).directive(

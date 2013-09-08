@@ -16,6 +16,12 @@
 </head>
 <body id="app" ng-controller="SpreadsheetStyleDataEntryController"
 	ng-cloak>
+	<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady==true">
+		<div class="span4 offset4 pagination-centered">
+			<img src="img/loading-spinner.gif" width="75">
+		</div>
+	</div>
+
 	<div id="hideOnLoad">
 		<div class="largeMenuBar">
 			<div class="menubar mainMenubar" ng-cloak>
@@ -23,13 +29,10 @@
 					ng-click="navigateVerifySaved('home')"><img
 						src="img/icon40_dev.png" border="0" /></a>
 				</span> <span ng-hide="data==undefined"><a
-					href="#/spreadsheet/{{template}}"
 					ng-click="dataentry=true;navigateVerifySaved('none')">Data
 						Entry</a></span> <span ng-hide="dataentry==false"> <a
-					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('searchMenu');">Search</a>
 				</span> <span ng-show="dataentry==true"> <a
-					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('editSession')">Session</a>
 				</span> <span ng-show="authenticated==true">
 					<ul class="dropdown_nav">
@@ -46,17 +49,15 @@
 					</div>
 				</span> <span ng-hide="data==undefined"></span>
 				<span><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
-				<span
-					ng-hide="data==undefined || dataentry==false"><a
-					ng-click="navigateVerifySaved('reload');">↻</a></span> <span
+			  <span
 					class="rightMenuItems" ng-show="authenticated==true">
 					<div class="rightMenuItemsDiv">
-						<div>
-							Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
+						<div ng-hide="DB==undefined">
+							Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 						</div>
 						<div>
-							<button ng-class="savedStateButtonClass" ng-click="saveChanges();searching=false;" ng-show="dataentry==true">{{getSavedState()}}</button>
-							<button class="btn btn-warning" ng-click="reloadPage()">Log
+							<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
+							<button class="btn btn-warning" ng-click="logOut()">Log
 								out</button>
 						</div>
 					</div>
@@ -164,13 +165,10 @@
 					ng-click="navigateVerifySaved('home')"><img
 						src="img/icon40_dev.png" border="0" /></a>
 				</span> <span ng-hide="data==undefined"><a
-					href="#/spreadsheet/{{template}}"
 					ng-click="dataentry=true;navigateVerifySaved('none')">Data
 						Entry</a></span> <span ng-hide="dataentry==false"> <a
-					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('searchMenu');">Search</a>
 				</span> <span ng-show="dataentry==true"> <a
-					href="#/spreadsheet/{{template}}"
 					ng-click="navigateVerifySaved('editSession')">Session</a>
 				</span> <span ng-show="authenticated==true">
 					<ul class="dropdown_nav">
@@ -183,16 +181,14 @@
 					</ul>
 				</span>
 				<span><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
-				<span
-					ng-hide="data==undefined || dataentry==false"><a
-					ng-click="navigateVerifySaved('reload');">↻</a></span><br />
+				<br />
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
-					<div class="floatLeft smallMenuBarInfoItem">
-						Current Session: {{currentSessionName}}<br />{{DB.corpustitle}}
+					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
+						Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 					</div>
 					<div class="smallMenuBarInfoItem">
-						<button ng-class="savedStateButtonClass" ng-click="saveChanges();searching=false;" ng-show="dataentry==true">{{getSavedState()}}</button>
-						<button class="btn btn-warning" ng-click="reloadPage()">Log out</button>
+						<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
+						<button class="btn btn-warning" ng-click="logOut()">Log out</button>
 					</div>
 				</div>
 			</div>
@@ -310,16 +306,44 @@
 			</div>
 		</div>
 
+		<!-- Audio Warning Modal-->
+		<div modal="audioWarningShouldBeOpen" close="stopRecording(datumForAudio)" options="opts">
+        <div class="modal-header">
+            <h3>Recording Audio</h3>
+        </div>
+        <div class="modal-body">
+        		<b>Please make sure to click "Allow" above to begin recording audio.</b><br />
+            Once clicked, your audio will begin recording.<br /><br />
+            Please note that recording will stop automatically after five minutes.<br />
+            Time left: {{timeLeftForAudio}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger cancel" ng-click="stopRecording(datumForAudio)">Stop Recording</button>
+        </div>
+    </div>
 
-		<div class="mainBody" ng-click="changeActiveSubMenu('none');">
+    <!-- Generic Notification Modal-->
+		<div modal="notificationShouldBeOpen" close="closeNotification()" options="opts">
+        <div class="modal-header">
+            <h3>Notification</h3>
+        </div>
+        <div class="modal-body">
+        		{{notificationMessage}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary cancel" ng-click="closeNotification()">OK</button>
+        </div>
+    </div>
+
+		<div class="mainBody" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
 			<ng-view></ng-view>
 		</div>
-		<div ng-hide="clickSuccess==true" class="clearCacheMessage">If
-			you are having trouble viewing the page, you may need to empty your
-			browser's cache.</div>
-
 	</div>
 
+		<div class="loading_trouble_message" ng-hide="clickSuccess==true" class="clearCacheMessage">If
+			you are having trouble viewing the page, you may need to empty your
+			browser's cache.</div>
+			
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
