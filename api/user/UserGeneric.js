@@ -1,11 +1,11 @@
-var Hotkey = require("hotkey/HotKey");
-var Permission = require("permission/Permission");
-var UserPreference = require("user/UserPreference");
-var UserMask = require("user/UserMask");
+var Hotkey = require('hotkey/HotKey');
+var Permission = require('permission/Permission');
+var UserPreference = require('user/UserPreference');
+var UserMask = require('user/UserMask');
 
 /**
  * @lends UserGeneric.prototype
- * 
+ *
  * @class A generic user has a repository and permission groups
  *        (read, write, admin). It can not login.
  *
@@ -46,7 +46,7 @@ var UserGeneric = function() {
     publicSelf: UserMask
   };
 
-  this.addCorpusToUser = function(corpus){
+  this.addCorpusToUser = function(corpus) {
     this.corpuses.unshift(corpus);
   };
   this.save = function(user) {
@@ -54,18 +54,18 @@ var UserGeneric = function() {
   };
   this.getGravatar = function(optionalEmail) {
     var existingGravatar = this.gravatar;
-    if (existingGravatar.indexOf("gravatar.com") > -1) {
-      existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/", "");
+    if (existingGravatar.indexOf('gravatar.com') > -1) {
+      existingGravatar = existingGravatar.replace('https://secure.gravatar.com/avatar/', '');
       this.gravatar = existingGravatar;
       return existingGravatar;
     }
     if (optionalEmail) {
       var hash = CryptoJS.MD5(optionalEmail).toString();
-      this.set("gravatar", hash);
+      this.set('gravatar', hash);
       return hash;
     }
-    if (existingGravatar.indexOf("/") > -1) {
-      existingGravatar = existingGravatar.replace(/\//g, "").replace("userpublic_gravatar.png", "968b8e7fb72b5ffe2915256c28a9414c");
+    if (existingGravatar.indexOf('/') > -1) {
+      existingGravatar = existingGravatar.replace(/\//g, '').replace('userpublic_gravatar.png', '968b8e7fb72b5ffe2915256c28a9414c');
     }
     return existingGravatar;
   };
