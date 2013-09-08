@@ -47,9 +47,9 @@
 		"phantomjs": "*",
 		"nodeunit": "*"
 	},
-	"main": "./scripts/build_template_databases_using_fielddb.sh http://localhost:5984",
+	"main": "./scripts/build_template_databases_using_fielddb.sh",
 	"bin": {
-		"fielddb-auth": "./scripts/build_template_databases_using_fielddb.sh http://localhost:5984"
+		"fielddb": "./scripts/build_template_databases_using_fielddb.sh"
 	},
 	"engines": {
 		"node": "~0.8 || ~0.10"
