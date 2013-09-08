@@ -1,8 +1,3 @@
-var Hotkey = require('hotkey/HotKey');
-var Permission = require('permission/Permission');
-var UserPreference = require('user/UserPreference');
-var UserMask = require('user/UserMask');
-
 /**
  * @lends UserGeneric.prototype
  *
@@ -11,7 +6,13 @@ var UserMask = require('user/UserMask');
  *
  *
  * @description Contains basic functions to manipulate User json and schema,
- * can be used as a shared model between clients and servers
+ * can be used as a shared model between clients and servers.
+ * Uses dependancy injection for classes it depends on.
+ *
+ * @param {Hotkey} Hotkey               [description]
+ * @param {Permission} Permission       [description]
+ * @param {UserPreference} UserPreference [description]
+ * @param {UserMask} UserMask           [description]
  *
  * @property {String} username This is a username used when login.
  * @property {String} password This is a password used when login. It should be secure (containing 1 digit, 1 uppercase) because it is what protects the confidentiality of the corpus.
@@ -36,7 +37,7 @@ var UserMask = require('user/UserMask');
  * @extends Object
  *
  */
-var UserGeneric = function() {
+var UserGeneric = function(Hotkey, MD5, Permission, UserPreference, UserMask) {
 
   // Internal models: used by the parse function
   this.internalModels = {
@@ -60,7 +61,7 @@ var UserGeneric = function() {
       return existingGravatar;
     }
     if (optionalEmail) {
-      var hash = CryptoJS.MD5(optionalEmail).toString();
+      var hash = MD5(optionalEmail).toString();
       this.set('gravatar', hash);
       return hash;
     }
