@@ -1,8 +1,9 @@
 <div arrow-key
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
+	class="relativePosition"
 	ng-click="selectRow('newEntry')"
 	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true">
-	<div class="row relativePosition">
+	<div class="row">
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
 			<input focus glossmorpheme class="span5" type="text" ng-model="newFieldData.field1"
@@ -44,7 +45,7 @@
 			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true">
 				<div class="span3 offset1 expandedData">
 					<div class="expandedDataInner">
-					<button ng-class="recordingButtonClass" ng-click="startStopRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
+					<button ng-class="recordingButtonClass" ng-click="startRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 				</div>
 				</div>
 				<div class="span6 expandedData">
@@ -62,7 +63,7 @@
 
 </div>
 
-<div class="row" ng-show="activeSession==undefined && loading==false">
+<div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined">
 	<div class="span12 pagination-centered">
 		<h2>Please select a session before entering data.</h2>
 	</div>
@@ -89,19 +90,19 @@
 <div ng-show="selected==datum">
 			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span5">
-				<input glossmorpheme focus class="span5" 
+				<input glossmorpheme keypress-mark-as-edited focus class="span5" 
 					type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
 					ng-hide="fields.field1.label==''"
 					placeholder="{{fields.field1.title}}">
-				<input class="span5"
+				<input keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
 					ng-hide="fields.field2.label==''"
 					placeholder="{{fields.field2.title}}">
-				<input class="span5"
+				<input keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field3"
 					ng-init="fieldData.field3=datum[fields.field3.label]"
 					value={{datum[fields.field3.label]}}
@@ -109,28 +110,28 @@
 					placeholder="{{fields.field3.title}}">
 			</div>
 			<div class="span5">
-				<input class="span5 " type="text" ng-model="fieldData.field4"
+				<input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field4"
 					ng-init="fieldData.field4=datum[fields.field4.label]"
 					value={{datum[fields.field4.label]}}
 					ng-hide="fields.field4.label==''"
 					placeholder="{{fields.field4.title}}">
-				<input class="span5 " type="text" ng-model="fieldData.field6"
+				<input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6"
 					ng-init="fieldData.field6=datum[fields.field6.label]"
 					value={{datum[fields.field6.label]}}
 					ng-hide="fields.field6.label==''"
 					placeholder="{{fields.field6.title}}">
-				<input class="span5" type="text" ng-model="fieldData.datumTags"
+				<input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.datumTags"
 					ng-init='commaList(datum.datumTags)'
 					value={{commaList(datum.datumTags)}}
 					placeholder="{{commaList(datum.datumTags)}}"></textarea>
 			</div>
-			<div class="span3">
-				<button class="btn btn-primary" type="submit">Done</button>
+			<div class="span2">
+				<button class="btn btn-primary" type="submit" ng-disabled="editsHaveBeenMade==false">Done</button>
 				&nbsp;&nbsp;
-				<button class="btn btn-danger"
-					ng-click="deleteRecord(datum.id, datum.rev)">Delete</button><br />
+				<button class="btn btn-danger" type="button"
+					ng-click="deleteRecord(datum)">Delete</button><br />
 					 	<br />
-					 	<span title="Date modified">Last modified:<br />{{datum.dateModified
+					 	<span title="Date modified">Last modified<br />{{datum.dateModified
 					| standardDate}}
 			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
 					 	<div class="expandCollapseButton"><span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>&nbsp;&nbsp;&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()"></div>			    		
@@ -145,16 +146,14 @@
 					ng-click="deleteComment(comment, datum)"><font size="5">✗</font></span><i><b>{{comment.username}}</b></i>:
 					{{comment.text}}<br /> </span>
 					<br />
-					<span class="span4 add_button"
-					ng-click="addComment(datum);"><font size="4"><b>+<i>Add
-						a comment</i></b></font></span>
+					<button class="btn btn-primary" ng-click="addComment(datum);">Add Comment</button>
 			</div>
 		</div>
 		</div>
 		<div class="row" ng-show="expandCollapse==true">
 			<div class="span3 offset1 expandedData">
 				<div class="expandedDataInner">
-				<button ng-class="recordingButtonClass" ng-click="startStopRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>
+				<button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>
 				</div>
 			</div>
 			<div class="span7 expandedData">
@@ -175,7 +174,7 @@
 					<tr ng-repeat="attachment in datum.attachments">
 						<td>
 							<span class="form-horizontal">
-								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename)">ⓧ</a>
+								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename, attachment.description)">ⓧ</a>
 								<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
 							</span>
 						</td>
@@ -191,42 +190,43 @@
 					</tr>
 				</table>
 				<br />
-				<span ng-show="datum.attachments.length > 0 && (datum.id==undefined || dataRefreshed==false)"><font size="2">If you cannot play the audio, hit refresh (↻) on the LingSync toolbar to be able to listen to this audio. Note that it may take a few moments for new audio to be uploaded and accessible.</font></span>
+				<span ng-show="datum.attachments.length > 0 && (datum.id==undefined || dataRefreshed==false)"><font size="2">If you cannot play the audio, refresh the page to be able to listen to this audio. Note that it may take a few moments for new audio to be uploaded and accessible.</font></span>
 			</div>
 		</div>
 	</div>
 
 	<!-- Show when not editing -->
 	<div ng-show="selected!=datum">
-		<div class="span1">
+		<div class="span1 search_checkbox">
 			<input type="checkbox" value="{{datum.id}}"
 				ng-checked="datum.checked" ng-model="datum.checked"
 				ng-show="searching==true">
 		</div>
-		<div class="span5">
-			<span class="span5" title="{{fields.field1.title}}"
+		<div class="span4">
+			<span class="span4" title="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''">{{datum[fields.field1.label]
 				| neverEmpty}}</span><br /> 
-			<span class="span5"
+			<span class="span4"
 				title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">{{datum[fields.field2.label]
 				| neverEmpty}}</span><br />
-			<span class="span5"
+			<span class="span4"
 				title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">{{datum[fields.field3.label]
 				| neverEmpty}}</span><br />
 		</div>
-		<div class="span5">
-			<span class="span5" title="{{fields.field4.title}}"
+		<div class="span4">
+			<span class="span4" title="{{fields.field4.title}}"
 				ng-hide="fields.field4.label==''">{{datum[fields.field4.label]
 				| neverEmpty}}</span><br /> 
 			<!-- <span class="span5"
 				ng-repeat="comment in datum.comments"><i>{{comment.username}}</i>:
 				{{comment.text}}<br />
 			</span> -->
-			<span class="span5" title="{{fields.field6.title}}"
+			<span class="span4" title="{{fields.field6.title}}"
 				ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
-				| neverEmpty}}</span><br /> <span class="span2" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
+				| neverEmpty}}</span><br /> <span class="span4" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
 		</div>
 		<div class="span2">
+			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults(datum)">Edit</button><br /></span>
 			<span title="Date modified">Last modified:<br />{{datum.dateModified
 				| standardDate}}
 			</span> <br /><span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span> <br /> <span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
