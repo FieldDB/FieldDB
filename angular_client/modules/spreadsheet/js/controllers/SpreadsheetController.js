@@ -915,7 +915,7 @@ define(
             comment.text = fieldData.comments;
             comment.username = $rootScope.userInfo.name;
             comment.timestamp = Date.now();
-            comment.gravatar = "./../user/user_gravatar.png";
+            comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
             comment.timestampModified = Date.now();
             fieldData.comments = [];
             fieldData.comments.push(comment);
@@ -1001,7 +1001,7 @@ define(
           comment.text = newComment;
           comment.username = $rootScope.userInfo.name;
           comment.timestamp = Date.now();
-          comment.gravatar = "./../user/user_gravatar.png";
+          comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
           comment.timestampModified = Date.now();
           if (datum.comments == null) {
             datum.comments = [];
@@ -1019,15 +1019,15 @@ define(
           $scope.addActivity([{
             verb: "commented",
             verbicon: "icon-comment",
-            directobjecticon: "",
-            directobject: "'" + comment.text + "'",
+            directobjecticon: "icon-list",
+            directobject: comment.text,
             indirectobject: indirectObjectString,
             teamOrPersonal: "personal"
           }, {
             verb: "commented",
             verbicon: "icon-comment",
-            directobjecticon: "",
-            directobject: "'" + comment.text + "'",
+            directobjecticon: "icon-list",
+            directobject: comment.text,
             indirectobject: indirectObjectString,
             teamOrPersonal: "team"
           }]);
@@ -1405,8 +1405,11 @@ define(
                     template.indirectobject = bareActivityObject.indirectobject;
                     template.teamOrPersonal = bareActivityObject.teamOrPersonal;
                     template.user.username = $rootScope.userInfo.name;
+                    template.user.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
+                    template.user.id = $rootScope.userInfo.name;
+                    template.user._id = $rootScope.userInfo.name;
+                    template.dateModified = JSON.parse(JSON.stringify(new Date()));
                     template.timestamp = Date.now();
-                    template.user.authUrl = $rootScope.server[0];
 
                     $scope.activities.push(template);
                   });
@@ -1539,6 +1542,11 @@ define(
 
           Data.getallusers(dataToPost).then(function(users) {
             $scope.users = users;
+            for (i in users.allusers) {
+              if (users.allusers[i].username == $rootScope.userInfo.name) {
+                $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
+              }
+            }
           });
 
           // Get privileges for logged in user
