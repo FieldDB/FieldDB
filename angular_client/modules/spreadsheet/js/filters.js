@@ -16,21 +16,25 @@ define(["angular"], function(angular) {
     return function(input) {
       if (!input) {
         return "--";
-      } else if (input == "TODO") {
-        return input;
+      } else if (input == "2000-09-06T16:31:30.988Z") {
+        return "N/A";
       } else {
         var newDate = input.replace(/\"/g, "");
         var d = new Date(newDate);
         var t = new Date(newDate);
-        return d.toLocaleDateString() + " " + t.toLocaleTimeString();
+        var minutes = t.getMinutes();
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        return d.toLocaleDateString() + " " + t.getHours() + ":" + minutes;
       }
     };
   }).filter('shortDate', function() {
     return function(input) {
       if (!input) {
         return "--";
-      } else if (input == "TODO") {
-        return input;
+      } else if (input == "2000-09-06T16:31:30.988Z") {
+        return "N/A";
       } else {
         var newDate = input.replace(/\"/g, "");
         var d = new Date(newDate);
@@ -49,7 +53,7 @@ define(["angular"], function(angular) {
     return function(input) {
       if (input == "Tags") {
         return "--";
-      }else {
+      } else {
         return input;
       }
     }

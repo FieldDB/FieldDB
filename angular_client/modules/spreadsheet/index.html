@@ -28,13 +28,17 @@
 				<span class="menuTitle"><a
 					ng-click="navigateVerifySaved('home')"><img
 						src="img/icon40_dev.png" border="0" /></a>
-				</span> <span ng-hide="data==undefined"><a
+				</span>
+				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a
 					ng-click="dataentry=true;navigateVerifySaved('none')">Data
-						Entry</a></span> <span ng-hide="dataentry==false"> <a
+						Entry</a></span>
+				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a
 					ng-click="navigateVerifySaved('searchMenu');">Search</a>
-				</span> <span ng-show="dataentry==true"> <a
+				</span>
+				<span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}"> <a
 					ng-click="navigateVerifySaved('editSession')">Session</a>
-				</span> <span ng-show="authenticated==true">
+				</span>
+				<span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
 					<ul class="dropdown_nav">
 						<li><a>Settings</a>
 							<ul>
@@ -43,12 +47,8 @@
 									ng-click="navigateVerifySaved('settings');">User Interface</a></li>
 							</ul></li>
 					</ul>
-				</span> <span ng-hide="authenticated == true">
-					<div class="rightMenuItemsDiv">
-						<a href="#/register"><button class="btn btn-primary">Register</button></a>
-					</div>
-				</span> <span ng-hide="data==undefined"></span>
-				<span><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
+				</span>
+				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
 			  <span
 					class="rightMenuItems" ng-show="authenticated==true">
 					<div class="rightMenuItemsDiv">
@@ -62,6 +62,11 @@
 						</div>
 					</div>
 					<div class="clearDiv"></div>
+				</span>
+				<span ng-hide="authenticated == true">
+					<div class="rightMenuItemsDiv">
+						<a href="#/register"><button class="btn btn-primary">Register</button></a>
+					</div>
 				</span>
 			</div>
 			<div class="subMenubar" ng-show="activeSubMenu=='editSession'"
@@ -142,21 +147,19 @@
 			</div>
 
 			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
-				<form class="form-search">
-					<span>Search: <input type="text"
+				<form class="form-horizontal">
+					Search: <input type="text"
 						class="input-medium search-query" ng-model='searchTerm'>
 						<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
 						<button class="btn btn-primary" ng-click="selectAll();">Select
 							All</button>
 						<button class="btn btn-primary" href="#searchModal"
-							ng-click="exportResults();">Export</button></span>
-
+							ng-click="exportResults();">Export</button>
 					<button class="btn btn-warning"
 						ng-click="loadData();searchTerm='';searchHistory=null">Clear
-						Results</button>
+						Results</button>&nbsp;
 					<span>{{searchHistory}}</span>
 				</form>
-				</span>
 			</div>
 		</div>
 		<div class="smallMenuBar">
@@ -164,13 +167,17 @@
 				<span class="menuTitle"><a
 					ng-click="navigateVerifySaved('home')"><img
 						src="img/icon40_dev.png" border="0" /></a>
-				</span> <span ng-hide="data==undefined"><a
+				</span>
+				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a
 					ng-click="dataentry=true;navigateVerifySaved('none')">Data
-						Entry</a></span> <span ng-hide="dataentry==false"> <a
+						Entry</a></span>
+				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a
 					ng-click="navigateVerifySaved('searchMenu');">Search</a>
-				</span> <span ng-show="dataentry==true"> <a
+				</span>
+				<span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}"> <a
 					ng-click="navigateVerifySaved('editSession')">Session</a>
-				</span> <span ng-show="authenticated==true">
+				</span>
+				<span ng-show="authenticated==true"  ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
 					<ul class="dropdown_nav">
 						<li><a href="#">Settings</a>
 							<ul>
@@ -180,7 +187,7 @@
 							</ul></li>
 					</ul>
 				</span>
-				<span><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
+				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
 				<br />
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
 					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
@@ -335,7 +342,7 @@
         </div>
     </div>
 
-		<div class="mainBody" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
+		<div ng-class="mainBodyClass()" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
 			<ng-view></ng-view>
 		</div>
 	</div>
