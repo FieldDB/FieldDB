@@ -198,6 +198,11 @@
 						<button class="btn btn-warning" ng-click="logOut()">Log out</button>
 					</div>
 				</div>
+				<span ng-hide="authenticated == true">
+					<div>
+						<a href="#/register"><button class="btn btn-primary">Register</button></a>
+					</div>
+				</span>
 			</div>
 			<div class="subMenubar" ng-show="activeSubMenu=='editSession'"
 				ng-cloak>
