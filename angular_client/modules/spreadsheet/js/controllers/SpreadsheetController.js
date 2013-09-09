@@ -209,8 +209,8 @@ define(
         $rootScope.template = Preferences.userTemplate;
         $rootScope.fields = Preferences[Preferences.userTemplate];
         $scope.scopePreferences = Preferences;
-        $scope.orderProp = "dateModified";
-        $scope.currentPage = 0;
+        $scope.orderProp = "dateEntered";
+        $rootScope.currentPage = 0;
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
@@ -228,10 +228,9 @@ define(
         $scope.recordingStatus = "Record";
         $scope.recordingButtonClass = "btn btn-success";
         $scope.recordingIcon = "speaker_icon.png";
-        $scope.createNewButtonClass = "btn btn-primary";
         $scope.showAudioFeatures = false;
         $scope.newFieldData = {};
-        $rootScope.editsHaveBeenMade = false;
+        $rootScope.newRecordHasBeenEdited = false;
 
         $rootScope.serverLabels = {
           "mcgill": "McGill Prosody Lab",
@@ -240,7 +239,7 @@ define(
         };
 
         // Set data size for pagination
-        $scope.resultSize = Preferences.resultSize;
+        $rootScope.resultSize = Preferences.resultSize;
 
         $scope.changeActiveSubMenu = function(subMenu) {
           if ($rootScope.activeSubMenu == subMenu) {
@@ -259,8 +258,8 @@ define(
           } else if ($scope.saved == "saving") {
             $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
             $rootScope.openNotification();
-          } else if ($rootScope.editsHaveBeenMade == true) {
-            $rootScope.notificationMessage = "Please click 'Done' and then save your changes before continuing.";
+          } else if ($rootScope.newRecordHasBeenEdited == true) {
+            $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
             $rootScope.openNotification();
           } else {
 
@@ -272,6 +271,7 @@ define(
 
             $rootScope.loading = false;
 
+            $scope.activeMenu = itemToDisplay;
 
             switch (itemToDisplay) {
               case "settings":
@@ -336,6 +336,17 @@ define(
 
                     for (j in dataFromServer[i].value.datumFields) {
                       newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
+                    }
+
+                    // Update users to add a dateEntered to all datums (oversight in original code; needed so that datums are ordered properly)
+                    if (!dataFromServer[i].value.dateEntered || dataFromServer[i].value.dateEntered == "" || dataFromServer[i].value.dateEntered == "N/A") {
+                      newDatumFromServer.dateEntered = "2000-09-06T16:31:30.988Z";
+                      newDatumFromServer.saved = "no";
+                    } else {
+                      newDatumFromServer.dateEntered = dataFromServer[i].value.dateEntered;
+                    }
+                    if (dataFromServer[i].value.enteredByUser) {
+                      newDatumFromServer.enteredByUser = dataFromServer[i].value.enteredByUser;
                     }
                     if (dataFromServer[i].value.dateModified) {
                       newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
@@ -824,7 +835,7 @@ define(
             $rootScope.notificationMessage = "Please save changes before continuing.";
             $rootScope.openNotification();
             $scope.selected = datum;
-          } else if (datum.attachments[0]) {
+          } else if (datum.attachments && datum.attachments[0]) {
             $rootScope.notificationMessage = "You must delete all recordings from this record first.";
             $rootScope.openNotification();
             $scope.selected = datum;
@@ -843,6 +854,7 @@ define(
                       var index = $scope.data.indexOf(datum);
                       $scope.data.splice(index, 1);
                       $scope.saved = "yes";
+                      $scope.selected = null;
                     }, function(error) {
                       window
                         .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
@@ -854,10 +866,12 @@ define(
 
         $scope.createRecord = function(fieldData) {
 
-          // Reset new datum form data; only resent audio field if present
+          // // Reset new datum form data and enable upload button; only reset audio field if present
           if ($rootScope.template == "fulltemplate") {
             document.getElementById("form_new_datum_audio-file").reset();
+            $scope.newDatumHasAudioToUpload = false;
           }
+          $rootScope.newRecordHasBeenEdited = false;
           $scope.newFieldData = {};
 
           // Set dataRefreshed to false to show user notifications for data that
@@ -901,13 +915,15 @@ define(
             comment.text = fieldData.comments;
             comment.username = $rootScope.userInfo.name;
             comment.timestamp = Date.now();
-            comment.gravatar = "./../user/user_gravatar.png";
+            comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
             comment.timestampModified = Date.now();
             fieldData.comments = [];
             fieldData.comments.push(comment);
           }
 
           fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
+          fieldData.enteredByUser = $rootScope.userInfo.name;
+          fieldData.timestamp = Date.now();
           fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
           fieldData.lastModifiedBy = $rootScope.userInfo.name;
           fieldData.sessionID = $scope.activeSession;
@@ -917,11 +933,10 @@ define(
           }
           $scope.data.push(fieldData);
           $scope.newFieldDatahasAudio = false;
-          $scope.createNewButtonClass = "btn btn-primary";
           $scope.saved = "no";
         };
 
-        $scope.markAsEdited = function(fieldData, datum) {
+        $rootScope.markAsEdited = function(fieldData, datum) {
           var utterance = "Datum";
           for (key in fieldData) {
             if (key == "datumTags" && typeof fieldData.datumTags === 'string') {
@@ -943,32 +958,38 @@ define(
               utterance = fieldData[key].value;
             }
           }
-          datum.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.saved = "no";
-          $scope.selected = null;
-          $rootScope.editsHaveBeenMade = false;
+          // $scope.selected = null;
+          // $rootScope.editsHaveBeenMade = false;
           // Close notification modal in case user hits enter while editsHaveBeenMade modal is open (which would call this function)
           $rootScope.closeNotification();
-          $scope.currentPage = 0;
-          // Update activity feed
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
-          $scope.addActivity([{
-            verb: "updated",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "personal"
-          }, {
-            verb: "updated",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
-          }]);
+          // $rootScope.currentPage = 0;
+
+          if (!datum.saved || datum.saved == "yes") {
+            datum.saved = "no";
+            // Update activity feed
+            console.log("ACTIVITY");
+            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            $scope.addActivity([{
+              verb: "updated",
+              verbicon: "icon-pencil",
+              directobjecticon: "icon-list",
+              directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "personal"
+            }, {
+              verb: "updated",
+              verbicon: "icon-pencil",
+              directobjecticon: "icon-list",
+              directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "team"
+            }]);
+          } else {
+            datum.saved = "no";
+          }
         };
 
         $rootScope.addComment = function(datum) {
@@ -980,32 +1001,33 @@ define(
           comment.text = newComment;
           comment.username = $rootScope.userInfo.name;
           comment.timestamp = Date.now();
-          comment.gravatar = "./../user/user_gravatar.png";
+          comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
           comment.timestampModified = Date.now();
           if (datum.comments == null) {
             datum.comments = [];
           }
           datum.comments.push(comment);
           datum.saved = "no";
+          $scope.saved = "no";
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
-          $scope.currentPage = 0;
-          $rootScope.editsHaveBeenMade = true;
+          // $rootScope.currentPage = 0;
+          // $rootScope.editsHaveBeenMade = true;
 
           var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
           // Update activity feed
           $scope.addActivity([{
             verb: "commented",
             verbicon: "icon-comment",
-            directobjecticon: "",
-            directobject: "'" + comment.text + "'",
+            directobjecticon: "icon-list",
+            directobject: comment.text,
             indirectobject: indirectObjectString,
             teamOrPersonal: "personal"
           }, {
             verb: "commented",
             verbicon: "icon-comment",
-            directobjecticon: "",
-            directobject: "'" + comment.text + "'",
+            directobjecticon: "icon-list",
+            directobject: comment.text,
             indirectobject: indirectObjectString,
             teamOrPersonal: "team"
           }]);
@@ -1054,9 +1076,12 @@ define(
                             }
                           }
                         }
-                        editedRecord.dateModified = JSON.parse(JSON
-                          .stringify(new Date()));
-                        editedRecord.lastModifiedBy = $rootScope.userInfo.name;
+
+                        // Save date info
+                        editedRecord.dateModified = fieldData.dateModified;
+                        editedRecord.lastModifiedBy = fieldData.lastModifiedBy;
+                        editedRecord.dateEntered = fieldData.dateEntered;
+                        editedRecord.enteredByUser = fieldData.enteredByUser;
 
                         // Save tags
                         if (fieldData.datumTags) {
@@ -1090,6 +1115,7 @@ define(
                   console.log("Saving new record.");
 
                   var fieldData = $scope.data[index];
+                  console.log(fieldData);
                   Data
                     .blankDatumTemplate()
                     .then(
@@ -1103,9 +1129,13 @@ define(
                             }
                           }
                         }
-                        newRecord.dateModified = JSON.parse(JSON
-                          .stringify(new Date()));
-                        newRecord.lastModifiedBy = $rootScope.userInfo.name;
+
+                        // Save date info
+                        newRecord.dateModified = fieldData.dateModified;
+                        newRecord.timestamp = fieldData.timestamp;
+                        newRecord.lastModifiedBy = fieldData.lastModifiedBy;
+                        newRecord.dateEntered = fieldData.dateEntered;
+                        newRecord.enteredByUser = fieldData.enteredByUser;
 
                         // Save session
                         newRecord.session = $scope.fullCurrentSession;
@@ -1199,23 +1229,25 @@ define(
             }
           }, 300000);
 
-        $scope.selectRow = function(datum) {
+        $scope.selectRow = function(scopeIndex) {
           // Do nothing if clicked row is currently selected
-          if ($scope.selected == datum) {
+          if ($scope.selected == scopeIndex) {
             return;
           }
           if ($scope.searching != true) {
-            if ($rootScope.editsHaveBeenMade != true) {
-              $scope.selected = datum;
+            if ($rootScope.newRecordHasBeenEdited != true) {
+              $scope.selected = scopeIndex;
             } else {
-              $rootScope.notificationMessage = "You must hit enter or click 'Done' to queue your changes before continuing.";
-              $rootScope.openNotification();
+              $scope.selected = scopeIndex + 1;
+              $scope.createRecord($scope.newFieldData);
+              // $rootScope.notificationMessage = "Please Please click \'Create New\' before continuing.";
+              // $rootScope.openNotification();
             }
           }
         };
 
-        $scope.editSearchResults = function(datum) {
-          $scope.selected = datum;
+        $scope.editSearchResults = function(scopeIndex) {
+          $scope.selected = scopeIndex;
         };
 
         $scope.runSearch = function(searchTerm) {
@@ -1373,8 +1405,11 @@ define(
                     template.indirectobject = bareActivityObject.indirectobject;
                     template.teamOrPersonal = bareActivityObject.teamOrPersonal;
                     template.user.username = $rootScope.userInfo.name;
+                    template.user.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
+                    template.user.id = $rootScope.userInfo.name;
+                    template.user._id = $rootScope.userInfo.name;
+                    template.dateModified = JSON.parse(JSON.stringify(new Date()));
                     template.timestamp = Date.now();
-                    template.user.authUrl = $rootScope.server[0];
 
                     $scope.activities.push(template);
                   });
@@ -1507,6 +1542,11 @@ define(
 
           Data.getallusers(dataToPost).then(function(users) {
             $scope.users = users;
+            for (i in users.allusers) {
+              if (users.allusers[i].username == $rootScope.userInfo.name) {
+                $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
+              }
+            }
           });
 
           // Get privileges for logged in user
@@ -1639,7 +1679,7 @@ define(
 
         $scope.numberOfResultPages = function(numberOfRecords) {
           var numberOfPages = Math
-            .ceil(numberOfRecords / $scope.resultSize);
+            .ceil(numberOfRecords / $rootScope.resultSize);
           return numberOfPages;
         };
 
@@ -1653,15 +1693,15 @@ define(
         document.getElementById("hideOnLoad").style.visibility = "visible";
 
         $scope.testFunction = function() {
-          console.log($scope.currentPage);
+          console.log($rootScope.currentPage);
         };
 
         $scope.pageForward = function() {
-          $scope.currentPage = $scope.currentPage + 1;
+          $rootScope.currentPage = $rootScope.currentPage + 1;
         };
 
         $scope.pageBackward = function() {
-          $scope.currentPage = $scope.currentPage - 1;
+          $rootScope.currentPage = $rootScope.currentPage - 1;
         };
         // Audio recording
 
@@ -1766,6 +1806,9 @@ define(
         };
 
         $scope.uploadFile = function(datum, file) {
+          if (!datum || !datum.id) {
+            $rootScope.newRecordHasBeenEdited = true;
+          }
 
           $scope.processingAudio = true;
 
@@ -1780,24 +1823,23 @@ define(
           };
 
           var base64File;
-          var filePrefix;
-          // Test to see if this is a new file
+          var inputBoxPrefix;
+          // Test to see if this is a new datum
           if (!datum || !datum.id) {
-            filePrefix = "new_datum";
+            inputBoxPrefix = "new_datum";
           } else {
-            filePrefix = datum.id;
+            inputBoxPrefix = datum.id;
           }
 
           // Create attachments
 
           var newAttachments = {};
 
-          // If a new file, set up attachments structure, to be saved later
+          // // If a new file, set up attachments structure, to be saved later
           if (!datum || !datum.id) {
             if (!datum) {
               datum = {};
             }
-
             datum._attachments = {};
             datum.attachments = [];
             datum.attachmentInfo = {};
@@ -1807,21 +1849,27 @@ define(
           if (file) {
             numberOfFiles = 1;
           } else {
-            numberOfFiles = document.getElementById(filePrefix + "_audio-file").files.length;
+            numberOfFiles = document.getElementById(inputBoxPrefix + "_audio-file").files.length;
+            // Disable upload button after uploading file(s) once in new datum; cannot reset file input in non-async task
+            if (!datum || !datum.id) {
+              $scope.newDatumHasAudioToUpload = true;
+            }
           }
 
           // Check to see if user has clicked on upload without recording or uploading files
           if (numberOfFiles == 0 || numberOfFiles == null) {
+            // $rootScope.editsHaveBeenMade = false;
+            $scope.processingAudio = false;
+            $scope.newDatumHasAudioToUpload = false;
+            document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
             $rootScope.notificationMessage = "Please record or select audio to upload.";
             $rootScope.openNotification();
-            $scope.processingAudio = false;
             return;
           }
 
           for (var i = 0; i < numberOfFiles; i++) {
             (function(index) {
-
-              blobToBase64(file || document.getElementById(filePrefix + "_audio-file").files[index], function(x) {
+              blobToBase64(file || document.getElementById(inputBoxPrefix + "_audio-file").files[index], function(x) {
                 base64File = x;
                 var filename;
                 var description;
@@ -1831,7 +1879,7 @@ define(
                   content_type = "audio\/wav";
                   description = "Add a description";
                 } else {
-                  // Test to see if this is a new file
+                  // Test to see if this is a new datum
                   if (!datum || !datum.id) {
                     var fileExt = document.getElementById("new_datum_audio-file").files[index].type.split("\/").pop();
                   } else {
@@ -1844,7 +1892,7 @@ define(
                   }
                   filename = Date.now() + "" + index + "." + fileExt; // appending index in case of super-rapid processing on multi-file upload, to avoid duplicate filenames
                   content_type = "audio\/" + fileExt;
-                  description = document.getElementById(filePrefix + "_audio-file").files[index].name;
+                  description = document.getElementById(inputBoxPrefix + "_audio-file").files[index].name;
                 }
 
                 var newAttachment = {};
@@ -1862,11 +1910,13 @@ define(
                     "description": newAttachments[filename].description
                   };
 
-                  datum._attachments[filename] = newAttachments[filename];
-                  datum.attachments.push(newScopeAttachment);
-                  datum.attachmentInfo[filename] = {
-                    "description": newAttachments[filename].description
-                  };
+                  $scope.$apply(function() {
+                    datum._attachments[filename] = newAttachments[filename];
+                    datum.attachments.push(newScopeAttachment);
+                    datum.attachmentInfo[filename] = {
+                      "description": newAttachments[filename].description
+                    };
+                  });
                 }
               });
             })(i);
@@ -1878,16 +1928,13 @@ define(
             // Force digest after recording audio
             if (file) {
               $scope.$apply(function() {
-                $scope.createNewButtonClass = "btn btn-success";
                 $scope.newFieldDatahasAudio = true;
                 $scope.processingAudio = false;
               });
             } else {
-              $scope.createNewButtonClass = "btn btn-success";
               $scope.newFieldDatahasAudio = true;
               $scope.processingAudio = false;
             }
-
             return;
           }
 
@@ -1927,8 +1974,8 @@ define(
                 datum.attachments.push(newScopeAttachment);
               }
 
-              // Reset file input field
-              document.getElementById("form_" + filePrefix + "_audio-file").reset();
+              // // Reset file input field
+              document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
 
               datum.hasAudio = true;
               $scope.processingAudio = false;
@@ -2055,6 +2102,22 @@ define(
             }
           }
         });
+
+        $scope.newRecordHasBeenEditedButtonClass = function() {
+          if ($rootScope.newRecordHasBeenEdited == true) {
+            return "btn btn-danger";
+          } else {
+            return "btn btn-primary";
+          }
+        };
+
+        $scope.mainBodyClass = function() {
+          if ($rootScope.activeSubMenu == 'searchMenu') {
+            return "mainBodySearching";
+          } else {
+            return "mainBody";
+          }
+        };
 
         window.onbeforeunload = function(e) {
           if ($scope.saved == "no") {
