@@ -86,15 +86,20 @@
 					<button class="btn btn-primary"
 						ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
 						Session</button>
-					&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;
+					<span ng-hide="activeSession==undefined">
 					<button class="btn"
-						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails"
-						ng-hide="activeSession==undefined">Edit Session Info</button>
-					&nbsp;&nbsp;&nbsp;
+						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false">Edit Session Info</button>
+					&nbsp;&nbsp;
+				</span>
+					<span ng-show="(data | filter: activeSession).length==0">
 					<button class="btn btn-danger"
-						ng-click="deleteEmptySession(activeSession)"
-						ng-show="(data | filter: activeSession).length==0">Delete
+						ng-click="deleteEmptySession(activeSession)">Delete
 						Session</button>
+						&nbsp;&nbsp;
+					</span>
+					<button class="btn btn-primary"
+						ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false">Create New Session</button>
 				</div>
 				<div class="subSubMenubar"
 					ng-show="editSessionDetails==true && activeSession!=undefined"
@@ -142,6 +147,48 @@
 							Changes</button>
 						&nbsp;
 						<button class="btn" ng-click="editSessionDetails=false">Cancel</button>
+					</div>
+				</div>
+
+			<div class="subSubMenubar"
+					ng-show="createNewSessionDropdown==true"
+					ng-cloak>
+					<form ng-model='newSessionInfo'>
+						<table cellpadding="5px">
+							<tr>
+								<td>Title:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.goal"
+									placeholder="Title"></td>
+								<td>Consultants:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.consultants"
+									placeholder="Consultants"></td>
+								<td>User:</td>
+								<td><input disabled class="span3" type="text"
+									ng-model="newSessionInfo.user"
+									placeholder="{{userInfo.name}}"></td>
+							</tr>
+							<tr>
+								<td>Language:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.language"
+									placeholder="Language"></td>
+								<td>Dialect:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.dialect"
+									placeholder="Dialect"></td>
+								<td>Date Elicited</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.dateElicited"
+									placeholder="Date Elicited"></td>
+							</tr>
+						</table>
+					</form>
+					<div>
+						<button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">Create Session</button>
+						&nbsp;
+						<button class="btn" ng-click="createNewSessionDropdown=false">Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -215,17 +262,22 @@
 						{{session.title}} ({{(data | filter: session._id).length}})</option>
 				</select>
 				<button class="btn btn-primary"
-					ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
-					Session</button>
-				&nbsp;&nbsp;&nbsp;
-				<button class="btn"
-					ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails"
-					ng-hide="activeSession==undefined">Edit Session Info</button>
-				&nbsp;&nbsp;&nbsp;
-				<button class="btn btn-danger"
-					ng-click="deleteEmptySession(activeSession)"
-					ng-show="(data | filter: activeSession).length==0">Delete
-					Session</button>
+						ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
+						Session</button>
+					&nbsp;&nbsp;
+					<span ng-hide="activeSession==undefined">
+					<button class="btn"
+						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false">Edit Session Info</button>
+					&nbsp;&nbsp;
+				</span>
+					<span ng-show="(data | filter: activeSession).length==0">
+					<button class="btn btn-danger"
+						ng-click="deleteEmptySession(activeSession)">Delete
+						Session</button>
+						&nbsp;&nbsp;
+					</span>
+					<button class="btn btn-primary"
+						ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false">Create New Session</button>
 				<div class="subSubMenubar"
 					ng-show="editSessionDetails==true && activeSession!=undefined"
 					ng-cloak>
@@ -272,6 +324,47 @@
 							Changes</button>
 						&nbsp;
 						<button class="btn" ng-click="editSessionDetails=false">Cancel</button>
+					</div>
+				</div>
+				<div class="subSubMenubar"
+					ng-show="createNewSessionDropdown==true"
+					ng-cloak>
+					<form ng-model='newSessionInfo'>
+						<table cellpadding="5px">
+							<tr>
+								<td>Title:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.goal"
+									placeholder="Title"></td>
+								<td>Consultants:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.consultants"
+									placeholder="Consultants"></td>
+								<td>User:</td>
+								<td><input disabled class="span3" type="text"
+									ng-model="newSessionInfo.user"
+									placeholder="{{userInfo.name}}"></td>
+							</tr>
+							<tr>
+								<td>Language:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.language"
+									placeholder="Language"></td>
+								<td>Dialect:</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.dialect"
+									placeholder="Dialect"></td>
+								<td>Date Elicited</td>
+								<td><input class="span3" type="text"
+									ng-model="newSessionInfo.dateElicited"
+									placeholder="Date Elicited"></td>
+							</tr>
+						</table>
+					</form>
+					<div>
+						<button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">Create Session</button>
+						&nbsp;
+						<button class="btn" ng-click="createNewSessionDropdown=false">Cancel</button>
 					</div>
 				</div>
 			</div>

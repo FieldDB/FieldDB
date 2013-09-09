@@ -222,6 +222,7 @@ define(
         $scope.currentSessionName = "All Sessions";
         $scope.showCreateSessionDiv = false;
         $scope.editSessionDetails = false;
+        $scope.createNewSessionDropdown = false;
         $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
         $scope.activities = [];
         $rootScope.DBselected = false;
