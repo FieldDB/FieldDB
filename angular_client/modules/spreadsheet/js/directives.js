@@ -45,7 +45,7 @@ define(
             element.bind('keyup', function(e) {
               scope.$apply(function() {
                 // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
-                var lastRecord = ((($rootScope.currentPage + 1) * scope.resultSize) - (scope.resultSize - (scope.$index + 1)));
+                var lastRecord = ((($rootScope.currentPage + 1) * scope.resultSize) - (scope.resultSize - (scope.$index + 1)) + 1);
                 if (e.keyCode === 40 && scope.$index == undefined) {
                   // Select first record if arrowing down from new record
                   scope.selectRow(0);
@@ -118,6 +118,11 @@ define(
         function() {
           return function(scope, element) {
             element.bind('keyup', function(e) {
+              // Ignore arrows
+              var keycodesToIgnore = [40, 38, 39, 37];
+              if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+                return;
+              }
               var newUtterance = this.value;
               var morphemeGuess = Glosser.morphemefinder(
                 newUtterance, scope.DB.pouchname);
@@ -156,8 +161,6 @@ define(
                   }
                 }
               }
-
-
             });
           }
         });
