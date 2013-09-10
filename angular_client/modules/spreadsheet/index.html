@@ -104,41 +104,35 @@
 				<div class="subSubMenubar"
 					ng-show="editSessionDetails==true && activeSession!=undefined"
 					ng-cloak>
-					<form ng-model='editedSessionInfo'>
+					<form ng-model='editSessionInfo'>
 						<table cellpadding="5px">
 							<tr>
 								<td>Title:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.goal"
-									value={{fullCurrentSessionToEdit.goal}}
-									placeholder="{{fullCurrentSessionToEdit.goal}}"></td>
+									placeholder="Title"></td>
 								<td>Consultants:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.consultants"
-									value={{fullCurrentSessionToEdit.consultants}}
-									placeholder="{{fullCurrentSessionToEdit.consultants}}"></td>
+									placeholder="Consultants"></td>
 								<td>User:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.user"
-									value={{fullCurrentSessionToEdit.user}}
-									placeholder="{{fullCurrentSessionToEdit.user}}"></td>
+									placeholder="{{editSessionInfo.user}}" disabled></td>
 							</tr>
 							<tr>
 								<td>Language:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.language"
-									value={{fullCurrentSessionToEdit.language}}
-									placeholder="{{fullCurrentSessionToEdit.language}}"></td>
+									placeholder="Language"></td>
 								<td>Dialect:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.dialect"
-									value={{fullCurrentSessionToEdit.dialect}}
-									placeholder="{{fullCurrentSessionToEdit.dialect}}"></td>
+									placeholder="Dialect"></td>
 								<td>Date Elicited</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.dateElicited"
-									value={{fullCurrentSessionToEdit.dateElicited}}
-									placeholder="{{fullCurrentSessionToEdit.dateElicited}}"></td>
+									placeholder="Date Elicited"></td>
 							</tr>
 						</table>
 					</form>
@@ -281,41 +275,35 @@
 				<div class="subSubMenubar"
 					ng-show="editSessionDetails==true && activeSession!=undefined"
 					ng-cloak>
-					<form ng-model='editedSessionInfo'>
+					<form ng-model='editSessionInfo'>
 						<table cellpadding="5px">
 							<tr>
 								<td>Title:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.goal"
-									value={{fullCurrentSessionToEdit.goal}}
-									placeholder="{{fullCurrentSessionToEdit.goal}}"></td>
+									placeholder="Title"></td>
 								<td>Consultants:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.consultants"
-									value={{fullCurrentSessionToEdit.consultants}}
-									placeholder="{{fullCurrentSessionToEdit.consultants}}"></td>
+									placeholder="Consultants"></td>
 								<td>User:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.user"
-									value={{fullCurrentSessionToEdit.user}}
-									placeholder="{{fullCurrentSessionToEdit.user}}"></td>
+									placeholder="{{editSessionInfo.user}}" disabled></td>
 							</tr>
 							<tr>
 								<td>Language:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.language"
-									value={{fullCurrentSessionToEdit.language}}
-									placeholder="{{fullCurrentSessionToEdit.language}}"></td>
+									placeholder="Language"></td>
 								<td>Dialect:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.dialect"
-									value={{fullCurrentSessionToEdit.dialect}}
-									placeholder="{{fullCurrentSessionToEdit.dialect}}"></td>
+									placeholder="Dialect"></td>
 								<td>Date Elicited</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.dateElicited"
-									value={{fullCurrentSessionToEdit.dateElicited}}
-									placeholder="{{fullCurrentSessionToEdit.dateElicited}}"></td>
+									placeholder="Date Elicited"></td>
 							</tr>
 						</table>
 					</form>
