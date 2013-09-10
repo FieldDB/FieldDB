@@ -404,7 +404,7 @@ define(
                       $scope.sessions = scopeSessions;
                       // Load session; saved state must have access to scope sessions before calling function
                       if (sessionID) {
-                        $scope.changeActiveSession(sessionID);
+                        $scope.selectSession(sessionID);
                       }
                       $scope.documentReady = true;
                     }, function(error) {
@@ -810,7 +810,7 @@ define(
                       }
                       $scope.sessions.push(newSessionRecord);
                       $scope.dataentry = true;
-                      $scope.changeActiveSession(savedRecord.data.id);
+                      $scope.selectSession(savedRecord.data.id);
                       window.location.assign("#/spreadsheet/" + $rootScope.template);
                     });
                 $rootScope.loading = false;
