@@ -1042,6 +1042,11 @@ define(
         };
 
         $scope.deleteComment = function(comment, datum) {
+          if ($rootScope.readOnly == true) {
+            $rootScope.notificationMessage = "You do not have permission to delete comments.";
+            $rootScope.openNotification();
+            return;
+          }
           if (comment.username != $rootScope.userInfo.name) {
             $rootScope.notificationMessage = "You may only delete comments created by you.";
             $rootScope.openNotification();
@@ -1547,24 +1552,50 @@ define(
           }
 
           Data.getallusers(dataToPost).then(function(users) {
-            $scope.users = users;
             for (i in users.allusers) {
               if (users.allusers[i].username == $rootScope.userInfo.name) {
                 $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
               }
             }
-          });
 
-          // Get privileges for logged in user
-          Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
-            .then(
-              function(response) {
-                if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
-                  $rootScope.admin = true;
-                } else {
-                  $rootScope.admin = false;
-                }
-              });
+            $scope.users = users;
+            console.log(users);
+
+            // Get privileges for logged in user
+            Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
+              .then(
+                function(response) {
+                  if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
+                    // Admin
+                    $rootScope.admin = true;
+                    $rootScope.readOnly = false;
+                    $rootScope.writeOnly = false;
+                  } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
+                    response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+                    // Read-write
+                    $rootScope.admin = false;
+                    $rootScope.readOnly = false;
+                    $rootScope.writeOnly = false;
+                  } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
+                    response.roles.indexOf($rootScope.DB.pouchname + "_writer") == -1) {
+                    // Read-only
+                    $rootScope.admin = false;
+                    $rootScope.readOnly = true;
+                    $rootScope.writeOnly = false;
+                  } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") == -1 &&
+                    response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+                    // Write-only
+                    $rootScope.admin = false;
+                    $rootScope.readOnly = false;
+                    $rootScope.writeOnly = true;
+                  } else {
+                    // TODO Commenter
+                    $rootScope.admin = false;
+                    $rootScope.readOnly = false;
+                    $rootScope.writeOnly = false;
+                  }
+                });
+          });
         };
 
         $scope.updateUserRoles = function(newUserRoles) {
@@ -1582,25 +1613,27 @@ define(
 
           $rootScope.loading = true;
 
-          if (newUserRoles.role == "admin") {
-            newUserRoles.admin = true;
-            newUserRoles.reader = true;
-            newUserRoles.writer = true;
-          }
-          if (newUserRoles.role == "read_write") {
-            newUserRoles.admin = false;
-            newUserRoles.reader = true;
-            newUserRoles.writer = true;
-          }
-          if (newUserRoles.role == "read_only") {
-            newUserRoles.admin = false;
-            newUserRoles.reader = true;
-            newUserRoles.writer = false;
-          }
-          if (newUserRoles.role == "write_only") {
-            newUserRoles.admin = false;
-            newUserRoles.reader = false;
-            newUserRoles.writer = true;
+          switch (newUserRoles.role) {
+            case "admin":
+              newUserRoles.admin = true;
+              newUserRoles.reader = true;
+              newUserRoles.writer = true;
+              break;
+            case "read_write":
+              newUserRoles.admin = false;
+              newUserRoles.reader = true;
+              newUserRoles.writer = true;
+              break;
+            case "read_only":
+              newUserRoles.admin = false;
+              newUserRoles.reader = true;
+              newUserRoles.writer = false;
+              break;
+            case "write_only":
+              newUserRoles.admin = false;
+              newUserRoles.reader = false;
+              newUserRoles.writer = true;
+              break;
           }
 
           newUserRoles.pouchname = $rootScope.DB.pouchname;
@@ -2001,6 +2034,11 @@ define(
         };
 
         $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
+          if ($rootScope.readOnly == true) {
+            $rootScope.notificationMessage = "You do not have permission to delete attachments.";
+            $rootScope.openNotification();
+            return;
+          }
           var r = confirm("Are you sure you want to delete the file " + description + " (" + filename + ")?");
           if (r == true) {
             var record = datum.id + "/" + filename;

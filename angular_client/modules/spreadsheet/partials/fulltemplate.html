@@ -2,7 +2,7 @@
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	class="relativePosition"
 	ng-click="selectRow('newEntry')"
-	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || currentPage!=0">
+	ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || readOnly == true || currentPage!=0">
 	<div class="row">
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
@@ -68,9 +68,15 @@
 			</div>
 </div>
 
-<div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined">
+<div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined && readOnly!=true">
 	<div class="span12 pagination-centered">
 		<h2>Please select a session before entering data.</h2>
+	</div>
+</div>
+
+<div class="row" ng-show="loading==false && readOnly==true" ng-click="selected=null">
+	<div class="span12 pagination-centered">
+		<h3>You have read-only access to this corpus.</h3>
 	</div>
 </div>
 
@@ -89,7 +95,7 @@
 <div arrow-key class="row relativePosition"
 	ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}"
 	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentPage*resultSize | limitTo:resultSize"
-	ng-click="selectRow($index)" ng-hide="loading==true">
+	ng-click="selectRow($index)" ng-hide="loading==true || writeOnly==true">
 
 	<!-- Show when editing -->
 	<div ng-show="selected==$index">
@@ -100,35 +106,41 @@
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
 					ng-hide="fields.field1.label==''"
-					placeholder="{{fields.field1.title}}">
+					placeholder="{{fields.field1.title}}"
+					ng-disabled="readOnly==true">
 				<input keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
 					ng-hide="fields.field2.label==''"
-					placeholder="{{fields.field2.title}}">
+					placeholder="{{fields.field2.title}}"
+					ng-disabled="readOnly==true">
 				<input keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field3"
 					ng-init="fieldData.field3=datum[fields.field3.label]"
 					value={{datum[fields.field3.label]}}
 					ng-hide="fields.field3.label==''"
-					placeholder="{{fields.field3.title}}">
+					placeholder="{{fields.field3.title}}"
+					ng-disabled="readOnly==true">
 			</div>
 			<div class="span5">
 				<input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field4"
 					ng-init="fieldData.field4=datum[fields.field4.label]"
 					value={{datum[fields.field4.label]}}
 					ng-hide="fields.field4.label==''"
-					placeholder="{{fields.field4.title}}">
+					placeholder="{{fields.field4.title}}"
+					ng-disabled="readOnly==true">
 				<input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6"
 					ng-init="fieldData.field6=datum[fields.field6.label]"
 					value={{datum[fields.field6.label]}}
 					ng-hide="fields.field6.label==''"
-					placeholder="{{fields.field6.title}}">
+					placeholder="{{fields.field6.title}}"
+					ng-disabled="readOnly==true">
 				<input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.datumTags"
 					ng-init='commaList(datum.datumTags)'
 					value={{commaList(datum.datumTags)}}
-					placeholder="{{commaList(datum.datumTags)}}"></textarea>
+					placeholder="{{commaList(datum.datumTags)}}"
+					ng-disabled="readOnly==true"></textarea>
 			</div>
 			<div class="span2">
 				<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}</span><br />
@@ -154,23 +166,26 @@
 				<span
 					ng-hide="fields.field5.label==''"
 					ng-repeat="comment in datum.comments"><a
-					ng-click="deleteComment(comment, datum)" class="delete_button">✗</a><i><b>{{comment.username}}</b></i>:
+					ng-click="deleteComment(comment, datum)" class="delete_button"
+					ng-disabled="readOnly==true">✗</a><i><b>{{comment.username}}</b></i>:
 					{{comment.text}}<br /> </span>
-					<button class="btn btn-primary" ng-click="addComment(datum);">Add Comment</button>
+					<button class="btn btn-primary" ng-click="addComment(datum);" ng-disabled="readOnly==true">Add Comment</button>
 			</div>
 		</div>
 		</div>
 		<div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
 			<div class="span3 expandedData">
 				<div class="expandedDataInner">
-				<button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>
+				<button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true" ng-disabled="readOnly==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>
 				</div>
 			</div>
 			<div class="span7 expandedData">
 				<div class="expandedDataInner">
 				<form id='form_{{datum.id}}_audio-file'>
 					<img src="img/speaker_icon.png">&nbsp;
-					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(datum);">Upload File(s)</button>&nbsp;&nbsp;
+					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload'
+					ng-disabled="readOnly==true" /><button class="btn btn-primary" ng-click="uploadFile(datum);"
+					ng-disabled="readOnly==true">Upload File(s)</button>&nbsp;&nbsp;
 				</form>
 				</div>
 			</div>
@@ -190,8 +205,8 @@
 						</td>
 						<td>
 							<span class="form-horizontal">
-								<input type="text" ng-model='attachment.description'> 
-								<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined">Save Description</button>
+								<input type="text" ng-model='attachment.description'ng-disabled="readOnly==true"> 
+								<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description</button>
 							</span>
 						</td>
 						<td>
@@ -201,7 +216,7 @@
 				</table>
 				<hr />
 				<button class="btn btn-inverse" type="button"
-					ng-click="deleteRecord(datum)">ⓧ Delete This Record</button>
+					ng-click="deleteRecord(datum)" ng-disabled="readOnly==true">ⓧ Delete This Record</button>
 			</div>
 		</div>
 	</div>
@@ -280,7 +295,7 @@
 <div class="pagination-centered"
 	ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
 	activeSession).length)==1 || numberOfResultPages((data | filter:
-	activeSession).length)==0">
+	activeSession).length)==0 || writeOnly==true">
 	<button class="btn btn-inverse btn-mini"
 		ng-disabled="currentPage == 0"
 		ng-click="pageBackward();">
