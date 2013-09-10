@@ -326,6 +326,12 @@ a.delete_button {
 	position: relative;
 }
 
+.entered_modified_info {
+	font-size: .8em;
+	font-weight: 700;
+	line-height: 1em;
+}
+
 .expandCollapseButton {
 	position: absolute;
 	bottom: 5px;

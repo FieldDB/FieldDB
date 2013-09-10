@@ -74,7 +74,7 @@
 	</div>
 </div>
 
-<div class="row" ng-show="loading==false && readOnly==true" ng-click="selected=null">
+<div class="row" ng-show="loading==false && readOnly==true" ng-click="selectNone()">
 	<div class="span12 pagination-centered">
 		<h3>You have read-only access to this corpus.</h3>
 	</div>
@@ -142,9 +142,10 @@
 					placeholder="{{commaList(datum.datumTags)}}"
 					ng-disabled="readOnly==true"></textarea>
 			</div>
-			<div class="span2">
+			<div class="span2 entered_modified_info">
+				<span ng-show="searching==true"><button class="btn btn-primary" ng-click="selectNone()">Done</button><br /><br /></span>
 				<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}</span><br />
-				<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span>
+				<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span><br />
 				<span title="Date modified">Modified: {{datum.dateModified | standardDate}}</span><br />
 				<span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
 				<div class="expandCollapseButton">
@@ -248,10 +249,10 @@
 				ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
 				| neverEmpty}}</span><br /> <span class="span4" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
 		</div>
-		<div class="span2">
-			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /></span>
+		<div class="span2 entered_modified_info">
+			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /><br /></span>
 			<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}<br />
-			<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span>
+			<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span><br />
 			<span title="Date modified">Modified: {{datum.dateModified | standardDate}}</span><br />
 			<span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
 			<span ng-show="datum.hasAudio==true"><br /><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
