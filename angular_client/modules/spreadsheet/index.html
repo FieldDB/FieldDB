@@ -89,17 +89,17 @@
 					&nbsp;&nbsp;
 					<span ng-hide="activeSession==undefined">
 					<button class="btn"
-						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false">Edit Session Info</button>
+						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">Edit Session Info</button>
 					&nbsp;&nbsp;
 				</span>
 					<span ng-show="(data | filter: activeSession).length==0">
 					<button class="btn btn-danger"
-						ng-click="deleteEmptySession(activeSession)">Delete
+						ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">Delete
 						Session</button>
 						&nbsp;&nbsp;
 					</span>
 					<button class="btn btn-primary"
-						ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false">Create New Session</button>
+						ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">Create New Session</button>
 				</div>
 				<div class="subSubMenubar"
 					ng-show="editSessionDetails==true && activeSession!=undefined"
@@ -261,17 +261,17 @@
 					&nbsp;&nbsp;
 					<span ng-hide="activeSession==undefined">
 					<button class="btn"
-						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false">Edit Session Info</button>
+						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">Edit Session Info</button>
 					&nbsp;&nbsp;
 				</span>
 					<span ng-show="(data | filter: activeSession).length==0">
 					<button class="btn btn-danger"
-						ng-click="deleteEmptySession(activeSession)">Delete
+						ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">Delete
 						Session</button>
 						&nbsp;&nbsp;
 					</span>
 					<button class="btn btn-primary"
-						ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false">Create New Session</button>
+						ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">Create New Session</button>
 				<div class="subSubMenubar"
 					ng-show="editSessionDetails==true && activeSession!=undefined"
 					ng-cloak>
@@ -441,7 +441,7 @@
 						<b>Tips:</b>
 						<ul>
 							<li>Save your work often.</li>
-							<li>To get your most up-to-date auto-glossing rules, refresh your browser window.</li>
+							<li>To get your most up-to-date auto-glossing rules, refresh your browser window after you save your data.</li>
 							<li>Check out our FAQ for more!
 						</ul>
 						<br />
