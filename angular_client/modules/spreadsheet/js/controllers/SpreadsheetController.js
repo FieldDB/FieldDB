@@ -38,6 +38,15 @@ define(
           $scope.notificationShouldBeOpen = false;
         };
 
+        // Functions to open/close welcome notification modal
+        $rootScope.openWelcomeNotification = function() {
+          $scope.welcomeNotificationShouldBeOpen = true;
+        };
+
+        $rootScope.closeWelcomeNotification = function() {
+          $scope.welcomeNotificationShouldBeOpen = false;
+        };
+
         // TEST FOR CHROME BROWSER
         var is_chrome = window.chrome;
         if (!is_chrome) {
@@ -379,6 +388,7 @@ define(
                 }
                 $scope.data = scopeData;
 
+                $scope.loadAutoGlosserRules();
                 $scope.loadUsersAndRoles();
 
                 // Get sessions
@@ -424,7 +434,9 @@ define(
                 $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
                 $rootScope.openNotification();
               });
+        };
 
+        $scope.loadAutoGlosserRules = function() {
           // Get precedence rules for Glosser
           Data.glosser($rootScope.DB.pouchname).then(
             function(rules) {
@@ -879,11 +891,6 @@ define(
           $rootScope.newRecordHasBeenEdited = false;
           $scope.newFieldData = {};
 
-          // Set dataRefreshed to false to show user notifications for data that
-          // has been created, but not yet updated in scope.
-
-          $scope.dataRefreshed = false;
-
           if (!fieldData) {
             fieldData = {};
           }
@@ -966,11 +973,6 @@ define(
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
           datum.lastModifiedBy = $rootScope.userInfo.name;
           $scope.saved = "no";
-          // $scope.selected = null;
-          // $rootScope.editsHaveBeenMade = false;
-          // Close notification modal in case user hits enter while editsHaveBeenMade modal is open (which would call this function)
-          $rootScope.closeNotification();
-          // $rootScope.currentPage = 0;
 
           if (!datum.saved || datum.saved == "yes") {
             datum.saved = "no";
@@ -997,7 +999,7 @@ define(
           }
         };
 
-        $rootScope.addComment = function(datum) {
+        $scope.addComment = function(datum) {
           var newComment = prompt("Enter new comment.");
           if (newComment == "" || newComment == null) {
             return;
@@ -1201,6 +1203,7 @@ define(
                                   indirectobject: indirectObjectString,
                                   teamOrPersonal: "team"
                                 }]);
+
                               // Upload new activities from async
                               // process
                               $scope.uploadActivities();
@@ -1245,8 +1248,6 @@ define(
             } else {
               $scope.selected = scopeIndex + 1;
               $scope.createRecord($scope.newFieldData);
-              // $rootScope.notificationMessage = "Please Please click \'Create New\' before continuing.";
-              // $rootScope.openNotification();
             }
           }
         };
@@ -2103,6 +2104,7 @@ define(
                 $scope.documentReady = true;
               }
             } else {
+              $rootScope.openWelcomeNotification();
               $scope.documentReady = true;
             }
           }

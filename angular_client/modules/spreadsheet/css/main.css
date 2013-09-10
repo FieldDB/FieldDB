@@ -70,6 +70,10 @@ body {
 	z-index: 100;
 }
 
+.footnote {
+	font-size: .8em;
+}
+
 .menubar {
 	background-color: #102E37;
 	border: 1px solid #102E37;
