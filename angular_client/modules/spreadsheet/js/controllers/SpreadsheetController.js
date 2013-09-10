@@ -977,7 +977,6 @@ define(
           if (!datum.saved || datum.saved == "yes") {
             datum.saved = "no";
             // Update activity feed
-            console.log("ACTIVITY");
             var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
             $scope.addActivity([{
               verb: "updated",
@@ -1259,6 +1258,10 @@ define(
 
         $scope.editSearchResults = function(scopeIndex) {
           $scope.selected = scopeIndex;
+        };
+
+        $scope.selectNone = function() {
+          $scope.selected = undefined;
         };
 
         $scope.runSearch = function(searchTerm) {
@@ -1559,7 +1562,6 @@ define(
             }
 
             $scope.users = users;
-            console.log(users);
 
             // Get privileges for logged in user
             Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
