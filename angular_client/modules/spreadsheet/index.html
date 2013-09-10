@@ -428,6 +428,30 @@
         </div>
     </div>
 
+    <!-- Welcome Notification Modal; loaded on absence of saved state in preferences-->
+		<div modal="welcomeNotificationShouldBeOpen" close="closeWelcomeNotification()" options="opts">
+        <div class="modal-header">
+            <h3>Welcome to LingSync Spreadsheet!</h3>
+        </div>
+        <div class="modal-body">
+						To get started, select a server* and log in with your username and password.<br />
+						If you do not have an account yet, click on the Register button.
+						<br />
+						<br />
+						<b>Tips:</b>
+						<ul>
+							<li>Save your work often.</li>
+							<li>To get your most up-to-date auto-glossing rules, refresh your browser window.</li>
+							<li>Check out our FAQ for more!
+						</ul>
+						<br />
+						<span class="footnote">*If you are unsure as to which server to select, chances are your account is located on the LingSync Beta server.</span>
+	      </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary cancel" ng-click="closeWelcomeNotification()">OK</button>
+        </div>
+    </div>
+
 		<div ng-class="mainBodyClass()" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
 			<ng-view></ng-view>
 		</div>
