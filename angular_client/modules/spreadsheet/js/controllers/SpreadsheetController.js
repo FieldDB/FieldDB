@@ -637,9 +637,11 @@ define(
                 for (j in $scope.sessions[i].sessionFields) {
                   if ($scope.sessions[i].sessionFields[j].label == "goal") {
                     if ($scope.sessions[i].sessionFields[j].mask) {
+                      $scope.currentSessionName = $scope.sessions[i].sessionFields[j].mask;
                       return $scope.sessions[i].sessionFields[j].mask.substr(0,
                         20);
                     } else {
+                      $scope.currentSessionName = $scope.sessions[i].sessionFields[j].value;
                       return $scope.sessions[i].sessionFields[j].value.substr(0,
                         20);
                     }
@@ -660,13 +662,13 @@ define(
                 $scope.fullCurrentSession = $scope.sessions[i];
 
                 // Set up object to make session editing easier
-                var fullCurrentSessionToEdit = {};
-                fullCurrentSessionToEdit._id = $scope.fullCurrentSession._id;
-                fullCurrentSessionToEdit._rev = $scope.fullCurrentSession._rev;
+                var editSessionInfo = {};
+                editSessionInfo._id = $scope.fullCurrentSession._id;
+                editSessionInfo._rev = $scope.fullCurrentSession._rev;
                 for (k in $scope.fullCurrentSession.sessionFields) {
-                  fullCurrentSessionToEdit[$scope.fullCurrentSession.sessionFields[k].label] = $scope.fullCurrentSession.sessionFields[k].mask;
+                  editSessionInfo[$scope.fullCurrentSession.sessionFields[k].label] = $scope.fullCurrentSession.sessionFields[k].mask;
                 }
-                $scope.fullCurrentSessionToEdit = fullCurrentSessionToEdit;
+                $scope.editSessionInfo = editSessionInfo;
               }
             }
           }
@@ -755,6 +757,8 @@ define(
                           $scope.sessions.splice(i, 1);
                         }
                       }
+                      // Set active session to All Sessions
+                      $scope.activeSession = undefined;
                     }, function(error) {
                       window
                         .alert("Error deleting session.\nTry refreshing the page.");
