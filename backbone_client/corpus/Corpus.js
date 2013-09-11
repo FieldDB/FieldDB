@@ -424,6 +424,33 @@ define([
         donefillingcallback();
       }
     },
+    
+    fillWithCorpusFieldsIfMissing : function(){
+      if(!this.get("datumFields")){
+        return;
+      }
+      if(this.alreadyVerifiedAndAddedMissingFields){
+        return this.get("datumFields").models;
+      }
+      
+      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
+      var tempCorpus = new Corpus();
+      tempCorpus.fillWithDefaults();
+      
+      var corpusFields = tempCorpus.get("datumFields").models;
+
+      for(var field in corpusFields){
+        var label = corpusFields[field].get("label");
+        OPrime.debug("Label "+label);
+        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
+        if(correspondingFieldInThisDatum.length === 0){
+          this.get("datumFields").push(corpusFields[field]);
+        }
+      }
+      this.alreadyVerifiedAndAddedMissingFields = true;
+      return this.get("datumFields").models;
+    },
+    
     fillInDefaultLicenseAndTermsForUserIfMissing : function(){
       if (!this.get("copyright")) {
         this.set("copyright",
