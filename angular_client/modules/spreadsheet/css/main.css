@@ -4,6 +4,10 @@
 	visibility: hidden;
 }
 
+.document_not_ready_spinner {
+	margin-top: 150px;
+}
+
 h3 {
 	color: #102E37;
 }
@@ -30,6 +34,9 @@ body {
 	.mainBody {
 		top: 50px;
 	}
+	.mainBodySearching {
+		top: 125px;
+	}
 }
 
 @media only screen and (max-width : 1100px) {
@@ -48,6 +55,23 @@ body {
 	.mainBody {
 		top: 100px;
 	}
+	.mainBodySearching {
+		top: 175px;
+	}
+}
+
+.loading_trouble_message {
+	position: fixed;
+	text-align: center;
+	background-color: #F0F5FF;
+	color: #000000;
+	width: 100%;
+	bottom: 0;
+	z-index: 100;
+}
+
+.footnote {
+	font-size: .8em;
 }
 
 .menubar {
@@ -88,6 +112,11 @@ body {
 
 .menubar a:hover {
 	color: #6D8CA0;
+	text-shadow: 0 0 10px #6D8CA0;
+}
+
+.active_menu_class a {
+	color: #6D8CA0 !important;
 }
 
 .menuTitle {
@@ -105,6 +134,10 @@ body {
 
 .floatLeft {
 	float: left;
+}
+
+.floatRight {
+	float: right;
 }
 
 .rightMenuItems {
@@ -138,7 +171,7 @@ body {
 	color: #FFFFFF;
 	left: 0;
 	right: 0;
-	position: relative;
+	position: fixed;
 	margin-left: 0;
 	margin-right: 0;
 	padding: 10px;
@@ -190,6 +223,12 @@ span ul {
 }
 
 .mainBody {
+	margin-bottom: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.mainBodySearching {
 	margin-bottom: 10px;
 	position: relative;
 	z-index: 1;
@@ -262,9 +301,6 @@ a.delete_button {
 	color: #7A012A;
 }
 
-.add_button:hover {
-	color: #7A012A;
-}
 .settingsItems {
 	margin: 15px;
 }
@@ -283,7 +319,7 @@ a.delete_button {
 }
 
 .unselectedNewRow {
-	background-color: #3399CC;
+	background-color: #5D5E5E;
 }
 
 .relativePosition {

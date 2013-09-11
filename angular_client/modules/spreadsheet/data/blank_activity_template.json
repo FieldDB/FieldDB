@@ -9,10 +9,8 @@
     "user": {
         "gravatar": "",
         "username": "",
-        "authUrl": "",
         "id": "",
         "_id": "",
-        "_rev": "",
         "collection": ""
     },
     "timestamp": "",
