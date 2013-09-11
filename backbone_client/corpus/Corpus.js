@@ -315,7 +315,22 @@ define([
             showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-          })
+          }),
+          new DatumField({
+            label : "enteredByUser",
+            shouldBeEncrypted: "",
+            showToUserTypes: "machine",
+            userchooseable: "disabled",
+            help: "The user who originally entered the datum"
+          }),
+          new DatumField({
+            label : "modifiedByUser",
+            shouldBeEncrypted: "",
+            showToUserTypes: "machine",
+            users: [],
+            userchooseable: "disabled",
+            help: "An array of users who modified the datum"
+          }),
         ]));
       }//end if to set datumFields
       
