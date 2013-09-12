@@ -530,7 +530,7 @@ define(
                 Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
                 Preferences.savedState.server = $rootScope.serverCode;
                 Preferences.savedState.username = $rootScope.userInfo.name;
-                Preferences.savedState.password = $rootScope.userInfo.password;
+                Preferences.savedState.password = sjcl.encrypt("password", $rootScope.userInfo.password);
                 localStorage.setItem('SpreadsheetPreferences', JSON
                   .stringify(Preferences));
 
@@ -2132,7 +2132,12 @@ define(
               var auth = {};
               auth.server = Preferences.savedState.server;
               auth.user = Preferences.savedState.username;
-              auth.password = Preferences.savedState.password;
+              try {
+                auth.password = sjcl.decrypt("password", Preferences.savedState.password);
+              } catch (err) {
+                // User's password has not yet been encrypted; encryption will be updated on login.
+                auth.password = Preferences.savedState.password;
+              }
               $scope.loginUser(auth);
               if (Preferences.savedState.DB) {
                 $rootScope.DB = Preferences.savedState.DB;

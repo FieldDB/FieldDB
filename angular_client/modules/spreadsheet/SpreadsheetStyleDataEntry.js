@@ -9,7 +9,8 @@ require.config({
 		"bootstrap": "libs/angular/ui-bootstrap.min",
 		"underscore": "libs/underscore-min",
 		"glosser": "libs/glosser/Glosser",
-		"recorder": "libs/recorderjs/recorder"
+		"recorder": "libs/recorderjs/recorder",
+		"sjcl": "libs/sjcl"
 	},
 	shim: {
 		"angular": {
@@ -30,7 +31,7 @@ require.config({
  * Declare only the variables that are needed here, the dependencies of the rest
  * will be discovered and loaded as needed by require.js
  */
-require(["bootstrap", "underscore", "glosser", "recorder", "js/module.js"],
+require(["bootstrap", "underscore", "glosser", "recorder", "sjcl", "js/module.js"],
 	function(angular) {
 		console.log("Initializing the Spreadsheet page.");
 
