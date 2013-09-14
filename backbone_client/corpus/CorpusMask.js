@@ -6,6 +6,8 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/DatumField",
     "datum/DatumFields",
+    "datum/DatumState",
+    "datum/DatumStates",
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
@@ -25,6 +27,8 @@ define([
     Confidential,
     DatumField,
     DatumFields, 
+    DatumState,
+    DatumStates,
     DataList,
     DataLists,
     Consultants,
@@ -51,7 +55,7 @@ define([
      *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *           
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
-     * @property {DatumStates} datumstates @deprecated The public datum states, datum which have one of these states can be made public. Collection of datum states used to describe the state of datums in the corpus 
+     * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
      * @property {Sessions} sessions Collection of sessions that belong to the corpus
      * @property {DataLists} datalists Collection of data lists created under the corpus
@@ -91,7 +95,11 @@ define([
       }
     },
     fillWithDefaults : function(){
-     
+      //TODO use these states to show what is public and what is not.
+      if(!this.get("datumStates")){
+        this.set("datumStates", new DatumStates());
+      }//end if to set datumStates
+      
       //Keeping all items since this seems okay for public viewing/searching if the user wants to let the public see it. 
       if(!this.get("datumFields")){
         this.set("datumFields", new DatumFields(
@@ -191,6 +199,7 @@ define([
       titleAsUrl :"PrivateCorpus",
       description : "The details of this corpus are not public.",
 //      consultants : Consultants,
+//      datumStates : DatumStates,
 //      datumFields : DatumFields, 
 //      sessionFields : DatumFields,
 //      searchFields : DatumFields,
@@ -230,6 +239,7 @@ define([
     internalModels : {
       //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
       consultants : Consultants,
+      datumStates : DatumStates,
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,

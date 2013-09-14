@@ -12,6 +12,9 @@ define([
     "datum/DatumField",
     "datum/DatumFields",
     "datum/DatumFieldEditView",
+    "datum/DatumState",
+    "datum/DatumStates",
+    "datum/DatumStateEditView",
     "permission/Permission",
     "permission/Permissions",
     "permission/PermissionEditView",
@@ -34,6 +37,9 @@ define([
     DatumField,
     DatumFields,
     DatumFieldEditView,
+    DatumState,
+    DatumStates,
+    DatumStateEditView,
     Permission,
     Permissions,
     PermissionEditView,
@@ -141,6 +147,9 @@ define([
         
 
       },
+      
+      //Add button inserts new Datum State
+      "click .add-datum-state" : 'insertNewDatumState',
       
       //Add button inserts new Datum Field
       "click .add-datum-field" : 'insertNewDatumField',
@@ -515,9 +524,8 @@ define([
       });
 
       // Create a DatumStatesView    
-      this.model.datumStates = this.model.datumStates || new Backbone.Collection();
       this.datumStatesView = new UpdatingCollectionView({
-        collection           : this.model.datumStates,
+        collection           : this.model.get("datumStates"),
         childViewConstructor : DatumStateEditView,
         childViewTagName     : 'li',
         childViewFormat      : "corpus"
@@ -752,6 +760,20 @@ define([
 
       },
     
+    //This the function called by the add button, it adds a new datum state both to the collection and the model
+    insertNewDatumState : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      var m = new DatumField({
+        "state" : this.$el.find(".add_input").val(),
+        "color" : this.$el.find(".add_color_chooser").val()
+      });
+      this.model.get("datumStates").add(m);
+      window.appView.addUnsavedDoc(this.model.id);
+
+    },
   //This the function called by the add button, it adds a new datum state both to the collection and the model
     insertNewPermission : function(e) {
       if(e){

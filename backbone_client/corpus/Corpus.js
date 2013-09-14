@@ -6,6 +6,8 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/DatumField",
     "datum/DatumFields",
+    "datum/DatumState",
+    "datum/DatumStates",
 //    "text!/_view/datalists",
 //    "text!/_view/sessions",
     "data_list/DataList",
@@ -30,6 +32,8 @@ define([
     Confidential,
     DatumField,
     DatumFields, 
+    DatumState,
+    DatumStates,
 //    forcingdataliststoloadearly,
 //    forcingsessionstoloadearly,
     DataList,
@@ -69,7 +73,7 @@ define([
      *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *           
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
-     * @property {DatumStates} datumstates @deprecated Collection of datum states used to describe the state of datums in the corpus 
+     * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
      * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
      * @property {Sessions} sessions Collection of sessions that belong to the corpus
@@ -222,6 +226,25 @@ define([
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Private");
       }
+      
+      if( !this.get("datumStates") || this.get("datumStates").length == 0 ){
+        this.set("datumStates", new DatumStates([ 
+          new DatumState({
+            state : "Checked",
+            color : "success",
+            selected: "selected"
+          }),
+          new DatumState({
+            state : "To be checked",
+            color : "warning"
+          }),
+          , new DatumState({
+            state : "Deleted",
+            color : "important",
+            showInSearchResults:  ""
+          }),
+        ]));
+      }//end if to set datumStates
       
       if(!this.get("datumFields") || this.get("datumFields").length == 0){
         this.set("datumFields", new DatumFields([ 
@@ -537,6 +560,7 @@ define([
       description : "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
 //      confidential :  Confidential,
 //      consultants : Consultants,
+//      datumStates : DatumStates,
 //      datumFields : DatumFields,
 //      conversationFields : DatumFields,
 //      sessionFields : DatumFields,
@@ -548,6 +572,7 @@ define([
     internalModels : {
       confidential :  Confidential,
       consultants : Consultants,
+      datumStates : DatumStates,
       datumFields : DatumFields, 
       conversationFields : DatumFields,
       sessionFields : DatumFields,
@@ -884,6 +909,20 @@ define([
         }
       }
       var oldrev = this.get("_rev");
+      
+      /*
+       * For some reason the corpus is getting an extra state that no one defined in it. this gets rid of it when we save.
+       */
+      try{
+        var ds = this.get("datumStates").models;
+        for (var s in ds){
+          if(ds[s].get("state") == undefined){
+            this.get("datumStates").remove(ds[s]);
+          }
+        }
+      }catch(e){
+        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
+      }
       
       this.set("timestamp", Date.now());
       
