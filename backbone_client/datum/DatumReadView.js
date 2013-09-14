@@ -7,7 +7,6 @@ define([
     "comment/CommentReadView",
     "datum/Datum",
     "datum/DatumFieldReadView",
-    "datum/DatumStateReadView",
     "datum/DatumTagReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
@@ -21,7 +20,6 @@ define([
     CommentReadView,
     Datum,
     DatumFieldReadView,
-    DatumStateReadView,
     DatumTagReadView,
     SessionReadView,
     UpdatingCollectionView
@@ -43,12 +41,6 @@ define([
       this.audioVideoView = new AudioVideoReadView({
         model : this.model.get("audioVideo")
       });
-      
-      // Create a DatumStateReadView
-      this.stateView = new DatumStateReadView({
-        model : this.model.get("state"),
-      });
-      this.stateView.format = "datum";
       
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
@@ -151,7 +143,7 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
-      
+
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
@@ -161,16 +153,10 @@ define([
         if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
-      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
-      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      try{
-        jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
-        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
-      }
+      jsonToRender.datumstate = this.model.getValidationStatus();
+      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       
       if (this.format == "well") {        
         // Display the DatumReadView
@@ -455,7 +441,7 @@ define([
           $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
         }
         try{
-          if(jsonToRender.datumstate.indexOf("Deleted") > -1){
+          if(jsonToRender.datumstate.toLowerCase().indexOf("Deleted") > -1){
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){
@@ -464,12 +450,6 @@ define([
       }
       
       return this;
-    },
-    
-    renderState : function() {
-      if (this.stausview != undefined) {
-        this.stateView.render();
-      }
     },
     
     insertNewComment : function(e) {
