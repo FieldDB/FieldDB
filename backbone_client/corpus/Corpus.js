@@ -280,7 +280,7 @@ define([
           new DatumField({
             label : "syntacticCategory",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish." +
             		" It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM)," +
@@ -289,7 +289,7 @@ define([
           new DatumField({
             label : "syntacticTreeLatex",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
           }),
@@ -317,14 +317,16 @@ define([
           new DatumField({
             label : "enteredByUser",
             shouldBeEncrypted: "",
-            showToUserTypes: "machine",
+            showToUserTypes: "all",
+            readonly: true,
             userchooseable: "disabled",
             help: "The user who originally entered the datum"
           }),
           new DatumField({
             label : "modifiedByUser",
             shouldBeEncrypted: "",
-            showToUserTypes: "machine",
+            showToUserTypes: "all",
+            readonly: true,
             users: [],
             userchooseable: "disabled",
             help: "An array of users who modified the datum"
@@ -423,69 +425,65 @@ define([
       }
     },
     
-    fillWithCorpusFieldsIfMissing : function(){
-      if(!this.get("datumFields")){
-        return;
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel){
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
       }
-      if(this.alreadyVerifiedAndAddedMissingFields){
-        return this.get("datumFields").models;
-      }
-      
-      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
+
+      /* Update the corpus to show all fields which are defaults on corpora, 
+      they are only added permanently if saved. */
       var tempCorpus = new Corpus();
       tempCorpus.fillWithDefaults();
       
-      var corpusFields = tempCorpus.get("datumFields").models;
+      var corpusFields = tempCorpus.get("datumFields").toJSON();
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
 
       for(var field in corpusFields){
-        var label = corpusFields[field].get("label");
-        OPrime.debug("Label "+label);
-        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
-        if(correspondingFieldInThisDatum.length === 0){
-          this.get("datumFields").push(corpusFields[field]);
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this corpus: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
         }
       }
-      this.alreadyVerifiedAndAddedMissingFields = true;
-      return this.get("datumFields").models;
-    },
-    
-    fillInDefaultLicenseAndTermsForUserIfMissing : function(){
-      if (!this.get("copyright")) {
-        this.set("copyright",
-          "Default: Add names of the copyright holders of the corpus.");
+
+      /* Update corpus to have default licensen and terms of use if the user hasnt defined them yet */
+      if (!originalModel.copyright) {
+        originalModel.copyright = "Default: Add names of the copyright holders of the corpus.";
       }
       var defaultLicense = {
-            title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
-            humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-            link: "http://creativecommons.org/licenses/by-sa/3.0/"
-          };
-      if (!this.get("license")) {
-        this.set("license", defaultLicense);
+        title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+        humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+        link: "http://creativecommons.org/licenses/by-sa/3.0/"
+      };
+      if (!originalModel.license) {
+        originalModel.license = defaultLicense;
       }
-      var licenseUpdated = this.get("license");
-      if(typeof licenseUpdated == "string"){
+      var licenseUpdated = originalModel.license;
+      if (typeof licenseUpdated == "string") {
         licenseUpdated = {};
       }
       if (!licenseUpdated.title) {
         licenseUpdated.title = defaultLicense.title;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       if (!licenseUpdated.humanReadable) {
         licenseUpdated.humanReadable = defaultLicense.humanReadable;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       if (!licenseUpdated.link) {
         licenseUpdated.link = defaultLicense.link;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       var defaultTerms = {
-          humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-        };
-      var termsUpdated = this.get("termsOfUse");
-      if(!termsUpdated || typeof termsUpdated == "string"){
+        humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+      };
+      var termsUpdated = originalModel.termsOfUse;
+      if (!termsUpdated || typeof termsUpdated == "string") {
         termsUpdated = defaultTerms;
-        this.set("termsOfUse", defaultTerms);
+        originalModel.termsOfUse = defaultTerms;
       }
+      return this.originalParse(originalModel);
     },
 
     /**

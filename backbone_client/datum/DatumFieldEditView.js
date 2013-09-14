@@ -92,9 +92,6 @@ define([
         $(this.el).find(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
-        if (jsonToRender.showToUserTypes === "machine") {
-          jsonToRender.readonly = true;
-        }
         jsonToRender.helpText = true;
         jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
         $(this.el).html(this.templateValue(jsonToRender));
