@@ -225,7 +225,6 @@ define([
       jsonToRender.datumstate = this.model.getValidationStatus();
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
-      
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
@@ -315,6 +314,12 @@ define([
           this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
         }
       }
+      /* make ungrammatical sentences have a strike through them */
+      var grammaticality = this.$el.find(".judgement .datum_field_input").val();
+      if (grammaticality.indexOf("*") !== -1) {
+        this.$el.find(".utterance .datum_field_input").addClass("ungrammatical");
+      }
+
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
       $(this.el).find(".icon-th-list").removeClass("icon-th-list");
       $(this.el).find(".comments-section").hide();
@@ -416,15 +421,16 @@ define([
       jsonToRender.datumstate = this.model.getValidationStatus();
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
 
-      if(jsonToRender.datumstatecolor){
-        $(this.el).find(".datum_fields_ul textarea ").removeClass("datum-state-color-warning");
-        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-important");
-        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-info");
-        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-success");
-        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-inverse");
-
-        $(this.el).find(".datum_fields_ul textarea").addClass("datum-state-color-"+jsonToRender.datumstatecolor);
+      if(!jsonToRender.datumstatecolor){
+        jsonToRender.datumstatecolor= "";
       }
+      $(this.el).find(".datum_fields_ul textarea ").removeClass("datum-primary-validation-status-outline-color-warning");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-important");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-info");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-success");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-inverse");
+
+      $(this.el).find(".datum_fields_ul textarea").addClass("datum-primary-validation-status-outline-color-"+jsonToRender.datumstatecolor);
 
     },
     
@@ -493,6 +499,7 @@ define([
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
+      this.updateDatumStateColor();
       this.guessMorphemes(utteranceLine);
     },
     morphemesBlur : function(e){

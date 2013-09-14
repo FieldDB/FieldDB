@@ -559,7 +559,7 @@ define([
         status = this.getValidationStatus();
       }
       /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
-      if(status.toLowerCase().indexOf("deleted") > -1){
+      if(status.toLowerCase().indexOf("delete") > -1){
         return "important";
       }
       if(status.toLowerCase().indexOf("tobechecked") > -1){
