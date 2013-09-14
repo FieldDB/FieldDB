@@ -79,8 +79,6 @@ define([
         childViewFormat      : "datum"
       });
 
-      this.model.fillWithCorpusFieldsIfMissing();
-      
       this.sessionView = new SessionReadView({
         model : this.model.get("session"),
         });

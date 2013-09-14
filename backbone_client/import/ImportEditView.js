@@ -40,7 +40,6 @@ define( [
       this.model.bind("change:asCSV", this.render, this);
       this._draghoverClassAdded = false;
       var datumToCauseCorpusToUpdate = new Datum();
-      datumToCauseCorpusToUpdate.fillWithCorpusFieldsIfMissing();
     },
     events : {
       "click .approve-save" : "saveDataList",

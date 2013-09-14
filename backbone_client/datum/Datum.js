@@ -185,23 +185,7 @@ define([
         
       }
     },
-    fillWithCorpusFieldsIfMissing : function(){
-      if(!this.get("datumFields")){
-        return;
-      }
-      window.app.get("corpus").fillWithCorpusFieldsIfMissing();
-      
-      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
-      var corpusFields = window.app.get("corpus").fillWithCorpusFieldsIfMissing();
-      for(var field in corpusFields){
-        var label = corpusFields[field].get("label");
-        OPrime.debug("Label "+label);
-        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
-        if(correspondingFieldInThisDatum.length === 0){
-          this.get("datumFields").push(corpusFields[field]);
-        }
-      }
-    },
+    
     originalParse : Backbone.Model.prototype.parse,
     parse : function(originalModel) {
       /* if this is just a couchdb save result, dont process it */
