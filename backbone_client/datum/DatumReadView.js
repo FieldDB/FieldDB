@@ -431,15 +431,18 @@ define([
        
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
-        if(jsonToRender.datumstatecolor){
-          $(this.el).removeClass("datum-state-color-warning");
-          $(this.el).removeClass("datum-state-color-important");
-          $(this.el).removeClass("datum-state-color-info");
-          $(this.el).removeClass("datum-state-color-success");
-          $(this.el).removeClass("datum-state-color-inverse");
-
-          $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
+        if(!jsonToRender.datumstatecolor){
+          jsonToRender.datumstatecolor = "";
         }
+        // if(jsonToRender.datumstatecolor){
+          $(this.el).removeClass("datum-primary-validation-status-color-warning");
+          $(this.el).removeClass("datum-primary-validation-status-color-important");
+          $(this.el).removeClass("datum-primary-validation-status-color-info");
+          $(this.el).removeClass("datum-primary-validation-status-color-success");
+          $(this.el).removeClass("datum-primary-validation-status-color-inverse");
+
+          $(this.el).addClass("datum-primary-validation-status-color-"+jsonToRender.datumstatecolor);
+        // }
         try{
           if(jsonToRender.datumstate.toLowerCase().indexOf("Deleted") > -1){
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
