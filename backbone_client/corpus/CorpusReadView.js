@@ -10,6 +10,7 @@ define([
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
+    "datum/DatumStateReadView",
     "lexicon/LexiconView",
     "permission/Permission",
     "permission/Permissions",
@@ -31,6 +32,7 @@ define([
     DataLists,
     DataListReadView,
     DatumFieldReadView,
+    DatumStateReadView, 
     LexiconView,
     Permission,
     Permissions,
@@ -392,10 +394,9 @@ define([
         childViewClass       : "breadcrumb"
       });
       
-      // Create a list of DatumStates   
-      this.model.datumStates = this.model.datumStates || new Backbone.Collection();
+      // Create a list of DatumStates    
       this.datumStatesView = new UpdatingCollectionView({
-        collection           : this.model.datumStates,
+        collection           : this.model.get("datumStates"),
         childViewConstructor : DatumStateReadView,
         childViewTagName     : 'li',
         childViewFormat      : "corpus"
