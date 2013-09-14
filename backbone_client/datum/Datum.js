@@ -6,8 +6,6 @@ define([
     "datum/Datums", 
     "datum/DatumField", 
     "datum/DatumFields", 
-    "datum/DatumState", 
-    "datum/DatumStates",
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
@@ -20,8 +18,6 @@ define([
     Datums,
     DatumField, 
     DatumFields,
-    DatumState, 
-    DatumStates,
     DatumTag,
     DatumTags,
     Session
@@ -74,11 +70,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Initially, the first datumState is selected
-//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-//        this.get("datumStates").models[0].set("selected", "selected");
-//      }
-      
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -120,7 +111,6 @@ define([
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumStates : DatumStates,
       datumTags : DatumTags
     },
 
@@ -209,6 +199,65 @@ define([
           this.get("datumFields").push(corpusFields[field]);
         }
       }
+    },
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel) {
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
+      }
+
+      OPrime.debug("Edit this function to update datum to the latest schema.");
+
+      /* Add any new corpus fields to this datum so they can be edited */
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+      var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
+      for(var field in corpusFields){
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this datum: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
+        }
+      }
+
+
+      /* remove Deprecated datumStates on datum */
+      var oldvalidationStatus = "";
+      if (originalModel.datumStates) {
+        var selectedArray = _.pluck(originalModel.datumStates, "selected");
+        var selectedIndex = selectedArray.indexOf("selected");
+
+        if (selectedIndex  !== -1) {
+          oldvalidationStatus = originalModel.datumStates[selectedIndex].state;
+        }
+        //Remove datumStates from this datum
+        delete originalModel.datumStates;
+      }
+
+      /* enforce validation status to be comma seperated */
+      var fieldLabels = _.pluck(originalModel.datumFields, "label");
+      var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
+      var validationFieldToclean = originalModel.datumFields[indexOfValidationSatus];
+      var validationStatus = validationFieldToclean.mask || "";
+      if (oldvalidationStatus) {
+        // if the old status is not already subsumbed by a curretn status, do add it to the validation status
+        if(validationStatus.toLowerCase().indexOf(oldvalidationStatus.toLowerCase()) === -1){
+          validationStatus = oldvalidationStatus + ", " + validationStatus;
+        }
+      }
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      validationFieldToclean.mask = uniqueStati.join(", ");
+      validationFieldToclean.value = validationFieldToclean.mask;
+
+      /* enforce tags to be comma seperated */
+      var indexOfTags = fieldLabels.indexOf("tags");
+      var tagFieldToClean = originalModel.datumFields[indexOfTags];
+      var tagValue = tagFieldToClean.mask || "";
+      var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      tagFieldToClean.mask = uniqueTags.join(", ");
+      tagFieldToClean.value = tagFieldToClean.mask;
+
+
+      return this.originalParse(originalModel);
     },
     searchByQueryString : function(queryString, callback) {
       var self = this;
@@ -463,7 +512,6 @@ define([
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
         session: this.get("session")
@@ -482,21 +530,17 @@ define([
     getValidationStatus : function(){
       var validationStatus = "";
       var stati = this.get("datumFields").where({"label": "validationStatus"});
-      if(stati.length > 0){
-        stati = stati[0].get("mask").split(" ");
-        if(stati.length >0){
-          validationStatus = stati[0];
-        }
+      stati = stati[0].get("mask").trim().split(", ");
+      validationStatus = stati[0].trim();
+      
+      if(!validationStatus){
+        return this.setDefaultValidationStatus();
       }
-      /* Handle upgrade from previous corpora look in datum states too */
-      if(validationStatus == ""){
-        stati = this.get("datumStates").where({selected : "selected"});
-        if(stati.length > 0){
-          validationStatus = stati[0].get("state");
-        }
-      }
-      this.updateDatumState(validationStatus);
       return validationStatus;
+    },
+    setDefaultValidationStatus : function(){
+      this.preprendValidationStatus("Checked");
+      return "Checked";
     },
     /**
      * This function is used to colour a datum background to make
@@ -516,7 +560,7 @@ define([
       }
       /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
       if(status.toLowerCase().indexOf("deleted") > -1){
-        return "danger";
+        return "important";
       }
       if(status.toLowerCase().indexOf("tobechecked") > -1){
         return "warning";
@@ -535,49 +579,15 @@ define([
      *            This is a string which is the validation status
      *            you want the datum to be
      */
-    updateDatumState : function(selectedValue){
-      if(!selectedValue){
-        return;
-      }
-      OPrime.debug("Asking to change the datum state to " + selectedValue); 
-      /* make sure all the corpus states are availible in this datum */
-      thisdatumStates = this.get("datumStates");
-      window.app.get("corpus").get("datumStates").each(function(datumstate) {
-        var obj = datumstate.toJSON();
-        obj.selected = "";
-        thisdatumStates.addIfNew(obj);
-      });
-      try{
-        $.each( this.get("datumStates").where({selected : "selected"}), function(){
-          if(this.get("state") != selectedValue){
-            this.set("selected", "");
-          }
-        });
-        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-      }
+    preprendValidationStatus : function(selectedValue){
       
       /* prepend this state to the new validationStates as of v1.46.2 */
       var n = this.get("datumFields").where({label: "validationStatus"})[0];
-      if(n == [] || !n){
-        n = new DatumField({
-          label : "validationStatus",
-          shouldBeEncrypted: "",
-          showToUserTypes: "all",
-          userchooseable: "disabled",
-          help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-        });
-        this.get("datumFields").add(n);
-      }
       var validationStatus = n.get("mask") || "";
-      validationStatus = selectedValue + " " +validationStatus ;
-      var uniqueStati = _.unique(validationStatus.trim().split(" "));
-      n.set("mask", uniqueStati.join(" "));
-      
-
-//      this.save();
-      //TODO save it
+      validationStatus = selectedValue + ", " +validationStatus ;
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(n){ return n });
+      n.set("mask", uniqueStati.join(", "));
+    
     },
     
     /**
@@ -591,7 +601,7 @@ define([
      */ 
     putInTrash : function(){
       this.set("trashed", "deleted"+Date.now());
-      this.updateDatumState("Deleted");
+      this.preprendValidationStatus("Deleted");
       this.saveAndInterConnectInApp(function(){
         /* This actually removes it from the database */
         //thisdatum.destroy();
@@ -918,20 +928,6 @@ define([
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it. 
-       * this gets rid of it when we save. (if it gets in to a datum)
-       */
-      try{
-        var ds = this.get("datumStates").models;
-        for (var s in ds){
-          if(ds[s].get("state") == undefined){
-            this.get("datumStates").remove(ds[s]);
-          }
-        }
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
-      }
       
         self.save(null, {
           success : function(model, response) {

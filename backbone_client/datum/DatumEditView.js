@@ -152,7 +152,7 @@ define([
           this.insertNewDatumTag();
         }
       },
-      "change .datum_state_select" : "updateDatumStates",
+      "blur .validationStatus" : "updateDatumStateColor",
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
@@ -216,22 +216,14 @@ define([
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM render: " );
       
-     
-      
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
-      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
-      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      try{
-        jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
-        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
-      }
+      jsonToRender.datumstate = this.model.getValidationStatus();
+      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
       
       if (this.format == "well") {
@@ -289,6 +281,8 @@ define([
         $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
         
         $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale.get("locale_Drag_and_Drop_Audio_Tooltip"));
+      
+
       }
 
       return this;
@@ -324,6 +318,7 @@ define([
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
       $(this.el).find(".icon-th-list").removeClass("icon-th-list");
       $(this.el).find(".comments-section").hide();
+      this.updateDatumStateColor();
 
     },
     
@@ -415,23 +410,22 @@ define([
       
       return false;
     },
-    
-    updateDatumStates : function() {
-      var selectedValue = this.$el.find(".datum_state_select").val();
-      try{
-        this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
-        this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-      }
-      
-      //update the view of the datum state to the new color and text without rendering the entire datum
-      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
-      $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
-      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
-      $(this.el).find(".datum-state-value").html(selectedValue);
 
-      this.needsSave = true;
+    updateDatumStateColor : function() {
+      var jsonToRender = {};
+      jsonToRender.datumstate = this.model.getValidationStatus();
+      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
+
+      if(jsonToRender.datumstatecolor){
+        $(this.el).find(".datum_fields_ul textarea ").removeClass("datum-state-color-warning");
+        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-important");
+        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-info");
+        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-success");
+        $(this.el).find(".datum_fields_ul textarea").removeClass("datum-state-color-inverse");
+
+        $(this.el).find(".datum_fields_ul textarea").addClass("datum-state-color-"+jsonToRender.datumstatecolor);
+      }
+
     },
     
     /**

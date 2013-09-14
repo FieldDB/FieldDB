@@ -31,11 +31,7 @@
     <ul class="datum_tags_ul unstyled  "></ul>
   </div>
   <div class="datum_state span3 border-left">
-    {{#each datumStates}}
-	  {{#if selected}}
-	  <span class="label label-{{color}}"><i class = " icon-flag"></i>{{state}}</span>
-	  {{/if}}
-	  {{/each}}
+      <span class="label label-{{datumstatecolor}} datum-state-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datumstate}}</span></span><br/>
   </div>
 </div>
 
