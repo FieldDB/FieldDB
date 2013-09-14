@@ -92,6 +92,9 @@ define([
         $(this.el).find(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
+        if (jsonToRender.showToUserTypes === "machine") {
+          jsonToRender.readonly = true;
+        }
         jsonToRender.helpText = true;
         jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
         $(this.el).html(this.templateValue(jsonToRender));
@@ -170,15 +173,18 @@ define([
      *          datum_field_input
      */
     resizeInputFieldToFit : function(e) {
-      var it;
+      var inputFieldToResize;
       if (e) {
-        it = e.target;
+        inputFieldToResize = e.target;
       } else {
-        it = $(this.el).find(".datum_field_input")[0];
+        inputFieldToResize = $(this.el).find(".datum_field_input")[0];
       }
-      var sh = it.scrollHeight;
+      if (!inputFieldToResize) {
+        return;
+      }
+      var sh = inputFieldToResize.scrollHeight;
       if(sh > 20){
-        it.style.height =  sh + "px";
+        inputFieldToResize.style.height =  sh + "px";
       }
     },
     

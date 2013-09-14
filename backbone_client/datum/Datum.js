@@ -189,8 +189,10 @@ define([
       if(!this.get("datumFields")){
         return;
       }
+      window.app.get("corpus").fillWithCorpusFieldsIfMissing();
+      
       /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
-      var corpusFields = window.app.get("corpus").get("datumFields").models;
+      var corpusFields = window.app.get("corpus").fillWithCorpusFieldsIfMissing();
       for(var field in corpusFields){
         var label = corpusFields[field].get("label");
         OPrime.debug("Label "+label);
@@ -890,11 +892,41 @@ define([
       if (OPrime.debugMode) OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
+      var user = window.app.get("authentication").get("userPublic").toJSON();
+      delete user._rev;
+      delete user._id;
+      delete user.id;
+      delete user.authUrl;
+      var usersName = user.firstname + " " + user.lastname;
+      usersName = usersName.replace(/undefined/g, "");
+      if(!usersName || usersName.trim().length < 2){
+        usersName = user.username ;
+      }
+
       if(this.id){
         newModel = false;
+        var modifiyersField = this.get("datumFields").where({label: "modifiedByUser"})[0];
+        if(modifiyersField){
+          var modifiers = modifiyersField.get("users");
+          modifiers.push(user);
+          modifieres = _.unique(modifiers);
+          modifiyersField.set("users", modifieres);
+          
+          var usersAsString =  modifiyersField.get("mask") + ","+ usersName;
+          usersAsString = (_.unique(usersAsString.trim().split(","))).join(",");
+          usersAsString = usersAsString.replace(/^,/,"");
+          modifiyersField.set("mask", usersAsString);
+        }
       }else{
         this.set("dateEntered", JSON.stringify(new Date()));
+        var userField = this.get("datumFields").where({label: "enteredByUser"})[0];
+        if(userField){
+          userField.set("mask", usersName);
+          userField.set("user", user);
+        }
       }
+      
+      
       //protect against users moving datums from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
