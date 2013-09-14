@@ -661,7 +661,7 @@ define([
           corpusid = this.get("corpus").id;
         }else{
           $(".spinner-status").html("Opening/Creating Corpus...");
-          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function(){
+          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection, function(){
             /* if the corpusid is missing, make sure there are other objects in the dashboard */
             selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
 //          window.app.stopSpinner();
@@ -674,53 +674,53 @@ define([
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
-            
             /* Upgrade chrome app user corpora's to v1.38+ */
             var oldCouchConnection = corpusModel.get("couchConnection");
             if(oldCouchConnection){
+              oldCouchConnection.corpusid = corpusModel._id;
               if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
                 oldCouchConnection.domain  = "corpusdev.lingsync.org";
                 oldCouchConnection.port = "";
-                corpusModel.set("couchConnection", oldCouchConnection);
               }
+              corpusModel.set("couchConnection", oldCouchConnection);
             }
             
-            try{
-              var tags = corpusModel.get("datumFields").where({label : "tags"});
-              if(tags.length == 0){
-                /* If its missing tags, add upgrade the corpus to version v1.38+ */
-                corpusModel.get("datumFields").add(new DatumField({
-                  label : "tags",
-                  shouldBeEncrypted: "",
-                  userchooseable: "disabled",
-                  help: "Tags for constructions or other info that you might want to use to categorize your data."
-                }));
-                corpusModel.get("datumFields").add(new DatumField({
-                  label : "validationStatus",
-                  shouldBeEncrypted: "",
-                  userchooseable: "disabled",
-                  help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
-                }));
-              }
-            }catch(e){
-              OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
-            }
-            try{
-              var tags = corpusModel.get("datumFields").where({label : "syntacticTreeLatex"});
-              if(tags.length == 0){
-                /* If its missing syntacticTreeLatex, add upgrade the corpus to version v1.54+ */
-                corpusModel.get("datumFields").add(new DatumField({
-                  label : "syntacticTreeLatex",
-                  showToUserTypes: "machine",
-                  shouldBeEncrypted: "",
-                  userchooseable: "disabled",
-                  help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
-                }));
+            // try{
+            //   var tags = corpusModel.get("datumFields").where({label : "tags"});
+            //   if(tags.length == 0){
+            //     /* If its missing tags, add upgrade the corpus to version v1.38+ */
+            //     corpusModel.get("datumFields").add(new DatumField({
+            //       label : "tags",
+            //       shouldBeEncrypted: "",
+            //       userchooseable: "disabled",
+            //       help: "Tags for constructions or other info that you might want to use to categorize your data."
+            //     }));
+            //     corpusModel.get("datumFields").add(new DatumField({
+            //       label : "validationStatus",
+            //       shouldBeEncrypted: "",
+            //       userchooseable: "disabled",
+            //       help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
+            //     }));
+            //   }
+            // }catch(e){
+            //   OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
+            // }
+            // try{
+            //   var tags = corpusModel.get("datumFields").where({label : "syntacticTreeLatex"});
+            //   if(tags.length == 0){
+            //     /* If its missing syntacticTreeLatex, add upgrade the corpus to version v1.54+ */
+            //     corpusModel.get("datumFields").add(new DatumField({
+            //       label : "syntacticTreeLatex",
+            //       showToUserTypes: "machine",
+            //       shouldBeEncrypted: "",
+            //       userchooseable: "disabled",
+            //       help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
+            //     }));
                
-              }
-            }catch(e){
-              OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
-            }
+            //   }
+            // }catch(e){
+            //   OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
+            // }
             
             $(".spinner-status").html("Opened Corpus...");
             

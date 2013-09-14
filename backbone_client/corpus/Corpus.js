@@ -122,76 +122,74 @@ define([
 //        + couchConnection.pouchname);
       
     },
-    loadOrCreateCorpusByPouchName : function(pouchname, sucessloadingorCreatingcallback){
+    loadOrCreateCorpusByPouchName : function(couchConnection, sucessloadingorCreatingcallback){
+      var couchurl = OPrime.getCouchUrl(couchConnection);
+      var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+
+      var errorfunction = function(response) {
+        OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
+        OPrime.bug("There was a problem loading your corpus. Please report this error.");
+        window.location.replace(optionalCouchAppPath + "user.html");
+      };
+
+      // var errorfunction = function(model, xhr, options) {
+      //   $(".spinner-status").html("Downloading Corpus...");
+
+      //   if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
+      //   if (corpusself.islooping) {
+      //     OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..." + e);
+      //     return;
+      //   }
+      //   corpusself.islooping = true;
+      //   OPrime.bug("Trying to download this corpus to this device one more time..." + xhr.reason);
+      //   corpusself.loadOrCreateCorpusByPouchName(couchConnection, sucessloadingorCreatingcallback);
+      // };
+
       var corpusself = this;
-      if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask({
-          "pouchname" : pouchname
-        }));
-      }
-      var c = this.get("publicSelf");
-      this.get("publicSelf").id = "corpus";
-        c.fetch({
-          success : function(model, response, options) {
-            if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
-            if(!model.get("corpusid")){
-              corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-              return;
-            }
-            corpusself.id = model.get("corpusid");
-            corpusself.set("pouchname", pouchname);
-              corpusself.fetch({
-                success : function(model) {
-                  if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
-                  $(".spinner-status").html("Loading Datalist...");
-                  corpusself.makeSureCorpusHasADataList(function(){
-                    corpusself.datalists.at(0).setAsCurrentDataList(function(){
-                      $(".spinner-status").html("Datalist loaded.");
-                    });
-                    $(".spinner-status").html("Loading Elicitation Session...");
-                    corpusself.makeSureCorpusHasASession(function(){
-                      corpusself.sessions.at(0).setAsCurrentSession(function(){
-                        $(".spinner-status").html("Session loaded.");
-                        if(typeof sucessloadingorCreatingcallback == "function"){
-                          sucessloadingorCreatingcallback();
-                        }
-                      });
-                      
-                      //end success to create new data list
-                    },function(){
-                      alert("Failed to create a session. ");
-                    });//end failure to create new data list
-                    //end success to create new data list
-                  },function(){
-                    alert("Failed to create a datalist. ");
-                  });//end failure to create new data list
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : queryUrl,
+        success : function(serverResults) {
 
-                },
-                error : function(model, xhr, options) {
-                  $(".spinner-status").html("Downloading Corpus...");
+          if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
+            errorfunction("No corpus doc! this corpus is broken.");
+          }
+          var model = serverResults.rows[0].value;
+          couchConnection.corpusid = model._id;
+          // appids.corpusid = model._id;
+          model.couchConnection = couchConnection;
+          // corpusself.set(corpusself.parse(model));
 
-                  if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
-                  if(corpusself.islooping){
-                    OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
-                    return;
-                  }
-                  corpusself.islooping = true;
-                  OPrime.bug("Trying to download this corpus to this device one more time..."+xhr.reason);
-                  corpusself.loadOrCreateCorpusByPouchName(pouchname, sucessloadingorCreatingcallback);
+          if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
+          $(".spinner-status").html("Loading Datalist...");
+          corpusself.makeSureCorpusHasADataList(function(){
+            corpusself.datalists.at(0).setAsCurrentDataList(function(){
+              $(".spinner-status").html("Datalist loaded.");
+            });
+            $(".spinner-status").html("Loading Elicitation Session...");
+            corpusself.makeSureCorpusHasASession(function(){
+              corpusself.sessions.at(0).setAsCurrentSession(function(){
+                $(".spinner-status").html("Session loaded.");
+                if(typeof sucessloadingorCreatingcallback == "function"){
+                  sucessloadingorCreatingcallback();
                 }
               });
-          },
-          error : function(model, xhr, options) {
-            $(".spinner-status").html("Creating Corpus...");
+              
+              //end success to create new data list
+            },function(){
+              alert("Failed to create a session. ");
+            });//end failure to create new data list
+            //end success to create new data list
+          },function(){
+            alert("Failed to create a datalist. ");
+          });//end failure to create new data list
 
-            if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-            OPrime.bug("Error fetching your corpus' public view..."+xhr.reason);
-            corpusself.get("publicSelf").fillWithDefaults();
-            corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
-            corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
-            corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-          }
-        });
+
+
+        },// end successful fetch
+        error : errorfunction,
+        dataType : "json"
+      });
     },
     fetchPublicSelf : function(){
       try{
