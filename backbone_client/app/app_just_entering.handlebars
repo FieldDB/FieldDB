@@ -27,18 +27,26 @@
 						role="button" class="dropdown-toggle" data-toggle="dropdown"><i
 							class="icon-cloud icon-white"></i> {{corpustitle}} -
 							{{elicitationgoal}}<b class="caret"></b></a>
-						<ul
-							class="dropdown-menu dont_close_corpus_dropdown_if_user_clicks"
+							<ul
+							class="unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks"
 							role="menu" aria-labelledby="corpus_dropdown_trigger">
 
 							<li>
-								<div id="corpus-quickview" class="well span3"></div>
-							</li>
-							<li>
-								<div id="session-quickview" class="well span3"></div>
+								<div class="well ">
+									<strong><span class="locale_Corpora"></span></strong>
+									<ul class=" unstyled corpuses"></ul>
+								</div>
 							</li>
 
-						</ul></li>
+							<li>
+								<div id="corpus-quickview" class="well "></div>
+							</li>
+							<li>
+								<div id="session-quickview" class="well "></div>
+							</li>
+
+						</ul>
+					</li>
 
 
 					<!-- Notification -->
@@ -127,9 +135,9 @@
 	<div id="dashboard-view" class="">
 		<!--Elements in the middle (things that get hidden)  -->
 
-		<div id="search-data-list-quickview" class="well hide ">
+		<div id="search-data-list-quickview" class="well hide span12 ">
 			<div id="search-data-list-quickview-header" class=" "></div>
-			<div class="  ">
+			<div class=" container  ">
 				<ul
 					class="unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view "></ul>
 				<div class="pagination-control"></div>

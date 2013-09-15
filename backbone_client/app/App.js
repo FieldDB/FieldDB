@@ -4,6 +4,8 @@ define([
     "activity/Activity",
     "authentication/Authentication", 
     "corpus/Corpus",
+    "corpus/CorpusMask",
+    "corpus/Corpuses",
     "data_list/DataList",
     "datum/DatumField",
     "datum/DatumFields",
@@ -21,6 +23,8 @@ define([
     Activity,
     Authentication, 
     Corpus,
+    CorpusMask,
+    Corpuses,
     DataList,
     DatumField,
     DatumFields,
@@ -359,6 +363,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
+      var couchConnectionInscope = couchConnection;
       $.couch.login({
         name: username,
         password: password,
@@ -366,6 +371,33 @@ define([
           if(!serverResults){
             OPrime.bug("There was a problem logging you into your backup database, please report this.");
           }
+          var corpuses =  window.app.get("corpusesUserHasAccessTo")  || new Corpuses();
+          var roles = serverResults.roles;
+          for (var role in roles) {
+            var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
+            thisCouchConnection.corpusid = "";
+            thisCouchConnection.pouchname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+            thisCouchConnection.title = thisCouchConnection.pouchname;
+            if (thisCouchConnection.title.length > 30) {
+              thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
+            }
+            if (thisCouchConnection.title.length > 30) {
+              thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
+            }
+            thisCouchConnection.id = thisCouchConnection.pouchname;
+            if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
+              if (corpuses.where({
+                "pouchname": thisCouchConnection.pouchname
+              }).length === 0) {
+                corpuses.push(new CorpusMask(thisCouchConnection));
+              } else {
+                console.log(thisCouchConnection.pouchname + " Already known");
+              }
+            }
+          }
+          window.app.set("corpusesUserHasAccessTo", corpuses);
+          localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
+          
           if (window.appView) {
             window.appView
             .toastUser(
@@ -685,43 +717,6 @@ define([
               corpusModel.set("couchConnection", oldCouchConnection);
             }
             
-            // try{
-            //   var tags = corpusModel.get("datumFields").where({label : "tags"});
-            //   if(tags.length == 0){
-            //     /* If its missing tags, add upgrade the corpus to version v1.38+ */
-            //     corpusModel.get("datumFields").add(new DatumField({
-            //       label : "tags",
-            //       shouldBeEncrypted: "",
-            //       userchooseable: "disabled",
-            //       help: "Tags for constructions or other info that you might want to use to categorize your data."
-            //     }));
-            //     corpusModel.get("datumFields").add(new DatumField({
-            //       label : "validationStatus",
-            //       shouldBeEncrypted: "",
-            //       userchooseable: "disabled",
-            //       help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
-            //     }));
-            //   }
-            // }catch(e){
-            //   OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
-            // }
-            // try{
-            //   var tags = corpusModel.get("datumFields").where({label : "syntacticTreeLatex"});
-            //   if(tags.length == 0){
-            //     /* If its missing syntacticTreeLatex, add upgrade the corpus to version v1.54+ */
-            //     corpusModel.get("datumFields").add(new DatumField({
-            //       label : "syntacticTreeLatex",
-            //       showToUserTypes: "machine",
-            //       shouldBeEncrypted: "",
-            //       userchooseable: "disabled",
-            //       help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
-            //     }));
-               
-            //   }
-            // }catch(e){
-            //   OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
-            // }
-            
             $(".spinner-status").html("Opened Corpus...");
             
             c.setAsCurrentCorpus(function(){
@@ -765,6 +760,12 @@ define([
                               if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               if(window.appView){
                                 window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
+                              }
+                              try {
+                                window.app.set("corpusesUserHasAccessTo", new Backbone.Collection(JSON.parse(localStorage.getItem(
+                                  window.app.get("authentication").get("userPrivate").get("username") + "corpusesUserHasAccessTo"))));
+                              } catch (e) {
+                                console.log("Couldn't load the list of corpora which the user has access to.");
                               }
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
