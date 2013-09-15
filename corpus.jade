@@ -65,8 +65,7 @@ block content
     footer
       - var year = (new Date()).getFullYear()
       p © #{corpora[0].corpusinfo.copyright} #{year} 
-        a(href="http://creativecommons.org/licenses/by-sa/3.0/", rel="license", title="#{corpora[0].corpusinfo.license}") #{corpora[0].corpusinfo.license}
-          img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
+        
       - var pouchname = corpora[0].corpusinfo.pouchname.toString()
       .tabbable
         ul.nav.nav-tabs
@@ -76,7 +75,11 @@ block content
             a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
         .tab-content
           .tab-pane.active#terms
-            p #{corpora[0].corpusinfo.terms}
+            p #{corpora[0].corpusinfo.terms.humanReadable}
+            span License: 
+            a(href="#{corpora[0].corpusinfo.license.link}", rel="license", title="#{corpora[0].corpusinfo.license.title}") #{corpora[0].corpusinfo.license.title}
+            p #{corpora[0].corpusinfo.license.humanReadable}
+            img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
           .tab-pane#emeldtermsreccomendations
             ul
               li
