@@ -27,7 +27,7 @@ define(
           gravatar : "user/user_gravatar.png",
           title : "Activity Feed",
           team : {
-            _id : $routeParams.username
+            username : $routeParams.username
           }
         };
 

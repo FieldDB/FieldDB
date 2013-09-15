@@ -15128,8 +15128,8 @@ console.log("Loading CouchDBServices");
  */
 
 
-define('libs/oprime/services/CouchDB',
-    [ "angular", "OPrime" ],
+define(
+    'libs/oprime/services/CouchDB',[ "angular", "OPrime" ],
     function(angular, OPrime) {
 
       var CouchDBServices = angular
@@ -15203,8 +15203,8 @@ define('libs/oprime/services/CouchDB',
 
     });
 
-define('js/controllers',
-    [ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
+define(
+    'js/controllers',[ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
     function(angular, OPrime, CouchDBServices) {
       // Declare app level module which depends on filters, and services
 
@@ -15231,7 +15231,7 @@ define('js/controllers',
           gravatar : "user/user_gravatar.png",
           title : "Activity Feed",
           team : {
-            _id : $routeParams.username
+            username : $routeParams.username
           }
         };
 
@@ -15324,6 +15324,9 @@ define('js/filters',[ "angular", "OPrime" ], function(angular, OPrime) {
         };
       } ]).filter('gravatar', function(){
         return function(gravatar, scope) {
+          if(!gravatar){
+            return "user_gravatar.png";
+          }
           return gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
         };
       });
@@ -15333,8 +15336,8 @@ define('js/filters',[ "angular", "OPrime" ], function(angular, OPrime) {
   return ActivityFeedFilters;
 });
 
-define('js/services',
-    [ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
+define(
+    'js/services',[ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
     function(angular, OPrime, CouchDBServices) {
 
       console.log("Loading Activity.services");

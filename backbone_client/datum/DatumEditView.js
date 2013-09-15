@@ -212,6 +212,7 @@ define([
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
+      this.model.startReadTimeIfNotAlreadyStarted();
       if (OPrime.debugMode) OPrime.debug("DATUM render: " );
       
       if(this.collection){
