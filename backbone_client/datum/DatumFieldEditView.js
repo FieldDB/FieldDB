@@ -84,7 +84,8 @@ define([
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW render");
      
       if (this.format == "corpus") {
-        $(this.el).html(this.templateSettings(this.model.toJSON()));
+        var jsonToRender = this.model.toJSON();
+        $(this.el).html(this.templateSettings(jsonToRender));
         //localization
         $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
         $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
@@ -92,8 +93,11 @@ define([
         
         // Select the correct values from the model TODO is this dead code?
         $(this.el).find(".choose-field").val(this.model.get("label"));
-      } else if (this.format == "datum") {
+      } else if (this.format == "datum" || this.format == "search") {
         var jsonToRender = this.model.toJSON();
+        if(this.format == "search"){
+          delete jsonToRender.readonly;
+        }
         jsonToRender.helpText = true;
         jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
         $(this.el).html(this.templateValue(jsonToRender));
