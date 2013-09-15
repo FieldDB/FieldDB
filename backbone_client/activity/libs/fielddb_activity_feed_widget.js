@@ -15249,14 +15249,14 @@ define(
           }else{
             feedParams.username = "";
           }
-          $scope.corpus.title = "Corpus Activity Feed";
+          $scope.corpus.title = "What's happening in this corpus";
           CorpusDetails.async({username: $routeParams.corpusid.split("-")[0], corpusid: $routeParams.corpusid}).then(function(details) {
             $scope.corpus.gravatar = details.gravatar;
             $scope.corpus.description = details.description;
           });
         }else{
           feedParams.corpusid = "";
-          $scope.corpus.title = "User Activity Feed";
+          $scope.corpus.title = "What was I working on last time...";
           UserDetails.async(feedParams).then(function(details) {
             $scope.corpus.gravatar = details.gravatar;
             $scope.corpus.description = details.description;
@@ -15371,7 +15371,7 @@ define(
                               + params.username
                               + params.corpusid
                               + '-activity_feed/'
-                              + '_design/activities/_view/activities?descending=true&limit=20',
+                              + '_design/activities/_view/activities?descending=true&limit=50',
                           withCredentials : true
                         }).then(function(response) {
                       // + JSON.stringify(response));
