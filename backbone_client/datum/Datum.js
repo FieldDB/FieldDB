@@ -114,6 +114,37 @@ define([
       datumTags : DatumTags
     },
 
+
+    /*
+    Psycholing experiment timers
+     */
+    startReadTimeIfNotAlreadyStarted : function(){
+      if(!this.readstarttime){
+        this.readstarttime = Date.now();
+      }
+    },
+
+    calculateEditTime: function() {
+      var details = {
+        editingTimeSpent: 0,
+        editingTimeDetails: []
+      };
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        if (fields[field].timeSpent) {
+          details.editingTimeSpent += fields[field].timeSpent;
+          details.editingTimeDetails.push(fields[field].timeSpent + ":::" + fields[field].get("label") + "->" + fields[field].get("mask") );
+        }
+      }
+      return details;
+    },
+
+    clearEditTimeDetails: function() {
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        fields[field].timeSpent = 0;
+      }
+    },
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -897,8 +928,7 @@ define([
           modifiyersField.set("users", modifieres);
           
           var usersAsString =  modifiyersField.get("mask") + ","+ usersName;
-          usersAsString = (_.unique(usersAsString.trim().split(","))).join(",");
-          usersAsString = usersAsString.replace(/^,/,"");
+          usersAsString = (_.unique(usersAsString.trim().split(/[, ]/))).filter(function(nonemptyvalue){ return nonemptyvalue; }).join(", ");
           modifiyersField.set("mask", usersAsString);
         }
       }else{
@@ -909,8 +939,18 @@ define([
           userField.set("user", user);
         }
       }
-      
-      
+      var timeSpentDetails = this.calculateEditTime();
+      timeSpentDetails.totalTimeSpent = Date.now() - this.readstarttime;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.totalTimeSpent - timeSpentDetails.editingTimeSpent; 
+      //Convert to seconds
+      timeSpentDetails.totalTimeSpent = timeSpentDetails.totalTimeSpent/1000;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.readTimeSpent/1000;
+      timeSpentDetails.editingTimeSpent = timeSpentDetails.editingTimeSpent/1000;
+
+      this.readstarttime = Date.now();
+      this.clearEditTimeDetails();
+      OPrime.debug("This activity was roughly ", timeSpentDetails);
+
       //protect against users moving datums from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
@@ -973,7 +1013,8 @@ define([
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
             
             window.app.addActivity(
@@ -984,7 +1025,8 @@ define([
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
 //            /*
 //             * If the current data list is the default
