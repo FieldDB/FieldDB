@@ -237,6 +237,10 @@ textarea {
 	width: 98%;
 }
 
+.comment-new-text{
+	height: 1em;
+}
+
 .datum_fields_ul textarea.datum_field_input {
 	padding: 0px;
 	margin: 0px;
@@ -849,10 +853,6 @@ h4 {
 
 .icon-white:hover {
 	color: #fff !important;
-}
-
-textarea {
-	width: 98%;
 }
 
 .drop-zone {
