@@ -61,7 +61,9 @@ define([
       if(!connection){
         return;
       }
-
+      if(!pouchname || pouchname == undefined || pouchname == "undefined"){
+        return;
+      }
       /*
        * Verify that the user is in their database, and that the
        * backbone couch adaptor is saving to the corpus' database,
