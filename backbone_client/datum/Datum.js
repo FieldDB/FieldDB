@@ -395,24 +395,35 @@ define([
     },
     isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
       
+      var wordboundary = " ";
+      // If the user is using # to indicate word boundaries as linguists do... turn all word boundaries into #
+      if (queryString.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
       
       var thisDatumIsIn = false;
       // If the query string is null, include all datumIds
-      if(queryString.trim() == ""){
+      if (queryString.trim() === "") {
         thisDatumIsIn = true;
-      }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").search(queryString) > -1){
-            thisDatumIsIn = true;
-          }
-      }else{
-        
+      } else if (doGrossKeywordMatch) {
+        // Take all the data in this object 
+        var stringToSearchIn = JSON.stringify(keyValuePair.key).toLowerCase();
+        // Remove the labels
+        stringToSearchIn = stringToSearchIn.replace(/"[^"]*":"/g, wordboundary).replace(/",/g, wordboundary).replace(/"}/g, wordboundary);
+        // Convert all white space into a word boundary
+        stringToSearchIn = stringToSearchIn.replace(/\s/g, wordboundary);
+        if (stringToSearchIn.search(queryString) > -1) {
+          thisDatumIsIn = true;
+        }
+      } else {
+
         // Determine if this datum matches the first search criteria
         thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
         
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
         for (var j = 1; j < queryTokens.length; j += 2) {
-          if (queryTokens[j] == "AND") {
+          if (queryTokens[j] === "AND") {
             // Short circuit: if it's already false then it continues to be false
             if (!thisDatumIsIn) {
               break;
@@ -447,31 +458,43 @@ define([
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
       var negate = false;
-      if (label.indexOf("!") == 0)
-      {
-    	  label = label.replace(/^!/,"");
-    	  negate  = true;
+      if (label.indexOf("!") === 0) {
+        label = label.replace(/^!/, "");
+        negate = true;
       }
       var value = criteria.substring(delimiterIndex + 1);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
-      if(label == "judgement" && value.toLowerCase() == "grammatical"){
-        if(!objectToSearchThrough[label]){
+      if (label === "judgement" && value.toLowerCase() === "grammatical") {
+        if (!objectToSearchThrough[label]) {
           return true;
         }
       }
-//      if(!label || !value){
-//        return false;
-//      }
-      
-      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+      //      if(!label || !value){
+      //        return false;
+      //      }
 
-      
-      if (negate)
-    	  {
-    	  	searchResult = !searchResult;
-    	  }
-      
-      
+      //If the query has a # in it, lets assume its a linguist looking for word boundaries since they use # to indicate the edge of words. 
+      var wordboundary = " ";
+      if (criteria.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
+
+      var searchResult  = false;
+      if (objectToSearchThrough[label]) {
+        // Make it case in-sensitive 
+        var stringToSearchThrough = objectToSearchThrough[label].toLowerCase();
+        // Replace all spaces with the wordboundary (either a space, or a # if its a linguist)
+        stringToSearchThrough = stringToSearchThrough.replace(/\s/g,wordboundary);
+        // Add word boundaries to the beginning and end of the string
+        stringToSearchThrough = stringToSearchThrough.replace(/^/,"#").replace(/$/,"#");
+
+        // now search for the query string
+        searchResult = (stringToSearchThrough.search(value.toLowerCase()) > -1);
+      }
+
+      if (negate) {
+        searchResult = !searchResult;
+      }
       return  searchResult;
     },
     
