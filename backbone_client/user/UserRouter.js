@@ -61,6 +61,32 @@ define([
       if(!connection){
         return;
       }
+
+      /*
+       * Verify that the user is in their database, and that the
+       * backbone couch adaptor is saving to the corpus' database,
+       * not where the user currently is.
+       */
+      if (OPrime.isCouchApp()) {
+        var corpusPouchName = pouchname;
+        if (window.location.pathname.indexOf(corpusPouchName) == -1) {
+          if (corpusPouchName != "public-firstcorpus") {
+            var username = "";
+            try {
+              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+            } catch (e) {
+              //do nothing
+            }
+            if (username != "public") {
+              // OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            }
+          }
+          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusPouchName);
+          window.location.replace(optionalCouchAppPath + "user.html#/corpus/"+pouchname);
+          return;
+        }
+      }
+
       /* this assumes that the user's corpus connection for this pouch is not on a different server */
       connection.pouchname = pouchname;
       window.app.changePouch(connection, function(){
@@ -77,6 +103,30 @@ define([
             if(!corpusidfromCorpusMask){
               corpusidfromCorpusMask = model.get("corpusId");
             }
+            if(!corpusidfromCorpusMask){
+
+              var couchurl = OPrime.getCouchUrl(connection);
+              var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+
+              var errorfunction = function(response) {
+                OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
+                OPrime.bug("There was a problem loading your corpus. Please report this error.");
+              };
+              var corpusself = this;
+              OPrime.makeCORSRequest({
+                type : 'GET',
+                url : queryUrl,
+                success : function(serverResults) {
+                  if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
+                    errorfunction("No corpus doc! this corpus is broken.");
+                  }
+                  var corpusidfromCorpusMask = serverResults.rows[0].id;
+                  window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
+                }, error: errorfunction 
+              });
+              return;
+            }
+
             if(corpusidfromCorpusMask){
               window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
             }else{
@@ -160,7 +210,9 @@ define([
             }
 
             self.bringCorpusToThisDevice(c, function(){
-              alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
+              if(OPrime.isChromeApp()){
+                alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
+              }
               self.showCorpusDashboard(pouchname, corpusid);
               self.islooping = true;
 
