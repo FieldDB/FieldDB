@@ -42,28 +42,60 @@ define(
         'arrowKey',
         function($rootScope) {
           return function(scope, element, attrs) {
-            element.bind('keydown', function(e) {
-              if (e.keyCode === 40 && scope.$index == undefined) {
-                scope.selectRow(scope.$$childHead.datum);
-              } else if (e.keyCode === 40 && scope.$index < scope.data.length && scope.$$nextSibling) {
-                scope.selectRow(scope.$$nextSibling.datum);
-              } else if (e.keyCode === 38 && scope.$index == 0) {
-                scope.selectRow('newEntry');
-              } else if (e.keyCode === 38 && scope.$index > 0 && scope.$$prevSibling) {
-                scope.selectRow(scope.$$prevSibling.datum);
-              } else {
-                return;
-              }
-              scope.$apply();
+            element.bind('keyup', function(e) {
+              scope.$apply(function() {
+                // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
+                var lastRecord = ((($rootScope.currentPage + 1) * scope.resultSize) - (scope.resultSize - (scope.$index + 1)));
+                if (e.keyCode === 40 && scope.$index == undefined) {
+                  // Select first record if arrowing down from new record
+                  scope.selectRow(0);
+                } else if (e.keyCode === 40 && lastRecord >= scope.data.length) {
+                  // Do not go past very last record
+                  return;
+                } else if (e.keyCode === 40) {
+                  if (scope.$index + 2 > scope.scopePreferences.resultSize) {
+                    // If the next record down is on another page, change to that page and select the first record
+                    $rootScope.currentPage = $rootScope.currentPage + 1;
+                    scope.selectRow(0);
+                  } else {
+                    scope.selectRow(scope.$index + 1);
+                  }
+                } else if (e.keyCode === 38 && $rootScope.currentPage == 0 && (scope.$index == 0 || scope.$index == undefined)) {
+                  // Select new entry if coming from most recent record
+                  scope.selectRow('newEntry');
+                } else if (e.keyCode === 38 && scope.$index == 0) {
+                  // Go back one page and select last record
+                  $rootScope.currentPage = $rootScope.currentPage - 1;
+                  scope.selectRow(scope.scopePreferences.resultSize - 1);
+                } else if (e.keyCode === 38) {
+                  scope.selectRow(scope.$index - 1);
+                } else {
+                  return;
+                }
+              });
             });
           };
         }).directive(
         'keypressMarkAsEdited',
         function($rootScope) {
           return function(scope, element, attrs) {
-            element.bind('keydown', function(e) {
-              if (e.keyCode != 40 && e.keyCode != 38) {
-                $rootScope.editsHaveBeenMade = true;
+            element.bind('keyup', function(e) {
+              var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
+              if (keycodesToIgnore.indexOf(e.keyCode) == -1) {
+                $rootScope.markAsEdited(scope.fieldData, scope.datum);
+              } else {
+                return;
+              }
+            });
+          };
+        }).directive(
+        'keypressMarkAsNew',
+        function($rootScope) {
+          return function(scope, element, attrs) {
+            element.bind('keyup', function(e) {
+              var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
+              if (keycodesToIgnore.indexOf(e.keyCode) == -1) {
+                $rootScope.newRecordHasBeenEdited = true;
               } else {
                 return;
               }
@@ -74,7 +106,7 @@ define(
         function($timeout) {
           return function(scope, element) {
             scope.$watch('selected', function() {
-              if (scope.selected == scope.datum || scope.selected == 'newEntry') {
+              if (scope.selected == scope.$index || scope.selected == 'newEntry') {
                 $timeout(function() {
                   element[0].focus();
                 }, 0);
