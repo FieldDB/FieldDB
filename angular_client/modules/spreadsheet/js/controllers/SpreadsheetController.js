@@ -345,7 +345,23 @@ define(
                     newDatumFromServer.rev = dataFromServer[i].value._rev;
 
                     for (j in dataFromServer[i].value.datumFields) {
-                      newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
+                      // Get enteredByUser object
+                      if (dataFromServer[i].value.datumFields[j].label == "enteredByUser") {
+                        newDatumFromServer.enteredByUser = dataFromServer[i].value.datumFields[j].user;
+                      }
+                      // Get enteredByUser object
+                      // else if (dataFromServer[i].value.datumFields[j].label == "modifiedByUser") {
+                      //   newDatumFromServer.modifiedByUser = dataFromServer[i].value.datumFields[j].users;
+                      // }
+                      else {
+                        newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
+                      }
+                    }
+
+                    // Grab enteredByUser for older records
+                    if (dataFromServer[i].value.enteredByUser && typeof dataFromServer[i].value.enteredByUser == "string") {
+                      newDatumFromServer.enteredByUser = {};
+                      newDatumFromServer.enteredByUser.username = dataFromServer[i].value.enteredByUser;
                     }
 
                     // Update users to add a dateEntered to all datums (oversight in original code; needed so that datums are ordered properly)
@@ -355,9 +371,7 @@ define(
                     } else {
                       newDatumFromServer.dateEntered = dataFromServer[i].value.dateEntered;
                     }
-                    if (dataFromServer[i].value.enteredByUser) {
-                      newDatumFromServer.enteredByUser = dataFromServer[i].value.enteredByUser;
-                    }
+
                     if (dataFromServer[i].value.dateModified) {
                       newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
                     }
@@ -934,10 +948,14 @@ define(
           }
 
           fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
-          fieldData.enteredByUser = $rootScope.userInfo.name;
+          fieldData.enteredByUser = {
+            "username": $rootScope.userInfo.name,
+            "gravatar": $rootScope.userInfo.gravatar
+          };
+
           fieldData.timestamp = Date.now();
-          fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
-          fieldData.lastModifiedBy = $rootScope.userInfo.name;
+          // fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
+          // fieldData.lastModifiedBy = $rootScope.userInfo.name;
           fieldData.sessionID = $scope.activeSession;
           fieldData.saved = "no";
           if (fieldData.attachments) {
@@ -971,7 +989,23 @@ define(
             }
           }
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
-          datum.lastModifiedBy = $rootScope.userInfo.name;
+          var modifiedByUser = {};
+          modifiedByUser.username = $rootScope.userInfo.name;
+          modifiedByUser.gravatar = $rootScope.userInfo.gravatar;
+          if (!datum.modifiedByUser) {
+            datum.modifiedByUser = {};
+            datum.modifiedByUser.users = [];
+          }
+
+          datum.modifiedByUser.users.push(modifiedByUser);
+
+          // Limit users array to unique usernames
+          datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
+            return x.username;
+          }), function(grouped) {
+            return grouped[0];
+          });
+
           $scope.saved = "no";
 
           if (!datum.saved || datum.saved == "yes") {
@@ -1136,17 +1170,20 @@ define(
                         for (var j = 0; j < newRecord.datumFields.length; j++) {
                           for (key in fieldData) {
                             if (newRecord.datumFields[j].label == key) {
-                              newRecord.datumFields[j].mask = fieldData[key];
+                              // Create enteredByUser object
+                              if (key == "enteredByUser") {
+                                newRecord.datumFields[j].mask = fieldData[key].username;
+                                newRecord.datumFields[j].user = fieldData[key];
+                              } else {
+                                newRecord.datumFields[j].mask = fieldData[key];
+                              }
                             }
                           }
                         }
 
                         // Save date info
-                        newRecord.dateModified = fieldData.dateModified;
-                        newRecord.timestamp = fieldData.timestamp;
-                        newRecord.lastModifiedBy = fieldData.lastModifiedBy;
                         newRecord.dateEntered = fieldData.dateEntered;
-                        newRecord.enteredByUser = fieldData.enteredByUser;
+                        newRecord.timestamp = fieldData.timestamp;
 
                         // Save session
                         newRecord.session = $scope.fullCurrentSession;
@@ -1168,7 +1205,7 @@ define(
                           newRecord._attachments = fieldData._attachments;
                           newRecord.attachmentInfo = fieldData.attachmentInfo;
                         }
-
+                        console.log(newRecord);
                         Data
                           .saveNew($rootScope.DB.pouchname, newRecord)
                           .then(
