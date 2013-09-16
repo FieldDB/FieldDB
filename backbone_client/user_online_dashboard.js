@@ -49,7 +49,7 @@ require.config({
   shim : {
 
     "xml2json" : {
-      deps : [ "jquery" ],
+      deps : [ "$" ],
       exports : "X2JS"
     },
 

@@ -34,7 +34,7 @@ define(
                               + params.username
                               + params.corpusid
                               + '-activity_feed/'
-                              + '_design/activities/_view/activities?descending=true&limit=20',
+                              + '_design/activities/_view/activities?descending=true&limit=50',
                           withCredentials : true
                         }).then(function(response) {
                       // + JSON.stringify(response));

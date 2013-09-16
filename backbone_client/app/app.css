@@ -237,6 +237,10 @@ textarea {
 	width: 98%;
 }
 
+.comment-new-text{
+	height: 1em;
+}
+
 .datum_fields_ul textarea.datum_field_input {
 	padding: 0px;
 	margin: 0px;
@@ -522,68 +526,89 @@ line
 	white-space: normal;
 }
 
-.datum-state-color-success {
+.datum-primary-validation-status-color-success {
 	color: rgb(70, 136, 71) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 	background-color: rgb(223, 240, 216) !important;
 	border: 1px solid rgb(214, 233, 198) !important;
-	margin: 0px 0px 2px 0px !important;
+	margin: 0px 0px 0px 0px !important;
 	padding-top: 0.25em !important;
 	padding-bottom: 0.25em !important;
 }
 
-.datum-state-color-warning {
+.datum-primary-validation-status-color-warning {
 	color: rgb(192, 152, 83) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 	background-color: rgb(252, 248, 227) !important;
 	border: 1px solid rgb(251, 238, 213) !important;
-	margin: 0px 0px 2px 0px !important;
+	margin: 0px 0px 0px 0px !important;
 	padding-top: 0.25em !important;
 	padding-bottom: 0.25em !important;
 	border-bottom: 1px solid #888;
 }
 
-.datum-state-color-important {
+.datum-primary-validation-status-color-important {
 	color: rgb(185, 74, 72) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 	background-color: rgb(242, 222, 222) !important;
 	border: 1px solid rgb(238, 211, 215) !important;
-	margin: 0px 0px 2px 0px !important;
+	margin: 0px 0px 0px 0px !important;
 	padding-top: 0.25em !important;
 	padding-bottom: 0.25em !important;
 	border-bottom: 1px solid #888;
 }
 
-.datum-state-color-info {
+.datum-primary-validation-status-color-info {
 	color: rgb(58, 135, 173) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 	background-color: rgb(230, 250, 250) !important;
 	border: 1px solid rgb(220, 240, 240) !important;
-	margin: 0px 0px 2px 0px !important;
+	margin: 0px 0px 0px 0px !important;
 	padding-top: 0.25em !important;
 	padding-bottom: 0.25em !important;
 	border-bottom: 1px solid #888;
 }
 
-.datum-state-color-inverse {
+.datum-primary-validation-status-color-inverse {
 	color: rgb(51, 51, 51) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 	background-color: rgb(221, 221, 221) !important;
 	border: 1px solid rgb(210, 210, 210) !important;
-	margin: 0px 0px 2px 0px !important;
+	margin: 0px 0px 0px 0px !important;
 	padding-top: 0.25em !important;
 	padding-bottom: 0.25em !important;
 	border-bottom: 1px solid #888;
 }
 
-.datum-state-color- {
-	color: rgb(51, 51, 51) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+.datum-primary-validation-status-color- {
 	border: 1px solid rgb(210, 210, 210) !important;
-	margin: 0px 0px 2px 0px !important;
+	margin: 0px 0px 0px 0px !important;
 	padding-top: 0.25em !important;
 	padding-bottom: 0.25em !important;
 	border-bottom: 1px solid #888;
+}
+
+
+
+
+
+.datum-primary-validation-status-outline-color-success {
+	border: 1px solid rgb(70, 136, 71) !important;
+}
+
+.datum-primary-validation-status-outline-color-warning {
+	border: 1px solid rgb(192, 152, 83) !important;
+}
+
+.datum-primary-validation-status-outline-color-important {
+	border: 1px solid rgb(185, 74, 72) !important;
+}
+
+.datum-primary-validation-status-outline-color-info {
+	border: 1px solid rgb(58, 135, 173) !important;
+}
+
+.datum-primary-validation-status-outline-color-inverse {
+	border: 1px solid rgb(0, 0, 0) !important;
+}
+
+.datum-primary-validation-status-outline-color- {
+	border: 1px solid rgba(51, 51, 51, 0.5) !important;
 }
 
 .datum-latex-translation {
@@ -830,10 +855,6 @@ h4 {
 	color: #fff !important;
 }
 
-textarea {
-	width: 98%;
-}
-
 .drop-zone {
 	border: dashed;
 	border-color: #1E90FF;
@@ -1020,7 +1041,9 @@ line.link {
 	stroke: #999;
 	stroke-opacity: .6;
 }
-
+.ungrammatical {
+	text-decoration: line-through;
+}
 .corpus-precedence-rules-visualization {
 	background-color: #333;
 	text-align: center;
@@ -1067,69 +1090,6 @@ line.link {
 	white-space: normal;
 }
 
-.datum-state-color-success {
-	color: rgb(70, 136, 71) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-	background-color: rgb(223, 240, 216) !important;
-	border: 1px solid rgb(214, 233, 198) !important;
-	margin: 0px 0px 2px 0px !important;
-	padding-top: 0.25em !important;
-	padding-bottom: 0.25em !important;
-}
-
-.datum-state-color-warning {
-	color: rgb(192, 152, 83) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-	background-color: rgb(252, 248, 227) !important;
-	border: 1px solid rgb(251, 238, 213) !important;
-	margin: 0px 0px 2px 0px !important;
-	padding-top: 0.25em !important;
-	padding-bottom: 0.25em !important;
-	border-bottom: 1px solid #888;
-}
-
-.datum-state-color-important {
-	color: rgb(185, 74, 72) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-	background-color: rgb(242, 222, 222) !important;
-	border: 1px solid rgb(238, 211, 215) !important;
-	margin: 0px 0px 2px 0px !important;
-	padding-top: 0.25em !important;
-	padding-bottom: 0.25em !important;
-	border-bottom: 1px solid #888;
-}
-
-.datum-state-color-info {
-	color: rgb(58, 135, 173) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-	background-color: rgb(230, 250, 250) !important;
-	border: 1px solid rgb(220, 240, 240) !important;
-	margin: 0px 0px 2px 0px !important;
-	padding-top: 0.25em !important;
-	padding-bottom: 0.25em !important;
-	border-bottom: 1px solid #888;
-}
-
-.datum-state-color-inverse {
-	color: rgb(51, 51, 51) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-	background-color: rgb(221, 221, 221) !important;
-	border: 1px solid rgb(210, 210, 210) !important;
-	margin: 0px 0px 2px 0px !important;
-	padding-top: 0.25em !important;
-	padding-bottom: 0.25em !important;
-	border-bottom: 1px solid #888;
-}
-
-.datum-state-color- {
-	color: rgb(51, 51, 51) !important;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-	border: 1px solid rgb(210, 210, 210) !important;
-	margin: 0px 0px 2px 0px !important;
-	padding-top: 0.25em !important;
-	padding-bottom: 0.25em !important;
-	border-bottom: 1px solid #888;
-}
 
 .datum-latex-translation {
 	font-style: italic;

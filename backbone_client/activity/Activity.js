@@ -21,8 +21,13 @@ define([
       if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
       if(!this.get("user")) {
-        this.set("user", window.app.get("authentication").get("userPublic"));
-//        if(!this.get("pouchname")) {
+        var user = window.app.get("authentication").get("userPublic").toJSON();
+        this.set("user", {
+          username: user.username,
+          gravatar: user.gravatar,
+          authUrl: user.authUrl
+        });
+        //        if(!this.get("pouchname")) {
 //          this.set("pouchname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname);
 //        }
       }

@@ -388,7 +388,7 @@
     "message" : "Affiliation:"
   },
   "locale_Corpora" : {
-    "message" : "Corpora:"
+    "message" : "Switch to another corpus:"
   },
   "locale_Gravatar" : {
     "message" : "Gravatar"
