@@ -15290,7 +15290,7 @@ define('user/UserRouter',[
       window.app.get("authentication").syncUserWithServer(function(){
         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(pouchname);
         window.location.replace(optionalCouchAppPath+"corpus.html");
-    });
+      });
     },
     guessCorpusIdAndShowDashboard : function(pouchname){
       var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
@@ -15300,30 +15300,7 @@ define('user/UserRouter',[
       if(!pouchname || pouchname == undefined || pouchname == "undefined"){
         return;
       }
-      /*
-       * Verify that the user is in their database, and that the
-       * backbone couch adaptor is saving to the corpus' database,
-       * not where the user currently is.
-       */
-      if (OPrime.isCouchApp()) {
-        var corpusPouchName = pouchname;
-        if (window.location.pathname.indexOf(corpusPouchName) == -1) {
-          if (corpusPouchName != "public-firstcorpus") {
-            var username = "";
-            try {
-              username = window.app.get("authentication").get("userPrivate").get("username") || "";
-            } catch (e) {
-              //do nothing
-            }
-            if (username != "public") {
-              // OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
-            }
-          }
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusPouchName);
-          window.location.replace(optionalCouchAppPath + "user.html#/corpus/"+pouchname);
-          return;
-        }
-      }
+      this.veryifyWeAreInTheRightDB(pouchname);
 
       /* this assumes that the user's corpus connection for this pouch is not on a different server */
       connection.pouchname = pouchname;
@@ -15409,10 +15386,15 @@ define('user/UserRouter',[
         if (OPrime.debugMode) OPrime.debug("the pouchname is missing, this should never happen");
         return;
       }
+
+      this.veryifyWeAreInTheRightDB(pouchname);
+      
       var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
       if(!connection){
         return;
       }
+
+
       var self = this;
       connection.pouchname = pouchname;
       window.app.changePouch(connection, function(){
@@ -15492,6 +15474,32 @@ define('user/UserRouter',[
             window.app.replicateOnlyFromCorpus(null, callback);
           });
           break;
+        }
+      }
+    },
+    veryifyWeAreInTheRightDB : function(pouchname){
+      /*
+       * Verify that the user is in their database, and that the
+       * backbone couch adaptor is saving to the corpus' database,
+       * not where the user currently is.
+       */
+      if (OPrime.isCouchApp()) {
+        var corpusPouchName = pouchname;
+        if (window.location.pathname.indexOf(corpusPouchName) == -1) {
+          if (corpusPouchName != "public-firstcorpus") {
+            var username = "";
+            try {
+              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+            } catch (e) {
+              //do nothing
+            }
+            if (username != "public") {
+              // OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            }
+          }
+          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusPouchName);
+          window.location.replace(optionalCouchAppPath + "user.html#/corpus/"+pouchname);
+          return;
         }
       }
     }
