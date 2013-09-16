@@ -178,13 +178,19 @@ define([
 //        childViewTagName     : 'li'
 //      });
     //Create a CommentReadView     
+      var corpuses = new Corpuses();
+      try {
+        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corpusesUserHasAccessTo")));
+      } catch (e) {
+        console.log("Couldn't load the list of corpora which the user has access to.");
+      } 
       this.corpusesReadView = new UpdatingCollectionView({
-        collection : new Corpuses(),
+        collection : corpuses,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
-      this.corpusesReadView.collection.constructCollectionFromArray(this.model
-          .get("corpuses"))
+      
     }
   });
 
