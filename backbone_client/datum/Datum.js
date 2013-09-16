@@ -6,8 +6,6 @@ define([
     "datum/Datums", 
     "datum/DatumField", 
     "datum/DatumFields", 
-    "datum/DatumState", 
-    "datum/DatumStates",
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
@@ -20,8 +18,6 @@ define([
     Datums,
     DatumField, 
     DatumFields,
-    DatumState, 
-    DatumStates,
     DatumTag,
     DatumTags,
     Session
@@ -74,11 +70,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Initially, the first datumState is selected
-//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-//        this.get("datumStates").models[0].set("selected", "selected");
-//      }
-      
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -120,10 +111,40 @@ define([
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumStates : DatumStates,
       datumTags : DatumTags
     },
 
+
+    /*
+    Psycholing experiment timers
+     */
+    startReadTimeIfNotAlreadyStarted : function(){
+      if(!this.readstarttime){
+        this.readstarttime = Date.now();
+      }
+    },
+
+    calculateEditTime: function() {
+      var details = {
+        editingTimeSpent: 0,
+        editingTimeDetails: []
+      };
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        if (fields[field].timeSpent) {
+          details.editingTimeSpent += fields[field].timeSpent;
+          details.editingTimeDetails.push(fields[field].timeSpent + ":::" + fields[field].get("label") + "->" + fields[field].get("mask") );
+        }
+      }
+      return details;
+    },
+
+    clearEditTimeDetails: function() {
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        fields[field].timeSpent = 0;
+      }
+    },
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -195,20 +216,65 @@ define([
         
       }
     },
-    fillWithCorpusFieldsIfMissing : function(){
-      if(!this.get("datumFields")){
-        return;
+    
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel) {
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
       }
-      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
-      var corpusFields = window.app.get("corpus").get("datumFields").models;
+
+      OPrime.debug("Edit this function to update datum to the latest schema.");
+
+      /* Add any new corpus fields to this datum so they can be edited */
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+      var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
       for(var field in corpusFields){
-        var label = corpusFields[field].get("label");
-        OPrime.debug("Label "+label);
-        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
-        if(correspondingFieldInThisDatum.length === 0){
-          this.get("datumFields").push(corpusFields[field]);
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this datum: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
         }
       }
+
+
+      /* remove Deprecated datumStates on datum */
+      var oldvalidationStatus = "";
+      if (originalModel.datumStates) {
+        var selectedArray = _.pluck(originalModel.datumStates, "selected");
+        var selectedIndex = selectedArray.indexOf("selected");
+
+        if (selectedIndex  !== -1) {
+          oldvalidationStatus = originalModel.datumStates[selectedIndex].state;
+        }
+        //Remove datumStates from this datum
+        delete originalModel.datumStates;
+      }
+
+      /* enforce validation status to be comma seperated */
+      var fieldLabels = _.pluck(originalModel.datumFields, "label");
+      var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
+      var validationFieldToclean = originalModel.datumFields[indexOfValidationSatus];
+      var validationStatus = validationFieldToclean.mask || "";
+      if (oldvalidationStatus) {
+        // if the old status is not already subsumbed by a curretn status, do add it to the validation status
+        if(validationStatus.toLowerCase().indexOf(oldvalidationStatus.toLowerCase()) === -1){
+          validationStatus = oldvalidationStatus + ", " + validationStatus;
+        }
+      }
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      validationFieldToclean.mask = uniqueStati.join(", ");
+      validationFieldToclean.value = validationFieldToclean.mask;
+
+      /* enforce tags to be comma seperated */
+      var indexOfTags = fieldLabels.indexOf("tags");
+      var tagFieldToClean = originalModel.datumFields[indexOfTags];
+      var tagValue = tagFieldToClean.mask || "";
+      var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      tagFieldToClean.mask = uniqueTags.join(", ");
+      tagFieldToClean.value = tagFieldToClean.mask;
+
+
+      return this.originalParse(originalModel);
     },
     searchByQueryString : function(queryString, callback) {
       var self = this;
@@ -329,24 +395,35 @@ define([
     },
     isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
       
+      var wordboundary = " ";
+      // If the user is using # to indicate word boundaries as linguists do... turn all word boundaries into #
+      if (queryString.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
       
       var thisDatumIsIn = false;
       // If the query string is null, include all datumIds
-      if(queryString.trim() == ""){
+      if (queryString.trim() === "") {
         thisDatumIsIn = true;
-      }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").search(queryString) > -1){
-            thisDatumIsIn = true;
-          }
-      }else{
-        
+      } else if (doGrossKeywordMatch) {
+        // Take all the data in this object 
+        var stringToSearchIn = JSON.stringify(keyValuePair.key).toLowerCase();
+        // Remove the labels
+        stringToSearchIn = stringToSearchIn.replace(/"[^"]*":"/g, wordboundary).replace(/",/g, wordboundary).replace(/"}/g, wordboundary);
+        // Convert all white space into a word boundary
+        stringToSearchIn = stringToSearchIn.replace(/\s/g, wordboundary);
+        if (stringToSearchIn.search(queryString) > -1) {
+          thisDatumIsIn = true;
+        }
+      } else {
+
         // Determine if this datum matches the first search criteria
         thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
         
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
         for (var j = 1; j < queryTokens.length; j += 2) {
-          if (queryTokens[j] == "AND") {
+          if (queryTokens[j] === "AND") {
             // Short circuit: if it's already false then it continues to be false
             if (!thisDatumIsIn) {
               break;
@@ -381,31 +458,43 @@ define([
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
       var negate = false;
-      if (label.indexOf("!") == 0)
-      {
-    	  label = label.replace(/^!/,"");
-    	  negate  = true;
+      if (label.indexOf("!") === 0) {
+        label = label.replace(/^!/, "");
+        negate = true;
       }
       var value = criteria.substring(delimiterIndex + 1);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
-      if(label == "judgement" && value.toLowerCase() == "grammatical"){
-        if(!objectToSearchThrough[label]){
+      if (label === "judgement" && value.toLowerCase() === "grammatical") {
+        if (!objectToSearchThrough[label]) {
           return true;
         }
       }
-//      if(!label || !value){
-//        return false;
-//      }
-      
-      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+      //      if(!label || !value){
+      //        return false;
+      //      }
 
-      
-      if (negate)
-    	  {
-    	  	searchResult = !searchResult;
-    	  }
-      
-      
+      //If the query has a # in it, lets assume its a linguist looking for word boundaries since they use # to indicate the edge of words. 
+      var wordboundary = " ";
+      if (criteria.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
+
+      var searchResult  = false;
+      if (objectToSearchThrough[label]) {
+        // Make it case in-sensitive 
+        var stringToSearchThrough = objectToSearchThrough[label].toLowerCase();
+        // Replace all spaces with the wordboundary (either a space, or a # if its a linguist)
+        stringToSearchThrough = stringToSearchThrough.replace(/\s/g,wordboundary);
+        // Add word boundaries to the beginning and end of the string
+        stringToSearchThrough = stringToSearchThrough.replace(/^/,"#").replace(/$/,"#");
+
+        // now search for the query string
+        searchResult = (stringToSearchThrough.search(value.toLowerCase()) > -1);
+      }
+
+      if (negate) {
+        searchResult = !searchResult;
+      }
       return  searchResult;
     },
     
@@ -463,7 +552,6 @@ define([
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
         session: this.get("session")
@@ -482,21 +570,17 @@ define([
     getValidationStatus : function(){
       var validationStatus = "";
       var stati = this.get("datumFields").where({"label": "validationStatus"});
-      if(stati.length > 0){
-        stati = stati[0].get("mask").split(" ");
-        if(stati.length >0){
-          validationStatus = stati[0];
-        }
+      stati = stati[0].get("mask").trim().split(", ");
+      validationStatus = stati[0].trim();
+      
+      if(!validationStatus){
+        return this.setDefaultValidationStatus();
       }
-      /* Handle upgrade from previous corpora look in datum states too */
-      if(validationStatus == ""){
-        stati = this.get("datumStates").where({selected : "selected"});
-        if(stati.length > 0){
-          validationStatus = stati[0].get("state");
-        }
-      }
-      this.updateDatumState(validationStatus);
       return validationStatus;
+    },
+    setDefaultValidationStatus : function(){
+      this.preprendValidationStatus("Checked");
+      return "Checked";
     },
     /**
      * This function is used to colour a datum background to make
@@ -515,8 +599,8 @@ define([
         status = this.getValidationStatus();
       }
       /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
-      if(status.toLowerCase().indexOf("deleted") > -1){
-        return "danger";
+      if(status.toLowerCase().indexOf("delete") > -1){
+        return "important";
       }
       if(status.toLowerCase().indexOf("tobechecked") > -1){
         return "warning";
@@ -535,49 +619,15 @@ define([
      *            This is a string which is the validation status
      *            you want the datum to be
      */
-    updateDatumState : function(selectedValue){
-      if(!selectedValue){
-        return;
-      }
-      OPrime.debug("Asking to change the datum state to " + selectedValue); 
-      /* make sure all the corpus states are availible in this datum */
-      thisdatumStates = this.get("datumStates");
-      window.app.get("corpus").get("datumStates").each(function(datumstate) {
-        var obj = datumstate.toJSON();
-        obj.selected = "";
-        thisdatumStates.addIfNew(obj);
-      });
-      try{
-        $.each( this.get("datumStates").where({selected : "selected"}), function(){
-          if(this.get("state") != selectedValue){
-            this.set("selected", "");
-          }
-        });
-        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-      }
+    preprendValidationStatus : function(selectedValue){
       
       /* prepend this state to the new validationStates as of v1.46.2 */
       var n = this.get("datumFields").where({label: "validationStatus"})[0];
-      if(n == [] || !n){
-        n = new DatumField({
-          label : "validationStatus",
-          shouldBeEncrypted: "",
-          showToUserTypes: "all",
-          userchooseable: "disabled",
-          help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-        });
-        this.get("datumFields").add(n);
-      }
       var validationStatus = n.get("mask") || "";
-      validationStatus = selectedValue + " " +validationStatus ;
-      var uniqueStati = _.unique(validationStatus.trim().split(" "));
-      n.set("mask", uniqueStati.join(" "));
-      
-
-//      this.save();
-      //TODO save it
+      validationStatus = selectedValue + ", " +validationStatus ;
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(n){ return n });
+      n.set("mask", uniqueStati.join(", "));
+    
     },
     
     /**
@@ -591,7 +641,7 @@ define([
      */ 
     putInTrash : function(){
       this.set("trashed", "deleted"+Date.now());
-      this.updateDatumState("Deleted");
+      this.preprendValidationStatus("Deleted");
       this.saveAndInterConnectInApp(function(){
         /* This actually removes it from the database */
         //thisdatum.destroy();
@@ -880,11 +930,50 @@ define([
       if (OPrime.debugMode) OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
+      var user = window.app.get("authentication").get("userPublic").toJSON();
+      delete user._rev;
+      delete user._id;
+      delete user.id;
+      delete user.authUrl;
+      var usersName = user.firstname + " " + user.lastname;
+      usersName = usersName.replace(/undefined/g, "");
+      if(!usersName || usersName.trim().length < 2){
+        usersName = user.username ;
+      }
+
       if(this.id){
         newModel = false;
+        var modifiyersField = this.get("datumFields").where({label: "modifiedByUser"})[0];
+        if(modifiyersField){
+          var modifiers = modifiyersField.get("users");
+          modifiers.push(user);
+          modifieres = _.unique(modifiers);
+          modifiyersField.set("users", modifieres);
+          
+          var usersAsString =  modifiyersField.get("mask") + ","+ usersName;
+          usersAsString = (_.unique(usersAsString.trim().split(/[, ]/))).filter(function(nonemptyvalue){ return nonemptyvalue; }).join(", ");
+          modifiyersField.set("mask", usersAsString);
+        }
       }else{
         this.set("dateEntered", JSON.stringify(new Date()));
+        var userField = this.get("datumFields").where({label: "enteredByUser"})[0];
+        if(userField){
+          userField.set("mask", usersName);
+          userField.set("user", user);
+        }
       }
+      var timeSpentDetails = this.calculateEditTime();
+      timeSpentDetails.totalTimeSpent = Date.now() - this.readstarttime;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.totalTimeSpent - timeSpentDetails.editingTimeSpent; 
+      //Convert to seconds
+      timeSpentDetails.totalTimeSpent = timeSpentDetails.totalTimeSpent/1000;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.readTimeSpent/1000;
+      timeSpentDetails.editingTimeSpent = timeSpentDetails.editingTimeSpent/1000;
+
+      this.readstarttime = Date.now();
+      this.clearEditTimeDetails();
+      OPrime.debug("This activity was roughly ", timeSpentDetails);
+
       //protect against users moving datums from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
@@ -918,20 +1007,6 @@ define([
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it. 
-       * this gets rid of it when we save. (if it gets in to a datum)
-       */
-      try{
-        var ds = this.get("datumStates").models;
-        for (var s in ds){
-          if(ds[s].get("state") == undefined){
-            this.get("datumStates").remove(ds[s]);
-          }
-        }
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
-      }
       
         self.save(null, {
           success : function(model, response) {
@@ -961,7 +1036,8 @@ define([
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
             
             window.app.addActivity(
@@ -972,7 +1048,8 @@ define([
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
 //            /*
 //             * If the current data list is the default

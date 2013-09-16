@@ -10,7 +10,11 @@
 {{#if size}}
 <input class="datum_field_input small-field" type="text" value="{{mask}}" />
 {{else}}
-<textarea class="datum_field_input" data-provide="typeahead"
-    data-items="6" data-minLength="0" data-source='{{alternates}}' autocomplete="off">{{mask}}</textarea>
+	{{#if readonly }}
+	<span>{{mask}}</span>
+	{{else}}
+	<textarea class="datum_field_input" data-provide="typeahead"
+	    data-items="6" data-minLength="0" data-source='{{alternates}}' autocomplete="off">{{mask}}</textarea>
+	{{/if}}
 {{/if}}
     </td>
