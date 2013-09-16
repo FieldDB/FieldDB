@@ -762,7 +762,7 @@ define([
                                 window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
                               }
                               try {
-                                window.app.set("corpusesUserHasAccessTo", new Backbone.Collection(JSON.parse(localStorage.getItem(
+                                window.app.set("corpusesUserHasAccessTo", new Corpuses(JSON.parse(localStorage.getItem(
                                   window.app.get("authentication").get("userPrivate").get("username") + "corpusesUserHasAccessTo"))));
                               } catch (e) {
                                 console.log("Couldn't load the list of corpora which the user has access to.");

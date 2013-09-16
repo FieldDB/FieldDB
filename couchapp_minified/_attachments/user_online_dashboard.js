@@ -3998,7 +3998,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n\n		<!-- Elements on Right hand side -->\n		<div class=\"span6\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n\n		<!-- Elements on Right hand side -->\n		<div class=\"span6\">\n			<div class=\"  hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"   \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
@@ -4017,7 +4017,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
@@ -4032,19 +4032,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.corpustitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " - ";
+    + " -\n							";
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
-  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ".html#/user/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
   if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4056,7 +4048,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
@@ -4075,7 +4075,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"\">\n		<!--Elements in the middle (things that get hidden)  -->\n\n		<div id=\"search-data-list-quickview\" class=\"well hide \">\n			<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n			<div class=\"  \">\n				<ul\n					class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n		<div class=\"clear-spacing\"></div>\n		\n		<div id=\"insert-unicode\" class=\"well\"></div>\n\n		<div id=\"datums-embedded\" class=\"middle well\"></div>\n		<div id=\"session-embedded\" class=\"middle well\"></div>\n		<div id=\"corpus-embedded\" class=\"middle well\"></div>\n		<div id=\"search-embedded\" class=\"middle well\"></div>\n\n		<div id=\"data-list-embedded\" class=\"well\">\n			<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n			<div>\n				<ul\n					class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n\n\n		<div id=\"conversation-embedded\" class=\"middle well\">\n			<div class=\"scrollable\">\n				<div class=\"conversation-text-audio-wrapper\">\n					<div class=\"jp-load-bar\" style=\"width: 960;\">\n						<div class=\"jp-play-bar\" style=\"width: 330;\">\n							<i class=\"icon-gift\"></i><strong></strong>\n							<h4>'Conversations' will let you have multiple speakers with\n								overlapping speech.</h4>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"\">\n		<!--Elements in the middle (things that get hidden)  -->\n\n		<div id=\"search-data-list-quickview\" class=\"well hide span12 \">\n			<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n			<div class=\" container  \">\n				<ul\n					class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n		<div class=\"clear-spacing\"></div>\n		\n		<div id=\"insert-unicode\" class=\"well\"></div>\n\n		<div id=\"datums-embedded\" class=\"middle well\"></div>\n		<div id=\"session-embedded\" class=\"middle well\"></div>\n		<div id=\"corpus-embedded\" class=\"middle well\"></div>\n		<div id=\"search-embedded\" class=\"middle well\"></div>\n\n		<div id=\"data-list-embedded\" class=\"well\">\n			<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n			<div>\n				<ul\n					class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n\n\n		<div id=\"conversation-embedded\" class=\"middle well\">\n			<div class=\"scrollable\">\n				<div class=\"conversation-text-audio-wrapper\">\n					<div class=\"jp-load-bar\" style=\"width: 960;\">\n						<div class=\"jp-play-bar\" style=\"width: 330;\">\n							<i class=\"icon-gift\"></i><strong></strong>\n							<h4>'Conversations' will let you have multiple speakers with\n								overlapping speech.</h4>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
@@ -4094,15 +4094,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n\n\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
-  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ".html#/user/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n			<div id=\"\" class=\" hide span12\"></div>\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n\n			<div class=\"well span12\">\n				<iframe\n					src=\"activity/activity_feed";
   if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4114,7 +4106,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well span12\">\n				<iframe src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
@@ -4181,11 +4181,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</span>\n<!--  <i class=\"icons icon-comment\"></i>  -->\n<textarea class=\"comment-new-text\">";
+    + "</span> \n<button class=\"btn btn-mini btn-primary add-comment-button pull-right\">\n    <span class=\"locale_Add\"></span> \n    <i class=\"icon-comment\"></i>\n  </button>\n<!--  <i class=\"icons icon-comment\"></i>  -->\n<textarea class=\"comment-new-text\">";
   if (stack1 = helpers.text) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.text; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-button\">\n    <span class=\"locale_Add\"></span> \n    <i class=\"icon-comment\"></i>\n  </button>\n</div>";
+    + "</textarea>\n  \n</div>";
   return buffer;
   });
 })();(function() {
@@ -4254,7 +4254,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4287,7 +4287,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4328,7 +4328,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n";
@@ -4425,7 +4425,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4466,7 +4466,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4629,7 +4629,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack2 = helpers.shouldBeEncrypted) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.shouldBeEncrypted; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
+    + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n";
   return buffer;
   });
 })();(function() {
@@ -4723,7 +4723,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack2 = helpers.glosserURL) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.glosserURL; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + "</strong></p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
+    + "</strong></p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n";
   return buffer;
   });
 })();(function() {
@@ -4745,14 +4745,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + "\">\n<i class=\"icon-cloud\"></i>\n";
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + " ";
-  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + " ";
-  if (stack1 = helpers.corpusid) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.corpusid; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
     + "</a>\n<small> ";
   if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
@@ -4866,25 +4858,6 @@ function program3(depth0,data) {
   return "icon-eye-open";
   }
 
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n          <option value=\"";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" ";
-  if (stack1 = helpers.selected) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ">";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</option>\n      ";
-  return buffer;
-  }
-
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"pull-left\">\n<button class=\"btn btn-success pull-left save-datalist locale_Save\" value=\"Save\"></button>\n<!-- Issue #797 -->\n  <button class=\"btn btn-danger trash-button\">\n    <i class=\"icon-trash \"></i> </button>\n</div>\n    \n<br>\n<br>\n <i class=\"icon-pushpin\"></i> \n<small>";
   if (stack1 = helpers.datumCount) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.datumCount; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -4901,21 +4874,10 @@ function program5(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n \n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n \n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
-  if (stack1 = helpers.statecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
-  if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
-  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n\n</div>\n -->\n";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n";
   return buffer;
   });
 })();(function() {
@@ -4986,7 +4948,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -5083,7 +5045,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -5124,7 +5086,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n</p>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n</p>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -5220,25 +5182,6 @@ function program7(depth0,data) {
   return "icon-eye-open";
   }
 
-function program9(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n          <option value=\"";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" ";
-  if (stack1 = helpers.selected) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ">";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</option>\n      ";
-  return buffer;
-  }
-
   buffer += "<div class=\"pull-right\">\n	 <!-- Issue #797 -->\n	<button class=\"btn btn-danger trash-button\">\n		<i class=\"icon-trash \"></i>\n	</button>\n	<button class=\"btn btn-success save-datum locale_Save\"\n		value=\"Save\"></button>\n</div>\n\n<span class=\"last-modified\">";
   if (stack1 = helpers.dateModified) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -5257,18 +5200,15 @@ function program9(depth0,data) {
   buffer += "\"></i></a> \n	    <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i>\n	    </a>\n	    <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n	      <i class=\" icon-paste\"></i></a>\n	    <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">LaTeX</i>\n	    </a>\n	    <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">CSV</i>\n	    </a>\n	  </div>\n	  <br/>\n		<a href=\"#\" class=\"audio_video locale_Drag_and_Drop_Audio_Tooltip\" rel=\"tooltip\"></a>\n	</div>\n  <div class=\"span3 border-left hide\">\n		<!-- list for the tags -->\n		<ul class=\"datum_tags_ul unstyled\"></ul>\n		<div class=\"controls  no-margin-left\">\n			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->\n			<div class=\"input-append \">\n			  <input class=\"add_tag span6\" type=\"text\" data-provide=\"typeahead\" data-items=\"4\" \n	            data-source=\"[&quot;Passive&quot;,&quot;Nominalization&quot;]\" \n	      /><button class=\" btn btn-small btn-primary add_datum_tag\" type=\"button\">\n	        <i class=\" icon-tag\"></i>\n	        <span class=\"locale_Add\">Add</span> \n	      </button>\n	    </div>\n		</div>\n	</div>\n  <div class=\"datum_state span3 border-left\">\n    <span class=\"label label-";
-  if (stack1 = helpers.statecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += "\"></i>\n	    </a>\n	    <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n	      <i class=\" icon-paste\"></i></a>\n	    <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">LaTeX</i>\n	    </a>\n	    <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">CSV</i>\n	    </a>\n	  </div>\n	  <br/>\n		<a href=\"#\" class=\"audio_video locale_Drag_and_Drop_Audio_Tooltip\" rel=\"tooltip\"></a>\n	</div>\n  <div class=\"span3 border-left hide\">\n		<!-- list for the tags -->\n		<ul class=\"datum_tags_ul unstyled\"></ul>\n		<div class=\"controls  no-margin-left\">\n			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->\n			<div class=\"input-append \">\n			  <input class=\"add_tag span6\" type=\"text\" data-provide=\"typeahead\" data-items=\"4\" \n	            data-source=\"[&quot;Passive&quot;,&quot;Nominalization&quot;]\" \n	      /><button class=\" btn btn-small btn-primary add_datum_tag\" type=\"button\">\n	        <i class=\" icon-tag\"></i>\n	        <span class=\"locale_Add\">Add</span> \n	      </button>\n	    </div>\n		</div>\n	</div>\n	<div class=\"datum_state span3 border-left\">\n	    <span class=\"label label-";
+  if (stack1 = helpers.datumstatecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstatecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+    + " datum-primary-validation-status-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
   if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</span></span><br/>\n		<!-- drop down for the states -->\n    <select class=\"datum_state_select span12 hide\" >\n      ";
-  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n  </div>\n</div>\n\n<span class=\"session-link\"></span>\n\n<!-- Datum comments -->\n<div class=\"new-comment-area\"></div>  \n<ul class=\"comments unstyled\"></ul> \n";
+    + "</span></span><br/>\n	</div>\n</div>\n\n<span class=\"session-link\"></span>\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul> \n<div class=\"new-comment-area\"></div>  \n";
   return buffer;
   });
 })();(function() {
@@ -5357,7 +5297,27 @@ function program3(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n<textarea class=\"datum_field_input\" data-provide=\"typeahead\"\n    data-items=\"6\" data-minLength=\"0\" data-source='";
+  buffer += "\n	";
+  stack1 = helpers['if'].call(depth0, depth0.readonly, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }
+function program6(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<span>";
+  if (stack1 = helpers.mask) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n	";
+  return buffer;
+  }
+
+function program8(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<textarea class=\"datum_field_input\" data-provide=\"typeahead\"\n	    data-items=\"6\" data-minLength=\"0\" data-source='";
   if (stack1 = helpers.alternates) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.alternates; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5365,7 +5325,7 @@ function program5(depth0,data) {
   if (stack1 = helpers.mask) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n";
+    + "</textarea>\n	";
   return buffer;
   }
 
@@ -5433,30 +5393,6 @@ function program3(depth0,data) {
   return "icon-eye-open";
   }
 
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n	  ";
-  stack1 = helpers['if'].call(depth0, depth0.selected, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	  ";
-  return buffer;
-  }
-function program6(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n	  <span class=\"label label-";
-  if (stack1 = helpers.color) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"><i class = \" icon-flag\"></i>";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span>\n	  ";
-  return buffer;
-  }
-
   buffer += "<!-- list for the fields -->\n<ul class=\"datum_fields_ul unstyled\"></ul>\n<div class=\"\">\n  <i class=\" icon-save \"></i><span class=\"last-modified\">";
   if (stack1 = helpers.dateModified) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -5468,10 +5404,15 @@ function program6(depth0,data) {
     + "</span><br/>\n  <span class=\"session-link\"></span>\n</div>\n<hr/>\n<!-- Datum Read only specialized fields and menu area -->\n<div class=\"row-fluid\">\n  <div class=\"span5\">\n    <!-- Buttons for various read only actions -->\n    <div class=\" btn-group\">\n      <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n        <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i>\n      </a>\n      <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n        <i class=\" icon-paste\"></i></a>\n      <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">LaTeX</i>\n      </a>\n      <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">CSV</i>\n      </a>\n    </div>\n    <br/>\n    <div class=\"audio_video \"></div>\n  </div>\n  <div class=\"span4 border-left hide\">\n    <!-- list for the tags -->\n    <ul class=\"datum_tags_ul unstyled  \"></ul>\n  </div>\n  <div class=\"datum_state span3 border-left\">\n    ";
-  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </div>\n</div>\n\n<!-- Datum comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>  \n\n";
+  buffer += "\"></i>\n      </a>\n      <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n        <i class=\" icon-paste\"></i></a>\n      <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">LaTeX</i>\n      </a>\n      <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">CSV</i>\n      </a>\n    </div>\n    <br/>\n    <div class=\"audio_video \"></div>\n  </div>\n  <div class=\"span4 border-left hide\">\n    <!-- list for the tags -->\n    <ul class=\"datum_tags_ul unstyled  \"></ul>\n  </div>\n  <div class=\"datum_state span3 border-left\">\n      <span class=\"label label-";
+  if (stack1 = helpers.datumstatecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstatecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " datum-primary-validation-status-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+  if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span></span><br/>\n  </div>\n</div>\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>  \n<div class=\"new-comment-area\"></div> \n\n";
   return buffer;
   });
 })();(function() {
@@ -5661,7 +5602,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<div class=\"new-comment-area\"></div>  \n<ul class=\"comments unstyled\"></ul>\n";
+    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div>  \n";
   return buffer;
   });
 })();(function() {
@@ -5722,7 +5663,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<div class=\"new-comment-area\"></div>\n<ul class=\"comments unstyled\"></ul> \n";
+    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<ul class=\"comments unstyled\"></ul> \n<div class=\"new-comment-area\"></div>\n";
   return buffer;
   });
 })();(function() {
@@ -6092,7 +6033,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " \n      </textarea>\n    </dd>\n    <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n    <dd>\n      <ul class=\"corpuses\">\n      </ul>\n    </dd>\n  </dl>\n";
+    + " \n      </textarea>\n    </dd>\n    <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n    <dd>\n      <ul class=\"corpuses unstyled\">\n      </ul>\n    </dd>\n  </dl>\n";
   return buffer;
   });
 })();(function() {
@@ -9552,7 +9493,7 @@ define( 'comment/Comments',[ "backbone",
     
     insertNewCommentFromObject : function(commentObject){
       commentObject.timestamp = Date.now();
-      this.unshift(new Comment(commentObject));
+      this.push(new Comment(commentObject));
     }
     
   });
@@ -9583,8 +9524,13 @@ define('activity/Activity',[
       if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
       if(!this.get("user")) {
-        this.set("user", window.app.get("authentication").get("userPublic"));
-//        if(!this.get("pouchname")) {
+        var user = window.app.get("authentication").get("userPublic").toJSON();
+        this.set("user", {
+          username: user.username,
+          gravatar: user.gravatar,
+          authUrl: user.authUrl
+        });
+        //        if(!this.get("pouchname")) {
 //          this.set("pouchname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname);
 //        }
       }
@@ -10852,8 +10798,6 @@ define('datum/Datum',[
     "datum/Datums", 
     "datum/DatumField", 
     "datum/DatumFields", 
-    "datum/DatumState", 
-    "datum/DatumStates",
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
@@ -10866,8 +10810,6 @@ define('datum/Datum',[
     Datums,
     DatumField, 
     DatumFields,
-    DatumState, 
-    DatumStates,
     DatumTag,
     DatumTags,
     Session
@@ -10920,11 +10862,6 @@ define('datum/Datum',[
      * @constructs
      */
     initialize : function() {
-      // Initially, the first datumState is selected
-//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-//        this.get("datumStates").models[0].set("selected", "selected");
-//      }
-      
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -10966,10 +10903,40 @@ define('datum/Datum',[
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumStates : DatumStates,
       datumTags : DatumTags
     },
 
+
+    /*
+    Psycholing experiment timers
+     */
+    startReadTimeIfNotAlreadyStarted : function(){
+      if(!this.readstarttime){
+        this.readstarttime = Date.now();
+      }
+    },
+
+    calculateEditTime: function() {
+      var details = {
+        editingTimeSpent: 0,
+        editingTimeDetails: []
+      };
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        if (fields[field].timeSpent) {
+          details.editingTimeSpent += fields[field].timeSpent;
+          details.editingTimeDetails.push(fields[field].timeSpent + ":::" + fields[field].get("label") + "->" + fields[field].get("mask") );
+        }
+      }
+      return details;
+    },
+
+    clearEditTimeDetails: function() {
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        fields[field].timeSpent = 0;
+      }
+    },
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -11041,20 +11008,65 @@ define('datum/Datum',[
         
       }
     },
-    fillWithCorpusFieldsIfMissing : function(){
-      if(!this.get("datumFields")){
-        return;
+    
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel) {
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
       }
-      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
-      var corpusFields = window.app.get("corpus").get("datumFields").models;
+
+      OPrime.debug("Edit this function to update datum to the latest schema.");
+
+      /* Add any new corpus fields to this datum so they can be edited */
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+      var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
       for(var field in corpusFields){
-        var label = corpusFields[field].get("label");
-        OPrime.debug("Label "+label);
-        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
-        if(correspondingFieldInThisDatum.length === 0){
-          this.get("datumFields").push(corpusFields[field]);
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this datum: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
         }
       }
+
+
+      /* remove Deprecated datumStates on datum */
+      var oldvalidationStatus = "";
+      if (originalModel.datumStates) {
+        var selectedArray = _.pluck(originalModel.datumStates, "selected");
+        var selectedIndex = selectedArray.indexOf("selected");
+
+        if (selectedIndex  !== -1) {
+          oldvalidationStatus = originalModel.datumStates[selectedIndex].state;
+        }
+        //Remove datumStates from this datum
+        delete originalModel.datumStates;
+      }
+
+      /* enforce validation status to be comma seperated */
+      var fieldLabels = _.pluck(originalModel.datumFields, "label");
+      var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
+      var validationFieldToclean = originalModel.datumFields[indexOfValidationSatus];
+      var validationStatus = validationFieldToclean.mask || "";
+      if (oldvalidationStatus) {
+        // if the old status is not already subsumbed by a curretn status, do add it to the validation status
+        if(validationStatus.toLowerCase().indexOf(oldvalidationStatus.toLowerCase()) === -1){
+          validationStatus = oldvalidationStatus + ", " + validationStatus;
+        }
+      }
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      validationFieldToclean.mask = uniqueStati.join(", ");
+      validationFieldToclean.value = validationFieldToclean.mask;
+
+      /* enforce tags to be comma seperated */
+      var indexOfTags = fieldLabels.indexOf("tags");
+      var tagFieldToClean = originalModel.datumFields[indexOfTags];
+      var tagValue = tagFieldToClean.mask || "";
+      var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      tagFieldToClean.mask = uniqueTags.join(", ");
+      tagFieldToClean.value = tagFieldToClean.mask;
+
+
+      return this.originalParse(originalModel);
     },
     searchByQueryString : function(queryString, callback) {
       var self = this;
@@ -11175,24 +11187,35 @@ define('datum/Datum',[
     },
     isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
       
+      var wordboundary = " ";
+      // If the user is using # to indicate word boundaries as linguists do... turn all word boundaries into #
+      if (queryString.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
       
       var thisDatumIsIn = false;
       // If the query string is null, include all datumIds
-      if(queryString.trim() == ""){
+      if (queryString.trim() === "") {
         thisDatumIsIn = true;
-      }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").search(queryString) > -1){
-            thisDatumIsIn = true;
-          }
-      }else{
-        
+      } else if (doGrossKeywordMatch) {
+        // Take all the data in this object 
+        var stringToSearchIn = JSON.stringify(keyValuePair.key).toLowerCase();
+        // Remove the labels
+        stringToSearchIn = stringToSearchIn.replace(/"[^"]*":"/g, wordboundary).replace(/",/g, wordboundary).replace(/"}/g, wordboundary);
+        // Convert all white space into a word boundary
+        stringToSearchIn = stringToSearchIn.replace(/\s/g, wordboundary);
+        if (stringToSearchIn.search(queryString) > -1) {
+          thisDatumIsIn = true;
+        }
+      } else {
+
         // Determine if this datum matches the first search criteria
         thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
         
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
         for (var j = 1; j < queryTokens.length; j += 2) {
-          if (queryTokens[j] == "AND") {
+          if (queryTokens[j] === "AND") {
             // Short circuit: if it's already false then it continues to be false
             if (!thisDatumIsIn) {
               break;
@@ -11227,31 +11250,43 @@ define('datum/Datum',[
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
       var negate = false;
-      if (label.indexOf("!") == 0)
-      {
-    	  label = label.replace(/^!/,"");
-    	  negate  = true;
+      if (label.indexOf("!") === 0) {
+        label = label.replace(/^!/, "");
+        negate = true;
       }
       var value = criteria.substring(delimiterIndex + 1);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
-      if(label == "judgement" && value.toLowerCase() == "grammatical"){
-        if(!objectToSearchThrough[label]){
+      if (label === "judgement" && value.toLowerCase() === "grammatical") {
+        if (!objectToSearchThrough[label]) {
           return true;
         }
       }
-//      if(!label || !value){
-//        return false;
-//      }
-      
-      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+      //      if(!label || !value){
+      //        return false;
+      //      }
 
-      
-      if (negate)
-    	  {
-    	  	searchResult = !searchResult;
-    	  }
-      
-      
+      //If the query has a # in it, lets assume its a linguist looking for word boundaries since they use # to indicate the edge of words. 
+      var wordboundary = " ";
+      if (criteria.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
+
+      var searchResult  = false;
+      if (objectToSearchThrough[label]) {
+        // Make it case in-sensitive 
+        var stringToSearchThrough = objectToSearchThrough[label].toLowerCase();
+        // Replace all spaces with the wordboundary (either a space, or a # if its a linguist)
+        stringToSearchThrough = stringToSearchThrough.replace(/\s/g,wordboundary);
+        // Add word boundaries to the beginning and end of the string
+        stringToSearchThrough = stringToSearchThrough.replace(/^/,"#").replace(/$/,"#");
+
+        // now search for the query string
+        searchResult = (stringToSearchThrough.search(value.toLowerCase()) > -1);
+      }
+
+      if (negate) {
+        searchResult = !searchResult;
+      }
       return  searchResult;
     },
     
@@ -11309,7 +11344,6 @@ define('datum/Datum',[
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
         session: this.get("session")
@@ -11328,21 +11362,17 @@ define('datum/Datum',[
     getValidationStatus : function(){
       var validationStatus = "";
       var stati = this.get("datumFields").where({"label": "validationStatus"});
-      if(stati.length > 0){
-        stati = stati[0].get("mask").split(" ");
-        if(stati.length >0){
-          validationStatus = stati[0];
-        }
+      stati = stati[0].get("mask").trim().split(", ");
+      validationStatus = stati[0].trim();
+      
+      if(!validationStatus){
+        return this.setDefaultValidationStatus();
       }
-      /* Handle upgrade from previous corpora look in datum states too */
-      if(validationStatus == ""){
-        stati = this.get("datumStates").where({selected : "selected"});
-        if(stati.length > 0){
-          validationStatus = stati[0].get("state");
-        }
-      }
-      this.updateDatumState(validationStatus);
       return validationStatus;
+    },
+    setDefaultValidationStatus : function(){
+      this.preprendValidationStatus("Checked");
+      return "Checked";
     },
     /**
      * This function is used to colour a datum background to make
@@ -11361,8 +11391,8 @@ define('datum/Datum',[
         status = this.getValidationStatus();
       }
       /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
-      if(status.toLowerCase().indexOf("deleted") > -1){
-        return "danger";
+      if(status.toLowerCase().indexOf("delete") > -1){
+        return "important";
       }
       if(status.toLowerCase().indexOf("tobechecked") > -1){
         return "warning";
@@ -11381,49 +11411,15 @@ define('datum/Datum',[
      *            This is a string which is the validation status
      *            you want the datum to be
      */
-    updateDatumState : function(selectedValue){
-      if(!selectedValue){
-        return;
-      }
-      OPrime.debug("Asking to change the datum state to " + selectedValue); 
-      /* make sure all the corpus states are availible in this datum */
-      thisdatumStates = this.get("datumStates");
-      window.app.get("corpus").get("datumStates").each(function(datumstate) {
-        var obj = datumstate.toJSON();
-        obj.selected = "";
-        thisdatumStates.addIfNew(obj);
-      });
-      try{
-        $.each( this.get("datumStates").where({selected : "selected"}), function(){
-          if(this.get("state") != selectedValue){
-            this.set("selected", "");
-          }
-        });
-        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-      }
+    preprendValidationStatus : function(selectedValue){
       
       /* prepend this state to the new validationStates as of v1.46.2 */
       var n = this.get("datumFields").where({label: "validationStatus"})[0];
-      if(n == [] || !n){
-        n = new DatumField({
-          label : "validationStatus",
-          shouldBeEncrypted: "",
-          showToUserTypes: "all",
-          userchooseable: "disabled",
-          help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-        });
-        this.get("datumFields").add(n);
-      }
       var validationStatus = n.get("mask") || "";
-      validationStatus = selectedValue + " " +validationStatus ;
-      var uniqueStati = _.unique(validationStatus.trim().split(" "));
-      n.set("mask", uniqueStati.join(" "));
-      
-
-//      this.save();
-      //TODO save it
+      validationStatus = selectedValue + ", " +validationStatus ;
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(n){ return n });
+      n.set("mask", uniqueStati.join(", "));
+    
     },
     
     /**
@@ -11437,7 +11433,7 @@ define('datum/Datum',[
      */ 
     putInTrash : function(){
       this.set("trashed", "deleted"+Date.now());
-      this.updateDatumState("Deleted");
+      this.preprendValidationStatus("Deleted");
       this.saveAndInterConnectInApp(function(){
         /* This actually removes it from the database */
         //thisdatum.destroy();
@@ -11726,11 +11722,50 @@ define('datum/Datum',[
       if (OPrime.debugMode) OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
+      var user = window.app.get("authentication").get("userPublic").toJSON();
+      delete user._rev;
+      delete user._id;
+      delete user.id;
+      delete user.authUrl;
+      var usersName = user.firstname + " " + user.lastname;
+      usersName = usersName.replace(/undefined/g, "");
+      if(!usersName || usersName.trim().length < 2){
+        usersName = user.username ;
+      }
+
       if(this.id){
         newModel = false;
+        var modifiyersField = this.get("datumFields").where({label: "modifiedByUser"})[0];
+        if(modifiyersField){
+          var modifiers = modifiyersField.get("users");
+          modifiers.push(user);
+          modifieres = _.unique(modifiers);
+          modifiyersField.set("users", modifieres);
+          
+          var usersAsString =  modifiyersField.get("mask") + ","+ usersName;
+          usersAsString = (_.unique(usersAsString.trim().split(/[, ]/))).filter(function(nonemptyvalue){ return nonemptyvalue; }).join(", ");
+          modifiyersField.set("mask", usersAsString);
+        }
       }else{
         this.set("dateEntered", JSON.stringify(new Date()));
+        var userField = this.get("datumFields").where({label: "enteredByUser"})[0];
+        if(userField){
+          userField.set("mask", usersName);
+          userField.set("user", user);
+        }
       }
+      var timeSpentDetails = this.calculateEditTime();
+      timeSpentDetails.totalTimeSpent = Date.now() - this.readstarttime;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.totalTimeSpent - timeSpentDetails.editingTimeSpent; 
+      //Convert to seconds
+      timeSpentDetails.totalTimeSpent = timeSpentDetails.totalTimeSpent/1000;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.readTimeSpent/1000;
+      timeSpentDetails.editingTimeSpent = timeSpentDetails.editingTimeSpent/1000;
+
+      this.readstarttime = Date.now();
+      this.clearEditTimeDetails();
+      OPrime.debug("This activity was roughly ", timeSpentDetails);
+
       //protect against users moving datums from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
@@ -11764,20 +11799,6 @@ define('datum/Datum',[
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it. 
-       * this gets rid of it when we save. (if it gets in to a datum)
-       */
-      try{
-        var ds = this.get("datumStates").models;
-        for (var s in ds){
-          if(ds[s].get("state") == undefined){
-            this.get("datumStates").remove(ds[s]);
-          }
-        }
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
-      }
       
         self.save(null, {
           success : function(model, response) {
@@ -11807,7 +11828,8 @@ define('datum/Datum',[
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
             
             window.app.addActivity(
@@ -11818,7 +11840,8 @@ define('datum/Datum',[
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
 //            /*
 //             * If the current data list is the default
@@ -13626,76 +13649,74 @@ define('corpus/Corpus',[
 //        + couchConnection.pouchname);
       
     },
-    loadOrCreateCorpusByPouchName : function(pouchname, sucessloadingorCreatingcallback){
+    loadOrCreateCorpusByPouchName : function(couchConnection, sucessloadingorCreatingcallback){
+      var couchurl = OPrime.getCouchUrl(couchConnection);
+      var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+
+      var errorfunction = function(response) {
+        OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
+        OPrime.bug("There was a problem loading your corpus. Please report this error.");
+        window.location.replace(optionalCouchAppPath + "user.html");
+      };
+
+      // var errorfunction = function(model, xhr, options) {
+      //   $(".spinner-status").html("Downloading Corpus...");
+
+      //   if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
+      //   if (corpusself.islooping) {
+      //     OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..." + e);
+      //     return;
+      //   }
+      //   corpusself.islooping = true;
+      //   OPrime.bug("Trying to download this corpus to this device one more time..." + xhr.reason);
+      //   corpusself.loadOrCreateCorpusByPouchName(couchConnection, sucessloadingorCreatingcallback);
+      // };
+
       var corpusself = this;
-      if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask({
-          "pouchname" : pouchname
-        }));
-      }
-      var c = this.get("publicSelf");
-      this.get("publicSelf").id = "corpus";
-        c.fetch({
-          success : function(model, response, options) {
-            if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
-            if(!model.get("corpusid")){
-              corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-              return;
-            }
-            corpusself.id = model.get("corpusid");
-            corpusself.set("pouchname", pouchname);
-              corpusself.fetch({
-                success : function(model) {
-                  if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
-                  $(".spinner-status").html("Loading Datalist...");
-                  corpusself.makeSureCorpusHasADataList(function(){
-                    corpusself.datalists.at(0).setAsCurrentDataList(function(){
-                      $(".spinner-status").html("Datalist loaded.");
-                    });
-                    $(".spinner-status").html("Loading Elicitation Session...");
-                    corpusself.makeSureCorpusHasASession(function(){
-                      corpusself.sessions.at(0).setAsCurrentSession(function(){
-                        $(".spinner-status").html("Session loaded.");
-                        if(typeof sucessloadingorCreatingcallback == "function"){
-                          sucessloadingorCreatingcallback();
-                        }
-                      });
-                      
-                      //end success to create new data list
-                    },function(){
-                      alert("Failed to create a session. ");
-                    });//end failure to create new data list
-                    //end success to create new data list
-                  },function(){
-                    alert("Failed to create a datalist. ");
-                  });//end failure to create new data list
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : queryUrl,
+        success : function(serverResults) {
 
-                },
-                error : function(model, xhr, options) {
-                  $(".spinner-status").html("Downloading Corpus...");
+          if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
+            errorfunction("No corpus doc! this corpus is broken.");
+          }
+          var model = serverResults.rows[0].value;
+          couchConnection.corpusid = model._id;
+          // appids.corpusid = model._id;
+          model.couchConnection = couchConnection;
+          // corpusself.set(corpusself.parse(model));
 
-                  if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
-                  if(corpusself.islooping){
-                    OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
-                    return;
-                  }
-                  corpusself.islooping = true;
-                  OPrime.bug("Trying to download this corpus to this device one more time..."+xhr.reason);
-                  corpusself.loadOrCreateCorpusByPouchName(pouchname, sucessloadingorCreatingcallback);
+          if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
+          $(".spinner-status").html("Loading Datalist...");
+          corpusself.makeSureCorpusHasADataList(function(){
+            corpusself.datalists.at(0).setAsCurrentDataList(function(){
+              $(".spinner-status").html("Datalist loaded.");
+            });
+            $(".spinner-status").html("Loading Elicitation Session...");
+            corpusself.makeSureCorpusHasASession(function(){
+              corpusself.sessions.at(0).setAsCurrentSession(function(){
+                $(".spinner-status").html("Session loaded.");
+                if(typeof sucessloadingorCreatingcallback == "function"){
+                  sucessloadingorCreatingcallback();
                 }
               });
-          },
-          error : function(model, xhr, options) {
-            $(".spinner-status").html("Creating Corpus...");
+              
+              //end success to create new data list
+            },function(){
+              alert("Failed to create a session. ");
+            });//end failure to create new data list
+            //end success to create new data list
+          },function(){
+            alert("Failed to create a datalist. ");
+          });//end failure to create new data list
 
-            if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-            OPrime.bug("Error fetching your corpus' public view..."+xhr.reason);
-            corpusself.get("publicSelf").fillWithDefaults();
-            corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
-            corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
-            corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-          }
-        });
+
+
+        },// end successful fetch
+        error : errorfunction,
+        dataType : "json"
+      });
     },
     fetchPublicSelf : function(){
       try{
@@ -13786,7 +13807,7 @@ define('corpus/Corpus',[
           new DatumField({
             label : "syntacticCategory",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish." +
             		" It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM)," +
@@ -13795,7 +13816,7 @@ define('corpus/Corpus',[
           new DatumField({
             label : "syntacticTreeLatex",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
           }),
@@ -13819,7 +13840,24 @@ define('corpus/Corpus',[
             showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-          })
+          }),
+          new DatumField({
+            label : "enteredByUser",
+            shouldBeEncrypted: "",
+            showToUserTypes: "all",
+            readonly: true,
+            userchooseable: "disabled",
+            help: "The user who originally entered the datum"
+          }),
+          new DatumField({
+            label : "modifiedByUser",
+            shouldBeEncrypted: "",
+            showToUserTypes: "all",
+            readonly: true,
+            users: [],
+            userchooseable: "disabled",
+            help: "An array of users who modified the datum"
+          }),
         ]));
       }//end if to set datumFields
       
@@ -13913,43 +13951,66 @@ define('corpus/Corpus',[
         donefillingcallback();
       }
     },
-    fillInDefaultLicenseAndTermsForUserIfMissing : function(){
-      if (!this.get("copyright")) {
-        this.set("copyright",
-          "Default: Add names of the copyright holders of the corpus.");
+    
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel){
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
+      }
+
+      /* Update the corpus to show all fields which are defaults on corpora, 
+      they are only added permanently if saved. */
+      var tempCorpus = new Corpus();
+      tempCorpus.fillWithDefaults();
+      
+      var corpusFields = tempCorpus.get("datumFields").toJSON();
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+
+      for(var field in corpusFields){
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this corpus: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
+        }
+      }
+
+      /* Update corpus to have default licensen and terms of use if the user hasnt defined them yet */
+      if (!originalModel.copyright) {
+        originalModel.copyright = "Default: Add names of the copyright holders of the corpus.";
       }
       var defaultLicense = {
-            title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
-            humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-            link: "http://creativecommons.org/licenses/by-sa/3.0/"
-          };
-      if (!this.get("license")) {
-        this.set("license", defaultLicense);
+        title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+        humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+        link: "http://creativecommons.org/licenses/by-sa/3.0/"
+      };
+      if (!originalModel.license) {
+        originalModel.license = defaultLicense;
       }
-      var licenseUpdated = this.get("license");
-      if(typeof licenseUpdated == "string"){
+      var licenseUpdated = originalModel.license;
+      if (typeof licenseUpdated == "string") {
         licenseUpdated = {};
       }
       if (!licenseUpdated.title) {
         licenseUpdated.title = defaultLicense.title;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       if (!licenseUpdated.humanReadable) {
         licenseUpdated.humanReadable = defaultLicense.humanReadable;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       if (!licenseUpdated.link) {
         licenseUpdated.link = defaultLicense.link;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       var defaultTerms = {
-          humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-        };
-      var termsUpdated = this.get("termsOfUse");
-      if(!termsUpdated || typeof termsUpdated == "string"){
+        humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+      };
+      var termsUpdated = originalModel.termsOfUse;
+      if (!termsUpdated || typeof termsUpdated == "string") {
         termsUpdated = defaultTerms;
-        this.set("termsOfUse", defaultTerms);
+        originalModel.termsOfUse = defaultTerms;
       }
+      return this.originalParse(originalModel);
     },
 
     /**
@@ -15229,13 +15290,18 @@ define('user/UserRouter',[
       window.app.get("authentication").syncUserWithServer(function(){
         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(pouchname);
         window.location.replace(optionalCouchAppPath+"corpus.html");
-    });
+      });
     },
     guessCorpusIdAndShowDashboard : function(pouchname){
       var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
       if(!connection){
         return;
       }
+      if(!pouchname || pouchname == undefined || pouchname == "undefined"){
+        return;
+      }
+      this.veryifyWeAreInTheRightDB(pouchname);
+
       /* this assumes that the user's corpus connection for this pouch is not on a different server */
       connection.pouchname = pouchname;
       window.app.changePouch(connection, function(){
@@ -15252,6 +15318,30 @@ define('user/UserRouter',[
             if(!corpusidfromCorpusMask){
               corpusidfromCorpusMask = model.get("corpusId");
             }
+            if(!corpusidfromCorpusMask){
+
+              var couchurl = OPrime.getCouchUrl(connection);
+              var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+
+              var errorfunction = function(response) {
+                OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
+                OPrime.bug("There was a problem loading your corpus. Please report this error.");
+              };
+              var corpusself = this;
+              OPrime.makeCORSRequest({
+                type : 'GET',
+                url : queryUrl,
+                success : function(serverResults) {
+                  if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
+                    errorfunction("No corpus doc! this corpus is broken.");
+                  }
+                  var corpusidfromCorpusMask = serverResults.rows[0].id;
+                  window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
+                }, error: errorfunction 
+              });
+              return;
+            }
+
             if(corpusidfromCorpusMask){
               window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
             }else{
@@ -15296,10 +15386,15 @@ define('user/UserRouter',[
         if (OPrime.debugMode) OPrime.debug("the pouchname is missing, this should never happen");
         return;
       }
+
+      this.veryifyWeAreInTheRightDB(pouchname);
+      
       var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
       if(!connection){
         return;
       }
+
+
       var self = this;
       connection.pouchname = pouchname;
       window.app.changePouch(connection, function(){
@@ -15335,7 +15430,9 @@ define('user/UserRouter',[
             }
 
             self.bringCorpusToThisDevice(c, function(){
-              alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
+              if(OPrime.isChromeApp()){
+                alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
+              }
               self.showCorpusDashboard(pouchname, corpusid);
               self.islooping = true;
 
@@ -15377,6 +15474,32 @@ define('user/UserRouter',[
             window.app.replicateOnlyFromCorpus(null, callback);
           });
           break;
+        }
+      }
+    },
+    veryifyWeAreInTheRightDB : function(pouchname){
+      /*
+       * Verify that the user is in their database, and that the
+       * backbone couch adaptor is saving to the corpus' database,
+       * not where the user currently is.
+       */
+      if (OPrime.isCouchApp()) {
+        var corpusPouchName = pouchname;
+        if (window.location.pathname.indexOf(corpusPouchName) == -1) {
+          if (corpusPouchName != "public-firstcorpus") {
+            var username = "";
+            try {
+              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+            } catch (e) {
+              //do nothing
+            }
+            if (username != "public") {
+              // OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            }
+          }
+          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusPouchName);
+          window.location.replace(optionalCouchAppPath + "user.html#/corpus/"+pouchname);
+          return;
         }
       }
     }
@@ -15821,13 +15944,19 @@ define('user/UserReadView',[
 //        childViewTagName     : 'li'
 //      });
     //Create a CommentReadView     
+      var corpuses = new Corpuses();
+      try {
+        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corpusesUserHasAccessTo")));
+      } catch (e) {
+        console.log("Couldn't load the list of corpora which the user has access to.");
+      } 
       this.corpusesReadView = new UpdatingCollectionView({
-        collection : new Corpuses(),
+        collection : corpuses,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
-      this.corpusesReadView.collection.constructCollectionFromArray(this.model
-          .get("corpuses"))
+      
     }
   });
 
@@ -17175,14 +17304,20 @@ define('user/UserEditView',[
 //        childViewConstructor : CommentReadView,
 //        childViewTagName     : 'li'
 //      });
-    //Create a CommentReadView     
+    //Create a CommentReadView    
+      var corpuses = new Corpuses();
+      try {
+        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corpusesUserHasAccessTo")));
+      } catch (e) {
+        console.log("Couldn't load the list of corpora which the user has access to.");
+      } 
       this.corpusesReadView = new UpdatingCollectionView({
-        collection : new Corpuses(),
+        collection : corpuses,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
-      this.corpusesReadView.collection.constructCollectionFromArray(this.model
-          .get("corpuses"))
+      
     }
   });
 
@@ -17714,7 +17849,7 @@ define(
     });
 }());
 
-define('text!locales/en/messages.json',[],function () { return '{\n  "application_title" : {\n    "message" : "LingSync beta",\n    "description" : "The title of the application, displayed in the web store."\n  },\n  "application_description" : {\n    "message" : "An on/offline fieldlinguistics database app which adapts to its user\'s I-Language.",\n    "description" : "The description of the application, displayed in the web store."\n  },\n  "locale_Close_and_login_as_LingLlama" : {\n    "message" : "Login as LingLlama",\n    "description" : "button"\n  },\n  "locale_Close_and_login_as_LingLlama_Tooltip" : {\n    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you\'re new to LingSync this is a great place to start after watching the videos. ",\n    "description" : "tooltip"\n  },\n  "locale_Username" : {\n    "message" : "Username:"\n  },\n  "locale_Password" : {\n    "message" : "Password:"\n  },\n  "locale_Sync_my_data_to_this_computer" : {\n    "message" : "Sync my data to this device"\n  },\n  "locale_Welcome_to_FieldDB" : {\n    "message" : "Welcome to LingSync!"\n  },\n  "locale_An_offline_online_fieldlinguistics_database" : {\n    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."\n  },\n  "locale_Welcome_Beta_Testers" : {\n    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"\n  },\n  "locale_Welcome_Screen" : {\n    "message" : "<p>Curious what this is? <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"\n  },\n  "locale_Create_a_new_user" : {\n    "message" : "Register"\n  },\n  "locale_What_is_your_username_going_to_be" : {\n    "message" : "What is your username going to be?"\n  },\n  "locale_Confirm_Password" : {\n    "message" : "Confirm Password:"\n  },\n  "locale_Sign_in_with_password" : {\n    "message" : "Register"\n  },\n  "locale_Warning" : {\n    "message" : "Warning!"\n  },\n  "locale_Instructions_to_show_on_dashboard" : {\n    "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=\' icon-edit\'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app.     To more information about what a \'Corpus\' is, click <i class=\' icon-cogs resize-full\'></i>.     It will show the corpus settings, which contains explanations of each component of a \'Corpus.\'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>",\n    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=\' icon-edit\'></i>. To see what Corpus consists of, click <i class=\' icon-cogs resize-full\'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=\' icon-edit\'></i>. Click <i class=\' icon icon-resize-full\'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>"\n    \n  },\n  "locale_elicitation_sessions_explanation" : {\n    "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class=\'icons icon-edit\'></i> icon in Dashboard view. For additional options, click on the <i class=\'icon-calendar\'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"\n  },\n  "locale_datalists_explanation" : {\n    "message" : "<p>A Datalist is a collection of Datum that you put together for some reason. Some examples are: making a handout, sharing data with someone, exporting into another program, or simply keeping track of similar Datum for your research.</p> <p> Creating a Datalist is like making a bookmark to a set of custom search results. First, do a search for whatever you want the Datalist to be about. Then, if you don\'t want some of the results to be included in the Datalist, click the <i class=\'icon-remove-sign\'></i> icon by any Datum to remove it. Finally, edit the title and description, and click the save button to create the Datalist.</p> <p>You can see your Datalists on the left side of your dashboard (click plus/minus to expand/minimize) or in the list below (double-click on a title to view details). </p><p>To see all your data, do a search with nothing in the search bar. If you have over 200 Datum in your corpus, this can be pretty slow, so you may prefer to search for a subset. In general, a Datalist with more than 100 Datum will take a few seconds to load.</p> <p> In the Datalist view, the Datum will appear in the colour of their current state (i.e. Checked with a consultant, To be checked, Deleted etc). You can make new states in the Datum State Settings on this page. </p>"\n  },\n  "locale_permissions_explanation" : {\n    "message" : "<p>Permissions are where you give other people access to your corpus.</p><p>To add another LingSync user, you need to know their username. Click the <i class=\'icons icon-edit\'></i> icon at the top right and then come back to Permissions and click the \'See current team members\' button. You can then add users by typing in their username by the appropriate group.</p> <ul><li>Admins can add other people to any group but not do anything with the data unless they are also writers/readers.</li> <li>Writers can enter new data, add comments, change Datum State from \'to be checked to \'checked\' etc, but not see data that is already entered. </li><li>Readers can see data that is already entered in the app but not edit or comment on it. </li></ul><p>If you want someone to be able to both enter data and see existing data, add them as both a writer and a reader.</p><p>If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, type \'Public\' in the \'Public or Private\' field below.</p><p>You can, and should, encrypt any Datum containing sensitive information by clicking the <i class=\' icon-unlock\'></i> button at the bottom of the Datum. Encrypted Datums are shown as \'xxx xx xx xx\' to all users, including on the web. If you want to see the contents of a confidential Datum, click on the <i class=\'icon-eye-open\'></i> and enter your password. This will make the Datum visible for 10 minutes.</p>"\n  },\n  "locale_datum_fields_explanation" : {\n    "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class=\'icon-list-alt\'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class=\'icons icon-edit\'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n    "locale_conversation_fields_explanation" : {\n    "message" : "<p>Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a \'location\' field, but instead choose to encrypt a \'world knowledge\' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n  "locale_datum_states_explanation" : {\n    "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, \'Checked\' with a consultant, \'To be checked\', \'Deleted\' etc. </p> <p>Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team\'s data validation workflow (e.g. \'To be checked with Sophie,\' \'Checked with Gladys\').  You can assign colours to your Datum States, which will appear as the background colour of the Datum in any Datalist. </p> <p> If you flag a Datum as Deleted it won\'t show up in search results anymore, but a Datum in a corpus is never really deleted. It remains in the database complete with its change history so that you can review it at a later date. (In future we might add a button to allow users to \'empty the trash\' and mass-delete old Datum from the system.) </p> "\n  },\n   "locale_advanced_search_explanation" : {\n    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type \'nay\' and search will find the morphemes \'onay\', \'naya\' etc. </p> <p>Search automatically creates a temporary list of data. If you enter new matching data, it will be added automatically this can be a handy way to see the data you have entered recently, as you enter data.. If you want to keep the list of data, click Save and a new DataList will be created. </p> <p>For now, search is offline, running on your device, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"\n   },\n  "locale_New_User" : {\n    "message" : "New User"\n  },\n  "locale_Activity_Feed_Your" : {\n    "message" : "Your Activity Feed"\n  },\n  "locale_Activity_Feed_Team" : {\n    "message" : "Corpus Team Activity Feed"\n  },\n  "locale_Refresh_Activities" : {\n    "message" : "Refresh activity feed to bring it up-to-date."\n  },\n  "locale_Need_save" : {\n    "message" : " Need save:"\n  },\n  "locale_60_unsaved" : {\n    "message" : "<strong>60% unsaved.</strong>"\n  },\n  "locale_Recent_Changes" : {\n    "message" : "Recent Changes:"\n  },\n  "locale_Need_sync" : {\n    "message" : "Need sync:"\n  },\n  "locale_Differences_with_the_central_server" : {\n    "message" : "Differences with the central server:"\n  },\n  "locale_to_beta_testers" : {\n    "message" : "These messages are here to communicate to users what the app is doing. We will gradually reduce the number of messages as the app becomes more stable. <p>You can close these messages by clicking on their x.</p>"\n  },\n  "locale_We_need_to_make_sure_its_you" : {\n    "message" : "We need to make sure it\'s you..."\n  },\n  "locale_Yep_its_me" : {\n    "message" : "Yep, it\'s me"\n  },\n  "locale_Log_Out" : {\n    "message" : "Log Out"\n  },\n  "locale_Log_In" : {\n    "message" : "Log In"\n  },\n  "locale_User_Settings" : {\n    "message" : "User Settings"\n  },\n  "locale_Keyboard_Shortcuts" : {\n    "message" : "Keyboard Shortcuts"\n  },\n  "locale_Corpus_Settings" : {\n    "message" : "Corpus Settings"\n  },\n  "locale_Terminal_Power_Users" : {\n    "message" : "Power Users Backend"\n  },\n  "locale_New_Datum" : {\n    "message" : "New Datum"\n  },\n  "locale_New_menu" : {\n    "message" : "New"\n  },\n  "locale_New_Conversation" : {\n  \t"message" : "New Conversation"\n  },\n  "locale_New_Data_List" : {\n    "message" : "New Data List"\n  },\n  "locale_New_Session" : {\n    "message" : "New Session"\n  },\n  "locale_New_Corpus" : {\n    "message" : "New Corpus"\n  },\n  "locale_Data_menu" : {\n    "message" : "Data"\n  },\n  "locale_Import_Data" : {\n    "message" : "Import Data"\n  },\n  "locale_Export_Data" : {\n    "message" : "Export Data"\n  },\n  "locale_All_Data" : {\n  \t"message" : "All Data"\n  },\n  "locale_Save" : {\n    "message" : "Save"\n  },\n  "locale_Title" : {\n    "message" : "Title:"\n  },\n  "locale_Description" : {\n    "message" : "Description:"\n  },\n    "locale_Copyright" : {\n    "message" : "Corpus Copyright:"\n  },\n    "locale_License" : {\n    "message" : "Corpus License:"\n  },\n    "locale_License_explanation" : {\n    "message" : "If you make a portion of your corpus available to other people, EMELD recommends that you document clearly your terms of use, and apply a license to enforce them. For easy to understand standard licenses, you can consult <a href=\'http://creativecommons.org/licenses/\' target=\'_blank\'>Creative Commons</a>. Creative Commons licenses are applied to most web/community owned/created data, be it Wikipedia or other popular content sharing websites and mobile apps."\n  },\n    "locale_Terms_of_use" : {\n    "message" : "Corpus Terms of Use:"\n  },\n    "locale_Terms_explanation" : {\n    "message" : "When you decide to make a portion of your corpus public, EMELD recommend that you cleary state your Terms of Use with your corpus. You can modify the sample of “Terms of Use” in the textbox below according to the policy of your project (be sure to discuss with other project members and affected parties before deciding on your terms of use). Please also try to choose a license which makes sense with your Terms of Use. For your reference, see also the terms of use for other corpora such as: <a href=\'http://www.aiatsis.gov.au/collections/muraread.html\' target=\'_blank\'>Mura</a>, <a href=\'http://www.paradisec.org.au/services.html\' target=\'_blank\'>PARADISEC</a>, <a href=\'http://linguistics.berkeley.edu/~survey/archive/terms-of-use.php\' target=\'_blank\'>Survey of California and Other Indian Languages</a> "\n  },\n  "locale_Sessions_associated" : {\n    "message" : "Elicitation Sessions associated with this corpus"\n  },\n  "locale_Datalists_associated" : {\n    "message" : "Datalists associated with this corpus"\n  },\n  "locale_Permissions_associated" : {\n    "message" : "Permissions associated with this corpus"\n  },\n  "locale_Datum_field_settings" : {\n    "message" : "Datum Field Settings"\n  },\n  "locale_Conversation_field_settings" : {\n    "message" : "Conversation Field Settings"\n  },\n  "locale_Encrypt_if_confidential" : {\n    "message" : "Encrypt if confidential:"\n  },\n  "locale_Help_Text" : {\n    "message" : "Help Text:"\n  },\n  "locale_Add" : {\n    "message" : "Add"\n  },\n  "locale_Datum_state_settings" : {\n    "message" : "Datum State Settings"\n  },\n  "locale_Green" : {\n    "message" : "Green"\n  },\n  "locale_Orange" : {\n    "message" : "Orange"\n  },\n  "locale_Red" : {\n    "message" : "Red"\n  },\n  "locale_Blue" : {\n    "message" : "Blue"\n  },\n  "locale_Teal" : {\n    "message" : "Teal"\n  },\n  "locale_Black" : {\n    "message" : "Black"\n  },\n  "locale_Default" : {\n    "message" : "Default"\n  },\n  "locale_Elicitation_Session" : {\n    "message" : "Elicitation Session"\n  },\n  "locale_Export" : {\n    "message" : "Export"\n  },\n  "locale_Actions" : {\n    "message" : "Actions"\n  },\n  "locale_Navigation" : {\n    "message" : "Navigation"\n  },\n  "locale_Datum_Status_Checked" : {\n    "message" : "Mark Datum status as checked/verified with language consultant"\n  },\n  "locale_Next_Datum" : {\n    "message" : "Next Datum"\n  },\n  "locale_Previous_Datum" : {\n    "message" : "Previous Datum"\n  },\n  "locale_Data_Entry_Area" : {\n    "message" : "Data Entry Area <small>(1-5 datum)</small>"\n  },\n  "locale_Search" : {\n    "message" : "Type your search query, or hit enter to see all data"\n  },\n  "locale_View_Profile_Tooltip" : {\n    "message" : "Click to view user\'s page"\n  },\n  "locale_View_Public_Profile_Tooltip" : {\n    "message" : "View/edit your public user\'s page"\n  },\n  "locale_Edit_User_Profile_Tooltip" : {\n    "message" : "Click to edit your user profile"\n  },\n  "locale_Public_Profile_Instructions" : {\n    "message" : "This is your public user\'s page. You can edit it to change/remove information. This is what your team members can see when they click on your gravatar. All of this information (including your gravatar) can be different from the information in your private profile."\n  },\n  "locale_Private_Profile_Instructions" : {\n    "message" : "This is your private profile."\n  },\n  "locale_Edit_Public_User_Profile" : {\n    "message" : "Edit my public user\'s page"\n  },\n  "locale_Close" : {\n    "message" : "Close"\n  },\n  "locale_New_Corpus_Instructions" : {\n    "message" : "Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus"\n  },\n  "locale_New_Corpus_Warning" : {\n    "message" : " The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental."\n  },\n  "locale_Cancel" : {\n    "message" : "Cancel"\n  },\n  "locale_Next" : {\n    "message" : "Next"\n  },\n  "locale_Show" : {\n    "message" : "Show"\n  },\n  "locale_per_page" : {\n    "message" : "per page"\n  },\n  "locale_New_Session_Instructions" : {\n    "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"\n  },\n  "locale_Consultants" : {\n    "message" : "Consultant(s):"\n  },\n  "locale_Goal" : {\n    "message" : "Goal:"\n  },\n  "locale_When" : {\n    "message" : "When:"\n  },\n  "locale_Save_And_Import" : {\n    "message" : "Save and Finish Importing"\n  },\n  "locale_Import" : {\n    "message" : "Import"\n  },\n  "locale_percent_completed" : {\n    "message" : "% completed."\n  },\n  "locale_Import_Instructions" : {\n    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus\'s existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus\' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a \'datum\' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", \n    "message" : "Everyone\'s data is different. <a href=\'http://www.facebook.com/LingSyncApp\'>You might know some fellow users who might be able to help you import yours: </a>"\n  }, \n  "locale_Import_First_Step" : {\n    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area. You can edit the data inside the text area.</p>"\n  },\n    "locale_Import_Second_Step" : {\n    "message" : "<p>Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.</p>"\n  },\n  "locale_Import_Third_Step" : {\n    "message" : "<p>Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import. </p>"\n  },\n  "locale_Drag_Fields_Instructions" : {\n    "message" : "<p>Drag (or type) the coloured datum fields to the column headings which match. Type in any additional column headings which you would like to keep as datum fields. The columns will become default datum fields in your corpus database and will also become fields that you can search through to locate your data. Each row will become a \'datum\' in your corpus database.</p>"\n  },\n  "locale_Add_Extra_Columns" : {\n    "message" : "Insert Extra Columns"\n  },\n  "locale_Attempt_Import" : {\n    "message" : "Preview Import"\n  },\n  "locale_LaTeX_Code" : {\n    "message" : "LaTeX Code:"\n  },\n  "locale_Unicode_Instructions" : {\n    "message" : "By default this is also a keyboard shortcut to type this character in a datum field. To customize the shortcut:"\n  },\n  "locale_Remove_Unicode" : {\n    "message" : "Remove Unicode"\n  },\n  "locale_Unicode" : {\n    "message" : "Unicode"\n  },\n  "locale_Drag_and_Drop" : {\n    "message" : "<small>Drag and Drop</small>"\n  },\n  "locale_AND" : {\n    "message" : "AND"\n  },\n  "locale_OR" : {\n    "message" : "OR"\n  },\n  "locale_Advanced_Search" : {\n    "message" : "Advanced Search"\n  },\n  "locale_Advanced_Search_Tooltip" : {\n    "message" : "Advanced Search allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."\n  },\n  "locale_User_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Private_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Public_Profile" : {\n    "message" : "Public Profile"\n  },\n  "locale_Email" : {\n    "message" : "Email:"\n  },\n  "locale_Research_Interests" : {\n    "message" : "Research Interests:"\n  },\n  "locale_Affiliation" : {\n    "message" : "Affiliation:"\n  },\n  "locale_Corpora" : {\n    "message" : "Corpora:"\n  },\n  "locale_Gravatar" : {\n    "message" : "Gravatar"\n  },\n  "locale_Gravatar_URL" : {\n    "message" : "Gravatar URL:"\n  },\n  "locale_Firstname" : {\n    "message" : "First name:"\n  },\n  "locale_Lastname" : {\n    "message" : "Last name:"\n  },\n  "locale_Skin" : {\n    "message" : "Skin:"\n  },\n  "locale_Background_on_Random" : {\n    "message" : "Background on Random"\n  },\n  "locale_Transparent_Dashboard" : {\n    "message" : "Transparent Dashboard"\n  },\n  "locale_Change_Background" : {\n    "message" : "Change Background"\n  },\n  "locale_Number_Datum" : {\n    "message" : "Number of Datum to appear at a time:"\n  },\n  "locale_Help_Text_Placeholder" : {\n    "message" : "Put a help text or your team data entry conventions for this field here (optional)."\n  },\n  "locale_Add_Placeholder" : {\n    "message" : "Add...."\n  },\n  "locale_Datalist_Description" : {\n    "message" : "You can use Datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."\n  },\n  "locale_Add_Tag" : {\n    "message" : "New Tag..."\n  },\n  "locale_Drag_and_Drop_Placeholder" : {\n    "message" : "Drag and drop, copy-paste or type your data here."\n  },\n  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {\n    "message" : "Paste/type unicode symbol"\n  },\n  "locale_TIPA_shortcut" : {\n    "message" : "TIPA/keyboard shortcut"\n  },\n  "locale_Show_Activities" : {\n    "message" : "Show Activities"\n  },\n  "locale_Hide_Activities" : {\n    "message" : "Hide Activities"\n  },\n  "locale_Show_Dashboard" : {\n    "message" : "Show dashboard with data entry form"\n  },\n  "locale_Save_on_this_Computer" : {\n    "message" : "Save on this device."\n  },\n  "locale_Sync_and_Share" : {\n    "message" : "Sync and share with team"\n  },\n  "locale_Show_Readonly" : {\n    "message" : "Show read only"\n  },\n  "locale_Show_Fullscreen" : {\n    "message" : "Show full screen"\n  },\n  "locale_Add_New_Datum_Field_Tooltip" : {\n    "message" : "Add new datum field"\n  },\n  "locale_Add_New_Conversation_Field_Tooltip" : {\n    "message" : "Add new conversation field"\n  },\n  "locale_Add_New_Datum_State_Tooltip" : {\n    "message" : "Add new datum state"\n  },\n  "locale_Show_in_Dashboard" : {\n    "message" : "Show in dashboard"\n  },\n  "locale_Edit_corpus" : {\n    "message" : "Edit Corpus"\n  },\n  "locale_Show_corpus_settings" : {\n    "message" : "Show Corpus Settings"\n  },\n  "locale_Drag_and_Drop_Audio_Tooltip" : {\n    "message" : "Drag and drop audio over the audio player to attach an audio file. Drag and drop option for YouTube videos coming soon."\n  },\n  "locale_Play_Audio" : {\n    "message" : "Play audio"\n  },\n  "locale_Play_Audio_checked" : {\n    "message" : "Play audio of checked items"\n  },\n  "locale_Remove_checked_from_datalist_tooltip" : {\n    "message" : "Remove checked datum from this data list (they will still be in the corpus). "\n  },\n  "locale_Plain_Text_Export_Tooltip" : {\n    "message" : "Export as plain text/Copy to clipboard"\n  },\n  "locale_Plain_Text_Export_Tooltip_checked" : {\n    "message" : "Export as plain text/Copy checked items to clipboard"\n  },\n  "locale_Duplicate" : {\n    "message" : "Duplicate datum to create a minimal pair"\n  },\n  "locale_Encrypt" : {\n    "message" : "Make this datum confidential"\n  },\n  "locale_Encrypt_checked" : {\n    "message" : "Make checked items confidential"\n  },\n  "locale_Decrypt_checked" : {\n    "message" : "Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you just want to unmask them so you can edit edit them, click on the eye instead."\n  },\n  "locale_Decrypt" : {\n    "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."\n  },\n  "locale_Show_confidential_items_Tooltip" : {\n    "message" : "Unmask confidential/encrypted data so that it can be edited and read for the next 10 minutes."\n  },\n  "locale_Hide_confidential_items_Tooltip" : {\n    "message" : "Return to masked view of confidential/encrypted data"\n  },\n  "locale_Edit_Datalist" : {\n    "message" : "Edit Data List"\n  },\n  "locale_Export_checked_as_LaTeX" : {\n    "message" : "Export checked as LaTeX"\n  },\n  "locale_Export_checked_as_CSV" : {\n    "message" : "Export checked as CSV"\n  },\n  "locale_Hide_Datalist" : {\n    "message" : "Hide datalist"\n  },\n  "locale_Show_Datalist" : {\n    "message" : "Show datalist"\n  },\n  "locale_Edit_Datum" : {\n    "message" : "Edit Datum"\n  },\n  "locale_See_Fields" : {\n    "message" : "Hide/Show infrequent fields"\n  },\n  "locale_Add_Tags_Tooltip" : {\n    "message" : "Add a tag to this datum. Tags can be used to categorize datum, count how many datum of each tag you have, and search datum."\n  },\n  "locale_Edit_Session" : {\n    "message" : "Edit Session"\n  },\n  "locale_Show_Unicode_Palette" : {\n    "message" : "Show Unicode Palette"\n  },\n  "locale_Hide_Unicode_Palette" : {\n    "message" : "Hide Unicode Palette"\n  },\n  "locale_Add_new_symbol" : {\n    "message" : "Add new symbol"\n  },\n  "locale_Public_or_Private" : {\n    "message" : "Public or Private:"\n  },\n  "locale_Insert_New_Datum" : {\n    "message" : "Insert a new datum on top of the dashboard center"\n  },\n  "locale_LaTeX" : {\n    "message" : "Export datum as LaTeX"\n  },\n  "locale_CSV_Tooltip" : {\n    "message" : "Export datum as CSV"\n  },\n  "locale_of" : {\n    "message" : "of"\n  },\n  "locale_pages_shown" : {\n    "message" : "pages shown"\n  },\n  "locale_More" : {\n    "message" : "More"\n  }\n}\n';});
+define('text!locales/en/messages.json',[],function () { return '{\n  "application_title" : {\n    "message" : "LingSync beta",\n    "description" : "The title of the application, displayed in the web store."\n  },\n  "application_description" : {\n    "message" : "An on/offline fieldlinguistics database app which adapts to its user\'s I-Language.",\n    "description" : "The description of the application, displayed in the web store."\n  },\n  "locale_Close_and_login_as_LingLlama" : {\n    "message" : "Login as LingLlama",\n    "description" : "button"\n  },\n  "locale_Close_and_login_as_LingLlama_Tooltip" : {\n    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you\'re new to LingSync this is a great place to start after watching the videos. ",\n    "description" : "tooltip"\n  },\n  "locale_Username" : {\n    "message" : "Username:"\n  },\n  "locale_Password" : {\n    "message" : "Password:"\n  },\n  "locale_Sync_my_data_to_this_computer" : {\n    "message" : "Sync my data to this device"\n  },\n  "locale_Welcome_to_FieldDB" : {\n    "message" : "Welcome to LingSync!"\n  },\n  "locale_An_offline_online_fieldlinguistics_database" : {\n    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."\n  },\n  "locale_Welcome_Beta_Testers" : {\n    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"\n  },\n  "locale_Welcome_Screen" : {\n    "message" : "<p>Curious what this is? <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"\n  },\n  "locale_Create_a_new_user" : {\n    "message" : "Register"\n  },\n  "locale_What_is_your_username_going_to_be" : {\n    "message" : "What is your username going to be?"\n  },\n  "locale_Confirm_Password" : {\n    "message" : "Confirm Password:"\n  },\n  "locale_Sign_in_with_password" : {\n    "message" : "Register"\n  },\n  "locale_Warning" : {\n    "message" : "Warning!"\n  },\n  "locale_Instructions_to_show_on_dashboard" : {\n    "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=\' icon-edit\'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app.     To more information about what a \'Corpus\' is, click <i class=\' icon-cogs resize-full\'></i>.     It will show the corpus settings, which contains explanations of each component of a \'Corpus.\'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>",\n    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=\' icon-edit\'></i>. To see what Corpus consists of, click <i class=\' icon-cogs resize-full\'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=\' icon-edit\'></i>. Click <i class=\' icon icon-resize-full\'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>"\n    \n  },\n  "locale_elicitation_sessions_explanation" : {\n    "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class=\'icons icon-edit\'></i> icon in Dashboard view. For additional options, click on the <i class=\'icon-calendar\'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"\n  },\n  "locale_datalists_explanation" : {\n    "message" : "<p>A Datalist is a collection of Datum that you put together for some reason. Some examples are: making a handout, sharing data with someone, exporting into another program, or simply keeping track of similar Datum for your research.</p> <p> Creating a Datalist is like making a bookmark to a set of custom search results. First, do a search for whatever you want the Datalist to be about. Then, if you don\'t want some of the results to be included in the Datalist, click the <i class=\'icon-remove-sign\'></i> icon by any Datum to remove it. Finally, edit the title and description, and click the save button to create the Datalist.</p> <p>You can see your Datalists on the left side of your dashboard (click plus/minus to expand/minimize) or in the list below (double-click on a title to view details). </p><p>To see all your data, do a search with nothing in the search bar. If you have over 200 Datum in your corpus, this can be pretty slow, so you may prefer to search for a subset. In general, a Datalist with more than 100 Datum will take a few seconds to load.</p> <p> In the Datalist view, the Datum will appear in the colour of their current state (i.e. Checked with a consultant, To be checked, Deleted etc). You can make new states in the Datum State Settings on this page. </p>"\n  },\n  "locale_permissions_explanation" : {\n    "message" : "<p>Permissions are where you give other people access to your corpus.</p><p>To add another LingSync user, you need to know their username. Click the <i class=\'icons icon-edit\'></i> icon at the top right and then come back to Permissions and click the \'See current team members\' button. You can then add users by typing in their username by the appropriate group.</p> <ul><li>Admins can add other people to any group but not do anything with the data unless they are also writers/readers.</li> <li>Writers can enter new data, add comments, change Datum State from \'to be checked to \'checked\' etc, but not see data that is already entered. </li><li>Readers can see data that is already entered in the app but not edit or comment on it. </li></ul><p>If you want someone to be able to both enter data and see existing data, add them as both a writer and a reader.</p><p>If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, type \'Public\' in the \'Public or Private\' field below.</p><p>You can, and should, encrypt any Datum containing sensitive information by clicking the <i class=\' icon-unlock\'></i> button at the bottom of the Datum. Encrypted Datums are shown as \'xxx xx xx xx\' to all users, including on the web. If you want to see the contents of a confidential Datum, click on the <i class=\'icon-eye-open\'></i> and enter your password. This will make the Datum visible for 10 minutes.</p>"\n  },\n  "locale_datum_fields_explanation" : {\n    "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class=\'icon-list-alt\'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class=\'icons icon-edit\'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n    "locale_conversation_fields_explanation" : {\n    "message" : "<p>Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a \'location\' field, but instead choose to encrypt a \'world knowledge\' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n  "locale_datum_states_explanation" : {\n    "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, \'Checked\' with a consultant, \'To be checked\', \'Deleted\' etc. </p> <p>Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team\'s data validation workflow (e.g. \'To be checked with Sophie,\' \'Checked with Gladys\').  You can assign colours to your Datum States, which will appear as the background colour of the Datum in any Datalist. </p> <p> If you flag a Datum as Deleted it won\'t show up in search results anymore, but a Datum in a corpus is never really deleted. It remains in the database complete with its change history so that you can review it at a later date. (In future we might add a button to allow users to \'empty the trash\' and mass-delete old Datum from the system.) </p> "\n  },\n   "locale_advanced_search_explanation" : {\n    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type \'nay\' and search will find the morphemes \'onay\', \'naya\' etc. </p> <p>Search automatically creates a temporary list of data. If you enter new matching data, it will be added automatically this can be a handy way to see the data you have entered recently, as you enter data.. If you want to keep the list of data, click Save and a new DataList will be created. </p> <p>For now, search is offline, running on your device, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"\n   },\n  "locale_New_User" : {\n    "message" : "New User"\n  },\n  "locale_Activity_Feed_Your" : {\n    "message" : "Your Activity Feed"\n  },\n  "locale_Activity_Feed_Team" : {\n    "message" : "Corpus Team Activity Feed"\n  },\n  "locale_Refresh_Activities" : {\n    "message" : "Refresh activity feed to bring it up-to-date."\n  },\n  "locale_Need_save" : {\n    "message" : " Need save:"\n  },\n  "locale_60_unsaved" : {\n    "message" : "<strong>60% unsaved.</strong>"\n  },\n  "locale_Recent_Changes" : {\n    "message" : "Recent Changes:"\n  },\n  "locale_Need_sync" : {\n    "message" : "Need sync:"\n  },\n  "locale_Differences_with_the_central_server" : {\n    "message" : "Differences with the central server:"\n  },\n  "locale_to_beta_testers" : {\n    "message" : "These messages are here to communicate to users what the app is doing. We will gradually reduce the number of messages as the app becomes more stable. <p>You can close these messages by clicking on their x.</p>"\n  },\n  "locale_We_need_to_make_sure_its_you" : {\n    "message" : "We need to make sure it\'s you..."\n  },\n  "locale_Yep_its_me" : {\n    "message" : "Yep, it\'s me"\n  },\n  "locale_Log_Out" : {\n    "message" : "Log Out"\n  },\n  "locale_Log_In" : {\n    "message" : "Log In"\n  },\n  "locale_User_Settings" : {\n    "message" : "User Settings"\n  },\n  "locale_Keyboard_Shortcuts" : {\n    "message" : "Keyboard Shortcuts"\n  },\n  "locale_Corpus_Settings" : {\n    "message" : "Corpus Settings"\n  },\n  "locale_Terminal_Power_Users" : {\n    "message" : "Power Users Backend"\n  },\n  "locale_New_Datum" : {\n    "message" : "New Datum"\n  },\n  "locale_New_menu" : {\n    "message" : "New"\n  },\n  "locale_New_Conversation" : {\n  \t"message" : "New Conversation"\n  },\n  "locale_New_Data_List" : {\n    "message" : "New Data List"\n  },\n  "locale_New_Session" : {\n    "message" : "New Session"\n  },\n  "locale_New_Corpus" : {\n    "message" : "New Corpus"\n  },\n  "locale_Data_menu" : {\n    "message" : "Data"\n  },\n  "locale_Import_Data" : {\n    "message" : "Import Data"\n  },\n  "locale_Export_Data" : {\n    "message" : "Export Data"\n  },\n  "locale_All_Data" : {\n  \t"message" : "All Data"\n  },\n  "locale_Save" : {\n    "message" : "Save"\n  },\n  "locale_Title" : {\n    "message" : "Title:"\n  },\n  "locale_Description" : {\n    "message" : "Description:"\n  },\n    "locale_Copyright" : {\n    "message" : "Corpus Copyright:"\n  },\n    "locale_License" : {\n    "message" : "Corpus License:"\n  },\n    "locale_License_explanation" : {\n    "message" : "If you make a portion of your corpus available to other people, EMELD recommends that you document clearly your terms of use, and apply a license to enforce them. For easy to understand standard licenses, you can consult <a href=\'http://creativecommons.org/licenses/\' target=\'_blank\'>Creative Commons</a>. Creative Commons licenses are applied to most web/community owned/created data, be it Wikipedia or other popular content sharing websites and mobile apps."\n  },\n    "locale_Terms_of_use" : {\n    "message" : "Corpus Terms of Use:"\n  },\n    "locale_Terms_explanation" : {\n    "message" : "When you decide to make a portion of your corpus public, EMELD recommend that you cleary state your Terms of Use with your corpus. You can modify the sample of “Terms of Use” in the textbox below according to the policy of your project (be sure to discuss with other project members and affected parties before deciding on your terms of use). Please also try to choose a license which makes sense with your Terms of Use. For your reference, see also the terms of use for other corpora such as: <a href=\'http://www.aiatsis.gov.au/collections/muraread.html\' target=\'_blank\'>Mura</a>, <a href=\'http://www.paradisec.org.au/services.html\' target=\'_blank\'>PARADISEC</a>, <a href=\'http://linguistics.berkeley.edu/~survey/archive/terms-of-use.php\' target=\'_blank\'>Survey of California and Other Indian Languages</a> "\n  },\n  "locale_Sessions_associated" : {\n    "message" : "Elicitation Sessions associated with this corpus"\n  },\n  "locale_Datalists_associated" : {\n    "message" : "Datalists associated with this corpus"\n  },\n  "locale_Permissions_associated" : {\n    "message" : "Permissions associated with this corpus"\n  },\n  "locale_Datum_field_settings" : {\n    "message" : "Datum Field Settings"\n  },\n  "locale_Conversation_field_settings" : {\n    "message" : "Conversation Field Settings"\n  },\n  "locale_Encrypt_if_confidential" : {\n    "message" : "Encrypt if confidential:"\n  },\n  "locale_Help_Text" : {\n    "message" : "Help Text:"\n  },\n  "locale_Add" : {\n    "message" : "Add"\n  },\n  "locale_Datum_state_settings" : {\n    "message" : "Datum State Settings"\n  },\n  "locale_Green" : {\n    "message" : "Green"\n  },\n  "locale_Orange" : {\n    "message" : "Orange"\n  },\n  "locale_Red" : {\n    "message" : "Red"\n  },\n  "locale_Blue" : {\n    "message" : "Blue"\n  },\n  "locale_Teal" : {\n    "message" : "Teal"\n  },\n  "locale_Black" : {\n    "message" : "Black"\n  },\n  "locale_Default" : {\n    "message" : "Default"\n  },\n  "locale_Elicitation_Session" : {\n    "message" : "Elicitation Session"\n  },\n  "locale_Export" : {\n    "message" : "Export"\n  },\n  "locale_Actions" : {\n    "message" : "Actions"\n  },\n  "locale_Navigation" : {\n    "message" : "Navigation"\n  },\n  "locale_Datum_Status_Checked" : {\n    "message" : "Mark Datum status as checked/verified with language consultant"\n  },\n  "locale_Next_Datum" : {\n    "message" : "Next Datum"\n  },\n  "locale_Previous_Datum" : {\n    "message" : "Previous Datum"\n  },\n  "locale_Data_Entry_Area" : {\n    "message" : "Data Entry Area <small>(1-5 datum)</small>"\n  },\n  "locale_Search" : {\n    "message" : "Type your search query, or hit enter to see all data"\n  },\n  "locale_View_Profile_Tooltip" : {\n    "message" : "Click to view user\'s page"\n  },\n  "locale_View_Public_Profile_Tooltip" : {\n    "message" : "View/edit your public user\'s page"\n  },\n  "locale_Edit_User_Profile_Tooltip" : {\n    "message" : "Click to edit your user profile"\n  },\n  "locale_Public_Profile_Instructions" : {\n    "message" : "This is your public user\'s page. You can edit it to change/remove information. This is what your team members can see when they click on your gravatar. All of this information (including your gravatar) can be different from the information in your private profile."\n  },\n  "locale_Private_Profile_Instructions" : {\n    "message" : "This is your private profile."\n  },\n  "locale_Edit_Public_User_Profile" : {\n    "message" : "Edit my public user\'s page"\n  },\n  "locale_Close" : {\n    "message" : "Close"\n  },\n  "locale_New_Corpus_Instructions" : {\n    "message" : "Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus"\n  },\n  "locale_New_Corpus_Warning" : {\n    "message" : " The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental."\n  },\n  "locale_Cancel" : {\n    "message" : "Cancel"\n  },\n  "locale_Next" : {\n    "message" : "Next"\n  },\n  "locale_Show" : {\n    "message" : "Show"\n  },\n  "locale_per_page" : {\n    "message" : "per page"\n  },\n  "locale_New_Session_Instructions" : {\n    "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"\n  },\n  "locale_Consultants" : {\n    "message" : "Consultant(s):"\n  },\n  "locale_Goal" : {\n    "message" : "Goal:"\n  },\n  "locale_When" : {\n    "message" : "When:"\n  },\n  "locale_Save_And_Import" : {\n    "message" : "Save and Finish Importing"\n  },\n  "locale_Import" : {\n    "message" : "Import"\n  },\n  "locale_percent_completed" : {\n    "message" : "% completed."\n  },\n  "locale_Import_Instructions" : {\n    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus\'s existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus\' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a \'datum\' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", \n    "message" : "Everyone\'s data is different. <a href=\'http://www.facebook.com/LingSyncApp\'>You might know some fellow users who might be able to help you import yours: </a>"\n  }, \n  "locale_Import_First_Step" : {\n    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area. You can edit the data inside the text area.</p>"\n  },\n    "locale_Import_Second_Step" : {\n    "message" : "<p>Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.</p>"\n  },\n  "locale_Import_Third_Step" : {\n    "message" : "<p>Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import. </p>"\n  },\n  "locale_Drag_Fields_Instructions" : {\n    "message" : "<p>Drag (or type) the coloured datum fields to the column headings which match. Type in any additional column headings which you would like to keep as datum fields. The columns will become default datum fields in your corpus database and will also become fields that you can search through to locate your data. Each row will become a \'datum\' in your corpus database.</p>"\n  },\n  "locale_Add_Extra_Columns" : {\n    "message" : "Insert Extra Columns"\n  },\n  "locale_Attempt_Import" : {\n    "message" : "Preview Import"\n  },\n  "locale_LaTeX_Code" : {\n    "message" : "LaTeX Code:"\n  },\n  "locale_Unicode_Instructions" : {\n    "message" : "By default this is also a keyboard shortcut to type this character in a datum field. To customize the shortcut:"\n  },\n  "locale_Remove_Unicode" : {\n    "message" : "Remove Unicode"\n  },\n  "locale_Unicode" : {\n    "message" : "Unicode"\n  },\n  "locale_Drag_and_Drop" : {\n    "message" : "<small>Drag and Drop</small>"\n  },\n  "locale_AND" : {\n    "message" : "AND"\n  },\n  "locale_OR" : {\n    "message" : "OR"\n  },\n  "locale_Advanced_Search" : {\n    "message" : "Advanced Search"\n  },\n  "locale_Advanced_Search_Tooltip" : {\n    "message" : "Advanced Search allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."\n  },\n  "locale_User_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Private_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Public_Profile" : {\n    "message" : "Public Profile"\n  },\n  "locale_Email" : {\n    "message" : "Email:"\n  },\n  "locale_Research_Interests" : {\n    "message" : "Research Interests:"\n  },\n  "locale_Affiliation" : {\n    "message" : "Affiliation:"\n  },\n  "locale_Corpora" : {\n    "message" : "Switch to another corpus:"\n  },\n  "locale_Gravatar" : {\n    "message" : "Gravatar"\n  },\n  "locale_Gravatar_URL" : {\n    "message" : "Gravatar URL:"\n  },\n  "locale_Firstname" : {\n    "message" : "First name:"\n  },\n  "locale_Lastname" : {\n    "message" : "Last name:"\n  },\n  "locale_Skin" : {\n    "message" : "Skin:"\n  },\n  "locale_Background_on_Random" : {\n    "message" : "Background on Random"\n  },\n  "locale_Transparent_Dashboard" : {\n    "message" : "Transparent Dashboard"\n  },\n  "locale_Change_Background" : {\n    "message" : "Change Background"\n  },\n  "locale_Number_Datum" : {\n    "message" : "Number of Datum to appear at a time:"\n  },\n  "locale_Help_Text_Placeholder" : {\n    "message" : "Put a help text or your team data entry conventions for this field here (optional)."\n  },\n  "locale_Add_Placeholder" : {\n    "message" : "Add...."\n  },\n  "locale_Datalist_Description" : {\n    "message" : "You can use Datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."\n  },\n  "locale_Add_Tag" : {\n    "message" : "New Tag..."\n  },\n  "locale_Drag_and_Drop_Placeholder" : {\n    "message" : "Drag and drop, copy-paste or type your data here."\n  },\n  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {\n    "message" : "Paste/type unicode symbol"\n  },\n  "locale_TIPA_shortcut" : {\n    "message" : "TIPA/keyboard shortcut"\n  },\n  "locale_Show_Activities" : {\n    "message" : "Show Activities"\n  },\n  "locale_Hide_Activities" : {\n    "message" : "Hide Activities"\n  },\n  "locale_Show_Dashboard" : {\n    "message" : "Show dashboard with data entry form"\n  },\n  "locale_Save_on_this_Computer" : {\n    "message" : "Save on this device."\n  },\n  "locale_Sync_and_Share" : {\n    "message" : "Sync and share with team"\n  },\n  "locale_Show_Readonly" : {\n    "message" : "Show read only"\n  },\n  "locale_Show_Fullscreen" : {\n    "message" : "Show full screen"\n  },\n  "locale_Add_New_Datum_Field_Tooltip" : {\n    "message" : "Add new datum field"\n  },\n  "locale_Add_New_Conversation_Field_Tooltip" : {\n    "message" : "Add new conversation field"\n  },\n  "locale_Add_New_Datum_State_Tooltip" : {\n    "message" : "Add new datum state"\n  },\n  "locale_Show_in_Dashboard" : {\n    "message" : "Show in dashboard"\n  },\n  "locale_Edit_corpus" : {\n    "message" : "Edit Corpus"\n  },\n  "locale_Show_corpus_settings" : {\n    "message" : "Show Corpus Settings"\n  },\n  "locale_Drag_and_Drop_Audio_Tooltip" : {\n    "message" : "Drag and drop audio over the audio player to attach an audio file. Drag and drop option for YouTube videos coming soon."\n  },\n  "locale_Play_Audio" : {\n    "message" : "Play audio"\n  },\n  "locale_Play_Audio_checked" : {\n    "message" : "Play audio of checked items"\n  },\n  "locale_Remove_checked_from_datalist_tooltip" : {\n    "message" : "Remove checked datum from this data list (they will still be in the corpus). "\n  },\n  "locale_Plain_Text_Export_Tooltip" : {\n    "message" : "Export as plain text/Copy to clipboard"\n  },\n  "locale_Plain_Text_Export_Tooltip_checked" : {\n    "message" : "Export as plain text/Copy checked items to clipboard"\n  },\n  "locale_Duplicate" : {\n    "message" : "Duplicate datum to create a minimal pair"\n  },\n  "locale_Encrypt" : {\n    "message" : "Make this datum confidential"\n  },\n  "locale_Encrypt_checked" : {\n    "message" : "Make checked items confidential"\n  },\n  "locale_Decrypt_checked" : {\n    "message" : "Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you just want to unmask them so you can edit edit them, click on the eye instead."\n  },\n  "locale_Decrypt" : {\n    "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."\n  },\n  "locale_Show_confidential_items_Tooltip" : {\n    "message" : "Unmask confidential/encrypted data so that it can be edited and read for the next 10 minutes."\n  },\n  "locale_Hide_confidential_items_Tooltip" : {\n    "message" : "Return to masked view of confidential/encrypted data"\n  },\n  "locale_Edit_Datalist" : {\n    "message" : "Edit Data List"\n  },\n  "locale_Export_checked_as_LaTeX" : {\n    "message" : "Export checked as LaTeX"\n  },\n  "locale_Export_checked_as_CSV" : {\n    "message" : "Export checked as CSV"\n  },\n  "locale_Hide_Datalist" : {\n    "message" : "Hide datalist"\n  },\n  "locale_Show_Datalist" : {\n    "message" : "Show datalist"\n  },\n  "locale_Edit_Datum" : {\n    "message" : "Edit Datum"\n  },\n  "locale_See_Fields" : {\n    "message" : "Hide/Show infrequent fields"\n  },\n  "locale_Add_Tags_Tooltip" : {\n    "message" : "Add a tag to this datum. Tags can be used to categorize datum, count how many datum of each tag you have, and search datum."\n  },\n  "locale_Edit_Session" : {\n    "message" : "Edit Session"\n  },\n  "locale_Show_Unicode_Palette" : {\n    "message" : "Show Unicode Palette"\n  },\n  "locale_Hide_Unicode_Palette" : {\n    "message" : "Hide Unicode Palette"\n  },\n  "locale_Add_new_symbol" : {\n    "message" : "Add new symbol"\n  },\n  "locale_Public_or_Private" : {\n    "message" : "Public or Private:"\n  },\n  "locale_Insert_New_Datum" : {\n    "message" : "Insert a new datum on top of the dashboard center"\n  },\n  "locale_LaTeX" : {\n    "message" : "Export datum as LaTeX"\n  },\n  "locale_CSV_Tooltip" : {\n    "message" : "Export datum as CSV"\n  },\n  "locale_of" : {\n    "message" : "of"\n  },\n  "locale_pages_shown" : {\n    "message" : "pages shown"\n  },\n  "locale_More" : {\n    "message" : "More"\n  }\n}\n';});
 
 define('user/UserApp',[
     "backbone", 
@@ -18244,7 +18379,7 @@ require.config({
   shim : {
 
     "xml2json" : {
-      deps : [ "jquery" ],
+      deps : [ "$" ],
       exports : "X2JS"
     },
 
