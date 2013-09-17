@@ -33,8 +33,7 @@ define([
     model : DatumField,
 
     events : {
-      "click .icon-question-sign" : "showHelpConvention",
-      "hover .icon-question-sign" : "hideHelpConvention"  
+      "click .help-conventions" : "toggleHelpConvention"
     },    
     
     
@@ -69,7 +68,7 @@ define([
         $(this.el).html(this.templateValue(jsonToRender));
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
-        jsonToRender.helpText = false;
+        jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       }
     
@@ -77,19 +76,22 @@ define([
     },
     
     /**
-     * Show help convention in popover when clicked 
+     * Toggle help convention in popover  
      */
-    showHelpConvention : function() {
-        this.$el.children(".help-conventions").popover("show");
-    }, 
-
-    /**
-     * Don't show help convention in popover if only hover 
-     */
-    hideHelpConvention : function() {
-        this.$el.children(".help-conventions").popover("hide");
-    }    
-    
+    toggleHelpConvention : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".help-conventions").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".help-conventions").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    }
     
   });
 

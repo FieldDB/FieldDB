@@ -170,6 +170,21 @@
   "locale_Description" : {
     "message" : "Description:"
   },
+    "locale_Copyright" : {
+    "message" : "Corpus Copyright:"
+  },
+    "locale_License" : {
+    "message" : "Corpus License:"
+  },
+    "locale_License_explanation" : {
+    "message" : "If you make a portion of your corpus available to other people, EMELD recommends that you document clearly your terms of use, and apply a license to enforce them. For easy to understand standard licenses, you can consult <a href='http://creativecommons.org/licenses/' target='_blank'>Creative Commons</a>. Creative Commons licenses are applied to most web/community owned/created data, be it Wikipedia or other popular content sharing websites and mobile apps."
+  },
+    "locale_Terms_of_use" : {
+    "message" : "Corpus Terms of Use:"
+  },
+    "locale_Terms_explanation" : {
+    "message" : "When you decide to make a portion of your corpus public, EMELD recommend that you cleary state your Terms of Use with your corpus. You can modify the sample of “Terms of Use” in the textbox below according to the policy of your project (be sure to discuss with other project members and affected parties before deciding on your terms of use). Please also try to choose a license which makes sense with your Terms of Use. For your reference, see also the terms of use for other corpora such as: <a href='http://www.aiatsis.gov.au/collections/muraread.html' target='_blank'>Mura</a>, <a href='http://www.paradisec.org.au/services.html' target='_blank'>PARADISEC</a>, <a href='http://linguistics.berkeley.edu/~survey/archive/terms-of-use.php' target='_blank'>Survey of California and Other Indian Languages</a> "
+  },
   "locale_Sessions_associated" : {
     "message" : "Elicitation Sessions associated with this corpus"
   },
@@ -373,7 +388,7 @@
     "message" : "Affiliation:"
   },
   "locale_Corpora" : {
-    "message" : "Corpora:"
+    "message" : "Switch to another corpus:"
   },
   "locale_Gravatar" : {
     "message" : "Gravatar"

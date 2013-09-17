@@ -167,7 +167,7 @@ define([
       }
 
       if(this.model.get("userPublic") != undefined){
-        this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
+        this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
         this.model.set( "username", this.model.get("userPublic").get("username") );
       }
       // Display the AuthenticationEditView
@@ -468,8 +468,9 @@ define([
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
-      dataToPost.gravatar = "user/user_gravatar.png";
-     
+      // dataToPost.gravatar = "user/user_gravatar.png";
+      var u = new UserMask();
+      dataToPost.gravatar = u.getGravatar(dataToPost.email);
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {

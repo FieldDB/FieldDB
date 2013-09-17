@@ -1,37 +1,363 @@
 <!DOCTYPE HTML>
 <html lang="en" ng-csp>
 <head>
-<title>LingSync</title>
+<title>LingSync Spreadsheet</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Stylesheets -->
-<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap-responsive.css">
-<link rel="stylesheet" type="text/css" href="css/LingSync.css">
+<link rel="stylesheet" type="text/css"
+	href="libs/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="libs/bootstrap/css/bootstrap-responsive.min.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
 <!-- END Stylesheets -->
 
 </head>
-<body id="app" class="LingSyncBody" ng-controller="LingSyncController">
+<body id="app" ng-controller="SpreadsheetStyleDataEntryController"
+	ng-cloak>
+	<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady==true">
+		<div class="span4 offset4 pagination-centered">
+			<img src="img/loading-spinner.gif" width="75">
+		</div>
+	</div>
 
-<div class="navbar">
-  <div class="navbar-inner">
-    <a class="brand" href="#"><h3>| LingSync |</h3></a>
-    <ul class="nav">
-      <li><a href="#/lingsync/{{template}}">Data Entry</a></li>
-      <li><a href="#/settings">Settings</a></li>
-    </ul>
-  </div>
-</div>
+	<div id="hideOnLoad">
+		<div class="largeMenuBar">
+			<div class="menubar mainMenubar" ng-cloak>
+				<span class="menuTitle"><a
+					ng-click="navigateVerifySaved('home')"><img
+						src="img/icon40_dev.png" border="0" /></a>
+				</span>
+				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a
+					ng-click="dataentry=true;navigateVerifySaved('none')">Data
+						Entry</a></span>
+				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a
+					ng-click="navigateVerifySaved('searchMenu');">Search</a>
+				</span>
+				<span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}"> <a
+					ng-click="navigateVerifySaved('editSession')">Session</a>
+				</span>
+				<span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
+					<ul class="dropdown_nav">
+						<li><a>Settings</a>
+							<ul>
+								<li><a ng-click="navigateVerifySaved('corpusSettings')">Corpus</a></li>
+								<li ng-hide="DB.pouchname==undefined"><a
+									ng-click="navigateVerifySaved('settings');">User Interface</a></li>
+							</ul></li>
+					</ul>
+				</span>
+				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
+			  <span
+					class="rightMenuItems" ng-show="authenticated==true">
+					<div class="rightMenuItemsDiv">
+						<div ng-hide="DB==undefined">
+							Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
+						</div>
+						<div>
+							<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
+							<button class="btn btn-warning" ng-click="logOut()">Log
+								out</button>
+						</div>
+					</div>
+					<div class="clearDiv"></div>
+				</span>
+				<span ng-hide="authenticated == true">
+					<div class="rightMenuItemsDiv">
+						<a href="#/register"><button class="btn btn-primary">Register</button></a>
+					</div>
+				</span>
+			</div>
+			<div class="subMenubar" ng-show="activeSubMenu=='editSession'"
+				ng-cloak>
+				<div class="form-horizontal">
+					<span>Change Session:</span> <select class="span3"
+						ng-model='activeSessionToSwitchTo'>
+						<option value="" disabled selected>Choose
+							session...</option>
+						<option value='none'>All sessions</option>
+						<option select-dropdown-session
+							ng-repeat="session in sessions | orderBy:'dateCreated'"
+							value={{session._id}}>{{session.dateCreated |
+							shortDate}} {{session.title}} ({{(data | filter:
+							session._id).length}})</option>
+					</select>
+					<button class="btn btn-primary"
+						ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
+						Session</button>
+					&nbsp;&nbsp;&nbsp;
+					<button class="btn"
+						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails"
+						ng-hide="activeSession==undefined">Edit Session Info</button>
+					&nbsp;&nbsp;&nbsp;
+					<button class="btn btn-danger"
+						ng-click="deleteEmptySession(activeSession)"
+						ng-show="(data | filter: activeSession).length==0">Delete
+						Session</button>
+				</div>
+				<div class="subSubMenubar"
+					ng-show="editSessionDetails==true && activeSession!=undefined"
+					ng-cloak>
+					<form ng-model='editedSessionInfo'>
+						<table cellpadding="5px">
+							<tr>
+								<td>Title:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.goal"
+									value={{fullCurrentSessionToEdit.goal}}
+									placeholder="{{fullCurrentSessionToEdit.goal}}"></td>
+								<td>Consultants:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.consultants"
+									value={{fullCurrentSessionToEdit.consultants}}
+									placeholder="{{fullCurrentSessionToEdit.consultants}}"></td>
+								<td>User:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.user"
+									value={{fullCurrentSessionToEdit.user}}
+									placeholder="{{fullCurrentSessionToEdit.user}}"></td>
+							</tr>
+							<tr>
+								<td>Language:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.language"
+									value={{fullCurrentSessionToEdit.language}}
+									placeholder="{{fullCurrentSessionToEdit.language}}"></td>
+								<td>Dialect:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.dialect"
+									value={{fullCurrentSessionToEdit.dialect}}
+									placeholder="{{fullCurrentSessionToEdit.dialect}}"></td>
+								<td>Date Elicited</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.dateElicited"
+									value={{fullCurrentSessionToEdit.dateElicited}}
+									placeholder="{{fullCurrentSessionToEdit.dateElicited}}"></td>
+							</tr>
+						</table>
+					</form>
+					<div>
+						<button class="btn" ng-click="editSession(editSessionInfo, data);">Save
+							Changes</button>
+						&nbsp;
+						<button class="btn" ng-click="editSessionDetails=false">Cancel</button>
+					</div>
+				</div>
+			</div>
 
-<ng-view></ng-view>
+			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
+				<form class="form-horizontal">
+					Search: <input type="text"
+						class="input-medium search-query" ng-model='searchTerm'>
+						<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
+						<button class="btn btn-primary" ng-click="selectAll();">Select
+							All</button>
+						<button class="btn btn-primary" href="#searchModal"
+							ng-click="exportResults();">Export</button>
+					<button class="btn btn-warning"
+						ng-click="loadData();searchTerm='';searchHistory=null">Clear
+						Results</button>&nbsp;
+					<span>{{searchHistory}}</span>
+				</form>
+			</div>
+		</div>
+		<div class="smallMenuBar">
+			<div class="menubar mainMenubar" ng-cloak>
+				<span class="menuTitle"><a
+					ng-click="navigateVerifySaved('home')"><img
+						src="img/icon40_dev.png" border="0" /></a>
+				</span>
+				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a
+					ng-click="dataentry=true;navigateVerifySaved('none')">Data
+						Entry</a></span>
+				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a
+					ng-click="navigateVerifySaved('searchMenu');">Search</a>
+				</span>
+				<span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}"> <a
+					ng-click="navigateVerifySaved('editSession')">Session</a>
+				</span>
+				<span ng-show="authenticated==true"  ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
+					<ul class="dropdown_nav">
+						<li><a href="#">Settings</a>
+							<ul>
+								<li><a ng-click="navigateVerifySaved('corpusSettings')">Corpus</a></li>
+								<li ng-hide="DB.pouchname==undefined"><a
+									ng-click="navigateVerifySaved('settings');">User Interface</a></li>
+							</ul></li>
+					</ul>
+				</span>
+				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
+				<br />
+				<div class="smallMenuBarInfo" ng-show="authenticated==true">
+					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
+						Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
+					</div>
+					<div class="smallMenuBarInfoItem">
+						<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
+						<button class="btn btn-warning" ng-click="logOut()">Log out</button>
+					</div>
+				</div>
+			</div>
+			<div class="subMenubar" ng-show="activeSubMenu=='editSession'"
+				ng-cloak>
+				<span>Change Session:</span> <select class="span3"
+					ng-model='activeSessionToSwitchTo'>
+					<option value='none'>All sessions</option>
+					<option select-dropdown-session
+						ng-repeat="session in sessions | orderBy:'dateCreated'"
+						value={{session._id}}>{{session.dateCreated | shortDate}}
+						{{session.title}} ({{(data | filter: session._id).length}})</option>
+				</select>
+				<button class="btn btn-primary"
+					ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
+					Session</button>
+				&nbsp;&nbsp;&nbsp;
+				<button class="btn"
+					ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails"
+					ng-hide="activeSession==undefined">Edit Session Info</button>
+				&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-danger"
+					ng-click="deleteEmptySession(activeSession)"
+					ng-show="(data | filter: activeSession).length==0">Delete
+					Session</button>
+				<div class="subSubMenubar"
+					ng-show="editSessionDetails==true && activeSession!=undefined"
+					ng-cloak>
+					<form ng-model='editedSessionInfo'>
+						<table cellpadding="5px">
+							<tr>
+								<td>Title:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.goal"
+									value={{fullCurrentSessionToEdit.goal}}
+									placeholder="{{fullCurrentSessionToEdit.goal}}"></td>
+								<td>Consultants:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.consultants"
+									value={{fullCurrentSessionToEdit.consultants}}
+									placeholder="{{fullCurrentSessionToEdit.consultants}}"></td>
+								<td>User:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.user"
+									value={{fullCurrentSessionToEdit.user}}
+									placeholder="{{fullCurrentSessionToEdit.user}}"></td>
+							</tr>
+							<tr>
+								<td>Language:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.language"
+									value={{fullCurrentSessionToEdit.language}}
+									placeholder="{{fullCurrentSessionToEdit.language}}"></td>
+								<td>Dialect:</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.dialect"
+									value={{fullCurrentSessionToEdit.dialect}}
+									placeholder="{{fullCurrentSessionToEdit.dialect}}"></td>
+								<td>Date Elicited</td>
+								<td><input class="span3" type="text"
+									ng-model="editSessionInfo.dateElicited"
+									value={{fullCurrentSessionToEdit.dateElicited}}
+									placeholder="{{fullCurrentSessionToEdit.dateElicited}}"></td>
+							</tr>
+						</table>
+					</form>
+					<div>
+						<button class="btn" ng-click="editSession(editSessionInfo, data);">Save
+							Changes</button>
+						&nbsp;
+						<button class="btn" ng-click="editSessionDetails=false">Cancel</button>
+					</div>
+				</div>
+			</div>
 
+			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
+				<form class="form-search">
+					<span>Search: <input type="text"
+						class="input-medium search-query" ng-model='searchTerm'>
+						<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
+						<button class="btn btn-primary" ng-click="selectAll();">Select
+							All</button>
+						<button class="btn btn-primary" href="#searchModal"
+							ng-click="exportResults();">Export</button></span>
 
+					<button class="btn btn-warning"
+						ng-click="loadData();searchTerm='';searchHistory=null">Clear
+						Results</button>
+					<span>{{searchHistory}}</span>
+				</form>
+				</span>
+			</div>
+		</div>
+		<!-- Export Search Results Modal -->
+		<div modal="shouldBeOpen" close="close()" id="searchModal"
+			class="modal hide fade" tabindex="-1" role="dialog"
+			aria-labelledby="searchModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" ng-click="close()" class="close"
+					data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="myModalLabel">Search results</h3>
+			</div>
+			<div class="modal-body">
+				<p>{{resultsMessage}}</p>
+				<div ng-repeat="result in results">
+					<span>{{result.judgement}} {{result.utterance}}</span> <br /> <span>{{result.morphemes}}</span>
+					<br /> <span>{{result.gloss}}</span> <br /> <span>{{result.translation}}</span>
+					<br /> <span>Tags: {{commaList(result.datumTags)}}</span>
+					<hr>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true"
+					ng-click="close()">Close</button>
+			</div>
+		</div>
+
+		<!-- Audio Warning Modal-->
+		<div modal="audioWarningShouldBeOpen" close="stopRecording(datumForAudio)" options="opts">
+        <div class="modal-header">
+            <h3>Recording Audio</h3>
+        </div>
+        <div class="modal-body">
+        		<b>Please make sure to click "Allow" above to begin recording audio.</b><br />
+            Once clicked, your audio will begin recording.<br /><br />
+            Please note that recording will stop automatically after five minutes.<br />
+            Time left: {{timeLeftForAudio}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger cancel" ng-click="stopRecording(datumForAudio)">Stop Recording</button>
+        </div>
+    </div>
+
+    <!-- Generic Notification Modal-->
+		<div modal="notificationShouldBeOpen" close="closeNotification()" options="opts">
+        <div class="modal-header">
+            <h3>Notification</h3>
+        </div>
+        <div class="modal-body">
+        		{{notificationMessage}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary cancel" ng-click="closeNotification()">OK</button>
+        </div>
+    </div>
+
+		<div ng-class="mainBodyClass()" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
+			<ng-view></ng-view>
+		</div>
+	</div>
+
+		<div class="loading_trouble_message" ng-hide="clickSuccess==true" class="clearCacheMessage">If
+			you are having trouble viewing the page, you may need to empty your
+			browser's cache.</div>
+			
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 
-  <script src="libs/require.js"></script>
-  <script src="js/LingSync.js"></script>
+	<script src="libs/d3.v3.js"></script>
+	<script src="libs/require.min.js"
+		data-main="SpreadsheetStyleDataEntry.js"></script>
+
 </body>
 </html>

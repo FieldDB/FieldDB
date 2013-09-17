@@ -10,6 +10,7 @@ define([
     "corpus/CorpusMask", 
     "corpus/CorpusEditView",
     "corpus/CorpusReadView",
+    "corpus/CorpusLinkView",
     "data_list/DataList",
     "data_list/DataListReadView",
     "data_list/DataListEditView",
@@ -39,6 +40,7 @@ define([
     "user/User",
     "user/UserEditView",
     "user/UserReadView",
+    "app/UpdatingCollectionView",
     "terminal",
     "OPrime"
 ], function(
@@ -53,6 +55,7 @@ define([
     CorpusMask,
     CorpusEditView,
     CorpusReadView,
+    CorpusLinkView,
     DataList,
     DataListReadView,
     DataListEditView,
@@ -82,6 +85,7 @@ define([
     User,
     UserEditView,
     UserReadView,
+    UpdatingCollectionView,
     Terminal
 ) {
   var AppView = Backbone.View.extend(
@@ -359,6 +363,13 @@ define([
         childViewClass       : "row span12"
       });  
       
+
+      this.corpusesReadView = new UpdatingCollectionView({
+        collection : this.model.get("corpusesUserHasAccessTo"),
+        childViewConstructor : CorpusLinkView,
+        childViewTagName : 'li'
+      });
+
       /*
        * fill collection with datum, this will render them at the same time.
        */
@@ -371,7 +382,7 @@ define([
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 
-      this.currentEditDataListView.format = "leftSide";
+      this.currentEditDataListView.format = "minimized";
       
       
       if(this.currentReadDataListView){
@@ -380,7 +391,7 @@ define([
       this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
       });  
-      this.currentReadDataListView.format = "leftSide";
+      this.currentReadDataListView.format = "minimized";
       
       
       if(typeof callback == "function"){
@@ -622,6 +633,9 @@ define([
         //This forces the top search to render.
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
+
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
         
         //put the version into the terminal, and into the user menu
         OPrime.getVersion(function (ver) { 
@@ -709,6 +723,7 @@ define([
       $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
       $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
       $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+      $(this.el).find(".locale_Corpora").html(Locale.get("locale_Corpora"));
 //      $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
 
       return this;
@@ -719,7 +734,7 @@ define([
     renderReadonlyDashboardViews : function() {
       this.renderReadonlyCorpusViews("leftSide");
       this.renderReadonlySessionViews("leftSide");
-      this.renderReadonlyDataListViews("leftSide");
+      this.renderReadonlyDataListViews("minimized");
       this.renderEditableDatumsViews("centreWell");
       this.datumsEditView.showMostRecentDatum();
     },

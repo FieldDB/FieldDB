@@ -1062,7 +1062,6 @@
 define("_", function(){});
 
 /*! jQuery v2.0.0 | (c) 2005, 2013 jQuery Foundation, Inc. | jquery.org/license
-//@ sourceMappingURL=jquery.min.map
 */
 (function(e,undefined){var t,n,r=typeof undefined,i=e.location,o=e.document,s=o.documentElement,a=e.jQuery,u=e.$,l={},c=[],f="2.0.0",p=c.concat,h=c.push,d=c.slice,g=c.indexOf,m=l.toString,y=l.hasOwnProperty,v=f.trim,x=function(e,n){return new x.fn.init(e,n,t)},b=/[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/.source,w=/\S+/g,T=/^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,C=/^<(\w+)\s*\/?>(?:<\/\1>|)$/,k=/^-ms-/,N=/-([\da-z])/gi,E=function(e,t){return t.toUpperCase()},S=function(){o.removeEventListener("DOMContentLoaded",S,!1),e.removeEventListener("load",S,!1),x.ready()};x.fn=x.prototype={jquery:f,constructor:x,init:function(e,t,n){var r,i;if(!e)return this;if("string"==typeof e){if(r="<"===e.charAt(0)&&">"===e.charAt(e.length-1)&&e.length>=3?[null,e,null]:T.exec(e),!r||!r[1]&&t)return!t||t.jquery?(t||n).find(e):this.constructor(t).find(e);if(r[1]){if(t=t instanceof x?t[0]:t,x.merge(this,x.parseHTML(r[1],t&&t.nodeType?t.ownerDocument||t:o,!0)),C.test(r[1])&&x.isPlainObject(t))for(r in t)x.isFunction(this[r])?this[r](t[r]):this.attr(r,t[r]);return this}return i=o.getElementById(r[2]),i&&i.parentNode&&(this.length=1,this[0]=i),this.context=o,this.selector=e,this}return e.nodeType?(this.context=this[0]=e,this.length=1,this):x.isFunction(e)?n.ready(e):(e.selector!==undefined&&(this.selector=e.selector,this.context=e.context),x.makeArray(e,this))},selector:"",length:0,toArray:function(){return d.call(this)},get:function(e){return null==e?this.toArray():0>e?this[this.length+e]:this[e]},pushStack:function(e){var t=x.merge(this.constructor(),e);return t.prevObject=this,t.context=this.context,t},each:function(e,t){return x.each(this,e,t)},ready:function(e){return x.ready.promise().done(e),this},slice:function(){return this.pushStack(d.apply(this,arguments))},first:function(){return this.eq(0)},last:function(){return this.eq(-1)},eq:function(e){var t=this.length,n=+e+(0>e?t:0);return this.pushStack(n>=0&&t>n?[this[n]]:[])},map:function(e){return this.pushStack(x.map(this,function(t,n){return e.call(t,n,t)}))},end:function(){return this.prevObject||this.constructor(null)},push:h,sort:[].sort,splice:[].splice},x.fn.init.prototype=x.fn,x.extend=x.fn.extend=function(){var e,t,n,r,i,o,s=arguments[0]||{},a=1,u=arguments.length,l=!1;for("boolean"==typeof s&&(l=s,s=arguments[1]||{},a=2),"object"==typeof s||x.isFunction(s)||(s={}),u===a&&(s=this,--a);u>a;a++)if(null!=(e=arguments[a]))for(t in e)n=s[t],r=e[t],s!==r&&(l&&r&&(x.isPlainObject(r)||(i=x.isArray(r)))?(i?(i=!1,o=n&&x.isArray(n)?n:[]):o=n&&x.isPlainObject(n)?n:{},s[t]=x.extend(l,o,r)):r!==undefined&&(s[t]=r));return s},x.extend({expando:"jQuery"+(f+Math.random()).replace(/\D/g,""),noConflict:function(t){return e.$===x&&(e.$=u),t&&e.jQuery===x&&(e.jQuery=a),x},isReady:!1,readyWait:1,holdReady:function(e){e?x.readyWait++:x.ready(!0)},ready:function(e){(e===!0?--x.readyWait:x.isReady)||(x.isReady=!0,e!==!0&&--x.readyWait>0||(n.resolveWith(o,[x]),x.fn.trigger&&x(o).trigger("ready").off("ready")))},isFunction:function(e){return"function"===x.type(e)},isArray:Array.isArray,isWindow:function(e){return null!=e&&e===e.window},isNumeric:function(e){return!isNaN(parseFloat(e))&&isFinite(e)},type:function(e){return null==e?e+"":"object"==typeof e||"function"==typeof e?l[m.call(e)]||"object":typeof e},isPlainObject:function(e){if("object"!==x.type(e)||e.nodeType||x.isWindow(e))return!1;try{if(e.constructor&&!y.call(e.constructor.prototype,"isPrototypeOf"))return!1}catch(t){return!1}return!0},isEmptyObject:function(e){var t;for(t in e)return!1;return!0},error:function(e){throw Error(e)},parseHTML:function(e,t,n){if(!e||"string"!=typeof e)return null;"boolean"==typeof t&&(n=t,t=!1),t=t||o;var r=C.exec(e),i=!n&&[];return r?[t.createElement(r[1])]:(r=x.buildFragment([e],t,i),i&&x(i).remove(),x.merge([],r.childNodes))},parseJSON:JSON.parse,parseXML:function(e){var t,n;if(!e||"string"!=typeof e)return null;try{n=new DOMParser,t=n.parseFromString(e,"text/xml")}catch(r){t=undefined}return(!t||t.getElementsByTagName("parsererror").length)&&x.error("Invalid XML: "+e),t},noop:function(){},globalEval:function(e){var t,n=eval;e=x.trim(e),e&&(1===e.indexOf("use strict")?(t=o.createElement("script"),t.text=e,o.head.appendChild(t).parentNode.removeChild(t)):n(e))},camelCase:function(e){return e.replace(k,"ms-").replace(N,E)},nodeName:function(e,t){return e.nodeName&&e.nodeName.toLowerCase()===t.toLowerCase()},each:function(e,t,n){var r,i=0,o=e.length,s=j(e);if(n){if(s){for(;o>i;i++)if(r=t.apply(e[i],n),r===!1)break}else for(i in e)if(r=t.apply(e[i],n),r===!1)break}else if(s){for(;o>i;i++)if(r=t.call(e[i],i,e[i]),r===!1)break}else for(i in e)if(r=t.call(e[i],i,e[i]),r===!1)break;return e},trim:function(e){return null==e?"":v.call(e)},makeArray:function(e,t){var n=t||[];return null!=e&&(j(Object(e))?x.merge(n,"string"==typeof e?[e]:e):h.call(n,e)),n},inArray:function(e,t,n){return null==t?-1:g.call(t,e,n)},merge:function(e,t){var n=t.length,r=e.length,i=0;if("number"==typeof n)for(;n>i;i++)e[r++]=t[i];else while(t[i]!==undefined)e[r++]=t[i++];return e.length=r,e},grep:function(e,t,n){var r,i=[],o=0,s=e.length;for(n=!!n;s>o;o++)r=!!t(e[o],o),n!==r&&i.push(e[o]);return i},map:function(e,t,n){var r,i=0,o=e.length,s=j(e),a=[];if(s)for(;o>i;i++)r=t(e[i],i,n),null!=r&&(a[a.length]=r);else for(i in e)r=t(e[i],i,n),null!=r&&(a[a.length]=r);return p.apply([],a)},guid:1,proxy:function(e,t){var n,r,i;return"string"==typeof t&&(n=e[t],t=e,e=n),x.isFunction(e)?(r=d.call(arguments,2),i=function(){return e.apply(t||this,r.concat(d.call(arguments)))},i.guid=e.guid=e.guid||x.guid++,i):undefined},access:function(e,t,n,r,i,o,s){var a=0,u=e.length,l=null==n;if("object"===x.type(n)){i=!0;for(a in n)x.access(e,t,a,n[a],!0,o,s)}else if(r!==undefined&&(i=!0,x.isFunction(r)||(s=!0),l&&(s?(t.call(e,r),t=null):(l=t,t=function(e,t,n){return l.call(x(e),n)})),t))for(;u>a;a++)t(e[a],n,s?r:r.call(e[a],a,t(e[a],n)));return i?e:l?t.call(e):u?t(e[0],n):o},now:Date.now,swap:function(e,t,n,r){var i,o,s={};for(o in t)s[o]=e.style[o],e.style[o]=t[o];i=n.apply(e,r||[]);for(o in t)e.style[o]=s[o];return i}}),x.ready.promise=function(t){return n||(n=x.Deferred(),"complete"===o.readyState?setTimeout(x.ready):(o.addEventListener("DOMContentLoaded",S,!1),e.addEventListener("load",S,!1))),n.promise(t)},x.each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(e,t){l["[object "+t+"]"]=t.toLowerCase()});function j(e){var t=e.length,n=x.type(e);return x.isWindow(e)?!1:1===e.nodeType&&t?!0:"array"===n||"function"!==n&&(0===t||"number"==typeof t&&t>0&&t-1 in e)}t=x(o),function(e,undefined){var t,n,r,i,o,s,a,u,l,c,f,p,h,d,g,m,y="sizzle"+-new Date,v=e.document,b={},w=0,T=0,C=ot(),k=ot(),N=ot(),E=!1,S=function(){return 0},j=typeof undefined,D=1<<31,A=[],L=A.pop,q=A.push,H=A.push,O=A.slice,F=A.indexOf||function(e){var t=0,n=this.length;for(;n>t;t++)if(this[t]===e)return t;return-1},P="checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped",R="[\\x20\\t\\r\\n\\f]",M="(?:\\\\.|[\\w-]|[^\\x00-\\xa0])+",W=M.replace("w","w#"),$="\\["+R+"*("+M+")"+R+"*(?:([*^$|!~]?=)"+R+"*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|("+W+")|)|)"+R+"*\\]",B=":("+M+")(?:\\(((['\"])((?:\\\\.|[^\\\\])*?)\\3|((?:\\\\.|[^\\\\()[\\]]|"+$.replace(3,8)+")*)|.*)\\)|)",I=RegExp("^"+R+"+|((?:^|[^\\\\])(?:\\\\.)*)"+R+"+$","g"),z=RegExp("^"+R+"*,"+R+"*"),_=RegExp("^"+R+"*([>+~]|"+R+")"+R+"*"),X=RegExp(R+"*[+~]"),U=RegExp("="+R+"*([^\\]'\"]*)"+R+"*\\]","g"),Y=RegExp(B),V=RegExp("^"+W+"$"),G={ID:RegExp("^#("+M+")"),CLASS:RegExp("^\\.("+M+")"),TAG:RegExp("^("+M.replace("w","w*")+")"),ATTR:RegExp("^"+$),PSEUDO:RegExp("^"+B),CHILD:RegExp("^:(only|first|last|nth|nth-last)-(child|of-type)(?:\\("+R+"*(even|odd|(([+-]|)(\\d*)n|)"+R+"*(?:([+-]|)"+R+"*(\\d+)|))"+R+"*\\)|)","i"),"boolean":RegExp("^(?:"+P+")$","i"),needsContext:RegExp("^"+R+"*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\("+R+"*((?:-\\d)?\\d*)"+R+"*\\)|)(?=[^-]|$)","i")},J=/^[^{]+\{\s*\[native \w/,Q=/^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/,K=/^(?:input|select|textarea|button)$/i,Z=/^h\d$/i,et=/'|\\/g,tt=/\\([\da-fA-F]{1,6}[\x20\t\r\n\f]?|.)/g,nt=function(e,t){var n="0x"+t-65536;return n!==n?t:0>n?String.fromCharCode(n+65536):String.fromCharCode(55296|n>>10,56320|1023&n)};try{H.apply(A=O.call(v.childNodes),v.childNodes),A[v.childNodes.length].nodeType}catch(rt){H={apply:A.length?function(e,t){q.apply(e,O.call(t))}:function(e,t){var n=e.length,r=0;while(e[n++]=t[r++]);e.length=n-1}}}function it(e){return J.test(e+"")}function ot(){var e,t=[];return e=function(n,i){return t.push(n+=" ")>r.cacheLength&&delete e[t.shift()],e[n]=i}}function st(e){return e[y]=!0,e}function at(e){var t=c.createElement("div");try{return!!e(t)}catch(n){return!1}finally{t.parentNode&&t.parentNode.removeChild(t),t=null}}function ut(e,t,n,r){var i,o,s,a,u,f,d,g,x,w;if((t?t.ownerDocument||t:v)!==c&&l(t),t=t||c,n=n||[],!e||"string"!=typeof e)return n;if(1!==(a=t.nodeType)&&9!==a)return[];if(p&&!r){if(i=Q.exec(e))if(s=i[1]){if(9===a){if(o=t.getElementById(s),!o||!o.parentNode)return n;if(o.id===s)return n.push(o),n}else if(t.ownerDocument&&(o=t.ownerDocument.getElementById(s))&&m(t,o)&&o.id===s)return n.push(o),n}else{if(i[2])return H.apply(n,t.getElementsByTagName(e)),n;if((s=i[3])&&b.getElementsByClassName&&t.getElementsByClassName)return H.apply(n,t.getElementsByClassName(s)),n}if(b.qsa&&(!h||!h.test(e))){if(g=d=y,x=t,w=9===a&&e,1===a&&"object"!==t.nodeName.toLowerCase()){f=gt(e),(d=t.getAttribute("id"))?g=d.replace(et,"\\$&"):t.setAttribute("id",g),g="[id='"+g+"'] ",u=f.length;while(u--)f[u]=g+mt(f[u]);x=X.test(e)&&t.parentNode||t,w=f.join(",")}if(w)try{return H.apply(n,x.querySelectorAll(w)),n}catch(T){}finally{d||t.removeAttribute("id")}}}return kt(e.replace(I,"$1"),t,n,r)}o=ut.isXML=function(e){var t=e&&(e.ownerDocument||e).documentElement;return t?"HTML"!==t.nodeName:!1},l=ut.setDocument=function(e){var t=e?e.ownerDocument||e:v;return t!==c&&9===t.nodeType&&t.documentElement?(c=t,f=t.documentElement,p=!o(t),b.getElementsByTagName=at(function(e){return e.appendChild(t.createComment("")),!e.getElementsByTagName("*").length}),b.attributes=at(function(e){return e.className="i",!e.getAttribute("className")}),b.getElementsByClassName=at(function(e){return e.innerHTML="<div class='a'></div><div class='a i'></div>",e.firstChild.className="i",2===e.getElementsByClassName("i").length}),b.sortDetached=at(function(e){return 1&e.compareDocumentPosition(c.createElement("div"))}),b.getById=at(function(e){return f.appendChild(e).id=y,!t.getElementsByName||!t.getElementsByName(y).length}),b.getById?(r.find.ID=function(e,t){if(typeof t.getElementById!==j&&p){var n=t.getElementById(e);return n&&n.parentNode?[n]:[]}},r.filter.ID=function(e){var t=e.replace(tt,nt);return function(e){return e.getAttribute("id")===t}}):(r.find.ID=function(e,t){if(typeof t.getElementById!==j&&p){var n=t.getElementById(e);return n?n.id===e||typeof n.getAttributeNode!==j&&n.getAttributeNode("id").value===e?[n]:undefined:[]}},r.filter.ID=function(e){var t=e.replace(tt,nt);return function(e){var n=typeof e.getAttributeNode!==j&&e.getAttributeNode("id");return n&&n.value===t}}),r.find.TAG=b.getElementsByTagName?function(e,t){return typeof t.getElementsByTagName!==j?t.getElementsByTagName(e):undefined}:function(e,t){var n,r=[],i=0,o=t.getElementsByTagName(e);if("*"===e){while(n=o[i++])1===n.nodeType&&r.push(n);return r}return o},r.find.CLASS=b.getElementsByClassName&&function(e,t){return typeof t.getElementsByClassName!==j&&p?t.getElementsByClassName(e):undefined},d=[],h=[],(b.qsa=it(t.querySelectorAll))&&(at(function(e){e.innerHTML="<select><option selected=''></option></select>",e.querySelectorAll("[selected]").length||h.push("\\["+R+"*(?:value|"+P+")"),e.querySelectorAll(":checked").length||h.push(":checked")}),at(function(e){var t=c.createElement("input");t.setAttribute("type","hidden"),e.appendChild(t).setAttribute("t",""),e.querySelectorAll("[t^='']").length&&h.push("[*^$]="+R+"*(?:''|\"\")"),e.querySelectorAll(":enabled").length||h.push(":enabled",":disabled"),e.querySelectorAll("*,:x"),h.push(",.*:")})),(b.matchesSelector=it(g=f.webkitMatchesSelector||f.mozMatchesSelector||f.oMatchesSelector||f.msMatchesSelector))&&at(function(e){b.disconnectedMatch=g.call(e,"div"),g.call(e,"[s!='']:x"),d.push("!=",B)}),h=h.length&&RegExp(h.join("|")),d=d.length&&RegExp(d.join("|")),m=it(f.contains)||f.compareDocumentPosition?function(e,t){var n=9===e.nodeType?e.documentElement:e,r=t&&t.parentNode;return e===r||!(!r||1!==r.nodeType||!(n.contains?n.contains(r):e.compareDocumentPosition&&16&e.compareDocumentPosition(r)))}:function(e,t){if(t)while(t=t.parentNode)if(t===e)return!0;return!1},S=f.compareDocumentPosition?function(e,n){if(e===n)return E=!0,0;var r=n.compareDocumentPosition&&e.compareDocumentPosition&&e.compareDocumentPosition(n);return r?1&r||!b.sortDetached&&n.compareDocumentPosition(e)===r?e===t||m(v,e)?-1:n===t||m(v,n)?1:u?F.call(u,e)-F.call(u,n):0:4&r?-1:1:e.compareDocumentPosition?-1:1}:function(e,n){var r,i=0,o=e.parentNode,s=n.parentNode,a=[e],l=[n];if(e===n)return E=!0,0;if(!o||!s)return e===t?-1:n===t?1:o?-1:s?1:u?F.call(u,e)-F.call(u,n):0;if(o===s)return lt(e,n);r=e;while(r=r.parentNode)a.unshift(r);r=n;while(r=r.parentNode)l.unshift(r);while(a[i]===l[i])i++;return i?lt(a[i],l[i]):a[i]===v?-1:l[i]===v?1:0},c):c},ut.matches=function(e,t){return ut(e,null,null,t)},ut.matchesSelector=function(e,t){if((e.ownerDocument||e)!==c&&l(e),t=t.replace(U,"='$1']"),!(!b.matchesSelector||!p||d&&d.test(t)||h&&h.test(t)))try{var n=g.call(e,t);if(n||b.disconnectedMatch||e.document&&11!==e.document.nodeType)return n}catch(r){}return ut(t,c,null,[e]).length>0},ut.contains=function(e,t){return(e.ownerDocument||e)!==c&&l(e),m(e,t)},ut.attr=function(e,t){(e.ownerDocument||e)!==c&&l(e);var n=r.attrHandle[t.toLowerCase()],i=n&&n(e,t,!p);return i===undefined?b.attributes||!p?e.getAttribute(t):(i=e.getAttributeNode(t))&&i.specified?i.value:null:i},ut.error=function(e){throw Error("Syntax error, unrecognized expression: "+e)},ut.uniqueSort=function(e){var t,n=[],r=0,i=0;if(E=!b.detectDuplicates,u=!b.sortStable&&e.slice(0),e.sort(S),E){while(t=e[i++])t===e[i]&&(r=n.push(i));while(r--)e.splice(n[r],1)}return e};function lt(e,t){var n=t&&e,r=n&&(~t.sourceIndex||D)-(~e.sourceIndex||D);if(r)return r;if(n)while(n=n.nextSibling)if(n===t)return-1;return e?1:-1}function ct(e,t,n){var r;return n?undefined:(r=e.getAttributeNode(t))&&r.specified?r.value:e[t]===!0?t.toLowerCase():null}function ft(e,t,n){var r;return n?undefined:r=e.getAttribute(t,"type"===t.toLowerCase()?1:2)}function pt(e){return function(t){var n=t.nodeName.toLowerCase();return"input"===n&&t.type===e}}function ht(e){return function(t){var n=t.nodeName.toLowerCase();return("input"===n||"button"===n)&&t.type===e}}function dt(e){return st(function(t){return t=+t,st(function(n,r){var i,o=e([],n.length,t),s=o.length;while(s--)n[i=o[s]]&&(n[i]=!(r[i]=n[i]))})})}i=ut.getText=function(e){var t,n="",r=0,o=e.nodeType;if(o){if(1===o||9===o||11===o){if("string"==typeof e.textContent)return e.textContent;for(e=e.firstChild;e;e=e.nextSibling)n+=i(e)}else if(3===o||4===o)return e.nodeValue}else for(;t=e[r];r++)n+=i(t);return n},r=ut.selectors={cacheLength:50,createPseudo:st,match:G,attrHandle:{},find:{},relative:{">":{dir:"parentNode",first:!0}," ":{dir:"parentNode"},"+":{dir:"previousSibling",first:!0},"~":{dir:"previousSibling"}},preFilter:{ATTR:function(e){return e[1]=e[1].replace(tt,nt),e[3]=(e[4]||e[5]||"").replace(tt,nt),"~="===e[2]&&(e[3]=" "+e[3]+" "),e.slice(0,4)},CHILD:function(e){return e[1]=e[1].toLowerCase(),"nth"===e[1].slice(0,3)?(e[3]||ut.error(e[0]),e[4]=+(e[4]?e[5]+(e[6]||1):2*("even"===e[3]||"odd"===e[3])),e[5]=+(e[7]+e[8]||"odd"===e[3])):e[3]&&ut.error(e[0]),e},PSEUDO:function(e){var t,n=!e[5]&&e[2];return G.CHILD.test(e[0])?null:(e[4]?e[2]=e[4]:n&&Y.test(n)&&(t=gt(n,!0))&&(t=n.indexOf(")",n.length-t)-n.length)&&(e[0]=e[0].slice(0,t),e[2]=n.slice(0,t)),e.slice(0,3))}},filter:{TAG:function(e){var t=e.replace(tt,nt).toLowerCase();return"*"===e?function(){return!0}:function(e){return e.nodeName&&e.nodeName.toLowerCase()===t}},CLASS:function(e){var t=C[e+" "];return t||(t=RegExp("(^|"+R+")"+e+"("+R+"|$)"))&&C(e,function(e){return t.test("string"==typeof e.className&&e.className||typeof e.getAttribute!==j&&e.getAttribute("class")||"")})},ATTR:function(e,t,n){return function(r){var i=ut.attr(r,e);return null==i?"!="===t:t?(i+="","="===t?i===n:"!="===t?i!==n:"^="===t?n&&0===i.indexOf(n):"*="===t?n&&i.indexOf(n)>-1:"$="===t?n&&i.slice(-n.length)===n:"~="===t?(" "+i+" ").indexOf(n)>-1:"|="===t?i===n||i.slice(0,n.length+1)===n+"-":!1):!0}},CHILD:function(e,t,n,r,i){var o="nth"!==e.slice(0,3),s="last"!==e.slice(-4),a="of-type"===t;return 1===r&&0===i?function(e){return!!e.parentNode}:function(t,n,u){var l,c,f,p,h,d,g=o!==s?"nextSibling":"previousSibling",m=t.parentNode,v=a&&t.nodeName.toLowerCase(),x=!u&&!a;if(m){if(o){while(g){f=t;while(f=f[g])if(a?f.nodeName.toLowerCase()===v:1===f.nodeType)return!1;d=g="only"===e&&!d&&"nextSibling"}return!0}if(d=[s?m.firstChild:m.lastChild],s&&x){c=m[y]||(m[y]={}),l=c[e]||[],h=l[0]===w&&l[1],p=l[0]===w&&l[2],f=h&&m.childNodes[h];while(f=++h&&f&&f[g]||(p=h=0)||d.pop())if(1===f.nodeType&&++p&&f===t){c[e]=[w,h,p];break}}else if(x&&(l=(t[y]||(t[y]={}))[e])&&l[0]===w)p=l[1];else while(f=++h&&f&&f[g]||(p=h=0)||d.pop())if((a?f.nodeName.toLowerCase()===v:1===f.nodeType)&&++p&&(x&&((f[y]||(f[y]={}))[e]=[w,p]),f===t))break;return p-=i,p===r||0===p%r&&p/r>=0}}},PSEUDO:function(e,t){var n,i=r.pseudos[e]||r.setFilters[e.toLowerCase()]||ut.error("unsupported pseudo: "+e);return i[y]?i(t):i.length>1?(n=[e,e,"",t],r.setFilters.hasOwnProperty(e.toLowerCase())?st(function(e,n){var r,o=i(e,t),s=o.length;while(s--)r=F.call(e,o[s]),e[r]=!(n[r]=o[s])}):function(e){return i(e,0,n)}):i}},pseudos:{not:st(function(e){var t=[],n=[],r=s(e.replace(I,"$1"));return r[y]?st(function(e,t,n,i){var o,s=r(e,null,i,[]),a=e.length;while(a--)(o=s[a])&&(e[a]=!(t[a]=o))}):function(e,i,o){return t[0]=e,r(t,null,o,n),!n.pop()}}),has:st(function(e){return function(t){return ut(e,t).length>0}}),contains:st(function(e){return function(t){return(t.textContent||t.innerText||i(t)).indexOf(e)>-1}}),lang:st(function(e){return V.test(e||"")||ut.error("unsupported lang: "+e),e=e.replace(tt,nt).toLowerCase(),function(t){var n;do if(n=p?t.lang:t.getAttribute("xml:lang")||t.getAttribute("lang"))return n=n.toLowerCase(),n===e||0===n.indexOf(e+"-");while((t=t.parentNode)&&1===t.nodeType);return!1}}),target:function(t){var n=e.location&&e.location.hash;return n&&n.slice(1)===t.id},root:function(e){return e===f},focus:function(e){return e===c.activeElement&&(!c.hasFocus||c.hasFocus())&&!!(e.type||e.href||~e.tabIndex)},enabled:function(e){return e.disabled===!1},disabled:function(e){return e.disabled===!0},checked:function(e){var t=e.nodeName.toLowerCase();return"input"===t&&!!e.checked||"option"===t&&!!e.selected},selected:function(e){return e.parentNode&&e.parentNode.selectedIndex,e.selected===!0},empty:function(e){for(e=e.firstChild;e;e=e.nextSibling)if(e.nodeName>"@"||3===e.nodeType||4===e.nodeType)return!1;return!0},parent:function(e){return!r.pseudos.empty(e)},header:function(e){return Z.test(e.nodeName)},input:function(e){return K.test(e.nodeName)},button:function(e){var t=e.nodeName.toLowerCase();return"input"===t&&"button"===e.type||"button"===t},text:function(e){var t;return"input"===e.nodeName.toLowerCase()&&"text"===e.type&&(null==(t=e.getAttribute("type"))||t.toLowerCase()===e.type)},first:dt(function(){return[0]}),last:dt(function(e,t){return[t-1]}),eq:dt(function(e,t,n){return[0>n?n+t:n]}),even:dt(function(e,t){var n=0;for(;t>n;n+=2)e.push(n);return e}),odd:dt(function(e,t){var n=1;for(;t>n;n+=2)e.push(n);return e}),lt:dt(function(e,t,n){var r=0>n?n+t:n;for(;--r>=0;)e.push(r);return e}),gt:dt(function(e,t,n){var r=0>n?n+t:n;for(;t>++r;)e.push(r);return e})}};for(t in{radio:!0,checkbox:!0,file:!0,password:!0,image:!0})r.pseudos[t]=pt(t);for(t in{submit:!0,reset:!0})r.pseudos[t]=ht(t);function gt(e,t){var n,i,o,s,a,u,l,c=k[e+" "];if(c)return t?0:c.slice(0);a=e,u=[],l=r.preFilter;while(a){(!n||(i=z.exec(a)))&&(i&&(a=a.slice(i[0].length)||a),u.push(o=[])),n=!1,(i=_.exec(a))&&(n=i.shift(),o.push({value:n,type:i[0].replace(I," ")}),a=a.slice(n.length));for(s in r.filter)!(i=G[s].exec(a))||l[s]&&!(i=l[s](i))||(n=i.shift(),o.push({value:n,type:s,matches:i}),a=a.slice(n.length));if(!n)break}return t?a.length:a?ut.error(e):k(e,u).slice(0)}function mt(e){var t=0,n=e.length,r="";for(;n>t;t++)r+=e[t].value;return r}function yt(e,t,r){var i=t.dir,o=r&&"parentNode"===i,s=T++;return t.first?function(t,n,r){while(t=t[i])if(1===t.nodeType||o)return e(t,n,r)}:function(t,r,a){var u,l,c,f=w+" "+s;if(a){while(t=t[i])if((1===t.nodeType||o)&&e(t,r,a))return!0}else while(t=t[i])if(1===t.nodeType||o)if(c=t[y]||(t[y]={}),(l=c[i])&&l[0]===f){if((u=l[1])===!0||u===n)return u===!0}else if(l=c[i]=[f],l[1]=e(t,r,a)||n,l[1]===!0)return!0}}function vt(e){return e.length>1?function(t,n,r){var i=e.length;while(i--)if(!e[i](t,n,r))return!1;return!0}:e[0]}function xt(e,t,n,r,i){var o,s=[],a=0,u=e.length,l=null!=t;for(;u>a;a++)(o=e[a])&&(!n||n(o,r,i))&&(s.push(o),l&&t.push(a));return s}function bt(e,t,n,r,i,o){return r&&!r[y]&&(r=bt(r)),i&&!i[y]&&(i=bt(i,o)),st(function(o,s,a,u){var l,c,f,p=[],h=[],d=s.length,g=o||Ct(t||"*",a.nodeType?[a]:a,[]),m=!e||!o&&t?g:xt(g,p,e,a,u),y=n?i||(o?e:d||r)?[]:s:m;if(n&&n(m,y,a,u),r){l=xt(y,h),r(l,[],a,u),c=l.length;while(c--)(f=l[c])&&(y[h[c]]=!(m[h[c]]=f))}if(o){if(i||e){if(i){l=[],c=y.length;while(c--)(f=y[c])&&l.push(m[c]=f);i(null,y=[],l,u)}c=y.length;while(c--)(f=y[c])&&(l=i?F.call(o,f):p[c])>-1&&(o[l]=!(s[l]=f))}}else y=xt(y===s?y.splice(d,y.length):y),i?i(null,s,y,u):H.apply(s,y)})}function wt(e){var t,n,i,o=e.length,s=r.relative[e[0].type],u=s||r.relative[" "],l=s?1:0,c=yt(function(e){return e===t},u,!0),f=yt(function(e){return F.call(t,e)>-1},u,!0),p=[function(e,n,r){return!s&&(r||n!==a)||((t=n).nodeType?c(e,n,r):f(e,n,r))}];for(;o>l;l++)if(n=r.relative[e[l].type])p=[yt(vt(p),n)];else{if(n=r.filter[e[l].type].apply(null,e[l].matches),n[y]){for(i=++l;o>i;i++)if(r.relative[e[i].type])break;return bt(l>1&&vt(p),l>1&&mt(e.slice(0,l-1)).replace(I,"$1"),n,i>l&&wt(e.slice(l,i)),o>i&&wt(e=e.slice(i)),o>i&&mt(e))}p.push(n)}return vt(p)}function Tt(e,t){var i=0,o=t.length>0,s=e.length>0,u=function(u,l,f,p,h){var d,g,m,y=[],v=0,x="0",b=u&&[],T=null!=h,C=a,k=u||s&&r.find.TAG("*",h&&l.parentNode||l),N=w+=null==C?1:Math.random()||.1;for(T&&(a=l!==c&&l,n=i);null!=(d=k[x]);x++){if(s&&d){g=0;while(m=e[g++])if(m(d,l,f)){p.push(d);break}T&&(w=N,n=++i)}o&&((d=!m&&d)&&v--,u&&b.push(d))}if(v+=x,o&&x!==v){g=0;while(m=t[g++])m(b,y,l,f);if(u){if(v>0)while(x--)b[x]||y[x]||(y[x]=L.call(p));y=xt(y)}H.apply(p,y),T&&!u&&y.length>0&&v+t.length>1&&ut.uniqueSort(p)}return T&&(w=N,a=C),b};return o?st(u):u}s=ut.compile=function(e,t){var n,r=[],i=[],o=N[e+" "];if(!o){t||(t=gt(e)),n=t.length;while(n--)o=wt(t[n]),o[y]?r.push(o):i.push(o);o=N(e,Tt(i,r))}return o};function Ct(e,t,n){var r=0,i=t.length;for(;i>r;r++)ut(e,t[r],n);return n}function kt(e,t,n,i){var o,a,u,l,c,f=gt(e);if(!i&&1===f.length){if(a=f[0]=f[0].slice(0),a.length>2&&"ID"===(u=a[0]).type&&9===t.nodeType&&p&&r.relative[a[1].type]){if(t=(r.find.ID(u.matches[0].replace(tt,nt),t)||[])[0],!t)return n;e=e.slice(a.shift().value.length)}o=G.needsContext.test(e)?0:a.length;while(o--){if(u=a[o],r.relative[l=u.type])break;if((c=r.find[l])&&(i=c(u.matches[0].replace(tt,nt),X.test(a[0].type)&&t.parentNode||t))){if(a.splice(o,1),e=i.length&&mt(a),!e)return H.apply(n,i),n;break}}}return s(e,f)(i,t,!p,n,X.test(e)),n}r.pseudos.nth=r.pseudos.eq;function Nt(){}Nt.prototype=r.filters=r.pseudos,r.setFilters=new Nt,b.sortStable=y.split("").sort(S).join("")===y,l(),[0,0].sort(S),b.detectDuplicates=E,at(function(e){if(e.innerHTML="<a href='#'></a>","#"!==e.firstChild.getAttribute("href")){var t="type|href|height|width".split("|"),n=t.length;while(n--)r.attrHandle[t[n]]=ft}}),at(function(e){if(null!=e.getAttribute("disabled")){var t=P.split("|"),n=t.length;while(n--)r.attrHandle[t[n]]=ct}}),x.find=ut,x.expr=ut.selectors,x.expr[":"]=x.expr.pseudos,x.unique=ut.uniqueSort,x.text=ut.getText,x.isXMLDoc=ut.isXML,x.contains=ut.contains}(e);var D={};function A(e){var t=D[e]={};return x.each(e.match(w)||[],function(e,n){t[n]=!0}),t}x.Callbacks=function(e){e="string"==typeof e?D[e]||A(e):x.extend({},e);var t,n,r,i,o,s,a=[],u=!e.once&&[],l=function(f){for(t=e.memory&&f,n=!0,s=i||0,i=0,o=a.length,r=!0;a&&o>s;s++)if(a[s].apply(f[0],f[1])===!1&&e.stopOnFalse){t=!1;break}r=!1,a&&(u?u.length&&l(u.shift()):t?a=[]:c.disable())},c={add:function(){if(a){var n=a.length;(function s(t){x.each(t,function(t,n){var r=x.type(n);"function"===r?e.unique&&c.has(n)||a.push(n):n&&n.length&&"string"!==r&&s(n)})})(arguments),r?o=a.length:t&&(i=n,l(t))}return this},remove:function(){return a&&x.each(arguments,function(e,t){var n;while((n=x.inArray(t,a,n))>-1)a.splice(n,1),r&&(o>=n&&o--,s>=n&&s--)}),this},has:function(e){return e?x.inArray(e,a)>-1:!(!a||!a.length)},empty:function(){return a=[],o=0,this},disable:function(){return a=u=t=undefined,this},disabled:function(){return!a},lock:function(){return u=undefined,t||c.disable(),this},locked:function(){return!u},fireWith:function(e,t){return t=t||[],t=[e,t.slice?t.slice():t],!a||n&&!u||(r?u.push(t):l(t)),this},fire:function(){return c.fireWith(this,arguments),this},fired:function(){return!!n}};return c},x.extend({Deferred:function(e){var t=[["resolve","done",x.Callbacks("once memory"),"resolved"],["reject","fail",x.Callbacks("once memory"),"rejected"],["notify","progress",x.Callbacks("memory")]],n="pending",r={state:function(){return n},always:function(){return i.done(arguments).fail(arguments),this},then:function(){var e=arguments;return x.Deferred(function(n){x.each(t,function(t,o){var s=o[0],a=x.isFunction(e[t])&&e[t];i[o[1]](function(){var e=a&&a.apply(this,arguments);e&&x.isFunction(e.promise)?e.promise().done(n.resolve).fail(n.reject).progress(n.notify):n[s+"With"](this===r?n.promise():this,a?[e]:arguments)})}),e=null}).promise()},promise:function(e){return null!=e?x.extend(e,r):r}},i={};return r.pipe=r.then,x.each(t,function(e,o){var s=o[2],a=o[3];r[o[1]]=s.add,a&&s.add(function(){n=a},t[1^e][2].disable,t[2][2].lock),i[o[0]]=function(){return i[o[0]+"With"](this===i?r:this,arguments),this},i[o[0]+"With"]=s.fireWith}),r.promise(i),e&&e.call(i,i),i},when:function(e){var t=0,n=d.call(arguments),r=n.length,i=1!==r||e&&x.isFunction(e.promise)?r:0,o=1===i?e:x.Deferred(),s=function(e,t,n){return function(r){t[e]=this,n[e]=arguments.length>1?d.call(arguments):r,n===a?o.notifyWith(t,n):--i||o.resolveWith(t,n)}},a,u,l;if(r>1)for(a=Array(r),u=Array(r),l=Array(r);r>t;t++)n[t]&&x.isFunction(n[t].promise)?n[t].promise().done(s(t,l,n)).fail(o.reject).progress(s(t,u,a)):--i;return i||o.resolveWith(l,n),o.promise()}}),x.support=function(t){var n=o.createElement("input"),r=o.createDocumentFragment(),i=o.createElement("div"),s=o.createElement("select"),a=s.appendChild(o.createElement("option"));return n.type?(n.type="checkbox",t.checkOn=""!==n.value,t.optSelected=a.selected,t.reliableMarginRight=!0,t.boxSizingReliable=!0,t.pixelPosition=!1,n.checked=!0,t.noCloneChecked=n.cloneNode(!0).checked,s.disabled=!0,t.optDisabled=!a.disabled,n=o.createElement("input"),n.value="t",n.type="radio",t.radioValue="t"===n.value,n.setAttribute("checked","t"),n.setAttribute("name","t"),r.appendChild(n),t.checkClone=r.cloneNode(!0).cloneNode(!0).lastChild.checked,t.focusinBubbles="onfocusin"in e,i.style.backgroundClip="content-box",i.cloneNode(!0).style.backgroundClip="",t.clearCloneStyle="content-box"===i.style.backgroundClip,x(function(){var n,r,s="padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box",a=o.getElementsByTagName("body")[0];a&&(n=o.createElement("div"),n.style.cssText="border:0;width:0;height:0;position:absolute;top:0;left:-9999px;margin-top:1px",a.appendChild(n).appendChild(i),i.innerHTML="",i.style.cssText="-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%",x.swap(a,null!=a.style.zoom?{zoom:1}:{},function(){t.boxSizing=4===i.offsetWidth}),e.getComputedStyle&&(t.pixelPosition="1%"!==(e.getComputedStyle(i,null)||{}).top,t.boxSizingReliable="4px"===(e.getComputedStyle(i,null)||{width:"4px"}).width,r=i.appendChild(o.createElement("div")),r.style.cssText=i.style.cssText=s,r.style.marginRight=r.style.width="0",i.style.width="1px",t.reliableMarginRight=!parseFloat((e.getComputedStyle(r,null)||{}).marginRight)),a.removeChild(n))}),t):t}({});var L,q,H=/(?:\{[\s\S]*\}|\[[\s\S]*\])$/,O=/([A-Z])/g;function F(){Object.defineProperty(this.cache={},0,{get:function(){return{}}}),this.expando=x.expando+Math.random()}F.uid=1,F.accepts=function(e){return e.nodeType?1===e.nodeType||9===e.nodeType:!0},F.prototype={key:function(e){if(!F.accepts(e))return 0;var t={},n=e[this.expando];if(!n){n=F.uid++;try{t[this.expando]={value:n},Object.defineProperties(e,t)}catch(r){t[this.expando]=n,x.extend(e,t)}}return this.cache[n]||(this.cache[n]={}),n},set:function(e,t,n){var r,i=this.key(e),o=this.cache[i];if("string"==typeof t)o[t]=n;else if(x.isEmptyObject(o))this.cache[i]=t;else for(r in t)o[r]=t[r]},get:function(e,t){var n=this.cache[this.key(e)];return t===undefined?n:n[t]},access:function(e,t,n){return t===undefined||t&&"string"==typeof t&&n===undefined?this.get(e,t):(this.set(e,t,n),n!==undefined?n:t)},remove:function(e,t){var n,r,i=this.key(e),o=this.cache[i];if(t===undefined)this.cache[i]={};else{x.isArray(t)?r=t.concat(t.map(x.camelCase)):t in o?r=[t]:(r=x.camelCase(t),r=r in o?[r]:r.match(w)||[]),n=r.length;while(n--)delete o[r[n]]}},hasData:function(e){return!x.isEmptyObject(this.cache[e[this.expando]]||{})},discard:function(e){delete this.cache[this.key(e)]}},L=new F,q=new F,x.extend({acceptData:F.accepts,hasData:function(e){return L.hasData(e)||q.hasData(e)},data:function(e,t,n){return L.access(e,t,n)},removeData:function(e,t){L.remove(e,t)},_data:function(e,t,n){return q.access(e,t,n)},_removeData:function(e,t){q.remove(e,t)}}),x.fn.extend({data:function(e,t){var n,r,i=this[0],o=0,s=null;if(e===undefined){if(this.length&&(s=L.get(i),1===i.nodeType&&!q.get(i,"hasDataAttrs"))){for(n=i.attributes;n.length>o;o++)r=n[o].name,0===r.indexOf("data-")&&(r=x.camelCase(r.substring(5)),P(i,r,s[r]));q.set(i,"hasDataAttrs",!0)}return s}return"object"==typeof e?this.each(function(){L.set(this,e)}):x.access(this,function(t){var n,r=x.camelCase(e);if(i&&t===undefined){if(n=L.get(i,e),n!==undefined)return n;if(n=L.get(i,r),n!==undefined)return n;if(n=P(i,r,undefined),n!==undefined)return n}else this.each(function(){var n=L.get(this,r);L.set(this,r,t),-1!==e.indexOf("-")&&n!==undefined&&L.set(this,e,t)})},null,t,arguments.length>1,null,!0)},removeData:function(e){return this.each(function(){L.remove(this,e)})}});function P(e,t,n){var r;if(n===undefined&&1===e.nodeType)if(r="data-"+t.replace(O,"-$1").toLowerCase(),n=e.getAttribute(r),"string"==typeof n){try{n="true"===n?!0:"false"===n?!1:"null"===n?null:+n+""===n?+n:H.test(n)?JSON.parse(n):n}catch(i){}L.set(e,t,n)}else n=undefined;return n}x.extend({queue:function(e,t,n){var r;return e?(t=(t||"fx")+"queue",r=q.get(e,t),n&&(!r||x.isArray(n)?r=q.access(e,t,x.makeArray(n)):r.push(n)),r||[]):undefined},dequeue:function(e,t){t=t||"fx";var n=x.queue(e,t),r=n.length,i=n.shift(),o=x._queueHooks(e,t),s=function(){x.dequeue(e,t)};"inprogress"===i&&(i=n.shift(),r--),o.cur=i,i&&("fx"===t&&n.unshift("inprogress"),delete o.stop,i.call(e,s,o)),!r&&o&&o.empty.fire()},_queueHooks:function(e,t){var n=t+"queueHooks";return q.get(e,n)||q.access(e,n,{empty:x.Callbacks("once memory").add(function(){q.remove(e,[t+"queue",n])})})}}),x.fn.extend({queue:function(e,t){var n=2;return"string"!=typeof e&&(t=e,e="fx",n--),n>arguments.length?x.queue(this[0],e):t===undefined?this:this.each(function(){var n=x.queue(this,e,t);
 x._queueHooks(this,e),"fx"===e&&"inprogress"!==n[0]&&x.dequeue(this,e)})},dequeue:function(e){return this.each(function(){x.dequeue(this,e)})},delay:function(e,t){return e=x.fx?x.fx.speeds[e]||e:e,t=t||"fx",this.queue(t,function(t,n){var r=setTimeout(t,e);n.stop=function(){clearTimeout(r)}})},clearQueue:function(e){return this.queue(e||"fx",[])},promise:function(e,t){var n,r=1,i=x.Deferred(),o=this,s=this.length,a=function(){--r||i.resolveWith(o,[o])};"string"!=typeof e&&(t=e,e=undefined),e=e||"fx";while(s--)n=q.get(o[s],e+"queueHooks"),n&&n.empty&&(r++,n.empty.add(a));return a(),i.promise(t)}});var R,M,W=/[\t\r\n]/g,$=/\r/g,B=/^(?:input|select|textarea|button)$/i;x.fn.extend({attr:function(e,t){return x.access(this,x.attr,e,t,arguments.length>1)},removeAttr:function(e){return this.each(function(){x.removeAttr(this,e)})},prop:function(e,t){return x.access(this,x.prop,e,t,arguments.length>1)},removeProp:function(e){return this.each(function(){delete this[x.propFix[e]||e]})},addClass:function(e){var t,n,r,i,o,s=0,a=this.length,u="string"==typeof e&&e;if(x.isFunction(e))return this.each(function(t){x(this).addClass(e.call(this,t,this.className))});if(u)for(t=(e||"").match(w)||[];a>s;s++)if(n=this[s],r=1===n.nodeType&&(n.className?(" "+n.className+" ").replace(W," "):" ")){o=0;while(i=t[o++])0>r.indexOf(" "+i+" ")&&(r+=i+" ");n.className=x.trim(r)}return this},removeClass:function(e){var t,n,r,i,o,s=0,a=this.length,u=0===arguments.length||"string"==typeof e&&e;if(x.isFunction(e))return this.each(function(t){x(this).removeClass(e.call(this,t,this.className))});if(u)for(t=(e||"").match(w)||[];a>s;s++)if(n=this[s],r=1===n.nodeType&&(n.className?(" "+n.className+" ").replace(W," "):"")){o=0;while(i=t[o++])while(r.indexOf(" "+i+" ")>=0)r=r.replace(" "+i+" "," ");n.className=e?x.trim(r):""}return this},toggleClass:function(e,t){var n=typeof e,i="boolean"==typeof t;return x.isFunction(e)?this.each(function(n){x(this).toggleClass(e.call(this,n,this.className,t),t)}):this.each(function(){if("string"===n){var o,s=0,a=x(this),u=t,l=e.match(w)||[];while(o=l[s++])u=i?u:!a.hasClass(o),a[u?"addClass":"removeClass"](o)}else(n===r||"boolean"===n)&&(this.className&&q.set(this,"__className__",this.className),this.className=this.className||e===!1?"":q.get(this,"__className__")||"")})},hasClass:function(e){var t=" "+e+" ",n=0,r=this.length;for(;r>n;n++)if(1===this[n].nodeType&&(" "+this[n].className+" ").replace(W," ").indexOf(t)>=0)return!0;return!1},val:function(e){var t,n,r,i=this[0];{if(arguments.length)return r=x.isFunction(e),this.each(function(n){var i,o=x(this);1===this.nodeType&&(i=r?e.call(this,n,o.val()):e,null==i?i="":"number"==typeof i?i+="":x.isArray(i)&&(i=x.map(i,function(e){return null==e?"":e+""})),t=x.valHooks[this.type]||x.valHooks[this.nodeName.toLowerCase()],t&&"set"in t&&t.set(this,i,"value")!==undefined||(this.value=i))});if(i)return t=x.valHooks[i.type]||x.valHooks[i.nodeName.toLowerCase()],t&&"get"in t&&(n=t.get(i,"value"))!==undefined?n:(n=i.value,"string"==typeof n?n.replace($,""):null==n?"":n)}}}),x.extend({valHooks:{option:{get:function(e){var t=e.attributes.value;return!t||t.specified?e.value:e.text}},select:{get:function(e){var t,n,r=e.options,i=e.selectedIndex,o="select-one"===e.type||0>i,s=o?null:[],a=o?i+1:r.length,u=0>i?a:o?i:0;for(;a>u;u++)if(n=r[u],!(!n.selected&&u!==i||(x.support.optDisabled?n.disabled:null!==n.getAttribute("disabled"))||n.parentNode.disabled&&x.nodeName(n.parentNode,"optgroup"))){if(t=x(n).val(),o)return t;s.push(t)}return s},set:function(e,t){var n,r,i=e.options,o=x.makeArray(t),s=i.length;while(s--)r=i[s],(r.selected=x.inArray(x(r).val(),o)>=0)&&(n=!0);return n||(e.selectedIndex=-1),o}}},attr:function(e,t,n){var i,o,s=e.nodeType;if(e&&3!==s&&8!==s&&2!==s)return typeof e.getAttribute===r?x.prop(e,t,n):(1===s&&x.isXMLDoc(e)||(t=t.toLowerCase(),i=x.attrHooks[t]||(x.expr.match.boolean.test(t)?M:R)),n===undefined?i&&"get"in i&&null!==(o=i.get(e,t))?o:(o=x.find.attr(e,t),null==o?undefined:o):null!==n?i&&"set"in i&&(o=i.set(e,n,t))!==undefined?o:(e.setAttribute(t,n+""),n):(x.removeAttr(e,t),undefined))},removeAttr:function(e,t){var n,r,i=0,o=t&&t.match(w);if(o&&1===e.nodeType)while(n=o[i++])r=x.propFix[n]||n,x.expr.match.boolean.test(n)&&(e[r]=!1),e.removeAttribute(n)},attrHooks:{type:{set:function(e,t){if(!x.support.radioValue&&"radio"===t&&x.nodeName(e,"input")){var n=e.value;return e.setAttribute("type",t),n&&(e.value=n),t}}}},propFix:{"for":"htmlFor","class":"className"},prop:function(e,t,n){var r,i,o,s=e.nodeType;if(e&&3!==s&&8!==s&&2!==s)return o=1!==s||!x.isXMLDoc(e),o&&(t=x.propFix[t]||t,i=x.propHooks[t]),n!==undefined?i&&"set"in i&&(r=i.set(e,n,t))!==undefined?r:e[t]=n:i&&"get"in i&&null!==(r=i.get(e,t))?r:e[t]},propHooks:{tabIndex:{get:function(e){return e.hasAttribute("tabindex")||B.test(e.nodeName)||e.href?e.tabIndex:-1}}}}),M={set:function(e,t,n){return t===!1?x.removeAttr(e,n):e.setAttribute(n,n),n}},x.each(x.expr.match.boolean.source.match(/\w+/g),function(e,t){var n=x.expr.attrHandle[t]||x.find.attr;x.expr.attrHandle[t]=function(e,t,r){var i=x.expr.attrHandle[t],o=r?undefined:(x.expr.attrHandle[t]=undefined)!=n(e,t,r)?t.toLowerCase():null;return x.expr.attrHandle[t]=i,o}}),x.support.optSelected||(x.propHooks.selected={get:function(e){var t=e.parentNode;return t&&t.parentNode&&t.parentNode.selectedIndex,null}}),x.each(["tabIndex","readOnly","maxLength","cellSpacing","cellPadding","rowSpan","colSpan","useMap","frameBorder","contentEditable"],function(){x.propFix[this.toLowerCase()]=this}),x.each(["radio","checkbox"],function(){x.valHooks[this]={set:function(e,t){return x.isArray(t)?e.checked=x.inArray(x(e).val(),t)>=0:undefined}},x.support.checkOn||(x.valHooks[this].get=function(e){return null===e.getAttribute("value")?"on":e.value})});var I=/^key/,z=/^(?:mouse|contextmenu)|click/,_=/^(?:focusinfocus|focusoutblur)$/,X=/^([^.]*)(?:\.(.+)|)$/;function U(){return!0}function Y(){return!1}function V(){try{return o.activeElement}catch(e){}}x.event={global:{},add:function(e,t,n,i,o){var s,a,u,l,c,f,p,h,d,g,m,y=q.get(e);if(y){n.handler&&(s=n,n=s.handler,o=s.selector),n.guid||(n.guid=x.guid++),(l=y.events)||(l=y.events={}),(a=y.handle)||(a=y.handle=function(e){return typeof x===r||e&&x.event.triggered===e.type?undefined:x.event.dispatch.apply(a.elem,arguments)},a.elem=e),t=(t||"").match(w)||[""],c=t.length;while(c--)u=X.exec(t[c])||[],d=m=u[1],g=(u[2]||"").split(".").sort(),d&&(p=x.event.special[d]||{},d=(o?p.delegateType:p.bindType)||d,p=x.event.special[d]||{},f=x.extend({type:d,origType:m,data:i,handler:n,guid:n.guid,selector:o,needsContext:o&&x.expr.match.needsContext.test(o),namespace:g.join(".")},s),(h=l[d])||(h=l[d]=[],h.delegateCount=0,p.setup&&p.setup.call(e,i,g,a)!==!1||e.addEventListener&&e.addEventListener(d,a,!1)),p.add&&(p.add.call(e,f),f.handler.guid||(f.handler.guid=n.guid)),o?h.splice(h.delegateCount++,0,f):h.push(f),x.event.global[d]=!0);e=null}},remove:function(e,t,n,r,i){var o,s,a,u,l,c,f,p,h,d,g,m=q.hasData(e)&&q.get(e);if(m&&(u=m.events)){t=(t||"").match(w)||[""],l=t.length;while(l--)if(a=X.exec(t[l])||[],h=g=a[1],d=(a[2]||"").split(".").sort(),h){f=x.event.special[h]||{},h=(r?f.delegateType:f.bindType)||h,p=u[h]||[],a=a[2]&&RegExp("(^|\\.)"+d.join("\\.(?:.*\\.|)")+"(\\.|$)"),s=o=p.length;while(o--)c=p[o],!i&&g!==c.origType||n&&n.guid!==c.guid||a&&!a.test(c.namespace)||r&&r!==c.selector&&("**"!==r||!c.selector)||(p.splice(o,1),c.selector&&p.delegateCount--,f.remove&&f.remove.call(e,c));s&&!p.length&&(f.teardown&&f.teardown.call(e,d,m.handle)!==!1||x.removeEvent(e,h,m.handle),delete u[h])}else for(h in u)x.event.remove(e,h+t[l],n,r,!0);x.isEmptyObject(u)&&(delete m.handle,q.remove(e,"events"))}},trigger:function(t,n,r,i){var s,a,u,l,c,f,p,h=[r||o],d=y.call(t,"type")?t.type:t,g=y.call(t,"namespace")?t.namespace.split("."):[];if(a=u=r=r||o,3!==r.nodeType&&8!==r.nodeType&&!_.test(d+x.event.triggered)&&(d.indexOf(".")>=0&&(g=d.split("."),d=g.shift(),g.sort()),c=0>d.indexOf(":")&&"on"+d,t=t[x.expando]?t:new x.Event(d,"object"==typeof t&&t),t.isTrigger=i?2:3,t.namespace=g.join("."),t.namespace_re=t.namespace?RegExp("(^|\\.)"+g.join("\\.(?:.*\\.|)")+"(\\.|$)"):null,t.result=undefined,t.target||(t.target=r),n=null==n?[t]:x.makeArray(n,[t]),p=x.event.special[d]||{},i||!p.trigger||p.trigger.apply(r,n)!==!1)){if(!i&&!p.noBubble&&!x.isWindow(r)){for(l=p.delegateType||d,_.test(l+d)||(a=a.parentNode);a;a=a.parentNode)h.push(a),u=a;u===(r.ownerDocument||o)&&h.push(u.defaultView||u.parentWindow||e)}s=0;while((a=h[s++])&&!t.isPropagationStopped())t.type=s>1?l:p.bindType||d,f=(q.get(a,"events")||{})[t.type]&&q.get(a,"handle"),f&&f.apply(a,n),f=c&&a[c],f&&x.acceptData(a)&&f.apply&&f.apply(a,n)===!1&&t.preventDefault();return t.type=d,i||t.isDefaultPrevented()||p._default&&p._default.apply(h.pop(),n)!==!1||!x.acceptData(r)||c&&x.isFunction(r[d])&&!x.isWindow(r)&&(u=r[c],u&&(r[c]=null),x.event.triggered=d,r[d](),x.event.triggered=undefined,u&&(r[c]=u)),t.result}},dispatch:function(e){e=x.event.fix(e);var t,n,r,i,o,s=[],a=d.call(arguments),u=(q.get(this,"events")||{})[e.type]||[],l=x.event.special[e.type]||{};if(a[0]=e,e.delegateTarget=this,!l.preDispatch||l.preDispatch.call(this,e)!==!1){s=x.event.handlers.call(this,e,u),t=0;while((i=s[t++])&&!e.isPropagationStopped()){e.currentTarget=i.elem,n=0;while((o=i.handlers[n++])&&!e.isImmediatePropagationStopped())(!e.namespace_re||e.namespace_re.test(o.namespace))&&(e.handleObj=o,e.data=o.data,r=((x.event.special[o.origType]||{}).handle||o.handler).apply(i.elem,a),r!==undefined&&(e.result=r)===!1&&(e.preventDefault(),e.stopPropagation()))}return l.postDispatch&&l.postDispatch.call(this,e),e.result}},handlers:function(e,t){var n,r,i,o,s=[],a=t.delegateCount,u=e.target;if(a&&u.nodeType&&(!e.button||"click"!==e.type))for(;u!==this;u=u.parentNode||this)if(u.disabled!==!0||"click"!==e.type){for(r=[],n=0;a>n;n++)o=t[n],i=o.selector+" ",r[i]===undefined&&(r[i]=o.needsContext?x(i,this).index(u)>=0:x.find(i,this,null,[u]).length),r[i]&&r.push(o);r.length&&s.push({elem:u,handlers:r})}return t.length>a&&s.push({elem:this,handlers:t.slice(a)}),s},props:"altKey bubbles cancelable ctrlKey currentTarget eventPhase metaKey relatedTarget shiftKey target timeStamp view which".split(" "),fixHooks:{},keyHooks:{props:"char charCode key keyCode".split(" "),filter:function(e,t){return null==e.which&&(e.which=null!=t.charCode?t.charCode:t.keyCode),e}},mouseHooks:{props:"button buttons clientX clientY offsetX offsetY pageX pageY screenX screenY toElement".split(" "),filter:function(e,t){var n,r,i,s=t.button;return null==e.pageX&&null!=t.clientX&&(n=e.target.ownerDocument||o,r=n.documentElement,i=n.body,e.pageX=t.clientX+(r&&r.scrollLeft||i&&i.scrollLeft||0)-(r&&r.clientLeft||i&&i.clientLeft||0),e.pageY=t.clientY+(r&&r.scrollTop||i&&i.scrollTop||0)-(r&&r.clientTop||i&&i.clientTop||0)),e.which||s===undefined||(e.which=1&s?1:2&s?3:4&s?2:0),e}},fix:function(e){if(e[x.expando])return e;var t,n,r,i=e.type,o=e,s=this.fixHooks[i];s||(this.fixHooks[i]=s=z.test(i)?this.mouseHooks:I.test(i)?this.keyHooks:{}),r=s.props?this.props.concat(s.props):this.props,e=new x.Event(o),t=r.length;while(t--)n=r[t],e[n]=o[n];return 3===e.target.nodeType&&(e.target=e.target.parentNode),s.filter?s.filter(e,o):e},special:{load:{noBubble:!0},focus:{trigger:function(){return this!==V()&&this.focus?(this.focus(),!1):undefined},delegateType:"focusin"},blur:{trigger:function(){return this===V()&&this.blur?(this.blur(),!1):undefined},delegateType:"focusout"},click:{trigger:function(){return"checkbox"===this.type&&this.click&&x.nodeName(this,"input")?(this.click(),!1):undefined},_default:function(e){return x.nodeName(e.target,"a")}},beforeunload:{postDispatch:function(e){e.result!==undefined&&(e.originalEvent.returnValue=e.result)}}},simulate:function(e,t,n,r){var i=x.extend(new x.Event,n,{type:e,isSimulated:!0,originalEvent:{}});r?x.event.trigger(i,null,t):x.event.dispatch.call(t,i),i.isDefaultPrevented()&&n.preventDefault()}},x.removeEvent=function(e,t,n){e.removeEventListener&&e.removeEventListener(t,n,!1)},x.Event=function(e,t){return this instanceof x.Event?(e&&e.type?(this.originalEvent=e,this.type=e.type,this.isDefaultPrevented=e.defaultPrevented||e.getPreventDefault&&e.getPreventDefault()?U:Y):this.type=e,t&&x.extend(this,t),this.timeStamp=e&&e.timeStamp||x.now(),this[x.expando]=!0,undefined):new x.Event(e,t)},x.Event.prototype={isDefaultPrevented:Y,isPropagationStopped:Y,isImmediatePropagationStopped:Y,preventDefault:function(){var e=this.originalEvent;this.isDefaultPrevented=U,e&&e.preventDefault&&e.preventDefault()},stopPropagation:function(){var e=this.originalEvent;this.isPropagationStopped=U,e&&e.stopPropagation&&e.stopPropagation()},stopImmediatePropagation:function(){this.isImmediatePropagationStopped=U,this.stopPropagation()}},x.each({mouseenter:"mouseover",mouseleave:"mouseout"},function(e,t){x.event.special[e]={delegateType:t,bindType:t,handle:function(e){var n,r=this,i=e.relatedTarget,o=e.handleObj;return(!i||i!==r&&!x.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,arguments),e.type=t),n}}}),x.support.focusinBubbles||x.each({focus:"focusin",blur:"focusout"},function(e,t){var n=0,r=function(e){x.event.simulate(t,e.target,x.event.fix(e),!0)};x.event.special[t]={setup:function(){0===n++&&o.addEventListener(e,r,!0)},teardown:function(){0===--n&&o.removeEventListener(e,r,!0)}}}),x.fn.extend({on:function(e,t,n,r,i){var o,s;if("object"==typeof e){"string"!=typeof t&&(n=n||t,t=undefined);for(s in e)this.on(s,t,n,e[s],i);return this}if(null==n&&null==r?(r=t,n=t=undefined):null==r&&("string"==typeof t?(r=n,n=undefined):(r=n,n=t,t=undefined)),r===!1)r=Y;else if(!r)return this;return 1===i&&(o=r,r=function(e){return x().off(e),o.apply(this,arguments)},r.guid=o.guid||(o.guid=x.guid++)),this.each(function(){x.event.add(this,e,r,n,t)})},one:function(e,t,n,r){return this.on(e,t,n,r,1)},off:function(e,t,n){var r,i;if(e&&e.preventDefault&&e.handleObj)return r=e.handleObj,x(e.delegateTarget).off(r.namespace?r.origType+"."+r.namespace:r.origType,r.selector,r.handler),this;if("object"==typeof e){for(i in e)this.off(i,t,e[i]);return this}return(t===!1||"function"==typeof t)&&(n=t,t=undefined),n===!1&&(n=Y),this.each(function(){x.event.remove(this,e,n,t)})},trigger:function(e,t){return this.each(function(){x.event.trigger(e,t,this)})},triggerHandler:function(e,t){var n=this[0];return n?x.event.trigger(e,t,n,!0):undefined}});var G=/^.[^:#\[\.,]*$/,J=x.expr.match.needsContext,Q={children:!0,contents:!0,next:!0,prev:!0};x.fn.extend({find:function(e){var t,n,r,i=this.length;if("string"!=typeof e)return t=this,this.pushStack(x(e).filter(function(){for(r=0;i>r;r++)if(x.contains(t[r],this))return!0}));for(n=[],r=0;i>r;r++)x.find(e,this[r],n);return n=this.pushStack(i>1?x.unique(n):n),n.selector=(this.selector?this.selector+" ":"")+e,n},has:function(e){var t=x(e,this),n=t.length;return this.filter(function(){var e=0;for(;n>e;e++)if(x.contains(this,t[e]))return!0})},not:function(e){return this.pushStack(Z(this,e||[],!0))},filter:function(e){return this.pushStack(Z(this,e||[],!1))},is:function(e){return!!e&&("string"==typeof e?J.test(e)?x(e,this.context).index(this[0])>=0:x.filter(e,this).length>0:this.filter(e).length>0)},closest:function(e,t){var n,r=0,i=this.length,o=[],s=J.test(e)||"string"!=typeof e?x(e,t||this.context):0;for(;i>r;r++)for(n=this[r];n&&n!==t;n=n.parentNode)if(11>n.nodeType&&(s?s.index(n)>-1:1===n.nodeType&&x.find.matchesSelector(n,e))){n=o.push(n);break}return this.pushStack(o.length>1?x.unique(o):o)},index:function(e){return e?"string"==typeof e?g.call(x(e),this[0]):g.call(this,e.jquery?e[0]:e):this[0]&&this[0].parentNode?this.first().prevAll().length:-1},add:function(e,t){var n="string"==typeof e?x(e,t):x.makeArray(e&&e.nodeType?[e]:e),r=x.merge(this.get(),n);return this.pushStack(x.unique(r))},addBack:function(e){return this.add(null==e?this.prevObject:this.prevObject.filter(e))}});function K(e,t){while((e=e[t])&&1!==e.nodeType);return e}x.each({parent:function(e){var t=e.parentNode;return t&&11!==t.nodeType?t:null},parents:function(e){return x.dir(e,"parentNode")},parentsUntil:function(e,t,n){return x.dir(e,"parentNode",n)},next:function(e){return K(e,"nextSibling")},prev:function(e){return K(e,"previousSibling")},nextAll:function(e){return x.dir(e,"nextSibling")},prevAll:function(e){return x.dir(e,"previousSibling")},nextUntil:function(e,t,n){return x.dir(e,"nextSibling",n)},prevUntil:function(e,t,n){return x.dir(e,"previousSibling",n)},siblings:function(e){return x.sibling((e.parentNode||{}).firstChild,e)},children:function(e){return x.sibling(e.firstChild)},contents:function(e){return x.nodeName(e,"iframe")?e.contentDocument||e.contentWindow.document:x.merge([],e.childNodes)}},function(e,t){x.fn[e]=function(n,r){var i=x.map(this,t,n);return"Until"!==e.slice(-5)&&(r=n),r&&"string"==typeof r&&(i=x.filter(r,i)),this.length>1&&(Q[e]||x.unique(i),"p"===e[0]&&i.reverse()),this.pushStack(i)}}),x.extend({filter:function(e,t,n){var r=t[0];return n&&(e=":not("+e+")"),1===t.length&&1===r.nodeType?x.find.matchesSelector(r,e)?[r]:[]:x.find.matches(e,x.grep(t,function(e){return 1===e.nodeType}))},dir:function(e,t,n){var r=[],i=n!==undefined;while((e=e[t])&&9!==e.nodeType)if(1===e.nodeType){if(i&&x(e).is(n))break;r.push(e)}return r},sibling:function(e,t){var n=[];for(;e;e=e.nextSibling)1===e.nodeType&&e!==t&&n.push(e);return n}});function Z(e,t,n){if(x.isFunction(t))return x.grep(e,function(e,r){return!!t.call(e,r,e)!==n});if(t.nodeType)return x.grep(e,function(e){return e===t!==n});if("string"==typeof t){if(G.test(t))return x.filter(t,e,n);t=x.filter(t,e)}return x.grep(e,function(e){return g.call(t,e)>=0!==n})}var et=/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi,tt=/<([\w:]+)/,nt=/<|&#?\w+;/,rt=/<(?:script|style|link)/i,it=/^(?:checkbox|radio)$/i,ot=/checked\s*(?:[^=]|=\s*.checked.)/i,st=/^$|\/(?:java|ecma)script/i,at=/^true\/(.*)/,ut=/^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g,lt={option:[1,"<select multiple='multiple'>","</select>"],thead:[1,"<table>","</table>"],tr:[2,"<table><tbody>","</tbody></table>"],td:[3,"<table><tbody><tr>","</tr></tbody></table>"],_default:[0,"",""]};lt.optgroup=lt.option,lt.tbody=lt.tfoot=lt.colgroup=lt.caption=lt.col=lt.thead,lt.th=lt.td,x.fn.extend({text:function(e){return x.access(this,function(e){return e===undefined?x.text(this):this.empty().append((this[0]&&this[0].ownerDocument||o).createTextNode(e))},null,e,arguments.length)},append:function(){return this.domManip(arguments,function(e){if(1===this.nodeType||11===this.nodeType||9===this.nodeType){var t=ct(this,e);t.appendChild(e)}})},prepend:function(){return this.domManip(arguments,function(e){if(1===this.nodeType||11===this.nodeType||9===this.nodeType){var t=ct(this,e);t.insertBefore(e,t.firstChild)}})},before:function(){return this.domManip(arguments,function(e){this.parentNode&&this.parentNode.insertBefore(e,this)})},after:function(){return this.domManip(arguments,function(e){this.parentNode&&this.parentNode.insertBefore(e,this.nextSibling)})},remove:function(e,t){var n,r=e?x.filter(e,this):this,i=0;for(;null!=(n=r[i]);i++)t||1!==n.nodeType||x.cleanData(gt(n)),n.parentNode&&(t&&x.contains(n.ownerDocument,n)&&ht(gt(n,"script")),n.parentNode.removeChild(n));return this},empty:function(){var e,t=0;for(;null!=(e=this[t]);t++)1===e.nodeType&&(x.cleanData(gt(e,!1)),e.textContent="");return this},clone:function(e,t){return e=null==e?!1:e,t=null==t?e:t,this.map(function(){return x.clone(this,e,t)})},html:function(e){return x.access(this,function(e){var t=this[0]||{},n=0,r=this.length;if(e===undefined&&1===t.nodeType)return t.innerHTML;if("string"==typeof e&&!rt.test(e)&&!lt[(tt.exec(e)||["",""])[1].toLowerCase()]){e=e.replace(et,"<$1></$2>");try{for(;r>n;n++)t=this[n]||{},1===t.nodeType&&(x.cleanData(gt(t,!1)),t.innerHTML=e);t=0}catch(i){}}t&&this.empty().append(e)},null,e,arguments.length)},replaceWith:function(){var e=x.map(this,function(e){return[e.nextSibling,e.parentNode]}),t=0;return this.domManip(arguments,function(n){var r=e[t++],i=e[t++];i&&(x(this).remove(),i.insertBefore(n,r))},!0),t?this:this.remove()},detach:function(e){return this.remove(e,!0)},domManip:function(e,t,n){e=p.apply([],e);var r,i,o,s,a,u,l=0,c=this.length,f=this,h=c-1,d=e[0],g=x.isFunction(d);if(g||!(1>=c||"string"!=typeof d||x.support.checkClone)&&ot.test(d))return this.each(function(r){var i=f.eq(r);g&&(e[0]=d.call(this,r,i.html())),i.domManip(e,t,n)});if(c&&(r=x.buildFragment(e,this[0].ownerDocument,!1,!n&&this),i=r.firstChild,1===r.childNodes.length&&(r=i),i)){for(o=x.map(gt(r,"script"),ft),s=o.length;c>l;l++)a=r,l!==h&&(a=x.clone(a,!0,!0),s&&x.merge(o,gt(a,"script"))),t.call(this[l],a,l);if(s)for(u=o[o.length-1].ownerDocument,x.map(o,pt),l=0;s>l;l++)a=o[l],st.test(a.type||"")&&!q.access(a,"globalEval")&&x.contains(u,a)&&(a.src?x._evalUrl(a.src):x.globalEval(a.textContent.replace(ut,"")))}return this}}),x.each({appendTo:"append",prependTo:"prepend",insertBefore:"before",insertAfter:"after",replaceAll:"replaceWith"},function(e,t){x.fn[e]=function(e){var n,r=[],i=x(e),o=i.length-1,s=0;for(;o>=s;s++)n=s===o?this:this.clone(!0),x(i[s])[t](n),h.apply(r,n.get());return this.pushStack(r)}}),x.extend({clone:function(e,t,n){var r,i,o,s,a=e.cloneNode(!0),u=x.contains(e.ownerDocument,e);if(!(x.support.noCloneChecked||1!==e.nodeType&&11!==e.nodeType||x.isXMLDoc(e)))for(s=gt(a),o=gt(e),r=0,i=o.length;i>r;r++)mt(o[r],s[r]);if(t)if(n)for(o=o||gt(e),s=s||gt(a),r=0,i=o.length;i>r;r++)dt(o[r],s[r]);else dt(e,a);return s=gt(a,"script"),s.length>0&&ht(s,!u&&gt(e,"script")),a},buildFragment:function(e,t,n,r){var i,o,s,a,u,l,c=0,f=e.length,p=t.createDocumentFragment(),h=[];for(;f>c;c++)if(i=e[c],i||0===i)if("object"===x.type(i))x.merge(h,i.nodeType?[i]:i);else if(nt.test(i)){o=o||p.appendChild(t.createElement("div")),s=(tt.exec(i)||["",""])[1].toLowerCase(),a=lt[s]||lt._default,o.innerHTML=a[1]+i.replace(et,"<$1></$2>")+a[2],l=a[0];while(l--)o=o.firstChild;x.merge(h,o.childNodes),o=p.firstChild,o.textContent=""}else h.push(t.createTextNode(i));p.textContent="",c=0;while(i=h[c++])if((!r||-1===x.inArray(i,r))&&(u=x.contains(i.ownerDocument,i),o=gt(p.appendChild(i),"script"),u&&ht(o),n)){l=0;while(i=o[l++])st.test(i.type||"")&&n.push(i)}return p},cleanData:function(e){var t,n,r,i=e.length,o=0,s=x.event.special;for(;i>o;o++){if(n=e[o],x.acceptData(n)&&(t=q.access(n)))for(r in t.events)s[r]?x.event.remove(n,r):x.removeEvent(n,r,t.handle);L.discard(n),q.discard(n)}},_evalUrl:function(e){return x.ajax({url:e,type:"GET",dataType:"text",async:!1,global:!1,success:x.globalEval})}});function ct(e,t){return x.nodeName(e,"table")&&x.nodeName(1===t.nodeType?t:t.firstChild,"tr")?e.getElementsByTagName("tbody")[0]||e.appendChild(e.ownerDocument.createElement("tbody")):e}function ft(e){return e.type=(null!==e.getAttribute("type"))+"/"+e.type,e}function pt(e){var t=at.exec(e.type);return t?e.type=t[1]:e.removeAttribute("type"),e}function ht(e,t){var n=e.length,r=0;for(;n>r;r++)q.set(e[r],"globalEval",!t||q.get(t[r],"globalEval"))}function dt(e,t){var n,r,i,o,s,a,u,l;if(1===t.nodeType){if(q.hasData(e)&&(o=q.access(e),s=x.extend({},o),l=o.events,q.set(t,s),l)){delete s.handle,s.events={};for(i in l)for(n=0,r=l[i].length;r>n;n++)x.event.add(t,i,l[i][n])}L.hasData(e)&&(a=L.access(e),u=x.extend({},a),L.set(t,u))}}function gt(e,t){var n=e.getElementsByTagName?e.getElementsByTagName(t||"*"):e.querySelectorAll?e.querySelectorAll(t||"*"):[];return t===undefined||t&&x.nodeName(e,t)?x.merge([e],n):n}function mt(e,t){var n=t.nodeName.toLowerCase();"input"===n&&it.test(e.type)?t.checked=e.checked:("input"===n||"textarea"===n)&&(t.defaultValue=e.defaultValue)}x.fn.extend({wrapAll:function(e){var t;return x.isFunction(e)?this.each(function(t){x(this).wrapAll(e.call(this,t))}):(this[0]&&(t=x(e,this[0].ownerDocument).eq(0).clone(!0),this[0].parentNode&&t.insertBefore(this[0]),t.map(function(){var e=this;while(e.firstElementChild)e=e.firstElementChild;return e}).append(this)),this)},wrapInner:function(e){return x.isFunction(e)?this.each(function(t){x(this).wrapInner(e.call(this,t))}):this.each(function(){var t=x(this),n=t.contents();n.length?n.wrapAll(e):t.append(e)})},wrap:function(e){var t=x.isFunction(e);return this.each(function(n){x(this).wrapAll(t?e.call(this,n):e)})},unwrap:function(){return this.parent().each(function(){x.nodeName(this,"body")||x(this).replaceWith(this.childNodes)}).end()}});var yt,vt,xt=/^(none|table(?!-c[ea]).+)/,bt=/^margin/,wt=RegExp("^("+b+")(.*)$","i"),Tt=RegExp("^("+b+")(?!px)[a-z%]+$","i"),Ct=RegExp("^([+-])=("+b+")","i"),kt={BODY:"block"},Nt={position:"absolute",visibility:"hidden",display:"block"},Et={letterSpacing:0,fontWeight:400},St=["Top","Right","Bottom","Left"],jt=["Webkit","O","Moz","ms"];function Dt(e,t){if(t in e)return t;var n=t.charAt(0).toUpperCase()+t.slice(1),r=t,i=jt.length;while(i--)if(t=jt[i]+n,t in e)return t;return r}function At(e,t){return e=t||e,"none"===x.css(e,"display")||!x.contains(e.ownerDocument,e)}function Lt(t){return e.getComputedStyle(t,null)}function qt(e,t){var n,r,i,o=[],s=0,a=e.length;for(;a>s;s++)r=e[s],r.style&&(o[s]=q.get(r,"olddisplay"),n=r.style.display,t?(o[s]||"none"!==n||(r.style.display=""),""===r.style.display&&At(r)&&(o[s]=q.access(r,"olddisplay",Pt(r.nodeName)))):o[s]||(i=At(r),(n&&"none"!==n||!i)&&q.set(r,"olddisplay",i?n:x.css(r,"display"))));for(s=0;a>s;s++)r=e[s],r.style&&(t&&"none"!==r.style.display&&""!==r.style.display||(r.style.display=t?o[s]||"":"none"));return e}x.fn.extend({css:function(e,t){return x.access(this,function(e,t,n){var r,i,o={},s=0;if(x.isArray(t)){for(r=Lt(e),i=t.length;i>s;s++)o[t[s]]=x.css(e,t[s],!1,r);return o}return n!==undefined?x.style(e,t,n):x.css(e,t)},e,t,arguments.length>1)},show:function(){return qt(this,!0)},hide:function(){return qt(this)},toggle:function(e){var t="boolean"==typeof e;return this.each(function(){(t?e:At(this))?x(this).show():x(this).hide()})}}),x.extend({cssHooks:{opacity:{get:function(e,t){if(t){var n=yt(e,"opacity");return""===n?"1":n}}}},cssNumber:{columnCount:!0,fillOpacity:!0,fontWeight:!0,lineHeight:!0,opacity:!0,orphans:!0,widows:!0,zIndex:!0,zoom:!0},cssProps:{"float":"cssFloat"},style:function(e,t,n,r){if(e&&3!==e.nodeType&&8!==e.nodeType&&e.style){var i,o,s,a=x.camelCase(t),u=e.style;return t=x.cssProps[a]||(x.cssProps[a]=Dt(u,a)),s=x.cssHooks[t]||x.cssHooks[a],n===undefined?s&&"get"in s&&(i=s.get(e,!1,r))!==undefined?i:u[t]:(o=typeof n,"string"===o&&(i=Ct.exec(n))&&(n=(i[1]+1)*i[2]+parseFloat(x.css(e,t)),o="number"),null==n||"number"===o&&isNaN(n)||("number"!==o||x.cssNumber[a]||(n+="px"),x.support.clearCloneStyle||""!==n||0!==t.indexOf("background")||(u[t]="inherit"),s&&"set"in s&&(n=s.set(e,n,r))===undefined||(u[t]=n)),undefined)}},css:function(e,t,n,r){var i,o,s,a=x.camelCase(t);return t=x.cssProps[a]||(x.cssProps[a]=Dt(e.style,a)),s=x.cssHooks[t]||x.cssHooks[a],s&&"get"in s&&(i=s.get(e,!0,n)),i===undefined&&(i=yt(e,t,r)),"normal"===i&&t in Et&&(i=Et[t]),""===n||n?(o=parseFloat(i),n===!0||x.isNumeric(o)?o||0:i):i}}),yt=function(e,t,n){var r,i,o,s=n||Lt(e),a=s?s.getPropertyValue(t)||s[t]:undefined,u=e.style;return s&&(""!==a||x.contains(e.ownerDocument,e)||(a=x.style(e,t)),Tt.test(a)&&bt.test(t)&&(r=u.width,i=u.minWidth,o=u.maxWidth,u.minWidth=u.maxWidth=u.width=a,a=s.width,u.width=r,u.minWidth=i,u.maxWidth=o)),a};function Ht(e,t,n){var r=wt.exec(t);return r?Math.max(0,r[1]-(n||0))+(r[2]||"px"):t}function Ot(e,t,n,r,i){var o=n===(r?"border":"content")?4:"width"===t?1:0,s=0;for(;4>o;o+=2)"margin"===n&&(s+=x.css(e,n+St[o],!0,i)),r?("content"===n&&(s-=x.css(e,"padding"+St[o],!0,i)),"margin"!==n&&(s-=x.css(e,"border"+St[o]+"Width",!0,i))):(s+=x.css(e,"padding"+St[o],!0,i),"padding"!==n&&(s+=x.css(e,"border"+St[o]+"Width",!0,i)));return s}function Ft(e,t,n){var r=!0,i="width"===t?e.offsetWidth:e.offsetHeight,o=Lt(e),s=x.support.boxSizing&&"border-box"===x.css(e,"boxSizing",!1,o);if(0>=i||null==i){if(i=yt(e,t,o),(0>i||null==i)&&(i=e.style[t]),Tt.test(i))return i;r=s&&(x.support.boxSizingReliable||i===e.style[t]),i=parseFloat(i)||0}return i+Ot(e,t,n||(s?"border":"content"),r,o)+"px"}function Pt(e){var t=o,n=kt[e];return n||(n=Rt(e,t),"none"!==n&&n||(vt=(vt||x("<iframe frameborder='0' width='0' height='0'/>").css("cssText","display:block !important")).appendTo(t.documentElement),t=(vt[0].contentWindow||vt[0].contentDocument).document,t.write("<!doctype html><html><body>"),t.close(),n=Rt(e,t),vt.detach()),kt[e]=n),n}function Rt(e,t){var n=x(t.createElement(e)).appendTo(t.body),r=x.css(n[0],"display");return n.remove(),r}x.each(["height","width"],function(e,t){x.cssHooks[t]={get:function(e,n,r){return n?0===e.offsetWidth&&xt.test(x.css(e,"display"))?x.swap(e,Nt,function(){return Ft(e,t,r)}):Ft(e,t,r):undefined},set:function(e,n,r){var i=r&&Lt(e);return Ht(e,n,r?Ot(e,t,r,x.support.boxSizing&&"border-box"===x.css(e,"boxSizing",!1,i),i):0)}}}),x(function(){x.support.reliableMarginRight||(x.cssHooks.marginRight={get:function(e,t){return t?x.swap(e,{display:"inline-block"},yt,[e,"marginRight"]):undefined}}),!x.support.pixelPosition&&x.fn.position&&x.each(["top","left"],function(e,t){x.cssHooks[t]={get:function(e,n){return n?(n=yt(e,t),Tt.test(n)?x(e).position()[t]+"px":n):undefined}}})}),x.expr&&x.expr.filters&&(x.expr.filters.hidden=function(e){return 0>=e.offsetWidth&&0>=e.offsetHeight},x.expr.filters.visible=function(e){return!x.expr.filters.hidden(e)}),x.each({margin:"",padding:"",border:"Width"},function(e,t){x.cssHooks[e+t]={expand:function(n){var r=0,i={},o="string"==typeof n?n.split(" "):[n];for(;4>r;r++)i[e+St[r]+t]=o[r]||o[r-2]||o[0];return i}},bt.test(e)||(x.cssHooks[e+t].set=Ht)});var Mt=/%20/g,Wt=/\[\]$/,$t=/\r?\n/g,Bt=/^(?:submit|button|image|reset|file)$/i,It=/^(?:input|select|textarea|keygen)/i;x.fn.extend({serialize:function(){return x.param(this.serializeArray())},serializeArray:function(){return this.map(function(){var e=x.prop(this,"elements");return e?x.makeArray(e):this}).filter(function(){var e=this.type;return this.name&&!x(this).is(":disabled")&&It.test(this.nodeName)&&!Bt.test(e)&&(this.checked||!it.test(e))}).map(function(e,t){var n=x(this).val();return null==n?null:x.isArray(n)?x.map(n,function(e){return{name:t.name,value:e.replace($t,"\r\n")}}):{name:t.name,value:n.replace($t,"\r\n")}}).get()}}),x.param=function(e,t){var n,r=[],i=function(e,t){t=x.isFunction(t)?t():null==t?"":t,r[r.length]=encodeURIComponent(e)+"="+encodeURIComponent(t)};if(t===undefined&&(t=x.ajaxSettings&&x.ajaxSettings.traditional),x.isArray(e)||e.jquery&&!x.isPlainObject(e))x.each(e,function(){i(this.name,this.value)});else for(n in e)zt(n,e[n],t,i);return r.join("&").replace(Mt,"+")};function zt(e,t,n,r){var i;if(x.isArray(t))x.each(t,function(t,i){n||Wt.test(e)?r(e,i):zt(e+"["+("object"==typeof i?t:"")+"]",i,n,r)});else if(n||"object"!==x.type(t))r(e,t);else for(i in t)zt(e+"["+i+"]",t[i],n,r)}x.each("blur focus focusin focusout load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error contextmenu".split(" "),function(e,t){x.fn[t]=function(e,n){return arguments.length>0?this.on(t,null,e,n):this.trigger(t)}}),x.fn.extend({hover:function(e,t){return this.mouseenter(e).mouseleave(t||e)},bind:function(e,t,n){return this.on(e,null,t,n)},unbind:function(e,t){return this.off(e,null,t)},delegate:function(e,t,n,r){return this.on(t,e,n,r)},undelegate:function(e,t,n){return 1===arguments.length?this.off(e,"**"):this.off(t,e||"**",n)}});var _t,Xt,Ut=x.now(),Yt=/\?/,Vt=/#.*$/,Gt=/([?&])_=[^&]*/,Jt=/^(.*?):[ \t]*([^\r\n]*)$/gm,Qt=/^(?:about|app|app-storage|.+-extension|file|res|widget):$/,Kt=/^(?:GET|HEAD)$/,Zt=/^\/\//,en=/^([\w.+-]+:)(?:\/\/([^\/?#:]*)(?::(\d+)|)|)/,tn=x.fn.load,nn={},rn={},on="*/".concat("*");try{Xt=i.href}catch(sn){Xt=o.createElement("a"),Xt.href="",Xt=Xt.href}_t=en.exec(Xt.toLowerCase())||[];function an(e){return function(t,n){"string"!=typeof t&&(n=t,t="*");var r,i=0,o=t.toLowerCase().match(w)||[];
@@ -3613,38 +3612,83 @@ define("backbonejs", ["_","bootstrap"], (function (global) {
     };
 }(this)));
 
-// lib/handlebars/base.js
+/*
+
+Copyright (C) 2011 by Yehuda Katz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+// lib/handlebars/browser-prefix.js
 var Handlebars = {};
 
-Handlebars.VERSION = "1.0.beta.6";
+(function(Handlebars, undefined) {
+;
+// lib/handlebars/base.js
+
+Handlebars.VERSION = "1.0.0";
+Handlebars.COMPILER_REVISION = 4;
+
+Handlebars.REVISION_CHANGES = {
+  1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
+  2: '== 1.0.0-rc.3',
+  3: '== 1.0.0-rc.4',
+  4: '>= 1.0.0'
+};
 
 Handlebars.helpers  = {};
 Handlebars.partials = {};
 
+var toString = Object.prototype.toString,
+    functionType = '[object Function]',
+    objectType = '[object Object]';
+
 Handlebars.registerHelper = function(name, fn, inverse) {
-  if(inverse) { fn.not = inverse; }
-  this.helpers[name] = fn;
+  if (toString.call(name) === objectType) {
+    if (inverse || fn) { throw new Handlebars.Exception('Arg not supported with multiple helpers'); }
+    Handlebars.Utils.extend(this.helpers, name);
+  } else {
+    if (inverse) { fn.not = inverse; }
+    this.helpers[name] = fn;
+  }
 };
 
 Handlebars.registerPartial = function(name, str) {
-  this.partials[name] = str;
+  if (toString.call(name) === objectType) {
+    Handlebars.Utils.extend(this.partials,  name);
+  } else {
+    this.partials[name] = str;
+  }
 };
 
 Handlebars.registerHelper('helperMissing', function(arg) {
   if(arguments.length === 2) {
     return undefined;
   } else {
-    throw new Error("Could not find property '" + arg + "'");
+    throw new Error("Missing helper: '" + arg + "'");
   }
 });
-
-var toString = Object.prototype.toString, functionType = "[object Function]";
 
 Handlebars.registerHelper('blockHelperMissing', function(context, options) {
   var inverse = options.inverse || function() {}, fn = options.fn;
 
-
-  var ret = "";
   var type = toString.call(context);
 
   if(type === functionType) { context = context.call(this); }
@@ -3655,70 +3699,117 @@ Handlebars.registerHelper('blockHelperMissing', function(context, options) {
     return inverse(this);
   } else if(type === "[object Array]") {
     if(context.length > 0) {
-      for(var i=0, j=context.length; i<j; i++) {
-        ret = ret + fn(context[i]);
-      }
+      return Handlebars.helpers.each(context, options);
     } else {
-      ret = inverse(this);
+      return inverse(this);
     }
-    return ret;
   } else {
     return fn(context);
   }
 });
 
+Handlebars.K = function() {};
+
+Handlebars.createFrame = Object.create || function(object) {
+  Handlebars.K.prototype = object;
+  var obj = new Handlebars.K();
+  Handlebars.K.prototype = null;
+  return obj;
+};
+
+Handlebars.logger = {
+  DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3, level: 3,
+
+  methodMap: {0: 'debug', 1: 'info', 2: 'warn', 3: 'error'},
+
+  // can be overridden in the host environment
+  log: function(level, obj) {
+    if (Handlebars.logger.level <= level) {
+      var method = Handlebars.logger.methodMap[level];
+      if (typeof console !== 'undefined' && console[method]) {
+        console[method].call(console, obj);
+      }
+    }
+  }
+};
+
+Handlebars.log = function(level, obj) { Handlebars.logger.log(level, obj); };
+
 Handlebars.registerHelper('each', function(context, options) {
   var fn = options.fn, inverse = options.inverse;
-  var ret = "";
+  var i = 0, ret = "", data;
 
-  if(context && context.length > 0) {
-    for(var i=0, j=context.length; i<j; i++) {
-      ret = ret + fn(context[i]);
-    }
-  } else {
-    ret = inverse(this);
-  }
-  return ret;
-});
-
-Handlebars.registerHelper('if', function(context, options) {
   var type = toString.call(context);
   if(type === functionType) { context = context.call(this); }
 
-  if(!context || Handlebars.OPrime.isEmpty(context)) {
+  if (options.data) {
+    data = Handlebars.createFrame(options.data);
+  }
+
+  if(context && typeof context === 'object') {
+    if(context instanceof Array){
+      for(var j = context.length; i<j; i++) {
+        if (data) { data.index = i; }
+        ret = ret + fn(context[i], { data: data });
+      }
+    } else {
+      for(var key in context) {
+        if(context.hasOwnProperty(key)) {
+          if(data) { data.key = key; }
+          ret = ret + fn(context[key], {data: data});
+          i++;
+        }
+      }
+    }
+  }
+
+  if(i === 0){
+    ret = inverse(this);
+  }
+
+  return ret;
+});
+
+Handlebars.registerHelper('if', function(conditional, options) {
+  var type = toString.call(conditional);
+  if(type === functionType) { conditional = conditional.call(this); }
+
+  if(!conditional || Handlebars.Utils.isEmpty(conditional)) {
     return options.inverse(this);
   } else {
     return options.fn(this);
   }
 });
 
-Handlebars.registerHelper('unless', function(context, options) {
-  var fn = options.fn, inverse = options.inverse;
-  options.fn = inverse;
-  options.inverse = fn;
-
-  return Handlebars.helpers['if'].call(this, context, options);
+Handlebars.registerHelper('unless', function(conditional, options) {
+  return Handlebars.helpers['if'].call(this, conditional, {fn: options.inverse, inverse: options.fn});
 });
 
 Handlebars.registerHelper('with', function(context, options) {
-  return options.fn(context);
+  var type = toString.call(context);
+  if(type === functionType) { context = context.call(this); }
+
+  if (!Handlebars.Utils.isEmpty(context)) return options.fn(context);
 });
 
-Handlebars.registerHelper('log', function(context) {
-  Handlebars.log(context);
+Handlebars.registerHelper('log', function(context, options) {
+  var level = options.data && options.data.level != null ? parseInt(options.data.level, 10) : 1;
+  Handlebars.log(level, context);
 });
 ;
 // lib/handlebars/utils.js
+
+var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
+
 Handlebars.Exception = function(message) {
   var tmp = Error.prototype.constructor.apply(this, arguments);
 
-  for (var p in tmp) {
-    if (tmp.hasOwnProperty(p)) { this[p] = tmp[p]; }
+  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
+  for (var idx = 0; idx < errorProps.length; idx++) {
+    this[errorProps[idx]] = tmp[errorProps[idx]];
   }
-
-  this.message = tmp.message;
 };
-Handlebars.Exception.prototype = new Error;
+Handlebars.Exception.prototype = new Error();
 
 // Build out our basic SafeString type
 Handlebars.SafeString = function(string) {
@@ -3728,98 +3819,142 @@ Handlebars.SafeString.prototype.toString = function() {
   return this.string.toString();
 };
 
-(function() {
-  var escape = {
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#x27;",
-    "`": "&#x60;"
-  };
+var escape = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#x27;",
+  "`": "&#x60;"
+};
 
-  var badChars = /&(?!\w+;)|[<>"'`]/g;
-  var possible = /[&<>"'`]/;
+var badChars = /[&<>"'`]/g;
+var possible = /[&<>"'`]/;
 
-  var escapeChar = function(chr) {
-    return escape[chr] || "&amp;";
-  };
+var escapeChar = function(chr) {
+  return escape[chr] || "&amp;";
+};
 
-  Handlebars.OPrime = {
-    escapeExpression: function(string) {
-      // don't escape SafeStrings, since they're already safe
-      if (string instanceof Handlebars.SafeString) {
-        return string.toString();
-      } else if (string == null || string === false) {
-        return "";
-      }
-
-      if(!possible.test(string)) { return string; }
-      return string.replace(badChars, escapeChar);
-    },
-
-    isEmpty: function(value) {
-      if (typeof value === "undefined") {
-        return true;
-      } else if (value === null) {
-        return true;
-      } else if (value === false) {
-        return true;
-      } else if(Object.prototype.toString.call(value) === "[object Array]" && value.length === 0) {
-        return true;
-      } else {
-        return false;
+Handlebars.Utils = {
+  extend: function(obj, value) {
+    for(var key in value) {
+      if(value.hasOwnProperty(key)) {
+        obj[key] = value[key];
       }
     }
-  };
-})();;
+  },
+
+  escapeExpression: function(string) {
+    // don't escape SafeStrings, since they're already safe
+    if (string instanceof Handlebars.SafeString) {
+      return string.toString();
+    } else if (string == null || string === false) {
+      return "";
+    }
+
+    // Force a string conversion as this will be done by the append regardless and
+    // the regex test will do this transparently behind the scenes, causing issues if
+    // an object's to string has escaped characters in it.
+    string = string.toString();
+
+    if(!possible.test(string)) { return string; }
+    return string.replace(badChars, escapeChar);
+  },
+
+  isEmpty: function(value) {
+    if (!value && value !== 0) {
+      return true;
+    } else if(toString.call(value) === "[object Array]" && value.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+;
 // lib/handlebars/runtime.js
+
 Handlebars.VM = {
   template: function(templateSpec) {
     // Just add water
     var container = {
-      escapeExpression: Handlebars.OPrime.escapeExpression,
+      escapeExpression: Handlebars.Utils.escapeExpression,
       invokePartial: Handlebars.VM.invokePartial,
       programs: [],
       program: function(i, fn, data) {
         var programWrapper = this.programs[i];
         if(data) {
-          return Handlebars.VM.program(fn, data);
-        } else if(programWrapper) {
-          return programWrapper;
-        } else {
-          programWrapper = this.programs[i] = Handlebars.VM.program(fn);
-          return programWrapper;
+          programWrapper = Handlebars.VM.program(i, fn, data);
+        } else if (!programWrapper) {
+          programWrapper = this.programs[i] = Handlebars.VM.program(i, fn);
         }
+        return programWrapper;
+      },
+      merge: function(param, common) {
+        var ret = param || common;
+
+        if (param && common) {
+          ret = {};
+          Handlebars.Utils.extend(ret, common);
+          Handlebars.Utils.extend(ret, param);
+        }
+        return ret;
       },
       programWithDepth: Handlebars.VM.programWithDepth,
-      noop: Handlebars.VM.noop
+      noop: Handlebars.VM.noop,
+      compilerInfo: null
     };
 
     return function(context, options) {
       options = options || {};
-      return templateSpec.call(container, Handlebars, context, options.helpers, options.partials, options.data);
+      var result = templateSpec.call(container, Handlebars, context, options.helpers, options.partials, options.data);
+
+      var compilerInfo = container.compilerInfo || [],
+          compilerRevision = compilerInfo[0] || 1,
+          currentRevision = Handlebars.COMPILER_REVISION;
+
+      if (compilerRevision !== currentRevision) {
+        if (compilerRevision < currentRevision) {
+          var runtimeVersions = Handlebars.REVISION_CHANGES[currentRevision],
+              compilerVersions = Handlebars.REVISION_CHANGES[compilerRevision];
+          throw "Template was precompiled with an older version of Handlebars than the current runtime. "+
+                "Please update your precompiler to a newer version ("+runtimeVersions+") or downgrade your runtime to an older version ("+compilerVersions+").";
+        } else {
+          // Use the embedded version info since the runtime doesn't know about this revision yet
+          throw "Template was precompiled with a newer version of Handlebars than the current runtime. "+
+                "Please update your runtime to a newer version ("+compilerInfo[1]+").";
+        }
+      }
+
+      return result;
     };
   },
 
-  programWithDepth: function(fn, data, $depth) {
-    var args = Array.prototype.slice.call(arguments, 2);
+  programWithDepth: function(i, fn, data /*, $depth */) {
+    var args = Array.prototype.slice.call(arguments, 3);
 
-    return function(context, options) {
+    var program = function(context, options) {
       options = options || {};
 
       return fn.apply(this, [context, options.data || data].concat(args));
     };
+    program.program = i;
+    program.depth = args.length;
+    return program;
   },
-  program: function(fn, data) {
-    return function(context, options) {
+  program: function(i, fn, data) {
+    var program = function(context, options) {
       options = options || {};
 
       return fn(context, options.data || data);
     };
+    program.program = i;
+    program.depth = 0;
+    return program;
   },
   noop: function() { return ""; },
   invokePartial: function(partial, name, context, helpers, partials, data) {
-    options = { helpers: helpers, partials: partials, data: data };
+    var options = { helpers: helpers, partials: partials, data: data };
 
     if(partial === undefined) {
       throw new Handlebars.Exception("The partial " + name + " could not be found");
@@ -3828,7 +3963,7 @@ Handlebars.VM = {
     } else if (!Handlebars.compile) {
       throw new Handlebars.Exception("The partial " + name + " could not be compiled when running in runtime-only mode");
     } else {
-      partials[name] = Handlebars.compile(partial);
+      partials[name] = Handlebars.compile(partial, {data: data !== undefined});
       return partials[name](context, options);
     }
   }
@@ -3836,6 +3971,10 @@ Handlebars.VM = {
 
 Handlebars.template = Handlebars.VM.template;
 ;
+// lib/handlebars/browser-suffix.js
+})(Handlebars);
+;
+
 define("handlebarsjs", ["backbonejs","$"], (function (global) {
     return function () {
         var ret, fn;
@@ -3846,8 +3985,8 @@ define("handlebarsjs", ["backbonejs","$"], (function (global) {
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_all_the_data'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3859,14 +3998,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n\n		<!-- Elements on Right hand side -->\n		<div class=\"span6\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n\n		<!-- Elements on Right hand side -->\n		<div class=\"span6\">\n			<div class=\"  hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"   \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_compare_datalists'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3878,14 +4017,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_everything_at_once'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3893,19 +4032,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.corpustitle) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " - ";
+    + " -\n							";
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
-  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ".html#/user/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
   if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -3917,14 +4048,22 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_just_entering'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3936,14 +4075,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"\">\n		<!--Elements in the middle (things that get hidden)  -->\n\n		<div id=\"search-data-list-quickview\" class=\"well hide \">\n			<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n			<div class=\"  \">\n				<ul\n					class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n		<div class=\"clear-spacing\"></div>\n		\n		<div id=\"insert-unicode\" class=\"well\"></div>\n\n		<div id=\"datums-embedded\" class=\"middle well\"></div>\n		<div id=\"session-embedded\" class=\"middle well\"></div>\n		<div id=\"corpus-embedded\" class=\"middle well\"></div>\n		<div id=\"search-embedded\" class=\"middle well\"></div>\n\n		<div id=\"data-list-embedded\" class=\"well\">\n			<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n			<div>\n				<ul\n					class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n\n\n		<div id=\"conversation-embedded\" class=\"middle well\">\n			<div class=\"scrollable\">\n				<div class=\"conversation-text-audio-wrapper\">\n					<div class=\"jp-load-bar\" style=\"width: 960;\">\n						<div class=\"jp-play-bar\" style=\"width: 330;\">\n							<i class=\"icon-gift\"></i><strong></strong>\n							<h4>'Conversations' will let you have multiple speakers with\n								overlapping speech.</h4>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"\">\n		<!--Elements in the middle (things that get hidden)  -->\n\n		<div id=\"search-data-list-quickview\" class=\"well hide span12 \">\n			<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n			<div class=\" container  \">\n				<ul\n					class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n		<div class=\"clear-spacing\"></div>\n		\n		<div id=\"insert-unicode\" class=\"well\"></div>\n\n		<div id=\"datums-embedded\" class=\"middle well\"></div>\n		<div id=\"session-embedded\" class=\"middle well\"></div>\n		<div id=\"corpus-embedded\" class=\"middle well\"></div>\n		<div id=\"search-embedded\" class=\"middle well\"></div>\n\n		<div id=\"data-list-embedded\" class=\"well\">\n			<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n			<div>\n				<ul\n					class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control\"></div>\n			</div>\n		</div>\n\n\n		<div id=\"conversation-embedded\" class=\"middle well\">\n			<div class=\"scrollable\">\n				<div class=\"conversation-text-audio-wrapper\">\n					<div class=\"jp-load-bar\" style=\"width: 960;\">\n						<div class=\"jp-play-bar\" style=\"width: 330;\">\n							<i class=\"icon-gift\"></i><strong></strong>\n							<h4>'Conversations' will let you have multiple speakers with\n								overlapping speech.</h4>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['app_whats_happening'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -3955,15 +4094,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.elicitationgoal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "<b class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n\n\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed";
-  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ".html#/user/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed";
+    + "<b class=\"caret\"></b></a>\n							<ul\n							class=\"unstyled dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div class=\"well \">\n									<strong><span class=\"locale_Corpora\"></span></strong>\n									<ul class=\" unstyled corpuses\"></ul>\n								</div>\n							</li>\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well \"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well \"></div>\n							</li>\n\n						</ul>\n					</li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable  current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n			<div id=\"\" class=\" hide span12\"></div>\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n\n			<div class=\"well span12\">\n				<iframe\n					src=\"activity/activity_feed";
   if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -3975,14 +4106,22 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well span12\">\n				<iframe src=\"activity/activity_feed";
+  if (stack1 = helpers.theme) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.theme; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ".html#/user/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<button class=\"btn pull-right\" data-dismiss=\"modal\">Close</button>\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['audio_video_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -3991,8 +4130,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['audio_video_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4010,16 +4149,16 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['authentication_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<li class=\"not-a \">\n	<div>\n		<img class=\"gravatar-large\" src=\"";
+  buffer += "<li class=\"not-a \">\n	<div>\n		<img src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		<h4>";
+    + "?d=identicon\" />\n		<h4>";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4029,39 +4168,39 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['comment_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"alert alert-info\">\n<span> <img class=\"gravatar-small\" src=\"";
+  buffer += "<div class=\"alert alert-info\">\n<span> <img class=\"gravatar-small\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"/></span>\n<div class= \"pull-right\">  \n</div>\n<span>";
+    + "?d=identicon\"/></span>\n<div class= \"pull-right\">  \n</div>\n<span>";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</span>\n<!--  <i class=\"icons icon-comment\"></i>  -->\n<textarea class=\"comment-new-text\">";
+    + "</span> \n<button class=\"btn btn-mini btn-primary add-comment-button pull-right\">\n    <span class=\"locale_Add\"></span> \n    <i class=\"icon-comment\"></i>\n  </button>\n<!--  <i class=\"icons icon-comment\"></i>  -->\n<textarea class=\"comment-new-text\">";
   if (stack1 = helpers.text) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.text; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-button\">\n    <span class=\"locale_Add\"></span> \n    <i class=\"icon-comment\"></i>\n  </button>\n</div>";
+    + "</textarea>\n  \n</div>";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['comment_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"alert alert-info\">\n	<span> <img class=\"gravatar-small\" src=\"";
+  buffer += "<div class=\"alert alert-info\">\n	<span> <img class=\"gravatar-small\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" /></span> <span>\n		";
+    + "?d=identicon\" /></span> <span>\n		";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4083,8 +4222,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4115,7 +4254,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4124,8 +4263,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_import_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4148,7 +4287,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--Import DataList Menu  -->\n<div class=\"btn-group\">\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4157,8 +4296,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4189,7 +4328,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n";
@@ -4198,8 +4337,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4221,8 +4360,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_search_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4258,8 +4397,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4286,7 +4425,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4295,8 +4434,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4327,7 +4466,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4336,8 +4475,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_summary_read_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4355,8 +4494,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['conversation_turn_read_latex'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4401,9 +4540,9 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<!-- create new stuff in same dashboard -->\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
@@ -4426,58 +4565,78 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small>\n\n<label class=locale_Description></label>\n<textarea class=\"corpus-description-input\">";
+    + "</small>\n|\n<a href=\"http://lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"\n	target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL:\n	http://lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n	\n<label class=\"locale_Description\"></label>\n<textarea class=\"corpus-description-input\">";
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<small>Shareable URL:\n	http://www.lingsync.org/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "/";
-  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</small>\n\n<div class=\"accordion\" id=\"accordion-edit-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n					glosser from any LingSync corpus, you need to have permission (ask\n					them to add you as a reader on their corpus). For example, if you\n					and your collaborators are working on Mi'gmaq, you might have a\n					master corpus with the most data that you all can use to gloss your\n					corpus. For an example url, see LingLlama's sample Quechua corpus:\n					https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n				<br /> <span>You can also create your own glosser web\n					service or use an existing glosser/morpheme segmenter you have\n					access too as long as it is available on a URL, and uses a similar\n					data schema. <a\n					href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n					target=\"_new\">Contact us</a> if you would like more details about how to do this.\n				</span> <label>Glosser URL:</label>\n				<textarea class=\"glosserURL\">";
-  if (stack1 = helpers.glosserURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+    + "</textarea>\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain-terms-of-use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-terms-input\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.termsOfUse),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</textarea>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain-license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-license-title-input\" placeholder=\"title\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</textarea> \n<textarea class=\"corpus-license-humanreadable-input\" placeholder=\"human readable version\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</textarea> \n<textarea class=\"corpus-license-link-input\" placeholder=\"link to full license information\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.link)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</textarea> \n\n<label class=\"locale_Copyright\"></label>\n<textarea class=\"corpus-copyright-input\">";
+  if (stack2 = helpers.copyright) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.copyright; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</textarea> \n\n\n<div class=\"accordion\" id=\"accordion-edit-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n					glosser from any LingSync corpus, you need to have permission (ask\n					them to add you as a reader on their corpus). For example, if you\n					and your collaborators are working on Mi'gmaq, you might have a\n					master corpus with the most data that you all can use to gloss your\n					corpus. For an example url, see LingLlama's sample Quechua corpus:\n					https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n				<br /> <span>You can also create your own glosser web\n					service or use an existing glosser/morpheme segmenter you have\n					access too as long as it is available on a URL, and uses a similar\n					data schema. <a\n					href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n					target=\"_new\">Contact us</a> if you would like more details about how to do this.\n				</span> <label>Glosser URL:</label>\n				<textarea class=\"glosserURL\">";
+  if (stack2 = helpers.glosserURL) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.glosserURL; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</textarea>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseSessionsEE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseSessionsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatalistsEE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatalistsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"accordion-edit-embedded\" href=\"#collapsePermissionsEE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapsePermissionsEE\">\n			<div class=\"accordion-inner container span12\">\n				<span class=\"locale_permissions_explanation\"></span> <label\n					class=\"locale_Public_or_Private\"></label> <input type=\"text\"\n					value=\"";
-  if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\" public-or-private\"\n					data-provide=\"typeahead\" data-items=\"4\"\n					data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" /> <a\n					href=\"http://www.lingsync.org/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.publicCorpus) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.publicCorpus; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "\" class=\" public-or-private\"\n					data-provide=\"typeahead\" data-items=\"4\"\n					data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" /> <a\n					href=\"http://lingsync.org/";
+  if (stack2 = helpers.username) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.username; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "/";
-  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"\n					target=\"_blank\"><i class=\" icon-link\"></i></a> <small>Shareable\n					URL: http://www.lingsync.org/";
-  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.titleAsUrl) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.titleAsUrl; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "\"\n					target=\"_blank\"><i class=\" icon-link\"></i></a> <small>Shareable\n					URL: http://lingsync.org/";
+  if (stack2 = helpers.username) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.username; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "/";
-  if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.titleAsUrl) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.titleAsUrl; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</small>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumFieldSettingsEE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_shouldBeEncrypted\"";
-  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  if (stack2 = helpers.shouldBeEncrypted) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.shouldBeEncrypted; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea class=\"add_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Datum_Field_Tooltip btn btn-primary add-datum-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumStateSettingsEE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumStateSettingsEE\">\n			<span class=\"locale_datum_states_explanation\"></span>\n			<ul class=\"datum_state_settings unstyled\"></ul>\n			<input class=\"add_input locale_Add_Placeholder\" value=\"\" type=\"text\"></input>\n			<select class=\"add_color_chooser\">\n				<option value=\"success\" class=\"locale_Green\"></option>\n				<option value=\"warning\" class=\"locale_Orange\"></option>\n				<option value=\"important\" class=\"locale_Red\"></option>\n				<option value=\"info\" class=\"locale_Teal\"></option>\n				<option value=\"inverse\" class=\"locale_Black\"></option>\n				<option value=\"\" class=\"locale_Default\"></option>\n			</select> <a href=\"#\"\n				class=\"locale_Add_New_Datum_State_Tooltip btn btn-primary add-datum-state locale_Add\"\n				rel=\"tooltip\"> </a>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseConversationFieldSettingsEE\"> <i\n				class=\"icon-comments-alt\"></i> <strong\n				class=\"locale_Conversation_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\"\n			id=\"collapseConversationFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_conversation_fields_explanation\"></span>\n				<ul class=\"conversation_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_conversationShouldBeEncrypted\"";
-  if (stack1 = helpers.shouldBeEncrypted) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
+  if (stack2 = helpers.shouldBeEncrypted) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.shouldBeEncrypted; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_edit_new_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4489,11 +4648,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n	<label class = \" locale_Description\">Description:</label>\n	<textarea class=\" corpus-description-input\">";
+    + "</textarea>\n	<label class = \"locale_Description\">Description:</label>\n	<textarea class=\"corpus-description-input\">";
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n  <label class = \" locale_Public_or_Private\"></label>\n  <input type=\"text\" value=\"";
+    + "</textarea>\n  <label class = \"locale_Public_or_Private\"></label>\n  <input type=\"text\" value=\"";
   if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4503,9 +4662,9 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
 
 
   buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Edit_corpus\" rel=\"tooltip\"> <i\n		class=\"icons icon-edit\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
@@ -4528,7 +4687,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small>\n</h2>\n<a href=\"http://www.lingsync.org/";
+    + "</small>\n</h2>\n<a href=\"http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4536,7 +4695,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.titleAsUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"\n	target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL:\n	http://www.lingsync.org/";
+    + "\"\n	target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL:\n	http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4548,18 +4707,30 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\"\n	id=\"corpus-precedence-rules-visualization-fullscreen\"></div>\n\n<div class=\"accordion\" id=\"accordion-read-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n          glosser from any LingSync corpus, you need to have permission\n          (ask them to add you as a reader on their corpus). For example, if\n          you and your collaborators are working on Mi'gmaq, you might have a\n          master corpus with the most data that you all can use to gloss your\n          corpus. For an example url, see LingLlama's sample Quechua corpus:\n          https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n        <br /> <span>You can also create your own glosser web\n          service or use an existing glosser/morpheme segmenter you have\n          access too as long as it is available on a URL and uses a similar data schema. <a\n          href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n          target=\"_new\">Contact us</a> if you would like more details.\n        </span>\n        <label>Glosser URL:</label>\n				<p class=\"glosserURL\"><strong>";
-  if (stack1 = helpers.glosserURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</strong></p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n";
+    + "</div>\n\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain-terms-of-use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"terms\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.termsOfUse),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain-license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"license\"><a href=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.link)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" target=\"_blank\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</a></div>\n<div class=\"license\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\n\n<label><span class=\"locale_Copyright\"></span></label>\n<div class=\"copyright\">";
+  if (stack2 = helpers.copyright) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.copyright; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</div>\n\n\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\"></div>\n\n<div class=\"accordion\" id=\"accordion-read-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n          glosser from any LingSync corpus, you need to have permission\n          (ask them to add you as a reader on their corpus). For example, if\n          you and your collaborators are working on Mi'gmaq, you might have a\n          master corpus with the most data that you all can use to gloss your\n          corpus. For an example url, see LingLlama's sample Quechua corpus:\n          https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/pages/_view/precedence_rules?group=true</span>\n        <br /> <span>You can also create your own glosser web\n          service or use an existing glosser/morpheme segmenter you have\n          access too as long as it is available on a URL and uses a similar data schema. <a\n          href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n          target=\"_new\">Contact us</a> if you would like more details.\n        </span>\n        <label>Glosser URL:</label>\n				<p class=\"glosserURL\"><strong>";
+  if (stack2 = helpers.glosserURL) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.glosserURL; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</strong></p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4575,14 +4746,6 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " ";
-  if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + " ";
-  if (stack1 = helpers.corpusid) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.corpusid; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
     + "</a>\n<small> ";
   if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -4593,8 +4756,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4610,7 +4773,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "/alldata\" class = \"locale_All_Data\"></a></li>\n        \n      </ul>\n    </div>\n    <!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n  </div>\n</div>\n\n<div class=\"corpus-description\">\n	<label class=\"locale_Title\"></label> <i class=\"icon-cloud\"></i> \n	<!-- <a href = \"http://www.lingsync.org/";
+    + "/alldata\" class = \"locale_All_Data\"></a></li>\n        \n      </ul>\n    </div>\n    <!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n  </div>\n</div>\n\n<div class=\"corpus-description\">\n	<label class=\"locale_Title\"></label> <i class=\"icon-cloud\"></i> \n	<!-- <a href = \"http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4636,8 +4799,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['corpus_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4661,7 +4824,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.publicCorpus) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small>\n	</h4>\n	<p>\n		<!-- <a href = \"http://www.lingsync.org/";
+    + "</small>\n	</h4>\n	<p>\n		<!-- <a href = \"http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -4679,8 +4842,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4693,25 +4856,6 @@ function program3(depth0,data) {
   
   
   return "icon-eye-open";
-  }
-
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n          <option value=\"";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" ";
-  if (stack1 = helpers.selected) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ">";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</option>\n      ";
-  return buffer;
   }
 
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"pull-left\">\n<button class=\"btn btn-success pull-left save-datalist locale_Save\" value=\"Save\"></button>\n<!-- Issue #797 -->\n  <button class=\"btn btn-danger trash-button\">\n    <i class=\"icon-trash \"></i> </button>\n</div>\n    \n<br>\n<br>\n <i class=\"icon-pushpin\"></i> \n<small>";
@@ -4730,28 +4874,17 @@ function program5(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n \n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n \n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
-  if (stack1 = helpers.statecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
-  if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
-  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n\n</div>\n -->\n";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_import_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4783,8 +4916,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4815,7 +4948,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n\n<!-- Data list comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div> \n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4824,8 +4957,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4847,8 +4980,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_search_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4875,7 +5008,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<!--Search DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <!--This cannot be included in search or import <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a> -->\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n\n\n<!--Search DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <!--This cannot be included in search or import <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a> -->\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4884,8 +5017,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4912,7 +5045,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "</textarea>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4921,8 +5054,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -4953,7 +5086,7 @@ function program3(depth0,data) {
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n</p>\n\n<!-- Data list comments -->\n<div class=\"new-comment-area \"></div> \n<ul class=\"comments unstyled\"></ul>\n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
+    + "\n</p>\n\n<!-- Data list comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area \"></div> \n\n\n<!--DataList Menu  -->\n<div class=\"btn-group\">\n  <a  href=\"#\" class = \"locale_Play_Audio_checked btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-bullhorn\"></i></a>\n  <a  href=\"#\" class = \"locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary\" rel=\"tooltip\" >\n    <i class=\" icon-remove-sign\"></i></a>\n  <a href=\"#\" class= \"locale_Decrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-unlock\"></i></a> \n  <a href=\"#\" class= \"locale_Encrypt_checked btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" icon-lock\"></i></a>\n  <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n    <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
@@ -4962,8 +5095,8 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['data_list_summary_read_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -4981,8 +5114,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -4991,8 +5124,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5001,8 +5134,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5011,8 +5144,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_container_read_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5021,8 +5154,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5049,25 +5182,6 @@ function program7(depth0,data) {
   return "icon-eye-open";
   }
 
-function program9(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n          <option value=\"";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" ";
-  if (stack1 = helpers.selected) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ">";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</option>\n      ";
-  return buffer;
-  }
-
   buffer += "<div class=\"pull-right\">\n	 <!-- Issue #797 -->\n	<button class=\"btn btn-danger trash-button\">\n		<i class=\"icon-trash \"></i>\n	</button>\n	<button class=\"btn btn-success save-datum locale_Save\"\n		value=\"Save\"></button>\n</div>\n\n<span class=\"last-modified\">";
   if (stack1 = helpers.dateModified) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -5086,25 +5200,22 @@ function program9(depth0,data) {
   buffer += "\"></i></a> \n	    <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n	      <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i>\n	    </a>\n	    <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n	      <i class=\" icon-paste\"></i></a>\n	    <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">LaTeX</i>\n	    </a>\n	    <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">CSV</i>\n	    </a>\n	  </div>\n	  <br/>\n		<a href=\"#\" class=\"audio_video locale_Drag_and_Drop_Audio_Tooltip\" rel=\"tooltip\"></a>\n	</div>\n  <div class=\"span3 border-left hide\">\n		<!-- list for the tags -->\n		<ul class=\"datum_tags_ul unstyled\"></ul>\n		<div class=\"controls  no-margin-left\">\n			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->\n			<div class=\"input-append \">\n			  <input class=\"add_tag span6\" type=\"text\" data-provide=\"typeahead\" data-items=\"4\" \n	            data-source=\"[&quot;Passive&quot;,&quot;Nominalization&quot;]\" \n	      /><button class=\" btn btn-small btn-primary add_datum_tag\" type=\"button\">\n	        <i class=\" icon-tag\"></i>\n	        <span class=\"locale_Add\">Add</span> \n	      </button>\n	    </div>\n		</div>\n	</div>\n  <div class=\"datum_state span3 border-left\">\n    <span class=\"label label-";
-  if (stack1 = helpers.statecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += "\"></i>\n	    </a>\n	    <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n	      <i class=\" icon-paste\"></i></a>\n	    <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">LaTeX</i>\n	    </a>\n	    <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">CSV</i>\n	    </a>\n	  </div>\n	  <br/>\n		<a href=\"#\" class=\"audio_video locale_Drag_and_Drop_Audio_Tooltip\" rel=\"tooltip\"></a>\n	</div>\n  <div class=\"span3 border-left hide\">\n		<!-- list for the tags -->\n		<ul class=\"datum_tags_ul unstyled\"></ul>\n		<div class=\"controls  no-margin-left\">\n			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->\n			<div class=\"input-append \">\n			  <input class=\"add_tag span6\" type=\"text\" data-provide=\"typeahead\" data-items=\"4\" \n	            data-source=\"[&quot;Passive&quot;,&quot;Nominalization&quot;]\" \n	      /><button class=\" btn btn-small btn-primary add_datum_tag\" type=\"button\">\n	        <i class=\" icon-tag\"></i>\n	        <span class=\"locale_Add\">Add</span> \n	      </button>\n	    </div>\n		</div>\n	</div>\n	<div class=\"datum_state span3 border-left\">\n	    <span class=\"label label-";
+  if (stack1 = helpers.datumstatecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstatecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+    + " datum-primary-validation-status-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
   if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</span></span><br/>\n		<!-- drop down for the states -->\n    <select class=\"datum_state_select span12 hide\" >\n      ";
-  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n  </div>\n</div>\n\n<span class=\"session-link\"></span>\n\n<!-- Datum comments -->\n<div class=\"new-comment-area\"></div>  \n<ul class=\"comments unstyled\"></ul> \n";
+    + "</span></span><br/>\n	</div>\n</div>\n\n<span class=\"session-link\"></span>\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul> \n<div class=\"new-comment-area\"></div>  \n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_settings_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5134,8 +5245,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_settings_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5157,14 +5268,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_value_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n<a  href=\"#\" class=\"help-conventions\" rel=\"popover\" data-placement=\"bottom\" data-content=\"";
+  buffer += "\n<a  class=\"help-conventions\" rel=\"popover\" data-placement=\"bottom\" data-content=\"";
   if (stack1 = helpers.help) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5186,7 +5297,27 @@ function program3(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n<textarea class=\"datum_field_input\" data-provide=\"typeahead\"\n    data-items=\"6\" data-minLength=\"0\" data-source='";
+  buffer += "\n	";
+  stack1 = helpers['if'].call(depth0, depth0.readonly, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }
+function program6(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<span>";
+  if (stack1 = helpers.mask) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n	";
+  return buffer;
+  }
+
+function program8(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<textarea class=\"datum_field_input\" data-provide=\"typeahead\"\n	    data-items=\"6\" data-minLength=\"0\" data-source='";
   if (stack1 = helpers.alternates) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.alternates; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5194,7 +5325,7 @@ function program5(depth0,data) {
   if (stack1 = helpers.mask) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n";
+    + "</textarea>\n	";
   return buffer;
   }
 
@@ -5214,14 +5345,14 @@ function program5(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_field_value_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n<a  href=\"#\" class=\"help-conventions\" rel=\"popover\" data-placement=\"bottom\" data-content=\"";
+  buffer += "\n<a  class=\"help-conventions\" rel=\"popover\" data-placement=\"bottom\" data-content=\"";
   if (stack1 = helpers.help) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.help; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5246,8 +5377,8 @@ function program1(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5262,30 +5393,6 @@ function program3(depth0,data) {
   return "icon-eye-open";
   }
 
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n	  ";
-  stack1 = helpers['if'].call(depth0, depth0.selected, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	  ";
-  return buffer;
-  }
-function program6(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n	  <span class=\"label label-";
-  if (stack1 = helpers.color) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"><i class = \" icon-flag\"></i>";
-  if (stack1 = helpers.state) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span>\n	  ";
-  return buffer;
-  }
-
   buffer += "<!-- list for the fields -->\n<ul class=\"datum_fields_ul unstyled\"></ul>\n<div class=\"\">\n  <i class=\" icon-save \"></i><span class=\"last-modified\">";
   if (stack1 = helpers.dateModified) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.dateModified; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -5297,17 +5404,22 @@ function program6(depth0,data) {
     + "</span><br/>\n  <span class=\"session-link\"></span>\n</div>\n<hr/>\n<!-- Datum Read only specialized fields and menu area -->\n<div class=\"row-fluid\">\n  <div class=\"span5\">\n    <!-- Buttons for various read only actions -->\n    <div class=\" btn-group\">\n      <a href=\"#\" class = \"locale_Show_confidential_items_Tooltip btn btn-mini btn-primary\" rel=\"tooltip\">\n        <i class=\" ";
   stack1 = helpers['if'].call(depth0, depth0.decryptedMode, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i>\n      </a>\n      <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n        <i class=\" icon-paste\"></i></a>\n      <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">LaTeX</i>\n      </a>\n      <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">CSV</i>\n      </a>\n    </div>\n    <br/>\n    <div class=\"audio_video \"></div>\n  </div>\n  <div class=\"span4 border-left hide\">\n    <!-- list for the tags -->\n    <ul class=\"datum_tags_ul unstyled  \"></ul>\n  </div>\n  <div class=\"datum_state span3 border-left\">\n    ";
-  stack1 = helpers.each.call(depth0, depth0.datumStates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </div>\n</div>\n\n<!-- Datum comments -->\n<div class=\"new-comment-area\"></div> \n<ul class=\"comments unstyled\"></ul>  \n\n";
+  buffer += "\"></i>\n      </a>\n      <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n        <i class=\" icon-paste\"></i></a>\n      <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">LaTeX</i>\n      </a>\n      <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">CSV</i>\n      </a>\n    </div>\n    <br/>\n    <div class=\"audio_video \"></div>\n  </div>\n  <div class=\"span4 border-left hide\">\n    <!-- list for the tags -->\n    <ul class=\"datum_tags_ul unstyled  \"></ul>\n  </div>\n  <div class=\"datum_state span3 border-left\">\n      <span class=\"label label-";
+  if (stack1 = helpers.datumstatecolor) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstatecolor; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " datum-primary-validation-status-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+  if (stack1 = helpers.datumstate) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span></span><br/>\n  </div>\n</div>\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>  \n<div class=\"new-comment-area\"></div> \n\n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_read_latex'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
@@ -5365,8 +5477,8 @@ function program5(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_state_settings_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5388,8 +5500,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_state_settings_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5407,8 +5519,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_tag_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5422,8 +5534,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['datum_tag_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5437,8 +5549,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['paging_footer'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
@@ -5473,12 +5585,12 @@ function program3(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<button class=\"btn btn-success pull-left btn-save-session locale_Save\"\n	value=\"Save\"></button>\n	<!-- Issue #797 -->\n  <button class=\"btn btn-danger trash-button\">\n    <i class=\"icon-trash \"></i> </button>\n	\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n<h1>\n	<i class=\"icon-calendar\"></i> <span class=\"locale_Elicitation_Session\"></span>\n</h1>\n<ul class=\"session-fields-ul unstyled\"></ul>\n\n<a\n	href=\"#corpus/";
+  buffer += "<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<button class=\"btn btn-success pull-left btn-save-session locale_Save\"\n	value=\"Save\"></button>\n	<!-- Issue #797 -->\n  <button class=\"btn btn-danger trash-button\">\n    <i class=\"icon-trash \"></i> </button>\n	\n\n<!-- Required so that the full screen button doesn't end up inside the next div -->\n<div class=\"clear-spacing\"></div>\n<h1>\n	<i class=\"icon-calendar\"></i> <span class=\"locale_Elicitation_Session\"></span>\n</h1>\n<table class=\"session-fields-ul unstyled\"></table>\n\n<a\n	href=\"#corpus/";
   if (stack1 = helpers.pouchname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5490,14 +5602,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<div class=\"new-comment-area\"></div>  \n<ul class=\"comments unstyled\"></ul>\n";
+    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"new-comment-area\"></div>  \n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_import'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5519,8 +5631,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5534,8 +5646,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5551,14 +5663,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.goal) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.goal; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<div class=\"new-comment-area\"></div>\n<ul class=\"comments unstyled\"></ul> \n";
+    + "\"><i\n	class=\"icon-list\"></i> See all data that was created in this\n	Elicitation Session</a>\n\n<!-- Session comments -->\n<ul class=\"comments unstyled\"></ul> \n<div class=\"new-comment-area\"></div>\n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5584,8 +5696,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_summary_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5607,8 +5719,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['session_summary_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5630,8 +5742,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['export_read_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5640,8 +5752,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['hot_key_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5675,8 +5787,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['import_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5698,8 +5810,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicode'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5729,8 +5841,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicodes'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5739,8 +5851,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicodes_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5749,26 +5861,26 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['permissions_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n		<li class=\"breadcrumb  ";
+  buffer += "\n		<li class=\"breadcrumb  pagination-centered ";
   if (stack1 = helpers.status) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">  <img class=\"gravatar-small\" src=\"";
-  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\"/>\n		";
+    + "\"> ";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " </li> ";
+    + "<br/> <img  src=\"https://secure.gravatar.com/avatar/";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "?d=identicon\"/>\n		 </li> ";
   return buffer;
   }
 
@@ -5776,7 +5888,7 @@ function program1(depth0,data) {
   if (stack1 = helpers.role) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "s\n	</h4>\n	<ul>\n		";
+    + "s\n	</h4>\n	<ul class=\"inline\">\n		";
   stack1 = helpers.each.call(depth0, depth0.users, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	</ul>\n</div>\n\n<div class=\"span6\">\n	<label class=\"locale_Modify_Username_TODO \">Username:</label> <input type=\"text\"\n		class=\"  choose-add-permission-username\" data-provide=\"typeahead\"\n		data-items=\"4\" data-source='";
@@ -5789,22 +5901,26 @@ function program1(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['permissions_read_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n	<li><img class=\"gravatar-small\" src=\"";
-  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" /><br />\n		";
+  buffer += "\n	<li class=\"pagination-centered well\">";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</li> ";
+    + "<br/><a href=\"http://lingsync.org/";
+  if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><img  src=\"https://secure.gravatar.com/avatar/";
+  if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "?d=identicon\" /></a>\n		</li> ";
   return buffer;
   }
 
@@ -5812,7 +5928,7 @@ function program1(depth0,data) {
   if (stack1 = helpers.role) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.role; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "s\n</h4>\n<ul>\n	";
+    + "s\n</h4>\n<ul class=\"inline\">\n	";
   stack1 = helpers.each.call(depth0, depth0.users, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ul>\n";
@@ -5821,18 +5937,18 @@ function program1(depth0,data) {
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['search_advanced_edit_embedded'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"title\">\n	<h1 class = \"locale_Advanced_Search\"></h1>\n</div>\n<div class=\"alert alert-info alert-block\">\n	<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> \n	<strong class=\"alert-heading \">How Search Works:</strong> \n	<span class=\"locale_advanced_search_explanation\"></span>\n</div>\n\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n<ul class=\"advanced_search_datum unstyled\"></ul>\n<ul class=\"advanced_search_session unstyled\"></ul>\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n";
+  return "<div class=\"title\">\n	<h1 class = \"locale_Advanced_Search\"></h1>\n</div>\n<div class=\"alert alert-info alert-block\">\n	<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> \n	<strong class=\"alert-heading \">How Search Works:</strong> \n	<span class=\"locale_advanced_search_explanation\"></span>\n</div>\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\"></div>\n\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n<table class=\"advanced_search_datum unstyled\"></table>\n<table class=\"advanced_search_session unstyled\"></table>\n<button class=\"btn btn-primary btn-search-union\">\n  <span class =\"locale_OR\"></span> \n  <img src = \"images/or_venn_diagram.png\">\n</button>\n<button class=\"btn btn-primary btn-search-intersection\">\n  <span class =\"locale_AND\"></span>\n  <img src = \"images/and_venn_diagram.png\">\n</button>\n\n";
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['search_top'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5850,8 +5966,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_app'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
@@ -5860,8 +5976,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5877,23 +5993,23 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ") </small>\n</h1>\n<a href = \"http://www.lingsync.org/";
+    + ") </small>\n</h1>\n<a href = \"http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://www.lingsync.org/";
+    + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small>\n<p class = \"locale_Public_Profile_Instructions\"></p>\n<hr/>\n<dl>\n    <dt class=\"locale_Gravatar\"></dt>\n    <dd>\n      <img class=\"gravatar-image gravatar-large\" src=\"";
+    + "</small>\n<p class = \"locale_Public_Profile_Instructions\"></p>\n<hr/>\n<dl>\n    <dt class=\"locale_Gravatar\"></dt>\n    <dd>\n      <img class=\"gravatar-image\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n    </dd>\n    <dt class=\"locale_Gravatar_URL\"></dt>\n    <dd>\n      <input class=\"gravatar\" type=\"email\" value=\"";
+    + "?d=identicon\" />\n    </dd>\n    <!--<dt class=\"locale_Gravatar_URL\"></dt>\n    <dd>\n      <input class=\"gravatar\" type=\"email\" value=\"";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n    </dd>\n    <dt class=\"locale_Firstname\"></dt>\n    <dd>\n      <input class=\"firstname\" value=\"";
+    + "\" />\n    </dd> -->\n    <dt class=\"locale_Firstname\"></dt>\n    <dd>\n      <input class=\"firstname\" value=\"";
   if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5917,14 +6033,14 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " \n      </textarea>\n    </dd>\n    <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n    <dd>\n      <ul class=\"corpuses\">\n      </ul>\n    </dd>\n  </dl>\n";
+    + " \n      </textarea>\n    </dd>\n    <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n    <dd>\n      <ul class=\"corpuses unstyled\">\n      </ul>\n    </dd>\n  </dl>\n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5940,15 +6056,15 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\"edit-public-user-profile locale_Edit_Public_User_Profile \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\"edit-public-user-profile locale_Edit_Public_User_Profile \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image \" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		</dd>\n		<dt class=\"locale_Gravatar_URL\"></dt>\n		<dd>\n			<input class=\"gravatar\" type=\"email\" value=\"";
+    + "?d=identicon\" />\n		</dd>\n		<!--<dt class=\"locale_Gravatar_URL\"></dt>\n		<dd>\n			<input class=\"gravatar\" type=\"email\" value=\"";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		</dd>\n		<dt class=\"locale_Firstname\"></dt>\n		<dd>\n			<input class=\"firstname\" value=\"";
+    + "\" />\n		</dd>-->\n		<dt class=\"locale_Firstname\"></dt>\n		<dd>\n			<input class=\"firstname\" value=\"";
   if (stack1 = helpers.firstname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -5978,8 +6094,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_preference_edit_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -5993,8 +6109,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6010,19 +6126,19 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ") </small>\n</h1>\n<a href = \"http://www.lingsync.org/";
+    + ") </small>\n</h1>\n<a href = \"http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://www.lingsync.org/";
+    + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</small>\n<hr/>\n<dl>\n	<dt class=\"locale_Gravatar\"></dt>\n	<dd>\n		<img class=\"gravatar-image gravatar-large\" src=\"";
+    + "</small>\n<hr/>\n<dl>\n	<dt class=\"locale_Gravatar\"></dt>\n	<dd>\n		<img class=\"gravatar-image gravatar-large\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n	</dd>\n	<dt class=\"locale_Email\"></dt>\n	<dd class=\"email\">";
+    + "?d=identicon\" />\n	</dd>\n	<dt class=\"locale_Email\"></dt>\n	<dd class=\"email\">";
   if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -6044,8 +6160,8 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_link'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6053,18 +6169,18 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" class = \"locale_View_Profile_Tooltip \" rel=\"tooltip\">\n  <img class=\"gravatar-small\" src=\"";
+    + "\" class = \"locale_View_Profile_Tooltip \" rel=\"tooltip\">\n  <img class=\"gravatar-small\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" border=\"0\" >\n</a>\n";
+    + "?d=identicon\" border=\"0\" >\n</a>\n";
   return buffer;
   });
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_read_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
@@ -6080,11 +6196,11 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   if (stack1 = helpers.lastname) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\" view-public-profile locale_View_Public_Profile_Tooltip \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+    + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\" view-public-profile locale_View_Public_Profile_Tooltip \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"https://secure.gravatar.com/avatar/";
   if (stack1 = helpers.gravatar) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd class=\"email\">";
+    + "?d=identicon\" />\n		</dd>\n		<dt class=\"locale_Email\"></dt>\n		<dd class=\"email\">";
   if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -6106,12 +6222,12 @@ helpers = helpers || Handlebars.helpers; data = data || {};
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_welcome_modal'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; data = data || {};
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"modal-header\">\n  <div class=\"btn-group pull-right\">\n    <a href=\"#\" class=\"btn btn-success sync-lingllama-data locale_Close_and_login_as_LingLlama locale_Close_and_login_as_LingLlama_Tooltip\" rel=\"tooltip\"></a>\n    <a class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\"> \n      <i class=\"icon-user icon-white\"></i> \n      <span class = \"locale_Log_In\"></span>\n      <span class=\"caret\"></span> \n    </a>\n    <ul class=\"dropdown-menu\">\n      <li class=\"not-a\">\n        <span class = \"locale_Username\"></span>\n        <input class=\"welcomeusername\" size=\"16\" type=\"text\" />\n      </li>\n      <li class=\"not-a\"> \n        <span class = \"locale_Password\"></span>\n        <input class=\"welcomepassword\" size=\"16\" type=\"password\" />\n      </li>\n      <li class=\"not-a\"> \n        <span class = \"locale_authUrl\">Server:</span>\n        <input class=\"welcomeauthurl\" size=\"16\" type=\"text\" />\n      </li>\n      <li class=\"not-a\">\n        <button class=\"btn btn-success sync-my-data\">\n          <span class = \"locale_Sync_my_data_to_this_computer\"></span>\n        </button>\n      </li>\n    </ul>\n  </div>\n  <div>\n    <!-- <h1 class = \"locale_Welcome_to_FieldDB\"></h1> -->\n    <img src=\"images/icon.png\" /><br/>\n    <i class = \"locale_An_offline_online_fieldlinguistics_database\"></i> <span class=\"welcome_version_number\"></span> \n  </div>\n</div>\n\n<div class=\"modal-body\">\n  <!-- <div class = \"locale_Welcome_Beta_Testers\"></div> -->\n \n  <div class=\"breadcrumb create_new_user_password\">\n    <h3 class = \"locale_Create_a_new_user\"></h3>\n    <p>\n      http://www.lingsync.org/";
+  buffer += "<div class=\"modal-header\">\n  <div class=\"btn-group pull-right\">\n    <a href=\"#\" class=\"btn btn-success sync-lingllama-data locale_Close_and_login_as_LingLlama locale_Close_and_login_as_LingLlama_Tooltip\" rel=\"tooltip\"></a>\n    <a class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\"> \n      <i class=\"icon-user icon-white\"></i> \n      <span class = \"locale_Log_In\"></span>\n      <span class=\"caret\"></span> \n    </a>\n    <ul class=\"dropdown-menu\">\n      <li class=\"not-a\">\n        <span class = \"locale_Username\"></span>\n        <input class=\"welcomeusername\" size=\"16\" type=\"text\" />\n      </li>\n      <li class=\"not-a\"> \n        <span class = \"locale_Password\"></span>\n        <input class=\"welcomepassword\" size=\"16\" type=\"password\" />\n      </li>\n      <li class=\"not-a\"> \n        <span class = \"locale_authUrl\">Server:</span>\n        <input class=\"welcomeauthurl\" size=\"16\" type=\"text\" />\n      </li>\n      <li class=\"not-a\">\n        <button class=\"btn btn-success sync-my-data\">\n          <span class = \"locale_Sync_my_data_to_this_computer\"></span>\n        </button>\n      </li>\n    </ul>\n  </div>\n  <div>\n    <!-- <h1 class = \"locale_Welcome_to_FieldDB\"></h1> -->\n    <img src=\"images/icon.png\" /><br/>\n    <i class = \"locale_An_offline_online_fieldlinguistics_database\"></i> <span class=\"welcome_version_number\"></span> \n  </div>\n</div>\n\n<div class=\"modal-body\">\n  <!-- <div class = \"locale_Welcome_Beta_Testers\"></div> -->\n \n  <div class=\"breadcrumb create_new_user_password\">\n    <h3 class = \"locale_Create_a_new_user\"></h3>\n    <p>\n      http://lingsync.org/";
   if (stack1 = helpers.username) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -6650,8 +6766,42 @@ define('audio_video/AudioVideo',[
 
   return AudioVideo;
 });
+/*
+CryptoJS v3.0.1
+code.google.com/p/crypto-js
+(c) 2009-2012 by Jeff Mott. All rights reserved.
+code.google.com/p/crypto-js/wiki/License
+*/
+var CryptoJS=CryptoJS||function(q,i){var f={},l=f.lib={},r=l.Base=function(){function a(){}return{extend:function(d){a.prototype=this;var b=new a;d&&b.mixIn(d);b.$super=this;return b},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var b in a)a.hasOwnProperty(b)&&(this[b]=a[b]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.$super.extend(this)}}}(),n=l.WordArray=r.extend({init:function(a,d){a=
+this.words=a||[];this.sigBytes=d!=i?d:4*a.length},toString:function(a){return(a||s).stringify(this)},concat:function(a){var d=this.words,b=a.words,c=this.sigBytes,a=a.sigBytes;this.clamp();if(c%4)for(var g=0;g<a;g++)d[c+g>>>2]|=(b[g>>>2]>>>24-8*(g%4)&255)<<24-8*((c+g)%4);else if(65535<b.length)for(g=0;g<a;g+=4)d[c+g>>>2]=b[g>>>2];else d.push.apply(d,b);this.sigBytes+=a;return this},clamp:function(){var a=this.words,d=this.sigBytes;a[d>>>2]&=4294967295<<32-8*(d%4);a.length=q.ceil(d/4)},clone:function(){var a=
+r.clone.call(this);a.words=this.words.slice(0);return a},random:function(a){for(var d=[],b=0;b<a;b+=4)d.push(4294967296*q.random()|0);return n.create(d,a)}}),m=f.enc={},s=m.Hex={stringify:function(a){for(var d=a.words,a=a.sigBytes,b=[],c=0;c<a;c++){var g=d[c>>>2]>>>24-8*(c%4)&255;b.push((g>>>4).toString(16));b.push((g&15).toString(16))}return b.join("")},parse:function(a){for(var d=a.length,b=[],c=0;c<d;c+=2)b[c>>>3]|=parseInt(a.substr(c,2),16)<<24-4*(c%8);return n.create(b,d/2)}},o=m.Latin1={stringify:function(a){for(var d=
+a.words,a=a.sigBytes,b=[],c=0;c<a;c++)b.push(String.fromCharCode(d[c>>>2]>>>24-8*(c%4)&255));return b.join("")},parse:function(a){for(var d=a.length,b=[],c=0;c<d;c++)b[c>>>2]|=(a.charCodeAt(c)&255)<<24-8*(c%4);return n.create(b,d)}},p=m.Utf8={stringify:function(a){try{return decodeURIComponent(escape(o.stringify(a)))}catch(d){throw Error("Malformed UTF-8 data");}},parse:function(a){return o.parse(unescape(encodeURIComponent(a)))}},e=l.BufferedBlockAlgorithm=r.extend({reset:function(){this._data=n.create();
+this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=p.parse(a));this._data.concat(a);this._nDataBytes+=a.sigBytes},_process:function(a){var d=this._data,b=d.words,c=d.sigBytes,g=this.blockSize,k=c/(4*g),k=a?q.ceil(k):q.max((k|0)-this._minBufferSize,0),a=k*g,c=q.min(4*a,c);if(a){for(var j=0;j<a;j+=g)this._doProcessBlock(b,j);j=b.splice(0,a);d.sigBytes-=c}return n.create(j,c)},clone:function(){var a=r.clone.call(this);a._data=this._data.clone();return a},_minBufferSize:0});l.Hasher=e.extend({init:function(){this.reset()},
+reset:function(){e.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);this._doFinalize();return this._hash},clone:function(){var a=e.clone.call(this);a._hash=this._hash.clone();return a},blockSize:16,_createHelper:function(a){return function(d,b){return a.create(b).finalize(d)}},_createHmacHelper:function(a){return function(d,b){return h.HMAC.create(a,b).finalize(d)}}});var h=f.algo={};return f}(Math);
+(function(){var q=CryptoJS,i=q.lib.WordArray;q.enc.Base64={stringify:function(f){var l=f.words,i=f.sigBytes,n=this._map;f.clamp();for(var f=[],m=0;m<i;m+=3)for(var s=(l[m>>>2]>>>24-8*(m%4)&255)<<16|(l[m+1>>>2]>>>24-8*((m+1)%4)&255)<<8|l[m+2>>>2]>>>24-8*((m+2)%4)&255,o=0;4>o&&m+0.75*o<i;o++)f.push(n.charAt(s>>>6*(3-o)&63));if(l=n.charAt(64))for(;f.length%4;)f.push(l);return f.join("")},parse:function(f){var l=f.length,r=this._map,n=r.charAt(64);n&&(n=f.indexOf(n),-1!=n&&(l=n));for(var n=[],m=0,s=0;s<
+l;s++)if(s%4){var o=r.indexOf(f.charAt(s-1))<<2*(s%4),p=r.indexOf(f.charAt(s))>>>6-2*(s%4);n[m>>>2]|=(o|p)<<24-8*(m%4);m++}return i.create(n,m)},_map:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="}})();
+(function(q){function i(e,h,a,d,b,c,g){e=e+(h&a|~h&d)+b+g;return(e<<c|e>>>32-c)+h}function f(e,h,a,d,b,c,g){e=e+(h&d|a&~d)+b+g;return(e<<c|e>>>32-c)+h}function l(e,h,a,d,b,c,g){e=e+(h^a^d)+b+g;return(e<<c|e>>>32-c)+h}function r(e,h,a,d,b,c,g){e=e+(a^(h|~d))+b+g;return(e<<c|e>>>32-c)+h}var n=CryptoJS,m=n.lib,s=m.WordArray,m=m.Hasher,o=n.algo,p=[];(function(){for(var e=0;64>e;e++)p[e]=4294967296*q.abs(q.sin(e+1))|0})();o=o.MD5=m.extend({_doReset:function(){this._hash=s.create([1732584193,4023233417,
+2562383102,271733878])},_doProcessBlock:function(e,h){for(var a=0;16>a;a++){var d=h+a,b=e[d];e[d]=(b<<8|b>>>24)&16711935|(b<<24|b>>>8)&4278255360}for(var d=this._hash.words,b=d[0],c=d[1],g=d[2],k=d[3],a=0;64>a;a+=4)16>a?(b=i(b,c,g,k,e[h+a],7,p[a]),k=i(k,b,c,g,e[h+a+1],12,p[a+1]),g=i(g,k,b,c,e[h+a+2],17,p[a+2]),c=i(c,g,k,b,e[h+a+3],22,p[a+3])):32>a?(b=f(b,c,g,k,e[h+(a+1)%16],5,p[a]),k=f(k,b,c,g,e[h+(a+6)%16],9,p[a+1]),g=f(g,k,b,c,e[h+(a+11)%16],14,p[a+2]),c=f(c,g,k,b,e[h+a%16],20,p[a+3])):48>a?(b=
+l(b,c,g,k,e[h+(3*a+5)%16],4,p[a]),k=l(k,b,c,g,e[h+(3*a+8)%16],11,p[a+1]),g=l(g,k,b,c,e[h+(3*a+11)%16],16,p[a+2]),c=l(c,g,k,b,e[h+(3*a+14)%16],23,p[a+3])):(b=r(b,c,g,k,e[h+3*a%16],6,p[a]),k=r(k,b,c,g,e[h+(3*a+7)%16],10,p[a+1]),g=r(g,k,b,c,e[h+(3*a+14)%16],15,p[a+2]),c=r(c,g,k,b,e[h+(3*a+5)%16],21,p[a+3]));d[0]=d[0]+b|0;d[1]=d[1]+c|0;d[2]=d[2]+g|0;d[3]=d[3]+k|0},_doFinalize:function(){var e=this._data,h=e.words,a=8*this._nDataBytes,d=8*e.sigBytes;h[d>>>5]|=128<<24-d%32;h[(d+64>>>9<<4)+14]=(a<<8|a>>>
+24)&16711935|(a<<24|a>>>8)&4278255360;e.sigBytes=4*(h.length+1);this._process();e=this._hash.words;for(h=0;4>h;h++)a=e[h],e[h]=(a<<8|a>>>24)&16711935|(a<<24|a>>>8)&4278255360}});n.MD5=m._createHelper(o);n.HmacMD5=m._createHmacHelper(o)})(Math);
+(function(){var q=CryptoJS,i=q.lib,f=i.Base,l=i.WordArray,i=q.algo,r=i.EvpKDF=f.extend({cfg:f.extend({keySize:4,hasher:i.MD5,iterations:1}),init:function(f){this.cfg=this.cfg.extend(f)},compute:function(f,m){for(var i=this.cfg,o=i.hasher.create(),p=l.create(),e=p.words,h=i.keySize,i=i.iterations;e.length<h;){a&&o.update(a);var a=o.update(f).finalize(m);o.reset();for(var d=1;d<i;d++)a=o.finalize(a),o.reset();p.concat(a)}p.sigBytes=4*h;return p}});q.EvpKDF=function(f,l,i){return r.create(i).compute(f,
+l)}})();
+CryptoJS.lib.Cipher||function(q){var i=CryptoJS,f=i.lib,l=f.Base,r=f.WordArray,n=f.BufferedBlockAlgorithm,m=i.enc.Base64,s=i.algo.EvpKDF,o=f.Cipher=n.extend({cfg:l.extend(),createEncryptor:function(c,a){return this.create(this._ENC_XFORM_MODE,c,a)},createDecryptor:function(c,a){return this.create(this._DEC_XFORM_MODE,c,a)},init:function(c,a,b){this.cfg=this.cfg.extend(b);this._xformMode=c;this._key=a;this.reset()},reset:function(){n.reset.call(this);this._doReset()},process:function(c){this._append(c);return this._process()},
+finalize:function(c){c&&this._append(c);return this._doFinalize()},keySize:4,ivSize:4,_ENC_XFORM_MODE:1,_DEC_XFORM_MODE:2,_createHelper:function(){return function(c){return{encrypt:function(a,k,j){return("string"==typeof k?b:d).encrypt(c,a,k,j)},decrypt:function(a,k,j){return("string"==typeof k?b:d).decrypt(c,a,k,j)}}}}()});f.StreamCipher=o.extend({_doFinalize:function(){return this._process(!0)},blockSize:1});var p=i.mode={},e=f.BlockCipherMode=l.extend({createEncryptor:function(c,a){return this.Encryptor.create(c,
+a)},createDecryptor:function(c,a){return this.Decryptor.create(c,a)},init:function(c,a){this._cipher=c;this._iv=a}}),p=p.CBC=function(){function c(c,a,g){var b=this._iv;b?this._iv=q:b=this._prevBlock;for(var d=0;d<g;d++)c[a+d]^=b[d]}var a=e.extend();a.Encryptor=a.extend({processBlock:function(a,g){var b=this._cipher,d=b.blockSize;c.call(this,a,g,d);b.encryptBlock(a,g);this._prevBlock=a.slice(g,g+d)}});a.Decryptor=a.extend({processBlock:function(a,g){var b=this._cipher,d=b.blockSize,e=a.slice(g,g+
+d);b.decryptBlock(a,g);c.call(this,a,g,d);this._prevBlock=e}});return a}(),h=(i.pad={}).Pkcs7={pad:function(c,a){for(var b=4*a,b=b-c.sigBytes%b,d=b<<24|b<<16|b<<8|b,e=[],h=0;h<b;h+=4)e.push(d);b=r.create(e,b);c.concat(b)},unpad:function(c){c.sigBytes-=c.words[c.sigBytes-1>>>2]&255}};f.BlockCipher=o.extend({cfg:o.cfg.extend({mode:p,padding:h}),reset:function(){o.reset.call(this);var c=this.cfg,a=c.iv,c=c.mode;if(this._xformMode==this._ENC_XFORM_MODE)var b=c.createEncryptor;else b=c.createDecryptor,
+this._minBufferSize=1;this._mode=b.call(c,this,a&&a.words)},_doProcessBlock:function(a,b){this._mode.processBlock(a,b)},_doFinalize:function(){var a=this.cfg.padding;if(this._xformMode==this._ENC_XFORM_MODE){a.pad(this._data,this.blockSize);var b=this._process(!0)}else b=this._process(!0),a.unpad(b);return b},blockSize:4});var a=f.CipherParams=l.extend({init:function(a){this.mixIn(a)},toString:function(a){return(a||this.formatter).stringify(this)}}),p=(i.format={}).OpenSSL={stringify:function(a){var b=
+a.ciphertext,a=a.salt;return(a?r.create([1398893684,1701076831]).concat(a).concat(b):b).toString(m)},parse:function(c){var c=m.parse(c),b=c.words;if(1398893684==b[0]&&1701076831==b[1]){var d=r.create(b.slice(2,4));b.splice(0,4);c.sigBytes-=16}return a.create({ciphertext:c,salt:d})}},d=f.SerializableCipher=l.extend({cfg:l.extend({format:p}),encrypt:function(c,b,d,j){var j=this.cfg.extend(j),e=c.createEncryptor(d,j),b=e.finalize(b),e=e.cfg;return a.create({ciphertext:b,key:d,iv:e.iv,algorithm:c,mode:e.mode,
+padding:e.padding,blockSize:c.blockSize,formatter:j.format})},decrypt:function(a,b,d,e){e=this.cfg.extend(e);b=this._parse(b,e.format);return a.createDecryptor(d,e).finalize(b.ciphertext)},_parse:function(a,b){return"string"==typeof a?b.parse(a,this):a}}),i=(i.kdf={}).OpenSSL={execute:function(c,b,d,e){e||(e=r.random(8));c=s.create({keySize:b+d}).compute(c,e);d=r.create(c.words.slice(b),4*d);c.sigBytes=4*b;return a.create({key:c,iv:d,salt:e})}},b=f.PasswordBasedCipher=d.extend({cfg:d.cfg.extend({kdf:i}),
+encrypt:function(a,b,e,j){j=this.cfg.extend(j);e=j.kdf.execute(e,a.keySize,a.ivSize);j.iv=e.iv;a=d.encrypt.call(this,a,b,e.key,j);a.mixIn(e);return a},decrypt:function(a,b,e,j){j=this.cfg.extend(j);b=this._parse(b,j.format);e=j.kdf.execute(e,a.keySize,a.ivSize,b.salt);j.iv=e.iv;return d.decrypt.call(this,a,b,e.key,j)}})}();
+(function(){var q=CryptoJS,i=q.lib.BlockCipher,f=q.algo,l=[],r=[],n=[],m=[],s=[],o=[],p=[],e=[],h=[],a=[];(function(){for(var b=[],c=0;256>c;c++)b[c]=128>c?c<<1:c<<1^283;for(var d=0,k=0,c=0;256>c;c++){var j=k^k<<1^k<<2^k<<3^k<<4,j=j>>>8^j&255^99;l[d]=j;r[j]=d;var f=b[d],i=b[f],q=b[i],t=257*b[j]^16843008*j;n[d]=t<<24|t>>>8;m[d]=t<<16|t>>>16;s[d]=t<<8|t>>>24;o[d]=t;t=16843009*q^65537*i^257*f^16843008*d;p[j]=t<<24|t>>>8;e[j]=t<<16|t>>>16;h[j]=t<<8|t>>>24;a[j]=t;d?(d=f^b[b[b[q^f]]],k^=b[b[k]]):d=k=1}})();
+var d=[0,1,2,4,8,16,32,64,128,27,54],f=f.AES=i.extend({_doReset:function(){for(var b=this._key,c=b.words,g=b.sigBytes/4,b=4*((this._nRounds=g+6)+1),k=this._keySchedule=[],j=0;j<b;j++)if(j<g)k[j]=c[j];else{var f=k[j-1];j%g?6<g&&4==j%g&&(f=l[f>>>24]<<24|l[f>>>16&255]<<16|l[f>>>8&255]<<8|l[f&255]):(f=f<<8|f>>>24,f=l[f>>>24]<<24|l[f>>>16&255]<<16|l[f>>>8&255]<<8|l[f&255],f^=d[j/g|0]<<24);k[j]=k[j-g]^f}c=this._invKeySchedule=[];for(g=0;g<b;g++)j=b-g,f=g%4?k[j]:k[j-4],c[g]=4>g||4>=j?f:p[l[f>>>24]]^e[l[f>>>
+16&255]]^h[l[f>>>8&255]]^a[l[f&255]]},encryptBlock:function(a,c){this._doCryptBlock(a,c,this._keySchedule,n,m,s,o,l)},decryptBlock:function(b,c){var d=b[c+1];b[c+1]=b[c+3];b[c+3]=d;this._doCryptBlock(b,c,this._invKeySchedule,p,e,h,a,r);d=b[c+1];b[c+1]=b[c+3];b[c+3]=d},_doCryptBlock:function(a,c,d,e,f,h,l,i){for(var p=this._nRounds,m=a[c]^d[0],n=a[c+1]^d[1],o=a[c+2]^d[2],q=a[c+3]^d[3],r=4,s=1;s<p;s++)var u=e[m>>>24]^f[n>>>16&255]^h[o>>>8&255]^l[q&255]^d[r++],v=e[n>>>24]^f[o>>>16&255]^h[q>>>8&255]^
+l[m&255]^d[r++],w=e[o>>>24]^f[q>>>16&255]^h[m>>>8&255]^l[n&255]^d[r++],q=e[q>>>24]^f[m>>>16&255]^h[n>>>8&255]^l[o&255]^d[r++],m=u,n=v,o=w;u=(i[m>>>24]<<24|i[n>>>16&255]<<16|i[o>>>8&255]<<8|i[q&255])^d[r++];v=(i[n>>>24]<<24|i[o>>>16&255]<<16|i[q>>>8&255]<<8|i[m&255])^d[r++];w=(i[o>>>24]<<24|i[q>>>16&255]<<16|i[m>>>8&255]<<8|i[n&255])^d[r++];q=(i[q>>>24]<<24|i[m>>>16&255]<<16|i[n>>>8&255]<<8|i[o&255])^d[r++];a[c]=u;a[c+1]=v;a[c+2]=w;a[c+3]=q},keySize:8});q.AES=i._createHelper(f)})();
+define("CryptoJS", function(){});
+
 define('user/UserMask',[ 
-    "backbone"
+    "backbone", "CryptoJS"
 ], function(
     Backbone
 ) {
@@ -6683,7 +6833,25 @@ define('user/UserMask',[
     defaults : {
       gravatar :  "user/user_gravatar.png"
     },
-    
+
+     getGravatar : function(email){
+      var existingGravatar = this.get("gravatar");
+      if(existingGravatar.indexOf("gravatar.com") > -1){
+        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","");
+        this.set("gravatar", existingGravatar);
+        return existingGravatar;
+      }
+      if(email){
+        var hash = CryptoJS.MD5(email).toString();
+        this.set("gravatar", hash);
+        return hash;
+      }
+      if(existingGravatar.indexOf("/") > -1){
+        existingGravatar = existingGravatar.replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+      }
+      return existingGravatar;
+    },
+   
     /**
      * this function makes it possible to save the UserMask with a
      * hardcoded id, it uses pouch's API directly for the first save, and then backbone/pouch save for the rest
@@ -6805,7 +6973,7 @@ define('user/UserMask',[
 
   return UserMask;
 });
-define('comment/Comment', [
+define( 'comment/Comment',[
     "backbone",
     "user/UserMask"
 ], function(
@@ -7816,7 +7984,7 @@ OPrime.defaultCouchConnection = function() {
     pouchname : "default",
     path : "",
     authUrl : "https://authdev.lingsync.org",
-    userFriendlyServerName : "LingSync Testing"
+    userFriendlyServerName : "LingSync Beta"
   };
   var production = {
     protocol : "https://",
@@ -7887,7 +8055,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
     alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
     return;
     authUrl = "https://auth.lingsync.org";
-  } else if (authUrl.indexOf("LingSync Testing") >= 0) {
+  } else if (authUrl.indexOf("LingSync Beta") >= 0) {
     authUrl = "https://authdev.lingsync.org";
   } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
     authUrl = "https://authdev.lingsync.org";
@@ -7956,9 +8124,9 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
   } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-    mostLikelyAuthUrl = "LingSync Testing";
+    mostLikelyAuthUrl = "LingSync Beta";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-    mostLikelyAuthUrl = "LingSync Testing";
+    mostLikelyAuthUrl = "LingSync Beta";
   } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
     OPrime
         .debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
@@ -8016,7 +8184,7 @@ define("OPrime", ["oprime"], (function (global) {
     };
 }(this)));
 
-define('comment/Comments', [ "backbone",
+define( 'comment/Comments',[ "backbone",
           "comment/Comment",
           "OPrime"
 ], function(Backbone, Comment) {
@@ -8051,7 +8219,7 @@ define('comment/Comments', [ "backbone",
     
     insertNewCommentFromObject : function(commentObject){
       commentObject.timestamp = Date.now();
-      this.unshift(new Comment(commentObject));
+      this.push(new Comment(commentObject));
     }
     
   });
@@ -8419,117 +8587,7 @@ define('datum/DatumFields',[
 
   return DatumFields;
 });
-define('datum/DatumState',[ 
-    "backbone", 
-    "user/UserMask" 
-], function(
-    Backbone,
-    UserMask
-) {
-  var DatumState = Backbone.Model.extend(
-  /** @lends DatumState.prototype */
-  {
-    /**
-     * @class The datum state lets the fieldlinguists assign their own state
-     *        categories to data (ie check with consultant, check with x,
-     *        checked, checked and wrong, hidden, deleted), whatever state they
-     *        decide. They an make each state have a color so that the team can
-     *        see quickly if there is something that needs to be done with that
-     *        data. We also added an optional field, Consultant that they can use
-     *        to say who they want to check with in case they have mulitple
-     *        consultants and the consultants have different grammaticality
-     *        judgements. When users change the state of the datum, we will add
-     *        a note in the datum's comments field so that the history of its
-     *        state is kept in an annotated format.
-     * 
-     * @description The initialize function The datum state creates a new state
-     *              object with the state set to the default (for example,
-     *              checked)
-     * 
-     * @extends Backbone.Model
-     * @constructs
-     */
-    initialize : function() {
-    },
-    
-    defaults : {
-//      state : "Checked",
-      color : "",
-//      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
-      showInSearchResults : "checked",
-      selected : ""
-    },
-    
-    // Internal models: used by the parse function
-    internalModels : {
-      consultant : UserMask
-    },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
-    }
-  });
-
-  return DatumState;
-});
-define('datum/DatumStates',[ 
-    "backbone", 
-    "datum/DatumState"
-], function(
-    Backbone,
-    DatumState
-) {
-  var DatumStates = Backbone.Collection.extend(
-  /** @lends DatumStates.prototype */
-  {
-    /**
-     * @class Collection of Datum State
-     * 
-     * @description The initialize function 
-     * 
-     * @extends Backbone.Collection
-     * @constructs
-     */
-    initialize : function() {
-    },
-    internalModels : DatumState,
-
-    model : DatumState,
-    
-    addIfNew : function(datumStateObject){
-      var newState = datumStateObject.state;
-      if(!newState){
-        return;
-      }
-      var existing = this.where({state: newState});
-      if(existing.length > 0){
-        return;
-      }
-      this.add(new DatumState(datumStateObject));
-
-    },
-    /** 
-     * Gets a copy DatumStates containing new (not references) DatumStates objects
-     * containing the same attributes.
-     * 
-     * @return The cloned DatumFields.
-     */
-    clone : function() {
-      var newCollection = new DatumStates();
-      
-      for (var i = 0; i < this.length; i++) {
-        newCollection.push(new DatumState(this.models[i].toJSON())); 
-      }
-      
-      return newCollection;
-    }
-  });
-
-  return DatumStates;
-});
-define('datum/DatumTag', [
+define( 'datum/DatumTag',[
     "backbone"
 ], function(
     Backbone
@@ -8588,7 +8646,7 @@ define('datum/DatumTags',[
   
   return DatumTags;
 });
-define('user/Consultant', [ 
+define( 'user/Consultant',[ 
     "backbone", 
     "user/UserMask" 
 ], function(
@@ -8700,8 +8758,8 @@ define('hotkey/HotKey',[
 
   return HotKey;
 });
-define('user/Users',
-    ["backbone",
+define(
+    'user/Users',["backbone",
      "user/UserMask"],
     function(Backbone, UserMask) {
   
@@ -8803,7 +8861,7 @@ define('permission/Permission',[
 
   return Permission;
 });
-define('insert_unicode/InsertUnicode',	[
+define(	'insert_unicode/InsertUnicode',[
     "backbone"
 ], function(
     Backbone
@@ -9123,6 +9181,7 @@ define('user/UserGeneric',[
     "permission/Permission",
     "user/UserPreference",
     "user/UserMask",
+    "CryptoJS",
     "OPrime"
 ], function(
     Backbone,
@@ -9191,6 +9250,23 @@ define('user/UserGeneric',[
       if(typeof callback == "function"){
         callback();
       }
+    }, 
+     getGravatar : function(email){
+      var existingGravatar = this.get("gravatar");
+      if(existingGravatar.indexOf("gravatar.com") > -1){
+        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","");
+        this.set("gravatar", existingGravatar);
+        return existingGravatar;
+      }
+      if(email){
+        var hash = CryptoJS.MD5(email).toString();
+        this.set("gravatar", hash);
+        return hash;
+      }
+      if(existingGravatar.indexOf("/") > -1){
+        existingGravatar = existingGravatar.replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+      }
+      return existingGravatar;
     }
   });
 
@@ -9811,8 +9887,6 @@ define('datum/Datum',[
     "datum/Datums", 
     "datum/DatumField", 
     "datum/DatumFields", 
-    "datum/DatumState", 
-    "datum/DatumStates",
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
@@ -9825,8 +9899,6 @@ define('datum/Datum',[
     Datums,
     DatumField, 
     DatumFields,
-    DatumState, 
-    DatumStates,
     DatumTag,
     DatumTags,
     Session
@@ -9879,11 +9951,6 @@ define('datum/Datum',[
      * @constructs
      */
     initialize : function() {
-      // Initially, the first datumState is selected
-//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-//        this.get("datumStates").models[0].set("selected", "selected");
-//      }
-      
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -9925,10 +9992,40 @@ define('datum/Datum',[
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumStates : DatumStates,
       datumTags : DatumTags
     },
 
+
+    /*
+    Psycholing experiment timers
+     */
+    startReadTimeIfNotAlreadyStarted : function(){
+      if(!this.readstarttime){
+        this.readstarttime = Date.now();
+      }
+    },
+
+    calculateEditTime: function() {
+      var details = {
+        editingTimeSpent: 0,
+        editingTimeDetails: []
+      };
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        if (fields[field].timeSpent) {
+          details.editingTimeSpent += fields[field].timeSpent;
+          details.editingTimeDetails.push(fields[field].timeSpent + ":::" + fields[field].get("label") + "->" + fields[field].get("mask") );
+        }
+      }
+      return details;
+    },
+
+    clearEditTimeDetails: function() {
+      var fields = this.get("datumFields").models;
+      for (var field in fields) {
+        fields[field].timeSpent = 0;
+      }
+    },
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -10001,6 +10098,65 @@ define('datum/Datum',[
       }
     },
     
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel) {
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
+      }
+
+      OPrime.debug("Edit this function to update datum to the latest schema.");
+
+      /* Add any new corpus fields to this datum so they can be edited */
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+      var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
+      for(var field in corpusFields){
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this datum: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
+        }
+      }
+
+
+      /* remove Deprecated datumStates on datum */
+      var oldvalidationStatus = "";
+      if (originalModel.datumStates) {
+        var selectedArray = _.pluck(originalModel.datumStates, "selected");
+        var selectedIndex = selectedArray.indexOf("selected");
+
+        if (selectedIndex  !== -1) {
+          oldvalidationStatus = originalModel.datumStates[selectedIndex].state;
+        }
+        //Remove datumStates from this datum
+        delete originalModel.datumStates;
+      }
+
+      /* enforce validation status to be comma seperated */
+      var fieldLabels = _.pluck(originalModel.datumFields, "label");
+      var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
+      var validationFieldToclean = originalModel.datumFields[indexOfValidationSatus];
+      var validationStatus = validationFieldToclean.mask || "";
+      if (oldvalidationStatus) {
+        // if the old status is not already subsumbed by a curretn status, do add it to the validation status
+        if(validationStatus.toLowerCase().indexOf(oldvalidationStatus.toLowerCase()) === -1){
+          validationStatus = oldvalidationStatus + ", " + validationStatus;
+        }
+      }
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      validationFieldToclean.mask = uniqueStati.join(", ");
+      validationFieldToclean.value = validationFieldToclean.mask;
+
+      /* enforce tags to be comma seperated */
+      var indexOfTags = fieldLabels.indexOf("tags");
+      var tagFieldToClean = originalModel.datumFields[indexOfTags];
+      var tagValue = tagFieldToClean.mask || "";
+      var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
+      tagFieldToClean.mask = uniqueTags.join(", ");
+      tagFieldToClean.value = tagFieldToClean.mask;
+
+
+      return this.originalParse(originalModel);
+    },
     searchByQueryString : function(queryString, callback) {
       var self = this;
       try{
@@ -10120,24 +10276,35 @@ define('datum/Datum',[
     },
     isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
       
+      var wordboundary = " ";
+      // If the user is using # to indicate word boundaries as linguists do... turn all word boundaries into #
+      if (queryString.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
       
       var thisDatumIsIn = false;
       // If the query string is null, include all datumIds
-      if(queryString.trim() == ""){
+      if (queryString.trim() === "") {
         thisDatumIsIn = true;
-      }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").search(queryString) > -1){
-            thisDatumIsIn = true;
-          }
-      }else{
-        
+      } else if (doGrossKeywordMatch) {
+        // Take all the data in this object 
+        var stringToSearchIn = JSON.stringify(keyValuePair.key).toLowerCase();
+        // Remove the labels
+        stringToSearchIn = stringToSearchIn.replace(/"[^"]*":"/g, wordboundary).replace(/",/g, wordboundary).replace(/"}/g, wordboundary);
+        // Convert all white space into a word boundary
+        stringToSearchIn = stringToSearchIn.replace(/\s/g, wordboundary);
+        if (stringToSearchIn.search(queryString) > -1) {
+          thisDatumIsIn = true;
+        }
+      } else {
+
         // Determine if this datum matches the first search criteria
         thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
         
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
         for (var j = 1; j < queryTokens.length; j += 2) {
-          if (queryTokens[j] == "AND") {
+          if (queryTokens[j] === "AND") {
             // Short circuit: if it's already false then it continues to be false
             if (!thisDatumIsIn) {
               break;
@@ -10172,31 +10339,43 @@ define('datum/Datum',[
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
       var negate = false;
-      if (label.indexOf("!") == 0)
-      {
-    	  label = label.replace(/^!/,"");
-    	  negate  = true;
+      if (label.indexOf("!") === 0) {
+        label = label.replace(/^!/, "");
+        negate = true;
       }
       var value = criteria.substring(delimiterIndex + 1);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
-      if(label == "judgement" && value.toLowerCase() == "grammatical"){
-        if(!objectToSearchThrough[label]){
+      if (label === "judgement" && value.toLowerCase() === "grammatical") {
+        if (!objectToSearchThrough[label]) {
           return true;
         }
       }
-//      if(!label || !value){
-//        return false;
-//      }
-      
-      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+      //      if(!label || !value){
+      //        return false;
+      //      }
 
-      
-      if (negate)
-    	  {
-    	  	searchResult = !searchResult;
-    	  }
-      
-      
+      //If the query has a # in it, lets assume its a linguist looking for word boundaries since they use # to indicate the edge of words. 
+      var wordboundary = " ";
+      if (criteria.indexOf("#") > -1) {
+        wordboundary = "#";
+      }
+
+      var searchResult  = false;
+      if (objectToSearchThrough[label]) {
+        // Make it case in-sensitive 
+        var stringToSearchThrough = objectToSearchThrough[label].toLowerCase();
+        // Replace all spaces with the wordboundary (either a space, or a # if its a linguist)
+        stringToSearchThrough = stringToSearchThrough.replace(/\s/g,wordboundary);
+        // Add word boundaries to the beginning and end of the string
+        stringToSearchThrough = stringToSearchThrough.replace(/^/,"#").replace(/$/,"#");
+
+        // now search for the query string
+        searchResult = (stringToSearchThrough.search(value.toLowerCase()) > -1);
+      }
+
+      if (negate) {
+        searchResult = !searchResult;
+      }
       return  searchResult;
     },
     
@@ -10254,7 +10433,6 @@ define('datum/Datum',[
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
         session: this.get("session")
@@ -10273,21 +10451,17 @@ define('datum/Datum',[
     getValidationStatus : function(){
       var validationStatus = "";
       var stati = this.get("datumFields").where({"label": "validationStatus"});
-      if(stati.length > 0){
-        stati = stati[0].get("mask").split(" ");
-        if(stati.length >0){
-          validationStatus = stati[0];
-        }
+      stati = stati[0].get("mask").trim().split(", ");
+      validationStatus = stati[0].trim();
+      
+      if(!validationStatus){
+        return this.setDefaultValidationStatus();
       }
-      /* Handle upgrade from previous corpora look in datum states too */
-      if(validationStatus == ""){
-        stati = this.get("datumStates").where({selected : "selected"});
-        if(stati.length > 0){
-          validationStatus = stati[0].get("state");
-        }
-      }
-      this.updateDatumState(validationStatus);
       return validationStatus;
+    },
+    setDefaultValidationStatus : function(){
+      this.preprendValidationStatus("Checked");
+      return "Checked";
     },
     /**
      * This function is used to colour a datum background to make
@@ -10306,8 +10480,8 @@ define('datum/Datum',[
         status = this.getValidationStatus();
       }
       /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
-      if(status.toLowerCase().indexOf("deleted") > -1){
-        return "danger";
+      if(status.toLowerCase().indexOf("delete") > -1){
+        return "important";
       }
       if(status.toLowerCase().indexOf("tobechecked") > -1){
         return "warning";
@@ -10326,49 +10500,15 @@ define('datum/Datum',[
      *            This is a string which is the validation status
      *            you want the datum to be
      */
-    updateDatumState : function(selectedValue){
-      if(!selectedValue){
-        return;
-      }
-      OPrime.debug("Asking to change the datum state to " + selectedValue); 
-      /* make sure all the corpus states are availible in this datum */
-      thisdatumStates = this.get("datumStates");
-      window.app.get("corpus").get("datumStates").each(function(datumstate) {
-        var obj = datumstate.toJSON();
-        obj.selected = "";
-        thisdatumStates.addIfNew(obj);
-      });
-      try{
-        $.each( this.get("datumStates").where({selected : "selected"}), function(){
-          if(this.get("state") != selectedValue){
-            this.set("selected", "");
-          }
-        });
-        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-      }
+    preprendValidationStatus : function(selectedValue){
       
       /* prepend this state to the new validationStates as of v1.46.2 */
       var n = this.get("datumFields").where({label: "validationStatus"})[0];
-      if(n == [] || !n){
-        n = new DatumField({
-          label : "validationStatus",
-          shouldBeEncrypted: "",
-          showToUserTypes: "all",
-          userchooseable: "disabled",
-          help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-        });
-        this.get("datumFields").add(n);
-      }
       var validationStatus = n.get("mask") || "";
-      validationStatus = selectedValue + " " +validationStatus ;
-      var uniqueStati = _.unique(validationStatus.trim().split(" "));
-      n.set("mask", uniqueStati.join(" "));
-      
-
-//      this.save();
-      //TODO save it
+      validationStatus = selectedValue + ", " +validationStatus ;
+      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(n){ return n });
+      n.set("mask", uniqueStati.join(", "));
+    
     },
     
     /**
@@ -10382,7 +10522,7 @@ define('datum/Datum',[
      */ 
     putInTrash : function(){
       this.set("trashed", "deleted"+Date.now());
-      this.updateDatumState("Deleted");
+      this.preprendValidationStatus("Deleted");
       this.saveAndInterConnectInApp(function(){
         /* This actually removes it from the database */
         //thisdatum.destroy();
@@ -10487,9 +10627,15 @@ define('datum/Datum',[
     				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
     				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
     			} else if(fields[field]){
-    				result = result
-    				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+            /* If as a field that is designed for LaTex dont excape the LaTeX characters */
+            if (fieldLabels[field].toLowerCase().indexOf("latex") > -1) {
+              result = result
+                + "\n " + fields[field];
+            } else {
+      				result = result
+      				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+      				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+            }
     			}
     		}
     		if(numInfrequent!=fieldLabels.length){
@@ -10508,7 +10654,7 @@ define('datum/Datum',[
     	//this version prints new data as well as previously shown latex'd data (best for datalists)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
-    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
     		$("#export-text-area").val($("#export-text-area").val() + result);
     	}
     	return result;
@@ -10518,8 +10664,16 @@ define('datum/Datum',[
     	//this version prints new data and deletes previously shown latex'd data (best for datums)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
-    		$("#export-type-description").html(" as LaTeX (GB4E)");
-    		$("#export-text-area").val(result);
+        $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
+        var latexDocument = 
+          "\\documentclass[12pt]{article} \n"+
+            "\\usepackage{fullpage} \n"+
+            "\\usepackage{tipa} \n"+
+            "\\usepackage{qtree} \n"+
+            "\\usepackage{gb4e} \n"+
+            "\\begin{document} \n" + result + 
+            "\\end{document}";
+    		$("#export-text-area").val(latexDocument);
     	}
     	return result;
     },
@@ -10657,11 +10811,50 @@ define('datum/Datum',[
       if (OPrime.debugMode) OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
+      var user = window.app.get("authentication").get("userPublic").toJSON();
+      delete user._rev;
+      delete user._id;
+      delete user.id;
+      delete user.authUrl;
+      var usersName = user.firstname + " " + user.lastname;
+      usersName = usersName.replace(/undefined/g, "");
+      if(!usersName || usersName.trim().length < 2){
+        usersName = user.username ;
+      }
+
       if(this.id){
         newModel = false;
+        var modifiyersField = this.get("datumFields").where({label: "modifiedByUser"})[0];
+        if(modifiyersField){
+          var modifiers = modifiyersField.get("users");
+          modifiers.push(user);
+          modifieres = _.unique(modifiers);
+          modifiyersField.set("users", modifieres);
+          
+          var usersAsString =  modifiyersField.get("mask") + ","+ usersName;
+          usersAsString = (_.unique(usersAsString.trim().split(/[, ]/))).filter(function(nonemptyvalue){ return nonemptyvalue; }).join(", ");
+          modifiyersField.set("mask", usersAsString);
+        }
       }else{
         this.set("dateEntered", JSON.stringify(new Date()));
+        var userField = this.get("datumFields").where({label: "enteredByUser"})[0];
+        if(userField){
+          userField.set("mask", usersName);
+          userField.set("user", user);
+        }
       }
+      var timeSpentDetails = this.calculateEditTime();
+      timeSpentDetails.totalTimeSpent = Date.now() - this.readstarttime;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.totalTimeSpent - timeSpentDetails.editingTimeSpent; 
+      //Convert to seconds
+      timeSpentDetails.totalTimeSpent = timeSpentDetails.totalTimeSpent/1000;
+      timeSpentDetails.readTimeSpent = timeSpentDetails.readTimeSpent/1000;
+      timeSpentDetails.editingTimeSpent = timeSpentDetails.editingTimeSpent/1000;
+
+      this.readstarttime = Date.now();
+      this.clearEditTimeDetails();
+      OPrime.debug("This activity was roughly ", timeSpentDetails);
+
       //protect against users moving datums from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
@@ -10695,20 +10888,6 @@ define('datum/Datum',[
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it. 
-       * this gets rid of it when we save. (if it gets in to a datum)
-       */
-      try{
-        var ds = this.get("datumStates").models;
-        for (var s in ds){
-          if(ds[s].get("state") == undefined){
-            this.get("datumStates").remove(ds[s]);
-          }
-        }
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
-      }
       
         self.save(null, {
           success : function(model, response) {
@@ -10738,7 +10917,8 @@ define('datum/Datum',[
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
             
             window.app.addActivity(
@@ -10749,7 +10929,8 @@ define('datum/Datum',[
                   directobjecticon : "icon-list",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
-                  context : " via Offline App."
+                  context : " via Offline App.",
+                  timeSpent : timeSpentDetails
                 });
 //            /*
 //             * If the current data list is the default
@@ -11291,9 +11472,9 @@ define('comment/CommentReadView',[
     render : function() {
       if (OPrime.debugMode) OPrime.debug("COMMENT render");
       var jsonToRender = this.model.toJSON();
+      jsonToRender.gravatar = jsonToRender.gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
       jsonToRender.timestamp = OPrime.prettyTimestamp(jsonToRender.timestamp);
       $(this.el).html(this.template(jsonToRender));
-     
       return this;
     },
     
@@ -11379,7 +11560,9 @@ define('comment/CommentEditView',[
 //    	  JSONtorender.timestamp = this.model.timestamp.toString();
 //    	  JSONtorender.username = this.model.username;
 //      }
-      $(this.el).html(this.template(this.model.toJSON()));
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.gravatar = jsonToRender.gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"");
+      $(this.el).html(this.template(jsonToRender));
 
       $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
@@ -11416,7 +11599,8 @@ define('comment/CommentEditView',[
 define('datum/DatumFieldEditView',[ 
      "backbone",
      "handlebars", 
-     "datum/DatumField"
+     "datum/DatumField",
+     "OPrime"
   ], function(
       Backbone, 
       Handlebars,
@@ -11462,10 +11646,10 @@ define('datum/DatumFieldEditView',[
       "click .remove-datum-field" : "removeDatumField",
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
-      "blur .datum_field_input" : "updateFieldValue",
+      "blur .datum_field_input" : "onblur",
       "keyup .datum_field_input" : "resizeInputFieldToFit",
-      "click .icon-question-sign" : "showHelpConvention",
-      "hover .icon-question-sign" : "hideHelpConvention"  
+      "focus .datum_field_input" : "onfocus",
+      "click .help-conventions" : "toggleHelpConvention"
     },
     
     /*
@@ -11498,7 +11682,8 @@ define('datum/DatumFieldEditView',[
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW render");
      
       if (this.format == "corpus") {
-        $(this.el).html(this.templateSettings(this.model.toJSON()));
+        var jsonToRender = this.model.toJSON();
+        $(this.el).html(this.templateSettings(jsonToRender));
         //localization
         $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
         $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
@@ -11506,8 +11691,11 @@ define('datum/DatumFieldEditView',[
         
         // Select the correct values from the model TODO is this dead code?
         $(this.el).find(".choose-field").val(this.model.get("label"));
-      } else if (this.format == "datum") {
+      } else if (this.format == "datum" || this.format == "search") {
         var jsonToRender = this.model.toJSON();
+        if(this.format == "search"){
+          delete jsonToRender.readonly;
+        }
         jsonToRender.helpText = true;
         jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
         $(this.el).html(this.templateValue(jsonToRender));
@@ -11533,7 +11721,7 @@ define('datum/DatumFieldEditView',[
         },200);
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
-        jsonToRender.helpText = false;
+        jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       }
       
@@ -11568,11 +11756,34 @@ define('datum/DatumFieldEditView',[
       this.model.set("help",help);
     },
          
+    onfocus: function(){
+      this.model.starttime = Date.now();
+      this.resizeInputFieldToFit();
+    },
+
+    onblur: function(){
+      var changedText = this.updateFieldValue();
+      if(this.model.starttime){
+        var stoptime = Date.now();
+        this.model.timeSpent = this.model.timeSpent || 0;
+        if(changedText != null){
+          this.model.timeSpent += stoptime - this.model.starttime;
+          OPrime.debug("Spent total miliseconds on \""+this.model.get("label")+ "\" : "+this.model.timeSpent);
+        }
+        this.model.starttime = null;
+      }
+    },
     /**
-     * Change the model's state.
+     * Change the model's value if it has changed.
      */
     updateFieldValue : function() {
-      this.model.set("mask", this.$el.find(".datum_field_input").val());
+      var visibleValue = this.$el.find(".datum_field_input").val();
+      visibleValue = visibleValue.trim() || "";
+      if (visibleValue != this.model.get("mask") ){
+        this.model.set("mask", visibleValue);
+        return visibleValue;
+      }
+      return null;
     }, 
     
     /**
@@ -11586,31 +11797,39 @@ define('datum/DatumFieldEditView',[
      *          datum_field_input
      */
     resizeInputFieldToFit : function(e) {
-      var it;
+      var inputFieldToResize;
       if (e) {
-        it = e.target;
+        inputFieldToResize = e.target;
       } else {
-        it = $(this.el).find(".datum_field_input")[0];
+        inputFieldToResize = $(this.el).find(".datum_field_input")[0];
       }
-      var sh = it.scrollHeight;
+      if (!inputFieldToResize) {
+        return;
+      }
+      var sh = inputFieldToResize.scrollHeight;
       if(sh > 20){
-        it.style.height =  sh + "px";
+        inputFieldToResize.style.height =  sh + "px";
       }
     },
     
     /**
-     * Show help convention in popover  
+     * Toggle help convention in popover  
      */
-    showHelpConvention : function() {
-    	this.$el.find(".help-conventions").popover("show");
-    },
-    
-    /**
-     * Don't show help convention in popover if only hover 
-     */
-    hideHelpConvention : function() {
+    toggleHelpConvention : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
         this.$el.find(".help-conventions").popover("hide");
-    }    
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".help-conventions").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    }
+     
    
   });
 
@@ -12134,6 +12353,7 @@ define('app/AppRouter',[
     routes : {
       "corpus/:pouchname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
       "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
+      "corpus/:pouchname/search/:searchterm"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname/conversation/:id" : "showEmbeddedConversation", 
       "corpus/:pouchname/alldata"       : "showAllData",//pouchname has to match the pouch of the corpus
@@ -12483,7 +12703,11 @@ define('app/AppRouter',[
     /**
      * Displays the advanced search in embedded form.
      */
-    showEmbeddedSearch : function(pouchname) {
+    showEmbeddedSearch : function(pouchname, searchterm) {
+      if(searchterm){
+        window.app.get("search").set("searchKeywords", searchterm);
+        window.appView.searchEditView.searchTop();
+      }
       this.hideEverything();
       $("#dashboard-view").show();
       window.appView.searchEditView.format = "centreWell";
@@ -12690,41 +12914,7 @@ define('app/AppRouter',[
   return AppRouter;
 });
 
-/*
-CryptoJS v3.0.1
-code.google.com/p/crypto-js
-(c) 2009-2012 by Jeff Mott. All rights reserved.
-code.google.com/p/crypto-js/wiki/License
-*/
-var CryptoJS=CryptoJS||function(q,i){var f={},l=f.lib={},r=l.Base=function(){function a(){}return{extend:function(d){a.prototype=this;var b=new a;d&&b.mixIn(d);b.$super=this;return b},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var b in a)a.hasOwnProperty(b)&&(this[b]=a[b]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.$super.extend(this)}}}(),n=l.WordArray=r.extend({init:function(a,d){a=
-this.words=a||[];this.sigBytes=d!=i?d:4*a.length},toString:function(a){return(a||s).stringify(this)},concat:function(a){var d=this.words,b=a.words,c=this.sigBytes,a=a.sigBytes;this.clamp();if(c%4)for(var g=0;g<a;g++)d[c+g>>>2]|=(b[g>>>2]>>>24-8*(g%4)&255)<<24-8*((c+g)%4);else if(65535<b.length)for(g=0;g<a;g+=4)d[c+g>>>2]=b[g>>>2];else d.push.apply(d,b);this.sigBytes+=a;return this},clamp:function(){var a=this.words,d=this.sigBytes;a[d>>>2]&=4294967295<<32-8*(d%4);a.length=q.ceil(d/4)},clone:function(){var a=
-r.clone.call(this);a.words=this.words.slice(0);return a},random:function(a){for(var d=[],b=0;b<a;b+=4)d.push(4294967296*q.random()|0);return n.create(d,a)}}),m=f.enc={},s=m.Hex={stringify:function(a){for(var d=a.words,a=a.sigBytes,b=[],c=0;c<a;c++){var g=d[c>>>2]>>>24-8*(c%4)&255;b.push((g>>>4).toString(16));b.push((g&15).toString(16))}return b.join("")},parse:function(a){for(var d=a.length,b=[],c=0;c<d;c+=2)b[c>>>3]|=parseInt(a.substr(c,2),16)<<24-4*(c%8);return n.create(b,d/2)}},o=m.Latin1={stringify:function(a){for(var d=
-a.words,a=a.sigBytes,b=[],c=0;c<a;c++)b.push(String.fromCharCode(d[c>>>2]>>>24-8*(c%4)&255));return b.join("")},parse:function(a){for(var d=a.length,b=[],c=0;c<d;c++)b[c>>>2]|=(a.charCodeAt(c)&255)<<24-8*(c%4);return n.create(b,d)}},p=m.Utf8={stringify:function(a){try{return decodeURIComponent(escape(o.stringify(a)))}catch(d){throw Error("Malformed UTF-8 data");}},parse:function(a){return o.parse(unescape(encodeURIComponent(a)))}},e=l.BufferedBlockAlgorithm=r.extend({reset:function(){this._data=n.create();
-this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=p.parse(a));this._data.concat(a);this._nDataBytes+=a.sigBytes},_process:function(a){var d=this._data,b=d.words,c=d.sigBytes,g=this.blockSize,k=c/(4*g),k=a?q.ceil(k):q.max((k|0)-this._minBufferSize,0),a=k*g,c=q.min(4*a,c);if(a){for(var j=0;j<a;j+=g)this._doProcessBlock(b,j);j=b.splice(0,a);d.sigBytes-=c}return n.create(j,c)},clone:function(){var a=r.clone.call(this);a._data=this._data.clone();return a},_minBufferSize:0});l.Hasher=e.extend({init:function(){this.reset()},
-reset:function(){e.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);this._doFinalize();return this._hash},clone:function(){var a=e.clone.call(this);a._hash=this._hash.clone();return a},blockSize:16,_createHelper:function(a){return function(d,b){return a.create(b).finalize(d)}},_createHmacHelper:function(a){return function(d,b){return h.HMAC.create(a,b).finalize(d)}}});var h=f.algo={};return f}(Math);
-(function(){var q=CryptoJS,i=q.lib.WordArray;q.enc.Base64={stringify:function(f){var l=f.words,i=f.sigBytes,n=this._map;f.clamp();for(var f=[],m=0;m<i;m+=3)for(var s=(l[m>>>2]>>>24-8*(m%4)&255)<<16|(l[m+1>>>2]>>>24-8*((m+1)%4)&255)<<8|l[m+2>>>2]>>>24-8*((m+2)%4)&255,o=0;4>o&&m+0.75*o<i;o++)f.push(n.charAt(s>>>6*(3-o)&63));if(l=n.charAt(64))for(;f.length%4;)f.push(l);return f.join("")},parse:function(f){var l=f.length,r=this._map,n=r.charAt(64);n&&(n=f.indexOf(n),-1!=n&&(l=n));for(var n=[],m=0,s=0;s<
-l;s++)if(s%4){var o=r.indexOf(f.charAt(s-1))<<2*(s%4),p=r.indexOf(f.charAt(s))>>>6-2*(s%4);n[m>>>2]|=(o|p)<<24-8*(m%4);m++}return i.create(n,m)},_map:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="}})();
-(function(q){function i(e,h,a,d,b,c,g){e=e+(h&a|~h&d)+b+g;return(e<<c|e>>>32-c)+h}function f(e,h,a,d,b,c,g){e=e+(h&d|a&~d)+b+g;return(e<<c|e>>>32-c)+h}function l(e,h,a,d,b,c,g){e=e+(h^a^d)+b+g;return(e<<c|e>>>32-c)+h}function r(e,h,a,d,b,c,g){e=e+(a^(h|~d))+b+g;return(e<<c|e>>>32-c)+h}var n=CryptoJS,m=n.lib,s=m.WordArray,m=m.Hasher,o=n.algo,p=[];(function(){for(var e=0;64>e;e++)p[e]=4294967296*q.abs(q.sin(e+1))|0})();o=o.MD5=m.extend({_doReset:function(){this._hash=s.create([1732584193,4023233417,
-2562383102,271733878])},_doProcessBlock:function(e,h){for(var a=0;16>a;a++){var d=h+a,b=e[d];e[d]=(b<<8|b>>>24)&16711935|(b<<24|b>>>8)&4278255360}for(var d=this._hash.words,b=d[0],c=d[1],g=d[2],k=d[3],a=0;64>a;a+=4)16>a?(b=i(b,c,g,k,e[h+a],7,p[a]),k=i(k,b,c,g,e[h+a+1],12,p[a+1]),g=i(g,k,b,c,e[h+a+2],17,p[a+2]),c=i(c,g,k,b,e[h+a+3],22,p[a+3])):32>a?(b=f(b,c,g,k,e[h+(a+1)%16],5,p[a]),k=f(k,b,c,g,e[h+(a+6)%16],9,p[a+1]),g=f(g,k,b,c,e[h+(a+11)%16],14,p[a+2]),c=f(c,g,k,b,e[h+a%16],20,p[a+3])):48>a?(b=
-l(b,c,g,k,e[h+(3*a+5)%16],4,p[a]),k=l(k,b,c,g,e[h+(3*a+8)%16],11,p[a+1]),g=l(g,k,b,c,e[h+(3*a+11)%16],16,p[a+2]),c=l(c,g,k,b,e[h+(3*a+14)%16],23,p[a+3])):(b=r(b,c,g,k,e[h+3*a%16],6,p[a]),k=r(k,b,c,g,e[h+(3*a+7)%16],10,p[a+1]),g=r(g,k,b,c,e[h+(3*a+14)%16],15,p[a+2]),c=r(c,g,k,b,e[h+(3*a+5)%16],21,p[a+3]));d[0]=d[0]+b|0;d[1]=d[1]+c|0;d[2]=d[2]+g|0;d[3]=d[3]+k|0},_doFinalize:function(){var e=this._data,h=e.words,a=8*this._nDataBytes,d=8*e.sigBytes;h[d>>>5]|=128<<24-d%32;h[(d+64>>>9<<4)+14]=(a<<8|a>>>
-24)&16711935|(a<<24|a>>>8)&4278255360;e.sigBytes=4*(h.length+1);this._process();e=this._hash.words;for(h=0;4>h;h++)a=e[h],e[h]=(a<<8|a>>>24)&16711935|(a<<24|a>>>8)&4278255360}});n.MD5=m._createHelper(o);n.HmacMD5=m._createHmacHelper(o)})(Math);
-(function(){var q=CryptoJS,i=q.lib,f=i.Base,l=i.WordArray,i=q.algo,r=i.EvpKDF=f.extend({cfg:f.extend({keySize:4,hasher:i.MD5,iterations:1}),init:function(f){this.cfg=this.cfg.extend(f)},compute:function(f,m){for(var i=this.cfg,o=i.hasher.create(),p=l.create(),e=p.words,h=i.keySize,i=i.iterations;e.length<h;){a&&o.update(a);var a=o.update(f).finalize(m);o.reset();for(var d=1;d<i;d++)a=o.finalize(a),o.reset();p.concat(a)}p.sigBytes=4*h;return p}});q.EvpKDF=function(f,l,i){return r.create(i).compute(f,
-l)}})();
-CryptoJS.lib.Cipher||function(q){var i=CryptoJS,f=i.lib,l=f.Base,r=f.WordArray,n=f.BufferedBlockAlgorithm,m=i.enc.Base64,s=i.algo.EvpKDF,o=f.Cipher=n.extend({cfg:l.extend(),createEncryptor:function(c,a){return this.create(this._ENC_XFORM_MODE,c,a)},createDecryptor:function(c,a){return this.create(this._DEC_XFORM_MODE,c,a)},init:function(c,a,b){this.cfg=this.cfg.extend(b);this._xformMode=c;this._key=a;this.reset()},reset:function(){n.reset.call(this);this._doReset()},process:function(c){this._append(c);return this._process()},
-finalize:function(c){c&&this._append(c);return this._doFinalize()},keySize:4,ivSize:4,_ENC_XFORM_MODE:1,_DEC_XFORM_MODE:2,_createHelper:function(){return function(c){return{encrypt:function(a,k,j){return("string"==typeof k?b:d).encrypt(c,a,k,j)},decrypt:function(a,k,j){return("string"==typeof k?b:d).decrypt(c,a,k,j)}}}}()});f.StreamCipher=o.extend({_doFinalize:function(){return this._process(!0)},blockSize:1});var p=i.mode={},e=f.BlockCipherMode=l.extend({createEncryptor:function(c,a){return this.Encryptor.create(c,
-a)},createDecryptor:function(c,a){return this.Decryptor.create(c,a)},init:function(c,a){this._cipher=c;this._iv=a}}),p=p.CBC=function(){function c(c,a,g){var b=this._iv;b?this._iv=q:b=this._prevBlock;for(var d=0;d<g;d++)c[a+d]^=b[d]}var a=e.extend();a.Encryptor=a.extend({processBlock:function(a,g){var b=this._cipher,d=b.blockSize;c.call(this,a,g,d);b.encryptBlock(a,g);this._prevBlock=a.slice(g,g+d)}});a.Decryptor=a.extend({processBlock:function(a,g){var b=this._cipher,d=b.blockSize,e=a.slice(g,g+
-d);b.decryptBlock(a,g);c.call(this,a,g,d);this._prevBlock=e}});return a}(),h=(i.pad={}).Pkcs7={pad:function(c,a){for(var b=4*a,b=b-c.sigBytes%b,d=b<<24|b<<16|b<<8|b,e=[],h=0;h<b;h+=4)e.push(d);b=r.create(e,b);c.concat(b)},unpad:function(c){c.sigBytes-=c.words[c.sigBytes-1>>>2]&255}};f.BlockCipher=o.extend({cfg:o.cfg.extend({mode:p,padding:h}),reset:function(){o.reset.call(this);var c=this.cfg,a=c.iv,c=c.mode;if(this._xformMode==this._ENC_XFORM_MODE)var b=c.createEncryptor;else b=c.createDecryptor,
-this._minBufferSize=1;this._mode=b.call(c,this,a&&a.words)},_doProcessBlock:function(a,b){this._mode.processBlock(a,b)},_doFinalize:function(){var a=this.cfg.padding;if(this._xformMode==this._ENC_XFORM_MODE){a.pad(this._data,this.blockSize);var b=this._process(!0)}else b=this._process(!0),a.unpad(b);return b},blockSize:4});var a=f.CipherParams=l.extend({init:function(a){this.mixIn(a)},toString:function(a){return(a||this.formatter).stringify(this)}}),p=(i.format={}).OpenSSL={stringify:function(a){var b=
-a.ciphertext,a=a.salt;return(a?r.create([1398893684,1701076831]).concat(a).concat(b):b).toString(m)},parse:function(c){var c=m.parse(c),b=c.words;if(1398893684==b[0]&&1701076831==b[1]){var d=r.create(b.slice(2,4));b.splice(0,4);c.sigBytes-=16}return a.create({ciphertext:c,salt:d})}},d=f.SerializableCipher=l.extend({cfg:l.extend({format:p}),encrypt:function(c,b,d,j){var j=this.cfg.extend(j),e=c.createEncryptor(d,j),b=e.finalize(b),e=e.cfg;return a.create({ciphertext:b,key:d,iv:e.iv,algorithm:c,mode:e.mode,
-padding:e.padding,blockSize:c.blockSize,formatter:j.format})},decrypt:function(a,b,d,e){e=this.cfg.extend(e);b=this._parse(b,e.format);return a.createDecryptor(d,e).finalize(b.ciphertext)},_parse:function(a,b){return"string"==typeof a?b.parse(a,this):a}}),i=(i.kdf={}).OpenSSL={execute:function(c,b,d,e){e||(e=r.random(8));c=s.create({keySize:b+d}).compute(c,e);d=r.create(c.words.slice(b),4*d);c.sigBytes=4*b;return a.create({key:c,iv:d,salt:e})}},b=f.PasswordBasedCipher=d.extend({cfg:d.cfg.extend({kdf:i}),
-encrypt:function(a,b,e,j){j=this.cfg.extend(j);e=j.kdf.execute(e,a.keySize,a.ivSize);j.iv=e.iv;a=d.encrypt.call(this,a,b,e.key,j);a.mixIn(e);return a},decrypt:function(a,b,e,j){j=this.cfg.extend(j);b=this._parse(b,j.format);e=j.kdf.execute(e,a.keySize,a.ivSize,b.salt);j.iv=e.iv;return d.decrypt.call(this,a,b,e.key,j)}})}();
-(function(){var q=CryptoJS,i=q.lib.BlockCipher,f=q.algo,l=[],r=[],n=[],m=[],s=[],o=[],p=[],e=[],h=[],a=[];(function(){for(var b=[],c=0;256>c;c++)b[c]=128>c?c<<1:c<<1^283;for(var d=0,k=0,c=0;256>c;c++){var j=k^k<<1^k<<2^k<<3^k<<4,j=j>>>8^j&255^99;l[d]=j;r[j]=d;var f=b[d],i=b[f],q=b[i],t=257*b[j]^16843008*j;n[d]=t<<24|t>>>8;m[d]=t<<16|t>>>16;s[d]=t<<8|t>>>24;o[d]=t;t=16843009*q^65537*i^257*f^16843008*d;p[j]=t<<24|t>>>8;e[j]=t<<16|t>>>16;h[j]=t<<8|t>>>24;a[j]=t;d?(d=f^b[b[b[q^f]]],k^=b[b[k]]):d=k=1}})();
-var d=[0,1,2,4,8,16,32,64,128,27,54],f=f.AES=i.extend({_doReset:function(){for(var b=this._key,c=b.words,g=b.sigBytes/4,b=4*((this._nRounds=g+6)+1),k=this._keySchedule=[],j=0;j<b;j++)if(j<g)k[j]=c[j];else{var f=k[j-1];j%g?6<g&&4==j%g&&(f=l[f>>>24]<<24|l[f>>>16&255]<<16|l[f>>>8&255]<<8|l[f&255]):(f=f<<8|f>>>24,f=l[f>>>24]<<24|l[f>>>16&255]<<16|l[f>>>8&255]<<8|l[f&255],f^=d[j/g|0]<<24);k[j]=k[j-g]^f}c=this._invKeySchedule=[];for(g=0;g<b;g++)j=b-g,f=g%4?k[j]:k[j-4],c[g]=4>g||4>=j?f:p[l[f>>>24]]^e[l[f>>>
-16&255]]^h[l[f>>>8&255]]^a[l[f&255]]},encryptBlock:function(a,c){this._doCryptBlock(a,c,this._keySchedule,n,m,s,o,l)},decryptBlock:function(b,c){var d=b[c+1];b[c+1]=b[c+3];b[c+3]=d;this._doCryptBlock(b,c,this._invKeySchedule,p,e,h,a,r);d=b[c+1];b[c+1]=b[c+3];b[c+3]=d},_doCryptBlock:function(a,c,d,e,f,h,l,i){for(var p=this._nRounds,m=a[c]^d[0],n=a[c+1]^d[1],o=a[c+2]^d[2],q=a[c+3]^d[3],r=4,s=1;s<p;s++)var u=e[m>>>24]^f[n>>>16&255]^h[o>>>8&255]^l[q&255]^d[r++],v=e[n>>>24]^f[o>>>16&255]^h[q>>>8&255]^
-l[m&255]^d[r++],w=e[o>>>24]^f[q>>>16&255]^h[m>>>8&255]^l[n&255]^d[r++],q=e[q>>>24]^f[m>>>16&255]^h[n>>>8&255]^l[o&255]^d[r++],m=u,n=v,o=w;u=(i[m>>>24]<<24|i[n>>>16&255]<<16|i[o>>>8&255]<<8|i[q&255])^d[r++];v=(i[n>>>24]<<24|i[o>>>16&255]<<16|i[q>>>8&255]<<8|i[m&255])^d[r++];w=(i[o>>>24]<<24|i[q>>>16&255]<<16|i[m>>>8&255]<<8|i[n&255])^d[r++];q=(i[q>>>24]<<24|i[m>>>16&255]<<16|i[n>>>8&255]<<8|i[o&255])^d[r++];a[c]=u;a[c+1]=v;a[c+2]=w;a[c+3]=q},keySize:8});q.AES=i._createHelper(f)})();
-define("CryptoJS", function(){});
-
-define('confidentiality_encryption/Confidential', [
+define( 'confidentiality_encryption/Confidential',[
     "backbone",
     "CryptoJS"
 ],function(
@@ -13394,8 +13584,13 @@ define('activity/Activity',[
       if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
       if(!this.get("user")) {
-        this.set("user", window.app.get("authentication").get("userPublic"));
-//        if(!this.get("pouchname")) {
+        var user = window.app.get("authentication").get("userPublic").toJSON();
+        this.set("user", {
+          username: user.username,
+          gravatar: user.gravatar,
+          authUrl: user.authUrl
+        });
+        //        if(!this.get("pouchname")) {
 //          this.set("pouchname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname);
 //        }
       }
@@ -13520,6 +13715,116 @@ define('activity/Activity',[
   return Activity;
 });
 
+define('datum/DatumState',[ 
+    "backbone", 
+    "user/UserMask" 
+], function(
+    Backbone,
+    UserMask
+) {
+  var DatumState = Backbone.Model.extend(
+  /** @lends DatumState.prototype */
+  {
+    /**
+     * @class The datum state lets the fieldlinguists assign their own state
+     *        categories to data (ie check with consultant, check with x,
+     *        checked, checked and wrong, hidden, deleted), whatever state they
+     *        decide. They an make each state have a color so that the team can
+     *        see quickly if there is something that needs to be done with that
+     *        data. We also added an optional field, Consultant that they can use
+     *        to say who they want to check with in case they have mulitple
+     *        consultants and the consultants have different grammaticality
+     *        judgements. When users change the state of the datum, we will add
+     *        a note in the datum's comments field so that the history of its
+     *        state is kept in an annotated format.
+     * 
+     * @description The initialize function The datum state creates a new state
+     *              object with the state set to the default (for example,
+     *              checked)
+     * 
+     * @extends Backbone.Model
+     * @constructs
+     */
+    initialize : function() {
+    },
+    
+    defaults : {
+//      state : "Checked",
+      color : "",
+//      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
+      showInSearchResults : "checked",
+      selected : ""
+    },
+    
+    // Internal models: used by the parse function
+    internalModels : {
+      consultant : UserMask
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    }
+  });
+
+  return DatumState;
+});
+define('datum/DatumStates',[ 
+    "backbone", 
+    "datum/DatumState"
+], function(
+    Backbone,
+    DatumState
+) {
+  var DatumStates = Backbone.Collection.extend(
+  /** @lends DatumStates.prototype */
+  {
+    /**
+     * @class Collection of Datum State
+     * 
+     * @description The initialize function 
+     * 
+     * @extends Backbone.Collection
+     * @constructs
+     */
+    initialize : function() {
+    },
+    internalModels : DatumState,
+
+    model : DatumState,
+    
+    addIfNew : function(datumStateObject){
+      var newState = datumStateObject.state;
+      if(!newState){
+        return;
+      }
+      var existing = this.where({state: newState});
+      if(existing.length > 0){
+        return;
+      }
+      this.add(new DatumState(datumStateObject));
+
+    },
+    /** 
+     * Gets a copy DatumStates containing new (not references) DatumStates objects
+     * containing the same attributes.
+     * 
+     * @return The cloned DatumFields.
+     */
+    clone : function() {
+      var newCollection = new DatumStates();
+      
+      for (var i = 0; i < this.length; i++) {
+        newCollection.push(new DatumState(this.models[i].toJSON())); 
+      }
+      
+      return newCollection;
+    }
+  });
+
+  return DatumStates;
+});
 define('data_list/DataLists',[
     "backbone",
     "data_list/DataList"
@@ -14180,7 +14485,7 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
   for (m in morphemes) {
     morphemenodes.push({
       name : morphemes[m],
-      group : morphemes[m].length
+      length : morphemes[m].length
     });
   }
   
@@ -14232,8 +14537,13 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   var width = 800,
   height = 300;
 
-  var color = d3.scale.category20();
-  
+  /*
+  Short morphemes will be blue, long will be red 
+  */
+  var color = d3.scale.linear()
+      .range(['darkblue', 'darkred']) // or use hex values
+      .domain([1, 8]);
+
   var x = d3.scale.linear()
      .range([0, width]);
    
@@ -14242,15 +14552,16 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   
   var force = d3.layout.force()
     .charge(-120)
+    .linkStrength(0.2)
     .linkDistance(30)
     .size([width, height]);
   
-  var svg = d3.select("#corpus-precedence-rules-visualization-fullscreen").append("svg")
+  var svg = d3.select(divElement).append("svg")
     .attr("width", width)
     .attr('title', "Morphology Visualization for "+ pouchname)
     .attr("height", height);
   
-  var titletext = "Morphemes in your corpus";
+  var titletext = "Click to search morphemes in your corpus";
   if(rulesGraph.nodes.length < 3){
     titletext = "Your morpheme visualizer will appear here after you have synced.";
   }
@@ -14259,6 +14570,7 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     .attr("class", "vis-title")
     .attr("dy", "1em")
     .attr("dx", "1em")
+    .style("fill", "#cccccc")
 //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(titletext);
   
@@ -14281,7 +14593,9 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     .enter().append("circle")
       .attr("class", "node")
       .attr("r", 5)
-      .style("fill", function(d) { return color(d.group); })
+      .style("fill", function(d) { 
+        return color(d.length); 
+      })
       .on("mouseover", function(d) {
         tooltip = d3.select("body")
         .append("div")
@@ -14293,6 +14607,16 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
       })
       .on("mouseout", function() {
         tooltip.style("visibility", "hidden");
+      })
+      .on("click", function(d) {
+        /* show the morpheme as a search result so the user can use the viz to explore the corpus*/
+        if(window.app && window.app.router){
+          // window.app.router.showEmbeddedSearch(pouchname, "morphemes:"+d.name);
+          var url = "corpus/"+pouchname+"/search/"+"morphemes:"+d.name;
+          // window.location.replace(url);    
+          window.app.router.navigate(url, {trigger: true});
+
+        }
       })
       .call(force.drag);
   
@@ -14814,76 +15138,74 @@ define('corpus/Corpus',[
 //        + couchConnection.pouchname);
       
     },
-    loadOrCreateCorpusByPouchName : function(pouchname, sucessloadingorCreatingcallback){
+    loadOrCreateCorpusByPouchName : function(couchConnection, sucessloadingorCreatingcallback){
+      var couchurl = OPrime.getCouchUrl(couchConnection);
+      var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+
+      var errorfunction = function(response) {
+        OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
+        OPrime.bug("There was a problem loading your corpus. Please report this error.");
+        window.location.replace(optionalCouchAppPath + "user.html");
+      };
+
+      // var errorfunction = function(model, xhr, options) {
+      //   $(".spinner-status").html("Downloading Corpus...");
+
+      //   if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
+      //   if (corpusself.islooping) {
+      //     OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..." + e);
+      //     return;
+      //   }
+      //   corpusself.islooping = true;
+      //   OPrime.bug("Trying to download this corpus to this device one more time..." + xhr.reason);
+      //   corpusself.loadOrCreateCorpusByPouchName(couchConnection, sucessloadingorCreatingcallback);
+      // };
+
       var corpusself = this;
-      if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask({
-          "pouchname" : pouchname
-        }));
-      }
-      var c = this.get("publicSelf");
-      this.get("publicSelf").id = "corpus";
-        c.fetch({
-          success : function(model, response, options) {
-            if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
-            if(!model.get("corpusid")){
-              corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-              return;
-            }
-            corpusself.id = model.get("corpusid");
-            corpusself.set("pouchname", pouchname);
-              corpusself.fetch({
-                success : function(model) {
-                  if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
-                  $(".spinner-status").html("Loading Datalist...");
-                  corpusself.makeSureCorpusHasADataList(function(){
-                    corpusself.datalists.at(0).setAsCurrentDataList(function(){
-                      $(".spinner-status").html("Datalist loaded.");
-                    });
-                    $(".spinner-status").html("Loading Elicitation Session...");
-                    corpusself.makeSureCorpusHasASession(function(){
-                      corpusself.sessions.at(0).setAsCurrentSession(function(){
-                        $(".spinner-status").html("Session loaded.");
-                        if(typeof sucessloadingorCreatingcallback == "function"){
-                          sucessloadingorCreatingcallback();
-                        }
-                      });
-                      
-                      //end success to create new data list
-                    },function(){
-                      alert("Failed to create a session. ");
-                    });//end failure to create new data list
-                    //end success to create new data list
-                  },function(){
-                    alert("Failed to create a datalist. ");
-                  });//end failure to create new data list
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : queryUrl,
+        success : function(serverResults) {
 
-                },
-                error : function(model, xhr, options) {
-                  $(".spinner-status").html("Downloading Corpus...");
+          if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
+            errorfunction("No corpus doc! this corpus is broken.");
+          }
+          var model = serverResults.rows[0].value;
+          couchConnection.corpusid = model._id;
+          // appids.corpusid = model._id;
+          model.couchConnection = couchConnection;
+          // corpusself.set(corpusself.parse(model));
 
-                  if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
-                  if(corpusself.islooping){
-                    OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
-                    return;
-                  }
-                  corpusself.islooping = true;
-                  OPrime.bug("Trying to download this corpus to this device one more time..."+xhr.reason);
-                  corpusself.loadOrCreateCorpusByPouchName(pouchname, sucessloadingorCreatingcallback);
+          if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
+          $(".spinner-status").html("Loading Datalist...");
+          corpusself.makeSureCorpusHasADataList(function(){
+            corpusself.datalists.at(0).setAsCurrentDataList(function(){
+              $(".spinner-status").html("Datalist loaded.");
+            });
+            $(".spinner-status").html("Loading Elicitation Session...");
+            corpusself.makeSureCorpusHasASession(function(){
+              corpusself.sessions.at(0).setAsCurrentSession(function(){
+                $(".spinner-status").html("Session loaded.");
+                if(typeof sucessloadingorCreatingcallback == "function"){
+                  sucessloadingorCreatingcallback();
                 }
               });
-          },
-          error : function(model, xhr, options) {
-            $(".spinner-status").html("Creating Corpus...");
+              
+              //end success to create new data list
+            },function(){
+              alert("Failed to create a session. ");
+            });//end failure to create new data list
+            //end success to create new data list
+          },function(){
+            alert("Failed to create a datalist. ");
+          });//end failure to create new data list
 
-            if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-            OPrime.bug("Error fetching your corpus' public view..."+xhr.reason);
-            corpusself.get("publicSelf").fillWithDefaults();
-            corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
-            corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
-            corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-          }
-        });
+
+
+        },// end successful fetch
+        error : errorfunction,
+        dataType : "json"
+      });
     },
     fetchPublicSelf : function(){
       try{
@@ -14974,7 +15296,7 @@ define('corpus/Corpus',[
           new DatumField({
             label : "syntacticCategory",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish." +
             		" It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM)," +
@@ -14983,7 +15305,7 @@ define('corpus/Corpus',[
           new DatumField({
             label : "syntacticTreeLatex",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
           }),
@@ -15007,7 +15329,24 @@ define('corpus/Corpus',[
             showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-          })
+          }),
+          new DatumField({
+            label : "enteredByUser",
+            shouldBeEncrypted: "",
+            showToUserTypes: "all",
+            readonly: true,
+            userchooseable: "disabled",
+            help: "The user who originally entered the datum"
+          }),
+          new DatumField({
+            label : "modifiedByUser",
+            shouldBeEncrypted: "",
+            showToUserTypes: "all",
+            readonly: true,
+            users: [],
+            userchooseable: "disabled",
+            help: "An array of users who modified the datum"
+          }),
         ]));
       }//end if to set datumFields
       
@@ -15034,11 +15373,13 @@ define('corpus/Corpus',[
              label : "goal",
              shouldBeEncrypted: "",
              userchooseable: "disabled",
-             help: "The goals of the session."
-           }),  
+             help: "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
+           }),
           new DatumField({
             label : "consultants",
             shouldBeEncrypted: "",
+            userMasks: [],
+            help: "This is a comma seperated field of all the consultants who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the consultants if they are not anonymous or are actual users of the system. ",
             userchooseable: "disabled"
           }),
           new DatumField({
@@ -15057,19 +15398,33 @@ define('corpus/Corpus',[
             label : "dateElicited",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "The date when the session took place."
+            help: "The date when the elicitation session took place."
           }),
           new DatumField({
             label : "user",
             shouldBeEncrypted: "",
+            help: "This is the username of who created this elicitation session. There are other fields contains an array of participants and consultants. ",
+            userchooseable: "disabled"
+          }),
+          new DatumField({
+            label : "participants",
+            shouldBeEncrypted: "",
+            userMasks: [],
+            help: "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. ",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "dateSEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "The date when the session data was entered."
+            help: "This field is deprecated, it was replaced by DateSessionEntered."
           }),
+          new DatumField({
+            label : "DateSessionEntered",
+            shouldBeEncrypted: "",
+            userchooseable: "disabled",
+            help: "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
+          })
         ]));
         
       }//end if to set sessionFields
@@ -15085,6 +15440,68 @@ define('corpus/Corpus',[
         donefillingcallback();
       }
     },
+    
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel){
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
+      }
+
+      /* Update the corpus to show all fields which are defaults on corpora, 
+      they are only added permanently if saved. */
+      var tempCorpus = new Corpus();
+      tempCorpus.fillWithDefaults();
+      
+      var corpusFields = tempCorpus.get("datumFields").toJSON();
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+
+      for(var field in corpusFields){
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this corpus: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
+        }
+      }
+
+      /* Update corpus to have default licensen and terms of use if the user hasnt defined them yet */
+      if (!originalModel.copyright) {
+        originalModel.copyright = "Default: Add names of the copyright holders of the corpus.";
+      }
+      var defaultLicense = {
+        title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+        humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+        link: "http://creativecommons.org/licenses/by-sa/3.0/"
+      };
+      if (!originalModel.license) {
+        originalModel.license = defaultLicense;
+      }
+      var licenseUpdated = originalModel.license;
+      if (typeof licenseUpdated == "string") {
+        licenseUpdated = {};
+      }
+      if (!licenseUpdated.title) {
+        licenseUpdated.title = defaultLicense.title;
+        originalModel.license = licenseUpdated;
+      }
+      if (!licenseUpdated.humanReadable) {
+        licenseUpdated.humanReadable = defaultLicense.humanReadable;
+        originalModel.license = licenseUpdated;
+      }
+      if (!licenseUpdated.link) {
+        licenseUpdated.link = defaultLicense.link;
+        originalModel.license = licenseUpdated;
+      }
+      var defaultTerms = {
+        humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+      };
+      var termsUpdated = originalModel.termsOfUse;
+      if (!termsUpdated || typeof termsUpdated == "string") {
+        termsUpdated = defaultTerms;
+        originalModel.termsOfUse = defaultTerms;
+      }
+      return this.originalParse(originalModel);
+    },
+
     /**
      * backbone-couchdb adaptor set up
      */
@@ -16652,13 +17069,19 @@ define('user/UserReadView',[
 //        childViewTagName     : 'li'
 //      });
     //Create a CommentReadView     
+      var corpuses = new Corpuses();
+      try {
+        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corpusesUserHasAccessTo")));
+      } catch (e) {
+        console.log("Couldn't load the list of corpora which the user has access to.");
+      } 
       this.corpusesReadView = new UpdatingCollectionView({
-        collection : new Corpuses(),
+        collection : corpuses,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
-      this.corpusesReadView.collection.constructCollectionFromArray(this.model
-          .get("corpuses"))
+      
     }
   });
 
@@ -16833,7 +17256,7 @@ define('authentication/AuthenticationEditView',[
       }
 
       if(this.model.get("userPublic") != undefined){
-        this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
+        this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
         this.model.set( "username", this.model.get("userPublic").get("username") );
       }
       // Display the AuthenticationEditView
@@ -17134,8 +17557,9 @@ define('authentication/AuthenticationEditView',[
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
-      dataToPost.gravatar = "user/user_gravatar.png";
-     
+      // dataToPost.gravatar = "user/user_gravatar.png";
+      var u = new UserMask();
+      dataToPost.gravatar = u.getGravatar(dataToPost.email);
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
@@ -17436,8 +17860,7 @@ define('datum/DatumFieldReadView',[
     model : DatumField,
 
     events : {
-      "click .icon-question-sign" : "showHelpConvention",
-      "hover .icon-question-sign" : "hideHelpConvention"  
+      "click .help-conventions" : "toggleHelpConvention"
     },    
     
     
@@ -17472,7 +17895,7 @@ define('datum/DatumFieldReadView',[
         $(this.el).html(this.templateValue(jsonToRender));
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
-        jsonToRender.helpText = false;
+        jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       }
     
@@ -17480,113 +17903,27 @@ define('datum/DatumFieldReadView',[
     },
     
     /**
-     * Show help convention in popover when clicked 
+     * Toggle help convention in popover  
      */
-    showHelpConvention : function() {
-        this.$el.children(".help-conventions").popover("show");
-    }, 
-
-    /**
-     * Don't show help convention in popover if only hover 
-     */
-    hideHelpConvention : function() {
-        this.$el.children(".help-conventions").popover("hide");
-    }    
-    
+    toggleHelpConvention : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".help-conventions").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".help-conventions").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    }
     
   });
 
   return DatumFieldReadView;
 });
-// TODO Make this a read-only version. Right now, this is just a copy of the Editable version
-
-define('datum/DatumStateReadView', [
-    "backbone", 
-    "handlebars", 
-    "datum/DatumState",
-    "OPrime"
-], function(
-    Backbone, 
-    Handlebars, 
-    DatumState
-) {
-  var DatumStateReadView = Backbone.View.extend(
-  /** @lends DatumStateReadView.prototype */
-  {
-    /**
-     * @class The DatumStateReadView is where user's can see the datum
-     *        states.
-     * 
-     * @property {String} format The format of the View. Valid values are "corpus".
-     * 
-     * @extends Backbone.View
-     * @constructs
-     */
-    initialize : function() {
-      if (OPrime.debugMode) OPrime.debug("DATUM STATE READ VIEW init");
-      
-      // Default format is "corpus" since it will be used in an UpdatingCollectionView.
-      this.format = "corpus";
-      
-      // If the model changes, re-render
-      this.model.bind('change', this.render, this);
-    },
-    
-    /**
-     * The underlying model of the DatumStateReadView is a DatumState.
-     */
-    model : DatumState,
-    
-    /**
-     * Events that the DatumStateReadView is listening to and their handlers.
-     */
-    events : {
-      "blur .datum_state_input" : "updateState",
-      "change .color_chooser" : "updateColor"
-    },
-
-    /**
-     * The Handlebars template rendered as the DatumStateSettingsReadView.
-     */
-    templateSettings : Handlebars.templates.datum_state_settings_read_embedded,
-      
-    /**
-     * Renders the DatumStateReadView.
-     */
-    render : function() {
-      if (OPrime.debugMode) OPrime.debug("DATUM STATE READ VIEW render");
-      
-      if (this.format == "corpus") {
-        // Display the DatumStateSettingsReadView
-        $(this.el).html(this.templateSettings(this.model.toJSON()));
-        
-        // Select the correct value from the color dropdown
-        this.$el.children(".color_chooser").val(this.model.get("color"));
-      }
-      
-      return this;
-    },
-    
-    /**
-     * Change the model's state.
-     */
-    updateState : function() {
-      if (OPrime.debugMode) OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
-      this.model.set("state", this.$el.children(".datum_state_input").val());
-    },
-    
-    /**
-     * Change the model's color.
-     */
-    updateColor : function() {
-      if (OPrime.debugMode) OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
-      this.model.set("color", this.$el.children(".color_chooser").val());
-    }
-  });
-
-  return DatumStateReadView;
-}); 
-
 // TODO Make this a read-only version. Right now, this is just a copy of the Editable version
 
 define('datum/DatumTagReadView',[
@@ -17946,7 +18283,6 @@ define('datum/DatumReadView',[
     "comment/CommentReadView",
     "datum/Datum",
     "datum/DatumFieldReadView",
-    "datum/DatumStateReadView",
     "datum/DatumTagReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
@@ -17960,7 +18296,6 @@ define('datum/DatumReadView',[
     CommentReadView,
     Datum,
     DatumFieldReadView,
-    DatumStateReadView,
     DatumTagReadView,
     SessionReadView,
     UpdatingCollectionView
@@ -17982,12 +18317,6 @@ define('datum/DatumReadView',[
       this.audioVideoView = new AudioVideoReadView({
         model : this.model.get("audioVideo")
       });
-      
-      // Create a DatumStateReadView
-      this.stateView = new DatumStateReadView({
-        model : this.model.get("state"),
-      });
-      this.stateView.format = "datum";
       
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
@@ -18090,7 +18419,7 @@ define('datum/DatumReadView',[
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
-      
+
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
@@ -18100,16 +18429,10 @@ define('datum/DatumReadView',[
         if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
-      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
-      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      try{
-        jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
-        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
-      }
+      jsonToRender.datumstate = this.model.getValidationStatus();
+      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       
       if (this.format == "well") {        
         // Display the DatumReadView
@@ -18384,17 +18707,20 @@ define('datum/DatumReadView',[
        
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
-        if(jsonToRender.datumstatecolor){
-          $(this.el).removeClass("datum-state-color-warning");
-          $(this.el).removeClass("datum-state-color-important");
-          $(this.el).removeClass("datum-state-color-info");
-          $(this.el).removeClass("datum-state-color-success");
-          $(this.el).removeClass("datum-state-color-inverse");
-
-          $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
+        if(!jsonToRender.datumstatecolor){
+          jsonToRender.datumstatecolor = "";
         }
+        // if(jsonToRender.datumstatecolor){
+          $(this.el).removeClass("datum-primary-validation-status-color-warning");
+          $(this.el).removeClass("datum-primary-validation-status-color-important");
+          $(this.el).removeClass("datum-primary-validation-status-color-info");
+          $(this.el).removeClass("datum-primary-validation-status-color-success");
+          $(this.el).removeClass("datum-primary-validation-status-color-inverse");
+
+          $(this.el).addClass("datum-primary-validation-status-color-"+jsonToRender.datumstatecolor);
+        // }
         try{
-          if(jsonToRender.datumstate.indexOf("Deleted") > -1){
+          if(jsonToRender.datumstate.toLowerCase().indexOf("Deleted") > -1){
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){
@@ -18403,12 +18729,6 @@ define('datum/DatumReadView',[
       }
       
       return this;
-    },
-    
-    renderState : function() {
-      if (this.stausview != undefined) {
-        this.stateView.render();
-      }
     },
     
     insertNewComment : function(e) {
@@ -18472,7 +18792,7 @@ define('datum/DatumReadView',[
   return DatumReadView;
 });
 
-define('data_list/DataListReadView', [ 
+define( 'data_list/DataListReadView',[ 
     "backbone", 
     "handlebars",
     "comment/Comment",
@@ -18779,6 +19099,9 @@ define('data_list/DataListReadView', [
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
+
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-quickview").find(".current-data-list-paginated-view") );
       
         //localization of the minimized data list icons
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
@@ -18938,7 +19261,7 @@ define('data_list/DataListReadView', [
   return DataListReadView;
 });
 
-define('datum/DatumStateEditView', [
+define( 'datum/DatumStateEditView',[
     "backbone", 
     "handlebars", 
     "datum/DatumState",
@@ -19332,6 +19655,11 @@ define('corpus/CorpusEditView',[
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
+      "blur .corpus-copyright-input" : "updateCopyright",
+      "blur .corpus-license-title-input" : "updateLicense",
+      "blur .corpus-license-humanreadable-input" : "updateLicense",
+      "blur .corpus-license-link-input" : "updateLicense",
+      "blur .corpus-terms-input" : "updateTermsOfUse",
       "blur .public-or-private" : "updatePublicOrPrivate",
       "blur .glosserURL" : function(e){
         if(e){
@@ -19340,6 +19668,11 @@ define('corpus/CorpusEditView',[
         }
         this.model.set("glosserURL", $(e.target).val());
       },
+
+      //help text around text areas 
+      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
+      "click .explain-license" : "toggleExplainLicense",
+      
       "click .save-corpus" : "updatePouch",
 //      Issue #797
 //      Only Admin users can trash corpus 
@@ -19514,6 +19847,11 @@ define('corpus/CorpusEditView',[
         $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
+        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
+        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
+        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
+        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -19710,7 +20048,33 @@ define('corpus/CorpusEditView',[
     },
     
     updateDescription: function(){
-      this.model.set("description",this.$el.find(".corpus-description-input").val());
+      this.model.set("description", this.$el.find(".corpus-description-input").val());
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateCopyright: function(){
+      this.model.set("copyright", this.$el.find(".corpus-copyright-input").val());
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateLicense: function(){
+      var license = {
+        title: this.$el.find(".corpus-license-title-input").val(),
+        link: this.$el.find(".corpus-license-link-input").val(),
+        humanReadable : this.$el.find(".corpus-license-humanreadable-input").val()
+      };
+      this.model.set("license", license);
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateTermsOfUse: function(){
+      var terms = {
+        humanReadable : this.$el.find(".corpus-terms-input").val()
+      };
+      this.model.set("termsOfUse", terms);
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }
@@ -19721,7 +20085,40 @@ define('corpus/CorpusEditView',[
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
-   
+    
+    //toggle Terms of Use explanation in popover 
+    toggleExplainTermsOfUse : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-terms-of-use").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+    
+    //toggle License explanation in popover 
+    toggleExplainLicense : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-license").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-license").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+
+    
     //Functions assoicate with the corpus menu
     newDatum : function(e) {
       if(e){
@@ -19946,6 +20343,95 @@ define('corpus/CorpusEditView',[
 
   return CorpusEditView;
 });
+// TODO Make this a read-only version. Right now, this is just a copy of the Editable version
+
+define( 'datum/DatumStateReadView',[
+    "backbone", 
+    "handlebars", 
+    "datum/DatumState",
+    "OPrime"
+], function(
+    Backbone, 
+    Handlebars, 
+    DatumState
+) {
+  var DatumStateReadView = Backbone.View.extend(
+  /** @lends DatumStateReadView.prototype */
+  {
+    /**
+     * @class The DatumStateReadView is where user's can see the datum
+     *        states.
+     * 
+     * @property {String} format The format of the View. Valid values are "corpus".
+     * 
+     * @extends Backbone.View
+     * @constructs
+     */
+    initialize : function() {
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE READ VIEW init");
+      
+      // Default format is "corpus" since it will be used in an UpdatingCollectionView.
+      this.format = "corpus";
+      
+      // If the model changes, re-render
+      this.model.bind('change', this.render, this);
+    },
+    
+    /**
+     * The underlying model of the DatumStateReadView is a DatumState.
+     */
+    model : DatumState,
+    
+    /**
+     * Events that the DatumStateReadView is listening to and their handlers.
+     */
+    events : {
+      "blur .datum_state_input" : "updateState",
+      "change .color_chooser" : "updateColor"
+    },
+
+    /**
+     * The Handlebars template rendered as the DatumStateSettingsReadView.
+     */
+    templateSettings : Handlebars.templates.datum_state_settings_read_embedded,
+      
+    /**
+     * Renders the DatumStateReadView.
+     */
+    render : function() {
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE READ VIEW render");
+      
+      if (this.format == "corpus") {
+        // Display the DatumStateSettingsReadView
+        $(this.el).html(this.templateSettings(this.model.toJSON()));
+        
+        // Select the correct value from the color dropdown
+        this.$el.children(".color_chooser").val(this.model.get("color"));
+      }
+      
+      return this;
+    },
+    
+    /**
+     * Change the model's state.
+     */
+    updateState : function() {
+      if (OPrime.debugMode) OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
+      this.model.set("state", this.$el.children(".datum_state_input").val());
+    },
+    
+    /**
+     * Change the model's color.
+     */
+    updateColor : function() {
+      if (OPrime.debugMode) OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
+      this.model.set("color", this.$el.children(".color_chooser").val());
+    }
+  });
+
+  return DatumStateReadView;
+}); 
+
 ;
 define("lexicon/LexiconView", function(){});
 
@@ -20138,6 +20624,10 @@ define('corpus/CorpusReadView',[
         
       },
       
+      //help text around text areas 
+      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
+      "click .explain-license" : "toggleExplainLicense",
+
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
@@ -20281,8 +20771,12 @@ define('corpus/CorpusReadView',[
         $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
+        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
+        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
+        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
+        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
 
-        
       } else if (this.format == "centreWell"){
         if (OPrime.debugMode) OPrime.debug("CORPUS READ CENTER render: " );
 
@@ -20421,6 +20915,39 @@ define('corpus/CorpusReadView',[
        });
       
     },
+
+    //toggle Terms of Use explanation in popover 
+    toggleExplainTermsOfUse : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-terms-of-use").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+
+    //toggle License explanation in popover 
+    toggleExplainLicense : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-license").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-license").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+
   //Functions assoicate with the corpus menu
     newDatum : function(e) {
       if(e){
@@ -20545,7 +21072,7 @@ define('corpus/CorpusReadView',[
 });
 
 
-define('data_list/DataListEditView', [ 
+define( 'data_list/DataListEditView',[ 
     "backbone", 
     "handlebars",
     "comment/Comment",
@@ -20655,8 +21182,6 @@ define('data_list/DataListEditView', [
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
-      
-      "change .datum_state_select" : "updateCheckedDatumStates",
       
       "click .icon-minus-sign" : function(e) {
         e.preventDefault();
@@ -20809,27 +21334,6 @@ define('data_list/DataListEditView', [
       jsonToRender.dateCreated = OPrime.prettyDate(jsonToRender.dateCreated);
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-
-      /*
-       * This is to get the datum states dropdown information and render "To be checked" as a default. 
-       * If user changes the label to something else, the first item in the dropdown menu will be shown.
-       * TODO test what happens if user changes datum state settings when a datalist is open 
-       */      
-      jsonToRender.datumStates = window.app.get("corpus").get("datumStates").toJSON();
-//      var indexOfToBeChecked = _.pluck(jsonToRender.datumStates, "state").indexOf("To be checked");
-//      if(indexOfToBeChecked == -1){
-//        indexOfToBeChecked = 0;
-//      }
-//      for(var x in jsonToRender.datumStates){
-//        if(x == indexOfToBeChecked){
-//          jsonToRender.datumStates[x].selected = "selected";
-//        }else{
-////          jsonToRender.datumStates[x].selected = "";
-//        }
-//      }
-      /* TODO instead, sort the datum states in the corpus by frequency... and take the top one */
-      jsonToRender.statecolor = jsonToRender.datumStates[0].color;
-      jsonToRender.datumstate = jsonToRender.datumStates[0].state;
 
       
       if (this.format == "leftSide") {
@@ -20992,6 +21496,9 @@ define('data_list/DataListEditView', [
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
+
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-quickview").find(".current-data-list-paginated-view") );
         
         //localization of the minimized data list icons
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
@@ -21176,27 +21683,6 @@ define('data_list/DataListEditView', [
       }
       alert("TODO");
     },
-   
-    updateCheckedDatumStates : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      var newState = e.target.value;
-//      $(this.el).find(".datum-state-color").find(".datum-state-value").html(newState);
-//      $(this.el).find(".datum-state-color").removeClass("label-warning");
-//      $(this.el).find(".datum-state-color").removeClass("label-imporant");
-//      $(this.el).find(".datum-state-color").removeClass("label-info");
-//      $(this.el).find(".datum-state-color").removeClass("label-success");
-//      $(this.el).find(".datum-state-color").removeClass("label-inverse");
-      
-//      var color = window.app.get("corpus").get("datumStates").models[_.pluck(window.app.get("corpus").get("datumStates").toJSON(), "state").indexOf(newState)].get("color");
-//      var datalisteditself= this;
-//      $(datalisteditself.el).find(".datum-state-color").addClass("label-"+color);
-//      
-//      this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "updateDatumState", newState);
-      return false;
-    },
     
     /**
      * 
@@ -21336,6 +21822,7 @@ define('audio_video/AudioVideoEditView',[
       //Use the terminal to put the file into the file system
       window.appView.term.addDroppedFiles(e.dataTransfer.files);
       window.filesToUpload = e.dataTransfer.files;
+      window.uploadAndGenerateTextGrid(e.dataTransfer.files);
       window.appView.term.output('<div>File(s) added!</div>');
       var audiojs = $(audio);
       audiojs.empty();
@@ -21433,6 +21920,80 @@ define('datum/DatumTagEditView',[
 
   return DatumTagEditView;
 }); 
+var rightBranchingBracketIt = function(pieces) {
+  if (pieces.length < 2) {
+    return pieces.join(" ");
+  }
+
+  // console.log(pieces);
+
+  // This is it! Recursion!!
+  var piece1 = pieces.pop();
+  var piece2 = pieces.pop();
+  pieces.push( "[" + piece2 + " " + piece1 + "]");
+  return  rightBranchingBracketIt(pieces) ;
+
+};
+
+var leftBranchingBracketIt = function(pieces) {
+  if (pieces.length < 2) {
+    return pieces.join(" ");
+  }
+
+  // console.log(pieces);
+
+  // This is it! Recursion!!
+  var piece1 = pieces.shift();
+  var piece2 = pieces.shift();
+  pieces.unshift( "[" + piece1 + " " + piece2 + "]" );
+  return  leftBranchingBracketIt(pieces) ;
+};
+
+var mixedBranchingBracketIt = function(pieces) {
+
+  window.count++;
+  if (pieces.length < 2) {
+    return pieces.join(" ");
+
+  }
+
+  // console.log(pieces);
+
+  // This is it! Recursion!!
+
+  if(window.count % 2 == 1){
+    var piece1 = pieces.shift();
+    var piece2 = pieces.shift();
+    pieces.unshift( "[" + piece1 + " " + piece2 + "]" );
+  }else{
+    var piece1 = pieces.pop();
+    var piece2 = pieces.pop();
+    pieces.push( "[" + piece2 + " " + piece1 + "]"); 
+  }
+
+  return  mixedBranchingBracketIt(pieces) ;
+
+};
+
+var bracketIt = function(morphemesLine) {
+
+  var trees = {};
+  trees.left = leftBranchingBracketIt(morphemesLine.split(" ")).replace(/\[/g, " [ ").replace(/\]/g, " ] ")
+  trees.right = rightBranchingBracketIt(morphemesLine.split(" ")).replace(/\[/g, " [ ").replace(/\]/g, " ] ");
+  trees.mixed = mixedBranchingBracketIt(morphemesLine.split(" ")).replace(/\[/g, " [ ").replace(/\]/g, " ] ");
+  return trees; 
+};
+
+
+var Tree = {
+	"mixedBranching": mixedBranchingBracketIt,
+	"rightBranching": rightBranchingBracketIt,
+	"leftBranching": leftBranchingBracketIt,
+  "generate": bracketIt
+
+};
+define("glosser/Tree", function(){});
+
 define('datum/DatumEditView',[
     "backbone", 
     "handlebars", 
@@ -21450,6 +22011,7 @@ define('datum/DatumEditView',[
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
+    "glosser/Tree",
     "OPrime"
 ], function(
     Backbone, 
@@ -21512,7 +22074,7 @@ define('datum/DatumEditView',[
         childViewClass   : "datum-field",
         childViewFormat      : "datum"
       });
-      
+
       this.sessionView = new SessionReadView({
         model : this.model.get("session"),
         });
@@ -21532,12 +22094,6 @@ define('datum/DatumEditView',[
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      /* Prevent clicking on the help conventions from reloading the page to # */
-      "click .help-conventions" :function(e){
-        if(e){
-          e.preventDefault();
-        }
-      },
       /* Menu */
       "click .LaTeX" : function(){
         this.model.latexitDatum(true);
@@ -21590,7 +22146,7 @@ define('datum/DatumEditView',[
           this.insertNewDatumTag();
         }
       },
-      "change .datum_state_select" : "updateDatumStates",
+      "blur .validationStatus" : "updateDatumStateColor",
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
@@ -21652,26 +22208,18 @@ define('datum/DatumEditView',[
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
+      this.model.startReadTimeIfNotAlreadyStarted();
       if (OPrime.debugMode) OPrime.debug("DATUM render: " );
-      
-     
       
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
-      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
-      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      try{
-        jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
-        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
-      }
+      jsonToRender.datumstate = this.model.getValidationStatus();
+      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
-      
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
@@ -21727,6 +22275,8 @@ define('datum/DatumEditView',[
         $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
         
         $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale.get("locale_Drag_and_Drop_Audio_Tooltip"));
+      
+
       }
 
       return this;
@@ -21759,9 +22309,16 @@ define('datum/DatumEditView',[
           this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
         }
       }
+      /* make ungrammatical sentences have a strike through them */
+      var grammaticality = this.$el.find(".judgement .datum_field_input").val();
+      if (grammaticality.indexOf("*") !== -1) {
+        this.$el.find(".utterance .datum_field_input").addClass("ungrammatical");
+      }
+
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
       $(this.el).find(".icon-th-list").removeClass("icon-th-list");
       $(this.el).find(".comments-section").hide();
+      this.updateDatumStateColor();
 
     },
     
@@ -21853,23 +22410,23 @@ define('datum/DatumEditView',[
       
       return false;
     },
-    
-    updateDatumStates : function() {
-      var selectedValue = this.$el.find(".datum_state_select").val();
-      try{
-        this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
-        this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-      }
-      
-      //update the view of the datum state to the new color and text without rendering the entire datum
-      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
-      $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
-      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
-      $(this.el).find(".datum-state-value").html(selectedValue);
 
-      this.needsSave = true;
+    updateDatumStateColor : function() {
+      var jsonToRender = {};
+      jsonToRender.datumstate = this.model.getValidationStatus();
+      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
+
+      if(!jsonToRender.datumstatecolor){
+        jsonToRender.datumstatecolor= "";
+      }
+      $(this.el).find(".datum_fields_ul textarea ").removeClass("datum-primary-validation-status-outline-color-warning");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-important");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-info");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-success");
+      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-inverse");
+
+      $(this.el).find(".datum_fields_ul textarea").addClass("datum-primary-validation-status-outline-color-"+jsonToRender.datumstatecolor);
+
     },
     
     /**
@@ -21937,6 +22494,7 @@ define('datum/DatumEditView',[
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
+      this.updateDatumStateColor();
       this.guessMorphemes(utteranceLine);
     },
     morphemesBlur : function(e){
@@ -21946,6 +22504,7 @@ define('datum/DatumEditView',[
       }
       this.guessUtterance($(e.currentTarget).val());
       this.guessGlosses($(e.currentTarget).val());
+      this.guessTree($(e.currentTarget).val());
       this.needsSave = true;
 
     },
@@ -21988,9 +22547,9 @@ define('datum/DatumEditView',[
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
         
+        this.previousGlossGuess = this.previousGlossGuess || [];
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
         if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
-          this.previousGlossGuess = this.previousGlossGuess || [];
           this.previousGlossGuess.push(glossLine);
           alternates.unshift(glossLine);
         }
@@ -22000,6 +22559,34 @@ define('datum/DatumEditView',[
           // If the gloss line is empty, or its from a previous guess, put our new guess there
 //          this.$el.find(".gloss .datum_field_input").val(glossLine);
           glossField.set("mask", glossLine);
+          this.needsSave = true;
+        }
+      }
+    },
+    /**
+    when pressing tab after filling morpheme line, guess different trees
+    and display them in Latex formatting
+
+    */
+    guessTree: function(morphemesLine) {
+      if (morphemesLine) {
+        var trees = Tree.generate(morphemesLine);
+        OPrime.debug(trees);
+        var syntacticTreeLatex  = "";
+        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
+        syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
+        syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
+        // syntacticTreeLatex +=  "Left: "+ trees.left;
+        // syntacticTreeLatex +=  "\nRight:" + trees.right;
+        // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
+        OPrime.debug(syntacticTreeLatex);
+        /* These put the syntacticTree into the actual datum fields on the screen so the user can see them */
+        if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
+          this.$el.find(".syntacticTreeLatex .datum_field_input").val(syntacticTreeLatex);
+        }        
+        var treeField = this.model.get("datumFields").where({label: "syntacticTreeLatex"})[0];
+        if (treeField) {
+          treeField.set("mask", syntacticTreeLatex);
           this.needsSave = true;
         }
       }
@@ -22231,7 +22818,6 @@ define('datum/DatumContainerEditView',[
       this.prependDatum(new Datum({
         filledWithDefaults : true,
         datumFields : new DatumFields(datumfields),
-        datumStates : app.get("corpus").get("datumStates").clone(),
         pouchname : app.get("corpus").get("pouchname"),
         session : app.get("currentSession")
       }));
@@ -22248,17 +22834,25 @@ define('datum/DatumContainerEditView',[
         // If the corpus' previous Datum is more than 24 hours old,
         // prompt the user if they want to create a new Session.
         var tooOld = false;
-          var previousDateModified = window.app.get("corpus").get("dateOfLastDatumModifiedToCheckForOldSession");
-          if (previousDateModified) {
-            var currentDate = new Date();
+        var promtForNewSession = "This session is getting pretty old.\n\nCreate a new session?";
+        var previousDateModified = window.app.get("corpus").get("dateOfLastDatumModifiedToCheckForOldSession");
+        if (previousDateModified) {
+          var currentDate = new Date();
+          var lastSaveDate;
             // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
-            if (currentDate - new Date(JSON.parse(previousDateModified)) > 86400000) {
+            try{
+              lastSaveDate = new Date(JSON.parse(previousDateModified));
+            }catch(e){
+              lastSaveDate = new Date(previousDateModified);
+            }
+            
+            if (currentDate - lastSaveDate > 86400000) {
               tooOld = true;
+            }
           }
-        }
-        if(!window.app.promptedForNewSession){
-          window.app.promptedForNewSession = true;
-          if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
+          if(!window.app.promptedForNewSession){
+            window.app.promptedForNewSession = true;
+            if (tooOld && confirm(promtForNewSession)) {
             // Display the new Session modal
             window.app.get("corpus").newSession();
             return;
@@ -23285,7 +23879,7 @@ function X2JS() {
 }
 
 var x2js = new X2JS();
-define("xml2json", ["jquery"], (function (global) {
+define("xml2json", ["$"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global.X2JS;
@@ -23913,7 +24507,7 @@ define('import/Import',[
    
   return Import;
 });
-define('import/ImportEditView', [ 
+define( 'import/ImportEditView',[ 
     "backbone",
     "handlebars",
     "import/Import",
@@ -23954,6 +24548,7 @@ define('import/ImportEditView', [
     initialize : function(){
       this.model.bind("change:asCSV", this.render, this);
       this._draghoverClassAdded = false;
+      var datumToCauseCorpusToUpdate = new Datum();
     },
     events : {
       "click .approve-save" : "saveDataList",
@@ -24486,25 +25081,16 @@ define('import/ImportEditView', [
                 validationType = "ToBeCheckedWith";
                 validationColor = "warning";
               }
-              window.app.get("corpus").get("datumStates")
-              .addIfNew({
-                color : validationColor,
-                showInSearchResults : "checked",
-                selected : "",
-                state : validationType + consultants[g].replace(/[- _.]/g,"")
-              });
               
               var validationString = validationType + consultants[g].replace(/[- _.]/g,"");
               validationStati.push(validationString);
               var n = fields.where({label: "validationStatus"})[0];
-              if(n != undefined){
-                /* add to any exisitng validation states */
-                var validationStatus = n.get("mask") || "";
-                validationStatus = validationStatus + " ";
-                validationStatus = validationStatus + validationStati.join(" ");
-                var uniqueStati = _.unique(validationStatus.trim().split(" "));
-                n.set("mask", uniqueStati.join(" "));
-              }
+              /* add to any exisitng validation states */
+              var validationStatus = n.get("mask") || "";
+              validationStatus = validationStatus + " ";
+              validationStatus = validationStatus + validationStati.join(" ");
+              var uniqueStati = _.unique(validationStatus.trim().split(" "));
+              n.set("mask", uniqueStati.join(" "));
               
 //              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
 //              /* get the initials from the data */
@@ -25699,6 +26285,12 @@ define('search/SearchEditView',[
       $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
       $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Advanced_Search_Tooltip"));
 
+      try{
+        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
+      }catch(e){
+        window.appView.toastUser("There was a problem loading your corpus visualization.");
+      }
+
       return this;
     },
     newTempDataList : function(callback){
@@ -25776,15 +26368,15 @@ define('search/SearchEditView',[
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "datum"
+        childViewTagName     : 'tr',
+        childViewFormat      : "search"
       });
       
       this.advancedSearchSessionView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "session"
+        childViewTagName     : 'tr',
+        childViewFormat      : "search"
       });
       
     },
@@ -26024,7 +26616,7 @@ define('user/UserEditView',[
         this.$el.modal("hide");
       },
       "click .save-user-profile" : "saveProfile",
-      "blur .gravatar" : "updateGravatar",
+      "blur .email" : "updateGravatar",
       "click .icon-book" : function(e){
         if(e){
           e.stopPropagation();
@@ -26141,11 +26733,13 @@ define('user/UserEditView',[
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());
-      this.model.set("email", $(this.el).find(".email").val());
+      var email = $(this.el).find(".email").val();
+      this.model.set("email", email);
+      this.model.set("gravatar", this.model.getGravatar(email));
       this.model.set("researchInterest", $(this.el).find(".researchInterest").val());
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
       this.model.set("description", $(this.el).find(".description").val());
-      this.model.set("gravatar", $(this.el).find(".gravatar").val());
+      // this.model.set("gravatar", $(this.el).find(".gravatar").val());
       
       //It is the private self
       if(this.format =="modal"){
@@ -26204,8 +26798,10 @@ define('user/UserEditView',[
       }
     },
     updateGravatar : function(){
-      this.model.set("gravatar", $(this.el).find(".gravatar").val());
-      $(this.el).find(".gravatar").attr("src",$(this.el).find(".gravatar").val());
+      var email = $(this.el).find(".email").val();
+      var gravatar = this.model.getGravatar(email);
+      this.model.set("gravatar", gravatar);
+      $(this.el).find(".gravatar-image").attr("src", "https://secure.gravatar.com/avatar/"+gravatar+"?d=identicon");
     },
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView      TODO add comments to users
@@ -26214,14 +26810,20 @@ define('user/UserEditView',[
 //        childViewConstructor : CommentReadView,
 //        childViewTagName     : 'li'
 //      });
-    //Create a CommentReadView     
+    //Create a CommentReadView    
+      var corpuses = new Corpuses();
+      try {
+        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corpusesUserHasAccessTo")));
+      } catch (e) {
+        console.log("Couldn't load the list of corpora which the user has access to.");
+      } 
       this.corpusesReadView = new UpdatingCollectionView({
-        collection : new Corpuses(),
+        collection : corpuses,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
-      this.corpusesReadView.collection.constructCollectionFromArray(this.model
-          .get("corpuses"))
+      
     }
   });
 
@@ -27085,6 +27687,7 @@ define('app/AppView',[
     "corpus/CorpusMask", 
     "corpus/CorpusEditView",
     "corpus/CorpusReadView",
+    "corpus/CorpusLinkView",
     "data_list/DataList",
     "data_list/DataListReadView",
     "data_list/DataListEditView",
@@ -27114,6 +27717,7 @@ define('app/AppView',[
     "user/User",
     "user/UserEditView",
     "user/UserReadView",
+    "app/UpdatingCollectionView",
     "terminal",
     "OPrime"
 ], function(
@@ -27128,6 +27732,7 @@ define('app/AppView',[
     CorpusMask,
     CorpusEditView,
     CorpusReadView,
+    CorpusLinkView,
     DataList,
     DataListReadView,
     DataListEditView,
@@ -27157,6 +27762,7 @@ define('app/AppView',[
     User,
     UserEditView,
     UserReadView,
+    UpdatingCollectionView,
     Terminal
 ) {
   var AppView = Backbone.View.extend(
@@ -27434,6 +28040,13 @@ define('app/AppView',[
         childViewClass       : "row span12"
       });  
       
+
+      this.corpusesReadView = new UpdatingCollectionView({
+        collection : this.model.get("corpusesUserHasAccessTo"),
+        childViewConstructor : CorpusLinkView,
+        childViewTagName : 'li'
+      });
+
       /*
        * fill collection with datum, this will render them at the same time.
        */
@@ -27446,7 +28059,7 @@ define('app/AppView',[
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 
-      this.currentEditDataListView.format = "leftSide";
+      this.currentEditDataListView.format = "minimized";
       
       
       if(this.currentReadDataListView){
@@ -27455,7 +28068,7 @@ define('app/AppView',[
       this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
       });  
-      this.currentReadDataListView.format = "leftSide";
+      this.currentReadDataListView.format = "minimized";
       
       
       if(typeof callback == "function"){
@@ -27697,6 +28310,9 @@ define('app/AppView',[
         //This forces the top search to render.
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
+
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
         
         //put the version into the terminal, and into the user menu
         OPrime.getVersion(function (ver) { 
@@ -27784,6 +28400,7 @@ define('app/AppView',[
       $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
       $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
       $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+      $(this.el).find(".locale_Corpora").html(Locale.get("locale_Corpora"));
 //      $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
 
       return this;
@@ -27794,7 +28411,7 @@ define('app/AppView',[
     renderReadonlyDashboardViews : function() {
       this.renderReadonlyCorpusViews("leftSide");
       this.renderReadonlySessionViews("leftSide");
-      this.renderReadonlyDataListViews("leftSide");
+      this.renderReadonlyDataListViews("minimized");
       this.renderEditableDatumsViews("centreWell");
       this.datumsEditView.showMostRecentDatum();
     },
@@ -28333,7 +28950,7 @@ define('app/AppView',[
     });
 }());
 
-define('text!locales/en/messages.json',[],function () { return '{\n  "application_title" : {\n    "message" : "LingSync beta",\n    "description" : "The title of the application, displayed in the web store."\n  },\n  "application_description" : {\n    "message" : "An on/offline fieldlinguistics database app which adapts to its user\'s I-Language.",\n    "description" : "The description of the application, displayed in the web store."\n  },\n  "locale_Close_and_login_as_LingLlama" : {\n    "message" : "Login as LingLlama",\n    "description" : "button"\n  },\n  "locale_Close_and_login_as_LingLlama_Tooltip" : {\n    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you\'re new to LingSync this is a great place to start after watching the videos. ",\n    "description" : "tooltip"\n  },\n  "locale_Username" : {\n    "message" : "Username:"\n  },\n  "locale_Password" : {\n    "message" : "Password:"\n  },\n  "locale_Sync_my_data_to_this_computer" : {\n    "message" : "Sync my data to this device"\n  },\n  "locale_Welcome_to_FieldDB" : {\n    "message" : "Welcome to LingSync!"\n  },\n  "locale_An_offline_online_fieldlinguistics_database" : {\n    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."\n  },\n  "locale_Welcome_Beta_Testers" : {\n    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"\n  },\n  "locale_Welcome_Screen" : {\n    "message" : "<p>Curious what this is? <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"\n  },\n  "locale_Create_a_new_user" : {\n    "message" : "Register"\n  },\n  "locale_What_is_your_username_going_to_be" : {\n    "message" : "What is your username going to be?"\n  },\n  "locale_Confirm_Password" : {\n    "message" : "Confirm Password:"\n  },\n  "locale_Sign_in_with_password" : {\n    "message" : "Register"\n  },\n  "locale_Warning" : {\n    "message" : "Warning!"\n  },\n  "locale_Instructions_to_show_on_dashboard" : {\n    "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=\' icon-edit\'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app.     To more information about what a \'Corpus\' is, click <i class=\' icon-cogs resize-full\'></i>.     It will show the corpus settings, which contains explanations of each component of a \'Corpus.\'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>",\n    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=\' icon-edit\'></i>. To see what Corpus consists of, click <i class=\' icon-cogs resize-full\'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=\' icon-edit\'></i>. Click <i class=\' icon icon-resize-full\'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>"\n    \n  },\n  "locale_elicitation_sessions_explanation" : {\n    "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class=\'icons icon-edit\'></i> icon in Dashboard view. For additional options, click on the <i class=\'icon-calendar\'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"\n  },\n  "locale_datalists_explanation" : {\n    "message" : "<p>A Datalist is a collection of Datum that you put together for some reason. Some examples are: making a handout, sharing data with someone, exporting into another program, or simply keeping track of similar Datum for your research.</p> <p> Creating a Datalist is like making a bookmark to a set of custom search results. First, do a search for whatever you want the Datalist to be about. Then, if you don\'t want some of the results to be included in the Datalist, click the <i class=\'icon-remove-sign\'></i> icon by any Datum to remove it. Finally, edit the title and description, and click the save button to create the Datalist.</p> <p>You can see your Datalists on the left side of your dashboard (click plus/minus to expand/minimize) or in the list below (double-click on a title to view details). </p><p>To see all your data, do a search with nothing in the search bar. If you have over 200 Datum in your corpus, this can be pretty slow, so you may prefer to search for a subset. In general, a Datalist with more than 100 Datum will take a few seconds to load.</p> <p> In the Datalist view, the Datum will appear in the colour of their current state (i.e. Checked with a consultant, To be checked, Deleted etc). You can make new states in the Datum State Settings on this page. </p>"\n  },\n  "locale_permissions_explanation" : {\n    "message" : "<p>Permissions are where you give other people access to your corpus.</p><p>To add another LingSync user, you need to know their username. Click the <i class=\'icons icon-edit\'></i> icon at the top right and then come back to Permissions and click the \'See current team members\' button. You can then add users by typing in their username by the appropriate group.</p> <ul><li>Admins can add other people to any group but not do anything with the data unless they are also writers/readers.</li> <li>Writers can enter new data, add comments, change Datum State from \'to be checked to \'checked\' etc, but not see data that is already entered. </li><li>Readers can see data that is already entered in the app but not edit or comment on it. </li></ul><p>If you want someone to be able to both enter data and see existing data, add them as both a writer and a reader.</p><p>If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, type \'Public\' in the \'Public or Private\' field below.</p><p>You can, and should, encrypt any Datum containing sensitive information by clicking the <i class=\' icon-unlock\'></i> button at the bottom of the Datum. Encrypted Datums are shown as \'xxx xx xx xx\' to all users, including on the web. If you want to see the contents of a confidential Datum, click on the <i class=\'icon-eye-open\'></i> and enter your password. This will make the Datum visible for 10 minutes.</p>"\n  },\n  "locale_datum_fields_explanation" : {\n    "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class=\'icon-list-alt\'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class=\'icons icon-edit\'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n    "locale_conversation_fields_explanation" : {\n    "message" : "<p>Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a \'location\' field, but instead choose to encrypt a \'world knowledge\' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n  "locale_datum_states_explanation" : {\n    "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, \'Checked\' with a consultant, \'To be checked\', \'Deleted\' etc. </p> <p>Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team\'s data validation workflow (e.g. \'To be checked with Sophie,\' \'Checked with Gladys\').  You can assign colours to your Datum States, which will appear as the background colour of the Datum in any Datalist. </p> <p> If you flag a Datum as Deleted it won\'t show up in search results anymore, but a Datum in a corpus is never really deleted. It remains in the database complete with its change history so that you can review it at a later date. (In future we might add a button to allow users to \'empty the trash\' and mass-delete old Datum from the system.) </p> "\n  },\n   "locale_advanced_search_explanation" : {\n    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type \'nay\' and search will find the morphemes \'onay\', \'naya\' etc. </p> <p>Search automatically creates a temporary list of data. If you enter new matching data, it will be added automatically this can be a handy way to see the data you have entered recently, as you enter data.. If you want to keep the list of data, click Save and a new DataList will be created. </p> <p>For now, search is offline, running on your device, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"\n   },\n  "locale_New_User" : {\n    "message" : "New User"\n  },\n  "locale_Activity_Feed_Your" : {\n    "message" : "Your Activity Feed"\n  },\n  "locale_Activity_Feed_Team" : {\n    "message" : "Corpus Team Activity Feed"\n  },\n  "locale_Refresh_Activities" : {\n    "message" : "Refresh activity feed to bring it up-to-date."\n  },\n  "locale_Need_save" : {\n    "message" : " Need save:"\n  },\n  "locale_60_unsaved" : {\n    "message" : "<strong>60% unsaved.</strong>"\n  },\n  "locale_Recent_Changes" : {\n    "message" : "Recent Changes:"\n  },\n  "locale_Need_sync" : {\n    "message" : "Need sync:"\n  },\n  "locale_Differences_with_the_central_server" : {\n    "message" : "Differences with the central server:"\n  },\n  "locale_to_beta_testers" : {\n    "message" : "These messages are here to communicate to users what the app is doing. We will gradually reduce the number of messages as the app becomes more stable. <p>You can close these messages by clicking on their x.</p>"\n  },\n  "locale_We_need_to_make_sure_its_you" : {\n    "message" : "We need to make sure it\'s you..."\n  },\n  "locale_Yep_its_me" : {\n    "message" : "Yep, it\'s me"\n  },\n  "locale_Log_Out" : {\n    "message" : "Log Out"\n  },\n  "locale_Log_In" : {\n    "message" : "Log In"\n  },\n  "locale_User_Settings" : {\n    "message" : "User Settings"\n  },\n  "locale_Keyboard_Shortcuts" : {\n    "message" : "Keyboard Shortcuts"\n  },\n  "locale_Corpus_Settings" : {\n    "message" : "Corpus Settings"\n  },\n  "locale_Terminal_Power_Users" : {\n    "message" : "Power Users Backend"\n  },\n  "locale_New_Datum" : {\n    "message" : "New Datum"\n  },\n  "locale_New_menu" : {\n    "message" : "New"\n  },\n  "locale_New_Conversation" : {\n  \t"message" : "New Conversation"\n  },\n  "locale_New_Data_List" : {\n    "message" : "New Data List"\n  },\n  "locale_New_Session" : {\n    "message" : "New Session"\n  },\n  "locale_New_Corpus" : {\n    "message" : "New Corpus"\n  },\n  "locale_Data_menu" : {\n    "message" : "Data"\n  },\n  "locale_Import_Data" : {\n    "message" : "Import Data"\n  },\n  "locale_Export_Data" : {\n    "message" : "Export Data"\n  },\n  "locale_All_Data" : {\n  \t"message" : "All Data"\n  },\n  "locale_Save" : {\n    "message" : "Save"\n  },\n  "locale_Title" : {\n    "message" : "Title:"\n  },\n  "locale_Description" : {\n    "message" : "Description:"\n  },\n  "locale_Sessions_associated" : {\n    "message" : "Elicitation Sessions associated with this corpus"\n  },\n  "locale_Datalists_associated" : {\n    "message" : "Datalists associated with this corpus"\n  },\n  "locale_Permissions_associated" : {\n    "message" : "Permissions associated with this corpus"\n  },\n  "locale_Datum_field_settings" : {\n    "message" : "Datum Field Settings"\n  },\n  "locale_Conversation_field_settings" : {\n    "message" : "Conversation Field Settings"\n  },\n  "locale_Encrypt_if_confidential" : {\n    "message" : "Encrypt if confidential:"\n  },\n  "locale_Help_Text" : {\n    "message" : "Help Text:"\n  },\n  "locale_Add" : {\n    "message" : "Add"\n  },\n  "locale_Datum_state_settings" : {\n    "message" : "Datum State Settings"\n  },\n  "locale_Green" : {\n    "message" : "Green"\n  },\n  "locale_Orange" : {\n    "message" : "Orange"\n  },\n  "locale_Red" : {\n    "message" : "Red"\n  },\n  "locale_Blue" : {\n    "message" : "Blue"\n  },\n  "locale_Teal" : {\n    "message" : "Teal"\n  },\n  "locale_Black" : {\n    "message" : "Black"\n  },\n  "locale_Default" : {\n    "message" : "Default"\n  },\n  "locale_Elicitation_Session" : {\n    "message" : "Elicitation Session"\n  },\n  "locale_Export" : {\n    "message" : "Export"\n  },\n  "locale_Actions" : {\n    "message" : "Actions"\n  },\n  "locale_Navigation" : {\n    "message" : "Navigation"\n  },\n  "locale_Datum_Status_Checked" : {\n    "message" : "Mark Datum status as checked/verified with language consultant"\n  },\n  "locale_Next_Datum" : {\n    "message" : "Next Datum"\n  },\n  "locale_Previous_Datum" : {\n    "message" : "Previous Datum"\n  },\n  "locale_Data_Entry_Area" : {\n    "message" : "Data Entry Area <small>(1-5 datum)</small>"\n  },\n  "locale_Search" : {\n    "message" : "Type your search query, or hit enter to see all data"\n  },\n  "locale_View_Profile_Tooltip" : {\n    "message" : "Click to view user\'s page"\n  },\n  "locale_View_Public_Profile_Tooltip" : {\n    "message" : "View/edit your public user\'s page"\n  },\n  "locale_Edit_User_Profile_Tooltip" : {\n    "message" : "Click to edit your user profile"\n  },\n  "locale_Public_Profile_Instructions" : {\n    "message" : "This is your public user\'s page. You can edit it to change/remove information. This is what your team members can see when they click on your gravatar. All of this information (including your gravatar) can be different from the information in your private profile."\n  },\n  "locale_Private_Profile_Instructions" : {\n    "message" : "This is your private profile."\n  },\n  "locale_Edit_Public_User_Profile" : {\n    "message" : "Edit my public user\'s page"\n  },\n  "locale_Close" : {\n    "message" : "Close"\n  },\n  "locale_New_Corpus_Instructions" : {\n    "message" : "Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus"\n  },\n  "locale_New_Corpus_Warning" : {\n    "message" : " The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental."\n  },\n  "locale_Cancel" : {\n    "message" : "Cancel"\n  },\n  "locale_Next" : {\n    "message" : "Next"\n  },\n  "locale_Show" : {\n    "message" : "Show"\n  },\n  "locale_per_page" : {\n    "message" : "per page"\n  },\n  "locale_New_Session_Instructions" : {\n    "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"\n  },\n  "locale_Consultants" : {\n    "message" : "Consultant(s):"\n  },\n  "locale_Goal" : {\n    "message" : "Goal:"\n  },\n  "locale_When" : {\n    "message" : "When:"\n  },\n  "locale_Save_And_Import" : {\n    "message" : "Save and Finish Importing"\n  },\n  "locale_Import" : {\n    "message" : "Import"\n  },\n  "locale_percent_completed" : {\n    "message" : "% completed."\n  },\n  "locale_Import_Instructions" : {\n    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus\'s existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus\' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a \'datum\' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", \n    "message" : "Everyone\'s data is different. <a href=\'http://www.facebook.com/LingSyncApp\'>You might know some fellow users who might be able to help you import yours: </a>"\n  }, \n  "locale_Import_First_Step" : {\n    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area. You can edit the data inside the text area.</p>"\n  },\n    "locale_Import_Second_Step" : {\n    "message" : "<p>Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.</p>"\n  },\n  "locale_Import_Third_Step" : {\n    "message" : "<p>Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import. </p>"\n  },\n  "locale_Drag_Fields_Instructions" : {\n    "message" : "<p>Drag (or type) the coloured datum fields to the column headings which match. Type in any additional column headings which you would like to keep as datum fields. The columns will become default datum fields in your corpus database and will also become fields that you can search through to locate your data. Each row will become a \'datum\' in your corpus database.</p>"\n  },\n  "locale_Add_Extra_Columns" : {\n    "message" : "Insert Extra Columns"\n  },\n  "locale_Attempt_Import" : {\n    "message" : "Preview Import"\n  },\n  "locale_LaTeX_Code" : {\n    "message" : "LaTeX Code:"\n  },\n  "locale_Unicode_Instructions" : {\n    "message" : "By default this is also a keyboard shortcut to type this character in a datum field. To customize the shortcut:"\n  },\n  "locale_Remove_Unicode" : {\n    "message" : "Remove Unicode"\n  },\n  "locale_Unicode" : {\n    "message" : "Unicode"\n  },\n  "locale_Drag_and_Drop" : {\n    "message" : "<small>Drag and Drop</small>"\n  },\n  "locale_AND" : {\n    "message" : "AND"\n  },\n  "locale_OR" : {\n    "message" : "OR"\n  },\n  "locale_Advanced_Search" : {\n    "message" : "Advanced Search"\n  },\n  "locale_Advanced_Search_Tooltip" : {\n    "message" : "Advanced Search allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."\n  },\n  "locale_User_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Private_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Public_Profile" : {\n    "message" : "Public Profile"\n  },\n  "locale_Email" : {\n    "message" : "Email:"\n  },\n  "locale_Research_Interests" : {\n    "message" : "Research Interests:"\n  },\n  "locale_Affiliation" : {\n    "message" : "Affiliation:"\n  },\n  "locale_Corpora" : {\n    "message" : "Corpora:"\n  },\n  "locale_Gravatar" : {\n    "message" : "Gravatar"\n  },\n  "locale_Gravatar_URL" : {\n    "message" : "Gravatar URL:"\n  },\n  "locale_Firstname" : {\n    "message" : "First name:"\n  },\n  "locale_Lastname" : {\n    "message" : "Last name:"\n  },\n  "locale_Skin" : {\n    "message" : "Skin:"\n  },\n  "locale_Background_on_Random" : {\n    "message" : "Background on Random"\n  },\n  "locale_Transparent_Dashboard" : {\n    "message" : "Transparent Dashboard"\n  },\n  "locale_Change_Background" : {\n    "message" : "Change Background"\n  },\n  "locale_Number_Datum" : {\n    "message" : "Number of Datum to appear at a time:"\n  },\n  "locale_Help_Text_Placeholder" : {\n    "message" : "Put a help text or your team data entry conventions for this field here (optional)."\n  },\n  "locale_Add_Placeholder" : {\n    "message" : "Add...."\n  },\n  "locale_Datalist_Description" : {\n    "message" : "You can use Datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."\n  },\n  "locale_Add_Tag" : {\n    "message" : "New Tag..."\n  },\n  "locale_Drag_and_Drop_Placeholder" : {\n    "message" : "Drag and drop, copy-paste or type your data here."\n  },\n  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {\n    "message" : "Paste/type unicode symbol"\n  },\n  "locale_TIPA_shortcut" : {\n    "message" : "TIPA/keyboard shortcut"\n  },\n  "locale_Show_Activities" : {\n    "message" : "Show Activities"\n  },\n  "locale_Hide_Activities" : {\n    "message" : "Hide Activities"\n  },\n  "locale_Show_Dashboard" : {\n    "message" : "Show dashboard with data entry form"\n  },\n  "locale_Save_on_this_Computer" : {\n    "message" : "Save on this device."\n  },\n  "locale_Sync_and_Share" : {\n    "message" : "Sync and share with team"\n  },\n  "locale_Show_Readonly" : {\n    "message" : "Show read only"\n  },\n  "locale_Show_Fullscreen" : {\n    "message" : "Show full screen"\n  },\n  "locale_Add_New_Datum_Field_Tooltip" : {\n    "message" : "Add new datum field"\n  },\n  "locale_Add_New_Conversation_Field_Tooltip" : {\n    "message" : "Add new conversation field"\n  },\n  "locale_Add_New_Datum_State_Tooltip" : {\n    "message" : "Add new datum state"\n  },\n  "locale_Show_in_Dashboard" : {\n    "message" : "Show in dashboard"\n  },\n  "locale_Edit_corpus" : {\n    "message" : "Edit Corpus"\n  },\n  "locale_Show_corpus_settings" : {\n    "message" : "Show Corpus Settings"\n  },\n  "locale_Drag_and_Drop_Audio_Tooltip" : {\n    "message" : "Drag and drop audio over the audio player to attach an audio file. Drag and drop option for YouTube videos coming soon."\n  },\n  "locale_Play_Audio" : {\n    "message" : "Play audio"\n  },\n  "locale_Play_Audio_checked" : {\n    "message" : "Play audio of checked items"\n  },\n  "locale_Remove_checked_from_datalist_tooltip" : {\n    "message" : "Remove checked datum from this data list (they will still be in the corpus). "\n  },\n  "locale_Plain_Text_Export_Tooltip" : {\n    "message" : "Export as plain text/Copy to clipboard"\n  },\n  "locale_Plain_Text_Export_Tooltip_checked" : {\n    "message" : "Export as plain text/Copy checked items to clipboard"\n  },\n  "locale_Duplicate" : {\n    "message" : "Duplicate datum to create a minimal pair"\n  },\n  "locale_Encrypt" : {\n    "message" : "Make this datum confidential"\n  },\n  "locale_Encrypt_checked" : {\n    "message" : "Make checked items confidential"\n  },\n  "locale_Decrypt_checked" : {\n    "message" : "Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you just want to unmask them so you can edit edit them, click on the eye instead."\n  },\n  "locale_Decrypt" : {\n    "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."\n  },\n  "locale_Show_confidential_items_Tooltip" : {\n    "message" : "Unmask confidential/encrypted data so that it can be edited and read for the next 10 minutes."\n  },\n  "locale_Hide_confidential_items_Tooltip" : {\n    "message" : "Return to masked view of confidential/encrypted data"\n  },\n  "locale_Edit_Datalist" : {\n    "message" : "Edit Data List"\n  },\n  "locale_Export_checked_as_LaTeX" : {\n    "message" : "Export checked as LaTeX"\n  },\n  "locale_Export_checked_as_CSV" : {\n    "message" : "Export checked as CSV"\n  },\n  "locale_Hide_Datalist" : {\n    "message" : "Hide datalist"\n  },\n  "locale_Show_Datalist" : {\n    "message" : "Show datalist"\n  },\n  "locale_Edit_Datum" : {\n    "message" : "Edit Datum"\n  },\n  "locale_See_Fields" : {\n    "message" : "Hide/Show infrequent fields"\n  },\n  "locale_Add_Tags_Tooltip" : {\n    "message" : "Add a tag to this datum. Tags can be used to categorize datum, count how many datum of each tag you have, and search datum."\n  },\n  "locale_Edit_Session" : {\n    "message" : "Edit Session"\n  },\n  "locale_Show_Unicode_Palette" : {\n    "message" : "Show Unicode Palette"\n  },\n  "locale_Hide_Unicode_Palette" : {\n    "message" : "Hide Unicode Palette"\n  },\n  "locale_Add_new_symbol" : {\n    "message" : "Add new symbol"\n  },\n  "locale_Public_or_Private" : {\n    "message" : "Public or Private:"\n  },\n  "locale_Insert_New_Datum" : {\n    "message" : "Insert a new datum on top of the dashboard center"\n  },\n  "locale_LaTeX" : {\n    "message" : "Export datum as LaTeX"\n  },\n  "locale_CSV_Tooltip" : {\n    "message" : "Export datum as CSV"\n  },\n  "locale_of" : {\n    "message" : "of"\n  },\n  "locale_pages_shown" : {\n    "message" : "pages shown"\n  },\n  "locale_More" : {\n    "message" : "More"\n  }\n}\n';});
+define('text!locales/en/messages.json',[],function () { return '{\n  "application_title" : {\n    "message" : "LingSync beta",\n    "description" : "The title of the application, displayed in the web store."\n  },\n  "application_description" : {\n    "message" : "An on/offline fieldlinguistics database app which adapts to its user\'s I-Language.",\n    "description" : "The description of the application, displayed in the web store."\n  },\n  "locale_Close_and_login_as_LingLlama" : {\n    "message" : "Login as LingLlama",\n    "description" : "button"\n  },\n  "locale_Close_and_login_as_LingLlama_Tooltip" : {\n    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you\'re new to LingSync this is a great place to start after watching the videos. ",\n    "description" : "tooltip"\n  },\n  "locale_Username" : {\n    "message" : "Username:"\n  },\n  "locale_Password" : {\n    "message" : "Password:"\n  },\n  "locale_Sync_my_data_to_this_computer" : {\n    "message" : "Sync my data to this device"\n  },\n  "locale_Welcome_to_FieldDB" : {\n    "message" : "Welcome to LingSync!"\n  },\n  "locale_An_offline_online_fieldlinguistics_database" : {\n    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."\n  },\n  "locale_Welcome_Beta_Testers" : {\n    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"\n  },\n  "locale_Welcome_Screen" : {\n    "message" : "<p>Curious what this is? <a target=\'top\' href=\'https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"\n  },\n  "locale_Create_a_new_user" : {\n    "message" : "Register"\n  },\n  "locale_What_is_your_username_going_to_be" : {\n    "message" : "What is your username going to be?"\n  },\n  "locale_Confirm_Password" : {\n    "message" : "Confirm Password:"\n  },\n  "locale_Sign_in_with_password" : {\n    "message" : "Register"\n  },\n  "locale_Warning" : {\n    "message" : "Warning!"\n  },\n  "locale_Instructions_to_show_on_dashboard" : {\n    "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=\' icon-edit\'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app.     To more information about what a \'Corpus\' is, click <i class=\' icon-cogs resize-full\'></i>.     It will show the corpus settings, which contains explanations of each component of a \'Corpus.\'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>",\n    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=\' icon-edit\'></i>. To see what Corpus consists of, click <i class=\' icon-cogs resize-full\'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=\' icon-edit\'></i>. Click <i class=\' icon icon-resize-full\'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class=\'caret\'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href=\'https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\' target=\'_new\'>Contact us</a> </p>"\n    \n  },\n  "locale_elicitation_sessions_explanation" : {\n    "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class=\'icons icon-edit\'></i> icon in Dashboard view. For additional options, click on the <i class=\'icon-calendar\'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"\n  },\n  "locale_datalists_explanation" : {\n    "message" : "<p>A Datalist is a collection of Datum that you put together for some reason. Some examples are: making a handout, sharing data with someone, exporting into another program, or simply keeping track of similar Datum for your research.</p> <p> Creating a Datalist is like making a bookmark to a set of custom search results. First, do a search for whatever you want the Datalist to be about. Then, if you don\'t want some of the results to be included in the Datalist, click the <i class=\'icon-remove-sign\'></i> icon by any Datum to remove it. Finally, edit the title and description, and click the save button to create the Datalist.</p> <p>You can see your Datalists on the left side of your dashboard (click plus/minus to expand/minimize) or in the list below (double-click on a title to view details). </p><p>To see all your data, do a search with nothing in the search bar. If you have over 200 Datum in your corpus, this can be pretty slow, so you may prefer to search for a subset. In general, a Datalist with more than 100 Datum will take a few seconds to load.</p> <p> In the Datalist view, the Datum will appear in the colour of their current state (i.e. Checked with a consultant, To be checked, Deleted etc). You can make new states in the Datum State Settings on this page. </p>"\n  },\n  "locale_permissions_explanation" : {\n    "message" : "<p>Permissions are where you give other people access to your corpus.</p><p>To add another LingSync user, you need to know their username. Click the <i class=\'icons icon-edit\'></i> icon at the top right and then come back to Permissions and click the \'See current team members\' button. You can then add users by typing in their username by the appropriate group.</p> <ul><li>Admins can add other people to any group but not do anything with the data unless they are also writers/readers.</li> <li>Writers can enter new data, add comments, change Datum State from \'to be checked to \'checked\' etc, but not see data that is already entered. </li><li>Readers can see data that is already entered in the app but not edit or comment on it. </li></ul><p>If you want someone to be able to both enter data and see existing data, add them as both a writer and a reader.</p><p>If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, type \'Public\' in the \'Public or Private\' field below.</p><p>You can, and should, encrypt any Datum containing sensitive information by clicking the <i class=\' icon-unlock\'></i> button at the bottom of the Datum. Encrypted Datums are shown as \'xxx xx xx xx\' to all users, including on the web. If you want to see the contents of a confidential Datum, click on the <i class=\'icon-eye-open\'></i> and enter your password. This will make the Datum visible for 10 minutes.</p>"\n  },\n  "locale_datum_fields_explanation" : {\n    "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class=\'icon-list-alt\'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class=\'icons icon-edit\'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n    "locale_conversation_fields_explanation" : {\n    "message" : "<p>Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as \'xxx xx xxxxx\'. For example, you may choose to not encrypt a \'location\' field, but instead choose to encrypt a \'world knowledge\' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class=\'icon-question-sign\'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"\n  },\n  "locale_datum_states_explanation" : {\n    "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, \'Checked\' with a consultant, \'To be checked\', \'Deleted\' etc. </p> <p>Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team\'s data validation workflow (e.g. \'To be checked with Sophie,\' \'Checked with Gladys\').  You can assign colours to your Datum States, which will appear as the background colour of the Datum in any Datalist. </p> <p> If you flag a Datum as Deleted it won\'t show up in search results anymore, but a Datum in a corpus is never really deleted. It remains in the database complete with its change history so that you can review it at a later date. (In future we might add a button to allow users to \'empty the trash\' and mass-delete old Datum from the system.) </p> "\n  },\n   "locale_advanced_search_explanation" : {\n    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type \'nay\' and search will find the morphemes \'onay\', \'naya\' etc. </p> <p>Search automatically creates a temporary list of data. If you enter new matching data, it will be added automatically this can be a handy way to see the data you have entered recently, as you enter data.. If you want to keep the list of data, click Save and a new DataList will be created. </p> <p>For now, search is offline, running on your device, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"\n   },\n  "locale_New_User" : {\n    "message" : "New User"\n  },\n  "locale_Activity_Feed_Your" : {\n    "message" : "Your Activity Feed"\n  },\n  "locale_Activity_Feed_Team" : {\n    "message" : "Corpus Team Activity Feed"\n  },\n  "locale_Refresh_Activities" : {\n    "message" : "Refresh activity feed to bring it up-to-date."\n  },\n  "locale_Need_save" : {\n    "message" : " Need save:"\n  },\n  "locale_60_unsaved" : {\n    "message" : "<strong>60% unsaved.</strong>"\n  },\n  "locale_Recent_Changes" : {\n    "message" : "Recent Changes:"\n  },\n  "locale_Need_sync" : {\n    "message" : "Need sync:"\n  },\n  "locale_Differences_with_the_central_server" : {\n    "message" : "Differences with the central server:"\n  },\n  "locale_to_beta_testers" : {\n    "message" : "These messages are here to communicate to users what the app is doing. We will gradually reduce the number of messages as the app becomes more stable. <p>You can close these messages by clicking on their x.</p>"\n  },\n  "locale_We_need_to_make_sure_its_you" : {\n    "message" : "We need to make sure it\'s you..."\n  },\n  "locale_Yep_its_me" : {\n    "message" : "Yep, it\'s me"\n  },\n  "locale_Log_Out" : {\n    "message" : "Log Out"\n  },\n  "locale_Log_In" : {\n    "message" : "Log In"\n  },\n  "locale_User_Settings" : {\n    "message" : "User Settings"\n  },\n  "locale_Keyboard_Shortcuts" : {\n    "message" : "Keyboard Shortcuts"\n  },\n  "locale_Corpus_Settings" : {\n    "message" : "Corpus Settings"\n  },\n  "locale_Terminal_Power_Users" : {\n    "message" : "Power Users Backend"\n  },\n  "locale_New_Datum" : {\n    "message" : "New Datum"\n  },\n  "locale_New_menu" : {\n    "message" : "New"\n  },\n  "locale_New_Conversation" : {\n  \t"message" : "New Conversation"\n  },\n  "locale_New_Data_List" : {\n    "message" : "New Data List"\n  },\n  "locale_New_Session" : {\n    "message" : "New Session"\n  },\n  "locale_New_Corpus" : {\n    "message" : "New Corpus"\n  },\n  "locale_Data_menu" : {\n    "message" : "Data"\n  },\n  "locale_Import_Data" : {\n    "message" : "Import Data"\n  },\n  "locale_Export_Data" : {\n    "message" : "Export Data"\n  },\n  "locale_All_Data" : {\n  \t"message" : "All Data"\n  },\n  "locale_Save" : {\n    "message" : "Save"\n  },\n  "locale_Title" : {\n    "message" : "Title:"\n  },\n  "locale_Description" : {\n    "message" : "Description:"\n  },\n    "locale_Copyright" : {\n    "message" : "Corpus Copyright:"\n  },\n    "locale_License" : {\n    "message" : "Corpus License:"\n  },\n    "locale_License_explanation" : {\n    "message" : "If you make a portion of your corpus available to other people, EMELD recommends that you document clearly your terms of use, and apply a license to enforce them. For easy to understand standard licenses, you can consult <a href=\'http://creativecommons.org/licenses/\' target=\'_blank\'>Creative Commons</a>. Creative Commons licenses are applied to most web/community owned/created data, be it Wikipedia or other popular content sharing websites and mobile apps."\n  },\n    "locale_Terms_of_use" : {\n    "message" : "Corpus Terms of Use:"\n  },\n    "locale_Terms_explanation" : {\n    "message" : "When you decide to make a portion of your corpus public, EMELD recommend that you cleary state your Terms of Use with your corpus. You can modify the sample of “Terms of Use” in the textbox below according to the policy of your project (be sure to discuss with other project members and affected parties before deciding on your terms of use). Please also try to choose a license which makes sense with your Terms of Use. For your reference, see also the terms of use for other corpora such as: <a href=\'http://www.aiatsis.gov.au/collections/muraread.html\' target=\'_blank\'>Mura</a>, <a href=\'http://www.paradisec.org.au/services.html\' target=\'_blank\'>PARADISEC</a>, <a href=\'http://linguistics.berkeley.edu/~survey/archive/terms-of-use.php\' target=\'_blank\'>Survey of California and Other Indian Languages</a> "\n  },\n  "locale_Sessions_associated" : {\n    "message" : "Elicitation Sessions associated with this corpus"\n  },\n  "locale_Datalists_associated" : {\n    "message" : "Datalists associated with this corpus"\n  },\n  "locale_Permissions_associated" : {\n    "message" : "Permissions associated with this corpus"\n  },\n  "locale_Datum_field_settings" : {\n    "message" : "Datum Field Settings"\n  },\n  "locale_Conversation_field_settings" : {\n    "message" : "Conversation Field Settings"\n  },\n  "locale_Encrypt_if_confidential" : {\n    "message" : "Encrypt if confidential:"\n  },\n  "locale_Help_Text" : {\n    "message" : "Help Text:"\n  },\n  "locale_Add" : {\n    "message" : "Add"\n  },\n  "locale_Datum_state_settings" : {\n    "message" : "Datum State Settings"\n  },\n  "locale_Green" : {\n    "message" : "Green"\n  },\n  "locale_Orange" : {\n    "message" : "Orange"\n  },\n  "locale_Red" : {\n    "message" : "Red"\n  },\n  "locale_Blue" : {\n    "message" : "Blue"\n  },\n  "locale_Teal" : {\n    "message" : "Teal"\n  },\n  "locale_Black" : {\n    "message" : "Black"\n  },\n  "locale_Default" : {\n    "message" : "Default"\n  },\n  "locale_Elicitation_Session" : {\n    "message" : "Elicitation Session"\n  },\n  "locale_Export" : {\n    "message" : "Export"\n  },\n  "locale_Actions" : {\n    "message" : "Actions"\n  },\n  "locale_Navigation" : {\n    "message" : "Navigation"\n  },\n  "locale_Datum_Status_Checked" : {\n    "message" : "Mark Datum status as checked/verified with language consultant"\n  },\n  "locale_Next_Datum" : {\n    "message" : "Next Datum"\n  },\n  "locale_Previous_Datum" : {\n    "message" : "Previous Datum"\n  },\n  "locale_Data_Entry_Area" : {\n    "message" : "Data Entry Area <small>(1-5 datum)</small>"\n  },\n  "locale_Search" : {\n    "message" : "Type your search query, or hit enter to see all data"\n  },\n  "locale_View_Profile_Tooltip" : {\n    "message" : "Click to view user\'s page"\n  },\n  "locale_View_Public_Profile_Tooltip" : {\n    "message" : "View/edit your public user\'s page"\n  },\n  "locale_Edit_User_Profile_Tooltip" : {\n    "message" : "Click to edit your user profile"\n  },\n  "locale_Public_Profile_Instructions" : {\n    "message" : "This is your public user\'s page. You can edit it to change/remove information. This is what your team members can see when they click on your gravatar. All of this information (including your gravatar) can be different from the information in your private profile."\n  },\n  "locale_Private_Profile_Instructions" : {\n    "message" : "This is your private profile."\n  },\n  "locale_Edit_Public_User_Profile" : {\n    "message" : "Edit my public user\'s page"\n  },\n  "locale_Close" : {\n    "message" : "Close"\n  },\n  "locale_New_Corpus_Instructions" : {\n    "message" : "Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus"\n  },\n  "locale_New_Corpus_Warning" : {\n    "message" : " The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental."\n  },\n  "locale_Cancel" : {\n    "message" : "Cancel"\n  },\n  "locale_Next" : {\n    "message" : "Next"\n  },\n  "locale_Show" : {\n    "message" : "Show"\n  },\n  "locale_per_page" : {\n    "message" : "per page"\n  },\n  "locale_New_Session_Instructions" : {\n    "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"\n  },\n  "locale_Consultants" : {\n    "message" : "Consultant(s):"\n  },\n  "locale_Goal" : {\n    "message" : "Goal:"\n  },\n  "locale_When" : {\n    "message" : "When:"\n  },\n  "locale_Save_And_Import" : {\n    "message" : "Save and Finish Importing"\n  },\n  "locale_Import" : {\n    "message" : "Import"\n  },\n  "locale_percent_completed" : {\n    "message" : "% completed."\n  },\n  "locale_Import_Instructions" : {\n    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus\'s existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus\' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a \'datum\' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", \n    "message" : "Everyone\'s data is different. <a href=\'http://www.facebook.com/LingSyncApp\'>You might know some fellow users who might be able to help you import yours: </a>"\n  }, \n  "locale_Import_First_Step" : {\n    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area. You can edit the data inside the text area.</p>"\n  },\n    "locale_Import_Second_Step" : {\n    "message" : "<p>Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.</p>"\n  },\n  "locale_Import_Third_Step" : {\n    "message" : "<p>Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import. </p>"\n  },\n  "locale_Drag_Fields_Instructions" : {\n    "message" : "<p>Drag (or type) the coloured datum fields to the column headings which match. Type in any additional column headings which you would like to keep as datum fields. The columns will become default datum fields in your corpus database and will also become fields that you can search through to locate your data. Each row will become a \'datum\' in your corpus database.</p>"\n  },\n  "locale_Add_Extra_Columns" : {\n    "message" : "Insert Extra Columns"\n  },\n  "locale_Attempt_Import" : {\n    "message" : "Preview Import"\n  },\n  "locale_LaTeX_Code" : {\n    "message" : "LaTeX Code:"\n  },\n  "locale_Unicode_Instructions" : {\n    "message" : "By default this is also a keyboard shortcut to type this character in a datum field. To customize the shortcut:"\n  },\n  "locale_Remove_Unicode" : {\n    "message" : "Remove Unicode"\n  },\n  "locale_Unicode" : {\n    "message" : "Unicode"\n  },\n  "locale_Drag_and_Drop" : {\n    "message" : "<small>Drag and Drop</small>"\n  },\n  "locale_AND" : {\n    "message" : "AND"\n  },\n  "locale_OR" : {\n    "message" : "OR"\n  },\n  "locale_Advanced_Search" : {\n    "message" : "Advanced Search"\n  },\n  "locale_Advanced_Search_Tooltip" : {\n    "message" : "Advanced Search allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."\n  },\n  "locale_User_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Private_Profile" : {\n    "message" : "User Profile"\n  },\n  "locale_Public_Profile" : {\n    "message" : "Public Profile"\n  },\n  "locale_Email" : {\n    "message" : "Email:"\n  },\n  "locale_Research_Interests" : {\n    "message" : "Research Interests:"\n  },\n  "locale_Affiliation" : {\n    "message" : "Affiliation:"\n  },\n  "locale_Corpora" : {\n    "message" : "Switch to another corpus:"\n  },\n  "locale_Gravatar" : {\n    "message" : "Gravatar"\n  },\n  "locale_Gravatar_URL" : {\n    "message" : "Gravatar URL:"\n  },\n  "locale_Firstname" : {\n    "message" : "First name:"\n  },\n  "locale_Lastname" : {\n    "message" : "Last name:"\n  },\n  "locale_Skin" : {\n    "message" : "Skin:"\n  },\n  "locale_Background_on_Random" : {\n    "message" : "Background on Random"\n  },\n  "locale_Transparent_Dashboard" : {\n    "message" : "Transparent Dashboard"\n  },\n  "locale_Change_Background" : {\n    "message" : "Change Background"\n  },\n  "locale_Number_Datum" : {\n    "message" : "Number of Datum to appear at a time:"\n  },\n  "locale_Help_Text_Placeholder" : {\n    "message" : "Put a help text or your team data entry conventions for this field here (optional)."\n  },\n  "locale_Add_Placeholder" : {\n    "message" : "Add...."\n  },\n  "locale_Datalist_Description" : {\n    "message" : "You can use Datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."\n  },\n  "locale_Add_Tag" : {\n    "message" : "New Tag..."\n  },\n  "locale_Drag_and_Drop_Placeholder" : {\n    "message" : "Drag and drop, copy-paste or type your data here."\n  },\n  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {\n    "message" : "Paste/type unicode symbol"\n  },\n  "locale_TIPA_shortcut" : {\n    "message" : "TIPA/keyboard shortcut"\n  },\n  "locale_Show_Activities" : {\n    "message" : "Show Activities"\n  },\n  "locale_Hide_Activities" : {\n    "message" : "Hide Activities"\n  },\n  "locale_Show_Dashboard" : {\n    "message" : "Show dashboard with data entry form"\n  },\n  "locale_Save_on_this_Computer" : {\n    "message" : "Save on this device."\n  },\n  "locale_Sync_and_Share" : {\n    "message" : "Sync and share with team"\n  },\n  "locale_Show_Readonly" : {\n    "message" : "Show read only"\n  },\n  "locale_Show_Fullscreen" : {\n    "message" : "Show full screen"\n  },\n  "locale_Add_New_Datum_Field_Tooltip" : {\n    "message" : "Add new datum field"\n  },\n  "locale_Add_New_Conversation_Field_Tooltip" : {\n    "message" : "Add new conversation field"\n  },\n  "locale_Add_New_Datum_State_Tooltip" : {\n    "message" : "Add new datum state"\n  },\n  "locale_Show_in_Dashboard" : {\n    "message" : "Show in dashboard"\n  },\n  "locale_Edit_corpus" : {\n    "message" : "Edit Corpus"\n  },\n  "locale_Show_corpus_settings" : {\n    "message" : "Show Corpus Settings"\n  },\n  "locale_Drag_and_Drop_Audio_Tooltip" : {\n    "message" : "Drag and drop audio over the audio player to attach an audio file. Drag and drop option for YouTube videos coming soon."\n  },\n  "locale_Play_Audio" : {\n    "message" : "Play audio"\n  },\n  "locale_Play_Audio_checked" : {\n    "message" : "Play audio of checked items"\n  },\n  "locale_Remove_checked_from_datalist_tooltip" : {\n    "message" : "Remove checked datum from this data list (they will still be in the corpus). "\n  },\n  "locale_Plain_Text_Export_Tooltip" : {\n    "message" : "Export as plain text/Copy to clipboard"\n  },\n  "locale_Plain_Text_Export_Tooltip_checked" : {\n    "message" : "Export as plain text/Copy checked items to clipboard"\n  },\n  "locale_Duplicate" : {\n    "message" : "Duplicate datum to create a minimal pair"\n  },\n  "locale_Encrypt" : {\n    "message" : "Make this datum confidential"\n  },\n  "locale_Encrypt_checked" : {\n    "message" : "Make checked items confidential"\n  },\n  "locale_Decrypt_checked" : {\n    "message" : "Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you just want to unmask them so you can edit edit them, click on the eye instead."\n  },\n  "locale_Decrypt" : {\n    "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."\n  },\n  "locale_Show_confidential_items_Tooltip" : {\n    "message" : "Unmask confidential/encrypted data so that it can be edited and read for the next 10 minutes."\n  },\n  "locale_Hide_confidential_items_Tooltip" : {\n    "message" : "Return to masked view of confidential/encrypted data"\n  },\n  "locale_Edit_Datalist" : {\n    "message" : "Edit Data List"\n  },\n  "locale_Export_checked_as_LaTeX" : {\n    "message" : "Export checked as LaTeX"\n  },\n  "locale_Export_checked_as_CSV" : {\n    "message" : "Export checked as CSV"\n  },\n  "locale_Hide_Datalist" : {\n    "message" : "Hide datalist"\n  },\n  "locale_Show_Datalist" : {\n    "message" : "Show datalist"\n  },\n  "locale_Edit_Datum" : {\n    "message" : "Edit Datum"\n  },\n  "locale_See_Fields" : {\n    "message" : "Hide/Show infrequent fields"\n  },\n  "locale_Add_Tags_Tooltip" : {\n    "message" : "Add a tag to this datum. Tags can be used to categorize datum, count how many datum of each tag you have, and search datum."\n  },\n  "locale_Edit_Session" : {\n    "message" : "Edit Session"\n  },\n  "locale_Show_Unicode_Palette" : {\n    "message" : "Show Unicode Palette"\n  },\n  "locale_Hide_Unicode_Palette" : {\n    "message" : "Hide Unicode Palette"\n  },\n  "locale_Add_new_symbol" : {\n    "message" : "Add new symbol"\n  },\n  "locale_Public_or_Private" : {\n    "message" : "Public or Private:"\n  },\n  "locale_Insert_New_Datum" : {\n    "message" : "Insert a new datum on top of the dashboard center"\n  },\n  "locale_LaTeX" : {\n    "message" : "Export datum as LaTeX"\n  },\n  "locale_CSV_Tooltip" : {\n    "message" : "Export datum as CSV"\n  },\n  "locale_of" : {\n    "message" : "of"\n  },\n  "locale_pages_shown" : {\n    "message" : "pages shown"\n  },\n  "locale_More" : {\n    "message" : "More"\n  }\n}\n';});
 
 define('app/App',[
     "backbone", 
@@ -28341,6 +28958,8 @@ define('app/App',[
     "activity/Activity",
     "authentication/Authentication", 
     "corpus/Corpus",
+    "corpus/CorpusMask",
+    "corpus/Corpuses",
     "data_list/DataList",
     "datum/DatumField",
     "datum/DatumFields",
@@ -28358,6 +28977,8 @@ define('app/App',[
     Activity,
     Authentication, 
     Corpus,
+    CorpusMask,
+    Corpuses,
     DataList,
     DatumField,
     DatumFields,
@@ -28696,6 +29317,7 @@ define('app/App',[
       if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
+      var couchConnectionInscope = couchConnection;
       $.couch.login({
         name: username,
         password: password,
@@ -28703,6 +29325,33 @@ define('app/App',[
           if(!serverResults){
             OPrime.bug("There was a problem logging you into your backup database, please report this.");
           }
+          var corpuses =  window.app.get("corpusesUserHasAccessTo")  || new Corpuses();
+          var roles = serverResults.roles;
+          for (var role in roles) {
+            var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
+            thisCouchConnection.corpusid = "";
+            thisCouchConnection.pouchname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+            thisCouchConnection.title = thisCouchConnection.pouchname;
+            if (thisCouchConnection.title.length > 30) {
+              thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
+            }
+            if (thisCouchConnection.title.length > 30) {
+              thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
+            }
+            thisCouchConnection.id = thisCouchConnection.pouchname;
+            if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
+              if (corpuses.where({
+                "pouchname": thisCouchConnection.pouchname
+              }).length === 0) {
+                corpuses.push(new CorpusMask(thisCouchConnection));
+              } else {
+                console.log(thisCouchConnection.pouchname + " Already known");
+              }
+            }
+          }
+          window.app.set("corpusesUserHasAccessTo", corpuses);
+          localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
+          
           if (window.appView) {
             window.appView
             .toastUser(
@@ -28998,7 +29647,7 @@ define('app/App',[
           corpusid = this.get("corpus").id;
         }else{
           $(".spinner-status").html("Opening/Creating Corpus...");
-          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function(){
+          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection, function(){
             /* if the corpusid is missing, make sure there are other objects in the dashboard */
             selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
 //          window.app.stopSpinner();
@@ -29011,52 +29660,15 @@ define('app/App',[
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
-            
             /* Upgrade chrome app user corpora's to v1.38+ */
             var oldCouchConnection = corpusModel.get("couchConnection");
             if(oldCouchConnection){
+              oldCouchConnection.corpusid = corpusModel._id;
               if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
                 oldCouchConnection.domain  = "corpusdev.lingsync.org";
                 oldCouchConnection.port = "";
-                corpusModel.set("couchConnection", oldCouchConnection);
               }
-            }
-            
-            try{
-              var tags = corpusModel.get("datumFields").where({label : "tags"});
-              if(tags.length == 0){
-                /* If its missing tags, add upgrade the corpus to version v1.38+ */
-                corpusModel.get("datumFields").add(new DatumField({
-                  label : "tags",
-                  shouldBeEncrypted: "",
-                  userchooseable: "disabled",
-                  help: "Tags for constructions or other info that you might want to use to categorize your data."
-                }));
-                corpusModel.get("datumFields").add(new DatumField({
-                  label : "validationStatus",
-                  shouldBeEncrypted: "",
-                  userchooseable: "disabled",
-                  help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
-                }));
-              }
-            }catch(e){
-              OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
-            }
-            try{
-              var tags = corpusModel.get("datumFields").where({label : "syntacticTreeLatex"});
-              if(tags.length == 0){
-                /* If its missing syntacticTreeLatex, add upgrade the corpus to version v1.54+ */
-                corpusModel.get("datumFields").add(new DatumField({
-                  label : "syntacticTreeLatex",
-                  showToUserTypes: "machine",
-                  shouldBeEncrypted: "",
-                  userchooseable: "disabled",
-                  help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
-                }));
-               
-              }
-            }catch(e){
-              OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
+              corpusModel.set("couchConnection", oldCouchConnection);
             }
             
             $(".spinner-status").html("Opened Corpus...");
@@ -29102,6 +29714,12 @@ define('app/App',[
                               if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               if(window.appView){
                                 window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
+                              }
+                              try {
+                                window.app.set("corpusesUserHasAccessTo", new Corpuses(JSON.parse(localStorage.getItem(
+                                  window.app.get("authentication").get("userPrivate").get("username") + "corpusesUserHasAccessTo"))));
+                              } catch (e) {
+                                console.log("Couldn't load the list of corpora which the user has access to.");
                               }
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
@@ -29258,6 +29876,7 @@ define('app/App',[
       var activitydb = couchConnection.pouchname + "-activity_feed";
       if (bareActivityObject.teamOrPersonal != "team") {
         activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
+        backboneActivity.attributes.user.gravatar= this.get("authentication").get("userPrivate").get("gravatar");
       }
       var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
       
@@ -29316,7 +29935,7 @@ define('app/App',[
         }, failurecallback);
       }, failurecallback);
     }
-    
+
    
   });
 
@@ -29374,7 +29993,7 @@ require.config({
   shim : {
 
     "xml2json" : {
-      deps : [ "jquery" ],
+      deps : [ "$" ],
       exports : "X2JS"
     },
 
@@ -29425,6 +30044,14 @@ require([ "app/App", "backbone", "OPrime" ], function(App,
   window.app = new App({
     filledWithDefaults : true
   });
+  
+  window.uploadAndGenerateTextGrid = function(files){
+//    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
+//    alert("I'm going to submit the upload form.");
+//    document.getElementById("uploadAudioForTextGridform").submit();
+  };
+  
+  
 });
 
 define("corpus_online_dashboard", function(){});

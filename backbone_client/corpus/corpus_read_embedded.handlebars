@@ -43,15 +43,33 @@
 <h2>
 	<i class="icon-cloud"></i> {{title}} <small>{{publicCorpus}}</small>
 </h2>
-<a href="http://www.lingsync.org/{{username}}/{{titleAsUrl}}"
+<a href="http://lingsync.org/{{username}}/{{titleAsUrl}}"
 	target="_blank"><i class=" icon-link"></i></a>
 <small>Shareable URL:
-	http://www.lingsync.org/{{username}}/{{titleAsUrl}}</small>
+	http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
 <div class="description">{{description}}</div>
 
+
+<label><span class="locale_Terms_of_use"></span>
+<a class="explain-terms-of-use locale_Terms_explanation" data-html="true" rel="popover" data-placement="right" data-content=""  data-original-title="Why have a Terms of Use for your corpus" tabindex="-1">
+  <i class="icon-question-sign"></i>
+</a></label>
+<div class="terms">{{termsOfUse.humanReadable}}</div>
+
+<label><span class="locale_License"></span>
+<a class="explain-license locale_License_explanation" data-html="true" rel="popover"  data-placement="right" data-content=""   data-original-title="Why have a License for your corpus" tabindex="-1">
+  <i class="icon-question-sign"></i>
+</a></label>
+<div class="license"><a href="{{license.link}}" target="_blank">{{license.title}}</a></div>
+<div class="license">{{license.humanReadable}}</div>
+
+<label><span class="locale_Copyright"></span></label>
+<div class="copyright">{{copyright}}</div>
+
+
+
 <!-- Force directed graph of morphemes in the corpus -->
-<div class="corpus-precedence-rules-visualization"
-	id="corpus-precedence-rules-visualization-fullscreen"></div>
+<div class="corpus-precedence-rules-visualization"></div>
 
 <div class="accordion" id="accordion-read-embedded">
 	<div class="accordion-group">
@@ -192,5 +210,5 @@
 </div>
 
 <!-- Corpus comments -->
-<div class="new-comment-area "></div> 
 <ul class="comments unstyled"></ul>
+<div class="new-comment-area "></div> 
