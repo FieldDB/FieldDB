@@ -53,7 +53,7 @@ define([
         this.$el.modal("hide");
       },
       "click .save-user-profile" : "saveProfile",
-      "blur .gravatar" : "updateGravatar",
+      "blur .email" : "updateGravatar",
       "click .icon-book" : function(e){
         if(e){
           e.stopPropagation();
@@ -170,11 +170,13 @@ define([
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());
-      this.model.set("email", $(this.el).find(".email").val());
+      var email = $(this.el).find(".email").val();
+      this.model.set("email", email);
+      this.model.set("gravatar", this.model.getGravatar(email));
       this.model.set("researchInterest", $(this.el).find(".researchInterest").val());
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
       this.model.set("description", $(this.el).find(".description").val());
-      this.model.set("gravatar", $(this.el).find(".gravatar").val());
+      // this.model.set("gravatar", $(this.el).find(".gravatar").val());
       
       //It is the private self
       if(this.format =="modal"){
@@ -233,8 +235,10 @@ define([
       }
     },
     updateGravatar : function(){
-      this.model.set("gravatar", $(this.el).find(".gravatar").val());
-      $(this.el).find(".gravatar").attr("src",$(this.el).find(".gravatar").val());
+      var email = $(this.el).find(".email").val();
+      var gravatar = this.model.getGravatar(email);
+      this.model.set("gravatar", gravatar);
+      $(this.el).find(".gravatar-image").attr("src", "https://secure.gravatar.com/avatar/"+gravatar+"?d=identicon");
     },
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView      TODO add comments to users
@@ -243,14 +247,20 @@ define([
 //        childViewConstructor : CommentReadView,
 //        childViewTagName     : 'li'
 //      });
-    //Create a CommentReadView     
+    //Create a CommentReadView    
+      var corpuses = new Corpuses();
+      try {
+        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corpusesUserHasAccessTo")));
+      } catch (e) {
+        console.log("Couldn't load the list of corpora which the user has access to.");
+      } 
       this.corpusesReadView = new UpdatingCollectionView({
-        collection : new Corpuses(),
+        collection : corpuses,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
-      this.corpusesReadView.collection.constructCollectionFromArray(this.model
-          .get("corpuses"))
+      
     }
   });
 

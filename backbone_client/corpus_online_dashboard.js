@@ -49,7 +49,7 @@ require.config({
   shim : {
 
     "xml2json" : {
-      deps : [ "jquery" ],
+      deps : [ "$" ],
       exports : "X2JS"
     },
 
@@ -102,9 +102,9 @@ require([ "app/App", "backbone", "OPrime" ], function(App,
   });
   
   window.uploadAndGenerateTextGrid = function(files){
-    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
-    alert("Im going to submit the upload form.");
-    document.getElementById("uploadAudioForTextGridform").submit();
+//    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
+//    alert("I'm going to submit the upload form.");
+//    document.getElementById("uploadAudioForTextGridform").submit();
   };
   
   

@@ -168,6 +168,11 @@ define([
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
+      "blur .corpus-copyright-input" : "updateCopyright",
+      "blur .corpus-license-title-input" : "updateLicense",
+      "blur .corpus-license-humanreadable-input" : "updateLicense",
+      "blur .corpus-license-link-input" : "updateLicense",
+      "blur .corpus-terms-input" : "updateTermsOfUse",
       "blur .public-or-private" : "updatePublicOrPrivate",
       "blur .glosserURL" : function(e){
         if(e){
@@ -176,6 +181,11 @@ define([
         }
         this.model.set("glosserURL", $(e.target).val());
       },
+
+      //help text around text areas 
+      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
+      "click .explain-license" : "toggleExplainLicense",
+      
       "click .save-corpus" : "updatePouch",
 //      Issue #797
 //      Only Admin users can trash corpus 
@@ -350,6 +360,11 @@ define([
         $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
+        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
+        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
+        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
+        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -546,7 +561,33 @@ define([
     },
     
     updateDescription: function(){
-      this.model.set("description",this.$el.find(".corpus-description-input").val());
+      this.model.set("description", this.$el.find(".corpus-description-input").val());
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateCopyright: function(){
+      this.model.set("copyright", this.$el.find(".corpus-copyright-input").val());
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateLicense: function(){
+      var license = {
+        title: this.$el.find(".corpus-license-title-input").val(),
+        link: this.$el.find(".corpus-license-link-input").val(),
+        humanReadable : this.$el.find(".corpus-license-humanreadable-input").val()
+      };
+      this.model.set("license", license);
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
+    },
+    updateTermsOfUse: function(){
+      var terms = {
+        humanReadable : this.$el.find(".corpus-terms-input").val()
+      };
+      this.model.set("termsOfUse", terms);
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }
@@ -557,7 +598,40 @@ define([
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
-   
+    
+    //toggle Terms of Use explanation in popover 
+    toggleExplainTermsOfUse : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-terms-of-use").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+    
+    //toggle License explanation in popover 
+    toggleExplainLicense : function(e) {
+      if(e){
+        // e.preventDefault();
+        e.stopPropagation();
+      }
+      if (this.showingHelp) {
+        this.$el.find(".explain-license").popover("hide");
+        this.showingHelp = false;
+      } else {
+        this.$el.find(".explain-license").popover("show");
+        this.showingHelp = true;
+      }
+      return false;
+    },
+
+    
     //Functions assoicate with the corpus menu
     newDatum : function(e) {
       if(e){

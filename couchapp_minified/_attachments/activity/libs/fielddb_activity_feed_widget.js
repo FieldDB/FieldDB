@@ -15128,8 +15128,8 @@ console.log("Loading CouchDBServices");
  */
 
 
-define('libs/oprime/services/CouchDB',
-    [ "angular", "OPrime" ],
+define(
+    'libs/oprime/services/CouchDB',[ "angular", "OPrime" ],
     function(angular, OPrime) {
 
       var CouchDBServices = angular
@@ -15203,8 +15203,8 @@ define('libs/oprime/services/CouchDB',
 
     });
 
-define('js/controllers',
-    [ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
+define(
+    'js/controllers',[ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
     function(angular, OPrime, CouchDBServices) {
       // Declare app level module which depends on filters, and services
 
@@ -15220,7 +15220,7 @@ define('js/controllers',
        * @returns
        */
       var ActivityFeedController = function ActivityFeedController($scope,
-          $routeParams, $resource, MostRecentActivities, GetSessionToken) {
+          $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken) {
         console.log("Loading ActivityFeedController");
         /*
          * TODO get a corpus item out of the non-activity feed, or out of the
@@ -15231,7 +15231,7 @@ define('js/controllers',
           gravatar : "user/user_gravatar.png",
           title : "Activity Feed",
           team : {
-            _id : $routeParams.username
+            username : $routeParams.username
           }
         };
 
@@ -15245,17 +15245,25 @@ define('js/controllers',
         if (feedParams.corpusid) {
           /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
           if(feedParams.corpusid.indexOf(feedParams.username) > -1){
-            feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+            feedParams.corpusid = feedParams.corpusid.replace($routeParams.username,"");
           }else{
             feedParams.username = "";
           }
-          $scope.corpus.title = "Corpus Activity Feed";
+          $scope.corpus.title = "What's happening in this corpus";
+          CorpusDetails.async({username: $routeParams.corpusid.split("-")[0], corpusid: $routeParams.corpusid}).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }else{
           feedParams.corpusid = "";
-          $scope.corpus.title = "User Activity Feed";
+          $scope.corpus.title = "What was I working on last time...";
+          UserDetails.async(feedParams).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }
 
-        
+
 //        GetSessionToken.run({
 //          "name" : "public",
 //          "password" : "none"
@@ -15268,7 +15276,7 @@ define('js/controllers',
       };
 
       ActivityFeedController.$inject = [ '$scope', '$routeParams', '$resource',
-          'MostRecentActivities', 'GetSessionToken' ];
+          'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken' ];
 
       OPrime.debug("Defining ActivityFeedController.");
 
@@ -15314,15 +15322,22 @@ define('js/filters',[ "angular", "OPrime" ], function(angular, OPrime) {
         return function(text) {
           return String(text).replace(/\%VERSION\%/mg, version);
         };
-      } ]);
+      } ]).filter('gravatar', function(){
+        return function(gravatar, scope) {
+          if(!gravatar){
+            return "user_gravatar.png";
+          }
+          return gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+        };
+      });
 
   OPrime.debug("Defining ActivityFeedFilters.");
 
   return ActivityFeedFilters;
 });
 
-define('js/services',
-    [ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
+define(
+    'js/services',[ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
     function(angular, OPrime, CouchDBServices) {
 
       console.log("Loading Activity.services");
@@ -15356,7 +15371,7 @@ define('js/services',
                               + params.username
                               + params.corpusid
                               + '-activity_feed/'
-                              + '_design/activities/_view/activities?descending=true&limit=20',
+                              + '_design/activities/_view/activities?descending=true&limit=50',
                           withCredentials : true
                         }).then(function(response) {
                       // + JSON.stringify(response));
@@ -15366,6 +15381,62 @@ define('js/services',
                         results.push(response.data.rows[i].value);
                       }
                       return results;
+                    });
+                    return promise;
+                  }
+                };
+              }).factory(
+              'UserDetails',
+              function($http) {
+                return {
+                  'async' : function(params) {
+                    console.log("Fetching this activity feed: ", params);
+                    var location = OPrime.couchURL();
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.username
+                              + '-firstcorpus'
+                              + '/'
+                              + params.username,
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      return response.data;
+                    });
+                    return promise;
+                  }
+                };
+              }).factory(
+              'CorpusDetails',
+              function($http) {
+                return {
+                  'async' : function(params) {
+                    console.log("Fetching this activity feed: ", params);
+                    var location = OPrime.couchURL();
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.corpusid
+                              + '/'
+                              + params.username,
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      
+                      return response.data;
                     });
                     return promise;
                   }

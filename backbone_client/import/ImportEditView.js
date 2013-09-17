@@ -39,6 +39,7 @@ define( [
     initialize : function(){
       this.model.bind("change:asCSV", this.render, this);
       this._draghoverClassAdded = false;
+      var datumToCauseCorpusToUpdate = new Datum();
     },
     events : {
       "click .approve-save" : "saveDataList",
@@ -571,25 +572,16 @@ define( [
                 validationType = "ToBeCheckedWith";
                 validationColor = "warning";
               }
-              window.app.get("corpus").get("datumStates")
-              .addIfNew({
-                color : validationColor,
-                showInSearchResults : "checked",
-                selected : "",
-                state : validationType + consultants[g].replace(/[- _.]/g,"")
-              });
               
               var validationString = validationType + consultants[g].replace(/[- _.]/g,"");
               validationStati.push(validationString);
               var n = fields.where({label: "validationStatus"})[0];
-              if(n != undefined){
-                /* add to any exisitng validation states */
-                var validationStatus = n.get("mask") || "";
-                validationStatus = validationStatus + " ";
-                validationStatus = validationStatus + validationStati.join(" ");
-                var uniqueStati = _.unique(validationStatus.trim().split(" "));
-                n.set("mask", uniqueStati.join(" "));
-              }
+              /* add to any exisitng validation states */
+              var validationStatus = n.get("mask") || "";
+              validationStatus = validationStatus + " ";
+              validationStatus = validationStatus + validationStati.join(" ");
+              var uniqueStati = _.unique(validationStatus.trim().split(" "));
+              n.set("mask", uniqueStati.join(" "));
               
 //              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
 //              /* get the initials from the data */

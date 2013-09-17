@@ -139,6 +139,12 @@ define([
       $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
       $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Advanced_Search_Tooltip"));
 
+      try{
+        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
+      }catch(e){
+        window.appView.toastUser("There was a problem loading your corpus visualization.");
+      }
+
       return this;
     },
     newTempDataList : function(callback){
@@ -216,15 +222,15 @@ define([
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "datum"
+        childViewTagName     : 'tr',
+        childViewFormat      : "search"
       });
       
       this.advancedSearchSessionView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "session"
+        childViewTagName     : 'tr',
+        childViewFormat      : "search"
       });
       
     },

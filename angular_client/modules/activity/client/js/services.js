@@ -34,7 +34,7 @@ define(
                               + params.username
                               + params.corpusid
                               + '-activity_feed/'
-                              + '_design/activities/_view/activities?descending=true&limit=20',
+                              + '_design/activities/_view/activities?descending=true&limit=50',
                           withCredentials : true
                         }).then(function(response) {
                       // + JSON.stringify(response));
@@ -44,6 +44,62 @@ define(
                         results.push(response.data.rows[i].value);
                       }
                       return results;
+                    });
+                    return promise;
+                  }
+                };
+              }).factory(
+              'UserDetails',
+              function($http) {
+                return {
+                  'async' : function(params) {
+                    console.log("Fetching this activity feed: ", params);
+                    var location = OPrime.couchURL();
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.username
+                              + '-firstcorpus'
+                              + '/'
+                              + params.username,
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      return response.data;
+                    });
+                    return promise;
+                  }
+                };
+              }).factory(
+              'CorpusDetails',
+              function($http) {
+                return {
+                  'async' : function(params) {
+                    console.log("Fetching this activity feed: ", params);
+                    var location = OPrime.couchURL();
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.corpusid
+                              + '/'
+                              + params.username,
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      
+                      return response.data;
                     });
                     return promise;
                   }

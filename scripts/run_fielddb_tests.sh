@@ -1,5 +1,9 @@
 #! /bin/bash
 
+# Run the api unit tests too
+grunt nodeunit
+
+
 # Turn on a simple server to be used to proxy so that the tests are not run from a file url  
 ./scripts/web-server.js &
 
