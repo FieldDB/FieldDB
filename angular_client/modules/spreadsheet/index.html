@@ -15,7 +15,7 @@
 
 </head>
 <body id="app" ng-controller="SpreadsheetStyleDataEntryController"
-	ng-cloak>
+	ng-cloak load-paginated-data-on-page-change>
 	<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady==true">
 		<div class="span4 offset4 pagination-centered">
 			<img src="img/loading-spinner.gif" width="75">
@@ -80,16 +80,15 @@
 						<option select-dropdown-session
 							ng-repeat="session in sessions | orderBy:'dateCreated'"
 							value={{session._id}}>{{session.dateCreated |
-							shortDate}} {{session.title}} ({{(data | filter:
-							session._id).length}})</option>
+							shortDate}} {{session.title}}</option>
 					</select>
 					<button class="btn btn-primary"
-						ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
+						ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">Activate
 						Session</button>
 					&nbsp;&nbsp;
 					<span ng-hide="activeSession==undefined">
 					<button class="btn"
-						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">Edit Session Info</button>
+						ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">Edit Session Info</button>
 					&nbsp;&nbsp;
 				</span>
 					<span ng-show="(data | filter: activeSession).length==0">
@@ -253,15 +252,15 @@
 					<option select-dropdown-session
 						ng-repeat="session in sessions | orderBy:'dateCreated'"
 						value={{session._id}}>{{session.dateCreated | shortDate}}
-						{{session.title}} ({{(data | filter: session._id).length}})</option>
+						{{session.title}}</option>
 				</select>
 				<button class="btn btn-primary"
-						ng-click="changeActiveSession(activeSessionToSwitchTo)">Activate
+						ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">Activate
 						Session</button>
 					&nbsp;&nbsp;
 					<span ng-hide="activeSession==undefined">
 					<button class="btn"
-						ng-click="changeActiveSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">Edit Session Info</button>
+						ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">Edit Session Info</button>
 					&nbsp;&nbsp;
 				</span>
 					<span ng-show="(data | filter: activeSession).length==0">

@@ -320,7 +320,6 @@ define(
                 $scope.selectRow('newEntry');
                 $scope.changeActiveSubMenu('none');
                 window.location.assign("#/spreadsheet/" + $rootScope.template);
-                $scope.loadData();
                 break;
               default:
                 window.location.assign("#/spreadsheet/" + $rootScope.template);
@@ -329,8 +328,41 @@ define(
           }
         };
 
+        // Get sessions for pouchname; select specific session on saved state load
+        $scope.loadSessions = function(sessionID) {
+          var scopeSessions = [];
+          Data
+            .sessions($rootScope.DB.pouchname)
+            .then(
+              function(response) {
+                for (k in response) {
+                  scopeSessions.push(response[k].value);
+                }
+
+                for (i in scopeSessions) {
+                  for (j in scopeSessions[i].sessionFields) {
+                    if (scopeSessions[i].sessionFields[j].label == "goal") {
+                      if (scopeSessions[i].sessionFields[j].mask) {
+                        scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
+                          .substr(0, 20);
+                      }
+                    }
+                  }
+                }
+                $scope.sessions = scopeSessions;
+                if (sessionID) {
+                  $scope.selectSession(sessionID);
+                }
+                $scope.documentReady = true;
+              }, function(error) {
+                $scope.documentReady = true;
+                console.log("Error loading sessions.");
+              });
+        };
+
         // Fetch data from server and put into template scope
         $scope.loadData = function(sessionID) {
+          $scope.appReloaded = true;
           $rootScope.loading = true;
           Data
             .async($rootScope.DB.pouchname)
@@ -397,44 +429,30 @@ define(
                     if (newDatumFromServer.attachments.length > 0) {
                       newDatumFromServer.hasAudio = true;
                     }
-                    scopeData.push(newDatumFromServer);
+
+                    // Load data from current session into scope
+                    if (!sessionID) {
+                      scopeData.push(newDatumFromServer);
+                    } else if (newDatumFromServer.sessionID == sessionID) {
+                      scopeData.push(newDatumFromServer);
+                    }
                   }
                 }
-                $scope.data = scopeData;
+                scopeData.sort(function(a, b) {
+                  if (a[$scope.orderProp] > b[$scope.orderProp])
+                    return -1;
+                  if (a[$scope.orderProp] < b[$scope.orderProp])
+                    return 1;
+                  return 0;
+                });
+
+                $scope.allData = scopeData;
+                $scope.data = scopeData.slice(0, $rootScope.resultSize);
+                $rootScope.currentPage = 0;
 
                 $scope.loadAutoGlosserRules();
                 $scope.loadUsersAndRoles();
 
-                // Get sessions
-                var scopeSessions = [];
-                Data
-                  .sessions($rootScope.DB.pouchname)
-                  .then(
-                    function(response) {
-                      for (k in response) {
-                        scopeSessions.push(response[k].value);
-                      }
-
-                      for (i in scopeSessions) {
-                        for (j in scopeSessions[i].sessionFields) {
-                          if (scopeSessions[i].sessionFields[j].label == "goal") {
-                            if (scopeSessions[i].sessionFields[j].mask) {
-                              scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
-                                .substr(0, 20);
-                            }
-                          }
-                        }
-                      }
-                      $scope.sessions = scopeSessions;
-                      // Load session; saved state must have access to scope sessions before calling function
-                      if (sessionID) {
-                        $scope.selectSession(sessionID);
-                      }
-                      $scope.documentReady = true;
-                    }, function(error) {
-                      $scope.documentReady = true;
-                      console.log("Error loading sessions.");
-                    });
                 $scope.saved = "yes";
                 $rootScope.loading = false;
               }, function(error) {
@@ -634,7 +652,7 @@ define(
             localStorage.setItem('SpreadsheetPreferences', JSON
               .stringify(Preferences));
 
-            $scope.loadData();
+            $scope.loadSessions();
           }
         };
 
@@ -650,32 +668,8 @@ define(
           Preferences.savedState.sessionID = activeSessionID;
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(Preferences));
+          $scope.loadData(activeSessionID);
           window.location.assign("#/spreadsheet/" + $rootScope.template);
-        };
-
-        $scope.getCurrentSessionName = function() {
-          if ($scope.activeSession == undefined) {
-            return "All Sessions";
-          } else {
-            var sessionTitle;
-            for (i in $scope.sessions) {
-              if ($scope.sessions[i]._id == $scope.activeSession) {
-                for (j in $scope.sessions[i].sessionFields) {
-                  if ($scope.sessions[i].sessionFields[j].label == "goal") {
-                    if ($scope.sessions[i].sessionFields[j].mask) {
-                      $scope.currentSessionName = $scope.sessions[i].sessionFields[j].mask;
-                      return $scope.sessions[i].sessionFields[j].mask.substr(0,
-                        20);
-                    } else {
-                      $scope.currentSessionName = $scope.sessions[i].sessionFields[j].value;
-                      return $scope.sessions[i].sessionFields[j].value.substr(0,
-                        20);
-                    }
-                  }
-                }
-              }
-            }
-          }
         };
 
         $scope.changeActiveSession = function(activeSessionToSwitchTo) {
@@ -704,6 +698,31 @@ define(
           Preferences.savedState.sessionTitle = $scope.currentSessionName;
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(Preferences));
+        };
+
+        $scope.getCurrentSessionName = function() {
+          if ($scope.activeSession == undefined) {
+            return "All Sessions";
+          } else {
+            var sessionTitle;
+            for (i in $scope.sessions) {
+              if ($scope.sessions[i]._id == $scope.activeSession) {
+                for (j in $scope.sessions[i].sessionFields) {
+                  if ($scope.sessions[i].sessionFields[j].label == "goal") {
+                    if ($scope.sessions[i].sessionFields[j].mask) {
+                      $scope.currentSessionName = $scope.sessions[i].sessionFields[j].mask;
+                      return $scope.sessions[i].sessionFields[j].mask.substr(0,
+                        20);
+                    } else {
+                      $scope.currentSessionName = $scope.sessions[i].sessionFields[j].value;
+                      return $scope.sessions[i].sessionFields[j].value.substr(0,
+                        20);
+                    }
+                  }
+                }
+              }
+            }
+          }
         };
 
         $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
@@ -757,7 +776,7 @@ define(
                       }
                     })(i);
                   }
-                  $scope.loadData();
+                  $scope.loadData($scope.activeSessionID);
                 });
           }
 
@@ -882,8 +901,12 @@ define(
                     var rev = recordToMarkAsDeleted._rev;
                     Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
                       // Remove record from scope
-                      var index = $scope.data.indexOf(datum);
-                      $scope.data.splice(index, 1);
+
+                      // Delete record from all scope data and update
+                      var index = $scope.allData.indexOf(datum);
+                      $scope.allData.splice(index, 1);
+                      $scope.loadPaginatedData();
+
                       $scope.saved = "yes";
                       $scope.selected = null;
                     }, function(error) {
@@ -961,7 +984,11 @@ define(
           if (fieldData.attachments) {
             fieldData.hasAudio = true;
           }
-          $scope.data.push(fieldData);
+
+          // Add record to all scope data and update
+          $scope.allData.unshift(fieldData);
+          $scope.loadPaginatedData();
+
           $scope.newFieldDatahasAudio = false;
           $scope.saved = "no";
         };
@@ -992,7 +1019,7 @@ define(
           var modifiedByUser = {};
           modifiedByUser.username = $rootScope.userInfo.name;
           modifiedByUser.gravatar = $rootScope.userInfo.gravatar;
-          if (!datum.modifiedByUser) {
+          if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
             datum.modifiedByUser = {};
             datum.modifiedByUser.users = [];
           }
@@ -1096,16 +1123,16 @@ define(
         };
 
         $scope.saveChanges = function() {
-          for (i in $scope.data) {
+          for (i in $scope.allData) {
             (function(index) {
-              if ($scope.data[index].saved && $scope.data[index].saved == "no") {
+              if ($scope.allData[index].saved && $scope.allData[index].saved == "no") {
 
                 $scope.saved = "saving";
 
                 // Save edited record
-                if ($scope.data[index].id) {
-                  console.log("Saving edited record: " + $scope.data[index].id);
-                  var fieldData = $scope.data[index];
+                if ($scope.allData[index].id) {
+                  console.log("Saving edited record: " + $scope.allData[index].id);
+                  var fieldData = $scope.allData[index];
                   var docID = fieldData.id;
                   Data
                     .async($rootScope.DB.pouchname, docID)
@@ -1144,7 +1171,7 @@ define(
                             docID, editedRecord)
                           .then(
                             function(response) {
-                              $scope.data[index].saved = "yes";
+                              $scope.allData[index].saved = "yes";
                               $scope.uploadActivities();
                               $scope.saved = "yes";
                             },
@@ -1159,7 +1186,7 @@ define(
                   // Save new record
                   console.log("Saving new record.");
 
-                  var fieldData = $scope.data[index];
+                  var fieldData = $scope.allData[index];
                   console.log(fieldData);
                   Data
                     .blankDatumTemplate()
@@ -1187,7 +1214,8 @@ define(
 
                         // Save session
                         newRecord.session = $scope.fullCurrentSession;
-
+                        console.log("TEST");
+                        console.log($scope.fullCurrentSession);
                         // Save pouchname
                         newRecord.pouchname = $rootScope.DB.pouchname;
                         // Save tags
@@ -1212,19 +1240,19 @@ define(
                             function(response) {
                               // Check to see if newly created record is still in scope and update with response info;
                               // user may have refreshed data before save was complete
-                              if ($scope.data[index]) {
-                                $scope.data[index].id = response.data.id;
-                                $scope.data[index].rev = response.data.rev;
-                                $scope.data[index].saved = "yes";
+                              if ($scope.allData[index]) {
+                                $scope.allData[index].id = response.data.id;
+                                $scope.allData[index].rev = response.data.rev;
+                                $scope.allData[index].saved = "yes";
                               }
-                              console.log("Saved new record: " + $scope.data[index].id);
+                              console.log("Saved new record: " + $scope.allData[index].id);
 
                               // Update activity feed with newly created
                               // records and couch ids (must be done
                               // here to have access to couch id)
                               var utterance = "Datum";
-                              if ($scope.data[index].utterance && $scope.data[index].utterance != "") {
-                                utterance = $scope.data[index].utterance;
+                              if ($scope.allData[index].utterance && $scope.allData[index].utterance != "") {
+                                utterance = $scope.allData[index].utterance;
                               }
 
                               var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
@@ -1761,6 +1789,15 @@ define(
           return numberOfPages;
         };
 
+        $scope.loadPaginatedData = function() {
+          var lastRecordOnPage = (($rootScope.currentPage + 1) * $rootScope.resultSize);
+          var firstRecordOnPage = lastRecordOnPage - $rootScope.resultSize;
+
+          if ($scope.allData) {
+            $scope.data = $scope.allData.slice(firstRecordOnPage, lastRecordOnPage);
+          }
+        };
+
         function trim(s) {
           s = s.replace(/(^\s*)|(\s*$)/gi, "");
           s = s.replace(/[ ]{2,}/gi, " ");
@@ -2179,9 +2216,8 @@ define(
               if (Preferences.savedState.DB) {
                 $rootScope.DB = Preferences.savedState.DB;
                 $scope.navigateVerifySaved('none');
-                // Load data with session ID so that scope has access to session
-                $scope.loadData(Preferences.savedState.sessionID);
-                window.location.assign("#/spreadsheet/" + $rootScope.template);
+                // Load all sessions and go to current session
+                $scope.loadSessions(Preferences.savedState.sessionID);
               } else {
                 $scope.documentReady = true;
               }

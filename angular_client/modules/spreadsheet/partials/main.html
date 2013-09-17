@@ -8,8 +8,8 @@
 				Google Chrome</button></a>
 	</div>
 	<img src="img/lingsync_spreadsheet_main_page_logo.png"> <br /><br />
-	<div ng-show="data!=undefined" class="mainPageDiv">
-		<span ng-show="data!=undefined">{{DB.corpustitle}} loaded.<br />Select
+	<div ng-show="sessions!=undefined" class="mainPageDiv">
+		<span ng-show="DB.corpustitle!=undefined">{{DB.corpustitle}} loaded.<br />Select
 			a session and click Go, or create a new session.
 		</span><br>
 		<div class="form-horizontal">
@@ -20,7 +20,7 @@
 				<option value='none'>View all sessions</option>
 				<option ng-repeat="session in sessions | orderBy:'dateCreated'"
 					value={{session._id}}>{{session.dateCreated | shortDate}}
-					{{session.title}} ({{(data | filter: session._id).length}})</option>
+					{{session.title}}</option>
 			</select>
 			<button class="btn btn-primary">Go</button>&nbsp;<button class="btn btn-info" type='button'
 				ng-click="showCreateSessionDiv=!showCreateSessionDiv">New Session</button>
