@@ -45,11 +45,17 @@ define(
             element.bind('keyup', function(e) {
               scope.$apply(function() {
                 // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
-                var lastRecord = ((($rootScope.currentPage + 1) * scope.resultSize) - (scope.resultSize - (scope.$index + 1)) + 1);
+                var lastPage = scope.numberOfResultPages(scope.allData.length);
+                var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
+                var currentRecordIsLastRecord = false;
+                if ($rootScope.currentPage == (lastPage - 1) && scopeIndexOfLastRecordOnLastPage == scope.$index) {
+                  currentRecordIsLastRecord = true;
+                }
+
                 if (e.keyCode === 40 && scope.$index == undefined) {
                   // Select first record if arrowing down from new record
                   scope.selectRow(0);
-                } else if (e.keyCode === 40 && lastRecord >= scope.data.length) {
+                } else if (e.keyCode === 40 && currentRecordIsLastRecord == true) {
                   // Do not go past very last record
                   return;
                 } else if (e.keyCode === 40) {
@@ -163,6 +169,14 @@ define(
               }
             });
           }
+        }).directive(
+        'loadPaginatedDataOnPageChange',
+        function($timeout, $rootScope) {
+          return function(scope, element) {
+            scope.$watch('currentPage', function() {
+              scope.loadPaginatedData();
+            });
+          };
         });
 
     return SpreadsheetStyleDataEntryDirectives;
