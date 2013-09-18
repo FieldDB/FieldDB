@@ -1380,33 +1380,34 @@ define(
           searchTerm = searchTerm.toString().toLowerCase();
           var newScopeData = [];
           if (!$scope.activeSession) {
-            for (i in $scope.data) {
-              for (key in $scope.data[i]) {
-                if ($scope.data[i][key]) {
+            // Search allData in scope
+            for (i in $scope.allData) {
+              for (key in $scope.allData[i]) {
+                if ($scope.allData[i][key]) {
                   // Limit search to visible data
                   if (fieldsInScope[key] == true) {
                     if (key == "datumTags") {
-                      var tagString = JSON.stringify($scope.data[i].datumTags);
+                      var tagString = JSON.stringify($scope.allData[i].datumTags);
                       tagString = tagString.toString().toLowerCase();
                       if (tagString.indexOf(searchTerm) > -1) {
-                        newScopeData.push($scope.data[i]);
+                        newScopeData.push($scope.allData[i]);
                         break;
                       }
                     } else if (key == "comments") {
-                      for (j in $scope.data[i].comments) {
-                        for (commentKey in $scope.data[i].comments[j]) {
-                          if ($scope.data[i].comments[j][commentKey].toString()
+                      for (j in $scope.allData[i].comments) {
+                        for (commentKey in $scope.allData[i].comments[j]) {
+                          if ($scope.allData[i].comments[j][commentKey].toString()
                             .indexOf(searchTerm) > -1) {
-                            newScopeData.push($scope.data[i]);
+                            newScopeData.push($scope.allData[i]);
                             break;
                           }
                         }
                       }
                     } else {
-                      var dataString = $scope.data[i][key].toString()
+                      var dataString = $scope.allData[i][key].toString()
                         .toLowerCase();
                       if (dataString.indexOf(searchTerm) > -1) {
-                        newScopeData.push($scope.data[i]);
+                        newScopeData.push($scope.allData[i]);
                         break;
                       }
                     }
@@ -1415,34 +1416,34 @@ define(
               }
             }
           } else {
-            for (i in $scope.data) {
-              if ($scope.data[i].sessionID == $scope.activeSession) {
-                for (key in $scope.data[i]) {
-                  if ($scope.data[i][key]) {
+            for (i in $scope.allData) {
+              if ($scope.allData[i].sessionID == $scope.activeSession) {
+                for (key in $scope.allData[i]) {
+                  if ($scope.allData[i][key]) {
                     // Limit search to visible data
                     if (fieldsInScope[key] == true) {
                       if (key == "datumTags") {
-                        var tagString = JSON.stringify($scope.data[i].datumTags);
+                        var tagString = JSON.stringify($scope.allData[i].datumTags);
                         tagString = tagString.toString().toLowerCase();
                         if (tagString.indexOf(searchTerm) > -1) {
-                          newScopeData.push($scope.data[i]);
+                          newScopeData.push($scope.allData[i]);
                           break;
                         }
                       } else if (key == "comments") {
-                        for (j in $scope.data[i].comments) {
-                          for (commentKey in $scope.data[i].comments[j]) {
-                            if ($scope.data[i].comments[j][commentKey].toString()
+                        for (j in $scope.allData[i].comments) {
+                          for (commentKey in $scope.allData[i].comments[j]) {
+                            if ($scope.allData[i].comments[j][commentKey].toString()
                               .indexOf(searchTerm) > -1) {
-                              newScopeData.push($scope.data[i]);
+                              newScopeData.push($scope.allData[i]);
                               break;
                             }
                           }
                         }
                       } else {
-                        var dataString = $scope.data[i][key].toString()
+                        var dataString = $scope.allData[i][key].toString()
                           .toLowerCase();
                         if (dataString.indexOf(searchTerm) > -1) {
-                          newScopeData.push($scope.data[i]);
+                          newScopeData.push($scope.allData[i]);
                           break;
                         }
                       }
@@ -1453,7 +1454,8 @@ define(
             }
           }
           if (newScopeData.length > 0) {
-            $scope.data = newScopeData;
+            $scope.allData = newScopeData;
+            $scope.data = $scope.allData.slice(0, $rootScope.resultSize);
           } else {
             $rootScope.notificationMessage = "No records matched your search.";
             $rootScope.openNotification();
@@ -2218,7 +2220,7 @@ define(
         };
 
         // Hide loader when all content is ready
-        $scope.$on('$viewContentLoaded', function() {
+        $rootScope.$on('$viewContentLoaded', function() {
           // Return user to saved state, if it exists; only recover saved state on reload, not menu navigate
           if ($scope.appReloaded != true) {
             Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
@@ -2242,9 +2244,13 @@ define(
               $scope.loginUser(auth);
               if (Preferences.savedState.DB) {
                 $rootScope.DB = Preferences.savedState.DB;
-                $scope.navigateVerifySaved('none');
-                // Load all sessions and go to current session
-                $scope.loadSessions(Preferences.savedState.sessionID);
+                if (Preferences.savedState.sessionID) {
+                  // Load all sessions and go to current session
+                  $scope.loadSessions(Preferences.savedState.sessionID);
+                  $scope.navigateVerifySaved('none');
+                } else {
+                  $scope.loadSessions();
+                }
               } else {
                 $scope.documentReady = true;
               }
