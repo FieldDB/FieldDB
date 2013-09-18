@@ -52,6 +52,14 @@ define(
                   currentRecordIsLastRecord = true;
                 }
 
+                if (e.keyCode === 40) {
+                  element[0].scrollIntoView(true);
+                }
+
+                if (e.keyCode === 38) {
+                  element[0].scrollIntoView(false);
+                }
+
                 if (e.keyCode === 40 && scope.$index == undefined) {
                   // Select first record if arrowing down from new record
                   scope.selectRow(0);
