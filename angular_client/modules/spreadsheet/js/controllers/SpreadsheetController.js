@@ -321,6 +321,9 @@ define(
                 $scope.changeActiveSubMenu('none');
                 window.location.assign("#/spreadsheet/" + $rootScope.template);
                 break;
+              case "register":
+                window.location.assign("#/register");
+                break;
               default:
                 window.location.assign("#/spreadsheet/" + $rootScope.template);
                 $scope.changeActiveSubMenu(itemToDisplay);
