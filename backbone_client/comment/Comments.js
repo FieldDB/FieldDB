@@ -33,7 +33,7 @@ define( [ "backbone",
     
     insertNewCommentFromObject : function(commentObject){
       commentObject.timestamp = Date.now();
-      this.unshift(new Comment(commentObject));
+      this.push(new Comment(commentObject));
     }
     
   });

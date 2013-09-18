@@ -194,7 +194,6 @@ define([
       var couchConnection = this.model.get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection);
 
-      this.model.fillInDefaultLicenseAndTermsForUserIfMissing();
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
