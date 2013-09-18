@@ -195,7 +195,6 @@ define([
       this.prependDatum(new Datum({
         filledWithDefaults : true,
         datumFields : new DatumFields(datumfields),
-        datumStates : app.get("corpus").get("datumStates").clone(),
         pouchname : app.get("corpus").get("pouchname"),
         session : app.get("currentSession")
       }));
@@ -212,17 +211,25 @@ define([
         // If the corpus' previous Datum is more than 24 hours old,
         // prompt the user if they want to create a new Session.
         var tooOld = false;
-          var previousDateModified = window.app.get("corpus").get("dateOfLastDatumModifiedToCheckForOldSession");
-          if (previousDateModified) {
-            var currentDate = new Date();
+        var promtForNewSession = "This session is getting pretty old.\n\nCreate a new session?";
+        var previousDateModified = window.app.get("corpus").get("dateOfLastDatumModifiedToCheckForOldSession");
+        if (previousDateModified) {
+          var currentDate = new Date();
+          var lastSaveDate;
             // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
-            if (currentDate - new Date(JSON.parse(previousDateModified)) > 86400000) {
+            try{
+              lastSaveDate = new Date(JSON.parse(previousDateModified));
+            }catch(e){
+              lastSaveDate = new Date(previousDateModified);
+            }
+            
+            if (currentDate - lastSaveDate > 86400000) {
               tooOld = true;
+            }
           }
-        }
-        if(!window.app.promptedForNewSession){
-          window.app.promptedForNewSession = true;
-          if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
+          if(!window.app.promptedForNewSession){
+            window.app.promptedForNewSession = true;
+            if (tooOld && confirm(promtForNewSession)) {
             // Display the new Session modal
             window.app.get("corpus").newSession();
             return;

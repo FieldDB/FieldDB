@@ -122,76 +122,74 @@ define([
 //        + couchConnection.pouchname);
       
     },
-    loadOrCreateCorpusByPouchName : function(pouchname, sucessloadingorCreatingcallback){
+    loadOrCreateCorpusByPouchName : function(couchConnection, sucessloadingorCreatingcallback){
+      var couchurl = OPrime.getCouchUrl(couchConnection);
+      var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+
+      var errorfunction = function(response) {
+        OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
+        OPrime.bug("There was a problem loading your corpus. Please report this error.");
+        window.location.replace(optionalCouchAppPath + "user.html");
+      };
+
+      // var errorfunction = function(model, xhr, options) {
+      //   $(".spinner-status").html("Downloading Corpus...");
+
+      //   if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
+      //   if (corpusself.islooping) {
+      //     OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..." + e);
+      //     return;
+      //   }
+      //   corpusself.islooping = true;
+      //   OPrime.bug("Trying to download this corpus to this device one more time..." + xhr.reason);
+      //   corpusself.loadOrCreateCorpusByPouchName(couchConnection, sucessloadingorCreatingcallback);
+      // };
+
       var corpusself = this;
-      if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask({
-          "pouchname" : pouchname
-        }));
-      }
-      var c = this.get("publicSelf");
-      this.get("publicSelf").id = "corpus";
-        c.fetch({
-          success : function(model, response, options) {
-            if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
-            if(!model.get("corpusid")){
-              corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-              return;
-            }
-            corpusself.id = model.get("corpusid");
-            corpusself.set("pouchname", pouchname);
-              corpusself.fetch({
-                success : function(model) {
-                  if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
-                  $(".spinner-status").html("Loading Datalist...");
-                  corpusself.makeSureCorpusHasADataList(function(){
-                    corpusself.datalists.at(0).setAsCurrentDataList(function(){
-                      $(".spinner-status").html("Datalist loaded.");
-                    });
-                    $(".spinner-status").html("Loading Elicitation Session...");
-                    corpusself.makeSureCorpusHasASession(function(){
-                      corpusself.sessions.at(0).setAsCurrentSession(function(){
-                        $(".spinner-status").html("Session loaded.");
-                        if(typeof sucessloadingorCreatingcallback == "function"){
-                          sucessloadingorCreatingcallback();
-                        }
-                      });
-                      
-                      //end success to create new data list
-                    },function(){
-                      alert("Failed to create a session. ");
-                    });//end failure to create new data list
-                    //end success to create new data list
-                  },function(){
-                    alert("Failed to create a datalist. ");
-                  });//end failure to create new data list
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : queryUrl,
+        success : function(serverResults) {
 
-                },
-                error : function(model, xhr, options) {
-                  $(".spinner-status").html("Downloading Corpus...");
+          if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
+            errorfunction("No corpus doc! this corpus is broken.");
+          }
+          var model = serverResults.rows[0].value;
+          couchConnection.corpusid = model._id;
+          // appids.corpusid = model._id;
+          model.couchConnection = couchConnection;
+          // corpusself.set(corpusself.parse(model));
 
-                  if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
-                  if(corpusself.islooping){
-                    OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
-                    return;
-                  }
-                  corpusself.islooping = true;
-                  OPrime.bug("Trying to download this corpus to this device one more time..."+xhr.reason);
-                  corpusself.loadOrCreateCorpusByPouchName(pouchname, sucessloadingorCreatingcallback);
+          if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
+          $(".spinner-status").html("Loading Datalist...");
+          corpusself.makeSureCorpusHasADataList(function(){
+            corpusself.datalists.at(0).setAsCurrentDataList(function(){
+              $(".spinner-status").html("Datalist loaded.");
+            });
+            $(".spinner-status").html("Loading Elicitation Session...");
+            corpusself.makeSureCorpusHasASession(function(){
+              corpusself.sessions.at(0).setAsCurrentSession(function(){
+                $(".spinner-status").html("Session loaded.");
+                if(typeof sucessloadingorCreatingcallback == "function"){
+                  sucessloadingorCreatingcallback();
                 }
               });
-          },
-          error : function(model, xhr, options) {
-            $(".spinner-status").html("Creating Corpus...");
+              
+              //end success to create new data list
+            },function(){
+              alert("Failed to create a session. ");
+            });//end failure to create new data list
+            //end success to create new data list
+          },function(){
+            alert("Failed to create a datalist. ");
+          });//end failure to create new data list
 
-            if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-            OPrime.bug("Error fetching your corpus' public view..."+xhr.reason);
-            corpusself.get("publicSelf").fillWithDefaults();
-            corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
-            corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
-            corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-          }
-        });
+
+
+        },// end successful fetch
+        error : errorfunction,
+        dataType : "json"
+      });
     },
     fetchPublicSelf : function(){
       try{
@@ -282,7 +280,7 @@ define([
           new DatumField({
             label : "syntacticCategory",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish." +
             		" It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM)," +
@@ -291,7 +289,7 @@ define([
           new DatumField({
             label : "syntacticTreeLatex",
             shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
           }),
@@ -319,14 +317,16 @@ define([
           new DatumField({
             label : "enteredByUser",
             shouldBeEncrypted: "",
-            showToUserTypes: "machine",
+            showToUserTypes: "all",
+            readonly: true,
             userchooseable: "disabled",
             help: "The user who originally entered the datum"
           }),
           new DatumField({
             label : "modifiedByUser",
             shouldBeEncrypted: "",
-            showToUserTypes: "machine",
+            showToUserTypes: "all",
+            readonly: true,
             users: [],
             userchooseable: "disabled",
             help: "An array of users who modified the datum"
@@ -425,69 +425,65 @@ define([
       }
     },
     
-    fillWithCorpusFieldsIfMissing : function(){
-      if(!this.get("datumFields")){
-        return;
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel){
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
       }
-      if(this.alreadyVerifiedAndAddedMissingFields){
-        return this.get("datumFields").models;
-      }
-      
-      /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
+
+      /* Update the corpus to show all fields which are defaults on corpora, 
+      they are only added permanently if saved. */
       var tempCorpus = new Corpus();
       tempCorpus.fillWithDefaults();
       
-      var corpusFields = tempCorpus.get("datumFields").models;
+      var corpusFields = tempCorpus.get("datumFields").toJSON();
+      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
 
       for(var field in corpusFields){
-        var label = corpusFields[field].get("label");
-        OPrime.debug("Label "+label);
-        var correspondingFieldInThisDatum = this.get("datumFields").where({label : label});
-        if(correspondingFieldInThisDatum.length === 0){
-          this.get("datumFields").push(corpusFields[field]);
+        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+          OPrime.debug("Adding field to this corpus: "+corpusFields[field].label);
+          originalModel.datumFields.push(corpusFields[field]);
         }
       }
-      this.alreadyVerifiedAndAddedMissingFields = true;
-      return this.get("datumFields").models;
-    },
-    
-    fillInDefaultLicenseAndTermsForUserIfMissing : function(){
-      if (!this.get("copyright")) {
-        this.set("copyright",
-          "Default: Add names of the copyright holders of the corpus.");
+
+      /* Update corpus to have default licensen and terms of use if the user hasnt defined them yet */
+      if (!originalModel.copyright) {
+        originalModel.copyright = "Default: Add names of the copyright holders of the corpus.";
       }
       var defaultLicense = {
-            title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
-            humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-            link: "http://creativecommons.org/licenses/by-sa/3.0/"
-          };
-      if (!this.get("license")) {
-        this.set("license", defaultLicense);
+        title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+        humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+        link: "http://creativecommons.org/licenses/by-sa/3.0/"
+      };
+      if (!originalModel.license) {
+        originalModel.license = defaultLicense;
       }
-      var licenseUpdated = this.get("license");
-      if(typeof licenseUpdated == "string"){
+      var licenseUpdated = originalModel.license;
+      if (typeof licenseUpdated == "string") {
         licenseUpdated = {};
       }
       if (!licenseUpdated.title) {
         licenseUpdated.title = defaultLicense.title;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       if (!licenseUpdated.humanReadable) {
         licenseUpdated.humanReadable = defaultLicense.humanReadable;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       if (!licenseUpdated.link) {
         licenseUpdated.link = defaultLicense.link;
-        this.set("license", licenseUpdated);
+        originalModel.license = licenseUpdated;
       }
       var defaultTerms = {
-          humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-        };
-      var termsUpdated = this.get("termsOfUse");
-      if(!termsUpdated || typeof termsUpdated == "string"){
+        humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+      };
+      var termsUpdated = originalModel.termsOfUse;
+      if (!termsUpdated || typeof termsUpdated == "string") {
         termsUpdated = defaultTerms;
-        this.set("termsOfUse", defaultTerms);
+        originalModel.termsOfUse = defaultTerms;
       }
+      return this.originalParse(originalModel);
     },
 
     /**

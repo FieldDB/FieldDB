@@ -1,7 +1,8 @@
 define([ 
      "backbone",
      "handlebars", 
-     "datum/DatumField"
+     "datum/DatumField",
+     "OPrime"
   ], function(
       Backbone, 
       Handlebars,
@@ -47,8 +48,9 @@ define([
       "click .remove-datum-field" : "removeDatumField",
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
-      "blur .datum_field_input" : "updateFieldValue",
+      "blur .datum_field_input" : "onblur",
       "keyup .datum_field_input" : "resizeInputFieldToFit",
+      "focus .datum_field_input" : "onfocus",
       "click .help-conventions" : "toggleHelpConvention"
     },
     
@@ -82,7 +84,8 @@ define([
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW render");
      
       if (this.format == "corpus") {
-        $(this.el).html(this.templateSettings(this.model.toJSON()));
+        var jsonToRender = this.model.toJSON();
+        $(this.el).html(this.templateSettings(jsonToRender));
         //localization
         $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
         $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
@@ -90,10 +93,10 @@ define([
         
         // Select the correct values from the model TODO is this dead code?
         $(this.el).find(".choose-field").val(this.model.get("label"));
-      } else if (this.format == "datum") {
+      } else if (this.format == "datum" || this.format == "search") {
         var jsonToRender = this.model.toJSON();
-        if (jsonToRender.showToUserTypes === "machine") {
-          jsonToRender.readonly = true;
+        if(this.format == "search"){
+          delete jsonToRender.readonly;
         }
         jsonToRender.helpText = true;
         jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
@@ -155,11 +158,34 @@ define([
       this.model.set("help",help);
     },
          
+    onfocus: function(){
+      this.model.starttime = Date.now();
+      this.resizeInputFieldToFit();
+    },
+
+    onblur: function(){
+      var changedText = this.updateFieldValue();
+      if(this.model.starttime){
+        var stoptime = Date.now();
+        this.model.timeSpent = this.model.timeSpent || 0;
+        if(changedText != null){
+          this.model.timeSpent += stoptime - this.model.starttime;
+          OPrime.debug("Spent total miliseconds on \""+this.model.get("label")+ "\" : "+this.model.timeSpent);
+        }
+        this.model.starttime = null;
+      }
+    },
     /**
-     * Change the model's state.
+     * Change the model's value if it has changed.
      */
     updateFieldValue : function() {
-      this.model.set("mask", this.$el.find(".datum_field_input").val());
+      var visibleValue = this.$el.find(".datum_field_input").val();
+      visibleValue = visibleValue.trim() || "";
+      if (visibleValue != this.model.get("mask") ){
+        this.model.set("mask", visibleValue);
+        return visibleValue;
+      }
+      return null;
     }, 
     
     /**
