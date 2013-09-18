@@ -65,7 +65,7 @@
 				</span>
 				<span ng-hide="authenticated == true">
 					<div class="rightMenuItemsDiv">
-						<a href="#/register"><button class="btn btn-primary">Register</button></a>
+						<button ng-click="navigateVerifySaved('register');" class="btn btn-primary">Register</button>
 					</div>
 				</span>
 			</div>
@@ -240,7 +240,7 @@
 				</div>
 				<span ng-hide="authenticated == true">
 					<div>
-						<a href="#/register"><button class="btn btn-primary">Register</button></a>
+						<button ng-click="navigateVerifySaved('register');" class="btn btn-primary">Register</button>
 					</div>
 				</span>
 			</div>
