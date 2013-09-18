@@ -10,6 +10,11 @@ define(
       $scope.scopePreferences = JSON.parse(localStorage
         .getItem('SpreadsheetPreferences'));
 
+      if ($scope.appReloaded != true) {
+        window.location.assign("#/");
+        return;
+      }
+
       $scope.availableFields = $scope.scopePreferences.availableFields;
 
       $scope.changeTagToEdit = function(tag) {
