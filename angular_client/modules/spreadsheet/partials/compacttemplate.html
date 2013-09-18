@@ -76,6 +76,10 @@
 	</div>
 </div>
 
+<div ng-show="loading==false && writeOnly==true" class="pagination-centered">
+	<h2>You have write-only access to {{DB.corpustitle}}</h2>
+</div>
+
 <div class="row" ng-show="loading==true">
 	<div class="span12 pagination-centered">
 		<img src="img/loading-spinner.gif" width="100px">
