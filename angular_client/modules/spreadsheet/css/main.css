@@ -33,6 +33,7 @@ body {
 	}
 	.mainBody {
 		top: 50px;
+		padding-bottom: 25px;
 	}
 	.mainBodySearching {
 		top: 125px;
@@ -54,6 +55,7 @@ body {
 	}
 	.mainBody {
 		top: 100px;
+		padding-bottom: 25px;
 	}
 	.mainBodySearching {
 		top: 175px;
