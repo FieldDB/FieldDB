@@ -381,11 +381,11 @@ define(
                       if (dataFromServer[i].value.datumFields[j].label == "enteredByUser") {
                         newDatumFromServer.enteredByUser = dataFromServer[i].value.datumFields[j].user;
                       }
-                      // Get enteredByUser object
-                      // else if (dataFromServer[i].value.datumFields[j].label == "modifiedByUser") {
-                      //   newDatumFromServer.modifiedByUser = dataFromServer[i].value.datumFields[j].users;
-                      // }
-                      else {
+                      // Get modifiedByUser object
+                      else if (dataFromServer[i].value.datumFields[j].label == "modifiedByUser") {
+                        newDatumFromServer.modifiedByUser = {};
+                        newDatumFromServer.modifiedByUser.users = dataFromServer[i].value.datumFields[j].users;
+                      } else {
                         newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
                       }
                     }
@@ -1140,15 +1140,42 @@ define(
                       function(editedRecord) {
                         // Populate new record with fields from
                         // scope
+                        // Check for modifiedByUser field in original record; if not present, add it
+                        var hasModifiedByUser = false;
                         for (var i = 0; i < editedRecord.datumFields.length; i++) {
+                          if (editedRecord.datumFields[i].label == "modifiedByUser") {
+                            hasModifiedByUser = true;
+                          }
+
                           for (key in fieldData) {
                             if (editedRecord.datumFields[i].label == key) {
-                              editedRecord.datumFields[i].mask = fieldData[key];
-                              editedRecord.datumFields[i].value = fieldData[key];
+                              // Check for (existing) modifiedByUser field in original record and update correctly
+                              if (key == "modifiedByUser") {
+                                editedRecord.datumFields[i].users = fieldData.modifiedByUser.users;
+                              } else {
+                                editedRecord.datumFields[i].mask = fieldData[key];
+                                editedRecord.datumFields[i].value = fieldData[key];
+                              }
                             }
                           }
                         }
 
+                        // Add modifiedByUser field if not present
+                        if (hasModifiedByUser == false) {
+                          console.log("Adding modifiedByUser field to older record.");
+                          var modifiedByUserField = {
+                            "label": "modifiedByUser",
+                            "mask": "",
+                            "users": fieldData.modifiedByUser.users,
+                            "encrypted": "",
+                            "shouldBeEncrypted": "",
+                            "help": "An array of users who modified the datum",
+                            "showToUserTypes": "all",
+                            "readonly": true,
+                            "userchooseable": "disabled"
+                          };
+                          editedRecord.datumFields.push(modifiedByUserField);
+                        }
                         // Save date info
                         editedRecord.dateModified = fieldData.dateModified;
                         editedRecord.lastModifiedBy = fieldData.lastModifiedBy;
