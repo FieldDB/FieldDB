@@ -85,7 +85,7 @@ define(
         'keypressMarkAsEdited',
         function($rootScope) {
           return function(scope, element, attrs) {
-            element.bind('keyup', function(e) {
+            element.bind('blur', function(e) {
               var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
               if (keycodesToIgnore.indexOf(e.keyCode) == -1) {
                 $rootScope.markAsEdited(scope.fieldData, scope.datum);

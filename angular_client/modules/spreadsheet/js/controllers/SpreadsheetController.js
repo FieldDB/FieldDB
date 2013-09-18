@@ -221,7 +221,7 @@ define(
         $scope.orderProp = "dateEntered";
         $rootScope.currentPage = 0;
         $scope.reverse = true;
-        $scope.selected = 'newEntry';
+        // $scope.selected = 'newEntry';
         $rootScope.authenticated = false;
         $rootScope.developer = false;
         $scope.dataentry = false;
@@ -317,7 +317,6 @@ define(
               case "none":
                 $scope.dataentry = true;
                 $scope.searching = false;
-                $scope.selectRow('newEntry');
                 $scope.changeActiveSubMenu('none');
                 window.location.assign("#/spreadsheet/" + $rootScope.template);
                 break;
@@ -458,6 +457,10 @@ define(
 
                 $scope.saved = "yes";
                 $rootScope.loading = false;
+
+                $scope.selected = "newEntry";
+
+
               }, function(error) {
                 // On error loading data, reset saved state
                 // Update saved state in Preferences
@@ -1038,6 +1041,7 @@ define(
 
           $scope.saved = "no";
 
+          // Limit activity to one instance in the case of multiple edits to the same datum before 'save'
           if (!datum.saved || datum.saved == "yes") {
             datum.saved = "no";
             // Update activity feed

@@ -305,6 +305,12 @@ a.delete_button {
 	margin: 15px;
 }
 
+.focus_box_div {
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}
+
 .selectedRow {
 	background-color: #6D8CA0;
 	border: 2px solid;
