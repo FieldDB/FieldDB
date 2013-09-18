@@ -183,8 +183,8 @@ define([
       },
 
       //help text around text areas 
-      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
-      "click .explain-license" : "toggleExplainLicense",
+      "click .explain_terms_of_use" : "toggleExplainTermsOfUse",
+      "click .explain_license" : "toggleExplainLicense",
       
       "click .save-corpus" : "updatePouch",
 //      Issue #797
@@ -230,6 +230,66 @@ define([
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
       
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
+      
+      jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
+      
+      jsonToRender.explain_license = Locale.get("locale_License_explanation");
+      jsonToRender.explain_terms_of_use = Locale.get("locale_Terms_explanation");
+      jsonToRender.locale_Add = Locale.get("locale_Add");
+      jsonToRender.locale_Add_New_Conversation_Field_Tooltip = Locale.get("locale_Add_New_Conversation_Field_Tooltip");
+      jsonToRender.locale_Add_New_Datum_Field_Tooltip = Locale.get("locale_Add_New_Datum_Field_Tooltip");
+      jsonToRender.locale_Add_New_Datum_State_Tooltip = Locale.get("locale_Add_New_Datum_State_Tooltip");
+      jsonToRender.locale_Add_Placeholder = Locale.get("locale_Add_Placeholder");
+      jsonToRender.locale_All_Data = Locale.get("locale_All_Data");
+      jsonToRender.locale_Black = Locale.get("locale_Black");
+      jsonToRender.locale_Blue = Locale.get("locale_Blue");
+      jsonToRender.locale_Cancel = Locale.get("locale_Cancel");
+      jsonToRender.locale_Conversation_field_settings = Locale.get("locale_Conversation_field_settings");
+      jsonToRender.locale_Copyright = Locale.get("locale_Copyright");
+      jsonToRender.locale_Data_menu = Locale.get("locale_Data_menu");
+      jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
+      jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
+      jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
+      jsonToRender.locale_Default = Locale.get("locale_Default");
+      jsonToRender.locale_Description = Locale.get("locale_Description");
+      jsonToRender.locale_Encrypt_if_confidential = Locale.get("locale_Encrypt_if_confidential");
+      jsonToRender.locale_Export_Data = Locale.get("locale_Export_Data");
+      jsonToRender.locale_Green = Locale.get("locale_Green");
+      jsonToRender.locale_Help_Text = Locale.get("locale_Help_Text");
+      jsonToRender.locale_Help_Text_Placeholder = Locale.get("locale_Help_Text_Placeholder");
+      jsonToRender.locale_Import_Data = Locale.get("locale_Import_Data");
+      jsonToRender.locale_License = Locale.get("locale_License");
+      jsonToRender.locale_New_Conversation = Locale.get("locale_New_Conversation");
+      jsonToRender.locale_New_Corpus = "<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") ;
+      jsonToRender.locale_New_Corpus = Locale.get("locale_New_Corpus");
+      jsonToRender.locale_New_Corpus_Instructions = Locale.get("locale_New_Corpus_Instructions");
+      jsonToRender.locale_New_Corpus_Warning = Locale.get("locale_New_Corpus_Warning");
+      jsonToRender.locale_New_Data_List = Locale.get("locale_New_Data_List");
+      jsonToRender.locale_New_Datum = Locale.get("locale_New_Datum");
+      jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
+      jsonToRender.locale_New_menu = Locale.get("locale_New_menu");
+      jsonToRender.locale_Orange = Locale.get("locale_Orange");
+      jsonToRender.locale_Permissions_associated = Locale.get("locale_Permissions_associated");
+      jsonToRender.locale_Public_or_Private = Locale.get("locale_Public_or_Private");
+      jsonToRender.locale_Red = Locale.get("locale_Red");
+      jsonToRender.locale_Save = Locale.get("locale_Save");
+      jsonToRender.locale_Sessions_associated = Locale.get("locale_Sessions_associated");
+      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
+      jsonToRender.locale_Teal = Locale.get("locale_Teal");
+      jsonToRender.locale_Terms_of_use = Locale.get("locale_Terms_of_use");
+      jsonToRender.locale_Title = Locale.get("locale_Title");
+      jsonToRender.locale_Warning = Locale.get("locale_Warning");
+      jsonToRender.locale_conversation_fields_explanation = Locale.get("locale_conversation_fields_explanation");
+      jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
+      jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
+      jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
+      jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
+      jsonToRender.locale_permissions_explanation = Locale.get("locale_permissions_explanation");
+
+      
+      
+      
+      
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
@@ -274,39 +334,39 @@ define([
           this.datumStatesView.render();
           
         //Localize for all embedded view
-          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-          $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
-          $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
-          $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
-          $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
-          $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
-          $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
-          $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
-          $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
-          $(this.el).find(".locale_Conversation_field_settings").html(Locale.get("locale_Conversation_field_settings"));
-          $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
-          $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
-          $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+//          $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
+//          $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
+//          $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
+//          $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
+//          $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
+//          $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
+//          $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
+//          $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
+//          $(this.el).find(".locale_Conversation_field_settings").html(Locale.get("locale_Conversation_field_settings"));
+//          $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
+//          $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
+//          $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
 
           
           
           //Localize for only Edit view.
-          $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-          $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
-          $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
-          $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
-          $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
-          $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
-          $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-          $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-          $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-          $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
-          $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-          $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-          $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
-          $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
-          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
+//          $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
+//          $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
+//          $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
+//          $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
+//          $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
+//          $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
+//          $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
+//          $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
+//          $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
+//          $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
+//          $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
+//          $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
+//          $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
+//          $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
+//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
@@ -347,43 +407,43 @@ define([
         this.datumStatesView.render();
 
       //Localize for all fullscreen view 
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
-        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
-        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
-        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
-        $(this.el).find(".locale_Conversation_field_settings").html(Locale.get("locale_Conversation_field_settings"));
-        $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
-        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
-        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
-        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
-        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
-        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
+//        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+//        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
+//        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
+//        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
+//        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
+//        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
+//        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
+//        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
+//        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
+//        $(this.el).find(".locale_Conversation_field_settings").html(Locale.get("locale_Conversation_field_settings"));
+//        $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
+//        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
+//        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+//        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
+//        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
+//        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
+//        $(this.el).find(".explain_terms_of_use").attr("data-content", Locale.get("locale_Terms_explanation"));
+//        $(this.el).find(".explain_license").attr("data-content", Locale.get("locale_License_explanation"));
 
         //Localize for only Edit view.
-        $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
-        $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
-        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
-        $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
-        $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
-        $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
-        $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-        $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-        $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-        $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
-        $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-        $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-        $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
-        $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
-        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
+//        $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
+//        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
+//        $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
+//        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
+//        $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
+//        $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
+//        $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
+//        $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
+//        $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
+//        $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
+//        $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
+//        $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
+//        $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
+//        $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
+//        $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
+//        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "leftSide"){
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
@@ -403,30 +463,30 @@ define([
       }
       if (this.format != "modal"){
         //Localize corpus menu for all corpus views, except new corpus modal
-        $(this.el).find(".locale_New_menu").html(Locale.get("locale_New_menu"));
-        $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale.get("locale_New_Datum"));
-        $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale.get("locale_New_Conversation"));
-        $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale.get("locale_New_Data_List"));
-        $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale.get("locale_New_Session"));
-        $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") );
-        $(this.el).find(".locale_Data_menu").html(Locale.get("locale_Data_menu"));
-        $(this.el).find(".locale_Import_Data").html(Locale.get("locale_Import_Data"));
-        $(this.el).find(".locale_Export_Data").html(Locale.get("locale_Export_Data"));
-        $(this.el).find(".locale_All_Data").html(Locale.get("locale_All_Data"));
-        $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
+//        $(this.el).find(".locale_New_menu").html(Locale.get("locale_New_menu"));
+//        $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale.get("locale_New_Datum"));
+//        $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale.get("locale_New_Conversation"));
+//        $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale.get("locale_New_Data_List"));
+//        $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale.get("locale_New_Session"));
+//        $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") );
+//        $(this.el).find(".locale_Data_menu").html(Locale.get("locale_Data_menu"));
+//        $(this.el).find(".locale_Import_Data").html(Locale.get("locale_Import_Data"));
+//        $(this.el).find(".locale_Export_Data").html(Locale.get("locale_Export_Data"));
+//        $(this.el).find(".locale_All_Data").html(Locale.get("locale_All_Data"));
+//        $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
       }else{
         //Localize the new corpus menu
-        $(this.el).find(".locale_New_Corpus").html(Locale.get("locale_New_Corpus"));
-        $(this.el).find(".locale_New_Corpus_Instructions").html(Locale.get("locale_New_Corpus_Instructions"));
-        $(this.el).find(".locale_Warning").html(Locale.get("locale_Warning"));
-        $(this.el).find(".locale_New_Corpus_Warning").html(Locale.get("locale_New_Corpus_Warning"));
-        $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-        $(this.el).find(".locale_Cancel").html(Locale.get("locale_Cancel"));
-        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//        $(this.el).find(".locale_New_Corpus").html(Locale.get("locale_New_Corpus"));
+//        $(this.el).find(".locale_New_Corpus_Instructions").html(Locale.get("locale_New_Corpus_Instructions"));
+//        $(this.el).find(".locale_Warning").html(Locale.get("locale_Warning"));
+//        $(this.el).find(".locale_New_Corpus_Warning").html(Locale.get("locale_New_Corpus_Warning"));
+//        $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
+//        $(this.el).find(".locale_Cancel").html(Locale.get("locale_Cancel"));
+//        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
       }
       //Localize the title and description labels
-      $(this.el).find(".locale_Title").html(Locale.get("locale_Title"));
-      $(this.el).find(".locale_Description").html(Locale.get("locale_Description"));
+//      $(this.el).find(".locale_Title").html(Locale.get("locale_Title"));
+//      $(this.el).find(".locale_Description").html(Locale.get("locale_Description"));
       
       return this;
     },
@@ -606,10 +666,10 @@ define([
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.$el.find(".explain_terms_of_use").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-terms-of-use").popover("show");
+        this.$el.find(".explain_terms_of_use").popover("show");
         this.showingHelp = true;
       }
       return false;
@@ -622,10 +682,10 @@ define([
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-license").popover("hide");
+        this.$el.find(".explain_license").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-license").popover("show");
+        this.$el.find(".explain_license").popover("show");
         this.showingHelp = true;
       }
       return false;
