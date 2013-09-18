@@ -30,7 +30,7 @@
 						src="img/icon40_dev.png" border="0" /></a>
 				</span>
 				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a
-					ng-click="dataentry=true;navigateVerifySaved('none')">Data
+					ng-click="dataentry=true;navigateVerifySaved('none');loadData(activeSession);">Data
 						Entry</a></span>
 				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a
 					ng-click="navigateVerifySaved('searchMenu');">Search</a>
@@ -196,7 +196,7 @@
 						<button class="btn btn-primary" href="#searchModal"
 							ng-click="exportResults();">Export</button>
 					<button class="btn btn-warning"
-						ng-click="loadData();searchTerm='';searchHistory=null">Clear
+						ng-click="loadData(activeSession);searchTerm='';searchHistory=null">Clear
 						Results</button>&nbsp;
 					<span>{{searchHistory}}</span>
 				</form>
@@ -209,7 +209,7 @@
 						src="img/icon40_dev.png" border="0" /></a>
 				</span>
 				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a
-					ng-click="dataentry=true;navigateVerifySaved('none')">Data
+					ng-click="dataentry=true;navigateVerifySaved('none');loadData(activeSession)">Data
 						Entry</a></span>
 				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a
 					ng-click="navigateVerifySaved('searchMenu');">Search</a>
@@ -367,7 +367,7 @@
 							ng-click="exportResults();">Export</button></span>
 
 					<button class="btn btn-warning"
-						ng-click="loadData();searchTerm='';searchHistory=null">Clear
+						ng-click="loadData(activeSession);searchTerm='';searchHistory=null">Clear
 						Results</button>
 					<span>{{searchHistory}}</span>
 				</form>
