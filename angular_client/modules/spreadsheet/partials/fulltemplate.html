@@ -6,7 +6,8 @@
 	<div class="row">
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
-			<input focus glossmorpheme keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
+			<div class="focus_box_div"><input focus /></div>
+			<input glossmorpheme keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''" >
 			<input keypress-mark-as-new class="span5"
@@ -105,7 +106,8 @@
 	<div ng-show="selected==$index">
 			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span5">
-				<input glossmorpheme keypress-mark-as-edited focus class="span5" 
+				<div class="focus_box_div"><input focus /></div>
+				<input glossmorpheme keypress-mark-as-edited class="span5" 
 					type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
