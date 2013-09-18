@@ -56,7 +56,7 @@
 							Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 						</div>
 						<div>
-							<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
+							<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>
 							<button class="btn btn-warning" ng-click="logOut()">Log
 								out</button>
 						</div>
@@ -234,7 +234,7 @@
 						Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 					</div>
 					<div class="smallMenuBarInfoItem">
-						<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true">{{getSavedState()}}</button>
+						<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>
 						<button class="btn btn-warning" ng-click="logOut()">Log out</button>
 					</div>
 				</div>
