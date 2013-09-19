@@ -58,6 +58,9 @@ module.exports = function(grunt) {
           src: ['libs/require.min.js'],
           dest: 'release/'
         }, {
+          src: ['libs/recorderjs/recorderWorker.js'],
+          dest: 'release/'
+        }, {
           src: ['index.html'],
           dest: 'release/'
         }, {
