@@ -1817,10 +1817,12 @@ define(
           };
 
           $scope.pageForward = function() {
+            $scope.selected = null;
             $rootScope.currentPage = $rootScope.currentPage + 1;
           };
 
           $scope.pageBackward = function() {
+            $scope.selected = null;
             $rootScope.currentPage = $rootScope.currentPage - 1;
           };
           // Audio recording
