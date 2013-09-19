@@ -45,11 +45,25 @@ define(
             element.bind('keyup', function(e) {
               scope.$apply(function() {
                 // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
-                var lastRecord = ((($rootScope.currentPage + 1) * scope.resultSize) - (scope.resultSize - (scope.$index + 1)));
+                var lastPage = scope.numberOfResultPages(scope.allData.length);
+                var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
+                var currentRecordIsLastRecord = false;
+                if ($rootScope.currentPage == (lastPage - 1) && scopeIndexOfLastRecordOnLastPage == scope.$index) {
+                  currentRecordIsLastRecord = true;
+                }
+
+                if (e.keyCode === 40) {
+                  element[0].scrollIntoView(true);
+                }
+
+                if (e.keyCode === 38) {
+                  element[0].scrollIntoView(false);
+                }
+
                 if (e.keyCode === 40 && scope.$index == undefined) {
                   // Select first record if arrowing down from new record
                   scope.selectRow(0);
-                } else if (e.keyCode === 40 && lastRecord >= scope.data.length) {
+                } else if (e.keyCode === 40 && currentRecordIsLastRecord == true) {
                   // Do not go past very last record
                   return;
                 } else if (e.keyCode === 40) {
@@ -79,7 +93,7 @@ define(
         'keypressMarkAsEdited',
         function($rootScope) {
           return function(scope, element, attrs) {
-            element.bind('keyup', function(e) {
+            element.bind('blur', function(e) {
               var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
               if (keycodesToIgnore.indexOf(e.keyCode) == -1) {
                 $rootScope.markAsEdited(scope.fieldData, scope.datum);
@@ -118,6 +132,11 @@ define(
         function() {
           return function(scope, element) {
             element.bind('keyup', function(e) {
+              // Ignore arrows
+              var keycodesToIgnore = [40, 38, 39, 37];
+              if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+                return;
+              }
               var newUtterance = this.value;
               var morphemeGuess = Glosser.morphemefinder(
                 newUtterance, scope.DB.pouchname);
@@ -156,10 +175,16 @@ define(
                   }
                 }
               }
-
-
             });
           }
+        }).directive(
+        'loadPaginatedDataOnPageChange',
+        function($timeout, $rootScope) {
+          return function(scope, element) {
+            scope.$watch('currentPage', function() {
+              scope.loadPaginatedData();
+            });
+          };
         });
 
     return SpreadsheetStyleDataEntryDirectives;
