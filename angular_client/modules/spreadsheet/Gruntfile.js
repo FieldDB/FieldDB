@@ -63,7 +63,7 @@ module.exports = function(grunt) {
       }
     },
     cssmin: {
-      dist: {
+      release: {
         options: {
           report: 'min'
         },
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
       }
     },
     htmlmin: {
-      dist: {
+      release: {
         options: {
           removeComments: true,
           collapseWhitespace: true
@@ -97,22 +97,25 @@ module.exports = function(grunt) {
           console: true,
           module: true,
           document: true
-        }
+        },
+        // Ignore functions inside of loops (to allow for closures)
+        loopfunc: true
       }
     },
     jasmine: {
-
       src: [
         'js/**/*.js'
       ],
       options: {
         specs: 'test/*.test.js',
+        template: require('grunt-template-jasmine-requirejs'),
+        templateOptions: {
+          requireConfigFile: 'SpreadsheetStyleDataEntry.js'
+        },
         junit: {
           path: 'test/output/testresults'
         }
       }
-
-
     },
     watch: {
       files: ['<%= jshint.files %>'],
