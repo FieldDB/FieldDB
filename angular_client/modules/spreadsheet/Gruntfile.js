@@ -31,11 +31,6 @@ module.exports = function(grunt) {
       spreadsheet: {
         files: [{
           expand: true,
-          cwd: 'css/',
-          src: ['**'],
-          dest: 'release/css/'
-        }, {
-          expand: true,
           cwd: 'data/',
           src: ['**'],
           dest: 'release/data/'
@@ -46,11 +41,6 @@ module.exports = function(grunt) {
           dest: 'release/img/'
         }, {
           expand: true,
-          cwd: 'partials/',
-          src: ['**'],
-          dest: 'release/partials/'
-        }, {
-          expand: true,
           cwd: 'libs/bootstrap/',
           src: ['**'],
           dest: 'release/libs/bootstrap/'
@@ -59,9 +49,6 @@ module.exports = function(grunt) {
           dest: 'release/'
         }, {
           src: ['libs/recorderjs/recorderWorker.js'],
-          dest: 'release/'
-        }, {
-          src: ['index.html'],
           dest: 'release/'
         }, {
           src: ['manifest-build.json'],
@@ -75,8 +62,31 @@ module.exports = function(grunt) {
         }]
       }
     },
-    qunit: {
-      files: ['test/**/*.html']
+    cssmin: {
+      dist: {
+        options: {
+          report: 'min'
+        },
+        files: {
+          'release/css/main.css': [
+            'css/main.css'
+          ]
+        }
+      }
+    },
+    htmlmin: {
+      dist: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: [{
+          expand: true,
+          cwd: './',
+          src: ['*.html', 'partials/**/*.html'],
+          dest: 'release/'
+        }]
+      }
     },
     jshint: {
       files: ['Gruntfile.js', 'js/**/*.js', 'test/**/*.js'],
@@ -90,6 +100,20 @@ module.exports = function(grunt) {
         }
       }
     },
+    jasmine: {
+
+      src: [
+        'js/**/*.js'
+      ],
+      options: {
+        specs: 'test/*.test.js',
+        junit: {
+          path: 'test/output/testresults'
+        }
+      }
+
+
+    },
     watch: {
       files: ['<%= jshint.files %>'],
       tasks: ['jshint', 'qunit']
@@ -99,14 +123,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
-  grunt.registerTask('test', ['jshint', 'qunit']);
+  grunt.registerTask('test', ['jshint', 'jasmine']);
 
-  grunt.registerTask('build-only', ['requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only']);
+  grunt.registerTask('build-only', ['requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only', 'htmlmin', 'cssmin']);
 
-  grunt.registerTask('default', ['jshint', 'qunit', 'requirejs', 'uglify', 'copy:spreadsheet']);
+  grunt.registerTask('default', ['jshint', 'jasmine', 'requirejs', 'uglify', 'copy:spreadsheet', 'htmlmin', 'cssmin']);
 
 };
