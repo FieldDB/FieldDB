@@ -1017,8 +1017,8 @@ define(
               datum[$scope.fields[key].label] = fieldData[key];
             }
 
-            if (key == "utterance" && fieldData[key].value != undefined) {
-              utterance = fieldData[key].value;
+            if ($scope.fields[key].label == "utterance") {
+              utterance = fieldData[key];
             }
           }
           datum.dateModified = JSON.parse(JSON.stringify(new Date()));
