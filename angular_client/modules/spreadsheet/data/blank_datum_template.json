@@ -81,6 +81,26 @@
     "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc...",
     "showToUserTypes": "all",
     "userchooseable": "disabled"
+  }, {
+    "label": "modifiedByUser",
+    "mask": "",
+    "users": [],
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "An array of users who modified the datum",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "userchooseable": "disabled"
+  }, {
+    "label": "enteredByUser",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "The user who originally entered the datum",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "userchooseable": "disabled",
+    "user": {}
   }],
   "pouchname": "default",
   "session": {
