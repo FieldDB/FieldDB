@@ -10,61 +10,12 @@ define(
       $scope.scopePreferences = JSON.parse(localStorage
         .getItem('SpreadsheetPreferences'));
 
-      $scope.availableFields = $scope.scopePreferences.availableFields;
+      if ($scope.appReloaded != true) {
+        window.location.assign("#/");
+        return;
+      }
 
-      // Get all available datum fields from server
-      // var availableFields = {};
-      //
-      // Data
-      // .datumFields($rootScope.DB)
-      // .then(
-      // function(availableDatumFields) {
-      // var availableFieldsFromServer = {};
-      // for (i in availableDatumFields) {
-      // for (keyValue in availableDatumFields[i].key) {
-      // availableFieldsFromServer[keyValue] = keyValue;
-      // }
-      // }
-      //
-      // for (field in availableFieldsFromServer) {
-      // availableFieldsFromServer[field] = {};
-      // availableFieldsFromServer[field].label = field;
-      // if (field == "utterance") {
-      // availableFieldsFromServer[field].title = "Utterance";
-      // } else if (field == "translation") {
-      // availableFieldsFromServer[field].title = "Translation";
-      // } else if (field == "refs") {
-      // availableFieldsFromServer[field].title = "References";
-      // } else if (field == "notes") {
-      // availableFieldsFromServer[field].title = "Notes";
-      // } else if (field == "morphemes") {
-      // availableFieldsFromServer[field].title = "Morphemes";
-      // } else if (field == "judgement") {
-      // availableFieldsFromServer[field].title = "Judgement";
-      // } else if (field == "gloss") {
-      // availableFieldsFromServer[field].title = "Gloss";
-      // } else if (field == "dialect") {
-      // availableFieldsFromServer[field].title = "Dialect";
-      // } else if (field == "dateElicited") {
-      // availableFieldsFromServer[field].title = "Date Elicited";
-      // } else if (field == "checkedWithConsultant") {
-      // availableFieldsFromServer[field].title = "Checked with consultant";
-      // } else if (field == "goal") {
-      // availableFieldsFromServer[field].title = "Goal";
-      // } else if (field == "user") {
-      // availableFieldsFromServer[field].title = "User";
-      // } else if (field == "dateSEntered") {
-      // availableFieldsFromServer[field].title = "Date entered";
-      // } else if (field == "consultants") {
-      // availableFieldsFromServer[field].title = "Consultants";
-      // } else {
-      // availableFieldsFromServer[field].title = field;
-      // }
-      // }
-      // console.log(JSON.stringify(availableFieldsFromServer));
-      // availableFields = availableFieldsFromServer;
-      // $scope.availableFields = availableFieldsFromServer;
-      // });
+      $scope.availableFields = $scope.scopePreferences.availableFields;
 
       $scope.changeTagToEdit = function(tag) {
         $scope.tagToEdit = tag;
@@ -99,7 +50,7 @@ define(
               for (var j = 0; j < $scope.dataCopy[indexi].value.datumTags.length; j++) {
                 if ($scope.dataCopy[indexi].value.datumTags[j].tag == oldTag) {
                   changeThisRecord = true;
-                };
+                }
               }
               if (changeThisRecord == true) {
                 $rootScope.loading = true;
@@ -191,7 +142,7 @@ define(
               $scope.tags = tags;
             });
       };
-      $scope.getTags();
+      // $scope.getTags();
 
       $scope.saveNewPreferences = function(template, newFieldPreferences) {
         Preferences = JSON.parse(localStorage
@@ -225,7 +176,7 @@ define(
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(Preferences));
           $rootScope.resultSize = numberOfRecordsToDisplay;
-          window.alert("Settings saved.");
+          window.alert("Settings saved.\nYou may need to reload for the new settings to take effect.");
         } else {
           window.alert("Please select a value from the dropdown.");
         }
