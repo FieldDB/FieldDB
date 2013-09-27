@@ -292,8 +292,15 @@ git checkout master
 
 grunt --version || {
   echo "If you want to run the tests, you should have grunt installed globally. "
-  echo " Enter your password if you want to do this, otherwise just cancel the tests with CTL+C"
-  sudo npm install -g grunt
+  read -p "Do you want me to install Grunt globally for you? (sudo npm install -g grunt)" -n 1 -r
+       if [[ $REPLY =~ ^[Yy]$ ]]
+        then {
+          sudo npm install -g grunt
+        }
+        else {
+          exit 1;
+        }
+       fi
 }
 
 echo "Testing if FieldDB WebServer will run, it should say 'Listening on 3182' "
@@ -314,13 +321,13 @@ grunt tests || {
   echo "All done! "
   echo ""
   echo ""
-  echo "I wasn't able to run the tests to know if all the webservices are ready to use, but all the code is downloaded, now you can take a look in the $FIELDDB_HOME folder with your favorite IDE (if you have Sublime, I already opened it for you)."
+  echo "All the code is downloaded. I wasn't able to run the tests to know if all the webservices are ready to use, now you can take a look in the $FIELDDB_HOME folder with your favorite IDE (if you have Sublime, I already opened it for you)."
 }
 
-echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $FIELDDB_HOME/FieldDBWebServer/pubic/dev.html"
 echo ""
+echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $FIELDDB_HOME/FieldDBWebServer/public/dev.html"
 echo ""
-echo "If you got the code so you could edit it, you could try doing a CMD+Shift+F in Sublime and looking for "
+echo "If you got the code in order to could edit something specific, you could try doing a CMD+Shift+F in Sublime and looking for it the text you want to edit "
 
 #echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
 
