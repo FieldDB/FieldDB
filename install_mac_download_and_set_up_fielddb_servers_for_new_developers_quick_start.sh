@@ -66,6 +66,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/FieldDB.git
 cd FieldDB
 
 echo "Setting the upstream of the repository so that updates are easy to do"
+git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDB.git
 git remote rm origin
 echo "Preparing to compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
@@ -129,6 +130,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git
 cd FieldDBWebServer
 
 echo "Setting the upstream of the repository so that updates are easy to do"
+git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/FieldDBWebServer.git;
@@ -146,6 +148,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService
 cd AuthenticationWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
+git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/AuthenticationWebService.git;
@@ -165,6 +168,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/AudioWebService.git
 cd AudioWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
+git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/AudioWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/AudioWebService.git;
@@ -183,6 +187,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/LexiconWebService.git
 cd LexiconWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
+git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/LexiconWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/LexiconWebService.git;
@@ -201,6 +206,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/CorpusWebService.git
 cd CorpusWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
+git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/CorpusWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/CorpusWebService.git;
@@ -221,12 +227,11 @@ curl http://localhost:5984 || {
       cd $FIELDDB_HOME
       # mkdir couchdb
       cd couchdb
-      curl -O --retry 999 --retry-max-time 0 -C - http://mirror.its.dal.ca/apache/couchdb/binary/mac/1.4.0/Apache-CouchDB-1.4.0.zip
+      # curl -O --retry 999 --retry-max-time 0 -C - http://mirror.its.dal.ca/apache/couchdb/binary/mac/1.4.0/Apache-CouchDB-1.4.0.zip
       unzip Apache-CouchDB-1.4.0.zip
       mv Apache\ CouchDB.app /Applications/Apache\ CouchDB.app
       echo "Setting up CouchDB with CORS support and HTTPS"
-      cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini
-      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB &
+      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB && cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini &&
     fi
   }
 }
@@ -286,9 +291,7 @@ echo "Installing the databases you need to develop offline (or to create a new F
 cd $FIELDDB_HOME/AuthenticationWebService
 git fetch https://github.com/cesine/AuthenticationWebService.git installable
 git checkout 0cdcc4503e064623b4788d9935b3896dfe09bb98
-node $FIELDDB_HOME/AuthenticationWebService/service.js &
-curl -k https://localhost:3183/api/install
-git checkout master
+node $FIELDDB_HOME/AuthenticationWebService/service.js && curl -k https://localhost:3183/api/install && git checkout master
 
 grunt --version || {
   echo "If you want to run the tests, you should have grunt installed globally. "
