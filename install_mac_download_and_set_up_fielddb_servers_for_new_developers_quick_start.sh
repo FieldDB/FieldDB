@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#IF you want to customize the home's location, change this variable 
+FIELDDB_HOME=$HOME/fielddbhome
+
 # For wget on mac using:  "curl -O --retry 999 --retry-max-time 0 -C -"
 
 # We need git to do anything, anyone who is running this script should have git installed
@@ -33,9 +36,9 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
   echo -n "(e.g. me@gmail.com) and press [ENTER]: "
   read email;
   ssh-keygen -t rsa -C  '"'$email'"';
-  echo 'I Created an ssh key for you so you can push code to GitHub, you need to copy this ssh key to your GitHub user preferences. ';
-  echo 'I already copied it into your clipboard so you can paste it in an New Key on GitHub. ';
+  echo 'I created an ssh key for you so you can push code to GitHub, you need to copy this ssh key to your GitHub user preferences. ';
   echo '' 
+  echo 'I already copied it into your clipboard so you can paste it in an New Key on GitHub. ';
   echo ''
   echo 'Please wait, Opening... https://github.com/settings/ssh'; 
   pbcopy  < ~/.ssh/id_rsa.pub;
@@ -49,7 +52,6 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
 
 
 echo "Making fielddb directory which will house the fielddb code, in case you need it"
-FIELDDB_HOME=$HOME/fielddbhome
 echo "export FIELDDB_HOME=$FIELDDB_HOME" >> $HOME/.bash_profile
 mkdir $FIELDDB_HOME
 cd $FIELDDB_HOME
@@ -66,10 +68,10 @@ cd FieldDB
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDB.git
 git remote rm origin
-echo "Compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
-# Install require,js, handlebars and other development dependancies
+echo "Preparing to compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
+echo " Installing require,js, handlebars and other development dependancies"
 npm install
-# The handlebars templates have to be compiled and turned into javascript before you can run the Chrome App (as of Chrome manifest v2 you cant use any sort of Eval in your code, and templates generally require eval. So this means that before you can use the app, we now have "build step" ie, run this script if you have changed anything in the .handlebars files)
+echo 'The handlebars templates have to be compiled and turned into javascript before you can run the Chrome App (as of Chrome manifest v2 you cant use any sort of Eval in your code, and templates generally require eval. So this means that before you can use the app, we now have "build step" ie, run this script if you have changed anything in the .handlebars files)'
 ./scripts/build_templates.sh
 echo "If you want to get started developing or using the Offline Chrome App, you now can load it as an Chrome Extension."
 echo 'Instructions:'
@@ -80,9 +82,9 @@ echo " 4. Navigate to $FIELDDB_HOME/FieldDB/backbone_client OR $FIELDDB_HOME/Fie
 echo " 5. Open a new tab, click on the apps section (if it is not already open) and the click on the Logo of the app to open it"
 echo ''
 echo ''
-echo 'Please wait, Opening the instructions page in Chrome so you can install the app and get started while we continue to download...'
-sleep 3
-open -a Sublime\ Text\ 3.app $FIELDDB_HOME;
+echo 'Please wait, Opening instructions for you to follow ...'
+sleep 5
+open -a Sublime\ Text\ 2.app $FIELDDB_HOME;
 open http://developer.chrome.com/extensions/getstarted.html#unpacked;
 
 
@@ -127,7 +129,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git
 cd FieldDBWebServer
 
 echo "Setting the upstream of the repository so that updates are easy to do"
-git remote add upstream https://github.com:OpenSourceFieldlinguistics/FieldDBWebServer.git
+git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/FieldDBWebServer.git;
 git remote -v
@@ -144,13 +146,15 @@ git clone https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService
 cd AuthenticationWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
-git remote add upstream https://github.com:OpenSourceFieldlinguistics/AuthenticationWebService.git
+git remote add upstream https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/AuthenticationWebService.git;
 git remote -v
 echo "Installing the FieldDB auth webservice dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
-npm install
+npm install || {
+  echo "Something went wrong with the npm install for the Authentication web service, but we'll keep going anyway. (You can rerun this script later, it will essentially redo only the parts that didnt work the first time )"
+}
 
 
 echo -en '\E[47;34m'"\033[1mE" #Blue
@@ -161,7 +165,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/AudioWebService.git
 cd AudioWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
-git remote add upstream https://github.com:OpenSourceFieldlinguistics/AudioWebService.git
+git remote add upstream https://github.com/OpenSourceFieldlinguistics/AudioWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/AudioWebService.git;
 git remote -v
@@ -179,7 +183,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/LexiconWebService.git
 cd LexiconWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
-git remote add upstream https://github.com:OpenSourceFieldlinguistics/LexiconWebService.git
+git remote add upstream https://github.com/OpenSourceFieldlinguistics/LexiconWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/LexiconWebService.git;
 git remote -v
@@ -197,7 +201,7 @@ git clone https://github.com/OpenSourceFieldlinguistics/CorpusWebService.git
 cd CorpusWebService
 
 echo "Setting the upstream of the repository so that updates are easy to do"
-git remote add upstream https://github.com:OpenSourceFieldlinguistics/CorpusWebService.git
+git remote add upstream https://github.com/OpenSourceFieldlinguistics/CorpusWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/CorpusWebService.git;
 git remote -v
@@ -280,7 +284,7 @@ erica --version || {
 ## Running tests to see if everything downloaded and works ###################################################
 echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
 cd $FIELDDB_HOME/AuthenticationWebService
-git fetch https://github.com/cesine/AuthenticationWebService.git
+git fetch https://github.com/cesine/AuthenticationWebService.git installable
 git checkout 0cdcc4503e064623b4788d9935b3896dfe09bb98
 node $FIELDDB_HOME/AuthenticationWebService/service.js &
 curl -k https://localhost:3183/api/install
@@ -306,6 +310,17 @@ grunt tests
 
 echo "Testing if FieldDB LexiconWebService will run, it should say 'Listening on 3185' "
 cd $FIELDDB_HOME/LexiconWebService
-grunt tests
+grunt tests || {
+  echo "All done! "
+  echo ""
+  echo ""
+  echo "I wasn't able to run the tests to know if all the webservices are ready to use, but all the code is downloaded, now you can take a look in the $FIELDDB_HOME folder with your favorite IDE (if you have Sublime, I already opened it for you)."
+}
+
+echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $FIELDDB_HOME/FieldDBWebServer/pubic/dev.html"
+echo ""
+echo ""
+echo "If you got the code so you could edit it, you could try doing a CMD+Shift+F in Sublime and looking for "
+
 #echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
 
