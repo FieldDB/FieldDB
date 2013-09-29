@@ -219,19 +219,21 @@ npm install
 
 curl http://localhost:5984 || { 
   echo "If  you want to develop/use FieldDB offline, you have to turn on a Couch Database yourself. It is very easy to do. Download it from here: http://couchdb.apache.org/ then double click on the app logo after you unzip it."
+  /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB  &
   ls /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB || {
     read -p "Do you want me to automatically download and set up CouchDB (with CORS and HTTPS) for you?" -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
-    then
+    then {
       # set up couchdb 
       cd $FIELDDB_HOME
-      # mkdir couchdb
+      mkdir couchdb
       cd couchdb
-      # curl -O --retry 999 --retry-max-time 0 -C - http://mirror.its.dal.ca/apache/couchdb/binary/mac/1.4.0/Apache-CouchDB-1.4.0.zip
+      curl -O --retry 999 --retry-max-time 0 -C - http://mirror.its.dal.ca/apache/couchdb/binary/mac/1.4.0/Apache-CouchDB-1.4.0.zip
       unzip Apache-CouchDB-1.4.0.zip
       mv Apache\ CouchDB.app /Applications/Apache\ CouchDB.app
       echo "Setting up CouchDB with CORS support and HTTPS"
-      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB && cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini &&
+      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB && cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini &
+      }   
     fi
   }
 }
@@ -290,17 +292,22 @@ erica --version || {
 echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
 cd $FIELDDB_HOME/AuthenticationWebService
 git fetch https://github.com/cesine/AuthenticationWebService.git installable
-git checkout 0cdcc4503e064623b4788d9935b3896dfe09bb98
-node $FIELDDB_HOME/AuthenticationWebService/service.js && curl -k https://localhost:3183/api/install && git checkout master
+git checkout 16f9bad6b356a829eb237ff842c03da2002b000d
+node $FIELDDB_HOME/AuthenticationWebService/service.js &
+sleep 10
+curl -k https://localhost:3183/api/install 
+git checkout master
 
 grunt --version || {
   echo "If you want to run the tests, you should have grunt installed globally. "
-  read -p "Do you want me to install Grunt globally for you? (sudo npm install -g grunt)" -n 1 -r
+  read -p "Do you want me to install Grunt globally for you? (sudo npm install -g grunt-cli)" -n 1 -r
        if [[ $REPLY =~ ^[Yy]$ ]]
         then {
-          sudo npm install -g grunt
+          echo ""
+          sudo npm install -g grunt-cli
         }
         else {
+          echo ""
           exit 1;
         }
        fi
