@@ -59,6 +59,8 @@ define([
       if($(this.el).find(".comment-text").attr("contenteditable")){
         $(this.el).find(".comment-text").removeAttr("contenteditable");
         $(this.el).find(".comment-text").removeClass("thisIsEditable");
+        this.model.edit($(this.el).find(".comment-text").text());
+        this.model.set("modifiedByUsername", window.app.get("authentication").get("userPublic").get("username"));
         $(this.el).find(".icon-save").toggleClass("icon-pencil icon-save");
       }else{
         $(this.el).find(".comment-text").attr("contenteditable","true");
