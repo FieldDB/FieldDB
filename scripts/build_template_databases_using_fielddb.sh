@@ -1,5 +1,5 @@
 echo "Building couchapps"
-FIELDDB="$HOME/fielddbworkspace"
+FIELDDB="$FIELDDB_HOME"
 cd $FIELDDB/FieldDB
 ./scripts/build_fielddb_minified.sh
 ./scripts/build_activity_feed.sh
