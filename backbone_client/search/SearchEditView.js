@@ -222,7 +222,7 @@ define([
       
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
       //put "grammatical" to search by default for only grammatical forms. 
-      window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
+      // window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
