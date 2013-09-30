@@ -11,10 +11,15 @@
 			<span class="clickable" ng-class="{active: show_section=='works'}">Works
 				with Your Data</span>
 		</div>
-		<div class="bulletSectionHeader  bulletSectionHeaderBottom"
+		<div class="bulletSectionHeader"
 			ng-click="show_section='open_source'">
 			<span class="clickable"
 				ng-class="{active: show_section=='open_source'}">Open Source</span>
+		</div>
+		<div class="bulletSectionHeader  bulletSectionHeaderBottom" 
+		  ng-click="show_section='word_cloud'">
+			<span class="clickable"
+				ng-class="{active: show_section=='word_cloud'}">Word Cloud</span>
 		</div>
 	</div>
 	<div class="floatRight">
@@ -73,7 +78,12 @@
 				visualize, or mass-edit lots of data.</span>
 
 		</div>
+		<div class="bulletSection" ng-show="show_section=='word_cloud'">
+
+			<span>Click on a word to search the web.</span>
+			<div word-cloud="[]"></div>
+
+		</div>
 	</div>
 	<div class="clearBoth"></div>
 </div>
-
