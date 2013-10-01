@@ -146,6 +146,9 @@ li {
 	position: relative;*/
 	margin-top: 4em;
 }
+.wiki-preview {
+	border: 1px solid #ccc;
+}
 
 #corpus-quickview { /* min-height: 10em;
 	overflow: auto;  */
