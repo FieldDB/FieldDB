@@ -1,9 +1,13 @@
+/* source: https://gist.github.com/xalakox/3026004
+This function itterates through the data and figures out the headers and 
+exports the id, key (and all its children) and value  (and all its children) as csv 
+*/
 function(head, req) {
-    start({
-        'headers': {
-            'Content-Type': 'text/csv'
-        }
-    });
+    // start({
+    //     'headers': {
+    //         'Content-Type': 'text/csv'
+    //     }
+    // });
     Array.prototype.unique = function() {
         var a = this.concat();
         for (var i = 0; i < a.length; ++i) {
