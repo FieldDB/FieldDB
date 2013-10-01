@@ -4,9 +4,7 @@
 	<form>
 		Server<sup>*</sup>:<br />
 		<select ng-model="newUserInfo.serverCode">
-			<!-- <option value="mcgill">{{serverLabels.mcgill}}</option> -->
-			<!-- <option value="localhost">{{serverLabels.localhost}}</option> -->
-			<option value="testing">{{serverLabels.testing}}</option>
+			<option ng-repeat="server in servers" selected={{server.selected}} value="{{server.label}}"  >{{server.value}}</option>
 		</select> <br /> <font size="1"><i>*Please note that data may be
 				shared only between users who are registered on the same server.</i></font> <br />
 		<input type="text" placeholder="username"
