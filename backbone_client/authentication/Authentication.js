@@ -298,7 +298,7 @@ define([
       for(var x in mostRecentPublicUser){
         localStorage.setItem(x, mostRecentPublicUser[x]);
       }
-      window.location.replace("index.html");
+      window.location.replace("corpus.html");
     },
     
     savePublicUserForOfflineUse: function(){

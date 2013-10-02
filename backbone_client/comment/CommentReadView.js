@@ -48,6 +48,7 @@ define([
       jsonToRender.gravatar = jsonToRender.gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
       jsonToRender.timestamp = OPrime.prettyTimestamp(jsonToRender.timestamp);
       $(this.el).html(this.template(jsonToRender));
+      $(this.el).find(".comment-text").html($.wikiText(jsonToRender.text));
       return this;
     },
     
@@ -56,13 +57,20 @@ define([
       if(e){
         e.preventDefault();
       }
-      if($(this.el).find(".comment-text").attr("contenteditable")){
-        $(this.el).find(".comment-text").removeAttr("contenteditable");
-        $(this.el).find(".comment-text").removeClass("thisIsEditable");
+      if($(this.el).hasClass("thisIsEditable")){
+        $(this.el).removeClass("thisIsEditable");
+        $(this.el).find(".comment-text").show();
+        var editedComment  = $(this.el).find(".comment-textarea").val();
+        this.model.edit(editedComment);
+        $(this.el).find(".comment-text").html($.wikiText(editedComment));
+        this.model.set("modifiedByUsername", window.app.get("authentication").get("userPublic").get("username"));
         $(this.el).find(".icon-save").toggleClass("icon-pencil icon-save");
+        $(this.el).find(".comment-textarea").hide();
       }else{
-        $(this.el).find(".comment-text").attr("contenteditable","true");
-        $(this.el).find(".comment-text").addClass("thisIsEditable");
+        $(this.el).addClass("thisIsEditable");
+        // $(this.el).find(".comment-text").hide();
+        $(this.el).find(".comment-textarea").val(this.model.get("text"));
+        $(this.el).find(".comment-textarea").show();
         $(this.el).find(".icon-pencil").toggleClass("icon-save icon-pencil");
       }
     },

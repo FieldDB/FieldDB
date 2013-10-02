@@ -4,8 +4,9 @@ compiled_handlebars.js
 #ignore generated folders
 release/
 couchapp_dev/_attachments
-#couchapp_minified/_attachments/corpus_online_dashboard.js
-#couchapp_minified/_attachments/user_online_dashboard.js
+couchapp_minified/views
+couchapp_minified/lists
+couchapp_minified/_attachments
 
 #ignore private config files
 *_production*

@@ -130,10 +130,20 @@ define([
       this.advancedSearchSessionView.el = this.$('.advanced_search_session');
       this.advancedSearchSessionView.render();
 
-     //this.setElement($("#search-top"));
+      //this.setElement($("#search-top"));
+      var searchKeywords = this.model.get("searchKeywords");
+      if (!searchKeywords) {
+        searchKeywords = localStorage.getItem("searchKeywords");
+        if (!searchKeywords) {
+          searchKeywords = window.app.get("corpus").get("searchKeywords");
+        }
+        if(searchKeywords){
+          this.model.set("searchKeywords", searchKeywords);
+        }
+      }
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
-      
+
       //localization
       $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
       $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
@@ -218,7 +228,7 @@ define([
       
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
       //put "grammatical" to search by default for only grammatical forms. 
-      window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
+      // window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
@@ -332,6 +342,7 @@ define([
      * @param queryString {String} The string representing the query.
      */
     search : function(queryString, callback) {
+      this.model.saveKeyword(queryString);
       // Search for Datum that match the search criteria      
       var searchself = this;
       (new Datum({"pouchname": app.get("corpus").get("pouchname")})).searchByQueryString(queryString

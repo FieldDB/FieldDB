@@ -22,6 +22,374 @@
 	</div>
 
 
+  <div id="wiki-syntax-modal" class="modal hide">
+    <div class="modal-header">
+      <button class="btn pull-right" data-dismiss="modal">Close</button>
+      <h3>Wiki Syntax Help</h3>
+    </div>
+    <div class="modal-body">
+      <div class="scrollable">
+      <h3>Paragraphs </h3>
+
+      <p>
+      Text starting at the beginning of a line becomes a paragraph.  A new paragraph is created whenever 
+      there is a blank line between two blocks of text.
+      </p>
+      <p>
+      Example:
+      </p>
+      <pre>So this is the first paragraph
+      with text on the following line part of the same paragraph.
+
+      But this a new paragraph.
+      </pre>
+      <p>
+      Becomes:
+      </p>
+      <p>
+      So this is the first paragraph
+      with text on the following line part of the same paragraph.
+      </p>
+      <p>
+      But this a new paragraph.
+      </p>
+      <p>
+      <em>Note: Blank lines end paragraphs, lists and block quotes.</em>
+      </p>
+
+      <h3>Line Breaks </h3>
+
+      <p>
+      To force lines to break where you want them - useful for poetry, for example - include <tt>[[BR]]</tt> in the text.
+      </p>
+      <p>
+      Example:
+      </p>
+      <pre>A paragraph which you dont want to break here.
+
+      A paragraph which you want to break[[BR]]here onto the next line.
+      </pre>
+      <p>
+      Becomes:
+      </p>
+      <p>
+      A paragraph which you dont want to break here.
+      </p>
+      <p>
+      A paragraph which you want to break<br>here onto the next line.
+      </p>
+
+      <h3>Headings </h3>
+
+      <p>
+      To add a heading put the text of the heading on a line by itself started with between 
+      1 and 6 equals ('='), a space then the heading text and finally the same number of 
+      equals ('='). The number of equals before the heading name sets the heading level - H1 to H6. 
+      </p>
+      <p>
+      Example: 
+      </p>
+      <pre>= Heading 1 =
+      == Heading 2 ==
+      === Heading 3 ===
+      ==== Heading 4 ====
+      ===== Heading 5 =====
+      ====== Heading 6 ======
+      </pre>
+      <p>
+      Becomes:
+      </p>
+
+      <h1>Heading 1 </h1>
+
+
+      <h2>Heading 2 </h2>
+
+
+      <h3>Heading 3 </h3>
+
+
+      <h4>Heading 4 </h4>
+
+
+      <h5>Heading 5 </h5>
+
+
+      <h6>Heading 6 </h6>
+
+      <p>
+      <em>Note: currently it doesn't check if the number of equals ('=') is the same before and after the 
+      heading text - although it must be 6 or less.  A future version might check.</em>
+      </p>
+
+      <h3>Block Quotes </h3>
+
+      <p>
+      Block quotes are entered by starting each line with one or more spaces or tabs.
+      </p>
+      <p>
+      Example:
+      </p>
+      <pre>The next paragraph is a block quote - blank lines are not needed here:
+       Once upon a time 
+       there were three little pigs...
+      You may recognise it.
+      </pre>
+      <p>
+      Becomes:
+      </p>
+      <p>
+      The next paragraph is a block quote:
+      </p>
+      <blockquote>
+
+      Once upon a time there were three little pigs...</blockquote>
+      <p>
+      You may recognise it.
+      </p>
+
+      <h3>Preformatted Text </h3>
+
+      <p>
+      Preformatted text such as code examples can be entered between '{{{' and '}}}' lines each 
+      on a separate line.
+      </p>
+      <p>
+      Example:
+      </p>
+      <pre>{{{
+      This is preformatted text - 
+        with ''italic'' and '''bold''' and other inline formatting ignored.
+      == Even Headings ==
+      }}} 
+      </pre>
+      <p>
+      Becomes:
+      </p>
+      <pre>This is preformatted text - 
+        with ''italic'' and '''bold''' and other inline formatting ignored.
+      == Even Headings ==
+      </pre>
+      <p>
+      <em>Note: Both '{{{' and '}}}' should be the only text on the line - they will be treated as normal
+      text if there is any text or space before or after them.  That's how the example works above!''
+      </em></p>
+
+      <h3><em>Lists </em></h3>
+
+      <p>
+      <em>Both bulleted and numbered lists are supported using the following syntax:
+      </em></p>
+      <p>
+      <em>Example:
+      </em></p>
+      <pre> * this is a bulleted list
+       * with three bullets
+         including a wrapped line (indented)
+       * as an example.
+       # and now a numbered list
+       # with a couple of numbered items.
+
+       # but this is a separate list after the blank line.
+      # and this is not recognised as a list item.
+      </pre>
+      <p>
+      <em>Becomes: 
+      </em></p>
+      <ul>
+      <li><em>this is a bulleted list</em></li>
+      <li><em>with three bullets
+      including a wrapped line (indented)</em></li>
+      <li><em>as an example.</em></li>
+      </ul>
+      <ol>
+      <li><em>and now a numbered list</em></li>
+      <li><em>with a couple of numbered items.</em></li>
+      </ol>
+      <ol>
+      <li><em>but this is a separate list after the blank line.</em></li>
+      </ol>
+      <p>
+      <em># and this is not recognised as a list item.
+      </em></p>
+
+      <h3><em>Horizontal Rules </em></h3>
+
+      <p>
+      <em>A line consisting of only 4 or more dashes is converted to a horizontal rule.
+      </em></p>
+      <p>
+      <em>Example: 
+      </em></p>
+      <pre>----
+      </pre>
+      <p>
+      <em>Becomes:
+      </em></p>
+      <hr>
+      <p>
+      <em></em>Note: If there are less than four dashes, or there is any space or text 
+      before or after the dashes, they will not be recognised as a horizontal rule.<em>
+      </em></p>
+
+      <h3><em>Font Styles </em></h3>
+
+      <p>
+      <em>The plugin supports the following inline text formatting styles:
+      </em></p>
+      <p>
+      <em>Example:
+      </em></p>
+      <pre> * Text can be ''Italic''
+       * or '''Bold'''
+       * and even '''''Italic and Bold''''' at the same time.
+       * Text can be __Underlined__ - but this can be confused with hyperlinks.
+       * {{{Monotype}}} can be used for inline code examples
+       * and ~~Strikethrough~~ is supported
+       * as are ^Superscript^
+       * and ,,Subscript,,
+      </pre>
+      <p>
+      <em>Becomes:
+      </em></p>
+      <ul>
+      <li><em>Text can be </em>Italic<em></em></li>
+      <li><em>or <strong>Bold</strong></em></li>
+      <li><em>and even </em><strong>Italic and Bold</strong><em> at the same time.</em></li>
+      <li><em>Text can be <u>Underlined</u> - but this can be confused with hyperlinks.</em></li>
+      <li><em><tt>Monotype</tt> can be used for inline code examples</em></li>
+      <li><em>and <strike>Strikethrough</strike> is supported</em></li>
+      <li><em>as are <sup>Superscript</sup></em></li>
+      <li><em>and <sub>Subscript</sub></em></li>
+      </ul>
+      <p>
+      <em></em>Notes: 
+      </p>
+      <ol>
+      <li>Inside monospace, any other inline formatting is ignored.</li>
+      <li>Inline formatting is carried across to the next block element - bypassing preformatted text.</li>
+      </ol>
+      <p>
+      <em>
+      </em></p>
+
+      <h3><em>Links </em></h3>
+
+      <p>
+      <em>FTP, HTTP(S) and email links are recognised inside the marked up text (except inside monospace 
+      or preformatted text) and converted to hyperlinks. 
+      </em></p>
+      <p>
+      <em>Example:
+      </em></p>
+      <pre> * HTTP links: http://www.example.com/
+       * Secure HTTP links: https://secure.example.com
+       * FTP links: ftp://ftp.example.com/
+       * Email addresses: mailto:simon@example.com or 
+         simply simon@example.com.
+       * Also, HTTP Parameters: http://www.example.com/some-script.php?param1=value&amp;param2=something
+       * And URL escapes: https://example.com/A%20URL%20With%20Spaces
+      </pre>
+      <p>
+      <em>Becomes:
+      </em></p>
+      <ul>
+      <li><em>HTTP links: <a href="http://www.example.com/">http://www.example.com/</a></em></li>
+      <li><em>Secure HTTP links: <a href="https://secure.example.com">https://secure.example.com</a></em></li>
+      <li><em>FTP links: <a href="ftp://ftp.example.com/">ftp://ftp.example.com/</a></em></li>
+      <li><em>Email addresses: <a href="mailto:simon@example.com">simon@example.com</a> or 
+      simply <a href="mailto:simon@example.com">simon@example.com</a>.</em></li>
+      <li><em>Also, HTTP Parameters: <a href="http://www.example.com/some-script.php?param1=value&amp;param2=something">http://www.example.com/some-script.php?param1=value&amp;param2=something</a></em></li>
+      <li><em>And URL escapes: <a href="https://example.com/A%20URL%20With%20Spaces">https://example.com/A URL With Spaces</a></em></li>
+      </ul>
+
+      <h3><em>Named Links </em></h3>
+
+      <p>
+      <em>Named links provide a way to add HTTP(S), FTP and email links to a page which display a more friendly 
+      text for the user.  It also enables relative links to be included.
+      </em></p>
+      <p>
+      <em>To create a named link, enclose the link in square brackets.  If the link URL itself is followed 
+      by spaces and some text, the text is displayed instead of the URL for the link. 
+      </em></p>
+      <p>
+      <em>Example:
+      </em></p>
+      <pre> * A basic named link - the same as those above:
+         [http://www.example.com].
+       * The same link but with a name: 
+         [http://www.example.com Example].
+       * A link relative to the current page: 
+         [index.html Wiki Text Home]
+       * Email address are supported also:
+         [mailto:simon@example.com Simon with mailto:] and 
+         [simon@example.com Simon without]
+       * Finally, notice that inline formatting is not supported:
+         [http://www.example.com ''Example''].
+      </pre>
+      <p>
+      <em>Becomes:
+      </em></p>
+      <ul>
+      <li><em>A basic named link - the same as those above:
+      <a href="http://www.example.com">http://www.example.com</a>.</em></li>
+      <li><em>The same link but with a name: 
+      <a href="http://www.example.com">Example</a>.</em></li>
+      <li><em>A link relative to the current page: 
+      <a href="index.html">Wiki Text Home</a></em></li>
+      <li><em>Email address are supported also:
+      <a href="mailto:simon@example.com">Simon with mailto:</a> and 
+      <a href="mailto:simon@example.com">Simon without</a></em></li>
+      <li><em>Finally, notice that inline formatting is not supported:
+      <a href="http://www.example.com">''Example''</a>.</em></li>
+      </ul>
+      <p>
+      <em></em>Note: although this plugin supports Wiki markup, it is not itself a Wiki and so does not support 
+      automatic Wiki style CamelCase links.
+      </p>
+
+      <h3>Escape Syntax </h3>
+
+      <p>
+      Any of the inline markup (except inside monospace or preformatted text) can be escaped 
+      using a '!' before it. Double up the '!' to include it immediately before markup - 
+      e.g. when ending an italicised comment.
+      </p>
+      <p>
+      Also, embedded '&lt;' and '&gt;' and '&amp;' are escaped.
+      </p>
+      <p>
+      Example:
+      </p>
+      <pre>This text is '''bold''' but this !'''is not!'''.  
+      You can include '&lt;html&gt; &amp; &lt;/html&gt;' in the text without a problem.
+
+      Escaping also works with named links:
+      ![http://www.example.com ''Example''] - 
+      the brackets are treated as ordinary text, the URL is recognised as an inline link and 
+      the rest of the line is treated as normal - including inline
+      formatting.
+      </pre>
+      <p>
+      Becomes:
+      </p>
+      <p>
+      This text is <strong>bold</strong> but this '''is not'''.  
+      You can include '&lt;html&gt; &amp; &lt;/html&gt;' in the text without a problem.
+      </p>
+      <p>
+      Escaping also works with named links:
+      [<a href="http://www.example.com">http://www.example.com</a> <em>Example</em>] - 
+      the brackets are treated as ordinary text, the URL is recognised as an inline link and 
+      the rest of the line is treated as normal - including inline
+      formatting.
+      </p>
+      </div>
+    </div>
+
+  </div>
+
 <form class="hidden" hidden id="uploadAudioForTextGridform" enctype="multipart/form-data"
   action="https://localhost:3184/upload" method="post">
   <input type="text" name="filesToBeAligned" value="Files to be Aligned"><br />
@@ -43,9 +411,7 @@
 
 	<script type="text/javascript" src="./libs/require.js"></script>
 	<script type="text/javascript" src="./corpus_online_dashboard.js"></script>
-  <script type="text/javascript" src="./libs/d3.v2.js"></script>
-  <script type="text/javascript" src="./libs/xregexp.js"></script>
-  <script src="./libs/unicode-base.js"></script>
+     <script type="text/javascript" src="./libs/d3.v2.js"></script>
 
 	<!-- <script type="text/javascript" src="./libs/ga.js"></script>
   <script type="text/javascript" src="./libs/analytics.js"></script> -->

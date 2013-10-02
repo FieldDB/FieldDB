@@ -53,6 +53,21 @@ define(
           $scope.not_chrome = true;
         }
 
+        /*
+        Create an array of servers which the user may use
+         */
+        $scope.localhost = false;
+        $scope.mcgill = true;
+        $rootScope.servers = [];
+        if($scope.localhost){
+          $rootScope.servers.push({label:"localhost",value: "Localhost"});
+        }
+        $rootScope.servers.push({label: "testing", value : "LingSync Beta"});
+        if($scope.mcgill){
+          $rootScope.servers.push({label:"mcgill",value: "McGill Prosody Lab"});
+        }
+        $rootScope.servers[0].selected = "selected";
+
         // Set/get/update user preferences
         var defaultPreferences = {
           "userTemplate": "fulltemplate",
@@ -526,6 +541,9 @@ define(
         };
 
         $scope.loginUser = function(auth) {
+          if(!auth.server){
+              auth.server = $rootScope.servers[0].label;
+            }
           if (!auth || !auth.server) {
             $rootScope.notificationMessage = "Please choose a server.";
             $rootScope.openNotification();
@@ -1565,8 +1583,11 @@ define(
         };
 
         $scope.registerNewUser = function(newUserInfo) {
+          if(!newUserInfo.serverCode){
+            newUserInfo.serverCode = $rootScope.servers[0].label;
+          }
           if (!newUserInfo || !newUserInfo.serverCode) {
-            $rootScope.notificationMessage = "Please select a server.";
+            $rootScope.notificationMessage = "Please choose a server.";
             $rootScope.openNotification();
             return;
           }
@@ -1834,6 +1855,8 @@ define(
           }
         };
 
+        /* TODO why is there a hand written trim function here instead of using the one built in to javascript?
+         s =  s.trim()? */
         function trim(s) {
           s = s.replace(/(^\s*)|(\s*$)/gi, "");
           s = s.replace(/[ ]{2,}/gi, " ");

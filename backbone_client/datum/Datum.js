@@ -930,11 +930,12 @@ define([
       if (OPrime.debugMode) OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
-      var user = window.app.get("authentication").get("userPublic").toJSON();
-      delete user._rev;
-      delete user._id;
-      delete user.id;
-      delete user.authUrl;
+      var user = {
+        username: window.app.get("authentication").get("userPublic").get("username"),
+        gravatar: window.app.get("authentication").get("userPublic").get("gravatar"), 
+        firstname: window.app.get("authentication").get("userPublic").get("firstname"),
+        lastname: window.app.get("authentication").get("userPublic").get("lastname")
+      };
       var usersName = user.firstname + " " + user.lastname;
       usersName = usersName.replace(/undefined/g, "");
       if(!usersName || usersName.trim().length < 2){
@@ -947,17 +948,32 @@ define([
         if(modifiyersField){
           var modifiers = modifiyersField.get("users");
           modifiers.push(user);
-          modifieres = _.unique(modifiers);
-          modifiyersField.set("users", modifieres);
+          // Limit users array to unique usernames
+          modifiers = _.map(_.groupBy(modifiers, function(x) {
+            return x.username;
+          }), function(grouped) {
+            /* take the most recent version of the user in case they updated their gravatar or first and last name*/
+            return grouped[grouped.length - 1];
+          });
+          modifiyersField.set("users", modifiers);
           
-          var usersAsString =  modifiyersField.get("mask") + ","+ usersName;
-          usersAsString = (_.unique(usersAsString.trim().split(/[, ]/))).filter(function(nonemptyvalue){ return nonemptyvalue; }).join(", ");
+          /* generate the users as a string using the users array */
+          var usersAsString =  [];
+          for(var user in modifiers){
+            var userFirstandLastName = modifiers[user].firstname + " " + modifiers[user].lastname;
+            userFirstandLastName = userFirstandLastName.replace(/undefined/g, "");
+            if(!userFirstandLastName || userFirstandLastName.trim().length < 2){
+              userFirstandLastName = modifiers[user].username;
+            }
+            usersAsString.push(userFirstandLastName);
+          }
+          usersAsString = usersAsString.join(", ");
           modifiyersField.set("mask", usersAsString);
         }
       }else{
         this.set("dateEntered", JSON.stringify(new Date()));
         var userField = this.get("datumFields").where({label: "enteredByUser"})[0];
-        if(userField){
+        if (userField) {
           userField.set("mask", usersName);
           userField.set("user", user);
         }

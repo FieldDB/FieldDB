@@ -26,6 +26,7 @@ require.config({
 
     /* jQuery and jQuery plugins */
     "$" : "libs/jquery",
+    "wikitext" : "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
     "handlebars" : "libs/compiled_handlebars",
@@ -53,13 +54,18 @@ require.config({
       exports : "X2JS"
     },
 
+    "wikitext" : {
+      deps : [ "$" ],
+      exports : "$"
+    },
+
     "OPrime" : {
       deps : [ "oprime" ],
       exports : "OPrime"
     },
 
     "jquery-couch" : {
-      deps : [ "$" ],
+      deps : [ "wikitext" ],
       exports : "$"
     },
 
