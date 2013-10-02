@@ -40,14 +40,14 @@ define([
          this.fetch({
            error : function(model, xhr, options) {
              if (OPrime.debugMode) OPrime.debug("There was an error loading your sessions.");
-             console.log(model,xhr,options);
+             OPrime.debug(model,xhr,options);
              OPrime.bug("There was an error loading your sessions.");
              if(typeof fail == "function"){
                fail();
              }
            },
            success : function(model, response, options) {
-             console.log("Datalists fetched ",model,response,options);
+             OPrime.debug("Datalists fetched ",model,response,options);
              if (response.length == 0) {
                OPrime.debug("You have no datalists, TODO creating a new one...");
                if(window.location.href.indexOf("corpus.html") > -1){
