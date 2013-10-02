@@ -33,6 +33,7 @@ body {
 	}
 	.mainBody {
 		top: 50px;
+		padding-bottom: 25px;
 	}
 	.mainBodySearching {
 		top: 125px;
@@ -54,6 +55,7 @@ body {
 	}
 	.mainBody {
 		top: 100px;
+		padding-bottom: 25px;
 	}
 	.mainBodySearching {
 		top: 175px;
@@ -305,6 +307,12 @@ a.delete_button {
 	margin: 15px;
 }
 
+.focus_box_div {
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}
+
 .selectedRow {
 	background-color: #6D8CA0;
 	border: 2px solid;
@@ -324,6 +332,12 @@ a.delete_button {
 
 .relativePosition {
 	position: relative;
+}
+
+.entered_modified_info {
+	font-size: .8em;
+	font-weight: 700;
+	line-height: 1em;
 }
 
 .expandCollapseButton {
@@ -369,6 +383,16 @@ a.delete_button {
 .activeTemplate {
 	background-color: #83F787;
 	border-radius: 15px;
+}
+
+.page_navigation {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 5px;
+	background-color: #FCFCFC;
+	z-index: 100;
 }
 
 div.row {

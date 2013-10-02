@@ -26,6 +26,7 @@ require.config({
 
     /* jQuery and jQuery plugins */
     "$" : "libs/jquery",
+    "wikitext" : "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
     "handlebars" : "libs/compiled_handlebars",
@@ -53,13 +54,18 @@ require.config({
       exports : "X2JS"
     },
 
+    "wikitext" : {
+      deps : [ "$" ],
+      exports : "$"
+    },
+
     "OPrime" : {
       deps : [ "oprime" ],
       exports : "OPrime"
     },
 
     "jquery-couch" : {
-      deps : [ "$" ],
+      deps : [ "wikitext" ],
       exports : "$"
     },
 
@@ -154,7 +160,7 @@ require([ "user/UserApp", "backbone", "OPrime" ], function(App,
 // alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " +
 // OPrime.contactUs);
 // OPrime.setCookie("username","");
-// document.location.href='index.html';
+// document.location.href='corpus.html';
 // return;
 // }else{
 // // alert("We logged you in." + OPrime.contactUs);
@@ -167,7 +173,7 @@ require([ "user/UserApp", "backbone", "OPrime" ], function(App,
 //    
 // } else {
 // // new user, let them register or login as themselves or lingllama
-// document.location.href='index.html';
+// document.location.href='corpus.html';
 // }
 //  
 // });

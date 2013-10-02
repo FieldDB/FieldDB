@@ -61,24 +61,38 @@
 <small>Shareable URL:
 	http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
 	
-<label class="locale_Description"></label>
+<label ><span class="locale_Description"></span>
+<a tabindex="-1" data-toggle="modal" href="#wiki-syntax-modal"><i class="icon-question-sign"></i> </a>
+</label>
 <textarea class="corpus-description-input">{{description}}</textarea>
+<label>Preview:</label>
+<div class="corpus-description-wiki-preview wiki-preview"></div>
+<hr/>
 
 <label><span class="">{{locale_Terms_of_use}}</span>
 <a class="explain_terms_of_use" title="{{locale_Terms_explanation}}"data-html="true" rel="popover" data-placement="right" data-content=""  data-original-title="Why have a Terms of Use for your corpus" tabindex="-1">
   <i class="icon-question-sign"></i>
 </a></label>
 <textarea class="corpus-terms-input">{{termsOfUse.humanReadable}}</textarea>
+<label>Preview:</label>
+<div class="corpus-terms-wiki-preview wiki-preview"></div>
+<hr/>
 
 <label><span class="">{{locale_License}}</span>
 <a class="explain_license" title="{{locale_License_explanation}}" data-html="true" rel="popover"  data-placement="right" data-content=""   data-original-title="Why have a License for your corpus" tabindex="-1">
   <i class="icon-question-sign"></i>
 </a></label>
 <textarea class="corpus-license-title-input" placeholder="title">{{license.title}}</textarea> 
-<textarea class="corpus-license-humanreadable-input" placeholder="human readable version">{{license.humanReadable}}</textarea> 
 <textarea class="corpus-license-link-input" placeholder="link to full license information">{{license.link}}</textarea> 
 
+
 <label class="">{{locale_Copyright}}</label>
+
+<textarea class="corpus-license-humanreadable-input" placeholder="human readable version">{{license.humanReadable}}</textarea> 
+<label>Preview:</label>
+<div class="corpus-license-humanreadable-wiki-preview wiki-preview"></div>
+<hr/>
+
 <textarea class="corpus-copyright-input">{{copyright}}</textarea> 
 
 
