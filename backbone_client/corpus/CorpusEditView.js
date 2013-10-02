@@ -286,10 +286,7 @@ define([
       jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
       jsonToRender.locale_permissions_explanation = Locale.get("locale_permissions_explanation");
 
-      
-      
-      
-      
+    
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){

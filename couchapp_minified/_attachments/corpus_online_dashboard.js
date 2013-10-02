@@ -4585,9 +4585,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain-terms-of-use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-terms-input\">"
+    + "</textarea>\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain_terms_of_use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-terms-input\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.termsOfUse),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</textarea>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain-license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-license-title-input\" placeholder=\"title\">"
+    + "</textarea>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain_license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<textarea class=\"corpus-license-title-input\" placeholder=\"title\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</textarea> \n<textarea class=\"corpus-license-humanreadable-input\" placeholder=\"human readable version\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4707,9 +4707,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain-terms-of-use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"terms\">"
+    + "</div>\n\n\n<label><span class=\"locale_Terms_of_use\"></span>\n<a class=\"explain_terms_of_use locale_Terms_explanation\" data-html=\"true\" rel=\"popover\" data-placement=\"right\" data-content=\"\"  data-original-title=\"Why have a Terms of Use for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"terms\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.termsOfUse),stack1 == null || stack1 === false ? stack1 : stack1.humanReadable)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</div>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain-license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"license\"><a href=\""
+    + "</div>\n\n<label><span class=\"locale_License\"></span>\n<a class=\"explain_license locale_License_explanation\" data-html=\"true\" rel=\"popover\"  data-placement=\"right\" data-content=\"\"   data-original-title=\"Why have a License for your corpus\" tabindex=\"-1\">\n  <i class=\"icon-question-sign\"></i>\n</a></label>\n<div class=\"license\"><a href=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.link)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" target=\"_blank\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.license),stack1 == null || stack1 === false ? stack1 : stack1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -19670,8 +19670,8 @@ define('corpus/CorpusEditView',[
       },
 
       //help text around text areas 
-      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
-      "click .explain-license" : "toggleExplainLicense",
+      "click .explain_terms_of_use" : "toggleExplainTermsOfUse",
+      "click .explain_license" : "toggleExplainLicense",
       
       "click .save-corpus" : "updatePouch",
 //      Issue #797
@@ -19850,8 +19850,8 @@ define('corpus/CorpusEditView',[
         $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
         $(this.el).find(".locale_License").html(Locale.get("locale_License"));
         $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
-        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
-        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
+        $(this.el).find(".explain_terms_of_use").attr("data-content", Locale.get("locale_Terms_explanation"));
+        $(this.el).find(".explain_license").attr("data-content", Locale.get("locale_License_explanation"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -20093,10 +20093,10 @@ define('corpus/CorpusEditView',[
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.$el.find(".explain_terms_of_use").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-terms-of-use").popover("show");
+        this.$el.find(".explain_terms_of_use").popover("show");
         this.showingHelp = true;
       }
       return false;
@@ -20109,10 +20109,10 @@ define('corpus/CorpusEditView',[
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-license").popover("hide");
+        this.$el.find(".explain_license").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-license").popover("show");
+        this.$el.find(".explain_license").popover("show");
         this.showingHelp = true;
       }
       return false;
@@ -20625,8 +20625,8 @@ define('corpus/CorpusReadView',[
       },
       
       //help text around text areas 
-      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
-      "click .explain-license" : "toggleExplainLicense",
+      "click .explain_terms_of_use" : "toggleExplainTermsOfUse",
+      "click .explain_license" : "toggleExplainLicense",
 
       "click .icon-edit": "showEditable",
       
@@ -20774,8 +20774,8 @@ define('corpus/CorpusReadView',[
         $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
         $(this.el).find(".locale_License").html(Locale.get("locale_License"));
         $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
-        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
-        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
+        $(this.el).find(".explain_terms_of_use").attr("data-content", Locale.get("locale_Terms_explanation"));
+        $(this.el).find(".explain_license").attr("data-content", Locale.get("locale_License_explanation"));
 
       } else if (this.format == "centreWell"){
         if (OPrime.debugMode) OPrime.debug("CORPUS READ CENTER render: " );
@@ -20923,10 +20923,10 @@ define('corpus/CorpusReadView',[
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.$el.find(".explain_terms_of_use").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-terms-of-use").popover("show");
+        this.$el.find(".explain_terms_of_use").popover("show");
         this.showingHelp = true;
       }
       return false;
@@ -20939,10 +20939,10 @@ define('corpus/CorpusReadView',[
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-license").popover("hide");
+        this.$el.find(".explain_license").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-license").popover("show");
+        this.$el.find(".explain_license").popover("show");
         this.showingHelp = true;
       }
       return false;
