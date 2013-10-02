@@ -1,6 +1,6 @@
 {
   "name" : "FieldDB Localhost",
-  "version" : "1.72.2",
+  "version" : "1.74.1",
   "description" : "Local development version",
   "app" : {
     "launch" : {
@@ -8,11 +8,7 @@
     }
   },
   "offline_enabled" : true,
-  "permissions" : [ "debugger","unlimitedStorage", "https://localhost:3183/", "https://localhost:6984/", "https://auth.lingsync.org/",
-
-                    "https://corpus.lingsync.org/",   "https://authdev.lingsync.org/",
-
-                    "https://corpusdev.lingsync.org/", "https://www.youtube.com/" ],
+  "permissions" : [ "debugger","unlimitedStorage"],
   "icons" : {
     "16" : "images/icon16_local.png",
     "48" : "images/icon48_local.png",
