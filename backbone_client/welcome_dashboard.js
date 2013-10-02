@@ -174,7 +174,7 @@ require([
         if(!localStorage.getItem("encryptedUser")){
           alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
           OPrime.setCookie("username","");
-          document.location.href='index.html';
+          document.location.href='corpus.html';
           return;
         }else{
           a = new App({filledWithDefaults: true});

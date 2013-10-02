@@ -141,7 +141,7 @@ window.app = new App({filledWithDefaults: true});
 //      if(success == null){
 //        alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " + OPrime.contactUs);  
 //        OPrime.setCookie("username","");
-//        document.location.href='index.html';
+//        document.location.href='corpus.html';
 //        return;
 //      }else{
 ////        alert("We logged you in." + OPrime.contactUs);  
@@ -154,7 +154,7 @@ window.app = new App({filledWithDefaults: true});
 //    
 //  } else {
 //    // new user, let them register or login as themselves or lingllama
-//    document.location.href='index.html';
+//    document.location.href='corpus.html';
 //  }
 //  
 //});

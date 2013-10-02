@@ -185,7 +185,7 @@ define([
       //help text around text areas 
       "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
       "click .explain-license" : "toggleExplainLicense",
-      
+
       "click .save-corpus" : "updatePouch",
 //      Issue #797
 //      Only Admin users can trash corpus 
@@ -273,6 +273,7 @@ define([
           this.datumStatesView.el = this.$('.datum_state_settings');
           this.datumStatesView.render();
           
+          this.updateDescription();
         //Localize for all embedded view
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
@@ -291,6 +292,10 @@ define([
           
           
           //Localize for only Edit view.
+          
+          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+          $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
+
           $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
           $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
           $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
@@ -346,6 +351,7 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
+        this.updateDescription();
       //Localize for all fullscreen view 
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
         $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
@@ -367,6 +373,10 @@ define([
         $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
 
         //Localize for only Edit view.
+        
+        $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+        $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
+
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
         $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
         $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
@@ -560,11 +570,28 @@ define([
 
     },
     
-    updateDescription: function(){
-      this.model.set("description", this.$el.find(".corpus-description-input").val());
-      if(this.model.id){
-        window.appView.addUnsavedDoc(this.model.id);
+    updateDescription: function(e){
+      var newDescription = this.$el.find(".corpus-description-input").val();
+      var inputFieldToResize;
+      if (e) {
+        inputFieldToResize = e.target;
+      } else {
+        inputFieldToResize = $(this.el).find(".corpus-description-input")[0];
       }
+      if (!inputFieldToResize) {
+        return;
+      }
+      var sh = inputFieldToResize.scrollHeight;
+      if(sh > 20){
+        inputFieldToResize.style.height =  sh + "px";
+      }
+      if(this.model.get("description") != newDescription){
+        this.model.set("description", newDescription);
+        if(this.model.id){
+          window.appView.addUnsavedDoc(this.model.id);
+        }
+      }
+      $(this.el).find(".corpus-description-wiki-preview").html($.wikiText(newDescription));
     },
     updateCopyright: function(){
       this.model.set("copyright", this.$el.find(".corpus-copyright-input").val());

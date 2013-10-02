@@ -293,7 +293,7 @@ echo "Installing the databases you need to develop offline (or to create a new F
 cd $FIELDDB_HOME/AuthenticationWebService
 git fetch https://github.com/cesine/AuthenticationWebService.git installable
 git checkout 16f9bad6b356a829eb237ff842c03da2002b000d
-node $FIELDDB_HOME/AuthenticationWebService/service.js &
+node service.js &
 sleep 10
 curl -k https://localhost:3183/api/install 
 git checkout master

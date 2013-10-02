@@ -669,8 +669,8 @@ define( [
           }
         });
         d.set("datumFields", fields);
-        var states = window.app.get("corpus").get("datumStates").clone();
-        d.set("datumStates", states);
+        // var states = window.app.get("corpus").get("datumStates").clone();
+        // d.set("datumStates", states);
         d.set("session", this.model.get("session"));
         //these are temp datums, dont save them until the user saves the data list
         this.importPaginatedDataListDatumsView.collection.add(d);

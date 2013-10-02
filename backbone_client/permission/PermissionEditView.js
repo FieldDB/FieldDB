@@ -71,7 +71,7 @@ define([
                         verb : "added",
                         verbicon: "icon-plus",
                         directobjecticon : "",
-                        directobject : "<img class='gravatar-small' src='"+userAsMask.get("gravatar")+"'/> "+user.username,
+                        directobject : "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/"+userAsMask.get("gravatar")+"?d=identicon'/> "+user.username,
                         indirectobject : "as a <i class='icon-group'></i> "+permisionviewself.model.get("role")+" on <i class='icon-cloud'></i><a href='#corpus/"+window.app.get("corpus").id+"'>this corpus</a>",
                         teamOrPersonal : "team",
                         context : " via Offline App."
@@ -82,7 +82,7 @@ define([
                         verb : "added",
                         verbicon: "icon-plus",
                         directobjecticon : "icon-group",
-                        directobject : "<img class='gravatar-small' src='"+userAsMask.get("gravatar")+"'/> "+user.username,
+                        directobject : "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/"+userAsMask.get("gravatar")+"?d=identicon'/> "+user.username,
                         indirectobject : "as a <i class='icon-group'></i> "+permisionviewself.model.get("role")+" on <i class='icon-cloud'></i><a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                         teamOrPersonal : "personal",
                         context : " via Offline App."

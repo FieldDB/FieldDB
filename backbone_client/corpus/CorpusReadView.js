@@ -263,6 +263,15 @@ define([
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }
 
+        try{
+          $(this.el).find(".corpus-description-wiki").html($.wikiText(jsonToRender.description));
+          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+          $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
+        } catch(e){
+          OPrime.debug("Formatting as wiki text didnt work");
+        }
+
+      
         //Localize for all fullscreen view 
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
         $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
@@ -314,7 +323,16 @@ define([
         // Display the PermissionsView
 //        this.permissionsView.el = this.$('.permissions-updating-collection');
 //        this.permissionsView.render();
+  
 
+        try{
+          $(this.el).find(".corpus-description-wiki").html($.wikiText(jsonToRender.description));
+          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+          $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
+        } catch(e){
+          OPrime.debug("Formatting as wiki text didnt work");
+        }
+        
         //Localize for all embedded view
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
         $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
