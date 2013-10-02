@@ -40,6 +40,7 @@ define([
     
     saveKeyword: function(keywords){
       this.set("searchKeywords", keywords);
+      localStorage.setItem("searchKeywords", keywords);
       window.app.get("corpus").set("searchKeywords", keywords);
     },
 

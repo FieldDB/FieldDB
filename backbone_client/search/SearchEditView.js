@@ -131,9 +131,15 @@ define([
       this.advancedSearchSessionView.render();
 
       //this.setElement($("#search-top"));
-      var searchKeywords = window.app.get("corpus").get("searchKeywords");
-      if(searchKeywords){
-        this.model.set("searchKeywords", searchKeywords);
+      var searchKeywords = this.model.get("searchKeywords");
+      if (!searchKeywords) {
+        searchKeywords = localStorage.getItem("searchKeywords");
+        if (!searchKeywords) {
+          searchKeywords = window.app.get("corpus").get("searchKeywords");
+        }
+        if(searchKeywords){
+          this.model.set("searchKeywords", searchKeywords);
+        }
       }
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
