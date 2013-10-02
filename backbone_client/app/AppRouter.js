@@ -103,7 +103,8 @@ define([
     
     renderHelp : function(helptype){
       if(helptype.indexOf("illustratedguide") >= 0){
-        $("#illustrated_guide_to_dash").modal("show");
+        //The guide is out of date and annoying popup
+        // $("#illustrated_guide_to_dash").modal("show");
         window.location.href= "#";
       }
     },

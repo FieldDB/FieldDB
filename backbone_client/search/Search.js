@@ -38,9 +38,12 @@ define([
       // There are no nested models
     },
     
-    saveKeyword: function(){
-      this.set("searchKeywords","hihi");
+    saveKeyword: function(keywords){
+      this.set("searchKeywords", keywords);
+      localStorage.setItem("searchKeywords", keywords);
+      window.app.get("corpus").set("searchKeywords", keywords);
     },
+
     saveAndInterConnectInApp : function(callback){
       
       if(typeof callback == "function"){

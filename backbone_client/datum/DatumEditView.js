@@ -222,6 +222,9 @@ define([
       var jsonToRender = this.model.toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
       jsonToRender.datumstate = this.model.getValidationStatus();
+      if(jsonToRender.datumstate.length > 30){
+         jsonToRender.datumstate =  jsonToRender.datumstate.substring(0,12) + "..." + jsonToRender.datumstate.substring(jsonToRender.datumstate.length-12, jsonToRender.datumstate.length);
+      }
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
       if (this.format == "well") {
@@ -321,7 +324,6 @@ define([
 
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
       $(this.el).find(".icon-th-list").removeClass("icon-th-list");
-      $(this.el).find(".comments-section").hide();
       this.updateDatumStateColor();
 
     },
@@ -337,7 +339,6 @@ define([
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
-      $(this.el).find(".comments-section").show();
 
     },
     

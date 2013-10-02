@@ -6,7 +6,8 @@
 	<div class="row">
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
-			<input focus glossmorpheme keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
+			<div class="focus_box_div"><input focus /></div>
+			<input glossmorpheme keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''" >
 			<input keypress-mark-as-new class="span5"
@@ -74,10 +75,14 @@
 	</div>
 </div>
 
-<div class="row" ng-show="loading==false && readOnly==true" ng-click="selected=null">
+<div class="row" ng-show="loading==false && readOnly==true" ng-click="selectNone()">
 	<div class="span12 pagination-centered">
 		<h3>You have read-only access to this corpus.</h3>
 	</div>
+</div>
+
+<div ng-show="loading==false && writeOnly==true" class="pagination-centered">
+	<h2>You have write-only access to {{DB.corpustitle}}</h2>
 </div>
 
 <div class="row" ng-show="loading==true">
@@ -94,14 +99,15 @@
 
 <div arrow-key class="row relativePosition"
 	ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}"
-	ng-repeat="datum in data | filter: activeSession | orderBy:orderProp:reverse | startFrom:currentPage*resultSize | limitTo:resultSize"
+	ng-repeat="datum in data | orderBy:orderProp:reverse"
 	ng-click="selectRow($index)" ng-hide="loading==true || writeOnly==true">
 
 	<!-- Show when editing -->
 	<div ng-show="selected==$index">
 			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span5">
-				<input glossmorpheme keypress-mark-as-edited focus class="span5" 
+				<div class="focus_box_div"><input focus /></div>
+				<input glossmorpheme keypress-mark-as-edited class="span5" 
 					type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
@@ -142,11 +148,13 @@
 					placeholder="{{commaList(datum.datumTags)}}"
 					ng-disabled="readOnly==true"></textarea>
 			</div>
-			<div class="span2">
+			<div class="span2 entered_modified_info">
+				<span ng-show="searching==true"><button class="btn btn-primary" ng-click="selectNone()">Done</button><br /><br /></span>
 				<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}</span><br />
-				<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span>
-				<span title="Date modified">Modified: {{datum.dateModified | standardDate}}</span><br />
-				<span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
+				<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://www.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
+				<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
+				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
+				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} /> </span>
 				<div class="expandCollapseButton">
 					<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span>
 					<span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
@@ -224,36 +232,33 @@
 
 	<!-- Show when not editing -->
 	<div ng-show="selected!=$index">
-		<div class="span1 search_checkbox">
+		<div class="span1 search_checkbox" ng-show="searching==true">
 			<input type="checkbox" value="{{datum.id}}"
-				ng-checked="datum.checked" ng-model="datum.checked"
-				ng-show="searching==true">
+				ng-checked="datum.checked" ng-model="datum.checked">
 		</div>
-		<div class="span4">
-			<span class="span4" title="{{fields.field1.title}}"
-				ng-hide="fields.field1.label==''">{{datum[fields.field1.label]
+		<div ng-class="{span5: searching!=true, span4: searching==true}">
+			<span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">{{datum[fields.field1.label]
 				| neverEmpty}}</span><br /> 
-			<span class="span4"
+			<span ng-class="{span5: searching!=true, span4: searching==true}"
 				title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">{{datum[fields.field2.label]
 				| neverEmpty}}</span><br />
-			<span class="span4"
+			<span ng-class="{span5: searching!=true, span4: searching==true}"
 				title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">{{datum[fields.field3.label]
 				| neverEmpty}}</span><br />
 		</div>
-		<div class="span4">
-			<span class="span4" title="{{fields.field4.title}}"
-				ng-hide="fields.field4.label==''">{{datum[fields.field4.label]
+		<div ng-class="{span5: searching!=true, span4: searching==true}">
+			<span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">{{datum[fields.field4.label]
 				| neverEmpty}}</span><br /> 
-			<span class="span4" title="{{fields.field6.title}}"
-				ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
-				| neverEmpty}}</span><br /> <span class="span4" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
+			<span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
+				| neverEmpty}}</span><br /> <span ng-class="{span5: searching!=true, span4: searching==true}" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
 		</div>
-		<div class="span2">
-			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /></span>
+		<div class="span2 entered_modified_info">
+			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /><br /></span>
 			<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}<br />
-			<span ng-hide="!datum.enteredByUser">by {{datum.enteredByUser}}<br /></span>
-			<span title="Date modified">Modified: {{datum.dateModified | standardDate}}</span><br />
-			<span ng-hide="!datum.lastModifiedBy">by {{datum.lastModifiedBy}}</span>
+			<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://www.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
+			<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
+				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
+				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} /> </span>
 			<span ng-show="datum.hasAudio==true"><br /><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
 		</div>
 
@@ -292,20 +297,18 @@
 	</div>
 </div>
 <br />
-<div class="pagination-centered"
-	ng-hide="loading==true || data==undefined || numberOfResultPages((data | filter:
-	activeSession).length)==1 || numberOfResultPages((data | filter:
-	activeSession).length)==0 || writeOnly==true">
+
+<div class="pagination-centered page_navigation"
+	ng-hide="loading==true || data==undefined || numberOfResultPages(allData.length)==1 || numberOfResultPages(allData.length)==0 || writeOnly==true">
 	<button class="btn btn-inverse btn-mini"
 		ng-disabled="currentPage == 0"
 		ng-click="pageBackward();">
-		&larr;
+		<font size="4"><b>&larr;</b></font>
 	</button>
-	{{currentPage+1}} of {{numberOfResultPages((data | filter:
-	activeSession).length)}}
+	 	{{currentPage+1}} of {{numberOfResultPages(allData.length)}}
 	<button class="btn btn-inverse btn-mini"
-		ng-disabled="currentPage >= (data | filter: filterTerm).length/resultSize - 1"
+		ng-disabled="currentPage >= (allData | filter: filterTerm).length/resultSize - 1"
 		ng-click="pageForward()">
-		&rarr;
+		<font size="4"><b>&rarr;</b></font>
 	</button>
 </div>
