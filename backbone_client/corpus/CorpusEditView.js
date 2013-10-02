@@ -585,12 +585,13 @@ define([
       if(sh > 20){
         inputFieldToResize.style.height =  sh + "px";
       }
-
-      this.model.set("description", newDescription);
-      $(this.el).find(".corpus-description-wiki-preview").html($.wikiText(newDescription));
-      if(this.model.id){
-        window.appView.addUnsavedDoc(this.model.id);
+      if(this.model.get("description") != newDescription){
+        this.model.set("description", newDescription);
+        if(this.model.id){
+          window.appView.addUnsavedDoc(this.model.id);
+        }
       }
+      $(this.el).find(".corpus-description-wiki-preview").html($.wikiText(newDescription));
     },
     updateCopyright: function(){
       this.model.set("copyright", this.$el.find(".corpus-copyright-input").val());
