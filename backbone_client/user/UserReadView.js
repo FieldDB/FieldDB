@@ -89,7 +89,7 @@ define([
      * Renders the UserReadView.
      */
     render : function() {
-      
+      var jsonToRender = this.model.toJSON();
 //      if (OPrime.debugMode) OPrime.debug("USER render: ");
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\User model was undefined");
@@ -101,15 +101,15 @@ define([
         if (OPrime.debugMode) OPrime.debug("USER READ FULLSCREEN render: ");
 
         this.setElement($("#user-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));
         
         $(this.el).find(".locale_User_Profile").html(Locale.get("locale_Private_Profile"));
 
         // Display the CorpusesReadView
         this.corpusesReadView.el = $(this.el).find('.corpuses');
         this.corpusesReadView.render();
-        
-        
+                
+                
       } else if (this.format == "modal") {
         if (OPrime.debugMode) OPrime.debug("USER READ MODAL render: ");
 
@@ -132,7 +132,7 @@ define([
       } else if (this.format == "link") {
         if (OPrime.debugMode) OPrime.debug("USER READ LINK render: ");
 
-        $(this.el).html(this.linkTemplate(this.model.toJSON()));
+        $(this.el).html(this.linkTemplate(jsonToRender));
         
         //localization for link view
         $(this.el).find(".locale_View_Profile_Tooltip").attr("title",Locale.get("locale_View_Profile_Tooltip"));
@@ -141,7 +141,7 @@ define([
         if (OPrime.debugMode) OPrime.debug("USER READ PUBLIC render: ");
 
         this.setElement($("#public-user-page"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));
         
         //localize the public user page
         $(this.el).find(".locale_Edit_Public_User_Profile").attr("title",Locale.get("locale_Edit_Public_User_Profile"));
@@ -156,8 +156,14 @@ define([
         throw("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
       
-      if(this.format != "link"){
+      if(this.format !== "link"){
         //localization for all except link
+        try{
+          $(this.el).find(".description").html($.wikiText(jsonToRender.description));
+          $(this.el).find(".researchInterest").html($.wikiText(jsonToRender.researchInterest));
+        }catch(e){
+          OPrime.debug("Wiki markup formatting didnt work.");
+        }
 
         $(this.el).find(".locale_Gravatar").html(Locale.get("locale_Gravatar"));
         $(this.el).find(".locale_Email").html(Locale.get("locale_Email"));
