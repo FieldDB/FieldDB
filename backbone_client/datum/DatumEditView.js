@@ -15,7 +15,6 @@ define([
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
-    "glosser/Tree",
     "OPrime"
 ], function(
     Backbone, 
@@ -74,11 +73,11 @@ define([
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "tr",
-        childViewClass   : "datum-field",
+        childViewTagName     : "div",
+        childViewClass   : "datum-field span5",
         childViewFormat      : "datum"
       });
-
+      
       this.sessionView = new SessionReadView({
         model : this.model.get("session"),
         });
@@ -86,7 +85,6 @@ define([
       
       this.model.bind("change:audioVideo", this.playAudio, this);
       this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
-      this.prepareDatumFieldAlternatesTypeAhead();
     },
 
     /**
@@ -98,6 +96,12 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
+      /* Prevent clicking on the help conventions from reloading the page to # */
+      "click .help-conventions" :function(e){
+        if(e){
+          e.preventDefault();
+        }
+      },
       /* Menu */
       "click .LaTeX" : function(){
         this.model.latexitDatum(true);
@@ -150,27 +154,10 @@ define([
           this.insertNewDatumTag();
         }
       },
-      "blur .validationStatus" : "updateDatumStateColor",
+      "change .datum_state_select" : "updateDatumStates",
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "focus .morphemes .datum_field_input" : function(e){
-        if( this.lastMorphemsFocus && Date.now() - this.lastMorphemsFocus < 1000 ){
-          return;
-        }
-        this.lastMorphemsFocus = Date.now();
-        this.guessMorphemes(this.$el.find(".utterance .datum_field_input").val());
-        this.guessUtterance($(e.target).val());
-      },
-      "focus .gloss .datum_field_input" : function(){
-        if( this.lastGlossFocus && Date.now() - this.lastGlossFocus < 1000 ){
-          return;
-        }
-        this.lastGlossFocus = Date.now();
-        this.guessGlosses(this.$el.find(".morphemes .datum_field_input").val());
-        this.guessUtterance(this.$el.find(".morphemes .datum_field_input").val());
-
-      },
       "click .save-datum" : "saveButton",
 
       // Issue #797
@@ -212,21 +199,26 @@ define([
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
-      this.model.startReadTimeIfNotAlreadyStarted();
       if (OPrime.debugMode) OPrime.debug("DATUM render: " );
+      
+     
       
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
+      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      jsonToRender.datumstate = this.model.getValidationStatus();
-      if(jsonToRender.datumstate.length > 30){
-         jsonToRender.datumstate =  jsonToRender.datumstate.substring(0,12) + "..." + jsonToRender.datumstate.substring(jsonToRender.datumstate.length-12, jsonToRender.datumstate.length);
+      try{
+        jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
+        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
+      }catch(e){
+        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
-      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
+      
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
@@ -282,8 +274,6 @@ define([
         $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
         
         $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale.get("locale_Drag_and_Drop_Audio_Tooltip"));
-      
-
       }
 
       return this;
@@ -316,15 +306,9 @@ define([
           this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
         }
       }
-      /* make ungrammatical sentences have a strike through them */
-      var grammaticality = this.$el.find(".judgement .datum_field_input").val();
-      if (grammaticality.indexOf("*") !== -1) {
-        this.$el.find(".utterance .datum_field_input").addClass("ungrammatical");
-      }
-
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
       $(this.el).find(".icon-th-list").removeClass("icon-th-list");
-      this.updateDatumStateColor();
+      $(this.el).find(".comments-section").hide();
 
     },
     
@@ -339,6 +323,7 @@ define([
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
+      $(this.el).find(".comments-section").show();
 
     },
     
@@ -415,23 +400,23 @@ define([
       
       return false;
     },
-
-    updateDatumStateColor : function() {
-      var jsonToRender = {};
-      jsonToRender.datumstate = this.model.getValidationStatus();
-      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
-
-      if(!jsonToRender.datumstatecolor){
-        jsonToRender.datumstatecolor= "";
+    
+    updateDatumStates : function() {
+      var selectedValue = this.$el.find(".datum_state_select").val();
+      try{
+        this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      }catch(e){
+        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
-      $(this.el).find(".datum_fields_ul textarea ").removeClass("datum-primary-validation-status-outline-color-warning");
-      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-important");
-      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-info");
-      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-success");
-      $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-inverse");
+      
+      //update the view of the datum state to the new color and text without rendering the entire datum
+      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
+      $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
+      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
+      $(this.el).find(".datum-state-value").html(selectedValue);
 
-      $(this.el).find(".datum_fields_ul textarea").addClass("datum-primary-validation-status-outline-color-"+jsonToRender.datumstatecolor);
-
+      this.needsSave = true;
     },
     
     /**
@@ -499,8 +484,44 @@ define([
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
-      this.updateDatumStateColor();
-      this.guessMorphemes(utteranceLine);
+      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
+        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
+      }
+      if (utteranceLine) {
+        var morphemesLine = Glosser.morphemefinder(utteranceLine);
+        if (this.$el.find(".morphemes .datum_field_input").val() == "") {
+          // If the morphemes line is empty, make it a copy of the utterance
+          this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
+          this.needsSave = true;
+          
+//          //autosize the morphemes field
+//          var datumself = this;
+//          window.setTimeout(function(){
+//            $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//          },500);
+        }
+        // If the guessed morphemes is different than the unparsed utterance 
+        if (morphemesLine != utteranceLine && morphemesLine != "") {
+          //trigger the gloss guessing
+          this.guessGlosses(morphemesLine);
+          // Ask the user if they want to use the guessed morphemes
+          if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
+            // Replace the morphemes line with the guessed morphemes
+            this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+            this.needsSave = true;
+            //redo the gloss guessing
+            this.guessGlosses(morphemesLine);
+            
+//            //autosize the morphemes field
+//            var datumself = this;
+//            window.setTimeout(function(){
+//              $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//            },500);
+
+          }
+        }
+      }
     },
     morphemesBlur : function(e){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
@@ -509,91 +530,85 @@ define([
       }
       this.guessUtterance($(e.currentTarget).val());
       this.guessGlosses($(e.currentTarget).val());
-      this.guessTree($(e.currentTarget).val());
+      this.buildQTree($(e.currentTarget).val());
       this.needsSave = true;
 
-    },
-    guessMorphemes : function(utteranceLine){
-      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
-        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
-      }
-      if (utteranceLine) {
-        var morphemesLine = Glosser.morphemefinder(utteranceLine);
-        
-        this.previousMorphemesGuess = this.previousMorphemesGuess || [];
-        this.previousMorphemesGuess.push(morphemesLine);
-        
-        var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
-        var alternates = morphemesField.get("alternates") || [];
-        alternates.push(utteranceLine);
-        
-        // If the guessed morphemes is different than the unparsed utterance 
-        if (morphemesLine != utteranceLine && morphemesLine != "") {
-          //hey we have a new idea, so trigger the gloss guessing too
-          this.guessGlosses(morphemesLine);
-          alternates.unshift(morphemesLine);
-        }
-        morphemesField.set("alternates", _.unique(alternates));
-        this.needsSave = true;
-        if (this.$el.find(".morphemes .datum_field_input").val() == "" || this.previousMorphemesGuess.indexOf(this.$el.find(".morphemes .datum_field_input").val()) > -1 ) {
-          // If the morphemes line is empty, or its from a previous guess, put this guess in.
-          morphemesField.set("mask", morphemesLine);
-//          this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
-          this.needsSave = true;
-        }
-      }
     },
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {
         var glossLine = Glosser.glossFinder(morphemesLine);
-        
-        var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
-        var alternates = glossField.get("alternates") || [];
-        alternates.push(morphemesLine);
-        
-        this.previousGlossGuess = this.previousGlossGuess || [];
+        if (this.$el.find(".gloss .datum_field_input").val() == "") {
+          // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
+//        this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+
+          this.needsSave = true;
+        }
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
         if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
-          this.previousGlossGuess.push(glossLine);
-          alternates.unshift(glossLine);
-        }
-        glossField.set("alternates", _.unique(alternates));
-        this.needsSave = true;
-        if (this.$el.find(".gloss .datum_field_input").val() == "" || this.previousGlossGuess.indexOf(this.$el.find(".gloss .datum_field_input").val()) > -1 ) {
-          // If the gloss line is empty, or its from a previous guess, put our new guess there
-//          this.$el.find(".gloss .datum_field_input").val(glossLine);
-          glossField.set("mask", glossLine);
-          this.needsSave = true;
+          // Ask the user if they want to use the guessed gloss
+          if (confirm("Would you like to use this gloss:\n" + glossLine)) {
+            // Replace the gloss line with the guessed gloss
+            this.$el.find(".gloss .datum_field_input").val(glossLine);
+            this.needsSave = true;
+            //autosize the gloss field
+//          var datumself = this;
+//          window.setTimeout(function(){
+//          $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//          },500);
+          }
         }
       }
     },
-    /**
-    when pressing tab after filling morpheme line, guess different trees
-    and display them in Latex formatting
-
-    */
-    guessTree: function(morphemesLine) {
+    buildQTree : function(morphemesLine) {
       if (morphemesLine) {
-        var trees = Tree.generate(morphemesLine);
-        OPrime.debug(trees);
-        var syntacticTreeLatex  = "";
-        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
-        syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
-        syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
-        // syntacticTreeLatex +=  "Left: "+ trees.left;
-        // syntacticTreeLatex +=  "\nRight:" + trees.right;
-        // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
-        OPrime.debug(syntacticTreeLatex);
-        /* These put the syntacticTree into the actual datum fields on the screen so the user can see them */
-        if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
-          this.$el.find(".syntacticTreeLatex .datum_field_input").val(syntacticTreeLatex);
-        }        
-        var treeField = this.model.get("datumFields").where({label: "syntacticTreeLatex"})[0];
-        if (treeField) {
-          treeField.set("mask", syntacticTreeLatex);
+        if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "") {
+          // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
+//        this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+
+
+/* 
+add QTree brackets
+
+*/
+          var qtree = morphemesLine;
+          morphemesLine = "tusu-naya-wa-mi";
+          morphemesLine = "x-y-z-w";
+
+          //qtree = "x-y-z-w";
+          var parses = [];
+          var groupInPairs = function(demitedungroupeditem, delimiter, prefix){
+            if(!prefix) prefix = "";
+            var pieces = demitedungroupeditem.split(delimiter);
+            var newdelimitedgroup = [];
+            for(var i in pieces){
+              if(i == 0) continue;
+              newdelimitedgroup.push(prefix+"9"+ pieces.slice(0,i).join("-")+"8"+pieces.slice(i,pieces.length).join("-") );
+            }
+            parses = parses.concat(newdelimitedgroup);
+
+            return newdelimitedgroup;
+          }
+
+          var firstpass =  groupInPairs(morphemesLine, "-") ;
+          for( var itemInFirstPass in firstpass){
+            var prefix = firstpass[itemInFirstPass].replace(/8[^8]*$/, "");
+            var twopieces = [prefix , firstpass[itemInFirstPass].replace(prefix, "")];
+          
+            var secondpass =  groupInPairs(twopieces[1], "-", twopieces[0] )) ;
+            for( var itenInSecondPass in secondpass){
+              var twopieces = secondpass[secondpass].split(/8[^8]*$/);
+              if(twopieces.length <2){
+                twopieces.unshift("");
+              }
+               var thirdpass =   groupInPairs(twopieces[1], "-", twopieces[0] )) ;
+
+            }
+          }
+          //qtree = qtree.replace(/ /g," ] [ ");
+          //qtree = "[ "+morphemesLine+" ]";
           this.needsSave = true;
         }
+        
       }
     },
     guessUtterance : function(morphemesLine) {
@@ -601,25 +616,10 @@ define([
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
         if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
           var utteranceLine = morphemesLine.replace(/-/g,"");
-          /* uppercase the first letter of the line */
-          utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
-
           this.$el.find(".utterance").find(".datum_field_input").val(utteranceLine);
           this.needsSave = true;
         }
       }
-    },
-    prepareDatumFieldAlternatesTypeAhead : function(){
-      var validationStatusField =  this.model.get("datumFields").where({label: "validationStatus"})[0];
-      window.app.get("corpus").getFrequentDatumValidationStates(null, null, function(results){
-        validationStatusField.set("alternates", results);
-      });
-      
-      var tagField =  this.model.get("datumFields").where({label: "tags"})[0];
-      window.app.get("corpus").getFrequentDatumTags(null, null, function(results){
-        tagField.set("alternates", results);
-      });
-      
     }
   });
 
