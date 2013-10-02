@@ -459,7 +459,7 @@ define([
           if(route.indexOf("#") >=0 ){
             window.app.router.navigate(route,{trigger: true});
           } else {
-            window.location.open(route, "_blank");
+            window.open(route, "_blank");
           }
         }else{
           if(e){
