@@ -11,6 +11,7 @@
 
 <!-- END Stylesheets -->
 </head>
+
 <body class="LingSyncBody" ng-controller="LingSyncWebsiteMainController">
 	<div class="mainContainer">
 		<div class="mainHeader">
@@ -19,8 +20,22 @@
 					class="headerTagLine">An App for Field Linguistics</span>
 			</div>
 			<div class="mainHeaderButton">
-				<a href="#/download"
-					class="btn btn-primary">Get LingSync</a>
+				<a href="#/download" class="btn btn-primary" style="margin-top: -18px">Get LingSync</a>
+			<div style="display: inline-table">
+				<script>
+				  (function() {
+				    var cx = '005285534078825247140:t9u2m-en9y4';
+				    var gcse = document.createElement('script');
+				    gcse.type = 'text/javascript';
+				    gcse.async = true;
+				    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+				        '//www.google.com/cse/cse.js?cx=' + cx;
+				    var s = document.getElementsByTagName('script')[0];
+				    s.parentNode.insertBefore(gcse, s);
+				  })();
+				</script>
+				<gcse:search></gcse:search>
+			</div>
 			</div>
 			<div class="clearBoth"></div>
 		</div>
@@ -42,10 +57,16 @@
 		</div>
 		<div class="mainContentDiv" ng-view></div>
 	</div>
+
 <script src="js/jquery.js"></script>
 <script src="js/angular.js"></script>
 <script src="js/LingSyncModule.js"></script>
 <script src="js/LingSyncWebsiteController.js"></script>
 <script src="bootstrap/js/bootstrap.js"></script>
+
+<script src="js/d3/d3.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+<script src="js/directives/wordcloud.js"></script>
+
 </body>
 </html>
