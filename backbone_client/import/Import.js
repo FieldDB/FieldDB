@@ -370,6 +370,9 @@ define([
         callback();
       }
     },
+
+    metadataLines : [],
+
     /**
      * This function takes in a text block, splits it on lines and then
      * takes the first word with a \firstword as the data type/column
@@ -396,15 +399,29 @@ define([
       var currentDatum = -1;
       var header = [];
       var columnhead = "";
-      for(l in lines){
+
+      var firstToolboxField = "";
+
+      /* Looks for the first line of the toolbox data */
+      while(!firstToolboxField && lines.length > 0){
+        var potentialToolBoxFieldMatches = lines[0].match(/^\\[a-zA-Z]+\b/);
+        if(potentialToolBoxFieldMatches && potentialToolBoxFieldMatches.length > 0){
+          firstToolboxField = potentialToolBoxFieldMatches[0];
+        }else{
+          /* remove the line, and put it into the metadata lines */
+          this.metadataLines.push(lines.shift());
+        }
+      }
+
+      for(var l in lines){
         //Its a new row
-        if( lines[l].indexOf("\\ge ") == 0 ){
+        if( lines[l].indexOf(firstToolboxField) == 0 ){
           currentDatum += 1;
           matrix[currentDatum] = {};
-          matrix[currentDatum]["ge"] = lines[l].replace("\\ge ","");;
-          header.push("ge");
+          matrix[currentDatum][firstToolboxField.replace(/\\/g,"")] = lines[l].replace(firstToolboxField,"").trim();
+          header.push(firstToolboxField.replace(/\\/g,""));
         }else{
-          if(currentDatum > 0){
+          if(currentDatum >= 0){
             //If the line starts with \ its a column 
             if(lines[l].match(/^\\/) ){
               var pieces = lines[l].split(/ +/);
