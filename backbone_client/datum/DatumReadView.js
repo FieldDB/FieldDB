@@ -158,14 +158,14 @@ define([
       jsonToRender.datumstate = this.model.getValidationStatus();
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate); 
       
-      jsonToRender.locale_Add = Locale.get(locale_Add);
-      jsonToRender.locale_CSV_Tooltip = Locale.get(locale_CSV_Tooltip);
-      jsonToRender.locale_LaTeX = Locale.get(locale_LaTeX);
-      jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get(locale_Plain_Text_Export_Tooltip);
+      jsonToRender.locale_Add = Locale.get("locale_Add");
+      jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
+      jsonToRender.locale_LaTeX = Locale.get("locale_LaTeX");
+      jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get("locale_Plain_Text_Export_Tooltip");
       if(jsonToRender.decryptedMode){
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get(locale_Hide_confidential_items_Tooltip);
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
       }else{
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get(locale_Show_confidential_items_Tooltip);
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
       } 
            
       if (this.format == "well") {        

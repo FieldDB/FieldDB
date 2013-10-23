@@ -41,10 +41,10 @@ define([
       
       var jsonToRender = this.model.toJSON(); 
 
-      jsonToRender.locale_Keyboard_Shortcuts = Locale.get(locale_Keyboard_Shortcuts);
-      jsonToRender.locale_LaTeX_Code = Locale.get(locale_LaTeX_Code);
-      jsonToRender.locale_Remove_Unicode = Locale.get(locale_Remove_Unicode);
-      jsonToRender.locale_Unicode_Instructions = Locale.get(locale_Unicode_Instructions);
+      jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts");
+      jsonToRender.locale_LaTeX_Code = Locale.get("locale_LaTeX_Code");
+      jsonToRender.locale_Remove_Unicode = Locale.get("locale_Remove_Unicode");
+      jsonToRender.locale_Unicode_Instructions = Locale.get("locale_Unicode_Instructions");
       
       $(this.el).html(this.template(jsonToRender));
       

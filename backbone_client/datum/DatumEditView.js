@@ -229,23 +229,23 @@ define([
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified); 
 
 //    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip); 
-      jsonToRender.locale_CSV_Tooltip = Locale.get(locale_CSV_Tooltip);
-      jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get(locale_Drag_and_Drop_Audio_Tooltip);
-      jsonToRender.locale_Duplicate = Locale.get(locale_Duplicate);
-      jsonToRender.locale_Insert_New_Datum = Locale.get(locale_Insert_New_Datum);
-      jsonToRender.locale_LaTeX = Locale.get(locale_LaTeX);
-      jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get(locale_Plain_Text_Export_Tooltip);
-      jsonToRender.locale_Save = Locale.get(locale_Save);
-      jsonToRender.locale_See_Fields = Locale.get(locale_See_Fields);
+      jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
+      jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get("locale_Drag_and_Drop_Audio_Tooltip");
+      jsonToRender.locale_Duplicate = Locale.get("locale_Duplicate");
+      jsonToRender.locale_Insert_New_Datum = Locale.get("locale_Insert_New_Datum");
+      jsonToRender.locale_LaTeX = Locale.get("locale_LaTeX");
+      jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get("locale_Plain_Text_Export_Tooltip");
+      jsonToRender.locale_Save = Locale.get("locale_Save");
+      jsonToRender.locale_See_Fields = Locale.get("locale_See_Fields");
       if(jsonToRender.confidential){
-        jsonToRender.locale_Encrypt = Locale.get(locale_Decrypt);
+        jsonToRender.locale_Encrypt = Locale.get("locale_Decrypt");
       }else{
-        jsonToRender.locale_Encrypt = Locale.get(locale_Encrypt);
+        jsonToRender.locale_Encrypt = Locale.get("locale_Encrypt");
       }
       if(jsonToRender.decryptedMode){
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get(locale_Hide_confidential_items_Tooltip);
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
       }else{
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get(locale_Show_confidential_items_Tooltip);
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
       } 
       
       

@@ -153,17 +153,17 @@ define([
       if (OPrime.debugMode) OPrime.debug("USER render: " );
       
       var jsonToRender = this.model.toJSON();
-      jsonToRender.locale_Close_and_login_as_LingLlama = Locale.get(locale_Close_and_login_as_LingLlama);
-      jsonToRender.locale_Close_and_login_as_LingLlama_Tooltip = Locale.get(locale_Close_and_login_as_LingLlama_Tooltip);
-      jsonToRender.locale_Log_In = Locale.get(locale_Log_In);
-      jsonToRender.locale_Username = Locale.get(locale_Username);
-      jsonToRender.locale_Password = Locale.get(locale_Password);
-      jsonToRender.locale_Sync_my_data_to_this_computer = Locale.get(locale_Sync_my_data_to_this_computer);
-      jsonToRender.locale_An_offline_online_fieldlinguistics_database = Locale.get(locale_An_offline_online_fieldlinguistics_database);
-      jsonToRender.locale_Create_a_new_user = Locale.get(locale_Create_a_new_user);
-      jsonToRender.locale_New_User = Locale.get(locale_New_User);
-      jsonToRender.locale_Confirm_Password = Locale.get(locale_Confirm_Password);
-      jsonToRender.locale_Sign_in_with_password = Locale.get(locale_Sign_in_with_password);
+      jsonToRender.locale_Close_and_login_as_LingLlama = Locale.get("locale_Close_and_login_as_LingLlama");
+      jsonToRender.locale_Close_and_login_as_LingLlama_Tooltip = Locale.get("locale_Close_and_login_as_LingLlama_Tooltip");
+      jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
+      jsonToRender.locale_Username = Locale.get("locale_Username");
+      jsonToRender.locale_Password = Locale.get("locale_Password");
+      jsonToRender.locale_Sync_my_data_to_this_computer = Locale.get("locale_Sync_my_data_to_this_computer");
+      jsonToRender.locale_An_offline_online_fieldlinguistics_database = Locale.get("locale_An_offline_online_fieldlinguistics_database");
+      jsonToRender.locale_Create_a_new_user = Locale.get("locale_Create_a_new_user");
+      jsonToRender.locale_New_User = Locale.get("locale_New_User");
+      jsonToRender.locale_Confirm_Password = Locale.get("locale_Confirm_Password");
+      jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
 //      jsonToRender.locale_What_is_your_username_going_to_be = Locale.get(locale_What_is_your_username_going_to_be);
 //      jsonToRender.locale_Welcome_Beta_Testers = Locale.get(locale_Welcome_Beta_Testers);
 //      jsonToRender.locale_Welcome_to_FieldDB = Locale.get(locale_Welcome_to_FieldDB);

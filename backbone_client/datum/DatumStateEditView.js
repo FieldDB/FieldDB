@@ -52,12 +52,12 @@ define( [
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM STATE EDIT VIEW render");
       var jsonToRender = this.model.toJSON();
-      jsonToRender.locale_Green = Locale.get(locale_Green);
-      jsonToRender.locale_Orange = Locale.get(locale_Orange);
-      jsonToRender.locale_Red = Locale.get(locale_Red);
-      jsonToRender.locale_Teal = Locale.get(locale_Teal);
-      jsonToRender.locale_Black = Locale.get(locale_Black);
-      jsonToRender.locale_Default = Locale.get(locale_Default);
+      jsonToRender.locale_Green = Locale.get("locale_Green");
+      jsonToRender.locale_Orange = Locale.get("locale_Orange");
+      jsonToRender.locale_Red = Locale.get("locale_Red");
+      jsonToRender.locale_Teal = Locale.get("locale_Teal");
+      jsonToRender.locale_Black = Locale.get("locale_Black");
+      jsonToRender.locale_Default = Locale.get("locale_Default");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsEditView

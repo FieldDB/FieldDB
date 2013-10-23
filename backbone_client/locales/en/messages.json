@@ -255,7 +255,7 @@
     "message" : "Previous Datum"
   },
   "locale_Data_Entry_Area" : {
-    "message" : "Data Entry Area <small>(1-5 datum)</small>"
+    "message" : "Data Entry Area (1-5 datum)"
   },
   "locale_Search" : {
     "message" : "Type your search query, or hit enter to see all data"
@@ -355,7 +355,7 @@
     "message" : "Unicode"
   },
   "locale_Drag_and_Drop" : {
-    "message" : "<small>Drag and Drop</small>"
+    "message" : "Drag and Drop"
   },
   "locale_AND" : {
     "message" : "AND"
