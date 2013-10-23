@@ -107,12 +107,12 @@ define([
       this.changeViewsOfInternalModels();
 
       var jsonToRender = this.model.toJSON();
-      jsonToRender.locale_AND = Locale.get(locale_AND);
-      jsonToRender.locale_Advanced_Search = Locale.get(locale_Advanced_Search);
-      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get(locale_Advanced_Search_Tooltip);
-      jsonToRender.locale_OR = Locale.get(locale_OR);
-      jsonToRender.locale_Search_Tooltip = Locale.get(locale_Search_Tooltip);
-      jsonToRender.locale_advanced_search_explanation = Locale.get(locale_advanced_search_explanation);
+      jsonToRender.locale_AND = Locale.get("locale_AND");
+      jsonToRender.locale_Advanced_Search = Locale.get("locale_Advanced_Search");
+      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
+      jsonToRender.locale_OR = Locale.get("locale_OR");
+      jsonToRender.locale_Search_Tooltip = Locale.get("locale_Search_Tooltip");
+      jsonToRender.locale_advanced_search_explanation = Locale.get("locale_advanced_search_explanation");
       
       if (this.format == "fullscreen") {
         // Display the SearchView

@@ -85,9 +85,9 @@ define([
 
       var jsonToRender = this.model.toJSON();
 
-      jsonToRender.locale_Encrypt_if_confidential = Locale.get(locale_Encrypt_if_confidential);
-      jsonToRender.locale_Help_Text = Locale.get(locale_Help_Text);
-      jsonToRender.locale_Help_Text_Placeholder = Locale.get(locale_Help_Text_Placeholder);
+      jsonToRender.locale_Encrypt_if_confidential = Locale.get("locale_Encrypt_if_confidential");
+      jsonToRender.locale_Help_Text = Locale.get("locale_Help_Text");
+      jsonToRender.locale_Help_Text_Placeholder = Locale.get("locale_Help_Text_Placeholder");
 
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(jsonToRender));

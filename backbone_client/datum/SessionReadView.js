@@ -123,13 +123,13 @@ define([
         jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
         jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
 
-        jsonToRender.locale_Consultants = Locale.get(locale_Consultants);
-        jsonToRender.locale_Edit_Session = Locale.get(locale_Edit_Session);
-        jsonToRender.locale_Elicitation_Session = Locale.get(locale_Elicitation_Session);
-        jsonToRender.locale_Goal = Locale.get(locale_Goal);
-        jsonToRender.locale_Show_Fullscreen = Locale.get(locale_Show_Fullscreen);
-        jsonToRender.locale_Show_in_Dashboard = Locale.get(locale_Show_in_Dashboard);
-        jsonToRender.locale_When = Locale.get(locale_When);
+        jsonToRender.locale_Consultants = Locale.get("locale_Consultants");
+        jsonToRender.locale_Edit_Session = Locale.get("locale_Edit_Session");
+        jsonToRender.locale_Elicitation_Session = Locale.get("locale_Elicitation_Session");
+        jsonToRender.locale_Goal = Locale.get("locale_Goal");
+        jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
+        jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
+        jsonToRender.locale_When = Locale.get("locale_When");
         
         if(this.format != "link"){
           if(window.appView.currentSessionEditView){

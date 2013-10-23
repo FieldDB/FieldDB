@@ -54,7 +54,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD READ VIEW render");
 
       var jsonToRender = this.model.toJSON();
-      jsonToRender.locale_Encrypt_if_confidential = Locale.get(locale_Encrypt_if_confidential);
+      jsonToRender.locale_Encrypt_if_confidential = Locale.get("locale_Encrypt_if_confidential");
 
       
       if (this.format == "corpus") {

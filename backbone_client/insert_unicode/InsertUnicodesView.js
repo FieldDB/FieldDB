@@ -77,14 +77,14 @@ define([
     render : function() {
 
       var jsonToRender = this.model.toJSON();
-      jsonToRender.locale_Add = Locale.get(locale_Add);
-      jsonToRender.locale_Add_new_symbol = Locale.get(locale_Add_new_symbol);
-      jsonToRender.locale_Drag_and_Drop = Locale.get(locale_Drag_and_Drop);
-      jsonToRender.locale_Hide_Unicode_Palette = Locale.get(locale_Hide_Unicode_Palette);
-      jsonToRender.locale_Paste_Type_Unicode_Symbol_Placeholder = Locale.get(locale_Paste_Type_Unicode_Symbol_Placeholder);
-      jsonToRender.locale_Show_Unicode_Palette = Locale.get(locale_Show_Unicode_Palette);
-      jsonToRender.locale_TIPA_shortcut = Locale.get(locale_TIPA_shortcut);
-      jsonToRender.locale_Unicode = Locale.get(locale_Unicode);
+      jsonToRender.locale_Add = Locale.get("locale_Add");
+      jsonToRender.locale_Add_new_symbol = Locale.get("locale_Add_new_symbol");
+      jsonToRender.locale_Drag_and_Drop = Locale.get("locale_Drag_and_Drop");
+      jsonToRender.locale_Hide_Unicode_Palette = Locale.get("locale_Hide_Unicode_Palette");
+      jsonToRender.locale_Paste_Type_Unicode_Symbol_Placeholder = Locale.get("locale_Paste_Type_Unicode_Symbol_Placeholder");
+      jsonToRender.locale_Show_Unicode_Palette = Locale.get("locale_Show_Unicode_Palette");
+      jsonToRender.locale_TIPA_shortcut = Locale.get("locale_TIPA_shortcut");
+      jsonToRender.locale_Unicode = Locale.get("locale_Unicode");
 
       if (this.format == "rightSide") {
         // Display the maximized InsertUnicodesView
