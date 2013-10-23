@@ -171,17 +171,31 @@ define([
         }
         if (this.format == "leftSide") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
-
+          
+          var jsonToRender = this.model.toJSON();
+          jsonToRender.locale_Show_Readonly = Locale.get(locale_Show_Readonly);
+          jsonToRender.locale_Cancel = Locale.get(locale_Cancel);
+          jsonToRender.locale_Consultants = Locale.get(locale_Consultants);
+          jsonToRender.locale_Elicitation_Session = Locale.get(locale_Elicitation_Session);
+          jsonToRender.locale_Goal = Locale.get(locale_Goal);
+          jsonToRender.locale_New_Session = Locale.get(locale_New_Session);
+          jsonToRender.locale_New_Session_Instructions = Locale.get(locale_New_Session_Instructions);
+          jsonToRender.locale_Save = Locale.get(locale_Save);
+          jsonToRender.locale_Show_Fullscreen = Locale.get(locale_Show_Fullscreen);
+          jsonToRender.locale_Show_Readonly = Locale.get(locale_Show_Readonly);
+          jsonToRender.locale_Show_in_Dashboard = Locale.get(locale_Show_in_Dashboard);
+          jsonToRender.locale_When = Locale.get(locale_When);
+          
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
           
           //Localization for leftSide
-          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
-          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
-          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
-          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
+//          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
+//          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
+//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
+//          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
+//          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
+//          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
 
           
         }if (this.format == "import") {
@@ -191,10 +205,10 @@ define([
           $(this.el).html(this.templateImport(jsonToRender));
           
           //Localization for leftSide
-          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
-          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
-          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
+//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
+//          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
+//          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
+//          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
 
           
         } else if (this.format == "centerWell") {
@@ -215,10 +229,10 @@ define([
 //          this.commentEditView.render();
           
           //Localization for centerWell
-          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
+//          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
+//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
 
         } else if (this.format == "fullscreen") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
@@ -238,10 +252,10 @@ define([
           this.commentEditView.render();
           
           //Localization for fullscreen
-          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
+//          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
+//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
 
           
         } else if (this.format == "modal") {
@@ -263,10 +277,10 @@ define([
           this.commentEditView.render();
 
           //Localization for modal
-          $(this.el).find(".locale_New_Session").html(Locale.get("locale_New_Session"));
-          $(this.el).find(".locale_New_Session_Instructions").html(Locale.get("locale_New_Session_Instructions"));
-          $(this.el).find(".locale_Cancel").html(Locale.get("locale_Cancel"));
-          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//          $(this.el).find(".locale_New_Session").html(Locale.get("locale_New_Session"));
+//          $(this.el).find(".locale_New_Session_Instructions").html(Locale.get("locale_New_Session_Instructions"));
+//          $(this.el).find(".locale_Cancel").html(Locale.get("locale_Cancel"));
+//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
 
         }
       } catch(e) {

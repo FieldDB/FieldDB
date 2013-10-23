@@ -102,12 +102,31 @@ define([
       if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("USER EDIT FULLSCREEN render: " + this.el);
 
+        var jsonToRender = this.model.toJSON(); 
+        jsonToRender.locale_Affiliation = Locale.get(locale_Affiliation);
+        jsonToRender.locale_Close = Locale.get(locale_Close);
+        jsonToRender.locale_Corpora = Locale.get(locale_Corpora);
+        jsonToRender.locale_Description = Locale.get(locale_Description);
+        jsonToRender.locale_Edit_Public_User_Profile = Locale.get(locale_Edit_Public_User_Profile);
+        jsonToRender.locale_Email = Locale.get(locale_Email);
+        jsonToRender.locale_Firstname = Locale.get(locale_Firstname);
+        jsonToRender.locale_Gravatar = Locale.get(locale_Gravatar);
+        jsonToRender.locale_Gravatar_URL = Locale.get(locale_Gravatar_URL);
+        jsonToRender.locale_Lastname = Locale.get(locale_Lastname);
+        jsonToRender.locale_Private_Profile_Instructions = Locale.get(locale_Private_Profile_Instructions);
+        jsonToRender.locale_Public_Profile_Instructions = Locale.get(locale_Public_Profile_Instructions);
+        jsonToRender.locale_Research_Interests = Locale.get(locale_Research_Interests);
+        jsonToRender.locale_Save = Locale.get(locale_Save);
+        jsonToRender.locale_Show_Readonly = Locale.get(locale_Show_Readonly);
+        jsonToRender.locale_User_Profile = Locale.get(locale_Private_Profile);       
+        jsonToRender.locale_User_Profile = Locale.get(locale_Public_Profile);
+        
         this.setElement($("#user-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));
         
         //localization for public user edit fullscreen
-        $(this.el).find(".locale_Public_Profile_Instructions").html(Locale.get("locale_Public_Profile_Instructions"));
-        $(this.el).find(".locale_User_Profile").html(Locale.get("locale_Private_Profile"));
+//        $(this.el).find(".locale_Public_Profile_Instructions").html(Locale.get("locale_Public_Profile_Instructions"));
+//        $(this.el).find(".locale_User_Profile").html(Locale.get("locale_Private_Profile"));
 
         // Display the CorpusesReadView
         this.corpusesReadView.el = $(this.el).find('.corpuses');
@@ -116,15 +135,17 @@ define([
         
       } else if(this.format == "modal") {
         if (OPrime.debugMode) OPrime.debug("USER EDIT MODAL render: " + this.el);
-
+        
         this.setElement($("#user-modal"));
-        $(this.el).html(this.modalTemplate(this.model.toJSON()));
+        
+        var jsonToRender = this.model.toJSON();
+        $(this.el).html(this.modalTemplate(jsonToRender));
         
         //localization for user edit modal
-        $(this.el).find(".locale_Edit_Public_User_Profile").html(Locale.get("locale_Edit_Public_User_Profile"));
-        $(this.el).find(".locale_Private_Profile_Instructions").html(Locale.get("locale_Private_Profile_Instructions"));
-        $(this.el).find(".locale_Close").html(Locale.get("locale_Close"));
-        $(this.el).find(".locale_User_Profile").html(Locale.get("locale_Private_Profile"));
+//        $(this.el).find(".locale_Edit_Public_User_Profile").html(Locale.get("locale_Edit_Public_User_Profile"));
+//        $(this.el).find(".locale_Private_Profile_Instructions").html(Locale.get("locale_Private_Profile_Instructions"));
+//        $(this.el).find(".locale_Close").html(Locale.get("locale_Close"));
+//        $(this.el).find(".locale_User_Profile").html(Locale.get("locale_Private_Profile"));
 
         // Display the CorpusesReadView
         this.corpusesReadView.el = $(this.el).find('.corpuses');
@@ -135,11 +156,13 @@ define([
         if (OPrime.debugMode) OPrime.debug("USER EDIT PUBLIC render: " + this.el);
 
         this.setElement($("#public-user-page"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        
+        var jsonToRender = this.model.toJSON();
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));
         
         //localization for public user edit fullscreen
-        $(this.el).find(".locale_Public_Profile_Instructions").html(Locale.get("locale_Public_Profile_Instructions"));
-        $(this.el).find(".locale_User_Profile").html(Locale.get("locale_Public_Profile"));
+//        $(this.el).find(".locale_Public_Profile_Instructions").html(Locale.get("locale_Public_Profile_Instructions"));
+//        $(this.el).find(".locale_User_Profile").html(Locale.get("locale_Public_Profile"));
 
         // Display the CorpusesReadView
         this.corpusesReadView.el = $(this.el).find('.corpuses');
@@ -148,19 +171,19 @@ define([
         
       }
       //localization
-      $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-    
-
-      $(this.el).find(".locale_Gravatar").html(Locale.get("locale_Gravatar"));
-      $(this.el).find(".locale_Gravatar_URL").html(Locale.get("locale_Gravatar_URL"));
-      $(this.el).find(".locale_Firstname").html(Locale.get("locale_Firstname"));
-      $(this.el).find(".locale_Lastname").html(Locale.get("locale_Lastname"));
-      $(this.el).find(".locale_Email").html(Locale.get("locale_Email"));
-      $(this.el).find(".locale_Research_Interests").html(Locale.get("locale_Research_Interests"));
-      $(this.el).find(".locale_Affiliation").html(Locale.get("locale_Affiliation"));
-      $(this.el).find(".locale_Description").html(Locale.get("locale_Description"));
-      $(this.el).find(".locale_Corpora").html(Locale.get("locale_Corpora"));
-      $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//      $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
+//    
+//
+//      $(this.el).find(".locale_Gravatar").html(Locale.get("locale_Gravatar"));
+//      $(this.el).find(".locale_Gravatar_URL").html(Locale.get("locale_Gravatar_URL"));
+//      $(this.el).find(".locale_Firstname").html(Locale.get("locale_Firstname"));
+//      $(this.el).find(".locale_Lastname").html(Locale.get("locale_Lastname"));
+//      $(this.el).find(".locale_Email").html(Locale.get("locale_Email"));
+//      $(this.el).find(".locale_Research_Interests").html(Locale.get("locale_Research_Interests"));
+//      $(this.el).find(".locale_Affiliation").html(Locale.get("locale_Affiliation"));
+//      $(this.el).find(".locale_Description").html(Locale.get("locale_Description"));
+//      $(this.el).find(".locale_Corpora").html(Locale.get("locale_Corpora"));
+//      $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
 
 
       return this;

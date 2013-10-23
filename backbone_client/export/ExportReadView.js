@@ -28,11 +28,12 @@ define([
     render : function() {
      // Display the ExportView
     	this.setElement($("#export-modal")); 
-    	$(this.el).html(this.template(this.model.toJSON()));
-    	
+    	$(this.el).html(this.template(jsonToRender));
+ 
+    	var jsonToRender = this.model.toJSON();
     	//localization
-    	$(this.el).find(".locale_Export").html(Locale.get("locale_Export"));
-    	$(this.el).find(".locale_Close").html(Locale.get("locale_Close"));
+    	jsonToRender.locale_Export = Locale.get("locale_Export"); 
+    	jsonToRender.locale_Close = Locale.get("locale_Close"); 
 
 
   	      

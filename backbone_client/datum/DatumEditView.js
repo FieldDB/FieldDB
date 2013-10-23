@@ -226,7 +226,32 @@ define([
          jsonToRender.datumstate =  jsonToRender.datumstate.substring(0,12) + "..." + jsonToRender.datumstate.substring(jsonToRender.datumstate.length-12, jsonToRender.datumstate.length);
       }
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
-      jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
+      jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified); 
+      
+      jsonToRender.locale_See_Fields = Locale.get(locale_See_Fields);
+//    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip);
+      jsonToRender.locale_Save = Locale.get(locale_Save);
+      jsonToRender.locale_Insert_New_Datum = Locale.get(locale_Insert_New_Datum);
+      jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get(locale_Plain_Text_Export_Tooltip);
+      jsonToRender.locale_Duplicate = Locale.get(locale_Duplicate);
+      if(jsonToRender.confidential){
+        jsonToRender.locale_Encrypt = Locale.get(locale_Decrypt);
+      }else{
+        jsonToRender.locale_Encrypt = Locale.get(locale_Encrypt);
+      }
+      if(jsonToRender.decryptedMode){
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get(locale_Hide_confidential_items_Tooltip);
+      }else{
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get(locale_Show_confidential_items_Tooltip);
+      } 
+      jsonToRender.locale_LaTeX = Locale.get(locale_LaTeX);
+      jsonToRender.locale_CSV_Tooltip = Locale.get(locale_CSV_Tooltip);
+      
+      jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get(locale_Drag_and_Drop_Audio_Tooltip);
+      
+      
+      
+      
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
@@ -262,26 +287,26 @@ define([
         });
             
         //localization for edit well view
-        $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
-//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
-        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-        $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale.get("locale_Insert_New_Datum"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
-        $(this.el).find(".locale_Duplicate").attr("title", Locale.get("locale_Duplicate"));
-        if(jsonToRender.confidential){
-          $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Decrypt"));
-        }else{
-          $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Encrypt"));
-        }
-        if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Hide_confidential_items_Tooltip"));
-        }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Show_confidential_items_Tooltip"));
-        } 
-        $(this.el).find(".locale_LaTeX").attr("title", Locale.get("locale_LaTeX"));
-        $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
-        
-        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale.get("locale_Drag_and_Drop_Audio_Tooltip"));
+//        $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
+////      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
+//        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+//        $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale.get("locale_Insert_New_Datum"));
+//        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
+//        $(this.el).find(".locale_Duplicate").attr("title", Locale.get("locale_Duplicate"));
+//        if(jsonToRender.confidential){
+//          $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Decrypt"));
+//        }else{
+//          $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Encrypt"));
+//        }
+//        if(jsonToRender.decryptedMode){
+//          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Hide_confidential_items_Tooltip"));
+//        }else{
+//          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Show_confidential_items_Tooltip"));
+//        } 
+//        $(this.el).find(".locale_LaTeX").attr("title", Locale.get("locale_LaTeX"));
+//        $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
+//        
+//        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale.get("locale_Drag_and_Drop_Audio_Tooltip"));
       
 
       }

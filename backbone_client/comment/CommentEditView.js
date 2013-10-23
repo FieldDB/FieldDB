@@ -51,10 +51,12 @@ define([
 //      }
       var jsonToRender = this.model.toJSON();
       jsonToRender.gravatar = jsonToRender.gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"");
+      jsonToRender.locale_Add = Locale.get("locale_Add"); 
+//      $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
+
       $(this.el).html(this.template(jsonToRender));
 
-      $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
-
+      
       return this;
     },
     

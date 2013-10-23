@@ -52,15 +52,19 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD READ VIEW render");
-     
+
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_Encrypt_if_confidential = Locale.get(locale_Encrypt_if_confidential);
+
+      
       if (this.format == "corpus") {
-        $(this.el).html(this.templateSettings(this.model.toJSON()));
+        $(this.el).html(this.templateSettings(jsonToRender));
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));
         
         //localization
-        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
+//        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
       
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();

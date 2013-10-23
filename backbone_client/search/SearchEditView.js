@@ -109,7 +109,16 @@ define([
       if (this.format == "fullscreen") {
         // Display the SearchView
         this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));
+        
+        var jsonToRender = this.model.toJSON();
+        //localization
+        jsonToRender.locale_Advanced_Search = Locale.get(locale_Advanced_Search);
+        jsonToRender.locale_advanced_search_explanation = Locale.get(locale_advanced_search_explanation);
+        jsonToRender.locale_AND = Locale.get(locale_AND);
+        jsonToRender.locale_OR = Locale.get(locale_OR);
+        
+        
         
       } else if (this.format == "centreWell") {
         // Display the SearchView
@@ -117,11 +126,11 @@ define([
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
       } 
       
-      //localization
-      $(this.el).find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
-      $(this.el).find(".locale_advanced_search_explanation").html(Locale.get("locale_advanced_search_explanation"));
-      $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
-      $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
+//      //localization
+//      $(this.el).find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
+//      $(this.el).find(".locale_advanced_search_explanation").html(Locale.get("locale_advanced_search_explanation"));
+//      $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
+//      $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
       
 //      $(this.el).find(".judgement").find("input").val("grammatical");
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
@@ -141,13 +150,20 @@ define([
           this.model.set("searchKeywords", searchKeywords);
         }
       }
-      $("#search-top").html(this.topTemplate(this.model.toJSON()));
+
+      $("#search-top").html(this.topTemplate(jsonToRender));
       
+      var jsonToRender = this.model.toJSON();
 
       //localization
-      $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
-      $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
-      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Advanced_Search_Tooltip"));
+      jsonToRender.locale_Search_Tooltip = Locale.get(locale_Search_Tooltip);
+      jsonToRender.locale_Advanced_Search = Locale.get(locale_Advanced_Search);
+      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get(locale_Advanced_Search_Tooltip);
+      
+//      //localization
+//      $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
+//      $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
+//      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Advanced_Search_Tooltip"));
 
       try{
         Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));

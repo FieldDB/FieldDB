@@ -51,7 +51,7 @@
 
 
 
-<label class="locale_Title"></label>
+<label class="">{{locale_Title}}</label>
 <i class="icon-cloud"></i>
 <input class="corpus-title-input" value="{{title}}" type="text" />
 <small>{{publicCorpus}}</small>
@@ -61,7 +61,7 @@
 <small>Shareable URL:
 	http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
 	
-<label ><span class="locale_Description"></span>
+<label ><span class="">{{locale_Description}}</span>
 <a tabindex="-1" data-toggle="modal" href="#wiki-syntax-modal"><i class="icon-question-sign"></i> </a>
 </label>
 <textarea class="corpus-description-input">{{description}}</textarea>
@@ -211,7 +211,7 @@
 						data-provide="typeahead" data-items="4"
 						data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
 					<label class="">{{locale_Help_Text}}</label>
-					<textarea class="add_help locale_Help_Text_Placeholder"></textarea>
+					<textarea class="add_help" title="{{locale_Help_Text_Placeholder}}"></textarea>
 					<a href="#"
 						class="btn btn-primary add-datum-field" title="{{locale_Add_New_Datum_Field_Tooltip}}"
 						rel="tooltip">{{locale_Add}}</a>
@@ -237,7 +237,7 @@
 				<option value="important" class="">{{locale_Red}}</option>
 				<option value="info" class="">{{locale_Teal}}</option>
 				<option value="inverse" class="">{{locale_Black}}</option>
-				<option value="" class="locale_Default"></option>
+				<option value="" class="">{{locale_Default}}</option>
 			</select> <a href="#"
 				class="btn btn-primary add-datum-state" title="{{locale_Add_New_Datum_State_Tooltip}}"
 				rel="tooltip">{{locale_Add}}</a>
@@ -266,7 +266,7 @@
 						data-source="[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]">
 					<label class="">{{locale_Help_Text}}</label>
 					<textarea
-						class="add_conversation_help locale_Help_Text_Placeholder"></textarea>
+						class="add_conversation_help" title="{{locale_Help_Text_Placeholder}}"></textarea>
 					<a href="#"
 						class="btn btn-primary add-conversation-field" title="{{locale_Add_New_Conversation_Field_Tooltip}}"
 						rel="tooltip">{{locale_Add}}</a>

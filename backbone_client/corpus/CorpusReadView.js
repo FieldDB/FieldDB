@@ -221,17 +221,17 @@ define([
 
       
       //Localize for all embedded view
-      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
-      jsonToRender.locale_Sessions_associated = Locale.get("locale_Sessions_associated");
-      jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
-      jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
-      jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
-      jsonToRender.locale_Permissions_associated = Locale.get("locale_Permissions_associated");
-      jsonToRender.locale_permissions_explanation = Locale.get("locale_permissions_explanation");
-      jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
-      jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
-      jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
-      jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
+//      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
+//      jsonToRender.locale_Sessions_associated = Locale.get("locale_Sessions_associated");
+//      jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
+//      jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
+//      jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
+//      jsonToRender.locale_Permissions_associated = Locale.get("locale_Permissions_associated");
+//      jsonToRender.locale_permissions_explanation = Locale.get("locale_permissions_explanation");
+//      jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
+//      jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
+//      jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
+//      jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
 
       //Localize corpus menu for all corpus views
       jsonToRender.locale_New_menu = Locale.get("locale_New_menu");
@@ -399,17 +399,17 @@ define([
         }
         
         //Localize for all embedded view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
-        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
-        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
-        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
-        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+//        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+//        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
+//        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
+//        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
+//        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
+//        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
+//        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
+//        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
+//        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
+//        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
+//        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
 
       }
       
