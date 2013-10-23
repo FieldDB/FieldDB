@@ -91,21 +91,21 @@ define([
     render : function() {
       var jsonToRender = this.model.toJSON();
       
-      jsonToRender.locale_User_Profile = Locale.get(locale_Private_Profile);
-      jsonToRender.locale_Edit_User_Profile_Tooltip = Locale.get(locale_Edit_User_Profile_Tooltip);
-      jsonToRender.locale_View_Public_Profile_Tooltip = Locale.get(locale_View_Public_Profile_Tooltip);
-      jsonToRender.locale_Private_Profile_Instructions = Locale.get(locale_Private_Profile_Instructions);
-      jsonToRender.locale_Close = Locale.get(locale_Close);
-      jsonToRender.locale_User_Profile = Locale.get(locale_Private_Profile);
-      jsonToRender.locale_View_Profile_Tooltip = Locale.get(locale_View_Profile_Tooltip);
-      jsonToRender.locale_Edit_Public_User_Profile = Locale.get(locale_Edit_Public_User_Profile);
-      jsonToRender.locale_User_Profile = Locale.get(locale_Public_Profile);
-      jsonToRender.locale_Gravatar = Locale.get(locale_Gravatar);
-      jsonToRender.locale_Email = Locale.get(locale_Email);
-      jsonToRender.locale_Research_Interests = Locale.get(locale_Research_Interests);
-      jsonToRender.locale_Affiliation = Locale.get(locale_Affiliation);
-      jsonToRender.locale_Description = Locale.get(locale_Description);
-      jsonToRender.locale_Corpora = Locale.get(locale_Corpora);
+      jsonToRender.locale_User_Profile = Locale.get("locale_Private_Profile");
+      jsonToRender.locale_Edit_User_Profile_Tooltip = Locale.get("locale_Edit_User_Profile_Tooltip");
+      jsonToRender.locale_View_Public_Profile_Tooltip = Locale.get("locale_View_Public_Profile_Tooltip");
+      jsonToRender.locale_Private_Profile_Instructions = Locale.get("locale_Private_Profile_Instructions");
+      jsonToRender.locale_Close = Locale.get("locale_Close");
+      jsonToRender.locale_User_Profile = Locale.get("locale_Private_Profile");
+      jsonToRender.locale_View_Profile_Tooltip = Locale.get("locale_View_Profile_Tooltip");
+      jsonToRender.locale_Edit_Public_User_Profile = Locale.get("locale_Edit_Public_User_Profile");
+      jsonToRender.locale_User_Profile = Locale.get("locale_Public_Profile");
+      jsonToRender.locale_Gravatar = Locale.get("locale_Gravatar");
+      jsonToRender.locale_Email = Locale.get("locale_Email");
+      jsonToRender.locale_Research_Interests = Locale.get("locale_Research_Interests");
+      jsonToRender.locale_Affiliation = Locale.get("locale_Affiliation");
+      jsonToRender.locale_Description = Locale.get("locale_Description");
+      jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
     
 //      if (OPrime.debugMode) OPrime.debug("USER render: ");
       if (this.model == undefined) {

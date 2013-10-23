@@ -133,14 +133,14 @@ define([
       
       var jsonToRender = this.model.toJSON();
       
-      jsonToRender.locale_User_Settings = Locale.get(locale_User_Settings);
-      jsonToRender.locale_Skin = Locale.get(locale_Skin);
-      jsonToRender.locale_Change_Background = Locale.get(locale_Change_Background);
-      jsonToRender.locale_Background_on_Random = Locale.get(locale_Background_on_Random);
-      jsonToRender.locale_Transparent_Dashboard = Locale.get(locale_Transparent_Dashboard);
-//      jsonToRender.locale_High_Contrast_Dashboard = Locale.get(locale_High_Contrast_Dashboard);
-      jsonToRender.locale_Number_Datum = Locale.get(locale_Number_Datum);
-      jsonToRender.locale_Close = Locale.get(locale_Close);  
+      jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
+      jsonToRender.locale_Skin = Locale.get("locale_Skin");
+      jsonToRender.locale_Change_Background = Locale.get("locale_Change_Background");
+      jsonToRender.locale_Background_on_Random = Locale.get("locale_Background_on_Random");
+      jsonToRender.locale_Transparent_Dashboard = Locale.get("locale_Transparent_Dashboard");
+//      jsonToRender.locale_High_Contrast_Dashboard = Locale.get("locale_High_Contrast_Dashboard");
+      jsonToRender.locale_Number_Datum = Locale.get("locale_Number_Datum");
+      jsonToRender.locale_Close = Locale.get("locale_Close");  
 
       if (this.model != undefined) {
         // Display the UserPreferenceEditView
