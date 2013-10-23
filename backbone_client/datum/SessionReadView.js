@@ -123,7 +123,6 @@ define([
         jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
         jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
 
-        jsonToRender.locale_Edit_Session = Locale.get(locale_Edit_Session);
         jsonToRender.locale_Consultants = Locale.get(locale_Consultants);
         jsonToRender.locale_Edit_Session = Locale.get(locale_Edit_Session);
         jsonToRender.locale_Elicitation_Session = Locale.get(locale_Elicitation_Session);

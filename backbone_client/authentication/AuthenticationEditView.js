@@ -164,33 +164,36 @@ define([
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("Auth model was undefined, come back later.");
         return this;
-      }
-
-      var jsonToRender = this.model.toJSON();
-      //localization
-      jsonToRender.locale_Log_Out = Locale.get("locale_Log_Out");        
-      jsonToRender.locale_Close_and_login_as_LingLlama = Locale.get("locale_Close_and_login_as_LingLlama");
-      jsonToRender.locale_Close_and_login_as_LingLlama_Tooltip = Locale.get("locale_Close_and_login_as_LingLlama_Tooltip");      
-      jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
-      jsonToRender.locale_Create_a_new_user = Locale.get("locale_Create_a_new_user");
-      jsonToRender.locale_New_User = Locale.get("locale_New_User");
-      jsonToRender.locale_Confirm_Password = Locale.get("locale_Confirm_Password");
-      jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
-      jsonToRender.locale_Private_Profile = Locale.get("locale_Private_Profile");
-      jsonToRender.locale_An_offline_online_fieldlinguistics_database = Locale.get("locale_An_offline_online_fieldlinguistics_database");      
-      jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
-      jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts");
-      jsonToRender.locale_Corpus_Settings = Locale.get("locale_Corpus_Settings");
-      jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
-      
+      }      
       
       if(this.model.get("userPublic") != undefined){
         this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
         this.model.set( "username", this.model.get("userPublic").get("username") );
       }
+
+      var jsonToRender = this.model.toJSON();
+      //localization
+      jsonToRender.locale_An_offline_online_fieldlinguistics_database = Locale.get("locale_An_offline_online_fieldlinguistics_database");
+      jsonToRender.locale_Close_and_login_as_LingLlama = Locale.get("locale_Close_and_login_as_LingLlama");
+      jsonToRender.locale_Close_and_login_as_LingLlama_Tooltip = Locale.get("locale_Close_and_login_as_LingLlama_Tooltip");
+      jsonToRender.locale_Confirm_Password = Locale.get("locale_Confirm_Password");
+      jsonToRender.locale_Corpus_Settings = Locale.get("locale_Corpus_Settings");
+      jsonToRender.locale_Create_a_new_user = Locale.get("locale_Create_a_new_user");
+      jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts");
+      jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
+      jsonToRender.locale_Log_Out = Locale.get("locale_Log_Out");  
+      jsonToRender.locale_New_User = Locale.get("locale_New_User");
+      jsonToRender.locale_Private_Profile = Locale.get("locale_Private_Profile");
+      jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
+      jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
+      jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
+
+
+            
       // Display the AuthenticationEditView
       this.setElement($("#authentication-embedded"));
       $(this.el).html(this.template(jsonToRender));
+      
 
       if (this.model.get("state") == "renderLoggedIn") {
         $("#logout").show();

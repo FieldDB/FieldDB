@@ -207,17 +207,17 @@ define( [
       $(this.el).html(this.template(jsonToRender));
       
       var jsonToRender = this.model.toJSON(); 
-      //localization
-      $(this.el).find(".locale_Save_And_Import").html(Locale.get("locale_Save_And_Import"));
-      jsonToRender.locale_Import = Locale.get(locale_Import);
-      jsonToRender.locale_percent_completed = Locale.get(locale_percent_completed);
-      jsonToRender.locale_Import_Instructions = Locale.get(locale_Import_Instructions);
-      jsonToRender.locale_Import_First_Step = Locale.get(locale_Import_First_Step);
-      jsonToRender.locale_Import_Second_Step = Locale.get(locale_Import_Second_Step);
-      jsonToRender.locale_Import_Third_Step = Locale.get(locale_Import_Third_Step);
-      jsonToRender.locale_Drag_and_Drop_Placeholder = Locale.get(locale_Drag_and_Drop_Placeholder);
       jsonToRender.locale_Add_Extra_Columns = Locale.get(locale_Add_Extra_Columns);
       jsonToRender.locale_Attempt_Import = Locale.get(locale_Attempt_Import);
+      jsonToRender.locale_Drag_and_Drop_Placeholder = Locale.get(locale_Drag_and_Drop_Placeholder);
+      jsonToRender.locale_Import = Locale.get(locale_Import);
+      jsonToRender.locale_Import_First_Step = Locale.get(locale_Import_First_Step);
+      jsonToRender.locale_Import_Instructions = Locale.get(locale_Import_Instructions);
+      jsonToRender.locale_Import_Second_Step = Locale.get(locale_Import_Second_Step);
+      jsonToRender.locale_Import_Third_Step = Locale.get(locale_Import_Third_Step);
+      jsonToRender.locale_Save_And_Import = Locale.get(locale_Save_And_Import);
+      jsonToRender.locale_percent_completed = Locale.get(locale_percent_completed);
+
 
       
       if(this.dataListView != undefined){

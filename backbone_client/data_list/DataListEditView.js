@@ -258,20 +258,10 @@ define( [
       }
       
       var jsonToRender = this.model.toJSON();
-      jsonToRender.dateCreated = OPrime.prettyDate(jsonToRender.dateCreated);
-      jsonToRender.datumCount = this.model.get("datumIds").length;
-      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-
-      jsonToRender.locale_Save = Locale.get("locale_Save"); 
       jsonToRender.locale_Add = Locale.get("locale_Add");
+      jsonToRender.locale_Decrypt_checked = Locale.get("locale_Decrypt_checked");
       jsonToRender.locale_Description = Locale.get("locale_Description"); 
       jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked");
-      jsonToRender.locale_Decrypt_checked = Locale.get("locale_Decrypt_checked");
-      if(jsonToRender.decryptedMode){
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip"); 
-      }else{
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip"); 
-      }
       jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV");
       jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX");
       jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist"); 
@@ -285,6 +275,11 @@ define( [
       jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");       
       jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
       jsonToRender.locale_Title = Locale.get("locale_Title"); 
+      if(jsonToRender.decryptedMode){
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip"); 
+      }else{
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip"); 
+      }
       
       if (this.format == "leftSide") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);

@@ -238,31 +238,23 @@ define( [
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
-      //Localization of icons for quickview
+      jsonToRender.locale_Decrypt_checked = Locale.get("locale_Decrypt_checked");
+      jsonToRender.locale_Edit_Datalist = Locale.get("locale_Edit_Datalist"); 
       jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist"); 
-      jsonToRender.locale_Edit_Datalist = Locale.get("locale_Edit_Datalist"); 
-      jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen"); 
-      //Localization of icons for fullscreen
-      jsonToRender.locale_Edit_Datalist = Locale.get("locale_Edit_Datalist"); 
-      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard"); 
-      //Localization of icons for centerWell
-      jsonToRender.locale_Edit_Datalist = Locale.get("locale_Edit_Datalist"); 
-      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard"); 
-      //localization of the minimized data list icons
-      jsonToRender.locale_Show_Datalist = Locale.get("locale_Show_Datalist"); 
-      //localization of data list menu
+      jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked");
+      jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV");
+      jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX");
+      jsonToRender.locale_Plain_Text_Export_Tooltip_checked = Locale.get("locale_Plain_Text_Export_Tooltip_checked"); 
       jsonToRender.locale_Play_Audio_checked = Locale.get("locale_Play_Audio_checked"); 
       jsonToRender.locale_Remove_checked_from_datalist_tooltip = Locale.get("locale_Remove_checked_from_datalist_tooltip"); 
-      jsonToRender.locale_Plain_Text_Export_Tooltip_checked = Locale.get("locale_Plain_Text_Export_Tooltip_checked"); 
-      jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked"); 
-      jsonToRender.locale_Decrypt_checked = Locale.get("locale_Decrypt_checked"); 
+      jsonToRender.locale_Show_Datalist = Locale.get("locale_Show_Datalist");       
+      jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
+      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
       if(jsonToRender.decryptedMode){
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip"); 
       }else{
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip"); 
       }          
-      jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX"); 
-      jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV"); 
 
       
       if (this.format == "link") {

@@ -106,24 +106,22 @@ define([
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
 
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_AND = Locale.get(locale_AND);
+      jsonToRender.locale_Advanced_Search = Locale.get(locale_Advanced_Search);
+      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get(locale_Advanced_Search_Tooltip);
+      jsonToRender.locale_OR = Locale.get(locale_OR);
+      jsonToRender.locale_Search_Tooltip = Locale.get(locale_Search_Tooltip);
+      jsonToRender.locale_advanced_search_explanation = Locale.get(locale_advanced_search_explanation);
+      
       if (this.format == "fullscreen") {
         // Display the SearchView
         this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(jsonToRender));
-        
-        var jsonToRender = this.model.toJSON();
-        //localization
-        jsonToRender.locale_Advanced_Search = Locale.get(locale_Advanced_Search);
-        jsonToRender.locale_advanced_search_explanation = Locale.get(locale_advanced_search_explanation);
-        jsonToRender.locale_AND = Locale.get(locale_AND);
-        jsonToRender.locale_OR = Locale.get(locale_OR);
-        
-        
-        
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));        
       } else if (this.format == "centreWell") {
         // Display the SearchView
         this.setElement($("#search-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        $(this.el).html(this.embeddedTemplate(jsonToRender));
       } 
       
 //      //localization
@@ -153,12 +151,6 @@ define([
 
       $("#search-top").html(this.topTemplate(jsonToRender));
       
-      var jsonToRender = this.model.toJSON();
-
-      //localization
-      jsonToRender.locale_Search_Tooltip = Locale.get(locale_Search_Tooltip);
-      jsonToRender.locale_Advanced_Search = Locale.get(locale_Advanced_Search);
-      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get(locale_Advanced_Search_Tooltip);
       
 //      //localization
 //      $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));

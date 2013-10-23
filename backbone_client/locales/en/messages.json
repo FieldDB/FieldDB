@@ -411,6 +411,9 @@
   "locale_Transparent_Dashboard" : {
     "message" : "Transparent Dashboard"
   },
+  "locale_High_Contrast_Dashboard" : {
+    "message" : "High Contrast"
+  },
   "locale_Change_Background" : {
     "message" : "Change Background"
   },
