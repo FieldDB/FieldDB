@@ -204,7 +204,22 @@ define( [
     },
     render : function() {
       this.setElement("#import-fullscreen");
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template(jsonToRender));
+      
+      var jsonToRender = this.model.toJSON(); 
+      //localization
+      $(this.el).find(".locale_Save_And_Import").html(Locale.get("locale_Save_And_Import"));
+      jsonToRender.locale_Import = Locale.get(locale_Import);
+      jsonToRender.locale_percent_completed = Locale.get(locale_percent_completed);
+      jsonToRender.locale_Import_Instructions = Locale.get(locale_Import_Instructions);
+      jsonToRender.locale_Import_First_Step = Locale.get(locale_Import_First_Step);
+      jsonToRender.locale_Import_Second_Step = Locale.get(locale_Import_Second_Step);
+      jsonToRender.locale_Import_Third_Step = Locale.get(locale_Import_Third_Step);
+      jsonToRender.locale_Drag_and_Drop_Placeholder = Locale.get(locale_Drag_and_Drop_Placeholder);
+      jsonToRender.locale_Add_Extra_Columns = Locale.get(locale_Add_Extra_Columns);
+      jsonToRender.locale_Attempt_Import = Locale.get(locale_Attempt_Import);
+
+      
       if(this.dataListView != undefined){
         this.dataListView.format = "import";
         this.dataListView.render();
@@ -231,17 +246,17 @@ define( [
         this.showSecondStep();
       }
       
-      //localization
-      $(this.el).find(".locale_Save_And_Import").html(Locale.get("locale_Save_And_Import"));
-      $(this.el).find(".locale_Import").html(Locale.get("locale_Import"));
-      $(this.el).find(".locale_percent_completed").html(Locale.get("locale_percent_completed"));
-      $(this.el).find(".locale_Import_Instructions").html(Locale.get("locale_Import_Instructions"));
-      $(this.el).find(".locale_Import_First_Step").html(Locale.get("locale_Import_First_Step"));
-      $(this.el).find(".locale_Import_Second_Step").html(Locale.get("locale_Import_Second_Step"));
-      $(this.el).find(".locale_Import_Third_Step").html(Locale.get("locale_Import_Third_Step"));
-      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", Locale.get("locale_Drag_and_Drop_Placeholder"));
-      $(this.el).find(".locale_Add_Extra_Columns").html(Locale.get("locale_Add_Extra_Columns"));
-      $(this.el).find(".locale_Attempt_Import").html(Locale.get("locale_Attempt_Import"));
+//      //localization
+//      $(this.el).find(".locale_Save_And_Import").html(Locale.get("locale_Save_And_Import"));
+//      $(this.el).find(".locale_Import").html(Locale.get("locale_Import"));
+//      $(this.el).find(".locale_percent_completed").html(Locale.get("locale_percent_completed"));
+//      $(this.el).find(".locale_Import_Instructions").html(Locale.get("locale_Import_Instructions"));
+//      $(this.el).find(".locale_Import_First_Step").html(Locale.get("locale_Import_First_Step"));
+//      $(this.el).find(".locale_Import_Second_Step").html(Locale.get("locale_Import_Second_Step"));
+//      $(this.el).find(".locale_Import_Third_Step").html(Locale.get("locale_Import_Third_Step"));
+//      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", Locale.get("locale_Drag_and_Drop_Placeholder"));
+//      $(this.el).find(".locale_Add_Extra_Columns").html(Locale.get("locale_Add_Extra_Columns"));
+//      $(this.el).find(".locale_Attempt_Import").html(Locale.get("locale_Attempt_Import"));
       
       return this;
     },
