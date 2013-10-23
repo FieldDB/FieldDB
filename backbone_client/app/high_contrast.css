@@ -1,0 +1,77 @@
+/*
+* The alerts are hard to see for the visually impaired. They said that if it were just black and white it would help. 
+*/
+.alert {
+	color: #000 !important;
+	background-color: #fff !important;
+}
+
+.datum-primary-validation-status-color-warning {
+	color: #000 !important;
+	background-color: #fff !important;
+}
+
+.datum-primary-validation-status-color-inverse {
+	color: #000 !important;
+	background-color: #fff !important;
+}
+
+.datum-primary-validation-status-color-important {
+	color: #000 !important;
+	background-color: #fff !important;
+}
+
+.datum-primary-validation-status-color-success {
+	color: #000 !important;
+	background-color: #fff !important;
+}
+
+.datum-primary-validation-status-color-info {
+	color: #000 !important;
+	background-color: #fff !important;
+}
+
+.datum-primary-validation-status-color- {
+	color: #000 !important;
+	background-color: #fff !important;
+}
+
+a {
+	color: #00f;
+}
+
+a:visited {
+	color: #00f;
+}
+
+a:hover {
+	color: #00f;
+}
+
+.btn {
+	color: #000 !important;
+	background-color: #fff !important;
+	background-image: linear-gradient(to bottom, #ffffff, #e6e6e6)
+		!important;
+}
+
+i {
+	color: #000 !important;
+}
+
+.navbar-inverse .dropdown a {
+	/* color: #fff !important; */
+}
+
+.navbar-inverse .icon-white {
+	color: #fff !important;
+}
+
+.navbar-inverse .icon-bar {
+	background-color: #000 !important;
+}
+
+
+.infrequent-unicode-symbol,.unicode-symbol {
+	color: #000 !important;
+}

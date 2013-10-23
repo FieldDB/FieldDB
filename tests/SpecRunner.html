@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Jasmine Spec Runner</title>
+
+<link rel="shortcut icon" type="image/png"
+	href="libs/jasmine/jasmine_favicon.png">
+<link rel="stylesheet" type="text/css" href="libs/jasmine/jasmine.css">
+
+</head>
+
+<body>
+
+	<form id="uploadForm" enctype="multipart/form-data" action="https://localhost:3184/upload" method="post">
+  	  <input type="text" name="filesToBeAligned" value="Files to be Aligned"><br/> 
+      <input type="text" name="user" value="lingllama"><br/>
+      <input type="text" name="dictionary" value="Url goes here"><br/>
+      <input type="text" name="dialect" value="AmericanEnglish"><br/>
+      <input type="text" name="labels1" value="TESTING AUDIO FOR UPLOAD."><br/>
+      <input type="text" name="labels2" value="TESTING AUDIO FOR UPLOAD TWO."><br/>
+      <input type="text" name="corpusName" value="lingllama-firstcorpus"><br/>
+      <input type="file" id="userFileInput" name="filesToUpload[]" multiple="multiple" /><br/>
+  	<input type="submit" value="Upload to server" />
+  	</form>
+
+	<script type="text/javascript" src="libs/jasmine/jasmine.js"></script>
+	<script type="text/javascript" src="libs/jasmine/jasmine-html.js"></script>
+
+	<script type="text/javascript" src="../backbone_client/libs/require.js"
+		data-main="backbone-client_jasmine-main"></script>
+
+</body>
+</html>

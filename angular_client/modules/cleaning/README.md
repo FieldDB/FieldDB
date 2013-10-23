@@ -1,0 +1,1 @@
+This module contains a number of data cleaning/navigating widgets that let the user explore and find outliers in their data using the D3 data visualizations. 

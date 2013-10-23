@@ -1,0 +1,20 @@
+<td  class="datum_field_label_cell">
+<label class="datum_field_label">{{label}}</label>
+{{#if helpText}}
+<a  class="help-conventions" rel="popover" data-placement="bottom" data-content="{{help}}" 
+  data-original-title="Conventions/Help" tabindex="-1">
+  <i class="icon-question-sign"></i>
+</a>
+{{/if}}
+</td><td class="datum_field_input_cell">
+{{#if size}}
+<input class="datum_field_input small-field" type="text" value="{{mask}}" />
+{{else}}
+	{{#if readonly }}
+	<span>{{mask}}</span>
+	{{else}}
+	<textarea class="datum_field_input" data-provide="typeahead"
+	    data-items="6" data-minLength="0" data-source='{{alternates}}' autocomplete="off">{{mask}}</textarea>
+	{{/if}}
+{{/if}}
+    </td>
