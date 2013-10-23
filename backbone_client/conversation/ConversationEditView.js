@@ -238,28 +238,26 @@ define( [
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
-      jsonToRender.locale_Save = Locale.get("locale_Save"); 
+      jsonToRender.locale_Decrypt_checked = Locale.get("locale_Decrypt_checked");
+      jsonToRender.locale_Description = Locale.get("locale_Description");
+      jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked");
+      jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV");
+      jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX");
       jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist"); 
-      jsonToRender.locale_Show_Datalist = Locale.get("locale_Show_Datalist"); 
-      jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly"); 
-      jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen"); 
-
+      jsonToRender.locale_Plain_Text_Export_Tooltip_checked = Locale.get("locale_Plain_Text_Export_Tooltip_checked");
       jsonToRender.locale_Play_Audio_checked = Locale.get("locale_Play_Audio_checked"); 
-      jsonToRender.locale_Remove_checked_from_datalist_tooltip = Locale.get("locale_Remove_checked_from_datalist_tooltip"); 
-      jsonToRender.locale_Plain_Text_Export_Tooltip_checked = Locale.get("locale_Plain_Text_Export_Tooltip_checked"); 
-      jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked"); 
-      jsonToRender.locale_Decrypt_checked = Locale.get("locale_Decrypt_checked"); 
+      jsonToRender.locale_Remove_checked_from_datalist_tooltip = Locale.get("locale_Remove_checked_from_datalist_tooltip");
+      jsonToRender.locale_Save = Locale.get("locale_Save"); 
+      jsonToRender.locale_Show_Datalist = Locale.get("locale_Show_Datalist"); 
+      jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen"); 
+      jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
+      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard"); 
+      jsonToRender.locale_Title = Locale.get("locale_Title");
       if(jsonToRender.decryptedMode){
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip"); 
       }else{
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip"); 
-      }
-      jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX"); 
-      jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV");  
-      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard"); 
-      jsonToRender.locale_Title = Locale.get("locale_Title"); 
-      jsonToRender.locale_Description = Locale.get("locale_Description"); 
-      
+      }      
       
       if (this.format == "leftSide") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);

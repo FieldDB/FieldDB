@@ -173,7 +173,6 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
           
           var jsonToRender = this.model.toJSON();
-          jsonToRender.locale_Show_Readonly = Locale.get(locale_Show_Readonly);
           jsonToRender.locale_Cancel = Locale.get(locale_Cancel);
           jsonToRender.locale_Consultants = Locale.get(locale_Consultants);
           jsonToRender.locale_Elicitation_Session = Locale.get(locale_Elicitation_Session);

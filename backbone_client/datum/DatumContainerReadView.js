@@ -54,10 +54,10 @@ define([
     render : function() {
       
       var jsonToRender = this.model.toJSON(); 
-      jsonToRender.locale_Show_Fullscreen = Locale.get(locale_Show_Fullscreen);
-      jsonToRender.locale_Show_in_Dashboard = Locale.get(locale_Show_in_Dashboard);
       jsonToRender.locale_Data_Entry_Area = Locale.get(locale_Data_Entry_Area);
       jsonToRender.locale_Edit_Datum = Locale.get(locale_Edit_Datum);             
+      jsonToRender.locale_Show_Fullscreen = Locale.get(locale_Show_Fullscreen);
+      jsonToRender.locale_Show_in_Dashboard = Locale.get(locale_Show_in_Dashboard);
 
       if (this.format == "centreWell") {
         // Display the DatumContainerEditView

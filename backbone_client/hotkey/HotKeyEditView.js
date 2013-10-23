@@ -24,23 +24,24 @@ define([
         render : function() {
 //            $(this.el).html(this.template(this.model.toJSON()));
             
-         // Display the HotKeyEditView
-            this.setElement($("#hotkey-settings-modal")); 
-            $(this.el).html(this.template(this.jsonToRender));
            
             var jsonToRender = this.model.toJSON();
-            //localization
-            jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts"); 
             jsonToRender.locale_Actions = Locale.get("locale_Actions"); 
-            jsonToRender.locale_Navigation = Locale.get("locale_Navigation"); 
-            jsonToRender.locale_Datum_Status_Checked = Locale.get("locale_Datum_Status_Checked"); 
-            jsonToRender.locale_Next_Datum = Locale.get("locale_Next_Datum"); 
-            jsonToRender.locale_New_Datum = Locale.get("locale_New_Datum"); 
-            jsonToRender.locale_Previous_Datum = Locale.get("locale_Previous_Datum"); 
-            jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
-            jsonToRender.locale_Search = Locale.get("locale_Search");
             jsonToRender.locale_Close = Locale.get("locale_Close");
+            jsonToRender.locale_Datum_Status_Checked = Locale.get("locale_Datum_Status_Checked"); 
+            jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts");
+            jsonToRender.locale_Navigation = Locale.get("locale_Navigation");
+            jsonToRender.locale_New_Datum = Locale.get("locale_New_Datum"); 
+            jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
+            jsonToRender.locale_Next_Datum = Locale.get("locale_Next_Datum");
+            jsonToRender.locale_Previous_Datum = Locale.get("locale_Previous_Datum");
             jsonToRender.locale_Save = Locale.get("locale_Save");
+            jsonToRender.locale_Search = Locale.get("locale_Search");
+
+            // Display the HotKeyEditView
+            this.setElement($("#hotkey-settings-modal")); 
+            $(this.el).html(this.template(jsonToRender));
+            
 //
 //            $(document).bind('keydown', 'ctrl+j', function() {
 //                alert('You found the hotkey!');
