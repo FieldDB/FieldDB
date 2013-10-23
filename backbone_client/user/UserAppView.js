@@ -171,9 +171,9 @@ define(
 
                 var jsonToRender = this.model.toJSON();
                 
-                jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get(locale_We_need_to_make_sure_its_you);
-                jsonToRender.locale_Password = Locale.get(locale_Password);
-                jsonToRender.locale_Yep_its_me = Locale.get(locale_Yep_its_me);
+                jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
+                jsonToRender.locale_Password = Locale.get("locale_Password");
+                jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
 
                 
                 $(this.el).html(this.template(jsonToRender));
