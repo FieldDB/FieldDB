@@ -16,7 +16,7 @@ define(
        * @returns
        */
       var ActivityFeedController = function ActivityFeedController($scope,
-          $routeParams, $resource, MostRecentActivities, GetSessionToken) {
+          $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken) {
         console.log("Loading ActivityFeedController");
         /*
          * TODO get a corpus item out of the non-activity feed, or out of the
@@ -27,7 +27,7 @@ define(
           gravatar : "user/user_gravatar.png",
           title : "Activity Feed",
           team : {
-            _id : $routeParams.username
+            username : $routeParams.username
           }
         };
 
@@ -39,26 +39,40 @@ define(
         feedParams.username = $routeParams.username || "lingllama";
         feedParams.corpusid = $routeParams.corpusid;
         if (feedParams.corpusid) {
-          feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
-          $scope.corpus.title = "Corpus Activity Feed";
+          /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
+          if(feedParams.corpusid.indexOf(feedParams.username) > -1){
+            feedParams.corpusid = feedParams.corpusid.replace($routeParams.username,"");
+          }else{
+            feedParams.username = "";
+          }
+          $scope.corpus.title = "What's happening in this corpus";
+          CorpusDetails.async({username: $routeParams.corpusid.split("-")[0], corpusid: $routeParams.corpusid}).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }else{
           feedParams.corpusid = "";
-          $scope.corpus.title = "User Activity Feed";
+          $scope.corpus.title = "What was I working on last time...";
+          UserDetails.async(feedParams).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }
 
-        GetSessionToken.run({
-          "name" : "public",
-          "password" : "none"
-        }).then(function() {
+
+//        GetSessionToken.run({
+//          "name" : "public",
+//          "password" : "none"
+//        }).then(function() {
           MostRecentActivities.async(feedParams).then(function(activities) {
             $scope.activities = activities;
           });
-        });
+//        });
 
       };
 
       ActivityFeedController.$inject = [ '$scope', '$routeParams', '$resource',
-          'MostRecentActivities', 'GetSessionToken' ];
+          'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken' ];
 
       OPrime.debug("Defining ActivityFeedController.");
 

@@ -1,21 +1,16 @@
 {
   "name": "FieldDB Tests or Slides",
   "version": "1.0",
-  "description": "A way for the developers to test the FieldDB Client",
+  "description": "A way for the developers to test the FieldDB Clients",
   "app": {
     "launch": {
-      "local_path": "tests/jasmine.html"
+      "local_path": "tests/SpecRunner.html"
     }
   },
   "offline_enabled": true,
-  "permissions": [
-    "unlimitedStorage",
-    "<all_urls>"
-  ],
-   "icons": { 
-
-  },
+  "permissions" : [ "unlimitedStorage" ],
   "manifest_version" : 2,
-  "content_security_policy" : "img-src 'self' https://secure.gravatar.com  https://ssl.google-analytics.com ; default-src 'self' https://secure.gravatar.com https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://corpusdev.lingsync.org  https://ssl.google-analytics.com https://www.youtube.com ; script-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://corpusdev.lingsync.org  https://ssl.google-analytics.com https://www.youtube.com ; connect-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://corpusdev.lingsync.org  https://ssl.google-analytics.com https://www.youtube.com ; object-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://corpusdev.lingsync.org  https://ssl.google-analytics.com https://www.youtube.com "
+
+  "content_security_policy" : "default-src 'self' https://secure.gravatar.com https://docs.google.com https://themes.googleusercontent.com  https://auth.lingsync.org https://corpus.lingsync.org https://authdev.lingsync.org https://corpusdev.lingsync.org  https://localhost:6984 https://ssl.google-analytics.com "
 
 }

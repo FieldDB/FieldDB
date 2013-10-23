@@ -3,29 +3,46 @@
 echo ""
 echo ""
 echo "Put the Chrome app source into debug mode to see the debugging output."
-sed 's/Utils.debugMode *= *true/Utils.debugMode = false/' client/libs/Utils.js  > output
-mv output client/libs/Utils.js
+sed 's/OPrime.debugMode *= *true/OPrime.debugMode = false/' backbone_client/libs/OPrime.js  > output
+mv output backbone_client/libs/OPrime.js
 
 
 echo ""
 echo ""
 echo "Put the dev analytics code."
-sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-32705284-1";/' client/libs/analytics.js  > output
-mv output client/libs/analytics.js
+sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-32705284-1";/' backbone_client/libs/analytics.js  > output
+mv output backbone_client/libs/analytics.js
 
 echo ""
 echo ""
 echo "Tell the Chrome app to contact the dev webservices."
-sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' client/corpus_dashboard.js  > output
-mv output client/corpus_dashboard.js
-sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' client/user_dashboard.js  > output
-mv output client/user_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/corpus_dashboard.js  > output
+mv output backbone_client/corpus_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/lingllama_dashboard.js  > output
+mv output backbone_client/lingllama_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/user_dashboard.js  > output
+mv output backbone_client/user_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/welcome_dashboard.js  > output
+mv output backbone_client/welcome_dashboard.js
+
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/corpus_online_dashboard.js  > output
+mv output backbone_client/corpus_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/user_online_dashboard.js  > output
+mv output backbone_client/user_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/welcome_online_dashboard.js  > output
+mv output backbone_client/welcome_online_dashboard.js
+
+echo ""
+echo ""
+echo "Making localhost available in the spreadsheet app"
+sed 's/scope.localhost = true/scope.localhost = false/' angular_client/modules/spreadsheet/js/controllers/SpreadsheetController.js  > output
+mv output angular_client/modules/spreadsheet/js/controllers/SpreadsheetController.js
 
 echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the dev manifest for release into the Chrome store as the unstable bleeding egde chromeapp  for users who like to be on the bleeding edge"
-cp client/manifest_dev.json client/manifest.json
-cp client/images/icon128_dev.png client/images/icon.png
+cp backbone_client/manifest_dev.json backbone_client/manifest.json
+cp backbone_client/images/icon128_dev.png backbone_client/images/icon.png
 
 echo ""
 echo ""
