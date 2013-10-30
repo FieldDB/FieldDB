@@ -111,7 +111,7 @@ define([
       jsonToRender.locale_Advanced_Search = Locale.get("locale_Advanced_Search");
       jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
       jsonToRender.locale_OR = Locale.get("locale_OR");
-      jsonToRender.locale_Search_Tooltip = Locale.get("locale_Search_Tooltip");
+      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
       jsonToRender.locale_advanced_search_explanation = Locale.get("locale_advanced_search_explanation");
       
       if (this.format == "fullscreen") {
@@ -153,7 +153,7 @@ define([
       
       
 //      //localization
-//      $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
+//      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Search"));
 //      $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
 //      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Advanced_Search_Tooltip"));
 

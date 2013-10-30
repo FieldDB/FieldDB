@@ -164,6 +164,19 @@ define([
         jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
         jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
         
+//        var jsonToRender = this.model.toJSON();
+        jsonToRender.locale_Cancel = Locale.get("locale_Cancel");
+        jsonToRender.locale_Consultants = Locale.get("locale_Consultants");
+        jsonToRender.locale_Elicitation_Session = Locale.get("locale_Elicitation_Session");
+        jsonToRender.locale_Goal = Locale.get("locale_Goal");
+        jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
+        jsonToRender.locale_New_Session_Instructions = Locale.get("locale_New_Session_Instructions");
+        jsonToRender.locale_Save = Locale.get("locale_Save");
+        jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
+        jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
+        jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
+        jsonToRender.locale_When = Locale.get("locale_When");
+    
         
         if(this.format != "modal"){
           appView.currentSessionEditView.destroy_view();
@@ -171,19 +184,6 @@ define([
         }
         if (this.format == "leftSide") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
-          
-          var jsonToRender = this.model.toJSON();
-          jsonToRender.locale_Cancel = Locale.get("locale_Cancel");
-          jsonToRender.locale_Consultants = Locale.get("locale_Consultants");
-          jsonToRender.locale_Elicitation_Session = Locale.get("locale_Elicitation_Session");
-          jsonToRender.locale_Goal = Locale.get("locale_Goal");
-          jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
-          jsonToRender.locale_New_Session_Instructions = Locale.get("locale_New_Session_Instructions");
-          jsonToRender.locale_Save = Locale.get("locale_Save");
-          jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
-          jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
-          jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
-          jsonToRender.locale_When = Locale.get("locale_When");
           
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
