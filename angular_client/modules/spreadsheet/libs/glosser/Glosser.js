@@ -107,11 +107,18 @@ Glosser.morphemefinder = function(unparsedUtterance, pouchname) {
             break;
           }
           for (var j in matchedRules) {
+            if (matchedRules[j].r[0].key.y === "@" && suffixtemplate.length > 1) {
+              continue;
+            }
+            // if (matchedRules[j].r[0].key.x.length === 1) {
+            //   continue;
+            // }
             if (suffixtemplate[i] == matchedRules[j].r[0].key.y) {
               if (suffixtemplate[i + 1]) { // ambiguity (two potential
                 // following morphemes)
-                suffixtemplate.pop();
-                break;
+                if(suffixtemplate[i + 1].length < matchedRules[j].r[0].key.x.length){
+                  suffixtemplate[i + 1] = matchedRules[j].r[0].key.x;
+                }
               } else {
                 suffixtemplate[i + 1] = matchedRules[j].r[0].key.x;
               }
