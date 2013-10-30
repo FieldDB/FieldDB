@@ -95,31 +95,34 @@ define([
     render : function() {
 //      if (OPrime.debugMode) OPrime.debug("USER render: " + this.el);
 
+      var jsonToRender = this.model.toJSON(); 
+      jsonToRender.locale_Affiliation = Locale.get("locale_Affiliation");
+      jsonToRender.locale_Close = Locale.get("locale_Close");
+      jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
+      jsonToRender.locale_Description = Locale.get("locale_Description");
+      jsonToRender.locale_Edit_Public_User_Profile = Locale.get("locale_Edit_Public_User_Profile");
+      jsonToRender.locale_Email = Locale.get("locale_Email");
+      jsonToRender.locale_Firstname = Locale.get("locale_Firstname");
+      jsonToRender.locale_Gravatar = Locale.get("locale_Gravatar");
+      jsonToRender.locale_Gravatar_URL = Locale.get("locale_Gravatar_URL");
+      jsonToRender.locale_Lastname = Locale.get("locale_Lastname");
+      jsonToRender.locale_Private_Profile_Instructions = Locale.get("locale_Private_Profile_Instructions");
+      jsonToRender.locale_Public_Profile_Instructions = Locale.get("locale_Public_Profile_Instructions");
+      jsonToRender.locale_Research_Interests = Locale.get("locale_Research_Interests");
+      jsonToRender.locale_Save = Locale.get("locale_Save");
+      jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
+      jsonToRender.locale_User_Profile = Locale.get("locale_Private_Profile");       
+      jsonToRender.locale_User_Profile = Locale.get("locale_Public_Profile");      
+      
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\User model was undefined");
         return this;
+
+       
       }
       if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("USER EDIT FULLSCREEN render: " + this.el);
 
-        var jsonToRender = this.model.toJSON(); 
-        jsonToRender.locale_Affiliation = Locale.get("locale_Affiliation");
-        jsonToRender.locale_Close = Locale.get("locale_Close");
-        jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
-        jsonToRender.locale_Description = Locale.get("locale_Description");
-        jsonToRender.locale_Edit_Public_User_Profile = Locale.get("locale_Edit_Public_User_Profile");
-        jsonToRender.locale_Email = Locale.get("locale_Email");
-        jsonToRender.locale_Firstname = Locale.get("locale_Firstname");
-        jsonToRender.locale_Gravatar = Locale.get("locale_Gravatar");
-        jsonToRender.locale_Gravatar_URL = Locale.get("locale_Gravatar_URL");
-        jsonToRender.locale_Lastname = Locale.get("locale_Lastname");
-        jsonToRender.locale_Private_Profile_Instructions = Locale.get("locale_Private_Profile_Instructions");
-        jsonToRender.locale_Public_Profile_Instructions = Locale.get("locale_Public_Profile_Instructions");
-        jsonToRender.locale_Research_Interests = Locale.get("locale_Research_Interests");
-        jsonToRender.locale_Save = Locale.get("locale_Save");
-        jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
-        jsonToRender.locale_User_Profile = Locale.get("locale_Private_Profile");       
-        jsonToRender.locale_User_Profile = Locale.get("locale_Public_Profile");
         
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(jsonToRender));
@@ -138,7 +141,6 @@ define([
         
         this.setElement($("#user-modal"));
         
-        var jsonToRender = this.model.toJSON();
         $(this.el).html(this.modalTemplate(jsonToRender));
         
         //localization for user edit modal
@@ -157,7 +159,6 @@ define([
 
         this.setElement($("#public-user-page"));
         
-        var jsonToRender = this.model.toJSON();
         $(this.el).html(this.fullscreenTemplate(jsonToRender));
         
         //localization for public user edit fullscreen

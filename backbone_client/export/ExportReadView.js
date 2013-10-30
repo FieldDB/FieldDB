@@ -28,16 +28,15 @@ define([
     render : function() {
      // Display the ExportView
     	this.setElement($("#export-modal")); 
+
+        var jsonToRender = this.model.toJSON();
+        //localization
+        jsonToRender.locale_Export = Locale.get("locale_Export"); 
+        jsonToRender.locale_Close = Locale.get("locale_Close"); 
+
     	$(this.el).html(this.template(jsonToRender));
  
-    	var jsonToRender = this.model.toJSON();
-    	//localization
-    	jsonToRender.locale_Export = Locale.get("locale_Export"); 
-    	jsonToRender.locale_Close = Locale.get("locale_Close"); 
-
-
-  	      
-      return this;
+  	           return this;
     }
   });
   
