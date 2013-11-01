@@ -151,29 +151,48 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("USER render: " );
+      
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_Close_and_login_as_LingLlama = Locale.get("locale_Close_and_login_as_LingLlama");
+      jsonToRender.locale_Close_and_login_as_LingLlama_Tooltip = Locale.get("locale_Close_and_login_as_LingLlama_Tooltip");
+      jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
+      jsonToRender.locale_Username = Locale.get("locale_Username");
+      jsonToRender.locale_Password = Locale.get("locale_Password");
+      jsonToRender.locale_Sync_my_data_to_this_computer = Locale.get("locale_Sync_my_data_to_this_computer");
+      jsonToRender.locale_An_offline_online_fieldlinguistics_database = Locale.get("locale_An_offline_online_fieldlinguistics_database");
+      jsonToRender.locale_Create_a_new_user = Locale.get("locale_Create_a_new_user");
+      jsonToRender.locale_New_User = Locale.get("locale_New_User");
+      jsonToRender.locale_Confirm_Password = Locale.get("locale_Confirm_Password");
+      jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
+//      jsonToRender.locale_What_is_your_username_going_to_be = Locale.get(locale_What_is_your_username_going_to_be);
+//      jsonToRender.locale_Welcome_Beta_Testers = Locale.get(locale_Welcome_Beta_Testers);
+//      jsonToRender.locale_Welcome_to_FieldDB = Locale.get(locale_Welcome_to_FieldDB);
+//      jsonToRender.locale_Warning = Locale.get(locale_Warning);
+//      jsonToRender.locale_Instructions_to_show_on_dashboard = Locale.get(locale_Instructions_to_show_on_dashboard);
 
+      
       if (this.model != undefined) {
         this.model.set("username", this.model.get("username").toLowerCase().replace(/[^0-9a-z]/g,""));
         // Display the UserWelcomeView
         this.setElement($("#user-welcome-modal"));
-        $(this.el).html(this.template(this.model.toJSON()));
+        $(this.el).html(this.template(jsonToRender));
         $(".registerusername").focus();
-        $(this.el).find(".locale_Close_and_login_as_LingLlama").html(Locale.get("locale_Close_and_login_as_LingLlama"));
-        $(this.el).find(".locale_Close_and_login_as_LingLlama_Tooltip").attr("title", Locale.get("locale_Close_and_login_as_LingLlama_Tooltip"));
-        $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
-        $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
-        $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
-        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
-//        $(this.el).find(".locale_Welcome_to_FieldDB").html(Locale.get("locale_Welcome_to_FieldDB"));
-        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale.get("locale_An_offline_online_fieldlinguistics_database"));
-//        $(this.el).find(".locale_Welcome_Beta_Testers").html(Locale.get("locale_Welcome_Beta_Testers"));
-        $(this.el).find(".locale_Create_a_new_user").html(Locale.get("locale_Create_a_new_user"));
-//        $(this.el).find(".locale_What_is_your_username_going_to_be").html(Locale.get("locale_What_is_your_username_going_to_be"));
-        $(this.el).find(".locale_New_User").text(Locale.get("locale_New_User"));
-        $(this.el).find(".locale_Confirm_Password").text(Locale.get("locale_Confirm_Password"));
-        $(this.el).find(".locale_Sign_in_with_password").text(Locale.get("locale_Sign_in_with_password"));
-//        $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
-//        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
+//        $(this.el).find(".locale_Close_and_login_as_LingLlama").html(Locale.get("locale_Close_and_login_as_LingLlama"));
+//        $(this.el).find(".locale_Close_and_login_as_LingLlama_Tooltip").attr("title", Locale.get("locale_Close_and_login_as_LingLlama_Tooltip"));
+//        $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
+//        $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
+//        $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+//        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
+////        $(this.el).find(".locale_Welcome_to_FieldDB").html(Locale.get("locale_Welcome_to_FieldDB"));
+//        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale.get("locale_An_offline_online_fieldlinguistics_database"));
+////        $(this.el).find(".locale_Welcome_Beta_Testers").html(Locale.get("locale_Welcome_Beta_Testers"));
+//        $(this.el).find(".locale_Create_a_new_user").html(Locale.get("locale_Create_a_new_user"));
+////        $(this.el).find(".locale_What_is_your_username_going_to_be").html(Locale.get("locale_What_is_your_username_going_to_be"));
+//        $(this.el).find(".locale_New_User").text(Locale.get("locale_New_User"));
+//        $(this.el).find(".locale_Confirm_Password").text(Locale.get("locale_Confirm_Password"));
+//        $(this.el).find(".locale_Sign_in_with_password").text(Locale.get("locale_Sign_in_with_password"));
+////        $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
+////        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
 
 //        /*
 //         * Workaround for Bootstrap dropdowns not being clickable in android.

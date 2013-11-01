@@ -546,6 +546,27 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.el);
+      
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
+      jsonToRender.locale_Differences_with_the_central_server = Locale.get("locale_Differences_with_the_central_server"); 
+      jsonToRender.locale_Instructions_to_show_on_dashboard = Locale.get("locale_Instructions_to_show_on_dashboard"); // Do we still use this instruction?  
+      jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
+      jsonToRender.locale_Need_save = Locale.get("locale_Need_save");
+      jsonToRender.locale_Need_sync = Locale.get("locale_Need_sync");
+      jsonToRender.locale_Password = Locale.get("locale_Password");
+      jsonToRender.locale_Recent_Changes = Locale.get("locale_Recent_Changes");
+      jsonToRender.locale_Save_on_this_Computer = Locale.get("locale_Save_on_this_Computer");
+      jsonToRender.locale_Show_Dashboard = Locale.get("locale_Show_Dashboard");
+      jsonToRender.locale_Sync_and_Share = Locale.get("locale_Sync_and_Share");
+      jsonToRender.locale_Username = Locale.get("locale_Username");
+      jsonToRender.locale_View_Public_Profile_Tooltip = Locale.get("locale_View_Public_Profile_Tooltip");
+      jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
+      jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
+      jsonToRender.locale_to_beta_testers = Locale.get("locale_to_beta_testers"); // Do we still use this? 
+//    jsonToRender.locale_Warning = Locale.get(locale_Warning);
+//    jsonToRender.locale_Sync_my_data_to_this_computer = Locale.get(locale_Sync_my_data_to_this_computer);
+
       if (this.model != undefined) {
         
         if (OPrime.debugMode) OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
@@ -704,27 +725,27 @@ define([
       this.setTotalBackboneDocs();
       
       //localization
-      $(this.el).find(".locale_Show_Dashboard").attr("title", Locale.get("locale_Show_Dashboard"));
-      $(this.el).find(".locale_Need_save").text(Locale.get("locale_Need_save"));
-      $(this.el).find(".locale_Recent_Changes").text(Locale.get("locale_Recent_Changes"));
-      $(this.el).find(".locale_Save_on_this_Computer").attr("title", Locale.get("locale_Save_on_this_Computer"));
-      $(this.el).find(".locale_Need_sync").text(Locale.get("locale_Need_sync"));
-      $(this.el).find(".locale_Differences_with_the_central_server").text(Locale.get("locale_Differences_with_the_central_server"));
-      $(this.el).find(".locale_Sync_and_Share").attr("title", Locale.get("locale_Sync_and_Share"));
-      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", Locale.get("locale_View_Public_Profile_Tooltip"));
-//      $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
-      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
-      $(this.el).find(".locale_to_beta_testers").html(Locale.get("locale_to_beta_testers"));
-      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale.get("locale_We_need_to_make_sure_its_you"));
-      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
-      $(this.el).find(".locale_Yep_its_me").text(Locale.get("locale_Yep_its_me"));
-      
-      
-      $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
-      $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
-      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
-      $(this.el).find(".locale_Corpora").html(Locale.get("locale_Corpora"));
-//      $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
+//      $(this.el).find(".locale_Show_Dashboard").attr("title", Locale.get("locale_Show_Dashboard"));
+//      $(this.el).find(".locale_Need_save").text(Locale.get("locale_Need_save"));
+//      $(this.el).find(".locale_Recent_Changes").text(Locale.get("locale_Recent_Changes"));
+//      $(this.el).find(".locale_Save_on_this_Computer").attr("title", Locale.get("locale_Save_on_this_Computer"));
+//      $(this.el).find(".locale_Need_sync").text(Locale.get("locale_Need_sync"));
+//      $(this.el).find(".locale_Differences_with_the_central_server").text(Locale.get("locale_Differences_with_the_central_server"));
+//      $(this.el).find(".locale_Sync_and_Share").attr("title", Locale.get("locale_Sync_and_Share"));
+//      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", Locale.get("locale_View_Public_Profile_Tooltip"));
+////      $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
+//      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
+//      $(this.el).find(".locale_to_beta_testers").html(Locale.get("locale_to_beta_testers"));
+//      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale.get("locale_We_need_to_make_sure_its_you"));
+//      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+//      $(this.el).find(".locale_Yep_its_me").text(Locale.get("locale_Yep_its_me"));
+//      
+//      
+//      $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
+//      $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
+//      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+//      $(this.el).find(".locale_Corpora").html(Locale.get("locale_Corpora"));
+////      $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
 
       return this;
     },

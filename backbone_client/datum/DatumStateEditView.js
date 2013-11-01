@@ -51,21 +51,28 @@ define( [
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM STATE EDIT VIEW render");
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_Green = Locale.get("locale_Green");
+      jsonToRender.locale_Orange = Locale.get("locale_Orange");
+      jsonToRender.locale_Red = Locale.get("locale_Red");
+      jsonToRender.locale_Teal = Locale.get("locale_Teal");
+      jsonToRender.locale_Black = Locale.get("locale_Black");
+      jsonToRender.locale_Default = Locale.get("locale_Default");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsEditView
-        $(this.el).html(this.templateSettings(this.model.toJSON()));
+        $(this.el).html(this.templateSettings(jsonToRender));
         
         // Select the correct value from the color dropdown
         this.$el.children(".color_chooser").val(this.model.get("color"));
         
         //localization
-        $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-        $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-        $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-        $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-        $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-        $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
+//        $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
+//        $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
+//        $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
+//        $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
+//        $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
+//        $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
       }
       
       return this;
