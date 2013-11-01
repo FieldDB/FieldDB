@@ -44,18 +44,12 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("COMMENT render");
-//      var JSONtorender = {};
-//      if ( typeof this.model != undefined){
-//    	  JSONtorender.timestamp = this.model.timestamp.toString();
-//    	  JSONtorender.username = this.model.username;
-//      }
+
       var jsonToRender = this.model.toJSON();
       jsonToRender.gravatar = jsonToRender.gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"");
       jsonToRender.locale_Add = Locale.get("locale_Add"); 
-//      $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       $(this.el).html(this.template(jsonToRender));
-
       
       return this;
     },
@@ -68,10 +62,6 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-//    This timestamp thing doesn't seem to be working       
-//      if(!this.model.get("timestamp")){
-//        this.model.set("timestamp", new Date(JSON.stringify(new Date())));
-//      }
       this.model.edit($(this.el).find(".comment-new-text").val());
     },
     clearCommentForReuse : function(){
