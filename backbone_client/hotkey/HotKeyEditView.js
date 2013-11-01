@@ -22,8 +22,6 @@ define([
         template: Handlebars.templates.hot_key_edit_modal,
     
         render : function() {
-//            $(this.el).html(this.template(this.model.toJSON()));
-            
            
             var jsonToRender = this.model.toJSON();
             jsonToRender.locale_Actions = Locale.get("locale_Actions"); 
@@ -49,14 +47,9 @@ define([
       
             
             return this;
-        }, 
-        
-        
-        
+        }
         
     });
     
-  
-
     return HotKeyEditView;
 }); 

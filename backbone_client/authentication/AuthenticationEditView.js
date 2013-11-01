@@ -188,12 +188,10 @@ define([
       jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
       jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
 
-
             
       // Display the AuthenticationEditView
       this.setElement($("#authentication-embedded"));
       $(this.el).html(this.template(jsonToRender));
-      
 
       if (this.model.get("state") == "renderLoggedIn") {
         $("#logout").show();
@@ -208,10 +206,6 @@ define([
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
         
-//        //localization
-//        $(this.el).find(".locale_Log_Out").html(Locale.get("locale_Log_Out"));
-
-        
       } else {
         $("#logout").hide();
         $("#login_form").show();
@@ -225,31 +219,12 @@ define([
         }else{
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
-        
-//        //localization
-//        $(this.el).find(".locale_Close_and_login_as_LingLlama").html(Locale.get("locale_Close_and_login_as_LingLlama"));
-//        $(this.el).find(".locale_Close_and_login_as_LingLlama_Tooltip").attr("title", Locale.get("locale_Close_and_login_as_LingLlama_Tooltip"));
-//        
-//        $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
-//        $(this.el).find(".locale_Create_a_new_user").html(Locale.get("locale_Create_a_new_user"));
-//        $(this.el).find(".locale_New_User").text(Locale.get("locale_New_User"));
-//        $(this.el).find(".locale_Confirm_Password").text(Locale.get("locale_Confirm_Password"));
-//        $(this.el).find(".locale_Sign_in_with_password").text(Locale.get("locale_Sign_in_with_password"));
 
         var mostLikelyAuthUrl = OPrime.getMostLikelyUserFriendlyAuthServerName();
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
         
       }
 
-//      //localization
-//      $(this.el).find(".locale_Private_Profile").html(Locale.get("locale_Private_Profile"));
-//      $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale.get("locale_An_offline_online_fieldlinguistics_database"));
-//      
-//      $(this.el).find(".locale_User_Settings").html(Locale.get("locale_User_Settings"));
-//      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale.get("locale_Keyboard_Shortcuts"));
-//      $(this.el).find(".locale_Corpus_Settings").html(Locale.get("locale_Corpus_Settings"));
-//      $(this.el).find(".locale_Terminal_Power_Users").html(Locale.get("locale_Terminal_Power_Users"));
-      
       return this;
     },
     
