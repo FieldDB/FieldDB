@@ -544,6 +544,7 @@ define([
         }
       }
     },
+
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {
         var glossLine = Glosser.glossFinder(morphemesLine);
@@ -596,6 +597,7 @@ define([
         }
       }
     },
+
     guessUtterance : function(morphemesLine) {
       if (morphemesLine) {
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
