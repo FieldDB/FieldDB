@@ -156,9 +156,6 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .resize-full" : "resizeFullscreen",
       
-      //Add button inserts new Conversation Field
-      "click .add-conversation-field" : 'insertNewConversationDatumField',
-      
       //corpus menu buttons
       "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
@@ -236,7 +233,6 @@ define([
       jsonToRender.explain_license = Locale.get("locale_License_explanation");
       jsonToRender.explain_terms_of_use = Locale.get("locale_Terms_explanation");
       jsonToRender.locale_Add = Locale.get("locale_Add");
-      jsonToRender.locale_Add_New_Conversation_Field_Tooltip = Locale.get("locale_Add_New_Conversation_Field_Tooltip");
       jsonToRender.locale_Add_New_Datum_Field_Tooltip = Locale.get("locale_Add_New_Datum_Field_Tooltip");
       jsonToRender.locale_Add_New_Datum_State_Tooltip = Locale.get("locale_Add_New_Datum_State_Tooltip");
       jsonToRender.locale_Add_Placeholder = Locale.get("locale_Add_Placeholder");
@@ -259,7 +255,6 @@ define([
       jsonToRender.locale_Help_Text_Placeholder = Locale.get("locale_Help_Text_Placeholder");
       jsonToRender.locale_Import_Data = Locale.get("locale_Import_Data");
       jsonToRender.locale_License = Locale.get("locale_License");
-      jsonToRender.locale_New_Conversation = Locale.get("locale_New_Conversation");
       jsonToRender.locale_New_Corpus = "<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") ;
       jsonToRender.locale_New_Corpus = Locale.get("locale_New_Corpus");
       jsonToRender.locale_New_Corpus_Instructions = Locale.get("locale_New_Corpus_Instructions");
@@ -769,19 +764,6 @@ define([
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },
-    newConversation : function(e) {
-        if(e){
-//          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
-          e.preventDefault(); //this stops the link from moving the page to the top
-          /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
-          if($(e.target).parent().parent().hasClass("dropdown-menu")){
-            $(e.target).parent().parent().hide();
-          }
-        }
-//        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
-//        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
-        if (OPrime.debugMode) OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
-      },
 
     newDataList : function(e) {
       if(e){

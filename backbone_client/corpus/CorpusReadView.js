@@ -211,7 +211,6 @@ define([
       jsonToRender.locale_Export_Data = Locale.get("locale_Export_Data");
       jsonToRender.locale_Import_Data = Locale.get("locale_Import_Data");
       jsonToRender.locale_License = Locale.get("locale_License");
-      jsonToRender.locale_New_Conversation = Locale.get("locale_New_Conversation");
       jsonToRender.locale_New_Corpus = "<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") ;
       jsonToRender.locale_New_Corpus = Locale.get("locale_New_Corpus");
       jsonToRender.locale_New_Data_List = Locale.get("locale_New_Data_List");
@@ -529,19 +528,6 @@ define([
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
-    newConversation : function(e) {
-        if(e){
-//          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
-          e.preventDefault(); //this stops the link from moving the page to the top
-          /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
-          if($(e.target).parent().parent().hasClass("dropdown-menu")){
-            $(e.target).parent().parent().hide();
-          }
-        }
-//        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
-//        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
-        if (OPrime.debugMode) OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
-      },
 
     newDataList : function(e) {
       if(e){

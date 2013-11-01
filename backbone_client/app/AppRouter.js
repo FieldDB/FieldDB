@@ -37,7 +37,6 @@ define([
       "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
       "corpus/:pouchname/search/:searchterm"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
-      "corpus/:pouchname/conversation/:id" : "showEmbeddedConversation", 
       "corpus/:pouchname/alldata"       : "showAllData",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname"               : "showFullscreenCorpus", 
       "corpus"                          : "showFullscreenCorpus", 
@@ -501,34 +500,6 @@ define([
       }
     },
     
-    showEmbeddedConversation : function(pouchname, conversationid){
-        $("#datums-embedded").hide();
-    	$("#conversation-embedded").show();
-    	if (OPrime.debugMode) OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
-            + conversationid);
-        if(conversationid){
-          if(!pouchname){
-            pouchname = window.app.get("corpus").get("pouchname");
-          }
-          if(conversationid == "new"){
-//            appView.datumsEditView.newDatum(); //change this so it's relevant for Conversation
-            window.location.href = "#render/false"; //TODO this is to clear the parameters in the url
-//            $($($(".utterance")[0]).find(".datum_field_input")[0]).focus() //change so relevant to Conversation
-            return;
-          }
-          var obj = new Conversation({pouchname: app.get("corpus").get("pouchname")});
-          obj.id  = conversationid;
-            obj.fetch({
-              success : function(model, response) {
- //               window.appView.datumsEditView.prependDatum(model); //change so relevant to Conversation
-                window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
-              }
-          });
-        }else{
-          window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
-        }
-      },
-      
     showImport : function() {
       if (OPrime.debugMode) OPrime.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
@@ -577,10 +548,8 @@ define([
     hideEverything: function() {
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();
-      $("#conversation-embedded").hide();
       $("#data-list-fullscreen").hide();
       $("#datum-container-fullscreen").hide();
-      $("#conversation-container-fullscreen").hide();
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
       $("#search-fullscreen").hide();
