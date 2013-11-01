@@ -349,7 +349,7 @@ define([
                 help: "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
             })
           ]));
-        }
+      }
       
       if(!this.get("sessionFields") || this.get("sessionFields").length == 0){
         this.set("sessionFields", new DatumFields([ 
