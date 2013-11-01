@@ -214,24 +214,23 @@ define([
         if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
-
       
       if (OPrime.debugMode) OPrime.debug("CORPUS EDIT render: ");
       if( this.format != "modal"){
         window.appView.currentCorpusEditView.destroy_view();
         window.appView.currentCorpusReadView.destroy_view();
       }
-      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
+
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
-      
+
+      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       
       jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
-      
-      jsonToRender.explain_license = Locale.get("locale_License_explanation");
-      jsonToRender.explain_terms_of_use = Locale.get("locale_Terms_explanation");
+      jsonToRender.locale_License_explanation = Locale.get("locale_License_explanation");
+      jsonToRender.locale_Terms_explanation = Locale.get("locale_Terms_explanation");
       jsonToRender.locale_Add = Locale.get("locale_Add");
       jsonToRender.locale_Add_New_Datum_Field_Tooltip = Locale.get("locale_Add_New_Datum_Field_Tooltip");
       jsonToRender.locale_Add_New_Datum_State_Tooltip = Locale.get("locale_Add_New_Datum_State_Tooltip");
@@ -287,11 +286,17 @@ define([
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("Problem getting the usrname of the corpus' team");
       }
-      if (this.format == "centreWell") {
-        if (OPrime.debugMode) OPrime.debug("CORPUS Edit center render: " );
-          // Display the CorpusReadFullScreenView
+        
+     if (this.format == "fullscreen" || this.format == "centreWell"){
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ FULLSCREEN/EMBEDDED render: " );
+        
+        if(this.format == "fullscreen"){
+          this.setElement($("#corpus-fullscreen")); 
+          $(this.el).html(this.templateFullscreen(jsonToRender));
+        }else{
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(jsonToRender));
+        }
 
           // Display the CommentReadView
           this.commentReadView.el = $(this.el).find('.comments');
@@ -326,165 +331,9 @@ define([
           this.datumStatesView.render();
           
           this.updateDescription();
-        //Localize for all embedded view
-//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-//          $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
-//          $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
-//          $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
-//          $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
-//          $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
-//          $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
-//          $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
-//          $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
-//          $(this.el).find(".locale_Conversation_field_settings").html(Locale.get("locale_Conversation_field_settings"));
-//          $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
-//          $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
-//          $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
 
-          
-          
-          //Localize for only Edit view.
-
-//          $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-//          $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
-//          $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
-//          $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
-//          $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
-//          $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
-//          $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-//          $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-//          $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-//          $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
-//          $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-//          $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-//          $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
-//          $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
-//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-//          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
-
-          
-//          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
-//          $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
-//
-//          $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-//          $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
-//          $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
-//          $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
-//          $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
-//          $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
-//          $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-//          $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-//          $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-//          $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
-//          $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-//          $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-//          $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
-//          $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
-//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-//          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
-
-
-      } else if (this.format == "fullscreen") {
-        if (OPrime.debugMode) OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
-
-        this.setElement($("#corpus-fullscreen"));
-        $(this.el).html(this.templateFullscreen(jsonToRender));
-
-        // Display the CommentReadView
-        this.commentReadView.el = $(this.el).find('.comments');
-        this.commentReadView.render();
-        
-        // Display the CommentEditView
-        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
-        this.commentEditView.render();
-        
-        // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists-updating-collection'); 
-        this.dataListsView.render();
-        
-        // Display the SessionsView
-        this.sessionsView.el = this.$('.sessions-updating-collection'); 
-        this.sessionsView.render();
-        
-        // Display the PermissionsView
-//        this.permissionsView.el = this.$('.permissions-updating-collection');
-//        this.permissionsView.render();
-
-        // Display the DatumFieldsView
-        this.datumFieldsView.el = this.$('.datum_field_settings');
-        this.datumFieldsView.render();
-
-        // Display the ConversationFieldsView
-        this.conversationFieldsView.el = this.$('.conversation_field_settings');
-        this.conversationFieldsView.render();
-        
-        // Display the DatumStatesView
-        this.datumStatesView.el = this.$('.datum_state_settings');
-        this.datumStatesView.render();
-
-        this.updateDescription();
-      //Localize for all fullscreen view 
-//        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-//        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
-//        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
-//        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
-//        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
-//        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
-//        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
-//        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
-//        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
-//        $(this.el).find(".locale_Conversation_field_settings").html(Locale.get("locale_Conversation_field_settings"));
-//        $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
-//        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
-//        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-//        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
-//        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
-//        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
-//        $(this.el).find(".explain_terms_of_use").attr("data-content", Locale.get("locale_Terms_explanation"));
-//        $(this.el).find(".explain_license").attr("data-content", Locale.get("locale_License_explanation"));
-
-        //Localize for only Edit view.
-
-//        $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-//        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
-//        $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
-//        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
-//        $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
-//        $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
-//        $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
-//        $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-//        $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-//        $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-//        $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
-//        $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-//        $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-//        $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
-//        $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
-//        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-//        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
-
-        
-        $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
-        $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
-
-//        $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-//        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
-//        $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
-//        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
-//        $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_Field_Tooltip"));
-//        $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale.get("locale_Add_New_Conversation_Field_Tooltip"));
-//        $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale.get("locale_Add_Placeholder"));
-//        $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-//        $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-//        $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-//        $(this.el).find(".locale_Blue").html(Locale.get("locale_Blue"));
-//        $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-//        $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-//        $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
-//        $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
-//        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-//        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
-
+          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+          $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
 
       } else if (this.format == "leftSide"){
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
@@ -494,40 +343,14 @@ define([
         //Localize left side edit view
         $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
       
-      }else if (this.format == "modal"){
+      } else if (this.format == "modal"){
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT MODAL render: " );
         this.setElement($("#new-corpus-modal"));
         $(this.el).html(this.templateNewCorpus(jsonToRender));
         
-      }else {
-        throw("You have not specified a format that the CorpusEditView can understand.");
+      } else {
+        throw("You have not specified a render format that the CorpusEditView can understand.");
       }
-      if (this.format != "modal"){
-        //Localize corpus menu for all corpus views, except new corpus modal
-//        $(this.el).find(".locale_New_menu").html(Locale.get("locale_New_menu"));
-//        $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale.get("locale_New_Datum"));
-//        $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale.get("locale_New_Conversation"));
-//        $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale.get("locale_New_Data_List"));
-//        $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale.get("locale_New_Session"));
-//        $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") );
-//        $(this.el).find(".locale_Data_menu").html(Locale.get("locale_Data_menu"));
-//        $(this.el).find(".locale_Import_Data").html(Locale.get("locale_Import_Data"));
-//        $(this.el).find(".locale_Export_Data").html(Locale.get("locale_Export_Data"));
-//        $(this.el).find(".locale_All_Data").html(Locale.get("locale_All_Data"));
-//        $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-      }else{
-        //Localize the new corpus menu
-//        $(this.el).find(".locale_New_Corpus").html(Locale.get("locale_New_Corpus"));
-//        $(this.el).find(".locale_New_Corpus_Instructions").html(Locale.get("locale_New_Corpus_Instructions"));
-//        $(this.el).find(".locale_Warning").html(Locale.get("locale_Warning"));
-//        $(this.el).find(".locale_New_Corpus_Warning").html(Locale.get("locale_New_Corpus_Warning"));
-//        $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
-//        $(this.el).find(".locale_Cancel").html(Locale.get("locale_Cancel"));
-//        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-      }
-      //Localize the title and description labels
-//      $(this.el).find(".locale_Title").html(Locale.get("locale_Title"));
-//      $(this.el).find(".locale_Description").html(Locale.get("locale_Description"));
       
       return this;
     },
