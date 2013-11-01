@@ -420,6 +420,13 @@ define( [
         if(this.sessionView){
           this.sessionView.destroy_view();
         }
+        /* put metadata in the session goals */
+        var sessionGoal = this.model.get("session").get("sessionFields").where({
+            label : "goal"
+          })[0];
+        if(sessionGoal){
+          sessionGoal.set("mask", this.model.metadataLines.join("\n") + "\n"+ sessionGoal.get("mask") );
+        }
         this.sessionView = new SessionEditView({
           model : this.model.get("session")
         });
