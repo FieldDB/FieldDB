@@ -62,9 +62,6 @@ define([
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));
-        
-        //localization
-//        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
       
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();

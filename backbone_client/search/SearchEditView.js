@@ -124,11 +124,6 @@ define([
         $(this.el).html(this.embeddedTemplate(jsonToRender));
       } 
       
-//      //localization
-//      $(this.el).find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
-//      $(this.el).find(".locale_advanced_search_explanation").html(Locale.get("locale_advanced_search_explanation"));
-//      $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
-//      $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
       
 //      $(this.el).find(".judgement").find("input").val("grammatical");
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
@@ -151,12 +146,6 @@ define([
 
       $("#search-top").html(this.topTemplate(jsonToRender));
       
-      
-//      //localization
-//      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Search"));
-//      $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
-//      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Advanced_Search_Tooltip"));
-
       try{
         Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
       }catch(e){

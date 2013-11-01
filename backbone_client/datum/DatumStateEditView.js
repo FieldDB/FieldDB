@@ -65,14 +65,6 @@ define( [
         
         // Select the correct value from the color dropdown
         this.$el.children(".color_chooser").val(this.model.get("color"));
-        
-        //localization
-//        $(this.el).find(".locale_Green").html(Locale.get("locale_Green"));
-//        $(this.el).find(".locale_Orange").html(Locale.get("locale_Orange"));
-//        $(this.el).find(".locale_Red").html(Locale.get("locale_Red"));
-//        $(this.el).find(".locale_Teal").html(Locale.get("locale_Teal"));
-//        $(this.el).find(".locale_Black").html(Locale.get("locale_Black"));
-//        $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
       }
       
       return this;

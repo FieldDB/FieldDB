@@ -143,15 +143,7 @@ define([
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender)); 
 
-          //Localization for leftSide
-//          $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
-//          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
-//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-//          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
-//          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
-//          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
-
-        }else if (this.format == "centerWell") {
+        } else if (this.format == "centerWell") {
           if (OPrime.debugMode) OPrime.debug("SESSION READ CENTERWELL render: " );
 
           this.setElement("#session-embedded");
@@ -167,11 +159,6 @@ define([
           // Display the CommentEditView
           this.commentEditView.el = $(this.el).find('.new-comment-area'); 
           this.commentEditView.render();
-          
-          //Localization for centerWell
-//          $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
-//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
 
         } else if (this.format == "fullscreen") {
           if (OPrime.debugMode) OPrime.debug("SESSION READ FULLSCREEN render: " );
@@ -190,19 +177,10 @@ define([
           this.commentEditView.el = $(this.el).find('.new-comment-area'); 
           this.commentEditView.render();
 
-          //Localization for fullscreen
-//          $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
-//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-
         } else if (this.format == "link") {
           if (OPrime.debugMode) OPrime.debug("SESSION READ LINK render: " );
 
           $(this.el).html(this.templateLink(jsonToRender));
-          
-          //Localization of link
-//          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
-//          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
           
         } else {
           throw("You have not specified a format that the SessionReadView can understand.");

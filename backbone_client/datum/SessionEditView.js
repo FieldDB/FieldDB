@@ -164,7 +164,6 @@ define([
         jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
         jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
         
-//        var jsonToRender = this.model.toJSON();
         jsonToRender.locale_Cancel = Locale.get("locale_Cancel");
         jsonToRender.locale_Consultants = Locale.get("locale_Consultants");
         jsonToRender.locale_Elicitation_Session = Locale.get("locale_Elicitation_Session");
@@ -188,27 +187,12 @@ define([
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
           
-          //Localization for leftSide
-//          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-//          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
-//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-//          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
-//          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
-//          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
-
-          
         }if (this.format == "import") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  IMPORT render: " );
           
           this.setElement("#import-session");
           $(this.el).html(this.templateImport(jsonToRender));
           
-          //Localization for leftSide
-//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-//          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
-//          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
-//          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
-
           
         } else if (this.format == "centerWell") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT CENTERWELL render: " );
@@ -219,20 +203,6 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           
-//          // Display the CommentReadView
-//          this.commentReadView.el = $(this.el).find('.comments'); 
-//          this.commentReadView.render();
-//          
-//          // Display the CommentEditView
-//          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
-//          this.commentEditView.render();
-          
-          //Localization for centerWell
-//          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-
         } else if (this.format == "fullscreen") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
 
@@ -249,13 +219,6 @@ define([
           // Display the CommentEditView
           this.commentEditView.el = $(this.el).find('.new-comment-area'); 
           this.commentEditView.render();
-          
-          //Localization for fullscreen
-//          $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
-//          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-//          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-
           
         } else if (this.format == "modal") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT MODAL render: " );
@@ -274,12 +237,6 @@ define([
           // Display the CommentEditView
           this.commentEditView.el = $(this.el).find('.new-comment-area'); 
           this.commentEditView.render();
-
-          //Localization for modal
-//          $(this.el).find(".locale_New_Session").html(Locale.get("locale_New_Session"));
-//          $(this.el).find(".locale_New_Session_Instructions").html(Locale.get("locale_New_Session_Instructions"));
-//          $(this.el).find(".locale_Cancel").html(Locale.get("locale_Cancel"));
-//          $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
 
         }
       } catch(e) {
