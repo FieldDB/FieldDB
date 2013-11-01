@@ -214,12 +214,6 @@ define( [
      * The Handlebars template rendered as the DataListLinkReadView.
      */
     templateLink : Handlebars.templates.data_list_read_link,
-
-    /**
-     * The Handlebars template of the pagination footer, which is used
-     * as a partial.
-     */
-    footerTemplate : Handlebars.templates.paging_footer,
     
     /**
      * The Handlebars template of the minimized version
