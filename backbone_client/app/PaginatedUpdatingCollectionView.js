@@ -248,20 +248,20 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       this.el.parent().find(".pagination-control").empty();
       
       // Put in new footer and bind events again
-      this.el.parent().find(".pagination-control").html(this.paginationControlTemplate(this.getPaginationInfo()));
+      var jsonToRender = this.getPaginationInfo();
+      jsonToRender.locale_More = Locale.get("locale_More");
+      jsonToRender.locale_Show = Locale.get("locale_Show");
+      jsonToRender.locale_per_page = Locale.get("locale_per_page");
+      jsonToRender.locale_of = Locale.get("locale_of");
+      jsonToRender.locale_pages_shown = Locale.get("locale_pages_shown");
+
+      this.el.parent().find(".pagination-control").html(this.paginationControlTemplate(jsonToRender));
       this.el.parent().find(".nextinfinitepagination").bind('click', function(e){
         paginatedSelf.nextResultPage(e, paginatedSelf);
       });
       this.el.parent().find(".howmanyperpagination").bind('click', function(e){
         paginatedSelf.changeCount(e, paginatedSelf);
       });
-      
-      //localization of the paginatedupdating collection's footer.
-      this.el.parent().find(".pagination-control").find(".locale_More").html(Locale.get("locale_More"));
-      this.el.parent().find(".pagination-control").find(".locale_Show").html(Locale.get("locale_Show"));
-      this.el.parent().find(".pagination-control").find(".locale_per_page").html(Locale.get("locale_per_page"));
-      this.el.parent().find(".pagination-control").find(".locale_of").html(Locale.get("locale_of"));
-      this.el.parent().find(".pagination-control").find(".locale_pages_shown").html(Locale.get("locale_pages_shown"));
 
     },
 

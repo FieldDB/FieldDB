@@ -204,7 +204,6 @@ define( [
     },
     render : function() {
       this.setElement("#import-fullscreen");
-      $(this.el).html(this.template(jsonToRender));
       
       var jsonToRender = this.model.toJSON(); 
       jsonToRender.locale_Add_Extra_Columns = Locale.get("locale_Add_Extra_Columns");
@@ -219,6 +218,7 @@ define( [
       jsonToRender.locale_percent_completed = Locale.get("locale_percent_completed");
 
 
+      $(this.el).html(this.template(jsonToRender));
       
       if(this.dataListView != undefined){
         this.dataListView.format = "import";
@@ -245,18 +245,6 @@ define( [
         this.renderDatumFieldsLabels();
         this.showSecondStep();
       }
-      
-//      //localization
-//      $(this.el).find(".locale_Save_And_Import").html(Locale.get("locale_Save_And_Import"));
-//      $(this.el).find(".locale_Import").html(Locale.get("locale_Import"));
-//      $(this.el).find(".locale_percent_completed").html(Locale.get("locale_percent_completed"));
-//      $(this.el).find(".locale_Import_Instructions").html(Locale.get("locale_Import_Instructions"));
-//      $(this.el).find(".locale_Import_First_Step").html(Locale.get("locale_Import_First_Step"));
-//      $(this.el).find(".locale_Import_Second_Step").html(Locale.get("locale_Import_Second_Step"));
-//      $(this.el).find(".locale_Import_Third_Step").html(Locale.get("locale_Import_Third_Step"));
-//      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", Locale.get("locale_Drag_and_Drop_Placeholder"));
-//      $(this.el).find(".locale_Add_Extra_Columns").html(Locale.get("locale_Add_Extra_Columns"));
-//      $(this.el).find(".locale_Attempt_Import").html(Locale.get("locale_Attempt_Import"));
       
       return this;
     },

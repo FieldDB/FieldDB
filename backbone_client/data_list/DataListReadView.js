@@ -228,12 +228,6 @@ define( [
      * The Handlebars template rendered as the DataListLinkReadView.
      */
     templateLink : Handlebars.templates.data_list_read_link,
-
-    /**
-     * The Handlebars template of the pagination footer, which is used
-     * as a partial.
-     */
-    footerTemplate : Handlebars.templates.paging_footer,
     
     /**
      * The Handlebars template of the minimized version
@@ -265,6 +259,7 @@ define( [
       jsonToRender.locale_Show_Datalist = Locale.get("locale_Show_Datalist"); 
       jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen"); 
       jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
+
       if(jsonToRender.decryptedMode){
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip"); 
       }else{
@@ -286,10 +281,6 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
         
-//        //Localization of icons for quickview
-//        $(this.el).find(".locale_Hide_Datalist").attr("title", Locale.get("locale_Hide_Datalist"));
-//        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale.get("locale_Edit_Datalist"));
-//        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
         
       } else if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ FULLSCREEN render: ");
@@ -301,10 +292,6 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
         
-//        //Localization of icons for fullscreen
-//        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale.get("locale_Edit_Datalist"));
-//        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-       
       } else if(this.format == "centerWell") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ CENTER render: ");
 
@@ -313,10 +300,6 @@ define( [
         
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-embedded").find(".current-data-list-paginated-view") );
-       
-//        //Localization of icons for centerWell
-//        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale.get("locale_Edit_Datalist"));
-//        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
 
       } else if (this.format == "minimized") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ MINIMIZED render: ");
@@ -327,9 +310,6 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
       
-//        //localization of the minimized data list icons
-//        $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
-
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
@@ -340,20 +320,6 @@ define( [
           // Display the CommentEditView
           this.commentEditView.el = $(this.el).find('.new-comment-area'); 
           this.commentEditView.render();
-          
-//          //localization of data list menu
-//          $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale.get("locale_Play_Audio_checked"));
-//          $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", Locale.get("locale_Remove_checked_from_datalist_tooltip"));
-//          $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip_checked"));
-//          $(this.el).find(".locale_Encrypt_checked").attr("title", Locale.get("locale_Encrypt_checked"));
-//          $(this.el).find(".locale_Decrypt_checked").attr("title", Locale.get("locale_Decrypt_checked"));
-//          if(jsonToRender.decryptedMode){
-//            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Hide_confidential_items_Tooltip"));
-//          }else{
-//            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Show_confidential_items_Tooltip"));
-//          }          
-//          $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
-//          $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
           
         }
       }catch(e){
