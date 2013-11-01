@@ -168,7 +168,15 @@ define(
 
                 // Display the UserAppView
                 this.setElement($("#app_view"));
-                $(this.el).html(this.template(this.model.toJSON()));
+
+                var jsonToRender = this.model.toJSON();
+                
+                jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
+                jsonToRender.locale_Password = Locale.get("locale_Password");
+                jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
+
+                
+                $(this.el).html(this.template(jsonToRender));
               
               //The authView is the dropdown in the top right corner which holds all the user menus
                 this.authView.render();
@@ -183,9 +191,9 @@ define(
                 $(".corpus-settings").addClass("hidden");
                 $(".power-users-link").addClass("hidden");
                 
-                $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale.get("locale_We_need_to_make_sure_its_you"));
-                $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
-                $(this.el).find(".locale_Yep_its_me").text(Locale.get("locale_Yep_its_me"));
+//                $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale.get("locale_We_need_to_make_sure_its_you"));
+//                $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+//                $(this.el).find(".locale_Yep_its_me").text(Locale.get("locale_Yep_its_me"));
                 
               }
               return this;

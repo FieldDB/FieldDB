@@ -52,34 +52,41 @@ define([
     templateFullscreen : Handlebars.templates.datum_container_read_fullscreen,
     
     render : function() {
+      
+      var jsonToRender = this.model.toJSON(); 
+      jsonToRender.locale_Data_Entry_Area = Locale.get("locale_Data_Entry_Area");
+      jsonToRender.locale_Edit_Datum = Locale.get("locale_Edit_Datum");             
+      jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
+      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
+
       if (this.format == "centreWell") {
         // Display the DatumContainerEditView
-        this.setElement($("#datums-embedded"));
-        $(this.el).html(this.templateEmbedded({}));
+        this.setElement($("#datums-embedded"));        
+        $(this.el).html(this.templateEmbedded(jsonToRender));
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".datum-embedded-ul");
         this.datumsView.render();
         
         //localization of centerWell view
-        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
+//        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
         
       } else if (this.format == "fullscreen") {
         // Display the DatumContainerEditView
         this.setElement($("#datum-container-fullscreen"));
-        $(this.el).html(this.templateFullscreen({}));
+        $(this.el).html(this.templateFullscreen(jsonToRender));
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".datum-embedded-ul");
         this.datumsView.render();
         
         //localization of fullscreen view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+//        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
 
       }
       //localization for all views
-      $(this.el).find(".locale_Data_Entry_Area").html(Locale.get("locale_Data_Entry_Area"));
-      $(this.el).find(".locale_Edit_Datum").attr("title", Locale.get("locale_Edit_Datum"));      
+//      $(this.el).find(".locale_Data_Entry_Area").html(Locale.get("locale_Data_Entry_Area"));
+//      $(this.el).find(".locale_Edit_Datum").attr("title", Locale.get("locale_Edit_Datum"));      
     },
     
     resizeSmall : function(e) {

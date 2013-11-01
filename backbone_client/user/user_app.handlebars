@@ -6,7 +6,7 @@
 
 
       <!-- Home button -->
-      <a tabindex="-1" href="#" class=" brand locale_Show_Dashboard"
+      <a tabindex="-1" href="#" class="brand" title="{{locale_Show_Dashboard}}"
         rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
 
       <!-- Top Search Area -->
@@ -38,7 +38,7 @@
               <li class="power-users-link"><a tabindex="-1"
                 data-toggle="modal" href="#terminal-modal"><i
                   class=" icon-magic"></i> <span
-                  class="locale_Terminal_Power_Users"></span> </a></li>
+                  class="">{{locale_Terminal_Power_Users}}</span> </a></li>
               <li><a tabindex="-1" href="http://lingsync.org"
                 target="_blank"><i class="icons icon-film"></i> Help Videos and
                   User Guide</a></li>
@@ -101,8 +101,8 @@
                   <div class="alert alert-info alert-block">
                     <a class="close" data-dismiss="alert" href="#">×</a> <strong
                       class="alert-heading ">Quick Start Instructions:</strong> <span
-                      class="locale_Instructions_to_show_on_dashboard"></span> <span
-                      class="locale_to_beta_testers"></span>
+                      class="">{{locale_Instructions_to_show_on_dashboard}}</span> <span
+                      class="">{{{locale_to_beta_testers}}}</span>
                   </div>
                 </div></li>
 
@@ -115,7 +115,7 @@
           <!--  User dropdown -->
           <li id="auth-menu" class="dropdown"><a href="#"
             id="user_drop_down_trigger" role="button"
-            class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
+            class=" dropdown-toggle pull-left" title="{{locale_View_Public_Profile_Tooltip}}"
             data-toggle="dropdown" rel="tooltip"> <span
               id="user-quickview"> <i class="icons icon-user icon-white"></i>
             </span> <b class="caret"></b>
@@ -148,13 +148,13 @@
 <div id="user-preferences-modal" class="modal hide"></div>
 <div id="quick-authenticate-modal"  class="modal hide">
   <div class="modal-header">
-    <h4><span class="reason_why_we_need_to_make_sure_its_you"></span> <span class="locale_We_need_to_make_sure_its_you"></span></h4>
+    <h4><span class="reason_why_we_need_to_make_sure_its_you"></span> <span class="">{{locale_We_need_to_make_sure_its_you}}</span></h4>
   </div>
   <div class="modal-body">
-  <label class = "locale_Password"></label>
+  <label class="">{{locale_Password}}</label>
       <input type="password" id="quick-authenticate-password"/>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-success locale_Yep_its_me" id="quick-authentication-okay-btn"></button>
+    <button class="btn btn-success" id="quick-authentication-okay-btn">{{locale_Yep_its_me}}</button>
   </div>
 </div>

@@ -6,7 +6,7 @@
 
 
 			<!-- Home button -->
-			<a tabindex="-1" href="#" class=" brand locale_Show_Dashboard"
+			<a tabindex="-1" href="#" class="brand" title="{{locale_Show_Dashboard}}"
 				rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
 
 			<!-- Top Search Area -->
@@ -33,7 +33,7 @@
 
 							<li>
 								<div class="well ">
-									<strong><span class="locale_Corpora"></span></strong>
+									<strong><span class="">{{locale_Corpora}}</span></strong>
 									<ul class=" unstyled corpuses"></ul>
 								</div>
 							</li>
@@ -94,8 +94,8 @@
 									<div class="alert alert-info alert-block">
 										<a class="close" data-dismiss="alert" href="#">×</a> <strong
 											class="alert-heading ">Quick Start Instructions:</strong> <span
-											class="locale_Instructions_to_show_on_dashboard"></span> <span
-											class="locale_to_beta_testers"></span>
+											class="">{{{locale_Instructions_to_show_on_dashboard}}}</span> <span
+											class="">{{{locale_to_beta_testers}}}</span>
 									</div>
 								</div></li>
 
@@ -108,7 +108,7 @@
 					<!--  User dropdown -->
 					<li id="auth-menu" class="dropdown"><a href="#"
 						id="user_drop_down_trigger" role="button"
-						class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
+						class=" dropdown-toggle pull-left" title="{{locale_View_Public_Profile_Tooltip}}"
 						data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
 							<button id="login_register_button" class="btn btn-success hide">Login/Register</button>
 							<span id="loggedin_customize_on_auth_dropdown">Customize</span><span
@@ -248,26 +248,26 @@
 	<div class="modal-header">
 		<h4>
 			<span class="reason_why_we_need_to_make_sure_its_you"></span> <span
-				class="locale_We_need_to_make_sure_its_you"></span>
+				class="">{{locale_We_need_to_make_sure_its_you}}</span>
 		</h4>
 	</div>
 	<div class="modal-body">
-		<label class="locale_Password"></label> <input type="password"
+		<label class="">{{locale_Password}}</label> <input type="password"
 			id="quick-authenticate-password" />
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-success locale_Yep_its_me"
-			id="quick-authentication-okay-btn"></button>
+		<button class="btn btn-success"
+			id="quick-authentication-okay-btn">{{locale_Yep_its_me}}</button>
 	</div>
 </div>
 <div id="login_modal" class="modal hide">
 	<div class="modal-header">
-		<h3 class="locale_Log_In"></h3>
+		<h3 class="">{{locale_Log_In}}</h3>
 	</div>
 	<div class="modal-body">
 		<div class="alert alert-error hide welcome-screen-alerts"></div>
-		<label class="locale_Username"></label> <input size="16" type="text"
-			class="welcomeusername" value="" /> <label class="locale_Password "></label>
+		<label class="">{{locale_Username}}</label> <input size="16" type="text"
+			class="welcomeusername" value="" /> <label class="">{{locale_Password}}</label>
 		<input type="password" size="16" class="welcomepassword" value="" />
 		<label class="locale_authUrl">Server</label> <input type="text"
 			size="16" class="welcomeauthurl" data-provide="typeahead"
@@ -276,7 +276,7 @@
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="btn btn-success sync-my-data"> <span
-			class="locale_Log_In"></span>
+			class="">{{locale_Log_In}}</span>
 		</a>
 	</div>
 </div>

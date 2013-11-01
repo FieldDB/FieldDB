@@ -82,17 +82,24 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW render");
-     
+
+      var jsonToRender = this.model.toJSON();
+
+      jsonToRender.locale_Encrypt_if_confidential = Locale.get("locale_Encrypt_if_confidential");
+      jsonToRender.locale_Help_Text = Locale.get("locale_Help_Text");
+      jsonToRender.locale_Help_Text_Placeholder = Locale.get("locale_Help_Text_Placeholder");
+
       if (this.format == "corpus") {
-        var jsonToRender = this.model.toJSON();
         $(this.el).html(this.templateSettings(jsonToRender));
+        $(this.el).find(".choose-field").val(this.model.get("label"));
+
         //localization
-        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
-        $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
-        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
+//        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
+//        $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
+//        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
         
         // Select the correct values from the model TODO is this dead code?
-        $(this.el).find(".choose-field").val(this.model.get("label"));
+        // $(this.el).find(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum" || this.format == "search") {
         var jsonToRender = this.model.toJSON();
         if(this.format == "search"){
