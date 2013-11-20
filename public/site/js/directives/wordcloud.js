@@ -281,7 +281,11 @@ angular.module('LingSyncWebsite')
               return 'rotate(' + (d + 90) + ')translate(-' + r + ')';
             });
             layout.rotate(function() {
-              return scale(~~(Math.random() * count));
+              try{
+                return scale(~~(Math.random() * count));
+              }catch(e){
+                return scale(~~(Math.random() * count));
+              }
             });
           }
 
