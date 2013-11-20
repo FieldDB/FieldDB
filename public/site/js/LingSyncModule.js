@@ -4,17 +4,17 @@
 angular.module('LingSyncWebsite', [ ]).config(
     [ '$routeProvider', function($routeProvider) {
       $routeProvider.when('/home', {
-        templateUrl : 'partials/home.html'
+        templateUrl : 'site/partials/home.html'
       }).when('/technology', {
-        templateUrl : 'partials/technology.html' , controller: LingSyncWebsiteTechnologyController
+        templateUrl : 'site/partials/technology.html' , controller: LingSyncWebsiteTechnologyController
       }).when('/people', {
-        templateUrl : 'partials/people.html'
+        templateUrl : 'site/partials/people.html'
       }).when('/tutorials', {
-        templateUrl : 'partials/tutorials.html'
+        templateUrl : 'site/partials/tutorials.html'
       }).when('/projects', {
-        templateUrl : 'partials/projects.html'
+        templateUrl : 'site/partials/projects.html'
       }).when('/download', {
-        templateUrl : 'partials/download.html'
+        templateUrl : 'site/partials/download.html'
       }).otherwise({
         redirectTo : '/home'
       });
