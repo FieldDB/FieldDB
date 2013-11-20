@@ -1,12 +1,12 @@
 #!/bin/bash
 
-cd $HOME/fielddbworkspace/FieldDBWebServer
+cd $FIELDDB_HOME/FieldDBWebServer
 bash switch_to_producti.sh
 
-cd $HOME/fielddbworkspace/FieldDBWebServer
-$HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever \
+cd $FIELDDB_HOME/FieldDBWebServer
+$FIELDDB_HOME/FieldDBWebServer/node_modules/forever/bin/forever \
 start \
--al $HOME/fielddbworkspace/logs/fielddbwww.log \
--ao $HOME/fielddbworkspace/logs/fielddbwwwout.log \
--ae $HOME/fielddbworkspace/logs/fielddbwwwerr.log \
+-al $FIELDDB_HOME/logs/fielddbwww.log \
+-ao $FIELDDB_HOME/logs/fielddbwwwout.log \
+-ae $FIELDDB_HOME/logs/fielddbwwwerr.log \
 server.js
