@@ -17,6 +17,11 @@ input {
 	font-family: 'Gentium Basic', sans-serif;
 }
 
+.backup_page{
+	min-height: 500px;
+	min-width: 500px;
+}
+
 a
 :hover {
 	text-decoration: none !important;
@@ -639,6 +644,13 @@ line
 	padding-top: 0.25em !important;
 	padding-bottom: 0.25em !important;
 	border-bottom: 1px solid #888;
+}
+.finished-status{
+	color: #fff;
+	font-size: 2em;
+	line-height: 1em;
+	margin-top: 2em;
+	text-shadow: 1px 1px #000;
 }
 
 .spinner-status {

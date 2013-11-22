@@ -1,9 +1,11 @@
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
 
-'use strict';
 define(
   ["angular"],
   function(angular) {
+
+    'use strict';
+
     var SpreadsheetStyleDataEntryServices = angular
       .module('SpreadsheetStyleDataEntry.services', ['ngResource'])
       .factory(
@@ -12,8 +14,10 @@ define(
           return {
             'async': function(DB, UUID) {
               var couchInfo;
+              var promise;
+              
               if (UUID != undefined) {
-                couchInfo = $rootScope.server + DB + "/" + UUID;
+                couchInfo = $rootScope.server + "/" + DB + "/" + UUID;
                 var config = {
                   method: "GET",
                   url: couchInfo,
@@ -21,23 +25,21 @@ define(
                 };
 
                 console.log("Contacting the DB to get   record data " + couchInfo);
-                var promise = $http(config).then(function(response) {
+                promise = $http(config).then(function(response) {
                   console.log("Receiving   data results ");
                   return response.data;
                 });
                 return promise;
               } else {
-
-                var couchInfo = $rootScope.server + DB + "/_design/pages/_view/datums";
-
-                var config = {
+                couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/datums";
+                config = {
                   method: "GET",
                   url: couchInfo,
                   withCredentials: true
                 };
                 console
                   .log("Contacting the DB to get all   corpus data for " + DB);
-                var promise = $http(config).then(function(response) {
+                promise = $http(config).then(function(response) {
                   console.log("Receiving   data results ");
                   return response.data.rows;
                 });
@@ -45,7 +47,7 @@ define(
               }
             },
             'datumFields': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/get_datum_fields";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/get_datum_fields";
 
               var config = {
                 method: "GET",
@@ -61,7 +63,7 @@ define(
               return promise;
             },
             'sessions': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/sessions";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/sessions";
 
               var config = {
                 method: "GET",
@@ -77,7 +79,7 @@ define(
               return promise;
             },
             'glosser': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/precedence_rules?group=true";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/precedence_rules?group=true";
 
               var config = {
                 method: "GET",
@@ -94,7 +96,7 @@ define(
               return promise;
             },
             'lexicon': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/lexicon_create_tuples?group=true";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true";
 
               var config = {
                 method: "GET",
@@ -110,7 +112,7 @@ define(
               return promise;
             },
             'getallusers': function(userInfo) {
-              var couchInfo = $rootScope.server + "zfielddbuserscouch/_all_docs";
+              var couchInfo = $rootScope.server + "/zfielddbuserscouch/_all_docs";
 
               var config = {
                 method: "POST",
@@ -133,7 +135,7 @@ define(
                 password: password
               };
 
-              var couchInfo = $rootScope.server + "_session";
+              var couchInfo = $rootScope.server + "/_session";
 
               var config = {
                 method: "POST",
@@ -178,9 +180,13 @@ define(
                   return response;
                 }, function(err) {
                   console.log(JSON.stringify(err));
-                  $rootScope.notificationMessage = "Error registering new user.";
+                  $rootScope.notificationMessage = "Error registering a new user, please contact us. Opening the Contact Us page... ";
                   $rootScope.openNotification();
                   $rootScope.loading = false;
+                  window.setTimeout(function(){
+                    window.open("https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ");
+                  }, 1500)
+                  
                 });
               return promise;
             },
@@ -226,7 +232,7 @@ define(
                   function(response) {
                     console.log("Updated user roles.");
                     if (response.data.userFriendlyErrors) {
-                      if (response.data.userFriendlyErrors[0] == null) {
+                      if (response.data.userFriendlyErrors[0] === null) {
                         $rootScope.notificationMessage = "Error adding user. Please make sure that user exists.";
                         $rootScope.openNotification();
                       } else {
@@ -248,7 +254,7 @@ define(
               return promise;
             },
             'saveNew': function(DB, newRecord) {
-              var couchInfo = $rootScope.server + DB;
+              var couchInfo = $rootScope.server + "/" + DB;
 
               var config = {
                 method: "POST",
@@ -266,9 +272,9 @@ define(
             'saveEditedRecord': function(DB, UUID, newRecord, rev) {
               var couchInfo;
               if (rev) {
-                couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
+                couchInfo = $rootScope.server + "/" + DB + "/" + UUID + "?rev=" + rev;
               } else {
-                couchInfo = $rootScope.server + DB + "/" + UUID;
+                couchInfo = $rootScope.server + "/" + DB + "/" + UUID;
               }
 
               var config = {
@@ -307,7 +313,7 @@ define(
               return promise;
             },
             'removeRecord': function(DB, UUID, rev) {
-              var couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
+              var couchInfo = $rootScope.server + "/" + DB + "/" + UUID + "?rev=" + rev;
 
               var config = {
                 method: "DELETE",

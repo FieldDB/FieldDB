@@ -2,10 +2,10 @@
 <br />
 <div id="login_screen" ng-show="documentReady==true">
 	<div ng-show="not_chrome==true">
-		<h3>THIS SITE WAS DEVELOPED FOR GOOGLE CHROME.</h3>
+		<h3>THIS SITE WAS DEVELOPED FOR CHROME.</h3>
 		It may not work as expected if you are using another browser.<br /> <a
 			href="http://chrome.google.com"><button class="btn btn-primary">Get
-				Google Chrome</button></a>
+				  Chrome</button></a>
 	</div>
 	<img src="img/lingsync_spreadsheet_main_page_logo.png"> <br /><br />
 	<div ng-show="sessions!=undefined" class="mainPageDiv">
@@ -15,12 +15,10 @@
 		<div class="form-horizontal">
 		<form ng-submit="selectSession(activeSessionToView)">
 			<select ng-model='activeSessionToView'>
-				<option value="" disabled selected>Choose existing
-					session...</option>
+				<option value="" disabled selected>Choose existing session...</option>
 				<option value='none'>View all sessions</option>
 				<option ng-repeat="session in sessions | orderBy:'dateCreated'"
-					value={{session._id}}>{{session.dateCreated | shortDate}}
-					{{session.title}}</option>
+					value={{session._id}}>{{session.dateCreated | shortDate}} {{session.title}}</option>
 			</select>
 			<button class="btn btn-primary">Go</button>&nbsp;<button class="btn btn-info" type='button'
 				ng-click="showCreateSessionDiv=!showCreateSessionDiv">New Session</button>
