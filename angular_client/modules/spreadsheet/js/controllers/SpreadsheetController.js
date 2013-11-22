@@ -10,10 +10,11 @@ define(
      * @param $rootScope
      * @param $resource
      * @param Data
+     * @param Servers provides utility functions which can let users choose a server
      * @returns {SpreadsheetStyleDataEntryController}
      */
 
-      function($scope, $rootScope, $resource, $filter, $document, Data) {
+      function($scope, $rootScope, $resource, $filter, $document, Data, Servers) {
 
         /* Modal controller TODO could move somewhere where the search is? */
         $scope.open = function() {
@@ -56,16 +57,7 @@ define(
         /*
         Create an array of servers which the user may use
          */
-        $scope.localhost = false;
-        $scope.mcgill = true;
-        $rootScope.servers = [];
-        if($scope.localhost){
-          $rootScope.servers.push({label:"localhost",value: "Localhost"});
-        }
-        $rootScope.servers.push({label: "testing", value : "LingSync Beta"});
-        if($scope.mcgill){
-          $rootScope.servers.push({label:"mcgill",value: "McGill Prosody Lab"});
-        }
+        $rootScope.servers = Servers.getAvailable();
         $rootScope.servers[0].selected = "selected";
 
         // Set/get/update user preferences
@@ -257,11 +249,7 @@ define(
         $scope.newFieldData = {};
         $rootScope.newRecordHasBeenEdited = false;
 
-        $rootScope.serverLabels = {
-          "mcgill": "McGill Prosody Lab",
-          "testing": "LingSync Beta",
-          "localhost": "Localhost"
-        };
+        $rootScope.serverLabels = Servers.getHumanFriendlyLabels();
 
         // Set data size for pagination
         $rootScope.resultSize = Preferences.resultSize;
@@ -561,20 +549,11 @@ define(
             //   }
             // }
             $rootScope.loading = true;
-            if (auth.server == "mcgill") {
-              $rootScope.server = "https://prosody.linguistics.mcgill.ca/corpus/";
-              $rootScope.serverCode = "mcgill";
-            }
 
-            if (auth.server == "testing") {
-              $rootScope.server = "https://corpusdev.lingsync.org/";
-              $rootScope.serverCode = "testing";
-            }
+            $rootScope.serverCode = auth.server;
+            $rootScope.server = Servers.getServiceUrl(auth.server, "corpus");
+             
 
-            if (auth.server == "localhost") {
-              $rootScope.server = "https://localhost:6984/";
-              $rootScope.serverCode = "localhost";
-            }
             Data.login(auth.user.toLowerCase(), auth.password).then(
               function(response) {
                 if (response == undefined) {
@@ -1596,13 +1575,8 @@ define(
           dataToPost.email = trim(newUserInfo.email);
           dataToPost.username = trim(newUserInfo.username.toLowerCase());
           dataToPost.password = trim(newUserInfo.password);
-
-          if (newUserInfo.serverCode == "localhost") {
-            dataToPost.authUrl = "https://localhost:3183";
-          } else {
-            dataToPost.authUrl = "https://authdev.lingsync.org";
-          }
-          dataToPost.appVersionWhenCreated = "ss1.62.2";
+          dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
+          dataToPost.appVersionWhenCreated = "1.82.1.ss";
           // dataToPost.appVersionWhenCreated = this.appVersion;
 
           dataToPost.serverCode = newUserInfo.serverCode;
@@ -1632,14 +1606,9 @@ define(
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
           dataToPost.password = trim($rootScope.userInfo.password);
-
-          if ($rootScope.serverCode == "localhost") {
-            dataToPost.authUrl = "https://localhost:3183";
-          } else {
-            dataToPost.authUrl = "https://authdev.lingsync.org";
-          }
-
           dataToPost.serverCode = $rootScope.serverCode;
+          dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+
           dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
 
           if (dataToPost.newCorpusName != "") {
@@ -1667,14 +1636,10 @@ define(
 
           dataToPost.username = $rootScope.userInfo.name;
           dataToPost.password = $rootScope.userInfo.password;
-          dataToPost.pouchname = $rootScope.DB.pouchname;
           dataToPost.serverCode = $rootScope.serverCode;
+          dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+          dataToPost.pouchname = $rootScope.DB.pouchname;
 
-          if ($rootScope.serverCode == "localhost") {
-            dataToPost.authUrl = "https://localhost:3183";
-          } else {
-            dataToPost.authUrl = "https://authdev.lingsync.org";
-          }
 
           Data.getallusers(dataToPost).then(function(users) {
             for (i in users.allusers) {
@@ -1765,14 +1730,9 @@ define(
           var dataToPost = {};
           dataToPost.username = trim($rootScope.userInfo.name);
           dataToPost.password = trim($rootScope.userInfo.password);
-
-          if ($rootScope.serverCode == "localhost") {
-            dataToPost.authUrl = "https://localhost:3183";
-          } else {
-            dataToPost.authUrl = "https://authdev.lingsync.org";
-          }
-
           dataToPost.serverCode = $rootScope.serverCode;
+          dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+
           dataToPost.userRoleInfo = newUserRoles;
 
           Data.updateroles(dataToPost).then(function(response) {
@@ -1800,14 +1760,9 @@ define(
             var dataToPost = {};
             dataToPost.username = trim($rootScope.userInfo.name);
             dataToPost.password = trim($rootScope.userInfo.password);
-
-            if ($rootScope.serverCode == "localhost") {
-              dataToPost.authUrl = "https://localhost:3183";
-            } else {
-              dataToPost.authUrl = "https://authdev.lingsync.org";
-            }
-
             dataToPost.serverCode = $rootScope.serverCode;
+            dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+
             dataToPost.userRoleInfo = {};
             dataToPost.userRoleInfo.usernameToModify = userid;
             dataToPost.userRoleInfo.pouchname = $rootScope.DB.pouchname;
@@ -2317,7 +2272,7 @@ define(
 
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
-      '$resource', '$filter', '$document', 'Data'
+      '$resource', '$filter', '$document', 'Data', 'Servers'
     ];
     return SpreadsheetStyleDataEntryController;
   });

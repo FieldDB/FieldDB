@@ -13,7 +13,7 @@ define(
             'async': function(DB, UUID) {
               var couchInfo;
               if (UUID != undefined) {
-                couchInfo = $rootScope.server + DB + "/" + UUID;
+                couchInfo = $rootScope.server + "/" + DB + "/" + UUID;
                 var config = {
                   method: "GET",
                   url: couchInfo,
@@ -28,7 +28,7 @@ define(
                 return promise;
               } else {
 
-                var couchInfo = $rootScope.server + DB + "/_design/pages/_view/datums";
+                var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/datums";
 
                 var config = {
                   method: "GET",
@@ -45,7 +45,7 @@ define(
               }
             },
             'datumFields': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/get_datum_fields";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/get_datum_fields";
 
               var config = {
                 method: "GET",
@@ -61,7 +61,7 @@ define(
               return promise;
             },
             'sessions': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/sessions";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/sessions";
 
               var config = {
                 method: "GET",
@@ -77,7 +77,7 @@ define(
               return promise;
             },
             'glosser': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/precedence_rules?group=true";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/precedence_rules?group=true";
 
               var config = {
                 method: "GET",
@@ -94,7 +94,7 @@ define(
               return promise;
             },
             'lexicon': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/lexicon_create_tuples?group=true";
+              var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true";
 
               var config = {
                 method: "GET",
@@ -178,9 +178,13 @@ define(
                   return response;
                 }, function(err) {
                   console.log(JSON.stringify(err));
-                  $rootScope.notificationMessage = "Error registering new user.";
+                  $rootScope.notificationMessage = "Error registering a new user, please contact us. Opening the Contact Us page... ";
                   $rootScope.openNotification();
                   $rootScope.loading = false;
+                  window.setTimeout(function(){
+                    window.open("https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ");
+                  }, 1500)
+                  
                 });
               return promise;
             },
@@ -248,7 +252,7 @@ define(
               return promise;
             },
             'saveNew': function(DB, newRecord) {
-              var couchInfo = $rootScope.server + DB;
+              var couchInfo = $rootScope.server + "/" + DB;
 
               var config = {
                 method: "POST",
@@ -266,9 +270,9 @@ define(
             'saveEditedRecord': function(DB, UUID, newRecord, rev) {
               var couchInfo;
               if (rev) {
-                couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
+                couchInfo = $rootScope.server + "/" + DB + "/" + UUID + "?rev=" + rev;
               } else {
-                couchInfo = $rootScope.server + DB + "/" + UUID;
+                couchInfo = $rootScope.server + "/" + DB + "/" + UUID;
               }
 
               var config = {
@@ -307,7 +311,7 @@ define(
               return promise;
             },
             'removeRecord': function(DB, UUID, rev) {
-              var couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
+              var couchInfo = $rootScope.server + "/" + DB + "/" + UUID + "?rev=" + rev;
 
               var config = {
                 method: "DELETE",

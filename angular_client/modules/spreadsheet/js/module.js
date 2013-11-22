@@ -5,12 +5,12 @@ define(
   ["angular", "js/controllers/SpreadsheetController",
     "js/controllers/SettingsController",
     "js/directives", "js/filters",
-    "js/services", "js/controllers/SandboxController"
+    "js/services", "js/private_services", "js/controllers/SandboxController"
   ],
   function(angular, SpreadsheetStyleDataEntryController,
     SpreadsheetStyleDataEntrySettingsController,
     SpreadsheetStyleDataEntryDirectives, SpreadsheetStyleDataEntryFilters,
-    SpreadsheetStyleDataEntryServices, SandboxController) {
+    SpreadsheetStyleDataEntryServices, SpreadsheetPrivateServices, SandboxController) {
     /**
      * The main Spreadsheet Angular UI module.
      *
@@ -20,6 +20,7 @@ define(
     var SpreadsheetStyleDataEntry = angular
       .module(
         'SpreadsheetStyleDataEntry', ['SpreadsheetStyleDataEntry.services',
+          'SpreadsheetStyleDataEntry.private_services',
           'SpreadsheetStyleDataEntry.directives',
           'SpreadsheetStyleDataEntry.filters', 'ui.bootstrap'
         ])
