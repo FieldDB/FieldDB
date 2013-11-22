@@ -56,7 +56,7 @@
 							Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 						</div>
 						<div>
-							<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>
+							&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>&nbsp;
 							<button class="btn btn-warning" ng-click="logOut()">Log
 								out</button>
 						</div>
@@ -74,15 +74,14 @@
 				<div class="form-horizontal">
 					<span>Change Session:</span> <select class="span3"
 						ng-model='activeSessionToSwitchTo'>
-						<option value="" disabled selected>Choose
-							session...</option>
+						<option value="" disabled selected>Choose session...</option>
 						<option value='none'>All sessions</option>
 						<option select-dropdown-session
 							ng-repeat="session in sessions | orderBy:'dateCreated'"
 							value={{session._id}}>{{session.dateCreated |
 							shortDate}} {{session.title}}</option>
 					</select>
-					<button class="btn btn-primary"
+					&nbsp;<button class="btn btn-primary"
 						ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">Activate
 						Session</button>
 					&nbsp;&nbsp;
@@ -188,16 +187,16 @@
 
 			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
 				<form class="form-horizontal">
-					Search: <input type="text"
+					Search:&nbsp;<input type="text"
 						class="input-medium search-query" ng-model='searchTerm'>
-						<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
-						<button class="btn btn-primary" ng-click="selectAll();">Select
+						&nbsp;<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
+						&nbsp;<button class="btn btn-primary" ng-click="selectAll();">Select
 							All</button>
-						<button class="btn btn-primary" href="#searchModal"
+						&nbsp;<button class="btn btn-primary" href="#searchModal"
 							ng-click="exportResults();">Export</button>
-					<button class="btn btn-warning"
-						ng-click="loadData(activeSession);searchTerm='';searchHistory=null">Clear
-						Results</button>&nbsp;
+						&nbsp;<button class="btn btn-warning"
+							ng-click="loadData(activeSession);searchTerm='';searchHistory=null">Clear
+							Results</button>&nbsp;
 					<span>{{searchHistory}}</span>
 				</form>
 			</div>
@@ -234,7 +233,7 @@
 						Current Session: {{getCurrentSessionName()}}<br />{{DB.corpustitle}}
 					</div>
 					<div class="smallMenuBarInfoItem">
-						<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>
+						&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>&nbsp;
 						<button class="btn btn-warning" ng-click="logOut()">Log out</button>
 					</div>
 				</div>
@@ -251,8 +250,7 @@
 					<option value='none'>All sessions</option>
 					<option select-dropdown-session
 						ng-repeat="session in sessions | orderBy:'dateCreated'"
-						value={{session._id}}>{{session.dateCreated | shortDate}}
-						{{session.title}}</option>
+						value={{session._id}}>{{session.dateCreated | shortDate}} {{session.title}}</option>
 				</select>
 				<button class="btn btn-primary"
 						ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">Activate
@@ -299,7 +297,7 @@
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.dialect"
 									placeholder="Dialect"></td>
-								<td>Date Elicited</td>
+								<td>Date Elicited:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.dateElicited"
 									placeholder="Date Elicited"></td>
@@ -341,7 +339,7 @@
 								<td><input class="span3" type="text"
 									ng-model="newSessionInfo.dialect"
 									placeholder="Dialect"></td>
-								<td>Date Elicited</td>
+								<td>Date Elicited:</td>
 								<td><input class="span3" type="text"
 									ng-model="newSessionInfo.dateElicited"
 									placeholder="Date Elicited"></td>
@@ -358,15 +356,14 @@
 
 			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
 				<form class="form-search">
-					<span>Search: <input type="text"
+					<span>Search:&nbsp;<input type="text"
 						class="input-medium search-query" ng-model='searchTerm'>
-						<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
-						<button class="btn btn-primary" ng-click="selectAll();">Select
+						&nbsp;<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
+						&nbsp;<button class="btn btn-primary" ng-click="selectAll();">Select
 							All</button>
-						<button class="btn btn-primary" href="#searchModal"
+						&nbsp;<button class="btn btn-primary" href="#searchModal"
 							ng-click="exportResults();">Export</button></span>
-
-					<button class="btn btn-warning"
+					&nbsp;<button class="btn btn-warning"
 						ng-click="loadData(activeSession);searchTerm='';searchHistory=null">Clear
 						Results</button>
 					<span>{{searchHistory}}</span>
@@ -464,7 +461,6 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 
-	<script src="libs/d3.v3.js"></script>
 	<script src="libs/require.min.js"
 		data-main="SpreadsheetStyleDataEntry.js"></script>
 

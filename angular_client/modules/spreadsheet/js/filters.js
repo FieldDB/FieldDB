@@ -1,11 +1,13 @@
 console.log("Loading the SpreadsheetStyleDataEntryFilters.");
 
-'use strict';
 define(["angular"], function(angular) {
+
+  'use strict';
+
   var SpreadsheetStyleDataEntryFilters = angular.module(
     'SpreadsheetStyleDataEntry.filters', []).filter('startFrom', function() {
     return function(input, start) {
-      if (input == undefined) {
+      if (input === undefined) {
         return;
       } else {
         start = +start; // parse to int
@@ -43,7 +45,7 @@ define(["angular"], function(angular) {
     };
   }).filter('neverEmpty', function() {
     return function(input) {
-      if (input == "" || input == undefined || input == " ") {
+      if (input === "" || input === undefined || input == " ") {
         return "--";
       } else {
         return input;
@@ -56,7 +58,7 @@ define(["angular"], function(angular) {
       } else {
         return input;
       }
-    }
+    };
   });
   return SpreadsheetStyleDataEntryFilters;
 });

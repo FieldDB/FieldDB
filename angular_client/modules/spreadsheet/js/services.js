@@ -1,9 +1,11 @@
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
 
-'use strict';
 define(
   ["angular"],
   function(angular) {
+
+    'use strict';
+
     var SpreadsheetStyleDataEntryServices = angular
       .module('SpreadsheetStyleDataEntry.services', ['ngResource'])
       .factory(
@@ -12,6 +14,8 @@ define(
           return {
             'async': function(DB, UUID) {
               var couchInfo;
+              var promise;
+              
               if (UUID != undefined) {
                 couchInfo = $rootScope.server + "/" + DB + "/" + UUID;
                 var config = {
@@ -21,23 +25,21 @@ define(
                 };
 
                 console.log("Contacting the DB to get   record data " + couchInfo);
-                var promise = $http(config).then(function(response) {
+                promise = $http(config).then(function(response) {
                   console.log("Receiving   data results ");
                   return response.data;
                 });
                 return promise;
               } else {
-
-                var couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/datums";
-
-                var config = {
+                couchInfo = $rootScope.server + "/" + DB + "/_design/pages/_view/datums";
+                config = {
                   method: "GET",
                   url: couchInfo,
                   withCredentials: true
                 };
                 console
                   .log("Contacting the DB to get all   corpus data for " + DB);
-                var promise = $http(config).then(function(response) {
+                promise = $http(config).then(function(response) {
                   console.log("Receiving   data results ");
                   return response.data.rows;
                 });
@@ -230,7 +232,7 @@ define(
                   function(response) {
                     console.log("Updated user roles.");
                     if (response.data.userFriendlyErrors) {
-                      if (response.data.userFriendlyErrors[0] == null) {
+                      if (response.data.userFriendlyErrors[0] === null) {
                         $rootScope.notificationMessage = "Error adding user. Please make sure that user exists.";
                         $rootScope.openNotification();
                       } else {
