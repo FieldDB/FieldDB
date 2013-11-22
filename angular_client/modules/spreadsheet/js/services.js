@@ -112,7 +112,7 @@ define(
               return promise;
             },
             'getallusers': function(userInfo) {
-              var couchInfo = $rootScope.server + "zfielddbuserscouch/_all_docs";
+              var couchInfo = $rootScope.server + "/zfielddbuserscouch/_all_docs";
 
               var config = {
                 method: "POST",
@@ -135,7 +135,7 @@ define(
                 password: password
               };
 
-              var couchInfo = $rootScope.server + "_session";
+              var couchInfo = $rootScope.server + "/_session";
 
               var config = {
                 method: "POST",
