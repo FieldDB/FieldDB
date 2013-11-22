@@ -38,7 +38,7 @@ require(
 
       $('#dashboard_loading_spinner')
           .html(
-              "<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Preparing for version 1.40...</p>");
+              "<div class='finished-status'></div><img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Preparing for version 1.40...</p>");
       $('.spinner-image').css({
         'width' : function() {
           return ($(document).width() * .1) + 'px';
@@ -65,8 +65,13 @@ require(
 
       window.backupPouches = function(pouches) {
         console.log("Got the pouches: ", pouches);
-        $("#dashboard_loading_spinner").append(
+        if(pouches.length == 0){
+          $("#dashboard_loading_spinner").append(
+            "<h2>Backed up " + pouches.length + " databases</h2>");
+        }else{
+          $("#dashboard_loading_spinner").append(
             "<h2>Backing up " + pouches.length + " databases</h2>");
+        }
 
         /* for each pouch, identify its remote, and begin replicating to it. */
         window.currentPouch = 0;
@@ -138,10 +143,14 @@ require(
 
       window.finishedReplicating = function() {
         localStorage.setItem(window.username + "lastUpdatedAtVersion", "1.40");
+        $(".spinner-status").html("Finished backing up your previous data.");
+        $(".finished-status").html("Unfortunately LingSync isn't able to run offline because of changes to the Chrome Extensions technology. Please use LingSync online at: <a href='http://spreadsheet.lingsync.org'>http://spreadsheet.lingsync.org</a>");
+        $(".spinner-image").attr("src","images/icon.png");
+
         /* Take them to the user page so they can choose a corpus */
-        alert("All your data has been backed up and is ready to be used in version 1.38 and up \n\n"
+        console.log("All your data has been backed up and is ready to be used in version 1.38 and up \n\n"
             + window.actuallyReplicatedPouches.join("\n"));
-        window.location.replace("user.html");
+        // window.location.replace("http://spreadsheet.lingsync.org/#/spreadsheet_main");
       };
 
       /* Get a list of all pouches */
@@ -163,7 +172,7 @@ require(
           console.log("success",serverResults);
         },
         error : function(serverResults) {
-          alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
+          console.log("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
         }
       });
 

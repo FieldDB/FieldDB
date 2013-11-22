@@ -1,9 +1,11 @@
 console.log("Loading the SpreadsheetStyleDataEntryDirectives.");
 
-'use strict';
 define(
   ["angular"],
   function(angular) {
+
+    'use strict';
+
     var SpreadsheetStyleDataEntryDirectives = angular
       .module('SpreadsheetStyleDataEntry.directives', [])
       .directive('moduleVersion', ['version',
@@ -60,10 +62,10 @@ define(
                   element[0].scrollIntoView(false);
                 }
 
-                if (e.keyCode === 40 && scope.$index == undefined) {
+                if (e.keyCode === 40 && scope.$index === undefined) {
                   // Select first record if arrowing down from new record
                   scope.selectRow(0);
-                } else if (e.keyCode === 40 && currentRecordIsLastRecord == true) {
+                } else if (e.keyCode === 40 && currentRecordIsLastRecord === true) {
                   // Do not go past very last record
                   return;
                 } else if (e.keyCode === 40) {
@@ -74,10 +76,10 @@ define(
                   } else {
                     scope.selectRow(scope.$index + 1);
                   }
-                } else if (e.keyCode === 38 && $rootScope.currentPage == 0 && (scope.$index == 0 || scope.$index == undefined)) {
+                } else if (e.keyCode === 38 && $rootScope.currentPage === 0 && (scope.$index === 0 || scope.$index === undefined)) {
                   // Select new entry if coming from most recent record
                   scope.selectRow('newEntry');
-                } else if (e.keyCode === 38 && scope.$index == 0) {
+                } else if (e.keyCode === 38 && scope.$index === 0) {
                   // Go back one page and select last record
                   $rootScope.currentPage = $rootScope.currentPage - 1;
                   scope.selectRow(scope.scopePreferences.resultSize - 1);
@@ -145,8 +147,8 @@ define(
 
 
               // Set scope data for existing records
-              if (scope.fieldData) {
-                for (key in scope.fields) {
+              for (var key in scope.fields) {
+                if (scope.fieldData) {
                   if (scope.fields[key].label == "morphemes") {
                     scope.$apply(function() {
                       scope.fieldData[key] = morphemeGuess;
@@ -158,10 +160,9 @@ define(
                       scope.fieldData[key] = glossGuess;
                     });
                   }
-                }
-              } else {
-                // Set scope data for new record
-                for (key in scope.fields) {
+
+                } else {
+                  // Set scope data for new record
                   if (scope.fields[key].label == "morphemes") {
                     scope.$apply(function() {
                       scope.newFieldData[key] = morphemeGuess;
@@ -176,7 +177,7 @@ define(
                 }
               }
             });
-          }
+          };
         }).directive(
         'loadPaginatedDataOnPageChange',
         function($timeout, $rootScope) {

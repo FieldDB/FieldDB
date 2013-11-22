@@ -8,6 +8,8 @@ couchapp_minified/views
 couchapp_minified/lists
 couchapp_minified/_attachments
 
+spreadsheet_build_dev
+
 #ignore private config files
 *_production*
 *private*

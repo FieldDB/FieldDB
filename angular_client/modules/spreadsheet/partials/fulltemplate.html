@@ -154,7 +154,7 @@
 				<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://www.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
 				<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
 				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
-				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} /> </span>
+				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} />&nbsp;</span>
 				<div class="expandCollapseButton">
 					<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span>
 					<span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
@@ -175,7 +175,7 @@
 					ng-hide="fields.field5.label==''"
 					ng-repeat="comment in datum.comments"><a
 					ng-click="deleteComment(comment, datum)" class="delete_button"
-					ng-disabled="readOnly==true">✗</a><i><b>{{comment.username}}</b></i>:
+					ng-disabled="readOnly==true">✗</a><i><b>{{comment.username}}</b></i>:&nbsp;
 					{{comment.text}}<br /> </span>
 					<button class="btn btn-primary" ng-click="addComment(datum);" ng-disabled="readOnly==true">Add Comment</button>
 			</div>
@@ -214,7 +214,7 @@
 						<td>
 							<span class="form-horizontal">
 								<input type="text" ng-model='attachment.description'ng-disabled="readOnly==true"> 
-								<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description</button>
+								&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description</button>
 							</span>
 						</td>
 						<td>
@@ -268,7 +268,7 @@
 				<div class="expandedDataInner">
 					<span
 					ng-hide="fields.field5.label==''"
-					ng-repeat="comment in datum.comments"><i><b>{{comment.username}}</b></i>:
+					ng-repeat="comment in datum.comments"><i><b>{{comment.username}}</b></i>:&nbsp;
 					{{comment.text}}<br /> </span>
 				</div>
 			</div>
@@ -305,7 +305,7 @@
 		ng-click="pageBackward();">
 		<font size="4"><b>&larr;</b></font>
 	</button>
-	 	{{currentPage+1}} of {{numberOfResultPages(allData.length)}}
+	&nbsp;{{currentPage+1}} of {{numberOfResultPages(allData.length)}}&nbsp;
 	<button class="btn btn-inverse btn-mini"
 		ng-disabled="currentPage >= (allData | filter: filterTerm).length/resultSize - 1"
 		ng-click="pageForward()">
