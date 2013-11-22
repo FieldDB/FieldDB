@@ -15,12 +15,10 @@
 		<div class="form-horizontal">
 		<form ng-submit="selectSession(activeSessionToView)">
 			<select ng-model='activeSessionToView'>
-				<option value="" disabled selected>Choose existing
-					session...</option>
+				<option value="" disabled selected>Choose existing session...</option>
 				<option value='none'>View all sessions</option>
 				<option ng-repeat="session in sessions | orderBy:'dateCreated'"
-					value={{session._id}}>{{session.dateCreated | shortDate}}
-					{{session.title}}</option>
+					value={{session._id}}>{{session.dateCreated | shortDate}} {{session.title}}</option>
 			</select>
 			<button class="btn btn-primary">Go</button>&nbsp;<button class="btn btn-info" type='button'
 				ng-click="showCreateSessionDiv=!showCreateSessionDiv">New Session</button>
