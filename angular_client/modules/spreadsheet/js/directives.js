@@ -132,8 +132,11 @@ define(
         }).directive(
         'glossmorpheme',
         function() {
-          return function(scope, element) {
+          return function(scope, element, attrs) {
             element.bind('keyup', function(e) {
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+                return;
+              }
               // Ignore arrows
               var keycodesToIgnore = [40, 38, 39, 37];
               if (keycodesToIgnore.indexOf(e.keyCode) > -1) {

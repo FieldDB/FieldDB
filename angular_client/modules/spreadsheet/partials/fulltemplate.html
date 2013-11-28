@@ -7,7 +7,7 @@
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
 			<div class="focus_box_div"><input focus /></div>
-			<input glossmorpheme keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
+			<input glossmorpheme auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''" >
 			<input keypress-mark-as-new class="span5"
