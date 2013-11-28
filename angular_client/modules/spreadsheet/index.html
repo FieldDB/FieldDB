@@ -49,7 +49,8 @@
 					</ul>
 				</span>
 				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a ng-click="navigateVerifySaved('faq');clickSuccess=true;">FAQ</a></span>
-			  <span
+				<span><input type="checkbox" ng-model="useAutoGlosser"> Semi-auto Glosser</span>
+			  	<span
 					class="rightMenuItems" ng-show="authenticated==true">
 					<div class="rightMenuItemsDiv">
 						<div ng-hide="DB==undefined">

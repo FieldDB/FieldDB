@@ -55,6 +55,8 @@ define(
       if (!is_chrome) {
         $scope.not_chrome = true;
       }
+      
+      $scope.useAutoGlosser = true;
 
       /*
         Create an array of servers which the user may use
