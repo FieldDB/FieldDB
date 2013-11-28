@@ -151,10 +151,10 @@
 			<div class="span2 entered_modified_info">
 				<span ng-show="searching==true"><button class="btn btn-primary" ng-click="selectNone()">Done</button><br /><br /></span>
 				<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}</span><br />
-				<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://www.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
+				<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
 				<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
 				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
-				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} />&nbsp;</span>
+				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} />&nbsp;</span>
 				<div class="expandCollapseButton">
 					<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span>
 					<span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
@@ -255,10 +255,10 @@
 		<div class="span2 entered_modified_info">
 			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /><br /></span>
 			<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}<br />
-			<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://www.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
+			<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
 			<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
 				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
-				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} /> </span>
+				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} /> </span>
 			<span ng-show="datum.hasAudio==true"><br /><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
 		</div>
 
