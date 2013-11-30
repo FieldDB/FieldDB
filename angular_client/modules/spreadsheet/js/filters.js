@@ -5,7 +5,7 @@ define(["angular"], function(angular) {
   'use strict';
 
   var SpreadsheetStyleDataEntryFilters = angular.module(
-    'SpreadsheetStyleDataEntry.filters', []).filter('startFrom', function() {
+    'spreadsheet_filters', []).filter('startFrom', function() {
     return function(input, start) {
       if (input === undefined) {
         return;

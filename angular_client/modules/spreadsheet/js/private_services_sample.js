@@ -5,7 +5,7 @@ define(
   ["angular"],
   function(angular) {
     var SpreadsheetPrivateServices = angular
-      .module('SpreadsheetStyleDataEntry.private_services', ['ngResource'])
+      .module('spreadsheet_private_services', ['ngResource'])
       .factory(
         'Servers',
         function($http, $rootScope) {
