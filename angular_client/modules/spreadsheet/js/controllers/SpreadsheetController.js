@@ -1348,11 +1348,11 @@ define(
           if ($scope.saved == "no") {
             $scope.saveChanges();
           } else {
-            // TODO FIND BETTER WAY TO KEEP SESSION ALIVE;
-            if ($rootScope.userInfo) {
-              Data.login($rootScope.userInfo.name,
-                $rootScope.userInfo.password);
-            }
+            // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
+            // if ($rootScope.userInfo) {
+            //   Data.login($rootScope.userInfo.name,
+            //     $rootScope.userInfo.password);
+            // }
           }
         }, 300000);
 
