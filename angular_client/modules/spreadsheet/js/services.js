@@ -376,6 +376,8 @@ define(
                 window.location.assign("#/spreadsheet_main");
                 return;
               }
+              console.log("You cannot delete items from the corpus.");
+              return;
               var config = {
                 method: "DELETE",
                 url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID + "?rev=" + rev,

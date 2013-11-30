@@ -811,7 +811,7 @@ define(
           $rootScope.notificationMessage = "You must select a session to delete.";
           $rootScope.openNotification();
         } else {
-          var r = confirm("Are you sure you want to delete this session permanently?");
+          var r = confirm("Are you sure you want to put this session in the trash?");
           if (r === true) {
             Data.async($rootScope.DB.pouchname, activeSessionID)
               .then(
@@ -913,7 +913,7 @@ define(
           $rootScope.openNotification();
           $scope.selected = datum;
         } else {
-          var r = confirm("Are you sure you want to delete this record permanently?");
+          var r = confirm("Are you sure you want to put this datum in the trash?");
           if (r === true) {
 
             Data
