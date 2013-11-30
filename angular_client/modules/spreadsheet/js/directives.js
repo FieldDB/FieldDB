@@ -30,7 +30,7 @@ define(
     };
 
     var SpreadsheetStyleDataEntryDirectives = angular
-      .module('SpreadsheetStyleDataEntry.directives', [])
+      .module('spreadsheet_directives', [])
       .directive('moduleVersion', ['version',
         function(version) {
           return function(scope, element, attrs) {

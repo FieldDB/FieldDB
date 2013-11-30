@@ -7,7 +7,7 @@ define(
     'use strict';
 
     var SpreadsheetStyleDataEntryServices = angular
-      .module('SpreadsheetStyleDataEntry.services', ['ngResource'])
+      .module('spreadsheet_services', ['ngResource'])
       .factory(
         'Data',
         function($http, $rootScope) {
