@@ -2207,6 +2207,7 @@ define(
               .stringify(Preferences));
             $scope.documentReady = true;
           } else if (Preferences.savedState && Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
+            $rootScope.serverCode = Preferences.savedState.server;
             var auth = {};
             auth.server = Preferences.savedState.server;
             auth.user = Preferences.savedState.username;
