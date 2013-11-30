@@ -32,11 +32,6 @@ define(
         dialogFade: true
       };
 
-      // Functions to open/close generic password notification modal
-      $rootScope.openPasswordNotification = function() {
-        $scope.passwordNotificationShouldBeOpen = true;
-      };
-
       // Functions to open/close generic notification modal
       $rootScope.openNotification = function() {
         $scope.notificationShouldBeOpen = true;
@@ -88,7 +83,7 @@ define(
         "savedState": {
           "server": "",
           "username": "",
-          // "password": "",
+          "password": "",
           "DB": "",
           "sessionID": ""
         },
@@ -560,7 +555,7 @@ define(
           $rootScope.clickSuccess = true;
           $rootScope.userInfo = {
             "name": auth.user.toLowerCase(),
-            // "password": auth.password
+            "password": auth.password
           };
 
           // if (auth.user == "senhorzinho") {
@@ -586,9 +581,7 @@ define(
               Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
               Preferences.savedState.server = $rootScope.serverCode;
               Preferences.savedState.username = $rootScope.userInfo.name;
-              Preferences.savedState.gravatar = $rootScope.userInfo.gravatar;
-              // $scope.confirmPassword = auth.password;
-              // Preferences.savedState.password = sjcl.encrypt("password", $rootScope.userInfo.password);
+              Preferences.savedState.password = sjcl.encrypt("password", $rootScope.userInfo.password);
               localStorage.setItem('SpreadsheetPreferences', JSON
                 .stringify(Preferences));
 
@@ -1356,10 +1349,10 @@ define(
             $scope.saveChanges();
           } else {
             // TODO FIND BETTER WAY TO KEEP SESSION ALIVE;
-            // if ($rootScope.userInfo) {
-            //   Data.login($rootScope.userInfo.name,
-            //     $rootScope.userInfo.password);
-            // }
+            if ($rootScope.userInfo) {
+              Data.login($rootScope.userInfo.name,
+                $rootScope.userInfo.password);
+            }
           }
         }, 300000);
 
@@ -1589,122 +1582,95 @@ define(
         }
       };
 
-      $scope.openPasswordDialog = function(requestingfunction){
-        if($scope.confirmPassword){
-          requestingfunction();
-          return;
-        }
-        $rootScope.loading = false;
-        $rootScope.passwordNotificationMessage = "Please enter your password.";
-        $rootScope.openPasswordNotification();
-        $scope.closePasswordNotification = requestingfunction;
-      };
-
       $scope.createNewCorpus = function(newCorpusInfo) {
         if (!newCorpusInfo) {
           $rootScope.notificationMessage = "Please enter a corpus name.";
           $rootScope.openNotification();
           return;
         }
-        $scope.openPasswordDialog(function(){
-          $scope.passwordNotificationShouldBeOpen = false;
-          $rootScope.loading = true;
-          var dataToPost = {};
-          dataToPost.username = trim($rootScope.userInfo.name);
-          dataToPost.password = trim($scope.confirmPassword);
-          dataToPost.serverCode = $rootScope.serverCode;
-          dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
-          dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
+        $rootScope.loading = true;
+        var dataToPost = {};
+        dataToPost.username = trim($rootScope.userInfo.name);
+        dataToPost.password = trim($rootScope.userInfo.password);
+        dataToPost.serverCode = $rootScope.serverCode;
+        dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
-          $scope.confirmPassword = null;
-          $scope.passwordNotificationShouldBeOpen = false;
-          $scope.closePasswordNotification = function(){
-            $scope.passwordNotificationShouldBeOpen = false;
-          }
+        dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
 
-          if (dataToPost.newCorpusName !== "") {
-            // Create new corpus
-            Data.createcorpus(dataToPost).then(function(response) {
-              // Add new corpus to scope
-              var newCorpus = {};
-              newCorpus.pouchname = response.corpus.pouchname;
-              newCorpus.corpustitle = response.corpus.title;
-              $scope.corpora.push(newCorpus);
-              $rootScope.loading = false;
-              window.location.assign("#/");
-            });
-          } else {
-            $rootScope.notificationMessage = "Please verify corpus name.";
-            $rootScope.openNotification();
+        if (dataToPost.newCorpusName !== "") {
+          // Create new corpus
+          Data.createcorpus(dataToPost).then(function(response) {
+            // Add new corpus to scope
+            var newCorpus = {};
+            newCorpus.pouchname = response.corpus.pouchname;
+            newCorpus.corpustitle = response.corpus.title;
+            $scope.corpora.push(newCorpus);
             $rootScope.loading = false;
-          }
-
-        });
+            window.location.assign("#/");
+          });
+        } else {
+          $rootScope.notificationMessage = "Please verify corpus name.";
+          $rootScope.openNotification();
+          $rootScope.loading = false;
+        }
       };
 
       $scope.loadUsersAndRoles = function() {
+        // Get all users and roles (for this corpus) from server
 
-        $scope.openPasswordDialog(function(){
-          var dataToPost = {};
-          dataToPost.username = $rootScope.userInfo.name;
-          dataToPost.password =  trim($scope.confirmPassword);
-          dataToPost.serverCode = $rootScope.serverCode;
-          dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
-          dataToPost.pouchname = $rootScope.DB.pouchname;
+        var dataToPost = {};
 
-          $scope.confirmPassword = null;
-          $scope.passwordNotificationShouldBeOpen = false;
-          $scope.closePasswordNotification = function(){
-            $scope.passwordNotificationShouldBeOpen = false;
-          };
+        dataToPost.username = $rootScope.userInfo.name;
+        dataToPost.password = $rootScope.userInfo.password;
+        dataToPost.serverCode = $rootScope.serverCode;
+        dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+        dataToPost.pouchname = $rootScope.DB.pouchname;
 
-          Data.getallusers(dataToPost).then(function(users) {
-            for (var i in users.allusers) {
-              if (users.allusers[i].username == $rootScope.userInfo.name) {
-                $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
-                Preferences.savedState.gravatar = $rootScope.userInfo.gravatar;
-              }
+
+        Data.getallusers(dataToPost).then(function(users) {
+          for (var i in users.allusers) {
+            if (users.allusers[i].username == $rootScope.userInfo.name) {
+              $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
             }
+          }
 
-            $scope.users = users;
+          $scope.users = users;
 
-            // Get privileges for logged in user
-            Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
-              .then(
-                function(response) {
-                  if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
-                    // Admin
-                    $rootScope.admin = true;
-                    $rootScope.readOnly = false;
-                    $rootScope.writeOnly = false;
-                  } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
-                    response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
-                    // Read-write
-                    $rootScope.admin = false;
-                    $rootScope.readOnly = false;
-                    $rootScope.writeOnly = false;
-                  } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
-                    response.roles.indexOf($rootScope.DB.pouchname + "_writer") == -1) {
-                    // Read-only
-                    $rootScope.admin = false;
-                    $rootScope.readOnly = true;
-                    $rootScope.writeOnly = false;
-                  } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") == -1 &&
-                    response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
-                    // Write-only
-                    $rootScope.admin = false;
-                    $rootScope.readOnly = false;
-                    $rootScope.writeOnly = true;
-                  } else {
-                    // TODO Commenter
-                    $rootScope.admin = false;
-                    $rootScope.readOnly = false;
-                    $rootScope.writeOnly = false;
-                  }
-
-           });
-         });
+          // Get privileges for logged in user
+          Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
+            .then(
+              function(response) {
+                if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
+                  // Admin
+                  $rootScope.admin = true;
+                  $rootScope.readOnly = false;
+                  $rootScope.writeOnly = false;
+                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
+                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+                  // Read-write
+                  $rootScope.admin = false;
+                  $rootScope.readOnly = false;
+                  $rootScope.writeOnly = false;
+                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
+                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") == -1) {
+                  // Read-only
+                  $rootScope.admin = false;
+                  $rootScope.readOnly = true;
+                  $rootScope.writeOnly = false;
+                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") == -1 &&
+                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+                  // Write-only
+                  $rootScope.admin = false;
+                  $rootScope.readOnly = false;
+                  $rootScope.writeOnly = true;
+                } else {
+                  // TODO Commenter
+                  $rootScope.admin = false;
+                  $rootScope.readOnly = false;
+                  $rootScope.writeOnly = false;
+                }
+              });
         });
       };
 
@@ -1721,57 +1687,48 @@ define(
           return;
         }
 
-        $scope.openPasswordDialog(function(){
-          $rootScope.loading = true;
+        $rootScope.loading = true;
 
-          switch (newUserRoles.role) {
-            case "admin":
-              newUserRoles.admin = true;
-              newUserRoles.reader = true;
-              newUserRoles.writer = true;
-              break;
-            case "read_write":
-              newUserRoles.admin = false;
-              newUserRoles.reader = true;
-              newUserRoles.writer = true;
-              break;
-            case "read_only":
-              newUserRoles.admin = false;
-              newUserRoles.reader = true;
-              newUserRoles.writer = false;
-              break;
-            case "write_only":
-              newUserRoles.admin = false;
-              newUserRoles.reader = false;
-              newUserRoles.writer = true;
-              break;
-          }
+        switch (newUserRoles.role) {
+          case "admin":
+            newUserRoles.admin = true;
+            newUserRoles.reader = true;
+            newUserRoles.writer = true;
+            break;
+          case "read_write":
+            newUserRoles.admin = false;
+            newUserRoles.reader = true;
+            newUserRoles.writer = true;
+            break;
+          case "read_only":
+            newUserRoles.admin = false;
+            newUserRoles.reader = true;
+            newUserRoles.writer = false;
+            break;
+          case "write_only":
+            newUserRoles.admin = false;
+            newUserRoles.reader = false;
+            newUserRoles.writer = true;
+            break;
+        }
 
-          newUserRoles.pouchname = $rootScope.DB.pouchname;
+        newUserRoles.pouchname = $rootScope.DB.pouchname;
 
-          var dataToPost = {};
-          dataToPost.username = trim($rootScope.userInfo.name);
-          dataToPost.password = trim($scope.confirmPassword);
-          dataToPost.serverCode = $rootScope.serverCode;
-          dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+        var dataToPost = {};
+        dataToPost.username = trim($rootScope.userInfo.name);
+        dataToPost.password = trim($rootScope.userInfo.password);
+        dataToPost.serverCode = $rootScope.serverCode;
+        dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
-          dataToPost.userRoleInfo = newUserRoles;
+        dataToPost.userRoleInfo = newUserRoles;
 
-          $scope.confirmPassword = null;
-          $scope.passwordNotificationShouldBeOpen = false;
-          $scope.closePasswordNotification = function(){
-            $scope.passwordNotificationShouldBeOpen = false;
-          };
-
-          Data.updateroles(dataToPost).then(function(response) {
-            document.getElementById("userToModifyInput").value = "";
-            $rootScope.loading = false;
-            $scope.loadUsersAndRoles();
-          }, function(error) {
-            $rootScope.loading = false;
-          });
+        Data.updateroles(dataToPost).then(function(response) {
+          document.getElementById("userToModifyInput").value = "";
+          $rootScope.loading = false;
+          $scope.loadUsersAndRoles();
+        }, function(error) {
+          $rootScope.loading = false;
         });
-
       };
 
       $scope.removeUserFromCorpus = function(userid) {
@@ -1787,28 +1744,19 @@ define(
         var r = confirm("Are you sure you want to remove " + userid + " from this corpus?\nNOTE: This will remove ALL user roles for " + userid + ". However, you may add this user again with new permissions.");
         if (r === true) {
 
-          $scope.openPasswordDialog(function(){
-            var dataToPost = {};
-            dataToPost.username = trim($rootScope.userInfo.name);
-            dataToPost.password = trim($scope.confirmPassword);
-            dataToPost.serverCode = $rootScope.serverCode;
-            dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+          var dataToPost = {};
+          dataToPost.username = trim($rootScope.userInfo.name);
+          dataToPost.password = trim($rootScope.userInfo.password);
+          dataToPost.serverCode = $rootScope.serverCode;
+          dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
-            dataToPost.userRoleInfo = {};
-            dataToPost.userRoleInfo.usernameToModify = userid;
-            dataToPost.userRoleInfo.pouchname = $rootScope.DB.pouchname;
-            dataToPost.userRoleInfo.removeUser = true;
+          dataToPost.userRoleInfo = {};
+          dataToPost.userRoleInfo.usernameToModify = userid;
+          dataToPost.userRoleInfo.pouchname = $rootScope.DB.pouchname;
+          dataToPost.userRoleInfo.removeUser = true;
 
-            $scope.confirmPassword = null;
-            $scope.passwordNotificationShouldBeOpen = false;
-            $scope.closePasswordNotification = function(){
-              $scope.passwordNotificationShouldBeOpen = false;
-            };
-
-            Data.updateroles(dataToPost).then(function(response) {
-              $scope.loadUsersAndRoles();
-            });
-            
+          Data.updateroles(dataToPost).then(function(response) {
+            $scope.loadUsersAndRoles();
           });
         }
       };
@@ -2258,19 +2206,17 @@ define(
             localStorage.setItem('SpreadsheetPreferences', JSON
               .stringify(Preferences));
             $scope.documentReady = true;
-          } else if (Preferences.savedState) {
-            // var auth = {};
-            $rootScope.serverCode = Preferences.savedState.server;
-            $rootScope.userInfo = $rootScope.userInfo || {};
-            $rootScope.userInfo.gravatar = Preferences.savedState.gravatar;
-            $rootScope.userInfo.username = Preferences.savedState.username;
-            // try {
-            //   auth.password = sjcl.decrypt("password", Preferences.savedState.password);
-            // } catch (err) {
-            //   // User's password has not yet been encrypted; encryption will be updated on login.
-            //   auth.password = Preferences.savedState.password;
-            // }
-            // $scope.loginUser(auth);
+          } else if (Preferences.savedState && Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
+            var auth = {};
+            auth.server = Preferences.savedState.server;
+            auth.user = Preferences.savedState.username;
+            try {
+              auth.password = sjcl.decrypt("password", Preferences.savedState.password);
+            } catch (err) {
+              // User's password has not yet been encrypted; encryption will be updated on login.
+              auth.password = Preferences.savedState.password;
+            }
+            $scope.loginUser(auth);
             if (Preferences.savedState.DB) {
               $rootScope.DB = Preferences.savedState.DB;
               if (Preferences.savedState.sessionID) {
