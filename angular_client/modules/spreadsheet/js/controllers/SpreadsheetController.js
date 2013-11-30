@@ -645,6 +645,10 @@ define(
                 })(m);
               }
               $rootScope.loading = false;
+            }, /* login failure */ function(reason){
+              $rootScope.notificationMessage = "Error logging in.\n"+ reason;
+              $rootScope.openNotification();
+              $rootScope.loading = false;
             });
         }
       };

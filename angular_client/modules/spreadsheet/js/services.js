@@ -10,7 +10,7 @@ define(
       .module('spreadsheet_services', ['ngResource'])
       .factory(
         'Data',
-        function($http, $rootScope) {
+        function($http, $rootScope, $q, Servers) {
           return {
             'async': function(DB, UUID) {
               var couchInfo;
@@ -129,34 +129,52 @@ define(
               return promise;
             },
             'login': function(user, password) {
+              var deferred = $q.defer();
 
-              var userInfo = {
-                name: user,
-                password: password
-              };
-
-              var couchInfo = $rootScope.server + "/_session";
-
-              var config = {
+              var authConfig = {
                 method: "POST",
-                url: couchInfo,
-                data: userInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/login",
+                data: {
+                  username: user,
+                  password: password
+                },
+                // withCredentials: true
+              };
+              var corpusConfig = {
+                method: "POST",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/_session",
+                data: {
+                  name: user,
+                  password: password
+                },
                 withCredentials: true
               };
 
-              var promise = $http(config)
-                .then(
-                  function(response) {
-                    console.log("Logging in/Keeping session alive.");
-                    return response;
+              var userIsAuthenticated = function(){
+                var promiseCorpus = $http(corpusConfig).then(
+                  function(corpusResponse) {
+                    console.log("Logging in to corpus server.");
+                    deferred.resolve(corpusResponse);
                   },
                   function(err) {
-                    $rootScope.notificationMessage = "Error logging in.\nPlease check username/password.";
-                    $rootScope.openNotification();
-                    console.log(err);
-                    $rootScope.loading = false;
+                    deferred.reject("Please report this.");
                   });
-              return promise;
+              }
+
+              var promise = $http(authConfig).then(
+                function(response) {
+                  if(response.data.userFriendlyErrors){
+                    deferred.reject(response.data.userFriendlyErrors.join(" "));
+                  } else {
+                    userIsAuthenticated();
+                  }
+
+                }, 
+                function(err) {
+                  console.log(err);
+                  deferred.reject("Cannot contact "+$rootScope.serverCode+" server, please report this.");
+                });
+              return deferred.promise;
             },
             'register': function(newUserInfo) {
               var config = {
