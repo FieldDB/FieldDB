@@ -57,6 +57,18 @@ define(
       }
       
       $scope.useAutoGlosser = true;
+      try {
+        var previousValue = localStorage.getItem("useAutoGlosser");
+        if (previousValue == "false") {
+          $scope.useAutoGlosser =  false; 
+        }
+      } catch (e) {
+        console.log("Use autoglosser was not previously set.");
+      }
+
+      $scope.$watch('useAutoGlosser', function(newvalue, oldvalue) {
+        localStorage.setItem("useAutoGlosser", newvalue);
+      });
 
       /*
         Create an array of servers which the user may use
