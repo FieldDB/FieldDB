@@ -6,6 +6,29 @@ define(
 
     'use strict';
 
+    var convertFieldsIntoDatum = function(fieldLabelHolder, dataHolder){
+      var datum = {};
+      for (var key in fieldLabelHolder) {
+        if (fieldLabelHolder[key].label === "morphemes") {
+          datum.morphemes = dataHolder[key];
+          datum.morphemesfield = key;
+        }
+        if (fieldLabelHolder[key].label === "gloss") {
+          datum.gloss = dataHolder[key];
+          datum.glossfield = key;
+        }
+        if (fieldLabelHolder[key].label === "utterance") {
+          datum.utterance = dataHolder[key];
+          datum.utterancefield = key;
+        }
+        if (fieldLabelHolder[key].label === "allomorphs") {
+          datum.allomorphs = dataHolder[key];
+          datum.allomorphsfield = key;
+        }
+      }
+      return datum;
+    };
+
     var SpreadsheetStyleDataEntryDirectives = angular
       .module('SpreadsheetStyleDataEntry.directives', [])
       .directive('moduleVersion', ['version',
@@ -130,55 +153,73 @@ define(
             });
           };
         }).directive(
-        'glossmorpheme',
+        'guessUtteranceFromMorphemes',
         function() {
           return function(scope, element, attrs) {
-            element.bind('keyup', function(e) {
+            element.bind('blur', function(e) {
+              var justCopyDontGuessIGT = false;
               if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
-                return;
+                justCopyDontGuessIGT = true;
               }
               // Ignore arrows
               var keycodesToIgnore = [40, 38, 39, 37];
               if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
                 return;
               }
-              var newUtterance = this.value;
-              var morphemeGuess = Glosser.morphemefinder(
-                newUtterance, scope.DB.pouchname);
-              var glossGuess = Glosser
-                .glossFinder(morphemeGuess, scope.DB.pouchname);
-
-
-              // Set scope data for existing records
-              for (var key in scope.fields) {
-                if (scope.fieldData) {
-                  if (scope.fields[key].label == "morphemes") {
-                    scope.$apply(function() {
-                      scope.fieldData[key] = morphemeGuess;
-                    });
-                  }
-
-                  if (scope.fields[key].label == "gloss") {
-                    scope.$apply(function() {
-                      scope.fieldData[key] = glossGuess;
-                    });
-                  }
-
-                } else {
-                  // Set scope data for new record
-                  if (scope.fields[key].label == "morphemes") {
-                    scope.$apply(function() {
-                      scope.newFieldData[key] = morphemeGuess;
-                    });
-                  }
-
-                  if (scope.fields[key].label == "gloss") {
-                    scope.$apply(function() {
-                      scope.newFieldData[key] = glossGuess;
-                    });
-                  }
-                }
+              var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+              var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+              datum.pouchname = scope.DB.pouchname;
+              datum = Glosser.guessUtteranceFromMorphemes(datum, justCopyDontGuessIGT);
+              scope.$apply(function() {
+                dataHolder[datum.utterancefield] = datum.utterance;
+              });
+            });
+          };
+        }).directive(
+        'guessMorphemesFromUtterance',
+        function() {
+          return function(scope, element, attrs) {
+            element.bind('blur', function(e) {
+              var justCopyDontGuessIGT = false;
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+                justCopyDontGuessIGT = true;
               }
+              // Ignore arrows
+              var keycodesToIgnore = [40, 38, 39, 37];
+              if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+                return;
+              }
+              var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+              var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+              datum.pouchname = scope.DB.pouchname;
+              datum = Glosser.guessMorphemesFromUtterance(datum, justCopyDontGuessIGT);
+              scope.$apply(function() {
+                dataHolder[datum.morphemesfield] = datum.morphemes;
+                dataHolder[datum.glossfield] = datum.gloss;
+              });
+            });
+          };
+        }).directive(
+        'guessGlossFromMorphemes',
+        function() {
+          return function(scope, element, attrs) {
+            element.bind('blur', function(e) {
+              var justCopyDontGuessIGT = false;
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+                justCopyDontGuessIGT = true;
+              }
+              // Ignore arrows
+              var keycodesToIgnore = [40, 38, 39, 37];
+              if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+                return;
+              }
+              var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+              var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+              datum.pouchname = scope.DB.pouchname;
+              datum = Glosser.guessGlossFromMorphemes(datum, justCopyDontGuessIGT);
+              scope.$apply(function() {
+                dataHolder[datum.glossfield] = datum.gloss;
+              });
             });
           };
         }).directive(

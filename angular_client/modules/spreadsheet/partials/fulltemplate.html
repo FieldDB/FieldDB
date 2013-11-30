@@ -7,10 +7,10 @@
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
 			<div class="focus_box_div"><input focus /></div>
-			<input glossmorpheme auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
+			<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''" >
-			<input keypress-mark-as-new class="span5"
+			<input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span5"
 				type="text" ng-model="newFieldData.field2"
 				placeholder="{{fields.field2.title}}"
 				ng-hide="fields.field2.label==''" >
@@ -20,10 +20,10 @@
 				ng-hide="fields.field3.label==''">
 		</div>
 		<div class="span5">
-			<input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field4"
+			<input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field4"
 				placeholder="{{fields.field4.title}}"
 				ng-hide="fields.field4.label==''">
-			<input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field6"
+			<input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6"
 				placeholder="{{fields.field6.title}}"
 				ng-hide="fields.field6.label==''">
 			<input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.datumTags"
@@ -107,14 +107,14 @@
 			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span5">
 				<div class="focus_box_div"><input focus /></div>
-				<input glossmorpheme keypress-mark-as-edited class="span5" 
+				<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span5" 
 					type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
 					ng-hide="fields.field1.label==''"
 					placeholder="{{fields.field1.title}}"
 					ng-disabled="readOnly==true">
-				<input keypress-mark-as-edited class="span5"
+				<input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
