@@ -576,6 +576,15 @@ define(
                 return;
               }
 
+              $scope.addActivity([{
+                verb: "logged in",
+                verbicon: "icon-check",
+                directobjecticon: "icon-user",
+                directobject: "",
+                indirectobject: "",
+                teamOrPersonal: "personal"
+              }]);
+              $scope.uploadActivities();
 
               // Update saved state in Preferences
               Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
@@ -768,6 +777,24 @@ define(
               newSession)
             .then(
               function() {
+                var directobject =  $scope.currentSessionName || "an elicitation session";
+                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                $scope.addActivity([{
+                  verb: "updated",
+                  verbicon: "icon-pencil",
+                  directobjecticon: "icon-calendar",
+                  directobject: "<a href='#session/" + newSession._id + "'>" +directobject+ "</a> ",
+                  indirectobject: indirectObjectString,
+                  teamOrPersonal: "personal"
+                }, {
+                  verb: "updated",
+                  verbicon: "icon-pencil",
+                  directobjecticon: "icon-calendar",
+                  directobject: "<a href='#session/" + newSession._id + "'>" +directobject+ "</a> ",
+                  indirectobject: indirectObjectString,
+                  teamOrPersonal: "team"
+                }]);
+                $scope.uploadActivities();
 
                 // Update all records tied to this session
                 for (var i in scopeDataToEdit) {
@@ -819,6 +846,25 @@ define(
                   sessionToMarkAsDeleted.trashed = "deleted";
                   var rev = sessionToMarkAsDeleted._rev;
                   Data.saveEditedRecord($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
+                    
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    $scope.addActivity([{
+                      verb: "deleted",
+                      verbicon: "icon-trash",
+                      directobjecticon: "icon-calendar",
+                      directobject: "<a href='#session/" + sessionToMarkAsDeleted._id + "'>an elicitation session</a> ",
+                      indirectobject: indirectObjectString,
+                      teamOrPersonal: "personal"
+                    }, {
+                      verb: "deleted",
+                      verbicon: "icon-trash",
+                      directobjecticon: "icon-calendar",
+                      directobject: "<a href='#session/" + sessionToMarkAsDeleted._id + "'>an elicitation session</a> ",
+                      indirectobject: indirectObjectString,
+                      teamOrPersonal: "team"
+                    }]);
+                    $scope.uploadActivities();
+
                     // Remove session from scope
                     for (var i in $scope.sessions) {
                       if ($scope.sessions[i]._id == activeSessionID) {
@@ -872,6 +918,8 @@ define(
                 .saveNew($rootScope.DB.pouchname, newSessionRecord)
                 .then(
                   function(savedRecord) {
+
+
                     newSessionRecord._id = savedRecord.data.id;
                     newSessionRecord._rev = savedRecord.data.rev;
                     for (var i in newSessionRecord.sessionFields) {
@@ -880,6 +928,25 @@ define(
                           .substr(0, 20);
                       }
                     }
+                    var directobject =  newSessionRecord.title || "an elicitation session";
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    $scope.addActivity([{
+                      verb: "added",
+                      verbicon: "icon-pencil",
+                      directobjecticon: "icon-calendar",
+                      directobject: "<a href='#session/" + savedRecord.data.id + "'>" +directobject+ "</a> ",
+                      indirectobject: indirectObjectString,
+                      teamOrPersonal: "personal"
+                    }, {
+                      verb: "added",
+                      verbicon: "icon-pencil",
+                      directobjecticon: "icon-calendar",
+                      directobject: "<a href='#session/" + savedRecord.data.id + "'>" +directobject+ "</a> ",
+                      indirectobject: indirectObjectString,
+                      teamOrPersonal: "team"
+                    }]);
+                    $scope.uploadActivities();
+
                     $scope.sessions.push(newSessionRecord);
                     $scope.dataentry = true;
                     $scope.selectSession(savedRecord.data.id);
@@ -924,6 +991,25 @@ define(
                   var rev = recordToMarkAsDeleted._rev;
                   Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
                     // Remove record from scope
+
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    $scope.addActivity([{
+                      verb: "deleted",
+                      verbicon: "icon-trash",
+                      directobjecticon: "icon-list",
+                      directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
+                      indirectobject: indirectObjectString,
+                      teamOrPersonal: "personal"
+                    }, {
+                      verb: "deleted",
+                      verbicon: "icon-trash",
+                      directobjecticon: "icon-list",
+                      directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
+                      indirectobject: indirectObjectString,
+                      teamOrPersonal: "team"
+                    }]);
+
+                    $scope.uploadActivities();
 
                     // Delete record from all scope data and update
                     var index = $scope.allData.indexOf(datum);
@@ -1536,7 +1622,7 @@ define(
                       console.log("Saved new activity");
                       // Deleting so that indices in scope are unchanged
                       delete $scope.activities[index];
-                    },
+                    },  
                     function() {
                       window
                         .alert("There was an error saving the activity. Please try again.");
@@ -1601,10 +1687,21 @@ define(
         if (dataToPost.newCorpusName !== "") {
           // Create new corpus
           Data.createcorpus(dataToPost).then(function(response) {
+            
             // Add new corpus to scope
             var newCorpus = {};
             newCorpus.pouchname = response.corpus.pouchname;
             newCorpus.corpustitle = response.corpus.title;
+            var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
+            $scope.addActivity([{
+              verb: "added",
+              verbicon: "icon-plus",
+              directobjecticon: "icon-cloud",
+              directobject: directObjectString,
+              indirectobject: "",
+              teamOrPersonal: "personal"
+            }]);
+
             $scope.corpora.push(newCorpus);
             $rootScope.loading = false;
             window.location.assign("#/");
@@ -1688,27 +1785,31 @@ define(
         }
 
         $rootScope.loading = true;
-
+        var rolesString = "";
         switch (newUserRoles.role) {
           case "admin":
             newUserRoles.admin = true;
             newUserRoles.reader = true;
             newUserRoles.writer = true;
+            rolesString += " Admin"
             break;
           case "read_write":
             newUserRoles.admin = false;
             newUserRoles.reader = true;
             newUserRoles.writer = true;
+            rolesString += " Writer Reader"
             break;
           case "read_only":
             newUserRoles.admin = false;
             newUserRoles.reader = true;
             newUserRoles.writer = false;
+            rolesString += " Reader"
             break;
           case "write_only":
             newUserRoles.admin = false;
             newUserRoles.reader = false;
             newUserRoles.writer = true;
+            rolesString += " Writer"
             break;
         }
 
@@ -1723,6 +1824,24 @@ define(
         dataToPost.userRoleInfo = newUserRoles;
 
         Data.updateroles(dataToPost).then(function(response) {
+
+          var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a> as "+rolesString;
+          $scope.addActivity([{
+            verb: "updated",
+            verbicon: "icon-pencil",
+            directobjecticon: "icon-user",
+            directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "personal"
+          }, {
+            verb: "updated",
+            verbicon: "icon-pencil",
+            directobjecticon: "icon-user",
+            directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "team"
+          }]);
+
           document.getElementById("userToModifyInput").value = "";
           $rootScope.loading = false;
           $scope.loadUsersAndRoles();
@@ -1737,7 +1856,7 @@ define(
         // corpus
         if (userid == $rootScope.userInfo.name) {
           window
-            .alert("You cannot remove yourself from a corpus.\nOnly another server admin can remove you.");
+            .alert("You cannot remove yourself from a corpus.\nOnly another Admin can remove you.");
           return;
         }
 
@@ -1756,6 +1875,24 @@ define(
           dataToPost.userRoleInfo.removeUser = true;
 
           Data.updateroles(dataToPost).then(function(response) {
+            
+            var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            $scope.addActivity([{
+              verb: "removed",
+              verbicon: "icon-remove-sign",
+              directobjecticon: "icon-user",
+              directobject: dataToPost.userRoleInfo.usernameToModify,
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "personal"
+            }, {
+              verb: "removed",
+              verbicon: "icon-remove-sign",
+              directobjecticon: "icon-user",
+              directobject: dataToPost.userRoleInfo.usernameToModify,
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "team"
+            }]);
+
             $scope.loadUsersAndRoles();
           });
         }
