@@ -199,6 +199,27 @@ define([
       }
       
       this.saveAndInterConnectInApp(function(){
+        window.app.addActivity({
+          verb: "deleted",
+          verbicon: "icon-trash",
+          directobjecticon: "icon-calendar",
+          directobject: "<a href='#session/" + model.id + "'>a session</a> ",
+          indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+          teamOrPersonal: "team",
+          context: " via Offline App."
+        });
+
+        window.app.addActivity({
+          verb: "deleted",
+          verbicon: "icon-trash",
+          directobjecticon: "icon-calendar",
+          directobject: "<a href='#session/" + model.id + "'>a session</a> ",
+          indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+          teamOrPersonal: "personal",
+          context: " via Offline App."
+        });
+
+
         window.app.get("corpus").sessions.models[whichSessionToUse]
         .setAsCurrentSession(function() {
           if (window.appView) {
