@@ -7,7 +7,7 @@
 	<form ng-submit="createRecord(newFieldData);newFieldData=''">
 		<div class="focus_box_div"><input focus /></div>
 		<div class="span3">
-			<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span3" type="text" ng-model="newFieldData.field1"
+			<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span3" type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''">
 		</div>
@@ -103,7 +103,7 @@
 		<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span3">
 				<div class="focus_box_div"><input focus /></div>
-				<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field1"
+				<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
 					placeholder="{{fields.field1.title}}"
