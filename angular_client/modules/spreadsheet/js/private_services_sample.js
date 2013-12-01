@@ -5,46 +5,42 @@ define(
   ["angular"],
   function(angular) {
     var SpreadsheetPrivateServices = angular
-      .module('spreadsheet_private_services', ['ngResource'])
+      .module('spreadsheet_private_services', [])
       .factory(
         'Servers',
         function($http, $rootScope) {
 
-          var localhost = false;
-
-          var servers = {
-            testing: {
-              auth: "https://authdev.example.com",
-              corpus: "https://corpusdev.example.com",
-              serverCode: "testing",
-              userFriendlyServerName: "Example Beta"
-            },
-            production: {
-              auth: "https://auth.example.com",
-              corpus: "https://corpus.example.com",
-              serverCode: "production",
-              userFriendlyServerName: "Example"
-            }
-          };
+          var localhost = true;
+          var servers = {};
 
           if (localhost) {
-            servers.unshift({
-              localhost: {
-                auth: "https://localhost:3183",
-                corpus: "https://localhost:6984",
-                serverCode: "localhost",
-                userFriendlyServerName: "Localhost"
-              }
-            });
+            servers.localhost = {
+              auth: "https://localhost:3183",
+              corpus: "https://localhost:6984",
+              serverCode: "localhost",
+              userFriendlyServerName: "Localhost"
+            };
           }
+          servers.testing = {
+            auth: "https://authdev.example.org",
+            corpus: "https://corpusdev.example.org",
+            serverCode: "testing",
+            userFriendlyServerName: "Example Beta"
+          };
+
+          // servers.production = {
+          //   auth: "https://auth.example.org",
+          //   corpus: "https://corpus.example.org",
+          //   serverCode: "production",
+          //   userFriendlyServerName: "Example"
+          // };
 
           return {
             'getServiceUrl': function(label, serviceType) {
               var serverInfo = {};
 
-              if (label == "localhost" || label == "production" || label == "testing") {
-                serverInfo = servers[label];
-              } else {
+              serverInfo = servers[label];  
+              if (!serverInfo) {
                 throw "Request for an invalid server: " + label;
               }
 

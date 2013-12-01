@@ -193,7 +193,11 @@ define(
                 }, 
                 function(err) {
                   console.log(err);
-                  deferred.reject("Cannot contact "+$rootScope.serverCode+" server, please report this.");
+                  var message = "please report this.";
+                  if(err.status == 0){
+                    message = "are you offline?";
+                  }
+                  deferred.reject("Cannot contact "+$rootScope.serverCode+" server, " + message);
                 });
               return deferred.promise;
             },
