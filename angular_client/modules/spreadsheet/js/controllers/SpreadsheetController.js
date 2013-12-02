@@ -319,7 +319,7 @@ define(
               $scope.dataentry = false;
               $scope.searching = false;
               $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet_main");
+              window.location.assign("");
               break;
             case "searchMenu":
               $scope.changeActiveSubMenu(itemToDisplay);
