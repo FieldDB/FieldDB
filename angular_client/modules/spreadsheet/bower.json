@@ -1,0 +1,30 @@
+{
+  "name": "fielddb-spreadsheet",
+  "version": "1.82.1",
+  "authors": [
+    "info@fielddb.org"
+  ],
+  "description": "A Free Tool for Creating and Maintaining a Shared Database",
+  "main": "dist/fielddb-glosser.min.js",
+  "keywords": [
+    "igt",
+    "leipzig",
+    "conventions",
+    "linguistics"
+  ],
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "libs",
+    "dist",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "fielddb-glosser": "*"
+  }
+}
