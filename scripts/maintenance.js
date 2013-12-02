@@ -312,6 +312,66 @@ $.couch.allDbs({
 });
 
 
+
+/*
+Remove block non admin writes from all users activity feeds: 
+ */
+$.couch.allDbs({
+    success: function(results) {
+        console.log(results);
+        for (var db in results) {
+
+            (function(dbname) {
+                if (dbname.indexOf("-") === -1) {
+                    // console.log(dbname + "  is not a corpus or activity feed " );
+                    return;
+                }
+                var sourceDB = "";
+                if (dbname.indexOf("activity_feed") > -1) {
+                    if (dbname.split("-").length >= 3) {
+                        sourceDB = "new_corpus_activity_feed";
+                    } else {
+                        sourceDB = "new_user_activity_feed";
+                    }
+                } else {
+                    sourceDB = "new_corpus";
+                }
+                if(sourceDB  != "new_user_activity_feed"){
+                    return;
+                }
+                console.log(dbname + " is a " + sourceDB);
+                var database = $.couch.db(dbname);
+                database.openDoc("_design/blockNonContribAdminWrites", {
+                    success: function(blockDoc) {
+                        // console.log("Found blockNonContribAdminWrites", blockDoc);
+                        database.removeDoc(blockDoc, {
+                            success: function(serverResults) {
+                                console.log("removed blockNonContribAdminWrites for " + dbname, JSON.stringify(blockDoc));
+                            },
+                            error: function(serverResults) {
+                                console.log("There was a problem removing the doc." + dbname, +JSON.stringify(blockDoc));
+                            }
+                        });
+
+                    },
+                    error: function(serverResults) {
+                        console.log("There was no blockNonContribAdminWrites." + dbname, +JSON.stringify(blockDoc));
+                    }
+                });
+
+
+
+            })(results[db]);
+
+        }
+    },
+    error: function(error) {
+        console.log("Error getting db list", error);
+    }
+});
+
+
+
 /*
 Remove extra quotes in security docs
  */

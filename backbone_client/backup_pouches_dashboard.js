@@ -150,7 +150,7 @@ require(
         /* Take them to the user page so they can choose a corpus */
         console.log("All your data has been backed up and is ready to be used in version 1.38 and up \n\n"
             + window.actuallyReplicatedPouches.join("\n"));
-        // window.location.replace("http://spreadsheet.lingsync.org/#/spreadsheet_main");
+        // window.location.replace("http://app.lingsync.org");
       };
 
       /* Get a list of all pouches */
