@@ -100,10 +100,26 @@
 				Select a Different Corpus
 			</button>
 		</div>
+		
 	</div>
+	<br />
+
 	<div class="row-fluid pagination-centered">
 		<br /><br />
 		<button class="btn btn-info" ng-click="contactUs()">Contact Us</button>
-</div>
+		<button class="btn btn-info" ng-click="showResetPassword=!showResetPassword">Reset Password</button>
+		
+	</div>
+	<br />
+	<div class="mainPageDiv" ng-show="showResetPassword==true"> Password Reset:
+		<br />
+		<form ng-submit='changePasswordSubmit()'>
+			<label>Old Password:</label><input type="password" ng-model="resetPasswordInfo.password"/> <br/>
+			<label>New Password:</label><input type="password" ng-model="resetPasswordInfo.newpassword"/><br/>
+			<label>Confirm new password:</label><input type="password" ng-model="resetPasswordInfo.confirmpassword"/><br/>
+
+			<button class="btn btn-primary" ng-disabled="loading==true">Reset Password</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+		</form>
+	</div>
 </div>
     
