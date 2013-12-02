@@ -2373,6 +2373,33 @@ define(
           }
         }
       });
+      $scope.resetPasswordInfo = {};
+      $scope.changePasswordSubmit = function(){
+        if ($scope.resetPasswordInfo.confirmpassword !== $scope.resetPasswordInfo.newpassword) {
+          $rootScope.notificationMessage = "New passwords don't match.";
+          $rootScope.openNotification();
+          return;
+        }
+
+        $scope.resetPasswordInfo.username = "testing182usercreation"; //$rootScope.userInfo.name,
+        Data.changePassword($scope.resetPasswordInfo).then(function(result){
+          console.log(result);
+          $scope.resetPasswordInfo = {};
+          $scope.showResetPassword = false;
+          $rootScope.notificationMessage = "Successfully updated password";
+          $rootScope.openNotification();
+        }, function(reason){
+          console.log(reason);
+          var message = "Please report this.";
+          if (reason.status == 0) {
+            message = "Are you offline?";
+          } else {
+            message = reason.data.userFriendlyErrors.join(" ");
+          }
+          $rootScope.notificationMessage = "Error updating password. " + message;
+          $rootScope.openNotification();
+        });
+      };
 
       $scope.newRecordHasBeenEditedButtonClass = function() {
         if ($rootScope.newRecordHasBeenEdited === true) {

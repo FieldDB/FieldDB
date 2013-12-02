@@ -393,6 +393,26 @@ define(
                 return response;
               });
               return promise;
+            },
+            'changePassword': function(changePasswordInfo) {
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/spreadsheet_main");
+                return;
+              }
+              var config = {
+                method: "POST",
+                data: changePasswordInfo,
+                // url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/changepassword",
+                url: "https://localhost:3183/changepassword",
+                withCredentials: true
+              };
+
+              console.log("Contacting the server to change password. " + config.url);
+              var promise = $http(config).then(function(response) {
+                return response;
+              });
+              return promise;
             }
           };
         });
