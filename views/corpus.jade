@@ -37,11 +37,11 @@ block content
           .span4
         .row-fluid
           .span12
-            <iframe src="/libs/activities_visualization/index.html?#{corpora[0].corpusinfo.pouchname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
+            <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{corpora[0].corpusinfo.pouchname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
         .row-fluid
           .span11.offset1
             - var pouchname = corpora[0].corpusinfo.pouchname.toString()
-            form.form-inline#searchCorpus(action='https://lexicondev.lingsync.org/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
+            form.form-inline#searchCorpus(action='http://localhost:3185/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
               input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
               | &nbsp;&nbsp;
               button.btn.btn-small.btn-success(type='submit', id='corpus_search')
