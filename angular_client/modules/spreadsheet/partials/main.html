@@ -107,7 +107,7 @@
 	<div class="row-fluid pagination-centered">
 		<br /><br />
 		<button class="btn btn-info" ng-click="contactUs()">Contact Us</button>
-		<button class="btn btn-info" ng-click="showResetPassword=!showResetPassword">Reset Password</button>
+		<button class="btn btn-info" ng-show="authenticated==true" ng-click="showResetPassword=!showResetPassword">Reset Password</button>
 		
 	</div>
 	<br />
