@@ -1,0 +1,350 @@
+@import url(https://fonts.googleapis.com/css?family=Andika);
+
+@import url(https://fonts.googleapis.com/css?family=Droid+Sans);
+
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);
+
+@import url(/site/bootstrap/css/bootstrap.min.css);
+
+a {
+	color: #5F1BF2;
+}
+
+h1 {
+	color: #000000;
+	font-size: 3em;
+	font-family: 'Andika', sans-serif;
+}
+
+h2 {
+	color: #000000;
+	font-size: 1.2em;
+}
+
+h3 {
+	color: #000000;
+}
+
+.LingSyncBody { /* 	background-color: #000000; */
+	background-image: url(/site/img/test_background.png);
+	font-family: 'Droid Sans', sans-serif;
+}
+
+.mainContainer {
+	margin-right: 12%;
+	margin-left: 12%;
+}
+
+.mainHeader {
+	color: #000000;
+	min-height: 100px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background-image: linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -o-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -moz-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -webkit-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -ms-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.17, rgb(159,
+		216, 242) ), color-stop(0.56, rgb(205, 255, 255) ),
+		color-stop(0.95, rgb(205, 255, 255) ) );
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	margin-top: 10px;
+}
+
+.mainHeaderLogo {
+	padding-left: 25px;
+	float: left;
+}
+
+span.headerTagLine {
+	font-size: 1.4em;
+	padding-left: 70px;
+	font-family: "Andika";
+	margin-top: -20px;
+}
+
+.mainHeaderButton {
+	padding-top: 45px;
+	padding-right: 25px;
+	float: right;
+}
+
+.menubar {
+	background-color: #74C2E1;
+	border: 1px solid #000000;
+	background: #74C2E1;
+	min-height: 40px;
+	border-radius: 15px;
+	text-align: center;
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+.menubar a.active { /* 	text-decoration: underline; */
+	text-shadow: 2px 2px 5px #FFFFFF;
+}
+
+.menubar span {
+	margin-top: 0;
+	padding: 0;
+	text-align: center;
+	height: 40px;
+	border-radius: 5px;
+	display: inline;
+}
+
+.menubar span a {
+	text-decoration: none;
+	line-height: 40px;
+	color: #000000;
+	text-transform: uppercase;
+	font-size: 1.1em;
+	font-weight: 900;
+	padding: 0 15px;
+	background: #74C2E1;
+	transition: text-shadow 700ms;
+	-moz-transition: text-shadow 700ms; /* Firefox 4 */
+	-webkit-transition: text-shadow 700ms; /* Safari and Chrome */
+	-o-transition: text-shadow 700ms; /* Opera */
+}
+
+.menubar a:hover {
+	text-shadow: 2px 2px 10px #0011FF;
+}
+
+.mainContentDiv {
+	margin-top: 0px;
+	margin-bottom: 10px;
+	background-color: #FAFAFA;
+	color: #000000;
+	padding: 15px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	min-height: 420px;
+}
+
+.mainTitleBackground {
+	color: #000000;
+	min-height: 50px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom: 1px solid #DEDEDE;
+	background-image: linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -o-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -moz-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -webkit-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -ms-linear-gradient(left, rgb(159, 216, 242) 17%,
+		rgb(205, 255, 255) 56%, rgb(205, 255, 255) 95% );
+	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.17, rgb(159,
+		216, 242) ), color-stop(0.56, rgb(205, 255, 255) ),
+		color-stop(0.95, rgb(205, 255, 255) ) );
+	padding: 10px;
+	margin-top: -15px;
+	margin-right: -15px;
+	margin-left: -15px;
+	margin-bottom: 10px;
+	box-shadow: 0px 3px 2px #DEDEDE;
+}
+
+#mainBodyTitle {
+	text-align: center;
+	text-shadow: 1px 1px 1px #D2EAFA;
+	margin-top: -10px;
+	margin-bottom: 25px;
+}
+
+#mainBodyHeader {
+	font-size: 1.2em;
+	font-weight: 700;
+	color: #000000;
+	padding-right: 10px;
+	padding-left: 10px;
+	margin-left: 15%;
+	margin-right: 15%;
+	margin-top: 5px;
+	margin-bottom: 0px;
+	text-align: center;
+}
+
+.contentSection {
+	margin-top: 25px;
+}
+
+.imageMenu {
+	margin-top: 25px;
+	margin-bottom: 0px;
+	min-height: 115px;
+	text-align: center;
+}
+
+.imageMenu img {
+	margin-top: 0px;
+	-webkit-transition: margin 0.5s ease-out;
+	-moz-transition: margin 0.5s ease-out;
+	-o-transition: margin 0.5s ease-out;
+}
+
+.imageMenu img:hover {
+	margin-top: -25px;
+}
+
+.imageMenu img.active {
+	margin-top: -25px;
+}
+
+.sideMenuContainerDiv {
+	width: 25%;
+	padding-right: 10px;
+	padding-top: 30px;
+	margin-top: -30px;
+	min-height: 400px;
+	background: url(/site/img/test_background.jpg) no-repeat right top;
+	float: left;
+}
+
+.floatRight {
+	float: right;
+	width: 65%;
+	margin-right: 4%;
+}
+
+.clearBoth {
+	clear: both;
+}
+
+.singleHeaderPage {
+	margin-right: 20%;
+	margin-left: 20%;
+}
+
+.bulletSectionHeaderTop {
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	border-top: 1px solid #DEDEDE;
+}
+
+.bulletSectionHeaderBottom {
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom: 1px solid #DEDEDE;
+}
+
+.bulletSectionHeader_noMenu {
+	border-radius: 10px;
+	background-color: #D2EAFA;
+	border: 1px solid #DEDEDE;
+	margin: 0px;
+	padding: 10px;
+	font-size: 1.3em;
+	font-weight: 700;
+	font-family: "Ubuntu";
+	letter-spacing: 1px;
+	color: #000000;
+}
+
+.bulletSectionHeader {
+	background-color: #D2EAFA;
+	min-height: 20px;
+	margin-top: 0px;
+	padding: 10px;
+	border-right: 1px solid #DEDEDE;
+	border-left: 1px solid #DEDEDE;
+}
+
+.bulletSectionHeader:hover {
+	background-color: #74C2E1;
+}
+
+.bulletSectionHeader span {
+	font-size: 1.3em;
+	font-weight: 700;
+	font-family: "Ubuntu";
+	letter-spacing: 1px;
+	color: #000000;
+}
+
+.bulletSectionHeader span.active {
+	color: #5100FF;
+}
+
+.bulletSection {
+	border-radius: 10px;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-top: 0px;
+	padding: 10px;
+	margin-right: 25px;
+	background: url(/site/img/lingsync_transparent.png) no-repeat;
+	background-position: center top;
+	text-shadow: 1px 1px 1px #FFFFFF;
+	min-height: 300px;
+	margin-right: 10px;
+	min-height: 300px;
+	font-size: 1.2em;
+	line-height: 1.5em;
+}
+
+.bulletSection td {
+	vertical-align: top;
+}
+
+.bullet {
+	padding: 5px;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.bulletSection hr {
+	background-color: #CDFFFF;
+	border: #000 1px dotted;
+	border-style: none none dotted;
+	color: #74C2E1;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+input:focus {
+	background-color: #EAFFFF;
+	outline-size: 6px !important; 
+	outline: #000000 !important;
+}
+
+/*Google Custom Search Enging CSS overrides
+  for inserting into Bootstrap page*/
+
+#gs_tti50 > input {
+  margin-top:-1px !important;
+}
+
+.cse .gsc-control-cse, .gsc-control-cse {
+  background-color: transparent !important;
+  border: 0px !important;
+  margin-top: 0px !important;
+  padding: 0px !important;
+  width: 260px !important;
+}
+
+.gsc-search-box-tools .gsc-search-box .gsc-input {
+	padding-right: 0px !important;
+	padding-top: 2px !important;
+	padding-left: 12px !important;
+}
+
+.gsc-input-box input[type="text"], .gsc-input-box input[type="text"]:focus, .gsc-input-box input[type="text"]:active {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
