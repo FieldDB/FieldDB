@@ -407,8 +407,7 @@ define(
               var config = {
                 method: "POST",
                 data: changePasswordInfo,
-                // url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/changepassword",
-                url: "https://localhost:3183/changepassword",
+                url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/changepassword",
                 withCredentials: true
               };
 
