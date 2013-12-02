@@ -159,7 +159,7 @@ define(
                   username: user,
                   password: password
                 },
-                // withCredentials: true
+                withCredentials: true
               };
               var corpusConfig = {
                 method: "POST",
@@ -196,7 +196,11 @@ define(
                   var message = "please report this.";
                   if(err.status == 0){
                     message = "are you offline?";
+                    if($rootScope.serverCode == "mcgill"|| $rootScope.serverCode == "concordia"){
+                      message = "have you accepted the server's security certificate? (please refer to your registration email)";
+                    }
                   }
+
                   deferred.reject("Cannot contact "+$rootScope.serverCode+" server, " + message);
                 });
               return deferred.promise;
@@ -206,8 +210,8 @@ define(
               var config = {
                 method: "POST",
                 url: newUserInfo.authUrl + "/register",
-                data: newUserInfo
-                // withCredentials : true
+                data: newUserInfo,
+                withCredentials : true
               };
 
               var promise = $http(config).then(
