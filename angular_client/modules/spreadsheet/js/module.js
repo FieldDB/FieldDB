@@ -20,10 +20,10 @@ define(
 
     var SpreadsheetStyleDataEntry = angular
       .module(
-        'SpreadsheetStyleDataEntry', ['SpreadsheetStyleDataEntry.services',
-          'SpreadsheetStyleDataEntry.private_services',
-          'SpreadsheetStyleDataEntry.directives',
-          'SpreadsheetStyleDataEntry.filters', 'ui.bootstrap'
+        'SpreadsheetStyleDataEntry', ['spreadsheet_services',
+          'spreadsheet_private_services',
+          'spreadsheet_directives',
+          'spreadsheet_filters', 'ui.bootstrap'
         ])
       .config(
         [

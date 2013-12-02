@@ -643,6 +643,30 @@ define([
       this.set("trashed", "deleted"+Date.now());
       this.preprendValidationStatus("Deleted");
       this.saveAndInterConnectInApp(function(){
+
+      window.app.addActivity({
+        verb: "deleted",
+        verbicon: "icon-trash",
+        directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>a datum</a> ",
+        directobjecticon: "icon-list",
+        indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+        teamOrPersonal: "team",
+        context: " via Offline App.",
+        timeSpent: timeSpentDetails
+      });
+
+      window.app.addActivity({
+        verb: "deleted",
+        verbicon: "icon-trash",
+        directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>a datum</a> ",
+        directobjecticon: "icon-list",
+        indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+        teamOrPersonal: "personal",
+        context: " via Offline App.",
+        timeSpent: timeSpentDetails
+      });
+
+
         /* This actually removes it from the database */
         //thisdatum.destroy();
         if(window.appView){

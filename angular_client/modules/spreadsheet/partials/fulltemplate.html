@@ -7,10 +7,10 @@
 	<form ng-submit="createRecord(newFieldData)" >
 		<div class="span5">
 			<div class="focus_box_div"><input focus /></div>
-			<input glossmorpheme keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
+			<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1"
 				placeholder="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''" >
-			<input keypress-mark-as-new class="span5"
+			<input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span5"
 				type="text" ng-model="newFieldData.field2"
 				placeholder="{{fields.field2.title}}"
 				ng-hide="fields.field2.label==''" >
@@ -20,10 +20,10 @@
 				ng-hide="fields.field3.label==''">
 		</div>
 		<div class="span5">
-			<input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field4"
+			<input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field4"
 				placeholder="{{fields.field4.title}}"
 				ng-hide="fields.field4.label==''">
-			<input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field6"
+			<input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6"
 				placeholder="{{fields.field6.title}}"
 				ng-hide="fields.field6.label==''">
 			<input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.datumTags"
@@ -107,14 +107,14 @@
 			<form ng-submit="markAsEdited(fieldData, datum);">
 			<div class="span5">
 				<div class="focus_box_div"><input focus /></div>
-				<input glossmorpheme keypress-mark-as-edited class="span5" 
+				<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span5" 
 					type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
 					ng-hide="fields.field1.label==''"
 					placeholder="{{fields.field1.title}}"
 					ng-disabled="readOnly==true">
-				<input keypress-mark-as-edited class="span5"
+				<input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span5"
 					type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
@@ -151,10 +151,10 @@
 			<div class="span2 entered_modified_info">
 				<span ng-show="searching==true"><button class="btn btn-primary" ng-click="selectNone()">Done</button><br /><br /></span>
 				<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}</span><br />
-				<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://www.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
+				<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
 				<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
 				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
-				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} />&nbsp;</span>
+				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} />&nbsp;</span>
 				<div class="expandCollapseButton">
 					<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span>
 					<span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
@@ -255,10 +255,10 @@
 		<div class="span2 entered_modified_info">
 			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /><br /></span>
 			<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}<br />
-			<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://www.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
+			<span ng-hide="!datum.enteredByUser">by <img ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">{{datum.enteredByUser.username}}<br /></span><br />
 			<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
 				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
-				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://www.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} /> </span>
+				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title={{modifiedByUser.username}} /> </span>
 			<span ng-show="datum.hasAudio==true"><br /><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
 		</div>
 

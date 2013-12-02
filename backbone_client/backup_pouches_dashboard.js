@@ -144,7 +144,7 @@ require(
       window.finishedReplicating = function() {
         localStorage.setItem(window.username + "lastUpdatedAtVersion", "1.40");
         $(".spinner-status").html("Finished backing up your previous data.");
-        $(".finished-status").html("Unfortunately LingSync isn't able to run offline because of changes to the Chrome Extensions technology. Please use LingSync online at: <a href='http://spreadsheet.lingsync.org'>http://spreadsheet.lingsync.org</a>");
+        $(".finished-status").html("Unfortunately LingSync isn't able to run offline because of changes to the Chrome Extensions technology. Please use LingSync online at: <a href='http://app.lingsync.org'>http://app.lingsync.org</a>");
         $(".spinner-image").attr("src","images/icon.png");
 
         /* Take them to the user page so they can choose a corpus */
