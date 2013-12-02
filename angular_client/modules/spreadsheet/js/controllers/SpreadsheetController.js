@@ -59,7 +59,7 @@ define(
       $scope.useAutoGlosser = true;
       try {
         var previousValue = localStorage.getItem("useAutoGlosser");
-        if (previousValue == "false") {
+        if (previousValue === "false") {
           $scope.useAutoGlosser =  false; 
         }
       } catch (e) {
@@ -271,9 +271,9 @@ define(
       $rootScope.resultSize = Preferences.resultSize;
 
       $scope.changeActiveSubMenu = function(subMenu) {
-        if ($rootScope.activeSubMenu == subMenu) {
+        if ($rootScope.activeSubMenu === subMenu) {
           $rootScope.activeSubMenu = 'none';
-        } else if (subMenu == 'none' && $scope.searching === true) {
+        } else if (subMenu === 'none' && $scope.searching === true) {
           return;
         } else {
           $rootScope.activeSubMenu = subMenu;
@@ -281,10 +281,10 @@ define(
       };
 
       $scope.navigateVerifySaved = function(itemToDisplay) {
-        if ($scope.saved == 'no') {
+        if ($scope.saved === 'no') {
           $rootScope.notificationMessage = "Please save changes before continuing.";
           $rootScope.openNotification();
-        } else if ($scope.saved == "saving") {
+        } else if ($scope.saved === "saving") {
           $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
           $rootScope.openNotification();
         } else if ($rootScope.newRecordHasBeenEdited === true) {
@@ -362,7 +362,7 @@ define(
 
               for (var i in scopeSessions) {
                 for (var j in scopeSessions[i].sessionFields) {
-                  if (scopeSessions[i].sessionFields[j].label == "goal") {
+                  if (scopeSessions[i].sessionFields[j].label === "goal") {
                     if (scopeSessions[i].sessionFields[j].mask) {
                       scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
                         .substr(0, 20);
@@ -399,11 +399,11 @@ define(
 
                   for (var j in dataFromServer[i].value.datumFields) {
                     // Get enteredByUser object
-                    if (dataFromServer[i].value.datumFields[j].label == "enteredByUser") {
+                    if (dataFromServer[i].value.datumFields[j].label === "enteredByUser") {
                       newDatumFromServer.enteredByUser = dataFromServer[i].value.datumFields[j].user;
                     }
                     // Get modifiedByUser object
-                    else if (dataFromServer[i].value.datumFields[j].label == "modifiedByUser") {
+                    else if (dataFromServer[i].value.datumFields[j].label === "modifiedByUser") {
                       newDatumFromServer.modifiedByUser = {};
                       newDatumFromServer.modifiedByUser.users = dataFromServer[i].value.datumFields[j].users;
                     } else {
@@ -412,13 +412,13 @@ define(
                   }
 
                   // Grab enteredByUser for older records
-                  if (dataFromServer[i].value.enteredByUser && typeof dataFromServer[i].value.enteredByUser == "string") {
+                  if (dataFromServer[i].value.enteredByUser && typeof dataFromServer[i].value.enteredByUser === "string") {
                     newDatumFromServer.enteredByUser = {};
                     newDatumFromServer.enteredByUser.username = dataFromServer[i].value.enteredByUser;
                   }
 
                   // Update users to add a dateEntered to all datums (oversight in original code; needed so that datums are ordered properly)
-                  if (!dataFromServer[i].value.dateEntered || dataFromServer[i].value.dateEntered === "" || dataFromServer[i].value.dateEntered == "N/A") {
+                  if (!dataFromServer[i].value.dateEntered || dataFromServer[i].value.dateEntered === "" || dataFromServer[i].value.dateEntered === "N/A") {
                     newDatumFromServer.dateEntered = "2000-09-06T16:31:30.988Z";
                     newDatumFromServer.saved = "no";
                   } else {
@@ -454,7 +454,7 @@ define(
                   // Load data from current session into scope
                   if (!sessionID) {
                     scopeData.push(newDatumFromServer);
-                  } else if (newDatumFromServer.sessionID == sessionID) {
+                  } else if (newDatumFromServer.sessionID === sessionID) {
                     scopeData.push(newDatumFromServer);
                   }
                 }
@@ -558,7 +558,7 @@ define(
             "password": auth.password
           };
 
-          // if (auth.user == "senhorzinho") {
+          // if (auth.user === "senhorzinho") {
           //   var r = confirm("Hello, developer! Would you like to enter developer mode?");
           //   if (r === true) {
           //     $rootScope.developer = true;
@@ -705,12 +705,12 @@ define(
       };
 
       $scope.changeActiveSession = function(activeSessionToSwitchTo) {
-        if (activeSessionToSwitchTo == 'none' || activeSessionToSwitchTo === undefined) {
+        if (activeSessionToSwitchTo === 'none' || activeSessionToSwitchTo === undefined) {
           $scope.activeSession = undefined;
         } else {
           $scope.activeSession = activeSessionToSwitchTo;
           for (var i in $scope.sessions) {
-            if ($scope.sessions[i]._id == activeSessionToSwitchTo) {
+            if ($scope.sessions[i]._id === activeSessionToSwitchTo) {
               $scope.fullCurrentSession = $scope.sessions[i];
 
               // Set up object to make session editing easier
@@ -738,9 +738,9 @@ define(
         } else {
           var sessionTitle;
           for (var i in $scope.sessions) {
-            if ($scope.sessions[i]._id == $scope.activeSession) {
+            if ($scope.sessions[i]._id === $scope.activeSession) {
               for (var j in $scope.sessions[i].sessionFields) {
-                if ($scope.sessions[i].sessionFields[j].label == "goal") {
+                if ($scope.sessions[i].sessionFields[j].label === "goal") {
                   if ($scope.sessions[i].sessionFields[j].mask) {
                     $scope.currentSessionName = $scope.sessions[i].sessionFields[j].mask;
                     return $scope.sessions[i].sessionFields[j].mask.substr(0,
@@ -765,7 +765,7 @@ define(
           var newSession = $scope.fullCurrentSession;
           for (var i in newSession.sessionFields) {
             for (var key in editSessionInfo) {
-              if (newSession.sessionFields[i].label == key) {
+              if (newSession.sessionFields[i].label === key) {
                 newSession.sessionFields[i].value = editSessionInfo[key];
                 newSession.sessionFields[i].mask = editSessionInfo[key];
               }
@@ -800,7 +800,7 @@ define(
                 for (var i in scopeDataToEdit) {
                   $rootScope.loading = true;
                   (function(index) {
-                    if (scopeDataToEdit[index].sessionID == newSession._id) {
+                    if (scopeDataToEdit[index].sessionID === newSession._id) {
                       Data
                         .async($rootScope.DB.pouchname,
                           scopeDataToEdit[index].id)
@@ -834,7 +834,7 @@ define(
 
 
       $scope.deleteEmptySession = function(activeSessionID) {
-        if ($scope.currentSessionName == "All Sessions") {
+        if ($scope.currentSessionName === "All Sessions") {
           $rootScope.notificationMessage = "You must select a session to delete.";
           $rootScope.openNotification();
         } else {
@@ -867,7 +867,7 @@ define(
 
                     // Remove session from scope
                     for (var i in $scope.sessions) {
-                      if ($scope.sessions[i]._id == activeSessionID) {
+                      if ($scope.sessions[i]._id === activeSessionID) {
                         $scope.sessions.splice(i, 1);
                       }
                     }
@@ -898,17 +898,17 @@ define(
               newSessionRecord.lastModifiedBy = $rootScope.userInfo.name;
               for (var key in newSession) {
                 for (var i in newSessionRecord.sessionFields) {
-                  if (newSessionRecord.sessionFields[i].label == "user") {
+                  if (newSessionRecord.sessionFields[i].label === "user") {
                     newSessionRecord.sessionFields[i].value = $rootScope.userInfo.name;
                     newSessionRecord.sessionFields[i].mask = $rootScope.userInfo.name;
                   }
-                  if (newSessionRecord.sessionFields[i].label == "dateSEntered") {
+                  if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
                     newSessionRecord.sessionFields[i].value = new Date()
                       .toString();
                     newSessionRecord.sessionFields[i].mask = new Date()
                       .toString();
                   }
-                  if (key == newSessionRecord.sessionFields[i].label) {
+                  if (key === newSessionRecord.sessionFields[i].label) {
                     newSessionRecord.sessionFields[i].value = newSession[key];
                     newSessionRecord.sessionFields[i].mask = newSession[key];
                   }
@@ -923,7 +923,7 @@ define(
                     newSessionRecord._id = savedRecord.data.id;
                     newSessionRecord._rev = savedRecord.data.rev;
                     for (var i in newSessionRecord.sessionFields) {
-                      if (newSessionRecord.sessionFields[i].label == "goal") {
+                      if (newSessionRecord.sessionFields[i].label === "goal") {
                         newSessionRecord.title = newSessionRecord.sessionFields[i].mask
                           .substr(0, 20);
                       }
@@ -958,10 +958,10 @@ define(
       };
 
       $scope.reloadPage = function() {
-        if ($scope.saved == "no") {
+        if ($scope.saved === "no") {
           $rootScope.notificationMessage = "Please save changes before continuing.";
           $rootScope.openNotification();
-        } else if ($scope.saved == "saving") {
+        } else if ($scope.saved === "saving") {
           $rootScope.notificationMessage = "Changes are currently being saved.\nYou may refresh the data once this operation is done.";
           $rootScope.openNotification();
         } else {
@@ -1030,7 +1030,7 @@ define(
       $scope.createRecord = function(fieldData) {
 
         // // Reset new datum form data and enable upload button; only reset audio field if present
-        if ($rootScope.template == "fulltemplate") {
+        if ($rootScope.template === "fulltemplate") {
           document.getElementById("form_new_datum_audio-file").reset();
           $scope.newDatumHasAudioToUpload = false;
         }
@@ -1044,7 +1044,7 @@ define(
         // Edit record fields with labels from prefs
         for (var dataKey in fieldData) {
           for (var fieldKey in $scope.fields) {
-            if (dataKey == fieldKey) {
+            if (dataKey === fieldKey) {
               var newDataKey = $scope.fields[fieldKey].label;
               fieldData[newDataKey] = fieldData[dataKey];
               delete fieldData[dataKey];
@@ -1105,7 +1105,7 @@ define(
       $rootScope.markAsEdited = function(fieldData, datum) {
         var utterance = "Datum";
         for (var key in fieldData) {
-          if (key == "datumTags" && typeof fieldData.datumTags === 'string') {
+          if (key === "datumTags" && typeof fieldData.datumTags === 'string') {
             var newDatumFields = fieldData.datumTags.split(",");
             var newDatumFieldsArray = [];
             for (var i in newDatumFields) {
@@ -1120,7 +1120,7 @@ define(
             datum[$scope.fields[key].label] = fieldData[key];
           }
 
-          if ($scope.fields[key].label == "utterance") {
+          if ($scope.fields[key].label === "utterance") {
             utterance = fieldData[key];
           }
         }
@@ -1145,7 +1145,7 @@ define(
         $scope.saved = "no";
 
         // Limit activity to one instance in the case of multiple edits to the same datum before 'save'
-        if (!datum.saved || datum.saved == "yes") {
+        if (!datum.saved || datum.saved === "yes") {
           datum.saved = "no";
           // Update activity feed
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
@@ -1225,7 +1225,7 @@ define(
         var verifyCommentDelete = confirm("Are you sure you want to delete the comment '" + comment.text + "'?");
         if (verifyCommentDelete === true) {
           for (var i in datum.comments) {
-            if (datum.comments[i] == comment) {
+            if (datum.comments[i] === comment) {
               datum.comments.splice(i, 1);
             }
           }
@@ -1235,7 +1235,7 @@ define(
       $scope.saveChanges = function() {
         for (var i in $scope.allData) {
           (function(index) {
-            if ($scope.allData[index].saved && $scope.allData[index].saved == "no") {
+            if ($scope.allData[index].saved && $scope.allData[index].saved === "no") {
               var fieldData;
               $scope.saved = "saving";
 
@@ -1253,14 +1253,14 @@ define(
                       // Check for modifiedByUser field in original record; if not present, add it
                       var hasModifiedByUser = false;
                       for (var i = 0; i < editedRecord.datumFields.length; i++) {
-                        if (editedRecord.datumFields[i].label == "modifiedByUser") {
+                        if (editedRecord.datumFields[i].label === "modifiedByUser") {
                           hasModifiedByUser = true;
                         }
 
                         for (var key in fieldData) {
-                          if (editedRecord.datumFields[i].label == key) {
+                          if (editedRecord.datumFields[i].label === key) {
                             // Check for (existing) modifiedByUser field in original record and update correctly
-                            if (key == "modifiedByUser") {
+                            if (key === "modifiedByUser") {
                               editedRecord.datumFields[i].users = fieldData.modifiedByUser.users;
                             } else {
                               editedRecord.datumFields[i].mask = fieldData[key];
@@ -1333,9 +1333,9 @@ define(
                       // scope
                       for (var j = 0; j < newRecord.datumFields.length; j++) {
                         for (var key in fieldData) {
-                          if (newRecord.datumFields[j].label == key) {
+                          if (newRecord.datumFields[j].label === key) {
                             // Create enteredByUser object
-                            if (key == "enteredByUser") {
+                            if (key === "enteredByUser") {
                               newRecord.datumFields[j].mask = fieldData[key].username;
                               newRecord.datumFields[j].user = fieldData[key];
                             } else {
@@ -1431,7 +1431,7 @@ define(
       // Set auto-save interval for 5 minutes
       var autoSave = window.setInterval(
         function() {
-          if ($scope.saved == "no") {
+          if ($scope.saved === "no") {
             $scope.saveChanges();
           } else {
             // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
@@ -1444,7 +1444,7 @@ define(
 
       $scope.selectRow = function(scopeIndex) {
         // Do nothing if clicked row is currently selected
-        if ($scope.selected == scopeIndex) {
+        if ($scope.selected === scopeIndex) {
           return;
         }
         if ($scope.searching !== true) {
@@ -1472,7 +1472,7 @@ define(
         for (var key in $scope.fields) {
           fieldsInScope[$scope.fields[key].label] = true;
         }
-        if ($rootScope.template == "fulltemplate") {
+        if ($rootScope.template === "fulltemplate") {
           fieldsInScope.datumTags = true;
           fieldsInScope.comments = true;
         }
@@ -1495,7 +1495,7 @@ define(
           var searchTarget = false;
           if (!$scope.activeSession) {
             searchTarget = true;
-          } else if ($scope.allData[i].sessionID == $scope.activeSession) {
+          } else if ($scope.allData[i].sessionID === $scope.activeSession) {
             searchTarget = true;
           }
           if (searchTarget === true) {
@@ -1503,14 +1503,14 @@ define(
               if ($scope.allData[i][fieldkey]) {
                 // Limit search to visible data
                 if (fieldsInScope[fieldkey] === true) {
-                  if (fieldkey == "datumTags") {
+                  if (fieldkey === "datumTags") {
                     var tagString = JSON.stringify($scope.allData[i].datumTags);
                     tagString = tagString.toString().toLowerCase();
                     if (tagString.indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.allData[i]);
                       break;
                     }
-                  } else if (fieldkey == "comments") {
+                  } else if (fieldkey === "comments") {
                     for (var j in $scope.allData[i].comments) {
                       for (var commentKey in $scope.allData[i].comments[j]) {
                         if ($scope.allData[i].comments[j][commentKey].toString()
@@ -1547,7 +1547,7 @@ define(
         for (var i in $scope.allData) {
           if (!$scope.activeSession) {
             $scope.allData[i].checked = true;
-          } else if ($scope.allData[i].sessionID == $scope.activeSession) {
+          } else if ($scope.allData[i].sessionID === $scope.activeSession) {
             $scope.allData[i].checked = true;
           }
         }
@@ -1609,7 +1609,7 @@ define(
             (function(index) {
               if ($scope.activities[index]) {
                 var activitydb;
-                if ($scope.activities[index].teamOrPersonal == "team") {
+                if ($scope.activities[index].teamOrPersonal === "team") {
                   activitydb = $rootScope.DB.pouchname + "-activity_feed";
                 } else {
                   activitydb = $rootScope.userInfo.name + "-activity_feed";
@@ -1654,7 +1654,7 @@ define(
 
         dataToPost.serverCode = newUserInfo.serverCode;
 
-        if (dataToPost.username !== "" && (dataToPost.password == trim(newUserInfo.confirmPassword)) && dataToPost.email !== "") {
+        if (dataToPost.username !== "" && (dataToPost.password === trim(newUserInfo.confirmPassword)) && dataToPost.email !== "") {
           // Create user
           Data.register(dataToPost).then(function(response) {
             $rootScope.loading = false;
@@ -1727,7 +1727,7 @@ define(
 
         Data.getallusers(dataToPost).then(function(users) {
           for (var i in users.allusers) {
-            if (users.allusers[i].username == $rootScope.userInfo.name) {
+            if (users.allusers[i].username === $rootScope.userInfo.name) {
               $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
             }
           }
@@ -1750,12 +1750,12 @@ define(
                   $rootScope.readOnly = false;
                   $rootScope.writeOnly = false;
                 } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
-                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") == -1) {
+                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") === -1) {
                   // Read-only
                   $rootScope.admin = false;
                   $rootScope.readOnly = true;
                   $rootScope.writeOnly = false;
-                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") == -1 &&
+                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") === -1 &&
                   response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
                   // Write-only
                   $rootScope.admin = false;
@@ -1854,7 +1854,7 @@ define(
         // Prevent an admin from removing him/herself from a corpus; This
         // helps to avoid a situation in which there is no admin for a
         // corpus
-        if (userid == $rootScope.userInfo.name) {
+        if (userid === $rootScope.userInfo.name) {
           window
             .alert("You cannot remove yourself from a corpus.\nOnly another Admin can remove you.");
           return;
@@ -2262,7 +2262,7 @@ define(
           Data.async($rootScope.DB.pouchname, datum.id).then(function(originalRecord) {
             Data.removeRecord($rootScope.DB.pouchname, record, originalRecord._rev).then(function(response) {
               for (var i in datum.attachments) {
-                if (datum.attachments[i].filename == filename) {
+                if (datum.attachments[i].filename === filename) {
                   datum.attachments[i].description = "Deleted";
                   datum.attachments.splice(i, 1);
                 }
@@ -2271,7 +2271,7 @@ define(
               Data.async($rootScope.DB.pouchname, datum.id).then(function(record) {
                 // Delete attachment info for deleted record
                 for (var key in record.attachmentInfo) {
-                  if (key == filename) {
+                  if (key === filename) {
                     delete record.attachmentInfo[key];
                   }
                 }
@@ -2304,10 +2304,10 @@ define(
       };
 
       $scope.getSavedState = function() {
-        if ($scope.saved == "yes") {
+        if ($scope.saved === "yes") {
           $scope.savedStateButtonClass = "btn btn-success";
           return "Saved";
-        } else if ($scope.saved == "no") {
+        } else if ($scope.saved === "no") {
           $scope.savedStateButtonClass = "btn btn-danger";
           return "Save";
         } else {
@@ -2378,7 +2378,6 @@ define(
         if ($scope.resetPasswordInfo.confirmpassword !== $scope.resetPasswordInfo.newpassword) {
           $rootScope.notificationMessage = "New passwords don't match.";
           $rootScope.openNotification();
-          return;
         }
 
         $scope.resetPasswordInfo.username = "testing182usercreation"; //$rootScope.userInfo.name,
@@ -2391,7 +2390,7 @@ define(
         }, function(reason){
           console.log(reason);
           var message = "Please report this.";
-          if (reason.status == 0) {
+          if (reason.status === 0) {
             message = "Are you offline?";
           } else {
             message = reason.data.userFriendlyErrors.join(" ");
@@ -2410,7 +2409,7 @@ define(
       };
 
       $scope.mainBodyClass = function() {
-        if ($rootScope.activeSubMenu == 'searchMenu') {
+        if ($rootScope.activeSubMenu === 'searchMenu') {
           return "mainBodySearching";
         } else {
           return "mainBody";
@@ -2418,7 +2417,7 @@ define(
       };
 
       window.onbeforeunload = function(e) {
-        if ($scope.saved == "no") {
+        if ($scope.saved === "no") {
           return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
         } else {
           return;
