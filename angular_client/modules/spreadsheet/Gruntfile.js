@@ -45,6 +45,9 @@ module.exports = function(grunt) {
           src: ['**'],
           dest: 'release/libs/bootstrap/'
         }, {
+          src: ['favicon.ico'],
+          dest: 'release/'
+        }, {
           src: ['libs/require.min.js'],
           dest: 'release/'
         }, {
@@ -134,8 +137,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
-  grunt.registerTask('build-only', ['requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only', 'htmlmin', 'cssmin']);
+  grunt.registerTask('default', ['requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only', 'htmlmin', 'cssmin']);
 
-  grunt.registerTask('default', ['jshint', 'jasmine', 'requirejs', 'uglify', 'copy:spreadsheet', 'htmlmin', 'cssmin']);
+  grunt.registerTask('all', ['jshint', 'jasmine', 'requirejs', 'uglify', 'copy:spreadsheet', 'htmlmin', 'cssmin']);
 
 };
