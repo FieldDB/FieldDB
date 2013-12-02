@@ -2380,9 +2380,10 @@ define(
           $rootScope.openNotification();
         }
 
-        $scope.resetPasswordInfo.username = "testing182usercreation"; //$rootScope.userInfo.name,
+        $scope.resetPasswordInfo.username = $rootScope.userInfo.name,
         Data.changePassword($scope.resetPasswordInfo).then(function(result){
           console.log(result);
+          Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
           $scope.resetPasswordInfo = {};
           $scope.showResetPassword = false;
           $rootScope.notificationMessage = "Successfully updated password";
