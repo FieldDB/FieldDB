@@ -214,7 +214,7 @@ $.couch.allDbs({
                                 "corpusid": ""
                             };
                         }
-                        
+
                         if (doUpdate) {
                             updateCorpusDoc(results, localdbname);
                         }
@@ -280,7 +280,7 @@ $.couch.allDbs({
 
             (function(dbname) {
                 if (dbname.indexOf("-") === -1) {
-                    console.log(dbname + "  is not a corpus or activity feed " );
+                    console.log(dbname + "  is not a corpus or activity feed ");
                     return;
                 }
                 var sourceDB = "";
@@ -313,6 +313,51 @@ $.couch.allDbs({
 
 
 
+
+/*
+Replicate all databases
+ */
+$.couch.urlPrefix = "https://corpus.lingsync.org"
+$.couch.allDbs({
+    success: function(results) {
+        console.log(results);
+        for (var db in results) {
+
+            (function(dbname) {
+                if (dbname.indexOf("-") === -1) {
+                    console.log(dbname + "  is not a corpus or activity feed ");
+                    return;
+                }
+                var sourceDB = "";
+                if (dbname.indexOf("activity_feed") > -1) {
+                    if (dbname.split("-").length >= 3) {
+                        sourceDB = "new_corpus_activity_feed";
+                    } else {
+                        sourceDB = "new_user_activity_feed";
+                    }
+                } else {
+                    sourceDB = "new_corpus";
+                }
+                console.log(dbname + " is a " + sourceDB);
+
+                $.couch.replicate(dbname, "https://admin:none@corpusdev.lingsync.org/"+dbname, {
+                    success: function(result) {
+                        console.log(dbname, result);
+                    },
+                    error: function(error) {
+                        console.log("Error replicating to db" + dbname, error);
+                    }
+                });
+            })(results[db]);
+
+        }
+    },
+    error: function(error) {
+        console.log("Error getting db list", error);
+    }
+});
+
+
 /*
 Remove block non admin writes from all users activity feeds: 
  */
@@ -336,7 +381,7 @@ $.couch.allDbs({
                 } else {
                     sourceDB = "new_corpus";
                 }
-                if(sourceDB  != "new_user_activity_feed"){
+                if (sourceDB != "new_user_activity_feed") {
                     return;
                 }
                 console.log(dbname + " is a " + sourceDB);
@@ -475,3 +520,189 @@ database.allDocs({
         console.log("Error opening the database ", error);
     }
 });
+
+
+
+/*
+Merge users roles
+ */
+Array.prototype.getUnique = function(){
+   var u = {}, a = [];
+   for(var i = 0, l = this.length; i < l; ++i){
+      if(u.hasOwnProperty(this[i])) {
+         continue;
+      }
+      a.push(this[i]);
+      u[this[i]] = 1;
+   }
+   return a;
+}
+var database = $.couch.db("userscorpusserveragain");
+var usersdatabase = $.couch.db("_users");
+database.allDocs({
+    success: function(result) {
+        //console.log(result);
+        var data = result.rows;
+        for (var couchdatum in data) {
+
+            (function(userid) {
+
+                database.openDoc(userid.id, {
+                    success: function(originalDoc) {
+                        if(!originalDoc.name){
+                            console.log("This is not a user ",originalDoc);
+                            return;
+                        }
+                        var temp = originalDoc.roles.join(",") || "";
+                        if (temp)
+                            originalDoc.roles = temp.replace(/"/g, "").split(",");
+
+                        usersdatabase.openDoc(userid.id, {
+                            success: function(corpusdevDoc) {
+                                var temp = corpusdevDoc.roles.join(",") || "";
+                                if (temp)
+                                    corpusdevDoc.roles = temp.replace(/"/g, "").split(",");
+                                console.log(originalDoc.roles);
+                                corpusdevDoc.roles = corpusdevDoc.roles.concat(originalDoc.roles);
+                                corpusdevDoc.roles = corpusdevDoc.roles.getUnique();
+
+                                console.log("Combined roles: " , corpusdevDoc.roles);
+
+                                usersdatabase.saveDoc(corpusdevDoc, {
+                                    success: function(serverResults) {
+                                        console.log("combined roles for user " + originalDoc._id, JSON.stringify(originalDoc), JSON.stringify(corpusdevDoc));
+                                    },
+                                    error: function(serverResults) {
+                                        console.log("There was a problem combining the user doc. " + originalDoc._id, JSON.stringify(corpusdevDoc));
+                                    }
+                                });
+                            },
+                            error: function(error) {
+                                console.log("User is not on corpusdev ", error);
+                                delete originalDoc._rev;
+                                usersdatabase.saveDoc(originalDoc, {
+                                    success: function(serverResults) {
+                                        console.log("transfering user to corpusdev " + originalDoc._id);
+                                    },
+                                    error: function(serverResults) {
+                                        console.log("There was a problem saving the user doc to corpusdev. " + originalDoc._id, JSON.stringify(originalDoc));
+                                    }
+                                });
+                            }
+                        });
+
+                    },
+                    error: function(error) {
+                        console.log("Error opening your docs ", error);
+                    }
+                });
+
+            })(data[couchdatum]);
+
+        }
+    },
+    error: function(error) {
+        console.log("Error opening the database ", error);
+    }
+});
+
+
+/*
+Merge users docs
+ */
+var database = $.couch.db("zfielddbuserscouchcorpus");
+var usersdatabase = $.couch.db("zfielddbuserscouch");
+database.allDocs({
+    success: function(result) {
+        //console.log(result);
+        var data = result.rows;
+        for (var couchdatum in data) {
+
+            (function(userid) {
+
+                database.openDoc(userid.id, {
+                    success: function(originalDoc) {
+                        if(!originalDoc.username){
+                            console.log("This is not a user ",originalDoc);
+                            return;
+                        }
+
+                        usersdatabase.openDoc(userid.id, {
+                            success: function(corpusdevDoc) {
+                                // corpusdevDoc.original_created_at = originalDoc.created_at;
+                                // corpusdevDoc.original_email = originalDoc.email;
+                                // corpusdevDoc.original_updated_at = originalDoc.updated_at;
+                                // corpusdevDoc.original_appVersionWhenCreated = originalDoc.appVersionWhenCreated;
+                                // corpusdevDoc.original_hash = originalDoc.hash;
+                                // corpusdevDoc.original_salt = originalDoc.salt;
+                                corpusdevDoc.serverlogs = corpusdevDoc.serverlogs || {};
+                                corpusdevDoc.serverlogs.orignal_user = originalDoc;
+
+                                console.log("Combined user: " , corpusdevDoc);
+
+                                usersdatabase.saveDoc(corpusdevDoc, {
+                                    success: function(serverResults) {
+                                        console.log("combined user " + originalDoc._id, JSON.stringify(originalDoc), JSON.stringify(corpusdevDoc));
+                                    },
+                                    error: function(serverResults) {
+                                        console.log("There was a problem combining the user doc. " + originalDoc._id, JSON.stringify(corpusdevDoc));
+                                    }
+                                });
+                            },
+                            error: function(error) {
+                                console.log("User was not on corpusdev ", error);
+                                originalDoc.oldrev = JSON.parse(JSON.stringify(originalDoc._rev));
+                                delete originalDoc._rev;
+                                usersdatabase.saveDoc(originalDoc, {
+                                    success: function(serverResults) {
+                                        console.log("transfering user to corpusdev " + originalDoc._id);
+                                    },
+                                    error: function(serverResults) {
+                                        console.log("There was a problem saving the user doc to corpusdev. " + originalDoc._id, JSON.stringify(originalDoc));
+                                    }
+                                });
+                            }
+                        });
+
+                    },
+                    error: function(error) {
+                        console.log("Error opening your docs ", error);
+                    }
+                });
+
+            })(data[couchdatum]);
+
+        }
+    },
+    error: function(error) {
+        console.log("Error opening the database ", error);
+    }
+});
+
+
+/*
+Get users revision number
+ */
+var database = $.couch.db("_users");
+var users = [];
+database.allDocs({
+    success: function(result) {
+        //console.log(result);
+        var data = result.rows;
+        for (var couchdatum in data) {
+            database.openDoc(data[couchdatum].id, {
+                success: function(originalDoc) {
+                    // console.log(originalDoc._rev);
+                    users.push(originalDoc.name + "," + originalDoc._rev);
+                },
+                error: function(error) {
+                    console.log("Error opening your docs ", error);
+                }
+            });
+        }
+    },
+    error: function(error) {
+        console.log("Error opening the database ", error);
+    }
+});
+console.log(users.join("\n"));
