@@ -833,6 +833,8 @@ define([
     router : AppRouter,
 
     showHelpOrNot : function() {
+      //Dont show help
+      return;
       
       var username = this.get("authentication").get("userPrivate").get("username");
       if(username == "public"){
