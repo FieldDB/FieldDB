@@ -9,15 +9,15 @@ body {
   background-color: transparent;
   color: #fff;
   font-size: .8em;
-  font-family: "Arial Narrow",Arial, sans-serif;  
+  font-family:  'Arial Narrow', 'Arial', sans-serif;
 }
 
 @font-face {
-  font-family: 'Englebert';
+  font-family: 'Gentium Basic';
   font-style: normal;
   font-weight: 400;
-  src: local('Englebert'), local('Englebert-Regular'),
-    url(https://themes.googleusercontent.com/static/fonts/englebert/v1/5vhE18ztcHRcsYmBaZ6CaLO3LdcAZYWl9Si6vvxL-qU.woff)
+  src: local('Gentium Basic'),
+    url(https://themes.googleusercontent.com/static/fonts/gentiumbasic/v4/KCktj43blvLkhOTolFn-MU3vq9dAc3DuCNWjMJNKvGE.woff)
     format('woff');
 }
 
@@ -59,7 +59,6 @@ li {
 
 .team_name {
   font-size: 1.25em;
-  font-family: 'Englebert', sans-serif;
   vertical-align: top;
   line-height: 2em;
   text-align: center;
@@ -97,4 +96,5 @@ li {
 
 li:hover {
   background-color: #000 !important;
+  /* background-color: #000 !important; */
 }

@@ -94,7 +94,6 @@ define([
         $(this.el).find(".choose-field").val(this.model.get("label"));
         
       } else if (this.format == "datum" || this.format == "search") {
-        var jsonToRender = this.model.toJSON();
         if(this.format == "search"){
           delete jsonToRender.readonly;
         }
@@ -122,7 +121,6 @@ define([
           fieldself.resizeInputFieldToFit();
         },200);
       } else if (this.format == "session") {
-        var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       }
