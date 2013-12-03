@@ -64,11 +64,9 @@ define([
         this.$el.children(".choose-field").val(this.model.get("label"));
       
       } else if (this.format == "datum") {
-        var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       } else if (this.format == "session") {
-        var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       }
