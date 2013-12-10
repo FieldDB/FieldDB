@@ -15,7 +15,7 @@ define(
             'async': function(DB, UUID) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var promise;
@@ -50,7 +50,7 @@ define(
             'datumFields': function(DB) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -69,7 +69,7 @@ define(
             'sessions': function(DB) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -88,7 +88,7 @@ define(
             'glosser': function(DB) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -108,7 +108,7 @@ define(
             'lexicon': function(DB) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -127,7 +127,7 @@ define(
             'getallusers': function(userInfo) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -147,7 +147,7 @@ define(
             'login': function(user, password) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var deferred = $q.defer();
@@ -241,7 +241,7 @@ define(
             'createcorpus': function(newCorpusInfo) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -275,7 +275,7 @@ define(
             'updateroles': function(newRoleInfo) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -314,7 +314,7 @@ define(
             'saveNew': function(DB, newRecord) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
@@ -333,7 +333,7 @@ define(
             'saveEditedRecord': function(DB, UUID, newRecord, rev) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var couchInfo;
@@ -381,7 +381,7 @@ define(
             'removeRecord': function(DB, UUID, rev) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               console.log("You cannot delete items from the corpus.");
@@ -401,7 +401,7 @@ define(
             'changePassword': function(changePasswordInfo) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
-                window.location.assign("");
+                window.location.assign("#/spreadsheet_main");
                 return;
               }
               var config = {
