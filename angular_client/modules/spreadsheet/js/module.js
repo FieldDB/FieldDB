@@ -31,7 +31,7 @@ define(
           function($routeProvider) {
             window.SpreadsheetStyleDataEntryController = SpreadsheetStyleDataEntryController;
             console.log("Initializing the Spreadsheet module.");
-            $routeProvider.when('/spreadsheet_main', {
+            $routeProvider.when('/corpora_list', {
               templateUrl: 'partials/main.html'
             }).when('/settings', {
               templateUrl: 'partials/settings.html',
@@ -47,7 +47,7 @@ define(
             }).when('/spreadsheet/fulltemplate', {
               templateUrl: 'partials/fulltemplate.html'
             }).otherwise({
-              redirectTo: '/spreadsheet_main'
+              redirectTo: '/corpora_list'
             });
           }
         ]);
