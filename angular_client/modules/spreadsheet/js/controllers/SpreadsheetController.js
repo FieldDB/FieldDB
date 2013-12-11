@@ -319,7 +319,7 @@ define(
               $scope.dataentry = false;
               $scope.searching = false;
               $scope.changeActiveSubMenu('none');
-              window.location.assign("#/spreadsheet_main");
+              window.location.assign("#/corpora_list");
               break;
             case "searchMenu":
               $scope.changeActiveSubMenu(itemToDisplay);
@@ -1649,7 +1649,7 @@ define(
         dataToPost.username = trim(newUserInfo.username.toLowerCase());
         dataToPost.password = trim(newUserInfo.password);
         dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
-        dataToPost.appVersionWhenCreated = "1.82.1.ss";
+        dataToPost.appVersionWhenCreated = "1.83.1.ss";
         // dataToPost.appVersionWhenCreated = this.appVersion;
 
         dataToPost.serverCode = newUserInfo.serverCode;
