@@ -260,7 +260,7 @@ define(
       $rootScope.DBselected = false;
       $scope.recordingStatus = "Record";
       $scope.recordingButtonClass = "btn btn-success";
-      $scope.recordingIcon = "speaker_icon.png";
+      $scope.recordingIcon = "fa-microphone";
       $scope.showAudioFeatures = false;
       $scope.newFieldData = {};
       $rootScope.newRecordHasBeenEdited = false;
@@ -438,19 +438,22 @@ define(
                   newDatumFromServer.comments = dataFromServer[i].value.comments;
                   newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
                   // Get attachments
-                  newDatumFromServer.attachments = [];
-                  for (var key in dataFromServer[i].value._attachments) {
-                    var attachment = {
-                      "filename": key
-                    };
-                    if (dataFromServer[i].value.attachmentInfo && dataFromServer[i].value.attachmentInfo[key]) {
-                      attachment.description = dataFromServer[i].value.attachmentInfo[key].description;
-                    } else {
-                      attachment.description = "Add a description";
+                  console.log(dataFromServer[i].value);
+                  newDatumFromServer.audioFiles = dataFromServer[i].value.audioFiles || [];
+                  if(newDatumFromServer.audioFiles.length === 0){
+                    for (var key in dataFromServer[i].value._attachments) {
+                      var attachment = {
+                        "filename": key
+                      };
+                      if (dataFromServer[i].value.attachmentInfo && dataFromServer[i].value.attachmentInfo[key]) {
+                        attachment.description = dataFromServer[i].value.attachmentInfo[key].description;
+                      } else {
+                        attachment.description = "Add a description";
+                      }
+                      newDatumFromServer.audioFiles.push(attachment);
                     }
-                    newDatumFromServer.attachments.push(attachment);
                   }
-                  if (newDatumFromServer.attachments.length > 0) {
+                  if (newDatumFromServer.audioFiles.length > 0) {
                     newDatumFromServer.hasAudio = true;
                   }
 
@@ -967,10 +970,10 @@ define(
           $rootScope.notificationMessage = "Please save changes before continuing.";
           $rootScope.openNotification();
           $scope.selected = datum;
-        } else if (datum.attachments && datum.attachments[0]) {
-          $rootScope.notificationMessage = "You must delete all recordings from this record first.";
-          $rootScope.openNotification();
-          $scope.selected = datum;
+        // } else if (datum.audioFiles && datum.audioFiles[0]) {
+        //   $rootScope.notificationMessage = "You must delete all recordings from this record first.";
+        //   $rootScope.openNotification();
+        //   $scope.selected = datum;
         } else {
           var r = confirm("Are you sure you want to put this datum in the trash?");
           if (r === true) {
@@ -1082,7 +1085,7 @@ define(
         // fieldData.lastModifiedBy = $rootScope.userInfo.name;
         fieldData.sessionID = $scope.activeSession;
         fieldData.saved = "no";
-        if (fieldData.attachments) {
+        if (fieldData.audioFiles) {
           fieldData.hasAudio = true;
         }
 
@@ -1214,7 +1217,7 @@ define(
           $rootScope.openNotification();
           return;
         }
-        var verifyCommentDelete = confirm("Are you sure you want to delete the comment '" + comment.text + "'?");
+        var verifyCommentDelete = confirm("Are you sure you want to remove the comment '" + comment.text + "'?");
         if (verifyCommentDelete === true) {
           for (var i in datum.comments) {
             if (datum.comments[i] === comment) {
@@ -1359,6 +1362,7 @@ define(
                       // Save attachments
                       if (fieldData._attachments) {
                         newRecord._attachments = fieldData._attachments;
+                        newRecord.audioFiles = fieldData.audioFiles;
                         newRecord.attachmentInfo = fieldData.attachmentInfo;
                       }
 
@@ -1967,7 +1971,7 @@ define(
       var onFail = function(e) {
         $scope.recordingStatus = "Record";
         $scope.recordingButtonClass = "btn btn-success";
-        $scope.recordingIcon = "speaker_icon.png";
+        $scope.recordingIcon = "fa-microphone";
         console.log('Audio Rejected!', e);
         $rootScope.notificationMessage = "Unable to record audio.";
         $rootScope.openNotification();
@@ -2032,7 +2036,7 @@ define(
           }, 1000);
           $scope.recordingButtonClass = "btn btn-success disabled";
           $scope.recordingStatus = "Recording";
-          $scope.recordingIcon = "recording_icon.gif";
+          $scope.recordingIcon = "fa fa-rss";
           navigator.getUserMedia({
             audio: true
           }, onSuccess, onFail);
@@ -2048,7 +2052,7 @@ define(
         clearInterval(audioRecordingInterval);
         $scope.recordingStatus = "Record";
         $scope.recordingButtonClass = "btn btn-success";
-        $scope.recordingIcon = "speaker_icon.png";
+        $scope.recordingIcon = "fa-microphone";
         $scope.processingAudio = true;
         recorder.exportWAV(function(s) {
           $scope.uploadFile(datum, s);
@@ -2091,7 +2095,7 @@ define(
             datum = {};
           }
           datum._attachments = {};
-          datum.attachments = [];
+          datum.audioFiles = [];
           datum.attachmentInfo = {};
         }
 
@@ -2163,7 +2167,7 @@ define(
 
                 $scope.$apply(function() {
                   datum._attachments[filename] = newAttachments[filename];
-                  datum.attachments.push(newScopeAttachment);
+                  datum.audioFiles.push(newScopeAttachment);
                   datum.attachmentInfo[filename] = {
                     "description": newAttachments[filename].description
                   };
@@ -2207,28 +2211,26 @@ define(
               "description": newAttachments[key].description
             };
           }
-
+          // Update scope attachments
+          if (!datum.audioFiles) {
+            datum.audioFiles = [];
+          }
+          for (var key in newAttachments) {
+            var newScopeAttachment = {
+              "filename": key,
+              "description": newAttachments[key].description
+            };
+            datum.audioFiles.push(newScopeAttachment);
+          }
+          datum.hasAudio = true;
+          originalDoc.audioFiles = datum.audioFiles;
+          console.log(originalDoc.audioFiles);
           Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
             console.log("Successfully uploaded attachment.");
 
-
-            // Update scope attachments
-            if (!datum.attachments) {
-              datum.attachments = [];
-            }
-
-            for (var key in newAttachments) {
-              var newScopeAttachment = {
-                "filename": key,
-                "description": newAttachments[key].description
-              };
-              datum.attachments.push(newScopeAttachment);
-            }
-
-            // // Reset file input field
+            // Reset file input field
             document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
 
-            datum.hasAudio = true;
             $scope.processingAudio = false;
           });
         });
@@ -2251,32 +2253,67 @@ define(
           $rootScope.openNotification();
           return;
         }
-        var r = confirm("Are you sure you want to delete the file " + description + " (" + filename + ")?");
+        var r = confirm("Are you sure you want to put the file " + description + " (" + filename + ") in the trash?");
         if (r === true) {
           var record = datum.id + "/" + filename;
           Data.async($rootScope.DB.pouchname, datum.id).then(function(originalRecord) {
-            Data.removeRecord($rootScope.DB.pouchname, record, originalRecord._rev).then(function(response) {
-              for (var i in datum.attachments) {
-                if (datum.attachments[i].filename === filename) {
-                  datum.attachments[i].description = "Deleted";
-                  datum.attachments.splice(i, 1);
+            // mark as trashed in scope
+            var inDatumAudioFiles = false;
+            for (var i in datum.audioFiles) {
+              if (datum.audioFiles[i].filename === filename) {
+                datum.audioFiles[i].description = datum.audioFiles[i].description + ":::Trashed " + Date.now() + " by " + $rootScope.user.username;
+                datum.audioFiles[i].trashed = "deleted";
+                inDatumAudioFiles = true;
+                // mark as trashed in database record
+                for (var k in originalRecord.audioFiles) {
+                  if (originalRecord.audioFiles[k].filename === filename) {
+                    originalRecord.audioFiles[k] = datum.audioFiles[i];
+                  }
                 }
               }
+            }
+            if (datum.audioFiles.length === 0) {
+              datum.hasAudio = false;
+            }
+            originalRecord.audioFiles = datum.audioFiles;
+            console.log(originalRecord);
+            Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
+              console.log("Saved attachment as trashed.");
 
-              Data.async($rootScope.DB.pouchname, datum.id).then(function(record) {
-                // Delete attachment info for deleted record
-                for (var key in record.attachmentInfo) {
-                  if (key === filename) {
-                    delete record.attachmentInfo[key];
-                  }
-                }
-                Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
-                  if (datum.attachments.length === 0) {
-                    datum.hasAudio = false;
-                  }
-                  console.log("File successfully deleted.");
-                });
-              });
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+              $scope.addActivity([{
+                verb: "deleted",
+                verbicon: "icon-trash",
+                directobjecticon: "icon-list",
+                directobject: "<a href='#data/" + datum.id + "/" + filename+ "'>the audio file "+ description + " (" + filename + ") on "+datum.utterance+"</a> ",
+                indirectobject: indirectObjectString,
+                teamOrPersonal: "personal"
+              }, {
+                verb: "deleted",
+                verbicon: "icon-trash",
+                directobjecticon: "icon-list",
+                directobject: "<a href='#data/" + datum.id + "/" + filename + "'>an audio file on "+datum.utterance+"</a> ",
+                indirectobject: indirectObjectString,
+                teamOrPersonal: "team"
+              }]);
+
+              $scope.uploadActivities();
+
+              // Dont actually let users delete data...
+              // Data.async($rootScope.DB.pouchname, datum.id).then(function(record) {
+              //   // Delete attachment info for deleted record
+              //   for (var key in record.attachmentInfo) {
+              //     if (key === filename) {
+              //       delete record.attachmentInfo[key];
+              //     }
+              //   }
+              //   Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
+              //     if (datum.audioFiles.length === 0) {
+              //       datum.hasAudio = false;
+              //     }
+              //     console.log("File successfully deleted.");
+              //   });
+              // });
             });
           });
         }
