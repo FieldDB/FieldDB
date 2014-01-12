@@ -703,6 +703,11 @@ define(
           $rootScope.notificationMessage = "Please select a database.";
           $rootScope.openNotification();
         } else {
+          try{
+            selectedDB = JSON.parse(selectedDB);
+          }catch(e){
+            console.log("must have been an object...",e,selectedDB);
+          }
           $rootScope.DB = selectedDB;
 
           // Update saved state in Preferences

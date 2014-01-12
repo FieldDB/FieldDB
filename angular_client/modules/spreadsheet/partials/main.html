@@ -137,18 +137,18 @@
         <br />  
         <table class="table">  
           <tbody>
-          <tr ng-repeat="item in corpora" ng-click='selectDB(item);DBselected=true' ng-disabled="loading==true" >
+          <tr ng-repeat="item in corpora" ng-click="selectDB(item);DBselected=true;" ng-disabled="loading==true" >
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" />
             </td>
-            <td class"text-left"> Access {{item.corpustitle}}
+            <td class="text-left"> Access {{item.corpustitle}}
             </td>
           </tr>  
-          <tr ng-repeat="item in corpora" ng-click='selectDB({"pouchname":"lingllama-communitycorpus","corpustitle":"CommunityCorpus"});DBselected=true' ng-disabled="loading==true" >
+          <tr ng-repeat="item in corpora" ng-click="selectDB({'pouchname':'lingllama-communitycorpus','corpustitle':'CommunityCorpus'});DBselected=true;" ng-disabled="loading==true" >
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
             </td>
-            <td class"text-left"> Access LingLlama's Community Corpus
+            <td class="text-left"> Access LingLlama's Community Corpus
               <br/>
               <small>(You can browse this corpus to see what the app looks like with sample data)
               </small>
