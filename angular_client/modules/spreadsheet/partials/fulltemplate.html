@@ -84,7 +84,7 @@
 <div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined && readOnly!=true"> 
   <div class="span12 pagination-centered"> 
     <h2>Please select a 
-      <i class="fa whiteicon fa-calendar">
+      <i class="fa fa-calendar">
       </i> session before entering data.
     </h2> 
   </div> 
@@ -92,14 +92,14 @@
 <div class="row" ng-show="loading==false && readOnly==true" ng-click="selectNone()"> 
   <div class="span12 pagination-centered"> 
     <h3>You have read-only access to this 
-      <i class="fa whiteicon fa-cloud">
+      <i class="fa  fa-cloud">
       </i> corpus.
     </h3> 
   </div> 
 </div> 
 <div ng-show="loading==false && writeOnly==true" class="pagination-centered"> 
   <h2>You have write-only access to 
-    <i class="fa whiteicon fa-cloud">
+    <i class="fa  fa-cloud">
     </i> {{DB.corpustitle}}
   </h2> 
 </div> 
@@ -163,7 +163,7 @@
       </span> 
       <div class="expandCollapseButton"> 
         <i ng-show="datum.hasAudio==true"class="fa whiteicon {{recordingIcon}}"></i>
-        <i ng-show="datum.comments.length > 0" "fa whiteicon fa-comment"></i>
+        <i ng-show="datum.comments.length > 0" class="fa whiteicon fa-comment"></i>
         <i class="fa whiteicon" ng-class="{'fa-list': !expandCollapse, 'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()"></i> 
       </div> 
     </div> 
@@ -326,7 +326,7 @@
       <span>
         <br />
         <i ng-show="datum.hasAudio==true" class="fa {{recordingIcon}}"></i>
-        <i ng-show="datum.comments.length > 0" "fa fa-comment"></i>
+        <i ng-show="datum.comments.length > 0" class="fa fa-comment"></i>
       </span>
     </div> 
     <div class="row" ng-show="searching==true && datum.comments[0]!=undefined"> 
