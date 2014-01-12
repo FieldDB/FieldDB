@@ -23,7 +23,7 @@ define(
         'SpreadsheetStyleDataEntry', ['spreadsheet_services',
           'spreadsheet_private_services',
           'spreadsheet_directives',
-          'spreadsheet_filters', 'ui.bootstrap'
+          'spreadsheet_filters', 'ui.bootstrap', 'angular-md5'
         ])
       .config(
         [

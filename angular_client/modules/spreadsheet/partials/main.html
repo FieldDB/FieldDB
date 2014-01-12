@@ -9,7 +9,7 @@
 	</div>
 	<img src="img/logo.png"> <br /><br />
 	<div ng-show="sessions!=undefined" class="mainPageDiv">
-		<span ng-show="DB.corpustitle!=undefined">{{DB.corpustitle}} loaded.<br />Select
+		<span ng-show="DB.corpustitle!=undefined"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" > {{DB.corpustitle}} loaded.<br />Select
 			a session and click Go, or create a new session.
 		</span><br>
 		<div class="form-horizontal">
@@ -30,7 +30,7 @@
 			<div ng-show="showCreateSessionDiv==true">
 				<br />
 				<h3>
-					New Session for <i>{{DB.corpustitle}}</i>
+					New Session for <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" ><i>{{DB.corpustitle}}</i>
 				</h3>
 				<form ng-model="newSession">
 					<table class="newSessionTable" align='center'>
@@ -83,16 +83,13 @@
 				<button class="btn btn-primary" ng-disabled="loading==true">Log In</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
 			</form>
 		</div>
-		<div ng-show="authenticated==true && DBselected==false">
-			Logged in as {{userInfo.name}}<br /> Select Corpus and click Access:<br />
-			<br />
-			<form ng-submit='selectDB(selectedDB);DBselected=true'>
-				<select ng-model='selectedDB' ng-disabled="loading==true">
-					<option value="" disabled selected>Choose corpus...</option>
-					<option ng-repeat="item in corpora" value={{item}}>{{item.corpustitle}}</option>
-				</select><br>
-				<button class="btn btn-primary" ng-disabled="loading==true">Access</button>&nbsp;<img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
-			</form>
+		<div ng-show="authenticated==true && DBselected==false" >
+			 Corpora:<br />
+			<table class="table">
+				<tr ng-repeat="item in corpora" ng-click='selectDB(item);DBselected=true' ng-disabled="loading==true" ><td><img ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" ></td><td class"text-left"> Access {{item.corpustitle}}</td></tr>
+				<tr ng-repeat="item in corpora" ng-click='selectDB({"pouchname":"lingllama-communitycorpus","corpustitle":"CommunityCorpus"});DBselected=true' ng-disabled="loading==true" ><td><img ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" ></td><td class"text-left"> Access LingLlama's Community Corpus<br/><small>(You can browse this corpus to see what the app looks like with sample data)</small></td></tr>
+			</table>
+			&nbsp;<img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
 		</div>
 		<div ng-show="DBselected==true">
 			Logged in as {{userInfo.name}}<br />Selected corpus: {{DB.corpustitle}}<br />

@@ -25,6 +25,7 @@
     "package.json"
   ],
   "dependencies": {
-    "fielddb-glosser": "*"
+    "fielddb-glosser": "*",
+    "angular-md5": "~0.0.5"
   }
 }
