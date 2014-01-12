@@ -171,7 +171,9 @@ define(
                 withCredentials: true
               };
 
-              var userIsAuthenticated = function(){
+              var userIsAuthenticated = function(user){
+                user.name = user.firstname || user.username;
+                $rootScope.user = user;
                 var promiseCorpus = $http(corpusConfig).then(
                   function(corpusResponse) {
                     console.log("Logging in to corpus server.");
@@ -187,7 +189,7 @@ define(
                   if(response.data.userFriendlyErrors){
                     deferred.reject(response.data.userFriendlyErrors.join(" "));
                   } else {
-                    userIsAuthenticated();
+                    userIsAuthenticated(response.data.user);
                   }
 
                 }, 
@@ -207,13 +209,14 @@ define(
             },
             'register': function(newUserInfo) {
 
+
+
               var config = {
                 method: "POST",
                 url: newUserInfo.authUrl + "/register",
                 data: newUserInfo,
                 withCredentials : true
               };
-
               var promise = $http(config).then(
                 function(response) {
                   console.log("Registered new user.");

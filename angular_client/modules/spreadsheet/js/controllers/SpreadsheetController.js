@@ -16,7 +16,7 @@ define(
      * @returns {SpreadsheetStyleDataEntryController}
      */
 
-    function($scope, $rootScope, $resource, $filter, $document, Data, Servers) {
+    function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
@@ -378,6 +378,9 @@ define(
             }, function(error) {
               $scope.documentReady = true;
               console.log("Error loading sessions.");
+              $rootScope.notificationMessage = "Error loading corpus, please report this.";
+              $rootScope.openNotification();
+              $rootScope.loading = false;
             });
       };
 
@@ -595,45 +598,34 @@ define(
                 .stringify(Preferences));
 
               $rootScope.authenticated = true;
-              var DBs = response.data.roles;
-              // Format available databases (pluck final string after
-              // underscore) TODO Implement underscore pluck?
-              for (var i in DBs) {
-                DBs[i] = DBs[i].split("_");
-                DBs[i].pop();
-                if (DBs[i].length > 1) {
-                  var newDBString = DBs[i][0];
-                  for (var j = 1; j < DBs[i].length; j++) {
-                    (function(index) {
-                      newDBString = newDBString + "_" + DBs[i][index];
-                    })(j);
-                  }
-                  DBs[i] = newDBString;
-                } else {
-                  DBs[i] = DBs[i][0];
-                }
-                if (DBs[i]) {
-                  DBs[i] = DBs[i].replace(/[\"]/g, "");
+              var userRoles = response.data.roles;
+              var availableDBs = {};
+              // Find available databases from db roles
+              for (var roleIndex = 0; roleIndex < userRoles.length; roleIndex++) {
+                var pieces = userRoles[roleIndex].split("_");
+                if (pieces.length > 1 && pieces[1] === "writer") {
+                  availableDBs[pieces[0].replace(/[\"]/g, "")] = {
+                    roleIndex: roleIndex
+                  };
                 }
               }
-              DBs.sort();
+              // put dbs in order that they were added to the user rather than alphabetical by pouchname which isnt useful
               var scopeDBs = [];
-              for (var k = 0; k < DBs.length; k++) {
-                // Hiding public-firstcorpus, per client request
-                if (DBs[k + 1] != DBs[k] && DBs[k] != "fielddbuser" && DBs[k] != "public-firstcorpus") {
-                  // Only show lingllama corpora to lingllama, per client request
-                  if (DBs[k].indexOf("lingllama") > -1 && $rootScope.userInfo.name != "lingllama") {
+              for (var dbName in availableDBs) {
+                if (availableDBs.hasOwnProperty(dbName)) {
+
+                  // Only show lingllama's grafiti corpora to lingllama, per client request
+                  if (dbName.indexOf("lingllama-communitycorpus") > -1 && $rootScope.userInfo.name != "lingllama") {
                     continue;
                   }
-
-                  scopeDBs.push(DBs[k]);
+                  scopeDBs.push(dbName);
                 }
               }
               $scope.corpora = [];
 
               for (var m = 0; m < scopeDBs.length; m++) {
                 (function(index) {
-                  // Use map-reduce to get private corpus info
+                  // Use map-reduce to get corpus title
 
                   Data.async(scopeDBs[index], "_design/pages/_view/private_corpuses").then(
                     function(response) {
@@ -644,6 +636,7 @@ define(
                       } else {
                         corpus.corpustitle = scopeDBs[index];
                       }
+                      corpus.gravatar = md5.createHash(corpus.pouchname);
                       $scope.corpora.push(corpus);
                     }, function(error) {
                       var corpus = {};
@@ -675,7 +668,6 @@ define(
           $rootScope.notificationMessage = "Please select a database.";
           $rootScope.openNotification();
         } else {
-          selectedDB = JSON.parse(selectedDB);
           $rootScope.DB = selectedDB;
 
           // Update saved state in Preferences
@@ -2427,7 +2419,7 @@ define(
 
     };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
-      '$resource', '$filter', '$document', 'Data', 'Servers'
+      '$resource', '$filter', '$document', 'Data', 'Servers', 'md5'
     ];
     return SpreadsheetStyleDataEntryController;
   });
