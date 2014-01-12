@@ -243,8 +243,8 @@
             </td> 
             <td> 
               <span class="form-horizontal"> 
-                <input type="text" ng-model='audioFile.description'ng-disabled="readOnly==true"> &nbsp;
-                <button hidden keypress-mark-as-edited class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description
+                <input type="text" keypress-mark-as-edited placeholder="Optional description" ng-model='audioFile.description'ng-disabled="readOnly==true"> &nbsp;
+                <button hidden  class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description
                 </button> 
               </span> 
             </td> 
