@@ -1050,7 +1050,7 @@ define(
           for (var i in newDatumFields) {
             var newDatumTagObject = {};
             // Trim spaces
-            var trimmedTag = trim(newDatumFields[i]);
+            var trimmedTag = newDatumFields[i].trim();
             newDatumTagObject.tag = trimmedTag;
             newDatumFieldsArray.push(newDatumTagObject);
           }
@@ -1103,7 +1103,7 @@ define(
             for (var i in newDatumFields) {
               var newDatumTagObject = {};
               // Trim spaces
-              var trimmedTag = trim(newDatumFields[i]);
+              var trimmedTag = newDatumFields[i].trim();
               newDatumTagObject.tag = trimmedTag;
               newDatumFieldsArray.push(newDatumTagObject);
             }
@@ -1636,17 +1636,27 @@ define(
           return;
         }
         $rootScope.loading = true;
+
+        // Clean username and tell user about it
+        var safeUsernameForCouchDB = newUserInfo.username.trim().toLowerCase().replace(/[^0-9a-z]/g,"");
+        if(safeUsernameForCouchDB !== newUserInfo.username){
+          $rootScope.loading = false;
+          newUserInfo.username = safeUsernameForCouchDB;
+          $rootScope.notificationMessage = "We have automatically changed your requested username to '"+safeUsernameForCouchDB+ "' instead \n(the username you have chosen isn't very safe for urls, which means your corpora would be potentially inaccessible in old browsers)";
+          $rootScope.openNotification();
+          return;
+        }
         var dataToPost = {};
-        dataToPost.email = trim(newUserInfo.email);
-        dataToPost.username = trim(newUserInfo.username.toLowerCase());
-        dataToPost.password = trim(newUserInfo.password);
+        dataToPost.email = newUserInfo.email ? newUserInfo.email.trim().split(" ")[0] : "";
+        dataToPost.username = newUserInfo.username.trim().toLowerCase();
+        dataToPost.password = newUserInfo.password.trim();
         dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
-        dataToPost.appVersionWhenCreated = "1.83.1.ss";
+        dataToPost.appVersionWhenCreated = "1.90.1.ss";
         // dataToPost.appVersionWhenCreated = this.appVersion;
 
         dataToPost.serverCode = newUserInfo.serverCode;
 
-        if (dataToPost.username !== "" && (dataToPost.password === trim(newUserInfo.confirmPassword)) && dataToPost.email !== "") {
+        if (dataToPost.username !== "" && (dataToPost.password === newUserInfo.confirmPassword.trim()) ) {
           // Create user
           Data.register(dataToPost).then(function(response) {
             $rootScope.loading = false;
@@ -1669,8 +1679,8 @@ define(
 
         $rootScope.loading = true;
         var dataToPost = {};
-        dataToPost.username = trim($rootScope.userInfo.name);
-        dataToPost.password = trim($rootScope.userInfo.password);
+        dataToPost.username = $rootScope.userInfo.name.trim();
+        dataToPost.password = $rootScope.userInfo.password.trim();
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1808,8 +1818,8 @@ define(
         newUserRoles.pouchname = $rootScope.DB.pouchname;
 
         var dataToPost = {};
-        dataToPost.username = trim($rootScope.userInfo.name);
-        dataToPost.password = trim($rootScope.userInfo.password);
+        dataToPost.username = $rootScope.userInfo.name.trim();
+        dataToPost.password = $rootScope.userInfo.password.trim();
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1856,8 +1866,8 @@ define(
         if (r === true) {
 
           var dataToPost = {};
-          dataToPost.username = trim($rootScope.userInfo.name);
-          dataToPost.password = trim($rootScope.userInfo.password);
+          dataToPost.username = $rootScope.userInfo.name.trim();
+          dataToPost.password = $rootScope.userInfo.password.trim();
           dataToPost.serverCode = $rootScope.serverCode;
           dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1925,13 +1935,6 @@ define(
           $scope.data = $scope.allData.slice(firstRecordOnPage, lastRecordOnPage);
         }
       };
-
-      function trim(s) {
-        s = s.replace(/(^\s*)|(\s*$)/gi, "");
-        s = s.replace(/[ ]{2,}/gi, " ");
-        s = s.replace(/\n /, "\n");
-        return s;
-      }
 
       document.getElementById("hideOnLoad").style.visibility = "visible";
 
