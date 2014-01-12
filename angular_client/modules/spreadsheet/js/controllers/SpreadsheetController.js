@@ -96,6 +96,14 @@ define(
             "label": "utterance",
             "title": "Utterance"
           },
+          "allomorphs": {
+            "label": "allomorphs",
+            "title": "Allomorphs"
+          },
+          "phonetic": {
+            "label": "phonetic",
+            "title": "Phonetic"
+          },
           "morphemes": {
             "label": "morphemes",
             "title": "Morphemes"
@@ -235,12 +243,15 @@ define(
           .stringify(defaultPreferences));
         Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
       }
-
+      // Always get the most recent available fields
+      Preferences.availableFields = defaultPreferences.availableFields;
+      // console.log(Preferences.availableFields);
       // Set scope variables
       $scope.documentReady = false;
       $rootScope.template = Preferences.userTemplate;
       $rootScope.fields = Preferences[Preferences.userTemplate];
       $scope.scopePreferences = Preferences;
+      $scope.availableFields = defaultPreferences.availableFields;
       $scope.orderProp = "dateEntered";
       $rootScope.currentPage = 0;
       $scope.reverse = true;
@@ -438,7 +449,7 @@ define(
                   newDatumFromServer.comments = dataFromServer[i].value.comments;
                   newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
                   // Get attachments
-                  console.log(dataFromServer[i].value);
+                  // console.log(dataFromServer[i].value);
                   newDatumFromServer.audioFiles = dataFromServer[i].value.audioFiles || [];
                   if(newDatumFromServer.audioFiles.length === 0){
                     for (var key in dataFromServer[i].value._attachments) {
@@ -1040,12 +1051,14 @@ define(
         for (var dataKey in fieldData) {
           for (var fieldKey in $scope.fields) {
             if (dataKey === fieldKey) {
+              // console.log(dataKey);
               var newDataKey = $scope.fields[fieldKey].label;
               fieldData[newDataKey] = fieldData[dataKey];
               delete fieldData[dataKey];
             }
           }
         }
+        // console.log(fieldData);
         // Save tags
         if (fieldData.datumTags) {
           var newDatumFields = fieldData.datumTags.split(",");
@@ -1112,6 +1125,7 @@ define(
             }
             datum.datumTags = newDatumFieldsArray;
           } else {
+            console.log("$scope.fields",$scope.fields);
             datum[$scope.fields[key].label] = fieldData[key];
           }
 
@@ -1247,13 +1261,15 @@ define(
                       // scope
                       // Check for modifiedByUser field in original record; if not present, add it
                       var hasModifiedByUser = false;
-                      for (var i = 0; i < editedRecord.datumFields.length; i++) {
-                        if (editedRecord.datumFields[i].label === "modifiedByUser") {
-                          hasModifiedByUser = true;
-                        }
-
-                        for (var key in fieldData) {
+                      // console.log(fieldData);
+                      // console.log(editedRecord.datumFields);
+                      for (var key in fieldData) {
+                      // for (var i = 0; i < editedRecord.datumFields.length; i++) {
+                        // for (var key in fieldData) {
+                        var fieldWasInDatum = false;
+                        for (var i = 0; i < editedRecord.datumFields.length; i++) {
                           if (editedRecord.datumFields[i].label === key) {
+                            fieldWasInDatum = true;
                             // Check for (existing) modifiedByUser field in original record and update correctly
                             if (key === "modifiedByUser") {
                               editedRecord.datumFields[i].users = fieldData.modifiedByUser.users;
@@ -1262,6 +1278,22 @@ define(
                               editedRecord.datumFields[i].value = fieldData[key];
                             }
                           }
+
+                          if (editedRecord.datumFields[i].label === "modifiedByUser") {
+                            hasModifiedByUser = true;
+                          }
+                        }
+                        if (!fieldWasInDatum) {
+                          editedRecord.datumFields.push({
+                            "label": key,
+                            "value": fieldData[key],
+                            "mask": fieldData[key],
+                            "encrypted": "",
+                            "shouldBeEncrypted": "checked",
+                            "help": "Entered by user in Spreadsheet App, conventions are missing.",
+                            "showToUserTypes": "linguist",
+                            "userchooseable": "disabled"
+                          });
                         }
                       }
 
@@ -2224,7 +2256,7 @@ define(
           }
           datum.hasAudio = true;
           originalDoc.audioFiles = datum.audioFiles;
-          console.log(originalDoc.audioFiles);
+          // console.log(originalDoc.audioFiles);
           Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
             console.log("Successfully uploaded attachment.");
 
@@ -2276,7 +2308,7 @@ define(
               datum.hasAudio = false;
             }
             originalRecord.audioFiles = datum.audioFiles;
-            console.log(originalRecord);
+            // console.log(originalRecord);
             Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
               console.log("Saved attachment as trashed.");
 
@@ -2406,7 +2438,7 @@ define(
 
         $scope.resetPasswordInfo.username = $rootScope.userInfo.name,
         Data.changePassword($scope.resetPasswordInfo).then(function(result){
-          console.log(result);
+          // console.log(result);
           Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
           $scope.resetPasswordInfo = {};
           $scope.showResetPassword = false;
