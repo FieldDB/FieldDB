@@ -1214,7 +1214,7 @@ define(
         comment.timestamp = Date.now();
         comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
         comment.timestampModified = Date.now();
-        if (datum.comments === null) {
+        if (!datum.comments) {
           datum.comments = [];
         }
         datum.comments.push(comment);
