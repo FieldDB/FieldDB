@@ -1303,6 +1303,10 @@ define(
                             // Check for (existing) modifiedByUser field in original record and update correctly
                             if (key === "modifiedByUser") {
                               editedRecord.datumFields[i].users = fieldData.modifiedByUser.users;
+                            } else if (key === "enteredByUser") {
+                              editedRecord.datumFields[i].user = fieldData.enteredByUser;
+                              editedRecord.datumFields[i].mask = fieldData.enteredByUser.username;
+                              editedRecord.datumFields[i].value = fieldData.enteredByUser.username;
                             } else {
                               editedRecord.datumFields[i].mask = fieldData[key];
                               editedRecord.datumFields[i].value = fieldData[key];
@@ -1313,7 +1317,23 @@ define(
                             hasModifiedByUser = true;
                           }
                         }
-                        if (!fieldWasInDatum) {
+                        //TODO this really means the spreadsheet needs to stop having its own data model. it would greatly reduce the complexity of the app if it just opened the data, and modified it, using the actual fielddb json.
+                        if (!fieldWasInDatum 
+                          && key !== "hasAudio" 
+                          && key !== "saved" 
+                          && key !== "$$hashKey" 
+                          && key !== "audioVideo" 
+                          && key !== "comments" 
+                          && key !== "sessionID"  
+                          && key !== "modifiedByUser"
+                          && key !== "enteredByUser"
+                          && key !== "id"
+                          && key !== "rev"
+                          && key !== "dateEntered"
+                          && key !== "datumTags"
+                          && key !== "timestamp"
+                          && key !== "dateModified"
+                          && key !== "lastModifiedBy") {
                           editedRecord.datumFields.push({
                             "label": key,
                             "value": fieldData[key],
@@ -1347,8 +1367,7 @@ define(
                       editedRecord.dateModified = fieldData.dateModified;
                       editedRecord.lastModifiedBy = fieldData.lastModifiedBy;
                       editedRecord.dateEntered = fieldData.dateEntered;
-                      editedRecord.enteredByUser = fieldData.enteredByUser;
-
+                      
                       // Save tags
                       if (fieldData.datumTags) {
                         editedRecord.datumTags = fieldData.datumTags;
