@@ -151,9 +151,9 @@
 			<div class="span2 entered_modified_info">
 				<span ng-show="searching==true"><button class="btn btn-primary" ng-click="selectNone()">Done</button><br /><br /></span>
 				<span title="Date entered {{datum.dateEntered | standardDate}}"> <i class="fa whiteicon fa-clock-o"></i> Entered: {{datum.dateEntered | standardDate}}</span><br />
-				<span ng-hide="!datum.enteredByUser">by <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon"><br /></span><br />
+				<span ng-hide="!datum.enteredByUser"> <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon"><br /></span><br />
 				<span title="Date modified {{datum.dateModified | standardDate}}"><i class="fa whiteicon fa-clock-o"></i>Last edit: {{datum.dateModified | standardDate}}</span><br />
-				<span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"></i> Contributors:<br /></span>
+				<span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"></i> Edited:<br /></span>
 				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title="{{modifiedByUser.username}}" />&nbsp;</span>
 				<div class="expandCollapseButton">
 					<span ng-show="datum.hasAudio==true"><i class="fa whiteicon {{recordingIcon}}"></i></span>
@@ -218,7 +218,7 @@
 						<td>
 							<span class="form-horizontal">
 								<input type="text" ng-model='audioFile.description'ng-disabled="readOnly==true"> 
-								&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description</button>
+								&nbsp;<button hidden keypress-mark-as-edited class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description</button>
 							</span>
 						</td>
 						<td>
@@ -259,9 +259,9 @@
 		<div class="span2 entered_modified_info">
 			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)"> <i class="fa whiteicon fa-pencil"></i> Edit</button><br /><br /></span>
 			<span title="Date entered"> <i class="fa whiteicon fa-clock-o"></i> Entered: {{datum.dateEntered | standardDate}}<br />
-			<span ng-hide="!datum.enteredByUser">by <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon"><br /></span><br />
+			<span ng-hide="!datum.enteredByUser"> <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon"><br /></span><br />
 			<span title="Date modified"><i class="fa whiteicon fa-clock-o"></i>Last edit: {{datum.dateModified | standardDate}}</span><br />
-				<span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"></i> Contributors:<br /></span>
+				<span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"></i> Edited:<br /></span>
 				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title="{{modifiedByUser.username}}" /> </span>
 			<span ng-show="datum.hasAudio==true"><br /><i class="fa {{recordingIcon}}"></i></span> <span ng-show="datum.comments.length > 0"><i "fa fa-comment"></i></span>
 		</div>
