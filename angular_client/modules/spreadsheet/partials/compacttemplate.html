@@ -57,10 +57,10 @@
 					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
 				</div>
 			</div>
-			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true && newFieldData.audioFiles[0]!=undefined">
+			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true && newFieldData.audioVideo[0]!=undefined">
 				<div class="span8 offset1">
 					<b>Click 'Create New' then  <i class="fa whiteicon fa-save"></i> 'Save' to have access to the following:</b><br />
-					<span ng-repeat="audioFile in newFieldData.audioFiles"><i> <i class="fa whiteicon fa-bullhorn"></i> New Audio File:</i> {{audioFile.description}}<br /></span>
+					<span ng-repeat="audioFile in newFieldData.audioVideo"><i> <i class="fa whiteicon fa-bullhorn"></i> New Audio File:</i> {{audioFile.description}}<br /></span>
 				</div>
 			</div>
 </div>

@@ -61,10 +61,10 @@
 					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
 				</div>
 			</div>
-			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true && newFieldData.audioFiles[0]!=undefined">
+			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true && newFieldData.audioVideo[0]!=undefined">
 				<div class="span8 offset1">
 					<b>Click 'Create New' then 'Save' to have access to the following:</b><br />
-					<span ng-repeat="audioFile in newFieldData.audioFiles"><i>New Audio File:</i> <i class="fa whiteicon fa-bullhorn"></i>  {{audioFile.description}}<br /></span>
+					<span ng-repeat="audioFile in newFieldData.audioVideo"><i>New Audio File:</i> <i class="fa whiteicon fa-bullhorn"></i>  {{audioFile.description}}<br /></span>
 				</div>
 			</div>
 </div>
@@ -208,7 +208,7 @@
 		<div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
 			<div class="span10">
 				<table>
-					<tr ng-repeat="audioFile in datum.audioFiles" ng-hide="audioFile.trashed == 'deleted'">
+					<tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
 						<td>
 							<span class="form-horizontal">
 								<a class="delete_button btn btn-danger floatLeft" ng-click="deleteAttachmentFromCorpus(datum, audioFile.filename, audioFile.description)"><i class="fa fa-trash-o whiteicon"></i></a>
@@ -286,7 +286,7 @@
 		<div class="row" ng-show="searching==true">
 			<div class="span9 offset1">
 				<table>
-					<tr ng-repeat="audioFile in datum.audioFiles" ng-hide="audioFile.trashed == 'deleted'">
+					<tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
 						<td>
 							<span class="form-horizontal">
 								<audio controls><source ng-src="{{server}}/{{DB.pouchname}}/{{datum.id}}/{{audioFile.filename}}" type="audio/wav"/></audio>

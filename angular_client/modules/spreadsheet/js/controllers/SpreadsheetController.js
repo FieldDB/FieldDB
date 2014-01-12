@@ -450,22 +450,43 @@ define(
                   newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
                   // Get attachments
                   // console.log(dataFromServer[i].value);
-                  newDatumFromServer.audioFiles = dataFromServer[i].value.audioFiles || [];
-                  if(newDatumFromServer.audioFiles.length === 0){
+                  // upgrade to v1.90
+                  newDatumFromServer.audioVideo = dataFromServer[i].value.audioVideo || [];
+                  if (!Array.isArray(newDatumFromServer.audioVideo)) {
+                    console.log("Upgrading audioVideo to a collection", newDatumFromServer.audioVideo);
+                    var audioVideoArray = [];
+                    if (newDatumFromServer.audioVideo.URL) {
+                      var audioVideoURL = newDatumFromServer.audioVideo.URL;
+                      var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+                      audioVideoArray.push({
+                        "filename": fileFromUrl,
+                        "description": fileFromUrl,
+                        "URL": audioVideoURL,
+                        "type": "audio"
+                      });
+                    }
+                    newDatumFromServer.audioVideo = audioVideoArray;
+                  }
+                  if(newDatumFromServer.audioVideo.length === 0){
                     for (var key in dataFromServer[i].value._attachments) {
                       var attachment = {
-                        "filename": key
+                        "filename": key,
+                        "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + newDatumFromServer.id + "/" + key,
+                        "type": "audio"
                       };
+                      // if in the old spot:
                       if (dataFromServer[i].value.attachmentInfo && dataFromServer[i].value.attachmentInfo[key]) {
                         attachment.description = dataFromServer[i].value.attachmentInfo[key].description;
                       } else {
-                        attachment.description = "Add a description";
+                        attachment.description = "";
                       }
-                      newDatumFromServer.audioFiles.push(attachment);
+                      newDatumFromServer.audioVideo.push(attachment);
                     }
                   }
-                  if (newDatumFromServer.audioFiles.length > 0) {
+                  if (newDatumFromServer.audioVideo.length > 0) {
                     newDatumFromServer.hasAudio = true;
+                  } else{
+                    newDatumFromServer.hasAudio = false;
                   }
 
                   // Load data from current session into scope
@@ -981,7 +1002,7 @@ define(
           $rootScope.notificationMessage = "Please save changes before continuing.";
           $rootScope.openNotification();
           $scope.selected = datum;
-        // } else if (datum.audioFiles && datum.audioFiles[0]) {
+        // } else if (datum.audioVideo && datum.audioVideo[0]) {
         //   $rootScope.notificationMessage = "You must delete all recordings from this record first.";
         //   $rootScope.openNotification();
         //   $scope.selected = datum;
@@ -995,6 +1016,10 @@ define(
                 function(recordToMarkAsDeleted) {
                   recordToMarkAsDeleted.trashed = "deleted";
                   var rev = recordToMarkAsDeleted._rev;
+                  //Upgrade to v1.90
+                  if(recordToMarkAsDeleted.attachmentInfo){
+                    delete recordToMarkAsDeleted.attachmentInfo;
+                  }
                   Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
                     // Remove record from scope
 
@@ -1098,7 +1123,7 @@ define(
         // fieldData.lastModifiedBy = $rootScope.userInfo.name;
         fieldData.sessionID = $scope.activeSession;
         fieldData.saved = "no";
-        if (fieldData.audioFiles) {
+        if (fieldData.audioVideo) {
           fieldData.hasAudio = true;
         }
 
@@ -1330,10 +1355,11 @@ define(
                       }
                       // Save edited record and refresh data
                       // in scope
-                      Data
-                        .saveEditedRecord($rootScope.DB.pouchname,
-                          docID, editedRecord)
-                        .then(
+                      // upgrade to v1.90
+                      if(editedRecord.attachmentInfo){
+                        delete editedRecord.attachmentInfo;
+                      }
+                      Data.saveEditedRecord($rootScope.DB.pouchname, docID, editedRecord).then(
                           function(response) {
                             $scope.allData[index].saved = "yes";
                             $scope.uploadActivities();
@@ -1394,8 +1420,7 @@ define(
                       // Save attachments
                       if (fieldData._attachments) {
                         newRecord._attachments = fieldData._attachments;
-                        newRecord.audioFiles = fieldData.audioFiles;
-                        newRecord.attachmentInfo = fieldData.attachmentInfo;
+                        newRecord.audioVideo = fieldData.audioVideo;
                       }
 
                       Data
@@ -2127,8 +2152,7 @@ define(
             datum = {};
           }
           datum._attachments = {};
-          datum.audioFiles = [];
-          datum.attachmentInfo = {};
+          datum.audioVideo = [];
         }
 
         var numberOfFiles;
@@ -2163,7 +2187,7 @@ define(
               if (file) {
                 filename = Date.now() + ".wav";
                 content_type = "audio\/wav";
-                description = "Add a description";
+                description = "";
               } else {
                 // Test to see if this is a new datum
                 var fileExt;
@@ -2194,15 +2218,29 @@ define(
               if (!datum || !datum.id) {
                 var newScopeAttachment = {
                   "filename": filename,
-                  "description": newAttachments[filename].description
+                  "description": newAttachments[filename].description,
+                  "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + filename,
+                  "type": "audio"
                 };
 
                 $scope.$apply(function() {
                   datum._attachments[filename] = newAttachments[filename];
-                  datum.audioFiles.push(newScopeAttachment);
-                  datum.attachmentInfo[filename] = {
-                    "description": newAttachments[filename].description
-                  };
+                  if (!Array.isArray(datum.audioVideo)) {
+                    console.log("Upgrading audioVideo to a collection", datum.audioVideo);
+                    var audioVideoArray = [];
+                    if (datum.audioVideo.URL) {
+                      var audioVideoURL = datum.audioVideo.URL;
+                      var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+                      audioVideoArray.push({
+                        "filename": fileFromUrl,
+                        "description": fileFromUrl,
+                        "URL": audioVideoURL,
+                        "type": "audio"
+                      });
+                    }
+                    datum.audioVideo = audioVideoArray;
+                  }
+                  datum.audioVideo.push(newScopeAttachment);
                 });
               }
             });
@@ -2233,30 +2271,46 @@ define(
             originalDoc._attachments = {};
           }
 
-          if (originalDoc.attachmentInfo === undefined) {
-            originalDoc.attachmentInfo = {};
-          }
-
           for (var key in newAttachments) {
             originalDoc._attachments[key] = newAttachments[key];
-            originalDoc.attachmentInfo[key] = {
-              "description": newAttachments[key].description
-            };
           }
           // Update scope attachments
-          if (!datum.audioFiles) {
-            datum.audioFiles = [];
+          if (!datum.audioVideo) {
+            datum.audioVideo = [];
+          }
+          if (!Array.isArray(datum.audioVideo)) {
+            console.log("Upgrading audioVideo to a collection", datum.audioVideo);
+            var audioVideoArray = [];
+            for (var audioVideoItem in datum.audioVideo) {
+              if (datum.audioVideo.hasOwnProperty(audioVideoItem) && datum.audioVideo.audioVideoItem.URL) {
+                var audioVideoURL = datum.audioVideo.audioVideoItem.URL;
+                var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+                audioVideoArray.push({
+                  "filename": fileFromUrl,
+                  "description": fileFromUrl,
+                  "URL": audioVideoURL,
+                  "type": "audio"
+                });
+              }
+            }
+            datum.audioVideo = audioVideoArray;
           }
           for (var key in newAttachments) {
             var newScopeAttachment = {
               "filename": key,
-              "description": newAttachments[key].description
+              "description": newAttachments[key].description,
+              "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + key,
+              "type": "audio"
             };
-            datum.audioFiles.push(newScopeAttachment);
+            datum.audioVideo.push(newScopeAttachment);
           }
           datum.hasAudio = true;
-          originalDoc.audioFiles = datum.audioFiles;
-          // console.log(originalDoc.audioFiles);
+          originalDoc.audioVideo = datum.audioVideo;
+          //Upgrade to v1.90
+          if(originalDoc.attachmentInfo){
+            delete originalDoc.attachmentInfo;
+          }
+          // console.log(originalDoc.audioVideo);
           Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
             console.log("Successfully uploaded attachment.");
 
@@ -2264,17 +2318,6 @@ define(
             document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
 
             $scope.processingAudio = false;
-          });
-        });
-      };
-
-      $scope.saveAttachmentInfo = function(attachment, datumID) {
-        Data.async($rootScope.DB.pouchname, datumID).then(function(originalDoc) {
-          var rev = originalDoc._rev;
-          originalDoc.attachmentInfo[attachment.filename].description = attachment.description;
-          Data.saveEditedRecord($rootScope.DB.pouchname, datumID, originalDoc, rev).then(function(response) {
-            $rootScope.notificationMessage = "Successfully updated description for " + attachment.filename;
-            $rootScope.openNotification();
           });
         });
       };
@@ -2291,23 +2334,27 @@ define(
           Data.async($rootScope.DB.pouchname, datum.id).then(function(originalRecord) {
             // mark as trashed in scope
             var inDatumAudioFiles = false;
-            for (var i in datum.audioFiles) {
-              if (datum.audioFiles[i].filename === filename) {
-                datum.audioFiles[i].description = datum.audioFiles[i].description + ":::Trashed " + Date.now() + " by " + $rootScope.user.username;
-                datum.audioFiles[i].trashed = "deleted";
+            for (var i in datum.audioVideo) {
+              if (datum.audioVideo[i].filename === filename) {
+                datum.audioVideo[i].description = datum.audioVideo[i].description + ":::Trashed " + Date.now() + " by " + $rootScope.user.username;
+                datum.audioVideo[i].trashed = "deleted";
                 inDatumAudioFiles = true;
                 // mark as trashed in database record
-                for (var k in originalRecord.audioFiles) {
-                  if (originalRecord.audioFiles[k].filename === filename) {
-                    originalRecord.audioFiles[k] = datum.audioFiles[i];
+                for (var k in originalRecord.audioVideo) {
+                  if (originalRecord.audioVideo[k].filename === filename) {
+                    originalRecord.audioVideo[k] = datum.audioVideo[i];
                   }
                 }
               }
             }
-            if (datum.audioFiles.length === 0) {
+            if (datum.audioVideo.length === 0) {
               datum.hasAudio = false;
             }
-            originalRecord.audioFiles = datum.audioFiles;
+            originalRecord.audioVideo = datum.audioVideo;
+            //Upgrade to v1.90
+            if(originalRecord.attachmentInfo){
+              delete originalRecord.attachmentInfo;
+            }
             // console.log(originalRecord);
             Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
               console.log("Saved attachment as trashed.");
@@ -2340,7 +2387,7 @@ define(
               //     }
               //   }
               //   Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
-              //     if (datum.audioFiles.length === 0) {
+              //     if (datum.audioVideo.length === 0) {
               //       datum.hasAudio = false;
               //     }
               //     console.log("File successfully deleted.");
