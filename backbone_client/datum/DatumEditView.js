@@ -1,7 +1,7 @@
 define([
     "backbone", 
     "handlebars", 
-    "audio_video/AudioVideoEditView",
+    "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -20,7 +20,7 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    AudioVideoEditView,
+    AudioVideoReadView,
     Comment,
     Comments,
     CommentReadView,
@@ -48,8 +48,8 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a AudioVideoEditView
-      this.audioVideoView = new AudioVideoEditView({
+      // Create a AudioVideoReadView
+      this.audioVideoView = new AudioVideoReadView({
         model : this.model.get("audioVideo")
       });
       
