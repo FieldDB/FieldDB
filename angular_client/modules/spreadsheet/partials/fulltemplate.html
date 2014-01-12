@@ -31,8 +31,8 @@
 		</div>
 		<div class="span2">
 			<button ng-show="selected=='newEntry'" ng-class="newRecordHasBeenEditedButtonClass()"
-				type="submit" ng-disabled="newRecordHasBeenEdited==false">Create New</button>&nbsp;<div class="expandCollapseButton"><i ng-class="{'fa fa-list': !expandCollapse,  'fa fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'"></i></div><br />
-				<span ng-show="newFieldDatahasAudio==true"><img src="img/speaker_icon.png"></span>
+				type="submit" ng-disabled="newRecordHasBeenEdited==false"> <i class="fa whiteicon fa-plus"></i> Create New</button>&nbsp;<div class="expandCollapseButton"><i class="fa whiteicon" ng-class="{'fa-list': !expandCollapse,  'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'"></i></div><br />
+				<span ng-show="newFieldDatahasAudio==true"><i class="fa {{recordingIcon}}"></i></span>
 		</div>
 		</form>
 	</div>
@@ -46,14 +46,14 @@
 			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true">
 				<div class="span3 offset1 expandedData">
 					<div class="expandedDataInner">
-					<button ng-class="recordingButtonClass" ng-click="startRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
+					<button ng-class="recordingButtonClass" ng-click="startRecording(newFieldData)" ng-show="audioCompatible==true && selected=='newEntry'"> <i class="fa {{recordingIcon}}"></i>&nbsp;{{recordingStatus}}</button>&nbsp;&nbsp; 
 				</div>
 				</div>
 				<div class="span6 expandedData">
 					<div class="expandedDataInner">
 						<form id="form_new_datum_audio-file">
-						<img src="img/speaker_icon.png">&nbsp;
-						<input id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)" ng-disabled="newDatumHasAudioToUpload==true">Add File(s)</button>
+						<i class="fa fa-bullhorn"></i>&nbsp;
+						<input id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)" ng-disabled="newDatumHasAudioToUpload==true"> <i class="fa whiteicon fa-file"></i> Add File(s)</button>
 					</form>
 				</div>
 			</div>
@@ -61,28 +61,28 @@
 					<span ng-show="processingAudio==true"><img src="img/spinner-small.gif"></span>
 				</div>
 			</div>
-			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true && newFieldData.attachments[0]!=undefined">
+			<div class="row" ng-show="selected=='newEntry' && expandCollapse==true && newFieldData.audioFiles[0]!=undefined">
 				<div class="span8 offset1">
 					<b>Click 'Create New' then 'Save' to have access to the following:</b><br />
-					<span ng-repeat="attachment in newFieldData.attachments"><i>New Audio File:</i> {{attachment.description}}<br /></span>
+					<span ng-repeat="audioFile in newFieldData.audioFiles"><i>New Audio File:</i> <i class="fa whiteicon fa-bullhorn"></i>  {{audioFile.description}}<br /></span>
 				</div>
 			</div>
 </div>
 
 <div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined && readOnly!=true">
 	<div class="span12 pagination-centered">
-		<h2>Please select a session before entering data.</h2>
+		<h2>Please select a  <i class="fa whiteicon fa-calendar"></i>  session before entering data.</h2>
 	</div>
 </div>
 
 <div class="row" ng-show="loading==false && readOnly==true" ng-click="selectNone()">
 	<div class="span12 pagination-centered">
-		<h3>You have read-only access to this corpus.</h3>
+		<h3>You have read-only access to this  <i class="fa whiteicon fa-cloud"></i>  corpus.</h3>
 	</div>
 </div>
 
 <div ng-show="loading==false && writeOnly==true" class="pagination-centered">
-	<h2>You have write-only access to {{DB.corpustitle}}</h2>
+	<h2>You have write-only access to  <i class="fa whiteicon fa-cloud"></i> {{DB.corpustitle}}</h2>
 </div>
 
 <div class="row" ng-show="loading==true">
@@ -150,15 +150,15 @@
 			</div>
 			<div class="span2 entered_modified_info">
 				<span ng-show="searching==true"><button class="btn btn-primary" ng-click="selectNone()">Done</button><br /><br /></span>
-				<span title="Date entered {{datum.dateEntered | standardDate}}">Entered: {{datum.dateEntered | standardDate}}</span><br />
+				<span title="Date entered {{datum.dateEntered | standardDate}}"> <i class="fa whiteicon fa-clock-o"></i> Entered: {{datum.dateEntered | standardDate}}</span><br />
 				<span ng-hide="!datum.enteredByUser">by <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon"><br /></span><br />
-				<span title="Date modified {{datum.dateModified | standardDate}}">Last edit: {{datum.dateModified | standardDate}}</span><br />
-				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
+				<span title="Date modified {{datum.dateModified | standardDate}}"><i class="fa whiteicon fa-clock-o"></i>Last edit: {{datum.dateModified | standardDate}}</span><br />
+				<span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"></i> Contributors:<br /></span>
 				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title="{{modifiedByUser.username}}" />&nbsp;</span>
 				<div class="expandCollapseButton">
-					<span ng-show="datum.hasAudio==true"><img src="img/speaker_icon.png"></span>
-					<span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
-					&nbsp;&nbsp;&nbsp;<img ng-src="{{getExpandCollapse()}}" ng-click="triggerExpandCollapse()">
+					<span ng-show="datum.hasAudio==true"><i class="fa whiteicon {{recordingIcon}}"></i></span>
+					<span ng-show="datum.comments.length > 0"><i "fa whiteicon fa-comment"></i></span>
+					&nbsp;&nbsp;&nbsp;<i  class="fa whiteicon" ng-class="{'fa-list': !expandCollapse,  'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()"></i>
 				</div>			    		
 			</div>
 			</form>
@@ -171,29 +171,33 @@
 		<div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
 			<div class="span10 expandedDataComments">
 			<div class="expandedDataInner">
-				<span
-					ng-hide="fields.field5.label==''"
-					ng-repeat="comment in datum.comments"><a
-					ng-click="deleteComment(comment, datum)" class="delete_button"
-					ng-disabled="readOnly==true">✗</a><i><b>{{comment.username}}</b></i>:&nbsp;
-					{{comment.text}}<br /> </span>
-					<button class="btn btn-primary" ng-click="addComment(datum);" ng-disabled="readOnly==true">Add Comment</button>
+				<ul class="unstyled">
+					<li ng-hide="fields.field5.label==''" ng-repeat="comment in datum.comments">
+						<a ng-click="deleteComment(comment, datum)" class="delete_button" ng-disabled="readOnly==true"> 
+							<i class="fa  fa-remove"></i> 
+						</a>
+						<img  title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=30&d=identicon">&nbsp;
+						<i class="fa  fa-comment"></i> 
+						{{comment.text}} <i class="fa  fa-clock-o"></i>  {{comment.timestamp  | standardDateFromTimestamp}}
+					</li>
+				</ul>
+				<button class="btn btn-primary" ng-click="addComment(datum);" ng-disabled="readOnly==true"> <i class="fa whiteicon fa-comment"></i> Add Comment</button>
 			</div>
 		</div>
 		</div>
 		<div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
 			<div class="span3 expandedData">
 				<div class="expandedDataInner">
-				<button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true" ng-disabled="readOnly==true"><img ng-src="img/{{recordingIcon}}">&nbsp;{{recordingStatus}}</button>
+				<button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true" ng-disabled="readOnly==true"><i class="fa {{recordingIcon}}"></i>&nbsp;{{recordingStatus}}</button>
 				</div>
 			</div>
 			<div class="span7 expandedData">
 				<div class="expandedDataInner">
 				<form id='form_{{datum.id}}_audio-file'>
-					<img src="img/speaker_icon.png">&nbsp;
+					<i class="fa fa-bullhorn"></i>&nbsp;
 					<input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload'
 					ng-disabled="readOnly==true" /><button class="btn btn-primary" ng-click="uploadFile(datum);"
-					ng-disabled="readOnly==true">Upload File(s)</button>&nbsp;&nbsp;
+					ng-disabled="readOnly==true"> <i class="fa whiteicon fa-file"></i> Upload File(s)</button>&nbsp;&nbsp;
 				</form>
 				</div>
 			</div>
@@ -204,27 +208,27 @@
 		<div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
 			<div class="span10">
 				<table>
-					<tr ng-repeat="attachment in datum.attachments">
+					<tr ng-repeat="audioFile in datum.audioFiles" ng-hide="audioFile.trashed == 'deleted'">
 						<td>
 							<span class="form-horizontal">
-								<a class="delete_button" ng-click="deleteAttachmentFromCorpus(datum, attachment.filename, attachment.description)">✗</a>
-								<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
+								<a class="delete_button btn btn-danger floatLeft" ng-click="deleteAttachmentFromCorpus(datum, audioFile.filename, audioFile.description)"><i class="fa fa-trash-o whiteicon"></i></a>
+								<audio controls><source ng-src="{{server}}/{{DB.pouchname}}/{{datum.id}}/{{audioFile.filename}}" type="audio/wav"/></audio>
 							</span>
 						</td>
 						<td>
 							<span class="form-horizontal">
-								<input type="text" ng-model='attachment.description'ng-disabled="readOnly==true"> 
-								&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(attachment, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description</button>
+								<input type="text" ng-model='audioFile.description'ng-disabled="readOnly==true"> 
+								&nbsp;<button class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined" ng-disabled="readOnly==true">Save Description</button>
 							</span>
 						</td>
 						<td>
-							<a href="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" target="_blank"><img src="img/link.png"></a>
+							<a href="{{server}}/{{DB.pouchname}}/{{datum.id}}/{{audioFile.filename}}" target="_blank"><i class="fa whiteicon fa-link"></i></a>
 						</td>
 					</tr>
 				</table>
 				<hr />
 				<button class="btn btn-inverse" type="button"
-					ng-click="deleteRecord(datum)" ng-disabled="readOnly==true">ⓧ Delete This Record</button>
+					ng-click="deleteRecord(datum)" ng-disabled="readOnly==true"><i class="fa fa-trash-o"></i> Delete This Record</button>
 			</div>
 		</div>
 	</div>
@@ -253,42 +257,48 @@
 				| neverEmpty}}</span><br /> <span ng-class="{span5: searching!=true, span4: searching==true}" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}</span><br />
 		</div>
 		<div class="span2 entered_modified_info">
-			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)">Edit</button><br /><br /></span>
-			<span title="Date entered">Entered: {{datum.dateEntered | standardDate}}<br />
+			<span ng-show="searching==true"><button class="btn btn-primary" ng-click="editSearchResults($index)"> <i class="fa whiteicon fa-pencil"></i> Edit</button><br /><br /></span>
+			<span title="Date entered"> <i class="fa whiteicon fa-clock-o"></i> Entered: {{datum.dateEntered | standardDate}}<br />
 			<span ng-hide="!datum.enteredByUser">by <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon"><br /></span><br />
-			<span title="Date modified">Last edit: {{datum.dateModified | standardDate}}</span><br />
-				<span ng-hide="!datum.modifiedByUser.users[0]">Contributors:<br /></span>
+			<span title="Date modified"><i class="fa whiteicon fa-clock-o"></i>Last edit: {{datum.dateModified | standardDate}}</span><br />
+				<span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"></i> Contributors:<br /></span>
 				<span ng-repeat="modifiedByUser in datum.modifiedByUser.users"><img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title="{{modifiedByUser.username}}" /> </span>
-			<span ng-show="datum.hasAudio==true"><br /><img src="img/speaker_icon.png"></span> <span ng-show="datum.comments.length > 0"><img src="img/comment_icon.png"></span>
+			<span ng-show="datum.hasAudio==true"><br /><i class="fa {{recordingIcon}}"></i></span> <span ng-show="datum.comments.length > 0"><i "fa fa-comment"></i></span>
 		</div>
 
 
 		<div class="row" ng-show="searching==true && datum.comments[0]!=undefined">
 			<div class="span10 offset1 expandedDataComments">
 				<div class="expandedDataInner">
-					<span
-					ng-hide="fields.field5.label==''"
-					ng-repeat="comment in datum.comments"><i><b>{{comment.username}}</b></i>:&nbsp;
-					{{comment.text}}<br /> </span>
+					<ul class="unstyled">
+						<li ng-hide="fields.field5.label==''" ng-repeat="comment in datum.comments"> 
+							<a ng-click="deleteComment(comment, datum)" class="delete_button" ng-disabled="readOnly==true"> 
+								<i class="fa  fa-remove"></i> 
+							</a>
+							<img class="floatLeft" title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=30&d=identicon">&nbsp;
+							<i class="floatLeft fa fa-comment"></i> 
+							{{comment.text}} <i class="fa  fa-clock-o"></i>  {{comment.timestamp | standardDateFromTimestamp}}
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
 		<div class="row" ng-show="searching==true">
 			<div class="span9 offset1">
 				<table>
-					<tr ng-repeat="attachment in datum.attachments">
+					<tr ng-repeat="audioFile in datum.audioFiles" ng-hide="audioFile.trashed == 'deleted'">
 						<td>
 							<span class="form-horizontal">
-								<audio controls><source ng-src="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" type="audio/wav"/></audio>
+								<audio controls><source ng-src="{{server}}/{{DB.pouchname}}/{{datum.id}}/{{audioFile.filename}}" type="audio/wav"/></audio>
 							</span>
 						</td>
 						<td>
 							<span class="form-horizontal">
-								<input type="text" ng-model='attachment.description'> 
+								<input type="text" ng-model='audioFile.description'> 
 							</span>
 						</td>
 						<td>
-							<a href="{{server}}{{DB.pouchname}}/{{datum.id}}/{{attachment.filename}}" target="_blank"><img src="img/link.png"></a>
+							<a href="{{server}}/{{DB.pouchname}}/{{datum.id}}/{{audioFile.filename}}" target="_blank"><i class="fa whiteicon fa-link"></i></a>
 						</td>
 					</tr>
 				</table>
