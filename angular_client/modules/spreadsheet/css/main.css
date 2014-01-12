@@ -299,7 +299,6 @@ span ul {
 a.delete_button {
 	text-decoration: none;
 	color: #102E37;
-	font-size: 1.6em;
 	font-weight: 800;
 }
 .delete_button:hover {
