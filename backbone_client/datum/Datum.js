@@ -273,6 +273,22 @@ define([
       tagFieldToClean.mask = uniqueTags.join(", ");
       tagFieldToClean.value = tagFieldToClean.mask;
 
+      /* upgrade to collection of audio video */
+      if (!Array.isArray(originalModel.audioVideo)) {
+        console.log("Upgrading audioVideo to a collection", originalModel.audioVideo);
+        var audioVideoArray = [];
+        if (originalModel.audioVideo.URL) {
+          var audioVideoURL = originalModel.audioVideo.URL;
+          var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+          audioVideoArray.push({
+            "filename": fileFromUrl,
+            "description": fileFromUrl,
+            "URL": audioVideoURL,
+            "type": "audio"
+          });
+        }
+        originalModel.audioVideo = audioVideoArray;
+      }
 
       return this.originalParse(originalModel);
     },
