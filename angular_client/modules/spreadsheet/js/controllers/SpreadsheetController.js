@@ -2290,14 +2290,6 @@ define(
         }
       };
 
-      $scope.getExpandCollapse = function() {
-        if ($scope.expandCollapse === true) {
-          return "img/collapse.png";
-        } else {
-          return "img/expand.png";
-        }
-      };
-
       $scope.getSavedState = function() {
         if ($scope.saved === "yes") {
           $scope.savedStateButtonClass = "btn btn-success";
