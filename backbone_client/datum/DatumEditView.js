@@ -515,10 +515,10 @@ define([
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
-      var utteranceField =  this.model.get("datumFields").where({label: "utterance"})[0];
-      if (utteranceField.get("mask").trim() == utteranceLine.trim()) {
-        return;
-      }
+      // var utteranceField =  this.model.get("datumFields").where({label: "utterance"})[0];
+      // if (utteranceField.get("mask").trim() == utteranceLine.trim()) {
+      //   return;
+      // }
       this.updateDatumStateColor();
       this.guessMorphemes(utteranceLine);
       this.reloadIGTPreview();
@@ -529,10 +529,10 @@ define([
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       var morphemesLine = $(e.currentTarget).val();
-      var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
-      if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
-        return;
-      }
+      // var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
+      // if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
+      //   return;
+      // }
       this.guessUtterance(morphemesLine);
       this.guessGlosses(morphemesLine);
       this.guessTree(morphemesLine);
@@ -540,12 +540,16 @@ define([
       this.reloadIGTPreview();
 
     },
+    previousUtterance : null,
+    previousMorphemes : null,
+    previousGloss : null,
     guessMorphemes : function(utteranceLine){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
-      if (utteranceLine) {
+      if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine ) )) {
+        this.previousUtterance = utteranceLine;
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
         
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
@@ -555,8 +559,9 @@ define([
         var alternates = morphemesField.get("alternates") || [];
         alternates.push(utteranceLine);
         
-        // If the guessed morphemes is different than the unparsed utterance 
-        if (morphemesLine != utteranceLine && morphemesLine != "") {
+        // If the guessed morphemes is different than the unparsed utterance, and different than the previous morphemes line we guessed on 
+        if (morphemesLine != utteranceLine && morphemesLine != "" &&  (!this.previousMorphemes || (this.previousMorphemes != morphemesLine )) ){
+          this.previousMorphemes = morphemesLine;
           //hey we have a new idea, so trigger the gloss guessing too
           this.guessGlosses(morphemesLine);
           alternates.unshift(morphemesLine);
@@ -573,10 +578,13 @@ define([
     },
 
     guessGlosses : function(morphemesLine) {
-      if (morphemesLine) {
+      var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
+      var currentGloss = glossField.get("mask") || "";
+      if (morphemesLine && (!currentGloss || !this.previousMorphemes || (this.previousMorphemes != morphemesLine ))) {
+        this.previousMorphemes = morphemesLine;
+
         var glossLine = Glosser.glossFinder(morphemesLine);
         
-        var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
         
