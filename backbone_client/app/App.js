@@ -673,8 +673,12 @@ define([
       
       /* Upgrade chrome app user corpora's to v1.38+ */
       if(couchConnection.domain == "ifielddevs.iriscouch.com"){
-        couchConnection.domain  = "corpusdev.lingsync.org";
+        couchConnection.domain  = "corpus.lingsync.org";
         couchConnection.port = "";
+      }
+      /* Upgrade chrome app user corpora's to v1.90+ */
+      if(couchConnection.domain == "corpusdev.lingsync.org"){
+        couchConnection.domain  = "corpus.lingsync.org";
       }
 
       this.set("couchConnection", couchConnection);
@@ -711,8 +715,11 @@ define([
             if(oldCouchConnection){
               oldCouchConnection.corpusid = corpusModel._id;
               if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-                oldCouchConnection.domain  = "corpusdev.lingsync.org";
+                oldCouchConnection.domain  = "corpus.lingsync.org";
                 oldCouchConnection.port = "";
+              }
+              if(oldCouchConnection.domain == "corpusdev.lingsync.org"){
+                oldCouchConnection.domain  = "corpus.lingsync.org";
               }
               corpusModel.set("couchConnection", oldCouchConnection);
             }

@@ -42,8 +42,8 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
 
     
   /* Switch user to the new dev servers if they have the old ones */
-  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,
-      "corpusdev.lingsync.org");
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g, "corpus.lingsync.org");
+  couchurl = couchurl.replace(/corpusdev.lingsync.org/g, "corpus.lingsync.org");
 
   /*
    * For debugging cors #838: Switch to use the corsproxy corpus service instead
