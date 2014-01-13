@@ -522,6 +522,95 @@ database.allDocs({
 });
 
 
+/*
+Add lingllama-communitycorpus to all users who have access to lingllama and prevent anyone from editing the user study data 
+ */
+Array.prototype.getUnique = function(){
+   var u = {}, a = [];
+   for(var i = 0, l = this.length; i < l; ++i){
+      if(u.hasOwnProperty(this[i])) {
+         continue;
+      }
+      a.push(this[i]);
+      u[this[i]] = 1;
+   }
+   return a;
+}
+var database = $.couch.db("_users");
+database.allDocs({
+    success: function(result) {
+        //console.log(result);
+        var data = result.rows;
+        for (var couchdatum in data) {
+            database.openDoc(data[couchdatum].id, {
+                success: function(originalDoc) {
+                    // console.log(originalDoc);
+                    if(!originalDoc.roles){
+                        return;
+                    }
+                    var temp = originalDoc.roles.getUnique().join(",") || "";
+                    if (temp){
+                        //upgrade pre 1.30 users
+                        for(var roleIndex = 0; roleIndex < originalDoc.roles.length; roleIndex++){
+                            if(originalDoc.roles[roleIndex].indexOf("contributor") || originalDoc.roles[roleIndex].indexOf("writer")){
+                                temp = temp.replace(/contributor/g,"writer");
+                                var roleName = originalDoc.roles[roleIndex].replace(/contributor/g,"writer");
+                                var expectedReaderOnWriterCorpora = roleName.replace("writer","reader");
+                                var expectedCommenterOnWriterCorpora = roleName.replace("writer","commenter");
+                                temp = temp+","+expectedReaderOnWriterCorpora+","+expectedCommenterOnWriterCorpora;
+                            }
+                        }
+
+                        temp = temp.replace(/computationalfieldworkshop-group_data_entry_tutorial_writer/g,"computationalfieldworkshop-group_data_entry_tutorial_reader");
+                        temp = temp.replace(/public-firstcorpus_reader/g,"");
+                        
+                        //remove testing users from communitycorpus
+                        temp = temp.replace(/lingllama-communitycorpus_writer/g,"");
+                        temp = temp.replace(/lingllama-communitycorpus_reader/g,"");
+                        temp = temp.replace(/lingllama-communitycorpus_commenter/g,"");
+                        temp = temp.replace(/,+/g,",").replace(/,$/g,"");
+
+
+                        if(originalDoc.name.search(/elise[0-9]+/) > -1 || originalDoc.name.indexOf("nemo") > -1 || originalDoc.name.indexOf("test") > -1 || originalDoc.name.indexOf("tobin") > -1 || temp.indexOf("-") === -1 ){
+                            originalDoc.roles = temp.replace(/"/g, "").split(",");
+                            originalDoc.roles = originalDoc.roles.getUnique().sort().join(",").split(",");
+                        } else {
+                            //add everyone else to the communitycorpus
+                            // console.log(temp);
+                            originalDoc.roles = temp.replace(/"/g, "").split(",");
+                            originalDoc.roles = originalDoc.roles.getUnique().sort().join(",").split(",");
+
+                            originalDoc.roles.push("lingllama-communitycorpus_commenter");
+                            originalDoc.roles.push("lingllama-communitycorpus_reader");
+                            originalDoc.roles.push("lingllama-communitycorpus_writer");
+                        }
+
+                    }
+                    console.log(originalDoc.name, originalDoc.roles);
+                    
+                    database.saveDoc(originalDoc, {
+                        success: function(serverResults) {
+                            console.log("cleaned extra quotes and updated lingllama roles for " + originalDoc._id, JSON.stringify(originalDoc.roles));
+                        },
+                        error: function(serverResults) {
+                            console.log("There was a problem saving the user doc." + originalDoc._id, +JSON.stringify(originalDoc));
+                        }
+                    });
+
+                },
+                error: function(error) {
+                    console.log("Error opening your docs ", error);
+                }
+            });
+        }
+    },
+    error: function(error) {
+        console.log("Error opening the database ", error);
+    }
+});
+
+
+
 
 /*
 Merge users roles
