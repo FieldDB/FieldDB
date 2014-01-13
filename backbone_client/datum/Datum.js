@@ -570,7 +570,8 @@ define([
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
-        session: this.get("session")
+        session: this.get("session"),
+        _attachments: this.get("_attachments")
       });
 
       return datum;
