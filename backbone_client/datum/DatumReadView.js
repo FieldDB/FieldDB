@@ -195,7 +195,7 @@ define([
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
         
-      } else if (this.format == "latex") {
+      } else if (this.format == "latex" || this.format == "latexPreviewIGTonly") {
         //This gets the fields necessary from the model
         // This bit of code makes the datum look like its rendered by
         // latex, could be put into a function, but not sure if thats
@@ -419,24 +419,29 @@ define([
     	/*throughout this next section, print frequent fields and infrequent ones differently
     	frequent fields get latex'd as items in a description and infrequent ones are the same,
     	but commented out.*/
-    	if(fields && (fields.length>0)){
-          for (var field in fields){
-              if(!frequentFields || frequentFields.indexOf(fieldLabels[field])>=0){
-                if(fields[field]){
-                  jsonToRender.additionalFields.push({field: fieldLabels[field],
-                    value: highlightMatches(fields[field], fieldLabels[field])});
+      if(this.format == "latex"){
+        if(fields && (fields.length>0)){
+            for (var field in fields){
+                if(!frequentFields || frequentFields.indexOf(fieldLabels[field])>=0){
+                  if(fields[field] && fieldLabels[field].toLowerCase().indexOf("latex") === -1){
+                    jsonToRender.additionalFields.push({field: fieldLabels[field],
+                      value: highlightMatches(fields[field], fieldLabels[field])});
+                  }
                 }
-              }
-          }
-    	}
+            }
+      	}
+        jsonToRender.withCheckbox = true;
+      }
 
        
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
-        if(!jsonToRender.datumstatecolor){
-          jsonToRender.datumstatecolor = "";
-        }
-        // if(jsonToRender.datumstatecolor){
+        
+        if(this.format == "latex"){
+          if(!jsonToRender.datumstatecolor){
+            jsonToRender.datumstatecolor = "";
+          }
+          // if(jsonToRender.datumstatecolor){
           $(this.el).removeClass("datum-primary-validation-status-color-warning");
           $(this.el).removeClass("datum-primary-validation-status-color-important");
           $(this.el).removeClass("datum-primary-validation-status-color-info");
@@ -444,7 +449,7 @@ define([
           $(this.el).removeClass("datum-primary-validation-status-color-inverse");
 
           $(this.el).addClass("datum-primary-validation-status-color-"+jsonToRender.datumstatecolor);
-        // }
+        }
         try{
           if(jsonToRender.datumstate.toLowerCase().indexOf("Deleted") > -1){
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
