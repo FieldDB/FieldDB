@@ -824,8 +824,12 @@ define([
       var oldCouchConnection = this.get("couchConnection");
       if(oldCouchConnection){
         if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-          oldCouchConnection.domain  = "corpusdev.lingsync.org";
+          oldCouchConnection.domain  = "corpus.lingsync.org";
           oldCouchConnection.port = "";
+          this.set("couchConnection", oldCouchConnection);
+        }
+        if(oldCouchConnection.domain == "orpusdev.lingsync.org"){
+          oldCouchConnection.domain  = "corpus.lingsync.org";
           this.set("couchConnection", oldCouchConnection);
         }
       }

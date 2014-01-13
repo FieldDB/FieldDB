@@ -261,10 +261,10 @@ define([
       }
       var userString = this.get("confidential").decrypt(encryptedUserString);
      
-      /* Switch user to the new dev servers if they have the old ones */
+      /* Switch user to the new prod servers if they have the old ones */
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
-      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
-      
+      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpus.lingsync.org");
+      userString = userString.replace(/corpusdev.lingsync.org/g,"corpus.lingsync.org");
 
       /*
        * For debugging cors #838: Switch to use the corsproxy
