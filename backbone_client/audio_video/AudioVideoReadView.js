@@ -21,14 +21,13 @@ define([
     
     model : AudioVideo,
 
-    classname : "audio_video",
-
     template : Handlebars.templates.audio_video_read_embedded,
 
     render : function() {
       if(this.model.get("URL")){
         var jsonToRender = this.model.toJSON();
         jsonToRender.audioType = "audio/"+this.model.get("filename").split('.').pop() ;
+        console.log("rendering Audio Video ", jsonToRender);
         $(this.el).html(this.template(jsonToRender));
       }else{
         $(this.el).html(""); //render no audio player
