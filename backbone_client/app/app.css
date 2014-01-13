@@ -250,13 +250,13 @@ textarea {
 }
 
 .datum_fields_ul textarea.datum_field_input {
-	padding: 0px;
+	padding: 2px;
 	margin: 0px;
 	/* background-color: #ff00ff; */
 	outline: none;
 	overflow: hidden;
 	resize: none;
-	line-height: 1.2em;
+	/*line-height: 1.2em;*/
 	min-height: 1.2em;
 	font-size: 1em;
 	border: none;
@@ -266,6 +266,8 @@ textarea {
 	-moz-border-radius: 0 !important;
 	border-radius: 0 !important;
 	line-height: 1.2em;
+	  	font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+
 }
 
 .datum_fields_ul {
@@ -274,6 +276,7 @@ textarea {
 
 .datum_field_input_cell {
 	width: 90%;
+
 	/* background-color: white;
   color: #333;
   border-bottom: 1px solid #999; */
@@ -299,11 +302,20 @@ textarea {
 
 .glossCouplet {
 	display: inline-block;
-	padding-left: 5px;
-	padding-right: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
 	vertical-align: top;
 	/*necessary for when utteranceArray/morphemeArray/glossArray have different lengths*/
 }
+
+.preview_IGT_area{
+	margin: .5em;
+}
+.preview_IGT_area .glossCouplet {
+	background-color: #FFFcdF;
+	margin-bottom: 5px;
+/*	font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+*/}
 
 .zebra
  
