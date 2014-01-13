@@ -621,8 +621,7 @@ define(
                 directobject: "",
                 indirectobject: "",
                 teamOrPersonal: "personal"
-              }]);
-              $scope.uploadActivities();
+              }], "uploadnow");
 
               // Update saved state in Preferences
               Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
@@ -825,8 +824,7 @@ define(
                   directobject: "<a href='#session/" + newSession._id + "'>" +directobject+ "</a> ",
                   indirectobject: indirectObjectString,
                   teamOrPersonal: "team"
-                }]);
-                $scope.uploadActivities();
+                }], "uploadnow");
 
                 // Update all records tied to this session
                 for (var i in scopeDataToEdit) {
@@ -894,8 +892,7 @@ define(
                       directobject: "<a href='#session/" + sessionToMarkAsDeleted._id + "'>an elicitation session</a> ",
                       indirectobject: indirectObjectString,
                       teamOrPersonal: "team"
-                    }]);
-                    $scope.uploadActivities();
+                    }], "uploadnow");
 
                     // Remove session from scope
                     for (var i in $scope.sessions) {
@@ -976,8 +973,7 @@ define(
                       directobject: "<a href='#session/" + savedRecord.data.id + "'>" +directobject+ "</a> ",
                       indirectobject: indirectObjectString,
                       teamOrPersonal: "team"
-                    }]);
-                    $scope.uploadActivities();
+                    }], "uploadnow");
 
                     $scope.sessions.push(newSessionRecord);
                     $scope.dataentry = true;
@@ -1043,9 +1039,7 @@ define(
                       directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
                       indirectobject: indirectObjectString,
                       teamOrPersonal: "team"
-                    }]);
-
-                    $scope.uploadActivities();
+                    }], "uploadnow");
 
                     // Delete record from all scope data and update
                     var index = $scope.allData.indexOf(datum);
@@ -1484,17 +1478,15 @@ define(
                                 directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + response.data.id + "'>" + utterance + "</a> ",
                                 indirectobject: indirectObjectString,
                                 teamOrPersonal: "team"
-                              }]);
+                              }], "uploadnow");
 
                             // Upload new activities from async
                             // process
-                            $scope.uploadActivities();
                             $scope.saved = "yes";
                           },
                           function() {
                             $scope.saved = "no";
-                            window
-                              .alert("There was an error saving the record. Please try again.");
+                            window.alert("There was an error saving the record. Please try again.");
                           });
                     });
               }
@@ -1644,39 +1636,38 @@ define(
       };
 
       // Add activities to scope object, to be uploaded when 'SAVE' is clicked
-      $scope.addActivity = function(activityArray) {
+      $scope.addActivity = function(activityArray, uploadnow) {
+        Data.blankActivityTemplate().then(
+          function(sourceTemplate) {
 
-        for (var i = 0; i < activityArray.length; i++) {
-          (function(index) {
-            var bareActivityObject = activityArray[index];
-            bareActivityObject.verb = bareActivityObject.verb.replace(
-              "href=", "target='_blank' href=");
-            bareActivityObject.directobject = bareActivityObject.directobject
-              .replace("href=", "target='_blank' href=");
-            bareActivityObject.indirectobject = bareActivityObject.indirectobject
-              .replace("href=", "target='_blank' href=");
+            for (var index = 0; index < activityArray.length; index++) {
+              var template = JSON.parse(JSON.stringify(sourceTemplate));
+              var bareActivityObject = activityArray[index];
 
-            Data
-              .blankActivityTemplate()
-              .then(
-                function(template) {
-                  template.verb = bareActivityObject.verb;
-                  template.verbicon = bareActivityObject.verbicon;
-                  template.directobjecticon = bareActivityObject.directobjecticon;
-                  template.directobject = bareActivityObject.directobject;
-                  template.indirectobject = bareActivityObject.indirectobject;
-                  template.teamOrPersonal = bareActivityObject.teamOrPersonal;
-                  template.user.username = $rootScope.userInfo.name;
-                  template.user.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
-                  template.user.id = $rootScope.userInfo.name;
-                  template.user._id = $rootScope.userInfo.name;
-                  template.dateModified = JSON.parse(JSON.stringify(new Date()));
-                  template.timestamp = Date.now();
+              bareActivityObject.verb = bareActivityObject.verb.replace("href=", "target='_blank' href=");
+              bareActivityObject.directobject = bareActivityObject.directobject.replace("href=", "target='_blank' href=");
+              bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
 
-                  $scope.activities.push(template);
-                });
-          })(i);
-        }
+              template.verb = bareActivityObject.verb;
+              template.verbicon = bareActivityObject.verbicon;
+              template.directobjecticon = bareActivityObject.directobjecticon;
+              template.directobject = bareActivityObject.directobject;
+              template.indirectobject = bareActivityObject.indirectobject;
+              template.teamOrPersonal = bareActivityObject.teamOrPersonal;
+              template.user.username = $rootScope.userInfo.name;
+              template.user.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
+              template.user.id = $rootScope.userInfo.name;
+              template.user._id = $rootScope.userInfo.name;
+              template.dateModified = JSON.parse(JSON.stringify(new Date()));
+              template.timestamp = Date.now();
+
+              $scope.activities.push(template);
+
+            }
+            if(uploadnow){
+              $scope.uploadActivities();
+            }
+          });
       };
 
       $scope.uploadActivities = function() {
@@ -1787,7 +1778,7 @@ define(
               directobject: directObjectString,
               indirectobject: "",
               teamOrPersonal: "personal"
-            }]);
+            }], "uploadnow");
 
             $scope.corpora.push(newCorpus);
             $rootScope.loading = false;
@@ -1927,7 +1918,7 @@ define(
             directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
             indirectobject: indirectObjectString,
             teamOrPersonal: "team"
-          }]);
+          }], "uploadnow");
 
           document.getElementById("userToModifyInput").value = "";
           $rootScope.loading = false;
@@ -1978,9 +1969,8 @@ define(
               directobject: dataToPost.userRoleInfo.usernameToModify,
               indirectobject: indirectObjectString,
               teamOrPersonal: "team"
-            }]);
+            }], "uploadnow");
 
-            $scope.loadUsersAndRoles();
           });
         }
       };
@@ -2398,9 +2388,7 @@ define(
                 directobject: "<a href='#data/" + datum.id + "/" + filename + "'>an audio file on "+datum.utterance+"</a> ",
                 indirectobject: indirectObjectString,
                 teamOrPersonal: "team"
-              }]);
-
-              $scope.uploadActivities();
+              }], "uploadnow");
 
               // Dont actually let users delete data...
               // Data.async($rootScope.DB.pouchname, datum.id).then(function(record) {
