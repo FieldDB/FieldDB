@@ -38,8 +38,10 @@ define([
      */
     initialize : function() {
       
-      this.audioVideoView = new AudioVideoReadView({
-        model : this.model.get("audioVideo")
+      this.audioVideoView = new UpdatingCollectionView({
+        collection           : this.model.get("audioVideo"),
+        childViewConstructor : AudioVideoReadView,
+        childViewTagName     : 'li'
       });
       
       this.commentReadView = new UpdatingCollectionView({
@@ -174,7 +176,7 @@ define([
         $(this.el).html(this.template(jsonToRender));
 
         // Display audioVideo View
-        this.audioVideoView.el = this.$(".audio_video");
+        this.audioVideoView.el = this.$(".audio_video_ul");
         this.audioVideoView.render();
         
         // Display the DatumTagsView

@@ -1,6 +1,6 @@
 define([ 
     "backbone",
-    "audio_video/AudioVideo", 
+    "audio_video/AudioVideos", 
     "comment/Comment",
     "comment/Comments",
     "datum/Datums", 
@@ -12,7 +12,7 @@ define([
     "OPrime"
 ], function(
     Backbone, 
-    AudioVideo, 
+    AudioVideos, 
     Comment,
     Comments,
     Datums,
@@ -78,7 +78,7 @@ define([
     fillWithDefaults : function(){
    // If there's no audioVideo, give it a new one.
       if (!this.get("audioVideo")) {
-        this.set("audioVideo", new AudioVideo());
+        this.set("audioVideo", new AudioVideos());
       }
       
       // If there are no comments, give it a new one
@@ -108,7 +108,7 @@ define([
     // Internal models: used by the parse function
     internalModels : {
       datumFields : DatumFields,
-      audioVideo : AudioVideo,
+      audioVideo : AudioVideos,
       session : Session,
       comments : Comments,
       datumTags : DatumTags
@@ -563,7 +563,7 @@ define([
     clone : function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
-        audioVideo : new AudioVideo(this.get("audioVideo").toJSON(), {parse: true}),
+        audioVideo : new AudioVideos(this.get("audioVideo").toJSON(), {parse: true}),
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
