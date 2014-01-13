@@ -9,6 +9,7 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
+    "datum/DatumReadView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "datum/DatumTagReadView",
@@ -28,6 +29,7 @@ define([
     Confidential,
     Datum,
     DatumFieldEditView,
+    DatumReadView,
     DatumTag,
     DatumTagEditView,
     DatumTagReadView,
@@ -64,6 +66,10 @@ define([
       this.commentEditView = new CommentEditView({
         model : new Comment(),
       });
+
+      this.datumEasierToReadIGTAlignedView = new DatumReadView({
+        model : this.model
+      });
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -88,6 +94,8 @@ define([
       
       this.model.bind("change:audioVideo", this.playAudio, this);
       this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
+      this.bind("change:datumFields", this.reloadIGTPreview, this);
+
       this.prepareDatumFieldAlternatesTypeAhead();
     },
 
@@ -272,6 +280,11 @@ define([
         // Display the CommentEditView
         this.commentEditView.el = $(this.el).find('.new-comment-area'); 
         this.commentEditView.render();
+
+        // Display the DatumReadView
+        this.datumEasierToReadIGTAlignedView.el = $(this.el).find('.preview_IGT_area'); 
+        this.datumEasierToReadIGTAlignedView.format = "latexPreviewIGTonly";
+        this.datumEasierToReadIGTAlignedView.render();
         
         // Display the SessionView
         this.sessionView.el = this.$('.session-link'); 
@@ -502,18 +515,29 @@ define([
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
+      var utteranceField =  this.model.get("datumFields").where({label: "utterance"})[0];
+      if (utteranceField.get("mask").trim() == utteranceLine.trim()) {
+        return;
+      }
       this.updateDatumStateColor();
       this.guessMorphemes(utteranceLine);
+      this.reloadIGTPreview();
     },
     morphemesBlur : function(e){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
-      this.guessUtterance($(e.currentTarget).val());
-      this.guessGlosses($(e.currentTarget).val());
-      this.guessTree($(e.currentTarget).val());
+      var morphemesLine = $(e.currentTarget).val();
+      var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
+      if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
+        return;
+      }
+      this.guessUtterance(morphemesLine);
+      this.guessGlosses(morphemesLine);
+      this.guessTree(morphemesLine);
       this.needsSave = true;
+      this.reloadIGTPreview();
 
     },
     guessMorphemes : function(utteranceLine){
@@ -625,6 +649,11 @@ define([
         tagField.set("alternates", results);
       });
       
+    },
+    reloadIGTPreview: function(){
+      // Display the DatumReadView
+      this.datumEasierToReadIGTAlignedView.model = this.model;
+      this.datumEasierToReadIGTAlignedView.render();
     }
   });
 
