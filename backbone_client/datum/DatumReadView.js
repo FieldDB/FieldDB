@@ -216,7 +216,7 @@ define([
         // not preceded by "<span").
 
         // searchParams is something like "judgement:grammatical AND utterance:chiens" or just "chiens"
-        var searchParams = app.get("search").get("searchKeywords");
+        var searchParams = $("#search_box").val();
 
         // queryTokens is something like ["judgement:grammatical", "AND", "utterance:chiens"] or just ["chiens"]
         var queryTokens = this.model.processQueryString(searchParams);
@@ -394,7 +394,7 @@ define([
           var getIGTList = function (params) {
             return _.map(_.zip.apply(null, _.compact(_.map(params, function (p) {
               if (p) {
-                return _.map(p.split(' '), randomStrings2highlightSpans);
+                return _.map(p.split(/[ \t\n]+/), randomStrings2highlightSpans);
               } else {
                 return null;
               }
