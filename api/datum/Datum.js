@@ -947,7 +947,7 @@ define([
               window.appView.toastUser("Sucessfully saved datum: "+ utterance,"alert-success","Saved!");
               window.appView.addSavedDoc(model.id);
             }
-            var verb = "updated";
+            var verb = "modified";
             verbicon = "icon-pencil";
             if(newModel){
               verb = "added";

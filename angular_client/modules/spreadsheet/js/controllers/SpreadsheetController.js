@@ -812,14 +812,14 @@ define(
                 var directobject =  $scope.currentSessionName || "an elicitation session";
                 var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
                 $scope.addActivity([{
-                  verb: "updated",
+                  verb: "modified",
                   verbicon: "icon-pencil",
                   directobjecticon: "icon-calendar",
                   directobject: "<a href='#session/" + newSession._id + "'>" +directobject+ "</a> ",
                   indirectobject: indirectObjectString,
                   teamOrPersonal: "personal"
                 }, {
-                  verb: "updated",
+                  verb: "modified",
                   verbicon: "icon-pencil",
                   directobjecticon: "icon-calendar",
                   directobject: "<a href='#session/" + newSession._id + "'>" +directobject+ "</a> ",
@@ -1189,14 +1189,14 @@ define(
           // Update activity feed
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
           $scope.addActivity([{
-            verb: "updated",
+            verb: "modified",
             verbicon: "icon-pencil",
             directobjecticon: "icon-list",
             directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
             indirectobject: indirectObjectString,
             teamOrPersonal: "personal"
           }, {
-            verb: "updated",
+            verb: "modified",
             verbicon: "icon-pencil",
             directobjecticon: "icon-list",
             directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
@@ -1914,14 +1914,14 @@ define(
 
           var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a> as "+rolesString;
           $scope.addActivity([{
-            verb: "updated",
+            verb: "modified",
             verbicon: "icon-pencil",
             directobjecticon: "icon-user",
             directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
             indirectobject: indirectObjectString,
             teamOrPersonal: "personal"
           }, {
-            verb: "updated",
+            verb: "modified",
             verbicon: "icon-pencil",
             directobjecticon: "icon-user",
             directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
