@@ -402,6 +402,10 @@ define([
           }
 
           try {
+            //if the user wants an latexPreviewIGTonly and this IGT is incomplete, dont render.
+            if (this.format === "latexPreviewIGTonly" && !utterance || !morphemes || !gloss) {
+              return;
+            }
             var tuple = getIGTList([utterance, morphemes, gloss]);
             if (translation != "") {
               jsonToRender.translation = "\u2018"+ translation +"\u2019";
