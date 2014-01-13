@@ -637,8 +637,9 @@ define(
               // Find available databases from db roles
               for (var roleIndex = 0; roleIndex < userRoles.length; roleIndex++) {
                 var pieces = userRoles[roleIndex].split("_");
-                if (pieces.length > 1 && pieces[1] === "writer") {
-                  availableDBs[pieces[0].replace(/[\"]/g, "")] = {
+                if (pieces.length > 1 && pieces[pieces.length - 1] === "writer") {
+                  pieces.pop();
+                  availableDBs[pieces.join("_").replace(/[\"]/g, "")] = {
                     roleIndex: roleIndex
                   };
                 }
@@ -649,7 +650,7 @@ define(
                 if (availableDBs.hasOwnProperty(dbName)) {
 
                   // Only show lingllama's grafiti corpora to lingllama, per client request
-                  if (dbName.indexOf("lingllama-communitycorpus") > -1 && $rootScope.userInfo.name != "lingllama") {
+                  if (dbName.indexOf("lingllama-communitycorpus") > -1) {
                     continue;
                   }
                   scopeDBs.push(dbName);
