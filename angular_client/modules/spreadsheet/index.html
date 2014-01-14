@@ -68,7 +68,7 @@
 					class="rightMenuItems" ng-show="authenticated==true">
 					<div class="rightMenuItemsDiv">
 						<div ng-hide="DB==undefined">
-							<a class="floatLeft" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}" target="_blank" title="Visit this corpus' webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
+							<a class="floatLeft" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this {{DB.pouchname}}'s webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
 							{{getCurrentSessionName()}}<br /><i class="fa whiteicon fa-cloud"></i> {{DB.corpustitle}}
 						</div>
 						<div>
@@ -249,7 +249,7 @@
 				<br />
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
 					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
-						<a class="floatLeft"  href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}" target="_blank" title="Visit this corpus' webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
+						<a class="floatLeft"  href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this corpus' webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
 						{{getCurrentSessionName()}}<br /> <i class="fa whiteicon fa-cloud"></i> {{DB.corpustitle}}
 					</div>
 					<div class="smallMenuBarInfoItem">
