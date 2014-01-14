@@ -403,13 +403,13 @@ define([
 
           try {
             //if the user wants an latexPreviewIGTonly and this IGT is incomplete, dont render.
-            if (this.format === "latexPreviewIGTonly" && !utterance || !morphemes || !gloss) {
-              return;
+            if (this.format === "latexPreviewIGTonly" && (!utterance || !morphemes || !gloss) ) {
+              return this;
             }
             var tuple = getIGTList([utterance, morphemes, gloss]);
             // if there are only 3 or less words, they probably dont need the alignment visuall that much
             if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
-              return;
+              return this;
             }
             if (translation != "") {
               jsonToRender.translation = "\u2018"+ translation +"\u2019";
