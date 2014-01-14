@@ -1150,7 +1150,7 @@ define(
             }
             datum.datumTags = newDatumFieldsArray;
           } else {
-            console.log("$scope.fields",$scope.fields);
+            // console.log("$scope.fields",$scope.fields);
             datum[$scope.fields[key].label] = fieldData[key];
           }
 
@@ -2317,7 +2317,25 @@ define(
               "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + key,
               "type": "audio"
             };
+
             datum.audioVideo.push(newScopeAttachment);
+
+            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            $scope.addActivity([{
+              verb: "recorded",
+              verbicon: "icon-plus",
+              directobjecticon: "icon-list",
+              directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename+ "'>the audio file "+ newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on "+datum.utterance+"</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "personal"
+            }, {
+              verb: "recorded",
+              verbicon: "icon-plus",
+              directobjecticon: "icon-list",
+              directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename+ "'>the audio file "+ newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on "+datum.utterance+"</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "team"
+            }], "uploadnow");
           }
           datum.hasAudio = true;
           originalDoc.audioVideo = datum.audioVideo;
@@ -2328,6 +2346,9 @@ define(
           // console.log(originalDoc.audioVideo);
           Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
             console.log("Successfully uploaded attachment.");
+
+            
+
 
             // Reset file input field
             document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
