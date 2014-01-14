@@ -490,7 +490,7 @@ define(
                   }
 
                   // Load data from current session into scope
-                  if (!sessionID) {
+                  if (!sessionID || sessionID == "none") {
                     scopeData.push(newDatumFromServer);
                   } else if (newDatumFromServer.sessionID === sessionID) {
                     scopeData.push(newDatumFromServer);
