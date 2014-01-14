@@ -252,6 +252,8 @@ function getUser(userId) {
         for (pouch in result.corpuses) {
           result.corpuses[pouch].phash = md5(result.corpuses[pouch].pouchname);
         }
+        result.firstname =  result.firstname || "";
+        result.lastname =  result.lastname || "";
         result.subtitle = result.subtitle || result.firstname + ' ' + result.lastname;
         df.resolve(result);
       }
