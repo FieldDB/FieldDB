@@ -154,7 +154,7 @@ define([
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
      */
-    getMostRecentIdsByDate : function(callback) {
+    getMostRecentIdsByDate : function(howmany, callback) {
       var self = this;
       
       if(OPrime.isBackboneCouchDBApp()){
@@ -164,7 +164,7 @@ define([
         tempDatums.model = Datum;
         tempDatums.fetch({
           descending: true,
-          limit: 5,
+          limit: howmany,
           error : function(model, xhr, options) {
             OPrime.bug("There was an error loading your datums.");
             if(typeof callback == "function"){
@@ -197,7 +197,7 @@ define([
                 window.toldSearchtomakebydateviews = true;
                 window.app.get("corpus").createPouchView("pages/by_date", function(){
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
-                  self.getMostRecentIdsByDate(callback);
+                  self.getMostRecentIdsByDate(howmany, callback);
                 });
                 return;
               }
