@@ -43,6 +43,7 @@ define([
       
       this.newTempDataList();
       this.changeViewsOfInternalModels();
+      this.userSetSearchToBlank = false;
 
       this.model.bind('change', this.render, this);
     },
@@ -116,7 +117,7 @@ define([
       
       //this.setElement($("#search-top"));
       var searchKeywords = this.model.get("searchKeywords");
-      if (!searchKeywords) {
+      if (!searchKeywords && !this.userSetSearchToBlank) {
         searchKeywords = localStorage.getItem("searchKeywords");
         if (!searchKeywords) {
           searchKeywords = window.app.get("corpus").get("searchKeywords");
@@ -283,6 +284,12 @@ define([
     searchTop : function() {
       if (OPrime.debugMode) OPrime.debug("Will search for " + $("#search_box").val());
       this.model.set("searchKeywords", $("#search_box").val());
+      
+      if($("#search_box").val() == ""){
+        this.userSetSearchToBlank = true;
+      }else{
+        this.userSetSearchToBlank = false;
+      }
             // Search for Datum that match the search criteria      
       this.search($("#search_box").val());
       

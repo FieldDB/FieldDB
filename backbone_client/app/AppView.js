@@ -508,6 +508,11 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
+          if($("#search_box").val() == ""){
+            this.searchEditView.userSetSearchToBlank = true;
+          }else{
+            this.searchEditView.userSetSearchToBlank = false;
+          }
           this.searchEditView.searchTop();
         }
 //        return false;
