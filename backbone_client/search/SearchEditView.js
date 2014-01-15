@@ -114,24 +114,6 @@ define([
       jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
       jsonToRender.locale_advanced_search_explanation = Locale.get("locale_advanced_search_explanation");
       
-      if (this.format == "fullscreen") {
-        // Display the SearchView
-        this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(jsonToRender));        
-      } else if (this.format == "centreWell") {
-        // Display the SearchView
-        this.setElement($("#search-embedded"));
-        $(this.el).html(this.embeddedTemplate(jsonToRender));
-      } 
-      
-      
-//      $(this.el).find(".judgement").find("input").val("grammatical");
-      this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
-      this.advancedSearchDatumView.render();
-      
-      this.advancedSearchSessionView.el = this.$('.advanced_search_session');
-      this.advancedSearchSessionView.render();
-
       //this.setElement($("#search-top"));
       var searchKeywords = this.model.get("searchKeywords");
       if (!searchKeywords) {
@@ -143,8 +125,28 @@ define([
           this.model.set("searchKeywords", searchKeywords);
         }
       }
-
+      jsonToRender.searchKeywords = searchKeywords;
+      
+      if (this.format == "fullscreen") {
+        // Display the SearchView
+        this.setElement($("#search-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));        
+      } else if (this.format == "centreWell") {
+        // Display the SearchView
+        this.setElement($("#search-embedded"));
+        $(this.el).html(this.embeddedTemplate(jsonToRender));
+      } 
       $("#search-top").html(this.topTemplate(jsonToRender));
+      
+      
+//      $(this.el).find(".judgement").find("input").val("grammatical");
+      this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
+      this.advancedSearchDatumView.render();
+      
+      this.advancedSearchSessionView.el = this.$('.advanced_search_session');
+      this.advancedSearchSessionView.render();
+
+
       
       try{
         Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
