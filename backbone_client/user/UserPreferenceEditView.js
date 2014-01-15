@@ -119,6 +119,20 @@ define([
           e.preventDefault();
         }
         this.setPreferedDashboardTemplate("layoutEverythingAtOnce");
+      },
+      "click .choose-show-at-top-of-datum-area" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setShowDatumAtTopOrBottomOfDataEntryArea("top");
+      },
+      "click .choose-show-at-bottom-of-datum-area" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setShowDatumAtTopOrBottomOfDataEntryArea("bottom");
       }
       
     },
@@ -131,18 +145,29 @@ define([
     render : function() {
       if (OPrime.debugMode) OPrime.debug("USERPREFERENCE render: " + this.el);
       
-      var jsonToRender = this.model.toJSON();
-      
-      jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
-      jsonToRender.locale_Skin = Locale.get("locale_Skin");
-      jsonToRender.locale_Change_Background = Locale.get("locale_Change_Background");
-      jsonToRender.locale_Background_on_Random = Locale.get("locale_Background_on_Random");
-      jsonToRender.locale_Transparent_Dashboard = Locale.get("locale_Transparent_Dashboard");
-      jsonToRender.locale_High_Contrast_Dashboard = Locale.get("locale_High_Contrast_Dashboard");
-      jsonToRender.locale_Number_Datum = Locale.get("locale_Number_Datum");
-      jsonToRender.locale_Close = Locale.get("locale_Close");  
-
       if (this.model != undefined) {
+        var jsonToRender = this.model.toJSON();
+        
+        jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
+        jsonToRender.locale_Skin = Locale.get("locale_Skin");
+        jsonToRender.locale_Change_Background = Locale.get("locale_Change_Background");
+        jsonToRender.locale_Background_on_Random = Locale.get("locale_Background_on_Random");
+        jsonToRender.locale_Transparent_Dashboard = Locale.get("locale_Transparent_Dashboard");
+        jsonToRender.locale_High_Contrast_Dashboard = Locale.get("locale_High_Contrast_Dashboard");
+        jsonToRender.locale_Number_Datum = Locale.get("locale_Number_Datum");
+        jsonToRender.locale_Close = Locale.get("locale_Close");  
+
+        if (jsonToRender.showNewDatumAtTopOrBottomOfDataEntryArea == "top") {
+          jsonToRender.showDatumAtTopOfDataEntryArea  = true;
+          jsonToRender.showDatumAtBottomOfDataEntryArea  = false;
+        } else if (jsonToRender.showNewDatumAtTopOrBottomOfDataEntryArea == "bottom") {
+          jsonToRender.showDatumAtTopOfDataEntryArea  = false;
+          jsonToRender.showDatumAtBottomOfDataEntryArea  = true;
+        } else {
+          jsonToRender.showDatumAtTopOfDataEntryArea  = true;
+          jsonToRender.showDatumAtBottomOfDataEntryArea  = false;
+        }
+
         // Display the UserPreferenceEditView
         this.setElement($("#user-preferences-modal"));
         $(this.el).html(this.template(jsonToRender));
@@ -330,7 +355,15 @@ define([
           window.location.replace("corpus.html");
         });
       }
-    }
+    }, 
+    setShowDatumAtTopOrBottomOfDataEntryArea : function(preferedLocation){
+      this.model.set("showNewDatumAtTopOrBottomOfDataEntryArea", preferedLocation);
+      if (confirm("Would you like to load this new dashboard layout now?")) {
+        window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
+          window.location.replace("corpus.html");
+        });
+      }
+    }, 
     
   });
   
