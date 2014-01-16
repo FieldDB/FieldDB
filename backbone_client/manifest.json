@@ -1,41 +1,19 @@
-
-
 {
-  "name": "LingSync Prototype",
-  "description": "A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners",
-  "version": "1.90.2",
-  "manifest_version": 2,
-  "offline_enabled": true,
-  "app": {
-    "background": {
-      "scripts": [
-        "background.js"
-      ]
-
+  "name" : "LingSync Prototype",
+  "version" : "1.90.2",
+  "description" : "A bleeding edge version, with new features faster",
+  "app" : {
+    "launch" : {
+      "local_path" : "index.html"
     }
   },
-
-  "icons": {
-    "16": "images/icon16_dev.png",
-    "48": "images/icon48_dev.png",
-    "128": "images/icon128_dev.png"
+  "offline_enabled" : true,
+  "permissions" : [ "unlimitedStorage" ],
+  "icons" : {
+    "16" : "images/icon16_dev.png",
+    "48" : "images/icon48_dev.png",
+    "128" : "images/icon128_dev.png"
   },
-
-  "sandbox": {
-    "pages": ["sorry.html"
-    ]
-
-  },
-
-  "permissions": [
-    "https://*/*",
-    "webview",
-    "unlimitedStorage", {
-      "socket": [
-        "tcp-connect",
-        "udp-send-to",
-        "udp-bind"
-      ]
-    }
-  ]
+  "manifest_version" : 2,
+  "content_security_policy" : "default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com "
 }
