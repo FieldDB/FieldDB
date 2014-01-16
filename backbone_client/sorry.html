@@ -10,48 +10,37 @@
 <link rel="stylesheet" type="text/css" href="app/app.css">
 <link rel="stylesheet" type="text/css" href="app/app_opaque.css">
 <link rel="stylesheet" type="text/css" href="app/not_high_contrast.css">
+<link rel="stylesheet" type="text/css" href="app/sorry.css">
 <!-- END Stylesheets -->
 
 </head>
 <body id="app" class="body_background">
 	<p>.</p>
 	<div class="container well">
-		<h2>January 28th 2012</h2>
 
-		<p>
-			After 40 weeks as a Chrome app, v1.40 of LingSync now available
-			outside of the Chrome Store online at <a
-				href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html#">LingSync.org</a>
-			and soon on Android. <a
-				href="http://blog.chromium.org/2012/11/restricting-extension-apis-in-legacy.html">A
-				change in Chrome Apps for Chrome 24</a> means our testing app can no longer
-			contact our testing databases. We are working on a workaround or a
-			re-infrastructuring. We hope to have the workaround ready in a few
-			weeks depending on how busy we are this semester. For now you can
-			<a
-				href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html#">use
-				the online version</a>, or <a
-				href="https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj?utm_source=chrome-ntp-icon">the
-				stable version</a> if you want to be offline (note the stable version is
-			currently not very good at multi-user corpora).
+		<table><tr><td  id="goToSpreadsheetApp">
+
+			<image title="Open LingSync Online" src="images/icon128.png"/>
+			<h2>Open Lingsync Online</h2>
+			<p>For entering data</p>
+
+		</td><td id="goToPrototypeApp" >
+
+			<image title="Open LingSync Corpus Pages" src="images/iconCorpusPages.png"/>
+			<h2>Open Lingsync<br>Corpus Pages</h2>
+			<p>For administering your corpora</p>
+
+		</td>
+		</tr></table>
+		<h2 >January 15th 2014 v1.90</h2>
+
+		<p >
+			After 40 weeks as an offline Chrome app LingSync v1.40 has became available
+			outside of the Chrome Store, online at http://app.lingsync.org. In November 2012, a <a id="seeChromeBlog"
+				href="http://blog.chromium.org/2012/11/restricting-extension-apis-in-legacy.html">
+				significant change in Chrome Apps for Chrome 24</a> meant that we could no longer use our app offline without significant modifications. That day has come. In December 2013 we were forced to convert this app into a Chrome Extension (icon in the Chrome menu bar). In preparation, as of version v1.72 much of the corpus settings began moving into the corpus' pages themselves.  As of version v.190 Chrome will no longer let you use the app as Chrome app, instead IF you are used to using the Prototype app and you would like to continue using it, we have made a "hidden" link on the Corpus Pages, the video below shows you how to access it. We are encouraging all new users to use the LingSync Online app, which has a much more streamlined layout for data entry. Both apps are updated every two weeks.
 		</p>
-
-
-		<p>
-			If you want more details or updates you can leave comments/your vote
-			on our <a
-				href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/828">issue
-				#828</a> or complain on <a
-				href="https://groups.google.com/a/chromium.org/forum/?fromgroups=#!topic/chromium-extensions/TRgqg90L8XU">the
-				thread we created the Chrome Extension Developer's Google Group</a>. It
-			turns out <a
-				href="https://groups.google.com/a/chromium.org/forum/?fromgroups=#!searchin/chromium-apps/permission/chromium-apps/GqeR-oKopa4/SeCNZyVff0gJ">we
-				aren't the only app that has been put in limbo</a> by the transition from
-			legacy apps to packaged apps. Packaged apps are pretty awesome...they
-			look like a normal desktop app. We can't wait until they are
-			available for us to transition to...
-		</p>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/d2k1XgOBmIw?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
 
 	</div>
 
@@ -70,9 +59,7 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 
-	<script type="text/javascript" src="./libs/require.js"></script>
-	<script type="text/javascript" src="./backup_pouches_dashboard.js"></script>
-	<script type="text/javascript" src="./libs/d3.v2.js"></script>
+	<script type="text/javascript" src="sorry.js"></script>
 
 	<!-- <script type="text/javascript" src="./libs/ga.js"></script>
   <script type="text/javascript" src="./libs/analytics.js"></script> -->
