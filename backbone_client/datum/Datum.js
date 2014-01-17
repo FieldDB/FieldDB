@@ -1,6 +1,6 @@
 define([ 
     "backbone",
-    "audio_video/AudioVideo", 
+    "audio_video/AudioVideos", 
     "comment/Comment",
     "comment/Comments",
     "datum/Datums", 
@@ -12,7 +12,7 @@ define([
     "OPrime"
 ], function(
     Backbone, 
-    AudioVideo, 
+    AudioVideos, 
     Comment,
     Comments,
     Datums,
@@ -78,7 +78,7 @@ define([
     fillWithDefaults : function(){
    // If there's no audioVideo, give it a new one.
       if (!this.get("audioVideo")) {
-        this.set("audioVideo", new AudioVideo());
+        this.set("audioVideo", new AudioVideos());
       }
       
       // If there are no comments, give it a new one
@@ -108,7 +108,7 @@ define([
     // Internal models: used by the parse function
     internalModels : {
       datumFields : DatumFields,
-      audioVideo : AudioVideo,
+      audioVideo : AudioVideos,
       session : Session,
       comments : Comments,
       datumTags : DatumTags
@@ -154,7 +154,7 @@ define([
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
      */
-    getMostRecentIdsByDate : function(callback) {
+    getMostRecentIdsByDate : function(howmany, callback) {
       var self = this;
       
       if(OPrime.isBackboneCouchDBApp()){
@@ -164,7 +164,7 @@ define([
         tempDatums.model = Datum;
         tempDatums.fetch({
           descending: true,
-          limit: 5,
+          limit: howmany,
           error : function(model, xhr, options) {
             OPrime.bug("There was an error loading your datums.");
             if(typeof callback == "function"){
@@ -197,7 +197,7 @@ define([
                 window.toldSearchtomakebydateviews = true;
                 window.app.get("corpus").createPouchView("pages/by_date", function(){
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
-                  self.getMostRecentIdsByDate(callback);
+                  self.getMostRecentIdsByDate(howmany, callback);
                 });
                 return;
               }
@@ -273,6 +273,22 @@ define([
       tagFieldToClean.mask = uniqueTags.join(", ");
       tagFieldToClean.value = tagFieldToClean.mask;
 
+      /* upgrade to collection of audio video */
+      if (!Array.isArray(originalModel.audioVideo)) {
+        console.log("Upgrading audioVideo to a collection", originalModel.audioVideo);
+        var audioVideoArray = [];
+        if (originalModel.audioVideo.URL) {
+          var audioVideoURL = originalModel.audioVideo.URL;
+          var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+          audioVideoArray.push({
+            "filename": fileFromUrl,
+            "description": fileFromUrl,
+            "URL": audioVideoURL,
+            "type": "audio"
+          });
+        }
+        originalModel.audioVideo = audioVideoArray;
+      }
 
       return this.originalParse(originalModel);
     },
@@ -547,14 +563,15 @@ define([
     clone : function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
-        audioVideo : new AudioVideo(this.get("audioVideo").toJSON(), {parse: true}),
+        audioVideo : new AudioVideos(this.get("audioVideo").toJSON(), {parse: true}),
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
-        session: this.get("session")
+        session: this.get("session"),
+        _attachments: this.get("_attachments")
       });
 
       return datum;
@@ -1062,7 +1079,7 @@ define([
               window.appView.toastUser("Sucessfully saved datum: "+ utterance,"alert-success","Saved!");
               window.appView.addSavedDoc(model.id);
             }
-            var verb = "updated";
+            var verb = "modified";
             verbicon = "icon-pencil";
             if(newModel){
               verb = "added";

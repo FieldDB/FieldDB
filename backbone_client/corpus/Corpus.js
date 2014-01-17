@@ -129,6 +129,7 @@ define([
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
+        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
         window.location.replace(optionalCouchAppPath + "user.html");
       };
 
@@ -823,8 +824,12 @@ define([
       var oldCouchConnection = this.get("couchConnection");
       if(oldCouchConnection){
         if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-          oldCouchConnection.domain  = "corpusdev.lingsync.org";
+          oldCouchConnection.domain  = "corpus.lingsync.org";
           oldCouchConnection.port = "";
+          this.set("couchConnection", oldCouchConnection);
+        }
+        if(oldCouchConnection.domain == "orpusdev.lingsync.org"){
+          oldCouchConnection.domain  = "corpus.lingsync.org";
           this.set("couchConnection", oldCouchConnection);
         }
       }
@@ -985,7 +990,7 @@ define([
               window.appView.toastUser("Sucessfully saved corpus: "+ title,"alert-success","Saved!");
               window.appView.addSavedDoc(model.id);
             }
-            var verb = "updated";
+            var verb = "modified";
             verbicon = "icon-pencil";
             if(newModel){
               verb = "added";

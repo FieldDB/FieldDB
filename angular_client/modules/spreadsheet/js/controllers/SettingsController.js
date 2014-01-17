@@ -17,8 +17,8 @@ define(
         return;
       }
 
-      $scope.availableFields = $scope.scopePreferences.availableFields;
-
+      // $scope.availableFields = $scope.scopePreferences.availableFields;
+      // console.log($scope.availableFields );
       $scope.changeTagToEdit = function(tag) {
         $scope.tagToEdit = tag;
       };
@@ -147,8 +147,8 @@ define(
       // $scope.getTags();
 
       $scope.saveNewPreferences = function(template, newFieldPreferences) {
-        Preferences = JSON.parse(localStorage
-          .getItem('SpreadsheetPreferences'));
+        var prefs = localStorage.getItem('SpreadsheetPreferences');
+        var Preferences = JSON.parse(prefs || "{}");
         for (var availableField in $scope.availableFields) {
           for (var newField in newFieldPreferences) {
             if (newFieldPreferences[newField] === "") {

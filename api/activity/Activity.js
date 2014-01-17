@@ -47,7 +47,7 @@ define([
     url : "/activities",
     
     defaults : {
-//      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
+//      verbs : [ "added", "modified", "commented", "checked", "tagged", "imported" ],
 //      verb : "added",
 //      directobject : "an entry",
 //      indirectobject : "with Consultant-SJ",

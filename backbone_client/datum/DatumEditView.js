@@ -1,7 +1,7 @@
 define([
     "backbone", 
     "handlebars", 
-    "audio_video/AudioVideoEditView",
+    "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -9,6 +9,7 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
+    "datum/DatumReadView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "datum/DatumTagReadView",
@@ -20,7 +21,7 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    AudioVideoEditView,
+    AudioVideoReadView,
     Comment,
     Comments,
     CommentReadView,
@@ -28,6 +29,7 @@ define([
     Confidential,
     Datum,
     DatumFieldEditView,
+    DatumReadView,
     DatumTag,
     DatumTagEditView,
     DatumTagReadView,
@@ -48,9 +50,11 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a AudioVideoEditView
-      this.audioVideoView = new AudioVideoEditView({
-        model : this.model.get("audioVideo")
+      // Create a AudioVideoReadView
+      this.audioVideoView = new UpdatingCollectionView({
+        collection           : this.model.get("audioVideo"),
+        childViewConstructor : AudioVideoReadView,
+        childViewTagName     : 'li'
       });
       
       this.commentReadView = new UpdatingCollectionView({
@@ -61,6 +65,10 @@ define([
       
       this.commentEditView = new CommentEditView({
         model : new Comment(),
+      });
+
+      this.datumEasierToReadIGTAlignedView = new DatumReadView({
+        model : this.model
       });
       
       // Create a DatumTagView
@@ -86,6 +94,8 @@ define([
       
       this.model.bind("change:audioVideo", this.playAudio, this);
       this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
+      this.bind("change:datumFields", this.reloadIGTPreview, this);
+
       this.prepareDatumFieldAlternatesTypeAhead();
     },
 
@@ -256,7 +266,7 @@ define([
         $(this.el).html(this.template(jsonToRender));
          
         // Display audioVideo View
-        this.audioVideoView.el = this.$(".audio_video");
+        this.audioVideoView.el = this.$(".audio_video_ul");
         this.audioVideoView.render();
         
         // Display the DatumTagsView
@@ -270,6 +280,11 @@ define([
         // Display the CommentEditView
         this.commentEditView.el = $(this.el).find('.new-comment-area'); 
         this.commentEditView.render();
+
+        // Display the DatumReadView
+        this.datumEasierToReadIGTAlignedView.el = $(this.el).find('.preview_IGT_area'); 
+        this.datumEasierToReadIGTAlignedView.format = "latexPreviewIGTonly";
+        this.datumEasierToReadIGTAlignedView.render();
         
         // Display the SessionView
         this.sessionView.el = this.$('.session-link'); 
@@ -500,26 +515,41 @@ define([
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
+      // var utteranceField =  this.model.get("datumFields").where({label: "utterance"})[0];
+      // if (utteranceField.get("mask").trim() == utteranceLine.trim()) {
+      //   return;
+      // }
       this.updateDatumStateColor();
       this.guessMorphemes(utteranceLine);
+      this.reloadIGTPreview();
     },
     morphemesBlur : function(e){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
-      this.guessUtterance($(e.currentTarget).val());
-      this.guessGlosses($(e.currentTarget).val());
-      this.guessTree($(e.currentTarget).val());
+      var morphemesLine = $(e.currentTarget).val();
+      // var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
+      // if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
+      //   return;
+      // }
+      this.guessUtterance(morphemesLine);
+      this.guessGlosses(morphemesLine);
+      this.guessTree(morphemesLine);
       this.needsSave = true;
+      this.reloadIGTPreview();
 
     },
+    previousUtterance : null,
+    previousMorphemes : null,
+    previousGloss : null,
     guessMorphemes : function(utteranceLine){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
-      if (utteranceLine) {
+      if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine ) )) {
+        this.previousUtterance = utteranceLine;
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
         
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
@@ -529,8 +559,9 @@ define([
         var alternates = morphemesField.get("alternates") || [];
         alternates.push(utteranceLine);
         
-        // If the guessed morphemes is different than the unparsed utterance 
-        if (morphemesLine != utteranceLine && morphemesLine != "") {
+        // If the guessed morphemes is different than the unparsed utterance, and different than the previous morphemes line we guessed on 
+        if (morphemesLine != utteranceLine && morphemesLine != "" &&  (!this.previousMorphemes || (this.previousMorphemes != morphemesLine )) ){
+          this.previousMorphemes = morphemesLine;
           //hey we have a new idea, so trigger the gloss guessing too
           this.guessGlosses(morphemesLine);
           alternates.unshift(morphemesLine);
@@ -547,10 +578,13 @@ define([
     },
 
     guessGlosses : function(morphemesLine) {
-      if (morphemesLine) {
+      var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
+      var currentGloss = glossField.get("mask") || "";
+      if (morphemesLine && (!currentGloss || !this.previousMorphemes || (this.previousMorphemes != morphemesLine ))) {
+        this.previousMorphemes = morphemesLine;
+
         var glossLine = Glosser.glossFinder(morphemesLine);
         
-        var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
         
@@ -623,6 +657,11 @@ define([
         tagField.set("alternates", results);
       });
       
+    },
+    reloadIGTPreview: function(){
+      // Display the DatumReadView
+      this.datumEasierToReadIGTAlignedView.model = this.model;
+      this.datumEasierToReadIGTAlignedView.render();
     }
   });
 

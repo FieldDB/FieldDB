@@ -125,10 +125,11 @@ define([
     
     showMostRecentDatum : function() {
       var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
-        
+      var showDatumOnTopOrBottomOfDataEntryArea = app.get("authentication").get("userPrivate").get("prefs").get("showNewDatumAtTopOrBottomOfDataEntryArea");
+      
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(function(rows) {
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(nextNumberOfDatum, function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums
@@ -141,10 +142,18 @@ define([
             self.newDatum();
           }
         } else {
-          var howManyToPop = self.model.length
-          for (var i = 0; i < howManyToPop; i++) {
-            self.model.pop();
+          if (showDatumOnTopOrBottomOfDataEntryArea === "bottom") {
+            //put most recent datum on the bottom
+            for (var i = self.model.length - 1; i >= 0; i--) {
+              self.model.shift();
+            }
+          } else {
+            //put most recent datum at the top
+            for (var i = 0; i < self.model.length ;  i++) {
+              self.model.pop();
+            }
           }
+          
           for (var i = 0; i < rows.length; i++) {
             //If you've filled it up, stop filling.
             if(self.model.length >= nextNumberOfDatum){
@@ -164,7 +173,13 @@ define([
               }
               //Only add datum objects to the container
               if(value.jsonType == "Datum"){
-                self.model.add(value);
+                if (showDatumOnTopOrBottomOfDataEntryArea === "bottom") {
+                  //put most recent datum on the bottom
+                  self.model.unshift(value);
+                } else {
+                  //put most recent datum at the top
+                  self.model.add(value);
+                }
               }
             }
           }
@@ -246,13 +261,27 @@ define([
       }
         
       // Add the new, blank, Datum
-      this.model.unshift(datum);
+      var showDatumOnTopOrBottomOfDataEntryArea = app.get("authentication").get("userPrivate").get("prefs").get("showNewDatumAtTopOrBottomOfDataEntryArea");
+      if (showDatumOnTopOrBottomOfDataEntryArea === "bottom") {
+        //put most recent datum on the bottom
+        this.model.push(datum);
+      } else {
+        //put most recent datum at the top
+        this.model.unshift(datum);
+      }
        
       // If there are too many datum on the screen, remove the bottom one and save it, if necessary
       if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
         var view = this.datumsView._childViews[this.model.length - 1];
         view.saveScreen();
-        this.model.pop();
+        if (showDatumOnTopOrBottomOfDataEntryArea === "bottom") {
+          //put most recent datum on the bottom
+          this.model.shift();
+        } else {
+          //put most recent datum at the top
+          this.model.pop();
+        }
+        
       }
       try{
         //bring the user to the top of the page where the prepended datum is, or show the dashboard if the datums arent showing.
