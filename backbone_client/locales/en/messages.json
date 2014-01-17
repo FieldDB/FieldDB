@@ -4,7 +4,7 @@
     "description" : "The title of the application, displayed in the web store."
   },
   "application_description" : {
-    "message" : "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
+    "message" : "A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners",
     "description" : "The description of the application, displayed in the web store."
   },
   "locale_Close_and_login_as_LingLlama" : {
@@ -28,7 +28,7 @@
     "message" : "Welcome to LingSync!"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."
+    "message" : "LingSync is a Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners"
   },
   "locale_Welcome_Beta_Testers" : {
     "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"
