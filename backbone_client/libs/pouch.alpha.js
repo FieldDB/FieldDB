@@ -3642,8 +3642,13 @@ var IdbPouch = function(opts, callback) {
 
     idb = e.target.result;
 
-    var txn = idb.transaction([META_STORE, DETECT_BLOB_SUPPORT_STORE],
+    try{
+      var txn = idb.transaction([META_STORE, DETECT_BLOB_SUPPORT_STORE],
                               IDBTransaction.READ_WRITE);
+    }catch(e){
+      console.log("error opening this database.",e);
+      return;
+    }
 
     idb.onversionchange = function() {
       idb.close();

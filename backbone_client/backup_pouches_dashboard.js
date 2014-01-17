@@ -85,6 +85,8 @@ require(
 
       window.backupPouch = function(pouchname) {
         /* Ignore pouches that don't need to be replicated */
+        pouchname = pouchname.replace(/_id/g,"");
+        
         if (window.databasesThatDontNeedReplication.indexOf(pouchname) >= 0) {
           /* Go to the next pouch */
           window.currentPouch++;
@@ -93,21 +95,32 @@ require(
           }
         }
         try{
-        
-        Pouch.replicate('idb://' + pouchname,
+        pouchnameid = pouchname + "_id";
+        Pouch.replicate('idb://' + pouchnameid,
             'https://corpusdev.lingsync.org/' + pouchname, {
               complete : function() {
                 $("#dashboard_loading_spinner").append(
                     "<h2>Finished backing up " + pouchname + " to "
                         + "https://corpusdev.lingsync.org/" + pouchname
                         + "</h2>");
+                 /* Go to the next pouch */
+                  window.currentPouch++;
+                  if (window.currentPouch < window.pouches.length) {
+                    window.backupPouch(window.pouches[window.currentPouch]);
+                  } else {
+                    window.finishedReplicating();
+                  }
               },
               onChange : function(change) {
                 $("#dashboard_loading_spinner").append(
                     "<div>Backing up " + pouchname + " to "
                         + "https://corpusdev.lingsync.org/" + pouchname
                         + " Change:  " + JSON.stringify(change) + '</div>');
+              },
+              onSuccess : function(info) {
+                console.log("onsuccess");
               }
+
             }, function(err, changes) {
               console.log("Backing up " + pouchname + " to "
                   + 'https://corpusdev.lingsync.org/' + pouchname, err,
@@ -131,6 +144,7 @@ require(
             });
         }catch(e){
           console.log("There was a problem reading or backing up this database. "+window.pouches[window.currentPouch]);
+          console.log(e);
           /* Go to the next pouch */
           window.currentPouch++;
           if (window.currentPouch < window.pouches.length) {
@@ -144,8 +158,8 @@ require(
       window.finishedReplicating = function() {
         localStorage.setItem(window.username + "lastUpdatedAtVersion", "1.40");
         $(".spinner-status").html("Finished backing up your previous data.");
-        $(".finished-status").html("Unfortunately LingSync isn't able to run offline because of changes to the Chrome Extensions technology. Please use LingSync online at: <a href='http://app.lingsync.org'>http://app.lingsync.org</a>");
-        $(".spinner-image").attr("src","images/icon.png");
+        $(".finished-status").html("LingSync no longer runs purely offline because of changes to the Chrome App offline storage technology.<p> We are encouraging all new and old users to use the new Online app which has been built for fieldmethods courses and data entry: <a href='http://app.lingsync.org'>http://app.lingsync.org</a>.<p> If you wish to continue using the Prototype you can <a href='corpus.html'>return to your corpus</a>. Your Prototype app has been upgraded from v1.36 to v1.90.");
+        $(".spinner-image").attr("src","images/icon128.png");
 
         /* Take them to the user page so they can choose a corpus */
         console.log("All your data has been backed up and is ready to be used in version 1.38 and up \n\n"
