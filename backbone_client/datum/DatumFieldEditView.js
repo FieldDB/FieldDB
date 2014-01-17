@@ -50,7 +50,7 @@ define([
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "onblur",
       "keyup .datum_field_input" : "resizeInputFieldToFit",
-      "focus .datum_field_input" : "onfocus",
+      // "focus .datum_field_input" : "onfocus",
       "click .help-conventions" : "toggleHelpConvention"
     },
     
@@ -77,6 +77,7 @@ define([
      */
     templateValue : Handlebars.templates.datum_field_value_edit_embedded,
     
+    previousJsonRendered : null,
     /**
      * Renders the DatumFieldEditView.
      */
@@ -90,6 +91,10 @@ define([
       jsonToRender.locale_Help_Text_Placeholder = Locale.get("locale_Help_Text_Placeholder");
 
       if (this.format == "corpus") {
+        if(this.previousJsonRendered && this.previousJsonRendered.mask == jsonToRender.mask){
+          return this;
+        }
+        this.previousJsonRendered = jsonToRender;
         $(this.el).html(this.templateSettings(jsonToRender));
         $(this.el).find(".choose-field").val(this.model.get("label"));
         
@@ -99,6 +104,10 @@ define([
         }
         jsonToRender.helpText = true;
         jsonToRender.alternates = JSON.stringify(this.model.get("alternates"));
+        if(this.previousJsonRendered && this.previousJsonRendered.mask == jsonToRender.mask){
+          return this;
+        }
+        this.previousJsonRendered = jsonToRender;
         $(this.el).html(this.templateValue(jsonToRender));
         
         //Add the label class to this element so that it can be found for other purposes like hiding rare fields
@@ -116,12 +125,24 @@ define([
         });
         
 //        This replaces the jquery autosize library which makes the datum text areas fit their size.http://www.impressivewebs.com/textarea-auto-resize/ (see comments) https://github.com/jackmoore/autosize/blob/master/demo.html
-        var fieldself = this;
+        var fieldself = this.el;
         window.setTimeout(function(){
-          fieldself.resizeInputFieldToFit();
-        },200);
+          // fieldself.resizeInputFieldToFit();
+          var inputField = $(fieldself).find(".datum_field_input")[0];
+          if(inputField){
+            var sh = inputField.scrollHeight;
+            if(sh > 20){
+              inputField.style.height =  sh + "px";
+            }
+          }
+
+        },500);
       } else if (this.format == "session") {
         jsonToRender.helpText = true;
+        if(this.previousJsonRendered && this.previousJsonRendered.mask == jsonToRender.mask){
+          return this;
+        }
+        this.previousJsonRendered = jsonToRender;
         $(this.el).html(this.templateValue(jsonToRender));
       }
       
@@ -158,7 +179,7 @@ define([
          
     onfocus: function(){
       this.model.starttime = Date.now();
-      this.resizeInputFieldToFit();
+      // this.resizeInputFieldToFit();
     },
 
     onblur: function(){
@@ -198,17 +219,25 @@ define([
      */
     resizeInputFieldToFit : function(e) {
       var inputFieldToResize;
+      var explictlyCalled = false;
+
       if (e) {
         inputFieldToResize = e.target;
       } else {
         inputFieldToResize = $(this.el).find(".datum_field_input")[0];
+        // explictlyCalled = true;
       }
       if (!inputFieldToResize) {
         return;
       }
-      var sh = inputFieldToResize.scrollHeight;
-      if(sh > 20){
-        inputFieldToResize.style.height =  sh + "px";
+      var newValue = $(inputFieldToResize).val()  || "";
+      var oldValue = this.model.get("mask")  || "";
+      var lengthDiffernce = newValue.length - oldValue.length
+      if (explictlyCalled || ( Math.abs(lengthDiffernce) < 10 )) {
+        var sh = inputFieldToResize.scrollHeight;
+        if(sh > 20){
+          inputFieldToResize.style.height =  sh + "px";
+        }
       }
     },
     

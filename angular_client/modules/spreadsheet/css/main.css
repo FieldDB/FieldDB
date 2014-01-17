@@ -16,7 +16,9 @@ body {
 	background-color: #FCFCFC;
 	font-family: 'Droid Sans', sans-serif;
 }
-
+.whiteicon{
+	color: white;
+}
 @media only screen and (min-width : 1101px) {
 	.largeMenuBar {
 		display: inline;
@@ -97,14 +99,16 @@ body {
 	color: #FFFFFF;
 }
 
+.menuitem {
+	line-height: 50px;
+}
+
 .menubar span a {
 	text-decoration: none;
-	line-height: 50px;
 	color: #FFFFFF;
 	text-transform: uppercase;
 	font-size: .95em;
 	font-weight: 900;
-	padding: 0 15px;
 	background: #102E37;
 	transition: color 700ms;
 	-moz-transition: color 700ms; /* Firefox 4 */
@@ -206,7 +210,6 @@ span ul {
 
 .dropdown_nav a {
 	display: block;
-	width: 10em;
 }
 
 .dropdown_nav li {
@@ -296,7 +299,6 @@ span ul {
 a.delete_button {
 	text-decoration: none;
 	color: #102E37;
-	font-size: 1.6em;
 	font-weight: 800;
 }
 .delete_button:hover {

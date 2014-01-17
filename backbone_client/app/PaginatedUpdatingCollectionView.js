@@ -219,6 +219,9 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
               // Render at the bottom
               self.collection.add(model);
               self.filledBasedOnIds = true;
+            },
+            error : function(error) {
+              console.log("Error feching item in PaginatedUpdatingCollectionView",error);
             }
         });
       }

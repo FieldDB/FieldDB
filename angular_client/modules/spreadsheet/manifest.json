@@ -16,5 +16,5 @@
     "unlimitedStorage", "https://*.mcgill.ca/", "https://*.concordia.ca/", "https://localhost:*/"
   ],
   "manifest_version": 2,
-  "content_security_policy" : "default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://themes.googleusercontent.com  https://fonts.googleapis.com https://localhost:* https://ssl.google-analytics.com "
+  "content_security_policy" : "default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://cdnjs.cloudflare.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://themes.googleusercontent.com  https://fonts.googleapis.com https://localhost:* https://ssl.google-analytics.com "
 }

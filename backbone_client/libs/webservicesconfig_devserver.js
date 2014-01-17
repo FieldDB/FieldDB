@@ -2,7 +2,7 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
-OPrime.apptype = "testing";
+OPrime.apptype = "production";
 
 OPrime.websiteUrl = "https://wwwdev.lingsync.org";
 OPrime.authUrl = "https://authdev.lingsync.org";
@@ -104,11 +104,10 @@ OPrime.defaultCouchConnection = function() {
       OPrime.authUrl = "https://auth.lingsync.org";
     } else {
       /*
-       * its probably a dev's chrome extension, use the corresponding connection
-       * for this build
+       * now using the stable as the default
        */
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
     }
   }
   return connection;
@@ -117,8 +116,6 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
   var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
   var authUrl = userFriendlyServerName;
   if (authUrl.indexOf("LingSync.org") >= 0) {
-    alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
-    return;
     authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("LingSync Beta") >= 0) {
     authUrl = "https://authdev.lingsync.org";
@@ -138,7 +135,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
          * TODO change this back to the lingsync server once the lingsync server
          * supports 1.38
          */
-        authUrl = "https://authdev.lingsync.org";
+        authUrl = "https://auth.lingsync.org";
       }
     } else {
       alert("I don't know how to connect to : "
@@ -188,13 +185,14 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
+  }  else if (window.location.origin.indexOf("corpus.lingsync.org") >= 0) {
+    mostLikelyAuthUrl = "LingSync.org";
   } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
     mostLikelyAuthUrl = "LingSync Beta";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
     mostLikelyAuthUrl = "LingSync Beta";
   } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
-    OPrime
-        .debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
+    OPrime.debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
   } else if (window.location.origin.indexOf("localhost") >= 0) {
     mostLikelyAuthUrl = "Localhost";
   } else if (OPrime.isChromeApp()) {

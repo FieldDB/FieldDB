@@ -9,6 +9,7 @@ require.config({
 		"bootstrap": "libs/angular/ui-bootstrap.min",
 		"_": "bower_components/underscore/underscore",
 		"Glosser": "bower_components/fielddb-glosser/fielddb-glosser",
+		"angular-md5": "bower_components/angular-md5/angular-md5",
 		"recorder": "libs/recorderjs/recorder",
 		"sjcl": "libs/sjcl"
 	},
@@ -16,8 +17,12 @@ require.config({
 		"angular": {
 			exports: "angular"
 		},
-		"angular-resource": {
+		"angular-md5": {
 			deps: ["angular"],
+			exports: "angular"
+		},
+		"angular-resource": {
+			deps: ["angular-md5"],
 			exports: "angular"
 		},
 		"bootstrap": {

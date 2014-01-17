@@ -43,6 +43,7 @@ define([
       
       this.newTempDataList();
       this.changeViewsOfInternalModels();
+      this.userSetSearchToBlank = false;
 
       this.model.bind('change', this.render, this);
     },
@@ -114,6 +115,19 @@ define([
       jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
       jsonToRender.locale_advanced_search_explanation = Locale.get("locale_advanced_search_explanation");
       
+      //this.setElement($("#search-top"));
+      var searchKeywords = this.model.get("searchKeywords");
+      if (!searchKeywords && !this.userSetSearchToBlank) {
+        searchKeywords = localStorage.getItem("searchKeywords");
+        if (!searchKeywords) {
+          searchKeywords = window.app.get("corpus").get("searchKeywords");
+        }
+        if(searchKeywords){
+          this.model.set("searchKeywords", searchKeywords);
+        }
+      }
+      jsonToRender.searchKeywords = searchKeywords;
+      
       if (this.format == "fullscreen") {
         // Display the SearchView
         this.setElement($("#search-fullscreen"));
@@ -123,6 +137,7 @@ define([
         this.setElement($("#search-embedded"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
       } 
+      $("#search-top").html(this.topTemplate(jsonToRender));
       
       
 //      $(this.el).find(".judgement").find("input").val("grammatical");
@@ -132,19 +147,7 @@ define([
       this.advancedSearchSessionView.el = this.$('.advanced_search_session');
       this.advancedSearchSessionView.render();
 
-      //this.setElement($("#search-top"));
-      var searchKeywords = this.model.get("searchKeywords");
-      if (!searchKeywords) {
-        searchKeywords = localStorage.getItem("searchKeywords");
-        if (!searchKeywords) {
-          searchKeywords = window.app.get("corpus").get("searchKeywords");
-        }
-        if(searchKeywords){
-          this.model.set("searchKeywords", searchKeywords);
-        }
-      }
 
-      $("#search-top").html(this.topTemplate(jsonToRender));
       
       try{
         Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
@@ -281,6 +284,12 @@ define([
     searchTop : function() {
       if (OPrime.debugMode) OPrime.debug("Will search for " + $("#search_box").val());
       this.model.set("searchKeywords", $("#search_box").val());
+      
+      if($("#search_box").val() == ""){
+        this.userSetSearchToBlank = true;
+      }else{
+        this.userSetSearchToBlank = false;
+      }
             // Search for Datum that match the search criteria      
       this.search($("#search_box").val());
       
