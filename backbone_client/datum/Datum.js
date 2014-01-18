@@ -244,8 +244,10 @@ define([
           if(enteredByUserField.user && (! enteredByUserField.value || ! enteredByUserField.mask)){
             enteredByUserField.value = enteredByUserField.user.username;
             enteredByUserField.mask = enteredByUserField.user.username;
+            console.log("repaired enteredByUserField", enteredByUserField);
+
           }else{
-            console.log("enteredByUser looked okay", enteredByUserField);
+            // console.log("enteredByUser looked okay", enteredByUserField);
           }
         }
       } catch (e) {
@@ -279,8 +281,10 @@ define([
             usersAsString = usersAsString.join(", ");
             modifiyersField.mask = usersAsString;
             modifiyersField.value = usersAsString;
+            console.log("repaired modifiedByUser", modifiyersField);
+
           } else {
-            console.log("modifiedByUser was okay", modifiyersField);
+            // console.log("modifiedByUser was okay", modifiyersField);
           }
         }
       } catch (e) {
@@ -325,7 +329,7 @@ define([
 
       /* upgrade to collection of audio video */
       if (!Array.isArray(originalModel.audioVideo)) {
-        console.log("Upgrading audioVideo to a collection", originalModel.audioVideo);
+        // console.log("Upgrading audioVideo to a collection", originalModel.audioVideo);
         var audioVideoArray = [];
         if (originalModel.audioVideo.URL) {
           var audioVideoURL = originalModel.audioVideo.URL;
