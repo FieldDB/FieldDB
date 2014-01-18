@@ -236,6 +236,56 @@ define([
         }
       }
 
+      /* bug fix for versions of spreadsheet with a enteredByUsers datumfield missing stuff */
+      var indexOfEnterdByUserField = originalFieldLabels.indexOf("enteredByUser");
+      try {
+        if (indexOfEnterdByUserField > -1) {
+          var enteredByUserField = originalModel.datumFields[indexOfEnterdByUserField];
+          if(enteredByUserField.user && (! enteredByUserField.value || ! enteredByUserField.mask)){
+            enteredByUserField.value = enteredByUserField.user.username;
+            enteredByUserField.mask = enteredByUserField.user.username;
+          }else{
+            console.log("enteredByUser looked okay", enteredByUserField);
+          }
+        }
+      } catch (e) {
+        console.log("there was a problem upgrading enteredByUser", e);
+      }
+      var indexOfModifiedByUserField = originalFieldLabels.indexOf("modifiedByUser");
+      try {
+        if (indexOfModifiedByUserField > -1) {
+          var modifiyersField = originalModel.datumFields[indexOfModifiedByUserField];
+          if (modifiyersField.users && modifiyersField.users.length > 0 && (!modifiyersField.value || !modifiyersField.mask)) {
+            var modifiers = modifiyersField.users;
+            // Limit users array to unique usernames
+            modifiers = _.map(_.groupBy(modifiers, function(x) {
+              return x.username;
+            }), function(grouped) {
+              /* take the most recent version of the user in case they updated their gravatar or first and last name*/
+              return grouped[grouped.length - 1];
+            });
+            modifiyersField.users = modifiers;
+
+            /* generate the users as a string using the users array */
+            var usersAsString = [];
+            for (var user in modifiers) {
+              var userFirstandLastName = modifiers[user].firstname + " " + modifiers[user].lastname;
+              userFirstandLastName = userFirstandLastName.replace(/undefined/g, "");
+              if (!userFirstandLastName || userFirstandLastName.trim().length < 2) {
+                userFirstandLastName = modifiers[user].username;
+              }
+              usersAsString.push(userFirstandLastName);
+            }
+            usersAsString = usersAsString.join(", ");
+            modifiyersField.mask = usersAsString;
+            modifiyersField.value = usersAsString;
+          } else {
+            console.log("modifiedByUser was okay", modifiyersField);
+          }
+        }
+      } catch (e) {
+        console.log("there was a problem upgrading modifiedByUser", e);
+      }
 
       /* remove Deprecated datumStates on datum */
       var oldvalidationStatus = "";
@@ -289,6 +339,7 @@ define([
         }
         originalModel.audioVideo = audioVideoArray;
       }
+
 
       return this.originalParse(originalModel);
     },
