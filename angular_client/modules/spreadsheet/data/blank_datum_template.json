@@ -83,6 +83,7 @@
     "userchooseable": "disabled"
   }, {
     "label": "modifiedByUser",
+    "value": "",
     "mask": "",
     "users": [],
     "encrypted": "",
