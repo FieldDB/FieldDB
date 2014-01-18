@@ -1,6 +1,6 @@
 {
   "name" : "LingSync",
-  "version" : "1.90.6",
+  "version" : "1.90.7",
   "description" : "A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners",
   "app" : {
     "launch" : {
