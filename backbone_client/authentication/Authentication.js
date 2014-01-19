@@ -288,6 +288,10 @@ define([
           return;
         }
       }
+      if (window.location.hostname === "hdfkfcibgbjomikilhmkdpkcfpecakhd") { //"ocmdknddgpmjngkhcbcofoogkommjfoj") {
+        console.log("This is a prototype stable user, who has been backed up. taking them directly to the spreadsheet app.");
+        window.location.replace("http://app.lingsync.org");
+      }
       
       this.saveServerResponseToUser(data, callbackload);
     },
