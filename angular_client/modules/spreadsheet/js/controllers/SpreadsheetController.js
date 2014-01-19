@@ -18,6 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
+      $rootScope.appVersion = "1.91.1.ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -1650,6 +1651,7 @@ define(
               bareActivityObject.directobject = bareActivityObject.directobject.replace("href=", "target='_blank' href=");
               bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
 
+              template.appVersion = $rootScope.appVersion;
               template.verb = bareActivityObject.verb;
               template.verbicon = bareActivityObject.verbicon;
               template.directobjecticon = bareActivityObject.directobjecticon;
@@ -1729,8 +1731,8 @@ define(
         dataToPost.username = newUserInfo.username.trim().toLowerCase();
         dataToPost.password = newUserInfo.password.trim();
         dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
-        dataToPost.appVersionWhenCreated = "1.91.1.ss";
-        // dataToPost.appVersionWhenCreated = this.appVersion;
+        // dataToPost.appVersionWhenCreated = "1.91.1.ss";
+        dataToPost.appVersionWhenCreated = $rootScope.appVersion;
 
         dataToPost.serverCode = newUserInfo.serverCode;
 
