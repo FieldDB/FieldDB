@@ -377,6 +377,11 @@ define([
           // Add search results to the data list
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
+          
+          // show the number of hits
+          var datumCount = datumIds.length;
+          $("#searchDatumCount").html(datumCount);
+
           if (OPrime.debugMode) OPrime.debug("Successfully got data back from search and put it into the temp search data list");
           if(typeof callback == "function"){
         	  callback();
