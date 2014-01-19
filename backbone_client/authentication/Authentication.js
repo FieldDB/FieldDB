@@ -288,7 +288,7 @@ define([
           return;
         }
       }
-      if (window.location.hostname === "hdfkfcibgbjomikilhmkdpkcfpecakhd") { //"ocmdknddgpmjngkhcbcofoogkommjfoj") {
+      if (window.location.hostname === "ocmdknddgpmjngkhcbcofoogkommjfoj") {
         console.log("This is a prototype stable user, who has been backed up. taking them directly to the spreadsheet app.");
         window.location.replace("http://app.lingsync.org");
       }
