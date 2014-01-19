@@ -389,8 +389,8 @@ define(
             }, function(error) {
               $scope.documentReady = true;
               console.log("Error loading sessions.");
-              $rootScope.notificationMessage = "Error loading corpus, please report this.";
-              $rootScope.openNotification();
+              $rootScope.notificationMessage = "Error loading corpus, please log in.";
+              $rootScope.errorLoggingInNotificationShouldBeOpen = true;
               $rootScope.loading = false;
             });
       };
@@ -527,7 +527,8 @@ define(
                 .stringify(Preferences));
               $scope.documentReady = true;
               $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
-              $rootScope.openNotification();
+              $rootScope.errorLoggingInNotificationShouldBeOpen = true;
+              $rootScope.loading = false;
             });
       };
 
@@ -684,7 +685,7 @@ define(
               $rootScope.loading = false;
             }, /* login failure */ function(reason){
               $rootScope.notificationMessage = "Error logging in.\n"+ reason;
-              $rootScope.openNotification();
+              $rootScope.errorLoggingInNotificationShouldBeOpen = true;
               $rootScope.loading = false;
             });
         }
