@@ -2521,10 +2521,16 @@ define(
         Data.changePassword($scope.resetPasswordInfo).then(function(result){
           // console.log(result);
           Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
+          
+          Preferences.savedState.password = sjcl.encrypt("password", $scope.resetPasswordInfo.confirmpassword);
+          localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+
           $scope.resetPasswordInfo = {};
           $scope.showResetPassword = false;
           $rootScope.notificationMessage = "Successfully updated password";
           $rootScope.openNotification();
+
+
         }, function(reason){
           console.log(reason);
           var message = "Please report this.";
