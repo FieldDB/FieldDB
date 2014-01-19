@@ -758,10 +758,23 @@ define([
      */
     laTeXiT : function(showInExportModal) {
     	//corpus's most frequent fields
-        var frequentFields = window.app.get("corpus").frequentFields;
-        //this datum/datalist's datumfields and their names 
-    	var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
-    	var fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+      var frequentFields = window.app.get("corpus").frequentFields;
+      //this datum/datalist's datumfields and their names 
+    	var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
+        //Dont export the user fields
+        if (field.label.toLowerCase().indexOf("byuser") > -1) {
+          return {label:"", mask: ""};
+        }
+        //Dont export the validationStatus
+        if (field.label.toLowerCase().indexOf("validationstatus") > -1) {
+          return {label:"", mask: ""};
+        }
+        // console.log(field);
+        return field;
+      });
+
+      var fields = _.pluck(fieldsToExport, "mask");
+    	var fieldLabels = _.pluck(fieldsToExport, "label");
     	//setting up for IGT case...
     	var utteranceIndex = -1;
     	var utterance = "";
@@ -771,7 +784,7 @@ define([
     	var gloss = "";
     	var translationIndex = -1;
     	var translation = "";
-    	var result = "\n \\begin{exe} \n \\ex \[";
+    	var result = "\n \\begin{exe} \n \\ex ";
     	//IGT case:
     	if(this.datumIsInterlinearGlossText()){
     		/* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
@@ -806,11 +819,25 @@ define([
     			fields.splice(translationIndex,1);
     		}
     		//print the main IGT, escaping special latex chars
-    		result = result + this.escapeLatexChars(judgement) + "\]\{" +  this.escapeLatexChars(utterance)
-    			+ "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\"
-    			+ "\n " + this.escapeLatexChars(gloss) + "\\\\"
-    			+ "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
-    			"\n\\label\{\}";
+        if (judgement) {
+          result = result + "\[" + this.escapeLatexChars(judgement) + "\]" 
+        } 
+    		result = result
+    			+ " \\glll " +  this.escapeLatexChars(utterance) + "\\\\"
+          + "\n\t" + this.escapeLatexChars(morphemes) + "\\\\"
+    			+ "\n\t" + this.escapeLatexChars(gloss) + "\\\\"
+    			+ "\n\n \\glt \\emph{`" + this.escapeLatexChars(translation) + "'\} "
+    			+ "\n\\label\{" +this.escapeLatexChars(utterance).toLowerCase().replace(/[^a-z0-9]/g,"") + "\}";
+
+          // This is maybe what gb4e actually looks like, the one we had before seemed off...
+          // \begin{exe}
+          // \ex \glll   Guhu'mhl wan  ant John.\\
+          //             guxw-'m=hl wan    an=t John\\
+          //             shoot-1pl.ii=det deer GAN=det John\\
+          //     \glt    \emph{John and I shot the deer.}\\
+          //             \emph{John and I shot the deer.}\\
+          // \end{exe}
+
     	}
     	//remove any empty fields from our arrays
     	for(i=fields.length-1;i>=0;i--){
@@ -820,9 +847,11 @@ define([
     		}
     		
     	}
-    	/*throughout this next section, print frequent fields and infrequent ones differently
+    	/*
+      throughout this next section, print frequent fields and infrequent ones differently
     	frequent fields get latex'd as items in a description and infrequent ones are the same,
-    	but commented out.*/
+    	but commented out.
+      */
     	if(fields && (fields.length>0)){
     		var numInfrequent = 0;
     		for (var field in fields){
@@ -839,7 +868,7 @@ define([
     		for (var field in fields){
     			if(fields[field] && (frequentFields.indexOf(fieldLabels[field])>=0)){
     				result = result
-    				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\n\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
     				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
     			} else if(fields[field]){
             /* If as a field that is designed for LaTex dont excape the LaTeX characters */
@@ -848,7 +877,7 @@ define([
                 + "\n " + fields[field];
             } else {
       				result = result
-      				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+      				+ "\n%\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
       				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
             }
     			}
@@ -944,9 +973,24 @@ define([
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
-      var result = fields.join("\n");
+      var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
+        if (field.label.toLowerCase().indexOf("latex") > -1) {
+          return {label:"", mask: ""};
+        }
+        if (field.label.toLowerCase().indexOf("byuser") > -1) {
+          return {label:"", mask: ""};
+        }
+        if (field.label.toLowerCase().indexOf("validationstatus") > -1) {
+          return {label:"", mask: ""};
+        }
+        // console.log(field);
+        return field;
+      });
+
+      var header = _.pluck(fieldsToExport, "label") || [];
+      var fields = _.pluck(fieldsToExport, "mask") || [];
+
+      var result = fields.join("\n").replace(/\n\n+/g, "\n");
       if (showInExportModal != null) {
         $("#export-type-description").html(" as text (Word)");
         $("#export-text-area").val(
@@ -961,22 +1005,22 @@ define([
      */
     exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
       
-      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
-      var result = fields.join(",") +"\n";
+      var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
+        if (field.label.toLowerCase().indexOf("latex") > -1) {
+          return {label:"", mask: ""};
+        }
+        // console.log(field);
+        field.label = '"' + field.label.replace(/"/g,'\"') + '"';
+        field.mask = '"' + field.mask.replace(/"/g,'\"') + '"';
+        return field;
+      });
+
+      var header = _.pluck(fieldsToExport, "label") || [];
+      var fields = _.pluck(fieldsToExport, "mask") || [];
+      var result = fields.join(",").replace(/,,/g, ",") + "\n";
       
-//      if (orderedFields == null) {
-//        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
-//      }
-//      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
-//      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-//      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-//      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-//      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-//      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
-//      var result = '"' + resultarray.join('","') + '"\n';
       if (printheaderonly) {
-        result = header.join(",") + "\n";
+        result = header.join(",").replace(/,,/g, ",") + "\n";
       }
       if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
