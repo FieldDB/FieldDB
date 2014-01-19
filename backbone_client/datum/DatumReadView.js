@@ -431,7 +431,10 @@ define([
         if(fields && (fields.length>0)){
             for (var field in fields){
                 if(!frequentFields || frequentFields.indexOf(fieldLabels[field])>=0){
-                  if(fields[field] && fieldLabels[field].toLowerCase().indexOf("latex") === -1){
+                  if(fields[field] &&
+                   fieldLabels[field].toLowerCase().indexOf("latex") === -1 &&
+                    fieldLabels[field].toLowerCase().indexOf("byuser") === -1 &&
+                     fieldLabels[field].toLowerCase().indexOf("validationstatus") === -1){
                     jsonToRender.additionalFields.push({field: fieldLabels[field],
                       value: highlightMatches(fields[field], fieldLabels[field])});
                   }
