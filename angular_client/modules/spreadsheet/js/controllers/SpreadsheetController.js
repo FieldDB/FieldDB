@@ -1729,7 +1729,7 @@ define(
         dataToPost.username = newUserInfo.username.trim().toLowerCase();
         dataToPost.password = newUserInfo.password.trim();
         dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
-        dataToPost.appVersionWhenCreated = "1.90.2.ss";
+        dataToPost.appVersionWhenCreated = "1.91.1.ss";
         // dataToPost.appVersionWhenCreated = this.appVersion;
 
         dataToPost.serverCode = newUserInfo.serverCode;
