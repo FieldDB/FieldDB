@@ -2457,7 +2457,7 @@ define(
       };
 
       $scope.contactUs = function() {
-        window.open("https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ");
+        window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
       };
 
       // Use this function to show objects on loading without displacing other elements
