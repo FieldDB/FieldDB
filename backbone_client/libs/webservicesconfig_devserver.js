@@ -194,6 +194,8 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
     mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
     mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
+  } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+    mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
   } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
     OPrime.debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
   } else if (window.location.origin.indexOf("localhost") >= 0) {
@@ -213,6 +215,30 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   // ocmdknddgpmjngkhcbcofoogkommjfoj
 
   return mostLikelyAuthUrl;
+};
+
+OPrime.getMostLikelyPrototypeVersionFromUrl = function(versionCode) {
+  if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+    versionCode = versionCode + "pmo";
+  } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+    versionCode = versionCode + "pmc";
+  }  else if (window.location.origin.indexOf("corpus.lingsync.org") >= 0) {
+    versionCode = versionCode + "pso";
+  } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+    versionCode = versionCode + "pbo";
+  } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+    versionCode = versionCode + "pbc";
+  } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+    versionCode = versionCode + "psc";
+  } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
+    versionCode = versionCode + "pba";
+  } else if (window.location.origin.indexOf("localhost") >= 0) {
+    versionCode = versionCode + "plo";
+  } else if (OPrime.isChromeApp()) {
+    versionCode = versionCode + "pdc";
+  }
+
+  return versionCode;
 };
 
 OPrime.contactUs = "<a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_blank'>Contact Us</a>";

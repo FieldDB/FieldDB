@@ -667,6 +667,7 @@ define([
       
       //put the version into the terminal, and into the user menu
       OPrime.getVersion(function (ver) { 
+        app.set("version", ver);
         window.appView.term.VERSION_ = ver;
         $(".fielddb-version").html(ver);
       });
