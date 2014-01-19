@@ -288,6 +288,11 @@ define([
           return;
         }
       }
+      /* As of version v1.90 take all stable and mcgill users to the online app */
+      if (window.location.hostname === "ocmdknddgpmjngkhcbcofoogkommjfoj" || window.location.hostname === "jlbnogfhkigoniojfngfcglhphldldgi") {
+        console.log("This is a prototype stable user, or a mcgill user, who has been backed up. Taking them directly to the spreadsheet app.");
+        window.location.replace("http://app.lingsync.org");
+      }
       
       this.saveServerResponseToUser(data, callbackload);
     },
