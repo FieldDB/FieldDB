@@ -309,6 +309,9 @@ define([
     getFrequentFields : function(whenfieldsareknown){
       var self = this;
       window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
+        // this is one way of hiding the usernames regardles of if they are informative
+        // fieldLabels.push("enteredByUser");
+        // fieldLabels.push("modifiedByUser");
         self.frequentFields = fieldLabels;
         window.app.get("corpus").frequentFields = fieldLabels;
         if(typeof whenfieldsareknown == "function"){
@@ -326,7 +329,11 @@ define([
         return;
       }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
-        if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
+        //hide entered by user or modified by user if they match the person logged in (ie are not informative because only one person is working on this corpus.)
+        var fieldValue  = this.model.get("datumFields").models[f].get("mask");
+        var currentUsername = window.app.get("authentication").get("userPrivate").get("username");
+        var fieldsLabel = this.model.get("datumFields").models[f].get("label") ;
+        if( (fieldsLabel.indexOf("ByUser") > -1 && !fieldValue ) || fieldValue == currentUsername || this.frequentFields.indexOf( fieldsLabel ) == -1 ){
           $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
           this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
         }
