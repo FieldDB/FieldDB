@@ -411,7 +411,7 @@ define([
             if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
               return this;
             }
-            if (translation != "") {
+            if (translation != "" && this.format !== "latexPreviewIGTonly") {
               jsonToRender.translation = "\u2018"+ translation +"\u2019";
             }
             jsonToRender.tuple = tuple;
