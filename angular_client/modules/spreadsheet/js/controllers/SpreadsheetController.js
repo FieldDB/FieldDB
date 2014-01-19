@@ -18,6 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
+      $rootScope.appVersion = "1.91.1.ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -389,8 +390,8 @@ define(
             }, function(error) {
               $scope.documentReady = true;
               console.log("Error loading sessions.");
-              $rootScope.notificationMessage = "Error loading corpus, please report this.";
-              $rootScope.openNotification();
+              $rootScope.notificationMessage = "Error loading corpus, please log in.";
+              $rootScope.errorLoggingInNotificationShouldBeOpen = true;
               $rootScope.loading = false;
             });
       };
@@ -527,7 +528,8 @@ define(
                 .stringify(Preferences));
               $scope.documentReady = true;
               $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
-              $rootScope.openNotification();
+              $rootScope.errorLoggingInNotificationShouldBeOpen = true;
+              $rootScope.loading = false;
             });
       };
 
@@ -684,7 +686,7 @@ define(
               $rootScope.loading = false;
             }, /* login failure */ function(reason){
               $rootScope.notificationMessage = "Error logging in.\n"+ reason;
-              $rootScope.openNotification();
+              $rootScope.errorLoggingInNotificationShouldBeOpen = true;
               $rootScope.loading = false;
             });
         }
@@ -1649,6 +1651,7 @@ define(
               bareActivityObject.directobject = bareActivityObject.directobject.replace("href=", "target='_blank' href=");
               bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
 
+              template.appVersion = $rootScope.appVersion;
               template.verb = bareActivityObject.verb;
               template.verbicon = bareActivityObject.verbicon;
               template.directobjecticon = bareActivityObject.directobjecticon;
@@ -1728,8 +1731,8 @@ define(
         dataToPost.username = newUserInfo.username.trim().toLowerCase();
         dataToPost.password = newUserInfo.password.trim();
         dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
-        dataToPost.appVersionWhenCreated = "1.90.2.ss";
-        // dataToPost.appVersionWhenCreated = this.appVersion;
+        // dataToPost.appVersionWhenCreated = "1.91.1.ss";
+        dataToPost.appVersionWhenCreated = $rootScope.appVersion;
 
         dataToPost.serverCode = newUserInfo.serverCode;
 
@@ -2454,7 +2457,7 @@ define(
       };
 
       $scope.contactUs = function() {
-        window.open("https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ");
+        window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
       };
 
       // Use this function to show objects on loading without displacing other elements
@@ -2521,10 +2524,16 @@ define(
         Data.changePassword($scope.resetPasswordInfo).then(function(result){
           // console.log(result);
           Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
+          
+          Preferences.savedState.password = sjcl.encrypt("password", $scope.resetPasswordInfo.confirmpassword);
+          localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+
           $scope.resetPasswordInfo = {};
           $scope.showResetPassword = false;
           $rootScope.notificationMessage = "Successfully updated password";
           $rootScope.openNotification();
+
+
         }, function(reason){
           console.log(reason);
           var message = "Please report this.";
