@@ -9,6 +9,7 @@ define([
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
+    "glosser/Tree",
     "OPrime"
 ], function(
     Backbone, 
@@ -873,12 +874,20 @@ define([
     			} else if(fields[field]){
             /* If as a field that is designed for LaTex dont excape the LaTeX characters */
             if (fieldLabels[field].toLowerCase().indexOf("latex") > -1) {
-              result = result
-                + "\n " + fields[field];
+              // Only output the tree if the user modified the tree
+              if (fieldLabels[field] == "syntacticTreeLatex") {
+                if (fields[field] != this.guessTree(morphemes)) {
+                  result = result + "\n " + fields[field];
+                } else {
+                  console.log("Not exporting latex tree, the user didnt modify it so they probably dont want it.");
+                }
+              } else {
+                result = result + "\n " + fields[field];
+              }
             } else {
-      				result = result
-      				+ "\n%\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-      				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+                result = result
+                + "\n%\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+                + "\}\] " + this.escapeLatexChars(fields[field]) ;
             }
     			}
     		}
@@ -968,6 +977,28 @@ define([
     	}
     },
     
+    /**
+    when pressing tab after filling morpheme line, guess different trees
+    and display them in Latex formatting
+    */
+    guessTree: function(morphemesLine) {
+      if (morphemesLine) {
+        var trees = Tree.generate(morphemesLine);
+        OPrime.debug(trees);
+        var syntacticTreeLatex  = "";
+        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
+        syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
+        // syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed; //TODO figure out why mixed doesnt work.
+        
+        // syntacticTreeLatex +=  "Left: "+ trees.left;
+        // syntacticTreeLatex +=  "\nRight:" + trees.right;
+        // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
+        OPrime.debug(syntacticTreeLatex);
+        return syntacticTreeLatex;
+      } else {
+        return "";
+      }
+    },
     /**
      * This function simply takes the utterance gloss and translation and puts
      * them out as plain text so the user can do as they wish.

@@ -16,7 +16,6 @@ define([
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
-    "glosser/Tree",
     "OPrime"
 ], function(
     Backbone, 
@@ -607,19 +606,10 @@ define([
     /**
     when pressing tab after filling morpheme line, guess different trees
     and display them in Latex formatting
-
     */
     guessTree: function(morphemesLine) {
       if (morphemesLine) {
-        var trees = Tree.generate(morphemesLine);
-        OPrime.debug(trees);
-        var syntacticTreeLatex  = "";
-        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
-        syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
-        syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
-        // syntacticTreeLatex +=  "Left: "+ trees.left;
-        // syntacticTreeLatex +=  "\nRight:" + trees.right;
-        // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
+        var syntacticTreeLatex  = this.model.guessTree(morphemesLine);
         OPrime.debug(syntacticTreeLatex);
         /* These put the syntacticTree into the actual datum fields on the screen so the user can see them */
         if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
