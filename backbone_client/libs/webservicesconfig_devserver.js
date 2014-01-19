@@ -42,15 +42,15 @@ OPrime.defaultCouchConnection = function() {
     authUrl : "https://localhost:3183",
     userFriendlyServerName : "Localhost"
   };
-  var testing = {
-    protocol : "https://",
-    domain : "corpusdev.lingsync.org",
-    port : "443",
-    pouchname : "default",
-    path : "",
-    authUrl : "https://authdev.lingsync.org",
-    userFriendlyServerName : "LingSync Beta"
-  };
+  // var testing = {
+  //   protocol : "https://",
+  //   domain : "corpusdev.lingsync.org",
+  //   port : "443",
+  //   pouchname : "default",
+  //   path : "",
+  //   authUrl : "https://authdev.lingsync.org",
+  //   userFriendlyServerName : "LingSync Beta"
+  // };
   var production = {
     protocol : "https://",
     domain : "corpus.lingsync.org",
@@ -60,13 +60,16 @@ OPrime.defaultCouchConnection = function() {
     authUrl : "https://auth.lingsync.org",
     userFriendlyServerName : "LingSync.org"
   };
+  //v1.90 all users are on production
+  testing = production;
+
   var mcgill = {
     protocol : "https://",
-    domain : "corpusdev.lingsync.org",
+    domain : "corpus.lingsync.org",
     port : "443",
     pouchname : "default",
     path : "",
-    authUrl : "https://authdev.lingsync.org",
+    authUrl : "https://auth.lingsync.org",
     userFriendlyServerName : "McGill ProsodyLab"
   };
   OPrime.servers = [ localhost, testing, production, mcgill ];
@@ -79,13 +82,13 @@ OPrime.defaultCouchConnection = function() {
   if (OPrime.isCouchApp()) {
     if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
       connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
       connection = mcgill;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("localhost") >= 0) {
       connection = localhost;
       OPrime.authUrl = "https://localhost:3183";
@@ -93,11 +96,11 @@ OPrime.defaultCouchConnection = function() {
   } else if (OPrime.isChromeApp()) {
     if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
       connection = mcgill;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin
         .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
       connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin
         .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
       connection = production;
@@ -118,9 +121,9 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
   if (authUrl.indexOf("LingSync.org") >= 0) {
     authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("LingSync Beta") >= 0) {
-    authUrl = "https://authdev.lingsync.org";
+    authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
-    authUrl = "https://authdev.lingsync.org";
+    authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("Localhost") >= 0) {
     authUrl = "https://localhost:3183";
   } else {
@@ -188,9 +191,9 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   }  else if (window.location.origin.indexOf("corpus.lingsync.org") >= 0) {
     mostLikelyAuthUrl = "LingSync.org";
   } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-    mostLikelyAuthUrl = "LingSync Beta";
+    mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-    mostLikelyAuthUrl = "LingSync Beta";
+    mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
   } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
     OPrime.debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
   } else if (window.location.origin.indexOf("localhost") >= 0) {
@@ -228,11 +231,11 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   if (OPrime.isCouchApp()) {
     var corpusURL = window.location.origin;
     if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
-      corpusURL = "https://corpusdev.lingsync.org";
+      corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
-      corpusURL = "https://corpusdev.lingsync.org";
+      corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("localhost") >= 0) {
       // use the window origin
     }

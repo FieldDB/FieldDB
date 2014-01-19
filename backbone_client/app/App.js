@@ -830,7 +830,12 @@ define([
               if(reason.indexOf("nexpected end of input") >=0){
                 OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only. We are waiting for an upgrade in the PouchDB library (this is what makes it possible to have an offline database).");
               }else{
-                OPrime.bug("You appear to be offline. If you are not offline, please report this.");
+                // OPrime.bug("You appear to be offline. If you are not offline, please report this.");
+                var originalCallbackFromLoadBackboneApp = callback;
+                window.app.get("authentication").syncUserWithServer(function(){
+                  console.log("Trying to reload the app after a session token has timed out, or the users account was moved to another server in v1.90");
+                  self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
+                }, couchConnection.pouchname);
               }
             }
           }
