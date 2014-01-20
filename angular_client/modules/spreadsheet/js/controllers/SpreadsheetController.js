@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.91.1.ss";
+      $rootScope.appVersion = "1.91.2ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -1731,7 +1731,6 @@ define(
         dataToPost.username = newUserInfo.username.trim().toLowerCase();
         dataToPost.password = newUserInfo.password.trim();
         dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
-        // dataToPost.appVersionWhenCreated = "1.91.1.ss";
         dataToPost.appVersionWhenCreated = $rootScope.appVersion;
 
         dataToPost.serverCode = newUserInfo.serverCode;
