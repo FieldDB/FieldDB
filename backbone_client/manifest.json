@@ -1,10 +1,10 @@
 {
-  "name" : "LingSync",
-  "version" : "1.91.2",
+  "name" : "LingSync Prototype",
+  "version" : "1.91.3",
   "description" : "A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners",
   "app" : {
     "launch" : {
-      "local_path" : "index.html"
+      "local_path" : "backup_pouches.html"
     }
   },
   "offline_enabled" : true,
