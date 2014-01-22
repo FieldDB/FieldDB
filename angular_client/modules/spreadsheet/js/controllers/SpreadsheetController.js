@@ -96,6 +96,22 @@ define(
             "label": "utterance",
             "title": "Utterance"
           },
++          "allomorphs": {
+ +            "label": "allomorphs",
+ +            "title": "Allomorphs"
+ +          },
+ +          "phonetic": {
+ +            "label": "phonetic",
+ +            "title": "Phonetic"
+ +          },
++          "housekeeping": {
+ +            "label": "housekeeping",
+ +            "title": "Housekeeping"
+ +          },
+ +          "spanish": {
+ +            "label": "spanish",
+ +            "title": "Spanish"
+ +          },
           "morphemes": {
             "label": "morphemes",
             "title": "Morphemes"
