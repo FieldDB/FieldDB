@@ -64,24 +64,6 @@
     "showToUserTypes": "all",
     "userchooseable": "disabled"
   }, {
-    "label": "spanish",
-    "value": "",
-    "mask": "",
-    "encrypted": "",
-    "shouldBeEncrypted": "checked",
-    "help": "Free translation into Spanish",
-    "showToUserTypes": "all",
-    "userchooseable": "disabled"
-  }, {
-    "label": "housekeeping",
-    "value": "",
-    "mask": "",
-    "encrypted": "",
-    "shouldBeEncrypted": "checked",
-    "help": "",
-    "showToUserTypes": "all",
-    "userchooseable": "disabled"
-  }, {
     "label": "tags",
     "value": "",
     "mask": "",
