@@ -298,7 +298,7 @@ define([
     },
     
     loadPublicUser : function(callbackload){
-      var mostRecentPublicUser = localStorage.getItem("mostRecentPublicUser") || OPrime.publicUserStaleDetails();
+      var mostRecentPublicUser =  OPrime.publicUserStaleDetails();
       mostRecentPublicUser = JSON.parse(mostRecentPublicUser);
       for(var x in mostRecentPublicUser){
         localStorage.setItem(x, mostRecentPublicUser[x]);

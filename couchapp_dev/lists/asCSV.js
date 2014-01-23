@@ -3,11 +3,11 @@ This function itterates through the data and figures out the headers and
 exports the id, key (and all its children) and value  (and all its children) as csv 
 */
 function(head, req) {
-    // start({
-    //     'headers': {
-    //         'Content-Type': 'text/csv'
-    //     }
-    // });
+    start({
+        'headers': {
+          'Content-Type': 'text/csv; charset=utf-8'
+        }
+      });
     Array.prototype.unique = function() {
         var a = this.concat();
         for (var i = 0; i < a.length; ++i) {
