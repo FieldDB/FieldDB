@@ -820,14 +820,19 @@ define([
     			fields.splice(translationIndex,1);
     		}
     		//print the main IGT, escaping special latex chars
+        var judgementClosingBracketIfAny = "";
         if (judgement) {
-          result = result + "\[" + this.escapeLatexChars(judgement) + "\]" 
-        } 
+          result = result + "\[" + this.escapeLatexChars(judgement) + "\] {";
+          judgementClosingBracketIfAny = " } ";
+        }
+        if (translation) {
+          translation = "`" + translation + "'";
+        }
     		result = result
     			+ " \\glll " +  this.escapeLatexChars(utterance) + "\\\\"
           + "\n\t" + this.escapeLatexChars(morphemes) + "\\\\"
-    			+ "\n\t" + this.escapeLatexChars(gloss) + "\\\\"
-    			+ "\n\n \\glt \\emph{`" + this.escapeLatexChars(translation) + "'\} "
+    			+ "\n\t" + this.escapeLatexChars(gloss) + " \\\\" + judgementClosingBracketIfAny
+    			+ "\n\n \\glt \\emph{" + this.escapeLatexChars(translation) + " \} "
     			+ "\n\\label\{" +this.escapeLatexChars(utterance).toLowerCase().replace(/[^a-z0-9]/g,"") + "\}";
 
           // This is maybe what gb4e actually looks like, the one we had before seemed off...
