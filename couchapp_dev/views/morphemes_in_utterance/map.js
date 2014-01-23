@@ -1,10 +1,10 @@
 function(doc) {
   /* if this document has been deleted, the ignore it and return immediately */
-  if(doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
+  if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
   // If the document is a Datum
   if (doc.audioVideo) {
     // Loop over all its DatumFields
-    for ( var key in doc.datumFields) {
+    for (var key in doc.datumFields) {
       // If the DatumField contains the Judgement
       if (doc.datumFields[key].label == 'judgement') {
         // If the Judgement contains a '*', don't count the words in it
@@ -16,7 +16,7 @@ function(doc) {
     }
     var context = {};
     // Loop over all its DatumFields
-    for ( var key in doc.datumFields) {
+    for (var key in doc.datumFields) {
       // If the DatumField contains the Utterance
       if (doc.datumFields[key].label == 'utterance') {
         // Trim whitespace
@@ -30,8 +30,8 @@ function(doc) {
         }
         // Tokenize the utterance
         var words = utterance.toLowerCase().replace(/#?!.,\//g, '').split(
-            /[ ]+/);
-        for ( var word in words) {
+          /[ ]+/);
+        for (var word in words) {
           // If the token it not null or the empty string
           if (words[word]) {
             // Replace (*_) with ''
@@ -50,12 +50,12 @@ function(doc) {
         var morphemesline = doc.datumFields[key].mask.trim();
         // Tokenize the morphemes
         var morphemes = morphemesline.replace(/#!,\//g, '').split(/[ ]+/);
-        for ( var morphemegroup in morphemes) {
+        for (var morphemegroup in morphemes) {
           // If the token it not null or the empty string
           if (morphemes[morphemegroup]) {
             // Replace (*_) with ''
             var feederWord = morphemes[morphemegroup].replace(/\(\*[^)]*\)/g,
-                '');// DONT replace ? it is used to indicate uncertainty with
+              ''); // DONT replace ? it is used to indicate uncertainty with
             // the data, . is used for fusional morphemes
             // Replace *(_) with _
             feederWord = feederWord.replace(/\*\(([^)]*)\)/, '$1');
@@ -70,7 +70,7 @@ function(doc) {
         // Trim whitespace
         var gloss = doc.datumFields[key].mask.trim();
         // Tokenize the gloss
-        var glosses = gloss.replace(/#!,\//g, '').split(/[ ]+/);// DONT replace
+        var glosses = gloss.replace(/#!,\//g, '').split(/[ ]+/); // DONT replace
         // ? it is used
         // to indicate
         // uncertainty
@@ -79,7 +79,7 @@ function(doc) {
         // used for
         // fusional
         // morphemes
-        for ( var glossgroup in glosses) {
+        for (var glossgroup in glosses) {
           // If the token it not null or the empty string
           if (glosses[glossgroup]) {
             // Replace (*_) with ''
@@ -95,13 +95,15 @@ function(doc) {
       }
     }
     // Build triples
-    for ( var j in context.words) {
+    for (var j in context.words) {
       var w = context.words[j];
       var morphemesInUtterance = context.morphemes[j].split('-');
       var gs = context.glosses[j].split('-');
-      for ( var i in morphemesInUtterance) {
-        emit([ morphemesInUtterance[i] ], w);
-
+      for (var i in morphemesInUtterance) {
+        var morphemeToEmit = morphemesInUtterance[i] ? morphemesInUtterance[i].toLocaleLowerCase() : "";
+        if (morphemeToEmit) {
+          emit(morphemeToEmit, w);
+        }
       }
     }
   }
