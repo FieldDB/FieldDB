@@ -158,7 +158,7 @@ require(
       window.finishedReplicating = function() {
         localStorage.setItem(window.username + "lastUpdatedAtVersion", "1.40");
         $(".spinner-status").html("Finished backing up your previous data.");
-        $(".finished-status").html("LingSync no longer runs purely offline because of changes to the Chrome App offline storage technology.<p> We are encouraging all new and old users to use the new Online app which has been built for fieldmethods courses and data entry: <a href='http://app.lingsync.org'>http://app.lingsync.org</a>.<p> If you wish to continue using the Prototype you can <a href='corpus.html'>return to your corpus</a>. Your Prototype app has been upgraded from v1.36 to v1.90.");
+        $(".finished-status").html("We are encouraging all new and old users to use the new Online app which has been built for fieldmethods courses and data entry: <a href='http://app.lingsync.org'>http://app.lingsync.org</a>.<p>");
         $(".spinner-image").attr("src","images/icon128.png");
 
         /* Take them to the user page so they can choose a corpus */

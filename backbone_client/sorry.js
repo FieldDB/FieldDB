@@ -1,11 +1,20 @@
 
 var goToPrototypeApp = function(){
-	var action_url = "https://www.lingsync.org/public";
+	var action_url = "corpus.html";
 	chrome.tabs.create({
 		url: action_url
 	});
 }
 document.getElementById("goToPrototypeApp").onclick = goToPrototypeApp;
+
+var goToCorpusPagesApp = function(){
+	var action_url = "https://www.lingsync.org/public";
+	chrome.tabs.create({
+		url: action_url
+	});
+}
+document.getElementById("goToCorpusPagesApp").onclick = goToCorpusPagesApp;
+
 
 
 var goToSpreadsheetApp = function(){
