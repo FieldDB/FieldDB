@@ -256,7 +256,9 @@ define([
       }else{
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
       } 
-      
+      if (!this.model.id) {
+        jsonToRender.buttonColor = "primary";
+      }
       
       
       
@@ -324,6 +326,7 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
+      $(this.el).find(".extra-datum-info-which-can-be-hidden").hide();
       this.rareFields = [];
       if(!this.frequentFields){
         return;
@@ -355,6 +358,8 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
+      $(this.el).find(".extra-datum-info-which-can-be-hidden").show();
+
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
       }
