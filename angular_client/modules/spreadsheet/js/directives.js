@@ -55,7 +55,17 @@ define(
               element[0].selected = true;
             }
           };
-        }).directive('selectDropdownSession', function() {
+        })
+      .directive(
+        'selectDropdownYaleTemplate',
+        function() {
+          return function(scope, element, attrs) {
+            if (scope.field.label == scope.scopePreferences.yalefieldmethods2014template[attrs.selectDropdownYaleTemplate].label) {
+              element[0].selected = true;
+            }
+          };
+        })
+      .directive('selectDropdownSession', function() {
         return function(scope, element, attrs) {
           scope.$watch('activeSession', function() {
             if (scope.session._id == scope.activeSession) {
@@ -63,7 +73,8 @@ define(
             }
           });
         };
-      }).directive(
+      })
+      .directive(
         'arrowKey',
         function($rootScope) {
           return function(scope, element, attrs) {
