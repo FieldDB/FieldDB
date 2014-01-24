@@ -97,22 +97,6 @@ define(
             "label": "utterance",
             "title": "Utterance"
           },
-          "allomorphs": {
-            "label": "allomorphs",
-            "title": "Allomorphs"
-          },
-          "phonetic": {
-            "label": "phonetic",
-            "title": "Phonetic"
-          },
-          "housekeeping": {
-             "label": "housekeeping",
-             "title": "Housekeeping"
-           },
-           "spanish": {
-             "label": "spanish",
-             "title": "Spanish"
-           },
           "morphemes": {
             "label": "morphemes",
             "title": "Morphemes"
@@ -172,7 +156,23 @@ define(
           "syntacticCategory": {
             "label": "syntacticCategory",
             "title": "syntacticCategory"
-          }
+          },
+          "allomorphs": {
+            "label": "allomorphs",
+            "title": "Allomorphs"
+          },
+          "phonetic": {
+            "label": "phonetic",
+            "title": "Phonetic"
+          },
+          "housekeeping": {
+             "label": "housekeeping",
+             "title": "Housekeeping"
+           },
+           "spanish": {
+             "label": "spanish",
+             "title": "Spanish"
+           }
         },
         "compacttemplate": {
           "field1": {
@@ -193,6 +193,44 @@ define(
           }
         },
         "fulltemplate": {
+          "field1": {
+            "label": "utterance",
+            "title": "Utterance"
+          },
+          "field2": {
+            "label": "morphemes",
+            "title": "Morphemes"
+          },
+          "field3": {
+            "label": "gloss",
+            "title": "Gloss"
+          },
+          "field4": {
+            "label": "translation",
+            "title": "Translation"
+          },
+          "field5": {
+            "label": "comments",
+            "title": "Comments"
+          },
+          "field6": {
+            "label": "judgement",
+            "title": "Judgement"
+          },
+          "field7": {
+            "label": "",
+            "title": ""
+          },
+          "field8": {
+            "label": "",
+            "title": ""
+          }
+        },
+        "yalefieldmethods2014template": {
+          "field0": {
+            "label": "orthography",
+            "title": "Orthography"
+          },
           "field1": {
             "label": "utterance",
             "title": "Utterance"
