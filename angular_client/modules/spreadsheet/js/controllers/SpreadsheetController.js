@@ -716,18 +716,19 @@ define(
                   Data.async(scopeDBs[index], "_design/pages/_view/private_corpuses").then(
                     function(response) {
                       var corpus = {};
-                      corpus.pouchname = scopeDBs[index];
                       if (response.rows[0]) {
-                        corpus.corpustitle = response.rows[0].value.title;
+                        corpus = response.rows[0].value;
                       } else {
-                        corpus.corpustitle = scopeDBs[index];
+                        corpus.pouchname = scopeDBs[index];
+                        corpus.title = scopeDBs[index];
                       }
                       corpus.gravatar = md5.createHash(corpus.pouchname);
                       $scope.corpora.push(corpus);
                     }, function(error) {
                       var corpus = {};
                       corpus.pouchname = scopeDBs[index];
-                      corpus.corpustitle = scopeDBs[index];
+                      corpus.title = scopeDBs[index];
+                      corpus.gravatar = md5.createHash(corpus.pouchname);
                       $scope.corpora.push(corpus);
                     });
                 })(m);
@@ -861,7 +862,7 @@ define(
             .then(
               function() {
                 var directobject =  $scope.currentSessionName || "an elicitation session";
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                 $scope.addActivity([{
                   verb: "modified",
                   verbicon: "icon-pencil",
@@ -929,7 +930,7 @@ define(
                   var rev = sessionToMarkAsDeleted._rev;
                   Data.saveEditedRecord($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
                     
-                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
                       verb: "deleted",
                       verbicon: "icon-trash",
@@ -1010,7 +1011,7 @@ define(
                       }
                     }
                     var directobject =  newSessionRecord.title || "an elicitation session";
-                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
                       verb: "added",
                       verbicon: "icon-pencil",
@@ -1076,7 +1077,7 @@ define(
                   Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
                     // Remove record from scope
 
-                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
                       verb: "deleted",
                       verbicon: "icon-trash",
@@ -1233,7 +1234,7 @@ define(
         if (!datum.saved || datum.saved === "yes") {
           datum.saved = "no";
           // Update activity feed
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
           $scope.addActivity([{
             verb: "modified",
             verbicon: "icon-pencil",
@@ -1276,7 +1277,7 @@ define(
         // $rootScope.currentPage = 0;
         // $rootScope.editsHaveBeenMade = true;
 
-        var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
+        var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.title + "</a>";
         // Update activity feed
         $scope.addActivity([{
           verb: "commented",
@@ -1514,7 +1515,7 @@ define(
                               utterance = $scope.allData[index].utterance;
                             }
 
-                            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                             $scope
                               .addActivity([{
                                 verb: "added",
@@ -1821,7 +1822,7 @@ define(
             // Add new corpus to scope
             var newCorpus = {};
             newCorpus.pouchname = response.corpus.pouchname;
-            newCorpus.corpustitle = response.corpus.title;
+            newCorpus.title = response.corpus.title;
             var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
             $scope.addActivity([{
               verb: "added",
@@ -1961,7 +1962,7 @@ define(
 
         Data.updateroles(dataToPost).then(function(response) {
 
-          var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a> as "+rolesString;
+          var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a> as "+rolesString;
           $scope.addActivity([{
             verb: "modified",
             verbicon: "icon-pencil",
@@ -2012,7 +2013,7 @@ define(
 
           Data.updateroles(dataToPost).then(function(response) {
             
-            var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
             $scope.addActivity([{
               verb: "removed",
               verbicon: "icon-remove-sign",
@@ -2377,7 +2378,7 @@ define(
 
             datum.audioVideo.push(newScopeAttachment);
 
-            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
             $scope.addActivity([{
               verb: "recorded",
               verbicon: "icon-plus",
@@ -2452,7 +2453,7 @@ define(
             Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
               console.log("Saved attachment as trashed.");
 
-              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
               $scope.addActivity([{
                 verb: "deleted",
                 verbicon: "icon-trash",
