@@ -29,9 +29,9 @@
 		<h2>Templates</h2>
 	</div>
 	<div class="clearDiv">&nbsp;</div>
-	<!-- TEMPLATE 2 -->
 	<div class="settingsItems">
 
+		<!-- Full TEMPLATE -->
 		<h3>
 			<span ng-show="template=='fulltemplate'"><b>✓</b></span> Full Template
 		</h3>
@@ -79,13 +79,13 @@
 		<button class="btn btn-primary"
 			ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2)">Save/Activate
 			Full Template</button>
+		<!-- End Full TEMPLATE -->
 
 		<center>
 			<hr width="80%">
 		</center>
 
-		<!-- TEMPLATE 1 -->
-
+		<!-- Compact TEMPLATE 1 -->
 		<h3>
 			<span ng-show="template=='compacttemplate'"><b>✓</b></span> Compact
 			Template
@@ -124,11 +124,63 @@
 		<button class="btn btn-primary"
 			ng-click="saveNewPreferences('compacttemplate', newFieldPreferences1)">Save/Activate
 			Compact Template</button>
+		<!-- End Compact TEMPLATE 1 -->
+
+		<center>
+			<hr width="80%">
+		</center>
+
+		<!-- Yale Field Methods TEMPLATE 3 -->
+		<h3>
+			<span ng-show="template=='yalefieldmethodsspring2014template'"><b>✓</b></span> Yale Field Methods Template
+		</h3>
+		<div class="row settingsTemplate">
+			<div class="span5">
+				<select class="span5" ng-model="newFieldPreferences2.field1">
+					<option value="">Empty</option>
+					<option select-dropdown2=field1
+						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
+				</select>
+				<select class="span5" ng-model="newFieldPreferences2.field2">
+					<option value="">Empty</option>
+					<option select-dropdown2=field2
+						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
+				</select>
+				<select class="span5" ng-model="newFieldPreferences2.field3">
+					<option value="">Empty</option>
+					<option select-dropdown2=field3
+						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
+				</select>
+			</div>
+			<div class="span5">
+				<select class="span5" ng-model="newFieldPreferences2.field4">
+					<option value="">Empty</option>
+					<option select-dropdown2=field4
+						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
+				</select>
+				<select class="span5" ng-model="newFieldPreferences2.field6">
+					<option value="">Empty</option>
+					<option select-dropdown2=field6
+						ng-repeat="field in availableFields" value={{field.label}}>{{field.title}}</option>
+				</select>
+
+				<input class="span5" type="text" disabled='disabled'
+					placeholder="Tags"></textarea>
+				<!-- <span class="span4" rows="3">Comments</span> -->
+
+			</div>
+			<div class="span1">
+				Audio &amp; Comments
+			</div>
+
+		</div>
 		<br />
+		<button class="btn btn-primary"
+			ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences2)">Save/Activate
+			Yale Field Methods Template</button>
+		<!-- End Yale Field Methods TEMPLATE -->
+
 	</div>
-
-	<!-- TEMPLATE 3 -->
-
 
 
 	<div ng-show="developer==true">
