@@ -97,22 +97,6 @@ define(
             "label": "utterance",
             "title": "Utterance"
           },
-          "allomorphs": {
-            "label": "allomorphs",
-            "title": "Allomorphs"
-          },
-          "phonetic": {
-            "label": "phonetic",
-            "title": "Phonetic"
-          },
-          "housekeeping": {
-             "label": "housekeeping",
-             "title": "Housekeeping"
-           },
-           "spanish": {
-             "label": "spanish",
-             "title": "Spanish"
-           },
           "morphemes": {
             "label": "morphemes",
             "title": "Morphemes"
@@ -172,6 +156,26 @@ define(
           "syntacticCategory": {
             "label": "syntacticCategory",
             "title": "syntacticCategory"
+          },
+          "allomorphs": {
+            "label": "allomorphs",
+            "title": "Allomorphs"
+          },
+          "phonetic": {
+            "label": "phonetic",
+            "title": "Phonetic"
+          },
+          "housekeeping": {
+            "label": "housekeeping",
+            "title": "Housekeeping"
+          },
+          "spanish": {
+            "label": "spanish",
+            "title": "Spanish"
+          },
+          "orthography": {
+            "label": "orthography",
+            "title": "Orthography"
           }
         },
         "compacttemplate": {
@@ -225,8 +229,45 @@ define(
             "label": "",
             "title": ""
           }
+        },
+        "yalefieldmethodsspring2014template": {
+          "field1": {
+            "label": "utterance",
+            "title": "Utterance"
+          },
+          "field2": {
+            "label": "morphemes",
+            "title": "Morphemes"
+          },
+          "field3": {
+            "label": "gloss",
+            "title": "Gloss"
+          },
+          "field4": {
+            "label": "translation",
+            "title": "Translation"
+          },
+          "field5": {
+            "label": "comments",
+            "title": "Comments"
+          },
+          "field6": {
+            "label": "judgement",
+            "title": "Judgement"
+          },
+          "field7": {
+            "label": "",
+            "title": ""
+          },
+          "field8": {
+            "label": "",
+            "title": ""
+          }
         }
       };
+
+      //TODO move the default preferences somewher the SettingsController can access them. for now here is a hack for #1290
+      window.defaultPreferences = defaultPreferences;
 
       var Preferences = localStorage.getItem('SpreadsheetPreferences');
 
