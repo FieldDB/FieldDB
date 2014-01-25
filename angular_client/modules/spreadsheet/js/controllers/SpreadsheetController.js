@@ -722,6 +722,10 @@ define(
                         corpus.pouchname = scopeDBs[index];
                         corpus.title = scopeDBs[index];
                       }
+                      // If this is the corpus the user is looking at, update to the latest corpus details from the database.
+                      if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
+                        $rootScope.DB = corpus;
+                      }
                       corpus.gravatar = md5.createHash(corpus.pouchname);
                       $scope.corpora.push(corpus);
                     }, function(error) {
@@ -764,7 +768,7 @@ define(
 
           // Update saved state in Preferences
           Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-          Preferences.savedState.DB = selectedDB;
+          Preferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(Preferences));
 
@@ -2550,8 +2554,13 @@ define(
               auth.password = Preferences.savedState.password;
             }
             $scope.loginUser(auth);
+            // Upgrade to v92 where corpus info is not saved in the prefs, only the pouchbame
             if (Preferences.savedState.DB) {
-              $rootScope.DB = Preferences.savedState.DB;
+              Preferences.savedState.mostRecentCorpusPouchname = Preferences.savedState.DB.pouchname;
+              delete Preferences.savedState.DB;
+            }
+            if (Preferences.savedState.mostRecentCorpusPouchname) {
+              $rootScope.DB = {pouchname: Preferences.savedState.mostRecentCorpusPouchname};
               if (Preferences.savedState.sessionID) {
                 // Load all sessions and go to current session
                 $scope.loadSessions(Preferences.savedState.sessionID);
