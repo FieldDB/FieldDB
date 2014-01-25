@@ -859,10 +859,9 @@ define(
               }
             }
           }
-          // Save new session record
+          // Save session record
           Data
-            .saveEditedRecord($rootScope.DB.pouchname, newSession._id,
-              newSession)
+            .saveEditedCouchDoc($rootScope.DB.pouchname, newSession._id, newSession)
             .then(
               function() {
                 var directobject =  $scope.currentSessionName || "an elicitation session";
@@ -897,7 +896,7 @@ define(
                             // and save
 
                             editedRecord.session = newSession;
-                            Data.saveEditedRecord(
+                            Data.saveEditedCouchDoc(
                               $rootScope.DB.pouchname,
                               scopeDataToEdit[index].id,
                               editedRecord, editedRecord._rev)
@@ -932,7 +931,7 @@ define(
                 function(sessionToMarkAsDeleted) {
                   sessionToMarkAsDeleted.trashed = "deleted";
                   var rev = sessionToMarkAsDeleted._rev;
-                  Data.saveEditedRecord($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
+                  Data.saveEditedCouchDoc($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
                     
                     var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
@@ -1001,7 +1000,7 @@ define(
                 }
               }
               Data
-                .saveNew($rootScope.DB.pouchname, newSessionRecord)
+                .saveNewCouchDoc($rootScope.DB.pouchname, newSessionRecord)
                 .then(
                   function(savedRecord) {
 
@@ -1078,7 +1077,7 @@ define(
                   if(recordToMarkAsDeleted.attachmentInfo){
                     delete recordToMarkAsDeleted.attachmentInfo;
                   }
-                  Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
+                  Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
                     // Remove record from scope
 
                     var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
@@ -1323,235 +1322,26 @@ define(
       };
 
       $scope.saveChanges = function() {
-        for (var i in $scope.allData) {
-          (function(index) {
+        var saveDatumPromises = [];
+
+        for (var index in $scope.allData) {
+          console.log(index);
+          if ($scope.allData.hasOwnProperty(index)) {
             if ($scope.allData[index].saved && $scope.allData[index].saved === "no") {
-              var fieldData;
               $scope.saved = "saving";
-
-              // Save edited record
-              if ($scope.allData[index].id) {
-                console.log("Saving edited record: " + $scope.allData[index].id);
-                fieldData = $scope.allData[index];
-                var docID = fieldData.id;
-                Data
-                  .async($rootScope.DB.pouchname, docID)
-                  .then(
-                    function(editedRecord) {
-                      // Populate new record with fields from
-                      // scope
-                      // Check for modifiedByUser field in original record; if not present, add it
-                      var hasModifiedByUser = false;
-                      // console.log(fieldData);
-                      // console.log(editedRecord.datumFields);
-                      for (var key in fieldData) {
-                      // for (var i = 0; i < editedRecord.datumFields.length; i++) {
-                        // for (var key in fieldData) {
-                        var fieldWasInDatum = false;
-                        for (var i = 0; i < editedRecord.datumFields.length; i++) {
-                          if (editedRecord.datumFields[i].label === key) {
-                            fieldWasInDatum = true;
-                            // Check for (existing) modifiedByUser field in original record and update correctly
-                            if (key === "modifiedByUser") {
-                              editedRecord.datumFields[i].users = fieldData.modifiedByUser.users;
-                            } else if (key === "enteredByUser") {
-                              editedRecord.datumFields[i].user = fieldData.enteredByUser;
-                              editedRecord.datumFields[i].mask = fieldData.enteredByUser.username;
-                              editedRecord.datumFields[i].value = fieldData.enteredByUser.username;
-                            } else {
-                              editedRecord.datumFields[i].mask = fieldData[key];
-                              editedRecord.datumFields[i].value = fieldData[key];
-                            }
-                          }
-
-                          if (editedRecord.datumFields[i].label === "modifiedByUser") {
-                            hasModifiedByUser = true;
-                          }
-                        }
-                        //TODO this really means the spreadsheet needs to stop having its own data model. it would greatly reduce the complexity of the app if it just opened the data, and modified it, using the actual fielddb json.
-                        if (!fieldWasInDatum 
-                          && key !== "hasAudio" 
-                          && key !== "saved" 
-                          && key !== "$$hashKey" 
-                          && key !== "audioVideo" 
-                          && key !== "comments" 
-                          && key !== "sessionID"  
-                          && key !== "modifiedByUser"
-                          && key !== "enteredByUser"
-                          && key !== "id"
-                          && key !== "rev"
-                          && key !== "dateEntered"
-                          && key !== "datumTags"
-                          && key !== "timestamp"
-                          && key !== "dateModified"
-                          && key !== "lastModifiedBy") {
-                          editedRecord.datumFields.push({
-                            "label": key,
-                            "value": fieldData[key],
-                            "mask": fieldData[key],
-                            "encrypted": "",
-                            "shouldBeEncrypted": "checked",
-                            "help": "Entered by user in Spreadsheet App, conventions are missing.",
-                            "showToUserTypes": "linguist",
-                            "userchooseable": "disabled"
-                          });
-                        }
-                      }
-
-                      // Add modifiedByUser field if not present
-                      if (hasModifiedByUser === false) {
-                        console.log("Adding modifiedByUser field to older record.");
-                        var modifiedByUserField = {
-                          "label": "modifiedByUser",
-                          "mask": "",
-                          "users": fieldData.modifiedByUser.users,
-                          "encrypted": "",
-                          "shouldBeEncrypted": "",
-                          "help": "An array of users who modified the datum",
-                          "showToUserTypes": "all",
-                          "readonly": true,
-                          "userchooseable": "disabled"
-                        };
-                        editedRecord.datumFields.push(modifiedByUserField);
-                      }
-                      // Save date info
-                      editedRecord.dateModified = fieldData.dateModified;
-                      editedRecord.lastModifiedBy = fieldData.lastModifiedBy;
-                      editedRecord.dateEntered = fieldData.dateEntered;
-                      
-                      // Save tags
-                      if (fieldData.datumTags) {
-                        editedRecord.datumTags = fieldData.datumTags;
-                      }
-
-                      // Save comments
-                      if (fieldData.comments) {
-                        editedRecord.comments = fieldData.comments;
-                      }
-                      // Save edited record and refresh data
-                      // in scope
-                      // upgrade to v1.90
-                      if(editedRecord.attachmentInfo){
-                        delete editedRecord.attachmentInfo;
-                      }
-                      Data.saveEditedRecord($rootScope.DB.pouchname, docID, editedRecord).then(
-                          function(response) {
-                            $scope.allData[index].saved = "yes";
-                            $scope.uploadActivities();
-                            $scope.saved = "yes";
-                          },
-                          function() {
-                            $scope.saved = "no";
-                            window
-                              .alert("There was an error saving the record. Please try again.");
-                          });
-                    });
-
-              } else {
-                // Save new record
-                console.log("Saving new record.");
-
-                fieldData = $scope.allData[index];
-
-                Data
-                  .blankDatumTemplate()
-                  .then(
-                    function(newRecord) {
-                      // Populate new record with fields from
-                      // scope
-                      for (var j = 0; j < newRecord.datumFields.length; j++) {
-                        for (var key in fieldData) {
-                          if (newRecord.datumFields[j].label === key) {
-                            // Create enteredByUser object
-                            if (key === "enteredByUser") {
-                              newRecord.datumFields[j].mask = fieldData[key].username;
-                              newRecord.datumFields[j].user = fieldData[key];
-                            } else {
-                              newRecord.datumFields[j].mask = fieldData[key];
-                            }
-                          }
-                        }
-                      }
-
-                      // Save date info
-                      newRecord.dateEntered = fieldData.dateEntered;
-                      newRecord.timestamp = fieldData.timestamp;
-
-                      // Save session
-                      newRecord.session = $scope.fullCurrentSession;
-
-                      // Save pouchname
-                      newRecord.pouchname = $rootScope.DB.pouchname;
-                      // Save tags
-                      if (fieldData.datumTags) {
-                        newRecord.datumTags = fieldData.datumTags;
-                      }
-
-                      // Save comments
-                      if (fieldData.comments) {
-                        newRecord.comments = fieldData.comments;
-                      }
-
-                      // Save attachments
-                      if (fieldData._attachments) {
-                        newRecord._attachments = fieldData._attachments;
-                        newRecord.audioVideo = fieldData.audioVideo;
-                      }
-
-                      Data
-                        .saveNew($rootScope.DB.pouchname, newRecord)
-                        .then(
-                          function(response) {
-                            // Check to see if newly created record is still in scope and update with response info;
-                            // user may have refreshed data before save was complete
-                            if ($scope.allData[index]) {
-                              $scope.allData[index].id = response.data.id;
-                              $scope.allData[index].rev = response.data.rev;
-                              $scope.allData[index].saved = "yes";
-                            }
-                            console.log("Saved new record: " + $scope.allData[index].id);
-
-                            // Update activity feed with newly created
-                            // records and couch ids (must be done
-                            // here to have access to couch id)
-                            var utterance = "Datum";
-                            if ($scope.allData[index].utterance && $scope.allData[index].utterance !== "") {
-                              utterance = $scope.allData[index].utterance;
-                            }
-
-                            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-                            $scope
-                              .addActivity([{
-                                verb: "added",
-                                verbicon: "icon-plus",
-                                directobjecticon: "icon-list",
-                                directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + response.data.id + "'>" + utterance + "</a> ",
-                                indirectobject: indirectObjectString,
-                                teamOrPersonal: "personal"
-                              }, {
-                                verb: "added",
-                                verbicon: "icon-plus",
-                                directobjecticon: "icon-list",
-                                directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + response.data.id + "'>" + utterance + "</a> ",
-                                indirectobject: indirectObjectString,
-                                teamOrPersonal: "team"
-                              }], "uploadnow");
-
-                            // Upload new activities from async
-                            // process
-                            $scope.saved = "yes";
-                          },
-                          function() {
-                            $scope.saved = "no";
-                            window.alert("There was an error saving the record. Please try again.");
-                          });
-                    });
-              }
+              saveDatumPromises.push(Data.saveSpreadsheetDatum($rootScope.DB.pouchname, $scope.allData[index]));
             }
-          })(i);
-        }
-        // Upload Activities
-        $scope.uploadActivities();
+          }
+        } 
+        Q.allSettled(saveDatumPromises).then(
+          function(response) {
+            $scope.saved = "yes";
+          },
+          function(reason) {
+            console.log(reason);
+            $scope.saved = "no";
+            window.alert("There was an error saving a record. Please try again.");
+          });
       };
 
       // Set auto-save interval for 5 minutes
@@ -1742,7 +1532,7 @@ define(
                 }
 
                 Data
-                  .saveNew(activitydb, $scope.activities[index])
+                  .saveNewCouchDoc(activitydb, $scope.activities[index])
                   .then(
                     function(response) {
                       console.log("Saved new activity");
@@ -2406,7 +2196,7 @@ define(
             delete originalDoc.attachmentInfo;
           }
           // console.log(originalDoc.audioVideo);
-          Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
+          Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
             console.log("Successfully uploaded attachment.");
 
             
@@ -2454,7 +2244,7 @@ define(
               delete originalRecord.attachmentInfo;
             }
             // console.log(originalRecord);
-            Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
+            Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
               console.log("Saved attachment as trashed.");
 
               var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
@@ -2482,7 +2272,7 @@ define(
               //       delete record.attachmentInfo[key];
               //     }
               //   }
-              //   Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
+              //   Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
               //     if (datum.audioVideo.length === 0) {
               //       datum.hasAudio = false;
               //     }

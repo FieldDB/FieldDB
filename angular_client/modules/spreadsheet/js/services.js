@@ -314,7 +314,7 @@ define(
                   });
               return promise;
             },
-            'saveNew': function(DB, newRecord) {
+            'saveNewCouchDoc': function(DB, newRecord) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
                 window.location.assign("#/corpora_list");
@@ -333,7 +333,7 @@ define(
               });
               return promise;
             },
-            'saveEditedRecord': function(DB, UUID, newRecord, rev) {
+            'saveEditedCouchDoc': function(DB, UUID, newRecord, rev) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
                 window.location.assign("#/corpora_list");
@@ -359,9 +359,23 @@ define(
               });
               return promise;
             },
+            'saveSpreadsheetDatum': function(DB, spreadsheetDatum) {
+              var deffered = Q.defer();
+
+              Q.nextTick(function(){
+                spreadsheetDatum.saved = "yes";
+                deffered.resolve(spreadsheetDatum);
+              });
+
+              return deffered.promise;
+            },
             'blankDatumTemplate': function() {
               var promise = $http.get('data/blank_datum_template.json').then(
                 function(response) {
+                  /* Override default datum fields with the ones in the currently loaded corpus */
+                  if ($rootScope.DB && $rootScope.DB.datumFields) {
+                    response.data.datumFields = $rootScope.DB.datumFields;
+                  }
                   return response.data;
                 });
               return promise;

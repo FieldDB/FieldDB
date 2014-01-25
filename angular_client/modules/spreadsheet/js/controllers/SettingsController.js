@@ -70,7 +70,7 @@ define(
                       }
                       // Save edited record
                       Data
-                        .saveEditedRecord($rootScope.DB.pouchname, UUID,
+                        .saveEditedCouchDoc($rootScope.DB.pouchname, UUID,
                           editedRecord, editedRecord._rev)
                         .then(
                           function() {
