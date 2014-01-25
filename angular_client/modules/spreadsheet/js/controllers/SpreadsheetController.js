@@ -1815,6 +1815,12 @@ define(
 
 
         Data.getallusers(dataToPost).then(function(users) {
+          if (!users) {
+            console.log("User doesn't have access to roles.");
+            users = {
+              allusers: []
+            };
+          }
           for (var i in users.allusers) {
             if (users.allusers[i].username === $rootScope.userInfo.name) {
               $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
