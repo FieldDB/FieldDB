@@ -39,28 +39,28 @@ define(
         }
       ])
       .directive(
-        'selectDropdown1',
+        'selectFieldFromDefaultCompactTemplate',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.compacttemplate[attrs.selectDropdown1].label) {
+            if (scope.field.label == scope.scopePreferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
               element[0].selected = true;
             }
           };
         })
       .directive(
-        'selectDropdown2',
+        'selectFieldFromDefaultFullTemplate',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.fulltemplate[attrs.selectDropdown2].label) {
+            if (scope.field.label == scope.scopePreferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
               element[0].selected = true;
             }
           };
         })
       .directive(
-        'selectDropdown3',
+        'selectFieldFromYaleFieldMethodsSpring2014Template',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.yalefieldmethodsspring2014template[attrs.selectDropdown3].label) {
+            if (scope.field.label == scope.scopePreferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
               element[0].selected = true;
             }
           };
