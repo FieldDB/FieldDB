@@ -55,7 +55,17 @@ define(
               element[0].selected = true;
             }
           };
-        }).directive('selectDropdownSession', function() {
+        })
+      .directive(
+        'selectDropdown3',
+        function() {
+          return function(scope, element, attrs) {
+            if (scope.field.label == scope.scopePreferences.yalefieldmethodsspring2014template[attrs.selectDropdown3].label) {
+              element[0].selected = true;
+            }
+          };
+        })
+      .directive('selectDropdownSession', function() {
         return function(scope, element, attrs) {
           scope.$watch('activeSession', function() {
             if (scope.session._id == scope.activeSession) {
