@@ -46,8 +46,6 @@ define(
               templateUrl: 'partials/compacttemplate.html'
             }).when('/spreadsheet/fulltemplate', {
               templateUrl: 'partials/fulltemplate.html'
-            }).when('/spreadsheet/yalefieldmethods2014', {
-              templateUrl: 'partials/yalefieldmethods2014.html'
             }).otherwise({
               redirectTo: '/corpora_list'
             });
