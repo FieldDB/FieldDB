@@ -155,6 +155,10 @@ define(
               Preferences[template][newField].title = "";
               Preferences[template][newField].label = "";
             } else if ($scope.availableFields[availableField].label == newFieldPreferences[newField]) {
+              if(!Preferences[template]){
+                //hack for #1290 until we refactor the app into something more MVC
+                Preferences[template] = window.defaultPreferences[template];
+              }
               Preferences[template][newField].title = $scope.availableFields[availableField].title;
               Preferences[template][newField].label = $scope.availableFields[availableField].label;
             }
