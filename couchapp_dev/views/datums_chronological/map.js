@@ -7,7 +7,7 @@ function(doc) {
         var dateEntered = doc.dateEntered;
         if (dateEntered) {
             try {
-                dateEntered = dateEntered.replace(/"/g, "");
+                dateEntered = dateEntered.replace(/["\\]/g, '');
                 dateEntered = new Date(dateEntered);
                 /* Use date modified as a timestamp if it isnt one already */
                 dateEntered = dateEntered.getTime();
