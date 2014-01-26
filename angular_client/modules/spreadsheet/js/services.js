@@ -360,43 +360,43 @@ define(
 
               Q.nextTick(function() {
 
-                try {
-                  var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
+                var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
+                  try {
                     var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
-                    saveCouchDoc(fieldDBDatum.pouchname, fieldDBDatum).then(function(response){
-                      console.log(response);
-                      if (response.status >= 400) {
-                        deffered.reject("Error saving datum " + response.status);
-                        return;
-                      }
-                      if (!spreadsheetDatumToBeSaved.id) {
-                        spreadsheetDatumToBeSaved.id = response.data.id;
-                        spreadsheetDatumToBeSaved.rev = response.data.rev;
-                      }
-                      deffered.resolve(spreadsheetDatumToBeSaved);
-                    }, function(e){
-                      var reason = "Error saving datum. Maybe you're offline?";
-                      if (e.data && e.data.reason) {
-                        reason = e.data.reason;
-                      } else if (e.status) {
-                        reason = "Error saving datum: " + e.status;
-                      }
-                      console.log(reason, fieldDBDatum, e);
-                      deffered.reject(reason);
-                    });
-                  };
-
-                  if (spreadsheetDatumToBeSaved.id) {
-                    getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum);
-                  } else {
-                    getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
+                  } catch (e) {
+                    deffered.reject("Error saving datum: " + JSON.stringify(e));
+                    return;
                   }
+                  saveCouchDoc(fieldDBDatum.pouchname, fieldDBDatum).then(function(response) {
+                    console.log(response);
+                    if (response.status >= 400) {
+                      deffered.reject("Error saving datum " + response.status);
+                      return;
+                    }
+                    if (!spreadsheetDatumToBeSaved.id) {
+                      spreadsheetDatumToBeSaved.id = response.data.id;
+                      spreadsheetDatumToBeSaved.rev = response.data.rev;
+                    }
+                    deffered.resolve(spreadsheetDatumToBeSaved);
+                  }, function(e) {
+                    var reason = "Error saving datum. Maybe you're offline?";
+                    if (e.data && e.data.reason) {
+                      reason = e.data.reason;
+                    } else if (e.status) {
+                      reason = "Error saving datum: " + e.status;
+                    }
+                    console.log(reason, fieldDBDatum, e);
+                    deffered.reject(reason);
+                  });
+                };
 
-                } catch(e) {
-                  deffered.reject("Error saving datum: "+ JSON.stringify(e));
+                if (spreadsheetDatumToBeSaved.id) {
+                  getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum);
+                } else {
+                  getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
                 }
-              });
 
+              });
               return deffered.promise;
             },
             'blankDatumTemplate': getBlankDatumTemplate,
