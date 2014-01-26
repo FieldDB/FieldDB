@@ -10,7 +10,7 @@ define(
       .module('spreadsheet_services', ['ngResource'])
       .factory(
         'Data',
-        function($http, $rootScope, $q, Servers) {
+        function($http, $rootScope, $q, Servers, md5) {
 
           var getDocFromCouchDB = function (DB, UUID) {
             if (!$rootScope.serverCode) {
@@ -164,7 +164,7 @@ define(
               });
               return promise;
             },
-            'getallusers': function(userInfo) {
+            'getallusers': function(loginInfo) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
                 window.location.assign("#/corpora_list");
@@ -173,7 +173,7 @@ define(
               var config = {
                 method: "POST",
                 url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/corpusteam",
-                data: userInfo,
+                data: loginInfo,
                 withCredentials: true
               };
 
@@ -212,7 +212,10 @@ define(
               };
 
               var userIsAuthenticated = function(user){
-                user.name = user.firstname || user.username;
+                user.name = user.firstname || user.lastname || user.username;
+                if (!user.gravatar || user.gravatar.indexOf("gravatar") > -1) {
+                  user.gravatar = md5.createHash(user.email);
+                }
                 $rootScope.user = user;
                 var promiseCorpus = $http(corpusConfig).then(
                   function(corpusResponse) {
@@ -247,14 +250,14 @@ define(
                 });
               return deferred.promise;
             },
-            'register': function(newUserInfo) {
+            'register': function(newLoginInfo) {
 
 
 
               var config = {
                 method: "POST",
-                url: newUserInfo.authUrl + "/register",
-                data: newUserInfo,
+                url: newLoginInfo.authUrl + "/register",
+                data: newLoginInfo,
                 withCredentials : true
               };
               var promise = $http(config).then(
@@ -391,7 +394,19 @@ define(
                 };
 
                 if (spreadsheetDatumToBeSaved.id) {
-                  getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum);
+                  getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
+                    var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
+                    if (e.data && e.data.reason) {
+                      if (e.data.reason == "missing") {
+                        e.data.reason = e.data.reason + " Please report this.";
+                      }
+                      reason = e.data.reason;
+                    } else if (e.status) {
+                      reason = "Error getting the most recent version of the datum: " + e.status;
+                    }
+                    console.log(reason, spreadsheetDatumToBeSaved, e);
+                    deffered.reject(reason);
+                  });
                 } else {
                   getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
                 }

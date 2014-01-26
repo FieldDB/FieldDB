@@ -565,8 +565,8 @@ define(
           $rootScope.openNotification();
         } else {
           $rootScope.clickSuccess = true;
-          $rootScope.userInfo = {
-            "name": auth.user.toLowerCase(),
+          $rootScope.loginInfo = {
+            "username": auth.user.toLowerCase(),
             "password": auth.password
           };
 
@@ -600,8 +600,8 @@ define(
               // Update saved state in Preferences
               Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
               Preferences.savedState.server = $rootScope.serverCode;
-              Preferences.savedState.username = $rootScope.userInfo.name;
-              Preferences.savedState.password = sjcl.encrypt("password", $rootScope.userInfo.password);
+              Preferences.savedState.username = $rootScope.user.username;
+              Preferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
               localStorage.setItem('SpreadsheetPreferences', JSON
                 .stringify(Preferences));
 
@@ -942,12 +942,12 @@ define(
                 .stringify(new Date()));
               newSessionRecord.dateModified = JSON.parse(JSON
                 .stringify(new Date()));
-              newSessionRecord.lastModifiedBy = $rootScope.userInfo.name;
+              newSessionRecord.lastModifiedBy = $rootScope.user.username;
               for (var key in newSession) {
                 for (var i in newSessionRecord.sessionFields) {
                   if (newSessionRecord.sessionFields[i].label === "user") {
-                    newSessionRecord.sessionFields[i].value = $rootScope.userInfo.name;
-                    newSessionRecord.sessionFields[i].mask = $rootScope.userInfo.name;
+                    newSessionRecord.sessionFields[i].value = $rootScope.user.username;
+                    newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
                   }
                   if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
                     newSessionRecord.sessionFields[i].value = new Date()
@@ -1121,9 +1121,9 @@ define(
         if (fieldData.comments) {
           var comment = {};
           comment.text = fieldData.comments;
-          comment.username = $rootScope.userInfo.name;
+          comment.username = $rootScope.user.username;
           comment.timestamp = Date.now();
-          comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
+          comment.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
           comment.timestampModified = Date.now();
           fieldData.comments = [];
           fieldData.comments.push(comment);
@@ -1131,13 +1131,13 @@ define(
 
         fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
         fieldData.enteredByUser = {
-          "username": $rootScope.userInfo.name,
-          "gravatar": $rootScope.userInfo.gravatar
+          "username": $rootScope.user.username,
+          "gravatar": $rootScope.user.gravatar
         };
 
         fieldData.timestamp = Date.now();
         // fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
-        // fieldData.lastModifiedBy = $rootScope.userInfo.name;
+        // fieldData.lastModifiedBy = $rootScope.user.username;
         fieldData.sessionID = $scope.activeSession;
         fieldData.saved = "no";
         if (fieldData.audioVideo) {
@@ -1177,8 +1177,8 @@ define(
         }
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
         var modifiedByUser = {};
-        modifiedByUser.username = $rootScope.userInfo.name;
-        modifiedByUser.gravatar = $rootScope.userInfo.gravatar;
+        modifiedByUser.username = $rootScope.user.username;
+        modifiedByUser.gravatar = $rootScope.user.gravatar;
         if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
           datum.modifiedByUser = {};
           datum.modifiedByUser.users = [];
@@ -1227,9 +1227,9 @@ define(
         }
         var comment = {};
         comment.text = newComment;
-        comment.username = $rootScope.userInfo.name;
+        comment.username = $rootScope.user.username;
         comment.timestamp = Date.now();
-        comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
+        comment.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
         comment.timestampModified = Date.now();
         if (!datum.comments) {
           datum.comments = [];
@@ -1238,7 +1238,7 @@ define(
         datum.saved = "no";
         $scope.saved = "no";
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
-        datum.lastModifiedBy = $rootScope.userInfo.name;
+        datum.lastModifiedBy = $rootScope.user.username;
         // $rootScope.currentPage = 0;
         // $rootScope.editsHaveBeenMade = true;
 
@@ -1268,7 +1268,7 @@ define(
           $rootScope.openNotification();
           return;
         }
-        if (comment.username != $rootScope.userInfo.name) {
+        if (comment.username != $rootScope.user.username) {
           $rootScope.notificationMessage = "You may only delete comments created by you.";
           $rootScope.openNotification();
           return;
@@ -1350,7 +1350,9 @@ define(
               $scope.saved = "no";
               window.alert("There was an error saving one or more records. Please try again.");
             } else {
-              $scope.saved = "yes";
+              if($scope.saved === "saving"){
+                $scope.saved = "yes";
+              }
             }
           });
       };
@@ -1362,9 +1364,9 @@ define(
             $scope.saveChanges();
           } else {
             // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
-            // if ($rootScope.userInfo) {
-            //   Data.login($rootScope.userInfo.name,
-            //     $rootScope.userInfo.password);
+            // if ($rootScope.loginInfo) {
+            //   Data.login($rootScope.user.username,
+            //     $rootScope.loginInfo.password);
             // }
           }
         }, 300000);
@@ -1513,10 +1515,10 @@ define(
               template.directobject = bareActivityObject.directobject;
               template.indirectobject = bareActivityObject.indirectobject;
               template.teamOrPersonal = bareActivityObject.teamOrPersonal;
-              template.user.username = $rootScope.userInfo.name;
-              template.user.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
-              template.user.id = $rootScope.userInfo.name;
-              template.user._id = $rootScope.userInfo.name;
+              template.user.username = $rootScope.user.username;
+              template.user.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
+              template.user.id = $rootScope.user.username;
+              template.user._id = $rootScope.user.username;
               template.dateModified = JSON.parse(JSON.stringify(new Date()));
               template.timestamp = Date.now();
 
@@ -1539,7 +1541,7 @@ define(
                 if ($scope.activities[index].teamOrPersonal === "team") {
                   activitydb = $rootScope.DB.pouchname + "-activity_feed";
                 } else {
-                  activitydb = $rootScope.userInfo.name + "-activity_feed";
+                  activitydb = $rootScope.user.username + "-activity_feed";
                 }
 
                 Data
@@ -1561,11 +1563,11 @@ define(
         }
       };
 
-      $scope.registerNewUser = function(newUserInfo) {
-        if (!newUserInfo.serverCode) {
-          newUserInfo.serverCode = $rootScope.servers[0].label;
+      $scope.registerNewUser = function(newLoginInfo) {
+        if (!newLoginInfo.serverCode) {
+          newLoginInfo.serverCode = $rootScope.servers[0].label;
         }
-        if (!newUserInfo || !newUserInfo.serverCode) {
+        if (!newLoginInfo || !newLoginInfo.serverCode) {
           $rootScope.notificationMessage = "Please select a server.";
           $rootScope.openNotification();
           return;
@@ -1573,24 +1575,24 @@ define(
         $rootScope.loading = true;
 
         // Clean username and tell user about it
-        var safeUsernameForCouchDB = newUserInfo.username.trim().toLowerCase().replace(/[^0-9a-z]/g,"");
-        if(safeUsernameForCouchDB !== newUserInfo.username){
+        var safeUsernameForCouchDB = newLoginInfo.username.trim().toLowerCase().replace(/[^0-9a-z]/g,"");
+        if(safeUsernameForCouchDB !== newLoginInfo.username){
           $rootScope.loading = false;
-          newUserInfo.username = safeUsernameForCouchDB;
+          newLoginInfo.username = safeUsernameForCouchDB;
           $rootScope.notificationMessage = "We have automatically changed your requested username to '"+safeUsernameForCouchDB+ "' instead \n(the username you have chosen isn't very safe for urls, which means your corpora would be potentially inaccessible in old browsers)";
           $rootScope.openNotification();
           return;
         }
         var dataToPost = {};
-        dataToPost.email = newUserInfo.email ? newUserInfo.email.trim().split(" ")[0] : "";
-        dataToPost.username = newUserInfo.username.trim().toLowerCase();
-        dataToPost.password = newUserInfo.password.trim();
-        dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
+        dataToPost.email = newLoginInfo.email ? newLoginInfo.email.trim().split(" ")[0] : "";
+        dataToPost.username = newLoginInfo.username.trim().toLowerCase();
+        dataToPost.password = newLoginInfo.password.trim();
+        dataToPost.authUrl = Servers.getServiceUrl(newLoginInfo.serverCode, "auth");
         dataToPost.appVersionWhenCreated = $rootScope.appVersion;
 
-        dataToPost.serverCode = newUserInfo.serverCode;
+        dataToPost.serverCode = newLoginInfo.serverCode;
 
-        if (dataToPost.username !== "" && (dataToPost.password === newUserInfo.confirmPassword.trim()) ) {
+        if (dataToPost.username !== "" && (dataToPost.password === newLoginInfo.confirmPassword.trim()) ) {
           // Create user
           Data.register(dataToPost).then(function(response) {
             $rootScope.loading = false;
@@ -1613,8 +1615,8 @@ define(
 
         $rootScope.loading = true;
         var dataToPost = {};
-        dataToPost.username = $rootScope.userInfo.name.trim();
-        dataToPost.password = $rootScope.userInfo.password.trim();
+        dataToPost.username = $rootScope.user.username.trim();
+        dataToPost.password = $rootScope.loginInfo.password.trim();
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1654,8 +1656,8 @@ define(
 
         var dataToPost = {};
 
-        dataToPost.username = $rootScope.userInfo.name;
-        dataToPost.password = $rootScope.userInfo.password;
+        dataToPost.username = $rootScope.loginInfo.username;
+        dataToPost.password = $rootScope.loginInfo.password;
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
         dataToPost.pouchname = $rootScope.DB.pouchname;
@@ -1668,16 +1670,16 @@ define(
               allusers: []
             };
           }
-          for (var i in users.allusers) {
-            if (users.allusers[i].username === $rootScope.userInfo.name) {
-              $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
-            }
-          }
+          // for (var i in users.allusers) {
+          //   if (users.allusers[i].username === $rootScope.loginInfo.username) {
+          //     $rootScope.user.gravatar = users.allusers[i].gravatar;
+          //   }
+          // }
 
           $scope.users = users;
 
           // Get privileges for logged in user
-          Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
+          Data.async("_users", "org.couchdb.user:" + $rootScope.user.username)
             .then(
               function(response) {
                 if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
@@ -1758,8 +1760,8 @@ define(
         newUserRoles.pouchname = $rootScope.DB.pouchname;
 
         var dataToPost = {};
-        dataToPost.username = $rootScope.userInfo.name.trim();
-        dataToPost.password = $rootScope.userInfo.password.trim();
+        dataToPost.username = $rootScope.user.username.trim();
+        dataToPost.password = $rootScope.loginInfo.password.trim();
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1796,7 +1798,7 @@ define(
         // Prevent an admin from removing him/herself from a corpus; This
         // helps to avoid a situation in which there is no admin for a
         // corpus
-        if (userid === $rootScope.userInfo.name) {
+        if (userid === $rootScope.user.username) {
           window
             .alert("You cannot remove yourself from a corpus.\nOnly another Admin can remove you.");
           return;
@@ -1806,8 +1808,8 @@ define(
         if (r === true) {
 
           var dataToPost = {};
-          dataToPost.username = $rootScope.userInfo.name.trim();
-          dataToPost.password = $rootScope.userInfo.password.trim();
+          dataToPost.username = $rootScope.user.username.trim();
+          dataToPost.password = $rootScope.loginInfo.password.trim();
           dataToPost.serverCode = $rootScope.serverCode;
           dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -2385,7 +2387,7 @@ define(
           $rootScope.openNotification();
         }
 
-        $scope.resetPasswordInfo.username = $rootScope.userInfo.name,
+        $scope.resetPasswordInfo.username = $rootScope.user.username,
         Data.changePassword($scope.resetPasswordInfo).then(function(result){
           // console.log(result);
           Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
