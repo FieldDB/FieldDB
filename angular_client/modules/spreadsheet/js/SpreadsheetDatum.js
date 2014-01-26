@@ -17,6 +17,9 @@ define([], function() {
         spreadsheetDatum.modifiedByUser = {
           users: fieldDBDatum.datumFields[j].users
         };
+      } else if (fieldDBDatum.datumFields[j].label === "comments") {
+        // if their corpus has comments datum field, dont overwrite the comments with it ... 
+        console.log("This datum had a comments datum field... :( ", fieldDBDatum.datumFields[j], fieldDBDatum.comments);
       } else {
         spreadsheetDatum[fieldDBDatum.datumFields[j].label] = fieldDBDatum.datumFields[j].mask;
       }
@@ -116,6 +119,12 @@ define([], function() {
             fieldDBDatum.datumFields[i].mask = spreadsheetDatum.enteredByUser.username;
             fieldDBDatum.datumFields[i].value = spreadsheetDatum.enteredByUser.username;
             fieldDBDatum.datumFields[i].readonly = true;
+          } else if (key === "comments") {
+            //dont put the comments into the comments datum field if their corpus has one... 
+            if (typeof fieldDBDatum.datumFields[i].value != "string") {
+              fieldDBDatum.datumFields[i].value = "";
+              fieldDBDatum.datumFields[i].mask = "";
+            }
           } else {
             fieldDBDatum.datumFields[i].value = spreadsheetDatum[key];
             fieldDBDatum.datumFields[i].mask = spreadsheetDatum[key];
