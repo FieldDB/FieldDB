@@ -34,6 +34,7 @@
 		<!-- Full TEMPLATE -->
 		<h3>
 			<span ng-show="template=='fulltemplate'"><b>✓</b></span> Full Template
+			<small ng-show="DB.preferredTemplate == 'fulltemplate'">Default template for {{DB.title}}</small>
 		</h3>
 		<div class="row settingsTemplate">
 			<div class="span5">
@@ -78,7 +79,9 @@
 		<br />
 		<button class="btn btn-primary"
 			ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2)">Save/Activate
-			Full Template</button>
+			Full Template</button> 
+		<button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'fulltemplate'}"
+			ng-click="setAsDefaultCorpusTemplate('fulltemplate')">Set as default template for {{DB.title}}</button>
 		<!-- End Full TEMPLATE -->
 
 		<center>
@@ -87,8 +90,8 @@
 
 		<!-- Compact TEMPLATE 1 -->
 		<h3>
-			<span ng-show="template=='compacttemplate'"><b>✓</b></span> Compact
-			Template
+			<span ng-show="template=='compacttemplate'"><b>✓</b></span> Compact Template
+			<small ng-show="DB.preferredTemplate == 'compacttemplate'">Default template for {{DB.title}}</small>
 		</h3>
 		<div class="row settingsTemplate">
 			<div class="span3">
@@ -124,6 +127,8 @@
 		<button class="btn btn-primary"
 			ng-click="saveNewPreferences('compacttemplate', newFieldPreferences1)">Save/Activate
 			Compact Template</button>
+		<button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'compacttemplate'}"
+			ng-click="setAsDefaultCorpusTemplate('compacttemplate')">Set as default template for {{DB.title}}</button>
 		<!-- End Compact TEMPLATE 1 -->
 
 		<center>
@@ -133,42 +138,43 @@
 		<!-- Yale Field Methods TEMPLATE 3 -->
 		<h3>
 			<span ng-show="template=='yalefieldmethodsspring2014template'"><b>✓</b></span> Yale Field Methods Template
+			<small ng-show="DB.preferredTemplate == 'yalefieldmethodsspring2014template'">Default template for {{DB.title}}</small>
 		</h3>
 		<div class="row settingsTemplate">
 			<div class="span5">
-				<select class="span5" ng-model="newFieldPreferences3.field1">
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field1">
 					<option value="">Empty</option>
 					<option select-field-from-yale-field-methods-spring-2014-template="field1"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
-				<select class="span5" ng-model="newFieldPreferences3.field2">
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field2">
 					<option value="">Empty</option>
 					<option select-field-from-yale-field-methods-spring-2014-template="field2"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
-				<select class="span5" ng-model="newFieldPreferences3.field3">
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field3">
 					<option value="">Empty</option>
 					<option select-field-from-yale-field-methods-spring-2014-template="field3"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
-				<select class="span5" ng-model="newFieldPreferences3.field4">
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field4">
 					<option value="">Empty</option>
 					<option select-field-from-yale-field-methods-spring-2014-template="field4"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
 			</div>
 			<div class="span5">
-				<select class="span5" ng-model="newFieldPreferences3.field5">
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field5">
 					<option value="">Empty</option>
 					<option select-field-from-yale-field-methods-spring-2014-template="field5"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
-				<select class="span5" ng-model="newFieldPreferences3.field6">
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field6">
 					<option value="">Empty</option>
 					<option select-field-from-yale-field-methods-spring-2014-template="field6"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
-				<select class="span5" ng-model="newFieldPreferences3.field7">
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field7">
 					<option value="">Empty</option>
 					<option select-field-from-yale-field-methods-spring-2014-template="field7"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
@@ -187,6 +193,8 @@
 		<button class="btn btn-primary"
 			ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">Save/Activate
 			Yale Field Methods Template</button>
+		<button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'yalefieldmethodsspring2014template'}"
+			ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">Set as default template for {{DB.title}}</button>
 		<!-- End Yale Field Methods TEMPLATE -->
 
 	</div>

@@ -109,10 +109,10 @@ define(
             "label": "translation",
             "title": "Translation"
           },
-          "comments": {
-            "label": "comments",
-            "title": "Comments"
-          },
+          // "comments": {
+          //   "label": "comments",
+          //   "title": "Comments"
+          // },
           "refs": {
             "label": "refs",
             "title": "References"
@@ -232,32 +232,32 @@ define(
         },
         "yalefieldmethodsspring2014template": {
           "field1": {
+            "label": "orthography",
+            "title": "Orthography"
+          },
+          "field2": {
             "label": "utterance",
             "title": "Utterance"
           },
-          "field2": {
+          "field3": {
             "label": "morphemes",
             "title": "Morphemes"
           },
-          "field3": {
+          "field4": {
             "label": "gloss",
             "title": "Gloss"
           },
-          "field4": {
+          "field5": {
             "label": "translation",
             "title": "Translation"
           },
-          "field5": {
-            "label": "comments",
-            "title": "Comments"
-          },
           "field6": {
-            "label": "judgement",
-            "title": "Judgement"
+            "label": "spanish",
+            "title": "Spanish"
           },
           "field7": {
-            "label": "",
-            "title": ""
+            "label": "housekeeping",
+            "title": "Housekeeping"
           },
           "field8": {
             "label": "",
@@ -644,6 +644,14 @@ define(
                       // If this is the corpus the user is looking at, update to the latest corpus details from the database.
                       if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
                         $rootScope.DB = corpus;
+                        // If the currently choosen corpus has a default template, overwrite the user's preferences
+                        if (corpus.preferredTemplate) {
+                          var fieldsForTemplate = {};
+                          if (window.defaultPreferences[corpus.preferredTemplate]) {
+                            fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
+                          }
+                          $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
+                        }
                       }
                       corpus.gravatar = md5.createHash(corpus.pouchname);
                       $scope.corpora.push(corpus);
@@ -685,13 +693,49 @@ define(
           }
           $rootScope.DB = selectedDB;
 
+
           // Update saved state in Preferences
           Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
           Preferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(Preferences));
+          
+          // If the currently choosen corpus has a default template, overwrite the user's preferences
+          if (selectedDB.preferredTemplate) {
+            var fieldsForTemplate = {};
+            if (window.defaultPreferences[selectedDB.preferredTemplate]) {
+              fieldsForTemplate = window.defaultPreferences[selectedDB.preferredTemplate];
+            }
+            $rootScope.overrideTemplateSetting(selectedDB.preferredTemplate, fieldsForTemplate, true);
+          }
+
 
           $scope.loadSessions();
+        }
+      };
+
+      $rootScope.overrideTemplateSetting = function(template, newFieldPreferences, notUserInitited){
+        $rootScope.template = template;
+        $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
+      };
+
+      $rootScope.setAsDefaultCorpusTemplate = function(templateName){
+        console.log(templateName);
+        if (!$rootScope.admin) {
+          alert("You're not an admin on this corpus, please ask an admin to set this template as default for you.");
+          return;
+        }
+        if ($rootScope.DB.description) {
+          $rootScope.DB.preferredTemplate = templateName;
+          Data.saveCouchDoc($rootScope.DB.pouchname, $rootScope.DB)
+          .then(function(result){
+            console.log("Saved corpus template preferences ", result);
+          }, function(reason){
+            console.log("Error saving corpus template.", reason);
+            alert("Error saving corpus template.");
+          });
+        } else {
+          alert("The corpus doc was never fetched. So I cant save the preferences... Please report this if you think you should be able to save the preferences.");
         }
       };
 
