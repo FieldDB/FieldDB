@@ -780,7 +780,7 @@ define(
           }
           // Save session record
           Data
-            .saveEditedCouchDoc($rootScope.DB.pouchname, newSession._id, newSession)
+            .saveCouchDoc($rootScope.DB.pouchname, newSession)
             .then(
               function() {
                 var directobject =  $scope.currentSessionName || "an elicitation session";
@@ -815,14 +815,9 @@ define(
                             // and save
 
                             editedRecord.session = newSession;
-                            Data.saveEditedCouchDoc(
-                              $rootScope.DB.pouchname,
-                              scopeDataToEdit[index].id,
-                              editedRecord, editedRecord._rev)
-                              .then(function() {
+                            Data.saveCouchDoc($rootScope.DB.pouchname, editedRecord).then(function() {
                                 $rootScope.loading = false;
                               });
-
                           },
                           function() {
                             window
@@ -850,7 +845,7 @@ define(
                 function(sessionToMarkAsDeleted) {
                   sessionToMarkAsDeleted.trashed = "deleted";
                   var rev = sessionToMarkAsDeleted._rev;
-                  Data.saveEditedCouchDoc($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
+                  Data.saveCouchDoc($rootScope.DB.pouchname, sessionToMarkAsDeleted).then(function(response) {
                     
                     var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
@@ -919,7 +914,7 @@ define(
                 }
               }
               Data
-                .saveNewCouchDoc($rootScope.DB.pouchname, newSessionRecord)
+                .saveCouchDoc($rootScope.DB.pouchname, newSessionRecord)
                 .then(
                   function(savedRecord) {
 
@@ -996,7 +991,7 @@ define(
                   if(recordToMarkAsDeleted.attachmentInfo){
                     delete recordToMarkAsDeleted.attachmentInfo;
                   }
-                  Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
+                  Data.saveCouchDoc($rootScope.DB.pouchname, recordToMarkAsDeleted).then(function(response) {
                     // Remove record from scope
 
                     var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
@@ -1455,7 +1450,7 @@ define(
                 }
 
                 Data
-                  .saveNewCouchDoc(activitydb, $scope.activities[index])
+                  .saveCouchDoc(activitydb, $scope.activities[index])
                   .then(
                     function(response) {
                       console.log("Saved new activity");
@@ -2119,7 +2114,7 @@ define(
             delete originalDoc.attachmentInfo;
           }
           // console.log(originalDoc.audioVideo);
-          Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
+          Data.saveCouchDoc($rootScope.DB.pouchname, originalDoc).then(function(response) {
             console.log("Successfully uploaded attachment.");
 
             
@@ -2167,7 +2162,7 @@ define(
               delete originalRecord.attachmentInfo;
             }
             // console.log(originalRecord);
-            Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
+            Data.saveCouchDoc($rootScope.DB.pouchname, originalRecord).then(function(response) {
               console.log("Saved attachment as trashed.");
 
               var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
@@ -2195,7 +2190,7 @@ define(
               //       delete record.attachmentInfo[key];
               //     }
               //   }
-              //   Data.saveEditedCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
+              //   Data.saveCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
               //     if (datum.audioVideo.length === 0) {
               //       datum.hasAudio = false;
               //     }
