@@ -36,10 +36,10 @@ define(
             } else {
               config = {
                 method: "GET",
-                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_cronological",
                 withCredentials: true
               };
-              console.log("Contacting the DB to get all   corpus data for " + DB);
+              console.log("Contacting the DB to get all corpus data for " + DB);
               promise = $http(config).then(function(response) {
                 console.log("Receiving data results ");
                 return response.data.rows;
