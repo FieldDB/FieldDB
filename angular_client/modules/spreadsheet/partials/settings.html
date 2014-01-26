@@ -179,8 +179,13 @@
 					<option select-field-from-yale-field-methods-spring-2014-template="field7"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
-				<input class="span5" type="text" disabled="disabled"
-					placeholder="Tags"></textarea>
+				<select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field8">
+					<option value="">Empty</option>
+					<option select-field-from-yale-field-methods-spring-2014-template="field8"
+						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
+				</select>
+				<!-- <input class="span5" type="text" disabled="disabled"
+					placeholder="Tags"></textarea> -->
 				<!-- <span class="span4" rows="3">Comments</span> -->
 
 			</div>
