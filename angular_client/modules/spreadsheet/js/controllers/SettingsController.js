@@ -147,6 +147,11 @@ define(
       // $scope.getTags();
 
       $scope.saveNewPreferences = function(template, newFieldPreferences) {
+        if ($rootScope.DB  && $rootScope.DB.preferredTemplate !== template) {
+          window.alert("Sorry, you can't use a different template. Your team has decided to use the "+ $rootScope.DB.preferredTemplate + " for "+$rootScope.DB.title);
+          return;
+        }
+
         var prefs = localStorage.getItem('SpreadsheetPreferences');
         var Preferences = JSON.parse(prefs || "{}");
         for (var availableField in $scope.availableFields) {
