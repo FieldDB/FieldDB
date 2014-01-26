@@ -93,7 +93,7 @@
             <tr>  
               <td>User:
               </td>  
-              <td>{{userInfo.name}}
+              <td>{{user.name}}
               </td>  
             </tr>  
             <tr>  
@@ -158,7 +158,7 @@
         </table>  &nbsp;
         <img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">  
       </div>  
-      <div ng-show="DBselected==true">  Logged in as {{userInfo.name}}
+      <div ng-show="DBselected==true">  Logged in as {{user.name}}
         <br />
         <i class="fa fa-cloud">
         </i> Selected corpus: {{DB.title}}
