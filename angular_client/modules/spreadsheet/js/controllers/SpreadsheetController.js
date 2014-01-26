@@ -1241,24 +1241,69 @@ define(
         for (var index in $scope.allData) {
           console.log(index);
           if ($scope.allData.hasOwnProperty(index)) {
-            if ($scope.allData[index].saved && $scope.allData[index].saved === "no") {
-              $scope.saved = "saving";
-              var recordToBeSaved = $scope.allData[index];
-              recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
-              recordToBeSaved.pouchname = $rootScope.DB.pouchname;
-              recordToBeSaved.timestamp = Date.now();
-              saveDatumPromises.push(Data.saveSpreadsheetDatum($rootScope.DB.pouchname, recordToBeSaved));
-            }
+            (function(recordToBeSaved){
+              var recordToBeSaved,
+                promiseToSaveThisDatum;
+
+              var utterance = "Datum";
+              if (recordToBeSaved.utterance && recordToBeSaved.utterance !== "") {
+                utterance = recordToBeSaved.utterance;
+              }
+
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+              var activities = [{
+                  verb: "added",
+                  verbicon: "icon-plus",
+                  directobjecticon: "icon-list",
+                  indirectobject: indirectObjectString,
+                  teamOrPersonal: "personal"
+                }, {
+                  verb: "added",
+                  verbicon: "icon-plus",
+                  directobjecticon: "icon-list",
+                  indirectobject: indirectObjectString,
+                  teamOrPersonal: "team"
+                }];
+
+              if (recordToBeSaved.id) {
+                activities[0].verb = "modified";
+                activities[0].verbicon = "icon-pencil";
+                activities[1].verb = "modified";
+                activities[1].verbicon = "icon-pencil";
+              }
+
+              if (recordToBeSaved.saved && recordToBeSaved.saved === "no") {
+                $scope.saved = "saving";
+                recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
+                recordToBeSaved.pouchname = $rootScope.DB.pouchname;
+                recordToBeSaved.timestamp = Date.now();
+                promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
+                saveDatumPromises.push(promiseToSaveThisDatum);
+
+                promiseToSaveThisDatum.then(function(spreadSheetDatum) {
+                  spreadSheetDatum.saved = "yes";
+                  activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utterance + "</a> ";
+                  $scope.addActivity(activities, "uploadnow");
+                }, function(reason){
+                  console.log(reason);
+                  $scope.saved = "no";
+                  window.alert("There was an error saving a record. " + reason);
+                });
+
+              }
+
+            })($scope.allData[index]);
           }
         } 
-        Q.allSettled(saveDatumPromises).then(
-          function(response) {
-            $scope.saved = "yes";
-          },
-          function(reason) {
-            console.log(reason);
-            $scope.saved = "no";
-            window.alert("There was an error saving a record. Please try again.");
+        Q.allSettled(saveDatumPromises)
+          .done(function(success, reason) {
+            if (reason) {
+              console.log(reason);
+              $scope.saved = "no";
+              window.alert("There was an error saving one or more records. Please try again.");
+            } else {
+              $scope.saved = "yes";
+            }
           });
       };
 

@@ -355,7 +355,7 @@ define(
               return promise;
             },
             'saveCouchDoc': saveCouchDoc,
-            'saveSpreadsheetDatum': function(DBname, spreadsheetDatumToBeSaved) {
+            'saveSpreadsheetDatum': function(spreadsheetDatumToBeSaved) {
               var deffered = Q.defer();
 
               Q.nextTick(function() {
@@ -363,18 +363,37 @@ define(
                 try {
                   var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
                     var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
-                    /* TODO save fieldDBDatum */
-
-                    spreadsheetDatumToBeSaved.saved = "yes";
-                    deffered.resolve(spreadsheetDatumToBeSaved);
+                    saveCouchDoc(fieldDBDatum.pouchname, fieldDBDatum).then(function(response){
+                      console.log(response);
+                      if (response.status >= 400) {
+                        deffered.reject("Error saving datum " + response.status);
+                        return;
+                      }
+                      if (!spreadsheetDatumToBeSaved.id) {
+                        spreadsheetDatumToBeSaved.id = response.data.id;
+                        spreadsheetDatumToBeSaved.rev = response.data.rev;
+                      }
+                      deffered.resolve(spreadsheetDatumToBeSaved);
+                    }, function(e){
+                      var reason = "Error saving datum. Maybe you're offline?";
+                      if (e.data && e.data.reason) {
+                        reason = e.data.reason;
+                      } else if (e.status) {
+                        reason = "Error saving datum: " + e.status;
+                      }
+                      console.log(reason, fieldDBDatum, e);
+                      deffered.reject(reason);
+                    });
                   };
+
                   if (spreadsheetDatumToBeSaved.id) {
-                    getDocFromCouchDB(DBname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum);
+                    getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum);
                   } else {
                     getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
                   }
+
                 } catch(e) {
-                  deffered.reject(e);
+                  deffered.reject("Error saving datum: "+ JSON.stringify(e));
                 }
               });
 
