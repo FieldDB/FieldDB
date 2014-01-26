@@ -110,10 +110,12 @@ define([], function() {
             fieldDBDatum.datumFields[i].users = spreadsheetDatum.modifiedByUser.users;
             // fieldDBDatum.datumFields[i].mask = spreadsheetDatum.modifiedByUser.users; /TODO 
             // fieldDBDatum.datumFields[i].value = spreadsheetDatum.modifiedByUser.users; /TODO 
+            fieldDBDatum.datumFields[i].readonly = true;
           } else if (key === "enteredByUser") {
             fieldDBDatum.datumFields[i].user = spreadsheetDatum.enteredByUser;
             fieldDBDatum.datumFields[i].mask = spreadsheetDatum.enteredByUser.username;
             fieldDBDatum.datumFields[i].value = spreadsheetDatum.enteredByUser.username;
+            fieldDBDatum.datumFields[i].readonly = true;
           } else {
             fieldDBDatum.datumFields[i].value = spreadsheetDatum[key];
             fieldDBDatum.datumFields[i].mask = spreadsheetDatum[key];
