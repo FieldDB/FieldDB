@@ -36,7 +36,7 @@ define(
             } else {
               config = {
                 method: "GET",
-                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_cronological",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_chronological",
                 withCredentials: true
               };
               console.log("Contacting the DB to get all corpus data for " + DB);
