@@ -95,7 +95,7 @@
 
 <div arrow-key class="row relativePosition"
 	ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}"
-	ng-repeat="datum in data | orderBy:orderProp:reverse"
+	ng-repeat="datum in data | orderBy:orderProp"
 	ng-click="selectRow($index)" ng-hide="loading==true || writeOnly==true">
 
 	<!-- Show when editing -->

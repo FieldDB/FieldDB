@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.91.4ss";
+      $rootScope.appVersion = "1.92.0ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -466,13 +466,17 @@ define(
                   }
                 }
               }
-              scopeData.sort(function(a, b) {
-                if (a[$scope.orderProp] > b[$scope.orderProp])
-                  return -1;
-                if (a[$scope.orderProp] < b[$scope.orderProp])
-                  return 1;
-                return 0;
-              });
+
+              // TODO dont sort the data here, its being sorted by the templates too...?
+              // scopeData.sort(function(a, b) {
+              //   // return a[$scope.orderProp] - b[$scope.orderProp];
+
+              //   if (a[$scope.orderProp] > b[$scope.orderProp])
+              //     return -1;
+              //   if (a[$scope.orderProp] < b[$scope.orderProp])
+              //     return 1;
+              //   return 0;
+              // });
 
               $scope.allData = scopeData;
               $scope.data = scopeData.slice(0, $rootScope.resultSize);
