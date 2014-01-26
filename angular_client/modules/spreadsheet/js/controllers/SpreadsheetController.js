@@ -1176,6 +1176,7 @@ define(
           }
         }
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
+        datum.timestamp = Date.now();
         var modifiedByUser = {};
         modifiedByUser.username = $rootScope.user.username;
         modifiedByUser.gravatar = $rootScope.user.gravatar;
@@ -1238,6 +1239,7 @@ define(
         datum.saved = "no";
         $scope.saved = "no";
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
+        datum.timestamp = Date.now();
         datum.lastModifiedBy = $rootScope.user.username;
         // $rootScope.currentPage = 0;
         // $rootScope.editsHaveBeenMade = true;

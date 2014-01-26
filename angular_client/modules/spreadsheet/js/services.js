@@ -362,7 +362,8 @@ define(
               var deffered = Q.defer();
 
               Q.nextTick(function() {
-
+                spreadsheetDatumToBeSaved.timestamp = Date.now();
+                spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date()));
                 var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
                   try {
                     var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
