@@ -9,7 +9,7 @@ function(doc) {
         // If the DatumField contains the Judgement
         if (doc.datumFields[key].label == 'judgement') {
           // If the Judgement contains a '*', don't count the words in it
-          if (doc.datumFields[i].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
+          if (doc.datumFields[key].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
             return;
           }
           break;
