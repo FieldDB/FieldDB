@@ -1,38 +1,4 @@
 
-<div arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || readOnly == true || currentPage!=0"> 
-  <div class="row"> 
-    <form ng-submit="createRecord(newFieldData)" > 
-      <div class="span5"> 
-        <div class="focus_box_div">
-          <input focus />
-        </div> 
-        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" ng-hide="fields.field1.label==''" > 
-        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" ng-hide="fields.field2.label==''" > 
-        <input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" ng-hide="fields.field3.label==''"> 
-      </div> 
-      <div class="span5"> 
-        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" ng-hide="fields.field4.label==''"> 
-        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6" placeholder="{{fields.field6.title}}" ng-hide="fields.field6.label==''"> 
-        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.datumTags" placeholder="Tags">
-      </textarea> 
-    </div> 
-    <div class="span2"> 
-      <button ng-show="selected=='newEntry'" ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false"> 
-        <i class="fa whiteicon fa-plus">
-        </i> Create New
-      </button>&nbsp;
-      <div class="expandCollapseButton">
-        <i class="fa whiteicon" ng-class="{'fa-list': !expandCollapse, 'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'">
-        </i>
-      </div>
-      <br /> 
-      <span ng-show="newFieldDatahasAudio==true">
-        <i class="fa {{recordingIcon}}">
-        </i>
-      </span> 
-    </div> 
-  </form> 
-</div> 
 <div class="row" ng-show="selected=='newEntry' && expandCollapse==true"> 
   <div class="span10"> 
     <input keypress-mark-as-new type="text" class="span10" ng-model="newFieldData.field5" placeholder="{{fields.field5.title}}" ng-hide="fields.field5.label==''"> 
@@ -375,6 +341,41 @@
       </div> 
     </div> 
   </div> 
+</div> 
+
+<div arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || readOnly == true || currentPage!=0"> 
+  <div class="row"> 
+    <form ng-submit="createRecord(newFieldData)" > 
+      <div class="span5"> 
+        <div class="focus_box_div">
+          <input focus />
+        </div> 
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" ng-hide="fields.field1.label==''" > 
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" ng-hide="fields.field2.label==''" > 
+        <input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" ng-hide="fields.field3.label==''"> 
+      </div> 
+      <div class="span5"> 
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" ng-hide="fields.field4.label==''"> 
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6" placeholder="{{fields.field6.title}}" ng-hide="fields.field6.label==''"> 
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.datumTags" placeholder="Tags">
+      </textarea> 
+    </div> 
+    <div class="span2"> 
+      <button ng-show="selected=='newEntry'" ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false"> 
+        <i class="fa whiteicon fa-plus">
+        </i> Create New
+      </button>&nbsp;
+      <div class="expandCollapseButton">
+        <i class="fa whiteicon" ng-class="{'fa-list': !expandCollapse, 'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'">
+        </i>
+      </div>
+      <br /> 
+      <span ng-show="newFieldDatahasAudio==true">
+        <i class="fa {{recordingIcon}}">
+        </i>
+      </span> 
+    </div> 
+  </form> 
 </div> 
 <br /> 
 <div class="pagination-centered page_navigation" ng-hide="loading==true || data==undefined || numberOfResultPages(allData.length)==1 || numberOfResultPages(allData.length)==0 || writeOnly==true"> 
