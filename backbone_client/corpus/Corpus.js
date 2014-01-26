@@ -320,6 +320,7 @@ define([
             shouldBeEncrypted: "",
             showToUserTypes: "all",
             readonly: true,
+            user: {},
             userchooseable: "disabled",
             help: "The user who originally entered the datum"
           }),

@@ -950,3 +950,27 @@ database.allDocs({
     }
 });
 console.log(users.join("\n"));
+
+
+// writers only previledges
+function(new_doc, old_doc, userCtx) {
+    var userCanWrite = false;
+    for (var roleIndex = 0; roleIndex < userCtx.roles.length; roleIndex++) {
+        if (userCtx.roles[roleIndex] === userCtx.db + '_writer') {
+            userCanWrite = true;
+        }
+        if (userCtx.roles[roleIndex] === 'admin') {
+            userCanWrite = true;
+        }
+        if (userCtx.roles[roleIndex] === '_admin') {
+            userCanWrite = true;
+        }
+    }
+
+    if (!userCanWrite) {
+        throw ({
+            'forbidden': 'Not Authorized, you are not a writer on ' + userCtx.db + ', you will have to ask ' + userCtx.db.replace(/-.*/, '') + ' to add you as a writer. You currently have these roles: ' + userCtx.roles
+        });
+    }
+}
+
