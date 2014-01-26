@@ -1,8 +1,8 @@
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
 
 define(
-  ["angular"],
-  function(angular) {
+  ["angular", "js/SpreadsheetDatum"],
+  function(angular, SpreadsheetDatum) {
 
     'use strict';
 
@@ -11,42 +11,57 @@ define(
       .factory(
         'Data',
         function($http, $rootScope, $q, Servers) {
-          return {
-            'async': function(DB, UUID) {
-              if (!$rootScope.serverCode) {
-                console.log("Sever code is undefined");
-                window.location.assign("#/corpora_list");
-                return;
-              }
-              var promise;
-              
-              if (UUID != undefined) {
-                var config = {
-                  method: "GET",
-                  url: Servers.getServiceUrl($rootScope.serverCode, "corpus")+ "/" + DB + "/" + UUID,
-                  withCredentials: true
-                };
 
-                console.log("Contacting the DB to get   record data " + config.url);
-                promise = $http(config).then(function(response) {
-                  console.log("Receiving data results ");
-                  return response.data;
-                });
-                return promise;
-              } else {
-                config = {
-                  method: "GET",
-                  url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums",
-                  withCredentials: true
-                };
-                console.log("Contacting the DB to get all   corpus data for " + DB);
-                promise = $http(config).then(function(response) {
-                  console.log("Receiving data results ");
-                  return response.data.rows;
-                });
-                return promise;
-              }
-            },
+          var getDocFromCouchDB = function (DB, UUID) {
+            if (!$rootScope.serverCode) {
+              console.log("Sever code is undefined");
+              window.location.assign("#/corpora_list");
+              return;
+            }
+            var promise;
+
+            if (UUID != undefined) {
+              var config = {
+                method: "GET",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,
+                withCredentials: true
+              };
+
+              console.log("Contacting the DB to get   record data " + config.url);
+              promise = $http(config).then(function(response) {
+                console.log("Receiving data results ");
+                return response.data;
+              });
+              return promise;
+            } else {
+              config = {
+                method: "GET",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums",
+                withCredentials: true
+              };
+              console.log("Contacting the DB to get all   corpus data for " + DB);
+              promise = $http(config).then(function(response) {
+                console.log("Receiving data results ");
+                return response.data.rows;
+              });
+              return promise;
+            }
+          };
+
+          var getBlankDatumTemplate = function() {
+            var promise = $http.get('data/blank_datum_template.json').then(
+              function(response) {
+                /* Override default datum fields with the ones in the currently loaded corpus */
+                if ($rootScope.DB && $rootScope.DB.datumFields) {
+                  response.data.datumFields = $rootScope.DB.datumFields;
+                }
+                return response.data;
+              });
+            return promise;
+          };
+
+          return {
+            'async': getDocFromCouchDB,
             'datumFields': function(DB) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
@@ -359,27 +374,32 @@ define(
               });
               return promise;
             },
-            'saveSpreadsheetDatum': function(DB, spreadsheetDatum) {
+            'saveSpreadsheetDatum': function(DBname, spreadsheetDatumToBeSaved) {
               var deffered = Q.defer();
 
-              Q.nextTick(function(){
-                spreadsheetDatum.saved = "yes";
-                deffered.resolve(spreadsheetDatum);
+              Q.nextTick(function() {
+
+                try {
+                  var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
+                    var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
+                    /* TODO save fieldDBDatum */
+
+                    spreadsheetDatumToBeSaved.saved = "yes";
+                    deffered.resolve(spreadsheetDatumToBeSaved);
+                  };
+                  if (spreadsheetDatumToBeSaved.id) {
+                    getDocFromCouchDB(DBname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum);
+                  } else {
+                    getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
+                  }
+                } catch(e) {
+                  deffered.reject(e);
+                }
               });
 
               return deffered.promise;
             },
-            'blankDatumTemplate': function() {
-              var promise = $http.get('data/blank_datum_template.json').then(
-                function(response) {
-                  /* Override default datum fields with the ones in the currently loaded corpus */
-                  if ($rootScope.DB && $rootScope.DB.datumFields) {
-                    response.data.datumFields = $rootScope.DB.datumFields;
-                  }
-                  return response.data;
-                });
-              return promise;
-            },
+            'blankDatumTemplate': getBlankDatumTemplate,
             'blankSessionTemplate': function() {
               var promise = $http.get('data/blank_session_template.json')
                 .then(function(response) {

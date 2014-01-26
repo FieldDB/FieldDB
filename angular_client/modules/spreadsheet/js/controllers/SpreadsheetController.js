@@ -1,8 +1,8 @@
 console.log("Loading the SpreadsheetStyleDataEntryController.");
 
 define(
-  ["angular"],
-  function(angular) {
+  ["angular", "js/SpreadsheetDatum"],
+  function(angular, SpreadsheetDatum) {
 
     'use strict';
 
@@ -455,90 +455,9 @@ define(
             function(dataFromServer) {
               var scopeData = [];
               for (var i = 0; i < dataFromServer.length; i++) {
-                // Create array of datums
                 if (dataFromServer[i].value.datumFields) {
-                  var newDatumFromServer = {};
-                  newDatumFromServer.id = dataFromServer[i].id;
-                  newDatumFromServer.rev = dataFromServer[i].value._rev;
-
-                  for (var j in dataFromServer[i].value.datumFields) {
-                    // Get enteredByUser object
-                    if (dataFromServer[i].value.datumFields[j].label === "enteredByUser") {
-                      newDatumFromServer.enteredByUser = dataFromServer[i].value.datumFields[j].user;
-                    }
-                    // Get modifiedByUser object
-                    else if (dataFromServer[i].value.datumFields[j].label === "modifiedByUser") {
-                      newDatumFromServer.modifiedByUser = {};
-                      newDatumFromServer.modifiedByUser.users = dataFromServer[i].value.datumFields[j].users;
-                    } else {
-                      newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
-                    }
-                  }
-
-                  // Grab enteredByUser for older records
-                  if (dataFromServer[i].value.enteredByUser && typeof dataFromServer[i].value.enteredByUser === "string") {
-                    newDatumFromServer.enteredByUser = {};
-                    newDatumFromServer.enteredByUser.username = dataFromServer[i].value.enteredByUser;
-                  }
-
-                  // Update users to add a dateEntered to all datums (oversight in original code; needed so that datums are ordered properly)
-                  if (!dataFromServer[i].value.dateEntered || dataFromServer[i].value.dateEntered === "" || dataFromServer[i].value.dateEntered === "N/A") {
-                    newDatumFromServer.dateEntered = "2000-09-06T16:31:30.988Z";
-                    newDatumFromServer.saved = "no";
-                  } else {
-                    newDatumFromServer.dateEntered = dataFromServer[i].value.dateEntered;
-                  }
-
-                  if (dataFromServer[i].value.dateModified) {
-                    newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
-                  }
-                  if (dataFromServer[i].value.lastModifiedBy) {
-                    newDatumFromServer.lastModifiedBy = dataFromServer[i].value.lastModifiedBy;
-                  }
-                  newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
-                  newDatumFromServer.comments = dataFromServer[i].value.comments;
-                  newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
-                  // Get attachments
-                  // console.log(dataFromServer[i].value);
-                  // upgrade to v1.90
-                  newDatumFromServer.audioVideo = dataFromServer[i].value.audioVideo || [];
-                  if (!Array.isArray(newDatumFromServer.audioVideo)) {
-                    console.log("Upgrading audioVideo to a collection", newDatumFromServer.audioVideo);
-                    var audioVideoArray = [];
-                    if (newDatumFromServer.audioVideo.URL) {
-                      var audioVideoURL = newDatumFromServer.audioVideo.URL;
-                      var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
-                      audioVideoArray.push({
-                        "filename": fileFromUrl,
-                        "description": fileFromUrl,
-                        "URL": audioVideoURL,
-                        "type": "audio"
-                      });
-                    }
-                    newDatumFromServer.audioVideo = audioVideoArray;
-                  }
-                  if(newDatumFromServer.audioVideo.length === 0){
-                    for (var key in dataFromServer[i].value._attachments) {
-                      var attachment = {
-                        "filename": key,
-                        "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + newDatumFromServer.id + "/" + key,
-                        "type": "audio"
-                      };
-                      // if in the old spot:
-                      if (dataFromServer[i].value.attachmentInfo && dataFromServer[i].value.attachmentInfo[key]) {
-                        attachment.description = dataFromServer[i].value.attachmentInfo[key].description;
-                      } else {
-                        attachment.description = "";
-                      }
-                      newDatumFromServer.audioVideo.push(attachment);
-                    }
-                  }
-                  if (newDatumFromServer.audioVideo.length > 0) {
-                    newDatumFromServer.hasAudio = true;
-                  } else{
-                    newDatumFromServer.hasAudio = false;
-                  }
-
+                  var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.DB.pouchname + "/");
+                  
                   // Load data from current session into scope
                   if (!sessionID || sessionID == "none") {
                     scopeData.push(newDatumFromServer);
@@ -1329,7 +1248,11 @@ define(
           if ($scope.allData.hasOwnProperty(index)) {
             if ($scope.allData[index].saved && $scope.allData[index].saved === "no") {
               $scope.saved = "saving";
-              saveDatumPromises.push(Data.saveSpreadsheetDatum($rootScope.DB.pouchname, $scope.allData[index]));
+              var recordToBeSaved = $scope.allData[index];
+              recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
+              recordToBeSaved.pouchname = $rootScope.DB.pouchname;
+              recordToBeSaved.timestamp = Date.now();
+              saveDatumPromises.push(Data.saveSpreadsheetDatum($rootScope.DB.pouchname, recordToBeSaved));
             }
           }
         } 
