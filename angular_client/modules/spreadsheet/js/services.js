@@ -48,6 +48,31 @@ define(
             }
           };
 
+          var saveCouchDoc = function(DB, newRecord) {
+            if (!$rootScope.serverCode) {
+              console.log("Sever code is undefined");
+              window.location.assign("#/corpora_list");
+              return;
+            }
+            var config = {
+              method: "POST",
+              url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB,
+              data: newRecord,
+              withCredentials: true
+            };
+
+            if (newRecord._rev) {
+              config.method = "PUT";
+              config.url = config.url + "/" + newRecord._id + "?rev=" + newRecord._rev
+            }
+
+            console.log("Contacting the DB to save record. " + config.url);
+            var promise = $http(config).then(function(response) {
+              return response;
+            });
+            return promise;
+          };
+
           var getBlankDatumTemplate = function() {
             var promise = $http.get('data/blank_datum_template.json').then(
               function(response) {
@@ -329,51 +354,7 @@ define(
                   });
               return promise;
             },
-            'saveNewCouchDoc': function(DB, newRecord) {
-              if (!$rootScope.serverCode) {
-                console.log("Sever code is undefined");
-                window.location.assign("#/corpora_list");
-                return;
-              }
-              var config = {
-                method: "POST",
-                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB,
-                data: newRecord,
-                withCredentials: true
-              };
-
-              console.log("Contacting the DB to save new record. " + config.url);
-              var promise = $http(config).then(function(response) {
-                return response;
-              });
-              return promise;
-            },
-            'saveEditedCouchDoc': function(DB, UUID, newRecord, rev) {
-              if (!$rootScope.serverCode) {
-                console.log("Sever code is undefined");
-                window.location.assign("#/corpora_list");
-                return;
-              }
-              var couchInfo;
-              if (rev) {
-                couchInfo = Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID + "?rev=" + rev;
-              } else {
-                couchInfo = Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID;
-              }
-
-              var config = {
-                method: "PUT",
-                url: couchInfo,
-                data: newRecord,
-                withCredentials: true
-              };
-
-              console.log("Contacting the DB to save edited record. " + couchInfo);
-              var promise = $http(config).then(function(response) {
-                return response;
-              });
-              return promise;
-            },
+            'saveCouchDoc': saveCouchDoc,
             'saveSpreadsheetDatum': function(DBname, spreadsheetDatumToBeSaved) {
               var deffered = Q.defer();
 
