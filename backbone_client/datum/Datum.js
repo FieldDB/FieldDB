@@ -232,8 +232,13 @@ define([
       var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
       for(var field in corpusFields){
         if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
-          OPrime.debug("Adding field to this datum: "+corpusFields[field].label);
-          originalModel.datumFields.push(corpusFields[field]);
+          var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
+          OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
+          corpusFieldClone.mask = "";
+          corpusFieldClone.value = "";
+          delete corpusFieldClone.user;
+          delete corpusFieldClone.users;
+          originalModel.datumFields.push(corpusFieldClone);
         }
       }
 
@@ -722,7 +727,7 @@ define([
       window.app.addActivity({
         verb: "deleted",
         verbicon: "icon-trash",
-        directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>a datum</a> ",
+        directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
         directobjecticon: "icon-list",
         indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
         teamOrPersonal: "team",
@@ -733,7 +738,7 @@ define([
       window.app.addActivity({
         verb: "deleted",
         verbicon: "icon-trash",
-        directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>a datum</a> ",
+        directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
         directobjecticon: "icon-list",
         indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
         teamOrPersonal: "personal",
