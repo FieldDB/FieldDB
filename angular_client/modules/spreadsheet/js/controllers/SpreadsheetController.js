@@ -260,8 +260,8 @@ define(
             "title": "Housekeeping"
           },
           "field8": {
-            "label": "",
-            "title": ""
+            "label": "tags",
+            "title": "Tags"
           }
         }
       };
