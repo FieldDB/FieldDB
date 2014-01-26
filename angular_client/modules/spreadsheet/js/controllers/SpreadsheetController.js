@@ -1078,7 +1078,7 @@ define(
       $scope.createRecord = function(fieldData) {
 
         // // Reset new datum form data and enable upload button; only reset audio field if present
-        if ($rootScope.template === "fulltemplate") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
           document.getElementById("form_new_datum_audio-file").reset();
           $scope.newDatumHasAudioToUpload = false;
         }
@@ -1403,7 +1403,7 @@ define(
         for (var key in $scope.fields) {
           fieldsInScope[$scope.fields[key].label] = true;
         }
-        if ($rootScope.template === "fulltemplate") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
           fieldsInScope.datumTags = true;
           fieldsInScope.comments = true;
         }
