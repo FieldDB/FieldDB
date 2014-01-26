@@ -323,6 +323,7 @@ define([
           validationStatus = oldvalidationStatus + ", " + validationStatus;
         }
       }
+      validationStatus = validationStatus.replace(" be", "Be").replace(" to", "To").replace(" checked", "Checked");
       var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
       validationFieldToclean.mask = uniqueStati.join(", ");
       validationFieldToclean.value = validationFieldToclean.mask;
