@@ -250,6 +250,7 @@ define([
           }else{
             // console.log("enteredByUser looked okay", enteredByUserField);
           }
+          enteredByUserField.readonly = true;
         }
       } catch (e) {
         console.log("there was a problem upgrading enteredByUser", e);
@@ -287,6 +288,7 @@ define([
           } else {
             // console.log("modifiedByUser was okay", modifiyersField);
           }
+          modifiyersField.readonly = true;
         }
       } catch (e) {
         console.log("there was a problem upgrading modifiedByUser", e);
