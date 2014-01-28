@@ -41,11 +41,14 @@ define([], function() {
 
     if (fieldDBDatum.dateModified) {
       spreadsheetDatum.dateModified = fieldDBDatum.dateModified;
-    }
+    } 
 
     spreadsheetDatum.datumTags = fieldDBDatum.datumTags;
     spreadsheetDatum.comments = fieldDBDatum.comments;
-    spreadsheetDatum.sessionID = fieldDBDatum.session._id;
+    if (fieldDBDatum.session) {
+      spreadsheetDatum.sessionID = fieldDBDatum.session._id;
+      spreadsheetDatum.session = fieldDBDatum.session;
+    }
 
     // upgrade to v1.90
     spreadsheetDatum.audioVideo = fieldDBDatum.audioVideo || [];
