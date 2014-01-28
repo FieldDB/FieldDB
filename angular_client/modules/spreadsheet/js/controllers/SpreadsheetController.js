@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.92.0ss";
+      $rootScope.appVersion = "1.92.2ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -1324,7 +1324,7 @@ define(
 
               if (recordToBeSaved.saved && recordToBeSaved.saved === "no") {
                 $scope.saved = "saving";
-                recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
+                // recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
                 recordToBeSaved.pouchname = $rootScope.DB.pouchname;
                 recordToBeSaved.timestamp = Date.now();
                 promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
