@@ -244,7 +244,7 @@
 \bibpunct[:]{(}{)}{,}{a}{,}{,}
 \newcommand{\lingbib}[2]{
 	\bibliographystyle{mitwpl-bibstyle}
-	\newcommand{\bibfont}{#1}
+	\renewcommand{\bibfont}{#1}
 	\setlength{\bibsep}{#2}
 }
 
