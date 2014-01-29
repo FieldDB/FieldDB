@@ -69,6 +69,7 @@ npm-debug.log
 *.ist
 *.ps
 *(busy)
+*.pdfsync
 
 # Compiled source #
 ###################
