@@ -2,6 +2,7 @@
 \usepackage{pstricks}
 \usepackage[novbox]{pdfsync}
 \setlength{\headheight}{14.5pt}
+
 %%% BEGIN DOCUMENT
 \begin{document}
 
@@ -17,17 +18,70 @@
 
 \maketitle
 
+\section*{Spanish Abstract - ME} 
 
-\section*{Abstract}
+\section*{English Abstract}
+
+
+LingSync is an OpenSource database system that allows language researchers to securely enter, store, organize, annotate, and share linguistic data. The application is accessible on any device; as it runs in a HTML5 browser, it runs on laptops (Mac  10.5 and above, Linux, Windows, ChromeBooks) as well as on mobile devices (Android and iPhone/iPad).  It is suitable for both online and \emph{offline} use.%\footnote{Running offline requires  a local database. As of August 2012 it would be possible to use the app offline in Chrome Browsers (Mac, Linux \& Windows), ChromeBooks and on Android tablets, in the coming months/years other browsers/systems will support offline databases. Safari and Firefox may also work by the end of 2012.}  
+Furthermore, the application is created with collaborative goals in mind;  data is syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members use the application to modify and discuss the data. The system also has a simple and friendly user interface, allowing users to drag and drop data (audio, video, text), or record audio/video directly into the database when using the Android App. In addition, the application  has import and export capabilities for multiple file types. The application is designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any database which will house data funded by granting agencies.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works. The application is hosted on cloud servers so that users can use it without knowing how to set up its servers. The application also has an installation guide for linguistics department server administrators so that they can set up unlimited data usage on their own department servers.
+
+
+%LingSync is a collaboration between  the programming fieldlinguists of iLanguage Lab LTD, Montreal, the Mig'maq Research Group at McGill University and the Prosody Lab at McGill University, Montreal Canada.
 
 \section{Introduction}
 
-\subsection{Why iCampo/LingSync was created}
-\subsubsection{The need}
-\subsubsection{Other programs: pros and cons}
-\subsubsection{Technological background: why we can make this now} 
+\subsection{Why LingSync was created}
+\subsubsection{The need - GRETCHEN}
 
-\subsection{Design principles} 
+LingSync was conceived out of the needs of language researchers doing
+fieldwork or other large scale data collection. Linguistic fieldwork often requires researchers
+to travel to places where a stable connection to the internet is not guaranteed.
+Also, it often involves a group of researchers contributing to building a single database.
+An ideal linguistic database should therefore work both online and offline as well as
+making it easy to share and integrate data.
+
+\subsubsection{Other programs: pros and cons - GRETCHEN}
+
+
+
+There are existing programs/software used for linguistic fieldwork, however, they
+fall short in providing features necessary for collaborative fieldwork, while keeping
+the data confidential if needed. For example, some web-based databases http://linguistics.berkeley.edu/~karuk/links.php Karuk
+Dictionary and Texts , The Washo Project
+http://washo.uchicago.edu/dictionary/dictionary.php) work only online, hence it is
+impossible for researchers to enter new data or search the database while in the field
+where the internet is unavailable.
+
+Non-web-based software such as Toolbox (http://www.sil.org/computing/toolbox/)
+and FLEx/FieldWorks (http://fieldworks.sil.org/flex/) are excellent in terms of annotating
+data and organizing data into various formats (corpus, grammar or lexicon).
+Nonetheless, integration of data taken by individual researchers is not well-automated
+and takes considerable work by researchers. Moreover, they run only on a single platform
+(either PC or Linux, but not both). These tools therefore cause further difficulty in
+data sharing among researchers using different platforms.
+
+General purpose database software such as FileMaker Pro can be customized for the
+purpose of language research. However, it demands researchers to learn the software,
+and research teams often need to hire a programmer to customize the software for their
+research purposes. The stand-alone nature of such software makes data sharing and
+integration difficult as well.
+
+The existing linguistic database programs, although useful, have various shortfalls
+that would hinder collection and integration of data. Some of them are constrained by
+the internet accessibility or by the computer platform types. Some others demand extra
+human work in order to integrate data. Data entry can require hours of a researcher’s
+time. All linguistic database programs surveyed did not provide a good user experience.
+The number of clicks required and the delay between actions did not meet current
+software engineering best practices. In addition to core functionalities, a good user
+experience is necessary to ensure quality data management. The present project grows
+out of discussion with a number of fieldworkers dissatisfied with currently available
+options.
+
+
+\subsubsection{Technological background: why we can make this now - GINA} 
+
+\subsection{Design principles - HISAKO} 
 
 
 The principal goal of LingSync is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. The main objectives are to provide: 
@@ -46,7 +100,6 @@ The usefulness and effectiveness of LingSync will be evaluated in two respects: 
 
 
 Although it is designed primarily for linguists, the application will equally be useful for researchers documenting endangered languages and/or creating dictionaries/grammar books for minority languages, as well as language teachers creating educational materials.  
-
 
 
 \subsubsection{Open (open source, open access)}
@@ -288,7 +341,7 @@ This application will be able to perform the necessary functions needed by field
 This application integrates the best functions from existing fieldwork database programs, while avoiding many of the shortcomings discussed above. The core features are summarized as follows: 
 
 
-\subsection{Current functions}
+\subsection{Current functions  -GINA}
 
 
 The project has three core modules which must be developed prior to additional modules. These are the {\it collaboration, corpus} and {\it lexicon} modules, briefly outlined in terms of functionality and timeline in the following sections.  Implementation of the three core modules began on April 20th 2012. The three core modules will be launched on August 1st at CAML in Patzun Guatemala. We estimate the three core modules and the software architecture to take 9.2 weeks to complete with three software developers,  and cost roughly \$23,800 before taxes. We will have its final time and costs on August 3rd 2012.
@@ -329,7 +382,7 @@ Another widget will be an Activity Feed View displaying the most recent changes.
 
 
 
-\subsection{Plugging into LingSync}
+\subsection{Plugging into LingSync -GINA}
 
 \subsubsection{Wiki-dictionary format export}
 
@@ -347,7 +400,7 @@ The phonetic aligner module show in Table~\ref{tab:aligner} makes it possible to
 The Web Spider module shown in Table~\ref{table-spider} is a non-crucial module which allows researchers with limited access to consultants to gather data using blogs or forums. The web spider also provides an additional source of context to assist consultants in providing grammaticality judgements, as well as additional contexts where morphemes appear. For example, ``ke'' is largely considered a postposition by Urdu-consultants with explicit knowledge, however it is often produced as other functional morphemes in everyday spoken contexts. Blog/forum data can be used to discover these additional contexts.
 
 
-\subsection{Collaborators} 
+\subsection{Collaborators - GRETCHEN} 
 
 \section{How is iCampo/LingSync used so far?} 
 
@@ -357,15 +410,12 @@ The Web Spider module shown in Table~\ref{table-spider} is a non-crucial module 
 
 \subsection{Future users} 
 
-\section{Conclusion} 
+\section{Conclusion - YULIYA} 
 
 %\label{sec:intro}
 
 
-LingSync is an OpenSource database system that will allow language researchers to securely enter, store, organize, annotate, and share linguistic data. The application will be accessible on any device; as it runs in a HTML5 browser, it will run on laptops (Mac  10.5 and above, Linux, Windows, ChromeBooks) as well as on mobile devices (Android and iPhone/iPad).  It will be suitable for both online and \emph{offline} use.\footnote{Running offline requires  a local database. As of August 2012 it would be possible to use the app offline in Chrome Browsers (Mac, Linux \& Windows), ChromeBooks and on Android tablets, in the coming months/years other browsers/systems will support offline databases. Safari and Firefox may also work by the end of 2012.}  Furthermore, the application will be created with collaborative goals in mind;  data will be syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members use the application to modify and discuss the data. The system will also have a simple and friendly user interface, allowing users to drag and drop data (audio, video, text), or record audio/video directly into the database when using the Android App. In addition, the application will have import and export capabilities for multiple file types. The application will be designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any database which will house data funded by granting agencies.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works. The application will be hosted on cloud servers so that users can use it without knowing how to set up its servers. The application will also have an installation guide for linguistics department server administrators so that they can set up unlimited data usage on their own department servers.
 
-
-LingSync is a collaboration between  the programming fieldlinguists of iLanguage Lab LTD, Montreal, the Mig'maq Research Group at McGill University and the Prosody Lab at McGill University, Montreal Canada.
 
 \begin{exe}
 	\ex The postman was rung by the door bell.
