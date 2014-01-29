@@ -83,6 +83,7 @@
     "userchooseable": "disabled"
   }, {
     "label": "modifiedByUser",
+    "value": "",
     "mask": "",
     "users": [],
     "encrypted": "",
@@ -93,14 +94,14 @@
     "userchooseable": "disabled"
   }, {
     "label": "enteredByUser",
+    "value": "",
     "mask": "",
     "encrypted": "",
     "shouldBeEncrypted": "",
     "help": "The user who originally entered the datum",
     "showToUserTypes": "all",
     "readonly": true,
-    "userchooseable": "disabled",
-    "user": {}
+    "userchooseable": "disabled"
   }],
   "pouchname": "default",
   "session": {

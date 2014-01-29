@@ -1,22 +1,24 @@
 console.log("Loading the SpreadsheetStyleDataEntrySettingsController.");
 
-'use strict';
 define(
   ["angular"],
   function(angular) {
+
+    'use strict';
+
     var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
       $resource, Data) {
 
       $scope.scopePreferences = JSON.parse(localStorage
         .getItem('SpreadsheetPreferences'));
 
-      if ($scope.appReloaded != true) {
+      if ($scope.appReloaded !== true) {
         window.location.assign("#/");
         return;
       }
 
-      $scope.availableFields = $scope.scopePreferences.availableFields;
-
+      // $scope.availableFields = $scope.scopePreferences.availableFields;
+      // console.log($scope.availableFields );
       $scope.changeTagToEdit = function(tag) {
         $scope.tagToEdit = tag;
       };
@@ -28,7 +30,7 @@ define(
       $scope.editFieldTitle = function(field, newFieldTitle) {
         var Preferences = JSON.parse(localStorage
           .getItem('SpreadsheetPreferences'));
-        for (key in Preferences.availableFields) {
+        for (var key in Preferences.availableFields) {
           if (key == field.label) {
             Preferences.availableFields[key].title = newFieldTitle;
           }
@@ -41,7 +43,7 @@ define(
 
       $scope.editTagInfo = function(oldTag, newTag) {
         var r = confirm("Are you sure you want to change all '" + oldTag + "' to '" + newTag + "'?\nThis may take a while.");
-        if (r == true) {
+        if (r === true) {
           var changeThisRecord;
           for (var i = 0; i < $scope.dataCopy.length; i++) {
             changeThisRecord = false;
@@ -52,7 +54,7 @@ define(
                   changeThisRecord = true;
                 }
               }
-              if (changeThisRecord == true) {
+              if (changeThisRecord === true) {
                 $rootScope.loading = true;
                 Data
                   .async($rootScope.DB.pouchname, UUID)
@@ -68,7 +70,7 @@ define(
                       }
                       // Save edited record
                       Data
-                        .saveEditedRecord($rootScope.DB.pouchname, UUID,
+                        .saveEditedCouchDoc($rootScope.DB.pouchname, UUID,
                           editedRecord, editedRecord._rev)
                         .then(
                           function() {
@@ -87,9 +89,9 @@ define(
               }
             })(i);
           }
-          for (i in $scope.tags) {
-            if ($scope.tags[i] == oldTag) {
-              $scope.tags[i] = newTag;
+          for (var j in $scope.tags) {
+            if ($scope.tags[j] == oldTag) {
+              $scope.tags[j] = newTag;
             }
           }
         }
@@ -131,8 +133,8 @@ define(
                   dataCopy.push(dataFromServer[i]);
                 }
                 if (dataFromServer[i].value.datumTags) {
-                  for (j in dataFromServer[i].value.datumTags) {
-                    if (tags[dataFromServer[i].value.datumTags[j].tag] == undefined && dataFromServer[i].value.datumTags[j].tag != undefined) {
+                  for (var j in dataFromServer[i].value.datumTags) {
+                    if (tags[dataFromServer[i].value.datumTags[j].tag] === undefined && dataFromServer[i].value.datumTags[j].tag !== undefined) {
                       tags[dataFromServer[i].value.datumTags[j].tag] = dataFromServer[i].value.datumTags[j].tag;
                     }
                   }
@@ -145,14 +147,23 @@ define(
       // $scope.getTags();
 
       $scope.saveNewPreferences = function(template, newFieldPreferences) {
-        Preferences = JSON.parse(localStorage
-          .getItem('SpreadsheetPreferences'));
-        for (availableField in $scope.availableFields) {
-          for (newField in newFieldPreferences) {
-            if (newFieldPreferences[newField] == "") {
+        if ($rootScope.DB && $rootScope.DB.preferredTemplate && $rootScope.DB.preferredTemplate !== template) {
+          window.alert("Sorry, you can't use a different template. Your team has decided to use the "+ $rootScope.DB.preferredTemplate + " for "+$rootScope.DB.title);
+          return;
+        }
+
+        var prefs = localStorage.getItem('SpreadsheetPreferences');
+        var Preferences = JSON.parse(prefs || "{}");
+        for (var availableField in $scope.availableFields) {
+          for (var newField in newFieldPreferences) {
+            if (newFieldPreferences[newField] === "") {
               Preferences[template][newField].title = "";
               Preferences[template][newField].label = "";
             } else if ($scope.availableFields[availableField].label == newFieldPreferences[newField]) {
+              if(!Preferences[template]){
+                //hack for #1290 until we refactor the app into something more MVC
+                Preferences[template] = window.defaultPreferences[template];
+              }
               Preferences[template][newField].title = $scope.availableFields[availableField].title;
               Preferences[template][newField].label = $scope.availableFields[availableField].label;
             }

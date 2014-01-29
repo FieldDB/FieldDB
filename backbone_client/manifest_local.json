@@ -1,6 +1,6 @@
 {
   "name" : "FieldDB Localhost",
-  "version" : "1.74.1",
+  "version" : "1.92.0",
   "description" : "Local development version",
   "app" : {
     "launch" : {
@@ -15,5 +15,5 @@
     "128" : "images/icon128_local.png"
   },
   "manifest_version" : 2,
-  "content_security_policy" : "default-src 'self' https://secure.gravatar.com https://soundcloud.com https://prosody.linguistics.mcgill.ca https://docs.google.com https://themes.googleusercontent.com  https://auth.lingsync.org https://corpus.lingsync.org https://authdev.lingsync.org https://corpusdev.lingsync.org  https://localhost:6984 https://localhost:3183  https://localhost:3184 https://ssl.google-analytics.com "
+  "content_security_policy" : "default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com "
 }

@@ -22,24 +22,24 @@ define([
         template: Handlebars.templates.hot_key_edit_modal,
     
         render : function() {
-//            $(this.el).html(this.template(this.model.toJSON()));
-            
-         // Display the HotKeyEditView
-            this.setElement($("#hotkey-settings-modal")); 
-            $(this.el).html(this.template(this.model.toJSON()));
            
-            //localization
-            $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale.get("locale_Keyboard_Shortcuts"));
-            $(this.el).find(".locale_Actions").html(Locale.get("locale_Actions"));
-            $(this.el).find(".locale_Navigation").html(Locale.get("locale_Navigation"));
-            $(this.el).find(".locale_Datum_Status_Checked").html(Locale.get("locale_Datum_Status_Checked"));
-            $(this.el).find(".locale_Next_Datum").html(Locale.get("locale_Next_Datum"));
-            $(this.el).find(".locale_New_Datum").html(Locale.get("locale_New_Datum"));
-            $(this.el).find(".locale_Previous_Datum").html(Locale.get("locale_Previous_Datum"));
-            $(this.el).find(".locale_New_Session").html(Locale.get("locale_New_Session"));
-            $(this.el).find(".locale_Search").html(Locale.get("locale_Search"));
-            $(this.el).find(".locale_Close").html(Locale.get("locale_Close"));
-            $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+            var jsonToRender = this.model.toJSON();
+            jsonToRender.locale_Actions = Locale.get("locale_Actions"); 
+            jsonToRender.locale_Close = Locale.get("locale_Close");
+            jsonToRender.locale_Datum_Status_Checked = Locale.get("locale_Datum_Status_Checked"); 
+            jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts");
+            jsonToRender.locale_Navigation = Locale.get("locale_Navigation");
+            jsonToRender.locale_New_Datum = Locale.get("locale_New_Datum"); 
+            jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
+            jsonToRender.locale_Next_Datum = Locale.get("locale_Next_Datum");
+            jsonToRender.locale_Previous_Datum = Locale.get("locale_Previous_Datum");
+            jsonToRender.locale_Save = Locale.get("locale_Save");
+            jsonToRender.locale_Search = Locale.get("locale_Search");
+
+            // Display the HotKeyEditView
+            this.setElement($("#hotkey-settings-modal")); 
+            $(this.el).html(this.template(jsonToRender));
+            
 //
 //            $(document).bind('keydown', 'ctrl+j', function() {
 //                alert('You found the hotkey!');
@@ -47,14 +47,9 @@ define([
       
             
             return this;
-        }, 
-        
-        
-        
+        }
         
     });
     
-  
-
     return HotKeyEditView;
 }); 

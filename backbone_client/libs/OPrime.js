@@ -42,8 +42,8 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
 
     
   /* Switch user to the new dev servers if they have the old ones */
-  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,
-      "corpusdev.lingsync.org");
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g, "corpus.lingsync.org");
+  couchurl = couchurl.replace(/corpusdev.lingsync.org/g, "corpus.lingsync.org");
 
   /*
    * For debugging cors #838: Switch to use the corsproxy corpus service instead
@@ -54,7 +54,7 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   return couchurl;
 };
 
-OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
+OPrime.contactUs = "<a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_blank'>Contact Us</a>";
 
 OPrime.debug = function(message, message2, message3, message4) {
   if (navigator.appName == 'Microsoft Internet Explorer') {

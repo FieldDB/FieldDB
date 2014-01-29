@@ -8,9 +8,10 @@ Tips:
 </div>
 <div class="answer">
 <ul>
+  <li>First time using? Try our <a href="http://lingsync.org/#/tutorial">tutorial</a> to get familiar with the app.</li>
   <li>To return to the main page at any time, click on the LingSync logo at the top left of the page.</li>
   <li>Save your work often! Changes are automatically saved every five minutes, but it is good practice to save frequently.</li>
-  <li><b>Do not use your browser's reload button!</b> This will completely reload the LingSync Spreadsheet, erasing any unsaved data and logging you out of your corpus. Instead, use the sync button (↻) on the LingSync toolbar to download the most recent changes.</li>
+  <li>Use your browser's reload button to discard changes.</li>
   <li>If a change in your settings isn’t showing up immediately, save your data and click the sync button (↻); this should update everything, and will also keep your auto-parser performing at its best.</li>
 </ul>
 </div>
@@ -19,7 +20,7 @@ Tips:
 How do I create an account?
 </div>
 <div class="answer">
-From the main startup screen, click the "Register" button in the top right corner and fill out the form. If you are unsure as to which server you should select, you most likely want to choose "LingSync Beta".
+From the main startup screen, click the "Register" button in the top right corner and fill out the form. If you are unsure as to which server you should select, you most likely want to choose "LingSync".
 </div>
 
 <div class="question">
@@ -33,8 +34,16 @@ How do I create a corpus?
 How do I enter data?
 </div>
 <div class="answer">
-  After you have selected a corpus and a session (or created a new session), you will be taken to the data entry page. The topmost item on this page is the space to enter new records. Fill in your data and/or record/upload audio and then click "Create New". Note that your new record will not be saved to the database until you click the "Save" button at the top right of the screen!
+  After you have selected a corpus and an elicitation session (or created a new session), you will be taken to the data entry page. The topmost item on this page is the space to enter new records. Fill in your data and/or record/upload audio and then click "Create New". Note that your new record will not be saved to the database until you click the "Save" button at the top right of the screen!
 </div>
+
+<div class="question">
+How do I import data?
+</div>
+<div class="answer">
+  You can import data (csv, plain text, toolbox and more) using the <a target="_blank" href="https://corpus.lingsync.org/public-firstcorpus/_design/pages/corpus.html">Prototype app</a>. How-to <a href="https://www.youtube.com/watch?v=Gcc0CFhGLfI&list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT">video</a>. 
+</div>
+
 
 <div class="question">
 How do I edit an existing record?
@@ -47,7 +56,7 @@ How do I edit an existing record?
 How do I record audio, upload audio, or add/view comments?
 </div>
 <div class="answer">
-  Click the expand button <img src="img/expand.png"> on a new record or a record in edit mode to access audio and comment features. You may click the collapse button <img src="img/collapse.png"> to hide this section.<br /><br />
+  Click the expand button <i class="fa fa-list"></i> on a new record or a record in edit mode to access audio and comment features. You may click the collapse button <i class="fa fa-th-list"></i> to hide this section.<br /><br />
   <b>Recording Audio</b><br />
   To record audio, click the record button. <b>Note that you must then click the "Allow" button on the browser dropdown at the top of the page.</b> Your audio will begin recording once you click "Allow". To stop recording, simply click the "Recording" button. Your audio will then be processed. This may take a while.<br /><br />
   <b>Uploading Audio</b><br />
@@ -66,13 +75,22 @@ How do I delete a record or audio file?
 Is my data private and protected?
 </div>
 <div class="answer">
-  Yes! For more on our policies with respect to your data, please see <a href="https://www.lingsync.org/">our main site</a>.
+  Yes! For more on our policies with respect to your data, please see <a target="_blank" href="https://www.lingsync.org/">our main site</a>.
 </div>
 
+<div class="question">
+How do I export data?
+</div>
+<div class="answer">
+  You can export your entire database as <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/get_datum_fields">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_view/get_datum_fields">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target="_blank" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}">your corpus' own webpage</a> You can also export lists of data in LaTeX using the <a target="_blank" href="https://corpus.lingsync.org/public-firstcorpus/_design/pages/corpus.html">Prototype app</a>. 
+  <p>You can also download a <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/word_list?group=true">word list</a> and a <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true">morphemes list</a>, among other things. If you're curious about other exports you can do, contact us and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>
+</div>
 
 <div class="question">
 Contact
 </div>
 <div class="answer">
-  For any other questions or comments, you may <a href="mailto:tobin.skinner@gmail.com?subject=LingSync Spreadsheet">contact the developer</a>.
+  For any other questions or comments, you may <a target="_blank" href="https://www.lingsync.org/#/contact">send us an email</a> or <a target="_blank" href="https://www.facebook.com/LingSyncApp">ask other users on Facebook</a>.
 </div>
+
+<small>LingSync v{{appVersion}}</small>

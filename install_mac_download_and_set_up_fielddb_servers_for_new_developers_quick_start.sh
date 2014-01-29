@@ -252,6 +252,7 @@ erica --version || {
     if [[ $REPLY =~ ^[Yy]$ ]]
     then {
      cd $FIELDDB_HOME
+     mkdir couchdb
      cd couchdb 
      echo ""
      git clone https://github.com/benoitc/erica.git

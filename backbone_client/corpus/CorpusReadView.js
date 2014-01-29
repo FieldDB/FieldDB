@@ -129,8 +129,8 @@ define([
       },
       
       //help text around text areas 
-      "click .explain-terms-of-use" : "toggleExplainTermsOfUse",
-      "click .explain-license" : "toggleExplainLicense",
+      "click .explain_terms_of_use" : "toggleExplainTermsOfUse",
+      "click .explain_license" : "toggleExplainLicense",
 
       "click .icon-edit": "showEditable",
       
@@ -179,7 +179,6 @@ define([
         window.appView.currentCorpusEditView.destroy_view();
       }
       window.appView.currentCorpusReadView.destroy_view();
-      
 
       // Build the lexicon
       this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
@@ -191,30 +190,57 @@ define([
         if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
-      var couchConnection = this.model.get("couchConnection");
-      var couchurl = OPrime.getCouchUrl(couchConnection);
 
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
+      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
-
+      jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
+      
+      jsonToRender.locale_License_explanation = Locale.get("locale_License_explanation");
+      jsonToRender.locale_Terms_explanation = Locale.get("locale_Terms_explanation");
+      jsonToRender.locale_All_Data = Locale.get("locale_All_Data");
+      jsonToRender.locale_Copyright = Locale.get("locale_Copyright");
+      jsonToRender.locale_Data_menu = Locale.get("locale_Data_menu");
+      jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
+      jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
+      jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
+      jsonToRender.locale_Edit_corpus = Locale.get("locale_Edit_corpus");
+      jsonToRender.locale_Export_Data = Locale.get("locale_Export_Data");
+      jsonToRender.locale_Import_Data = Locale.get("locale_Import_Data");
+      jsonToRender.locale_License = Locale.get("locale_License");
+      jsonToRender.locale_New_Corpus = "<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") ;
+      jsonToRender.locale_New_Corpus = Locale.get("locale_New_Corpus");
+      jsonToRender.locale_New_Data_List = Locale.get("locale_New_Data_List");
+      jsonToRender.locale_New_Datum = Locale.get("locale_New_Datum");
+      jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
+      jsonToRender.locale_New_menu = Locale.get("locale_New_menu");
+      jsonToRender.locale_Permissions_associated = Locale.get("locale_Permissions_associated");
+      jsonToRender.locale_Sessions_associated = Locale.get("locale_Sessions_associated");
+      jsonToRender.locale_Show_corpus_settings = Locale.get("locale_Show_corpus_settings");
+      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
+      jsonToRender.locale_Terms_of_use = Locale.get("locale_Terms_of_use");
+      jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
+      jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
+      jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
+      jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
+      jsonToRender.locale_permissions_explanation = Locale.get("locale_permissions_explanation");
+    
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("Problem getting the usrname of the corpus' team");
       }
+
       if (this.format == "leftSide") {
         if (OPrime.debugMode) OPrime.debug("CORPUS READ LEFTSIDE render: " );
 
-          // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
           if(jsonToRender.description && jsonToRender.description.length > 200){
             jsonToRender.description = jsonToRender.description.substring(0,150)+"...";
           }
           $(this.el).html(this.templateSummary(jsonToRender));
-          
-          $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
 
       } else if (this.format == "link") {
         if (OPrime.debugMode) OPrime.debug("CORPUS READ LINK render: " );
@@ -222,12 +248,16 @@ define([
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(jsonToRender));
         
-      } else if (this.format == "fullscreen"){
-        if (OPrime.debugMode) OPrime.debug("CORPUS READ FULLSCREEN render: " );
-
-        this.setElement($("#corpus-fullscreen")); 
-        $(this.el).html(this.templateFullscreen(jsonToRender));
+      } else if (this.format == "fullscreen" || this.format == "centreWell"){
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ FULLSCREEN/EMBEDDED render: " );
         
+        if(this.format == "fullscreen"){
+          this.setElement($("#corpus-fullscreen")); 
+          $(this.el).html(this.templateFullscreen(jsonToRender));
+        }else{
+          this.setElement($("#corpus-embedded"));
+          $(this.el).html(this.templateCentreWell(jsonToRender));
+        }
 
         // Display the CommentReadView
         this.commentReadView.el = $(this.el).find('.comments');
@@ -250,7 +280,7 @@ define([
         this.dataListsView.render();
         
         // Display the SessionsView
-        this.sessionsView.el = this.$('.sessions-updating-collection'); //TODO do not use such ambiguous class names, compare this with datum_field_settings below.  there is a highlyily hood that the sesson module will be using the same class name and will overwrite your renders.
+        this.sessionsView.el = this.$('.sessions-updating-collection');
         this.sessionsView.render();
         
 //        // Display the PermissionsView
@@ -271,98 +301,7 @@ define([
           OPrime.debug("Formatting as wiki text didnt work");
         }
 
-      
-        //Localize for all fullscreen view 
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
-        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
-        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
-        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
-        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Copyright").html(Locale.get("locale_Copyright"));
-        $(this.el).find(".locale_License").html(Locale.get("locale_License"));
-        $(this.el).find(".locale_Terms_of_use").html(Locale.get("locale_Terms_of_use"));
-        $(this.el).find(".explain-terms-of-use").attr("data-content", Locale.get("locale_Terms_explanation"));
-        $(this.el).find(".explain-license").attr("data-content", Locale.get("locale_License_explanation"));
-
-      } else if (this.format == "centreWell"){
-        if (OPrime.debugMode) OPrime.debug("CORPUS READ CENTER render: " );
-
-        this.setElement($("#corpus-embedded"));
-        $(this.el).html(this.templateCentreWell(jsonToRender));
-
-        // Display the CommentReadView
-        this.commentReadView.el = $(this.el).find('.comments');
-        this.commentReadView.render();
-        
-        // Display the CommentEditView
-        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
-        this.commentEditView.render();
-        
-        // Display the DatumFieldsView
-        this.datumFieldsView.el = this.$('.datum_field_settings');
-        this.datumFieldsView.render();
-
-        // Display the DatumStatesView
-        this.datumStatesView.el = this.$('.datum_state_settings');
-        this.datumStatesView.render();
-
-        // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists-updating-collection'); 
-        this.dataListsView.render();
-         
-        // Display the SessionsView
-        this.sessionsView.el = this.$('.sessions-updating-collection'); 
-        this.sessionsView.render();
-        
-        // Display the PermissionsView
-//        this.permissionsView.el = this.$('.permissions-updating-collection');
-//        this.permissionsView.render();
-  
-
-        try{
-          $(this.el).find(".corpus-description-wiki").html($.wikiText(jsonToRender.description));
-          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
-          $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
-        } catch(e){
-          OPrime.debug("Formatting as wiki text didnt work");
-        }
-        
-        //Localize for all embedded view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
-        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
-        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
-        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
-        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-
-      }
-      
-      //Localize corpus menu for all corpus views
-      $(this.el).find(".locale_New_menu").html(Locale.get("locale_New_menu"));
-      $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale.get("locale_New_Datum"));
-      $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale.get("locale_New_Conversation"));
-      $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale.get("locale_New_Data_List"));
-      $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale.get("locale_New_Session"));
-      $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") );
-      $(this.el).find(".locale_Data_menu").html(Locale.get("locale_Data_menu"));
-      $(this.el).find(".locale_Import_Data").html(Locale.get("locale_Import_Data"));
-      $(this.el).find(".locale_Export_Data").html(Locale.get("locale_Export_Data"));
-      $(this.el).find(".locale_All_Data").html(Locale.get("locale_All_Data"));
-      
-      //Localize corpus read only view
-      $(this.el).find(".locale_Edit_corpus").attr("title", Locale.get("locale_Edit_corpus"));
-      
+      } 
       
       return this;
     },
@@ -445,10 +384,10 @@ define([
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-terms-of-use").popover("hide");
+        this.$el.find(".explain_terms_of_use").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-terms-of-use").popover("show");
+        this.$el.find(".explain_terms_of_use").popover("show");
         this.showingHelp = true;
       }
       return false;
@@ -461,10 +400,10 @@ define([
         e.stopPropagation();
       }
       if (this.showingHelp) {
-        this.$el.find(".explain-license").popover("hide");
+        this.$el.find(".explain_license").popover("hide");
         this.showingHelp = false;
       } else {
-        this.$el.find(".explain-license").popover("show");
+        this.$el.find(".explain_license").popover("show");
         this.showingHelp = true;
       }
       return false;
@@ -484,19 +423,6 @@ define([
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
-    newConversation : function(e) {
-        if(e){
-//          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
-          e.preventDefault(); //this stops the link from moving the page to the top
-          /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
-          if($(e.target).parent().parent().hasClass("dropdown-menu")){
-            $(e.target).parent().parent().hide();
-          }
-        }
-//        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
-//        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
-        if (OPrime.debugMode) OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
-      },
 
     newDataList : function(e) {
       if(e){

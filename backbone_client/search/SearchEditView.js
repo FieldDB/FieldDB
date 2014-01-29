@@ -43,6 +43,7 @@ define([
       
       this.newTempDataList();
       this.changeViewsOfInternalModels();
+      this.userSetSearchToBlank = false;
 
       this.model.bind('change', this.render, this);
     },
@@ -106,33 +107,17 @@ define([
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
 
-      if (this.format == "fullscreen") {
-        // Display the SearchView
-        this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
-        
-      } else if (this.format == "centreWell") {
-        // Display the SearchView
-        this.setElement($("#search-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-      } 
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_AND = Locale.get("locale_AND");
+      jsonToRender.locale_Advanced_Search = Locale.get("locale_Advanced_Search");
+      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
+      jsonToRender.locale_OR = Locale.get("locale_OR");
+      jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
+      jsonToRender.locale_advanced_search_explanation = Locale.get("locale_advanced_search_explanation");
       
-      //localization
-      $(this.el).find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
-      $(this.el).find(".locale_advanced_search_explanation").html(Locale.get("locale_advanced_search_explanation"));
-      $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
-      $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
-      
-//      $(this.el).find(".judgement").find("input").val("grammatical");
-      this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
-      this.advancedSearchDatumView.render();
-      
-      this.advancedSearchSessionView.el = this.$('.advanced_search_session');
-      this.advancedSearchSessionView.render();
-
       //this.setElement($("#search-top"));
       var searchKeywords = this.model.get("searchKeywords");
-      if (!searchKeywords) {
+      if (!searchKeywords && !this.userSetSearchToBlank) {
         searchKeywords = localStorage.getItem("searchKeywords");
         if (!searchKeywords) {
           searchKeywords = window.app.get("corpus").get("searchKeywords");
@@ -141,14 +126,29 @@ define([
           this.model.set("searchKeywords", searchKeywords);
         }
       }
-      $("#search-top").html(this.topTemplate(this.model.toJSON()));
+      jsonToRender.searchKeywords = searchKeywords;
       
+      if (this.format == "fullscreen") {
+        // Display the SearchView
+        this.setElement($("#search-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));        
+      } else if (this.format == "centreWell") {
+        // Display the SearchView
+        this.setElement($("#search-embedded"));
+        $(this.el).html(this.embeddedTemplate(jsonToRender));
+      } 
+      $("#search-top").html(this.topTemplate(jsonToRender));
+      
+      
+//      $(this.el).find(".judgement").find("input").val("grammatical");
+      this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
+      this.advancedSearchDatumView.render();
+      
+      this.advancedSearchSessionView.el = this.$('.advanced_search_session');
+      this.advancedSearchSessionView.render();
 
-      //localization
-      $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
-      $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));
-      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale.get("locale_Advanced_Search_Tooltip"));
 
+      
       try{
         Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
       }catch(e){
@@ -284,6 +284,12 @@ define([
     searchTop : function() {
       if (OPrime.debugMode) OPrime.debug("Will search for " + $("#search_box").val());
       this.model.set("searchKeywords", $("#search_box").val());
+      
+      if($("#search_box").val() == ""){
+        this.userSetSearchToBlank = true;
+      }else{
+        this.userSetSearchToBlank = false;
+      }
             // Search for Datum that match the search criteria      
       this.search($("#search_box").val());
       
@@ -371,6 +377,11 @@ define([
           // Add search results to the data list
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
+          
+          // show the number of hits
+          var datumCount = datumIds.length;
+          $("#searchDatumCount").html(datumCount);
+
           if (OPrime.debugMode) OPrime.debug("Successfully got data back from search and put it into the temp search data list");
           if(typeof callback == "function"){
         	  callback();

@@ -1,9 +1,7 @@
 {
-  "name": "LingSync Spreadsheet",
-  "description": "Spreadsheet style data entry; written in AngularJS.",
-  "version": "1.0",
-  "manifest_version": 2,
-  "content_security_policy": "img-src 'self' https://www.gravatar.com/avatar/ https://ifielddevs.iriscouch.com; default-src 'self' https://localhost:6984 https://localhost:3183 https://corpusdev.lingsync.org https://authdev.lingsync.org https://fonts.googleapis.com/ https://themes.googleusercontent.com/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; script-src 'self' 'unsafe-eval' https://ifielddevs.iriscouch.com; connect-src 'self' https://localhost:6984 https://localhost:3183 https://corpusdev.lingsync.org/ https://authdev.lingsync.org/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; object-src 'self' https://ifielddevs.iriscouch.com ; style-src 'self' 'unsafe-inline' https://ifielddevs.iriscouch.com https://fonts.googleapis.com/ https://themes.googleusercontent.com/;",
+  "name": "LingSync",
+  "description": "A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners",
+  "version": "1.81.1",
   "app": {
     "launch": {
       "local_path": "index.html"
@@ -11,10 +9,12 @@
   },
   "icons": {
     "16": "img/icon16_dev.png",
+    "48": "img/icon48_dev.png",
     "128": "img/icon128_dev.png"
   },
   "permissions": [
-
-    "https://localhost:6984/", "https://localhost:3183/"
-  ]
+    "unlimitedStorage", "https://*.mcgill.ca/", "https://*.concordia.ca/", "https://localhost:*/"
+  ],
+  "manifest_version": 2,
+  "content_security_policy" : "default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://cdnjs.cloudflare.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://themes.googleusercontent.com  https://fonts.googleapis.com https://localhost:* https://ssl.google-analytics.com "
 }

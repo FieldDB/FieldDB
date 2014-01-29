@@ -1,59 +1,105 @@
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
 
-'use strict';
 define(
-  ["angular"],
-  function(angular) {
+  ["angular", "js/SpreadsheetDatum"],
+  function(angular, SpreadsheetDatum) {
+
+    'use strict';
+
     var SpreadsheetStyleDataEntryServices = angular
-      .module('SpreadsheetStyleDataEntry.services', ['ngResource'])
+      .module('spreadsheet_services', ['ngResource'])
       .factory(
         'Data',
-        function($http, $rootScope) {
-          return {
-            'async': function(DB, UUID) {
-              var couchInfo;
-              if (UUID != undefined) {
-                couchInfo = $rootScope.server + DB + "/" + UUID;
-                var config = {
-                  method: "GET",
-                  url: couchInfo,
-                  withCredentials: true
-                };
+        function($http, $rootScope, $q, Servers, md5) {
 
-                console.log("Contacting the DB to get   record data " + couchInfo);
-                var promise = $http(config).then(function(response) {
-                  console.log("Receiving   data results ");
-                  return response.data;
-                });
-                return promise;
-              } else {
+          var getDocFromCouchDB = function (DB, UUID) {
+            if (!$rootScope.serverCode) {
+              console.log("Sever code is undefined");
+              window.location.assign("#/corpora_list");
+              return;
+            }
+            var promise;
 
-                var couchInfo = $rootScope.server + DB + "/_design/pages/_view/datums";
-
-                var config = {
-                  method: "GET",
-                  url: couchInfo,
-                  withCredentials: true
-                };
-                console
-                  .log("Contacting the DB to get all   corpus data for " + DB);
-                var promise = $http(config).then(function(response) {
-                  console.log("Receiving   data results ");
-                  return response.data.rows;
-                });
-                return promise;
-              }
-            },
-            'datumFields': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/get_datum_fields";
-
+            if (UUID != undefined) {
               var config = {
                 method: "GET",
-                url: couchInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,
                 withCredentials: true
               };
 
-              console.log("Contacting the DB to get   datum fields for " + couchInfo);
+              console.log("Contacting the DB to get   record data " + config.url);
+              promise = $http(config).then(function(response) {
+                console.log("Receiving data results ");
+                return response.data;
+              });
+              return promise;
+            } else {
+              config = {
+                method: "GET",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_chronological",
+                withCredentials: true
+              };
+              console.log("Contacting the DB to get all corpus data for " + DB);
+              promise = $http(config).then(function(response) {
+                console.log("Receiving data results ");
+                return response.data.rows;
+              });
+              return promise;
+            }
+          };
+
+          var saveCouchDoc = function(DB, newRecord) {
+            if (!$rootScope.serverCode) {
+              console.log("Sever code is undefined");
+              window.location.assign("#/corpora_list");
+              return;
+            }
+            var config = {
+              method: "POST",
+              url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB,
+              data: newRecord,
+              withCredentials: true
+            };
+
+            if (newRecord._rev) {
+              config.method = "PUT";
+              config.url = config.url + "/" + newRecord._id + "?rev=" + newRecord._rev
+            }
+
+            console.log("Contacting the DB to save record. " + config.url);
+            var promise = $http(config).then(function(response) {
+              return response;
+            });
+            return promise;
+          };
+
+          var getBlankDatumTemplate = function() {
+            var promise = $http.get('data/blank_datum_template.json').then(
+              function(response) {
+                /* Override default datum fields with the ones in the currently loaded corpus */
+                if ($rootScope.DB && $rootScope.DB.datumFields) {
+                  response.data.datumFields = $rootScope.DB.datumFields;
+                }
+                return response.data;
+              });
+            return promise;
+          };
+
+          return {
+            'async': getDocFromCouchDB,
+            'datumFields': function(DB) {
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
+              var config = {
+                method: "GET",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/get_datum_fields",
+                withCredentials: true
+              };
+
+              console.log("Contacting the DB to get   datum fields for " + config.url);
               var promise = $http(config).then(function(response) {
                 console.log("Receiving   datum fields ");
                 return response.data.rows;
@@ -61,32 +107,38 @@ define(
               return promise;
             },
             'sessions': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/sessions";
-
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
               var config = {
                 method: "GET",
-                url: couchInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/sessions",
                 withCredentials: true
               };
 
-              console.log("Contacting the DB to get sessions for " + couchInfo);
+              console.log("Contacting the DB to get sessions for " + config.url);
               var promise = $http(config).then(function(response) {
-                console.log("Receiving   datum fields ");
+                console.log("Receiving datum fields ");
                 return response.data.rows;
               });
               return promise;
             },
             'glosser': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/precedence_rules?group=true";
-
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
               var config = {
                 method: "GET",
-                url: couchInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/precedence_rules?group=true",
                 withCredentials: true
               };
 
               console
-                .log("Contacting the DB to get glosser precedence rules for " + couchInfo);
+                .log("Contacting the DB to get glosser precedence rules for " + config.url);
               var promise = $http(config).then(function(response) {
                 console.log("Receiving precedence rules ");
                 return response.data.rows;
@@ -94,32 +146,38 @@ define(
               return promise;
             },
             'lexicon': function(DB) {
-              var couchInfo = $rootScope.server + DB + "/_design/pages/_view/lexicon_create_tuples?group=true";
-
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
               var config = {
                 method: "GET",
-                url: couchInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true",
                 withCredentials: true
               };
 
-              console.log("Contacting the DB to get lexicon for " + couchInfo);
+              console.log("Contacting the DB to get lexicon for " + config.url);
               var promise = $http(config).then(function(response) {
                 console.log("Receiving lexicon ");
                 return response.data.rows;
               });
               return promise;
             },
-            'getallusers': function(userInfo) {
-              var couchInfo = $rootScope.server + "zfielddbuserscouch/_all_docs";
-
+            'getallusers': function(loginInfo) {
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
               var config = {
                 method: "POST",
-                url: userInfo.authUrl + "/corpusteam",
-                data: userInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/corpusteam",
+                data: loginInfo,
                 withCredentials: true
               };
 
-              console.log("Contacting the DB to get all users for " + couchInfo);
+              console.log("Contacting the DB to get all users for " + config.url);
               var promise = $http(config).then(function(response) {
                 console.log("Receiving all users");
                 return response.data.users;
@@ -127,43 +185,81 @@ define(
               return promise;
             },
             'login': function(user, password) {
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
+              var deferred = $q.defer();
 
-              var userInfo = {
-                name: user,
-                password: password
-              };
-
-              var couchInfo = $rootScope.server + "_session";
-
-              var config = {
+              var authConfig = {
                 method: "POST",
-                url: couchInfo,
-                data: userInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/login",
+                data: {
+                  username: user,
+                  password: password
+                },
+                withCredentials: true
+              };
+              var corpusConfig = {
+                method: "POST",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/_session",
+                data: {
+                  name: user,
+                  password: password
+                },
                 withCredentials: true
               };
 
-              var promise = $http(config)
-                .then(
-                  function(response) {
-                    console.log("Logging in/Keeping session alive.");
-                    return response;
+              var userIsAuthenticated = function(user){
+                user.name = user.firstname || user.lastname || user.username;
+                if (!user.gravatar || user.gravatar.indexOf("gravatar") > -1) {
+                  user.gravatar = md5.createHash(user.email);
+                }
+                $rootScope.user = user;
+                var promiseCorpus = $http(corpusConfig).then(
+                  function(corpusResponse) {
+                    console.log("Logging in to corpus server.");
+                    deferred.resolve(corpusResponse);
                   },
                   function(err) {
-                    $rootScope.notificationMessage = "Error logging in.\nPlease check username/password.";
-                    $rootScope.openNotification();
-                    console.log(err);
-                    $rootScope.loading = false;
+                    deferred.reject("Please report this.");
                   });
-              return promise;
+              }
+
+              var promise = $http(authConfig).then(
+                function(response) {
+                  if(response.data.userFriendlyErrors){
+                    deferred.reject(response.data.userFriendlyErrors.join(" "));
+                  } else {
+                    userIsAuthenticated(response.data.user);
+                  }
+
+                }, 
+                function(err) {
+                  console.log(err);
+                  var message = "please report this.";
+                  if(err.status == 0){
+                    message = "are you offline?";
+                    if($rootScope.serverCode == "mcgill"|| $rootScope.serverCode == "concordia"){
+                      message = "have you accepted the server's security certificate? (please refer to your registration email)";
+                    }
+                  }
+
+                  deferred.reject("Cannot contact "+$rootScope.serverCode+" server, " + message);
+                });
+              return deferred.promise;
             },
-            'register': function(newUserInfo) {
+            'register': function(newLoginInfo) {
+
+
+
               var config = {
                 method: "POST",
-                url: newUserInfo.authUrl + "/register",
-                data: newUserInfo
-                // withCredentials : true
+                url: newLoginInfo.authUrl + "/register",
+                data: newLoginInfo,
+                withCredentials : true
               };
-
               var promise = $http(config).then(
                 function(response) {
                   console.log("Registered new user.");
@@ -178,16 +274,25 @@ define(
                   return response;
                 }, function(err) {
                   console.log(JSON.stringify(err));
-                  $rootScope.notificationMessage = "Error registering new user.";
+                  $rootScope.notificationMessage = "Error registering a new user, please contact us. Opening the Contact Us page... ";
                   $rootScope.openNotification();
                   $rootScope.loading = false;
+                  window.setTimeout(function(){
+                    window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
+                  }, 1500)
+                  
                 });
               return promise;
             },
             'createcorpus': function(newCorpusInfo) {
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
               var config = {
                 method: "POST",
-                url: newCorpusInfo.authUrl + "/newcorpus",
+                url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/newcorpus",
                 data: newCorpusInfo,
                 withCredentials: true
               };
@@ -214,9 +319,14 @@ define(
               return promise;
             },
             'updateroles': function(newRoleInfo) {
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
               var config = {
                 method: "POST",
-                url: newRoleInfo.authUrl + "/updateroles",
+                url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/updateroles",
                 data: newRoleInfo,
                 withCredentials: true
               };
@@ -226,7 +336,7 @@ define(
                   function(response) {
                     console.log("Updated user roles.");
                     if (response.data.userFriendlyErrors) {
-                      if (response.data.userFriendlyErrors[0] == null) {
+                      if (response.data.userFriendlyErrors[0] === null) {
                         $rootScope.notificationMessage = "Error adding user. Please make sure that user exists.";
                         $rootScope.openNotification();
                       } else {
@@ -247,50 +357,65 @@ define(
                   });
               return promise;
             },
-            'saveNew': function(DB, newRecord) {
-              var couchInfo = $rootScope.server + DB;
+            'saveCouchDoc': saveCouchDoc,
+            'saveSpreadsheetDatum': function(spreadsheetDatumToBeSaved) {
+              var deffered = Q.defer();
 
-              var config = {
-                method: "POST",
-                url: couchInfo,
-                data: newRecord,
-                withCredentials: true
-              };
+              Q.nextTick(function() {
+                spreadsheetDatumToBeSaved.timestamp = Date.now();
+                spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date()));
+                var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
+                  try {
+                    var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
+                  } catch (e) {
+                    deffered.reject("Error saving datum: " + JSON.stringify(e));
+                    return;
+                  }
+                  saveCouchDoc(fieldDBDatum.pouchname, fieldDBDatum).then(function(response) {
+                    console.log(response);
+                    if (response.status >= 400) {
+                      deffered.reject("Error saving datum " + response.status);
+                      return;
+                    }
+                    if (!spreadsheetDatumToBeSaved.id) {
+                      spreadsheetDatumToBeSaved.id = response.data.id;
+                      spreadsheetDatumToBeSaved.rev = response.data.rev;
+                    }
+                    deffered.resolve(spreadsheetDatumToBeSaved);
+                  }, function(e) {
+                    var reason = "Error saving datum. Maybe you're offline?";
+                    if (e.data && e.data.reason) {
+                      reason = e.data.reason;
+                    } else if (e.status) {
+                      reason = "Error saving datum: " + e.status;
+                    }
+                    console.log(reason, fieldDBDatum, e);
+                    deffered.reject(reason);
+                  });
+                };
 
-              console.log("Contacting the DB to save new record. " + couchInfo);
-              var promise = $http(config).then(function(response) {
-                return response;
+                if (spreadsheetDatumToBeSaved.id) {
+                  getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
+                    var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
+                    if (e.data && e.data.reason) {
+                      if (e.data.reason == "missing") {
+                        e.data.reason = e.data.reason + " Please report this.";
+                      }
+                      reason = e.data.reason;
+                    } else if (e.status) {
+                      reason = "Error getting the most recent version of the datum: " + e.status;
+                    }
+                    console.log(reason, spreadsheetDatumToBeSaved, e);
+                    deffered.reject(reason);
+                  });
+                } else {
+                  getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
+                }
+
               });
-              return promise;
+              return deffered.promise;
             },
-            'saveEditedRecord': function(DB, UUID, newRecord, rev) {
-              var couchInfo;
-              if (rev) {
-                couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
-              } else {
-                couchInfo = $rootScope.server + DB + "/" + UUID;
-              }
-
-              var config = {
-                method: "PUT",
-                url: couchInfo,
-                data: newRecord,
-                withCredentials: true
-              };
-
-              console.log("Contacting the DB to save edited record. " + couchInfo);
-              var promise = $http(config).then(function(response) {
-                return response;
-              });
-              return promise;
-            },
-            'blankDatumTemplate': function() {
-              var promise = $http.get('data/blank_datum_template.json').then(
-                function(response) {
-                  return response.data;
-                });
-              return promise;
-            },
+            'blankDatumTemplate': getBlankDatumTemplate,
             'blankSessionTemplate': function() {
               var promise = $http.get('data/blank_session_template.json')
                 .then(function(response) {
@@ -307,15 +432,39 @@ define(
               return promise;
             },
             'removeRecord': function(DB, UUID, rev) {
-              var couchInfo = $rootScope.server + DB + "/" + UUID + "?rev=" + rev;
-
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
+              console.log("You cannot delete items from the corpus.");
+              return;
               var config = {
                 method: "DELETE",
-                url: couchInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID + "?rev=" + rev,
                 withCredentials: true
               };
 
-              console.log("Contacting the DB to delete record. " + couchInfo);
+              console.log("Contacting the DB to delete record. " + config.url);
+              var promise = $http(config).then(function(response) {
+                return response;
+              });
+              return promise;
+            },
+            'changePassword': function(changePasswordInfo) {
+              if (!$rootScope.serverCode) {
+                console.log("Sever code is undefined");
+                window.location.assign("#/corpora_list");
+                return;
+              }
+              var config = {
+                method: "POST",
+                data: changePasswordInfo,
+                url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/changepassword",
+                withCredentials: true
+              };
+
+              console.log("Contacting the server to change password. " + config.url);
               var promise = $http(config).then(function(response) {
                 return response;
               });

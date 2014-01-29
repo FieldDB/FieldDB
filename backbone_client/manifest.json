@@ -1,10 +1,10 @@
 {
   "name" : "LingSync Prototype",
-  "version" : "1.74.1",
+  "version" : "1.92.0",
   "description" : "A bleeding edge version, with new features faster",
   "app" : {
     "launch" : {
-      "local_path" : "index.html"
+      "local_path" : "sorry.html"
     }
   },
   "offline_enabled" : true,
@@ -15,5 +15,5 @@
     "128" : "images/icon128_dev.png"
   },
   "manifest_version" : 2,
-  "content_security_policy" : "default-src 'self' https://secure.gravatar.com https://soundcloud.com https://prosody.linguistics.mcgill.ca https://docs.google.com https://themes.googleusercontent.com  https://auth.lingsync.org https://corpus.lingsync.org https://authdev.lingsync.org https://corpusdev.lingsync.org  https://localhost:6984 https://localhost:3184 https://ssl.google-analytics.com "
+  "content_security_policy" : "default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://support.apple.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com "
 }

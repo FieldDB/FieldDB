@@ -261,10 +261,10 @@ define([
       }
       var userString = this.get("confidential").decrypt(encryptedUserString);
      
-      /* Switch user to the new dev servers if they have the old ones */
+      /* Switch user to the new prod servers if they have the old ones */
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
-      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
-      
+      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpus.lingsync.org");
+      userString = userString.replace(/corpusdev.lingsync.org/g,"corpus.lingsync.org");
 
       /*
        * For debugging cors #838: Switch to use the corsproxy
@@ -288,12 +288,17 @@ define([
           return;
         }
       }
+      /* As of version v1.90 take all stable and mcgill users to the online app */
+      if (window.location.hostname === "ocmdknddgpmjngkhcbcofoogkommjfoj" || window.location.hostname === "jlbnogfhkigoniojfngfcglhphldldgi") {
+        console.log("This is a prototype stable user, or a mcgill user, who has been backed up. Taking them directly to the spreadsheet app.");
+        window.location.replace("http://app.lingsync.org");
+      }
       
       this.saveServerResponseToUser(data, callbackload);
     },
     
     loadPublicUser : function(callbackload){
-      var mostRecentPublicUser = localStorage.getItem("mostRecentPublicUser") || OPrime.publicUserStaleDetails();
+      var mostRecentPublicUser =  OPrime.publicUserStaleDetails();
       mostRecentPublicUser = JSON.parse(mostRecentPublicUser);
       for(var x in mostRecentPublicUser){
         localStorage.setItem(x, mostRecentPublicUser[x]);

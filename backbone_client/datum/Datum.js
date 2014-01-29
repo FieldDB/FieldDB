@@ -1,6 +1,6 @@
 define([ 
     "backbone",
-    "audio_video/AudioVideo", 
+    "audio_video/AudioVideos", 
     "comment/Comment",
     "comment/Comments",
     "datum/Datums", 
@@ -9,10 +9,11 @@ define([
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
+    "glosser/Tree",
     "OPrime"
 ], function(
     Backbone, 
-    AudioVideo, 
+    AudioVideos, 
     Comment,
     Comments,
     Datums,
@@ -78,7 +79,7 @@ define([
     fillWithDefaults : function(){
    // If there's no audioVideo, give it a new one.
       if (!this.get("audioVideo")) {
-        this.set("audioVideo", new AudioVideo());
+        this.set("audioVideo", new AudioVideos());
       }
       
       // If there are no comments, give it a new one
@@ -108,7 +109,7 @@ define([
     // Internal models: used by the parse function
     internalModels : {
       datumFields : DatumFields,
-      audioVideo : AudioVideo,
+      audioVideo : AudioVideos,
       session : Session,
       comments : Comments,
       datumTags : DatumTags
@@ -149,12 +150,12 @@ define([
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
      * @param {Function} callback A function that expects a single parameter. That
-     * parameter is the result of calling "pages/by_date". So it is an array
+     * parameter is the result of calling "pages/datums". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
      */
-    getMostRecentIdsByDate : function(callback) {
+    getMostRecentIdsByDate : function(howmany, callback) {
       var self = this;
       
       if(OPrime.isBackboneCouchDBApp()){
@@ -164,7 +165,7 @@ define([
         tempDatums.model = Datum;
         tempDatums.fetch({
           descending: true,
-          limit: 5,
+          limit: howmany,
           error : function(model, xhr, options) {
             OPrime.bug("There was an error loading your datums.");
             if(typeof callback == "function"){
@@ -184,7 +185,7 @@ define([
       
       try{
           self.pouch(function(err, db) {
-            db.query("pages/by_date", {reduce: false}, function(err, response) {
+            db.query("pages/datums", {reduce: false}, function(err, response) {
               
               if(err){
                 if(window.toldSearchtomakebydateviews){
@@ -195,9 +196,9 @@ define([
                  * Its possible that the pouch has no by date views, create them and then try searching again.
                  */
                 window.toldSearchtomakebydateviews = true;
-                window.app.get("corpus").createPouchView("pages/by_date", function(){
+                window.app.get("corpus").createPouchView("pages/datums", function(){
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
-                  self.getMostRecentIdsByDate(callback);
+                  self.getMostRecentIdsByDate(howmany, callback);
                 });
                 return;
               }
@@ -231,11 +232,72 @@ define([
       var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
       for(var field in corpusFields){
         if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
-          OPrime.debug("Adding field to this datum: "+corpusFields[field].label);
-          originalModel.datumFields.push(corpusFields[field]);
+          var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
+          OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
+          corpusFieldClone.mask = "";
+          corpusFieldClone.value = "";
+          delete corpusFieldClone.user;
+          delete corpusFieldClone.users;
+          originalModel.datumFields.push(corpusFieldClone);
         }
       }
 
+      /* bug fix for versions of spreadsheet with a enteredByUsers datumfield missing stuff */
+      var indexOfEnterdByUserField = originalFieldLabels.indexOf("enteredByUser");
+      try {
+        if (indexOfEnterdByUserField > -1) {
+          var enteredByUserField = originalModel.datumFields[indexOfEnterdByUserField];
+          if(enteredByUserField.user && (! enteredByUserField.value || ! enteredByUserField.mask)){
+            enteredByUserField.value = enteredByUserField.user.username;
+            enteredByUserField.mask = enteredByUserField.user.username;
+            console.log("repaired enteredByUserField", enteredByUserField);
+
+          }else{
+            // console.log("enteredByUser looked okay", enteredByUserField);
+          }
+          enteredByUserField.readonly = true;
+        }
+      } catch (e) {
+        console.log("there was a problem upgrading enteredByUser", e);
+      }
+      var indexOfModifiedByUserField = originalFieldLabels.indexOf("modifiedByUser");
+      try {
+        if (indexOfModifiedByUserField > -1) {
+          var modifiyersField = originalModel.datumFields[indexOfModifiedByUserField];
+          if (modifiyersField.users && modifiyersField.users.length > 0 && (!modifiyersField.value || !modifiyersField.mask)) {
+            var modifiers = modifiyersField.users;
+            // Limit users array to unique usernames
+            modifiers = _.map(_.groupBy(modifiers, function(x) {
+              return x.username;
+            }), function(grouped) {
+              /* take the most recent version of the user in case they updated their gravatar or first and last name*/
+              return grouped[grouped.length - 1];
+            });
+            modifiyersField.users = modifiers;
+
+            /* generate the users as a string using the users array */
+            var usersAsString = [];
+            for (var user in modifiers) {
+              var userFirstandLastName = modifiers[user].firstname + " " + modifiers[user].lastname;
+              userFirstandLastName = userFirstandLastName.replace(/undefined/g, "");
+              if (!userFirstandLastName || userFirstandLastName.trim().length < 2) {
+                userFirstandLastName = modifiers[user].username;
+              }
+              usersAsString.push(userFirstandLastName);
+            }
+            usersAsString = usersAsString.join(", ");
+            modifiyersField.mask = usersAsString;
+            modifiyersField.value = usersAsString;
+            console.log("repaired modifiedByUser", modifiyersField);
+
+          } else {
+            // console.log("modifiedByUser was okay", modifiyersField);
+          }
+          modifiyersField.readonly = true;
+        }
+      } catch (e) {
+        console.log("there was a problem upgrading modifiedByUser", e);
+      }
 
       /* remove Deprecated datumStates on datum */
       var oldvalidationStatus = "";
@@ -261,6 +323,7 @@ define([
           validationStatus = oldvalidationStatus + ", " + validationStatus;
         }
       }
+      validationStatus = validationStatus.replace(" be", "Be").replace(" to", "To").replace(" checked", "Checked");
       var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
       validationFieldToclean.mask = uniqueStati.join(", ");
       validationFieldToclean.value = validationFieldToclean.mask;
@@ -272,6 +335,23 @@ define([
       var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue){ return nonemptyvalue; });
       tagFieldToClean.mask = uniqueTags.join(", ");
       tagFieldToClean.value = tagFieldToClean.mask;
+
+      /* upgrade to collection of audio video */
+      if (!Array.isArray(originalModel.audioVideo)) {
+        // console.log("Upgrading audioVideo to a collection", originalModel.audioVideo);
+        var audioVideoArray = [];
+        if (originalModel.audioVideo.URL) {
+          var audioVideoURL = originalModel.audioVideo.URL;
+          var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+          audioVideoArray.push({
+            "filename": fileFromUrl,
+            "description": fileFromUrl,
+            "URL": audioVideoURL,
+            "type": "audio"
+          });
+        }
+        originalModel.audioVideo = audioVideoArray;
+      }
 
 
       return this.originalParse(originalModel);
@@ -547,14 +627,15 @@ define([
     clone : function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
-        audioVideo : new AudioVideo(this.get("audioVideo").toJSON(), {parse: true}),
+        audioVideo : new AudioVideos(this.get("audioVideo").toJSON(), {parse: true}),
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
-        session: this.get("session")
+        session: this.get("session"),
+        _attachments: this.get("_attachments")
       });
 
       return datum;
@@ -643,6 +724,30 @@ define([
       this.set("trashed", "deleted"+Date.now());
       this.preprendValidationStatus("Deleted");
       this.saveAndInterConnectInApp(function(){
+
+      window.app.addActivity({
+        verb: "deleted",
+        verbicon: "icon-trash",
+        directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
+        directobjecticon: "icon-list",
+        indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+        teamOrPersonal: "team",
+        context: " via Offline App.",
+        timeSpent: timeSpentDetails
+      });
+
+      window.app.addActivity({
+        verb: "deleted",
+        verbicon: "icon-trash",
+        directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
+        directobjecticon: "icon-list",
+        indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+        teamOrPersonal: "personal",
+        context: " via Offline App.",
+        timeSpent: timeSpentDetails
+      });
+
+
         /* This actually removes it from the database */
         //thisdatum.destroy();
         if(window.appView){
@@ -662,10 +767,23 @@ define([
      */
     laTeXiT : function(showInExportModal) {
     	//corpus's most frequent fields
-        var frequentFields = window.app.get("corpus").frequentFields;
-        //this datum/datalist's datumfields and their names 
-    	var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
-    	var fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+      var frequentFields = window.app.get("corpus").frequentFields;
+      //this datum/datalist's datumfields and their names 
+    	var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
+        //Dont export the user fields
+        if (field.label.toLowerCase().indexOf("byuser") > -1) {
+          return {label:"", mask: ""};
+        }
+        //Dont export the validationStatus
+        if (field.label.toLowerCase().indexOf("validationstatus") > -1) {
+          return {label:"", mask: ""};
+        }
+        // console.log(field);
+        return field;
+      });
+
+      var fields = _.pluck(fieldsToExport, "mask");
+    	var fieldLabels = _.pluck(fieldsToExport, "label");
     	//setting up for IGT case...
     	var utteranceIndex = -1;
     	var utterance = "";
@@ -675,7 +793,7 @@ define([
     	var gloss = "";
     	var translationIndex = -1;
     	var translation = "";
-    	var result = "\n \\begin{exe} \n \\ex \[";
+    	var result = "\n \\begin{exe} \n \\ex ";
     	//IGT case:
     	if(this.datumIsInterlinearGlossText()){
     		/* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
@@ -710,11 +828,30 @@ define([
     			fields.splice(translationIndex,1);
     		}
     		//print the main IGT, escaping special latex chars
-    		result = result + this.escapeLatexChars(judgement) + "\]\{" +  this.escapeLatexChars(utterance)
-    			+ "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\"
-    			+ "\n " + this.escapeLatexChars(gloss) + "\\\\"
-    			+ "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
-    			"\n\\label\{\}";
+        var judgementClosingBracketIfAny = "";
+        if (judgement) {
+          result = result + "\[" + this.escapeLatexChars(judgement) + "\] {";
+          judgementClosingBracketIfAny = " } ";
+        }
+        if (translation) {
+          translation = "`" + translation + "'";
+        }
+    		result = result
+    			+ " \\glll " +  this.escapeLatexChars(utterance) + "\\\\"
+          + "\n\t" + this.escapeLatexChars(morphemes) + "\\\\"
+    			+ "\n\t" + this.escapeLatexChars(gloss) + " \\\\" + judgementClosingBracketIfAny
+    			+ "\n\n \\glt \\emph{" + this.escapeLatexChars(translation) + " \} "
+    			+ "\n\\label\{" +this.escapeLatexChars(utterance).toLowerCase().replace(/[^a-z0-9]/g,"") + "\}";
+
+          // This is maybe what gb4e actually looks like, the one we had before seemed off...
+          // \begin{exe}
+          // \ex \glll   Guhu'mhl wan  ant John.\\
+          //             guxw-'m=hl wan    an=t John\\
+          //             shoot-1pl.ii=det deer GAN=det John\\
+          //     \glt    \emph{John and I shot the deer.}\\
+          //             \emph{John and I shot the deer.}\\
+          // \end{exe}
+
     	}
     	//remove any empty fields from our arrays
     	for(i=fields.length-1;i>=0;i--){
@@ -724,9 +861,11 @@ define([
     		}
     		
     	}
-    	/*throughout this next section, print frequent fields and infrequent ones differently
+    	/*
+      throughout this next section, print frequent fields and infrequent ones differently
     	frequent fields get latex'd as items in a description and infrequent ones are the same,
-    	but commented out.*/
+    	but commented out.
+      */
     	if(fields && (fields.length>0)){
     		var numInfrequent = 0;
     		for (var field in fields){
@@ -743,17 +882,25 @@ define([
     		for (var field in fields){
     			if(fields[field] && (frequentFields.indexOf(fieldLabels[field])>=0)){
     				result = result
-    				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\n\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
     				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
     			} else if(fields[field]){
             /* If as a field that is designed for LaTex dont excape the LaTeX characters */
             if (fieldLabels[field].toLowerCase().indexOf("latex") > -1) {
-              result = result
-                + "\n " + fields[field];
+              // Only output the tree if the user modified the tree
+              if (fieldLabels[field] == "syntacticTreeLatex") {
+                if (fields[field] != this.guessTree(morphemes)) {
+                  result = result + "\n " + fields[field];
+                } else {
+                  console.log("Not exporting latex tree, the user didnt modify it so they probably dont want it.");
+                }
+              } else {
+                result = result + "\n " + fields[field];
+              }
             } else {
-      				result = result
-      				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-      				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+                result = result
+                + "\n%\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+                + "\}\] " + this.escapeLatexChars(fields[field]) ;
             }
     			}
     		}
@@ -844,13 +991,50 @@ define([
     },
     
     /**
+    when pressing tab after filling morpheme line, guess different trees
+    and display them in Latex formatting
+    */
+    guessTree: function(morphemesLine) {
+      if (morphemesLine) {
+        var trees = Tree.generate(morphemesLine);
+        OPrime.debug(trees);
+        var syntacticTreeLatex  = "";
+        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
+        syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
+        // syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed; //TODO figure out why mixed doesnt work.
+        
+        // syntacticTreeLatex +=  "Left: "+ trees.left;
+        // syntacticTreeLatex +=  "\nRight:" + trees.right;
+        // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
+        OPrime.debug(syntacticTreeLatex);
+        return syntacticTreeLatex;
+      } else {
+        return "";
+      }
+    },
+    /**
      * This function simply takes the utterance gloss and translation and puts
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
-      var result = fields.join("\n");
+      var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
+        if (field.label.toLowerCase().indexOf("latex") > -1) {
+          return {label:"", mask: ""};
+        }
+        if (field.label.toLowerCase().indexOf("byuser") > -1) {
+          return {label:"", mask: ""};
+        }
+        if (field.label.toLowerCase().indexOf("validationstatus") > -1) {
+          return {label:"", mask: ""};
+        }
+        // console.log(field);
+        return field;
+      });
+
+      var header = _.pluck(fieldsToExport, "label") || [];
+      var fields = _.pluck(fieldsToExport, "mask") || [];
+
+      var result = fields.join("\n").replace(/\n\n+/g, "\n");
       if (showInExportModal != null) {
         $("#export-type-description").html(" as text (Word)");
         $("#export-text-area").val(
@@ -865,22 +1049,22 @@ define([
      */
     exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
       
-      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
-      var result = fields.join(",") +"\n";
+      var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
+        if (field.label.toLowerCase().indexOf("latex") > -1) {
+          return {label:"", mask: ""};
+        }
+        // console.log(field);
+        field.label = '"' + field.label.replace(/"/g,'\"') + '"';
+        field.mask = '"' + field.mask.replace(/"/g,'\"') + '"';
+        return field;
+      });
+
+      var header = _.pluck(fieldsToExport, "label") || [];
+      var fields = _.pluck(fieldsToExport, "mask") || [];
+      var result = fields.join(",").replace(/,,/g, ",") + "\n";
       
-//      if (orderedFields == null) {
-//        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
-//      }
-//      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
-//      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-//      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-//      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-//      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-//      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
-//      var result = '"' + resultarray.join('","') + '"\n';
       if (printheaderonly) {
-        result = header.join(",") + "\n";
+        result = header.join(",").replace(/,,/g, ",") + "\n";
       }
       if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
@@ -1038,7 +1222,7 @@ define([
               window.appView.toastUser("Sucessfully saved datum: "+ utterance,"alert-success","Saved!");
               window.appView.addSavedDoc(model.id);
             }
-            var verb = "updated";
+            var verb = "modified";
             verbicon = "icon-pencil";
             if(newModel){
               verb = "added";

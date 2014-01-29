@@ -25,17 +25,16 @@ define([
 
     template: Handlebars.templates.export_read_modal,
 
-    render : function() {
-     // Display the ExportView
-    	this.setElement($("#export-modal")); 
-    	$(this.el).html(this.template(this.model.toJSON()));
-    	
-    	//localization
-    	$(this.el).find(".locale_Export").html(Locale.get("locale_Export"));
-    	$(this.el).find(".locale_Close").html(Locale.get("locale_Close"));
+    render: function() {
+      // Display the ExportView
+      this.setElement($("#export-modal"));
 
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_Export = Locale.get("locale_Export");
+      jsonToRender.locale_Close = Locale.get("locale_Close");
 
-  	      
+      $(this.el).html(this.template(jsonToRender));
+
       return this;
     }
   });

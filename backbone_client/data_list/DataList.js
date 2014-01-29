@@ -177,6 +177,27 @@ define([
       }
       
       this.saveAndInterConnectInApp(function(){
+
+        window.app.addActivity({
+          verb: "deleted",
+          verbicon: "icon-trash",
+          directobjecticon: "icon-pushpin",
+          directobject: "<a href='#data/" + model.id + "'>a data list</a> ",
+          indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+          teamOrPersonal: "team",
+          context: " via Offline App."
+        });
+
+        window.app.addActivity({
+          verb: "deleted",
+          verbicon: "icon-trash",
+          directobjecticon: "icon-pushpin",
+          directobject: "<a href='#data/" + model.id + "'>a data list</a> ",
+          indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+          teamOrPersonal: "personal",
+          context: " via Offline App."
+        });
+
         window.app.get("corpus").datalists.models[whichDatalistToUse]
         .setAsCurrentDataList(function() {
           if (window.appView) {
@@ -252,7 +273,7 @@ define([
               window.appView.toastUser("Sucessfully saved data list: "+ title,"alert-success","Saved!");
               window.appView.addSavedDoc(model.id);
             }
-            var verb = "updated";
+            var verb = "modified";
             verbicon = "icon-pencil";
             if(newModel){
               verb = "added";

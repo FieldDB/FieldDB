@@ -2,7 +2,7 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
-OPrime.apptype = "testing";
+OPrime.apptype = "production";
 
 OPrime.websiteUrl = "https://wwwdev.lingsync.org";
 OPrime.authUrl = "https://authdev.lingsync.org";
@@ -42,15 +42,15 @@ OPrime.defaultCouchConnection = function() {
     authUrl : "https://localhost:3183",
     userFriendlyServerName : "Localhost"
   };
-  var testing = {
-    protocol : "https://",
-    domain : "corpusdev.lingsync.org",
-    port : "443",
-    pouchname : "default",
-    path : "",
-    authUrl : "https://authdev.lingsync.org",
-    userFriendlyServerName : "LingSync Beta"
-  };
+  // var testing = {
+  //   protocol : "https://",
+  //   domain : "corpusdev.lingsync.org",
+  //   port : "443",
+  //   pouchname : "default",
+  //   path : "",
+  //   authUrl : "https://authdev.lingsync.org",
+  //   userFriendlyServerName : "LingSync Beta"
+  // };
   var production = {
     protocol : "https://",
     domain : "corpus.lingsync.org",
@@ -60,13 +60,16 @@ OPrime.defaultCouchConnection = function() {
     authUrl : "https://auth.lingsync.org",
     userFriendlyServerName : "LingSync.org"
   };
+  //v1.90 all users are on production
+  testing = production;
+
   var mcgill = {
     protocol : "https://",
-    domain : "corpusdev.lingsync.org",
+    domain : "corpus.lingsync.org",
     port : "443",
     pouchname : "default",
     path : "",
-    authUrl : "https://authdev.lingsync.org",
+    authUrl : "https://auth.lingsync.org",
     userFriendlyServerName : "McGill ProsodyLab"
   };
   OPrime.servers = [ localhost, testing, production, mcgill ];
@@ -79,13 +82,13 @@ OPrime.defaultCouchConnection = function() {
   if (OPrime.isCouchApp()) {
     if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
       connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
       connection = mcgill;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("localhost") >= 0) {
       connection = localhost;
       OPrime.authUrl = "https://localhost:3183";
@@ -93,22 +96,21 @@ OPrime.defaultCouchConnection = function() {
   } else if (OPrime.isChromeApp()) {
     if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
       connection = mcgill;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin
         .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
       connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin
         .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
     } else {
       /*
-       * its probably a dev's chrome extension, use the corresponding connection
-       * for this build
+       * now using the stable as the default
        */
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
     }
   }
   return connection;
@@ -117,13 +119,11 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
   var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
   var authUrl = userFriendlyServerName;
   if (authUrl.indexOf("LingSync.org") >= 0) {
-    alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
-    return;
     authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("LingSync Beta") >= 0) {
-    authUrl = "https://authdev.lingsync.org";
+    authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
-    authUrl = "https://authdev.lingsync.org";
+    authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("Localhost") >= 0) {
     authUrl = "https://localhost:3183";
   } else {
@@ -138,7 +138,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
          * TODO change this back to the lingsync server once the lingsync server
          * supports 1.38
          */
-        authUrl = "https://authdev.lingsync.org";
+        authUrl = "https://auth.lingsync.org";
       }
     } else {
       alert("I don't know how to connect to : "
@@ -188,13 +188,16 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
+  }  else if (window.location.origin.indexOf("corpus.lingsync.org") >= 0) {
+    mostLikelyAuthUrl = "LingSync.org";
   } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-    mostLikelyAuthUrl = "LingSync Beta";
+    mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-    mostLikelyAuthUrl = "LingSync Beta";
+    mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
+  } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+    mostLikelyAuthUrl = "LingSync.org";//"LingSync Beta";
   } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
-    OPrime
-        .debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
+    OPrime.debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
   } else if (window.location.origin.indexOf("localhost") >= 0) {
     mostLikelyAuthUrl = "Localhost";
   } else if (OPrime.isChromeApp()) {
@@ -214,13 +217,37 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   return mostLikelyAuthUrl;
 };
 
-OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
+OPrime.getMostLikelyPrototypeVersionFromUrl = function(versionCode) {
+  if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+    versionCode = versionCode + "pmo";
+  } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+    versionCode = versionCode + "pmc";
+  }  else if (window.location.origin.indexOf("corpus.lingsync.org") >= 0) {
+    versionCode = versionCode + "pso";
+  } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+    versionCode = versionCode + "pbo";
+  } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+    versionCode = versionCode + "pbc";
+  } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+    versionCode = versionCode + "psc";
+  } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
+    versionCode = versionCode + "pba";
+  } else if (window.location.origin.indexOf("localhost") >= 0) {
+    versionCode = versionCode + "plo";
+  } else if (OPrime.isChromeApp()) {
+    versionCode = versionCode + "pdc";
+  }
+
+  return versionCode;
+};
+
+OPrime.contactUs = "<a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_blank'>Contact Us</a>";
 
 OPrime.publicUserStaleDetails = function() {
   return JSON
       .stringify({
         token : "$2a$10$TpNxdbXtDQuFGBYW5BfnA.F7D0PUftrH1W9ERS7IdxkDdM.k7A5oy",
-        encryptedUser : "confidential:VTJGc2RHVmtYMStIK3J2WU9kZWFGUS9WUS80S2EzbTk3ZFBKcTNTQ0pqclZIak41SHJYZng3RGk5Q1RkaUZKZmpWK1l5MmVYQUYzNnJUclZ6LzJ1enEvbHltVnhISlBtSFpSOVJrdm1EMWRCREl4VWY3cWpadG0rWHhwaEExQ3A5Q1d0SVpjVkZuQXkwT1JNaVZKV1dTL3I5Z3lDYmxiNEdRNkMyVU5vbmxqdzBRcnB2OTBBc2xWV1NUUmFuMEhlaDZGTnJZWS9rNUo4NDJyc1ZveTl1WHhSeUZ6bEhHTHREQ21TdG5yWmk1VDJHSFo1NVdZN2FNKzNFVURrV3g1RTZ1ako2Zlp1UUN6Y0pKN0xwNjh0RXBkNlhpaTNoQi9wbXppdTErajNzWkN1eGoxWjZLWG4yTnAzVm00aTZwbytCRFFEOHhkSzhreDZ4SXFJZTYxUy9LTG5rdTJDQzZ4Y0RRQkVobCtpaFhGQ3RHc1Z0cDBCVmxlcXh5THpiSC9EMWQ3UkFKbjVYWDQ3MXJKcFZ2UkQ2RnJocFd4Ti9uUFRmNjlZcS9HZFZmem5YTE1LM1l5SEJPa3JUYlVUcHYydGZMaFRPQmp5ekRoS0ozY3g3d3JNajFrVWlhQjVQeHNZZmxmbDlza2VFMVJaVFBqenltV2xEakR4Qy9USlhKaFkyMHl1SnBaSThwVkhVVEpkWW1rL1pqMU0vbzdKRlUwVWF2N0E5cjJpQ2g5QURqV2hWT0o4U1pWSFJSYnZoV0xmQ0NSbzdhZlBSbEpJWmFJRnk2VFpYMkNSQ0VmYWlYUEI0YUhRdytWVGpKbHZxZlVtWC9YNkgrZkhaYlMwaVdSdlVhdHdpZzJqK3BrWGlJWElmUW1mano4QlFpSmcyTDI3ZnY5eEFuV0VrTndNaVg2Um95a1B0UWJkODduaDhzNGZ3c1FYWVNnRUYwRWFmT0hwZ3VtdThLUzNTVlFDUEhUVUlqYzZQZTVPVjg0YUt3cVBiQmhXRTZjNlRaRjBXLzR0aDhma2hvTWZzUzJ5UHRRa2w2UTB0eitkYXpuVzFRcVdoanM4cTRqbVBRMW9JYjdMb2ZvYjdYbW5XR1Z4RDRtQ0N4czdKRFpEZHhHd3ExOG1zT1ZhOE9EeFErZU9Mc293eVZHaUZEWUk3S0ZiL1BwNHpKcWw3UjE2TExtN294VTI4N1VBeTNZMCtsMkZ3TDRNcVEwZlR3dTA2WERGNGE2SzZpbVNPRk0xRFB2SUdjRllESUptcC95OHRuUzZaNjNkeUJwNmVYcm1aWUEzNU5ZSUJFVk00Um5mamJaT1ZrL21jajkwc3FlZzVyV1A2R21GK3FZZUI3THY4OGt3a1o2UDc5NTh5WEUrSWY2Vkh6aTJKK1pJV2xqSExZQnZ5SmRyVHA3UmgxT25WaFNuNW5MQTA5ellFb1RpNzdwMkMrRFBnRlJkdlJuZEtYWmJ1MFRCaXdpSWZLd2krbUQ3anFKclBXQkNodEN6Y3gwMElud3pLWG9xWXpBTFB5S0g5ZFBjRmN4dHZhU3pMdDExMWdOclBKNGJ1Z1NGbzd2clpTSjR6Q3dDSDFud2RMNVpGWFZQcDliUXhwcGlpNE9Rc2M5dnFnRG5UeEQ2dVQ4NkJaOGMwL0gzMUFwLzVvRGFNNU9MMHM4dXR5MUhxVHA5T2QxN0ZOelZka2xTbWFRMTR4elpxcE95M0JwYnJNTmZxWEpBUmNURUlnM3NYUG4vSWlLRTBRa1V1Vm1LTHR5OTdOUVdXMHBLUi95Sm5BUFI0ZFFlQURReXpDRGxiWUp0K2dSQy9rVkVQTklscVM5TnJBR0FOL0YzbUdhUVUrN2kzcmxzT1lxSS9rcTJUZnlBMkxJR28relFWVVAybFVSNWV6WGwwdElOMm0wSE9ZTHovOXkxZ2JyWlFkcU5XODhNOTVscVFvYXd3aEZhRm8rU1g0dWxmdzBRcFVacytRUDhCeGw1R1FqU3RQYnFyMm1NclI1cW9LNnpzOUFsSXJYbzZ1L1laS2x2bFdnUWJEVVk5V0QxSzJ5ZGdsRFE1cXlCdFVFUEhpSTJBcENKRXVqTmIwc3hia3FBUW1LdEJvNHczL3VjUkM5R2xRdGlocCtsMlhNOUFqSTk4aUJYckI4RkhIUkd2d3FZeTBoTWNzcnZ6MU13UHp3Rk9tVmVhbWpNTVNqRVgxRjlOcEJNRlpzRTZYUGNLbW9vU3BkSXh2TTJnNVJUam9lZ3hRbXFyYXFMdXU3ZUhPVk12aThjRUcrNjZlTVhQTTF6VXdDaTVvVGI1ZlBEOFBuZ3didmVJMVIzbUFvNUl4NzhxUHZ6Y3MzUUwyYjZyOXFRaDFuMnFwZGZLUk5TNkVlb1BJbkpBNXgwb3BONXVWWmpXdU52VVB3VkhkTWFwVUwvTUhhQU4xa3hhWXdiMnlLYWhRcDg0bHhGVVloeVFrSGhGVVBqOTVQOURDcUQyWDFLd011RW1EallLeldtenpNcXloYjBaWUlzaFZaTmlFYTdoRUNIUmpBV3I1a3VXa2VVYlVjcXlERmpTNWwyVFdtNWE0elpwY3FpcXBlN1JGMjBjMlUxVGF2OUorZ1RrUzJSdDFPalRaMG1NY1JOUXd4dlozaXFhb3BsdE1vbmhkZXlWWnZPQnlVdEx6SWVkRUJNbkZlaVBGc1g1SFJKWnpsdkxvVVhvZHQzWW5mZGczWDRVb1dCNGVodDQ0dGhQQlZ5OWZlVUlrTXltWkpYdkNhWFB4MUgzb0svVVl6KzJ2ZUpXLzl2UmZIbTZabGgwOS9WNWZ0UzZrMFRjUnhGRzlxcG9yQ01HNnBnenlQT1FESy9KaThaWHd0dG0yQXV4cEYwc1d6TmFkYzB0UGNvMG9tTjU3NzNFUjQxSkllRjJiWFJSaU9nK0diSmZ3MTdWb2ZRTU5OaEpmbVlqR1ZLbGs5RVdKYlNydU5KVWRzdGpFNGplRzdCNk9zd3VqYzlzSjNUaGhzWFhtZU5iWlFqYjQva3VhR2l2WENjamZBZUQwNVZwbTdXbWd4ZUFoU1dNdkc1SjhqdWFZWEFsUmtxbFk3U0F1SDd6bVZZbmhBYW5SUmExYnF1ZU5FVmsrTXM0MnJreWhtUjlkcVZCOGdZbnBCTHo5dHE3eXJoSlFGbFlnM3dqaURmcFJ2TEsvUGtBVUtiUnB0SS9uZ3RLdERKcTlwSm5KVnpMeFhyMUFxMk1UWEJSYmtQN1pXK0UreGxTTURnM2MvWUlldFdGeDJ4R2tLbHVzWXcwckdSYXloaFNsejNjYTFCSHV1QStmYVFNSWxCYnlmUDI2bmpFM3N5RVU2bEVuT1c0Y2RlT1UvdmdQV3dLNEx0SDJjdlo3UTB1ck1qMTdnbHAyUzU5TWt2aVU5MUFQZWRZWlF1Q0REZy8wa1lHWFFhK05sS2ZnbFd0anA1dThmTWF6YlVKUXJiMjZLRCtSRTMyMllmb2Q4OFFxR3k3T2FvSm0yV0dic0s2MVZQQ05icURSNndJU2V2U0dvdnNqWHRnMXp0MW1aVTA3Mmc4dXU1SXRRaktzQTY3MThMWGVEWmZLUGNhbnNEM1ZwbmpWTTN1RmdYMzJZU1ljTWdoZTlPQW9VZEtXV2ZCYUI2THRuak5peUdaL09XVzhHdFhKMHlYeURYUVllSThEQkpjU1k2bDkyRFR3d3R2dk9BZUR1NmRVbGkyaFVZNWxXNktucmY4THR5dzhhNXFoZWp0OGg5eWFCVExvSUpPeS80TUEwUUxZU2N1eG5XS2hNaWx6QlRuL1NxVVh4SFZ2OFFzdjJra2Q4Mk05TkJ3ZlljbllScmhrWkFnQzUzZmxsVG9sVVZhRmxxYWtEVHpKOFFibmZlcmtDNnkzdDlQWkNLekllNWVvMk9sN21yY1lVbGw1enJrZ1JSYkcxNml2WjY2OGkvRkR5SXhhem9IZHBwWXR4K0JDK0d6cmpRMHFLeWpjRVdETUNSb1RicWEwamw0WVFkVndwTjRVSXpNRHJhazE2NmpzSWxXYkRISnRuVUdPTXdnTnJoS0k3clZTb2xkV0tEakcyWTNJbnByS3BBeHpFbE5jd1liOG9IMC92TkRSN1Focnc3OGNIdGpBaXNXRG5BYlB0SWR6aUpTaWVLS0VXMURjR21kOENnVFdPSUdTdjVkZUc2TTQzWjl2Uk1rU0d1OUIzL0NYQTlNaUNRWnJ5b1cyY2hnZEJvcGVvd05mQVhwV1A4YTh4TXR0MTdIdG9GbWlhSm56K2tpeENJcWhYWlZpMG0wVmpzdjlMQ3lneGNZZEhvWE9vRnhpRU9ocXB5THlERmlkcFpGSVVDeGRwS0hYKytSNVpPbmJTQy83TE14YlRSd3JsMmdnWGxGMWlLbzZ3aSs3MFhLNmV6LzVxck5pVWlTcVFBQy9sd1IvcE1KMlJYSGtBSFJkbVE0TytVR1RESndjUDRLTEZvQ0RPVTFOdDlSTk9mbnVERWdkVVk2SVlkMjltV2ZScFVpNFZITGloK3k1K1FPSmRzMC81NVY1dXNYNmdLMHJ0VVhac25YTkNheGFpMU54Q1JNL0pxUmZxNmoyTDQrRVdEeWx1RDJkdTBpc2dFU0lDQXBGVEJCaHN0aTk3S2hJeERGVk9sait1b0dJbmJyUGJhR3F4MmNMRDZBQ092TTVNVjlmK2NIejRFazRiTXZ0TkFRK0hEK2o2SUZsUWtFZlk3QWNPS0x3aU51SmJwYkRETHlxMjBnSHgrb0xvOVVGRk5oYXpsM0NKUXdYVTRmTnNkY2pvc3AvYk54UWEwNEo3Z0pzVDBZaXJGb2Y3OWZXTXplRmRJTGl2NDJyTDBFMzVYcEdBSTExSTlBZGtIY2ZSRXVzalZQQUZTMVhhOVU4LzFuWU9GdGFhd09NbGVmUlZxWDh3OWkwQy9rS0V2V2MzZW11SUQwV0V3eFR6R1RtaHhKVmhXVW9GVGlqaG1RM2pZWHlHK0RNTjNCU2MwZGdabWZFbmRpNGpPUDNTSW43OWVDUnI1YTljclRFODk4OFRzelkvYzhzZVp3NGVOY3RsT0U0KzBFdUM1eEhaUDZDc0FIdkZRZ0FQc3c3T0ZUUTRjQ2h6U0hKdkMwUEhGWHh3aDFCRWNXeTZmQjQ3NytBVldwT3NTN0VsZ1MvVEtseFBjVmVmOWJEd3F6MjQvMHZGQzUxY1RwTmtiTWUyd291bVBjOUNnQzRpV2NmbjlINUFUcnVmb2ZFWis4V1BMN0FGM0lvMUd6b0U9",
+        encryptedUser : "confidential:VTJGc2RHVmtYMTlzZnd1TWZmMzlBcnY3bHJWd3JYOEZhOG1OeEo1eTZXYmpSRkV1TWh0ZEdYdTN6emtoUHhBYmg4OHpoZFVMYjFzMFpTU1paQU12U1ZJTjdoNU5oNzZVeElXNjh3TXZoYTJaanQ4eXBEUVNvSEFvc1c0ekhObmh2Qmw4ZlVsZnRzbnlDK0FJMGJ0VVVXOUhURUMraG5sSGlQQ29wYU0yVHlBUXZ1MncwSFl2emovbXB5L1hHbEFFQXJhU0l0VW9BRTg4RFhkeGNGZFd6YVlham9tMW5LbWZrb1dWaVNDZTZSS1h1R2xwU2xtRk5NbFU0U2ZwVklJNXNOaU90SVJoeG96aFkydHJZUUpreHBiU1RsQnJiMS9oYzh3QU0rNWRaT2Qyc0RPalV1bUM0QUhMMkZZK0d4QWV5c0d5Wno5bC9FUElzaGhWSG8vOEtHbEtFYjM3VU9JSTV0ZTZWVHA0K2s1ZVJyOEhsRGc5VDdrR1BPaUJQYmJIdmFkQmxhOEdtZXhlcE5aQkJyYnBhNjBiQm1yOUI3K2RTYUc3b3drZG5wTjBSKzkwbmwxamQrVE9MbERTNXRwdWR4MXpQZ2pxU3l6cmdqV3UzVXc0MFVyemp1dG5jeE1PZVE4L0FmYXc4TWl3ZExjakhiRkpKbVVWaUY0bklEYmtZRnZTOWtLeDFuSlN2YTg5VjlNTkFlKzJBcTNtOWJ4akI1RUZVS0g5a05mTWxkQUtNUTJpQ2ZGS3ZwWnY4aGlZcWg1OVo1dmtpMDYvOFhhbXE3RWtCcWhka3lFMmhubDBoZHZnK3hRYWcvMkQ0VEZEWTA3ZUhCQ3FrTDNnTWRlWGpXaEFUclgxWHJqbkxKYi81S0FzVzBWay9HSk5lMy96dEJNaXZWRWlPRFk4Y2hPc3FsbFdjTUw3ME12eitTTUQwbjFKWkZmZ1VWd29OSmVTNGo1ZkdRT2RxMVZFM0Y2Q1lzYnoyN3hhN3FMZDRNQUk0NmJqcFQ3RWNBZXppQlBPOWZWcFN4UUxnM29MOG9YYTdBVVRYY09mV3djenlyWUdUUGNjamlsVitxWU5Dc0I2anNTNklFRms1OWtBTmQ3OXBtakI4b0txeFNhQ002eWp3Y0dyYzBFSUlPTThVbUNYb1dDQVY1OG4yWWZyc3Z1NmR4RXQ5c1FsNlFkNHViOHgxcE14TjdWNkRSaGswZ1lNODlYalVkVXRoc3NEK0thalB6d0trYkRYZTNRc2pHeXhiMU1wZzVTKzd6OUZCKzF2dGZRQ2JBSENIWm5JeXpDMStWaDlOZVZHd2dESjB0VlJseDBLZkNjRnZaMWIxM2pzMS9pSEs1M2RVOXV3OGRkZExJK0JLc1NmMGlMRlByYmpZVDZCSFg1SUp5dzZGeVB4N1FGZW1XOHN5cVh3VmlEVTJSNlFERXdmNEc4bDJ1L2RXQXdlekkxcHdCc1pwVGEvT3c0WEd1eVlZUHVwRFdCTlB6Q1BlL1lJNWwwUVFFZUhGcFRXQ0ROMktkbC9rVEc4ZTNHbEZRZGZuZk9oZ1BhZGZQSzY2eXlhWGNlQ2s2UEhSSzdUZTFYeDhTQmdYMS9TeG1vK2JsQ3lzcGxBeUVhVXBuQ0ZmUzZyUitXb3Z3TUxWSTFFWit5TStpK2NsUjEvbi9UdWxlejR5QTI5cjNwbGFDT3gzWXhVSTZNMzkwTWRtTzFneTlnVVpCVXJ3WEhWK1F0aHVRRDlGVDJpVjh6b0dpNXFGWVk0cFF6UHZKbjgvMFYyYmJhRmNBWDB5UFIvUU9iK1JHZFd2S0dITllrN01leFZZekI3UXR1TWU2NG83S0NDYlBWeUJuTlJ6SWtGM3U1eEtmTDBIMFVpaXJjcUpLdU5YNkR6RDIyNzFBck1kdkRzNzFSNWZDZUpCWm5KNTVHcVNiSEl1S0hQRG9Ld01mbHFadUZMNFpKTWp4d1dsSExVRkdiOFNKU3NYWDdoYW5xei9KTDl3dmt1RXJrMHVRSHJvbGx0ZGhiNmVPRHcxUmY2VTY2RDBpTVJMenljN0dhVnZuT3RpcEgvVGlLa1VQc2dwa05yRjlFZjAxSnlHTFBuTjc0blNMRC9VOUphSDVPVGhydkRrNEZmU082Y29IWVlmTG51Q0svL1BCNUFaYTZPb1BEbXNUVFZCMDRkY0VtMk5OYnJCL3htZXZtME9lUXhZQWlFNFVHcGhTYW1CeEUyNVBtVFlpL2grbE9pb2JTaDBVMVhNalQvN3R4UVVWL2JpMVBGejVKcjA5SmxaTnFtV1E3QmJTMk55cTNHd3ZxR0NGaTNFWWtyNHZrQzdhMklpUHVYVStvbWdzVkFyWklVT21JZFJOVGpUcVNyS2kzK1M3bEdVeDhYSDZTRFBMRFoxTU9pOWh6VGtqQ3ZRRDJIZTNiakF4YndXeFFTRWhpa0s2MUExdmIwRGJTdWwyK3dvS3VxeWZlR00vQ01aOFZiU0htRU02Qks5emtoYWdJVjlHVXRSVXNnTlVwK29RZ2l2Wko4ZFFOb2o4anRIdHI0R2ZyQnVOOEtUQXQwN2VJTjVGamUvOGl6cXhSWDNtcDd3UWpjQk9XTUowZUN1VnBxdDRDWklLVnlSQkdXZm9wWEhZOWJWSWxWaG8vVnlvY0E1NVdiTlU1eGZ2TDZuNFdBWmFhR1ZxUTlsdHUxNEdoaVZSSkVDd3p0cHhkTE0yVklkeHJURmRyS2g3b1ptNDNYblBKeURFMUxZVmN5SnRVY21rQnAyaE4vUVFCYmVNdkl1eTNiZ1ZjaUZUWjlFZTdRdXNQcUVrWWIyRUZmakVoV0ZaSjFLMGpxMUx1TCt6R3loWk5FS3EwajJzSGpjQW9UZUVEU3hTV3BOSHRIWG9RdWVLTytFMFNVOGRpSW9HRnovaCs1bzRWMnE4eUlmVkFMV3hlc1lMU0lFUFN6UEZicUNUOFFXN3JILzIrc1hsaEJRTFUyMEc3R3BoalUvbUlUcDJSM01DdHhoTkFZZmpLYzc3TFY3azZuL1l1YVFWNzI3U3hQQnR3cTArZDRhQklWdm02VGk4YUc3a0lBTjJpNVUrQzliK0tDQTErMC9TOVZQblBCQmdKQXBrVC9ZbzFFTlZSU1hQUXhxanZBWFNSNGJLeXBvZlZkaUkwS3NEWnhNbjNLNVpXRU9ycC9VOVhhSXhIQ2M0dkdYUm90bThWejZQbEZPbG5NRmZ2VEFsdkJMRlR4VUY4ZVFqeXFRWmxWSUtRSTNzV3hzSUJYYmVoNjkyNVFmRE5hbFBUaEtmVUFnV2pUNGc4cmNja04rYUxEcDdON1c4VW9JSTRGZGkxZ0M2ekFrVE5sdnlmK2JUVlRHUmF0ekh4NGgreFdaVVU1NW1MenFyTmx1MTlDMEtFSHZJNEhhK2ZSVXFxK1J0RWRZQ0w3QWx3VzJwOWFvTHJabytKcFJtM0FPUDJFNUxBRjltbVdoWE5jKzUwWUpRYmx4YVk5TmxuSVJLWmlzdFRrVzdCRnV0M1NCTk9kUjZjdEV1eTBzcTB4U1dIcWhJRG1qdXBwTUx0QzhOQitOM2o3TTVvc0lOWUlzbmR3RUZvN0ZsdzlXM3UydGVjNk82QmFBV0JDeC9ZRHFqSDNrTGtGQ2wyZnp0R3hWNGRlQ2NNMUhzWUFYbW9WTStlWmZJeWJmTUlHWjJPYXlKMG1NQWlncDgvT3ZwMGJXZitJejlPUW5DK1NGZ2NTWTdhcnVrZ2FaV3hTd0J2M1FkQWtrOG1laHFhS3BsWnd2dVRydHNjNEZzaXJaVGdnRmVDekFpbzk5a2lldGdqZldMTTk1TFRUbkZJMDE0dElxcEprUXltNHcyRGtuY1BjQTBqdnZJVlNFeFVTZFJ3cGMvUnoyc2g2Qjh4WElTVnpjNUY3SEhlUnRUSjJkRjVtNFkyNjl4RG1HTDlXdnA4OXNFWENaSXZDc3oyTldESWp0bHpEU3R5RmY3UDFIRlQ5N0lLL2pLYTBQRGlIVlV0eGtZbFhhMndOZm5ONnVCRUh2VlFKMHl3S0VqVjZRZ2JHeDhvS3FrREtxY243cG04dm83ZHE3MU5nK0tSOFRRQjdEaEoxRGVMWG15Q1lzRUlJTEdONzUvcXAzVCsvMVlhWWVSdGc2RlRyOXg5YURzcERyTStjV2tMMnpjNWl1M3c2dDFudjBmN0VWNXlWcWJ1MkRhd3F1RXN5YjVQaWxUQ1dCQ3JUcFd3MUZWM0ZNd2FCMGExUWJkSTlDV3d6RUplUXVjUU8wR1ltUXRZc1ZOWElOclhEYkV6VmhLV0ZHYWNIdS82RDhFcEUydFZaOVcrNWNvVGpYeGNUZUpNY1pxWDRMTC9od3VwelYrU0ZYL3pBZTZKaEhKVGxacytxaFN6V1ZxNjJGa2JXb04wWUgzRWJzbG5SeUhvcTBUU2ExN3pXMUZ2YzRuWmdyUS8ralN6YVVtd1Z1SkFmZjd1Y3E4NlJrdlhwdU1xZEkyQ2x3ajR5NUFWQWpVK0FRc1NXdzNkdStLWWwyN1VsWjNlZlpJL3dDSlozZnBUSDNuajNBdmZXRjdvd0pHN1lIcS9YYit5azd4MVJ0UHgreFRzZEJIV3RVOFoydjg5bzdMc1VXWDJxSDFEQTFrMitVL05sRk5JSkIxMSswM01NNXJPKy9EZHV2SHRmQjU3VlJFV2tzMTB5ZktSdzBMajk2bW9CMXA3QmlEdmJjVlVRU0FYd29aSUdjazNnd3B4SlJSZTN0NE5YUUk1UmNzaVRmdDlzY3plWndwcFRlTURSM00vU2Z4bm9zTktvRXRLTHF4UmIvK3pyazBZdlg5QitHYmhPVzAwWWpYM2hpWDN2TjVUb1lMWWFrT0JmWVZCWFEvQnNnYTR3VXBhNFNUL3JBYVJiM0ZNL1FHSSs3UXFtN1N0Z0YxQkhaeE43MW5aVWd5b3B3QVFsUjZ2bVQ5bTJJU0E4eTBtUnhvSW5ndVNMUFVjeThVTnl6ajg2RmpDdHlTQ0JXZCszZWJST2VKLzArRFd3QS9ZanU4T2JyN0F6amZMRVRCM1N1c29uY0QrUUM4QTdVL051TWJ5Ukg3dHltTnF2UkVPQ2xOcEQ0Ym4xNkdhbWE1UWVKY3MrOXZMa21YTklLZUhZV0ZKR1RPUWxFL0Q5cnRwWVRIYWZpYjBTbFFkenkxTlc4RVF5dEMxV3BzYnNTd1NPcHh1RWpGRm0zcFdTd3ZGdnZGZUUxL2dJSmVwd0ZRWS9OSzkxcTVuYnpxdlJmRjBPRnlvTVlGVTVSZ2U5MWU5cnRwTExBcGRwekhEUE5uWEJpc21OT2RQNnlxMiszbExSMnA0eEIxRzE3Z1J5dDg5QU5HS0ZxMmlrRlFXTnIrUWxQeUxVbXdGdG9RNmU3YkxteExsV3QwMyt6WTZrVTQ0UHYyMlpCdi9TRmpnSExqbnQrcnBOYm92VFFMZ3NmSWtpR2NXSDNIM1V6TllTTFJSd0dJNVN5ek5nazd4ZDBMN3R0VGRYemtpZVpzYldrSE1rb3BkdE4xZ3dwZFJhZndXTTBZRFQ2ZzRza3hHUy9pc0pnaTFkc2lKS2o5NFphR1MzZXJaTU0xbk1UbjMwSWNZNlpZY3h6NVEvbUZiZ2pnS2FFdmxVWGhIZU13VHM2MWQ0RWtwK0FESnR0R0dXK3YvTnJpcGJESGhxQTFLSURjWFg5L0ZidzJ3eEQxZnc1ZVVKUHlKTERabnVUdFhyM3pFaHJQK0lHUTlEaWxQeWJ5Z0Y0S2M3enBqV2JoLytVVGJkMjAvcTI2NzFhblQyWThmRjU1UTBmTEphV0pSQ3BhUHhqK1IzdzlGRHpqb1JUNU1TdUhlaVdEY0lnbDhTb3M4Mk15N0JnKytBcUM5NTI0d1NlSm5RKzlneS81aHVCRy8vQSsyVDh2amNPRk5qNUNSOU9HZlRqVXhnaTVOOERaTHBhaHVrclZ2VU5NcHN5LzBTZkR1ZG5uNC93YTZIOUxUVmpEVTVMdm84TVdhZGl2amVBYWI0M3dpTHBST0tDazR4ckVHaHV4ODU3alZtb05IbFF1ckdCbGhPbyt5WmlwSE8vYktCbGlxNnNGVFdLeFJXeHcwaXIyKzRkUFRDNjJqQW1jQmVCR0QvaWt5WXpHakpUV1kwOEQxS1ByQkFOTHNWRlB5TklCNWRPaFpZMDF5c3BZd2RqaHgxcGFWRHUzTT0=",
         username : "public"
       });
 };
@@ -230,11 +257,11 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   if (OPrime.isCouchApp()) {
     var corpusURL = window.location.origin;
     if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
-      corpusURL = "https://corpusdev.lingsync.org";
+      corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
-      corpusURL = "https://corpusdev.lingsync.org";
+      corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("localhost") >= 0) {
       // use the window origin
     }

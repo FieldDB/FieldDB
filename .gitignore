@@ -8,6 +8,8 @@ couchapp_minified/views
 couchapp_minified/lists
 couchapp_minified/_attachments
 
+spreadsheet_build_dev
+
 #ignore private config files
 *_production*
 *private*
@@ -46,6 +48,7 @@ pids
 logs
 results
 
+bower_components
 node_modules
 npm-debug.log
 
@@ -66,6 +69,7 @@ npm-debug.log
 *.ist
 *.ps
 *(busy)
+*.pdfsync
 
 # Compiled source #
 ###################

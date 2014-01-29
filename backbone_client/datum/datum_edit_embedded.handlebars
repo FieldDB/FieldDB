@@ -1,44 +1,48 @@
 <div class="pull-right">
 	 <!-- Issue #797 -->
-	<button class="btn btn-danger trash-button">
-		<i class="icon-trash "></i>
-	</button>
-	<button class="btn btn-success save-datum locale_Save"
-		value="Save"></button>
+	
+	<button class="btn btn-{{buttonColor}} save-datum"
+		value="Save">{{locale_Save}}</button>
 </div>
 
-<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
-<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
+<!-- datum IGT preview area to see what you're doing -->
+<div class="row preview_IGT_area" > </div>
+
 
 <!-- list for the fields -->
 <table class="datum_fields_ul unstyled"></table>
-<a  href="#" class= "locale_See_Fields" rel="tooltip" >
-  <i class="icons icon-list-alt pull-right"> </i></a>
+<a  href="#"   title="{{locale_See_Fields}}" rel="tooltip" >
+	<i class="icons icon-list-alt pull-right"> </i>
+</a>
 <!-- Datum Edit view specialized fields and menu area -->
-<div class="row-fluid">
+<div class="row-fluid ">
 	<div class="span6">
 		<!-- Buttons for various actions -->
 	  <div class=" btn-group">
-	    <a href="#corpus/{{pouchname}}/datum/new" class = "locale_Insert_New_Datum btn btn-mini btn-primary" rel="tooltip">
+	    <a href="#corpus/{{pouchname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale_Insert_New_Datum}}" rel="tooltip">
 	      <i class=" icon-plus"></i></a>
-	    <a  href="#" class = "locale_Duplicate btn btn-mini btn-primary" rel="tooltip">
+	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Duplicate}}" rel="tooltip">
 	      <i class=" icon-copy"></i></a>  
-	    <a  href="#" class= "locale_Encrypt btn btn-mini btn-primary" rel="tooltip">
+	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Encrypt}}" rel="tooltip">
 	      <i class=" {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a> 
-	    <a href="#" class = "locale_Show_confidential_items_Tooltip btn btn-mini btn-primary" rel="tooltip">
+	    <a href="#" class="btn btn-mini btn-primary" title="{{locale_Show_confidential_items_Tooltip}}" rel="tooltip">
 	      <i class=" {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
 	    </a>
-	    <a  href="#" class = "locale_Plain_Text_Export_Tooltip btn btn-mini btn-info" rel="tooltip" >
+	    <a  href="#" class="btn btn-mini btn-info" title="{{locale_Plain_Text_Export_Tooltip}}" rel="tooltip" >
 	      <i class=" icon-paste"></i></a>
-	    <a href="#" class = "locale_LaTeX  LaTeX btn btn-mini btn-info" rel="tooltip">
-	      <i class="">LaTeX</i>
+	    <a href="#" class="LaTeX btn btn-mini btn-info" title="{{locale_LaTeX}}" rel="tooltip">
+	      <i>LaTeX</i>
 	    </a>
-	    <a href="#" class = "locale_CSV_Tooltip CSV btn btn-mini btn-info" rel="tooltip">
-	      <i class="">CSV</i>
+	    <a href="#" class="CSV btn btn-mini btn-info" title="{{locale_CSV_Tooltip}}" rel="tooltip">
+	      <i>CSV</i>
 	    </a>
+	    <a href="#" class="btn btn-mini  btn-danger trash-button" title="Put datum in the trash" rel="tooltip">
+			<i class="icon-trash "></i>
+		</a>
 	  </div>
 	  <br/>
-		<a href="#" class="audio_video locale_Drag_and_Drop_Audio_Tooltip" rel="tooltip"></a>
+		<a href="#" class="audio_video" title="{{locale_Drag_and_Drop_Audio_Tooltip}}" rel="tooltip"></a>
+		<ul class="audio_video_ul unstyled"></ul>
 	</div>
   <div class="span3 border-left hide">
 		<!-- list for the tags -->
@@ -50,7 +54,7 @@
 	            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]" 
 	      /><button class=" btn btn-small btn-primary add_datum_tag" type="button">
 	        <i class=" icon-tag"></i>
-	        <span class="locale_Add">Add</span> 
+	        <span>{{locale_Add}}</span> 
 	      </button>
 	    </div>
 		</div>
@@ -60,8 +64,14 @@
 	</div>
 </div>
 
-<span class="session-link"></span>
+<div class="extra-datum-info-which-can-be-hidden">
+	<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
+	<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
 
-<!-- Datum comments -->
-<ul class="comments unstyled"></ul> 
-<div class="new-comment-area"></div>  
+	<span class="session-link"></span>
+
+	<!-- Datum comments -->
+	<ul class="comments unstyled"></ul> 
+	<div class="new-comment-area"></div>  
+
+</div>

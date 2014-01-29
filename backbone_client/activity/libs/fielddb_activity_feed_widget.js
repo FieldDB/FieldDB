@@ -14429,7 +14429,7 @@ OPrime.touchUrl = "http://localhost:8128/";
  */
 OPrime.pouchUrl = "idb://";
 
-OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
+OPrime.contactUs = "<a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_blank'>Contact Us</a>";
 
 OPrime.debug = function(message, message2, message3, message4) {
   if (navigator.appName == 'Microsoft Internet Explorer') {
@@ -15936,8 +15936,8 @@ OPrime.couchURL = function() {
     corpusURL = "https://corpus.lingsync.org";
     couchConnection.domain = "corpus.lingsync.org";
   } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
-    corpusURL = "https://corpusdev.lingsync.org";
-    couchConnection.domain = "corpusdev.lingsync.org";
+    corpusURL = "https://prosody.lingsync.org";
+    couchConnection.domain = "prosody.lingsync.org";
   } else if (corpusURL.indexOf("localhost") >= 0) {
     corpusURL = window.location.origin;
     couchConnection.port = ":" + window.location.port;
@@ -15947,17 +15947,17 @@ OPrime.couchURL = function() {
     corpusURL = "https://corpus.lingsync.org";
     couchConnection.domain = "corpus.lingsync.org";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-    corpusURL = "https://corpusdev.lingsync.org";
-    couchConnection.domain = "corpusdev.lingsync.org";
+    corpusURL = "https://corpus.lingsync.org";
+    couchConnection.domain = "corpus.lingsync.org";
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-    corpusURL = "https://corpusdev.lingsync.org";
-    couchConnection.domain = "corpusdev.lingsync.org";
+    corpusURL = "https://corpus.lingsync.org";
+    couchConnection.domain = "corpus.lingsync.org";
   } else {
 //    corpusURL = "https://localhost:6984";
 //    couchConnection.port = ":6984";
 //    couchConnection.domain = "localhost";
-    corpusURL = "https://corpusdev.lingsync.org";
-    couchConnection.domain = "corpusdev.lingsync.org";
+    corpusURL = "https://corpus.lingsync.org";
+    couchConnection.domain = "corpus.lingsync.org";
   }
   couchConnection.complete = corpusURL + "/lingllama-cherokee-activity_feed/";
   return couchConnection;

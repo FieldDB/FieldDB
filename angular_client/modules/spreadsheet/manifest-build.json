@@ -1,0 +1,20 @@
+{
+  "name": "DIST - LingSync",
+  "description": "Spreadsheet style data entry; written in AngularJS.",
+  "version": "1.0",
+  "manifest_version": 2,
+  "content_security_policy": "img-src 'self' https://secure.gravatar.com/avatar/ https://ifielddevs.iriscouch.com; default-src 'self' https://localhost:6984 https://localhost:3183 https://corpusdev.lingsync.org https://authdev.lingsync.org https://fonts.googleapis.com/ https://themes.googleusercontent.com/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; script-src 'self' 'unsafe-eval' https://ifielddevs.iriscouch.com; connect-src 'self' https://localhost:6984 https://localhost:3183 https://corpusdev.lingsync.org/ https://authdev.lingsync.org/ https://ifielddevs.iriscouch.com https://prosody.linguistics.mcgill.ca/; object-src 'self' https://ifielddevs.iriscouch.com ; style-src 'self' 'unsafe-inline' https://ifielddevs.iriscouch.com https://fonts.googleapis.com/ https://themes.googleusercontent.com/;",
+  "app": {
+    "launch": {
+      "local_path": "index.html"
+    }
+  },
+  "icons": {
+    "16": "img/icon16_dev.png",
+    "128": "img/icon128_dev.png"
+  },
+  "permissions": [
+
+    "https://localhost:6984/", "https://localhost:3183/"
+  ]
+}
