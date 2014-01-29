@@ -332,6 +332,14 @@ a.delete_button {
 	background-color: #5D5E5E;
 }
 
+.unselectedGreyRow:nth-child(odd) {
+	background-color: #F1F0F1;
+}
+
+.unselectedGreyRow {
+	background-color: #FCFCFC;
+}
+
 .relativePosition {
 	position: relative;
 }
