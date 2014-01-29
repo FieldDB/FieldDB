@@ -128,7 +128,7 @@ define([
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
      * @param {Function} callback A function that expects a single parameter. That
-     * parameter is the result of calling "pages/by_date". So it is an array
+     * parameter is the result of calling "pages/datums". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
@@ -163,7 +163,7 @@ define([
       
       try{
           self.pouch(function(err, db) {
-            db.query("pages/by_date", {reduce: false}, function(err, response) {
+            db.query("pages/datums", {reduce: false}, function(err, response) {
               
               if(err){
                 if(window.toldSearchtomakebydateviews){
@@ -174,7 +174,7 @@ define([
                  * Its possible that the pouch has no by date views, create them and then try searching again.
                  */
                 window.toldSearchtomakebydateviews = true;
-                window.app.get("corpus").createPouchView("pages/by_date", function(){
+                window.app.get("corpus").createPouchView("pages/datums", function(){
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
                   self.getMostRecentIdsByDate(howmany, callback);
                 });

@@ -70,7 +70,7 @@ define(
                       }
                       // Save edited record
                       Data
-                        .saveEditedRecord($rootScope.DB.pouchname, UUID,
+                        .saveEditedCouchDoc($rootScope.DB.pouchname, UUID,
                           editedRecord, editedRecord._rev)
                         .then(
                           function() {
@@ -147,6 +147,11 @@ define(
       // $scope.getTags();
 
       $scope.saveNewPreferences = function(template, newFieldPreferences) {
+        if ($rootScope.DB && $rootScope.DB.preferredTemplate && $rootScope.DB.preferredTemplate !== template) {
+          window.alert("Sorry, you can't use a different template. Your team has decided to use the "+ $rootScope.DB.preferredTemplate + " for "+$rootScope.DB.title);
+          return;
+        }
+
         var prefs = localStorage.getItem('SpreadsheetPreferences');
         var Preferences = JSON.parse(prefs || "{}");
         for (var availableField in $scope.availableFields) {
@@ -155,6 +160,10 @@ define(
               Preferences[template][newField].title = "";
               Preferences[template][newField].label = "";
             } else if ($scope.availableFields[availableField].label == newFieldPreferences[newField]) {
+              if(!Preferences[template]){
+                //hack for #1290 until we refactor the app into something more MVC
+                Preferences[template] = window.defaultPreferences[template];
+              }
               Preferences[template][newField].title = $scope.availableFields[availableField].title;
               Preferences[template][newField].label = $scope.availableFields[availableField].label;
             }

@@ -1,7 +1,7 @@
 
 <div class="row" ng-show="selected=='newEntry' && expandCollapse==true"> 
   <div class="span10"> 
-    <input keypress-mark-as-new type="text" class="span10" ng-model="newFieldData.field5" placeholder="{{fields.field5.title}}" ng-hide="fields.field5.label==''"> 
+    <input keypress-mark-as-new type="text" class="span10" ng-model="newFieldData.field5" placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}" > 
   </div> 
 </div> 
 <div class="row" ng-show="selected=='newEntry' && expandCollapse==true"> 
@@ -79,7 +79,7 @@
     <img src="img/icon16_dev.png" border="0" /> above and log in. 
   </div> 
 </div> 
-<div arrow-key class="row relativePosition" ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}" ng-repeat="datum in data | orderBy:orderProp" ng-click="selectRow($index)" ng-hide="loading==true || writeOnly==true"> 
+<div arrow-key class="row relativePosition" ng-class="{selectedRow: selected==$index, unselectedGreyRow: selected!=$index}" ng-repeat="datum in data | orderBy:orderProp" ng-click="selectRow($index)" ng-hide="loading==true || writeOnly==true"> 
   <!-- Show when editing --> 
   <div ng-show="selected==$index"> 
     <form ng-submit="markAsEdited(fieldData, datum);"> 
@@ -87,14 +87,16 @@
         <div class="focus_box_div">
           <input focus />
         </div> 
-        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field1" ng-init="fieldData.field1=datum[fields.field1.label]" value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" ng-disabled="readOnly==true"> 
-        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2" ng-init="fieldData.field2=datum[fields.field2.label]" value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" ng-disabled="readOnly==true"> 
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3" ng-init="fieldData.field3=datum[fields.field3.label]" value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" ng-disabled="readOnly==true"> 
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field1" ng-init="fieldData.field1=datum[fields.field1.label]" value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" ng-disabled="readOnly==true"> 
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2" ng-init="fieldData.field2=datum[fields.field2.label]" value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" ng-disabled="readOnly==true"> 
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3" ng-init="fieldData.field3=datum[fields.field3.label]" value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" ng-disabled="readOnly==true"> 
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field4" ng-init="fieldData.field4=datum[fields.field4.label]" value="{{datum[fields.field4.label]}}" ng-hide="fields.field4.label==''" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" ng-disabled="readOnly==true"> 
       </div> 
       <div class="span5"> 
-        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field4" ng-init="fieldData.field4=datum[fields.field4.label]" value="{{datum[fields.field4.label]}}" ng-hide="fields.field4.label==''" placeholder="{{fields.field4.title}}" ng-disabled="readOnly==true"> 
-        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6" ng-init="fieldData.field6=datum[fields.field6.label]" value="{{datum[fields.field6.label]}}" ng-hide="fields.field6.label==''" placeholder="{{fields.field6.title}}" ng-disabled="readOnly==true"> 
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.datumTags" ng-init='commaList(datum.datumTags)' value="{{commaList(datum.datumTags)}}" placeholder="{{commaList(datum.datumTags)}}" ng-disabled="readOnly==true">
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field5" ng-init="fieldData.field5=datum[fields.field5.label]" value="{{datum[fields.field5.label]}}"  placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}" ng-disabled="readOnly==true"> 
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6" ng-init="fieldData.field6=datum[fields.field6.label]" value="{{datum[fields.field6.label]}}" ng-hide="fields.field6.label==''" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}" ng-disabled="readOnly==true"> 
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field7" ng-init="fieldData.field7=datum[fields.field7.label]" value="{{datum[fields.field7.label]}}" ng-hide="fields.field7.label==''" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}" ng-disabled="readOnly==true"> 
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field8" ng-init="fieldData.field8=datum[fields.field8.label]" value="{{datum[fields.field8.label]}}" ng-hide="fields.field8.label==''" placeholder="{{fields.field8.title}}" title="{{fields.field8.title}}" ng-disabled="readOnly==true"> 
       </textarea> 
     </div> 
     <div class="span2 entered_modified_info"> 
@@ -105,27 +107,24 @@
         <br />
       </span> 
       <span title="Date entered {{datum.dateEntered | standardDate}}"> 
-        <i class="fa whiteicon fa-clock-o">
-        </i> Entered: {{datum.dateEntered | standardDate}}
+        <i class="fa whiteicon  fa-clock-o">
+        </i>  {{datum.dateEntered | standardDate}}
       </span>
-      <br /> 
       <span ng-hide="!datum.enteredByUser"> 
-        <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">
+        <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=15&d=identicon">
         <br />
       </span>
       <br /> 
       <span title="Date modified {{datum.dateModified | standardDate}}">
-        <i class="fa whiteicon fa-clock-o">
-        </i>Last edit: {{datum.dateModified | standardDate}}
+        <i class="fa whiteicon fa-save">
+        </i> {{datum.dateModified | standardDate}}
       </span>
-      <br /> 
-      <span ng-hide="!datum.modifiedByUser.users[0]"> 
+      <!-- <span ng-hide="!datum.modifiedByUser.users[0]"> 
         <i class="fa whiteicon fa-group">
-        </i> Edited:
-        <br />
-      </span> 
+        </i>
+      </span>  -->
       <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
-        <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title="{{modifiedByUser.username}}" />&nbsp;
+        <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}}" />&nbsp;
       </span> 
       <div class="expandCollapseButton"> 
         <i ng-show="datum.hasAudio==true"class="fa whiteicon {{recordingIcon}}"></i>
@@ -141,20 +140,20 @@
     </div> 
   </div> 
   <div class="container-fluid"> 
-    <div class="row" ng-show="expandCollapse==true && datum.id!=undefined"> 
-      <div class="span10 expandedDataComments"> 
+    <div class="row" ng-show="datum.id!=undefined"> 
+      <div class="span5 expandedDataComments"> 
         <div class="expandedDataInner"> 
           <ul class="unstyled"> 
-            <li ng-hide="fields.field5.label==''" ng-repeat="comment in datum.comments"> 
-              <a ng-click="deleteComment(comment, datum)" class=" floatLeft delete_button" ng-disabled="readOnly==true"> 
+            <li  ng-repeat="comment in datum.comments"> 
+              <a ng-click="deleteComment(comment, datum)" class="  delete_button" ng-disabled="readOnly==true"> 
                 <i class="fa fa-times-circle">
                 </i> 
               </a> 
-              <img title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=30&d=identicon">&nbsp; 
-              <i class="fa fa-comment">
-              </i> {{comment.text}} 
+              <img title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=15&d=identicon">&nbsp; 
               <i class="fa fa-clock-o">
               </i> {{comment.timestamp | standardDateFromTimestamp}} 
+              <i class="fa fa-comment">
+              </i> {{comment.text}} 
             </li> 
           </ul> 
           <button class="btn btn-primary" ng-click="addComment(datum);" ng-disabled="readOnly==true"> 
@@ -246,15 +245,21 @@
     <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">{{datum[fields.field3.label] | neverEmpty}}
     </span>
     <br /> 
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">{{datum[fields.field4.label] | neverEmpty}}
+    </span>
+    <br /> 
   </div> 
   <div ng-class="{span5: searching!=true, span4: searching==true}"> 
-    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">{{datum[fields.field4.label] | neverEmpty}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field5.title}}" ng-hide="fields.field5.label==''">{{datum[fields.field5.label] | neverEmpty}}
     </span>
     <br /> 
     <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">{{datum[fields.field6.label] | neverEmpty}}
     </span>
     <br /> 
-    <span ng-class="{span5: searching!=true, span4: searching==true}" rows="3">{{commaList(datum.datumTags) | checkDatumTags}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">{{datum[fields.field7.label] | neverEmpty}}
+    </span>
+    <br /> 
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field8.title}}" ng-hide="fields.field8.label==''">{{datum[fields.field8.label] | neverEmpty}}
     </span>
     <br /> 
   </div> 
@@ -268,50 +273,47 @@
       <br />
     </span> 
     <span title="Date entered"> 
-      <i class="fa whiteicon fa-clock-o">
-      </i> Entered: {{datum.dateEntered | standardDate}}
-      <br /> 
+      <i class="fa  fa-clock-o">
+      </i> {{datum.dateEntered | standardDate}}
       <span ng-hide="!datum.enteredByUser"> 
-        <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">
+        <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=15&d=identicon">
         <br />
       </span>
       <br /> 
       <span title="Date modified">
-        <i class="fa whiteicon fa-clock-o">
-        </i>Last edit: {{datum.dateModified | standardDate}}
+        <i class="fa fa-save">
+        </i> {{datum.dateModified | standardDate}}
       </span>
-      <br /> 
-      <span ng-hide="!datum.modifiedByUser.users[0]"> 
-        <i class="fa whiteicon fa-group">
-        </i> Edited:
-        <br />
-      </span> 
+      <!-- <span ng-hide="!datum.modifiedByUser.users[0]"> 
+        <i class="fa  fa-group">
+        </i> 
+      </span>  -->
       <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
-        <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title="{{modifiedByUser.username}}" /> 
+        <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}}" /> 
       </span> 
       <span>
         <br />
         <i ng-show="datum.hasAudio==true" class="fa {{recordingIcon}}"></i>
-        <i ng-show="datum.comments.length > 0" class="fa fa-comment"></i>
+        <!-- <i ng-show="datum.comments.length > 0" class="fa fa-comment"></i> -->
       </span>
     </div> 
-    <div class="row" ng-show="searching==true && datum.comments[0]!=undefined"> 
-      <div class="span10 offset1 expandedDataComments"> 
-        <div class="expandedDataInner"> 
-          <ul class="unstyled"> 
-            <li ng-hide="fields.field5.label==''" ng-repeat="comment in datum.comments"> 
-              <a ng-click="deleteComment(comment, datum)" class=" floatLeft delete_button" ng-disabled="readOnly==true"> 
+    <div class="row" ng-show="datum.comments[0]!=undefined"> 
+      <div class="span5 "> 
+        <ul class="unstyled"> 
+          <li ng-repeat="comment in datum.comments"> 
+            <p>
+              <!-- <a ng-click="deleteComment(comment, datum)" class="  delete_button" ng-disabled="readOnly==true"> 
                 <i class="fa fa-times-circle">
                 </i> 
-              </a> 
-              <img class="floatLeft" title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=30&d=identicon">&nbsp; 
-              <i class="floatLeft fa fa-comment">
+              </a>  -->
+              <img class="" title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=15&d=identicon">&nbsp; 
+              <!-- <i class="fa fa-clock-o">
+              </i> {{comment.timestamp | standardDateFromTimestamp}}  -->
+              <i class=" fa fa-comment">
               </i> {{comment.text}} 
-              <i class="fa fa-clock-o">
-              </i> {{comment.timestamp | standardDateFromTimestamp}} 
-            </li> 
-          </ul> 
-        </div> 
+            </p>
+          </li> 
+        </ul> 
       </div> 
     </div> 
     <div class="row" ng-show="searching==true"> 
@@ -342,7 +344,6 @@
     </div> 
   </div> 
 </div> 
-
 <div arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || readOnly == true "> 
   <div class="row"> 
     <form ng-submit="createRecord(newFieldData)" > 
@@ -350,14 +351,16 @@
         <div class="focus_box_div">
           <input focus />
         </div> 
-        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" ng-hide="fields.field1.label==''" > 
-        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" ng-hide="fields.field2.label==''" > 
-        <input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" ng-hide="fields.field3.label==''"> 
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''"> 
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''" > 
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''" > 
+        <input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''"> 
       </div> 
       <div class="span5"> 
-        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" ng-hide="fields.field4.label==''"> 
-        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6" placeholder="{{fields.field6.title}}" ng-hide="fields.field6.label==''"> 
-        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.datumTags" placeholder="Tags">
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field5" placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}" ng-hide="fields.field5.label==''"> 
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''"> 
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field7" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''"> 
+        <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field8" placeholder="{{fields.field8.title}}" title="{{fields.field8.title}}" ng-hide="fields.field8.label==''">
       </textarea> 
     </div> 
     <div class="span2"> 
