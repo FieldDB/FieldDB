@@ -69,7 +69,7 @@
 					<div class="rightMenuItemsDiv">
 						<div ng-hide="DB==undefined">
 							<a class="floatLeft" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this {{DB.pouchname}}'s webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
-							{{getCurrentSessionName()}}<br /><i class="fa whiteicon fa-cloud"></i> {{DB.corpustitle}}
+							{{getCurrentSessionName()}}<br /><i class="fa whiteicon fa-cloud"></i> {{DB.title}}
 						</div>
 						<div>
 							&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>&nbsp;
@@ -175,7 +175,7 @@
 								<td><i class="fa whiteicon fa-user"></i> User:</td>
 								<td><input disabled class="span3" type="text"
 									ng-model="newSessionInfo.user"
-									placeholder="{{userInfo.name}}"></td>
+									placeholder="{{user.name}}"></td>
 							</tr>
 							<tr>
 								<td>Language:</td>
@@ -250,7 +250,7 @@
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
 					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
 						<a class="floatLeft"  href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this corpus' webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
-						{{getCurrentSessionName()}}<br /> <i class="fa whiteicon fa-cloud"></i> {{DB.corpustitle}}
+						{{getCurrentSessionName()}}<br /> <i class="fa whiteicon fa-cloud"></i> {{DB.title}}
 					</div>
 					<div class="smallMenuBarInfoItem">
 						&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>&nbsp;
@@ -295,7 +295,7 @@
 					<form ng-model='editSessionInfo'>
 						<table cellpadding="5px">
 							<tr>
-								<td>Title:</td>
+								<td>Goal:</td>
 								<td><input class="span3" type="text"
 									ng-model="editSessionInfo.goal"
 									placeholder="Collecting examples of animacy agreement"></td>
@@ -348,7 +348,7 @@
 								<td> <i class="fa whiteicon fa-user"></i> User:</td>
 								<td><input disabled class="span3" type="text"
 									ng-model="newSessionInfo.user"
-									placeholder="{{userInfo.name}}"></td>
+									placeholder="{{user.name}}"></td>
 							</tr>
 							<tr>
 								<td>Language:</td>

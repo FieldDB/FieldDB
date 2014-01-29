@@ -127,7 +127,7 @@ function(doc) {
          * lets make a variable to refer to this gloss of this word, bassically
          * the gloss of the above morpheme
          */
-        var thisgloss = awordofglosss[morph];
+        var thisgloss = awordofglosss[morph] || "";
         /*
          * lets start by saying that morhemes' syntactic category by default can
          * just be the morpheme itself.

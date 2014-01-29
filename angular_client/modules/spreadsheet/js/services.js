@@ -1,8 +1,8 @@
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
 
 define(
-  ["angular"],
-  function(angular) {
+  ["angular", "js/SpreadsheetDatum"],
+  function(angular, SpreadsheetDatum) {
 
     'use strict';
 
@@ -10,43 +10,83 @@ define(
       .module('spreadsheet_services', ['ngResource'])
       .factory(
         'Data',
-        function($http, $rootScope, $q, Servers) {
-          return {
-            'async': function(DB, UUID) {
-              if (!$rootScope.serverCode) {
-                console.log("Sever code is undefined");
-                window.location.assign("#/corpora_list");
-                return;
-              }
-              var promise;
-              
-              if (UUID != undefined) {
-                var config = {
-                  method: "GET",
-                  url: Servers.getServiceUrl($rootScope.serverCode, "corpus")+ "/" + DB + "/" + UUID,
-                  withCredentials: true
-                };
+        function($http, $rootScope, $q, Servers, md5) {
 
-                console.log("Contacting the DB to get   record data " + config.url);
-                promise = $http(config).then(function(response) {
-                  console.log("Receiving data results ");
-                  return response.data;
-                });
-                return promise;
-              } else {
-                config = {
-                  method: "GET",
-                  url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums",
-                  withCredentials: true
-                };
-                console.log("Contacting the DB to get all   corpus data for " + DB);
-                promise = $http(config).then(function(response) {
-                  console.log("Receiving data results ");
-                  return response.data.rows;
-                });
-                return promise;
-              }
-            },
+          var getDocFromCouchDB = function (DB, UUID) {
+            if (!$rootScope.serverCode) {
+              console.log("Sever code is undefined");
+              window.location.assign("#/corpora_list");
+              return;
+            }
+            var promise;
+
+            if (UUID != undefined) {
+              var config = {
+                method: "GET",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,
+                withCredentials: true
+              };
+
+              console.log("Contacting the DB to get   record data " + config.url);
+              promise = $http(config).then(function(response) {
+                console.log("Receiving data results ");
+                return response.data;
+              });
+              return promise;
+            } else {
+              config = {
+                method: "GET",
+                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_chronological",
+                withCredentials: true
+              };
+              console.log("Contacting the DB to get all corpus data for " + DB);
+              promise = $http(config).then(function(response) {
+                console.log("Receiving data results ");
+                return response.data.rows;
+              });
+              return promise;
+            }
+          };
+
+          var saveCouchDoc = function(DB, newRecord) {
+            if (!$rootScope.serverCode) {
+              console.log("Sever code is undefined");
+              window.location.assign("#/corpora_list");
+              return;
+            }
+            var config = {
+              method: "POST",
+              url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB,
+              data: newRecord,
+              withCredentials: true
+            };
+
+            if (newRecord._rev) {
+              config.method = "PUT";
+              config.url = config.url + "/" + newRecord._id + "?rev=" + newRecord._rev
+            }
+
+            console.log("Contacting the DB to save record. " + config.url);
+            var promise = $http(config).then(function(response) {
+              return response;
+            });
+            return promise;
+          };
+
+          var getBlankDatumTemplate = function() {
+            var promise = $http.get('data/blank_datum_template.json').then(
+              function(response) {
+                /* Override default datum fields with the ones in the currently loaded corpus */
+                if ($rootScope.DB && $rootScope.DB.datumFields) {
+                  response.data.datumFields = $rootScope.DB.datumFields;
+                }
+                return response.data;
+              });
+            return promise;
+          };
+
+          return {
+            'async': getDocFromCouchDB,
             'datumFields': function(DB) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
@@ -124,7 +164,7 @@ define(
               });
               return promise;
             },
-            'getallusers': function(userInfo) {
+            'getallusers': function(loginInfo) {
               if (!$rootScope.serverCode) {
                 console.log("Sever code is undefined");
                 window.location.assign("#/corpora_list");
@@ -133,7 +173,7 @@ define(
               var config = {
                 method: "POST",
                 url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/corpusteam",
-                data: userInfo,
+                data: loginInfo,
                 withCredentials: true
               };
 
@@ -172,7 +212,10 @@ define(
               };
 
               var userIsAuthenticated = function(user){
-                user.name = user.firstname || user.username;
+                user.name = user.firstname || user.lastname || user.username;
+                if (!user.gravatar || user.gravatar.indexOf("gravatar") > -1) {
+                  user.gravatar = md5.createHash(user.email);
+                }
                 $rootScope.user = user;
                 var promiseCorpus = $http(corpusConfig).then(
                   function(corpusResponse) {
@@ -207,14 +250,14 @@ define(
                 });
               return deferred.promise;
             },
-            'register': function(newUserInfo) {
+            'register': function(newLoginInfo) {
 
 
 
               var config = {
                 method: "POST",
-                url: newUserInfo.authUrl + "/register",
-                data: newUserInfo,
+                url: newLoginInfo.authUrl + "/register",
+                data: newLoginInfo,
                 withCredentials : true
               };
               var promise = $http(config).then(
@@ -314,58 +357,65 @@ define(
                   });
               return promise;
             },
-            'saveNew': function(DB, newRecord) {
-              if (!$rootScope.serverCode) {
-                console.log("Sever code is undefined");
-                window.location.assign("#/corpora_list");
-                return;
-              }
-              var config = {
-                method: "POST",
-                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB,
-                data: newRecord,
-                withCredentials: true
-              };
+            'saveCouchDoc': saveCouchDoc,
+            'saveSpreadsheetDatum': function(spreadsheetDatumToBeSaved) {
+              var deffered = Q.defer();
 
-              console.log("Contacting the DB to save new record. " + config.url);
-              var promise = $http(config).then(function(response) {
-                return response;
+              Q.nextTick(function() {
+                spreadsheetDatumToBeSaved.timestamp = Date.now();
+                spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date()));
+                var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
+                  try {
+                    var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
+                  } catch (e) {
+                    deffered.reject("Error saving datum: " + JSON.stringify(e));
+                    return;
+                  }
+                  saveCouchDoc(fieldDBDatum.pouchname, fieldDBDatum).then(function(response) {
+                    console.log(response);
+                    if (response.status >= 400) {
+                      deffered.reject("Error saving datum " + response.status);
+                      return;
+                    }
+                    if (!spreadsheetDatumToBeSaved.id) {
+                      spreadsheetDatumToBeSaved.id = response.data.id;
+                      spreadsheetDatumToBeSaved.rev = response.data.rev;
+                    }
+                    deffered.resolve(spreadsheetDatumToBeSaved);
+                  }, function(e) {
+                    var reason = "Error saving datum. Maybe you're offline?";
+                    if (e.data && e.data.reason) {
+                      reason = e.data.reason;
+                    } else if (e.status) {
+                      reason = "Error saving datum: " + e.status;
+                    }
+                    console.log(reason, fieldDBDatum, e);
+                    deffered.reject(reason);
+                  });
+                };
+
+                if (spreadsheetDatumToBeSaved.id) {
+                  getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
+                    var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
+                    if (e.data && e.data.reason) {
+                      if (e.data.reason == "missing") {
+                        e.data.reason = e.data.reason + " Please report this.";
+                      }
+                      reason = e.data.reason;
+                    } else if (e.status) {
+                      reason = "Error getting the most recent version of the datum: " + e.status;
+                    }
+                    console.log(reason, spreadsheetDatumToBeSaved, e);
+                    deffered.reject(reason);
+                  });
+                } else {
+                  getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
+                }
+
               });
-              return promise;
+              return deffered.promise;
             },
-            'saveEditedRecord': function(DB, UUID, newRecord, rev) {
-              if (!$rootScope.serverCode) {
-                console.log("Sever code is undefined");
-                window.location.assign("#/corpora_list");
-                return;
-              }
-              var couchInfo;
-              if (rev) {
-                couchInfo = Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID + "?rev=" + rev;
-              } else {
-                couchInfo = Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID;
-              }
-
-              var config = {
-                method: "PUT",
-                url: couchInfo,
-                data: newRecord,
-                withCredentials: true
-              };
-
-              console.log("Contacting the DB to save edited record. " + couchInfo);
-              var promise = $http(config).then(function(response) {
-                return response;
-              });
-              return promise;
-            },
-            'blankDatumTemplate': function() {
-              var promise = $http.get('data/blank_datum_template.json').then(
-                function(response) {
-                  return response.data;
-                });
-              return promise;
-            },
+            'blankDatumTemplate': getBlankDatumTemplate,
             'blankSessionTemplate': function() {
               var promise = $http.get('data/blank_session_template.json')
                 .then(function(response) {

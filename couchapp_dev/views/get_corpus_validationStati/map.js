@@ -6,10 +6,17 @@ function(doc) {
     if ((doc.datumFields) && (doc.session)) {
       for (var i in doc.datumFields) {
         if (doc.datumFields[i].label == "validationStatus" && doc.datumFields[i].mask) {
-          var stati = doc.datumFields[i].mask.split(" ");
+          var validationStatus = doc.datumFields[i].mask.replace(/ be/g, "Be").replace(/ to/g, "To").replace(/ checked/g, "Checked");
+          var stati = validationStatus.split(/[, ]/);
           for (var state in stati) {
-            if (stati[state])
-              emit(stati[state], 1);
+            var thisValidationStatus = stati[state];
+            thisValidationStatus = thisValidationStatus.replace(/[,!@#$%^&*()]/g, '').trim()
+            if (thisValidationStatus) {
+              thisValidationStatus = thisValidationStatus.replace(/\w\S*/g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1);
+              });
+              emit(thisValidationStatus, 1);
+            }
           }
         }
       }
