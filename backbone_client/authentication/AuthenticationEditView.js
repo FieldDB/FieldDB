@@ -164,15 +164,34 @@ define([
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("Auth model was undefined, come back later.");
         return this;
-      }
-
+      }      
+      
       if(this.model.get("userPublic") != undefined){
         this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
         this.model.set( "username", this.model.get("userPublic").get("username") );
       }
+
+      var jsonToRender = this.model.toJSON();
+      //localization
+      jsonToRender.locale_An_offline_online_fieldlinguistics_database = Locale.get("locale_An_offline_online_fieldlinguistics_database");
+      jsonToRender.locale_Close_and_login_as_LingLlama = Locale.get("locale_Close_and_login_as_LingLlama");
+      jsonToRender.locale_Close_and_login_as_LingLlama_Tooltip = Locale.get("locale_Close_and_login_as_LingLlama_Tooltip");
+      jsonToRender.locale_Confirm_Password = Locale.get("locale_Confirm_Password");
+      jsonToRender.locale_Corpus_Settings = Locale.get("locale_Corpus_Settings");
+      jsonToRender.locale_Create_a_new_user = Locale.get("locale_Create_a_new_user");
+      jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts");
+      jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
+      jsonToRender.locale_Log_Out = Locale.get("locale_Log_Out");  
+      jsonToRender.locale_New_User = Locale.get("locale_New_User");
+      jsonToRender.locale_Private_Profile = Locale.get("locale_Private_Profile");
+      jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
+      jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
+      jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
+
+            
       // Display the AuthenticationEditView
       this.setElement($("#authentication-embedded"));
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template(jsonToRender));
 
       if (this.model.get("state") == "renderLoggedIn") {
         $("#logout").show();
@@ -186,9 +205,6 @@ define([
         }else{
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
-        //localization
-        $(this.el).find(".locale_Log_Out").html(Locale.get("locale_Log_Out"));
-
         
       } else {
         $("#logout").hide();
@@ -203,30 +219,12 @@ define([
         }else{
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
-        //localization
-        $(this.el).find(".locale_Close_and_login_as_LingLlama").html(Locale.get("locale_Close_and_login_as_LingLlama"));
-        $(this.el).find(".locale_Close_and_login_as_LingLlama_Tooltip").attr("title", Locale.get("locale_Close_and_login_as_LingLlama_Tooltip"));
-        
-        $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
-        $(this.el).find(".locale_Create_a_new_user").html(Locale.get("locale_Create_a_new_user"));
-        $(this.el).find(".locale_New_User").text(Locale.get("locale_New_User"));
-        $(this.el).find(".locale_Confirm_Password").text(Locale.get("locale_Confirm_Password"));
-        $(this.el).find(".locale_Sign_in_with_password").text(Locale.get("locale_Sign_in_with_password"));
 
         var mostLikelyAuthUrl = OPrime.getMostLikelyUserFriendlyAuthServerName();
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
         
       }
 
-      //localization
-      $(this.el).find(".locale_Private_Profile").html(Locale.get("locale_Private_Profile"));
-      $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale.get("locale_An_offline_online_fieldlinguistics_database"));
-      
-      $(this.el).find(".locale_User_Settings").html(Locale.get("locale_User_Settings"));
-      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale.get("locale_Keyboard_Shortcuts"));
-      $(this.el).find(".locale_Corpus_Settings").html(Locale.get("locale_Corpus_Settings"));
-      $(this.el).find(".locale_Terminal_Power_Users").html(Locale.get("locale_Terminal_Power_Users"));
-      
       return this;
     },
     

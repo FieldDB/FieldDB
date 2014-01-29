@@ -52,34 +52,27 @@ define([
     templateFullscreen : Handlebars.templates.datum_container_read_fullscreen,
     
     render : function() {
-      if (this.format == "centreWell") {
-        // Display the DatumContainerEditView
-        this.setElement($("#datums-embedded"));
-        $(this.el).html(this.templateEmbedded({}));
-        
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".datum-embedded-ul");
-        this.datumsView.render();
-        
-        //localization of centerWell view
-        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
-        
-      } else if (this.format == "fullscreen") {
-        // Display the DatumContainerEditView
-        this.setElement($("#datum-container-fullscreen"));
-        $(this.el).html(this.templateFullscreen({}));
-        
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".datum-embedded-ul");
-        this.datumsView.render();
-        
-        //localization of fullscreen view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+      
+      var jsonToRender = this.model.toJSON(); 
+      jsonToRender.locale_Data_Entry_Area = Locale.get("locale_Data_Entry_Area");
+      jsonToRender.locale_Edit_Datum = Locale.get("locale_Edit_Datum");             
+      jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
+      jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
 
+      // Display the DatumContainerReadView
+      if (this.format == "centreWell") {
+        this.setElement($("#datums-embedded"));        
+        $(this.el).html(this.templateEmbedded(jsonToRender));
+      } else if (this.format == "fullscreen") {
+        this.setElement($("#datum-container-fullscreen"));
+        $(this.el).html(this.templateFullscreen(jsonToRender));
       }
-      //localization for all views
-      $(this.el).find(".locale_Data_Entry_Area").html(Locale.get("locale_Data_Entry_Area"));
-      $(this.el).find(".locale_Edit_Datum").attr("title", Locale.get("locale_Edit_Datum"));      
+      
+      // Display the DatumFieldsView
+      this.datumsView.el = this.$(".datum-embedded-ul");
+      this.datumsView.render();
+
+      return this;
     },
     
     resizeSmall : function(e) {
@@ -112,7 +105,7 @@ define([
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(function(rows) {
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(nextNumberOfDatum ,function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums

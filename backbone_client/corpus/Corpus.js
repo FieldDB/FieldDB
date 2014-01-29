@@ -129,6 +129,7 @@ define([
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
+        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
         window.location.replace(optionalCouchAppPath + "user.html");
       };
 
@@ -319,6 +320,7 @@ define([
             shouldBeEncrypted: "",
             showToUserTypes: "all",
             readonly: true,
+            user: {},
             userchooseable: "disabled",
             help: "The user who originally entered the datum"
           }),
@@ -349,7 +351,7 @@ define([
                 help: "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
             })
           ]));
-        }
+      }
       
       if(!this.get("sessionFields") || this.get("sessionFields").length == 0){
         this.set("sessionFields", new DatumFields([ 
@@ -823,8 +825,12 @@ define([
       var oldCouchConnection = this.get("couchConnection");
       if(oldCouchConnection){
         if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-          oldCouchConnection.domain  = "corpusdev.lingsync.org";
+          oldCouchConnection.domain  = "corpus.lingsync.org";
           oldCouchConnection.port = "";
+          this.set("couchConnection", oldCouchConnection);
+        }
+        if(oldCouchConnection.domain == "orpusdev.lingsync.org"){
+          oldCouchConnection.domain  = "corpus.lingsync.org";
           this.set("couchConnection", oldCouchConnection);
         }
       }
@@ -985,7 +991,7 @@ define([
               window.appView.toastUser("Sucessfully saved corpus: "+ title,"alert-success","Saved!");
               window.appView.addSavedDoc(model.id);
             }
-            var verb = "updated";
+            var verb = "modified";
             verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
@@ -1273,8 +1279,30 @@ define([
      */
     validCouchViews : function(){
       return {
-        "pages/by_date" : {
-          map: function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}
+        "pages/datums" : {
+          map: /* updated to be compatible with pre-1.38 databases */
+            function(doc) {
+                try {
+                    /* if this document has been deleted, the ignore it and return immediately */
+                    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
+                    if (doc.collection == "datums" || (doc.datumFields && doc.session)) {
+                        var dateModified = doc.dateModified;
+                        if (dateModified) {
+                            try {
+                                dateModified = dateModified.replace(/"/g, "");
+                                dateModified = new Date(dateModified);
+                                /* Use date modified as a timestamp if it isnt one already */
+                                dateModified = dateModified.getTime();
+                            } catch (e) {
+                                //emit(error, null);
+                            }
+                        }
+                        emit(dateModified, doc);
+                    }
+                } catch (e) {
+                    //emit(e, 1);
+                }
+            }
         },
         "pages/get_datum_fields" : {
           map : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}

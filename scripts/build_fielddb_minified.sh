@@ -43,6 +43,7 @@ cp backbone_client/images/and_venn_diagram.png couchapp_minified/_attachments/im
 
 cp backbone_client/manifest.json couchapp_minified/_attachments/manifest.json
 cp backbone_client/images/icon.png couchapp_minified/_attachments/images/icon.png
+cp backbone_client/favicon.ico couchapp_minified/_attachments/favicon.ico
 cp backbone_client/images/*dev.png couchapp_minified/_attachments/images/
 cp backbone_client/images/loader.gif couchapp_minified/_attachments/images/loader.gif
 cp backbone_client/images/spinner.gif couchapp_minified/_attachments/images/spinner.gif

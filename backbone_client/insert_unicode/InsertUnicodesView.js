@@ -75,11 +75,23 @@ define([
     minimizedTemplate : Handlebars.templates.insert_unicodes_minimized,
 
     render : function() {
+
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_Add = Locale.get("locale_Add");
+      jsonToRender.locale_Add_new_symbol = Locale.get("locale_Add_new_symbol");
+      jsonToRender.locale_Drag_and_Drop = Locale.get("locale_Drag_and_Drop");
+      jsonToRender.locale_Hide_Unicode_Palette = Locale.get("locale_Hide_Unicode_Palette");
+      jsonToRender.locale_Paste_Type_Unicode_Symbol_Placeholder = Locale.get("locale_Paste_Type_Unicode_Symbol_Placeholder");
+      jsonToRender.locale_Show_Unicode_Palette = Locale.get("locale_Show_Unicode_Palette");
+      jsonToRender.locale_TIPA_shortcut = Locale.get("locale_TIPA_shortcut");
+      jsonToRender.locale_Unicode = Locale.get("locale_Unicode");
+
       if (this.format == "rightSide") {
         // Display the maximized InsertUnicodesView
         this.setElement($("#insert-unicode"));
-        $(this.el).html(this.template({}));
-  
+
+        $(this.el).html(this.template(jsonToRender));
+        
         //Updating Collection View Rendering
         this.insertUnicodesView.el = this.$("#unicodes");
         this.insertUnicodesView.render();
@@ -88,24 +100,13 @@ define([
           this.addEventListener('dragstart', window.appView.insertUnicodesView.handleDragStart);
         });
         
-        //localization for non-minimized view
-        $(this.el).find(".locale_Hide_Unicode_Palette").attr("title", Locale.get("locale_Hide_Unicode_Palette"));
-        $(this.el).find(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", Locale.get("locale_Paste_Type_Unicode_Symbol_Placeholder"));
-        $(this.el).find(".locale_TIPA_shortcut").attr("placeholder", Locale.get("locale_TIPA_shortcut"));
-        $(this.el).find(".locale_Add_new_symbol").attr("title", Locale.get("locale_Add_new_symbol"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
       
       } else if (this.format == "minimized") {
         // Display the minimized InsertUnicodesView
         this.setElement($("#insert-unicode"));
-        $(this.el).html(this.minimizedTemplate({}));
-
-        //localization for minimized view
-        $(this.el).find(".locale_Show_Unicode_Palette").attr("title", Locale.get("locale_Show_Unicode_Palette"));
+        $(this.el).html(this.minimizedTemplate(jsonToRender));
+//        $(this.el).html(this.minimizedTemplate({}));
       }
-      //localization for all views
-      $(this.el).find(".locale_Unicode").html(Locale.get("locale_Unicode"));
-      $(this.el).find(".locale_Drag_and_Drop").html(Locale.get("locale_Drag_and_Drop"));
 
       return this;
     },

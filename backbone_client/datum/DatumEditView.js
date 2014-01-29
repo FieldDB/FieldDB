@@ -1,7 +1,7 @@
 define([
     "backbone", 
     "handlebars", 
-    "audio_video/AudioVideoEditView",
+    "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -9,18 +9,18 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
+    "datum/DatumReadView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "datum/DatumTagReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
-    "glosser/Tree",
     "OPrime"
 ], function(
     Backbone, 
     Handlebars, 
-    AudioVideoEditView,
+    AudioVideoReadView,
     Comment,
     Comments,
     CommentReadView,
@@ -28,6 +28,7 @@ define([
     Confidential,
     Datum,
     DatumFieldEditView,
+    DatumReadView,
     DatumTag,
     DatumTagEditView,
     DatumTagReadView,
@@ -48,9 +49,11 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a AudioVideoEditView
-      this.audioVideoView = new AudioVideoEditView({
-        model : this.model.get("audioVideo")
+      // Create a AudioVideoReadView
+      this.audioVideoView = new UpdatingCollectionView({
+        collection           : this.model.get("audioVideo"),
+        childViewConstructor : AudioVideoReadView,
+        childViewTagName     : 'li'
       });
       
       this.commentReadView = new UpdatingCollectionView({
@@ -61,6 +64,10 @@ define([
       
       this.commentEditView = new CommentEditView({
         model : new Comment(),
+      });
+
+      this.datumEasierToReadIGTAlignedView = new DatumReadView({
+        model : this.model
       });
       
       // Create a DatumTagView
@@ -86,6 +93,8 @@ define([
       
       this.model.bind("change:audioVideo", this.playAudio, this);
       this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
+      this.bind("change:datumFields", this.reloadIGTPreview, this);
+
       this.prepareDatumFieldAlternatesTypeAhead();
     },
 
@@ -226,13 +235,39 @@ define([
          jsonToRender.datumstate =  jsonToRender.datumstate.substring(0,12) + "..." + jsonToRender.datumstate.substring(jsonToRender.datumstate.length-12, jsonToRender.datumstate.length);
       }
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
-      jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
+      jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified); 
+
+//    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip); 
+      jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
+      jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get("locale_Drag_and_Drop_Audio_Tooltip");
+      jsonToRender.locale_Duplicate = Locale.get("locale_Duplicate");
+      jsonToRender.locale_Insert_New_Datum = Locale.get("locale_Insert_New_Datum");
+      jsonToRender.locale_LaTeX = Locale.get("locale_LaTeX");
+      jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get("locale_Plain_Text_Export_Tooltip");
+      jsonToRender.locale_Save = Locale.get("locale_Save");
+      jsonToRender.locale_See_Fields = Locale.get("locale_See_Fields");
+      if(jsonToRender.confidential){
+        jsonToRender.locale_Encrypt = Locale.get("locale_Decrypt");
+      }else{
+        jsonToRender.locale_Encrypt = Locale.get("locale_Encrypt");
+      }
+      if(jsonToRender.decryptedMode){
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
+      }else{
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
+      } 
+      if (!this.model.id) {
+        jsonToRender.buttonColor = "primary";
+      }
+      
+      
+      
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
          
         // Display audioVideo View
-        this.audioVideoView.el = this.$(".audio_video");
+        this.audioVideoView.el = this.$(".audio_video_ul");
         this.audioVideoView.render();
         
         // Display the DatumTagsView
@@ -246,6 +281,11 @@ define([
         // Display the CommentEditView
         this.commentEditView.el = $(this.el).find('.new-comment-area'); 
         this.commentEditView.render();
+
+        // Display the DatumReadView
+        this.datumEasierToReadIGTAlignedView.el = $(this.el).find('.preview_IGT_area'); 
+        this.datumEasierToReadIGTAlignedView.format = "latexPreviewIGTonly";
+        this.datumEasierToReadIGTAlignedView.render();
         
         // Display the SessionView
         this.sessionView.el = this.$('.session-link'); 
@@ -260,29 +300,6 @@ define([
         this.getFrequentFields(function(){
           self.hideRareFields();
         });
-            
-        //localization for edit well view
-        $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
-//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
-        $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
-        $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale.get("locale_Insert_New_Datum"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
-        $(this.el).find(".locale_Duplicate").attr("title", Locale.get("locale_Duplicate"));
-        if(jsonToRender.confidential){
-          $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Decrypt"));
-        }else{
-          $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Encrypt"));
-        }
-        if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Hide_confidential_items_Tooltip"));
-        }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Show_confidential_items_Tooltip"));
-        } 
-        $(this.el).find(".locale_LaTeX").attr("title", Locale.get("locale_LaTeX"));
-        $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
-        
-        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale.get("locale_Drag_and_Drop_Audio_Tooltip"));
-      
 
       }
 
@@ -294,6 +311,9 @@ define([
     getFrequentFields : function(whenfieldsareknown){
       var self = this;
       window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
+        // this is one way of hiding the usernames regardles of if they are informative
+        // fieldLabels.push("enteredByUser");
+        // fieldLabels.push("modifiedByUser");
         self.frequentFields = fieldLabels;
         window.app.get("corpus").frequentFields = fieldLabels;
         if(typeof whenfieldsareknown == "function"){
@@ -306,12 +326,17 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
+      $(this.el).find(".extra-datum-info-which-can-be-hidden").hide();
       this.rareFields = [];
       if(!this.frequentFields){
         return;
       }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
-        if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
+        //hide entered by user or modified by user if they match the person logged in (ie are not informative because only one person is working on this corpus.)
+        var fieldValue  = this.model.get("datumFields").models[f].get("mask");
+        var currentUsername = window.app.get("authentication").get("userPrivate").get("username");
+        var fieldsLabel = this.model.get("datumFields").models[f].get("label") ;
+        if( (fieldsLabel.indexOf("ByUser") > -1 && !fieldValue ) || fieldValue == currentUsername || this.frequentFields.indexOf( fieldsLabel ) == -1 ){
           $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
           this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
         }
@@ -333,6 +358,8 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
+      $(this.el).find(".extra-datum-info-which-can-be-hidden").show();
+
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
       }
@@ -499,26 +526,41 @@ define([
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
+      // var utteranceField =  this.model.get("datumFields").where({label: "utterance"})[0];
+      // if (utteranceField.get("mask").trim() == utteranceLine.trim()) {
+      //   return;
+      // }
       this.updateDatumStateColor();
       this.guessMorphemes(utteranceLine);
+      this.reloadIGTPreview();
     },
     morphemesBlur : function(e){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
-      this.guessUtterance($(e.currentTarget).val());
-      this.guessGlosses($(e.currentTarget).val());
-      this.guessTree($(e.currentTarget).val());
+      var morphemesLine = $(e.currentTarget).val();
+      // var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
+      // if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
+      //   return;
+      // }
+      this.guessUtterance(morphemesLine);
+      this.guessGlosses(morphemesLine);
+      this.guessTree(morphemesLine);
       this.needsSave = true;
+      this.reloadIGTPreview();
 
     },
+    previousUtterance : null,
+    previousMorphemes : null,
+    previousGloss : null,
     guessMorphemes : function(utteranceLine){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
-      if (utteranceLine) {
+      if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine ) )) {
+        this.previousUtterance = utteranceLine;
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
         
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
@@ -528,8 +570,9 @@ define([
         var alternates = morphemesField.get("alternates") || [];
         alternates.push(utteranceLine);
         
-        // If the guessed morphemes is different than the unparsed utterance 
-        if (morphemesLine != utteranceLine && morphemesLine != "") {
+        // If the guessed morphemes is different than the unparsed utterance, and different than the previous morphemes line we guessed on 
+        if (morphemesLine != utteranceLine && morphemesLine != "" &&  (!this.previousMorphemes || (this.previousMorphemes != morphemesLine )) ){
+          this.previousMorphemes = morphemesLine;
           //hey we have a new idea, so trigger the gloss guessing too
           this.guessGlosses(morphemesLine);
           alternates.unshift(morphemesLine);
@@ -544,11 +587,15 @@ define([
         }
       }
     },
+
     guessGlosses : function(morphemesLine) {
-      if (morphemesLine) {
+      var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
+      var currentGloss = glossField.get("mask") || "";
+      if (morphemesLine && (!currentGloss || !this.previousMorphemes || (this.previousMorphemes != morphemesLine ))) {
+        this.previousMorphemes = morphemesLine;
+
         var glossLine = Glosser.glossFinder(morphemesLine);
         
-        var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
         
@@ -571,19 +618,10 @@ define([
     /**
     when pressing tab after filling morpheme line, guess different trees
     and display them in Latex formatting
-
     */
     guessTree: function(morphemesLine) {
       if (morphemesLine) {
-        var trees = Tree.generate(morphemesLine);
-        OPrime.debug(trees);
-        var syntacticTreeLatex  = "";
-        syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
-        syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
-        syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed;
-        // syntacticTreeLatex +=  "Left: "+ trees.left;
-        // syntacticTreeLatex +=  "\nRight:" + trees.right;
-        // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
+        var syntacticTreeLatex  = this.model.guessTree(morphemesLine);
         OPrime.debug(syntacticTreeLatex);
         /* These put the syntacticTree into the actual datum fields on the screen so the user can see them */
         if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
@@ -596,6 +634,7 @@ define([
         }
       }
     },
+
     guessUtterance : function(morphemesLine) {
       if (morphemesLine) {
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
@@ -620,6 +659,11 @@ define([
         tagField.set("alternates", results);
       });
       
+    },
+    reloadIGTPreview: function(){
+      // Display the DatumReadView
+      this.datumEasierToReadIGTAlignedView.model = this.model;
+      this.datumEasierToReadIGTAlignedView.render();
     }
   });
 

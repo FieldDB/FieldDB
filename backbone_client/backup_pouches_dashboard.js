@@ -38,7 +38,7 @@ require(
 
       $('#dashboard_loading_spinner')
           .html(
-              "<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Preparing for version 1.40...</p>");
+              "<div class='finished-status'></div><img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Preparing for version 1.40...</p>");
       $('.spinner-image').css({
         'width' : function() {
           return ($(document).width() * .1) + 'px';
@@ -65,8 +65,13 @@ require(
 
       window.backupPouches = function(pouches) {
         console.log("Got the pouches: ", pouches);
-        $("#dashboard_loading_spinner").append(
+        if(pouches.length == 0){
+          $("#dashboard_loading_spinner").append(
+            "<h2>Backed up " + pouches.length + " databases</h2>");
+        }else{
+          $("#dashboard_loading_spinner").append(
             "<h2>Backing up " + pouches.length + " databases</h2>");
+        }
 
         /* for each pouch, identify its remote, and begin replicating to it. */
         window.currentPouch = 0;
@@ -80,6 +85,8 @@ require(
 
       window.backupPouch = function(pouchname) {
         /* Ignore pouches that don't need to be replicated */
+        pouchname = pouchname.replace(/_id/g,"");
+        
         if (window.databasesThatDontNeedReplication.indexOf(pouchname) >= 0) {
           /* Go to the next pouch */
           window.currentPouch++;
@@ -88,21 +95,32 @@ require(
           }
         }
         try{
-        
-        Pouch.replicate('idb://' + pouchname,
+        pouchnameid = pouchname + "_id";
+        Pouch.replicate('idb://' + pouchnameid,
             'https://corpusdev.lingsync.org/' + pouchname, {
               complete : function() {
                 $("#dashboard_loading_spinner").append(
                     "<h2>Finished backing up " + pouchname + " to "
                         + "https://corpusdev.lingsync.org/" + pouchname
                         + "</h2>");
+                 /* Go to the next pouch */
+                  window.currentPouch++;
+                  if (window.currentPouch < window.pouches.length) {
+                    window.backupPouch(window.pouches[window.currentPouch]);
+                  } else {
+                    window.finishedReplicating();
+                  }
               },
               onChange : function(change) {
                 $("#dashboard_loading_spinner").append(
                     "<div>Backing up " + pouchname + " to "
                         + "https://corpusdev.lingsync.org/" + pouchname
                         + " Change:  " + JSON.stringify(change) + '</div>');
+              },
+              onSuccess : function(info) {
+                console.log("onsuccess");
               }
+
             }, function(err, changes) {
               console.log("Backing up " + pouchname + " to "
                   + 'https://corpusdev.lingsync.org/' + pouchname, err,
@@ -126,6 +144,7 @@ require(
             });
         }catch(e){
           console.log("There was a problem reading or backing up this database. "+window.pouches[window.currentPouch]);
+          console.log(e);
           /* Go to the next pouch */
           window.currentPouch++;
           if (window.currentPouch < window.pouches.length) {
@@ -138,10 +157,14 @@ require(
 
       window.finishedReplicating = function() {
         localStorage.setItem(window.username + "lastUpdatedAtVersion", "1.40");
+        $(".spinner-status").html("Finished backing up your previous data.");
+        $(".finished-status").html("We are encouraging all new and old users to use the new Online app which has been built for fieldmethods courses and data entry: <a href='http://app.lingsync.org'>http://app.lingsync.org</a>.<p>");
+        $(".spinner-image").attr("src","images/icon128.png");
+
         /* Take them to the user page so they can choose a corpus */
-        alert("All your data has been backed up and is ready to be used in version 1.38 and up \n\n"
+        console.log("All your data has been backed up and is ready to be used in version 1.38 and up \n\n"
             + window.actuallyReplicatedPouches.join("\n"));
-        window.location.replace("user.html");
+        // window.location.replace("http://app.lingsync.org");
       };
 
       /* Get a list of all pouches */
@@ -163,7 +186,7 @@ require(
           console.log("success",serverResults);
         },
         error : function(serverResults) {
-          alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
+          console.log("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
         }
       });
 

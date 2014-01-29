@@ -508,6 +508,11 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
+          if($("#search_box").val() == ""){
+            this.searchEditView.userSetSearchToBlank = true;
+          }else{
+            this.searchEditView.userSetSearchToBlank = false;
+          }
           this.searchEditView.searchTop();
         }
 //        return false;
@@ -546,186 +551,131 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.el);
-      if (this.model != undefined) {
-        
-        if (OPrime.debugMode) OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
-        this.currentCorpusEditView.destroy_view();
-        this.currentCorpusReadView.destroy_view();
-        this.currentSessionEditView.destroy_view();
-        this.currentSessionReadView.destroy_view();
-//        this.datumsEditView.destroy_view();
-//        this.datumsReadView.destroy_view();//TODO add all the other child views eventually once they know how to destroy_view
-        this.currentEditDataListView.destroy_view();
-        this.currentReadDataListView.destroy_view();
-        this.currentPaginatedDataListDatumsView.destroy_view();
-        
-        this.importView.destroy_view();
-        this.searchEditView.destroy_view();
-        
-        
-        this.destroy_view();
-        if (OPrime.debugMode) OPrime.debug("Done Destroying the appview, so we dont get double events.");
-
-        // Display the AppView
-        this.setElement($("#app_view"));
-        
-        var jsonToRender = this.model.toJSON();
-        jsonToRender.theme = "";
-        var makeActivityFeedTransparent = app.get("authentication").get("userPrivate").get("prefs").get("transparentDashboard");
-        if(makeActivityFeedTransparent != "false"){
-          jsonToRender.theme = "_transparent";
-        }
-        /*
-         * show the corpus title, and the current sessions goal so the
-         * user knows which corpus and elicitation they are entering
-         * data in
-         */
-        jsonToRender.corpustitle = this.model.get("corpus").get("title");
-        if(jsonToRender.corpustitle.length > 20){
-          jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0,19) + "...";
-        }
-        jsonToRender.elicitationgoal = this.model.get("currentSession").getGoal();
-        if(jsonToRender.elicitationgoal.length > 20){
-          jsonToRender.elicitationgoal = jsonToRender.elicitationgoal.substr(0,19) + "...";
-        }
-        try{
-          jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
-          jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
-        }catch(e){
-          if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
-        }
-        
-        /* Render the users prefered dashboard layout */
-        this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
-        var username = "";
-        try{
-          username = window.app.get("authentication").get("userPrivate").get("username") || "";
-        }catch(e){
-          //do nothing
-        }
-        if(username == "public"){
-          this.format = "layoutEverythingAtOnce"
-        }
-        if(this.format == "default"){
-          $(this.el).html(this.template(jsonToRender));
-        }else if(this.format == "layoutJustEntering"){
-          $(this.el).html(this.layoutJustEntering(jsonToRender));
-        }else if(this.format == "layoutAllTheData"){
-          $(this.el).html(this.layoutAllTheData(jsonToRender));
-        }else if(this.format == "layoutWhatsHappening"){
-          $(this.el).html(this.layoutWhatsHappening(jsonToRender));
-        }else if(this.format == "layoutCompareDataLists"){
-          $(this.el).html(this.layoutCompareDataLists(jsonToRender));
-        }else if(this.format == "layoutEverythingAtOnce"){
-          $(this.el).html(this.layoutEverythingAtOnce(jsonToRender));
-        }
-        if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.format);
-
-        //The authView is the dropdown in the top right corner which holds all the user menus
-        this.authView.render();
-        this.userPreferenceView.render();
-        this.hotkeyEditView.render();//.showModal();
-        this.renderReadonlyUserViews();
-
-        this.renderReadonlyDashboardViews();
-        this.insertUnicodesView.render();
-        
-        //This forces the top search to render.
-        this.searchEditView.format = "centreWell";
-        this.searchEditView.render();
-
-        this.corpusesReadView.el = $(this.el).find('.corpuses');
-        this.corpusesReadView.render();
-        
-        //put the version into the terminal, and into the user menu
-        OPrime.getVersion(function (ver) { 
-          window.appView.term.VERSION_ = ver;
-          $(".fielddb-version").html(ver);
-        });
-//        this.importView.render(); //render at last minute using router
-        this.exportView.render();//render at last minute using router
-        
-        
-//        // Display the Corpus Views
-//        this.corpusNewModalView.render();
-//        this.currentCorpusEditView.render();
-//        this.currentCorpusReadView.render();
-//        this.currentCorpusEditView.render();
-//        this.currentCorpusReadView.render();
-//        this.publicCorpusReadEmbeddedView.render();
-//        this.currentCorpusEditView.render();
-//        this.currentCorpusReadView.render();
-//        
-//        // Display the ExportView
-//        
-//        // Display the User Views
-//        this.fullScreenEditUserView.render();
-//        this.publicReadUserView.render();
-//        this.modalEditUserView.render();
-//        this.modalReadUserView.render();
-//        
-//        // Display the Datum Container Views
-//        this.renderReadonlyDatumsViews("centreWell");
-//        this.renderEditableDatumsViews("centreWell");
-//        
-//        // Display the Search Views
-//        this.searchTopView.render();
-//        this.searchFullscreenView.render();
-//        this.searchEmbeddedView.render();
-//        
-//        // Display the AuthView
-//        
-//        // Display the Session Views
-//        this.currentSessionEditView.render();
-//        this.currentSessionReadView.render();
-//        this.currentSessionEditView.render();
-//        this.currentSessionReadView.render();
-//        this.currentSessionEditView.render();
-//        this.currentSessionReadView.render();
-//        this.sessionNewModalView.render();
-//        
-//        // Display the UserPreferenceEditView
-//        
-//        
-//        this.insertUnicodesView.render();
-//        
-//        // Display HotKeysView
-//
-//        // Display Data List Views 
-//        this.currentEditDataListView.render();
-//        this.currentReadDataListView.render();
-         
-        // Display the ImportEditView
-      } else {
+      
+      if (this.model == undefined) {
         alert("\tApp model is not defined, this is a very big bug. Refresh your browser, and let us know about this "+ OPrime.contactUs);
+
+        return this;
       }
       
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
+      jsonToRender.locale_Differences_with_the_central_server = Locale.get("locale_Differences_with_the_central_server"); 
+      jsonToRender.locale_Instructions_to_show_on_dashboard = Locale.get("locale_Instructions_to_show_on_dashboard"); // Do we still use this instruction?  
+      jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
+      jsonToRender.locale_Need_save = Locale.get("locale_Need_save");
+      jsonToRender.locale_Need_sync = Locale.get("locale_Need_sync");
+      jsonToRender.locale_Password = Locale.get("locale_Password");
+      jsonToRender.locale_Recent_Changes = Locale.get("locale_Recent_Changes");
+      jsonToRender.locale_Save_on_this_Computer = Locale.get("locale_Save_on_this_Computer");
+      jsonToRender.locale_Show_Dashboard = Locale.get("locale_Show_Dashboard");
+      jsonToRender.locale_Sync_and_Share = Locale.get("locale_Sync_and_Share");
+      jsonToRender.locale_Username = Locale.get("locale_Username");
+      jsonToRender.locale_View_Public_Profile_Tooltip = Locale.get("locale_View_Public_Profile_Tooltip");
+      jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
+      jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
+      jsonToRender.locale_to_beta_testers = Locale.get("locale_to_beta_testers"); // Do we still use this? 
+
+      
+      if (OPrime.debugMode) OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
+      this.currentCorpusEditView.destroy_view();
+      this.currentCorpusReadView.destroy_view();
+      this.currentSessionEditView.destroy_view();
+      this.currentSessionReadView.destroy_view();
+//        this.datumsEditView.destroy_view();
+//        this.datumsReadView.destroy_view();//TODO add all the other child views eventually once they know how to destroy_view
+      this.currentEditDataListView.destroy_view();
+      this.currentReadDataListView.destroy_view();
+      this.currentPaginatedDataListDatumsView.destroy_view();
+      
+      this.importView.destroy_view();
+      this.searchEditView.destroy_view();
+      
+      
+      this.destroy_view();
+      if (OPrime.debugMode) OPrime.debug("Done Destroying the appview, so we dont get double events.");
+
+      // Display the AppView
+      this.setElement($("#app_view"));
+      
+      jsonToRender.theme = "";
+      var makeActivityFeedTransparent = app.get("authentication").get("userPrivate").get("prefs").get("transparentDashboard");
+      if(makeActivityFeedTransparent != "false"){
+        jsonToRender.theme = "_transparent";
+      }
+      /*
+       * show the corpus title, and the current sessions goal so the
+       * user knows which corpus and elicitation they are entering
+       * data in
+       */
+      jsonToRender.corpustitle = this.model.get("corpus").get("title");
+      if(jsonToRender.corpustitle.length > 20){
+        jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0,19) + "...";
+      }
+      jsonToRender.elicitationgoal = this.model.get("currentSession").getGoal();
+      if(jsonToRender.elicitationgoal.length > 20){
+        jsonToRender.elicitationgoal = jsonToRender.elicitationgoal.substr(0,19) + "...";
+      }
+      try{
+        jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
+        jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
+      }catch(e){
+        if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
+      }
+      
+      /* Render the users prefered dashboard layout */
+      this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+      var username = "";
+      try{
+        username = window.app.get("authentication").get("userPrivate").get("username") || "";
+      }catch(e){
+        //do nothing
+      }
+      if(username == "public"){
+        this.format = "layoutEverythingAtOnce"
+      }
+      if(this.format == "default"){
+        $(this.el).html(this.template(jsonToRender));
+      }else if(this.format == "layoutJustEntering"){
+        $(this.el).html(this.layoutJustEntering(jsonToRender));
+      }else if(this.format == "layoutAllTheData"){
+        $(this.el).html(this.layoutAllTheData(jsonToRender));
+      }else if(this.format == "layoutWhatsHappening"){
+        $(this.el).html(this.layoutWhatsHappening(jsonToRender));
+      }else if(this.format == "layoutCompareDataLists"){
+        $(this.el).html(this.layoutCompareDataLists(jsonToRender));
+      }else if(this.format == "layoutEverythingAtOnce"){
+        $(this.el).html(this.layoutEverythingAtOnce(jsonToRender));
+      }
+      if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.format);
+
+      //The authView is the dropdown in the top right corner which holds all the user menus
+      this.authView.render();
+      this.userPreferenceView.render();
+      this.hotkeyEditView.render();//.showModal();
+      this.renderReadonlyUserViews();
+
+      this.renderReadonlyDashboardViews();
+      this.insertUnicodesView.render();
+      
+      //This forces the top search to render.
+      this.searchEditView.format = "centreWell";
+      this.searchEditView.render();
+
+      this.corpusesReadView.el = $(this.el).find('.corpuses');
+      this.corpusesReadView.render();
+      
+      //put the version into the terminal, and into the user menu
+      OPrime.getVersion(function (ver) { 
+        app.set("version", ver);
+        window.appView.term.VERSION_ = ver;
+        $(".fielddb-version").html(ver);
+      });
+      this.exportView.render();
+     
       this.setTotalPouchDocs();
       this.setTotalBackboneDocs();
       
-      //localization
-      $(this.el).find(".locale_Show_Dashboard").attr("title", Locale.get("locale_Show_Dashboard"));
-      $(this.el).find(".locale_Need_save").text(Locale.get("locale_Need_save"));
-      $(this.el).find(".locale_Recent_Changes").text(Locale.get("locale_Recent_Changes"));
-      $(this.el).find(".locale_Save_on_this_Computer").attr("title", Locale.get("locale_Save_on_this_Computer"));
-      $(this.el).find(".locale_Need_sync").text(Locale.get("locale_Need_sync"));
-      $(this.el).find(".locale_Differences_with_the_central_server").text(Locale.get("locale_Differences_with_the_central_server"));
-      $(this.el).find(".locale_Sync_and_Share").attr("title", Locale.get("locale_Sync_and_Share"));
-      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", Locale.get("locale_View_Public_Profile_Tooltip"));
-//      $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
-      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
-      $(this.el).find(".locale_to_beta_testers").html(Locale.get("locale_to_beta_testers"));
-      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale.get("locale_We_need_to_make_sure_its_you"));
-      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
-      $(this.el).find(".locale_Yep_its_me").text(Locale.get("locale_Yep_its_me"));
-      
-      
-      $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
-      $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
-      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
-      $(this.el).find(".locale_Corpora").html(Locale.get("locale_Corpora"));
-//      $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
-
       return this;
     },
     /**

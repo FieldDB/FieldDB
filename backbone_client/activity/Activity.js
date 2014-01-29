@@ -36,8 +36,12 @@ define([
         this.set("dateModified", JSON.stringify(new Date()) );
       }
       if( !this.get("teamOrPersonal")){
-         this.set("teamOrPersonal","personal");
+         this.set("teamOrPersonal", "personal");
       }
+      if (!this.get("appVersion")) {
+        this.set("appVersion", OPrime.getMostLikelyPrototypeVersionFromUrl(window.app.get("version")));
+      }
+
 //      if(this.isNew()){
 //        this.saveAndInterConnectInApp();
 //      }

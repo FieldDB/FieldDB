@@ -31,8 +31,13 @@ function (doc) {
       var wk = thistime.getWeek();
       if(doc.verb.indexOf("attempt") > -1){
         return;
+      } else if(doc.verb.indexOf("updated") > -1){
+        //v1.90 uses modified instead
+         emit({action: "modified", week: wk}, 1);
+      } else {
+        emit({action: doc.verb.replace(r1, '').replace(r2, ''), week: wk}, 1);
       }
-      emit({action: doc.verb.replace(r1, '').replace(r2, ''), week: wk}, 1);
+
     }
   }
 }

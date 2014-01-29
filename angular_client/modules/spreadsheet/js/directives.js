@@ -1,11 +1,36 @@
 console.log("Loading the SpreadsheetStyleDataEntryDirectives.");
 
-'use strict';
 define(
   ["angular"],
   function(angular) {
+
+    'use strict';
+
+    var convertFieldsIntoDatum = function(fieldLabelHolder, dataHolder){
+      var datum = {};
+      for (var key in fieldLabelHolder) {
+        if (fieldLabelHolder[key].label === "morphemes") {
+          datum.morphemes = dataHolder[key];
+          datum.morphemesfield = key;
+        }
+        if (fieldLabelHolder[key].label === "gloss") {
+          datum.gloss = dataHolder[key];
+          datum.glossfield = key;
+        }
+        if (fieldLabelHolder[key].label === "utterance") {
+          datum.utterance = dataHolder[key];
+          datum.utterancefield = key;
+        }
+        if (fieldLabelHolder[key].label === "allomorphs") {
+          datum.allomorphs = dataHolder[key];
+          datum.allomorphsfield = key;
+        }
+      }
+      return datum;
+    };
+
     var SpreadsheetStyleDataEntryDirectives = angular
-      .module('SpreadsheetStyleDataEntry.directives', [])
+      .module('spreadsheet_directives', [])
       .directive('moduleVersion', ['version',
         function(version) {
           return function(scope, element, attrs) {
@@ -14,23 +39,33 @@ define(
         }
       ])
       .directive(
-        'selectDropdown1',
+        'selectFieldFromDefaultCompactTemplate',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.compacttemplate[attrs.selectDropdown1].label) {
+            if (scope.field.label == scope.scopePreferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
               element[0].selected = true;
             }
           };
         })
       .directive(
-        'selectDropdown2',
+        'selectFieldFromDefaultFullTemplate',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.fulltemplate[attrs.selectDropdown2].label) {
+            if (scope.field.label == scope.scopePreferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
               element[0].selected = true;
             }
           };
-        }).directive('selectDropdownSession', function() {
+        })
+      .directive(
+        'selectFieldFromYaleFieldMethodsSpring2014Template',
+        function() {
+          return function(scope, element, attrs) {
+            if (scope.field.label == scope.scopePreferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
+              element[0].selected = true;
+            }
+          };
+        })
+      .directive('selectDropdownSession', function() {
         return function(scope, element, attrs) {
           scope.$watch('activeSession', function() {
             if (scope.session._id == scope.activeSession) {
@@ -60,10 +95,10 @@ define(
                   element[0].scrollIntoView(false);
                 }
 
-                if (e.keyCode === 40 && scope.$index == undefined) {
+                if (e.keyCode === 40 && scope.$index === undefined) {
                   // Select first record if arrowing down from new record
                   scope.selectRow(0);
-                } else if (e.keyCode === 40 && currentRecordIsLastRecord == true) {
+                } else if (e.keyCode === 40 && currentRecordIsLastRecord === true) {
                   // Do not go past very last record
                   return;
                 } else if (e.keyCode === 40) {
@@ -74,10 +109,10 @@ define(
                   } else {
                     scope.selectRow(scope.$index + 1);
                   }
-                } else if (e.keyCode === 38 && $rootScope.currentPage == 0 && (scope.$index == 0 || scope.$index == undefined)) {
+                } else if (e.keyCode === 38 && $rootScope.currentPage === 0 && (scope.$index === 0 || scope.$index === undefined)) {
                   // Select new entry if coming from most recent record
                   scope.selectRow('newEntry');
-                } else if (e.keyCode === 38 && scope.$index == 0) {
+                } else if (e.keyCode === 38 && scope.$index === 0) {
                   // Go back one page and select last record
                   $rootScope.currentPage = $rootScope.currentPage - 1;
                   scope.selectRow(scope.scopePreferences.resultSize - 1);
@@ -128,55 +163,75 @@ define(
             });
           };
         }).directive(
-        'glossmorpheme',
+        'guessUtteranceFromMorphemes',
         function() {
-          return function(scope, element) {
-            element.bind('keyup', function(e) {
+          return function(scope, element, attrs) {
+            element.bind('blur', function(e) {
+              var justCopyDontGuessIGT = false;
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+                justCopyDontGuessIGT = true;
+              }
               // Ignore arrows
               var keycodesToIgnore = [40, 38, 39, 37];
               if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
                 return;
               }
-              var newUtterance = this.value;
-              var morphemeGuess = Glosser.morphemefinder(
-                newUtterance, scope.DB.pouchname);
-              var glossGuess = Glosser
-                .glossFinder(morphemeGuess, scope.DB.pouchname);
-
-
-              // Set scope data for existing records
-              if (scope.fieldData) {
-                for (key in scope.fields) {
-                  if (scope.fields[key].label == "morphemes") {
-                    scope.$apply(function() {
-                      scope.fieldData[key] = morphemeGuess;
-                    });
-                  }
-
-                  if (scope.fields[key].label == "gloss") {
-                    scope.$apply(function() {
-                      scope.fieldData[key] = glossGuess;
-                    });
-                  }
-                }
-              } else {
-                // Set scope data for new record
-                for (key in scope.fields) {
-                  if (scope.fields[key].label == "morphemes") {
-                    scope.$apply(function() {
-                      scope.newFieldData[key] = morphemeGuess;
-                    });
-                  }
-
-                  if (scope.fields[key].label == "gloss") {
-                    scope.$apply(function() {
-                      scope.newFieldData[key] = glossGuess;
-                    });
-                  }
-                }
-              }
+              var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+              var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+              datum.pouchname = scope.DB.pouchname;
+              datum = Glosser.guessUtteranceFromMorphemes(datum, justCopyDontGuessIGT);
+              scope.$apply(function() {
+                dataHolder[datum.utterancefield] = datum.utterance;
+              });
             });
-          }
+          };
+        }).directive(
+        'guessMorphemesFromUtterance',
+        function() {
+          return function(scope, element, attrs) {
+            element.bind('blur', function(e) {
+              var justCopyDontGuessIGT = false;
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+                justCopyDontGuessIGT = true;
+              }
+              // Ignore arrows
+              var keycodesToIgnore = [40, 38, 39, 37];
+              if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+                return;
+              }
+              var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+              var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+              datum.pouchname = scope.DB.pouchname;
+              datum = Glosser.guessMorphemesFromUtterance(datum, justCopyDontGuessIGT);
+              scope.$apply(function() {
+                dataHolder[datum.morphemesfield] = datum.morphemes;
+                dataHolder[datum.glossfield] = datum.gloss;
+              });
+            });
+          };
+        }).directive(
+        'guessGlossFromMorphemes',
+        function() {
+          return function(scope, element, attrs) {
+            element.bind('blur', function(e) {
+              var justCopyDontGuessIGT = false;
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+                justCopyDontGuessIGT = true;
+              }
+              // Ignore arrows
+              var keycodesToIgnore = [40, 38, 39, 37];
+              if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+                return;
+              }
+              var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+              var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+              datum.pouchname = scope.DB.pouchname;
+              datum = Glosser.guessGlossFromMorphemes(datum, justCopyDontGuessIGT);
+              scope.$apply(function() {
+                dataHolder[datum.glossfield] = datum.gloss;
+              });
+            });
+          };
         }).directive(
         'loadPaginatedDataOnPageChange',
         function($timeout, $rootScope) {
