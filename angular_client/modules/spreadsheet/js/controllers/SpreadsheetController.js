@@ -1,8 +1,8 @@
 console.log("Loading the SpreadsheetStyleDataEntryController.");
 
 define(
-  ["angular"],
-  function(angular) {
+  ["angular", "js/SpreadsheetDatum"],
+  function(angular, SpreadsheetDatum) {
 
     'use strict';
 
@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.91.4ss";
+      $rootScope.appVersion = "1.92.2ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -97,22 +97,6 @@ define(
             "label": "utterance",
             "title": "Utterance"
           },
-          "allomorphs": {
-            "label": "allomorphs",
-            "title": "Allomorphs"
-          },
-          "phonetic": {
-            "label": "phonetic",
-            "title": "Phonetic"
-          },
-          "housekeeping": {
-             "label": "housekeeping",
-             "title": "Housekeeping"
-           },
-           "spanish": {
-             "label": "spanish",
-             "title": "Spanish"
-           },
           "morphemes": {
             "label": "morphemes",
             "title": "Morphemes"
@@ -125,10 +109,10 @@ define(
             "label": "translation",
             "title": "Translation"
           },
-          "comments": {
-            "label": "comments",
-            "title": "Comments"
-          },
+          // "comments": {
+          //   "label": "comments",
+          //   "title": "Comments"
+          // },
           "refs": {
             "label": "refs",
             "title": "References"
@@ -172,6 +156,26 @@ define(
           "syntacticCategory": {
             "label": "syntacticCategory",
             "title": "syntacticCategory"
+          },
+          "allomorphs": {
+            "label": "allomorphs",
+            "title": "Allomorphs"
+          },
+          "phonetic": {
+            "label": "phonetic",
+            "title": "Phonetic"
+          },
+          "housekeeping": {
+            "label": "housekeeping",
+            "title": "Housekeeping"
+          },
+          "spanish": {
+            "label": "spanish",
+            "title": "Spanish"
+          },
+          "orthography": {
+            "label": "orthography",
+            "title": "Orthography"
           }
         },
         "compacttemplate": {
@@ -225,8 +229,45 @@ define(
             "label": "",
             "title": ""
           }
+        },
+        "yalefieldmethodsspring2014template": {
+          "field1": {
+            "label": "orthography",
+            "title": "Orthography"
+          },
+          "field2": {
+            "label": "utterance",
+            "title": "Utterance"
+          },
+          "field3": {
+            "label": "morphemes",
+            "title": "Morphemes"
+          },
+          "field4": {
+            "label": "gloss",
+            "title": "Gloss"
+          },
+          "field5": {
+            "label": "translation",
+            "title": "Translation"
+          },
+          "field6": {
+            "label": "spanish",
+            "title": "Spanish"
+          },
+          "field7": {
+            "label": "housekeeping",
+            "title": "Housekeeping"
+          },
+          "field8": {
+            "label": "tags",
+            "title": "Tags"
+          }
         }
       };
+
+      //TODO move the default preferences somewher the SettingsController can access them. for now here is a hack for #1290
+      window.defaultPreferences = defaultPreferences;
 
       var Preferences = localStorage.getItem('SpreadsheetPreferences');
 
@@ -414,90 +455,9 @@ define(
             function(dataFromServer) {
               var scopeData = [];
               for (var i = 0; i < dataFromServer.length; i++) {
-                // Create array of datums
                 if (dataFromServer[i].value.datumFields) {
-                  var newDatumFromServer = {};
-                  newDatumFromServer.id = dataFromServer[i].id;
-                  newDatumFromServer.rev = dataFromServer[i].value._rev;
-
-                  for (var j in dataFromServer[i].value.datumFields) {
-                    // Get enteredByUser object
-                    if (dataFromServer[i].value.datumFields[j].label === "enteredByUser") {
-                      newDatumFromServer.enteredByUser = dataFromServer[i].value.datumFields[j].user;
-                    }
-                    // Get modifiedByUser object
-                    else if (dataFromServer[i].value.datumFields[j].label === "modifiedByUser") {
-                      newDatumFromServer.modifiedByUser = {};
-                      newDatumFromServer.modifiedByUser.users = dataFromServer[i].value.datumFields[j].users;
-                    } else {
-                      newDatumFromServer[dataFromServer[i].value.datumFields[j].label] = dataFromServer[i].value.datumFields[j].mask;
-                    }
-                  }
-
-                  // Grab enteredByUser for older records
-                  if (dataFromServer[i].value.enteredByUser && typeof dataFromServer[i].value.enteredByUser === "string") {
-                    newDatumFromServer.enteredByUser = {};
-                    newDatumFromServer.enteredByUser.username = dataFromServer[i].value.enteredByUser;
-                  }
-
-                  // Update users to add a dateEntered to all datums (oversight in original code; needed so that datums are ordered properly)
-                  if (!dataFromServer[i].value.dateEntered || dataFromServer[i].value.dateEntered === "" || dataFromServer[i].value.dateEntered === "N/A") {
-                    newDatumFromServer.dateEntered = "2000-09-06T16:31:30.988Z";
-                    newDatumFromServer.saved = "no";
-                  } else {
-                    newDatumFromServer.dateEntered = dataFromServer[i].value.dateEntered;
-                  }
-
-                  if (dataFromServer[i].value.dateModified) {
-                    newDatumFromServer.dateModified = dataFromServer[i].value.dateModified;
-                  }
-                  if (dataFromServer[i].value.lastModifiedBy) {
-                    newDatumFromServer.lastModifiedBy = dataFromServer[i].value.lastModifiedBy;
-                  }
-                  newDatumFromServer.datumTags = dataFromServer[i].value.datumTags;
-                  newDatumFromServer.comments = dataFromServer[i].value.comments;
-                  newDatumFromServer.sessionID = dataFromServer[i].value.session._id;
-                  // Get attachments
-                  // console.log(dataFromServer[i].value);
-                  // upgrade to v1.90
-                  newDatumFromServer.audioVideo = dataFromServer[i].value.audioVideo || [];
-                  if (!Array.isArray(newDatumFromServer.audioVideo)) {
-                    console.log("Upgrading audioVideo to a collection", newDatumFromServer.audioVideo);
-                    var audioVideoArray = [];
-                    if (newDatumFromServer.audioVideo.URL) {
-                      var audioVideoURL = newDatumFromServer.audioVideo.URL;
-                      var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
-                      audioVideoArray.push({
-                        "filename": fileFromUrl,
-                        "description": fileFromUrl,
-                        "URL": audioVideoURL,
-                        "type": "audio"
-                      });
-                    }
-                    newDatumFromServer.audioVideo = audioVideoArray;
-                  }
-                  if(newDatumFromServer.audioVideo.length === 0){
-                    for (var key in dataFromServer[i].value._attachments) {
-                      var attachment = {
-                        "filename": key,
-                        "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + newDatumFromServer.id + "/" + key,
-                        "type": "audio"
-                      };
-                      // if in the old spot:
-                      if (dataFromServer[i].value.attachmentInfo && dataFromServer[i].value.attachmentInfo[key]) {
-                        attachment.description = dataFromServer[i].value.attachmentInfo[key].description;
-                      } else {
-                        attachment.description = "";
-                      }
-                      newDatumFromServer.audioVideo.push(attachment);
-                    }
-                  }
-                  if (newDatumFromServer.audioVideo.length > 0) {
-                    newDatumFromServer.hasAudio = true;
-                  } else{
-                    newDatumFromServer.hasAudio = false;
-                  }
-
+                  var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.DB.pouchname + "/");
+                  
                   // Load data from current session into scope
                   if (!sessionID || sessionID == "none") {
                     scopeData.push(newDatumFromServer);
@@ -506,13 +466,17 @@ define(
                   }
                 }
               }
-              scopeData.sort(function(a, b) {
-                if (a[$scope.orderProp] > b[$scope.orderProp])
-                  return -1;
-                if (a[$scope.orderProp] < b[$scope.orderProp])
-                  return 1;
-                return 0;
-              });
+
+              // TODO dont sort the data here, its being sorted by the templates too...?
+              // scopeData.sort(function(a, b) {
+              //   // return a[$scope.orderProp] - b[$scope.orderProp];
+
+              //   if (a[$scope.orderProp] > b[$scope.orderProp])
+              //     return -1;
+              //   if (a[$scope.orderProp] < b[$scope.orderProp])
+              //     return 1;
+              //   return 0;
+              // });
 
               $scope.allData = scopeData;
               $scope.data = scopeData.slice(0, $rootScope.resultSize);
@@ -601,8 +565,8 @@ define(
           $rootScope.openNotification();
         } else {
           $rootScope.clickSuccess = true;
-          $rootScope.userInfo = {
-            "name": auth.user.toLowerCase(),
+          $rootScope.loginInfo = {
+            "username": auth.user.toLowerCase(),
             "password": auth.password
           };
 
@@ -636,8 +600,8 @@ define(
               // Update saved state in Preferences
               Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
               Preferences.savedState.server = $rootScope.serverCode;
-              Preferences.savedState.username = $rootScope.userInfo.name;
-              Preferences.savedState.password = sjcl.encrypt("password", $rootScope.userInfo.password);
+              Preferences.savedState.username = $rootScope.user.username;
+              Preferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
               localStorage.setItem('SpreadsheetPreferences', JSON
                 .stringify(Preferences));
 
@@ -675,18 +639,31 @@ define(
                   Data.async(scopeDBs[index], "_design/pages/_view/private_corpuses").then(
                     function(response) {
                       var corpus = {};
-                      corpus.pouchname = scopeDBs[index];
                       if (response.rows[0]) {
-                        corpus.corpustitle = response.rows[0].value.title;
+                        corpus = response.rows[0].value;
                       } else {
-                        corpus.corpustitle = scopeDBs[index];
+                        corpus.pouchname = scopeDBs[index];
+                        corpus.title = scopeDBs[index];
+                      }
+                      // If this is the corpus the user is looking at, update to the latest corpus details from the database.
+                      if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
+                        $rootScope.DB = corpus;
+                        // If the currently choosen corpus has a default template, overwrite the user's preferences
+                        if (corpus.preferredTemplate) {
+                          var fieldsForTemplate = {};
+                          if (window.defaultPreferences[corpus.preferredTemplate]) {
+                            fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
+                          }
+                          $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
+                        }
                       }
                       corpus.gravatar = md5.createHash(corpus.pouchname);
                       $scope.corpora.push(corpus);
                     }, function(error) {
                       var corpus = {};
                       corpus.pouchname = scopeDBs[index];
-                      corpus.corpustitle = scopeDBs[index];
+                      corpus.title = scopeDBs[index];
+                      corpus.gravatar = md5.createHash(corpus.pouchname);
                       $scope.corpora.push(corpus);
                     });
                 })(m);
@@ -720,13 +697,49 @@ define(
           }
           $rootScope.DB = selectedDB;
 
+
           // Update saved state in Preferences
           Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-          Preferences.savedState.DB = selectedDB;
+          Preferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(Preferences));
+          
+          // If the currently choosen corpus has a default template, overwrite the user's preferences
+          if (selectedDB.preferredTemplate) {
+            var fieldsForTemplate = {};
+            if (window.defaultPreferences[selectedDB.preferredTemplate]) {
+              fieldsForTemplate = window.defaultPreferences[selectedDB.preferredTemplate];
+            }
+            $rootScope.overrideTemplateSetting(selectedDB.preferredTemplate, fieldsForTemplate, true);
+          }
+
 
           $scope.loadSessions();
+        }
+      };
+
+      $rootScope.overrideTemplateSetting = function(template, newFieldPreferences, notUserInitited){
+        $rootScope.template = template;
+        $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
+      };
+
+      $rootScope.setAsDefaultCorpusTemplate = function(templateName){
+        console.log(templateName);
+        if (!$rootScope.admin) {
+          alert("You're not an admin on this corpus, please ask an admin to set this template as default for you.");
+          return;
+        }
+        if ($rootScope.DB.description) {
+          $rootScope.DB.preferredTemplate = templateName;
+          Data.saveCouchDoc($rootScope.DB.pouchname, $rootScope.DB)
+          .then(function(result){
+            console.log("Saved corpus template preferences ", result);
+          }, function(reason){
+            console.log("Error saving corpus template.", reason);
+            alert("Error saving corpus template.");
+          });
+        } else {
+          alert("The corpus doc was never fetched. So I cant save the preferences... Please report this if you think you should be able to save the preferences.");
         }
       };
 
@@ -813,14 +826,13 @@ define(
               }
             }
           }
-          // Save new session record
+          // Save session record
           Data
-            .saveEditedRecord($rootScope.DB.pouchname, newSession._id,
-              newSession)
+            .saveCouchDoc($rootScope.DB.pouchname, newSession)
             .then(
               function() {
                 var directobject =  $scope.currentSessionName || "an elicitation session";
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                 $scope.addActivity([{
                   verb: "modified",
                   verbicon: "icon-pencil",
@@ -851,14 +863,9 @@ define(
                             // and save
 
                             editedRecord.session = newSession;
-                            Data.saveEditedRecord(
-                              $rootScope.DB.pouchname,
-                              scopeDataToEdit[index].id,
-                              editedRecord, editedRecord._rev)
-                              .then(function() {
+                            Data.saveCouchDoc($rootScope.DB.pouchname, editedRecord).then(function() {
                                 $rootScope.loading = false;
                               });
-
                           },
                           function() {
                             window
@@ -886,9 +893,9 @@ define(
                 function(sessionToMarkAsDeleted) {
                   sessionToMarkAsDeleted.trashed = "deleted";
                   var rev = sessionToMarkAsDeleted._rev;
-                  Data.saveEditedRecord($rootScope.DB.pouchname, activeSessionID, sessionToMarkAsDeleted, rev).then(function(response) {
+                  Data.saveCouchDoc($rootScope.DB.pouchname, sessionToMarkAsDeleted).then(function(response) {
                     
-                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
                       verb: "deleted",
                       verbicon: "icon-trash",
@@ -935,12 +942,12 @@ define(
                 .stringify(new Date()));
               newSessionRecord.dateModified = JSON.parse(JSON
                 .stringify(new Date()));
-              newSessionRecord.lastModifiedBy = $rootScope.userInfo.name;
+              newSessionRecord.lastModifiedBy = $rootScope.user.username;
               for (var key in newSession) {
                 for (var i in newSessionRecord.sessionFields) {
                   if (newSessionRecord.sessionFields[i].label === "user") {
-                    newSessionRecord.sessionFields[i].value = $rootScope.userInfo.name;
-                    newSessionRecord.sessionFields[i].mask = $rootScope.userInfo.name;
+                    newSessionRecord.sessionFields[i].value = $rootScope.user.username;
+                    newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
                   }
                   if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
                     newSessionRecord.sessionFields[i].value = new Date()
@@ -955,7 +962,7 @@ define(
                 }
               }
               Data
-                .saveNew($rootScope.DB.pouchname, newSessionRecord)
+                .saveCouchDoc($rootScope.DB.pouchname, newSessionRecord)
                 .then(
                   function(savedRecord) {
 
@@ -969,7 +976,7 @@ define(
                       }
                     }
                     var directobject =  newSessionRecord.title || "an elicitation session";
-                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
                       verb: "added",
                       verbicon: "icon-pencil",
@@ -1032,10 +1039,10 @@ define(
                   if(recordToMarkAsDeleted.attachmentInfo){
                     delete recordToMarkAsDeleted.attachmentInfo;
                   }
-                  Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, recordToMarkAsDeleted, rev).then(function(response) {
+                  Data.saveCouchDoc($rootScope.DB.pouchname, recordToMarkAsDeleted).then(function(response) {
                     // Remove record from scope
 
-                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+                    var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
                       verb: "deleted",
                       verbicon: "icon-trash",
@@ -1071,7 +1078,7 @@ define(
       $scope.createRecord = function(fieldData) {
 
         // // Reset new datum form data and enable upload button; only reset audio field if present
-        if ($rootScope.template === "fulltemplate") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
           document.getElementById("form_new_datum_audio-file").reset();
           $scope.newDatumHasAudioToUpload = false;
         }
@@ -1114,9 +1121,9 @@ define(
         if (fieldData.comments) {
           var comment = {};
           comment.text = fieldData.comments;
-          comment.username = $rootScope.userInfo.name;
+          comment.username = $rootScope.user.username;
           comment.timestamp = Date.now();
-          comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
+          comment.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
           comment.timestampModified = Date.now();
           fieldData.comments = [];
           fieldData.comments.push(comment);
@@ -1124,13 +1131,13 @@ define(
 
         fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
         fieldData.enteredByUser = {
-          "username": $rootScope.userInfo.name,
-          "gravatar": $rootScope.userInfo.gravatar
+          "username": $rootScope.user.username,
+          "gravatar": $rootScope.user.gravatar
         };
 
         fieldData.timestamp = Date.now();
         // fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
-        // fieldData.lastModifiedBy = $rootScope.userInfo.name;
+        // fieldData.lastModifiedBy = $rootScope.user.username;
         fieldData.sessionID = $scope.activeSession;
         fieldData.saved = "no";
         if (fieldData.audioVideo) {
@@ -1169,9 +1176,10 @@ define(
           }
         }
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
+        datum.timestamp = Date.now();
         var modifiedByUser = {};
-        modifiedByUser.username = $rootScope.userInfo.name;
-        modifiedByUser.gravatar = $rootScope.userInfo.gravatar;
+        modifiedByUser.username = $rootScope.user.username;
+        modifiedByUser.gravatar = $rootScope.user.gravatar;
         if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
           datum.modifiedByUser = {};
           datum.modifiedByUser.users = [];
@@ -1192,7 +1200,7 @@ define(
         if (!datum.saved || datum.saved === "yes") {
           datum.saved = "no";
           // Update activity feed
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
           $scope.addActivity([{
             verb: "modified",
             verbicon: "icon-pencil",
@@ -1220,9 +1228,9 @@ define(
         }
         var comment = {};
         comment.text = newComment;
-        comment.username = $rootScope.userInfo.name;
+        comment.username = $rootScope.user.username;
         comment.timestamp = Date.now();
-        comment.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
+        comment.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
         comment.timestampModified = Date.now();
         if (!datum.comments) {
           datum.comments = [];
@@ -1231,11 +1239,12 @@ define(
         datum.saved = "no";
         $scope.saved = "no";
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
-        datum.lastModifiedBy = $rootScope.userInfo.name;
+        datum.timestamp = Date.now();
+        datum.lastModifiedBy = $rootScope.user.username;
         // $rootScope.currentPage = 0;
         // $rootScope.editsHaveBeenMade = true;
 
-        var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.corpustitle + "</a>";
+        var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.title + "</a>";
         // Update activity feed
         $scope.addActivity([{
           verb: "commented",
@@ -1261,7 +1270,7 @@ define(
           $rootScope.openNotification();
           return;
         }
-        if (comment.username != $rootScope.userInfo.name) {
+        if (comment.username != $rootScope.user.username) {
           $rootScope.notificationMessage = "You may only delete comments created by you.";
           $rootScope.openNotification();
           return;
@@ -1277,235 +1286,77 @@ define(
       };
 
       $scope.saveChanges = function() {
-        for (var i in $scope.allData) {
-          (function(index) {
-            if ($scope.allData[index].saved && $scope.allData[index].saved === "no") {
-              var fieldData;
-              $scope.saved = "saving";
+        var saveDatumPromises = [];
 
-              // Save edited record
-              if ($scope.allData[index].id) {
-                console.log("Saving edited record: " + $scope.allData[index].id);
-                fieldData = $scope.allData[index];
-                var docID = fieldData.id;
-                Data
-                  .async($rootScope.DB.pouchname, docID)
-                  .then(
-                    function(editedRecord) {
-                      // Populate new record with fields from
-                      // scope
-                      // Check for modifiedByUser field in original record; if not present, add it
-                      var hasModifiedByUser = false;
-                      // console.log(fieldData);
-                      // console.log(editedRecord.datumFields);
-                      for (var key in fieldData) {
-                      // for (var i = 0; i < editedRecord.datumFields.length; i++) {
-                        // for (var key in fieldData) {
-                        var fieldWasInDatum = false;
-                        for (var i = 0; i < editedRecord.datumFields.length; i++) {
-                          if (editedRecord.datumFields[i].label === key) {
-                            fieldWasInDatum = true;
-                            // Check for (existing) modifiedByUser field in original record and update correctly
-                            if (key === "modifiedByUser") {
-                              editedRecord.datumFields[i].users = fieldData.modifiedByUser.users;
-                            } else if (key === "enteredByUser") {
-                              editedRecord.datumFields[i].user = fieldData.enteredByUser;
-                              editedRecord.datumFields[i].mask = fieldData.enteredByUser.username;
-                              editedRecord.datumFields[i].value = fieldData.enteredByUser.username;
-                            } else {
-                              editedRecord.datumFields[i].mask = fieldData[key];
-                              editedRecord.datumFields[i].value = fieldData[key];
-                            }
-                          }
+        for (var index in $scope.allData) {
+          console.log(index);
+          if ($scope.allData.hasOwnProperty(index)) {
+            (function(recordToBeSaved){
+              var recordToBeSaved,
+                promiseToSaveThisDatum;
 
-                          if (editedRecord.datumFields[i].label === "modifiedByUser") {
-                            hasModifiedByUser = true;
-                          }
-                        }
-                        //TODO this really means the spreadsheet needs to stop having its own data model. it would greatly reduce the complexity of the app if it just opened the data, and modified it, using the actual fielddb json.
-                        if (!fieldWasInDatum 
-                          && key !== "hasAudio" 
-                          && key !== "saved" 
-                          && key !== "$$hashKey" 
-                          && key !== "audioVideo" 
-                          && key !== "comments" 
-                          && key !== "sessionID"  
-                          && key !== "modifiedByUser"
-                          && key !== "enteredByUser"
-                          && key !== "id"
-                          && key !== "rev"
-                          && key !== "dateEntered"
-                          && key !== "datumTags"
-                          && key !== "timestamp"
-                          && key !== "dateModified"
-                          && key !== "lastModifiedBy") {
-                          editedRecord.datumFields.push({
-                            "label": key,
-                            "value": fieldData[key],
-                            "mask": fieldData[key],
-                            "encrypted": "",
-                            "shouldBeEncrypted": "checked",
-                            "help": "Entered by user in Spreadsheet App, conventions are missing.",
-                            "showToUserTypes": "linguist",
-                            "userchooseable": "disabled"
-                          });
-                        }
-                      }
+              var utterance = "Datum";
+              if (recordToBeSaved.utterance && recordToBeSaved.utterance !== "") {
+                utterance = recordToBeSaved.utterance;
+              }
 
-                      // Add modifiedByUser field if not present
-                      if (hasModifiedByUser === false) {
-                        console.log("Adding modifiedByUser field to older record.");
-                        var modifiedByUserField = {
-                          "label": "modifiedByUser",
-                          "mask": "",
-                          "users": fieldData.modifiedByUser.users,
-                          "encrypted": "",
-                          "shouldBeEncrypted": "",
-                          "help": "An array of users who modified the datum",
-                          "showToUserTypes": "all",
-                          "readonly": true,
-                          "userchooseable": "disabled"
-                        };
-                        editedRecord.datumFields.push(modifiedByUserField);
-                      }
-                      // Save date info
-                      editedRecord.dateModified = fieldData.dateModified;
-                      editedRecord.lastModifiedBy = fieldData.lastModifiedBy;
-                      editedRecord.dateEntered = fieldData.dateEntered;
-                      
-                      // Save tags
-                      if (fieldData.datumTags) {
-                        editedRecord.datumTags = fieldData.datumTags;
-                      }
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+              var activities = [{
+                  verb: "added",
+                  verbicon: "icon-plus",
+                  directobjecticon: "icon-list",
+                  indirectobject: indirectObjectString,
+                  teamOrPersonal: "personal"
+                }, {
+                  verb: "added",
+                  verbicon: "icon-plus",
+                  directobjecticon: "icon-list",
+                  indirectobject: indirectObjectString,
+                  teamOrPersonal: "team"
+                }];
 
-                      // Save comments
-                      if (fieldData.comments) {
-                        editedRecord.comments = fieldData.comments;
-                      }
-                      // Save edited record and refresh data
-                      // in scope
-                      // upgrade to v1.90
-                      if(editedRecord.attachmentInfo){
-                        delete editedRecord.attachmentInfo;
-                      }
-                      Data.saveEditedRecord($rootScope.DB.pouchname, docID, editedRecord).then(
-                          function(response) {
-                            $scope.allData[index].saved = "yes";
-                            $scope.uploadActivities();
-                            $scope.saved = "yes";
-                          },
-                          function() {
-                            $scope.saved = "no";
-                            window
-                              .alert("There was an error saving the record. Please try again.");
-                          });
-                    });
+              if (recordToBeSaved.id) {
+                activities[0].verb = "modified";
+                activities[0].verbicon = "icon-pencil";
+                activities[1].verb = "modified";
+                activities[1].verbicon = "icon-pencil";
+              }
 
-              } else {
-                // Save new record
-                console.log("Saving new record.");
+              if (recordToBeSaved.saved && recordToBeSaved.saved === "no") {
+                $scope.saved = "saving";
+                // recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
+                recordToBeSaved.pouchname = $rootScope.DB.pouchname;
+                recordToBeSaved.timestamp = Date.now();
+                promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
+                saveDatumPromises.push(promiseToSaveThisDatum);
 
-                fieldData = $scope.allData[index];
+                promiseToSaveThisDatum.then(function(spreadSheetDatum) {
+                  spreadSheetDatum.saved = "yes";
+                  activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utterance + "</a> ";
+                  $scope.addActivity(activities, "uploadnow");
+                }, function(reason){
+                  console.log(reason);
+                  $scope.saved = "no";
+                  window.alert("There was an error saving a record. " + reason);
+                });
 
-                Data
-                  .blankDatumTemplate()
-                  .then(
-                    function(newRecord) {
-                      // Populate new record with fields from
-                      // scope
-                      for (var j = 0; j < newRecord.datumFields.length; j++) {
-                        for (var key in fieldData) {
-                          if (newRecord.datumFields[j].label === key) {
-                            // Create enteredByUser object
-                            if (key === "enteredByUser") {
-                              newRecord.datumFields[j].mask = fieldData[key].username;
-                              newRecord.datumFields[j].user = fieldData[key];
-                            } else {
-                              newRecord.datumFields[j].mask = fieldData[key];
-                            }
-                          }
-                        }
-                      }
+              }
 
-                      // Save date info
-                      newRecord.dateEntered = fieldData.dateEntered;
-                      newRecord.timestamp = fieldData.timestamp;
-
-                      // Save session
-                      newRecord.session = $scope.fullCurrentSession;
-
-                      // Save pouchname
-                      newRecord.pouchname = $rootScope.DB.pouchname;
-                      // Save tags
-                      if (fieldData.datumTags) {
-                        newRecord.datumTags = fieldData.datumTags;
-                      }
-
-                      // Save comments
-                      if (fieldData.comments) {
-                        newRecord.comments = fieldData.comments;
-                      }
-
-                      // Save attachments
-                      if (fieldData._attachments) {
-                        newRecord._attachments = fieldData._attachments;
-                        newRecord.audioVideo = fieldData.audioVideo;
-                      }
-
-                      Data
-                        .saveNew($rootScope.DB.pouchname, newRecord)
-                        .then(
-                          function(response) {
-                            // Check to see if newly created record is still in scope and update with response info;
-                            // user may have refreshed data before save was complete
-                            if ($scope.allData[index]) {
-                              $scope.allData[index].id = response.data.id;
-                              $scope.allData[index].rev = response.data.rev;
-                              $scope.allData[index].saved = "yes";
-                            }
-                            console.log("Saved new record: " + $scope.allData[index].id);
-
-                            // Update activity feed with newly created
-                            // records and couch ids (must be done
-                            // here to have access to couch id)
-                            var utterance = "Datum";
-                            if ($scope.allData[index].utterance && $scope.allData[index].utterance !== "") {
-                              utterance = $scope.allData[index].utterance;
-                            }
-
-                            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
-                            $scope
-                              .addActivity([{
-                                verb: "added",
-                                verbicon: "icon-plus",
-                                directobjecticon: "icon-list",
-                                directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + response.data.id + "'>" + utterance + "</a> ",
-                                indirectobject: indirectObjectString,
-                                teamOrPersonal: "personal"
-                              }, {
-                                verb: "added",
-                                verbicon: "icon-plus",
-                                directobjecticon: "icon-list",
-                                directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + response.data.id + "'>" + utterance + "</a> ",
-                                indirectobject: indirectObjectString,
-                                teamOrPersonal: "team"
-                              }], "uploadnow");
-
-                            // Upload new activities from async
-                            // process
-                            $scope.saved = "yes";
-                          },
-                          function() {
-                            $scope.saved = "no";
-                            window.alert("There was an error saving the record. Please try again.");
-                          });
-                    });
+            })($scope.allData[index]);
+          }
+        } 
+        Q.allSettled(saveDatumPromises)
+          .done(function(success, reason) {
+            if (reason) {
+              console.log(reason);
+              $scope.saved = "no";
+              window.alert("There was an error saving one or more records. Please try again.");
+            } else {
+              if($scope.saved === "saving"){
+                $scope.saved = "yes";
               }
             }
-          })(i);
-        }
-        // Upload Activities
-        $scope.uploadActivities();
+          });
       };
 
       // Set auto-save interval for 5 minutes
@@ -1515,9 +1366,9 @@ define(
             $scope.saveChanges();
           } else {
             // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
-            // if ($rootScope.userInfo) {
-            //   Data.login($rootScope.userInfo.name,
-            //     $rootScope.userInfo.password);
+            // if ($rootScope.loginInfo) {
+            //   Data.login($rootScope.user.username,
+            //     $rootScope.loginInfo.password);
             // }
           }
         }, 300000);
@@ -1552,7 +1403,7 @@ define(
         for (var key in $scope.fields) {
           fieldsInScope[$scope.fields[key].label] = true;
         }
-        if ($rootScope.template === "fulltemplate") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
           fieldsInScope.datumTags = true;
           fieldsInScope.comments = true;
         }
@@ -1666,10 +1517,10 @@ define(
               template.directobject = bareActivityObject.directobject;
               template.indirectobject = bareActivityObject.indirectobject;
               template.teamOrPersonal = bareActivityObject.teamOrPersonal;
-              template.user.username = $rootScope.userInfo.name;
-              template.user.gravatar = $rootScope.userInfo.gravatar || "./../user/user_gravatar.png";
-              template.user.id = $rootScope.userInfo.name;
-              template.user._id = $rootScope.userInfo.name;
+              template.user.username = $rootScope.user.username;
+              template.user.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
+              template.user.id = $rootScope.user.username;
+              template.user._id = $rootScope.user.username;
               template.dateModified = JSON.parse(JSON.stringify(new Date()));
               template.timestamp = Date.now();
 
@@ -1692,11 +1543,11 @@ define(
                 if ($scope.activities[index].teamOrPersonal === "team") {
                   activitydb = $rootScope.DB.pouchname + "-activity_feed";
                 } else {
-                  activitydb = $rootScope.userInfo.name + "-activity_feed";
+                  activitydb = $rootScope.user.username + "-activity_feed";
                 }
 
                 Data
-                  .saveNew(activitydb, $scope.activities[index])
+                  .saveCouchDoc(activitydb, $scope.activities[index])
                   .then(
                     function(response) {
                       console.log("Saved new activity");
@@ -1714,11 +1565,11 @@ define(
         }
       };
 
-      $scope.registerNewUser = function(newUserInfo) {
-        if (!newUserInfo.serverCode) {
-          newUserInfo.serverCode = $rootScope.servers[0].label;
+      $scope.registerNewUser = function(newLoginInfo) {
+        if (!newLoginInfo.serverCode) {
+          newLoginInfo.serverCode = $rootScope.servers[0].label;
         }
-        if (!newUserInfo || !newUserInfo.serverCode) {
+        if (!newLoginInfo || !newLoginInfo.serverCode) {
           $rootScope.notificationMessage = "Please select a server.";
           $rootScope.openNotification();
           return;
@@ -1726,24 +1577,24 @@ define(
         $rootScope.loading = true;
 
         // Clean username and tell user about it
-        var safeUsernameForCouchDB = newUserInfo.username.trim().toLowerCase().replace(/[^0-9a-z]/g,"");
-        if(safeUsernameForCouchDB !== newUserInfo.username){
+        var safeUsernameForCouchDB = newLoginInfo.username.trim().toLowerCase().replace(/[^0-9a-z]/g,"");
+        if(safeUsernameForCouchDB !== newLoginInfo.username){
           $rootScope.loading = false;
-          newUserInfo.username = safeUsernameForCouchDB;
+          newLoginInfo.username = safeUsernameForCouchDB;
           $rootScope.notificationMessage = "We have automatically changed your requested username to '"+safeUsernameForCouchDB+ "' instead \n(the username you have chosen isn't very safe for urls, which means your corpora would be potentially inaccessible in old browsers)";
           $rootScope.openNotification();
           return;
         }
         var dataToPost = {};
-        dataToPost.email = newUserInfo.email ? newUserInfo.email.trim().split(" ")[0] : "";
-        dataToPost.username = newUserInfo.username.trim().toLowerCase();
-        dataToPost.password = newUserInfo.password.trim();
-        dataToPost.authUrl = Servers.getServiceUrl(newUserInfo.serverCode, "auth");
+        dataToPost.email = newLoginInfo.email ? newLoginInfo.email.trim().split(" ")[0] : "";
+        dataToPost.username = newLoginInfo.username.trim().toLowerCase();
+        dataToPost.password = newLoginInfo.password.trim();
+        dataToPost.authUrl = Servers.getServiceUrl(newLoginInfo.serverCode, "auth");
         dataToPost.appVersionWhenCreated = $rootScope.appVersion;
 
-        dataToPost.serverCode = newUserInfo.serverCode;
+        dataToPost.serverCode = newLoginInfo.serverCode;
 
-        if (dataToPost.username !== "" && (dataToPost.password === newUserInfo.confirmPassword.trim()) ) {
+        if (dataToPost.username !== "" && (dataToPost.password === newLoginInfo.confirmPassword.trim()) ) {
           // Create user
           Data.register(dataToPost).then(function(response) {
             $rootScope.loading = false;
@@ -1766,8 +1617,8 @@ define(
 
         $rootScope.loading = true;
         var dataToPost = {};
-        dataToPost.username = $rootScope.userInfo.name.trim();
-        dataToPost.password = $rootScope.userInfo.password.trim();
+        dataToPost.username = $rootScope.user.username.trim();
+        dataToPost.password = $rootScope.loginInfo.password.trim();
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1780,7 +1631,7 @@ define(
             // Add new corpus to scope
             var newCorpus = {};
             newCorpus.pouchname = response.corpus.pouchname;
-            newCorpus.corpustitle = response.corpus.title;
+            newCorpus.title = response.corpus.title;
             var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
             $scope.addActivity([{
               verb: "added",
@@ -1807,24 +1658,30 @@ define(
 
         var dataToPost = {};
 
-        dataToPost.username = $rootScope.userInfo.name;
-        dataToPost.password = $rootScope.userInfo.password;
+        dataToPost.username = $rootScope.loginInfo.username;
+        dataToPost.password = $rootScope.loginInfo.password;
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
         dataToPost.pouchname = $rootScope.DB.pouchname;
 
 
         Data.getallusers(dataToPost).then(function(users) {
-          for (var i in users.allusers) {
-            if (users.allusers[i].username === $rootScope.userInfo.name) {
-              $rootScope.userInfo.gravatar = users.allusers[i].gravatar;
-            }
+          if (!users) {
+            console.log("User doesn't have access to roles.");
+            users = {
+              allusers: []
+            };
           }
+          // for (var i in users.allusers) {
+          //   if (users.allusers[i].username === $rootScope.loginInfo.username) {
+          //     $rootScope.user.gravatar = users.allusers[i].gravatar;
+          //   }
+          // }
 
           $scope.users = users;
 
           // Get privileges for logged in user
-          Data.async("_users", "org.couchdb.user:" + $rootScope.userInfo.name)
+          Data.async("_users", "org.couchdb.user:" + $rootScope.user.username)
             .then(
               function(response) {
                 if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
@@ -1905,8 +1762,8 @@ define(
         newUserRoles.pouchname = $rootScope.DB.pouchname;
 
         var dataToPost = {};
-        dataToPost.username = $rootScope.userInfo.name.trim();
-        dataToPost.password = $rootScope.userInfo.password.trim();
+        dataToPost.username = $rootScope.user.username.trim();
+        dataToPost.password = $rootScope.loginInfo.password.trim();
         dataToPost.serverCode = $rootScope.serverCode;
         dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1914,7 +1771,7 @@ define(
 
         Data.updateroles(dataToPost).then(function(response) {
 
-          var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a> as "+rolesString;
+          var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a> as "+rolesString;
           $scope.addActivity([{
             verb: "modified",
             verbicon: "icon-pencil",
@@ -1943,7 +1800,7 @@ define(
         // Prevent an admin from removing him/herself from a corpus; This
         // helps to avoid a situation in which there is no admin for a
         // corpus
-        if (userid === $rootScope.userInfo.name) {
+        if (userid === $rootScope.user.username) {
           window
             .alert("You cannot remove yourself from a corpus.\nOnly another Admin can remove you.");
           return;
@@ -1953,8 +1810,8 @@ define(
         if (r === true) {
 
           var dataToPost = {};
-          dataToPost.username = $rootScope.userInfo.name.trim();
-          dataToPost.password = $rootScope.userInfo.password.trim();
+          dataToPost.username = $rootScope.user.username.trim();
+          dataToPost.password = $rootScope.loginInfo.password.trim();
           dataToPost.serverCode = $rootScope.serverCode;
           dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
@@ -1965,7 +1822,7 @@ define(
 
           Data.updateroles(dataToPost).then(function(response) {
             
-            var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
             $scope.addActivity([{
               verb: "removed",
               verbicon: "icon-remove-sign",
@@ -2330,7 +2187,7 @@ define(
 
             datum.audioVideo.push(newScopeAttachment);
 
-            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
             $scope.addActivity([{
               verb: "recorded",
               verbicon: "icon-plus",
@@ -2354,7 +2211,7 @@ define(
             delete originalDoc.attachmentInfo;
           }
           // console.log(originalDoc.audioVideo);
-          Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalDoc, rev).then(function(response) {
+          Data.saveCouchDoc($rootScope.DB.pouchname, originalDoc).then(function(response) {
             console.log("Successfully uploaded attachment.");
 
             
@@ -2402,10 +2259,10 @@ define(
               delete originalRecord.attachmentInfo;
             }
             // console.log(originalRecord);
-            Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, originalRecord).then(function(response) {
+            Data.saveCouchDoc($rootScope.DB.pouchname, originalRecord).then(function(response) {
               console.log("Saved attachment as trashed.");
 
-              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.corpustitle + "</a>";
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
               $scope.addActivity([{
                 verb: "deleted",
                 verbicon: "icon-trash",
@@ -2430,7 +2287,7 @@ define(
               //       delete record.attachmentInfo[key];
               //     }
               //   }
-              //   Data.saveEditedRecord($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
+              //   Data.saveCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
               //     if (datum.audioVideo.length === 0) {
               //       datum.hasAudio = false;
               //     }
@@ -2502,8 +2359,13 @@ define(
               auth.password = Preferences.savedState.password;
             }
             $scope.loginUser(auth);
+            // Upgrade to v92 where corpus info is not saved in the prefs, only the pouchbame
             if (Preferences.savedState.DB) {
-              $rootScope.DB = Preferences.savedState.DB;
+              Preferences.savedState.mostRecentCorpusPouchname = Preferences.savedState.DB.pouchname;
+              delete Preferences.savedState.DB;
+            }
+            if (Preferences.savedState.mostRecentCorpusPouchname) {
+              $rootScope.DB = {pouchname: Preferences.savedState.mostRecentCorpusPouchname};
               if (Preferences.savedState.sessionID) {
                 // Load all sessions and go to current session
                 $scope.loadSessions(Preferences.savedState.sessionID);
@@ -2527,7 +2389,7 @@ define(
           $rootScope.openNotification();
         }
 
-        $scope.resetPasswordInfo.username = $rootScope.userInfo.name,
+        $scope.resetPasswordInfo.username = $rootScope.user.username,
         Data.changePassword($scope.resetPasswordInfo).then(function(result){
           // console.log(result);
           Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);

@@ -56,8 +56,19 @@ function(doc) {
             if (morphemes[morphemegroup]) {
               // Replace (*_) with ''
               var feederWord = morphemes[morphemegroup].replace(/\(\*[^)]*\)/g,
-                ''); // DONT replace ? it is used to indicate uncertainty with
-              // the data, . is used for fusional morphemes
+                ''); // DONT
+              // replace
+              // ? it is
+              // used to
+              // indicate
+              // uncertainty
+              // with
+              // the
+              // data, .
+              // is used
+              // for
+              // fusional
+              // morphemes
               // Replace *(_) with _
               feederWord = feederWord.replace(/\*\(([^)]*)\)/, '$1');
               // Remove all parentheses and *
@@ -72,14 +83,11 @@ function(doc) {
           var gloss = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // Tokenize the gloss
           var glosses = gloss.replace(/#!,\//g, '').split(/[ ]+/); // DONT replace
-          // ? it is used
-          // to indicate
-          // uncertainty
-          // with the
-          // data, . is
-          // used for
-          // fusional
-          // morphemes
+          // ? it is
+          // used to indicate
+          // uncertainty with the
+          // data, . is used for
+          // fusional morphemes
           for (var glossgroup in glosses) {
             // If the token it not null or the empty string
             if (glosses[glossgroup]) {
@@ -98,13 +106,47 @@ function(doc) {
       // Build triples
       for (var j in context.words) {
         var w = context.words[j];
-        var morphemesInUtterance = context.morphemes[j].split('-');
-        var gs = context.glosses[j].split('-');
-        for (var i in morphemesInUtterance) {
-          var morphemeToEmit = morphemesInUtterance[i] ? morphemesInUtterance[i].toLocaleLowerCase() : "";
-          if (morphemeToEmit) {
-            emit(morphemeToEmit, w);
-          }
+        var morphItems = context.morphemes[j].split('-');
+        var glossItem = context.glosses[j].split('-');
+        for (var i in morphItems) {
+
+          // <rdf:RDF xmlns:rdf="grandfather> 
+          //     <lego:concept rdf:about="grandfather"> 
+          //         <lego:hasCounterpart>
+          //             <gold:LinguisticSign rdf:about="grandfather"> 
+          //                 <gold:inLanguage>
+          //                     <gold:Language rdf:about="grandfather"/> 
+          //                 </gold:inLanguage>
+          //                 <gold:hasForm>
+          //                     <gold:formUnit> 
+          //                         <gold:stringRep>-ak</gold:stringRep>
+          //                     </gold:formUnit> 
+          //                     <gold:formUnit> 
+          //                         <gold:stringRep>afak</gold:stringRep>
+          //                     </gold:formUnit> 
+          //                 </gold:hasForm>
+          //             </gold:LinguisticSign> 
+          //         </lego:hasCounterpart> 
+          //     </lego:concept>
+          // </rdf:RDF>
+          var rdf = {
+            "rdf:RDF": {
+              "_xmlns:rdf": morphItems[i],
+              "lego:hasCounterpart": {
+                "gold:LinguisticSign": {
+                  "_rdf:about": morphItems[i],
+                  "gold:inLanguage": {
+                    "gold:hasForm": [{
+                      "gold:formUnit": {
+                        "gold:stringRep": glossItem[i]
+                      }
+                    }]
+                  }
+                }
+              }
+            }
+          };
+          emit(rdf, 1);
         }
       }
     }

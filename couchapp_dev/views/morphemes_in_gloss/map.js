@@ -9,7 +9,7 @@ function(doc) {
         // If the DatumField contains the Judgement
         if (doc.datumFields[key].label == 'judgement') {
           // If the Judgement contains a '*', don't count the words in it
-          if (doc.datumFields[i].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
+          if (doc.datumFields[key].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
             return;
           }
           break;
@@ -21,7 +21,7 @@ function(doc) {
         // If the DatumField contains the Utterance
         if (doc.datumFields[key].label == 'utterance') {
           // Trim whitespace
-          var utterance = doc.datumFields[i].mask ? doc.datumFields[key].mask.trim() : "";
+          var utterance = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // If the utterance is ungrammatical, don't count the words in it
           if (utterance.indexOf('*') == 0) {
             return;
@@ -48,7 +48,7 @@ function(doc) {
         }
         if (doc.datumFields[key].label == 'morphemes') {
           // Trim whitespace
-          var morphemesline = doc.datumFields[i].mask ? doc.datumFields[key].mask.trim() : "";
+          var morphemesline = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // Tokenize the morphemes
           var morphemes = morphemesline.replace(/#!,\//g, '').split(/[ ]+/);
           for (var morphemegroup in morphemes) {
@@ -69,7 +69,7 @@ function(doc) {
         }
         if (doc.datumFields[key].label == 'gloss') {
           // Trim whitespace
-          var gloss = doc.datumFields[i].mask ? doc.datumFields[key].mask.trim() : "";
+          var gloss = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // Tokenize the gloss
           var glosses = gloss.replace(/#!,\//g, '').split(/[ ]+/); // DONT replace
           // ? it is used
