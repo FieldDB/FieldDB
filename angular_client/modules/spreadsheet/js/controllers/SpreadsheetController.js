@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.92.2ss";
+      $rootScope.appVersion = "1.92.3ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -1140,7 +1140,8 @@ define(
 
         fieldData.enteredByUser = {
           "username": $rootScope.user.username,
-          "gravatar": $rootScope.user.gravatar
+          "gravatar": $rootScope.user.gravatar,
+          "appVersion": $rootScope.appVersion;
         };
 
         fieldData.timestamp = Date.now();
@@ -1187,14 +1188,17 @@ define(
         }
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
         datum.timestamp = Date.now();
-        var modifiedByUser = {};
-        modifiedByUser.username = $rootScope.user.username;
-        modifiedByUser.gravatar = $rootScope.user.gravatar;
-        if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
-          datum.modifiedByUser = {};
-          datum.modifiedByUser.users = [];
-        }
+        var modifiedByUser = {
+          "username": $rootScope.user.username,
+          "gravatar": $rootScope.user.gravatar,
+          "appVersion": $rootScope.appVersion
+        };
 
+        if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
+          datum.modifiedByUser = {
+            "users" : []
+          };
+        }
         datum.modifiedByUser.users.push(modifiedByUser);
 
         // Limit users array to unique usernames
