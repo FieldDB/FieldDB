@@ -48,6 +48,8 @@ define([], function() {
     if (fieldDBDatum.session) {
       spreadsheetDatum.sessionID = fieldDBDatum.session._id;
       spreadsheetDatum.session = fieldDBDatum.session;
+    } else {
+      window.alert("This record is missing a session, please report this to support@lingsync.org "+ fieldDBDatum._id);
     }
 
     // upgrade to v1.90
