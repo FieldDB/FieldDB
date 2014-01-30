@@ -362,8 +362,8 @@ define(
               var deffered = Q.defer();
 
               Q.nextTick(function() {
-                spreadsheetDatumToBeSaved.timestamp = Date.now();
-                spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date()));
+                // spreadsheetDatumToBeSaved.timestamp = Date.now();
+                // spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date())); //These were done in the edit functions because the data might get saved an hour after it was modified... or more...
                 var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
                   try {
                     var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);

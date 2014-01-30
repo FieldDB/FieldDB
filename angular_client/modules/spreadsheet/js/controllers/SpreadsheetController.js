@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.92.2ss";
+      $rootScope.appVersion = "1.92.3ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -1075,6 +1075,15 @@ define(
         }
       };
 
+
+      //TODO what does this do? can any of this be done in the SpreadsheetDatum file instead?
+      // Here is what fieldData looks like:
+      // {
+      //   "field2": "",
+      //   "field3": "",
+      //   "field1": "hi does this call createRecord"
+      // }
+
       $scope.createRecord = function(fieldData) {
 
         // // Reset new datum form data and enable upload button; only reset audio field if present
@@ -1129,14 +1138,15 @@ define(
           fieldData.comments.push(comment);
         }
 
-        fieldData.dateEntered = JSON.parse(JSON.stringify(new Date()));
         fieldData.enteredByUser = {
           "username": $rootScope.user.username,
-          "gravatar": $rootScope.user.gravatar
+          "gravatar": $rootScope.user.gravatar,
+          "appVersion": $rootScope.appVersion
         };
 
         fieldData.timestamp = Date.now();
-        // fieldData.dateModified = JSON.parse(JSON.stringify(new Date()));
+        fieldData.dateEntered = JSON.parse(JSON.stringify(new Date(fieldData.timestamp)));
+        fieldData.dateModified = fieldData.dateEntered;
         // fieldData.lastModifiedBy = $rootScope.user.username;
         fieldData.sessionID = $scope.activeSession;
         fieldData.saved = "no";
@@ -1152,6 +1162,7 @@ define(
         $scope.saved = "no";
       };
 
+      // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
       $rootScope.markAsEdited = function(fieldData, datum) {
         var utterance = "Datum";
         for (var key in fieldData) {
@@ -1177,14 +1188,17 @@ define(
         }
         datum.dateModified = JSON.parse(JSON.stringify(new Date()));
         datum.timestamp = Date.now();
-        var modifiedByUser = {};
-        modifiedByUser.username = $rootScope.user.username;
-        modifiedByUser.gravatar = $rootScope.user.gravatar;
-        if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
-          datum.modifiedByUser = {};
-          datum.modifiedByUser.users = [];
-        }
+        var modifiedByUser = {
+          "username": $rootScope.user.username,
+          "gravatar": $rootScope.user.gravatar,
+          "appVersion": $rootScope.appVersion
+        };
 
+        if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
+          datum.modifiedByUser = {
+            "users" : []
+          };
+        }
         datum.modifiedByUser.users.push(modifiedByUser);
 
         // Limit users array to unique usernames
@@ -1292,12 +1306,16 @@ define(
           console.log(index);
           if ($scope.allData.hasOwnProperty(index)) {
             (function(recordToBeSaved){
-              var recordToBeSaved,
-                promiseToSaveThisDatum;
+              if (!recordToBeSaved || recordToBeSaved.saved !== "no") {
+                //not saving this record
+                return;
+              }
 
-              var utterance = "Datum";
+              var promiseToSaveThisDatum;
+
+              var utteranceForActivityFeed = "Datum";
               if (recordToBeSaved.utterance && recordToBeSaved.utterance !== "") {
-                utterance = recordToBeSaved.utterance;
+                utteranceForActivityFeed = recordToBeSaved.utterance;
               }
 
               var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
@@ -1320,27 +1338,30 @@ define(
                 activities[0].verbicon = "icon-pencil";
                 activities[1].verb = "modified";
                 activities[1].verbicon = "icon-pencil";
+              } else {
+                if ($scope.fullCurrentSession) {
+                  recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
+                } else {
+                  window.alert("This appears to be a new record, but there isnt a current data entry session to associate it with. Please report this to support@lingsync.org");
+                }
               }
 
-              if (recordToBeSaved.saved && recordToBeSaved.saved === "no") {
-                $scope.saved = "saving";
-                // recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
-                recordToBeSaved.pouchname = $rootScope.DB.pouchname;
-                recordToBeSaved.timestamp = Date.now();
-                promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
-                saveDatumPromises.push(promiseToSaveThisDatum);
+              $scope.saved = "saving";
+              recordToBeSaved.pouchname = $rootScope.DB.pouchname;
+              // spreadsheetDatum.dateModified = 
+              // recordToBeSaved.timestamp = Date.now(); // these come from the edit function, and from the create function because the save can happen minutes or hours after the user actually modifies/creates the datum.
+              promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
+              saveDatumPromises.push(promiseToSaveThisDatum);
 
-                promiseToSaveThisDatum.then(function(spreadSheetDatum) {
-                  spreadSheetDatum.saved = "yes";
-                  activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utterance + "</a> ";
-                  $scope.addActivity(activities, "uploadnow");
-                }, function(reason){
-                  console.log(reason);
-                  $scope.saved = "no";
-                  window.alert("There was an error saving a record. " + reason);
-                });
-
-              }
+              promiseToSaveThisDatum.then(function(spreadSheetDatum) {
+                spreadSheetDatum.saved = "yes";
+                activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
+                $scope.addActivity(activities, "uploadnow");
+              }, function(reason){
+                console.log(reason);
+                $scope.saved = "no";
+                window.alert("There was an error saving a record. " + reason);
+              });
 
             })($scope.allData[index]);
           }
@@ -1520,8 +1541,8 @@ define(
               template.user.username = $rootScope.user.username;
               template.user.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
               template.user.id = $rootScope.user.username;
-              template.user._id = $rootScope.user.username;
-              template.dateModified = JSON.parse(JSON.stringify(new Date()));
+              template.user._id = $rootScope.user.username; //TODO remove this too eventually...
+              template.dateModified = JSON.parse(JSON.stringify(new Date())); //TODO #1109 eventually remove date modified?
               template.timestamp = Date.now();
 
               $scope.activities.push(template);
