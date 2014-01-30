@@ -1141,11 +1141,11 @@ define(
         fieldData.enteredByUser = {
           "username": $rootScope.user.username,
           "gravatar": $rootScope.user.gravatar,
-          "appVersion": $rootScope.appVersion;
+          "appVersion": $rootScope.appVersion
         };
 
         fieldData.timestamp = Date.now();
-        fieldData.dateEntered = JSON.parse(JSON.stringify(fieldData.timestamp));
+        fieldData.dateEntered = JSON.parse(JSON.stringify(new Date(fieldData.timestamp)));
         fieldData.dateModified = fieldData.dateEntered;
         // fieldData.lastModifiedBy = $rootScope.user.username;
         fieldData.sessionID = $scope.activeSession;
