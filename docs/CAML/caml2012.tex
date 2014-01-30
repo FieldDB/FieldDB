@@ -14,7 +14,9 @@
 \author{MaryEllen Cathcart$^{a,b}$\\ Gina Cook$^b$\\ Theresa Deering$^{b,c}$\\ Yuliya Manyakina$^{d,e}$\\Gretchen McCulloch$^d$\\Hisako Noguchi$^e$}
 \runningauthor{Cathcart et. al.}
 \institution{$^a$University of Delaware $^b$iLanguage Lab $^c$Visit Scotland $^d$McGill University$^e$Concordia University}
-\ackfn{ LingSync: A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners\\We would like to thank everybody who has contributed to this work.}
+\ackfn{English title: LingSync: A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners\\
+
+We would like to thank the CAML participants for their comments and questions, as well as members of Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on aspects of LingSync presented at meet-ups, as well as Montreal's vibrant start-up community who helped us understand  the industry best practices which underpin LingSync's success as a user driven app. We would also like to express our deep thanks to Tobin Skinner, Josh Horner, Elise McClay, Louisa Bielig, Joel Dunham, Gay Hazan, Oriana Kilbourn, Rakshit Majithiya, Kim Dan Nguyen, Pablo Duboue and as well as countless other open source software developers whose code directly or indirectly helped build LingSync to what it is today. We would like to thank Mathieu Legault for his substantial financial contributions which made LingSync advance far quicker than expected, as well as  SSHRC Grant ***? Lastly we would like to thank our significant others for their support and patience, without them our passion for better data experiences would have remained just that, a passion and not a reality.}
 
 \maketitle
 
@@ -27,7 +29,7 @@ LingSync is an OpenSource database system that allows language researchers to se
 Furthermore, the application is created with collaborative goals in mind;  data is syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members use the application to modify and discuss the data. The system also has a simple and friendly user interface, allowing users to drag and drop data (audio, video, text), or record audio/video directly into the database when using the Android App. In addition, the application  has import and export capabilities for multiple file types. The application is designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any database which will house data funded by granting agencies.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works. The application is hosted on cloud servers so that users can use it without knowing how to set up its servers. The application also has an installation guide for linguistics department server administrators so that they can set up unlimited data usage on their own department servers.
 
 
-%LingSync is a collaboration between  the programming fieldlinguists of iLanguage Lab LTD, Montreal, the Mig'maq Research Group at McGill University and the Prosody Lab at McGill University, Montreal Canada.
+%LingSync is a collaboration between  the programming fieldlinguists of iLanguage Lab LTD, Montr\'eal, the Mig'maq Research Group at McGill University and the Prosody Lab at McGill University, Montr\'eal Canada.
 
 \section{Introduction}
 
@@ -82,7 +84,7 @@ options.
 \subsubsection{Technological background: why we can make this now - GINA} 
 
 \subsection{Design principles - HISAKO} 
-
+\label{sec:design}
 
 The principal goal of LingSync is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. The main objectives are to provide: 
 
@@ -343,61 +345,123 @@ This application integrates the best functions from existing fieldwork database 
 
 \subsection{Current functions  -GINA}
 
+LingSync's functionality can be divided into two groups, functionality for linguistic field databases, and functionality for user friendly community driven software. In this section we will place more emphasis on the linguistic field database functionality and only briefly gloss over some of the more over-arching concerns which make LingSync user friendly and a project with a high proportion of returning users. 
 
-The project has three core modules which must be developed prior to additional modules. These are the {\it collaboration, corpus} and {\it lexicon} modules, briefly outlined in terms of functionality and timeline in the following sections.  Implementation of the three core modules began on April 20th 2012. The three core modules will be launched on August 1st at CAML in Patzun Guatemala. We estimate the three core modules and the software architecture to take 9.2 weeks to complete with three software developers,  and cost roughly \$23,800 before taxes. We will have its final time and costs on August 3rd 2012.
 
-The collaboration module shown in Table~\ref{table-collaboration}  deals with users, teams, permissions, user authentication,  as well as allowing users to see changes, modifications, and data verification in the form of an ``Activity Feed.'' An activity feed is a common design pattern which allows users to learn form other users how to use the software, what are popular functions other users are completing in addition to being a central location to update oneself on the activity in the corpus. The system will have special users called ``bot'' which are scripts or programs which power users can write in Javascript which will crawl their corpus and clean/automate batch actions.
+
+
+%The collaboration module shown in Table~\ref{table-collaboration}  deals with users, teams, permissions, user authentication,  as well as allowing users to see changes, modifications, and data verification in the form of an ``Activity Feed.'' An activity feed is a common design pattern which allows users to learn form other users how to use the software, what are popular functions other users are completing in addition to being a central location to update oneself on the activity in the corpus. The system will have special users called ``bot'' which are scripts or programs which power users can write in Javascript which will crawl their corpus and clean/automate batch actions.
 
 
 \subsubsection{Data entry and import}
 
-The corpus module shown in Table~\ref{table-corpus} deals with storing confidential data in the AES US Federal encryption standard, replicating the corpus locally on the  users' computers, as well as on a central server hosted either in the cloud, or on a linguistic department's server. The corpus module contains all of the core logic, including data fields, session fields, as well as data lists which are used to curate lists of data for handouts or publication either in linguistic articles or as web widgets embedded in external websites such as linguistic department blogs, or project pages. The corpus module is also where search of datum is implemented. 
+
+Data entry in LingSync goes beyond just typing or transcribing data. While simply typing in data is the most common use case, LingSync also provides the ability to add comments to any data in the system. This makes it possible to collaboratively enter data, and discuss data, without modifying or destroying information in the data itself. This means that multiple team members can suggest new segmentation, or new gloss information, qualms about translation or context and the team can reach a consensus together without blocking team members from accessing or improving data. Comments are also editable and deletable, and can be formatted using Wiki markup which essentially permits the ability to add unlimited documentation to a data record without needing to put the documentation into the record's utterance or translation lines, for example. When working as teams composed of linguists or community members who may speak different dialects, and thus have differing judgements, we believe that comments are a key way teams can provide a maximum amount of access and curation, without worrying about different team members over-writing each other's judgements. 
+
+As all documents in the system are versioned, mis-guided edits by team members can be undone and be detected via the team activity feeds \S \ref{sec:sharingactivityfeeds}. If a team discovers one of it's members is not following their team's data curation conventions, the permissions system allows the team to set the individual's permissions to read and comment only.  
+
+Data can be categorized by tags as well as by the status of each individual data entry. A record could have a status as simple as "Checked," or even ''CheckedWithSeberina'' or ''ToBeCheckedWithConsultant'' if the team is working with multiple consultants and/or dialects. The ability to group data into its validation status further aids organization and permits the team to gather data for future elicitation sessions, or to send data to consultants to be checked either by exporting the data and sending it by email, or by adding the consultant as a team member. 
+
+As LingSync is ``skinnable'' meaning each user can have a different visual representation of the data, teams can even create non-technical views of the data so that the consultants enjoy being part of the team and feel more connected to the collaborative nature of the language documentation effort.
+
+Data entry and data curation is also fully scriptable. In our user studies we estimate that well over 50\% of research time is spent cleaning and curating data, most often to revise old data to update it to what the team's evolving analysis of the data has shown. As such a fundamental part of field work is exploring and re-analyzing data, users can create bots which partly automate these tasks. Bots can even be scheduled to run periodically on the corpus, reducing the manual data entry process if the team decides all data should use the convention ``ACC'' should be glossed as ``CAUS'' in the context of ``ASP.'' Bots are able to go through a corpus, and leave comments on data which should be cleaned manually, or even execute the changes after the team has reviewed the changes and approves. There are existing bots for transliteration (conversion of Inuktitut syllabics to romanization) and for duplicating morphemes fields to an allomorph fields among others. Bots help reduce the redundant tasks, freeing team members to focus on data entry and data analysis. In most teams with long standing databases it is often the custom to enforce conventions by providing users with drop-downs where they must select only from appropriate options, or go to another screen to add the new option before selecting it. Bots reduce the time dedicated to high quality validation as fields can be populated with autocomplete lists which display options, but still permit new options to be added without visiting an addition screen, and permits the validation to happen post data entry by identifying context to be combined or separated and executing the validation automatically.
+
+Data entry expected to be grouped by elicitation session. In fact, one expected method of data entry is not data entry at all, but rather recording of an elicitation session followed by typing up the session at a later date. Longer audio files can also optionally be uploaded to the audio web-service \S \ref{sec:phoneticwebservice} to be automatically split into utterances,  reducing data entry and record creation if a team wishes to record elicitation sessions and enter the data later. We strongly recommend this approach to data entry as it permits the team dedicate 100\% of their attention to the speaker, while in eliciting data, rather than dividing their attention between the speaker and the process of data entry.
+
+One of LingSync's founding principles is that you should only need to enter data once. Whether you enter it in an Excel Spreadsheet, in a handout, in Elan or in Flex, you should be able to import it into LingSync without needing to re-enter the data.  Each record in a LingSync database can have an unlimited number of fields, with unlimited complexity, making it possible to import other formats, and be able to re-export them without losing any information (for example, timed alignments in Elan or Praat). 
 
 \subsubsection{Auto-glosser}
 
-The glosser module show in Table~\ref{tab:glosser} is designed to make the app ``smarter'' and to reduce the amount of time spent entering predictable information such as glosses. The glosser can use any existing morphological analysis tool to break down the utterance/orthography line  into a probable morphological segmentation using known morphemes in the lexicon, and enters a probable gloss for the morphemes in the glossing line. The glosser module is designed to reduce redundant data entry, not to provide accurate glosses. It is of course crucial that predicted morpheme segmentation and glosses be corrected by users, particularly in languages where morphemes are ambiguous, or where morphemes are short and hence there are more ambiguous morpheme segmentations for words. 
 
+The semi-automatic glosser requires no configuration or set up to be useful. It ``learns'' from the data in your corpus to guess where morphemes might be segmented, or how morphemes should be glossed. The glosser is also a separate module, meaning if you have an existing glosser you can plug it in to LingSync. Glossers can also be shared. For example, if you have two Quechua corpora, you can set the glosser url to use either corpus.  
 
-The lexicon module show in Table~\ref{table-lexicon} is used for search. It is loosely modeled after a mental lexicon, in a network of morphemes, allomorphs, orthographie(s), glosses and translations.  It is not a dictionary but rather a connected graph similar to theoretical models of mental lexicons (for a dictionary see the Dictionary Module in \S~\ref{module-dictionary}). As a connected graph it is the most useful structure to index datum and search for datum real time while data entry is happening. 
+The glosser is designed to make the app ``smarter'' and to reduce the amount of time spent entering predictable information such as glosses. The glosser can use any existing morphological analysis tool to break down the utterance/orthography line  into a probable morphological segmentation using known morphemes in the lexicon, and enters a probable gloss for the morphemes in the glossing line. The glosser module is designed to reduce redundant data entry, not to provide accurate glosses. It is of course crucial that predicted morpheme segmentation and glosses be corrected by users, particularly in languages where morphemes are ambiguous, or where morphemes are short and hence there are more ambiguous morpheme segmentations for words. 
+
+The glosser uses the auto-generated lexicon to evaluate morphemes both by precedence relation and by gloss. Each corpus has its own lexicon, which is loosely modelled after a mental lexicon, as a network of morphemes, allomorphs, orthographie(s), glosses and translations.  It is not a dictionary but rather a connected graph similar to theoretical models of mental lexicons (for a dictionary see the Dictionary Module in \S~\ref{module-dictionary}). As a connected graph it is the most useful structure to index datum and search for datum real time while data entry is happening. Currently, there is no user interface to view/edit a corpus' lexicon but if there is enough demand it will proritiized.
 
 \subsubsection{Search}
 
-
-Furthermore, researchers will be able to add tags for categorization and mark the status of each individual data entry as ''Checked'' or ''To be checked with consultant'', which further aids organization and reduces the number of errors that inevitably occur during research. Other functions such as importing data and exporting data into various formats aid efficiency and convenience. 
-
-
-Finally, the application will have a powerful search function that will expand into a data list that is contained in its own widget. Data lists can be sorted, saved and can be used for batch operations such as exporting or converting into LaTeX. 
-
-The phonological search module shown in Table~\ref{tab:phono} is used to search for phonological features in context. It consists of a phonology ontology (a general purpose feature geometry/articulatory feature ontology, or a customized ontology created by the users for their language of interest) which lets the user search for potential minimal pairs or phonological features in context to verify with consultants or to prepare psycholinguistic experiments. The phonological search module is used by the {\it  phonetic aligner} module to generate a ``dictionary.txt'' file containing orthography and phones which is used by the phonetic aligner module.
+LingSync was designed for powerful search. You can search your corpus, or across your corpora. The results of your searches can even be saved as a Data Lists which can be sorted, saved for later exporting or curating data for a handout or language learning lesson for heritage speakers. 
 
 
+\begin{exe}
+	\ex Search for  `yell' in an entire corpus, (to find examples in gloss and translation and comments etc)
+\end{exe}
+
+Search can be as simple as a key word search, which will search the entire record, or search with in only one field, or for example one key word in one field or another key word in another field. For those users who like to think in Set Theory LingSync provides you with the ability to look at the Intersection of search results, or in the Union. 
+
+\begin{exe}
+	\ex Search for  `nay' in the morphemes line, or `des' in the gloss
+\end{exe}
+
+For phonologists LingSync lets you search using regular expressions to find segments in context.
+
+
+\begin{exe}
+	\ex Search for  `nay[tk]' in the morphemes line to find context of allomorphy
+\end{exe}
+
+If there is demand we can add the ability to search for minimal pairs or to search for phonological features in context using a phonology ontology (a general purpose feature geometry/articulatory feature ontology, or a customized ontology created by the users for their language of interest)  where feature geometry searches could be used. 
+
+Phonological search lets the user search for potential minimal pairs or phonological features in context to verify with consultants, and/or to prepare psycholinguistic experiments. 
+
+\begin{exe}
+	\ex Search for  `nay-voice' in the morphemes line to find context of surface vowels
+\end{exe}
+
+Search has a 
+The phonological search module shown in Table~\ref{tab:phono} is used to search for phonological features in context. 
 
 \subsubsection{Sharing corpora, activity feed}
+\label{sec:sharingactivityfeeds}
 
+Corpora in LingSync can be shared as a team, with administrators who cannot see the data, but can add new team members (eg. a project coordinator) , writers, who cannot read the data but can enter new data (eg. language consultants, or psycho-linguistc experiment participants), readers who cannot edit the data but can see the data (eg. external collaborators) and commenters  who cannot edit the data but can provide feedback and offer additional information or corrections (eg. consultants and/or collaborators).  Of course, most teams will choose to give all roles to all users, but these roles permit a wider inclusive data collection team than previously available  in other data management tools where the permissions are simply full access or no access.
 
-Another widget will be an Activity Feed View displaying the most recent changes. This widget allows researchers to keep up to date on their team's activity.  The activity feed will display items such as recent additions to the corpus, comments made on data entries, and recent edits.  
+As a team, you might also want to catch up on recent activity in the corpus. If your corpus is small (only a 100 records) you could simply read each record to see what is new, but for larger corpora or where there is more activity LingSync provides team activity feeds. In the activity feed widget you can see who has modified, commented, created data, as well as recording audio, and putting records in the trash to be deleted later. Of course, there are also user activity feeds which are only presented to the user, while not particularly interesting in that they contain only activities that you have completed, they can help you remember what you were working on last time, particularly if it has been months since you last opened your corpus. Our user studies and previous experience as field workers indicate that most users visit their corpus very frequently , when building it, and the usually more sporadically as they need to return only to consult their data. The user activity feed can help you remember that you hadn't finished typing up that elicitation session three months ago before you had to go to class. 
 
 \subsubsection{Custom settings}
+
+LingSync is highly customizable. It comes with the ability to choose from 5 popular dashboards, and even to create your own. Users can decide how many records to show on a page of data, which order to show the records in and many more options. For users who have limited eyesight or who are using screen readers LingSync provides a high-contrast option as well as a dark option to reduce eyestrain after hours of entering data. LingSync was designed partly by research assistants who had entered data for 40 hours a week, and so it also provides the ability for rich and visually interesting background pictures to keep entering data visually stimulating.
+
+Each corpus is also fully customizable, team members can add new fields to the corpus, as well as edit its terms of use and other information which can become important if the team decides to share the result of their work with the outside world. We have added many other options to corpora which conform to EMELD recommendations discussed in \S\ref{sec:design}
+
 \subsubsection{Export}
 
+As users of many other data management software, we felt it was crucial that LingSync be nonproprietary and open. One important aspect of this is the ability for teams to export their entire database in any format they choose, in its entirety or only data which are relevant to a certain export goal. 
+
+Teams can even save lists of data for dedicated export purposes, such as data for a handout, or data which they are curating to be published as stories for the language community they are working with.
+
+LingSync is also able to export word lists, which can be used either as language learning exercises for heritage speakers or as materials for field methods courses. 
+
+It is possible to export an entire corpus either as a zip, as XML or JSON, as plain text, as LaTeX and  as CSV. 
+
+Beyond export, LingSync databases are fully replicatable between servers, which means that team members can have entire copies of their database locally on their laptops, yet still remain in full sync with other team members when they go online. It also means that departments can back up their data to their own department servers with out worry for data becoming stale or out of date. 
 
 
 \subsection{Plugging into LingSync -GINA}
 
-\subsubsection{Wiki-dictionary format export}
+One of the strengths of LingSync is that is built using well-understood web technologies which permit the creation and integration of nearly any existing software as web services, and if the software provides a javascript or HTML5 library or widget, even complex user interfaces can be combined and integrated with LingSync via the NPM and Bower web module management system. In this section we will discuss some of the current web services.
 
-The dictionary module shown in Table~\ref{tab:dictionary}is used to crawl the corpus to gather citations and examples to build a Wiktionary dictionary for the corpus' language, as required by some grants which focus on endangered/minority languages. The dictionary module is quite complex and the central component of many online fieldlinguistics databases. 	
+%\subsubsection{Wiki-dictionary format export}
+
+%It is possible to download the entire Wiktionary for a language and import or export it using LingSync  The dictionary module shown in Table~\ref{tab:dictionary} is used to crawl the corpus to gather citations and examples to build a Wiktionary dictionary for the corpus' language, as required by some grants which focus on endangered/minority languages. The dictionary module is quite complex and the central component of many online fieldlinguistics databases. 	
+
+\subsubsection{Custom glosser}
+
+We have wrapped Benoit Farley's morphological analyzer for inuktitut into a web service using Node.js ***link?
 
 \subsubsection{Language learning module for android}
 
-The language learning module shown in Table ~\ref{tab:langlearn} enables researchers and language teachers to create language learning aids from the data in existing corpora and from the data newly collected for the purpose of language learning. The learning aids aim to help language learners improve their listening and speaking skills. The orthographic lines (i.e. utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create a lesson. 
+A prototype for language learning was build which  enables researchers and language teachers to create language learning aids from the data in existing corpora and from the data newly collected for the purpose of language learning. The learning aids aim to help heritage language learners improve their listening and speaking skills. The orthographic lines (i.e. utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create a lesson. 
 
-\subsubsection{Integration with prosodylab aligner}
-The phonetic aligner module show in Table~\ref{tab:aligner} makes it possible to use attached audio recordings and the orthographic/utterance lines of datum to create a dictionary unique to the corpus' language, and to run the ProsodyLab Aligner, a machine learning algorithm which uses Hidden Markov Models to predict boundaries between phones and creates a Praat TextGrid with estimated phone boundaries, saving hours of boundary tagging. We also have factored in a bit of sound editing to facilitate the process of creating audio files which correspond closely to the utterance line in the datum's fields. 
+\subsubsection{Integration with ProsodyLab aligner}
+\label{sec:phoneticwebservice}
+
+The phonetic aligner web service it possible to upload audio recordings and the orthographic/utterance lines of datum to create a dictionary unique to the corpus' language, and to run the ProsodyLab Aligner, a machine learning algorithm which uses Hidden Markov Models to predict boundaries between phones and creates a Praat TextGrid with estimated phone boundaries, saving hours of boundary tagging.
 
 \subsubsection{WebSpider}
 
-The Web Spider module shown in Table~\ref{table-spider} is a non-crucial module which allows researchers with limited access to consultants to gather data using blogs or forums. The web spider also provides an additional source of context to assist consultants in providing grammaticality judgements, as well as additional contexts where morphemes appear. For example, ``ke'' is largely considered a postposition by Urdu-consultants with explicit knowledge, however it is often produced as other functional morphemes in everyday spoken contexts. Blog/forum data can be used to discover these additional contexts.
+The Web Spider allows teams with limited access to consultants to gather data using blogs or forums or online translations of the bible. The web spider also provides an additional source of context to assist consultants in providing grammaticality judgements, as well as additional contexts where morphemes appear. For example, ``ke'' is largely considered a postposition by Urdu-consultants with explicit knowledge, however it is often produced as other functional morphemes in everyday spoken contexts. Blog/forum data can be used to discover these additional contexts. citation needed ***
 
 
 \subsection{Collaborators - GRETCHEN} 
