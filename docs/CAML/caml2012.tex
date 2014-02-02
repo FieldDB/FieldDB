@@ -100,8 +100,9 @@ Although it is designed primarily for linguists, the application will equally be
 
 \begin{description}
 
-\item { \bf OpenSource}. Being OpenSource allows departments to install and customize the database application to tailor their specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub will allow linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas. It allows the software to continue to grow and improve without any company which seeks to profit from the software.
+\item { \bf OpenSource}. Being OpenSource allows departments to install and customize the database application to tailor their specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software development process \citep{Pfeiffer:2010} on GitHub, not simply the source code allows linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas. It allows the software to continue to grow and improve without any company which seeks to profit from the software. 
  
+
 
 \item {\bf OpenAccess}. Corpora often contain sensitive information, consultant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system encrypts confidential data and stores the data in the corpus encrypted. To access the plain text the user  has to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application. The system  allows the user to export data encrypted or decrypted. If the corpus contains sensitive confidential information the system will warn the users if they choose to export the information in a decrypted fashion.
 
@@ -111,6 +112,7 @@ Although it is designed primarily for linguists, the application will equally be
 
 \subsubsection{Standards-compliant (Unicode, EMELD, Leipzig, XML)}
 
+\citep{Good:2012b}
 
 \begin{description}
 \item {\bf Unicode}. Encoding problems and losing data should be behind us in the days of Unicode. However, many existing fieldlinguistics databases were built in programming languages that did not support Unicode, or where unicode support was added as an afterthought, so the Unicode support is dangerously fragile. Javascript and HTML5 (the technologies used in the system) are 100\% Unicode.
@@ -417,11 +419,14 @@ As a team, you might also want to catch up on recent activity in the corpus. If 
 
 \citep{Musgrave:2012}
 
-Unlike EOPAS\citep{EOPAS:2014:Online} each corpus can have its own terms of use. However a unified terms of use permits mashups...
+Corpora can also be exported and shared in EOPAS XML format and imported to EOPAS.org. Like EOPAS \citep{EOPAS:2014:Online} LingSync encourages all teams to adopt a Creative Commons license for their resources, however each LingSync corpus team can choose to have its own terms of use and licensing which permits the maximum flexibility to teams. However a unified terms of use across corpora permits better integrability of corpora across researcher groups, as well permits the creation of mobile apps and content dissemination networks for heritage speakers and members of the language community diaspora.
+
+embedable widgets and unique urls to data can be shared. , like EOPAS..
+
 
 \subsubsection{Custom settings}
 
-LingSync is highly customizable. It comes with the ability to choose from 5 popular dashboards, and even to create your own. Users can decide how many records to show on a page of data, which order to show the records in and many more options. For users who have limited eyesight or who are using screen readers, LingSync provides a high-contrast option as well as a dark option to reduce eyestrain after hours of entering data. LingSync was designed partly by research assistants who had entered data for 40 hours a week, and so it also provides the ability for rich and  interesting background pictures to keep entering data visually stimulating.
+LingSync is highly customizable. It comes with the ability to choose from 5 popular dashboards, and even to create your own. Users can decide how many records to show on a page of data, which order to show the records in and many more options. For users who have limited eyesight or who are using screen readers, LingSync provides a high-contrast option as well as a dark option to reduce eyestrain after hours of entering data. LingSync was designed partly by research assistants who had entered data for 40 hours a week, and so it also provides the ability for rich and  interesting background pictures to keep entering data visually stimulating.  Human factors and Human Computer Interaction and click intensive user interfaces can can often play a larger role in over all time it takes to complete of data entry,  greatly reducing the positive effects of any tools we can provide to make semi automatically annotate data.  \citep{Palmer:2010} \citep{Palmer:2009}.
 
 Each corpus is also fully customizable: team members can add new fields to the corpus, as well as edit its terms of use and other information which can become important if the team decides to share the result of their work with the outside world. We have added many other options to corpora which conform to EMELD recommendations discussed in \S\ref{sec:design}
 
@@ -451,9 +456,9 @@ One of the strengths of LingSync is that is built using well-understood web tech
 
 \subsubsection{Custom glosser}
 
-We have wrapped Benoit Farley's morphological analyzer for inuktitut into a web service using Node.js ***link?
+We have wrapped Benoit Farley's \citep{Farley:2014:Online} morphological analyzer for inuktitut into a web service using Node.js ***link?
 
-\subsubsection{Language learning module for android}
+\subsubsection{Language learning module for Android}
 
 A prototype for language learning was build which  enables researchers and language teachers to create language learning aids from the data in existing corpora and from the data newly collected for the purpose of language learning. The learning aids aim to help heritage language learners improve their listening and speaking skills. The orthographic lines (i.e. utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create a lesson. 
 
@@ -464,11 +469,15 @@ The phonetic aligner web service it possible to upload audio recordings and the 
 
 \subsubsection{WebSpider}
 
-The Web Spider allows teams with limited access to consultants to gather data using blogs or forums or online translations of the bible. The web spider also provides an additional source of context to assist consultants in providing grammaticality judgements, as well as additional contexts where morphemes appear. For example, ``ke'' is largely considered a postposition by Urdu-consultants with explicit knowledge, however it is often produced as other functional morphemes in everyday spoken contexts. Blog/forum data can be used to discover these additional contexts. citation needed ***
+The Web Spider allows teams with limited access to consultants to gather data using blogs or forums or online translations of the bible. The web spider also provides an additional source of context to assist consultants in providing grammaticality judgements, as well as additional contexts where morphemes appear. For example, ``ke'' is largely considered a postposition by Urdu-consultants with explicit knowledge, however it is often produced as other functional morphemes in everyday spoken contexts. Blog/forum data can be used to discover these additional contexts. If we identify a need we can follow \citep{Dubuc:2010} to extract structure social media in low resource languages. 
 
 \subsubsection{Using LingSync to power online language documentation sites/mobile apps}
 
 \cite{Good:2012}
+
+\subsubsection{Other}
+
+There is an Android Elcitiation app which permits recording of high quality video on 7 inch or 10inch tablets during elicitaiton sessions. Multiple videos can be assocaited to a session and uploaded to the ProsodyLab Aligner webservice for automatic generation of aligned TextGrids. As opportunities allow, the above are only a few of the plugins which are reasonably seamless to integrate into LingSync. There are other plugins which can help use advances in computational linguistics  and natural language processing libraries  \citep{Chen:2011}  \citep{Rosenberg:2012} \citep{Sateli:2013}.%\citep{Desilets:2010}
 
 
 \subsection{Collaborators - GRETCHEN} 
@@ -494,7 +503,6 @@ Our current user registration statistics show that over 300 people have created 
 \section{Conclusion - YULIYA} 
 
 %\label{sec:intro}
-
 
 \custombib{\bibliography{caml2012}}
 
