@@ -16,9 +16,10 @@
 \institution{$^a$University of Delaware $^b$iLanguage Lab $^c$Visit Scotland $^d$McGill University$^e$Concordia University}
 \ackfn{English title: LingSync: A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners\\
 
-We would like to thank the CAML participants for their comments and questions,
-as well as members of Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on aspects of LingSync presented at meet-ups,
-as well as Montreal's vibrant start-up community who helped us understand  the industry best practices which underpin LingSync's success as a user driven app.
+We would like to thank the CAML participants for their comments and questions, 
+Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on aspects of LingSync presented at meet-ups,
+as well as Montreal's start-up community for permitting linguists to immerse themselves in the software community, 
+without which we would not have discovered technologies  so well suited to a field database.
 We would also like to express our deep thanks to Tobin Skinner,
 Josh Horner,
 Elise McClay,
@@ -49,10 +50,10 @@ organize,
 annotate,
 and share linguistic data.
 The application is accessible on any device; as it runs in any HTML5 enabled browser,
-on laptops (Mac 10.5 and above,
+not only on laptops (Mac 10.5 and above,
 Linux,
 Windows,
-ChromeBooks) as well as on mobile devices (Android and iPhone/iPad).
+ChromeBooks) as well as on tablets or mobile devices (Android and iPhone/iPad).
  It is suitable for both online and offline use.
 %\footnote{Running offline requires  a local database.
 % As of August 2012 it would be possible to use the app offline in Chrome Browsers (Mac,
@@ -61,7 +62,7 @@ ChromeBooks) as well as on mobile devices (Android and iPhone/iPad).
 % in the coming months/years other browsers/systems will support offline databases.
 % Safari and Firefox may also work by the end of 2012.}  
 Furthermore,
-the application is created with collaborative goals in mind;  data is syncable and sharable with other researchers as well as the language community.
+the application was created with collaborative goals in mind;  data is syncable and sharable with other researchers as well as the language community.
  Teams can contribute to a single corpus,
 where team members use the application to modify,
 analyze and discuss the data.
@@ -72,7 +73,7 @@ text),
 or record audio/video directly into the database.
 In addition,
 the application  has import and export capabilities for multiple file types.
-LingSync is designed from the ground up to conform to E-MELD and DataOne data management best practices,
+LingSync was designed from the ground up to conform to E-MELD and DataOne data management best practices,
 an important requirement for any database which will house data funded by granting agencies.
  Most importantly,
 the application is designed intuitively and theory free,
@@ -88,19 +89,28 @@ but also has an installation guide for server administrators so organizations ca
 
 \section{Introduction}
 
+Thieberger identifies ``a need for research into existing and emerging methods and development of tools both for creating linguistic data and then for making it useful. '' \citep{Thieberger:2012} 
+In this paper we hope to demonstrate how the LingSync project embodies this call to action.
+% was built using tools and practices used for flexible data management which have come out of recent (2005) publications of how to scale flexible and incomplete data from disparate sources. 
+%We believe LingSync's position in providing an easy to use tool which produces highly structured data makes it help advance current efforts to assist field work teams to preserve their data.
+
 \subsection{Why LingSync was created}
 \subsubsection{The need - GRETCHEN}
 
 LingSync was conceived out of the needs of language researchers doing
-fieldwork or other large scale data collection.
+fieldwork, or other large scale data collection.
 Linguistic fieldwork often requires researchers
 to travel to places where a stable connection to the internet is not guaranteed.
-Also,
+In addition,
 it often involves a group of researchers contributing to building a single database.
-An ideal linguistic database should therefore work both online and offline as well as
-making it easy to share and integrate data resources,
-not only among researchers but also with the language community.
-\citep{Wittenburg:2006} \citep{Black:2006}
+An ideal linguistic database should therefore work both online and offline \citep[p.1556]{Wittenburg:2006}, as well as
+make it easy to share and integrate data resources,
+not only among researchers but also with the language community. \citep{Good:2012, Thieberger:2012}
+
+%linguists are now also much more aware of the need to create records that can be reused by the people we record and that will still be available for their descendants.  \citep[p.129]{Thieberger:2012}
+%importance of designing documentary projects in ways that allow speaker communities to benefit from the work of an outside researcher. \citep{Good:2012, }
+
+
 
 \subsubsection{Other programs: pros and cons - GRETCHEN}
 
@@ -718,6 +728,8 @@ as well as the data list  functionality allows researchers to organize data read
 \subsubsection{User-friendly}
 
 
+ We believe strongly, as do the creators of  ELAN that ``ergonomic qualities greatly contribute to the experience and appreciation of the every day user. Also the level of productivity that can be reached is of utmost importance.'' \citep[p.1559]{Wittenburg:2006}.
+
 \begin{description}
 \item { \bf Simple.} The system will be designed to replace Word Documents or LaTeX documents which is a very common way field linguists store data because it requires no training,
 doesn't require a complicated set-up for data categories,
@@ -908,6 +920,7 @@ see \cite{Schroeter:2006}p105
 
 \subsubsection{Auto-glosser}
 
+ \citep{Black:2006}
 
 The semi-automatic glosser requires no configuration or set up to be useful.
 It ``learns'' from the data in your corpus to guess where morphemes might be segmented,
@@ -1000,6 +1013,12 @@ The phonological search module shown in Table~\ref{tab:phono} is used to search 
 activity feed}
 \label{sec:sharingactivityfeeds}
 
+Sharing primary resources and the inconstant results of field work is notoriously difficult, 
+``most linguists fail to share their data for reasons ranging from the difficulties involves in curating it into a distributable form, to concerns regarding speaker privacy, to a desire to be finished working with it on their own before giving others access.'' \citep{Bender:2010} 
+
+Even ``a funding body like the ELDP cannot get all of its grantees to deposit in an archive in a timely fashion (or at all)'' \citep{Thieberger:2012} we hope to make this easier by importing any format, letting users write scripts to clean data, mark some or most data as confidential or not yet verified, to help get the data into a state where the teams can publish it to a long term archival organization such as OLAC or the original granting agency. Part of the process of preparing data for publication involves collaboration.
+
+
 Corpora in LingSync can be shared as a team,
 with administrators,
 who cannot see the data,
@@ -1034,8 +1053,7 @@ and the usually more sporadically as they need to return only to consult their d
 For example,
 the user activity feed could help you remember that you hadn't finished typing up that elicitation session three months ago before you had to go to class.
 
-
-\citep{Thieberger:2012}
+\citep[p.132]{Thieberger:2012}  identifies two ways in which research must be shared, with a unique uri so that researchers are able to cite primary resources which further permits the ``combining data from disparate sources (which could be `mashups' or could, for example, involve correlating transcripts and media in `compound objects''' . LingSync addresses both concerns by a fine grained level of sharing where the user controls what is shared and how, but each resource has a unique url. 
 
 \citep{Musgrave:2012}
 
@@ -1049,6 +1067,8 @@ embedable widgets and unique urls to data can be shared.
 ,
 like EOPAS..
 
+
+``We all know of projects which have been completed and for which there are now large datasets that are not being properly maintained.''\citep[p.133]{Thieberger:2012} by creating activity feeds, we hope that teams will return to their data, and continue to currate it after they have created their handouts, given talks and moved on to other topics. 
 
 \subsubsection{Custom settings}
 
@@ -1102,6 +1122,8 @@ It also means that departments can back up their data to their own department se
 discuss Existing data management systems \cite{Schroeter:2006} LACITO and EthnoER as well as the LDC and OLAC...
 and maybe how LingSync data can be imported by them?
 
+``most as the delivery system (which could be proprietary software or websites that are no longer maintained) becomes unusable'' \citep[p.132]{Thieberger:2012}
+
 
 \subsection{Plugging into LingSync -GINA}
 
@@ -1117,6 +1139,8 @@ In this section we will discuss some of the current web services.
 % as required by some grants which focus on endangered/minority languages.
 % The dictionary module is quite complex and the central component of many online fieldlinguistics databases.
 	
+
+``There is a need for data management skills to be developed among linguistic scholars so that our relatively small collections can be maintained.'' \citep[p.133]{Thieberger:2012}   LingSync also seeks to make it easier for linguists and students to gain scripting skills to not be at the mercy of programmers who don't understand their underling subtleties of linguistic data. 
 
 \subsubsection{Custom glosser}
 
@@ -1163,6 +1187,8 @@ For teams collaborating with Computer Science or Software Engineering department
  handwriting recognition research for low resource languages \citep{Sadri:2007} or even training for speech recognition systems with as little as one hour of annotated data using web-services which wrap open source toolkits such as Sphinx-4 \citep{Walker:2004} or Kaldi \citep{Povey:2011}.
 Sample web services are provided on the OpenSourceFieldlinguistics GitHub.\footnote{https://github.com/OpenSourceFieldlinguistics} %\citep{Desilets:2010}
 
+
+``Offline use is likely to be most relevant to speakers of the languages recorded, given the lack of affordable -- or indeed any-- internet access. Such offline use of language records includes printed outputs and media on CD, DVD, or in computer-based (e.g. iTunes) formats.'' \citep{Thieberger:2012}
 
 \subsection{Collaborators - GRETCHEN} 
 
