@@ -25,6 +25,7 @@ Josh Horner,
 Elise McClay,
 Louisa Bielig,
 Joel Dunham,
+Brian Doherty, 
 Gay Hazan,
 Oriana Kilbourn,
 Rakshit Majithiya,
@@ -190,6 +191,11 @@ The principal goal of LingSync is to help language researchers collect and organ
 \item Data sharing, protection and integration functions to facilitate collaboration among researchers and between researchers and language consultants. 
 \end{itemize} 
 
+
+ We believe strongly, as do the creators of  ELAN that ``ergonomic qualities greatly contribute to the experience and appreciation of the every day user. Also the level of productivity that can be reached is of utmost importance.'' \citep[p.1559]{Wittenburg:2006}.
+
+LingSync is designed so that it requires no training nor complicated set-up for data categories, and takes no time to add new categories.  The application does not include any theoretical constructs that must be tied to the data.  The application allows data fields and categories to develop organically as data collection proceeds. Researchers will be able to add and change their fields and categories for the data at any point. The application will be available for any device that has an HTML5 compatible browser, making collaborative work easier among users with different device preferences. 
+
 %As a tool for research, a software should ideally require no time for researchers to learn its functionality.  Various functions in LingSync are organized into widgets (e.g. data entry widget, search widget), and the user interface of each widget transparently reflects its function in order to minimize the time spent on figuring out the behaviour of the application. 
 %The database software underlying LingSync (CouchDB) allows data schema to change, which enables researchers to customize and modify data entry fields at any point during the course of research. In addition to the default data fields (utterance, morpheme, gloss, translation) researchers can add `phonetic transcription' or `context of utterance' as data fields, for example. 
 %CouchDB has the ability to deal with and record data modifications that happen concurrently by multiple users. LingSync's activity feed widget reports each modification to users who share the same database, making it easy for a team of researchers to keep track of their data and to work on the same database without concern of compromising or losing data. 
@@ -294,6 +300,9 @@ DataONE provides guidelines for data management according to 8 stages of data li
 
 %LingSync can be used to plan and manage data collection process. Users can begin by adding a description to their corpus, as well as adding language consultants and collaborators. When they begin collecting data they are first prompted to enter a Session and encouraged to write the session goals. Users are even able to prepare hypotheses in the form of Data lists containing Datum "To be Checked" to prepare for their data elicitation session with their language consultant. In this way LingSync helps a researcher in their collection rationale, collection and analysis methods. When the users add fields to datum they can enter a help text which will pop-up over the datum field as users are entering if they need to know what are the conventions for that field, e.g. IPA transcription could be either phonological or phonetic, the corpus administrator can indicate the conventions using the help text. 
 
+LingSync is designed in consideration of concerns users would encounter when planning to create language databases. 
+
+
 \begin{itemize} 
 
 \item{\sc Repository}: Data can be stored on cloud servers or on department or institution's own servers. Users can also store their databases on their own devices. Depending on the cyberinfrastructure available to users, LingSync allows flexible repository choices. 
@@ -314,10 +323,10 @@ DataONE provides guidelines for data management according to 8 stages of data li
 
 \end{itemize} 
 
-LingSync can be used to plan and manage data collection process. Users can begin by adding a description to their corpus, as well as adding language consultants and collaborators. When they begin collecting data they are first prompted to enter a Session and encouraged to write the session goals. Users are even able to prepare hypotheses in the form of Data lists containing Datum "To be Checked" to prepare for their data elicitation session with their language consultant. In this way LingSync helps a researcher in their collection rationale, collection and analysis methods. When the users add fields to datum they can enter a help text which will pop-up over the datum field as users are entering if they need to know what are the conventions for that field, e.g. IPA transcription could be either phonological or phonetic, the corpus administrator can indicate the conventions using the help text. 
+LingSync can also be used to plan and manage data collection process. Users can begin by adding a description to their corpus, as well as adding language consultants and collaborators. When they begin collecting data they are first prompted to enter a Session and encouraged to write the session goals. Users are even able to prepare hypotheses in the form of Data lists containing Datum "To be Checked" to prepare for their data elicitation session with their language consultant. In this way LingSync helps a researcher in their collection rationale, collection and analysis methods. When the users add fields to datum they can enter a help text which will pop-up over the datum field as users are entering if they need to know what are the conventions for that field, e.g. IPA transcription could be either phonological or phonetic, the corpus administrator can indicate the conventions using the help text. 
 
 
-\item Collect: Data is collected in such a way to ensure future usability.\footnote{DataOne recommends plain text ascii characters for variable names, file names, and data. As ascii is inappropriate for linguistic data, we follow E-MELD's recommendation to ensure that orthography, IPA, diacritics, semantic calculations and other are maintained in our users data.}
+\item {\bf Collect}: Data is collected in such a way to ensure future usability.\footnote{DataOne recommends plain text ascii characters for variable names, file names, and data. As ascii is inappropriate for linguistic data, we follow E-MELD's recommendation to ensure that orthography, IPA, diacritics, semantic calculations and other are maintained in our users data.}
 
 
 The application provides a template for data entry which is flexible and customizable. The four core data fields (utterance, morphemes, gloss, translation) are usually required for language data and are set as defaults on the template. Researchers can add extra fields (e.g. IPA transcription, context of utterance) relevant to their research. Each data field has an optional Help Text where users can add detailed description of the data content. Contents of data fields (default and additional) are object of Search function so that users can organize data using the information contained in the fields. Search results can be made into and stored as independent data lists. 
@@ -327,15 +336,15 @@ When the user exports their corpus a readme.txt is generated which describes the
 
 
 
-\item Assure: The quality of data is assured through checks and inspections. 
+\item{\bf Assure}: The quality of data is assured through checks and inspections. 
 
-Datum's Validation Status (Checked, To be checked, Elicitation Error) and datum comment feeds enable users to check, discuss and inspect the data quality.  
+Datum's validation status (Checked, To be checked, Elicitation Error) and datum comment feeds enable users to check, discuss and inspect the data quality.  
 %Each datum is associated with session information such as researcher's name, consultant's code and date of elicitation. 
 Each datum is also time stamped when entered and modified so that the data history is trackable. Users may also create "Bots" which crawl their data and ensure that it is consistent.
 
 % Each modification is recorded (I think) but the app would only show last modified ? 
  
-\item Describe: Data is accurately and thoroughly described using the appropriate metadata standard.  
+\item{\bf Describe}: Data is accurately and thoroughly described using the appropriate metadata standard.  
 
 Data will be described at three levels in the application: 
 
@@ -348,20 +357,20 @@ Data will be described at three levels in the application:
 
 
 
-\item Preserve: Data is submitted to an appropriate long-term archive.  
+\item{\bf Preserve}: Data is submitted to an appropriate long-term archive.  
 
 Data and associated metadata are stored in a host server for long-term archival purposes. Confidential data and information are stored encrypted using the US Federal approved AES encryption standard to ensure that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. (See also \S \ref{sec:documentation} Citation, Preservation \& Rights)
 
 
-\item Discover: Data is located and obtained. 
+\item{\bf Discover}: Data is located and obtained. 
 
 The data in LingSync, if tagged for public view, are in principle searchable via standard search engines. Data permitted for export will be exportable to CSV, XML, text or LaTex formats. (See also \S \ref{sec:documentation} Discovery, Access \& Citation)
 
-\item Integrate: Data from disparate sources are combined into one consistent data set. 
+\item{\bf Integrate}: Data from disparate sources are combined into one consistent data set. 
 
 LingSync can be used to integrate and organize data created in different applications. Import/Export functions enable to combine data created in different file formats (e.g. .csv from FileMaker Pro and .xml from ELAN) into .json files and export them back to the original formats. While on LingSync, data can be made consistent by the creation of "Bots" who crawl the corpus and automate changes.
 
-\item Analyze: Data is analyzed. 
+\item{\bf Analyze}: Data is analyzed. 
 
 The four core data fields include morpheme-segmentation and glossing lines, hence the data will contain primary linguistic analysis at the time of the entry to the database. 
 Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for further analysis.   
@@ -425,25 +434,25 @@ Customizable data entry fields and data tags, as well as the data list  function
 %
 
 
-\subsubsection{User-friendly}
+%\subsubsection{User-friendly}
 
- We believe strongly, as do the creators of  ELAN that ``ergonomic qualities greatly contribute to the experience and appreciation of the every day user. Also the level of productivity that can be reached is of utmost importance.'' \citep[p.1559]{Wittenburg:2006}.
+% We believe strongly, as do the creators of  ELAN that ``ergonomic qualities greatly contribute to the experience and appreciation of the every day user. Also the level of productivity that can be reached is of utmost importance.'' \citep[p.1559]{Wittenburg:2006}.
 
-\begin{description}
-\item { \bf Simple.} The system will be designed to replace Word Documents or LaTeX documents which is a very common way field linguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.  The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data.  The application will allow data fields and categories to develop organically as data collection proceeds, as opposed to imposing a particular construct upon entry.  Researchers will be able to add and change their fields and categories for the data at any point.
+%\begin{description}
+%\item { \bf Simple.} The system will be designed to replace Word Documents or LaTeX documents which is a very common way field linguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.  The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data.  The application will allow data fields and categories to develop organically as data collection proceeds, as opposed to imposing a particular construct upon entry.  Researchers will be able to add and change their fields and categories for the data at any point.
 
 %\item {\bf Attractive.} The system will have a modern design like many of the popular websites such as Google and Twitter. It's layout and background image will be customizable so that the user can change the look and feel of the application to make their eyes comfortable  in bright/dark light, or adapt the layout of the widgets to their style of data entry.
 
-\item { \bf Cross-Platform.} The application will be available for any device that has an HTML5 compatible browser. Specifically, the application will run \emph{offline/online} in Chrome  on Mac, Linux, and Windows computers,\footnote{The app will also run on ChromeBooks. ChromeBooks are affordable laptops (\$299) which use the Chrome operating system created by Google. ChromeBooks are currently available in the UK and online at www.google.com/chromebook/. ChromeBooks have very long battery life and automatically backup data, which makes them good laptops for fieldwork.} as well as \emph{online/online} on Android tablets and phones. The application will run \emph{online only} in Safari and Firefox, and \emph{online only }on iPads and iPhones. 
+%\item { \bf Cross-Platform.} The application will be available for any device that has an HTML5 compatible browser. Specifically, the application will run \emph{offline/online} in Chrome  on Mac, Linux, and Windows computers,\footnote{The app will also run on ChromeBooks. ChromeBooks are affordable laptops (\$299) which use the Chrome operating system created by Google. ChromeBooks are currently available in the UK and online at www.google.com/chromebook/. ChromeBooks have very long battery life and automatically backup data, which makes them good laptops for fieldwork.} as well as \emph{online/online} on Android tablets and phones. The application will run \emph{online only} in Safari and Firefox, and \emph{online only }on iPads and iPhones. 
 % As of June 28 2012, Chrome runs on iPads and iPhones. Accordingly the application will run both online and offline on iPads and iPhones.  
 
-Touch tablets are one of the easiest tools to carry and use in the field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video without  microphones or cameras which distract consultants. Mobile devices also have apps for push button  publishing to YouTube or other audio/video hosting solutions  which  allow for private data like Google Plus. Furthermore, Android tablets are particularly easy to program and integrate the microphone/camera directly into the database (Cook, Marquis and Achim 2011).
-
+%Touch tablets are one of the easiest tools to carry and use in the field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video without  microphones or cameras which distract consultants. Mobile devices also have apps for push button  publishing to YouTube or other audio/video hosting solutions  which  allow for private data like Google Plus. Furthermore, Android tablets are particularly easy to program and integrate the microphone/camera directly into the database (Cook, Marquis and Achim 2011).
+%
 
 
 %\item {\bf Work offline.} Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the application in a Chrome extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location. 
 
-\end{description}
+%\end{description}
 
 
 
