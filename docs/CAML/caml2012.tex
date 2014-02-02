@@ -16,7 +16,7 @@
 \institution{$^a$University of Delaware $^b$iLanguage Lab $^c$Visit Scotland $^d$McGill University$^e$Concordia University}
 \ackfn{English title: LingSync: A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners\\
 
-We would like to thank the CAML participants for their comments and questions, as well as members of Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on aspects of LingSync presented at meet-ups, as well as Montreal's vibrant start-up community who helped us understand  the industry best practices which underpin LingSync's success as a user driven app. We would also like to express our deep thanks to Tobin Skinner, Josh Horner, Elise McClay, Louisa Bielig, Joel Dunham, Gay Hazan, Oriana Kilbourn, Rakshit Majithiya, Kim Dan Nguyen, Pablo Duboue and as well as countless other open source software developers whose code directly or indirectly helped build LingSync to what it is today. We would like to thank Mathieu Legault for his substantial financial contributions which made LingSync advance far quicker than expected, as well as  SSHRC Grant ***? Lastly we would like to thank our significant others for their support and patience, without them our passion for better data experiences would have remained just that, a passion and not a reality.}
+We would like to thank the CAML participants for their comments and questions, as well as members of Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on aspects of LingSync presented at meet-ups, as well as Montreal's vibrant start-up community who helped us understand  the industry best practices which underpin LingSync's success as a user driven app. We would also like to express our deep thanks to Tobin Skinner, Josh Horner, Elise McClay, Louisa Bielig, Joel Dunham, Gay Hazan, Brian Doherty, Oriana Kilbourn, Rakshit Majithiya, Kim Dan Nguyen and Pablo Duboue as well as countless other open source software developers whose code directly or indirectly helped build LingSync to what it is today. We would like to thank Mathieu Legault for his substantial financial contributions which made LingSync advance far quicker than expected, as well as  SSHRC Grant ***? Lastly we would like to thank our significant others for their support and patience, without them our passion for better data experiences would have remained just that, a passion and not a reality.}
 
 \maketitle
 
@@ -73,114 +73,118 @@ options.
 \subsection{Design principles - HISAKO} 
 \label{sec:design}
 
-The principal goal of LingSync is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. The main objectives are to provide: 
+The principal goal of LingSync is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. Main objectives are to provide: 
 
 \begin{itemize} 
-\item A self-explanatory, easy-to-use user interface so that researchers can understand and start using the application without laborious training of the software.  
+\item A self-explanatory, easy-to-use user interface so that researchers can understand and start using the application without laborious training about the software.  
 %\item Both online and offline functionality so that the fieldwork is not constrained by the internet accessibility. 
 \item Customizable data entry fields to accommodate particular requirements of a research.  
 \item Data sharing, protection and integration functions to facilitate collaboration among researchers and between researchers and language consultants. 
 \end{itemize} 
 
-To maintain simple and clean user interface, various functions in LingSync are organized into widgets (e.g. data entry widget, search widget). % LingSync employs CouchDB, a NoSQL database, 
-The database underlying LingSync (CouchDB) allows data schema to change, which further allows researchers to customize and modify data entry fields at any point during the course of research. In addition to the default data fields (utterance, morpheme, gloss, translation) researchers can add phonetic transcription or context of utterances as data fields, for example. CouchDB also allows multiple users to access and write to the same database at the same time, making it easy for members of a research team to share and work on the same database without compromising each other's data.  
-Import export 
-Fine-grained encryption options, possible to hide only the sensitive data points and keep the rest of the dataset visible. 
+%As a tool for research, a software should ideally require no time for researchers to learn its functionality.  Various functions in LingSync are organized into widgets (e.g. data entry widget, search widget), and the user interface of each widget transparently reflects its function in order to minimize the time spent on figuring out the behaviour of the application. 
+%The database software underlying LingSync (CouchDB) allows data schema to change, which enables researchers to customize and modify data entry fields at any point during the course of research. In addition to the default data fields (utterance, morpheme, gloss, translation) researchers can add `phonetic transcription' or `context of utterance' as data fields, for example. 
+%CouchDB has the ability to deal with and record data modifications that happen concurrently by multiple users. LingSync's activity feed widget reports each modification to users who share the same database, making it easy for a team of researchers to keep track of their data and to work on the same database without concern of compromising or losing data. 
+%Import and export functions in LingSync allows researchers to gather and organize data that created in different formats, and put them back into a desired format. 
+ 
 
-The usefulness and effectiveness of LingSync will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following E-  MELD Best Practices in Digital Language Documentation,\footnote{http://emeld.org/school/what.html} and data management following DataONE Primer on Data Management.\footnote{http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf}
-
-
-
+%Although it is designed primarily for linguists, the application will equally be useful for researchers documenting endangered languages and/or creating dictionaries/grammar books for minority languages, as well as language teachers creating educational materials.  
 
 
-Although it is designed primarily for linguists, the application will equally be useful for researchers documenting endangered languages and/or creating dictionaries/grammar books for minority languages, as well as language teachers creating educational materials.  
+%\item {\bf EMELD.} The application will allow researchers to share their data with anyone interested in their work. The application will be able to import data from ELAN XML, CSV and text file formats, and to export to XML, Latex and WIki formats. These import/export functions will make it easier to exchange data with those who are not using the same application.  The system will have users and teams, and permissions for corpora. Permissions will ensure that data can be safely shared and edited by multiple users. Moreover, the corpus will be versioned so that users can track changes and revert mistakes.
+%
+%
+%\item {\bf  Leipzig.} The application will be designed for search as this is one of the most fundamental tasks a language researcher must be able to do. The search will go far beyond traditional string matches and database indexes. The application will guess what users do most often, and automate the process for them. Most importantly, the system will have semi-automated  glossing based on morpheme segmentation.
+%
+%
+%\item {\bf XML/JSON.} Data will be stored on a CouchDB server, and will be accessible and sharable by multiple users.  The installable Chrome extension version of the application allows individual researchers to store a portion of a corpus, or an entire corpus, on their own devices, enabling offline work and quick search. 
+%
 
 
-\subsubsection{Open (open source, open access)}
 
+In addition to the objectives described above, LingSync is designed to comply with the recommendations from %in two respects: Data Documentation and Data Management. Data documentation will be evaluated following 
+E-MELD Best Practices in Digital Language Documentation,\footnote{http://emeld.org/school/what.html} and %data management following 
+DataONE Primer on Data Management.\footnote{http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf}. 
+The following section discusses the design of LingSync with respect to E-MELD and DataONE best practice recommendations. 
+
+
+\subsubsection{E-MELD Best Practices in Digital Language Documentation}
+
+E-MELD describes seven common problems in digital language documentation identified in Bird and Simons (2003) and recommends solutions. LingSync  
+
+\begin{description} 
+
+\item {\bf Content}: Data is annotated and described using consistent terminology.  
+
+Terminological conventions used to annotate data are often not explicitly defined anywhere in the database. Members of a research team might use the same terms in different ways, or use different terms to mean the same thing, depending on their theoretical background or expertise in the language being documented. This may result in terminological inconsistency and ambiguity within a database, which is hard for computers to resolve.
+LingSync allows users to design their annotation terminology per corpus and attaches these categories to each datum of the corpus, ensuring that all data are annotated in a consistent fashion. The creation of datum also automatically inserts the gloss units into an ontology which is used for search indexes and can be human curated in Module~\ref{tab:phono}. The Annotations include three types, free text, enumerated grammatical tags, and enumerated datum status (checked with a consultant, to be checked, elicitation error, deleted etc). 
+While all data are annotated with a consistent  terminology, the app is designed to adapt to a particular linguistic framework or theoretical construct, and allows researchers to choose categories for annotation. 
+
+\item {\bf Format}: Data are intelligible regardless of the types of operating system. 
+ 
+The use of non-standard (non-ascii) fonts is sometime s inevitable in linguistic data, however, not all application supports non-ascii fonts. Data could also become unintelligible due to the file formats that are incompatible with other applications or operating systems. 
+The code behind LingSync is written in Javascript and HTML5 which are 100\% Unicode, hence the application supports a wider range of orthographic transcriptions as well as IPA symbols. LingSync also  exports data in a number of plain text human readable formats including .json, .tex, .txt, .csv, and .xml files, all of which are non-proprietary and compatible with applications commonly used in linguistic data collection and documentation. LingSync runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. 
+
+\item {\bf Discovery}: Data are searchable and discoverable. 
+ 
+It is often hard to find relevant linguistic data with standard search engines such as Google and Yahoo.  
+Inside LingSync, data are discoverable via keyword and string match search. The search module is capable of performing intersective or union search of the data using any of the annotation fields which used in the corpus. External to the application, the corpora which are public will show up in the OLAC linguistic search engine.\footnote{ http://linguistlist.org/olac/index.html 
+\hspace{.2cm}http://www.language-archives.org/documents/implement.html\#conventional}
+%The system is designed not only for data entry, but also for data retrieval. 
+Furthermore, data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However, authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
+% Confidential data are stored encrypted in the database. 
+The application allows two sorts of export. Export of encrypted output maintains encryption on confidential data, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public. Export of decrypted output keeps the data non-proprietary and viewable outside of the app and must be protected as any other confidential data. 
+
+\item {\bf Access}: Data are accessible. 
+ 
+Much of linguistic data still sit in researchers' offices in the form of notebooks or tapes, or inside a stand-alone program on their computers. 
+As LingSync is online and hosted by reliable servers, the data is considered accessible, unlike tape-data and noted cards.
+
+
+\item {\bf Citation}: Database provide citation information. 
+ 
+Providing correct and up-to-date citation information is important for online resources. Data should not be associated with obsolete or inaccessible URLs.  
+In LingSync, each corpus has a unique URL which can be used for citation. In addition, corpus administrators can add an archive URL and automate their corpus archiving by creating a "Bot" which will archive their data to one of the existing, reputable language archives of the user's choosing.\footnote{http://emeld.org/school/classroom/archives/index.html} Data are further citable to their primary sources in that all data points are tied to a Session which contains details of data source such as consultant, publication, web page and the time the data are elicited, as well as other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
+
+\item {\bf Preservation}: Data are archived in a way that withstands long-term preservation.\footnote{http://emeld.org/school/classroom/archives/finding-archives.html}
+
+Preservation of digital data is always confronted with the possibility that the data file format over time becomes obsolete and unsupported by new technology. LingSync stores data in JSON format. JSON files are light-weight text files in which data contents are easily readable by humans, hence the information content would not be lost even if the data format becomes obsolete.  
+%In addition to a host server, the data is stored in multiple locations. Researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
+
+
+\item {\bf Rights}: Rights of authors of data and of language consultants are respected. 
+
+Corpora often contain sensitive information, consultant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. With LingSync, researchers and language consultants (authors of data) have control over who can see, edit and/or export which part of their data. Data and consultant information designated as confidential are encrypted prior to storage in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. Each database has a corpus page that includes a section for the Terms of Use of data where authors of data can specify conditions for data usage. As endangered language data may often have a condition of being kept private until its parties have passed away, should the administration member of the corpus die, a policy of obeying his/her heir's decisions with regard to the data shall be put in place and discussed in the terms and conditions. 
+
+\end{description} 
+
+
+
+
+\subsubsection{DataONE Primer on Data Management} 
+
+DataONE provides guidelines for data management according to 8 stages of data life cycle. Although the guidelines are primarily directed to researches in natural sciences, they are also relevant for linguistic research and language documentation.  
 
 \begin{description}
 
 \item { \bf OpenSource}. Being OpenSource allows departments to install and customize the database application to tailor their specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub will allow linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas. It allows the software to continue to grow and improve without any company which seeks to profit from the software.
  
 
-\item {\bf OpenAccess}. Corpora often contain sensitive information, consultant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application. The system will allow the user to export data encrypted or decrypted. If the corpus contains sensitive confidential information the system will warn the users if they choose to export the information in a decrypted fashion.
+%\item {\bf OpenAccess}. Corpora often contain sensitive information, consultant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application. The system will allow the user to export data encrypted or decrypted. If the corpus contains sensitive confidential information the system will warn the users if they choose to export the information in a decrypted fashion.
 
 
-\end{description}
 
 
-\subsubsection{Standards-compliant (Unicode, EMELD, Leipzig, XML)}
+%\subsubsection{Standards-compliant (Unicode, EMELD, Leipzig, XML)}
 
-
-\begin{description}
-\item {\bf Unicode}. Encoding problems and losing data should be behind us in the days of Unicode. However, many existing fieldlinguistics databases were built in programming languages that did not support Unicode, or where unicode support was added as an afterthought, so the Unicode support is dangerously fragile. Javascript and HTML5 (the technologies used in the system) are 100\% Unicode.
-
-
-\item {\bf EMELD.} The application will allow researchers to share their data with anyone interested in their work. The application will be able to import data from ELAN XML, CSV and text file formats, and to export to XML, Latex and WIki formats. These import/export functions will make it easier to exchange data with those who are not using the same application.  The system will have users and teams, and permissions for corpora. Permissions will ensure that data can be safely shared and edited by multiple users. Moreover, the corpus will be versioned so that users can track changes and revert mistakes.
-
-
-\item {\bf  Leipzig.} The application will be designed for search as this is one of the most fundamental tasks a language researcher must be able to do. The search will go far beyond traditional string matches and database indexes. The application will guess what users do most often, and automate the process for them. Most importantly, the system will have semi-automated  glossing based on morpheme segmentation.
-
-
-\item {\bf XML/JSON.} Data will be stored on a CouchDB server, and will be accessible and sharable by multiple users.  The installable Chrome extension version of the application allows individual researchers to store a portion of a corpus, or an entire corpus, on their own devices, enabling offline work and quick search. 
 % Audio files will be stored elsewhere (not on a CouchDB server), most likely on researcher's own server, to keep the storage space small in order to provide . The database will contain the information of the location path of the audio files, and when users want to access audio files, they will be redirected to their location. We'll use Iris CouchDB which provides free service if the usage (storage and transaction) is less than 5$/month (http://www.iriscouch.com/service). If we host only text data, it is possible to keep the service free. 
 
-\end{description}
 
 
-%\subsection {Data Documentation }
-
-\begin{enumerate} 
-
-\item Content: Data is annotated and described using consistent terminology.  
-
-The application allows users to design their annotation terminology per corpus and attaches these categories to each datum of the corpus, ensuring that all datum are annotated in a consistent fashion. The creation of datum also automatically inserts the gloss units into an ontology which is used for search indexes and can be human curated in Module~\ref{tab:phono}. The Annotations include three types, free text, enumerated grammatical tags, and enumerated datum status (checked with a consultant, to be checked, elicitation error, deleted etc). While all datum are annotated with a consistent  terminology, the app is designed to adapt to a particular linguistic framework or theoretical construct, and allows researchers to choose categories for annotation. 
-
-\item Format: Data are intelligible regardless of the types of operating system 
-
-The application is entirely in Unicode and exports data in  a number of plain text human readable non-proprietary formats including .json, .tex, .txt, .csv, and .xml files. The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. 
-
-\item Discovery: Data are searchable and discoverable. 
-
-Within the application, data are discoverable via keyword and string match search. The search module is capable of performing intersective or union search of the data using any of the annotation fields which are used in the corpus. External to the application the corpora which are public will show up in the OLAC linguistic search engine. \footnote{ http://linguistlist.org/olac/index.html 
-
-\hspace{.2cm}http://www.language-archives.org/documents/implement.html\#conventional}
-
-The system is designed not only for data entry, but also for data retrieval. Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
-Confidential data are stored encrypted in the database. The application allows two sorts of export. Export of encrypted output maintains encryption on confidential data, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public. Export of decrypted output keeps the data non-proprietary and viewable outside of the app and must be protected as any other confidential data.
-
-\item Access: Data are accessible. 
-
-As the system is online and hosted by reliable servers, the data is considered accessible, unlike tape-data and noted cards.
+\item {\bf Plan}: Plan for data management prior to data collection and revise it as necessary during the project. 
 
 
-
-
-\item Citation: Data provide citation information.
-
-Each corpus has a unique URL which can be used for citation. In addition, corpus administrators can add an archive URL and automate their corpus archiving by creating a "Bot" which will archive their data to one of the existing, reputable language archives of the user's choosing.\footnote{http://emeld.org/school/classroom/archives/index.html} Data are further citable to their primary sources in that all data points are tied to a Session which contains details of data source such as consultant, publication, web page and the time the data are elicited, as well as other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
-
-\item Preservation: Data are archived in a way that withstands long-term preservation.  \footnote{http://emeld.org/school/classroom/archives/finding-archives.html}
-
-Data are stored in a host server as JSON files. JSON files are human-readable text files, which have replaced XML data stores as a lighter weight, similarly featured markup language. Therefore the information content would not be lost even if the data format becomes obsolete.  
-In addition to a host server, the data is stored in multiple locations. Researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
-
-
-\item Rights: Rights of authors of data and of language consultants are respected. 
-
-Researchers and language consultants (authors of data) have control over who can see, edit and/or export their data. Data which are confidential, as well as consultant information which is confidential are encrypted prior to storage in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author.  The terms of use of data will be well documented, and are enforced using AES encryption. As endangered language data may often have a condition of being kept private until its parties have passed away, should the administration member of the corpus die, a policy of obeying his/her heir's decisions with regard to the data shall be put in place and discussed in the terms and conditions. 
-
-\end{enumerate} 
-
-%\subsection {Data Management }
-
-\begin{enumerate} 
-
-\item Plan: Plan for data management prior to data collection and revise it as necessary during the project. 
-
-
-What data will be generated: users can use LingSync to manage their data collection process. They can begin by adding a description to their corpus, as well as adding language consultants and collaborators. When they begin collecting data they are first prompted to enter a Session and encouraged to write the session goals. Users are even able to prepare hypotheses in the form of Data lists containing Datum "To be Checked" to prepare for their data elicitation session with their language consultant. In this way LingSync helps a researcher in their collection rationale, collection and analysis methods. When the users add fields to datum they can enter a help text which will pop-up over the datum field as users are entering if they need to know what are the conventions for that field, i.e. IPA transcription could be either phonological or phonetic, the corpus administrator can indicate the conventions using the help text. 
+LingSync can be used to plan and manage data collection process. Users can begin by adding a description to their corpus, as well as adding language consultants and collaborators. When they begin collecting data they are first prompted to enter a Session and encouraged to write the session goals. Users are even able to prepare hypotheses in the form of Data lists containing Datum "To be Checked" to prepare for their data elicitation session with their language consultant. In this way LingSync helps a researcher in their collection rationale, collection and analysis methods. When the users add fields to datum they can enter a help text which will pop-up over the datum field as users are entering if they need to know what are the conventions for that field, e.g. IPA transcription could be either phonological or phonetic, the corpus administrator can indicate the conventions using the help text. 
 
 Repository:  data can be stored on cloud servers or on department's own server, or researcher's own device. In addition "Bots" have been included as a feature so that users can automatically archive their data in existing, reputable language data archives as described by E-MELD requirements above. Multiple storage locations means less risk of losing data.
 
@@ -197,10 +201,10 @@ Data preservation: Data are stored locally on the users' machines if they use an
 Budget: LingSync is free and OpenSouce, it can be installed for free on department servers, or institutional data centres, which may require hiring professionals to maintain the database and ensure that the data is properly backed up. LingSync can also run on the cloud and departments can choose to host their data on a cloud hosting provider. The costs usually range between \$1 and \$10 per month for 1-100 gigabytes of data/data transfer.
 
 
-\item Collect: Data are collected in such a way to ensure future usability.\footnote{While E-MELD recommends Unicode, DataOne recommends plain text ascii characters for variable names, file names, and data. As ascii is inappropriate for linguistic data we will be following E-MELDs recommendation to ensure that IPA, diacritics, semantic calculations and other are maintained in our users data.}
+\item Collect: Data are collected in such a way to ensure future usability.\footnote{DataOne recommends plain text ascii characters for variable names, file names, and data. As ascii is inappropriate for linguistic data, we follow E-MELD's recommendation to ensure that orthography, IPA, diacritics, semantic calculations and other are maintained in our users data.}
 
 
-The application provides a template for data entry which is flexible and customizable. The four core data fields (transcription, morpheme segmentation, gloss, translation) are usually required for language data and are set as defaults on the template. Researchers can add extra fields (e.g. IPA transcription, semantic context of utterance) relevant to their research. Contents of data fields (default and additional) can be used in a fine grained way  to search, and researchers can organize data using the information contained in the fields. 
+The application provides a template for data entry which is flexible and customizable. The four core data fields (transcription, morpheme segmentation, gloss, translation) are usually required for language data and are set as defaults on the template. Researchers can add extra fields (e.g. IPA transcription, context of utterance) relevant to their research. Each data field has an optional help text where users can add detailed description of the data content. Contents of data fields (default and additional) are object of Search function so that users can organize data using the information contained in the fields. 
 The application is non-proprietary and data collected are exportable in various formats (.csv, .xml, .txt, and .tex) to ensure that data are sharable and usable outside the application. 
 
 When the user exports their corpus a readme.txt is generated which describes the datum annotation fields (using the conventions help text which the users can customize). In this way, when they share their data they can attach the readme.txt to allow others to know what their conventions were when building their corpus. 
@@ -311,7 +315,7 @@ Customizable data entry fields and data tags, as well as the data list  function
 \begin{description}
 \item { \bf Simple.} The system will be designed to replace Word Documents or LaTeX documents which is a very common way field linguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.  The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data.  The application will allow data fields and categories to develop organically as data collection proceeds, as opposed to imposing a particular construct upon entry.  Researchers will be able to add and change their fields and categories for the data at any point.
 
-\item {\bf Attractive.} The system will have a modern design like many of the popular websites such as Google and Twitter. It's layout and background image will be customizable so that the user can change the look and feel of the application to make their eyes comfortable  in bright/dark light, or adapt the layout of the widgets to their style of data entry.
+%\item {\bf Attractive.} The system will have a modern design like many of the popular websites such as Google and Twitter. It's layout and background image will be customizable so that the user can change the look and feel of the application to make their eyes comfortable  in bright/dark light, or adapt the layout of the widgets to their style of data entry.
 
 \item { \bf Cross-Platform.} The application will be available for any device that has an HTML5 compatible browser. Specifically, the application will run \emph{offline/online} in Chrome  on Mac, Linux, and Windows computers,\footnote{The app will also run on ChromeBooks. ChromeBooks are affordable laptops (\$299) which use the Chrome operating system created by Google. ChromeBooks are currently available in the UK and online at www.google.com/chromebook/. ChromeBooks have very long battery life and automatically backup data, which makes them good laptops for fieldwork.} as well as \emph{online/online} on Android tablets and phones. The application will run \emph{online only} in Safari and Firefox, and \emph{online only }on iPads and iPhones. 
 % As of June 28 2012, Chrome runs on iPads and iPhones. Accordingly the application will run both online and offline on iPads and iPhones.  
