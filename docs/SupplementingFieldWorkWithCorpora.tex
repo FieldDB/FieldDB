@@ -1,4 +1,3 @@
-
 \documentclass[12pt]{article}
 %\usepackage{fullpage}
 \usepackage{rotating}
@@ -201,46 +200,265 @@ blablabla blablabla blablabla
 
 \section{Discussion} 
 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
-blablabla blablabla blablabla 
+
+
+Louisa Bielig
+Independent Study
+13.12.2013
+
+Linguistic Corpus-building in Low-Resource Languages: 
+An Inuktitut Case Study
+
+
+1. Introduction
+
+Cross-linguistically, subjects and objects of sentences are identified in different ways. Languages may use one or several systems to express these roles of nouns. English, for example, mainly uses word order. In “John eats apples”, the subject John precedes the object, apples. Another approach, used in languages such as German or Russian, is called case. In a case system, subjects and objects are indicated by different noun forms, as with the English pronouns he (subject) versus him (object). 
+	Inuktitut, a dialect group of the Canadian Inuit dialect continuum, is interesting in this respect in that it makes use of two different case patterns for two-place predicates: the antipassive, which resembles the English pronoun pattern in that subjects are marked in the same way (in the absolutive case) regardless of whether or not an object is present, while another pattern, the ergative, groups together objects and the subjects of intransitive sentences, marking the subjects of transitive sentences differently. A comparable pseudo-English pattern would be “I saw him. Him left”, where the object “him” of the transitive sentence receives the same form as the subject “him” of the intransitive sentence. An ergative-transitive, a semantically transitive antipassive, and an intransitive construction are shown schematically below in the way they apply in Inuktitut:
+
+Ergative-transitive construction (two-place predicate):
+Sujbect-ERG Verb-agr-agr Object-ABS
+
+Antipassive construction (two-place predicate):
+Subject-ABS Verb-AP-agr (Object-OBL)
+
+Intransitive construction:
+Subject-ABS Verb-agr
+
+
+            This study investigates the contexts in which each pattern occurs. Semantically two-place predicates can appear in both ergative and antipassive constructions, and I seek to explore the grammatical phenomena that may influence the choice between the two cases. To find examples of ergative and antipassive constructions and to identify contexts where the two case patterns occur, I built a corpus using the book of Genesis from the Inuktitut version of the Bible, which might later be used to further elicit examples from native speakers. The Bible has been translated into many low-resource languages and is therefore a valuable tool for building large corpora to supplement field work. 
+In my corpus, I searched for ergatives and antipassives and analyzed their context for two linguistic phenomena that appear to affect their occurrence, namely definiteness and telicity. These grammatical features are part of several grammatical properties of sentences that usually influence the distribution of two case constructions within one language (Tsunoda 1981).While I have found examples that confirm a link between ergativity and definiteness and telicity, and a link between antipassives and indefiniteness and atelicity, there is no necessary connection between these constructions, since I have also found several counter-examples. I also analyzed some of the challenges I encountered working on the corpus, which mostly stem from grammatical properties of Inuktitut and its unique writing system.
+In section 2, I offer background information about Inuktitut and the distribution of ergatives and antipassives in Eastern dialects. Section 2.1 discusses the grammatical components of ergative and antipassive patterns in Inuktitut. Section 2.2 examines Hopper and Thompson’s transitivity scale, and section 2.3 discusses two phenomena from the scale, definiteness and telicity, that may influence choice between the ergative and the antipassive. In section 3, I outline the methodology of this study. Section 3.1 illustrates how I created the corpus, section 3.2 explains how I searched for example sentences with ergatives and absolutives, and section 3.3 illustrates how I analyzed relevant sentences for ergative and antipassive patterns. In section 4, I examine some examples from the corpus containing ergatives and antipassives, and offer an analysis of the influence that definiteness and telicity may have on case choice.  In section 5, I discuss my findings from section 4 as well as advantages and disadvantages of work on large corpora, and some issues that I encountered while conducting this study.
+
+2. Background
+
+Inuktitut is one of the Canadian Inuit languages spoken primarily in the territory of Nunavut as well as in Nunavik and various other areas above the tree line. It is morphologically rich, of agglutinative typology, and its case system is predominantly ergative. Ergative case constructions mark the subjects of transitive verbs differently from the objects of transitive verbs and the subjects of intransitive verbs (Dixon 1994). 
+The ergative paradigm is more predominant in Western dialects of Inuktitut than in Eastern dialects (Johns 1999). In the latter, the distribution of ergative/absolutive forms has increasingly been limited by the emergence of antipassive/oblique forms that bear resemblances with the nominative/accusative paradigm (Johns 2006). The antipassive marks subjects the same way independently of the presence of an object and does not group subjects and objects of any type together. The continuous movement towards the antipassive in Eastern dialects leads to a co-occurrence of both models, which is called split-ergativity (Johns 2006). Such a co-occurrence of two competing agreement patterns is very common across languages (Siewierska 2013). 
+In the following sections, I will first introduce the two Inuktitut case constructions and then offer a brief overview of the transitivity scale as well as definiteness and telicity, which may influence the distribution of ergatives and antipassives. 
+
+2.1 Ergativity & Antipassive
+
+In this section I will provide an overview of ergativity and antipassive in Inuktitut.
+
+a) The ergative construction (ERG)
+
+In the ergative case, transitive subjects pattern differently from transitive objects and intransitive subjects. A transitive construction consists of a marked agent (identifiable by the ergative suffix -up), and a direct object (theme or patient) in the absolutive case (∅). This direct object has the same case marking as the subject of an intransitive verb. In addition to case marking on the nominals, verbs in ergative constructions usually bear both subject and object agreement. 1
+To find agents of transitive verbs and to avoid antipassives and noun incorporation, it may be useful to search for very forceful, active verbs such as “kill” or “attack”. A typical ergative construction is shown in (1). The difference between a transitive and an intransitive verb is illustrated in (2) and (3) from Spreng 2006.
+
+(1) subject + -(u)p obj + ∅  verbal root + mood + person 
+
+(2) anguti-up 	arnaq 		kunik-taa
+man-ERG.SG 	woman(-ABS.SG)   kiss-PART.3SG/3SG
+The man kissed the woman.
+
+(3) anguti 		niri-vuq 
+man(ABS.SG) eat-IND.3SG
+The man is eating.
+
+
+b) The antipassive construction (AP)
+
+The antipassive construction typically applies to semantically transitive verbs, or to derived intransitives. While a regular transitive construction realizes the patient-like argument as a direct object, the antipassive construction may suppress that argument (and leave it implicit) or realize it as an oblique complement. An antipassive sentence therefore includes an agent in subject position bearing absolutive case, and a (possible non-overt) object bearing oblique case (Polinkski 2013). Antipassives usually only bear agreement features of the subject on the verb. 
+The typical antipassive construction illustrated in (4) includes the AP marker ‘-si’ that attaches to the verb, and the oblique case marker ‘-mik’ (dual –nnik, plural –nik) that attaches to the object of the sentence. The difference between overt and non-overt AP morphology on the verb is demonstrated in (5) and (6) from Spreng 2006.
+
+(4) subject  verbal root (~ 0-2 syllables) +  si ... (object+mik/nnik/nik))
+
+(5) anguti 	       kunik-si-vuq 	   arna-mik 
+      man(ABS.SG)  kiss -AP-IND.3SG  woman-mik
+      the man kissed a woman 
+
+(6)  anguti 	        niri-∅-vuq              niqi-mik 
+       man(ABS.SG)  eat- AP-IND.3SG meat-mik
+       the man is eating meat
+
+The co-occurrence of these different case constructions in Inuktitut raises the question which grammatical contexts may influence the choice of case. In my study, I consider a transitivity ranking, called the transitivity scale, and specifically two of its components, definiteness and telicity, as potential influences on the choice between the ergative and the antipassive. 
+
+
+2.2 The Transitivity Scale
+
+One factor that is considered to influence choice of case is the transitivity of verbs, that is, the effectiveness with which actions occur. Hopper and Thompson (1980) proposed a ranking system for this effectiveness of actions, called the transitivity scale. The scale juxtaposes pairs of components that indicate higher or lower degrees of transitivity, such as the presence versus absence of an object or active versus passive voice. 
+
+
+
+High transitivity
+Low transitivity
+Aspect
+telic
+atelic
+Punctuality
+punctual
+non-punctual
+Individuation
+definite (a.o.)
+indefinite (a.o.)
+Mode
+realis
+irrealis
+
+Excerpt from Table 1 and 2 from Hopper and Thompson (1980)
+
+The more high-transitivity components a sentence exhibits, the higher it ranks on the transitivity scale, which has a predictable set of consequences, e.g. occurrence of certain case patterns instead of lower-ranked ones. Typical high-ranking grammatical properties include perfective and telic aspect on the verb, and definite objects. Their counterparts, imperfective and atelic aspect, and indefinite objects, are placed at the lower end of the scale. 
+In ergative languages, the ergative pattern is associated with high rankings on the transitivity scale, while antipassive patterns are associated with rankings. In Inuktitut, ergative constructions should therefore be associated with perfective, telic aspect, active verbs, and definite objects, while antipassive constructions should occur around imperfective, atelic aspect, passive verbs, indefinite objects or no objects at all. I am analyzing two of these properties, namely definiteness and telicity, more closely in this paper and will provide examples from my corpus pertaining to these grammatical properties. 
+
+2.3 Definiteness and Telicity in Inuktitut
+
+Definiteness is a grammatical feature pertaining to noun phrases. Definiteness roughly corresponds with identifiability - that is, whether or not a referent is familiar or already established in the discourse (Lyons 1999: 278).  In English, definiteness is marked by the article the, and indefiniteness is denoted by the article a(n) in the singular and by an absence of any article in the plural. In Inuktitut, there is a lack of overt articles to mark definite or indefinite objects (Wharram 2003); however, indefinite objects often emerge in antipassive constructions and receive the suffix –mik in the singular form and –nik in the plural form. Definite objects should therefore be linked to ergative constructions. In my corpus, I will analyze the definiteness of objects in sentences that include ergatives and antipassives, and search for links between definiteness and ergatives, and indefiniteness and antipassives.
+Telicity refers to a verb’s semantic property of having a fixed endpoint. Telic verbs are associated with complete actions while atelic verbs are associated with incomplete or ongoing actions. Some approaches to Eskimo-Aleut languages have interpreted ergatives as telic and antipassives as atelic (see Benua 1995), while others attribute such differentiation rather to grammatical and viewpoint aspect (Spreng 2008). In the corpus, I am searching for telic and atelic readings of sentences that include ergative and antipassive patterns, and explore if a link between telic readings and ergatives, and atelic readings and antipassive can be found.
+
+
+3 Methodology
+
+3.1 Creation of the corpus
+
+There are few literary sources in Inuktitut at the disposal of researchers who wish to use them for corpus work. I chose the Inuktitut version of the Bible because if offers a very large, coherent text that is already divided into books, chapters, verses and sentences. The Bible has been translated into hundreds of languages, many of which are low-resource languages such as Inuktitut, and has been used for linguistic research purposes in the past, e.g. for projects on Afrikaans (Trushkina 2008) or Mayan (Henderson 2013). 
+The transliteration of the Bible into Inuktitut was an ongoing project for 33 years, with a team of four Inuit clergymen of the Anglican Diocese of the Arctic working three months a year on translating the entire Bible into their mother tongue. They were trained and supervised by linguist consultants. The New Testament was first published in print in 1992, and the complete Bible was published in 2012 (Sison 2012).
+Since sources like the Bible are not designed for research purposes, there may be several steps that need to be taken in order to make their material usable for corpus work. I used the online version of Genesis, the first book of the Bible, for the construction of my corpus. Since the entire Bible is written in Inuktitut syllabics and does not incorporate a Latin alphabet transcription or a translation, I needed to add these to every line of text. With the help of a computational linguist, I wrote javascript algorithms to provide a Latin alphabet translation and two English versions of Genesis, and uploaded the resulting corpus into the database app lingsync. I organized it in the original biblical units of chapters and verses, creating a digital and easily searchable version of the corpus. Unfortunately, I was not able to provide the entries with a gloss-line. Given the highly polysynthetic nature of the language and the high degree of allomorphy at morpheme edges in Eastern dialects, glossing a corpus of such dimension, especially without consultants, was outside the scope of this project.
+
+
+3.2 Finding relevant examples
+
+As I could not create a gloss line, which would permit me to directly look for particular cases, moods or person-ending combinations, I searched the utterance line for morphemes associated with the ergative and antipassive case constructions, such as the ergative singular marker -(u)p that attaches to the subject of an ergative clause, the AP marker –si, and the oblique case marker –mik that marks the object in antipassive clauses. The lingsync search tools take as their input one or several of these morphemes combined, and output a data list of the verses that include them, potentially providing us with the associated case constructions and their environments.
+
+3.3 Analysis of associated grammatical phenomena 
+
+The search result lists were subsequently analyzed in order to determine if ergative and antipassive constructions were indeed present. Initially, I attempted to gloss and analyze some of my  output using the Spalding Dictionary (Spalding 1998) and Benoit Farley’s Inuktitut Morphological Analyzer (Farly 2005), but due to the agglutinative nature and the allomorphic writing system of Inuktitut, it was very complicated to identify morphemes properly (see discussion). Several examples were glossed with assistance from Inuktitut expert and project co-supervisor, Richard Compton. Once I identified relevant sentences for both case constructions, I analyzed them for definiteness and telicity.
+
+4. Results
+
+I found mixed results on the relationship between definiteness and telicity and the distribution of ergatives and antipassives. Ergative patterns are generally associated with active verbs, i.e. with energetic, forceful actions. Researchers of Inuktitut frequently use verbs such as kill and hurt to obtain ergative sentences from consultants, as in (7) and from Johns 2006:
+
+(7) anguti-up         nanuq                        kapi-jaa
+      man-ERG.SG  polar.bear(ABS.SG) stab-3SG.3SG
+	      The man stabbed the polar bear.
+
+Indeed, I found similar occurrences of ergatives with such verbs in the corpus, as illustrated in (8). 
+
+(8) kaainiup           tuqulaurngmagu.
+      kaaini-up         tuqu-laur-ngmagu.
+      Cain-ERG.SG kill-past-because.3SG.3SG 
+      Because Cain killed him
+
+In some cases, verbs were less forceful, as in (9).
+
+(9) guutiullu                 qaumajuq                          taivaa                          ullumik
+      guuti-up=lu            qauma-juq                         tai-vaa                         ullu-mik
+                  god-ERG.SG=and light-DEC.3SG(ABS.SG) name-indic.3SG.3SG day-OBL.SG
+	      God called the light day.
+
+Interestingly, this sentence includes the ergative and the absolutive as well as the oblique case, showing that objects marked with an oblique case and occur with the ergative paradigm when an object with the absolutive case is present. 
+In this sentence, the ergative subject may be explained by referring to God. Given the widespread belief in monotheistic Christianity of Inuktitut speakers, God is arguably definite, specific and a very powerful being in the corpus. God should therefore be associated with the ergative patterns. Frequency counts in my corpus confirm this assumption: there are 118 instances of the segment combination guutiu-, which combines the root guuti ‘God’ and the letter ‘u’, which is the beginning of both the ergative marker –up and the morpheme combination –ullu (combining –up and  –lu, meaning ‘and’). Of this count, 72 examples were exactly guutiup and 27 were exactly guutiullu. In comparison, only 5 antipassive examples of the combination guutimik, which combines guuti ‘God’ with the oblique marker –mik, can be found.
+On the other hand, the count illustrates that the oblique marker –mik can clearly be found on God (forming the object guutimik) which is interpreted as part of an antipassive sentence. Numbers might be higher once allophony is taken into account. This is puzzling because antipassives are usually associated with indefinite objects, and God is a frequently referred-to and therefore a definite entity in the text. I have, however, found several other cases with definite readings in the context of the antipassive, as illustrated in (10) and (11). 
+
+(10) iisaki                  nulianilauqpuq                riipikamik 
+        iisaki                  nuliaq-nik-lauq-puq        riipika-mik 
+                    Isaac(ABS.SG)  wife-get-past-indic.3SG Rebekah-OBL.SG
+	        Isaac married Rebekah.
+In this example, the wife of Isaac is named Rebekah. Proper names refer to unique, identifiable nouns, which makes Rebekah a rather definite object. It is not certain that the verb means “to marry” or “to take a wife”, since I could be dealing with a noun incorporation of the object nuliaq ‘wife’, in which case the name could be an appositive and the sentence would approximately mean “I. got a wife, Rebekah”. A further example in (11) does not include a name, but a previously mentioned noun.
+
+(11) nunamik           ijiraqtuqluta
+        Nuna-mik        ijiraq-tuq-luta
+        land-OBL.SG spy-repeatedly(?)-contemporative.1PL
+        while we spy on the land // us spying on the land
+
+In this example, the noun nuna ‘land’ receives oblique case, which should make it an indefinite object. However, the full sentence is “angutiup, nunami angajuqkaangujuup, iliranaqtumikuqallagvigilauqpaatigut, nunamik irijaqtuqlutaa qaujisaqtiuniralauqpaatigut.” The translation is “The man who is the governor of the land spoke to us in a mean way. He treated us as if we were spying on the land.” Hence, ‘the land’ was already mentioned earlier in the sentence, which makes it presumably definite. The English translation “as if we were spying on the land” supports this point further. I can therefore conclude that definite readings in antipassive constructions are possible, which provides evidence that there is no direct link between definite objects and ergatives, and indefinite objects and antipassives in Inuktitut.
+I will now discuss the relationship between telicity and case constructions in Inuktitut. According to Benua 1995, I expect ergatives to have a telic reading and antipassives to have an atelic reading. I do see a telic interpretation in examples like the one previously shown in (8), where another action takes place because of Cain killing someone. The action of killing someone evidently has a clear endpoint in the past, when the person that Cain killed died.
+
+(8) kaainiup           tuqulaurngmagu.
+      kaaini-up         tuqu-laur-ngmagu.
+      Cain-ERG.SG kill-past-because.3SG.3SG 
+                  Because Cain killed him
+
+Nevertheless, when I consider example (12), I fail to attribute an atelic interpretation to a verb with an AP marker. 
+
+
+(12) nalliat kaainimik tuqutsijuq
+        Nalliat kaaini-mik tuqut-si-juq
+        Which.one (ABS.SG) Cain-OBL SG kill-AP-DEC.3SG 
+                    Whoever kills Cain 
+
+In this case, ‘killing Cain’ would still receive a telic reading, since Cain would die and remain dead. Hence, the choice of antipassive cannot be explained by telicity. It is possible that the antipassive is rather triggered by the irrealis mode in the sentence, which ranks very low on the transitivity scale. The full sentence is “Whoever kills Cain will be paid back seven times”. Cain was not actually killed, nor is it determined that he will be killed. It is simply a possibility. This gives the statement an irrealis reading, which fails to support the hypothesis of a link between atelic readings and the antipassive. I therefore do not reach a supporting view of telicity as causing a decision between ergative and absolutive case systems.
+
+
+
+4. Discussion 
+
+Our corpus has provided us with a number of examples that partially strengthen and partially subvert the hypothesis of the influence of definiteness on the choice of case in Inuktitut. While definite subjects were often associated with the ergative, I also found names, such as Rebekah, that are expected to have a definite reading but occur with the oblique marker –mik (associated with indefinite objects) in the antipassive construction. Concerning telicity, I rather found examples that oppose the hypothesis that antipassive sentences are reliably associated with atelic readings. In some cases there were several interpretations of one sentence, which complicated the analysis of their definiteness and telicity. Most of the problems I encountered analyzing my  data stem from the complex morphology of Inuktitut and my  limited ability to gloss it, while most of my  advantages relate to the speed of obtaining data and conducting searches.
+To improve future work, I have identified a number of advantages and disadvantages of my approach to data collection. Advantageous is the abundance of sentences that can be used for linguistic work on the corpus. In low-resource languages, obtaining a reasonable amount of data often requires several meetings with a native-speaker consultant or even extensive field trips to a region in which the language in question is spoken. Such meetings cannot generate a large amount of context for simple sentences. A large corpus built from a pre-existing literary source, however, can be built within a few days once a digital version of the source exists, and can provide many complex contexts that consultants usually do not come up with during a session. Such a corpus can also be enlarged with little work, especially when working with the Bible. In my  case, I restricted the corpus to the book of Genesis, but other books of the Bible could be added later on in case that I need more data or would like to investigate grammatical phenomena with possible higher rates of occurrences in other parts of the Bible.
+A further advantage is the possibility of analyzing different phenomena using the same corpus since its content is not innately focussed on a limited number of specific grammatical phenomena. In my study, it is furthermore easy to look for words, morphemes, and morpheme combinations in the corpus as the search function of lingsync permits flexible searches using regular expressions, and can directly save relevant findings. Once relevant sentences are saved, their extended environment, in this case verses, can be tagged and glossed for further investigation. Especially for semantic analyses, having a larger context to a sentence can be very beneficial.
+The disadvantages of the work with my corpus and corpora from pre-existing literary sources in general are largely due to their sheer size and their only partially predictable content. I cannot control the morphological and syntactic complexity in my material, which can render work on morphologically complex languages such as Inuktitut very difficult. In less agglutinative and morphologically complex languages than Inuktitut, digital dictionaries, morphological parsers and comprehensive grammars can be used to parse and gloss a corpus, but in my case even with these resources it has proven to be difficult to parse sentences. The help of a consultant is clearly necessary. 
+Furthermore, researchers might have to work with different writing systems than they are using for translations and glosses; e.g. the original Inuktitut Bible is entirely written in Inuktitut syllabics and does not incorporate a Latin alphabet transliteration or a translation. I had to write several javascript programs to provide an aligned English version of Genesis and a Roman alphabet transliteration, which did not perfectly reflect the original syllabics. For instance, Inuktitut maximally uses two adjacent vowels, but the transliteration occasionally produced syllables with three adjacent vowels.
+As I could not directly look for particular cases, aspectual properties or person-ending combinations in the gloss line, I first searched the corpus for morphemes and morpheme combinations associated with ergative and antipassive sentences. This process likely overgenerated some occurrences of morphemes because particular strings of segments can either represent a relevant morpheme, belong to larger or several different morphemes, or have several functions, as the ergative marker -(u)p, which marks both the ergative and the possessive. This may not be an issue when both grammatical functions receive a very similar reading, but if they differ considerably, irrelevant results will be generated. Homophony of morphemes is frequently occurring because Inuktitut has a relatively small phonological inventory. For instance, the antipassive marker –si can also be part of the morpheme –sima, an aspect marker with a similar meaning to English perfect. 
+The opposite effect, namely some incidence of relevant morphemes not being found due to allomorphy in the writing system 2 as well as assimilation or deletion (especially in the case of the last consonant of verb roots) may be avoided by searching for morphemes first in their entirety, and then without their first or last segment, while verifying that the results do not differ in meaning and function. For example, in example sentence (9), guutiullu, meaning “and God” (literally “God and”), consists of the morphemes guuti-up=lu. The ‘p’ of the ergative marker -up is assimilated by the following -lu (and), which makes it invisible to simple searches for the affix -up. We had to search for guutiu- and guuti-.
+When significant morphemes were found, the parsing process generated a related issue: due to the frequency of homophony and the phonological processes that affect morpheme boundaries, it is challenging to parse phrases correctly along these boundaries, since different morphemes may incorporate the same sequence of segments. In consequence, bigram frequency counts 3 are insufficient in detecting morpheme boundaries, and when words are filtered for a fixed list of morphemes, numerous possible parsing versions are provided. I initially used Benoit Farley’s Inuktitut Morphological Analyzer (Farley 2005), but it was offering us several possibilities for most morpheme boundaries, which made it impossible to parse words without doubt about numerous boundaries. For judgement on correct morpheme boundaries, an expert needs to be consulted.
+My work on the Inuktitut Bible corpus was complicated by a few obstacles, especially in the identification of relevant morphemes and the glossing of their environments. Since I have no oral data and am forced to use the written form, morphemes are not easily searchable without sophisticated search algorithms, such as regular expressions. The strongly agglutinative nature of Inuktitut increased my  difficulties with regard to searchability of the corpus, which makes it is advisable to attempt future projects of this nature on isolating languages rather than on other agglutinative or generally highly synthetic languages. A less allophonic writing system would also be an advantage. This way the lack of glosses would be less hindering and single morphemes could be identified more easily. Corpora built from literary sources should also be used to supplement field work with native-speaker consultants rather than to offer all the material for linguistic analysis, as they can provide many different contexts but no focused analysis of several paradigms in contrast.
+If there was an opportunity of glossing my entire corpus or relevant selections of it in cooperation with a consultant, my analysis would also instantly be much easier because it would allow us to search morphemes in a much more focused way. I then would like to generate a more comprehensive list of definite and indefinite objects in their environments to test if they correspond to ergatives and antipassives respectively. This far, I have found both evidence that supports and evidence that subverts the link between the case patterns and definiteness.
+I would also like to extend my analysis on telicity in the immediate environment of the ergative and antipassive. I have so far not found any evidence of telicity being a relevant factor in the choice of ergative versus absolutive, at least not in the sense that atelic readings are associated with antipassives. I could investigate this issue further and also look at viewpoint aspect and durative versus punctual aspect. 
+
+
+
+References
+
+
+Benua, Laura (1995). Yup'ik Antipassive. Proceedings of CLS 31. 28-44.
+
+
+Dixon, Robert M. W. 1979. Ergativity. Language 55. 59-138.
+
+Farley, Benoît (2005). Inuktitut Morphological Analyzer.  National Research Council of 
+
+	Canada (NRC) 2012. http://www.inuktitutcomputing.ca/Uqailaut/info.php
+
+Henderson, Robert (2013). Reclaiming Wycliffe Bibles for Linguistic Research.
+
+Computational Fieldwork Workshop, Montreal, 28.5.2013.
+
+
+Hopper, Paul J. and Sandra A. Thompson (1980). Transitivity in Grammar and Discours. 
+
+Language, Vol. 56, No 2. Lingusitic Society of America, 1980. 251 -299.
+
+
+Johns. Alana (2006). Ergativity and Change in Inuktitut. In Ergativity – Emerging Issues. Ed. 
+
+Alana Johns, Diane Massam, Juvenal Ndayiragije. Studies in natural Language and Linguistic Theory, Vol 65. Springer, Dodrecht:2006. 293 – 311.
+
+
+Johns, Alana. (1999). The Decline of Ergativity in Labrador Inuttut. In Papers from the 
+
+Workshop on Structure and Constituency in Native American Languages, eds. L. Bar-el, R. M. Déchaine, and C. Reinholtz, MIT Occasional Papers in Linguistics 17, 73-90.
+
+
+Lyons, Christopher (1999). Definiteness. Cambridge University Press, 1999. 1- 380
+
+
+Polinsky, Maria (2013). Antipassive Constructions. In: Dryer, Matthew S. & Haspelmath, 
+
+Martin (eds.) The World Atlas of Language Structures Online. Leipzig: Max Planck Institute for Evolutionary Anthropology. (Available online at http://wals.info/chapter/108, Accessed on 2013-12-13.) Workshop on Structure and Constituency in Native American Languages, eds. L. Bar-el, R. M. Déchaine, and C. Reinholtz, MIT Occasional Papers in Linguistics 17, 73-90.
+
+Siewierska, Anna (2013). Alignment of Verbal Person Marking. In: Dryer, Matthew S. & 
+	
+Haspelmath, Martin (eds.) The World Atlas of Language Structures Online. Leipzig: Max Planck Institute for Evolutionary Anthropology. (Available online at http://wals.info/chapter/100, Accessed on 2013-12-14.)
+
+Sison, Marites N (2012). Bible translation links Inuit to Word of God. Anglican Journal 2012.
+
+http://www.anglicanjournal.com/articles/bible-translation-links-inuit-to-word-of-god-10664
+
+Spalding, Alex (1998). Inuktitut - A Multi-dialectal Outline Dictionary. Nunavut Arctic 
+
+College 1998. http://www.inuktitutcomputing.ca/Spalding/index.php?lang=en
+
+
+
+Spreng, Bettina (2008). Events in Inuktitut: voice alternations and viewpoint aspect. 
+
+Proceedings of the 41st Annual Meeting of the Chicago Linguistics Society, University of Chicago, 473-487.
+ 
+Trishkina, Julia (2008). The North-West University Bible corpus: A multilingual parallel
+corpus for South African languages. In Language Matters: Studies in the Languages of Africa, Volume 37, Issue 2, 2006. 227-245.
+
+
+Wharram, Doughlas (2003). On the interpreatation of (un)certain indefinites in Inuktitut and 
+	
+related languages. University for Connecticut. 1-145.
 
 \appendix 
 
