@@ -7,19 +7,21 @@
 %%% BEGIN DOCUMENT
 \begin{document}
 
-\papertitle{iField: A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners}
+\papertitle{iField}
+%A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners}
 
-\firsttitle{\LARGE iField: \\[.2ex]\Large   A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners}
+\firsttitle{\LARGE iField}
+%   A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners}
 \runningtitle{iField}
 
-\author{MaryEllen Cathcart$^{a,b}$\\ Gina Cook$^b$\\ Theresa Deering$^{b,c}$\\ Yuliya Manyakina$^{d}$\\Gretchen McCulloch$^d$\\Hisako Noguchi$^e$}
+\author{MaryEllen Cathcart$^{a,b}$ Gina Cook$^b$  Theresa Deering$^{b,c}$ Yuliya Manyakina$^{d}$ Gretchen McCulloch$^d$ Hisako Noguchi$^e$}
 \runningauthor{Cathcart et al.}
 \institution{$^a$University of Delaware $^b$iLanguage Lab $^c$Visit Scotland $^d$McGill University$^e$Concordia University}
 \ackfn{iCampo: Un aplicaci\'on de colecci\'on de datos ling\"u\'isticos\\
 
-We would like to thank the CAML participants for their comments and questions, 
-Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on aspects of iField presented at meet-ups,
-as well as Montreal's start-up community for permitting linguists to immerse themselves in the software community, 
+We would like to thank the CAML participants for their feedback and questions, as well as sharing their knowledge and field work experiences; without them this project would  never have begun. We would also like to thank 
+Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on technical aspects of iField presented at meet-ups,
+as well as Montreal's start-up community for permitting linguists to immerse themselves in the software culture, 
 without which we would not have discovered technologies  so well-suited to a field database.
 We would also like to express our deep thanks to Tobin Skinner,
 Josh Horner,
@@ -31,9 +33,9 @@ Gay Hazan,
 Oriana Kilbourn,
 Rakshit Majithiya,
 Kim Dan Nguyen,
-Pablo Duboue, as well as countless other open source software developers whose code directly or indirectly helped build iField to what it is today and in the future. 
-We would like to thank iField users for providing feedback, suggestions,  asking questions and sending bug reports, all of which have been instrumental in iField's success.
-We would like to thank the granting agencies which supported the students who have doubled as field work research assistants and interns on the project. 
+Pablo Duboue, as well as countless other open source software developers whose code directly or indirectly helped build iField to what it is today and will be in the future. 
+We would like to thank iField users for providing feedback, suggestions,  asking questions and sending bug reports, all of which have been instrumental in iField's success and help drive the software's development.
+Finally, we would like to thank the granting agencies which supported the students who have doubled as field work research assistants and interns on the project. 
 %Lastly we would like to thank our significant others for their support and patience: without them,
 %our passion for better data experiences would have remained just that,
 %a passion and not a reality.
@@ -94,7 +96,7 @@ iField was conceived out of the needs of language researchers doing
 fieldwork, or other large scale data collection, 
 often in a partnership with language community members. 
 Unlike professional field linguists, 
-these language researches often do not work with a database on a full-time basis but rather as one of many other tasks (including, but not limited to, teaching, grading, researching and preparing publications).
+ language researches often do not work with a database on a full-time basis but rather it as one of many other tasks (including, but not limited to, teaching, grading, researching and preparing publications).
 Linguistic fieldwork frequently occurs where a stable connection to the internet is not guaranteed.
 In addition,
 it frequently involves a group of researchers, research assistants and native speakers contributing to building a single data collection.
@@ -104,7 +106,7 @@ not only among researchers but also with the language community \citep{Good:2012
 
 
 \cite{Thieberger:2012} identifies ``a need for research into existing and emerging methods and development of tools both for creating linguistic data and then for making it useful.'' 
-In this paper we hope to demonstrate how the iField project embodies Thieberger's call to action. Section \ref{sec:background} provides some background to the project including why \S \ref{sec:why} iField was created despite numerous existing solutions, and the data management best practices \S \ref{sec:design} underlying iField. 
+In this paper we hope to demonstrate how the iField project embodies Thieberger's call to action. Section \ref{sec:background} provides some background to the project including why \S \ref{sec:why} iField was created despite numerous existing solutions and the data management best practices \S \ref{sec:design} underlying iField. 
 Section \ref{sec:what} discusses iField's core \S \ref{sec:core} functionality as well as how iField empowers teams  with a plugin architecture \S  \ref{sec:plugins} enabling the  repurposing of existing resources and software libraries. Section \ref{sec:use} discusses how teams are currently using iField, and celebrates iField's  growing community of over 300 users in just 1.5 years since the project was launched at CAML.
 
 
@@ -169,7 +171,6 @@ and programming-linguists who worked in the software industry, and knew that the
 \subsection{Technological background: Why we can make this now} 
 
 While the rest of this paper (with the exception of Plugins \S \ref{sec:plugins}) targets a field linguist audience, a discussion of iField is incomplete without some discussion of why iField is unique among field databases.
-
 iField is actually only an open ended  data schema (as shown in \ref{ex:intelligible}) % (Appendix \S \ref{appendix:datumjson}), 
 and a few simple Node.js web services. All of the heavy lifting of the system is done by CouchDB. CouchDB is an open source  project which began in 2005 and matured in 2010, with continuing exciting additions each year following. 
 
@@ -180,7 +181,9 @@ CouchDB was designed for collaboration  (\ref{ex:Irreconcilable}b),\footnote{All
 as well as to work offline.\footnote{CouchDB knows how to keep two or more computers in complete sync, permitting team members to go offline with a full copy of their data and come back online again without manually merging all of the data.}
  With CouchDB under the hood, teams can prototype iPhone and Android apps  and other useful results \emph{with} language communities (\ref{ex:Irreconcilable}c) \emph{while} doing field work, without waiting  to export their data to another tool.\footnote{CouchDB is, in fact, not just a database, but also a server. It is able to serve data at a unique URL without the need to write a custom API.} 
  At the same time, all the permissions of the data are still enforced,\footnote{CouchDB uses authentication tokens which can be shared across different client apps, meaning that if the user logs in to iField in one window, they can access the data in another app in another window (an experience very similar to Gmail and Google Docs). iField adds additional measures discussed in Sharing \S \ref{sec:sharingactivityfeeds} below.} 
- meaning that the same database can not only serve primary audio and video \citep{Pfeiffer:2010}, but also keep it private until it has been polished for wider community use. 
+ meaning that the same database can not only serve primary audio and video,
+%  \citep{Pfeiffer:2010}, 
+  but also keep it private until it has been polished for wider community use. 
  CouchDB can look like a webpage, with colors and buttons (\ref{ex:Irreconcilable}d) but, the team's power users can seamlessly explore data in its true form, and even edit and customize existing iField scripts to clean and transform data into new shapes for analysis and export.\footnote{Most of the labs we talked with had someone in their lab who had learned Python to be able to transform data. Both Chrome and CouchDB have an interactive scripting console where you can script transformations to your data and visually preview the results immediately. Being in a web technology and using Javascript, research assistants can copy-paste their way to new scripts and other useful internal tools for the team, with no need to find a computer science student and then teach them the subtleties of linguistic data to ensure that the way they clean data doesn't introduce errors. } 
 
 \begin{exe}
@@ -190,8 +193,8 @@ as well as to work offline.\footnote{CouchDB knows how to keep two or more compu
 && & Year & Technology \\\hline\hline
 a. & highly structured, & yet flexible & 2005 & NoSQL\\\hline
 b. & collaborative, & yet offline  & 2012 &  IndexedDB\\\hline
-c. & open data enabled,  &yet respect the wishes  & 2012 & CORS \\
-&&  of language community members \\\hline
+c. & open data enabled,  &yet respects the wishes of & 2012 & CORS \\
+&&   language community members \\\hline
 d. & easy to use,  &yet provides a seamless context switch  & 2005 & Chrome DevTools  \\
 && to a power-user friendly interface && CouchDB
 \end{tabular}
@@ -204,7 +207,7 @@ d. & easy to use,  &yet provides a seamless context switch  & 2005 & Chrome DevT
 \subsection{Design principles: EMELD-compliant} 
 \label{sec:design}
 
-The principal goal of iField is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. Main objectives are outlined in (\ref{ex:objectives}). 
+The principal goal of iField is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. Its main objectives are outlined in (\ref{ex:objectives}). 
 iField is designed so that it requires no training or complicated set-up for data categories, and takes no time to add new categories.  The application does not include any theoretical constructs that must be tied to the data, but rather allows data fields and categories to develop organically as data collection proceeds. Researchers are able to add and change their fields and categories for the data at any point. 
 
 
@@ -474,8 +477,8 @@ you can set the glosser URL to use either corpus, or permit other teams to use a
 \ex The glosser offers a) morpheme segmentation using b) precedence relations in your corpus
 
  \centering
-   \includegraphics[width=0.45\textwidth]{glosser} ~
-   \includegraphics[width=0.45\textwidth]{morphemePrecedenceRelations}
+   \includegraphics[width=0.4\textwidth]{glosser} ~
+   \includegraphics[width=0.4\textwidth]{morphemePrecedenceRelations}
 
 \label{ex:glosser}
 \end{exe}
@@ -637,7 +640,9 @@ It also means that organizations can back-up their data to their own servers wit
 One of the strengths of iField is that it is built using well-understood web technologies which permit the creation and integration of nearly any existing software as web services. 
 Even complex user interfaces can be combined and integrated with iField via the NPM and Bower web module management system.\footnote{
 For teams collaborating with Computer Science or Software Engineering departments, there are limitless plugins which port advances in Computational Linguistics  \citep{Chen:2011}  or Natural Language Processing (NLP) including  negation and modality scope taggers  \citep{Rosenberg:2012}, %  using , 
-discourse extraction out of social media  \citep{Dubuc:2010},  GATE \citep{Cunningham:2011} NLP web services for mobile apps \citep{Sateli:2013},
+discourse extraction out of social media  \citep{Dubuc:2010},  
+%GATE \citep{Cunningham:2011} 
+NLP web services for mobile apps \citep{Sateli:2013},
  handwriting recognition research for low resource languages \citep{Sadri:2007} or even training novel speech recognition systems with
 %  as little as one hour of annotated data using web-services which wrap 
  open source toolkits such as Sphinx-4 \citep{Walker:2004} or Kaldi \citep{Povey:2011}.
@@ -659,7 +664,7 @@ utterance and morpheme lines) and the attached audio or video recordings of a da
 \ex The Language Learning prototype is downloadable on Google Play\footnote{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons}
 
  \centering
-   \includegraphics[width=0.5\textwidth]{languageLearningApp} 
+   \includegraphics[width=0.7\textwidth]{languageLearningApp} 
 
 \label{ex:languageLearningApp}
 \end{exe}
