@@ -12,32 +12,10 @@
 \firsttitle{\LARGE LingSync: \\[.2ex]\Large   A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners}
 \runningtitle{iCampo/LingSync}
 
-\author{MaryEllen Cathcart$^{a,b}$\\ Gina Cook$^b$\\ Theresa Deering$^{b,c}$\\ Yuliya Manyakina$^{d}$\\Gretchen McCulloch$^d$\\Hisako Noguchi$^e$}
-\runningauthor{Cathcart et al.}
-\institution{$^a$University of Delaware $^b$iLanguage Lab $^c$Visit Scotland $^d$McGill University$^e$Concordia University}
-\ackfn{iCampo: Un aplicaci\'on de colecci\'on de datos ling\"u\'isticos\\
-
-We would like to thank the CAML participants for their comments and questions, 
-Android Montr\'eal and Javascript Montr\'eal for their comments and feedback on aspects of LingSync presented at meet-ups,
-as well as Montreal's start-up community for permitting linguists to immerse themselves in the software community, 
-without which we would not have discovered technologies  so well-suited to a field database.
-We would also like to express our deep thanks to Tobin Skinner,
-Josh Horner,
-Elise McClay,
-Louisa Bielig,
-Joel Dunham,
-Brian Doherty, 
-Gay Hazan,
-Oriana Kilbourn,
-Rakshit Majithiya,
-Kim Dan Nguyen,
-Pablo Duboue and as well as countless other open source software developers whose code directly or indirectly helped build LingSync to what it is today.
-We would like to thank Mathieu Legault for his substantial financial contributions which made LingSync advance far quicker than expected,
-as well as the granting agencies which supported the students who have doubled as field work research assistants and interns on the project. 
-%Lastly we would like to thank our significant others for their support and patience: without them,
-%our passion for better data experiences would have remained just that,
-%a passion and not a reality.
-}
+\author{Somebody}
+\runningauthor{LingSync et al.}
+\institution{Somewhere}
+\ackfn{We would like to thank the CAML participants for their comments and questions. }
 
 \maketitle
 
@@ -54,7 +32,7 @@ as well as the granting agencies which supported the students who have doubled a
 
 \begin{abstract} 
 LingSync is a free,
-open source data management system built for field linguistics teams.
+open source database app built for field linguistics teams.
 It allows teams to securely enter,
 store,
 organize,
@@ -65,33 +43,20 @@ not only on laptops (Mac,
 Linux,
 Windows,
 ChromeBooks) but also touch tablets or mobile devices (Android and iPhone/iPad).
- It is suitable for both online and offline use,
-yet,  
-data is syncable and sharable with other researchers as well as the language community.
  Team members use the application not just to view and modify data,
 but also to analyze and discuss the data.
 The system also has a simple and friendly user interface,
-allowing users to drag and drop data (audio,
-video,
-text),
-or record audio/video directly into the database.
-The application has import and export capabilities for multiple file types.
-LingSync was designed from the ground up to conform to E-MELD and DataOne data management best practices,
-an important requirement for any application used by data collection projects funded by granting agencies.
-Finally,
-the application is designed to be intuitive and theory free,
-so it is not necessary to be a field linguist, or programmer to figure out how it works.
+allowing users to record audio directly into the database.
+LingSync was designed from the ground up to be easy to use for field methods courses.
 LingSync is hosted on cloud servers so that users can use it without knowing how to set up their own servers,
-but it also has an installation guide for server administrators so organizations can run their own instance of LingSync. Not only is its source code 100\% open, LingSync's development is also 100\% open and driven by the research assistants of field work teams who use it.
+but it also has an installation guide for server administrators so organizations can run their own instance of LingSync. 
 \end{abstract}
 
 
 \section{Background}
 \label{sec:background}
-
-\cite{Thieberger:2012} identifies ``a need for research into existing and emerging methods and development of tools both for creating linguistic data and then for making it useful.'' 
-In this paper we hope to demonstrate how the LingSync project embodies Thieberger's call to action. Section \S \ref{sec:background} provides some background to the project including why \S \ref{sec:why} LingSync was created despite numerous existing solutions, and the data management best practices \S \ref{sec:design} underlying LingSync. 
-Section \S \ref{sec:what} discusses LingSync's core \S \ref{sec:core} functionality as well as how LingSync empowers teams  with plugins \S  \ref{sec:plugins} to reuse and repurpose existing resources and software libraries. Section \S \ref{sec:use} discusses how teams are currently using LingSync, and celebrates LingSync's  growing community of over 300 users in just 1.5 years since the project was launched at CAML. Section \S \ref{sec:conclusion} summarizes  the paper.
+ Section \S \ref{sec:background} provides some background to the project including why \S \ref{sec:why} LingSync was created despite numerous existing solutions. 
+Section \S \ref{sec:what} discusses LingSync's core \S \ref{sec:core} functionality. Section \S \ref{sec:use} discusses how teams are currently using LingSync, and celebrates LingSync's  growing community of over 300 users in just 1.5 years since the project was launched at CAML. Section \S \ref{sec:conclusion} summarizes  the paper.
 
 \subsection{Why LingSync was created}
 \label{sec:why}
@@ -102,12 +67,8 @@ fieldwork, or other large scale data collection,
 often in a partnership with language community members, 
 and unlike professional field linguists, 
  not on a full-time basis but rather as one of many other tasks (including, but not limited to, teaching, grading, researching and preparing publications).
-Linguistic fieldwork frequently occurs where a stable connection to the internet is not guaranteed.
-In addition,
-it frequently involves a group of researchers, research assistants and native speakers contributing to building a single data collection.
-An ideal linguistic database should therefore work both online and offline \citep[p.1556]{Wittenburg:2006}, as well as
-make it easy to share and integrate data resources,
-not only among researchers but also with the language community \citep{Good:2012, Thieberger:2012}.
+Linguistic fieldwork frequently  involves a group of researchers, research assistants and native speakers contributing to building a single data collection.
+An ideal linguistic database should make it easy to share and integrate data resources.
 
 
 \subsubsection{Other programs: pros and cons}
@@ -116,8 +77,7 @@ not only among researchers but also with the language community \citep{Good:2012
 There are several existing programs designed specifically for storing linguistic data; however,
 none of them fully satisfies a field work team's need for robust,
 collaborative,
-multi-platform data annotation and organization,
-both online and offline.
+multi-platform data annotation and organization.
 For example,
 there are web-based databases which allow collaboration and sharing research with the language community,
 such as 
@@ -125,8 +85,7 @@ the Yurok Documentation Project \citep{Yurok:2001:Online},
  Karuk Dictionary and Texts \citep{Karuk:2009:Online},
 the Washo Project \citep{Washo:2005:Online, WashoMobile:2008:Online, Cihlar:2008}, 
 and the Online Linguistic Database (OLD) \citep{OLD:2010:Online} to mention only a few. 
-However, they only work online,
-making them unusable for editing or searching the data while in the field with limited or no internet access.
+
 There are also non-web-based software programs such as ToolBox \citep{ToolBox:2003:Online} 
 and FLEx/FieldWorks,
 \citep{FLEx:2011:Online}
@@ -165,10 +124,7 @@ and programming-linguists who worked in the software industry and knew that the 
 
 \subsubsection{Technological background: why we can make this now} 
 
-While the rest of this paper (with the exception of Plugins \S \ref{sec:plugins}) targets a field linguist audience, a discussion of LingSync is incomplete without some discussion of why LingSync is unique among field databases.
-
-LingSync is actually only an open ended recursive data schema (\ref{ex:intelligible}) % (Appendix \S \ref{appendix:datumjson}), 
-and a few simple Node.js web services. All of the heavy lifting of the system is done by CouchDB. CouchDB is an open source  project which began in 2005 and matured in 2010, with continuing exciting additions each year following. 
+While the rest of this paper (with the exception of Plugins \S \ref{sec:plugins}) targets a field linguist audience, a discussion of LingSync is incomplete without some discussion of why LingSync is unique among field databases. All of the heavy lifting of the system is done by CouchDB. CouchDB is an open source  project which began in 2005 and matured in 2010, with continuing exciting additions each year following. 
 
 CouchDB  solves important problems for field linguists, such as the ability to change their  data structure (\ref{ex:Irreconcilable}a) as their field database evolves\footnote{CouchDB stores data as JSON which is the equivalent of XML, meaning it is more similar to the flexibility of ToolBox and ELAN but yet still has the ability to be extremely structured like FLEx.} 
 %CouchDB's map reduce functions are a powerhouse for searching highly structured diverse data without pushing round data into square holes. LingSync add sample `bots' to CouchDB so teams can clean and restructure data to follow and update to new conventions and new analyses of the data.} 
@@ -201,9 +157,8 @@ d. & easy to use,  &yet provides a seamless context switch  & 2005 & Chrome DevT
 \label{sec:design}
 
 The principal goal of LingSync is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. Main objectives are outlined in (\ref{ex:objectives}). 
-LingSync is designed so that it requires no training nor complicated set-up for data categories, and takes no time to add new categories.  The application does not include any theoretical constructs that must be tied to the data.  The application allows data fields and categories to develop organically as data collection proceeds. Researchers are able to add and change their fields and categories for the data at any point. 
-
-
+  The application does not include any theoretical constructs that must be tied to the data.  
+  
 
 
 \begin{exe} 
@@ -211,150 +166,21 @@ LingSync is designed so that it requires no training nor complicated set-up for 
 
 \begin{xlist}
         \ex  A self-explanatory, easy-to-use user interface so that researchers can understand and start using the application without laborious training about the software.
-        \ex Customizable data entry fields to accommodate particular requirements of a research.  
+        \ex Common data entry fields to accommodate particular requirements of a research.  
         \ex  Data sharing, protection and integration functions to facilitate collaboration among researchers and between researchers and language consultants. 
     \end{xlist}
 \label{ex:objectives}
 \end{exe}
 
 
-In addition to the user driven objectives in (\ref{ex:objectives}), LingSync was designed to comply with the recommendations from %in two respects: Data Documentation and Data Management. Data documentation will be evaluated following 
-E-MELD Best Practices in Digital Language Documentation,\footnote{http://emeld.org/school/what.html} and %data management following 
-DataONE Primer on Data Management.\footnote{http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf}
-The following section discusses the design of LingSync with respect to E-MELD %and DataONE 
-best practice recommendations. 
-
-
-\subsubsection{E-MELD Best Practices in Digital Language Documentation}
-\label{sec:documentation} 
-
-E-MELD describes seven common problems in digital language documentation identified in \cite{Bird:2003} and recommends solutions. LingSync's implementation of these solutions is included below.
-
-\begin{description} 
-
-\item {\bf Content}: Data is annotated and described using consistent terminology.  
-
-%Terminological conventions used to annotate data are all too often not explicitly defined in the database. 
-%Members of a research team might use the same terms in different ways, or use different terms to mean the same thing, depending on their theoretical background or expertise in the language being documented. 
-%This often result in terminological inconsistency and ambiguity within a database, which is hard for computers to resolve.
-LingSync allows users to design their annotation conventions per corpus and makes these conventions are available as a help text next to each field of each record of the corpus, ensuring that conventions are never far away, and reducing tension among team members.
-Although a consistent  terminology is necessary for cross-corpora integration  \citep{Schalley:2012}, the app's primary users require that it to adapt to a particular linguistic framework or theoretical construct, as such, LingSync permits researchers to use open ended categories for annotation. 
-To enable consistency, open-ended typeahead drop-downs, shown in (\ref{ex:consistent}) permit team members to see what has previously been used, and optionally add new tags and categories without needing to leave the data entry interface.
-
-
-\begin{exe} 
-\ex Data is open-ended, yet consistent
-
- \centering
-    \includegraphics[width=0.35\textwidth]{typeaheadForPreviousCategories}
-
-\label{ex:consistent}
-\end{exe}
-
-\item {\bf Format}: Data is intelligible regardless of the types of operating system. 
- 
-%The use of non-standard (non-ASCII) fonts is sometimes inevitable in linguistic data, however, not all applications support non-ASCII fonts. Data could also become unintelligible due to the file formats that are incompatible with other applications or operating systems. 
-LingSync is written in Javascript and web technologies which permit the application to be 100\% Unicode, including support for left to right orthographies as well as IPA symbols. LingSync data is stored as plain text, and exportable in human readable formats including .json, .tex, .txt, .csv, and .xml files, all of which are non-proprietary and compatible with applications commonly used in linguistic data collection and documentation. LingSync runs on PC, Linux and Mac OS, as well as on newer platforms such as Android, ChromeBook and iPad.
-
-\begin{exe} 
-\ex Data is stored as plain text in Unicode
-
- \centering
-    \includegraphics[width=0.8\textwidth]{dataIsPlainTextUnicode}
-
-\label{ex:intelligible}
-\end{exe}
-
-
-\item {\bf Discovery}: Data is searchable and discoverable. 
- 
-Inside LingSync, data is searchable via keywords, or within specific fields, using either simple strings or regular expressions (\ref{ex:searchable}). 
-%The search module is capable of performing intersective or union search of the data using any of the fields. 
-\begin{exe} 
-\ex Data is searchable both for normal users, and for power users
-
- \centering
-    \includegraphics[width=0.4\textwidth]{searchable}
-
-\label{ex:searchable}
-\end{exe}
-
-%It is often hard to find relevant linguistic data with standard search engines such as Google and Yahoo.  
-Public  corpora are   (\ref{ex:discoverable}a) are SEO enabled, and can be exported to the OLAC linguistic search engine.\footnote{ http://linguistlist.org/olac/index.html 
-\hspace{.2cm}http://www.language-archives.org/documents/implement.html\#conventional} Corpus administrators  control what is public, down to each field, of each data record. Sensitive information can even be encrypted in the database, and displayed masked (\ref{ex:discoverable}b), meaning that the entire corpus can be exported and shared without combing the data to black out sensitive information. 
-
-\begin{exe} 
-\ex a) Data can be search engine discoverable, b) fields can even be public yet masked 
-
-\hspace{-1.5in}
- \centering
-   \includegraphics[width=0.4\textwidth]{discoverable}
-   \includegraphics[width=0.4\textwidth]{confidential}
-
-\label{ex:discoverable}
-\end{exe}
-
-
-\item {\bf Access}: Data is accessible. 
- 
-Much of linguistic data sits in researchers' offices in the form of notebooks or tapes, or as files on their computers.  LingSync data is online, and team members can even replicate the entire database (\ref{ex:accessible}) onto their laptops or department servers. Unlike tape-data and note cards, the data can be in many physical locations at one time, even available to collaborators across the world. 
-
-\begin{exe} 
-\ex a) Data can be fully replicated/accessed in its entirety
-
- \centering
-   \includegraphics[width=0.8\textwidth]{accessible}
-
-\label{ex:accessible}
-\end{exe}
-
-\item {\bf Citation}: Database provide citation information. 
- 
-%Providing correct and up-to-date citation information is important for online resources. Data should not be associated with obsolete or inaccessible URLs.  
-In LingSync, each record  and media resource of each corpus has a unique URL (\ref{ex:discoverable}a) which can be used for citation. 
-All data points are tied to an Elicitation Session which contains details of data source (such as language consultant (\ref{ex:discoverable}b), publication, or web page) and the time the data is elicited, as well as other metadata as determined by the team conventions to ensure that data quality can be traced to its source. 
-
-\item {\bf Preservation}: Data are archived in a way that withstands long-term preservation.\footnote{http://emeld.org/school/classroom/archives/finding-archives.html}
-
-Preservation of digital data is always confronted with the possibility that the data file format over time becomes obsolete and unsupported by new technology. LingSync stores data in a plain text JSON format  (\ref{ex:intelligible}). 
-JSON files  are equivalent to XML, they are light-weight text files in which data contents are easily readable by humans and scripts. In addition to a host server, the data can be stored in multiple locations  (\ref{ex:accessible}). 
-In addition, corpus administrators  can schedule regular archiving by creating a "Bot" which will archive their data to one of the existing, reputable language archives of the user's choosing.\footnote{http://emeld.org/school/classroom/archives/index.html} 
-
-
-\item {\bf Rights}: Rights of authors of data and of language consultants are respected. 
-
-Each corpus includes a section for the Terms of Use (\ref{ex:customtermsOfUse}) where authors of data can specify conditions for data usage. 
-Corpora often contain sensitive information, consultant stories and other information which must be kept confidential. 
-Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. 
-%With LingSync, researchers and language consultants (authors of data) have control over who can see, edit and/or export which part of their data. 
-Data and consultant information designated as confidential are encrypted prior to storage in the database using the US Federal approved AES encryption standard, and are presented as masked data (\ref{ex:discoverable}b). 
-%This ensures that confidential data cannot be leaked if a corpus is shared or leaked without the consent of the corpus' author(s). 
-
-
-
-\begin{exe} 
-\ex a) Teams can have custom terms of use
-
- \centering
-   \includegraphics[width=0.8\textwidth]{customtermsOfUse}
-
-\label{ex:customtermsOfUse}
-\end{exe}
-
-\end{description} 
-
-
-
-
 
 \section{What is LingSync?}
 \label{sec:what}
 
-LingSync integrates the common features of existing fieldwork database software,
-while addressing many of the data management practices of E-MELD, and DataOne.\footnote{See the LingSync WhitePaper\\ https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true}
+LingSync integrates the common features of existing fieldwork database software. 
 LingSync's functionality can be divided into two groups: functionality for linguistic field databases,
 and functionality for user friendly community driven software.
-In this paper we will place more emphasis on the linguistic field database functionality and only gloss over some of the software engineering practices which make LingSync a useable and maintainable system. 
+In this paper we will place more emphasis on the linguistic field database functionality and only gloss over some of the human computer interaction best practices which make LingSync a useable system. 
 
 \subsection{Core Functionality}
 \label{sec:core}
@@ -370,8 +196,7 @@ This means that multiple team members can suggest new segmentation,
 new gloss information,
 or qualms about translation or context,
 and the team can reach a consensus together without blocking team members from accessing or improving data.
-Comments are also searchable, editable and deletable,
-and can be formatted using Wiki markup which essentially permits the ability to add unlimited documentation to a data record without needing to put the documentation into the record's utterance or translation lines.
+Comments are also searchable, editable and deletable.
 %for example.
 When working as teams composed of linguists or community members who may speak different dialects,
 and thus have differing judgements,
@@ -379,19 +204,7 @@ we believe that comments are a key way that teams can provide a maximum amount o
 without worrying about different team members over-writing each other's judgements.
 
 
-Since all documents in the system are versioned,
-mis-guided edits by team members can be undone and detected via the team activity feeds \S \ref{sec:sharingactivityfeeds}.
-If a team discovers one of its members is not following their team's data curation conventions,
-the permissions system \S \ref{sec:sharingactivityfeeds} allows the team to set the individual's permissions to read and comment only.
- 
-
-Data can be categorized using tags as well as by validation status of each individual data entry.
-A record could have a status as simple as "Checked," or even ''CheckedWithSeberina'' or ''ToBeCheckedWithConsultant'' (shown in example \ref{ex:consistent}. above) if the team is working with multiple consultants and/or dialects.
-The ability to group data into its validation status further aids organization and permits the team to gather data for future elicitation sessions,
-or to send data to consultants to be checked either by exporting the data and sending it by email,
-or by adding the consultant as a team member
-
-LingSync is ``skinnable,''
+Since all documents in the system are versioned. Data can be categorized using tags and LingSync is ``skinnable,''
 which means that each user can have a different visual representation of the data.
 Teams can even create non-technical views of the data so that the consultants enjoy being part of the team, and feel more connected and included in  the collaborative nature of the language documentation effort.
 
@@ -401,11 +214,7 @@ it is often the custom to enforce conventions by providing users with drop-downs
 or go to another screen to add the new option before selecting it.
 \cite{Palmer:2009}, \cite{Cihlar:2008}  and \cite{Wittenburg:2006} among others state the need for tools to adapt as a field work project matures and analyses change, 
 ``Carletta et. al. (2000) argues that linguistic data sets are varied and idiosyncratic to the point where imposing a universal annotation/description scheme would be impractical and counterproductive''   \cite[p.11]{Cihlar:2008}, Wittenburg argues that a software's ``ergonomic qualities greatly contribute to the experience and appreciation of the every day user. Also the level of productivity that can be reached is of utmost importance.'' \citep[p.1559]{Wittenburg:2006}.
-Rather than enforcing universal data conventions,
-or making heavy use of drop downs, 
-LingSync makes uses of  typeahead and autocomplete, 
-and makes data entry and data curation is also fully scriptable.
-As such a fundamental part of field work is exploring and re-analyzing data,
+Rather than enforcing universal data conventions
 LingSync allows users to create bots which partly automate these tasks.
 Bots can even be scheduled to run periodically on the corpus (\ref{ex:bots}a),
 reducing the manual data entry process if,
@@ -413,26 +222,13 @@ for example,
 the team decides all data should use the convention ``ACC should be glossed as CAUS in the context of ASP.'' Bots are able to go through a corpus,
 and leave comments on data which should be cleaned manually,
 or even execute the changes (\ref{ex:bots}b) after the team has reviewed and approved the changes.
-%There are existing bots for transliteration (conversion of Inuktitut syllabics to romanization) and for duplicating morphemes fields to allomorphs fields,
-%among others.
-%Bots are provided to help reduce the repetitive tasks,
-%freeing team members to focus on data entry and data analysis.
-
-
-%We believe strongly, as do the creators of  ELAN that 
-%Rather than place the weight of data validation at the time of data entry, typeahead suggestions (\ref{ex:consistent}) are provided to encourage team members to use existing annotations, 
-%% fields can be populated with autocomplete lists which display options ,
-%but still permit new options to be added without visiting an additional screen. 
-%Bots allow the validation to happen after data entry by identifying context to be combined or separated, and even in some cases executing the cleaning automatically.
-
 
 \begin{exe} 
 \ex Bots/Scripts can be scheduled to verify data consistency
 
 \hspace{-1in}
  \centering
-   \includegraphics[width=0.45\textwidth]{cleaningBotsDatalist} ~
-   \includegraphics[width=0.45\textwidth]{cleaningBotCameBy}
+   \includegraphics[width=0.9\textwidth]{spreadsheetbotcomment}
 
 \label{ex:bots}
 \end{exe}
@@ -447,17 +243,6 @@ Longer audio/video files can also optionally be uploaded to the speech web servi
  reducing data entry and record creation if a team wishes to record elicitation sessions and enter the data later.
  This approach to data entry permits the team to dedicate 100\% of their attention to the speaker and formulating questions while eliciting data,
 rather than dividing their attention between the speaker and the process of data entry.
-
-One of LingSync's founding principles is that you should only need to enter data once.
-Whether you enter it in an Excel Spreadsheet,
-in a handout,
-in ELAN or in FLEx,
-you should be able to import it into LingSync without needing to re-enter the data.
- Each record in a LingSync database can have an unlimited number of fields,
-with unlimited complexity,
-making it possible to import other formats,
-and be able to re-export them without losing any information (for example,
-timed alignments in ELAN or Praat).
 
 
 
@@ -477,17 +262,6 @@ you can set the glosser URL to use either corpus, or permit other teams to use a
  
 
 
-\begin{exe} 
-\ex The glosser offers a) morpheme segmentation using b) precedence relations in your corpus
-
- \centering
-   \includegraphics[width=0.45\textwidth]{glosser} ~
-   \includegraphics[width=0.45\textwidth]{morphemePrecedenceRelations}
-
-\label{ex:glosser}
-\end{exe}
-
-
 The glosser is designed to make the app ``smarter'' and to reduce the amount of time spent entering predictable information such as glosses.
 The glosser can use any existing morphological analysis tool (\S \ref{sec:plugins}) to break down the utterance/orthography line  into a probable morphological segmentation using known morphemes in the lexicon,
 and enters a probable gloss for the morphemes in the glossing line.
@@ -497,37 +271,22 @@ It is of course crucial that predicted morpheme segmentation and glosses be corr
 particularly in languages that have many short or ambiguous morphemes,
 which will result in more possibility for error in automatic morpheme segmentation.
  
-
-The glosser uses the auto-generated lexicon to evaluate morphemes both by precedence relation and by gloss.
-Each corpus has its own lexicon,
-which is loosely modelled after a mental lexicon,\footnote{It is important that note that LingSync uses a lexicon, not a dictionary. The lexicon is a connected graph similar to theoretical models of mental lexicons, and is useful for linguistic analysis but not useful for producing a dictionary for the language community. LingSync is not suitable curating dictionaries and the tasks involved in professional lexicography, instead LingSync offers export to WeSay which makes it possible to build a community driven living dictionary. http://www.sil.org/resources/software_fonts/wesay} 
-as a network of morphemes,
-allomorphs,
-orthographie(s),
-glosses and translations.
-% % (for a dictionary see the Dictionary plugin in \S~\ref{sec:plugins}).
-%As a connected graph (\ref{ex:glosser}b) it is the most useful structure to index datum and search for datum real time while data entry is happening.
-
-
 \subsubsection{Search}
 
-LingSync was designed for powerful search.
-You can search your corpus (\ref{ex:searchable}),
-or across your corpora (\ref{ex:discoverable}).
-Similar to ELAN \citep{Wittenburg:2006}, 
-the results of your searches can even be saved as a Data Lists which can be sorted,
-saved for later exporting, curating data for a handout or curating language learning lesson for heritage speakers.
 
-Search can be as simple as a keyword search,
-which will search the entire record,
-or search within only one field,
-or for example one key word in one field or another key word in another field.
-For those users who like to think in Set Theory, LingSync provides you with the ability to look at the Intersection or the Union of search results. 
-For phonologists, LingSync lets you search using regular expressions to find segments in context.
-If there is demand, we can add the ability to search for minimal pairs or to search for phonological features in context using a phonology ontology (a general purpose feature geometry/articulatory feature ontology,
-or a customized ontology created by the users for their language of interest)  where feature geometry searches could be used.
-Phonological search can also be helpful in %search for potential minimal pairs or phonological features in context to verify with consultants,
-preparing stimuli and controlling confounds for psycholinguistic experiments.
+Search can be as simple as a keyword search (\ref{ex:searchable}),
+or search within previous search results.
+
+\begin{exe} 
+\ex Search results can be further filtered
+
+\hspace{-1in}
+ \centering
+   \includegraphics[width=0.9\textwidth]{spreadsheetsearch}
+
+\label{ex:searchable}
+\end{exe}
+
 
 
 \subsubsection{Sharing corpora,
@@ -535,7 +294,7 @@ activity feed}
 \label{sec:sharingactivityfeeds}
 
 Sharing primary resources and the inconstant results of field work is notoriously difficult, 
-``most linguists fail to share their data for reasons ranging from the difficulties involves in curating it into a distributable form, to concerns regarding speaker privacy, to a desire to be finished working with it on their own before giving others access'' \citep{Bender:2010}. Even ``a funding body like the ELDP cannot get all of its grantees to deposit in an archive in a timely fashion (or at all)'' \citep{Thieberger:2012}. We hope to make this process easier  for teams by importing any format, letting users write scripts to clean data, mark some or most data as confidential or not yet verified, to help get the data into a state where the teams can publish it to a long term archival organization such as OLAC or the original granting agency. Part of the process of preparing data for publication involves collaboration of what data needs to be cleaned or excluded.
+``most linguists fail to share their data for reasons ranging from the difficulties involves in curating it into a distributable form, to concerns regarding speaker privacy, to a desire to be finished working with it on their own before giving others access'' \citep{Bender:2010}. Even ``a funding body like the ELDP cannot get all of its grantees to deposit in an archive in a timely fashion (or at all)'' \citep{Thieberger:2012}. We hope to make this process easier  for teams by facilitating the collaboration of what data needs to be cleaned or excluded.
 
 
 Corpora in LingSync can be shared as a team,
@@ -554,72 +313,12 @@ consultants and/or collaborators).
 most teams will choose to give all roles to all users,
 but these roles permit a wider inclusive data collection team than previously available  in other data management tools where the permissions are simply full access or no access.
 
-As a team,
-you might also want to catch up on recent activity in the corpus.
-If your corpus is small (only a 100 records) you could simply read each record to see what is new,
-but for larger corpora or where there is more activity LingSync provides team activity feeds.
-In the activity feed widget (\ref{ex:activityfeeds}) you can see who has modified,
-commented,
-created data,
-as well as recorded/uploaded audio,
-or put records in the trash to be deleted later.
-There are also user activity feeds which are only presented to the user. %Although less interesting than the actions of one's teammates,
-A users' personal feed  can help them remember what they were working on last time,
-particularly if it has been months since they last opened the corpus.
-%We expect users will visit their corpus very frequently
-%when building it,
-% but visit only sporadically as they need to return only to consult their data.
-For example,
-the user activity feed could help you remember that you hadn't finished typing up that elicitation session three months ago before you had to go to class.
-``We all know of projects which have been completed and for which there are now large datasets that are not being properly maintained.''\citep[p.133]{Thieberger:2012} By introducing activity feeds as a feature of a field linguistics database, we hope that teams will return to their data, and continue to curate it even after they have created their handouts, given talks and moved on to other aspects of their research. 
-
-\begin{exe} 
-\ex Activity feeds let team members catch up on recent changes in the database
-
- \centering
-   \includegraphics[width=0.7\textwidth]{activityfeeds} 
-
-\label{ex:activityfeeds}
-\end{exe}
-
-\cite{Thieberger:2012}  identifies two ways in which research must be shared, with a unique URL so that researchers are able to cite primary resources which further permits the ``combining data from disparate sources (which could be `mashups' or could, for example, involving correlating transcripts and media in `compound objects').'' LingSync addresses both concerns by a fine grained level of sharing where the user controls what is shared and how, while each resource keeps a unique URL.\footnote{ \cite{Musgrave:2012} discusses the diverse ways a language community can benefit from language documentation and how different communities benefit differently. LingSync's sharing system permits prototyping `mashups' early in a collaboration that can result in data collection which suits not only language documentation efforts but also the needs of  unique language communities.} 
-Corpora can also be shared via export in EOPAS XML format and import to EOPAS.org.
-
-%Encouraging a unified terms of use across corpora permits better integrability of corpora among researcher groups,
-%as well as the creation of mobile apps and content dissemination networks for heritage speakers and members of the language community diaspora.
-%Like EOPAS \citep{EOPAS:2014:Online} LingSync encourages all teams to adopt a Creative Commons license for their resources,
-%however, each LingSync corpus team can choose to have its own terms of use (\ref{ex:customtermsOfUse}) and licensing which permits the maximum flexibility to teams.
-%Embeddable widgets and unique URLs to data can be shared.
-
-
-
-
-%\subsubsection{Custom settings}
-%
-%LingSync is highly customizable.
-%It comes with the ability to choose from 5 dashboards,
-%and allows users to even create their own.
-%Users can decide how many records to show on a page of data,
-%in which order the records to be shown, for example. % and many more options.
-%For users who have limited eyesight or who are using screen readers,
-%LingSync provides a high-contrast option as well as a dark option to reduce eyestrain after hours of entering data.
-%LingSync was designed partly by research assistants who had entered data for 40 hours a week,
-%and so it also provides the ability for rich and  interesting background pictures to keep entering data visually stimulating.
-%
-%Each corpus is also fully customizable: team members can add new fields to the corpus,
-%as well as edit its terms of use and other information which can become important if the team decides to share the result of their work with the outside world.
-%Customization is a pervasive aspect of LingSync and has affected the way each functionality was conceived and implemented.
-
-
 \subsubsection{Export}
 
 As users of many diverse data management software,
 we felt it was crucial that LingSync be non-proprietary and open. In a language documentation project linguistic data must remain usable even when ``the delivery system (which could be proprietary software or websites that are no longer maintained) becomes unusable'' \citep[p.132]{Thieberger:2012}.
 One important aspect of this is the ability for teams to export their entire database in any format they choose,
 in its entirety, or only data which are relevant to a certain export goal.
-Teams can even save lists of data for dedicated export purposes,
-such as data for a handout,
-or data which they are curating to be published as stories for the language community they are working with.
 LingSync is also able to export word lists,
 which can be used either as language learning exercises for heritage speakers or as materials for field methods courses.
 \cite{Thieberger:2012} points out that ``offline use is likely to be most relevant to speakers of the languages recorded, given the lack of affordable -- or indeed any-- internet access. Such offline use of language records includes printed outputs and media on CD, DVD, or in computer-based (e.g. iTunes) formats.'' 
@@ -627,7 +326,7 @@ It is possible to export an entire corpus either as a ZIP archive,
 as well as multiple formats XML, JSON, plain text, TextGrid, LaTeX  or CSV.\footnote{Currently there are no users using ELAN which we know of, so export to ELAN is not currently available.} Like The Washo Project, LingSync seeks ``a format that is `self-documenting' so that it will be usable years after when the current technologies used to manipulate the data have long become obsolete'' \citep[p.4]{Cihlar:2008}. When data is exported in its raw form, each field includes the help conventions which were used in the app by teams to tell each other what the field is for. When corpora are exported as a ZIP archive, these help conventions are used to automatically generate a README file which details the corpora's fields as recommended by E-MELD \S \ref{sec:design}.
 
 Beyond export,
-LingSync databases are fully replicable between servers (\ref{ex:accessible}),
+LingSync databases are fully replicable between servers 
 which means that team members can have entire copies of their database locally on their laptops,
 yet still remain in full sync with other team members when they go online.
 It also means that organizations can back-up their data to their own servers without worrying that data may become stale or out of date.
@@ -649,22 +348,6 @@ In this section we will discuss only a few of the current web services.}
 \subsubsection{Custom glosser}
 
  Benoit Farley's \citep{Farley:2014:Online} morphological analyzer for Inuktitut was wrapped into a web service using Node.js, permitting a glosser which was prepared to look up variant  surface realizations of morphemes in Inuktitut corpora.
-
-\subsubsection{Language learning module for Android}
-
-A prototype mobile app for language learning was build which  enables researchers and language teachers to create language learning aids from the data in existing corpora and from the data newly collected for the purpose of language learning.
-The language learning prototype aims to help heritage language learners include their language as part of their daily activities and improve their listening and speaking skills.
-The orthographic lines (i.e.
-utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create lessons. Users are also able to make their own lessons and share them with other learners.
-
-\begin{exe} 
-\ex The Language Learning prototype is downloadable on Google Play\footnote{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons}
-
- \centering
-   \includegraphics[width=0.5\textwidth]{languageLearningApp} 
-
-\label{ex:languageLearningApp}
-\end{exe}
 
 \subsubsection{Integration with ProsodyLab aligner and touch tablets}
 \label{sec:phoneticwebservice}
@@ -725,8 +408,10 @@ We estimate between 10-20 teams (consisting of 1--20 users) have moved beyond th
 In this paper we have discussed some of the challenges inherent in field work projects. 
 We argue that many of the challenges were mutually exclusive and not reconcilable in a single data management system prior to 2012. 
 We have surveyed how some teams have managed to find ways to collaboratively build high quality data archives while balancing  their limited resources for research and language documentation, often in collaboration with technical consultants or Computer Science departments. 
-We have presented LingSync, an open source, open ended system which helps make it easier for field work teams to focus more on data analysis,  and less on  conversion of data and other repetitive task inherent in managing an evolving data heavy project. 
-LingSync was designed from the ground up to be both easy for new users to use, but also respect data management best practices. In the process, LingSync's open development and use of one unified easy-to-learn scripting language for user interfaces, web services and data queries has empowered field linguistics labs to learn more about data automation and build internal technical knowledge which further permits  the freedom for teams to develop novel ways of understanding and exploring their data. %explain the subtleties of language data to database administrators.
+We have presented LingSync, an open source, data base app which helps make it easier for field work teams to focus more on data entry and less on learning complex tools.
+
+
+ %explain the subtleties of language data to database administrators.
 
 %,helping to bridge members of the technical community with the research community.
 
