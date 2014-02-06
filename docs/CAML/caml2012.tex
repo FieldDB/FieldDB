@@ -185,7 +185,7 @@ While the rest of this paper (with the exception of Plugins \S \ref{sec:plugins}
 LingSync is actually only an open ended  data schema (as shown in (\ref{ex:intelligible}) below) % (Appendix \S \ref{appendix:datumjson}), 
 and a few simple Node.js web services. All of the heavy lifting of the system is done by CouchDB. CouchDB is an open source  project which began in 2005 and matured in 2010, with continuing exciting additions each year following. 
 
-CouchDB  solves several important problems for field linguists, which are summarized in (\ref{ex:Irreconcilable}). The first of these problems, as shown in (\ref{ex:Irreconcilable}a),  is the ability to change the data structure as the field database evolves
+CouchDB  solves several important problems for field linguists, which are summarized in (\ref{ex:Irreconcilable}). The first of these problems, as shown in (\ref{ex:Irreconcilable}a),  is the ability to have highly complex data structures yet easily change these data structures as the field database evolves
 %CouchDB's map reduce functions are a powerhouse for searching highly structured diverse data without pushing round data into square holes. LingSync add sample `bots' to CouchDB so teams can clean and restructure data to follow and update to new conventions and new analyses of the data.} 
 and matures.\footnote{CouchDB stores data as JSON, which is equivalent to XML, meaning that it is more similar to the flexibility of ToolBox and ELAN but yet still has the ability to be extremely structured like FLEx.} 
 Secondly (\ref{ex:Irreconcilable}b), CouchDB was designed for collaboration,
@@ -299,7 +299,7 @@ Inside LingSync, data is searchable via keywords, or within specific fields, usi
 \end{exe}
 
 %It is often hard to find relevant linguistic data with standard search engines such as Google and Yahoo.  
-Public  corpora are   (\ref{ex:discoverable}a) are SEO enabled, and can be exported to the OLAC linguistic search engine \citep{OLAC:2006:Online}. Corpus administrators  control what is public, down to each field of each data record. Sensitive information can even be encrypted in the database, and displayed masked (\ref{ex:discoverable}b), meaning that the entire corpus can be exported and shared without combing the data to black out sensitive information. 
+Public  corpora (\ref{ex:discoverable}a) are SEO enabled, and can be exported to the OLAC linguistic search engine \citep{OLAC:2006:Online} and/or the Ethnographic E-Research Online Presentation System (EOPAS) for Interlinear Text \citep{Schroeter:2006}. Corpus administrators  control what is public, down to each field of each data record. Sensitive information can even be encrypted in the database, and displayed masked (\ref{ex:discoverable}b), meaning that the entire corpus can be exported and shared without combing the data to black out sensitive information. 
 
 \begin{exe} 
 \ex \label{ex:discoverable}  ~  \\ 
@@ -317,7 +317,7 @@ Public  corpora are   (\ref{ex:discoverable}a) are SEO enabled, and can be expor
 Much of linguistic data sits in researchers' offices in the form of notebooks or tapes, or as files on their computers.  LingSync data is online, and team members can even replicate the entire database (\ref{ex:accessible}) onto their laptops or department servers. Unlike tape data and note cards, the data can be in many physical locations at one time, and even available to collaborators across the world. 
 
 \begin{exe} 
-\ex Data can be fully replicated/accessed in its entirety
+\ex Data can be fully replicated in its entirety across multiple servers
 
  \centering
    \includegraphics[width=0.8\textwidth]{accessible}
