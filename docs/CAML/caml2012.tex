@@ -456,7 +456,7 @@ timed alignments in ELAN or Praat).
 
 
 \subsubsection{Auto-glosser}
-
+\label{sec:autoglosser}
  
 
 Similar to the glosser underlying FLEx \citep{Black:2006}, the semi-automatic glosser requires no configuration or set up to be useful.
@@ -675,24 +675,21 @@ The LingSync ``spreadsheet" interface was developed by one programming-linguist 
 \label{ex:spreadsheet}
 \end{exe} 
 
-The auto-glosser can be turned on and off while entering data, without visiting another screen.  The restrictive search function permits users to do keyword search and further filter results by additional search terms. Audio can be recorded and/or  uploaded directly into the data records. All data are commentable, and the comment and the audio area can be  open  (\ref{ex:spreadsheet}) or hidden  (\ref{ex:spreadsheetcompact}), even to a point where the user interface even looks similar to Google Spreadsheets (but with the added benefit of a glosser). 
+True to the name, data entry in this interface is spreadsheet-like, complete with keyboard shortcuts for tabbing between cells, and pushing enter to switch between rows.  The plugin provides a straightforward, simple user interface which lets users enter data without training, and makes the time spent on data entry roughly equivalent to using Excel or Google Spreadsheets; at the plugin's launch, 20 users each entered 4 datums from an unfamiliar language within 15 minutes without any instruction or training.  
 
-
-Data entry is spreadsheet-like, complete with keyboard shortcuts for tabbing between cells, and pushing enter to switch between rows.  The plugin provides a straightforward, simple user interface which lets users enter data without training, and makes the time spent on data entry roughly equivalent to using Excel or Google Spreadsheets; at the plugin's launch, 20 users each entered 4 datums from an unfamiliar language within 15 minutes without any instruction or training.  
-
-
+Other features of the spreadsheet interface include the auto-glosser, as described in \S\ref{sec:autoglosser}, which can be turned on and off while entering data, without visiting another screen.  Its restrictive search function permits users to do keyword search and further filter results by additional search terms. Audio can be recorded and/or  uploaded directly into the data records. All data are commentable, and the comment and the audio area can be  open  (\ref{ex:spreadsheet}) or hidden  (\ref{ex:spreadsheetcompact}), even to a point where the user interface looks similar to a conventional spreadsheet such as Google Spreadsheets (but with the added benefit of a glosser). 
 
 
 \subsubsection{Custom glosser}
 
-\cite{Farley:2014:Online}'s morphological analyzer for Inuktitut was wrapped into a web service using Node.js, permitting a glosser which was prepared to look up variant  surface realizations of morphemes in Inuktitut corpora.
+We demonstrated how an external glosser can be used with LingSync by using \cite{Farley:2014:Online}'s morphological analyzer for Inuktitut, which was wrapped into a web service using Node.js, permitting a glosser which was prepared to look up variant  surface realizations of morphemes in Inuktitut corpora.%refer to somewhere for more details? %where did the Inuktitut corpus/corpora live, on our servers or somewhere online? 
 
 \subsubsection{Language learning module for Android}
 
-A prototype mobile app for language learning was build which  enables researchers and language teachers to create language learning aids from the data in existing corpora and from the data newly collected for the purpose of language learning.
+We built a prototype mobile app for language learning which uses the same LingSync data structure, to enable researchers and language teachers to create language learning aids from the data in existing linguistic corpora and to use data newly collected for the purpose of language learning for linguistic analysis, if desired.
 The language learning prototype aims to help heritage language learners include their language as part of their daily activities and improve their listening and speaking skills.
 The orthographic lines (i.e.
-utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create lessons. Users are also able to make their own lessons and share them with other learners.
+utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create lessons. Users are also able to make their own lessons by taking pictures and making audio recordings using their Android phone's built-in features, and share them with other learners.
 
 \begin{exe} 
 \ex The Language Learning prototype is downloadable on Google Play\footnote{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons}
@@ -712,7 +709,7 @@ a machine learning algorithm which uses Hidden Markov Models to predict boundari
 saving hours of boundary tagging.
 
 
-We also created an Android Elicitation app which permits recording of high quality video on 7 inch or 10 inch tablets during elicitation sessions.
+We also created an Android Elicitation app using same LingSync data structure which permits recording of high quality video on 7 inch or 10 inch tablets during elicitation sessions.
 Multiple videos can be associated to a session and uploaded to the ProsodyLab Aligner web service for automatic generation of aligned TextGrids. 
 
 %\subsubsection{WebSpider}
@@ -734,11 +731,11 @@ Multiple videos can be associated to a session and uploaded to the ProsodyLab Al
 \subsection{Users of LingSync so far}
 \label{sec:use}
 
-LingSync has also been used by five field methods classes so far, representing a typologically diverse range of languages.  In Winter 2013, it was used by field methods classes 
+LingSync has also been used by five field methods classes so far, representing a typologically diverse range of languages and a variety of teaching styles.  In Winter 2013, it was used by field methods classes 
 at the University of Ottawa (Teenek) and Pomona College  (Igikuria). In Winter 2014, LingSync is being used by field methods classes
 at McGill University (Inuktitut),
 Yale University (Quechua),
-and the University of Connecticut (Nepali).
+and the University of Connecticut (Nepali). %should we put the language families here too? I've never heard of some of these languages. 
 We especially appreciate the invaluable feedback provided by the students and instructors of these classes.
 
 As of February 2014, only 1.5 years after LingSync was launched, there are over 300 LingSync users,
