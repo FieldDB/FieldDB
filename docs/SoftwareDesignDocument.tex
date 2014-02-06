@@ -7,10 +7,12 @@
 \usepackage{amsmath}
 %\usepackage{linguex}
 \usepackage{enumerate}
-\usepackage[sc]{mathpazo}
+%\usepackage[sc]{mathpazo}
 \usepackage{natbib}
-\linespread{1.05}         % Palatino needs more leading (space between lines)
+%\linespread{1.05}         % Palatino needs more leading (space between lines)
 \usepackage[T1]{fontenc}
+\usepackage{graphicx}
+
 
 \hyphenpenalty= 7000 
 
@@ -28,12 +30,21 @@
 \section*{Executive Summary}
 \addcontentsline{toc}{section}{Executive Summary}
 
+The Software Design Document serves as a bridge between what the user wants the software to do, and what the developers need to program.
 
+We are using Scrum development practices which focus on delivering something to the users every two weeks, and documenting our code using tests rather than a traditional Software Design Document (SDD).
+
+The software design is documented on the fly and across time in our Issue Tracker. Each issue represents a user story or a feature, or a bug. Searching the Issue tracker and our milestones are the best place to get an idea of what the software is designed to do, what it does now, and what it will do.
+
+However, it has been nearly 2 years since we began the project and the team has grown! The need to cite a technical document has also grown, as most of the sequence and ER diagrams were completed during the design phases, and haven't changed much since we are able to formally diagram them here, if someone has time :) As of February 2014, this document will be a copy paste of materials from the wiki.
 
 \section{Introduction}
 
 
 \subsection{Audience and Scope of Design}
+
+The Audience of this document is mostly software engineering interns who would be familiar with the concept of SDD and want to see how open source software deviates from what they learned in school. The audience may also extend to programming linguists who would like to learn more about software engineering.
+
 \subsection{Terminology}
 \subsection{Structure}
 
@@ -41,60 +52,402 @@
 \section{Design Approach}
 
 \subsection{Behaviour Driven Development (BDD)}
+
+We are using Scrum development practices which focus on delivering something to the users every two weeks, and documenting our code using tests rather than a traditional Software Design Document (SDD).
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/tests
+
 \subsection{Feature Tracker (Agile)}
+
+The software design is documented on the fly and across time in our Issue Tracker. Each issue represents a user story or a feature, or a bug. The Issue tracker and our milestones are the best place to get an idea of what the software is designed to do, what it does now, and what it will do.
+
+Milestones
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones
+
+Feature/Issue tracker
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/issues
+
 \subsection{Chronological Growth (Blog)}
+
+Screencasts, Boardcasts in the Bi-Weekly Developers News Channel To learn about technical roadblocks and what was in each release.
+
+https://www.lingsync.org/dev.html
+
+
 \subsection{Formal Documentation}
+
+Module docs (jsdoc)
+
+http://builder.ilanguage.ca/job/FieldDB/ws/javadoc/index.html
+
+Software Design Document (this document)
+
+White Paper
+
+CAML publication
+
+\subsection{Balancing user experience and data management best practices}
+
+In the WhitePaper we discuss some of the challenges to build user friendly apps yet constrain data input to ensure data quality. When we began the project we had several non-functional requirements, available in the wiki, and pasted here for reference as we discuss the comonents, these requirements will be refered to.
+
+
+Non-functional requirements put simply are overarching considerations which affect the software architecture. Non-functional requirements are where most existing field linguistics/corpus linguistics database applications fall short.
+
+\begin{exe}
+
+\ex  
+\begin{enumerate}
+\item [] Non-functional requirements which have ramifications though-out the system
+
+\begin{enumerate}
+\item The system shall be \textbf{user friendly}.
+\item The system shall be \textbf{cute} so that the users feel like entering data, instead of procrastinating.
+\item The system shall be \textbf{designed for search} as this is one of the most important tasks that a fieldlinguist needs to do. The search needs go far beyond traditional string matches and database indexes. We need to see data in context, and the search must attempt to make this possible. 
+\item The system shall be \textbf{OpenData enabled.} Corpora often contain sensitive information, informant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. The system shall encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user must log in and use their password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the app. 
+\item The system shall work \textbf{offine.} Running a webapp offline has important consequences for how data is stored, and how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the app in a Chrome Extension (which has permission to have unlimited storage) the user will be able to have a significant portion of their data at their finger tips, whether in the Metro, in the field, in a park or in a country where wifi is not common, which is commonly the case for where we do our field work.
+\item The system shall run on \textbf{Mac, Linux, Windows} computers. By providing the app as installable Chrome Extensions, the app will run on all platforms, Mac, Linux and Windows, as well as Chrome Books. 
+\item The system shall be \textbf{OpenSource}. Being OpenSource allows departments to install and customize the database app for their needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub allows linguists with scripting/programming experience to contribute back to the software to make it more customized to their needs and their language typologies or linguistics research areas.
+\item The system shall store data in \textbf{Unicode}. Encoding problems and loosing our data should be behind us in the days of unicode, however many existing fieldlinguistics databases were built in programming languages that didn't support unicode, so the unicode support is dangerously fragile.
+\item The system shall be \textbf{simple}. The system is not designed to replace advanced field linguistics databases, or corpus linguistics databases. It is designed to replace Word Documents or LaTeX documents, which is a very common way fieldlinguists store data because it requires no training, doesn't require a complicated set-up for data categories,  and takes no time to add new categories.
+\item The system shall be \textbf{theory free}. The system will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data, however the system will make it possible for the team to set their own categories and thus tie the specific theoretical constructs they are investigating to their data. This is a different approach to many corpus databases which are motivated by typologies and language counting which place a large data-entry burden on the user, rather than letting the user gradually constrain their data entry conventions over time.
+\item The system shall be \textbf{collaborative} The system shall have users and teams, and permissions for corpora which will ensure that data can be safely shared and edited by multiple users.  The corpus will be versioned so that users can track changes and revert mistakes.
+\item The system shall run on \textbf{touch devices} Touch tablets are one of the easiest tools to carry to the field, they have a long battery life, they can play videos or show images for the informant to elicit complicated contexts (such as quantification and scope), they permit recording audio and video and direct publishing to YouTube or other service. Android tablets are particularly easy to program and integrate the microphone directly into the database. 
+\item The system shall be \textbf{smart} The system shall try to guess what users do most often, and automate the process for them. Most importantly, predictable glossing information should be automated.
+\end{enumerate}
+\end{enumerate}
+\end{exe}
 
 
 \section{Architecture Review}
 \subsection{System Architecture}
+
+https://www.youtube.com/watch?v=s8pxQ6ile\_c
+
 \subsection{Instance Architecture}
 
 \section{Composition Viewpoint}
 \subsection{Data Entry Client Component}
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=dgzZq0-E5NM
+
+https://www.lingsync.org/dev/images/dataEntrySD.jpeg
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/spreadsheet
+
+\subsection{Image transcription Data Entry Client Component}
+
+https://github.com/Yogurt1206/FieldDB/tree/myaamia
+
+
+https://github.com/OpenSourceFieldlinguistics/octothorpe
+
+
 \subsection{Import Component}
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=gNfsm5my0i4
+
+https://www.lingsync.org/dev/images/importSD.jpeg
+
 \subsection{Data Cleaning Client Component}
+
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/cleaning
+
 \subsection{ActivityFeed Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDBActivityFeed
+
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/activity
+
 \subsection{Corpus Admin Client Component}
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=B7PTZlzBNb8
+
+https://www.lingsync.org/dev/images/pageLoad.jpeg
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/backbone\_client
+
+\subsection{Corpus Visualization Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/visualization
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/couchapp\_dev
+
 \subsection{Search Client Component}
+
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/backbone_client/search
+
+
+\subsection{Search Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/lucenerevolution-2013
+
+
 \subsection{Export Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/backbone_client/datum/Datum.js
+
+\subsection{Export Service Component}
+
+
+https://github.com/OpenSourceFieldlinguistics/LaTeX2HTML5
+
+https://github.com/OpenSourceFieldlinguistics/eopas
+
+
+wesay: 
+
+https://github.com/OpenSourceFieldlinguistics/lfweb
+
+http://myaamiacenter.org/publications/266-2/
+
+http://myaamiadictionary.org/main/index.php?title=Main\_Page
+
+
+http://myaamiacenter.org/publications/250-2/
+
 \subsection{Discoverable Pages Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer/tree/master/public/corpus-pages
+
+\subsection{Discoverable Pages Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer
+
+https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer/blob/master/server.js
+
+
+\subsection{Read Along Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/html5-audio-read-along
+
+https://github.com/OpenSourceFieldlinguistics/esv-text-audio-aligner
+
+\subsection{Glossy Chrome Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/GlossyChrome
+
+
+
 \subsection{FieldMethods Admin Client Component}
+
+https://github.com/cesine/AuthenticationWebService/tree/refactor/public
+
+\subsection{FieldMethods Admin Service Component}
+
+https://github.com/cesine/AuthenticationWebService/tree/installable
+https://github.com/cesine/AuthenticationWebService/tree/refactor
+
 \subsection{Glosser Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDBGlosser
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/glosser
+
 \subsection{Glosser Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/LexiconWebService
+
+https://github.com/OpenSourceFieldlinguistics/LexiconWebServiceSample
+
+
+https://github.com/OpenSourceFieldlinguistics/kuromoji-server
+
+https://github.com/OpenSourceFieldlinguistics/kuromoji
+
+https://github.com/OpenSourceFieldlinguistics/hindi-morph
+
 \subsection{Lexicon Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDBGlosser
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/visualization
+
+https://github.com/OpenSourceFieldlinguistics/iLanguageCloud
+
+\subsection{Authentication Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService
+
+
+\subsection{Corpus Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/CorpusWebService
+
+\subsection{Lexicon Service Component}
+
+
+https://github.com/OpenSourceFieldlinguistics/berlin-buzzwords-2013
+
+https://github.com/OpenSourceFieldlinguistics/hadoop-R
+
+https://github.com/OpenSourceFieldlinguistics/machine
+
+\subsection{Computational Linguistics Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/clam
+
 \subsection{Grammar Client Component}
+
+\subsection{User Engagement Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/UsageDashboard
+
+\subsection{Android Elicitation Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/AndroidFieldDBElicitationRecorder
+
 \subsection{Learn X Client Component}
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=MOG22jpAPPM
+
+https://github.com/OpenSourceFieldlinguistics/AndroidLanguageLearningClientForFieldDB
+
+http://myaamiacenter.org/publications/niiki-iphone-application/
+
 \subsection{Experiment Client Component}
-\subsection{Elicitation Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/AndroidProductionExperiment
+
+https://github.com/OpenSourceFieldlinguistics/GamifyPsycholinguisticsExperiments
+
+https://github.com/OpenSourceFieldlinguistics/experigen
+
+
+https://github.com/OpenSourceFieldlinguistics/psychopyMegProsody
+
+
+\subsection{Android Client Component}
+
+https://github.com/OpenSourceFieldlinguistics/AndroidFieldDB
+
+
 \subsection{Speech Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/AudioWebService
+
+https://github.com/OpenSourceFieldlinguistics/AuToBI
+
+https://github.com/OpenSourceFieldlinguistics/Prosodylab-Aligner
+
+https://github.com/OpenSourceFieldlinguistics/BashScriptsForPhonetics
+
+
+https://www.youtube.com/playlist?list=PLoEb0ILJNG9bUKLZMw29ekXdrm9KR7HXv
+
 \subsection{Web Spider Service Component}
+
+https://github.com/OpenSourceFieldlinguistics/MultilingualCorporaExtractor
+
+
+https://github.com/OpenSourceFieldlinguistics/ark-tweet-nlp
+
+
 \subsection{Registration Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/authentication
+
+
 \subsection{Permissions Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/permission
 
 \section{Logical Viewpoint}
 \subsection{Datum Component}
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=HsCFhCaGpGg
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/datum
+
 \subsection{Session Component}
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/datum
+
 \subsection{Datalist Component}
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=tLQ75Z_2mJQ
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/data_list
+
 \subsection{Corpus Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/corpus
+
 \subsection{User Component}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/user
+
+
 \subsection{Bot Component}
 
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/bot
+
 \section{Information Viewpoint}
+
+https://www.youtube.com/watch?feature=player_embedded\&v=4oeE085nDg4
+
+
+https://www.lingsync.org/dev/images/entityRelationDiagram.jpg
+
+
 \section{Interface Viewpoint}
 
 \subsection{Supported devices and computing platforms}
 
 \section{Interaction Viewpoint}
 \subsection{Audio/Video Upload Interaction}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/angular_client/modules/spreadsheet/js/controllers/SpreadsheetController.js
+
+
 \subsection{Client Side Search Interaction}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/backbone_client/datum/Datum.js
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/backbone_client/search
+
 \subsection{Global Search Interaction}
+
+https://github.com/OpenSourceFieldlinguistics/LexiconWebService
+
+https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer/blob/master/public/corpus-pages/libs/search.js
+
 \subsection{Export Interaction}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/export
+
 \subsection{Import Interaction}
+
+https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api/import
+
 \subsection{Registration Interaction}
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=BhCaO8ZvmXY
+
+https://www.lingsync.org/dev/images/new\_user\_storyboard.jpg
+
 \subsection{Login Interaction}
+
+Online 
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=NOvuy516Tw4
+
+https://www.lingsync.org/dev/images/authentication\_sequence.jpg
+
+Offline 
+
+https://www.youtube.com/watch?feature=player\_embedded\&v=5XD6H-JpyDo
+
+https://www.lingsync.org/dev/images/confidential\_datum\_descryption\_sequence.jpg
+
+
+
 \subsection{Permissions Interaction}
 
+https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/api/corpus/Corpus.js
 
 \section{Design Rational}
 
@@ -102,7 +455,12 @@
 \section{Implementation Plan}
 
 \subsection{Recommendations for web services}
+
+https://github.com/OpenSourceFieldlinguistics/LexiconWebServiceSample
+
 \subsection{Recommendations for client modules}
+
+http://yeoman.io/
 
 \section{Summary}
 \section*{References}
