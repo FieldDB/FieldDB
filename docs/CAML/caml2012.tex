@@ -658,8 +658,7 @@ It also means that organizations can back-up their data to their own servers wit
 \label{sec:plugins}
 
 
-One of the strengths of LingSync is that it is built using well-understood web technologies which permit the creation and integration of nearly any existing software as web services. 
-Even complex user interfaces can be combined and integrated with LingSync via the NPM and Bower web module management system.\footnote{
+One of the strengths of LingSync is that it is built using well-understood web technologies which permit the creation and integration of nearly any existing software as web services.\footnote{
 For teams collaborating with Software Engineering or Computer Science departments, there are limitless plugins which port advances in Computational Linguistics  \citep{Chen:2011}  or Natural Language Processing (NLP) including  negation and modality scope taggers  \citep{Rosenberg:2012}, %  using , 
 discourse extraction out of social media  \citep{Dubuc:2010},  
 %GATE \citep{Cunningham:2011} 
@@ -669,6 +668,7 @@ NLP web services for mobile apps \citep{Sateli:2013},
  open source toolkits such as Sphinx-4 \citep{Walker:2004}.% or Kaldi \citep{Povey:2011}.
 Sample  services which can wrap Bash/Python/Perl scripts  into RESTful web services are provided on the OpenSourceFieldlinguistics GitHub. https://github.com/OpenSourceFieldlinguistics %\citep{Desilets:2010}
 }
+Even complex user interfaces can be combined and integrated with LingSync via the NPM and Bower web module management system.
 In fact, LingSync itself is composed of numerous plugins which can be re-used or embedded in an organization's website or existing web based tools.
 
 \subsubsection{LingSync ``spreadsheet''}
@@ -679,7 +679,7 @@ The LingSync ``spreadsheet" interface was
 launched in May 2013, at McGill University's Computational Field Workshop.\footnote{http://migmaq.org/workshops/2013-computational-fieldworkshop/} It has a simple user interface designed  for field methods classes, and is currently in use by three field methods classes, as discussed in \S \ref{sec:use}. The ``spreadsheet"  plugin can be included or embedded in any organization's website, including a field team's own project page if the team wishes. The spreadsheet interface is currently what powers app.lingsync.org and is therefore recommended to new users: detailed user guides and tutorials are available on the project website \citep{LingSync:2013}. % \footnote{http://lingsync.org/} 
  In this section we provide only a brief overview as a short case study of what the development of a custom data-entry centered plugin might entail. %I don't think we actually do this in this section? yet? 
 
- The spreadsheet interface offers multiple data entry templates suitable for IGT data. The Compact template (\ref{ex:spreadsheetcompact}) has 4 core fields, which by default consist of Utterance, Morphemes, Gloss and Translation. The Full template  (\ref{ex:spreadsheet}) includes Grammatical Judgement and Tags fields in addition to the 4 core fields. In both templates, users can customize which fields are displayed and where. Additional templates can be added if a team needs more fields, for example in January 2014 a template was added for one of the field methods groups which modified the layout and default fields.\footnote{As the templates are simply HTML, often TAs or students are able to create the template and send it to the LingSync team to be reviewed and included in the plugin. Templates usually take less than 1 day to build.} 
+ The spreadsheet interface offers multiple data entry templates suitable for  Interlinear Glossed Text (IGT) data. The Compact template (\ref{ex:spreadsheetcompact}) has 4 core fields, which by default consist of Utterance, Morphemes, Gloss and Translation. The Full template  (\ref{ex:spreadsheet}) includes Grammatical Judgement and Tags fields in addition to the 4 core fields. In both templates, users can customize which fields are displayed and where. Additional templates can be added if a team needs more fields, for example in January 2014 a template was added for one of the field methods groups which modified the layout and default fields.\footnote{As the templates are simply HTML, often TAs or students are able to create the template and send it to the LingSync team to be reviewed and included in the plugin. Templates usually take less than one day to build.} 
  
  \begin{exe} 
 \ex "Spreadsheet" compact view \\
@@ -691,7 +691,7 @@ launched in May 2013, at McGill University's Computational Field Workshop.\footn
 \label{ex:spreadsheetcompact}
 \end{exe} 
 
-True to the name, data entry in this interface is spreadsheet-like, complete with keyboard shortcuts for tabbing between cells, and pushing enter to switch between rows.  The plugin provides a straightforward, simple user interface which lets users enter data without training, and makes the time spent on data entry roughly equivalent to using Excel or Google Spreadsheets; at the plugin's launch, 20 users each entered 4 datums from an unfamiliar language, resulting in a small corpus of 70+ items in under 15 minutes without any specific instruction or training.  
+True to the name, data entry in this interface is spreadsheet-like, complete with keyboard shortcuts for tabbing between cells, and pushing enter to switch between rows.  The plugin provides a straightforward, simple user interface which lets users enter data without training, and makes the time spent on data entry roughly equivalent to using Excel or Google Spreadsheets; at the plugin's launch, 20 users each entered 4 IGT data records from an unfamiliar language, resulting in a small corpus of 70+ items in under 15 minutes without any specific instruction or training.  
 
  
 \begin{exe} 
@@ -704,20 +704,20 @@ True to the name, data entry in this interface is spreadsheet-like, complete wit
 \label{ex:spreadsheet}
 \end{exe} 
 
-Other features of the spreadsheet interface include the auto-glosser, as described in \S\ref{sec:autoglosser}, which can be turned on and off while entering data, without visiting another screen.  The restrictive search function permits users to do keyword search and further filter results by additional search terms. Audio can be recorded and/or  uploaded directly into the data records. All data are commentable, and the comment and the audio area can be  open  (\ref{ex:spreadsheet}) or hidden  (\ref{ex:spreadsheetcompact}), even to a point where the user interface looks similar to a conventional spreadsheet such as Google Spreadsheets (but with the added benefit of a glosser). The spreadsheet plugin was written in Angular.js and is built using Grunt.js. It took roughly 3 months to build, and 6 months to beta test.\footnote{https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/spreadsheet}
+Other features of the spreadsheet interface include the auto-glosser, as described in \S\ref{sec:autoglosser}, which can be turned on and off while entering data, without visiting another screen.  The restrictive search function permits users to do keyword search and further filter results by additional search terms. Audio can be recorded and/or  uploaded directly into the data records. All data are commentable, and the comment and the audio area can be  open  (\ref{ex:spreadsheet}) or hidden  (\ref{ex:spreadsheetcompact}), even to a point where the user interface looks similar to a conventional spreadsheet such as Google Spreadsheets (but with the added benefit of a glosser). The spreadsheet plugin was written in Angular.js and is built using Grunt.js. It took roughly three months to build, and six months to beta test.\footnote{https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/spreadsheet}
 
 
 \subsubsection{Custom glosser}
 
-We demonstrated how an external custom glosser can be used with LingSync by using \cite{Farley:2012:Online}'s morphological analyzer for Inuktitut, which was wrapped into a web service using Node.js, permitting a glosser which was prepared to look up variant  surface realizations of morphemes in Inuktitut corpora. 
-The Inuktitut glosser took Farley over 5 years to build and test, and 4 days to wrap as a web service.\footnote{https://github.com/OpenSourceFieldlinguistics/LexiconWebService}%refer to somewhere for more details? %where did the Inuktitut corpus/corpora live, on our servers or somewhere online? 
+For a team working on Inuktitut \citep{Bielig:2013} we wrapped \cite{Farley:2012:Online}'s morphological analyzer for Inuktitut, which  into a web service, permitting a glosser which was prepared to look up variant  surface realizations of morphemes in Inuktitut corpora. 
+The Inuktitut glosser took Farley over five years to build and test, and four days to wrap as a web service.\footnote{https://github.com/OpenSourceFieldlinguistics/LexiconWebService}%refer to somewhere for more details? %where did the Inuktitut corpus/corpora live, on our servers or somewhere online? 
 
 \subsubsection{Language learning module for Android}
 
 We built a prototype mobile app for language learning which uses the LingSync data structure, to enable researchers and language teachers to create language learning aids from the data in existing linguistic corpora and to use data newly collected for the purpose of language learning for linguistic analysis, if desired.
 The language learning prototype aims to help heritage language learners include their language as part of their daily activities and improve their listening and speaking skills.
 The orthographic lines (i.e.
-utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create lessons. Users are also able to make their own lessons by taking pictures and making audio recordings using their Android phone's built-in features, and share them with other learners. The language learning app took roughly 1 month to design and implement a clickable prototype.\footnote{https://github.com/OpenSourceFieldlinguistics/AndroidLanguageLearningClientForFieldDB}
+utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create lessons. Users are also able to make their own lessons by taking pictures and making audio recordings using their Android phone's built-in features, and share them with other learners. The language learning app took one month to design and implement a clickable prototype.\footnote{https://github.com/OpenSourceFieldlinguistics/AndroidLanguageLearningClientForFieldDB}
 
 \begin{exe} 
 \ex The Language Learning prototype is downloadable on Google Play\footnote{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons}
@@ -734,11 +734,11 @@ utterance and morpheme lines) and the attached audio or video recordings of a da
 The phonetic aligner web service makes it possible to upload audio or video recordings and the orthographic/utterance lines of datum to create a phonetic dictionary unique to the language of the corpus,
 and to run the McGill ProsodyLab Aligner,
 a machine learning algorithm which uses Hidden Markov Models to predict boundaries between segments and creates a Praat TextGrid with estimated segments boundaries,
-saving hours of boundary tagging. The ProsodyLab took roughly 2 years to build and test the aligner, and it took 2 weeks to wrap it as a web service.\footnote{https://github.com/OpenSourceFieldlinguistics/AudioWebService}
+saving hours of boundary tagging. The ProsodyLab took roughly two years to build and test the aligner, and it took two weeks to wrap it as a web service.\footnote{https://github.com/OpenSourceFieldlinguistics/AudioWebService}
 
 
-We also created an Android Elicitation app which permits recording of high quality video on 7 inch or 10 inch tablets during elicitation sessions.
-Multiple videos can be associated to a session and uploaded to the ProsodyLab Aligner web service for automatic generation of aligned TextGrids. The elicitation app took roughly 1 month to build and test.\footnote{https://github.com/OpenSourceFieldlinguistics/AndroidFieldDBElicitationRecorder}
+We also created an Android app which permits recording of high quality video on 7-inch or 10-inch tablets during elicitation sessions.
+Multiple videos can be associated to a session and uploaded to the ProsodyLab Aligner web service for automatic generation of aligned TextGrids. The android app took roughly one month to build and is currently being beta tested.\footnote{https://github.com/OpenSourceFieldlinguistics/AndroidFieldDBElicitationRecorder  \indent https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.videorecorder}
 
 %\subsubsection{WebSpider}
 %
@@ -759,17 +759,16 @@ Multiple videos can be associated to a session and uploaded to the ProsodyLab Al
 \subsection{Users of LingSync so far}
 \label{sec:use}
 
-LingSync has been used by five field methods classes so far (that we know of), representing a typologically diverse range of languages and a variety of teaching styles.  In Winter 2013, it was used by field methods classes 
-at the University of Ottawa (Teenek) and Pomona College  (Igikuria). In Winter 2014, LingSync is being used by field methods classes
-at McGill University (Inuktitut),
-Yale University (Quechua),
-and the University of Connecticut (Nepali). %should we put the language families here too? I've never heard of some of these languages. 
-We especially appreciate the invaluable feedback provided by the students and instructors of these classes.
+LingSync has been used by five field methods classes so far (that we know of), representing a typologically diverse range of languages and a variety of teaching styles.  In Winter 2013, it was used 
+at the University of Ottawa (Teenek) and Pomona College  (Igikuria). In Winter 2014, LingSync was  used at Yale University (Quechua),
+ the University of Connecticut (Nepali)
+and McGill University (Inuktitut). %should we put the language families here too? I've never heard of some of these languages. 
+We especially appreciate the invaluable beta-testing  performed by the students and instructors of these classes, results of which are discussed in \S \ref{sec:spreadsheet}.
 
-As of February 2014, only 1.5 years after LingSync was launched, there are over 300 LingSync users,
-who have created over 1000 corpora.
-We expect roughly 100 of these users are field methods students, while the remainder are most likely `investigating' accounts created to try out the app.
-We estimate between 10-20 teams (consisting of 1-20 users each) have moved beyond the investigation phase, and have been using LingSync actively. We have been very pleased by the positive reception so far towards LingSync by field linguists from a variety of locations and linguistic backgrounds, and we gratefully acknowledge the comments and questions from all users (and potential users) which has resulted in substantial improvements in the system.\footnote{We have had over 1000 features requested and implemented since the project began in April 20 2012, for more details, or to vote on features anyone can visit the project's issue/feature tracker \citep{LingSync:2012:ISSUES}. }
+As of February 2014, only 1.5 years after LingSync was launched, there are over 300 users,
+who have created over 1000 databases.
+We expect roughly 100 of these users are field methods students, while the remainder are most likely `investigating' accounts despite the availability of the LingLlama user (password: phoneme).
+We estimate between 10-20 teams (consisting of 1-20 users each) have moved beyond the investigation phase, and have been using LingSync actively. We have been very surprized by the interest in LingSync from field linguists from a variety of locations and linguistic backgrounds, and we gratefully acknowledge the comments and questions from all users, and potential users, which has resulted in substantial improvements in the system.\footnote{Over 1000 features have been requested and implemented since the project began on April 20 2012, for more details, or to vote on features anyone can visit the project's issue/feature tracker \citep{LingSync:2012:ISSUES}. }
 
 \subsection{Summary}
 \label{sec:summary} 
