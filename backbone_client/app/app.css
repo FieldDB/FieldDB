@@ -152,7 +152,7 @@ li {
 	/* height: 100%;
 	clear: both;
 	position: relative;*/
-	margin-top: .1em;
+	margin-top: 4em;
 }
 .wiki-preview {
 	border: 1px solid #ccc;
@@ -182,7 +182,6 @@ p {
 .well {
 	padding: .6em !important;
 	margin-bottom: .6em;
-    margin-top: .2em;
 
 }
 .mediate{
@@ -809,7 +808,7 @@ h4 {
 	/* height: 100%;
 	clear: both;
 	position: relative;*/
-	margin-top: .1em;
+	margin-top: 4em;
 }
 
 #corpus-quickview { /* min-height: 10em;
