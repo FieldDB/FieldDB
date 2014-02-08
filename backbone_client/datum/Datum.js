@@ -8,6 +8,7 @@ define([
     "datum/DatumFields", 
     "datum/DatumTag",
     "datum/DatumTags",
+    "image/Images",
     "datum/Session",
     "glosser/Tree",
     "OPrime"
@@ -21,6 +22,7 @@ define([
     DatumFields,
     DatumTag,
     DatumTags,
+    Images,
     Session
 ) {
   var Datum = Backbone.Model.extend(
@@ -110,6 +112,7 @@ define([
     internalModels : {
       datumFields : DatumFields,
       audioVideo : AudioVideos,
+      images : Images,
       session : Session,
       comments : Comments,
       datumTags : DatumTags
@@ -240,6 +243,11 @@ define([
           delete corpusFieldClone.users;
           originalModel.datumFields.push(corpusFieldClone);
         }
+      }
+
+      /* v1.93.0 add images */
+      if (!originalModel.images) {
+        originalModel.images = [];
       }
 
       /* bug fix for versions of spreadsheet with a enteredByUsers datumfield missing stuff */
