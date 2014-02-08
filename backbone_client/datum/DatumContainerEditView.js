@@ -4,7 +4,7 @@ define([
     "datum/Datum",
     "datum/Datums",
     "datum/DatumFields",
-    "datum/MyaamiaDatumEditView",
+    "datum/DatumEditView",
     "app/UpdatingCollectionView"
 ], function(
     Backbone,
