@@ -26,10 +26,12 @@ define([
         return false;
       },
       "click .remove-unicode" : "removeUnicode",
-      "keyup .edit-tipa-input" : function(e){
+      "blur .edit-tipa-input" : function(e){
         e.stopPropagation();
         e.preventDefault();
-        this.model.set("tipa", $(e.target).val());
+        this.model.set("tipa", $(e.target).val().trim());
+        window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+
       }
     },
     model : InsertUnicode,
@@ -60,7 +62,9 @@ define([
     removeUnicode : function(e){
       e.stopPropagation();
       e.preventDefault();
-      window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").remove(this.model);    
+      window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").remove(this.model);  
+      window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+  
     }
   });
   return InsertUnicodeView;
