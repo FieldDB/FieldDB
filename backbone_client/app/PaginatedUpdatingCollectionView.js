@@ -207,23 +207,29 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
      * Takes in an array of ids, and turns them all into elements in the collection.
      */
     fillWithIds : function(objectIds, Model){
-      if(this.filledBasedOnModels){
+      var self = this;
+      if (this.filledBasedOnModels) {
         alert("mixing a collection from id and models!");
       }
-      for(var id in objectIds){
-        var obj = new Model({pouchname: app.get("corpus").get("pouchname")});
-        obj.id  = objectIds[id];
-        var self = this;
-          obj.fetch({
-            success : function(model, response) {
-              // Render at the bottom
-              self.collection.add(model);
-              self.filledBasedOnIds = true;
-            },
-            error : function(error) {
-              console.log("Error feching item in PaginatedUpdatingCollectionView",error);
-            }
-        });
+      for (var id in objectIds) {
+        var obj = new Model();
+        obj.set("pouchname", app.get("corpus").get("pouchname"));
+        // obj.set("session", new Model({
+        //   pouchname: app.get("corpus").get("pouchname")
+        // }));
+        obj.id = objectIds[id];
+        self.collection.add(obj);
+        self.filledBasedOnIds = true;
+        obj.fetch({
+          success : function(model, response) {
+            // Render at the bottom
+            // self.collection.add(model);
+            self.render();
+          },
+          error : function(error) {
+            console.log("Error feching item in PaginatedUpdatingCollectionView",error);
+          }
+      });
       }
     },
     // Clear the view of all its ChildViews
