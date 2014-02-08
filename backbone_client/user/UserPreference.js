@@ -26,6 +26,14 @@ define([
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
+      if(OPrime.apptype == "myaamia")
+      {// do some prefs for myaamia users}
+    	  /*
+    	   if(OPrime.apptype == "myaamia" && app.get("authentication").get("userPrivate").get("username") == "public"){
+       this.set("transparentDashboard", "true");
+     } 
+    	   */
+      }
     },
     fillWithDefaults : function(){
       if(this.get("unicodes") == undefined){
@@ -37,7 +45,7 @@ define([
     },
     defaults : {
       skin : "",
-      numVisibleDatum : 2, //Use two as default so users can see minimal pairs
+      numVisibleDatum : 1, //Use two as default so users can see minimal pairs
       transparentDashboard: "false",
       alwaysRandomizeSkin : "true",
       numberOfItemsInPaginatedViews : 10

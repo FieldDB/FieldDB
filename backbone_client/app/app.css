@@ -26,7 +26,10 @@ a
 :hover {
 	text-decoration: none !important;
 }
-
+.myaamiaImage{
+	height:10em;
+	
+}
 .search {
 	padding: 10px
 }
@@ -149,7 +152,7 @@ li {
 	/* height: 100%;
 	clear: both;
 	position: relative;*/
-	margin-top: 4em;
+	margin-top: .1em;
 }
 .wiki-preview {
 	border: 1px solid #ccc;
@@ -179,6 +182,11 @@ p {
 .well {
 	padding: .6em !important;
 	margin-bottom: .6em;
+    margin-top: .2em;
+
+}
+.mediate{
+	text-align:center;
 }
 
 .alert {
@@ -801,7 +809,7 @@ h4 {
 	/* height: 100%;
 	clear: both;
 	position: relative;*/
-	margin-top: 4em;
+	margin-top: .1em;
 }
 
 #corpus-quickview { /* min-height: 10em;
@@ -820,10 +828,23 @@ h4 {
 	line-height: 1.5em;
 	/* margin: -.4em; */
 }
+.input-my{
+    width: 60px;
+    line-height:0.9em !important;
+    vertical-align:top !important;
+    font-size:0.8em !important;
+	height: 1em;
 
+
+}
 .well {
 	padding: .6em !important;
 	margin-bottom: .6em;
+}
+.mywell{
+	padding: .01em !important;
+	margin-bottom: .01em !important;
+	
 }
 
 .alert {
@@ -1075,6 +1096,11 @@ line.link {
 .vis-title {
 	font-size: 2em;
 	color: #fff;
+}
+.input-right
+{
+	height: 3em;
+	width: 100%;
 }
 
 .datum_tag {
