@@ -941,8 +941,6 @@ define([
 
     escapeLatexChars : function(input){
     	var result = input;
-
-
       //curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
       result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
       result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
