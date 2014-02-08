@@ -729,6 +729,33 @@ define( [
         hub.publish("saveDatumFailedToPouch",{d: d, message: "datum "+ JSON.stringify(e) });
       });
     },
+    popSaveADatumAndLoop : function(datumsLeftToSave){
+      var thatdatum = datumsLeftToSave.shift();
+      if(!thatdatum){
+        this.importCompleted();
+        return;
+      }
+      thatdatum.set({
+        "session" : this.model.get("session"),
+        "pouchname" : window.app.get("corpus").get("pouchname"),
+        "dateEntered" : JSON.stringify(new Date()),
+        "dateModified" : JSON.stringify(new Date())
+      });
+      
+      thatdatum.saveAndInterConnectInApp(function(){
+        // Add Datum to the new datalist and render it this should work
+        window.appView.importView.dataListView.model.get("datumIds").push(thatdatum.id);
+        // Update progress bar
+        $(".import-progress").val($(".import-progress").val()+1);
+        hub.publish("savedDatumToPouch",{ id: thatdatum.id, d: datumsLeftToSave, message: " datum "+thatdatum.id});
+      },function(){
+        //The e error should be from the error callback
+        if(!e){
+          e = {};
+        }
+        hub.publish("saveDatumFailedToPouch",{id: thatdatum.id, d: datumsLeftToSave, message: "datum "+ JSON.stringify(e) });
+      });
+    },
     importCompleted : function(){
       window.appView.toastUser( this.savedcount + " of your "
           +this.model.get("datumArray").length 
@@ -821,8 +848,7 @@ define( [
               // Update the progress bar, one more thing is done.
               $(".import-progress").val($(".import-progress").val()+1);
               
-              window.app.addActivity(
-                  {
+              window.app.addActivity({
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
@@ -830,8 +856,7 @@ define( [
                     context : "via Offline App"
                   });
               
-              window.app.addActivity(
-                  {
+              window.app.addActivity({
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
@@ -840,49 +865,23 @@ define( [
                   });
               
               window.hub.subscribe("savedDatumToPouch", function(arg){
-                this.savedindex[arg.d] = true;
+                this.savedindex[arg.id] = true;
                 this.savedcount++;
-//            window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
-                if( arg.d <= 0 ){
-                  /*
-                   * If we are at the final index in the import's datum
-                   */
-                  this.importCompleted();
-                }else{
-                  /*
-                   * Save another datum when the previous succeeds
-                   */
-                  var next = parseInt(arg.d) - 1;
-                  this.saveADatumAndLoop(next);
-                }
+                this.popSaveADatumAndLoop(arg.d);
               }, self);
               
               window.hub.subscribe("saveDatumFailedToPouch",function(arg){
-                this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
+                this.savefailedindex[arg.id] = false; //this.model.get("datumArray")[arg.d];
                 this.savefailedcount++;
-                window.appView.toastUser("Import failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
-                
-                if( arg.d <= 0 ){
-                  /*
-                   * If we are at the final index in the import's datum
-                   */
-                  this.importCompleted();
-                  
-                }else{
-                  /*
-                   * Save another datum when the previous fails
-                   */
-                  var next = parseInt(arg.d) - 1;
-                  this.saveADatumAndLoop(next);
-                }
-                
+                window.appView.toastUser("Import failed "+arg.id+" : "+arg.message,"alert-danger","Failure:");
+                this.popSaveADatumAndLoop(arg.d);
               }, self);
               
               /*
-               * Begin the datum saving loop with the last datum 
+               * Begin the datum saving loop 
                */
               if(self.model.get("datumArray").length > 0){
-                self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+                self.popSaveADatumAndLoop(self.model.get("datumArray"));
               }else{
                 alert("You havent imported anything. Please let us know if it does this again.");
                 this.importCompleted();
