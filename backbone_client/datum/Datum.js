@@ -342,7 +342,7 @@ define([
         var audioVideoArray = [];
         if (originalModel.audioVideo.URL) {
           var audioVideoURL = originalModel.audioVideo.URL;
-          var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+          var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
           audioVideoArray.push({
             "filename": fileFromUrl,
             "description": fileFromUrl,
