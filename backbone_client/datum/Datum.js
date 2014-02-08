@@ -396,17 +396,17 @@ define([
 //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
         //use the get_datum_fields view
 //        alert("TODO test search in chrome extension");
-        $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
+        $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
           success: function(response) {
             if (OPrime.debugMode) OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
 //            console.log(response);
             for (i in response.rows) {
-              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
+              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].value, queryString, doGrossKeywordMatch, queryTokens);
               // If the row's datum matches the given query string
               if (thisDatumIsIn) {
                 // Keep its datum's ID, which is the value
-                matchIds.push(response.rows[i].value);
+                matchIds.push(response.rows[i].id);
               }
             }
             
@@ -436,7 +436,7 @@ define([
                
                 // Go through all the rows of results
                 for (i in response.rows) {
-                  var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
+                  var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].key, queryString, doGrossKeywordMatch, queryTokens);
                   // If the row's datum matches the given query string
                   if (thisDatumIsIn) {
                     // Keep its datum's ID, which is the value
@@ -473,7 +473,7 @@ define([
         alert("Couldnt search the data, if you sync with the server you might get the most recent search index.");
       }
     },
-    isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
+    isThisMapReduceResultInTheSearchResults : function(searchablefields, queryString, doGrossKeywordMatch, queryTokens){
       
       var wordboundary = " ";
       // If the user is using # to indicate word boundaries as linguists do... turn all word boundaries into #
@@ -487,7 +487,7 @@ define([
         thisDatumIsIn = true;
       } else if (doGrossKeywordMatch) {
         // Take all the data in this object 
-        var stringToSearchIn = JSON.stringify(keyValuePair.key).toLowerCase();
+        var stringToSearchIn = JSON.stringify(searchablefields).toLowerCase();
         // Remove the labels
         stringToSearchIn = stringToSearchIn.replace(/"[^"]*":"/g, wordboundary).replace(/",/g, wordboundary).replace(/"}/g, wordboundary);
         // Convert all white space into a word boundary
@@ -498,7 +498,7 @@ define([
       } else {
 
         // Determine if this datum matches the first search criteria
-        thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
+        thisDatumIsIn = this.matchesSingleCriteria(searchablefields, queryTokens[0]);
         
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
@@ -510,10 +510,10 @@ define([
             }
             
             // Do an intersection
-            thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+            thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(searchablefields, queryTokens[j+1]);
           } else {
             // Do a union
-            thisDatumIsIn = thisDatumIsIn || this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+            thisDatumIsIn = thisDatumIsIn || this.matchesSingleCriteria(searchablefields, queryTokens[j+1]);
           }
         }
       }
@@ -932,13 +932,8 @@ define([
     	if (showInExportModal != null) {
         $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
         var latexDocument = 
-          "\\documentclass[12pt]{article} \n"+
-            "\\usepackage{fullpage} \n"+
-            "\\usepackage{tipa} \n"+
-            "\\usepackage{qtree} \n"+
-            "\\usepackage{gb4e} \n"+
-            "\\begin{document} \n" + result + 
-            "\\end{document}";
+          window.appView.exportView.model.exportLaTexPreamble() + result + 
+            window.appView.exportView.model.exportLaTexPostamble() ;
     		$("#export-text-area").val(latexDocument);
     	}
     	return result;
