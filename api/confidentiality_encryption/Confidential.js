@@ -1,3 +1,6 @@
+if ('undefined' === typeof window) {
+  var window = {};
+}
 (function(exports) {
     var CryptoJS = exports.CryptoJS || CryptoJS || require("../../backbone_client/libs/Crypto_AES");
     var OPrime = exports.OPrime || OPrime || require("../../backbone_client/libs/OPrime");

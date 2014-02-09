@@ -1,6 +1,6 @@
 var Confidential = Confidential || require("../../api/confidentiality_encryption/Confidential");
 
-describe("Confidential: as a language consultant I want to be able to give data and have my data remain confidential", function() {
+xdescribe("Confidential: as a language consultant I want to be able to give data and have my data remain confidential", function() {
   it("should encrypt and decrypt strings ", function() {
     var message = "this is a sample confidential translation";
     var confidential = new Confidential();

@@ -1,4 +1,4 @@
-var CorpusDBConnection = require("../corpus/CouchDBConnection");
+var CouchDBConnection = require("./CouchDBConnection");
 var OPrime = require('../../backbone_client/libs/OPrime.js');
 
 var runCORSTests = function(whichServer) {
@@ -127,7 +127,7 @@ var runCORSTests = function(whichServer) {
 
 };
 
-describe("CorpusWebService Testing: ", function() {
+xdescribe("CorpusWebService Testing: ", function() {
   runCORSTests("Testing");
 });
 

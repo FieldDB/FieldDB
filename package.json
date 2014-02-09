@@ -59,5 +59,9 @@
 	"scripts": {
 		"test": "grunt"
 	},
-	"license": "Apache 2.0"
+	"license": "Apache 2.0",
+	"licenses": [{
+		"type": "Apache 2.0"
+	}]
+
 }

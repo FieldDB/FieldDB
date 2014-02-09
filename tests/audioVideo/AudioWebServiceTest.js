@@ -110,7 +110,7 @@ var runCORSTests = function(whichServer) {
 // });
 
 /* Turn this on if you want to test your localhost config */
-describe("AudioWebService Localhost: ", function() {
+xdescribe("AudioWebService Localhost: ", function() {
   runCORSTests("Localhost");
 });
 //   

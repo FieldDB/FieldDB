@@ -1,3 +1,6 @@
+if ('undefined' === typeof window) {
+  var window = {};
+}
 (function(exports) {
 
   /** @lends Export.prototype */
