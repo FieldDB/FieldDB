@@ -21,7 +21,7 @@ env:
 
 before_install:
   # Download and configure android among other deps
-
+  npm install -g grunt-cli
 before_script:
   # Make sure the emulator has started before running tests
 
