@@ -15,7 +15,10 @@ define([
 		 *        their allomorphs and glosses. It allows the search to index
 		 *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
 		 * 
-		 * @description
+		 * @description  Lexicon is directed graph (triple store) between morphemes and
+     *        their allomorphs and glosses. It allows the search to index
+     *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
+     * 
 		 * 
 		 * @extends Backbone.Model
 		 * 

@@ -16,7 +16,8 @@ define( [
     /**
      * @class An Exercise is a type of Datum. It has the same information as a Datum plus extra,
      * but we want some info (e.g. recordings) to be kept confidential.
-     *  
+     *
+     * @name { String :Exercise}
      * @property {String} timesListened This is number of times the whole AudioVideo has been listened to by a specific user
      * 
      * @property {Date} lastListened This is the date of the last time the student listened to this Exercise
