@@ -68,7 +68,8 @@ module.exports = function(grunt) {
     jsdoc: {
       dist: {
         jsdoc : 'node_modules/.bin/jsdoc',
-        src: ['api/**/*.js', 'tests/**/*.js'],
+        src: ['api/**/*.js'],
+        // src: ['api/**/*.js', '!tests/libs/**/*.js', 'tests/**/*.js'],
         options: {
           destination: 'docs/javascript'
         }
@@ -102,5 +103,6 @@ module.exports = function(grunt) {
   grunt.registerTask('docs', ['jsdoc']);
   grunt.registerTask('default', ['jshint', 'jasmine_node', 'concat', 'uglify']);
   grunt.registerTask('default', ['jasmine_node', 'concat', 'uglify']);
+  grunt.registerTask('travis', ['jasmine_node', 'concat', 'uglify', 'docs']);
 
 };

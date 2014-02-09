@@ -7,16 +7,12 @@ if ('undefined' === typeof window) {
 
 
 
-    function Confidential() {
-      Object.call(this);
-    }
-
-    Confidential.prototype = Object.create(Object.prototype);
-
-    /** @lends Confidential.prototype */
     
       /**
-       * @class Confidential makes it possible to generate pass phrases (one per
+       * @class Confidential 
+       * @name Confidential 
+       *
+       * @description makes it possible to generate pass phrases (one per
        *        corpus) to encrypt and decrypt confidential data points. The
        *        confidential data is stored encrypted, and can only be decrypted
        *        if one has the corpus' secret key, or if one is logged into the
@@ -31,14 +27,18 @@ if ('undefined' === typeof window) {
        *
        * <a href="http://code.google.com/p/crypto-js/">More information on
        * CryptoJS</a>
-       *
-       * @description
-       *
-       * @extends Backbone.Model
+       * 
+       * @extends Object
        *
        * @constructs
        *
        */
+    function Confidential() {
+      Object.call(this);
+    }
+
+    Confidential.prototype = Object.create(Object.prototype);
+
 
       Confidential.prototype.initialize = function() {
         if (OPrime.debugMode) OPrime.debug("Initializing confidentiality module");
