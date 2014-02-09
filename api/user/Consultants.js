@@ -11,7 +11,7 @@ function(
     /**
      * @class  Consultants is a collection of user masks so that only public details get saved into items. 
 
-     * @description
+     * @description Consultants is a collection of user masks so that only public details get saved into items. 
      * 
      * @extends Backbone.Model
      * 

@@ -15,7 +15,7 @@ define([
     /**
      * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
      * 
-     * @description 
+     * @description The Data List widget is used for import search, to prepare handouts and to share data on the web.
      * 
      * @property {String} title The title of the Data List.
      * @property {String} dateCreated The date that this Data List was created.
@@ -143,7 +143,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       var datumCollection = this.view.collection.models;
       for(var datum in datumCollection){
-        if (datumIdsToApplyFunction.indexOf(datumCollection[datum].id > -1) {
+        if (datumIdsToApplyFunction.indexOf(datumCollection[datum].id > -1) ) {
           continue;
         } else{
           model[functionToApply](functionArguments);

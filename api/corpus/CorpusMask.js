@@ -214,7 +214,7 @@ define([
      * @param key
      * @param value
      * @param options
-     * @returns
+     * @returns null
      */
     set: function(key, value, options) {
       var attributes;

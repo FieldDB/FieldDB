@@ -8,6 +8,7 @@ define([
     "datum/DatumFields", 
     "datum/DatumTag",
     "datum/DatumTags",
+    "image/Images",
     "datum/Session",
     "glosser/Tree",
     "OPrime"
@@ -21,6 +22,7 @@ define([
     DatumFields,
     DatumTag,
     DatumTags,
+    Images,
     Session
 ) {
   var Datum = Backbone.Model.extend(
@@ -110,6 +112,7 @@ define([
     internalModels : {
       datumFields : DatumFields,
       audioVideo : AudioVideos,
+      images : Images,
       session : Session,
       comments : Comments,
       datumTags : DatumTags
@@ -229,17 +232,25 @@ define([
 
       /* Add any new corpus fields to this datum so they can be edited */
       var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
-      var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
-      for(var field in corpusFields){
-        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
-          var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
-          OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
-          corpusFieldClone.mask = "";
-          corpusFieldClone.value = "";
-          delete corpusFieldClone.user;
-          delete corpusFieldClone.users;
-          originalModel.datumFields.push(corpusFieldClone);
+      window.corpusfieldsforDatumParse = window.corpusfieldsforDatumParse || window.app.get("corpus").get("datumFields").toJSON()
+      var corpusFields = window.corpusfieldsforDatumParse;
+      if(corpusFields.length > originalFieldLabels.length){
+        for(var field in corpusFields){
+          if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+            var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
+            OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
+            corpusFieldClone.mask = "";
+            corpusFieldClone.value = "";
+            delete corpusFieldClone.user;
+            delete corpusFieldClone.users;
+            originalModel.datumFields.push(corpusFieldClone);
+          }
         }
+      }
+
+      /* v1.93.0 add images */
+      if (!originalModel.images) {
+        originalModel.images = [];
       }
 
       /* bug fix for versions of spreadsheet with a enteredByUsers datumfield missing stuff */
