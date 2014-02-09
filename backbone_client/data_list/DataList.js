@@ -142,7 +142,11 @@ define([
       }
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       $("#export-text-area").val(window.appView.exportView.model.exportLaTexPreamble());
-
+      $("#export-text-area").val($("#export-text-area").val()+ "\n\\section{"+app.get("corpus").get("title")+"}\n\n");
+      if (this.get("title")) {
+        $("#export-text-area").val($("#export-text-area").val()+ "\n\\subsection{"+this.get("title")+"}\n\n");
+      }
+      $("#export-text-area").val($("#export-text-area").val()+ "\n"+this.get("description")+"\n\n");
 
       var datumCollection = this.view.collection.models;
       for(var datum in datumCollection){
