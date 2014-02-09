@@ -364,6 +364,18 @@ define([
         originalModel.audioVideo = audioVideoArray;
       }
 
+      /* bug fix for versions of spreadsheet (v1.91?) with a checked field that comes from the search checkboxes (not to be confused with whether the datum was checked with a consultant or not) */
+      var indexOfCheckedField = originalFieldLabels.indexOf("checked");
+      try {
+        if (indexOfCheckedField > -1) {
+          //if its set to true or false, then its probably a bug not a user created field
+          if(originalModel.datumFields[indexOfCheckedField] && (originalModel.datumFields[indexOfCheckedField].value === true || originalModel.datumFields[indexOfCheckedField].value === false)) {
+            originalModel.datumFields.splice(indexOfCheckedField, 1)
+          }
+        }
+      } catch (e) {
+        console.log("there was a problem removing the checked=true which was introduced in spreadsheet v1.91", e);
+      }
 
       return this.originalParse(originalModel);
     },
@@ -409,7 +421,7 @@ define([
 //        alert("TODO test search in chrome extension");
         $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
           success: function(response) {
-            if (OPrime.debugMode) OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
+            if (OPrime.debugMode) OPrime.debug("Got "+response.rows.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
 //            console.log(response);
             for (i in response.rows) {
