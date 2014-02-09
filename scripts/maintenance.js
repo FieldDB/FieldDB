@@ -639,6 +639,42 @@ $.couch.allDbs({
     }
 });
 
+/*
+Merge a corpus to another
+ */
+var targetdatabase = "default";
+var database = $.couch.db(targetdatabase);
+database.allDocs({
+    success: function(result) {
+        //console.log(result);
+        var data = result.rows;
+        for (var couchdatum in data) {
+            database.openDoc(data[couchdatum].id, {
+                success: function(originalDoc) {
+                    console.log(originalDoc.pouchname);
+                    originalDoc.pouchname = targetdatabase;
+                    database.saveDoc(originalDoc, {
+                        success: function(serverResults) {
+                            console.log("updated " + originalDoc._id);
+                        },
+                        error: function(serverResults) {
+                            console.log("There was a problem saving the doc." + originalDoc._id, +JSON.stringify(originalDoc));
+                        }
+                    });
+
+                },
+                error: function(error) {
+                    console.log("Error opening your docs ", error);
+                }
+            });
+        }
+    },
+    error: function(error) {
+        console.log("Error opening the database ", error);
+    }
+});
+
+
 
 /*
 Remove extra quotes in permissions
