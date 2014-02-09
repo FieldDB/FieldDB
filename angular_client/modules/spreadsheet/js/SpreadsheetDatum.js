@@ -138,7 +138,7 @@ define([], function() {
       }
 
       /* If the key wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
-      if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "saved" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
+      if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "saved" &&  key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
         fieldDBDatum.datumFields.push({
           "label": key,
