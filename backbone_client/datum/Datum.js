@@ -952,6 +952,9 @@ define([
 
     escapeLatexChars : function(input){
     	var result = input;
+      if(!result.replace){
+        return "error parsing field, please report this."+JSON.stringify(input);
+      }
       //curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
       result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
       result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
