@@ -220,6 +220,10 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         obj.id = objectIds[id];
         self.collection.add(obj);
         self.filledBasedOnIds = true;
+        if (objectIds.length > 20) {
+          self.idsWhichWereNotFilledYet = objectIds.splice(13,objectIds.length);
+          self.ModelNotFilledYet = Model;
+        }
         obj.fetch({
           success : function(model, response) {
             // Render at the bottom
@@ -289,8 +293,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     getPaginationInfo : function() {
       var currentPage = (this._childViews.length > 0) ? Math
           .ceil(this._childViews.length / this.perPage) : 1;
-      var totalPages = (this.collection.length > 0) ? Math.ceil(this.collection.length
-          / this.perPage) : 1;
+      var totalPages = (this.collection.length > 0) ? Math.ceil(this.collection.length  / this.perPage) : 1;
 
       return {
         currentPage : currentPage,
@@ -342,6 +345,11 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       if(!self){
         self = this;
+      }
+      if(this.idsWhichWereNotFilledYet){
+        this.filledBasedOnModels = false;
+        this.fillWithIds(this.idsWhichWereNotFilledYet, this.ModelNotFilledYet);
+        return;
       }
       self.currentVisibleEnd = self.currentVisibleEnd + self.perPage;
       // Determine the range of indexes into the model's datumIds array that are 
