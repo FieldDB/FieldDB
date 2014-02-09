@@ -1,4 +1,4 @@
- generalize this to work on more langauges and bidirectionally. 
+/* generalize this to work on more langauges and bidirectionally. 
 currently this function is a quick and dirty transliterator prototype for 
 inuktitut written by  one of the interns for javascript practice, it sucessfully
 transliterates from syllabics to romanized.
