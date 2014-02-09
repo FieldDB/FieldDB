@@ -233,7 +233,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
           success : function(model, response) {
             // Render at the bottom
             // self.collection.add(model);
-            self.render();
+            //self.render();
           },
           error : function(error) {
             console.log("Error feching item in PaginatedUpdatingCollectionView",error);
