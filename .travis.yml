@@ -4,16 +4,16 @@ node_js:
   - 0.10
 
 # whitelist
-branches:
-  only:
-    - tests
+#branches:
+#  only:
+#    - tests
 
-#notifications:
-#  email:
-#    recipients:
-#      - lingsync-support@googlegroups.com
-#    on_success: change
-#    on_failure: always
+notifications:
+  email:
+    recipients:
+      - lingsync-support@googlegroups.com
+    on_success: change
+    on_failure: always
 
 env:
   matrix:
