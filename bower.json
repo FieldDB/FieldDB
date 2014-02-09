@@ -34,7 +34,6 @@
   "dependencies": {
   },
   "devDependencies": {
-    "sinon": "~1.8.1",
     "requirejs": "~2.1.10"
   }
 }

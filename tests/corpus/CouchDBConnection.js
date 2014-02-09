@@ -1,3 +1,6 @@
+if ('undefined' === typeof window) {
+  var window = {};
+}
 (function(exports) {
 
   var OPrime = OPrime || exports.OPrime || require('../../backbone_client/libs/OPrime.js');

@@ -1,3 +1,6 @@
+if ('undefined' === typeof window) {
+  var window = {};
+}
 (function(exports) {
   var AudioService = function(url, user, corpusConnection, datumid) {
 
