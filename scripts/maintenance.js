@@ -181,7 +181,7 @@ $.couch.allDbs({
                             try {
                                 corpusid = privateCorpusDoc.rows[0].value._id;
                             } catch (e) {
-                                console.log("Corpus is pretty broken, ask the user to sync : " + localdbname    );
+                                console.log("Corpus is pretty broken, ask the user to sync : " + localdbname);
                                 return;
                                 // corpusid = "";
                             }
@@ -190,13 +190,13 @@ $.couch.allDbs({
                             corpusDoc.corpusid = corpusid;
 
                             if (!corpusDoc.terms) {
-                                console.log("Added a terms of use"+ localdbname );
+                                console.log("Added a terms of use" + localdbname);
                                 corpusDoc["terms"] = {
                                     "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
                                 };
                             }
                             if (!corpusDoc.license) {
-                                console.log("Added a license"+ localdbname);
+                                console.log("Added a license" + localdbname);
                                 corpusDoc["license"] = {
                                     "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
                                     "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
@@ -204,7 +204,7 @@ $.couch.allDbs({
                                 };
                             }
                             if (!corpusDoc.copyright) {
-                                console.log("Added a copyright"+ localdbname);
+                                console.log("Added a copyright" + localdbname);
                                 corpusDoc["copyright"] = "Default: Add names of the copyright holders of the corpus.";
                             }
 
@@ -220,15 +220,15 @@ $.couch.allDbs({
                 database.openDoc("corpus", {
                     success: function(results) {
                         var doUpdate = false;
-                        if(results && results.couchConnection && results.couchConnection.corpusid){
+                        if (results && results.couchConnection && results.couchConnection.corpusid) {
                             console.log(results.couchConnection.corpusid + " is the corpusid for " + dbname);
                         }
                         if (results && results.couchConnection && results.couchConnection.corpusid && results.terms && results.license && results.copyright) {
-                            console.log("This corpus is pretty modern. "+ dbname);
+                            console.log("This corpus is pretty modern. " + dbname);
                             return;
                         }
-                        if(results && results.couchConnection && ! results.couchConnection.corpusid){
-                            console.log("This corpus is missing a corpusid that can happen if its only been opened in the spreadsheet app. but htey need the corpusid to use the offline app..."+ dbname);
+                        if (results && results.couchConnection && !results.couchConnection.corpusid) {
+                            console.log("This corpus is missing a corpusid that can happen if its only been opened in the spreadsheet app. but htey need the corpusid to use the offline app..." + dbname);
                             // console.log("This was the couchconnection before we removed its corpusid and checked its terms of use ", results.couchConnection);
                             // results.couchConnection = {
                             //     "protocol": "https://",
@@ -240,12 +240,12 @@ $.couch.allDbs({
                             // };
                             doUpdate = true;
                         }
-                        if(results && (!results.terms || !results.license || ! results.copyright )){
-                            console.log("This corpus is missing a terms of use info, that can happen if its older than around v1.70... "+ dbname);
+                        if (results && (!results.terms || !results.license || !results.copyright)) {
+                            console.log("This corpus is missing a terms of use info, that can happen if its older than around v1.70... " + dbname);
                             doUpdate = true;
                         }
 
-                        if(results && !results.couchConnection){
+                        if (results && !results.couchConnection) {
                             results.couchConnection = {
                                 "protocol": "https://",
                                 "domain": "corpus.lingsync.org",
@@ -255,14 +255,14 @@ $.couch.allDbs({
                                 "corpusid": ""
                             };
                         }
-                        
+
                         if (doUpdate) {
                             console.log("doc before update for " + localdbname + " " + JSON.stringify(results));
                             updateCorpusDoc(results, localdbname);
                         }
                     },
                     error: function(error) {
-                        console.log("Error getting a corpus doc, creating one for "+localdbname, error);
+                        console.log("Error getting a corpus doc, creating one for " + localdbname, error);
                         updateCorpusDoc(template_corpus_doc(), localdbname);
                     }
                 });
@@ -315,83 +315,83 @@ $.couch.allDbs({
 Add the team doc to all databases 
 */
 var team_template_doc = {
-        "_id": "team",
-        "gravatar": "",
-        "username": "team",
-        "collection": "users",
-        "firstname": "",
-        "lastname": "",
-        "email": "",
-        "researchInterest": "No public information available",
-        "affiliation": "No public information available",
-        "description": "No public information available"
-      };
+    "_id": "team",
+    "gravatar": "",
+    "username": "team",
+    "collection": "users",
+    "firstname": "",
+    "lastname": "",
+    "email": "",
+    "researchInterest": "No public information available",
+    "affiliation": "No public information available",
+    "description": "No public information available"
+};
 var count = 0;
 $.couch.allDbs({
-  success: function(dbs){
-    for(var db in dbs){
-      count++;
-      if(count > 60000){
-        return;
-      }
-      if(dbs[db].indexOf("-") === -1 || dbs[db].indexOf("activity_feed") > -1){
-        // (function(dbname){
-        //   var database = $.couch.db(dbname);
-        //   database.openDoc("team", {
-        //     success: function(serverResults) {
-        //       console.log("there was a team doc in the activity feed for "+dbname,JSON.stringify(serverResults));
-        //       database.removeDoc(serverResults, {
-        //         success: function(serverResults) {
-        //           console.log("removed team from activity feed" + dbname);
-        //         },
-        //         error: function(serverResults) {
-        //           console.log("There was a problem removing team doc in "+ dbname);
-        //         }
-        //       });
-        //     },
-        //     error: function(){
-        //       /* There is no team doc, doing nothing  */
-        //     }
-        //   });
-        //  })(dbs[db]);
-      }else{
-        (function(dbname){
-          var database = $.couch.db(dbname);
-          database.openDoc("team", {
-            success: function(serverResults) {
-              console.log("there already was a team doc for "+dbname,JSON.stringify(serverResults));
-              if(serverResults.researchInterest == "No public information available"){
-                serverResults.gravatar = "";
-                serverResults.username = dbname.split("-")[0];
-                database.saveDoc(serverResults, {
-                  success: function(serverResults) {
-                    console.log("updated default team for " + dbname);
-                  },
-                  error: function(serverResults) {
-                    console.log("There was a problem saving the default team doc in "+ dbname);
-                  }
-                });
-              }
-
-            },
-            error: function(){
-              /* There is no team doc, creating one */
-              team_template_doc.gravatar = "";
-              team_template_doc.username = dbname.split("-")[0];
-               database.saveDoc(team_template_doc, {
-                success: function(serverResults) {
-                  console.log("placed a default team for " + dbname);
-                },
-                error: function(serverResults) {
-                  console.log("There was a problem saving the default team doc in "+ dbname);
-                }
-              });
+    success: function(dbs) {
+        for (var db in dbs) {
+            count++;
+            if (count > 60000) {
+                return;
             }
-          });
-        })(dbs[db]);
-      }
+            if (dbs[db].indexOf("-") === -1 || dbs[db].indexOf("activity_feed") > -1) {
+                // (function(dbname){
+                //   var database = $.couch.db(dbname);
+                //   database.openDoc("team", {
+                //     success: function(serverResults) {
+                //       console.log("there was a team doc in the activity feed for "+dbname,JSON.stringify(serverResults));
+                //       database.removeDoc(serverResults, {
+                //         success: function(serverResults) {
+                //           console.log("removed team from activity feed" + dbname);
+                //         },
+                //         error: function(serverResults) {
+                //           console.log("There was a problem removing team doc in "+ dbname);
+                //         }
+                //       });
+                //     },
+                //     error: function(){
+                //       /* There is no team doc, doing nothing  */
+                //     }
+                //   });
+                //  })(dbs[db]);
+            } else {
+                (function(dbname) {
+                    var database = $.couch.db(dbname);
+                    database.openDoc("team", {
+                        success: function(serverResults) {
+                            console.log("there already was a team doc for " + dbname, JSON.stringify(serverResults));
+                            if (serverResults.researchInterest == "No public information available") {
+                                serverResults.gravatar = "";
+                                serverResults.username = dbname.split("-")[0];
+                                database.saveDoc(serverResults, {
+                                    success: function(serverResults) {
+                                        console.log("updated default team for " + dbname);
+                                    },
+                                    error: function(serverResults) {
+                                        console.log("There was a problem saving the default team doc in " + dbname);
+                                    }
+                                });
+                            }
+
+                        },
+                        error: function() {
+                            /* There is no team doc, creating one */
+                            team_template_doc.gravatar = "";
+                            team_template_doc.username = dbname.split("-")[0];
+                            database.saveDoc(team_template_doc, {
+                                success: function(serverResults) {
+                                    console.log("placed a default team for " + dbname);
+                                },
+                                error: function(serverResults) {
+                                    console.log("There was a problem saving the default team doc in " + dbname);
+                                }
+                            });
+                        }
+                    });
+                })(dbs[db]);
+            }
+        }
     }
-  }  
 });
 
 /*
@@ -1010,3 +1010,169 @@ function(new_doc, old_doc, userCtx) {
     }
 }
 
+
+/*
+verify all old corpora to have activity feeds and security docs
+*/
+window.areUsersComplete = {};
+window.nonPracticeCorpora = [];
+$.couch.allDbs({
+    success: function(results) {
+        console.log(results);
+
+        for (var db in results) {
+
+            if (results[db].indexOf("public") > -1) {
+                console.log("Skipping " + results[db]);
+                continue;
+            }
+            (function(dbname) {
+
+                if (dbname.indexOf("-") === -1) {
+                    console.log(dbname + "  is not a corpus or activity feed ");
+                    return;
+                }
+                var username = dbname.split("-")[0];
+                areUsersComplete[username] = areUsersComplete[username] || {};
+                var sourceDB = "";
+                if (dbname.indexOf("activity_feed") > -1) {
+                    if (dbname.split("-").length >= 3) {
+                        sourceDB = "new_corpus_activity_feed";
+                        var corpusname = dbname.replace(username + "-", "").replace("-activity_feed", "");
+                        areUsersComplete[username][corpusname] = areUsersComplete[username][corpusname] || {
+                            corpora: [],
+                            activity_feeds: []
+                        };
+                        areUsersComplete[username][corpusname].activity_feeds.push(dbname);
+                    } else {
+                        sourceDB = "new_user_activity_feed";
+                        areUsersComplete[username]["user_activity_feed"] = dbname;
+                    }
+                } else {
+                    sourceDB = "new_corpus";
+                    var corpusname = dbname.replace(username + "-", "");
+                    areUsersComplete[username][corpusname] = areUsersComplete[username][corpusname] || {
+                        corpora: [],
+                        activity_feeds: []
+                    };
+                    areUsersComplete[username][corpusname].corpora.push(dbname);
+                    if (dbname.indexOf("firstcorpus") === -1 && dbname.indexOf("test") === -1 && dbname.indexOf("devgina") === -1 && dbname.indexOf("nemo") === -1) {
+                        nonPracticeCorpora.push(dbname);
+                    }
+                }
+                console.log(dbname + " is a " + sourceDB);
+
+                var database = $.couch.db(dbname);
+                database.openDoc("_security", {
+                    success: function(serverResults) {
+                        if (serverResults && serverResults.admins) {
+                            // console.log("not updating _security for " + dbname, JSON.stringify(serverResults));
+                            return;
+                        }
+                        // console.log("_security for " + dbname, JSON.stringify(serverResults));
+                        var securitydoc;
+                        if (sourceDB === "new_user_activity_feed") {
+                            // console.log("Creating a new_user_activity_feed security doc");
+                            securitydoc = {
+                                "admins": {
+                                    "names": [],
+                                    "roles": ["fielddbadmin"]
+                                },
+                                "members": {
+                                    "names": [username],
+                                    "roles": []
+                                }
+                            };
+                        } else if (sourceDB === "new_corpus_activity_feed" || sourceDB === "new_corpus") {
+                            // console.log("Creating a new_corpus_activity_feed/new_corpus security doc");
+                            var corpusPouchName = dbname.replace("-activity_feed", "");
+                            securitydoc = {
+                                "admins": {
+                                    "names": [],
+                                    "roles": [corpusPouchName + "_admin", "fielddbadmin"]
+                                },
+                                "members": {
+                                    "names": [],
+                                    "roles": [corpusPouchName + "_reader", corpusPouchName + "_writer", corpusPouchName + "_commenter"]
+                                }
+                            };
+                        }
+                        securitydoc._id = "_security";
+                        // console.log("Would save this for: " + dbname, JSON.stringify(securitydoc));
+                        database.saveDoc(securitydoc, {
+                            success: function(serverResults) {
+                                console.log("saved _security for " + dbname, JSON.stringify(securitydoc));
+                            },
+                            error: function(serverResults) {
+                                console.log("There was a problem saving the _security." + dbname, JSON.stringify(securitydoc));
+                            }
+                        });
+                    },
+                    error: function(error) {
+                        console.log("There was no security doc." + dbname, +JSON.stringify(error));
+                    }
+                });
+
+            })(results[db]);
+
+        }
+    },
+    error: function(error) {
+        console.log("Error getting db list", error);
+    }
+});
+
+
+/*
+verify all databases have role of fielddbadmin
+*/
+$.couch.allDbs({
+    success: function(results) {
+        console.log(results);
+
+        for (var db in results) {
+
+            if (results[db].indexOf("public") > -1) {
+                console.log("Skipping " + results[db]);
+                continue;
+            }
+            (function(dbname) {
+
+                if (dbname.indexOf("-") === -1) {
+                    console.log(dbname + "  is not a corpus or activity feed ");
+                    return;
+                }
+
+                var database = $.couch.db(dbname);
+                database.openDoc("_security", {
+                    success: function(securitydoc) {
+                        if (securitydoc && securitydoc.admins) {
+                            securitydoc.admins.roles.push("fielddbadmin");
+                            securitydoc.admins.names = [];
+                            console.log("_security: " + dbname, JSON.stringify(securitydoc));
+                            securitydoc._id = "_security";
+                            database.saveDoc(securitydoc, {
+                                success: function(serverResults) {
+                                    console.log("saved _security for " + dbname, JSON.stringify(securitydoc));
+                                },
+                                error: function(serverResults) {
+                                    console.log("There was a problem saving the _security." + dbname);
+                                }
+                            });
+                        } else {
+                            console.log("This database is missing its _security" + dbname);
+                        }
+                    },
+                    error: function(error) {
+                        console.log("There was no security doc." + dbname, +JSON.stringify(error));
+                    }
+                });
+
+            })(results[db]);
+
+        }
+    },
+    error: function(error) {
+        console.log("Error getting db list", error);
+    }
+});
