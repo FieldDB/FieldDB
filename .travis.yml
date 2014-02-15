@@ -1,1 +1,29 @@
-script: ./scripts/run_fielddb_tests.sh
+language: javascript
+
+node_js:
+  - 0.10
+
+# whitelist
+#branches:
+#  only:
+#    - tests
+
+notifications:
+  email:
+    recipients:
+      - lingsync-support@googlegroups.com
+    on_success: change
+    on_failure: always
+
+env:
+  matrix:
+    # see set_up_new_machine.sh
+
+before_install:
+  # Download and configure deps
+  npm install -g grunt-cli &&
+  npm install
+before_script:
+  # Make sure the emulator has started before running tests
+
+script: grunt travis
