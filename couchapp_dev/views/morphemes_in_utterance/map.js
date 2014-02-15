@@ -95,13 +95,16 @@ function(doc) {
           context.glosses = glosses;
         }
       }
+      var punctuationToRemove = /[#?!.,\/\(\)\*\#0-9]/g;
       // Build triples
       for (var j in context.words) {
-        var w = context.words[j];
+        var w = context.words[j] || "";
         var morphemesInUtterance = context.morphemes[j].split('-');
         var gs = context.glosses[j].split('-');
         for (var i in morphemesInUtterance) {
           var morphemeToEmit = morphemesInUtterance[i] ? morphemesInUtterance[i].toLocaleLowerCase() : "";
+          morphemeToEmit =  morphemeToEmit.replace(punctuationToRemove, " ").trim()
+          w = w.replace(punctuationToRemove, " ").trim();
           if (morphemeToEmit) {
             emit(morphemeToEmit, w);
           }
