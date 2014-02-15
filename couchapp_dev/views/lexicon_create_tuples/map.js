@@ -103,15 +103,20 @@ function(doc) {
           context.glosses = glosses;
         }
       }
+      var punctuationToRemove = /[#?!.,\/\(\)\*\#0-9]/g;
       // Build triples
       for (var j in context.words) {
         var w = context.words[j];
         var ms = context.morphemes[j].split('-');
         var gs = context.glosses[j].split('-');
         for (var i in ms) {
+          var caseInsensitiveMorpheme = ms[i].toLocaleLowerCase();
+          caseInsensitiveMorpheme = caseInsensitiveMorpheme.replace(punctuationToRemove, " ").trim();
+          var caseInsensitiveGloss = gs[i] ? gs[i].toLocaleLowerCase() : '??';
+          caseInsensitiveGloss = caseInsensitiveGloss.replace(punctuationToRemove, " ").trim();
           emit({
-            morpheme: ms[i],
-            gloss: gs[i] || '??'
+            morpheme: caseInsensitiveMorpheme,
+            gloss: caseInsensitiveGloss 
           }, 1);
         }
       }
