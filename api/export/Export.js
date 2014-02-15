@@ -1,67 +1,37 @@
-define([ "backbone" ], function(Backbone) {
-  var Export = Backbone.Model.extend(
+if ('undefined' === typeof window) {
+  var window = {};
+}
+(function(exports) {
+
   /** @lends Export.prototype */
-  {
+  var Export = {
     /**
      * @class The export class helps export a set of selected data into csv, xml
      *        and LaTex file.
-     * 
+     *
      * @property {Collection} datalist This is the data selected for export.
      * @property {String} dataListName This is the name of the data set which
      *           appears as a filename when exported.
      * @property {Array} fields The fields array contains titles of the fields.
      * @property {Event} event The export event (e.g. click "LatexIt").
-     * 
+     *
      * @description The initialize serves to bind export to e.g. LaTexIt event.
-     * 
-     * 
+     *
+     *
      * @extends Backbone.Model
      * @constructs
      */
-    initialize : function() {
-    },
+    initialize: function() {},
 
-    // This is an list of attributes and their default values
-    defaults : {
-      fields : [],
-      dataList : null,
-      dataListName : "",
-      event : null
-    },
+    exportCSV: function() {},
 
-    // Internal models: used by the parse function
-    internalModels : {
-    // There are no nested models
-    },
+    exportXML: function() {},
 
-    /**
-     * Describe the validation here.
-     * 
-     * @param {Object}
-     *          attributes The set of attributes to validate.
-     * 
-     * @returns {String} The validation error, if there is one. Otherwise,
-     *          doesn't return anything.
-     */
-    validate : function(attributes) {
-    },
+    exportLaTex: function() {},
 
-    exportCSV : function() {
-    },
+  };
 
-    exportXML : function() {
-    },
 
-    exportLaTex : function() {
-    },
-    saveAndInterConnectInApp : function(callback) {
+  exports.Export = Export;
 
-      if (typeof callback == "function") {
-        callback();
-      }
-    }
-  });
-
-  return Export;
-
-});
+})(window || exports)

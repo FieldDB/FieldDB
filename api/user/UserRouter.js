@@ -17,6 +17,9 @@ define([
      * @class Routes URLs to handle the user dashboard. Mostly just
      *        shows the user a list of their corpora so they can switch
      *        between corpora.
+     * @description Routes URLs to handle the user dashboard. Mostly just
+     *        shows the user a list of their corpora so they can switch
+     *        between corpora.
      * 
      * @extends Backbone.Router
      * @constructs

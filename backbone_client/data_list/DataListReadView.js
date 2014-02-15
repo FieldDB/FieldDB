@@ -266,6 +266,7 @@ define( [
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip"); 
       }          
       
+
       if (this.format == "link") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ LINK render: ");
 
@@ -311,6 +312,10 @@ define( [
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
       
       }
+      if (this.format !== "link") {
+        this.model.view = window.appView.currentPaginatedDataListDatumsView;
+      }
+
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
           // Display the commentReadView

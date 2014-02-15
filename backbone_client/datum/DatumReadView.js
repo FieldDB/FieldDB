@@ -65,12 +65,12 @@ define([
         childViewFormat      : "datum"
       });
       
-      this.sessionView = new SessionReadView({
-        model : this.model.get("session"),
-        });
-      this.sessionView.format = "link";
+      // this.sessionView = new SessionReadView({
+      //   model : this.model.get("session"),
+      //   });
+      // this.sessionView.format = "link";
 
-//      this.model.bind("change", this.render, this);
+     this.model.bind("change", this.render, this);
     },
 
     /**
@@ -144,6 +144,10 @@ define([
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
+      if(!this.model || !this.model.get("datumFields")){
+        return this;
+      }
+
       if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
 
       if(this.collection){
@@ -188,8 +192,8 @@ define([
         this.commentReadView.render();
         
         // Display the SessionView
-        this.sessionView.el = this.$('.session-link'); 
-        this.sessionView.render();
+        // this.sessionView.el = this.$('.session-link'); 
+        // this.sessionView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");

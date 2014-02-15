@@ -75,7 +75,9 @@ define([
     minimizedTemplate : Handlebars.templates.insert_unicodes_minimized,
 
     render : function() {
-
+      this.undelegateEvents();
+      $(this.el).removeData().unbind(); 
+      
       var jsonToRender = this.model.toJSON();
       jsonToRender.locale_Add = Locale.get("locale_Add");
       jsonToRender.locale_Add_new_symbol = Locale.get("locale_Add_new_symbol");
@@ -128,6 +130,9 @@ define([
       // Clear the textfields
       this.$el.find(".insert-unicode-input").val("");
       this.$el.find(".insert-unicode-tipa-input").val("");
+      window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+      this.render();
+
     },
 
     dragSrcEl : null,

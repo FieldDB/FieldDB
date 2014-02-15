@@ -54,6 +54,20 @@ define([ "backbone" ], function(Backbone) {
 
     exportLaTex : function() {
     },
+
+    exportLaTexPreamble : function() {
+        return "\\documentclass[12pt]{article} \n"+
+            "\\usepackage{fullpage} \n"+
+            "\\usepackage{tipa} \n"+
+            "\\usepackage{qtree} \n"+
+            "\\usepackage{gb4e} \n"+
+            "\\begin{document} \n" ;
+    },
+
+    exportLaTexPostamble : function() {
+        return "\\end{document}";
+    },
+
     saveAndInterConnectInApp : function(callback) {
 
       if (typeof callback == "function") {

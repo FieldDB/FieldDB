@@ -13,6 +13,7 @@ define([
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "datum/DatumTagReadView",
+    "image/ImagesView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
@@ -32,6 +33,7 @@ define([
     DatumTag,
     DatumTagEditView,
     DatumTagReadView,
+    ImagesView,
     SessionReadView,
     UpdatingCollectionView
 ) {
@@ -62,6 +64,10 @@ define([
         childViewTagName     : 'li'
       });
       
+      this.imagesEditView = new ImagesView({
+        model : this.model.get("images"),
+      });
+
       this.commentEditView = new CommentEditView({
         model : new Comment(),
       });
@@ -281,6 +287,10 @@ define([
         // Display the CommentEditView
         this.commentEditView.el = $(this.el).find('.new-comment-area'); 
         this.commentEditView.render();
+        
+        // Display the imagesEditView
+        this.imagesEditView.el = $(this.el).find('.images-area'); 
+        this.imagesEditView.render();
 
         // Display the DatumReadView
         this.datumEasierToReadIGTAlignedView.el = $(this.el).find('.preview_IGT_area'); 

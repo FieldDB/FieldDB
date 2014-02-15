@@ -11,7 +11,8 @@ define("lexicon/LexiconNodes",
       /**
        * @class Lexicon Nodes is a collection of lexicon nodes is key value pair with an index of related datum. 
        * 
-       * @description
+       * @description Lexicon Nodes is a collection of lexicon nodes is key value pair with an index of related datum. 
+       * 
        * 
        * @extends Backbone.Model
        * 
