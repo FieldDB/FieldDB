@@ -15,7 +15,7 @@ define([
     /**
      * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
      * 
-     * @description 
+     * @description The Data List widget is used for import search, to prepare handouts and to share data on the web.
      * 
      * @property {String} title The title of the Data List.
      * @property {String} dateCreated The date that this Data List was created.
@@ -141,20 +141,26 @@ define([
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
       }
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
-      for(var id in datumIdsToApplyFunction){
+      var datumCollection = this.view.collection.models;
+      for(var datum in datumCollection){
+        if (datumIdsToApplyFunction.indexOf(datumCollection[datum].id > -1) ) {
+          continue;
+        } else{
+          model[functionToApply](functionArguments);
+        }
         /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
 //        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
 //        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
 
         
         /* this code re-opens the datum, but if its already in the child views, ths is  unnecesary */
-        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
-        obj.id  = datumIdsToApplyFunction[id];
-          obj.fetch({
-            success : function(model, response) {
-              model[functionToApply](functionArguments);
-            } 
-        });
+        // var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        // obj.id  = datumIdsToApplyFunction[id];
+        //   obj.fetch({
+        //     success : function(model, response) {
+              
+        //     } 
+        // });
         
       }
     },

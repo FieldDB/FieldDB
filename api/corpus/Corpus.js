@@ -1721,5 +1721,5 @@ var Corpus = Backbone.Model.extend(
     }
   });
 
-return Corpus;
+// return Corpus;
 

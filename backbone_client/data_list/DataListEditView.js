@@ -282,6 +282,7 @@ define( [
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip"); 
       }
       
+
       if (this.format == "leftSide") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
@@ -316,6 +317,7 @@ define( [
         $(this.el).html(this.searchTemplate(jsonToRender));
 //        $("#search-data-list-quickview").addClass("well");
         $("#search-data-list-quickview").show();
+        this.model.view = window.appView.searchEditView.searchPaginatedDataListDatumsView;
 
         window.appView.searchEditView.searchPaginatedDataListDatumsView.renderInElement(
             $("#search-data-list-quickview").find(".search-data-list-paginated-view") );
@@ -354,6 +356,11 @@ define( [
       }else{
         if (OPrime.debugMode) OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
+
+      if (this.format !== "link" && !this.format == "search") {
+        this.model.view = window.appView.currentPaginatedDataListDatumsView;
+      }
+
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
           // Display the CommentReadView          this.commentReadView.el = this.$el.find(".comments");

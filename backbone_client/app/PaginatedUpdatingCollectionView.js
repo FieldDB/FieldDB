@@ -206,24 +206,39 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     /**
      * Takes in an array of ids, and turns them all into elements in the collection.
      */
-    fillWithIds : function(objectIds, Model){
-      if(this.filledBasedOnModels){
+    fillWithIds : function(originalobjectIds, Model){
+      var objectIds = originalobjectIds.slice(0, originalobjectIds.length);
+      //set length once
+      if(!this.totalLength){
+        this.totalLength = originalobjectIds.length;
+      }
+      var self = this;
+      if (this.filledBasedOnModels) {
         alert("mixing a collection from id and models!");
       }
-      for(var id in objectIds){
-        var obj = new Model({pouchname: app.get("corpus").get("pouchname")});
-        obj.id  = objectIds[id];
-        var self = this;
-          obj.fetch({
-            success : function(model, response) {
-              // Render at the bottom
-              self.collection.add(model);
-              self.filledBasedOnIds = true;
-            },
-            error : function(error) {
-              console.log("Error feching item in PaginatedUpdatingCollectionView",error);
-            }
-        });
+      for (var id in objectIds) {
+        var obj = new Model();
+        obj.set("pouchname", app.get("corpus").get("pouchname"));
+        // obj.set("session", new Model({
+        //   pouchname: app.get("corpus").get("pouchname")
+        // }));
+        obj.id = objectIds[id];
+        self.collection.add(obj);
+        self.filledBasedOnIds = true;
+        if (objectIds.length > 20) {
+          self.idsWhichWereNotFilledYet = objectIds.splice(this.perPage, objectIds.length);
+          self.ModelNotFilledYet = Model;
+        }
+        obj.fetch({
+          success : function(model, response) {
+            // Render at the bottom
+            // self.collection.add(model);
+            //self.render();
+          },
+          error : function(error) {
+            console.log("Error feching item in PaginatedUpdatingCollectionView",error);
+          }
+      });
       }
     },
     // Clear the view of all its ChildViews
@@ -283,15 +298,14 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     getPaginationInfo : function() {
       var currentPage = (this._childViews.length > 0) ? Math
           .ceil(this._childViews.length / this.perPage) : 1;
-      var totalPages = (this.collection.length > 0) ? Math.ceil(this.collection.length
-          / this.perPage) : 1;
+      var totalPages = (this.totalLength > 0) ? Math.ceil(this.totalLength  / this.perPage) : 1;
 
       return {
         currentPage : currentPage,
         totalPages : totalPages,
         perPage : this.perPage,
         morePages : currentPage < totalPages,
-        allShown : this.currentVisibleEnd >= this.collection.length
+        allShown : this.currentVisibleEnd >= this.totalLength
       };
     },
 
@@ -336,6 +350,11 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       if(!self){
         self = this;
+      }
+      if(this.idsWhichWereNotFilledYet){
+        this.filledBasedOnModels = false;
+        this.fillWithIds(this.idsWhichWereNotFilledYet, this.ModelNotFilledYet);
+        // return;
       }
       self.currentVisibleEnd = self.currentVisibleEnd + self.perPage;
       // Determine the range of indexes into the model's datumIds array that are 

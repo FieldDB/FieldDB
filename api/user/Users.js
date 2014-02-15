@@ -11,7 +11,7 @@ define(
       /**
        * @class A collection of user masks (used mostly for permissions groups)
 
-       * @description
+       * @description A collection of user masks (used mostly for permissions groups)
        * 
        * @extends Backbone.Model
        * 

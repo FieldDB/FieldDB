@@ -1,3 +1,7 @@
+if ('undefined' === typeof navigator) {
+  var navigator = {"userAgent" : "Node.js"};
+}
+
 var OPrime = OPrime || {};
 
 OPrime.debugMode = false;

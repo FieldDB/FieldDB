@@ -14,7 +14,7 @@ define([
   {
     /**
      * @class The Conversation widget is under construction (it is a combo of a data list and a datum)
-     * @description 
+     * @description The Conversation widget is under construction (it is a combo of a data list and a datum)
      * 
      * @property {String} title The title of the Data List.
      * @property {String} dateCreated The date that this Data List was created.
