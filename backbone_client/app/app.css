@@ -26,7 +26,10 @@ a
 :hover {
 	text-decoration: none !important;
 }
-
+.myaamiaImage{
+	height:10em;
+	
+}
 .search {
 	padding: 10px
 }
@@ -179,6 +182,10 @@ p {
 .well {
 	padding: .6em !important;
 	margin-bottom: .6em;
+
+}
+.mediate{
+	text-align:center;
 }
 
 .alert {
@@ -718,7 +725,7 @@ line
 }
 
 @media ( max-width : 980px) {
-	.dropdown ul.dropdown-menu {
+	.nav .dropdown ul.dropdown-menu {
 		display: block;
 	}
 }
@@ -820,10 +827,23 @@ h4 {
 	line-height: 1.5em;
 	/* margin: -.4em; */
 }
+.input-my{
+    width: 60px;
+    line-height:0.9em !important;
+    vertical-align:top !important;
+    font-size:0.8em !important;
+	height: 1em;
 
+
+}
 .well {
 	padding: .6em !important;
 	margin-bottom: .6em;
+}
+.mywell{
+	padding: .01em !important;
+	margin-bottom: .01em !important;
+	
 }
 
 .alert {
@@ -1075,6 +1095,11 @@ line.link {
 .vis-title {
 	font-size: 2em;
 	color: #fff;
+}
+.input-right
+{
+	height: 3em;
+	width: 100%;
 }
 
 .datum_tag {

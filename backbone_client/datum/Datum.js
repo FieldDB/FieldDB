@@ -8,6 +8,7 @@ define([
     "datum/DatumFields", 
     "datum/DatumTag",
     "datum/DatumTags",
+    "image/Images",
     "datum/Session",
     "glosser/Tree",
     "OPrime"
@@ -21,6 +22,7 @@ define([
     DatumFields,
     DatumTag,
     DatumTags,
+    Images,
     Session
 ) {
   var Datum = Backbone.Model.extend(
@@ -110,6 +112,7 @@ define([
     internalModels : {
       datumFields : DatumFields,
       audioVideo : AudioVideos,
+      images : Images,
       session : Session,
       comments : Comments,
       datumTags : DatumTags
@@ -229,17 +232,25 @@ define([
 
       /* Add any new corpus fields to this datum so they can be edited */
       var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
-      var corpusFields = window.app.get("corpus").get("datumFields").toJSON();
-      for(var field in corpusFields){
-        if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
-          var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
-          OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
-          corpusFieldClone.mask = "";
-          corpusFieldClone.value = "";
-          delete corpusFieldClone.user;
-          delete corpusFieldClone.users;
-          originalModel.datumFields.push(corpusFieldClone);
+      window.corpusfieldsforDatumParse = window.corpusfieldsforDatumParse || window.app.get("corpus").get("datumFields").toJSON()
+      var corpusFields = window.corpusfieldsforDatumParse;
+      if(corpusFields.length > originalFieldLabels.length){
+        for(var field in corpusFields){
+          if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+            var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
+            OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
+            corpusFieldClone.mask = "";
+            corpusFieldClone.value = "";
+            delete corpusFieldClone.user;
+            delete corpusFieldClone.users;
+            originalModel.datumFields.push(corpusFieldClone);
+          }
         }
+      }
+
+      /* v1.93.0 add images */
+      if (!originalModel.images) {
+        originalModel.images = [];
       }
 
       /* bug fix for versions of spreadsheet with a enteredByUsers datumfield missing stuff */
@@ -342,7 +353,7 @@ define([
         var audioVideoArray = [];
         if (originalModel.audioVideo.URL) {
           var audioVideoURL = originalModel.audioVideo.URL;
-          var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+          var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
           audioVideoArray.push({
             "filename": fileFromUrl,
             "description": fileFromUrl,
@@ -353,6 +364,18 @@ define([
         originalModel.audioVideo = audioVideoArray;
       }
 
+      /* bug fix for versions of spreadsheet (v1.91?) with a checked field that comes from the search checkboxes (not to be confused with whether the datum was checked with a consultant or not) */
+      var indexOfCheckedField = originalFieldLabels.indexOf("checked");
+      try {
+        if (indexOfCheckedField > -1) {
+          //if its set to true or false, then its probably a bug not a user created field
+          if(originalModel.datumFields[indexOfCheckedField] && (originalModel.datumFields[indexOfCheckedField].value === true || originalModel.datumFields[indexOfCheckedField].value === false)) {
+            originalModel.datumFields.splice(indexOfCheckedField, 1)
+          }
+        }
+      } catch (e) {
+        console.log("there was a problem removing the checked=true which was introduced in spreadsheet v1.91", e);
+      }
 
       return this.originalParse(originalModel);
     },
@@ -396,17 +419,17 @@ define([
 //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
         //use the get_datum_fields view
 //        alert("TODO test search in chrome extension");
-        $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
+        $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
           success: function(response) {
-            if (OPrime.debugMode) OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
+            if (OPrime.debugMode) OPrime.debug("Got "+response.rows.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
 //            console.log(response);
             for (i in response.rows) {
-              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
+              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].value, queryString, doGrossKeywordMatch, queryTokens);
               // If the row's datum matches the given query string
               if (thisDatumIsIn) {
                 // Keep its datum's ID, which is the value
-                matchIds.push(response.rows[i].value);
+                matchIds.push(response.rows[i].id);
               }
             }
             
@@ -436,7 +459,7 @@ define([
                
                 // Go through all the rows of results
                 for (i in response.rows) {
-                  var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
+                  var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].key, queryString, doGrossKeywordMatch, queryTokens);
                   // If the row's datum matches the given query string
                   if (thisDatumIsIn) {
                     // Keep its datum's ID, which is the value
@@ -473,7 +496,7 @@ define([
         alert("Couldnt search the data, if you sync with the server you might get the most recent search index.");
       }
     },
-    isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
+    isThisMapReduceResultInTheSearchResults : function(searchablefields, queryString, doGrossKeywordMatch, queryTokens){
       
       var wordboundary = " ";
       // If the user is using # to indicate word boundaries as linguists do... turn all word boundaries into #
@@ -487,7 +510,7 @@ define([
         thisDatumIsIn = true;
       } else if (doGrossKeywordMatch) {
         // Take all the data in this object 
-        var stringToSearchIn = JSON.stringify(keyValuePair.key).toLowerCase();
+        var stringToSearchIn = JSON.stringify(searchablefields).toLowerCase();
         // Remove the labels
         stringToSearchIn = stringToSearchIn.replace(/"[^"]*":"/g, wordboundary).replace(/",/g, wordboundary).replace(/"}/g, wordboundary);
         // Convert all white space into a word boundary
@@ -498,7 +521,7 @@ define([
       } else {
 
         // Determine if this datum matches the first search criteria
-        thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
+        thisDatumIsIn = this.matchesSingleCriteria(searchablefields, queryTokens[0]);
         
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
@@ -510,10 +533,10 @@ define([
             }
             
             // Do an intersection
-            thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+            thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(searchablefields, queryTokens[j+1]);
           } else {
             // Do a union
-            thisDatumIsIn = thisDatumIsIn || this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+            thisDatumIsIn = thisDatumIsIn || this.matchesSingleCriteria(searchablefields, queryTokens[j+1]);
           }
         }
       }
@@ -932,13 +955,8 @@ define([
     	if (showInExportModal != null) {
         $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
         var latexDocument = 
-          "\\documentclass[12pt]{article} \n"+
-            "\\usepackage{fullpage} \n"+
-            "\\usepackage{tipa} \n"+
-            "\\usepackage{qtree} \n"+
-            "\\usepackage{gb4e} \n"+
-            "\\begin{document} \n" + result + 
-            "\\end{document}";
+          window.appView.exportView.model.exportLaTexPreamble() + result + 
+            window.appView.exportView.model.exportLaTexPostamble() ;
     		$("#export-text-area").val(latexDocument);
     	}
     	return result;
@@ -946,20 +964,30 @@ define([
 
     escapeLatexChars : function(input){
     	var result = input;
-    	//curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
-    	result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
-    	result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
-    	result = result.replace(/\~/g,"\\textasciitildeCURLYBRACES");
-    	result = result.replace(/#/g,"\\#");
-    	result = result.replace(/\$/g,"\\$");
-    	result = result.replace(/%/g,"\\%");
-    	result = result.replace(/&/g,"\\&");
-    	result = result.replace(/_/g,"\\_");
-    	result = result.replace(/{/g,"\\{");
-    	result = result.replace(/}/g,"\\}");
-    	result = result.replace(/</g,"\\textless");
-    	result = result.replace(/>/g,"\\textgreater");
-    	
+      if(!result.replace){
+        return "error parsing field, please report this."+JSON.stringify(input);
+      }
+      //curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
+      result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
+      result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
+      result = result.replace(/\~/g,"\\textasciitildeCURLYBRACES");
+      result = result.replace(/#/g,"\\#");
+      result = result.replace(/\$/g,"\\$");
+      result = result.replace(/%/g,"\\%");
+      result = result.replace(/&/g,"\\&");
+      result = result.replace(/_/g,"\\_");
+      result = result.replace(/{/g,"\\{");
+      result = result.replace(/}/g,"\\}");
+      result = result.replace(/</g,"\\textless");
+      result = result.replace(/>/g,"\\textgreater");
+      
+      var tipas = app.get("authentication").get("userPrivate").get("prefs").get("unicodes").toJSON();
+      for (var t = 0; t < tipas.length; t++) {
+        if(tipas[t].tipa){
+          var symbolAsRegularExpession = new RegExp(tipas[t].symbol,"g");
+          result = result.replace(symbolAsRegularExpession,tipas[t].tipa);
+        }
+      }
     	result = result.replace(/CURLYBRACES/g,"{}");
     	return result;
     },

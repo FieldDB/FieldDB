@@ -1,0 +1,10 @@
+<ul class="images-list">
+</ul>
+<form  hidden id="upload" method="post" action="{{uploadurl}}" enctype="multipart/form-data">
+<!--<form id="upload" method="put" action="{{uploadurl}}" enctype="multipart/form-data">-->
+    <label>Choose image : </label>
+    <!--<label hidden >Revision : <input hidden id="revision" type="text" value="{{docRevision}}" name="rev"/></label>-->
+    <label hidden >Revision : <input hidden id="revision" type="text" value="{{docRevision}}" name="_rev"/></label>
+    <input id="attachment" type="file" name="_attachments"/>
+    <input type="submit" value="Upload" class="btn btn-primary"/>
+</form>
