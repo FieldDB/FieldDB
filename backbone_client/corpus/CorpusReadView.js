@@ -196,7 +196,8 @@ define([
 
       var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
-      jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
+      // jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
+      jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/lexicon_create_tuples?group=true";
       
       jsonToRender.locale_License_explanation = Locale.get("locale_License_explanation");
       jsonToRender.locale_Terms_explanation = Locale.get("locale_Terms_explanation");
