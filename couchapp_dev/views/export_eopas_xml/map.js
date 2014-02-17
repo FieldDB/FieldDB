@@ -4,13 +4,15 @@ function(doc) {
 
   try {
     /* if this document has been deleted, the ignore it and return immediately */
-    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
+    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+      return;
+    }
     // If the document is a Datum
     if (doc.audioVideo) {
       // Loop over all its DatumFields
       for (var key in doc.datumFields) {
         // If the DatumField contains the Judgement
-        if (doc.datumFields[key].label == 'judgement') {
+        if (doc.datumFields[key].label === 'judgement') {
           // If the Judgement contains a '*', don't count the words in it
           if (doc.datumFields[key].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
             return;
@@ -22,14 +24,14 @@ function(doc) {
       // Loop over all its DatumFields
       for (var key in doc.datumFields) {
         // If the DatumField contains the Utterance
-        if (doc.datumFields[key].label == 'utterance') {
+        if (doc.datumFields[key].label === 'utterance') {
           // Trim whitespace
           utterance = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // If the utterance is ungrammatical, don't count the words in it
-          if (utterance.indexOf('*') == 0) {
+          if (utterance.indexOf('*') === 0) {
             return;
           }
-          if (utterance == '') {
+          if (utterance === '') {
             return;
           }
           // Tokenize the utterance
@@ -49,7 +51,7 @@ function(doc) {
           }
           context.words = words;
         }
-        if (doc.datumFields[key].label == 'morphemes') {
+        if (doc.datumFields[key].label === 'morphemes') {
           // Trim whitespace
           var morphemesline = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // Tokenize the morphemes
@@ -81,7 +83,7 @@ function(doc) {
           }
           context.morphemes = morphemes;
         }
-        if (doc.datumFields[key].label == 'gloss') {
+        if (doc.datumFields[key].label === 'gloss') {
           // Trim whitespace
           var gloss = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // Tokenize the gloss
@@ -105,7 +107,7 @@ function(doc) {
           }
           context.glosses = glosses;
         }
-        if (doc.datumFields[key].label == 'translation') {
+        if (doc.datumFields[key].label === 'translation') {
           translation = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
         }
       }
