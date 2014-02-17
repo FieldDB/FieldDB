@@ -123,7 +123,7 @@ define([
         $("#export-modal").modal("show");
       },
       "click .CSV" : function(){
-        this.model.exportAsCSV(true, null, true);
+        this.model.exportAsCSV(true, null);
         $("#export-modal").modal("show");
       },
       "click .icon-th-list" : "hideRareFields",
