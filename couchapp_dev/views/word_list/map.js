@@ -31,7 +31,8 @@ function(doc) {
             return;
           }
           // Tokenize the utterance
-          var words = utterance.toLowerCase().replace(/[#?!.,\/\(\)\*\#0-9]/g, ' ').split(/[ ]+/);
+          var punctuationToRemove = /[#?!.,\/\(\)\*\#0-9]/g;
+          var words = utterance.toLocaleLowerCase().replace(punctuationToRemove, ' ').split(/[ ]+/);
           for (var word in words) {
             // If the token it not null or the empty string
             if (words[word]) {
@@ -40,7 +41,6 @@ function(doc) {
                 suffixOrder = suffixOrder + words[word][ch];
               }
               emit({ word: words[word], sortThisColumnToFindSuffixes: suffixOrder }, {rhymingOrderToFindSuffixes: suffixOrder, grammaticalContexts: utterance});
-
             }
           }
         }

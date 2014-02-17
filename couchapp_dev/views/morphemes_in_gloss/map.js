@@ -95,14 +95,16 @@ function(doc) {
           context.glosses = glosses;
         }
       }
+      var punctuationToRemove = /[#?!.,\/\(\)\*\#0-9]/g;
+
       // Build triples
       for (var j in context.words) {
         var w = context.words[j];
         var morphemesInGloss = context.morphemes[j].split('-');
         var gs = context.glosses[j].split('-');
         for (var i in morphemesInGloss) {
-          emit([morphemesInGloss[i]], gs);
-
+          var morphemeToEmit = morphemesInGloss[i].replace(punctuationToRemove, " ").trim();
+          emit([morphemeToEmit], gs);
         }
       }
     }

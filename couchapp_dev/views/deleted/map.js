@@ -9,4 +9,4 @@ function(doc) {
   } catch (e) {
     //emit(e, 1);
   }
-};
+}

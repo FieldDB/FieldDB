@@ -15,7 +15,9 @@
 function(doc) {
   try {
     /* if this document has been deleted, the ignore it and return immediately */
-    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
+    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+      return;
+    }
 
     /*
      * If its not a datum (ie if its not the case that it has datumFields AND
@@ -31,14 +33,14 @@ function(doc) {
      * conventions, so we can just see the data
      */
     var datum = {};
-    for (i = 0; i < doc.datumFields.length; i++) {
+    for (var i = 0; i < doc.datumFields.length; i++) {
       if (doc.datumFields[i].mask) {
         datum[doc.datumFields[i].label] = doc.datumFields[i].mask;
       }
     }
     /* put all the session fields on the new simple datum too */
     if (doc.session.sessionFields) {
-      for (j = 0; j < doc.session.sessionFields.length; j++) {
+      for (var j = 0; j < doc.session.sessionFields.length; j++) {
         if (doc.session.sessionFields[j].mask) {
           datum[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;
         }
