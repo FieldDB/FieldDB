@@ -1,13 +1,15 @@
 function(doc) {
   try {
     /* if this document has been deleted, the ignore it and return immediately */
-    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
+    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+      return;
+    }
     // If the document is a Datum
     if (doc.audioVideo) {
       // Loop over all its DatumFields
       for (var key in doc.datumFields) {
         // If the DatumField contains the Judgement
-        if (doc.datumFields[key].label == 'judgement') {
+        if (doc.datumFields[key].label === 'judgement') {
           // If the Judgement contains a '*', don't count the
           // words in it
           if (doc.datumFields[key].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
@@ -19,12 +21,12 @@ function(doc) {
       // Loop over all its DatumFields
       for (var key in doc.datumFields) {
         // If the DatumField contains the Utterance
-        if (doc.datumFields[key].label == 'utterance') {
+        if (doc.datumFields[key].label === 'utterance') {
           // Trim whitespace
           var utterance = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
           // If the utterance is ungrammatical, don't count the
           // words in it
-          if (utterance.indexOf('*') == 0) {
+          if (utterance.indexOf('*') === 0) {
             return;
           }
           // Tokenize the utterance
@@ -44,7 +46,7 @@ function(doc) {
               var option1 = feederWord.replace(/\([^)]*\)/g, '');
               // If those two removals ended up with difference
               // strings
-              if (fullWord != option1) {
+              if (fullWord !== option1) {
                 // Emit the version without the characters between
                 // the parentheses
                 emit([option1.split('').reverse().join(''), option1], 1);
