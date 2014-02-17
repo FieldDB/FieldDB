@@ -138,20 +138,27 @@ define([
         functionToApply = "latexitDataList";
       }
       if(!functionArguments){
-//        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
+      //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
+      }      
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " + JSON.stringify(datumIdsToApplyFunction));
+      if (functionToApply === "latexitDataList") {
+        $("#export-text-area").val(window.appView.exportView.model.exportLaTexPreamble());
+        $("#export-text-area").val($("#export-text-area").val() + "\n\\section{" + app.get("corpus").get("title") + "}\n\n");
+        if (this.get("title")) {
+          $("#export-text-area").val($("#export-text-area").val() + "\n\\subsection{" + this.get("title") + "}\n\n");
+        }
+        $("#export-text-area").val($("#export-text-area").val() + "\n" + this.get("description") + "\n\n");
       }
-      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
-      $("#export-text-area").val(window.appView.exportView.model.exportLaTexPreamble());
-
 
       var datumCollection = this.view.collection.models;
-      for(var datum in datumCollection){
+      for (var datum in datumCollection) {
         if (datumIdsToApplyFunction.indexOf(datumCollection[datum].id > -1)) {
           datumCollection[datum][functionToApply](functionArguments);
         }
       }
-      $("#export-text-area").val($("#export-text-area").val() + window.appView.exportView.model.exportLaTexPostamble());
-
+      if (functionToApply === "latexitDataList") {
+        $("#export-text-area").val($("#export-text-area").val() + window.appView.exportView.model.exportLaTexPostamble());
+      }
     },
     
     /**

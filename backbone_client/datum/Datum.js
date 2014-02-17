@@ -952,13 +952,15 @@ define([
     latexitDatum : function(showInExportModal){
     	//this version prints new data and deletes previously shown latex'd data (best for datums)
     	var result = this.laTeXiT(showInExportModal);
-    	if (showInExportModal != null) {
+      if (showInExportModal != null) {
         $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
-        var latexDocument = 
-          window.appView.exportView.model.exportLaTexPreamble() + result + 
-            window.appView.exportView.model.exportLaTexPostamble() ;
-    		$("#export-text-area").val(latexDocument);
-    	}
+        if (!$("#export-text-area").val()) {
+          result = window.appView.exportView.model.exportLaTexPreamble() + result + window.appView.exportView.model.exportLaTexPostamble();
+        } else{
+          result = $("#export-text-area").val().replace(window.appView.exportView.model.exportLaTexPostamble(), "") + result + window.appView.exportView.model.exportLaTexPostamble();
+        }
+        $("#export-text-area").val(result);
+      }
     	return result;
     },
 
@@ -1075,7 +1077,7 @@ define([
     /**
      * This takes as an argument the order of fields and then creates a row of csv.
      */
-    exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
+    exportAsCSV : function(showInExportModal, orderedFields, printheader) {
       
       var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
         if (field.label.toLowerCase().indexOf("latex") > -1) {
@@ -1091,8 +1093,9 @@ define([
       var fields = _.pluck(fieldsToExport, "mask") || [];
       var result = fields.join(",").replace(/,,/g, ",") + "\n";
       
-      if (printheaderonly) {
-        result = header.join(",").replace(/,,/g, ",") + "\n";
+      // Ignore the print header, print it if there is nothing in the export box
+      if (printheader || !$("#export-text-area").val()) {
+        result = header.join(",").replace(/,,/g, ",") + "\n" +result;
       }
       if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
