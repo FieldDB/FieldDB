@@ -440,6 +440,11 @@ $.couch.allDbs({
                     console.log(dbname + "  is not a corpus or activity feed ");
                     return;
                 }
+                if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
+                    console.log("deploying to a beta tester");
+                } else {
+                    // return;
+                }
                 var sourceDB = "";
                 if (dbname.indexOf("activity_feed") > -1) {
                     if (dbname.split("-").length >= 3) {
@@ -467,7 +472,6 @@ $.couch.allDbs({
         console.log("Error getting db list", error);
     }
 });
-
 
 
 /*
