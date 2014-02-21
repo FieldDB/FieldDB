@@ -475,6 +475,74 @@ $.couch.allDbs({
 
 
 /*
+Count corpora
+ */
+window.corporaCount = 0;
+window.nonPracticeCorpora = [];
+window.databaseStats = [];
+$.couch.allDbs({
+    success: function(results) {
+        console.log(results);
+        for (var db in results) {
+
+            (function(dbname) {
+                if (dbname.indexOf("-") === -1) {
+                    console.log(dbname + "  is not a corpus or activity feed ");
+                    return;
+                }
+                if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
+                    console.log("ignoring a beta tester");
+                    return;
+                } else {}
+                var sourceDB = "";
+                if (dbname.indexOf("activity_feed") > -1) {
+                    if (dbname.split("-").length >= 3) {
+                        sourceDB = "new_corpus_activity_feed";
+                    } else {
+                        sourceDB = "new_user_activity_feed";
+                    }
+                } else {
+                    sourceDB = "new_corpus";
+                    corporaCount++;
+                    if (dbname.indexOf("firstcorpus") === -1 && dbname.indexOf("test") === -1 && dbname.indexOf("tutorial") === -1 && dbname.indexOf("devgina") === -1 && dbname.indexOf("nemo") === -1) {
+                        nonPracticeCorpora.push(dbname);
+                    }
+                }
+                // console.log(dbname + " is a " + sourceDB);
+                $.ajax({
+                    "method": "GET",
+                    "url": window.location.origin + "/" + dbname,
+                    success: function(result) {
+                        result = JSON.parse(result);
+                        result.type = sourceDB.replace("new_", "");
+                        result.realOrNot = "practice";
+                        if (dbname.indexOf("firstcorpus") === -1 && dbname.indexOf("test") === -1 && dbname.indexOf("tutorial") === -1 && dbname.indexOf("devgina") === -1 && dbname.indexOf("nemo") === -1) {
+                            result.realOrNot = "real";
+                        }
+                        console.log(dbname, result);
+                        databaseStats.push(result);
+                    },
+                    error: function(error) {
+                        console.log("Error geting stats for " + dbname, error);
+                    }
+                });
+
+            })(results[db]);
+
+        }
+    },
+    error: function(error) {
+        console.log("Error getting db list", error);
+    }
+});
+
+databaseStats.map(function(databaseDetails) {
+    console.log(databaseDetails.realOrNot + "," + databaseDetails.type + "," + databaseDetails.db_name + "," + databaseDetails.doc_count + "," + databaseDetails.disk_size + "," + databaseDetails.data_size + "," + databaseDetails.committed_update_seq);
+    return databaseDetails;
+})
+
+
+/*
 Replicate all databases
  */
 $.couch.urlPrefix = "https://corpus.lingsync.org"
