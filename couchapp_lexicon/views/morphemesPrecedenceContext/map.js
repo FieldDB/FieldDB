@@ -1,7 +1,7 @@
 function(doc) {
   var onlyErrors = false;
   var debug = true;
-  var maxDistance = 20;
+  var maxDistance = 10;
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
@@ -234,76 +234,77 @@ function(doc) {
 
       var thisNode;
       var skippedNodes;
-
-      var ngramPlacholders = [];
-      datumInContextTiers.morphemeLevelContext.map(function(node) {
-        if (ngramPlacholders.length > maxDistance) {
-          return;
-        }
-        ngramPlacholders.push({
-          "morphemes": "@",
-          "confidence": 1
-        });
-      });
+      var nodeIndex;
+      var previousNodeIndex;
+      var previousNode;
+      var distance;
 
       if (!onlyErrors) {
-        var nodeIndex = 0;
-        var previousNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
-        for (nodeIndex = 1; nodeIndex < datumInContextTiers.morphemeLevelContext.length; nodeIndex++) {
-          thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
-          skippedNodes = [];
-          while (!thisNode.morphemes) {
-            emit({
-              error: "Skipping this relation because one of the nodes has no morphemes"
-            }, {
-              reason: {
-                relation: [previousNode, thisNode]
-              },
-              potentiallyInaccurateData: thisNode,
-              id: doc._id
-            });
-            nodeIndex++;
-            skippedNodes.push(thisNode);
-            thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
-          }
-          if (skippedNodes.length > 0) {
-            thisNode.skippedNodes = skippedNodes;
-          }
-          if (thisNode.morphemes === "@" && previousNode.morphemes === "@") {
-            previousNode = thisNode;
-            continue;
-          }
-          var wordLevelContext = previousNode.utterance || thisNode.utterance || previousNode.morphemes || thisNode.morphemes;
-          if (thisNode.morphemes === previousNode.morphemes && !wordLevelContext.match(new RegExp(thisNode.morphemes + ".*" + previousNode.morphemes))) {
-            emit({
-              error: "Skipping this relation because one of the nodes morphemes match but the utterance doesn't contain it twice"
-            }, {
-              reason: {
-                relation: [previousNode, thisNode]
-              },
-              potentiallyInaccurateData: [previousNode, thisNode],
-              id: doc._id
-            });
-            previousNode = thisNode;
-            continue;
-          }
-          localemit({
-            "previous": previousNode,
-            "subsequent": thisNode,
-            "relation": "precedes",
-            "distance": 1,
-            "context": datumInContextTiers.datumLevelContext
-          }, wordLevelContext);
 
-          localemit({
-            "previous": previousNode,
-            "subsequent": thisNode,
-            "relation": "follows",
-            "distance": 1,
-            "context": datumInContextTiers.datumLevelContext
-          }, wordLevelContext);
-          // localemit(thisNode, doc._id);
-          previousNode = thisNode;
+        for (previousNodeIndex = 0; previousNodeIndex < datumInContextTiers.morphemeLevelContext.length - 1; previousNodeIndex++) {
+          for (nodeIndex = previousNodeIndex + 1; nodeIndex < datumInContextTiers.morphemeLevelContext.length; nodeIndex++) {
+
+            previousNode = datumInContextTiers.morphemeLevelContext[previousNodeIndex];
+            thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
+
+            skippedNodes = [];
+            while (!thisNode.morphemes) {
+              emit({
+                error: "Skipping this relation because one of the nodes has no morphemes"
+              }, {
+                reason: {
+                  relation: [previousNode, thisNode]
+                },
+                potentiallyInaccurateData: thisNode,
+                id: doc._id
+              });
+              nodeIndex++;
+              skippedNodes.push(thisNode);
+              thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
+            }
+            if (skippedNodes.length > 0) {
+              thisNode.skippedNodes = skippedNodes;
+            }
+            if (thisNode.morphemes === "@" && previousNode.morphemes === "@") {
+              previousNode = thisNode;
+              continue;
+            }
+            var wordLevelContext = previousNode.utterance || thisNode.utterance || previousNode.morphemes || thisNode.morphemes;
+            if (thisNode.morphemes === previousNode.morphemes && !wordLevelContext.match(new RegExp(thisNode.morphemes + ".*" + previousNode.morphemes))) {
+              emit({
+                error: "Skipping this relation because one of the nodes morphemes match but the utterance doesn't contain it twice"
+              }, {
+                reason: {
+                  relation: [previousNode, thisNode]
+                },
+                potentiallyInaccurateData: [previousNode, thisNode],
+                id: doc._id
+              });
+              previousNode = thisNode;
+              continue;
+            }
+            distance = nodeIndex - previousNodeIndex;
+            if (distance <= maxDistance) {
+              localemit({
+                "previous": previousNode,
+                "subsequent": thisNode,
+                "relation": "precedes",
+                "distance": distance,
+                "context": datumInContextTiers.datumLevelContext
+              }, wordLevelContext);
+
+              localemit({
+                "previous": previousNode,
+                "subsequent": thisNode,
+                "relation": "follows",
+                "distance": distance,
+                "context": datumInContextTiers.datumLevelContext
+              }, wordLevelContext);
+            }
+            // localemit(thisNode, doc._id);
+            previousNode = thisNode;
+
+          }
         }
       }
     };
