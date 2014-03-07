@@ -1,6 +1,6 @@
 function(doc) {
   var onlyErrors = false;
-  var debug = true;
+  var debug = false;
   var maxDistance = 10;
   try {
     /* if this document has been deleted, the ignore it and return immediately */
@@ -32,7 +32,7 @@ function(doc) {
       pattern: /\s+/g,
       collapseCase: true,
       removeSententialPunctuation: true,
-      punctuationToRemoveAfterTokenization: /[#?!.,;:”“\"\/\(\)\*\#0-9]+/g
+      punctuationToRemoveAfterTokenization: /[#!.,;:“\“\”\“\"\/\(\)\*\#0-9]+/g
     };
     /* Uses the Agressive tokenizer but also attempts to guess whether
      * - there are contrastive capital letters
@@ -63,7 +63,7 @@ function(doc) {
         }
         token = token.trim();
         if (tokenizer.removeSententialPunctuation) {
-          token = token.replace(/[.,;!?"\)\]\}]$/g, '').replace(/^[",.;\(\[\{]/g, '');
+          token = token.replace(/[.,;!\“\“\"\)\]\}]$/g, '').replace(/^[\“\“\",.;\(\[\{]/g, '');
         }
         if (token) {
           tokens.push(token);
@@ -89,7 +89,7 @@ function(doc) {
         if (fields[key].mask) {
           fields[key].mask = fields[key].mask.trim();
           datumFieldsForDatumLevelContext[fields[key].label] = fields[key].mask;
-          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : adaptiveTokenizer);
+          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : aggressiveTokenizer);
           if (fields[key].igt) {
             extendedIGTFields.push(fields[key].label);
           }
@@ -124,7 +124,7 @@ function(doc) {
           }
         }
       }
-      if (Object.keys(detectIfDatumHasUnmatchedIGT).length > 0) {
+      if (Object.keys(detectIfDatumHasUnmatchedIGT).length > 0 && (debug || onlyErrors)) {
         emit({
           error: "This datum might need cleaning, one or more of the lines has more 'words' than it should for an IGT"
         }, {
@@ -174,16 +174,18 @@ function(doc) {
           if (Object.keys(morphemeTuples[morphemeTupleIndex]).length !== Object.keys(wordIGT).length) {
             morphemeTuples[morphemeTupleIndex]["confidence"] = morphemeTuples[morphemeTupleIndex]["confidence"] ? morphemeTuples[morphemeTupleIndex]["confidence"] * 0.5 : 0.5;
             flagOthersAsLowConfidence = true;
-            emit({
-              error: "This datum might need cleaning, one or more of the lines has more 'morphemes' than it should for an IGT"
-            }, {
-              reason: {
-                fieldwhichHasMoreUnitsThanExpected: "unknown",
-                expectedUnits: wordIGT
-              },
-              potentiallyInaccurateData: morphemeTuples[morphemeTupleIndex],
-              id: doc._id
-            });
+            if (debug || onlyErrors) {
+              emit({
+                error: "This datum might need cleaning, one or more of the lines has more 'morphemes' than it should for an IGT"
+              }, {
+                reason: {
+                  fieldwhichHasMoreUnitsThanExpected: "unknown",
+                  expectedUnits: wordIGT
+                },
+                potentiallyInaccurateData: morphemeTuples[morphemeTupleIndex],
+                id: doc._id
+              });
+            }
           } else {
             if (flagOthersAsLowConfidence) {
               morphemeTuples[morphemeTupleIndex]["confidence"] = morphemeTuples[morphemeTupleIndex]["confidence"] ? morphemeTuples[morphemeTupleIndex]["confidence"] * 0.9 : 0.9;
@@ -212,13 +214,15 @@ function(doc) {
         for (morphemeTupleIndex = 0; morphemeTupleIndex < morphemeLevelTuples.length; morphemeTupleIndex++) {
           morphemeLevelTuples[morphemeTupleIndex]["confidence"] = morphemeLevelTuples[morphemeTupleIndex]["confidence"] ? parseFloat(morphemeLevelTuples[morphemeTupleIndex]["confidence"], 10) * 0.9 : 0.91;
         }
-        emit({
-          error: "This datum needs cleaning, some of its IGT fields which are segmented in other words, are missing segmentation in one or more words"
-        }, {
-          reason: detectIfDatumHasUnmatchedUnSegmentedFields,
-          potentiallyInaccurateData: morphemeLevelTuples,
-          id: doc._id
-        });
+        if (debug || onlyErrors) {
+          emit({
+            error: "This datum needs cleaning, some of its IGT fields which are segmented in other words, are missing segmentation in one or more words"
+          }, {
+            reason: detectIfDatumHasUnmatchedUnSegmentedFields,
+            potentiallyInaccurateData: morphemeLevelTuples,
+            id: doc._id
+          });
+        }
       }
 
       return {
@@ -249,15 +253,17 @@ function(doc) {
 
             skippedNodes = [];
             while (!thisNode.morphemes) {
-              emit({
-                error: "Skipping this relation because one of the nodes has no morphemes"
-              }, {
-                reason: {
-                  relation: [previousNode, thisNode]
-                },
-                potentiallyInaccurateData: thisNode,
-                id: doc._id
-              });
+              if (debug || onlyErrors) {
+                emit({
+                  error: "Skipping this relation because one of the nodes has no morphemes"
+                }, {
+                  reason: {
+                    relation: [previousNode, thisNode]
+                  },
+                  potentiallyInaccurateData: thisNode,
+                  id: doc._id
+                });
+              }
               nodeIndex++;
               skippedNodes.push(thisNode);
               thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
@@ -269,17 +275,31 @@ function(doc) {
               previousNode = thisNode;
               continue;
             }
-            var wordLevelContext = previousNode.utterance || thisNode.utterance || previousNode.morphemes || thisNode.morphemes;
+            var wordLevelContext = "";
+            if (previousNode.utterance !== thisNode.utterance) {
+              wordLevelContext = datumInContextTiers.datumLevelContext.utterance;
+            } else {
+              wordLevelContext = previousNode.utterance || thisNode.utterance;
+            }
+            if (!wordLevelContext) {
+              if (previousNode.morphemes !== thisNode.morphemes) {
+                wordLevelContext = datumInContextTiers.datumLevelContext.morphemes;
+              } else {
+                wordLevelContext = previousNode.morphemes || thisNode.morphemes;
+              }
+            }
             if (thisNode.morphemes === previousNode.morphemes && !wordLevelContext.match(new RegExp(thisNode.morphemes + ".*" + previousNode.morphemes))) {
-              emit({
-                error: "Skipping this relation because one of the nodes morphemes match but the utterance doesn't contain it twice"
-              }, {
-                reason: {
-                  relation: [previousNode, thisNode]
-                },
-                potentiallyInaccurateData: [previousNode, thisNode],
-                id: doc._id
-              });
+              if (debug || onlyErrors) {
+                emit({
+                  error: "Skipping this relation because one of the nodes morphemes match but the utterance doesn't contain it twice"
+                }, {
+                  reason: {
+                    relation: [previousNode, thisNode]
+                  },
+                  potentiallyInaccurateData: [previousNode, thisNode],
+                  id: doc._id
+                });
+              }
               previousNode = thisNode;
               continue;
             }
