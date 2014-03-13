@@ -8,22 +8,22 @@
 		<div class="focus_box_div"><input focus /></div>
 		<div class="span3">
 			<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span3" type="text" ng-model="newFieldData.field1"
-				placeholder="{{fields.field1.title}}"
+				placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}"
 				ng-hide="fields.field1.label==''">
 		</div>
 		<div class="span3">
 			<input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span3" type="text" ng-model="newFieldData.field2"
-				placeholder="{{fields.field2.title}}"
+				placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}"
 				ng-hide="fields.field2.label==''">
 		</div>
 		<div class="span3">
 			<input keypress-mark-as-new class="span3" type="text" ng-model="newFieldData.field3"
-				placeholder="{{fields.field3.title}}"
+				placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}"
 				ng-hide="fields.field3.label==''">
 		</div>
 		<div class="span2">
 			<input keypress-mark-as-new class="span2" type="text" ng-model="newFieldData.field4"
-				placeholder="{{fields.field4.title}}"
+				placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}"
 				ng-hide="fields.field4.label==''">
 		</div>
 		<div class="span1">
@@ -35,7 +35,7 @@
 	<div class="row" ng-show="selected=='newEntry' && expandCollapse==true">
 		<div class="span10">
 			<input keypress-mark-as-new type="text" class="span10" ng-model="newFieldData.field5"
-				placeholder="{{fields.field5.title}}"
+				placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}"
 				ng-hide="fields.field5.label==''">
 		</div>
 	</div>
@@ -106,7 +106,7 @@
 				<input guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field1"
 					ng-init="fieldData.field1=datum[fields.field1.label]"
 					value={{datum[fields.field1.label]}}
-					placeholder="{{fields.field1.title}}"
+					placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}"
 					ng-hide="fields.field1.label==''"
 					ng-disabled="readOnly==true">
 			</div>
@@ -114,7 +114,7 @@
 				<input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field2"
 					ng-init="fieldData.field2=datum[fields.field2.label]"
 					value={{datum[fields.field2.label]}}
-					placeholder="{{fields.field2.title}}"
+					placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}"
 					ng-hide="fields.field2.label==''"
 					ng-disabled="readOnly==true">
 			</div>
@@ -122,7 +122,7 @@
 				<input keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field3"
 					ng-init="fieldData.field3=datum[fields.field3.label]"
 					value={{datum[fields.field3.label]}}
-					placeholder="{{fields.field3.title}}"
+					placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}"
 					ng-hide="fields.field3.label==''"
 					ng-disabled="readOnly==true">
 			</div>
@@ -130,7 +130,7 @@
 				<input keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field4"
 					ng-init="fieldData.field4=datum[fields.field4.label]"
 					value={{datum[fields.field4.label]}}
-					placeholder="{{fields.field4.title}}"
+					placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}"
 					ng-hide="fields.field4.label==''"
 					ng-disabled="readOnly==true">
 			</div>
