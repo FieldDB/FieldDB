@@ -275,7 +275,7 @@ define(
         Preferences = defaultPreferences;
         console
           .log("No preferences. Setting default preferences in localStorage.");
-        localStorage.clear();
+        // localStorage.clear(); //why?? left over from debuging?
         localStorage.setItem('SpreadsheetPreferences', JSON
           .stringify(defaultPreferences));
       } else {
@@ -289,13 +289,28 @@ define(
         Preferences = defaultPreferences;
         console
           .log("Preferences need to be upgraded. Clearing and setting defaults.");
-        localStorage.clear();
+        // localStorage.clear(); //why?? left over from debuging?
         localStorage.setItem('SpreadsheetPreferences', JSON
           .stringify(defaultPreferences));
         Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
       }
       // Always get the most recent available fields
       Preferences.availableFields = defaultPreferences.availableFields;
+      /* upgrade to v1.923ss */
+      if (!Preferences.fulltemplate.field7.label) {
+        Preferences.fulltemplate.field7 = {
+          "label": "tags",
+          "title": "Tags"
+        };
+      }
+      if (Preferences.fulltemplate.field6.label === "judgement") {
+        Preferences.fulltemplate.field6 = {
+          "label": "judgement",
+          "title": "Grammaticality Judgement"
+        };
+      }
+      localStorage.setItem('SpreadsheetPreferences', JSON
+        .stringify(Preferences));
       // console.log(Preferences.availableFields);
       // Set scope variables
       $scope.documentReady = false;
