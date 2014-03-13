@@ -65,9 +65,13 @@
 					<option select-field-from-default-full-template="field6"
 						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
 				</select>
-
-				<input class="span5" type="text" disabled="disabled"
-					placeholder="Tags"></textarea>
+				<select class="span5" ng-model="newFieldPreferences2.field7">
+					<option value="">Empty</option>
+					<option select-field-from-default-full-template="field7"
+						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
+				</select>
+				<!-- <input class="span5" type="text" disabled="disabled"
+					placeholder="Tags"></textarea> -->
 				<!-- <span class="span4" rows="3">Comments</span> -->
 
 			</div>

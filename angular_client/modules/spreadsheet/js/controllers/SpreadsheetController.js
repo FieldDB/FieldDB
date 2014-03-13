@@ -91,7 +91,7 @@ define(
         "availableFields": {
           "judgement": {
             "label": "judgement",
-            "title": "Judgement"
+            "title": "Grammaticality Judgement"
           },
           "utterance": {
             "label": "utterance",
@@ -219,11 +219,11 @@ define(
           },
           "field6": {
             "label": "judgement",
-            "title": "Judgement"
+            "title": "Grammaticality Judgement"
           },
           "field7": {
-            "label": "",
-            "title": ""
+            "label": "tags",
+            "title": "Tags"
           },
           "field8": {
             "label": "",
@@ -281,6 +281,7 @@ define(
       } else {
         console.log("Loading Preferences from localStorage.");
         Preferences = JSON.parse(Preferences);
+        Preferences.yalefieldmethodsspring2014template = defaultPreferences.yalefieldmethodsspring2014template;
       }
 
       if ((Preferences.template1 !== undefined) || (Preferences.availableFields && Preferences.availableFields.notes)) {
