@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.92.4ss";
+      $rootScope.appVersion = "1.99.0ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
