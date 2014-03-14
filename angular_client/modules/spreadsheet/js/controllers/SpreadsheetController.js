@@ -147,7 +147,7 @@ define(
           },
           "tags": {
             "label": "tags",
-            "title": "tags"
+            "title": "Tags"
           },
           "validationStatus": {
             "label": "validationStatus",
@@ -230,6 +230,36 @@ define(
             "title": ""
           }
         },
+        "mcgillfieldmethodsspring2014template": {
+          "field1": {
+            "label": "utterance",
+            "title": "Utterance"
+          },
+          "field2": {
+            "label": "morphemes",
+            "title": "Morphemes"
+          },
+          "field3": {
+            "label": "gloss",
+            "title": "Gloss"
+          },
+          "field4": {
+            "label": "translation",
+            "title": "Translation"
+          },
+          "field5": {
+            "label": "judgement",
+            "title": "Grammaticality Judgement"
+          },
+          "field6": {
+            "label": "tags",
+            "title": "Tags"
+          },
+          "field8": {
+            "label": "",
+            "title": ""
+          }
+        },
         "yalefieldmethodsspring2014template": {
           "field1": {
             "label": "orthography",
@@ -281,6 +311,7 @@ define(
       } else {
         console.log("Loading Preferences from localStorage.");
         Preferences = JSON.parse(Preferences);
+        Preferences.mcgillfieldmethodsspring2014template = defaultPreferences.mcgillfieldmethodsspring2014template;
         Preferences.yalefieldmethodsspring2014template = defaultPreferences.yalefieldmethodsspring2014template;
       }
 
@@ -1103,7 +1134,7 @@ define(
       $scope.createRecord = function(fieldData) {
 
         // // Reset new datum form data and enable upload button; only reset audio field if present
-        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
           document.getElementById("form_new_datum_audio-file").reset();
           $scope.newDatumHasAudioToUpload = false;
         }
@@ -1440,7 +1471,7 @@ define(
         for (var key in $scope.fields) {
           fieldsInScope[$scope.fields[key].label] = true;
         }
-        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
           fieldsInScope.datumTags = true;
           fieldsInScope.comments = true;
         }

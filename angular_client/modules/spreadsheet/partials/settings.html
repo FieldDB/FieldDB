@@ -198,13 +198,62 @@
 			</div>
 
 		</div>
-		<br />
+
 		<button class="btn btn-primary"
 			ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">Save/Activate
 			Yale Field Methods Template</button>
 		<button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'yalefieldmethodsspring2014template'}"
 			ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">Set as default template for {{DB.title}}</button>
+		
+		<center>
+			<hr width="80%">
+		</center>
 		<!-- End Yale Field Methods TEMPLATE -->
+
+		<!-- McGill TEMPLATE -->
+		<h3>
+			<span ng-show="template=='mcgillfieldmethodsspring2014template'"><b>✓</b></span> McGill Field Methods Template
+			<small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsspring2014template'">Default template for {{DB.title}}</small>
+		</h3>
+		<div class="row settingsTemplate">
+			<div class="span5">
+				<select class="span5" disabled="disabled">
+					<option value="">Utterance</option>
+				</select>
+				<select class="span5" disabled="disabled">
+					<option value="">Morphemes</option>
+				</select>
+				<select class="span5" disabled="disabled">
+					<option value="">Gloss</option>
+				</select>
+			</div>
+			<div class="span5" >
+				<select class="span5" disabled="disabled">
+					<option value="">Translation</option>
+				</select>
+				<select class="span5" disabled="disabled">
+					<option value="">Grammaticality Judgement</option>
+				</select>
+				<select class="span5" disabled="disabled">
+					<option value="">Tags</option>
+				</select>
+				<!-- <input class="span5" type="text" disabled="disabled"
+					placeholder="Tags"></textarea> -->
+				<!-- <span class="span4" rows="3">Comments</span> -->
+
+			</div>
+			<div class="span1">
+				Audio &amp; Comments
+			</div>
+
+		</div>
+		<br />
+		<button class="btn btn-primary"
+			ng-click="saveNewPreferences('mcgillfieldmethodsspring2014template', newFieldPreferences2)">Save/Activate
+			McGill Template</button> 
+		<button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsspring2014template'}"
+			ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">Set as default template for {{DB.title}}</button>
+		<!-- End McGill TEMPLATE -->
 
 	</div>
 
