@@ -263,6 +263,15 @@ define([
       self.set("id","corpus");
       self.set("_id","corpus");
       this.set("timestamp", Date.now());
+      if(window.app && window.app.get("corpus") && window.app.get("corpus").get("termsOfUse")){
+        this.set("termsOfUse", window.app.get("corpus").get("termsOfUse"));
+      }
+      if(window.app && window.app.get("corpus") && window.app.get("corpus").get("license")){
+        this.set("license", window.app.get("corpus").get("license"));
+      }
+      if(window.app && window.app.get("corpus") && window.app.get("corpus").get("copyright")){
+        this.set("copyright", window.app.get("corpus").get("copyright"));
+      }
       
         if(OPrime.isBackboneCouchDBApp()){
           self.save();
