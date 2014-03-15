@@ -77,10 +77,17 @@ app.get('/db/:pouchname', function(req, res) {
       var defaultTerms = {
         humanReadable: "Sample terms of use: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
       };
-      if(!result.corpus.corpusinfo.terms || typeof result.corpus.corpusinfo.terms == "string"){
-        result.corpus.corpusinfo.terms = defaultTerms;
+      if (!result.corpus.corpusinfo.termsOfUse) {
+        if (result.corpus.corpusinfo.terms && typeof result.corpus.corpusinfo.terms !== "string") {
+          result.corpus.corpusinfo.termsOfUse = result.corpus.corpusinfo.terms;
+        } else {
+          result.corpus.corpusinfo.termsOfUse = defaultTerms;
+        }
       }
-
+      if (result.corpus.corpusinfo.terms) {
+        delete result.corpus.corpusinfo.terms;
+      }
+     
       var data = {
         corpora: [result.corpus],
         ghash: result.team.gravatar,
@@ -120,10 +127,16 @@ app.get('/:user/:corpus/:pouchname', function(req, res) {
       var defaultTerms = {
         humanReadable: "Sample terms of use: \"The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus.\""
       };
-      if(!result.corpus.corpusinfo.terms || typeof result.corpus.corpusinfo.terms == "string"){
-        result.corpus.corpusinfo.terms = defaultTerms;
+      if (!result.corpus.corpusinfo.termsOfUse) {
+        if (result.corpus.corpusinfo.terms && typeof result.corpus.corpusinfo.terms !== "string") {
+          result.corpus.corpusinfo.termsOfUse = result.corpus.corpusinfo.terms;
+        } else {
+          result.corpus.corpusinfo.termsOfUse = defaultTerms;
+        }
       }
-
+      if (result.corpus.corpusinfo.terms) {
+        delete result.corpus.corpusinfo.terms;
+      }
 
       var data = {
         corpora: [result.corpus],
