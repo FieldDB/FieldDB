@@ -158,3 +158,23 @@
     <button class="btn btn-success" id="quick-authentication-okay-btn">{{locale_Yep_its_me}}</button>
   </div>
 </div>
+<div id="login_modal" class="modal hide">
+  <div class="modal-header">
+    <h3>{{locale_Log_In}}</h3>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-error hide welcome-screen-alerts"></div>
+    <label>{{locale_Username}}</label> <input size="16" type="text"
+      class="welcomeusername" value="" /> <label>{{locale_Password}}</label>
+    <input type="password" size="16" class="welcomepassword" value="" />
+    <label class="locale_authUrl">Server</label> <input type="text"
+      size="16" class="welcomeauthurl" data-provide="typeahead"
+      data-items="4"
+      data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-success sync-my-data"> <span
+       >{{locale_Log_In}}</span>
+    </a>
+  </div>
+</div>
