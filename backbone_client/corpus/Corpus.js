@@ -691,6 +691,7 @@ define([
           pouchname : self.get("pouchname"),
           sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
+        window.appView.sessionNewModalView.model.fillWithDefaults();
         window.appView.sessionNewModalView.render();
       });
     },
