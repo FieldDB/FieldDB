@@ -410,6 +410,7 @@ define([
             if (this.format === "latexPreviewIGTonly" && (!utterance || !morphemes || !gloss) ) {
               return this;
             }
+
             var tuple = getIGTList([utterance, morphemes, gloss]);
             // if there are only 3 or less words, they probably dont need the alignment visuall that much
             if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
@@ -423,8 +424,8 @@ define([
               jsonToRender.judgement = judgement;
             }
           } catch(e) {
-            alert("Bug: something is wrong with this datum: "+JSON.stringify(e));
-            jsonToRender.translation = "bug";
+            console.log("Bug: something is wrong with this datum: "+JSON.stringify(e));
+            jsonToRender.translation = "---";
           }
     	}
 

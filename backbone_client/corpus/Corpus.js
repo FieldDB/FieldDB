@@ -433,7 +433,16 @@ define([
       if (originalModel.ok) {
         return this.originalParse(originalModel);
       }
-
+      /* Use the couch connection defined by this app. */
+      if (originalModel.couchConnection) {
+        tmp = originalModel.couchConnection;
+        originalModel.couchConnection = OPrime.defaultCouchConnection();
+        originalModel.couchConnection.corpusid = tmp.corpusid;
+        originalModel.couchConnection.pouchname = tmp.pouchname;
+        originalModel.couchConnection.title = tmp.title;
+        originalModel.couchConnection.description = tmp.description;
+        originalModel.couchConnection.titleAsUrl = tmp.titleAsUrl;
+      }
       /* Update the corpus to show all fields which are defaults on corpora, 
       they are only added permanently if saved. */
       var tempCorpus = new Corpus();
