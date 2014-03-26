@@ -221,6 +221,7 @@ define([
         window.appView.currentCorpusReadView.destroy_view();
       }
 
+      this.changeViewsOfInternalModels();
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
