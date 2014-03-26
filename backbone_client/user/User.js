@@ -49,6 +49,58 @@ define([
         this.set("hotkeys", new HotKey({filledWithDefaults : true }));//TODO this needs to become plural when hotkeys get implemented
       }
     },
+    originalParse : Backbone.Model.prototype.parse,
+    parse: function(originalModel) {
+      var tmp;
+      var corpusesUserHasAccessTo = localStorage.getItem(originalModel.username + "corpusesUserHasAccessTo");
+      if(corpusesUserHasAccessTo){
+        originalModel.corpuses = JSON.parse(corpusesUserHasAccessTo);
+      }
+      for (var corpusIndex = 0; corpusIndex < originalModel.corpuses.length; corpusIndex++) {
+        tmp = originalModel.corpuses[corpusIndex];
+        originalModel.corpuses[corpusIndex] = OPrime.defaultCouchConnection();
+        originalModel.corpuses[corpusIndex].corpusid = tmp.corpusid;
+        originalModel.corpuses[corpusIndex].pouchname = tmp.pouchname;
+        originalModel.corpuses[corpusIndex].title = tmp.title;
+        originalModel.corpuses[corpusIndex].description = tmp.description;
+        originalModel.corpuses[corpusIndex].titleAsUrl = tmp.titleAsUrl;
+      }
+      if (originalModel.mostRecentIds && originalModel.mostRecentIds.couchConnection) {
+        tmp = originalModel.mostRecentIds.couchConnection;
+        originalModel.mostRecentIds.couchConnection = OPrime.defaultCouchConnection();
+        originalModel.mostRecentIds.couchConnection.corpusid = tmp.corpusid;
+        originalModel.mostRecentIds.couchConnection.pouchname = tmp.pouchname;
+        originalModel.mostRecentIds.couchConnection.title = tmp.title;
+        originalModel.mostRecentIds.couchConnection.description = tmp.description;
+        originalModel.mostRecentIds.couchConnection.titleAsUrl = tmp.titleAsUrl;
+      }
+      if (originalModel.activityCouchConnection) {
+        tmp = originalModel.activityCouchConnection;
+        originalModel.activityCouchConnection = OPrime.defaultCouchConnection();
+        originalModel.activityCouchConnection.pouchname = tmp.pouchname;
+      }
+
+
+
+      var couchConnection = originalModel.mostRecentIds.couchConnection;
+      if(!couchConnection){
+        OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
+        window.location.replace("user.html");
+        return;
+      }
+      
+      /* Upgrade chrome app user corpora's to v1.38+ */
+      if(couchConnection.domain == "ifielddevs.iriscouch.com"){
+        couchConnection.domain  = "corpus.lingsync.org";
+        couchConnection.port = "";
+      }
+      /* Upgrade chrome app user corpora's to v1.90+ */
+      if(couchConnection.domain == "corpusdev.lingsync.org"){
+        couchConnection.domain  = "corpus.lingsync.org";
+      }
+
+      return this.originalParse(originalModel);
+    },
     defaults : {
       // Defaults from UserGeneric
       username : "",
