@@ -5,8 +5,12 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
       return;
     }
+
     if (doc.collection === "datums" || (doc.datumFields && doc.session)) {
       var datum = {};
+      // include trashed datum so that they can be deleted?
+      // datum.trashed = doc.trashed;
+      datum.appVersionsWhenModified = doc.appVersionsWhenModified || "";
       var dateEntered = doc.dateEntered;
       if (dateEntered) {
         try {
@@ -41,25 +45,29 @@ function(doc) {
         datum.images = doc.images.map(function(image) {
           var url = image.URL;
           if (!image.URL && image.filename && image.filename.trim()) {
-            url = "SERVER_URL/" + doc._id + "/" + image.filename.trim();
+            url = "SERVER_URL/" + doc.pouchname + "/" + doc._id + "/" + image.filename.trim();
           }
           /* if the file is on this document, prefer this server */
           if (doc._attachments && doc._attachments[image.filename.trim()]) {
-            url = "SERVER_URL/" + doc._id + "/" + image.filename.trim();
+            url = "SERVER_URL/" + doc.pouchname + "/" + doc._id + "/" + image.filename.trim();
           }
           return url;
         }).join(",");
       }
-      datum.comments = doc.comments;
+      if (doc.comments) {
+        datum.comments = doc.comments.map(function(comment) {
+          return comment.text.replace(",", " ");
+        }).join(",");
+      }
       if (doc.audioVideo) {
         datum.audioVideo = doc.audioVideo.map(function(audioVideo) {
           var url = audioVideo.URL;
           if (!audioVideo.URL && audioVideo.filename && audioVideo.filename.trim()) {
-            url = "SERVER_URL/" + doc._id + "/" + audioVideo.filename.trim();
+            url = "SERVER_URL/" + doc.pouchname + "/" + doc._id + "/" + audioVideo.filename.trim();
           }
           /* if the file is on this document, prefer this server */
           if (doc._attachments && doc._attachments[audioVideo.filename.trim()]) {
-            url = "SERVER_URL/" + doc._id + "/" + audioVideo.filename.trim();
+            url = "SERVER_URL/" + doc.pouchname + "/" + doc._id + "/" + audioVideo.filename.trim();
           }
           return url;
         }).join(",");
@@ -82,6 +90,12 @@ function(doc) {
       if (!datum.translation) {
         datum.translation = "";
       }
+      if (!datum.related) {
+        datum.related = "";
+      }
+      if (!datum.context) {
+        datum.context = "";
+      }
       /* Emit the datum by tag so that the android can download according to tags */
       var tags = datum.tags || "";
       if (!tags || !tags.trim()) {
@@ -93,6 +107,6 @@ function(doc) {
       }
     }
   } catch (e) {
-    emit(e, 1);
+    //emit(e, 1);
   }
 }
