@@ -663,24 +663,7 @@ define([
       if (Backbone.couch_connector.config.db_name == "default") {
         OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
-      
       var couchConnection = appids.couchConnection;
-      if(!couchConnection){
-        OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
-        window.location.replace("user.html");
-        return;
-      }
-      
-      /* Upgrade chrome app user corpora's to v1.38+ */
-      if(couchConnection.domain == "ifielddevs.iriscouch.com"){
-        couchConnection.domain  = "corpus.lingsync.org";
-        couchConnection.port = "";
-      }
-      /* Upgrade chrome app user corpora's to v1.90+ */
-      if(couchConnection.domain == "corpusdev.lingsync.org"){
-        couchConnection.domain  = "corpus.lingsync.org";
-      }
-
       this.set("couchConnection", couchConnection);
       
       var corpusid = appids.corpusid;
@@ -753,16 +736,9 @@ define([
                         "pouchname" : couchConnection.pouchname
                       });
                       s.id = appids.sessionid; 
-                        s.fetch({
-                          success : function(sessionModel) {
-                            $(".spinner-status").html("Opened Elicitation Session...");
-
-//                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                            if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
-                            s.setAsCurrentSession(function(){
-                              
+                      var afterLoadingSession = function(loadedSession){
+                        loadedSession.setAsCurrentSession(function(){
                               $(".spinner-status").html("Loading Elicitation Session...");
-
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
                               if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               if(window.appView){
@@ -780,22 +756,37 @@ define([
                               $(".spinner-status").html("Rendering Dashboard...");
 
                               window.app.stopSpinner();
-
-                              
                               if (typeof callback == "function") {
                                 callback();
                               }
                             }, function(){
                               alert("Failure to set as current session in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                             });
+                      }
+                      if(!s.id){
+                        s.set(
+                            "sessionFields", window.app.get("corpus").get("sessionFields").clone()
+                        );
+                        afterLoadingSession(s);
+                      } else {
+                        s.fetch({
+                          success : function(sessionModel) {
+                            $(".spinner-status").html("Opened Elicitation Session...");
+
+//                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                            if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
+                            afterLoadingSession(s);
                           },
                           error : function(model, error, options) {
                             alert("There was an error fetching the session. "+error.reason);
                             s.set(
                                 "sessionFields", window.app.get("corpus").get("sessionFields").clone()
                             );
+                            s.id = s.id+"sessionDetailsWereMissing";
+                            afterLoadingSession(s);
                           }
                         });//end session fetch
+                      }
 
                     },function(){
                       alert("Failure to set as current data list in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -817,7 +808,7 @@ define([
             if(error.reason){
               reason = error.reason.message || error.reason || "";
             };
-            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nthorized") >=0 ){
+            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nauthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
