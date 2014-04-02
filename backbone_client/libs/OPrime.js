@@ -745,7 +745,13 @@ OPrime.makeCORSRequest = function(options) {
 
   xhr.onerror = function(e,f,g) {
     if (OPrime.debugMode) OPrime.debug(e,f,g);
-    OPrime.bug('There was an error making the CORS request to '+options.url+ " from "+window.location.href+" the app will not function normally. Please report this.");
+    var message = 'There was an error making the CORS request to '+options.url+ " from "+window.location.href+" the app will not function normally";
+    if (options.url.indexOf("localhost") > 0) {
+      message = message + " Please turn on your CouchDB by going into the Applications (on Mac), and then re-load the page.";
+    } else {
+      message = message + " Please report this."
+    }
+    OPrime.bug(message);
     if(typeof options.error == "function"){
       options.error(e,f,g);
     }
