@@ -143,6 +143,15 @@ define(
               "click .save-dashboard" : function() {
                 window.app.saveAndInterConnectInApp();
               },
+              "click .sync-my-data" : function(e) {
+                if(e){
+                  e.stopPropagation();
+                  e.preventDefault();
+                }
+                var authUrl = $(".welcomeauthurl").val().trim();
+                authUrl = OPrime.getAuthUrl(authUrl);
+                this.authView.syncUser($(".welcomeusername").val().trim(),$(".welcomepassword").val().trim(), authUrl);
+              },
               "click .sync-everything" : "replicateDatabases",
             /*
              * These functions come from the top search template, it is renderd
@@ -174,6 +183,22 @@ define(
                 jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
                 jsonToRender.locale_Password = Locale.get("locale_Password");
                 jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
+                jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
+                jsonToRender.locale_Differences_with_the_central_server = Locale.get("locale_Differences_with_the_central_server"); 
+                jsonToRender.locale_Instructions_to_show_on_dashboard = Locale.get("locale_Instructions_to_show_on_dashboard"); // Do we still use this instruction?  
+                jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
+                jsonToRender.locale_Need_save = Locale.get("locale_Need_save");
+                jsonToRender.locale_Need_sync = Locale.get("locale_Need_sync");
+                jsonToRender.locale_Password = Locale.get("locale_Password");
+                jsonToRender.locale_Recent_Changes = Locale.get("locale_Recent_Changes");
+                jsonToRender.locale_Save_on_this_Computer = Locale.get("locale_Save_on_this_Computer");
+                jsonToRender.locale_Show_Dashboard = Locale.get("locale_Show_Dashboard");
+                jsonToRender.locale_Sync_and_Share = Locale.get("locale_Sync_and_Share");
+                jsonToRender.locale_Username = Locale.get("locale_Username");
+                jsonToRender.locale_View_Public_Profile_Tooltip = Locale.get("locale_View_Public_Profile_Tooltip");
+                jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
+                jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
+                jsonToRender.locale_to_beta_testers = Locale.get("locale_to_beta_testers"); // Do we still use this? 
 
                 
                 $(this.el).html(this.template(jsonToRender));

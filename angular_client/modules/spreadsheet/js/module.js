@@ -48,6 +48,8 @@ define(
               templateUrl: 'partials/fulltemplate.html'
             }).when('/spreadsheet/yalefieldmethodsspring2014template', {
               templateUrl: 'partials/yalefieldmethodsspring2014template.html'
+            }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
+              templateUrl: 'partials/mcgillfieldmethodsspring2014template.html'
             }).otherwise({
               redirectTo: '/corpora_list'
             });

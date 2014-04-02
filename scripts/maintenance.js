@@ -1248,3 +1248,20 @@ $.couch.allDbs({
         console.log("Error getting db list", error);
     }
 });
+
+
+/*
+Import ilanguages.org georgian phrase data
+ */
+
+$("td").map(function() {
+    var datum = {
+        utterance: $(this).find("b").text() || "",
+        translation: $(this).find("big").text() || "",
+        orthography: $(this).find("dfn").text() || "",
+        audioFile: $(this).find("a")[0].href || ""
+    };
+    datum.utterance = datum.utterance.replace(/[\[\]]/g, "");
+    datum.audioFile = datum.audioFile.substring(datum.audioFile.lastIndexOf("/") + 1);
+    console.log(datum.utterance + "\n" + datum.translation + "\n" + datum.orthography + "\n" + datum.audioFile + "\n\n\n");
+});
