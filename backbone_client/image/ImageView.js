@@ -34,6 +34,9 @@ define([
       if (OPrime.debugMode) OPrime.debug("IMAGE render");
       
       var jsonToRender = this.model.toJSON(); 
+      if(!jsonToRender.URL){
+        jsonToRender.URL = jsonToRender.filename;
+      }
       $(this.el).html(this.template(jsonToRender));
       
       return this;

@@ -190,6 +190,7 @@ define([
         if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
+      this.changeViewsOfInternalModels();
 
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";

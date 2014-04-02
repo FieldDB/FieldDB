@@ -1265,3 +1265,10 @@ $("td").map(function() {
     datum.audioFile = datum.audioFile.substring(datum.audioFile.lastIndexOf("/") + 1);
     console.log(datum.utterance + "\n" + datum.translation + "\n" + datum.orthography + "\n" + datum.audioFile + "\n\n\n");
 });
+
+
+
+/*
+Selected replication to the sample database for the Android app
+ */
+//$ curl -X POST $TARGET/_replicate -d '{"source":"$SOURCE/my-georgian","target":"$TARGET/community-georgian", "doc_ids":["3328d6a49281e117e859adddcd006168", "3328d6a49281e117e859adddcd006ddf", "3328d6a49281e117e859adddcd009369", "3328d6a49281e117e859adddcd026851", "723a8b707e579087aa36c2e338eafe05", "723a8b707e579087aa36c2e338eb17ec", "723a8b707e579087aa36c2e338eb33b4", "723a8b707e579087aa36c2e338eb9be4", "723a8b707e579087aa36c2e338ecdb4c", "eff8773970b2ebbf958af417890112ab", "eff8773970b2ebbf958af41789013154", "eff8773970b2ebbf958af41789014953", "eff8773970b2ebbf958af4178901877a", "eff8773970b2ebbf958af4178901a406", "eff8773970b2ebbf958af4178901df96", "eff8773970b2ebbf958af41789021a92"]}'  -H "Content-Type: application/json"

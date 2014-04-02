@@ -651,6 +651,7 @@ define([
       // Create a new Datum based on the current Datum
       var datum = new Datum({
         audioVideo : new AudioVideos(this.get("audioVideo").toJSON(), {parse: true}),
+        images : new Images(this.get("images").toJSON(), {parse: true}),
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
