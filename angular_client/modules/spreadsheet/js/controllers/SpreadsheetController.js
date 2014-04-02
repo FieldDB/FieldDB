@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.92.3ss";
+      $rootScope.appVersion = "1.99.0ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -91,7 +91,7 @@ define(
         "availableFields": {
           "judgement": {
             "label": "judgement",
-            "title": "Judgement"
+            "title": "Grammaticality Judgement"
           },
           "utterance": {
             "label": "utterance",
@@ -147,7 +147,7 @@ define(
           },
           "tags": {
             "label": "tags",
-            "title": "tags"
+            "title": "Tags"
           },
           "validationStatus": {
             "label": "validationStatus",
@@ -219,11 +219,41 @@ define(
           },
           "field6": {
             "label": "judgement",
-            "title": "Judgement"
+            "title": "Grammaticality Judgement"
           },
           "field7": {
+            "label": "tags",
+            "title": "Tags"
+          },
+          "field8": {
             "label": "",
             "title": ""
+          }
+        },
+        "mcgillfieldmethodsspring2014template": {
+          "field1": {
+            "label": "utterance",
+            "title": "Utterance"
+          },
+          "field2": {
+            "label": "morphemes",
+            "title": "Morphemes"
+          },
+          "field3": {
+            "label": "gloss",
+            "title": "Gloss"
+          },
+          "field4": {
+            "label": "translation",
+            "title": "Translation"
+          },
+          "field5": {
+            "label": "judgement",
+            "title": "Grammaticality Judgement"
+          },
+          "field6": {
+            "label": "tags",
+            "title": "Tags"
           },
           "field8": {
             "label": "",
@@ -275,12 +305,14 @@ define(
         Preferences = defaultPreferences;
         console
           .log("No preferences. Setting default preferences in localStorage.");
-        localStorage.clear();
+        // localStorage.clear(); //why?? left over from debuging?
         localStorage.setItem('SpreadsheetPreferences', JSON
           .stringify(defaultPreferences));
       } else {
         console.log("Loading Preferences from localStorage.");
         Preferences = JSON.parse(Preferences);
+        Preferences.mcgillfieldmethodsspring2014template = defaultPreferences.mcgillfieldmethodsspring2014template;
+        Preferences.yalefieldmethodsspring2014template = defaultPreferences.yalefieldmethodsspring2014template;
       }
 
       if ((Preferences.template1 !== undefined) || (Preferences.availableFields && Preferences.availableFields.notes)) {
@@ -288,13 +320,28 @@ define(
         Preferences = defaultPreferences;
         console
           .log("Preferences need to be upgraded. Clearing and setting defaults.");
-        localStorage.clear();
+        // localStorage.clear(); //why?? left over from debuging?
         localStorage.setItem('SpreadsheetPreferences', JSON
           .stringify(defaultPreferences));
         Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
       }
       // Always get the most recent available fields
       Preferences.availableFields = defaultPreferences.availableFields;
+      /* upgrade to v1.923ss */
+      if (!Preferences.fulltemplate.field7.label) {
+        Preferences.fulltemplate.field7 = {
+          "label": "tags",
+          "title": "Tags"
+        };
+      }
+      if (Preferences.fulltemplate.field6.label === "judgement") {
+        Preferences.fulltemplate.field6 = {
+          "label": "judgement",
+          "title": "Grammaticality Judgement"
+        };
+      }
+      localStorage.setItem('SpreadsheetPreferences', JSON
+        .stringify(Preferences));
       // console.log(Preferences.availableFields);
       // Set scope variables
       $scope.documentReady = false;
@@ -1087,7 +1134,7 @@ define(
       $scope.createRecord = function(fieldData) {
 
         // // Reset new datum form data and enable upload button; only reset audio field if present
-        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
           document.getElementById("form_new_datum_audio-file").reset();
           $scope.newDatumHasAudioToUpload = false;
         }
@@ -1424,7 +1471,7 @@ define(
         for (var key in $scope.fields) {
           fieldsInScope[$scope.fields[key].label] = true;
         }
-        if ($rootScope.template === "fulltemplate" || $rootScope.template === "yalefieldmethodsspring2014template") {
+        if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
           fieldsInScope.datumTags = true;
           fieldsInScope.comments = true;
         }

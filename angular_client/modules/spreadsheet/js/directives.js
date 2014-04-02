@@ -42,7 +42,8 @@ define(
         'selectFieldFromDefaultCompactTemplate',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
+            var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+            if (scope.field.label == Preferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
               element[0].selected = true;
             }
           };
@@ -51,7 +52,8 @@ define(
         'selectFieldFromDefaultFullTemplate',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
+            var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+            if (scope.field.label == Preferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
               element[0].selected = true;
             }
           };
@@ -60,7 +62,8 @@ define(
         'selectFieldFromYaleFieldMethodsSpring2014Template',
         function() {
           return function(scope, element, attrs) {
-            if (scope.field.label == scope.scopePreferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
+            var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+            if (scope.field.label == Preferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
               element[0].selected = true;
             }
           };

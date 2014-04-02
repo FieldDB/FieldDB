@@ -55,7 +55,7 @@ define([], function() {
     // upgrade to v1.90
     spreadsheetDatum.audioVideo = fieldDBDatum.audioVideo || [];
     if (!Array.isArray(spreadsheetDatum.audioVideo)) {
-      console.log("Upgrading audioVideo to a collection", spreadsheetDatum.audioVideo);
+      // console.log("Upgrading audioVideo to a collection", spreadsheetDatum.audioVideo);
       var audioVideoArray = [];
       if (spreadsheetDatum.audioVideo.URL) {
         var audioVideoURL = spreadsheetDatum.audioVideo.URL;
@@ -82,6 +82,22 @@ define([], function() {
           reconstructedAudioVideoItem.description = fieldDBDatum.attachmentInfo[key].description;
         }
         spreadsheetDatum.audioVideo.push(reconstructedAudioVideoItem);
+      }
+    }
+    // upgrade to v1.92
+    if(fieldDBDatum.datumTags && fieldDBDatum.datumTags.length >0){
+      console.log("Upgrading datumTags to a datumField", fieldDBDatum.datumTags);
+      var upgradedTags = spreadsheetDatum.tags ? spreadsheetDatum.tags.split(",") : [];
+      fieldDBDatum.datumTags.map(function(datumTag){
+        if(datumTag.tag){
+          upgradedTags.push(datumTag.tag.trim())
+        } else{
+          console.warn("This datum had datumTags but they were missing a tag inside", fieldDBDatum);
+        }
+      })
+      if(upgradedTags && upgradedTags.length > 0){
+        spreadsheetDatum.tags = upgradedTags.join(", ");
+        spreadsheetDatum.datumTags = [];
       }
     }
 
