@@ -103,7 +103,7 @@ function(doc) {
       }
       tags = tags.split(",");
       for (var tagIndex = 0; tagIndex < tags.length; tagIndex++) {
-        emit(tags[tagIndex], datum);
+        emit(tags[tagIndex].trim(), datum);
       }
     }
   } catch (e) {
