@@ -655,10 +655,10 @@ define(
               $rootScope.authenticated = true;
               var userRoles = response.data.roles;
               var availableDBs = {};
-              // Find available databases from db roles
+              // Find databases the user is allowed to read from db roles with reader
               for (var roleIndex = 0; roleIndex < userRoles.length; roleIndex++) {
                 var pieces = userRoles[roleIndex].split("_");
-                if (pieces.length > 1 && pieces[pieces.length - 1] === "writer") {
+                if (pieces.length > 1 && pieces[pieces.length - 1] === "reader") {
                   pieces.pop();
                   availableDBs[pieces.join("_").replace(/[\"]/g, "")] = {
                     roleIndex: roleIndex
@@ -671,7 +671,7 @@ define(
                 if (availableDBs.hasOwnProperty(dbName)) {
 
                   // Only show lingllama's grafiti corpora to lingllama, per client request
-                  if (dbName.indexOf("lingllama-communitycorpus") > -1) {
+                  if (dbName.indexOf("lingllama-communitycorpus") > -1 || dbName.indexOf("public-firstcorpus") > -1) {
                     continue;
                   }
                   scopeDBs.push(dbName);
