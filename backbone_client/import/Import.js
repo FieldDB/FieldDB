@@ -9,6 +9,7 @@ define([
     "datum/Session",
     "app/PaginatedUpdatingCollectionView",
     "xml2json",
+    "libs/textgrid",
     "OPrime"
 ], function(
     Backbone,
@@ -464,7 +465,51 @@ define([
       }
     },
     importTextGrid : function(text, self, callback){
-      alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+      console.log(textgrid);
+      // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+      var textgrid = TextGrid.textgrid2JSON(text);
+      var textgridFileName = self.get("files")[0].name;
+      if(!textgrid || !textgrid.items){
+        if(typeof callback == "function"){
+          callback();
+        }
+      }
+      var rows = [],
+        h,
+        itemIndex,
+        pointIndex,
+        intervalIndex,
+        point,
+        row,
+        interval,
+        tierName;
+      var header = ["text", "xmin", "xmax"];
+      for (itemIndex = 0; itemIndex < textgrid.items.length; itemIndex++) {
+        tierName = textgrid.items[itemIndex].name;
+        if (textgrid.items[itemIndex].intervals) {
+          for (intervalIndex = 0; intervalIndex < textgrid.items[itemIndex].intervals.length; intervalIndex++) {
+            interval = textgrid.items[itemIndex].intervals[intervalIndex];
+            row = [];
+            for ( h = 0; h < header.length; h++) {
+              if (interval[header[h]]) {
+                row.push(interval[header[h]].trim());
+              } else {
+                row.push("");
+              }
+            }
+            row.push(tierName);
+            row.push(textgridFileName);
+            if(row[0] && row[0] !== "silence"/* text is defined */){
+              rows.push(row);
+            }
+          }
+        }
+      }
+      header.push("tierName");
+      header.push("textGridFileName");
+      self.set("extractedHeader",header);
+      self.set("asCSV", rows);
+
       if(typeof callback == "function"){
         callback();
       }
