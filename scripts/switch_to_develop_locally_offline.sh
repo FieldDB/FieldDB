@@ -3,7 +3,7 @@
 echo ""
 echo ""
 echo "Put the Chrome app source into debug mode to see the debugging output."
-sed 's/OPrime.debugMode *= *false/OPrime.debugMode = true/' backbone_client/libs/OPrime.js  > output
+sed 's/OPrime.debugMode *= *false/OPrime.debugMode = false/' backbone_client/libs/OPrime.js  > output
 mv output backbone_client/libs/OPrime.js
 
 echo ""
