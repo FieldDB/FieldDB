@@ -53,6 +53,15 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
 
 echo "Making fielddb directory which will house the fielddb code, in case you need it"
 echo "export FIELDDB_HOME=$FIELDDB_HOME" >> $HOME/.bash_profile
+echo 'alias sublime="open -a /Applications/Sublime\ Text\ 2.app/ ."'  >> $HOME/.bash_profile
+if [ ! "$(command -v praat)" ]; then
+  echo "Please download Praat and put it in your Applications folder if you want to develop on the AudioWebService"
+  echo "Then add an alias for it in your ~/.bash_profile like this: "
+  echo ' echo "alias praat=/Applications/Praat.app/Contents/MacOS/Praat"  >> $HOME/.bash_profile' 
+else
+  echo "alias praat=/Applications/Praat.app/Contents/MacOS/Praat"  >> $HOME/.bash_profile
+fi
+
 mkdir $FIELDDB_HOME
 cd $FIELDDB_HOME
 mkdir -p data/logs/corpus
