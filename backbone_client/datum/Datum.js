@@ -84,6 +84,9 @@ define([
         this.set("audioVideo", new AudioVideos());
       }
       
+      if (!this.get("images")) {
+        this.set("images", new Images());
+      }
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());

@@ -366,7 +366,8 @@ define( [
     convertTableIntoDataList : function(){
       $(".import-progress").val($(".import-progress").val()+1);
       this.model.set("datumArray", []);
-
+      this.model.get("session").setConsultants(this.model.get("consultants"));
+      var consultantsInThisImportSession = [];
       /* clear out the data list views and datum views
        * 
        * Copied from SearchEditView 
@@ -573,6 +574,7 @@ define( [
             var validationStati = [];
             for(g in consultants){
               var consultantusername = consultants[g].toLowerCase();
+              consultantsInThisImportSession.push(consultantusername);
               if(!consultantusername){
                 continue;
               }
@@ -688,7 +690,7 @@ define( [
 
         this.model.get("datumArray").push(d);
       }
-      
+      this.model.set("consultants", _.unique(consultantsInThisImportSession).join(","));
       this.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
       
       $(".approve-save").removeAttr("disabled");
