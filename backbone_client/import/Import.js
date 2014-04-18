@@ -467,14 +467,15 @@ define([
     importTextGrid : function(text, self, callback){
       console.log(textgrid);
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
-      var textgrid = TextGrid.textgrid2JSON(text);
-      var textgridFileName = self.get("files")[0].name;
-      if(!textgrid || !textgrid.items){
-        if(typeof callback == "function"){
+      var textgrid = TextGrid.textgridToIGT(text);
+      var audioFileName = self.get("files")[0] ?  self.get("files")[0].name : "copypastedtextgrid_unknownaudio";
+      audioFileName = audioFileName.replace(/\.textgrid/i, "");
+      if (!textgrid || !textgrid.intervalsByXmin) {
+        if (typeof callback == "function") {
           callback();
         }
       }
-      var rows = [],
+      var matrix = [],
         h,
         itemIndex,
         pointIndex,
@@ -483,34 +484,67 @@ define([
         row,
         interval,
         tierName;
-      var header = ["text", "xmin", "xmax"];
-      for (itemIndex = 0; itemIndex < textgrid.items.length; itemIndex++) {
-        tierName = textgrid.items[itemIndex].name;
-        if (textgrid.items[itemIndex].intervals) {
-          for (intervalIndex = 0; intervalIndex < textgrid.items[itemIndex].intervals.length; intervalIndex++) {
-            interval = textgrid.items[itemIndex].intervals[intervalIndex];
-            row = [];
-            for ( h = 0; h < header.length; h++) {
-              if (interval[header[h]]) {
-                row.push(interval[header[h]].trim());
-              } else {
-                row.push("");
-              }
-            }
-            row.push(tierName);
-            row.push(textgridFileName);
-            if(row[0] && row[0] !== "silence"/* text is defined */){
-              rows.push(row);
-            }
+      var header = [];
+      var consultants = [];
+      for (itemIndex in textgrid.intervalsByXmin) {
+        if (!textgrid.intervalsByXmin.hasOwnProperty(itemIndex)) {
+          continue;
+        }
+        if (textgrid.intervalsByXmin[itemIndex]) {
+          row = {};
+          for (intervalIndex = 0; intervalIndex < textgrid.intervalsByXmin[itemIndex].length; intervalIndex++) {
+            interval = textgrid.intervalsByXmin[itemIndex][intervalIndex];
+            row.startTime = row.startTime ? row.startTime : interval.xmin;
+            row.endTime = row.endTime ? row.endTime : interval.xmax;
+            row.utterance = row.utterance ? row.utterance : interval.text.trim();
+            row.modality = "speech";
+            row.tier = interval.tierName;
+            row.speakers = interval.speaker;
+            row.CheckedWithConsultant = interval.speaker;
+            consultants.push(row.speakers);
+            row[interval.tierName] = interval.text;
+            header.push(interval.tierName);
           }
+          matrix.push(row);
         }
       }
-      header.push("tierName");
-      header.push("textGridFileName");
-      self.set("extractedHeader",header);
+      header = _.unique(header);
+      consultants = _.unique(consultants);
+      if (consultants.length > 0) {
+        self.set("consultants", consultants.join(","));
+      } else {
+        self.set("consultants", "Unknown");
+      }
+      header = header.concat( ["utterance", "tier", "speakers", "CheckedWithConsultant", "startTime", "endTime", "modality"]);
+      var rows = [];
+      for (var d in matrix) {
+        var cells = [];
+        //loop through all the column headings, find the data for that header and put it into a row of cells
+        for (var h in header) {
+          var cell = matrix[d][header[h]];
+          if (cell) {
+            cells.push(cell);
+          } else {
+            //fill the cell with a blank if that datum didn't have a that column
+            cells.push("");
+          }
+        }
+        //if the datum has any text, add it to the table
+        if(cells.length >= 7 && cells.slice(0, cells.length - 7).join("").replace(/[0-9.]/g, "").length > 0 && cells[cells.length - 7] !== "silent"){
+          cells.push(audioFileName);
+          rows.push(cells);
+        }else{
+          // console.log("This row has only the default columns, not text or anything interesting.");
+        }
+      }
+      if (rows == []) {
+        rows.push("");
+      }
+      header.push("audioFileName");
+      self.set("extractedHeader", header);
       self.set("asCSV", rows);
 
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
