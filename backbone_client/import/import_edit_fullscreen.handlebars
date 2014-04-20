@@ -22,6 +22,17 @@
 
 	<div class="well" id="import-first-step">
 		<span>{{{locale_Import_First_Step}}}</span>
+		<iframe class="well" height="5em" width="100%"  frameborder="0" ALLOWTRANSPARENCY="true" srcdoc='
+			<form id="uploadAudioForTextGridform" enctype="multipart/form-data" action="{{audioServerUrl}}/upload/extract/utterances" method="post">
+				<input type="file" multiple="true" name="files" value="Audio/Video files to be imported"/>
+				<input type="submit" value="Import audio/video/text file(s)" />
+				<input hidden type="text" name="token" value="{{audiouploadtoken}}"/>
+				<input hidden type="text" name="username" value="{{username}}"/>
+				<input hidden type="text" name="dbname" value="{{pouchname}}"/>
+				<input hidden type="text" name="returnTextGrid" value="true"/>
+			</form>
+			'>
+		</iframe>
 		<textarea
 			class="export-large-textarea  drop-zone" placeholder="{{locale_Drag_and_Drop_Placeholder}}">{{rawText}}</textarea>
 
