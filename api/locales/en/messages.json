@@ -325,7 +325,7 @@
     "message" : "Everyone's data is different. <a href='http://www.facebook.com/LingSyncApp'>You might know some fellow users who might be able to help you import yours: </a>"
   }, 
   "locale_Import_First_Step" : {
-    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area. You can edit the data inside the text area.</p>"
+    "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area, or select audio/video file(s) from your computer. Yes, you can edit the data inside the text area.</p>"
   },
     "locale_Import_Second_Step" : {
     "message" : "<p>Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.</p>"
