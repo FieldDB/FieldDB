@@ -642,7 +642,61 @@ define([
       return queryTokens;
     },
     getDisplayableFieldForActivitiesEtc : function(){
-      return  this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+      return  this.get("datumFields").where({label: "utterance"})[0].get("mask");
+    },
+    getAudioFileName: function() {
+      var filename = this.get("datumFields").where({
+        label: "audioFileName"
+      });
+      if (filename.length > 0) {
+        filename = filename[0].get("mask");
+      } else if (this.get("audioVideo")) {
+        //TODO test this
+        filename = this.get("audioVideo").get(0).filename;
+      }
+      return filename;
+    },
+
+    getAudioFileBaseName: function() {
+      var filename = this.getAudioFileName();
+      filename = filename.substring(0, filename.lastIndexOf("."));
+      return filename;
+    },
+
+    playAudio: function(audioElementId, elementToDisable) {
+      var startTime = this.get("datumFields").where({
+        label: "startTime"
+      });
+      if (startTime.length > 0) {
+        startTime = startTime[0].get("mask");
+      } else {
+        startTime = 0.0;
+      }
+      var endTime = this.get("datumFields").where({
+        label: "endTime"
+      });
+      if (endTime.length > 0) {
+        endTime = endTime[0].get("mask");
+      } else {
+        endTime = 0.0;
+      }
+      startTime = parseFloat(startTime,10);
+      endTime = parseFloat(endTime,10);
+      if (endTime > startTime || endTime === 0) {  
+        // elementToDisable.disabled = true;
+        // $(elementToDisable).addClass("disabled");
+        console.log(audioElementId+" "+startTime+" "+endTime);
+        if (!document.getElementById(audioElementId)) {
+          var sourceurl = OPrime.audioUrl + "/" + this.get("pouchname") + "/" + this.getAudioFileName();
+          console.log(sourceurl);
+          $(document.body).append('<audio id="' + audioElementId + '" src="' + sourceurl + '"  controls=""  />');
+        }
+        OPrime.playIntervalAudioFile(audioElementId, startTime, endTime, function() {
+          console.log("played interval");
+          // delete elementToDisable.disabled;
+          // $(elementToDisable).removeClass("disabled");
+        });
+      }
     },
     /**
      * Clone the current Datum and return the clone. The clone is put in the current

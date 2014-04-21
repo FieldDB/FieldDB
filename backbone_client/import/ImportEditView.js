@@ -1,6 +1,7 @@
 define( [ 
     "backbone",
     "handlebars",
+    "audio_video/AudioVideoReadView",
     "import/Import",
     "data_list/DataList",
     "data_list/DataListEditView",
@@ -13,11 +14,13 @@ define( [
     "datum/Session",
     "datum/SessionEditView",
     "app/PaginatedUpdatingCollectionView",
+    "app/UpdatingCollectionView",
     "OPrime"
 
 ], function(
     Backbone,
     Handlebars, 
+    AudioVideoReadView,
     Import,
     DataList,
     DataListEditView,
@@ -29,7 +32,8 @@ define( [
     DatumTag,
     Session,
     SessionEditView,
-    PaginatedUpdatingCollectionView
+    PaginatedUpdatingCollectionView,
+    UpdatingCollectionView
 
 ) {
   /**
@@ -38,6 +42,14 @@ define( [
   var ImportEditView = Backbone.View.extend({
     initialize : function(){
       this.model.bind("change:asCSV", this.render, this);
+
+      this.audioVideoView = new UpdatingCollectionView({
+        collection           : this.model.get("audioVideo"),
+        childViewConstructor : AudioVideoReadView,
+        childViewTagName     : 'li'
+      });
+      
+
       this._draghoverClassAdded = false;
       var datumToCauseCorpusToUpdate = new Datum();
     },
@@ -122,7 +134,7 @@ define( [
         data.append("pouchname", this.model.get("pouchname"));
         data.append("username", window.app.get("authentication").get("userPrivate").get("username"));
         data.append("returnTextGrid", true);
-
+        this.model.get("audioVideo").reset();
         var self = this;
         $.ajax({
           url: actionurl,
@@ -149,6 +161,7 @@ define( [
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. "+instructions);
                 } else {
+                  self.model.addAudioVideoFile(OPrime.audioUrl + "/" + self.model.get("pouchname") + "/" + results.files[fileIndex].fileBaseName + '.wav');
                   self.model.downloadTextGrid(results.files[fileIndex]);
                 }
               }
@@ -309,6 +322,11 @@ define( [
 
       $(this.el).html(this.template(jsonToRender));
       
+      // Display audioVideo View
+      this.audioVideoView.el = this.$(".audio_video_ul");
+      // this.audioVideoView.collection = this.model.get("audioVideo");
+      this.audioVideoView.render();
+
       if(this.dataListView != undefined){
         this.dataListView.format = "import";
         this.dataListView.render();
@@ -334,7 +352,7 @@ define( [
         this.renderDatumFieldsLabels();
         this.showSecondStep();
       }
-      
+
       return this;
     },
     renderDatumFieldsLabels : function(){
