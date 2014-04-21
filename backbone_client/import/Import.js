@@ -1,6 +1,8 @@
 define([ 
     "backbone",
     "handlebars",
+    "audio_video/AudioVideo",
+    "audio_video/AudioVideos",
     "data_list/DataList",
     "data_list/DataListEditView",
     "datum/DatumReadView",
@@ -14,6 +16,8 @@ define([
 ], function(
     Backbone,
     Handlebars,
+    AudioVideo,
+    AudioVideos,
     DataList,
     DataListEditView,
     DatumReadView,
@@ -50,6 +54,7 @@ define([
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
+      this.set("audioVideo", new AudioVideos());
     },
     fillWithDefaults : function(){
       if(this.get("datumFields") == undefined){
@@ -492,7 +497,7 @@ define([
             var message = " <br/>Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
             self.set("status", self.get("status") + message);
             window.appView.toastUser(message, "alert-info", "Import:");
-            self.set("rawText", self.get("rawText").trim() + "\n\n\nFile name = " + fileDetails.name + "\n" + results);
+            self.set("rawText", self.get("rawText").trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".wav\n" + results);
             self.importTextGrid(results, self, null);
           } else {
             console.log(results);
@@ -522,6 +527,17 @@ define([
           }
         }
       });
+    },
+
+    addAudioVideoFile: function(url) {
+      if (!this.get("audioVideo")) {
+        this.set("audioVideo", new AudioVideos())
+      }
+      this.get("audioVideo").add(new AudioVideo({
+        filename: url.substring(url.lastIndexOf("/") + 1),
+        URL: url,
+        description: "File from import"
+      }));
     },
 
     importTextGrid : function(text, self, callback){

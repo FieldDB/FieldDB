@@ -120,6 +120,14 @@ define([
           window.appView.datumsEditView.prependDatum(d);
         }
       },
+      "click .play-audio": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();//This breaks the checkbox
+        }
+        var audioFileName = this.model.getAudioFileName();
+        this.model.playAudio("audiovideo_"+audioFileName, e.target);
+      },
       "click .datum-checkboxes": function(e){
         if(e){
           e.stopPropagation();

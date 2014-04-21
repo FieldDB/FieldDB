@@ -433,7 +433,7 @@ OPrime.stopAudioFile = function(divid, callback, callingcontext) {
   } else {
     this.debug("Stopping Audio via HTML5");
     document.getElementById(divid).pause();
-    document.getElementById(divid).currentTime = 0;
+    document.getElementById(divid).currentTime = 0.0;
   }
   if (typeof callback == "function") {
     callback();
@@ -451,26 +451,65 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     Android.playIntervalOfAudio(audiourl, startime, endtime);
   } else {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
-    document.getElementById(divid).pause();
-    document.getElementById(divid).currentTime = startime;
-    if (OPrime.debugMode) OPrime.debug("Cueing audio to "
-        + document.getElementById(divid).currentTime);
-    document.getElementById(divid).play();
-    OPrime.playingInterval = true;
-    document.getElementById(divid).addEventListener("timeupdate", function() {
-      if (this.currentTime >= endtime && OPrime.playingInterval) {
-        if (OPrime.debugMode) OPrime.debug("CurrentTime: " + this.currentTime);
-        this.pause();
-        OPrime.playingInterval = false; /*
-                                         * workaround for not being able to
-                                         * remove events
-                                         */
+
+    var audioElement = document.getElementById(divid);
+    if(!audioElement){
+      console.log("Audio element does not exist.");
+      return;
+    }
+    var audioElementToPlaySelf = audioElement;
+    var startTimeSelf= startime;
+    window.actuallyPlayAudio = function(){
+      audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
+      OPrime.playingInterval = true;
+      audioElementToPlaySelf.currentTime = startTimeSelf;
+      console.log("Cueing audio to " + audioElementToPlaySelf.currentTime);
+      // audioElementToPlaySelf.load();
+      audioElementToPlaySelf.play();
+    };
+    if(window.audioEndListener){
+      window.audioEndListener();
+    }
+    window.audioEndListener = function(){
+      OPrime.playingInterval = false;
+      audioElementToPlaySelf.removeEventListener('ended', window.audioEndListener);
+      audioElementToPlaySelf.removeEventListener('timeupdate', window.audioTimeUpdateListener);
+      audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
+      audioElementToPlaySelf.currentTime = startTimeSelf;
+      audioElementToPlaySelf.load();
+      console.log("Cueing audio to starttime " + audioElementToPlaySelf.currentTime);
+      if (typeof callback == "function") {
+        callback();
       }
-    });
+    };
+    window.audioTimeUpdateListener = function() {
+      if (this.currentTime >= endtime && OPrime.playingInterval) {
+        console.log("Ending at: " + this.currentTime)
+        this.pause();
+        window.audioEndListener();
+      }
+    };
+    audioElement.removeEventListener('canplaythrough', window.actuallyPlayAudio);
+    audioElement.removeEventListener('timeupdate', window.audioTimeUpdateListener);
+    audioElement.removeEventListener('ended', window.audioEndListener);
+    audioElement.pause();
+    if (endtime) {
+      audioElement.addEventListener("timeupdate", window.audioTimeUpdateListener);
+    }
+    audioElement.addEventListener('ended', window.audioEndListener);
+    audioElement.addEventListener('canplaythrough', window.actuallyPlayAudio);
+    try{
+      // audioElement.currentTime = startime;
+      // console.log("Cueing audio to " + audioElement.currentTime);
+      audioElement.load();
+      // audioElement.currentTime = startime;
+      // console.log("Cueing audio again to " + audioElement.currentTime);
+    } catch(e){
+      console.log(e);
+    }
+
   }
-  if (typeof callback == "function") {
-    callback();
-  }
+  
 }
 OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     callbackRecordingCompleted, callingcontext) {
