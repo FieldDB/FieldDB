@@ -92,6 +92,7 @@ define([
         callback();
       }
     },
+
     /**
      * This function tries to guess if you have \n or \r as line endings
      * and then tries to determine if you have "surounding your text".
@@ -464,6 +465,65 @@ define([
         callback();
       }
     },
+
+
+    downloadTextGrid: function(fileDetails){
+      var textridUrl =  OPrime.audioUrl + "/" + this.get("pouchname") + "/" + fileDetails.fileBaseName + ".TextGrid";
+      var self = this;
+      $.ajax({
+        url: textridUrl,
+        type: 'get',
+        // dataType: 'text',
+        success: function(results) {
+          if (results) {
+            fileDetails.textgrid = results;
+            var syllables = "unknown";
+            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.syllableCount) {
+              syllables = fileDetails.syllablesAndUtterances.syllableCount;
+            }
+            var pauses = "unknown";
+            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.pauseCount) {
+              pauses = parseInt(fileDetails.syllablesAndUtterances.pauseCount,10);
+            }
+            var utteranceCount = 1;
+            if(pauses > 0){
+              utteranceCount = pauses +2;
+            }
+            var message = " <br/>Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
+            self.set("status", self.get("status") + message);
+            window.appView.toastUser(message, "alert-info", "Import:");
+            self.set("rawText", self.get("rawText").trim() + "\n\n\nFile name = " + fileDetails.name + "\n" + results);
+            self.importTextGrid(results, self, null);
+          } else {
+            console.log(results);
+            fileDetails.textgrid = "Error result was empty. " + results;
+          }
+        },
+        error: function(response) {
+          var reason = {};
+          if (response && response.responseJSON) {
+            reason = response.responseJSON;
+          } else {
+            var message = "Error contacting the server. ";
+            if (response.status >= 500) {
+              message = message + " Please report this error to us at support@lingsync.org ";
+            } else {
+              message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
+            }
+            reason = {
+              status: response.status,
+              userFriendlyErrors: [message + response.status]
+            };
+          }
+          console.log(reason);
+          if (reason && reason.userFriendlyErrors) {
+            self.set("status", fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" "));
+            window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
+          }
+        }
+      });
+    },
+
     importTextGrid : function(text, self, callback){
       console.log(textgrid);
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
@@ -500,6 +560,7 @@ define([
             row.modality = "speech";
             row.tier = interval.tierName;
             row.speakers = interval.speaker;
+            row.audioFileName = interval.fileName || audioFileName;
             row.CheckedWithConsultant = interval.speaker;
             consultants.push(row.speakers);
             row[interval.tierName] = interval.text;
@@ -515,7 +576,7 @@ define([
       } else {
         self.set("consultants", "Unknown");
       }
-      header = header.concat( ["utterance", "tier", "speakers", "CheckedWithConsultant", "startTime", "endTime", "modality"]);
+      header = header.concat( ["utterance", "tier", "speakers", "CheckedWithConsultant", "startTime", "endTime", "modality", "audioFileName"]);
       var rows = [];
       for (var d in matrix) {
         var cells = [];
@@ -530,8 +591,8 @@ define([
           }
         }
         //if the datum has any text, add it to the table
-        if(cells.length >= 7 && cells.slice(0, cells.length - 7).join("").replace(/[0-9.]/g, "").length > 0 && cells[cells.length - 7] !== "silent"){
-          cells.push(audioFileName);
+        if(cells.length >= 8 && cells.slice(0, cells.length - 8).join("").replace(/[0-9.]/g, "").length > 0 && cells[cells.length - 8] !== "silent"){
+          // cells.push(audioFileName);
           rows.push(cells);
         }else{
           // console.log("This row has only the default columns, not text or anything interesting.");
@@ -540,7 +601,7 @@ define([
       if (rows == []) {
         rows.push("");
       }
-      header.push("audioFileName");
+      // header.push("audioFileName");
       self.set("extractedHeader", header);
       self.set("asCSV", rows);
 
@@ -677,6 +738,12 @@ define([
         }else if(fileExtension == "tex"){
           importType.latex.confidence++;
         }else if(fileExtension == "textgrid"){
+          importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "mov"){
+          importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "wav"){
+          importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "mp3"){
           importType.praatTextgrid.confidence++;
         }
       }
