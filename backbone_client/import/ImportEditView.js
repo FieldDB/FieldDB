@@ -135,8 +135,10 @@ define( [
           success: function(results) {
             if (results && results.status === 200) {
               self.model.set("uploadDetails", results);
+              self.model.set("files", results.files);
               self.model.set("status", "File(s) uploaded and utterances were extracted.");
               var messages = [];
+              self.model.set("rawText",""); 
               /* Check for any textgrids which failed */
               for (var fileIndex = 0; fileIndex < results.files.length; fileIndex++) {
                 if (results.files[fileIndex].textGridStatus >= 400) {
@@ -147,7 +149,7 @@ define( [
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. "+instructions);
                 } else {
-                  // TODO fetch the textgrid 
+                  self.model.downloadTextGrid(results.files[fileIndex]);
                 }
               }
               if (messages.length > 0) {
@@ -301,7 +303,7 @@ define( [
       jsonToRender.locale_Save_And_Import = Locale.get("locale_Save_And_Import");
       jsonToRender.locale_percent_completed = Locale.get("locale_percent_completed");
 
-      jsonToRender.audioServerUrl = "https://localhost:3184";
+      jsonToRender.audioServerUrl = OPrime.audioUrl;
       // jsonToRender.username = window.app.get("authentication").get("userPrivate").get("username");
       // jsonToRender.audiouploadtoken = "testingaudiotoken";
 
