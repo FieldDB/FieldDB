@@ -106,6 +106,90 @@ define( [
         }
         window.location.href = "#render/true";
       },
+      "submit #uploadAudioForTextGridform": function(e) {
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+
+        //get the action-url of the form
+        var actionurl = e.currentTarget.action;
+        var data = new FormData();
+        jQuery.each($('#uploadAudioForTextGridformFiles')[0].files, function(i, file) {
+          data.append(i, file);
+        });
+        data.append("token", "testinguploadtoken");
+        data.append("pouchname", this.model.get("pouchname"));
+        data.append("username", window.app.get("authentication").get("userPrivate").get("username"));
+        data.append("returnTextGrid", true);
+
+        var self = this;
+        $.ajax({
+          url: actionurl,
+          type: 'post',
+          // dataType: 'json',
+          cache: false,
+          contentType: false,
+          processData: false,
+          data: data,
+          success: function(results) {
+            if (results && results.status === 200) {
+              self.model.set("uploadDetails", results);
+              self.model.set("status", "File(s) uploaded and utterances were extracted.");
+              var messages = [];
+              /* Check for any textgrids which failed */
+              for (var fileIndex = 0; fileIndex < results.files.length; fileIndex++) {
+                if (results.files[fileIndex].textGridStatus >= 400) {
+                  console.log(results.files[fileIndex]);
+                  var instructions = instructions = results.files[fileIndex].textGridInfo;
+                  if(results.files[fileIndex].textGridStatus >= 500){
+                    instructions = " Please report this error to us at support@lingsync.org ";
+                  }
+                  messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. "+instructions);
+                } else {
+                  // TODO fetch the textgrid 
+                }
+              }
+              if (messages.length > 0) {
+                self.model.set("status", messages.join(", "));
+                $(self.el).find(".status").html(self.model.get("status"));
+                window.appView.toastUser(messages.join(", "), "alert-danger", "Import:");
+              }
+            } else {
+              console.log(results);
+              var message = "Upload might have failed to complete processing on your file(s). Please report this error to us at support@lingsync.org ";
+              self.model.set("status", message + ": " + JSON.stringify(results));
+              window.appView.toastUser(message, "alert-danger", "Import:");
+            }
+            $(self.el).find(".status").html(self.model.get("status"));
+          },
+          error: function(response) {
+            var reason = {};
+            if (response && response.responseJSON) {
+              reason = response.responseJSON;
+            } else {
+              var message = "Error contacting the server. ";
+              if (response.status >= 500) {
+                message = message + " Please report this error to us at support@lingsync.org ";
+              } else {
+                message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
+              }
+              reason = {
+                status: response.status,
+                userFriendlyErrors: [message + response.status]
+              };
+            }
+            console.log(reason);
+            if (reason && reason.userFriendlyErrors) {
+              self.model.set("status", "Upload error: " + reason.userFriendlyErrors.join(" "));
+              window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
+              $(self.el).find(".status").html(self.model.get("status"));
+            }
+          }
+        });
+        this.model.set("status", "Contacting server...");
+        $(this.el).find(".status").html(this.model.get("status"));
+      },
       /* event listeners for the drag and drop import of files */
       "dragover .drop-zone" : "_dragOverEvent",
       "dragenter .drop-zone" : "_dragEnterEvent",
@@ -217,6 +301,9 @@ define( [
       jsonToRender.locale_Save_And_Import = Locale.get("locale_Save_And_Import");
       jsonToRender.locale_percent_completed = Locale.get("locale_percent_completed");
 
+      jsonToRender.audioServerUrl = "https://localhost:3184";
+      // jsonToRender.username = window.app.get("authentication").get("userPrivate").get("username");
+      // jsonToRender.audiouploadtoken = "testingaudiotoken";
 
       $(this.el).html(this.template(jsonToRender));
       
