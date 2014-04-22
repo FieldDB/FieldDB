@@ -385,7 +385,6 @@ define( [
       }catch(e){
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
-
       
       return this;
     }, 

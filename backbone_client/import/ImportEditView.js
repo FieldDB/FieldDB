@@ -43,7 +43,6 @@ define( [
     initialize : function(){
       this.model.bind("change:asCSV", this.render, this);
 
-
       this._draghoverClassAdded = false;
       var datumToCauseCorpusToUpdate = new Datum();
     },
@@ -341,7 +340,7 @@ define( [
         this.renderDatumFieldsLabels();
         this.showSecondStep();
       }
-
+      
       return this;
     },
     renderDatumFieldsLabels : function(){

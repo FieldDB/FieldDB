@@ -123,7 +123,7 @@ define([
       "click .play-audio": function(e){
         if(e){
           e.stopPropagation();
-          e.preventDefault();//This breaks the checkbox
+          e.preventDefault();
         }
         this.playAudio(e);
       },

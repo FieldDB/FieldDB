@@ -523,7 +523,6 @@ define([
       }
     },
     
-    
     /*
      * this function can be used to play datum automatically
      */
