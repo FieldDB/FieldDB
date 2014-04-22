@@ -41,7 +41,8 @@ How do I enter data?
 How do I import data?
 </div>
 <div class="answer">
-  You can import data (csv, plain text, toolbox and more) using the <a target="_blank" href="https://corpus.lingsync.org/public-firstcorpus/_design/pages/corpus.html">Prototype app</a>. How-to <a href="https://www.youtube.com/watch?v=Gcc0CFhGLfI&list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT">video</a>. 
+  You can import entire Elicitation Session by uploading an audio/video (any format works: .wav, .aiff, .mp3, .ogg, .mov, .avi, .3gp, .mp4 etc) 
+or text data (csv, plain text, TextGrid, toolbox and more) using the <a target="_blank" href="https://corpus.lingsync.org/public-firstcorpus/_design/pages/corpus.html">Prototype app</a>. How-to <a href="https://www.youtube.com/watch?v=Gcc0CFhGLfI&list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT">video</a>. These import functionality will be moved to the corpus admin pages when it becomes a priority.
 </div>
 
 
@@ -69,20 +70,20 @@ How do I record audio, upload audio, or add/view comments?
 How do I delete a record or audio file?
 </div>
 <div class="answer">
-  To delete a record, click the relevant record and then click the "Delete" button. To delete an audio file, click on the "X" next to the file. In both cases, you will be prompted to verify the deletion. Note that deleting records and files is irreversible! 
+  To delete a record, click the relevant record and then click the "Delete" button. To delete an audio file, click on the "X" next to the file. In both cases, you will be prompted to verify the deletion. Note that deleting records and files only a flag and does not result in destroying data. 
 </div>
 <div class="question">
 Is my data private and protected?
 </div>
 <div class="answer">
-  Yes! For more on our policies with respect to your data, please see <a target="_blank" href="https://www.lingsync.org/">our main site</a>.
+  Yes! For more on our policies with respect to your data, please see <a target="_blank" href="https://www.lingsync.org/privacy.html">our web site</a>.
 </div>
 
 <div class="question">
 How do I export data?
 </div>
 <div class="answer">
-  You can export your entire database as <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/get_datum_fields">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_view/get_datum_fields">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target="_blank" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}">your corpus' own webpage</a> You can also export lists of data in LaTeX using the <a target="_blank" href="https://corpus.lingsync.org/public-firstcorpus/_design/pages/corpus.html">Prototype app</a>. 
+  You can export your entire database as <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/get_datum_fields">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_view/get_datum_fields">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target="_blank" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target="_blank" href="https://corpus.lingsync.org/public-firstcorpus/_design/pages/corpus.html">Prototype app</a>. 
   <p>You can also download a <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/word_list?group=true">word list</a>, <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/lexicon_create_tuples?group=true">glossed word list</a> and a <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true">morphemes list</a>, among other things. If you're curious about other exports you can do, contact us and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>
 </div>
 
@@ -90,7 +91,7 @@ How do I export data?
 Contact
 </div>
 <div class="answer">
-  For any other questions or comments, you may <a target="_blank" href="https://www.lingsync.org/#/contact">send us an email</a> or <a target="_blank" href="https://www.facebook.com/LingSyncApp">ask other users on Facebook</a>.
+  For any other questions or comments, you may <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">send us an email</a> or <a target="_blank" href="https://www.facebook.com/LingSyncApp">ask other users on Facebook</a>.
 </div>
 
 <small>LingSync v{{appVersion}}</small>
