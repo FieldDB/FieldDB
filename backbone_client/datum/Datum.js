@@ -650,15 +650,19 @@ define([
       });
       if (filename.length > 0) {
         filename = filename[0].get("mask");
-      } else if (this.get("audioVideo")) {
-        //TODO test this
-        filename = this.get("audioVideo").get(0).filename;
+      } else if (this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0]) {
+        filename = this.get("audioVideo").models[0].get("filename");
+      } else {
+        filename = null;
       }
       return filename;
     },
 
     getAudioFileBaseName: function() {
       var filename = this.getAudioFileName();
+      if(!filename){
+        return;
+      }
       filename = filename.substring(0, filename.lastIndexOf("."));
       return filename;
     },
@@ -689,6 +693,9 @@ define([
         if (!document.getElementById(audioElementId)) {
           var sourceurl = OPrime.audioUrl + "/utterances/" + this.get("pouchname") + "/" + this.getAudioFileBaseName()+"/"+ this.getAudioFileName();
           console.log(sourceurl);
+          if(this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0] && this.get("audioVideo").models[0].get("URL")) {
+            sourceurl = this.get("audioVideo").models[0].get("URL");
+          }
           $(document.body).append('<audio id="' + audioElementId + '" src="' + sourceurl + '"  controls=""  />');
         }
         OPrime.playIntervalAudioFile(audioElementId, startTime, endTime, function() {

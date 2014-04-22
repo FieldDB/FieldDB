@@ -125,8 +125,7 @@ define([
           e.stopPropagation();
           e.preventDefault();//This breaks the checkbox
         }
-        var audioFileName = this.model.getAudioFileName();
-        this.model.playAudio("audiovideo_"+audioFileName, e.target);
+        this.playAudio(e);
       },
       "click .datum-checkboxes": function(e){
         if(e){
@@ -177,6 +176,11 @@ define([
       jsonToRender.locale_LaTeX = Locale.get("locale_LaTeX");
       jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get("locale_Plain_Text_Export_Tooltip");
       
+      jsonToRender.hasAudio = false;
+      if(this.model.getAudioFileName()){
+        jsonToRender.hasAudio = true;
+      }
+
       if(jsonToRender.decryptedMode){
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
       }else{
@@ -525,7 +529,17 @@ define([
     laTeXiT : function() {
       return "";
     },
-    
+
+    playAudio : function(e){
+      var audioFileName = this.model.getAudioFileName();
+      if (audioFileName) {
+        this.model.playAudio("audiovideo_" + audioFileName, e.target);
+      }else{
+        e.target.disabled = true;
+        $(e.target).addClass("disabled");
+      }
+    },
+
     /**
      * The copyDatum function copies all datum fields to the clipboard.
      */
