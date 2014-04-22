@@ -1045,7 +1045,8 @@ define( [
               value = file.mtime ? new Date(file.mtime).toLocaleDateString() : "n/a";
             }
             return value;
-          }).join(", ");
+          });
+          filemodified = _.unique(filemodified).join(", ");
         } catch (e) {
           //do nothing
         }
