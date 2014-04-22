@@ -21,7 +21,9 @@ define([
     defaults : {
       URL : "",
 //      filename : "",
-      type: "audio" //or video
+      type: "audio", //or video,
+      // startTime: 0,
+      // endTime: 0
     },
     
     // Internal models: used by the parse function

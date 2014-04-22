@@ -1,7 +1,7 @@
 define( [ 
     "backbone",
     "handlebars",
-    "audio_video/AudioVideoReadView",
+    "audio_video/AudioVideo",
     "import/Import",
     "data_list/DataList",
     "data_list/DataListEditView",
@@ -20,7 +20,7 @@ define( [
 ], function(
     Backbone,
     Handlebars, 
-    AudioVideoReadView,
+    AudioVideo,
     Import,
     DataList,
     DataListEditView,
@@ -43,12 +43,6 @@ define( [
     initialize : function(){
       this.model.bind("change:asCSV", this.render, this);
 
-      this.audioVideoView = new UpdatingCollectionView({
-        collection           : this.model.get("audioVideo"),
-        childViewConstructor : AudioVideoReadView,
-        childViewTagName     : 'li'
-      });
-      
 
       this._draghoverClassAdded = false;
       var datumToCauseCorpusToUpdate = new Datum();
@@ -322,11 +316,6 @@ define( [
 
       $(this.el).html(this.template(jsonToRender));
       
-      // Display audioVideo View
-      this.audioVideoView.el = this.$(".audio_video_ul");
-      // this.audioVideoView.collection = this.model.get("audioVideo");
-      this.audioVideoView.render();
-
       if(this.dataListView != undefined){
         this.dataListView.format = "import";
         this.dataListView.render();
@@ -508,7 +497,9 @@ define( [
       var filename = " typing/copy paste into text area";
       var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
       try {
-        filename = this.model.get("files")[0].name;
+        filename = this.model.get("files").map(function(file){
+          return file.name;
+        }).join(", ");
         descript = "This is the data list which results from the import of these file(s). " + this.model.get("fileDetails");
       }catch(e){
         //do nothing
@@ -518,7 +509,8 @@ define( [
         model : new DataList({
           "pouchname" : window.app.get("corpus").get("pouchname"),
           "title" : "Data from "+filename,
-          "description": descript
+          "description": descript,
+          "audioVideo": this.model.get("audioVideo")
         }),
       }); 
       this.dataListView.format = "import";
@@ -654,6 +646,14 @@ define( [
           datumfields[x].value = "";
         }
         var fields = new DatumFields(datumfields);
+        var audioVideo = null;
+        var audioFileDescriptionsKeyedByFilename = {};
+        this.model.get("files").map(function(fileDetails){
+          var details = JSON.parse(JSON.stringify(fileDetails));
+          delete details.textgrid;
+          audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".wav"] = details;
+        });
+
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
@@ -776,7 +776,25 @@ define( [
               var uniqueStati = _.unique(validationStatus.trim().split(" "));
               n.set("mask", uniqueStati.join(" "));
             }
-          } else{
+          } else if (index == "audioFileName" ) {
+            if(!audioVideo){
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("filename", value);
+            audioVideo.set("URL", OPrime.audioUrl + "/" + window.app.get("corpus").get("pouchname") + "/" + value);
+            audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value].description);
+            audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
+          } else if (index == "startTime") {
+            if(!audioVideo){
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("startTime", value);
+          } else if(index == "endTime" ) {
+            if(!audioVideo){
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("endTime", value);
+          } else {
             var knownlowercasefields = "utterance,gloss,morphemes,translation".split();
             if(knownlowercasefields.indexOf(index.toLowerCase()) > -1){
               index = index.toLowerCase();
@@ -788,6 +806,9 @@ define( [
           }
         });
         d.set("datumFields", fields);
+        if (audioVideo) {
+          d.get("audioVideo").add(audioVideo);
+        }
         // var states = window.app.get("corpus").get("datumStates").clone();
         // d.set("datumStates", states);
         d.set("session", this.model.get("session"));
@@ -1019,9 +1040,14 @@ define( [
         
         var filemodified = JSON.stringify(new Date());
         try {
-          filemodified = this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
-              : 'n/a';
-        }catch(e){
+          filemodified = this.model.get("files").map(function(file) {
+            var value = file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : "";
+            if(!value){
+              value = file.mtime ? new Date(file.mtime).toLocaleDateString() : "n/a";
+            }
+            return value;
+          }).join(", ");
+        } catch (e) {
           //do nothing
         }
         
