@@ -1,7 +1,7 @@
 {{#if withCheckbox}}
 	<div class="span1">
 	  <input type="checkbox" class="datum-checkboxes"></input>
-	  <button class="btn btn-mini btn-info play-audio"><i class="icon-bullhorn"></i></button>
+	  {{#if hasAudio}}<i class="icon-bullhorn play-audio"></i>{{/if}}
 	</div>
 	<div class="span1">
 	  {{#if judgement}}

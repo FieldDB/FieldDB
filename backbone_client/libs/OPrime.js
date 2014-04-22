@@ -463,7 +463,7 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
       audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
       OPrime.playingInterval = true;
       audioElementToPlaySelf.currentTime = startTimeSelf;
-      console.log("Cueing audio to " + audioElementToPlaySelf.currentTime);
+      console.log("Cueing audio to " + audioElementToPlaySelf.currentTime +", supposed to be "+startTimeSelf);
       // audioElementToPlaySelf.load();
       audioElementToPlaySelf.play();
     };
