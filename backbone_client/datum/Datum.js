@@ -687,7 +687,7 @@ define([
         // $(elementToDisable).addClass("disabled");
         console.log(audioElementId+" "+startTime+" "+endTime);
         if (!document.getElementById(audioElementId)) {
-          var sourceurl = OPrime.audioUrl + "/" + this.get("pouchname") + "/" + this.getAudioFileName();
+          var sourceurl = OPrime.audioUrl + "/utterances/" + this.get("pouchname") + "/" + this.getAudioFileBaseName()+"/"+ this.getAudioFileName();
           console.log(sourceurl);
           $(document.body).append('<audio id="' + audioElementId + '" src="' + sourceurl + '"  controls=""  />');
         }
