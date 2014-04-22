@@ -1,6 +1,6 @@
 #!/bin/bash
 
-$FIELDDB_HOME/FieldDBWebServer/node_modules/forever/bin/forever stop server.js
+forever stop server.js
 
 cd $FIELDDB_HOME/FieldDBWebServer
 bash switch_to_develop_easy_setup.sh
