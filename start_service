@@ -4,7 +4,7 @@ cd $FIELDDB_HOME/FieldDBWebServer
 bash switch_to_producti.sh
 
 cd $FIELDDB_HOME/FieldDBWebServer
-$FIELDDB_HOME/FieldDBWebServer/node_modules/forever/bin/forever \
+forever \
 start \
 -al $FIELDDB_HOME/logs/fielddbwww.log \
 -ao $FIELDDB_HOME/logs/fielddbwwwout.log \
