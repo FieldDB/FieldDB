@@ -496,9 +496,10 @@ define([
             }
             var message = " <br/>Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
             self.set("status", self.get("status") + message);
+            self.set("fileDetails", self.get("status") + message);
             window.appView.toastUser(message, "alert-info", "Import:");
             self.set("rawText", self.get("rawText").trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".wav\n" + results);
-            self.importTextGrid(results, self, null);
+            self.importTextGrid(self.get("rawText"), self, null);
           } else {
             console.log(results);
             fileDetails.textgrid = "Error result was empty. " + results;
