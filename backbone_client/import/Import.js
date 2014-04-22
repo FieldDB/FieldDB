@@ -494,8 +494,9 @@ define([
             if(pauses > 0){
               utteranceCount = pauses +2;
             }
-            var message = " <br/>Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
-            self.set("status", self.get("status") + message);
+            var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
+            fileDetails.description = message;
+            self.set("status", self.get("status") + "<br/>" +  message);
             self.set("fileDetails", self.get("status") + message);
             window.appView.toastUser(message, "alert-info", "Import:");
             self.set("rawText", self.get("rawText").trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".wav\n" + results);
@@ -574,7 +575,7 @@ define([
             row.startTime = row.startTime ? row.startTime : interval.xmin;
             row.endTime = row.endTime ? row.endTime : interval.xmax;
             row.utterance = row.utterance ? row.utterance : interval.text.trim();
-            row.modality = "speech";
+            row.modality = "spoken";
             row.tier = interval.tierName;
             row.speakers = interval.speaker;
             row.audioFileName = interval.fileName || audioFileName;

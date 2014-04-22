@@ -458,7 +458,22 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
       return;
     }
     var audioElementToPlaySelf = audioElement;
-    var startTimeSelf= startime;
+    var startTimeSelf = startime;
+    //pause all audio and remove all listeners from all audio
+    $(document.getElementsByTagName("audio")).map(function(i, localAudioElement) {
+      // console.log(localAudioElement);
+      localAudioElement.pause();
+      if (window.actuallyPlayAudio) {
+        localAudioElement.removeEventListener('canplaythrough', window.actuallyPlayAudio);
+      }
+      if (window.audioTimeUpdateListener) {
+        localAudioElement.removeEventListener('timeupdate', window.audioTimeUpdateListener);
+      }
+      if (window.audioEndListener) {
+        localAudioElement.removeEventListener('ended', window.audioEndListener);
+      }
+    });
+    
     window.actuallyPlayAudio = function(){
       audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
       OPrime.playingInterval = true;
@@ -467,15 +482,19 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
       // audioElementToPlaySelf.load();
       audioElementToPlaySelf.play();
     };
-    if(window.audioEndListener){
-      window.audioEndListener();
-    }
+    // if(window.audioEndListener){
+    //   window.audioEndListener();
+    // }
     window.audioEndListener = function(){
       OPrime.playingInterval = false;
       audioElementToPlaySelf.removeEventListener('ended', window.audioEndListener);
       audioElementToPlaySelf.removeEventListener('timeupdate', window.audioTimeUpdateListener);
       audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
-      audioElementToPlaySelf.currentTime = startTimeSelf;
+      // if(audioElementToPlaySelf.readyState > 0){
+      //   audioElementToPlaySelf.currentTime = startTimeSelf;
+      // }else {
+      //   console.log("Ready state" + audioElementToPlaySelf.readyState);
+      // }
       audioElementToPlaySelf.load();
       console.log("Cueing audio to starttime " + audioElementToPlaySelf.currentTime);
       if (typeof callback == "function") {
@@ -489,10 +508,6 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
         window.audioEndListener();
       }
     };
-    audioElement.removeEventListener('canplaythrough', window.actuallyPlayAudio);
-    audioElement.removeEventListener('timeupdate', window.audioTimeUpdateListener);
-    audioElement.removeEventListener('ended', window.audioEndListener);
-    audioElement.pause();
     if (endtime) {
       audioElement.addEventListener("timeupdate", window.audioTimeUpdateListener);
     }

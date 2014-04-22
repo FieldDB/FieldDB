@@ -1,6 +1,7 @@
 define( [ 
     "backbone", 
     "handlebars",
+    "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -13,6 +14,7 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
+    AudioVideoReadView,
     Comment,
     Comments,
     CommentReadView,
@@ -314,6 +316,11 @@ define( [
       }
       if (this.format !== "link") {
         this.model.view = window.appView.currentPaginatedDataListDatumsView;
+
+        // Must always Display audioVideo View so that the audio will work correctly
+        this.audioVideoView.el = this.$(".audio_video_ul");
+        // this.audioVideoView.collection = this.model.get("audioVideo");
+        this.audioVideoView.render();
       }
 
       try{
@@ -330,7 +337,8 @@ define( [
       }catch(e){
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
-     
+      
+
       return this;
     },
     
@@ -344,6 +352,12 @@ define( [
       
       this.commentEditView = new CommentEditView({
         model : new Comment(),
+      });
+
+      this.audioVideoView = new UpdatingCollectionView({
+        collection           : this.model.get("audioVideo"),
+        childViewConstructor : AudioVideoReadView,
+        childViewTagName     : 'li'
       });
     },
     /**
@@ -363,8 +377,8 @@ define( [
       return datumIdsChecked;
     },
     createPlaylistAndPlayAudioVideo : function(datumIds){
+      alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       this.model.getAllAudioAndVideoFiles(datumIds, function(audioAndVideoFilePaths){
-        alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       });
     },
     removeDatumFromThisList : function(datumIds){

@@ -1,10 +1,12 @@
 define([ 
     "backbone", 
+    "audio_video/AudioVideos",
     "datum/Datum",
     "comment/Comment",
     "comment/Comments"
 ], function(
     Backbone, 
+    AudioVideos,
     Datum,
     Comment,
     Comments
@@ -46,6 +48,11 @@ define([
       if (!this.get("dateCreated")) {
         this.set("dateCreated", (new Date()).toDateString());
       }
+
+      // If there's no audioVideo, give it a new one.
+      if (!this.get("audioVideo")) {
+        this.set("audioVideo", new AudioVideos());
+      }
     },
     /**
      * backbone-couchdb adaptor set up
@@ -64,7 +71,8 @@ define([
     
     // Internal models: used by the parse function
     internalModels : {
-      comments: Comments
+      comments: Comments,
+      audioVideo: AudioVideos
     },
 
   //This the function called by the add button, it adds a new comment state both to the collection and the model
@@ -114,7 +122,11 @@ define([
         var thisobjid = id;
           obj.fetch({
             success : function(model, response) {
-              audioVideoFiles.push(model.get("audioVideo").get("URL"));
+              //TODO test this, or alternatively fill the datalists own audio video collection
+              model.get("audioVideo").models.map(function(audiovid){
+                audioVideoFiles.push(audiovid.get("URL"));
+                audioVideoFiles = _.unique(audioVideoFiles);
+              });
               
               if(thisobjid == datumIdsToGetAudioVideo.length - 1){
                 if(typeof callback == "function"){

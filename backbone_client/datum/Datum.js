@@ -79,7 +79,7 @@ define([
       }
     },
     fillWithDefaults : function(){
-   // If there's no audioVideo, give it a new one.
+      // If there's no audioVideo, give it a new one.
       if (!this.get("audioVideo")) {
         this.set("audioVideo", new AudioVideos());
       }
@@ -645,15 +645,9 @@ define([
       return  this.get("datumFields").where({label: "utterance"})[0].get("mask");
     },
     getAudioFileName: function() {
-      var filename = this.get("datumFields").where({
-        label: "audioFileName"
-      });
-      if (filename.length > 0) {
-        filename = filename[0].get("mask");
-      } else if (this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0]) {
+      var filename;
+      if (this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0]) {
         filename = this.get("audioVideo").models[0].get("filename");
-      } else {
-        filename = null;
       }
       return filename;
     },
@@ -668,35 +662,29 @@ define([
     },
 
     playAudio: function(audioElementId, elementToDisable) {
-      var startTime = this.get("datumFields").where({
-        label: "startTime"
-      });
-      if (startTime.length > 0) {
-        startTime = startTime[0].get("mask");
-      } else {
-        startTime = 0.0;
+      var startTime = 0.0;
+      var endTime = 0.0;
+      var audioVideo;
+      if (this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0]) {
+        audioVideo = this.get("audioVideo").models[0];
+        startTime = audioVideo.get("startTime");
+        endTime = audioVideo.get("endTime");
       }
-      var endTime = this.get("datumFields").where({
-        label: "endTime"
-      });
-      if (endTime.length > 0) {
-        endTime = endTime[0].get("mask");
-      } else {
-        endTime = 0.0;
-      }
-      startTime = parseFloat(startTime,10);
-      endTime = parseFloat(endTime,10);
-      if (endTime > startTime || endTime === 0) {  
+      startTime = parseFloat(startTime, 10);
+      endTime = parseFloat(endTime, 10);
+      if (endTime > startTime || endTime === 0) {
         // elementToDisable.disabled = true;
         // $(elementToDisable).addClass("disabled");
-        console.log(audioElementId+" "+startTime+" "+endTime);
+        console.log(audioElementId + " " + startTime + " " + endTime);
         if (!document.getElementById(audioElementId)) {
-          var sourceurl = OPrime.audioUrl + "/utterances/" + this.get("pouchname") + "/" + this.getAudioFileBaseName()+"/"+ this.getAudioFileName();
-          console.log(sourceurl);
-          if(this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0] && this.get("audioVideo").models[0].get("URL")) {
-            sourceurl = this.get("audioVideo").models[0].get("URL");
+          var sourceurl;
+          if (audioVideo && audioVideo.get("URL")) {
+            sourceurl = audioVideo.get("URL");
+          } else {
+            sourceurl = OPrime.audioUrl + this.get("pouchname") + "/" + this.getAudioFileName();
           }
-          $(document.body).append('<audio id="' + audioElementId + '" src="' + sourceurl + '"  controls=""  />');
+          console.log(sourceurl);
+          $(document.getElementsByName(this.get("_id"))).parent().find(".audio_video_ul").append('<li><audio id="' + audioElementId + '" src="' + sourceurl + '"  controls="" preload=""  /></li>');
         }
         OPrime.playIntervalAudioFile(audioElementId, startTime, endTime, function() {
           console.log("played interval");
