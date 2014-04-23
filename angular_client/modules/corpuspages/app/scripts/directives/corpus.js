@@ -1,0 +1,80 @@
+mixin prettyDate(uglyDate)
+  daysAgo = ((((new Date() - uglyDate) / 1000) / 60) / 60) / 24
+  hours = uglyDate.getHours()
+  minutes = uglyDate.getMinutes()
+  ampm = hours >= 12 ? 'pm' : 'am'
+  hours = hours % 12
+  hours = hours ? hours : 12 
+  minutes = minutes < 10 ? '0'+minutes : minutes
+  strTime = hours + ':' + minutes + ' ' + ampm
+
+  if daysAgo < 1
+    | Today at #{strTime}
+  else if daysAgo <= 7
+    weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    day = uglyDate.getDay()
+    #{weekDays[day + 1]} at #{strTime}
+  else
+    #{uglyDate.getMonth() + 1}/#{uglyDate.getDate()}/#{uglyDate.getFullYear()}
+
+mixin showJson(myJsonObject, level)
+  if typeof level == 'undefined'
+    - var level = 0
+  - level++
+  .well(style='background-color:white')
+    .badge(style='width:1em;text-align:center;background-color:#cccccc').pull-center #{level}
+    unless typeof myJsonObject == 'undefined'
+      each value, key in myJsonObject
+        if value instanceof Array
+          p(style='margin:0') #{key}: (Array[#{value.length}])
+            if value.length == 0
+              | &nbsp;(empty)
+            else
+              .well(style='background-color:white')
+                each aValue, aIndex  in value
+                  p(style='margin:0') [#{aIndex}]: 
+                    if typeof aValue == 'undefined'
+                      | &nbsp;(empty)
+                    else if aValue instanceof Date
+                      mixin prettyDate(aValue)
+                    else if aValue instanceof Object
+                      | (Object)
+                      mixin showJson(aValue, level)
+                    else
+                      #{aValue}
+        else if value instanceof Date
+          p(style='margin:0') #{key}:&nbsp;
+            mixin prettyDate(value)
+        else if value instanceof Object
+          - var plusone = key + 1
+          p(style='margin:0') #{plusone}:
+          if typeof value == 'undefined' || value.length == 0
+            | &nbsp;(empty)
+          else
+            mixin showJson(value, level)
+        else if key == 'pouchname'
+          p(style='margin:0') #{key}: 
+            a(href= value) #{value}
+        else
+          p(style='margin:0') #{key}: #{value}
+
+mixin renderCorporaList(myJsonObject)
+  each c in myJsonObject
+    - var url = '/' + c.corpusinfo.url
+    .media(style='margin-bottom:40px')
+      a(href="#{url}").pull-left
+        img(src='https://secure.gravatar.com/avatar/#{c.corpusinfo.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+      .media-body
+        h4.media-heading
+          a(href="#{url}")= c.corpusinfo.title
+        - var text = c.corpusinfo.description
+        p= text.length > 200 ? text.substr(0,200) + '…' : text
+
+mixin renderCorpus(myJsonObject)
+  each c in myJsonObject
+    h1.media-heading #{c.corpusinfo.title}
+    .media(style='margin-bottom:40px')
+      a(href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html").pull-right
+        img(src='https://secure.gravatar.com/avatar/#{c.corpusinfo.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+      .media-body
+        div= c.corpusinfo.description
