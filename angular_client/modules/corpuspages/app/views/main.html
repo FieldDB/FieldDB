@@ -1,46 +1,49 @@
-extends layout
 
-block nav
-  .navbar.navbar-inverse.navbar-fixed-top
-    .navbar-inner
-      .container
-        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.brand(href='http://lingsync.org') LingSync Public URLS : places to share your data
-        .nav-collapse.collapse
-          ul.nav
-            li.active
-              a(href='http://emeld.org/school/what.html') EMELD Data Discoverability Best Practices  
-            li
-              a.btn.btn-primary(href='http://app.lingsync.org') Open LingSync App
 
-            //- future possible nav bar (make sure to unindent)
-              li
-                a(href='#about') About
-              li
-                a(href='#contact') Contact
-              li.dropdown
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  | Dropdown
-                  b.caret
-                ul.dropdown-menu
-                  li
-                    a(href='#') Action
-                  li
-                    a(href='#') Another action
-                  li
-                    a(href='#') Something else here
-                  li.divider
-                  li.nav-header Nav header
-                  li
-                    a(href='#') Separated link
-                  li
-                    a(href='#') One more separated link
-block content
-block scripts
-  script(src='/corpus-pages/js/jquery.js')
-  script(src='/corpus-pages/bootstrap/js/bootstrap.min.js')
-  script(src='/corpus-pages/js/jquery.jsonview.js')
-  script(src='/corpus-pages/libs/search.js')
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">
+        <span class="icon-bar">
+        </span>
+        <span class="icon-bar">
+        </span>
+        <span class="icon-bar">
+        </span>
+      </a>
+      <a href="http://lingsync.org" class="brand">
+        LingSync Public URLS : places to share your data
+      </a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li class="active">
+            <a href="http://emeld.org/school/what.html">
+              EMELD Data Discoverability Best Practices  
+            </a>
+          </li>
+          <li>
+            <a href="http://app.lingsync.org" class="btn btn-primary">
+              Open LingSync App
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="span3" user>
+    </div>
+    <div class="span6 offset1" corpora>
+    </div>
+  </div>
+</div>
+<div class="row" activity-heatmap>
+</div>
+<hr>
+<footer class="footer">
+  <div terms-of-use>
+  </div>
+</footer>
+
