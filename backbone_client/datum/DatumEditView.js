@@ -128,7 +128,13 @@ define([
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
-      
+      "click .play-audio": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.playAudio(e);
+      },
       /* Edit Only Menu */
       "click .icon-unlock" : "encryptDatum",
       "click .icon-lock" : "decryptDatum",
@@ -249,6 +255,7 @@ define([
       jsonToRender.locale_Duplicate = Locale.get("locale_Duplicate");
       jsonToRender.locale_Insert_New_Datum = Locale.get("locale_Insert_New_Datum");
       jsonToRender.locale_LaTeX = Locale.get("locale_LaTeX");
+      jsonToRender.locale_Play_Audio = Locale.get("locale_Play_Audio");
       jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get("locale_Plain_Text_Export_Tooltip");
       jsonToRender.locale_Save = Locale.get("locale_Save");
       jsonToRender.locale_See_Fields = Locale.get("locale_See_Fields");
@@ -516,16 +523,19 @@ define([
       }
     },
     
-    
     /*
      * this function can be used to play datum automatically
      */
-    playAudio : function(){
-      if(this.model.get("audioVideo")){
-          this.$el.find(".datum-audio-player")[0].play();
-          this.needsSave = true;
+    playAudio : function(e){
+      var audioFileName = this.model.getAudioFileName();
+      if (audioFileName) {
+        this.model.playAudio("audiovideo_" + audioFileName, e.target);
+      }else{
+        e.target.disabled = true;
+        $(e.target).addClass("disabled");
       }
     },
+    
     /*
      * This function helps the user know that the app is saving his/her data often,
      * it updates the time, without re-rendering the datum

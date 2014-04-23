@@ -79,11 +79,14 @@ define([
       }
     },
     fillWithDefaults : function(){
-   // If there's no audioVideo, give it a new one.
+      // If there's no audioVideo, give it a new one.
       if (!this.get("audioVideo")) {
         this.set("audioVideo", new AudioVideos());
       }
       
+      if (!this.get("images")) {
+        this.set("images", new Images());
+      }
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -639,7 +642,56 @@ define([
       return queryTokens;
     },
     getDisplayableFieldForActivitiesEtc : function(){
-      return  this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+      return  this.get("datumFields").where({label: "utterance"})[0].get("mask");
+    },
+    getAudioFileName: function() {
+      var filename;
+      if (this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0]) {
+        filename = this.get("audioVideo").models[0].get("filename");
+      }
+      return filename;
+    },
+
+    getAudioFileBaseName: function() {
+      var filename = this.getAudioFileName();
+      if(!filename){
+        return;
+      }
+      filename = filename.substring(0, filename.lastIndexOf("."));
+      return filename;
+    },
+
+    playAudio: function(audioElementId, elementToDisable) {
+      var startTime = 0.0;
+      var endTime = 0.0;
+      var audioVideo;
+      if (this.get("audioVideo") && this.get("audioVideo").models && this.get("audioVideo").models[0]) {
+        audioVideo = this.get("audioVideo").models[0];
+        startTime = audioVideo.get("startTime");
+        endTime = audioVideo.get("endTime");
+      }
+      startTime = parseFloat(startTime, 10);
+      endTime = parseFloat(endTime, 10);
+      if (endTime > startTime || endTime === 0) {
+        // elementToDisable.disabled = true;
+        // $(elementToDisable).addClass("disabled");
+        console.log(audioElementId + " " + startTime + " " + endTime);
+        if (!document.getElementById(audioElementId)) {
+          var sourceurl;
+          if (audioVideo && audioVideo.get("URL")) {
+            sourceurl = audioVideo.get("URL");
+          } else {
+            sourceurl = OPrime.audioUrl + this.get("pouchname") + "/" + this.getAudioFileName();
+          }
+          console.log(sourceurl);
+          $(document.getElementsByName(this.get("_id"))).parent().find(".audio_video_ul").append('<li><audio id="' + audioElementId + '" src="' + sourceurl + '"  controls="" preload=""  /></li>');
+        }
+        OPrime.playIntervalAudioFile(audioElementId, startTime, endTime, function() {
+          console.log("played interval");
+          // delete elementToDisable.disabled;
+          // $(elementToDisable).removeClass("disabled");
+        });
+      }
     },
     /**
      * Clone the current Datum and return the clone. The clone is put in the current

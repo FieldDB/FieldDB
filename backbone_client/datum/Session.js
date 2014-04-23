@@ -122,6 +122,12 @@ define([
       this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
       
     },
+    setConsultants: function(consultants){
+      if(consultants == undefined || consultants == null){
+        return;
+      }
+      this.get("sessionFields").where({label: "consultants"})[0].set("mask", consultants.trim());
+    },
     getGoal : function(){
       var goal = "";
       try {
