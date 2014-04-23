@@ -1,6 +1,8 @@
 define([ 
     "backbone",
     "handlebars",
+    "audio_video/AudioVideo",
+    "audio_video/AudioVideos",
     "data_list/DataList",
     "data_list/DataListEditView",
     "datum/DatumReadView",
@@ -9,10 +11,13 @@ define([
     "datum/Session",
     "app/PaginatedUpdatingCollectionView",
     "xml2json",
+    "libs/textgrid",
     "OPrime"
 ], function(
     Backbone,
     Handlebars,
+    AudioVideo,
+    AudioVideos,
     DataList,
     DataListEditView,
     DatumReadView,
@@ -49,6 +54,7 @@ define([
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
+      this.set("audioVideo", new AudioVideos());
     },
     fillWithDefaults : function(){
       if(this.get("datumFields") == undefined){
@@ -91,6 +97,7 @@ define([
         callback();
       }
     },
+
     /**
      * This function tries to guess if you have \n or \r as line endings
      * and then tries to determine if you have "surounding your text".
@@ -463,9 +470,160 @@ define([
         callback();
       }
     },
+
+
+    downloadTextGrid: function(fileDetails){
+      var textridUrl =  OPrime.audioUrl + "/" + this.get("pouchname") + "/" + fileDetails.fileBaseName + ".TextGrid";
+      var self = this;
+      $.ajax({
+        url: textridUrl,
+        type: 'get',
+        // dataType: 'text',
+        success: function(results) {
+          if (results) {
+            fileDetails.textgrid = results;
+            var syllables = "unknown";
+            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.syllableCount) {
+              syllables = fileDetails.syllablesAndUtterances.syllableCount;
+            }
+            var pauses = "unknown";
+            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.pauseCount) {
+              pauses = parseInt(fileDetails.syllablesAndUtterances.pauseCount,10);
+            }
+            var utteranceCount = 1;
+            if(pauses > 0){
+              utteranceCount = pauses +2;
+            }
+            var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
+            fileDetails.description = message;
+            self.set("status", self.get("status") + "<br/>" +  message);
+            self.set("fileDetails", self.get("status") + message);
+            window.appView.toastUser(message, "alert-info", "Import:");
+            self.set("rawText", self.get("rawText").trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".wav\n" + results);
+            self.importTextGrid(self.get("rawText"), self, null);
+          } else {
+            console.log(results);
+            fileDetails.textgrid = "Error result was empty. " + results;
+          }
+        },
+        error: function(response) {
+          var reason = {};
+          if (response && response.responseJSON) {
+            reason = response.responseJSON;
+          } else {
+            var message = "Error contacting the server. ";
+            if (response.status >= 500) {
+              message = message + " Please report this error to us at support@lingsync.org ";
+            } else {
+              message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
+            }
+            reason = {
+              status: response.status,
+              userFriendlyErrors: [message + response.status]
+            };
+          }
+          console.log(reason);
+          if (reason && reason.userFriendlyErrors) {
+            self.set("status", fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" "));
+            window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
+          }
+        }
+      });
+    },
+
+    addAudioVideoFile: function(url) {
+      if (!this.get("audioVideo")) {
+        this.set("audioVideo", new AudioVideos())
+      }
+      this.get("audioVideo").add(new AudioVideo({
+        filename: url.substring(url.lastIndexOf("/") + 1),
+        URL: url,
+        description: "File from import"
+      }));
+    },
+
     importTextGrid : function(text, self, callback){
-      alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
-      if(typeof callback == "function"){
+      console.log(textgrid);
+      // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+      var textgrid = TextGrid.textgridToIGT(text);
+      var audioFileName = self.get("files")[0] ?  self.get("files")[0].name : "copypastedtextgrid_unknownaudio";
+      audioFileName = audioFileName.replace(/\.textgrid/i, "");
+      if (!textgrid || !textgrid.intervalsByXmin) {
+        if (typeof callback == "function") {
+          callback();
+        }
+      }
+      var matrix = [],
+        h,
+        itemIndex,
+        pointIndex,
+        intervalIndex,
+        point,
+        row,
+        interval,
+        tierName;
+      var header = [];
+      var consultants = [];
+      for (itemIndex in textgrid.intervalsByXmin) {
+        if (!textgrid.intervalsByXmin.hasOwnProperty(itemIndex)) {
+          continue;
+        }
+        if (textgrid.intervalsByXmin[itemIndex]) {
+          row = {};
+          for (intervalIndex = 0; intervalIndex < textgrid.intervalsByXmin[itemIndex].length; intervalIndex++) {
+            interval = textgrid.intervalsByXmin[itemIndex][intervalIndex];
+            row.startTime = row.startTime ? row.startTime : interval.xmin;
+            row.endTime = row.endTime ? row.endTime : interval.xmax;
+            row.utterance = row.utterance ? row.utterance : interval.text.trim();
+            row.modality = "spoken";
+            row.tier = interval.tierName;
+            row.speakers = interval.speaker;
+            row.audioFileName = interval.fileName || audioFileName;
+            row.CheckedWithConsultant = interval.speaker;
+            consultants.push(row.speakers);
+            row[interval.tierName] = interval.text;
+            header.push(interval.tierName);
+          }
+          matrix.push(row);
+        }
+      }
+      header = _.unique(header);
+      consultants = _.unique(consultants);
+      if (consultants.length > 0) {
+        self.set("consultants", consultants.join(","));
+      } else {
+        self.set("consultants", "Unknown");
+      }
+      header = header.concat( ["utterance", "tier", "speakers", "CheckedWithConsultant", "startTime", "endTime", "modality", "audioFileName"]);
+      var rows = [];
+      for (var d in matrix) {
+        var cells = [];
+        //loop through all the column headings, find the data for that header and put it into a row of cells
+        for (var h in header) {
+          var cell = matrix[d][header[h]];
+          if (cell) {
+            cells.push(cell);
+          } else {
+            //fill the cell with a blank if that datum didn't have a that column
+            cells.push("");
+          }
+        }
+        //if the datum has any text, add it to the table
+        if(cells.length >= 8 && cells.slice(0, cells.length - 8).join("").replace(/[0-9.]/g, "").length > 0 && cells[cells.length - 8] !== "silent"){
+          // cells.push(audioFileName);
+          rows.push(cells);
+        }else{
+          // console.log("This row has only the default columns, not text or anything interesting.");
+        }
+      }
+      if (rows == []) {
+        rows.push("");
+      }
+      // header.push("audioFileName");
+      self.set("extractedHeader", header);
+      self.set("asCSV", rows);
+
+      if (typeof callback == "function") {
         callback();
       }
     },
@@ -598,6 +756,12 @@ define([
         }else if(fileExtension == "tex"){
           importType.latex.confidence++;
         }else if(fileExtension == "textgrid"){
+          importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "mov"){
+          importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "wav"){
+          importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "mp3"){
           importType.praatTextgrid.confidence++;
         }
       }

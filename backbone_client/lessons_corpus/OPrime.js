@@ -87,7 +87,7 @@ OPrime.makePublisher = function(o) {
   };
 };
 
-OPrime.debugMode = true;
+OPrime.debugMode = false;
 
 OPrime.debug = function(message, message2) {
   if (!message2) {

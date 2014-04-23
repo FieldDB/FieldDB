@@ -2,6 +2,7 @@
 define( [ 
     "backbone", 
     "handlebars",
+    "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -13,7 +14,8 @@ define( [
     "app/UpdatingCollectionView"
 ], function(
     Backbone, 
-    Handlebars, 
+    Handlebars,
+    AudioVideoReadView,
     Comment,
     Comments,
     CommentReadView,
@@ -357,8 +359,16 @@ define( [
         if (OPrime.debugMode) OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
 
+          
       if (this.format !== "link" && !this.format == "search") {
         this.model.view = window.appView.currentPaginatedDataListDatumsView;
+      }
+
+      if (this.format !== "link") {
+        // Must always Display audioVideo View so that the audio will work correctly
+        this.audioVideoView.el = this.$(".audio_video_ul");
+        // this.audioVideoView.collection = this.model.get("audioVideo");
+        this.audioVideoView.render();
       }
 
       try{
@@ -405,6 +415,12 @@ define( [
       this.commentEditView = new CommentEditView({
         model : new Comment(),
       }); 
+
+      this.audioVideoView = new UpdatingCollectionView({
+        collection           : this.model.get("audioVideo"),
+        childViewConstructor : AudioVideoReadView,
+        childViewTagName     : 'li'
+      });
     },
     /**
      * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items. 
@@ -423,8 +439,8 @@ define( [
       return datumIdsChecked;
     },
     createPlaylistAndPlayAudioVideo : function(datumIds){
+      alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       this.model.getAllAudioAndVideoFiles(datumIds, function(audioAndVideoFilePaths){
-        alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       });
     },
     removeDatumFromThisList : function(datumIds){

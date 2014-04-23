@@ -14,7 +14,9 @@
 					href="https://twitter.com/lingsync" target="_blank"><i
 					class="icons icon-twitter"></i></a>
 			</h5>
-			<div>{{status}}</div>
+			<blockquote class="status">
+				{{{status}}}
+			</blockquote>
 
 		</div>
 	</div>
@@ -22,6 +24,32 @@
 
 	<div class="well" id="import-first-step">
 		<span>{{{locale_Import_First_Step}}}</span>
+		<form class="form-inline button-group" id="uploadAudioForTextGridform" enctype="multipart/form-data" action="{{audioServerUrl}}/upload/extract/utterances" method="post">
+			<label>
+				<i class="icon-gift"></i> 
+				<span>New! Import long audio/video elicitation session(s) </span>
+			</label>
+			<div class="input-prepend">
+				<span class="btn btn-default btn-file btn-info btn-mini">
+					<span>
+						<i class="icon-file"></i> 
+						Choose file(s)
+					</span>
+					<input id="uploadAudioForTextGridformFiles" type="file" multiple="true" name="files" value="Audio/Video files to be imported"/>
+				</span>
+			</div>
+			<div class="input-append">
+				<button class="btn btn-info btn-mini" type="submit">
+					<i class="icon-upload"></i>
+					<span> Upload</span>
+				</button>
+			</div>
+			<input class="hidden" type="text" name="token" value="{{audiouploadtoken}}"/>
+			<input class="hidden" type="text" name="username" value="{{username}}"/>
+			<input class="hidden" type="text" name="dbname" value="{{pouchname}}"/>
+			<input class="hidden" type="text" name="returnTextGrid" value="true"/>
+		</form>
+		
 		<textarea
 			class="export-large-textarea  drop-zone" placeholder="{{locale_Drag_and_Drop_Placeholder}}">{{rawText}}</textarea>
 

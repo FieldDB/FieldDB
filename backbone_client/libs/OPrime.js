@@ -433,7 +433,7 @@ OPrime.stopAudioFile = function(divid, callback, callingcontext) {
   } else {
     this.debug("Stopping Audio via HTML5");
     document.getElementById(divid).pause();
-    document.getElementById(divid).currentTime = 0;
+    document.getElementById(divid).currentTime = 0.0;
   }
   if (typeof callback == "function") {
     callback();
@@ -451,26 +451,80 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     Android.playIntervalOfAudio(audiourl, startime, endtime);
   } else {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
-    document.getElementById(divid).pause();
-    document.getElementById(divid).currentTime = startime;
-    if (OPrime.debugMode) OPrime.debug("Cueing audio to "
-        + document.getElementById(divid).currentTime);
-    document.getElementById(divid).play();
-    OPrime.playingInterval = true;
-    document.getElementById(divid).addEventListener("timeupdate", function() {
-      if (this.currentTime >= endtime && OPrime.playingInterval) {
-        if (OPrime.debugMode) OPrime.debug("CurrentTime: " + this.currentTime);
-        this.pause();
-        OPrime.playingInterval = false; /*
-                                         * workaround for not being able to
-                                         * remove events
-                                         */
+
+    var audioElement = document.getElementById(divid);
+    if(!audioElement){
+      console.log("Audio element does not exist.");
+      return;
+    }
+    var audioElementToPlaySelf = audioElement;
+    var startTimeSelf = startime;
+    //pause all audio and remove all listeners from all audio
+    $(document.getElementsByTagName("audio")).map(function(i, localAudioElement) {
+      // console.log(localAudioElement);
+      localAudioElement.pause();
+      if (window.actuallyPlayAudio) {
+        localAudioElement.removeEventListener('canplaythrough', window.actuallyPlayAudio);
+      }
+      if (window.audioTimeUpdateListener) {
+        localAudioElement.removeEventListener('timeupdate', window.audioTimeUpdateListener);
+      }
+      if (window.audioEndListener) {
+        localAudioElement.removeEventListener('ended', window.audioEndListener);
       }
     });
+    
+    window.actuallyPlayAudio = function(){
+      audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
+      OPrime.playingInterval = true;
+      audioElementToPlaySelf.currentTime = startTimeSelf;
+      console.log("Cueing audio to " + audioElementToPlaySelf.currentTime +", supposed to be "+startTimeSelf);
+      // audioElementToPlaySelf.load();
+      audioElementToPlaySelf.play();
+    };
+    // if(window.audioEndListener){
+    //   window.audioEndListener();
+    // }
+    window.audioEndListener = function(){
+      OPrime.playingInterval = false;
+      audioElementToPlaySelf.removeEventListener('ended', window.audioEndListener);
+      audioElementToPlaySelf.removeEventListener('timeupdate', window.audioTimeUpdateListener);
+      audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
+      // if(audioElementToPlaySelf.readyState > 0){
+      //   audioElementToPlaySelf.currentTime = startTimeSelf;
+      // }else {
+      //   console.log("Ready state" + audioElementToPlaySelf.readyState);
+      // }
+      audioElementToPlaySelf.load();
+      console.log("Cueing audio to starttime " + audioElementToPlaySelf.currentTime);
+      if (typeof callback == "function") {
+        callback();
+      }
+    };
+    window.audioTimeUpdateListener = function() {
+      if (this.currentTime >= endtime && OPrime.playingInterval) {
+        console.log("Ending at: " + this.currentTime)
+        this.pause();
+        window.audioEndListener();
+      }
+    };
+    if (endtime) {
+      audioElement.addEventListener("timeupdate", window.audioTimeUpdateListener);
+    }
+    audioElement.addEventListener('ended', window.audioEndListener);
+    audioElement.addEventListener('canplaythrough', window.actuallyPlayAudio);
+    try{
+      // audioElement.currentTime = startime;
+      // console.log("Cueing audio to " + audioElement.currentTime);
+      audioElement.load();
+      // audioElement.currentTime = startime;
+      // console.log("Cueing audio again to " + audioElement.currentTime);
+    } catch(e){
+      console.log(e);
+    }
+
   }
-  if (typeof callback == "function") {
-    callback();
-  }
+  
 }
 OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     callbackRecordingCompleted, callingcontext) {
@@ -745,7 +799,13 @@ OPrime.makeCORSRequest = function(options) {
 
   xhr.onerror = function(e,f,g) {
     if (OPrime.debugMode) OPrime.debug(e,f,g);
-    OPrime.bug('There was an error making the CORS request to '+options.url+ " from "+window.location.href+" the app will not function normally. Please report this.");
+    var message = 'There was an error making the CORS request to '+options.url+ " from "+window.location.href+" the app will not function normally";
+    if (options.url.indexOf("localhost") > 0) {
+      message = message + " Please turn on your CouchDB by going into the Applications (on Mac), and then re-load the page.";
+    } else {
+      message = message + " Please report this."
+    }
+    OPrime.bug(message);
     if(typeof options.error == "function"){
       options.error(e,f,g);
     }
