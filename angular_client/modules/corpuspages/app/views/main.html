@@ -37,25 +37,26 @@
 </div><!-- /.container-fluid -->
 </nav>
 
-<div class="container ">
+<div class="container-fluid">
   <div class="row col-md-12">
     <div class="col-md-4" data-user json="app.team">
     </div>
-    <div class="col-md-6" >
-      <div class="row" data-corpus json="app.corpus">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12" data-corpus json="app.corpus">
+        </div>
       </div>
       <div class="row" data-fielddb-activity-heatmap>
-        TODO activity heatmap
       </div>
-      <div class="row" data-terms-of-use> 
-        TODO terms of use
-      </div>
+
     </div>
+  </div>
+  <div class="row col-md-12" data-fielddb-corpus-terms-of-use json="app.corpus"> 
   </div>
 </div>
 
 <footer class="footer navbar-fixed-bottom">
-  <div data-copyright> TODO corpus copyright
+  <div > © {{app.corpus.copyright}} {{app.corpus.startyear}} {{thisyear}}
   </div>
 </footer>
 
