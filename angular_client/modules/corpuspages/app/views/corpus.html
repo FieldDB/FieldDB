@@ -1,13 +1,14 @@
-<h1 class="media-heading">
-  {{title}}
+<h1>
+  {{corpus.title}}
 </h1>
-<div class="media">
-  <a href="http://app.lingsync.org/{{pouchname}}" class="pull-right">
-    <img src="{{gravatar}}" alt="Corpus image" class="media-object">
+{{corpus.corpus}}
+<div>
+  <a href="http://app.lingsync.org/{{corpus.pouchname}}" class="pull-right">
+    <img src="{{corpus.gravatar}}" alt="Corpus image"/>
   </a>
-  <div class="media-body">
+  <div>
     <div>
-      {{description}} 
+      {{corpus.description}} 
     </div>
   </div>
 </div>
