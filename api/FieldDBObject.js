@@ -1,9 +1,4 @@
 /**
- * 
- */
-
-
-/**
  * @class An extendable object which can recieve new parameters on creation.
  *
  * @param {Object} options Optional json initialization object
