@@ -62,6 +62,8 @@ npm-debug.log
 *.dvi
 *.log
 *.aux
+*.dot
+*.bak
 *.toc
 *.bbl
 *.blg

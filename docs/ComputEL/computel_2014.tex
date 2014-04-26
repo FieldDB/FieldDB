@@ -1,0 +1,889 @@
+%
+% File acl2014.tex
+%
+% Contact: koller@ling.uni-potsdam.de, yusuke@nii.ac.jp
+%%
+%% Based on the style files for ACL-2013, which were, in turn,
+%% Based on the style files for ACL-2012, which were, in turn,
+%% based on the style files for ACL-2011, which were, in turn, 
+%% based on the style files for ACL-2010, which were, in turn, 
+%% based on the style files for ACL-IJCNLP-2009, which were, in turn,
+%% based on the style files for EACL-2009 and IJCNLP-2008...
+
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt]{article}
+\usepackage{acl2014}
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{graphicx}
+
+
+% My Package Includes
+\usepackage{upquote} % For real apostrophes (see http://tex.stackexchange.com/questions/63345/how-to-make-a-real-apostrophe-or-single-quote-in-latex#63348)
+\usepackage{comment}
+\usepackage{xcolor}
+\definecolor{dark-blue}{rgb}{0.15,0.15,0.7}
+\usepackage{hyperref}
+%\hypersetup{colorlinks, linkcolor={dark-blue}, citecolor={dark-blue}, urlcolor={dark-blue}}
+\hypersetup{colorlinks, linkcolor=black, citecolor=black, urlcolor=black}
+\usepackage{booktabs}
+\frenchspacing % Normal (single) spaces after periods.  Cf. http://www.read.seas.harvard.edu/~kohler/latex.html
+%\usepackage{natbib}
+\usepackage[shortcuts]{extdash} % use "\-/" to help LaTeX insert hyphen/pagebreaks
+\usepackage[textwidth=0.9in]{todonotes}
+\newcommand{\smalltodo}[2][]
+    {\todo[caption={#2}, #1]
+    {\tiny#2\normalsize}}
+% End My Package Includes
+
+
+%\setlength\titlebox{5cm}
+
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+
+%\title{LingSync \& the Online Linguistic Database:\\Web Tools for Linguistic Fieldwork}
+%\title{LingSync \& the  Online Linguistic Database:\\ New models  for the collection and management of data for Language Communities, Linguists and Language Learners}
+\title{LingSync \& the Online Linguistic Database:\\New models for the
+    collection and management of data for language communities, linguists and
+language learners}
+
+% NOTE: BLIND PEER REVIEW MEANS THAT NAMES AND AFFILIATIONS MUST BE REMOVED
+% FROM THE SUBMITTED PAPER !!!!!!
+
+%\author{First Author \\
+%  Affiliation / Address line 1 \\
+%  Affiliation / Address line 2 \\
+%  Affiliation / Address line 3 \\
+%  {\tt email@domain} \\\And
+%  Second Author \\
+%  Affiliation / Address line 1 \\
+%  Affiliation / Address line 2 \\
+%  Affiliation / Address line 3 \\
+%  {\tt email@domain} \\}
+
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+LingSync and the Online Linguistic Database (OLD) are new models for the
+collection and management of data in endangered language settings. The
+Ling\-/Sync and OLD projects seek to build a community of computational and
+documentary linguists both by opening the project development on GitHub and
+also by creating web services and user interfaces which facilitate
+collaborative and inclusive linguistic fieldwork. This paper presents the APIs
+of these tools and resources generated thus far (i.e., languages being
+documented, numbers and types of entries). We also briefly discuss the
+integration of specific computational methods into the systems, including the 
+McGill Prosodylab-Aligner which uses OpenFST and HTK for automatic audio
+alignment of novel data, as well as integration of various  open source
+unsupervised and semi-unsupervised machine learning approaches to language
+independent morphological analysis, and symbolic language dependent analyzers. 
+The paper discusses the importance of allowing contributors to keep certain
+data private while also assisting language communities in developing an
+inclusive relationship with the data via community-focused web apps, lexicons
+and Android mobile apps.
+\end{abstract}
+
+
+\section{Introduction}
+LingSync%
+\footnote{\url{https://www.lingsync.org/}; Source:
+\url{https://github.com/OpenSourceFieldlinguistics/FieldDB}.} %
+and the Online Linguistic Database (OLD)%
+\footnote{Source: \url{https://github.com/OpenSourceFieldlinguistics/old};
+    Documentation:
+\url{https://online-linguistic-database.readthedocs.org/en/latest/}.}%
+~are RESTful web apps which facilitate collaborative linguistic fieldwork. 
+Section \ref{other-software} provides an overview of existing web-based strategies
+currently employed by teams of fieldworker-researchers to share under-resourced
+language data and to derive web-available resources. The APIs
+(Application Programming Interfaces) of LingSync and the OLD are presented in
+\autoref{lingsync-api} and \autoref{old-api}, respectively. The systems'
+implementations of data privacy are discussed in \autoref{privacy}, while 
+\autoref{open-data} discusses data sharing with larger audiences---in
+particular, as part of language learning apps or as additional resources for
+adaptation of existing Natural Language Processing techniques to low-resource
+language data.
+
+
+\section{Collaborative Fieldwork Software}
+\label{other-software}
+Over the past decade or so, a fragmented landscape of collaborative web-based%
+\footnote{We use the term \emph{web-based} to refer to tools which run online
+or offline in a browser and/or mobile device via the use of native interfaces
+and web services, as opposed to traditional offline desktop applications where
+there is little to no server side component.} %
+databases has arisen in response to the need for software that could allow
+linguistic fieldworkers to share their primary data (internally and with
+specific language communities), thereby increasing the efficiency of the
+fieldwork process and the numerous ventures which depend upon its products,
+i.e., documentation, description, analysis, and revitalization. Such database
+applications include the Myaamia Project \cite{Myaamia:2001}, the Yurok
+Documentation Project \cite{Yurok:2001:Online}, the Washo Project
+\cite{Washo:2005:Online}, \cite{Cihlar:2008}, the Washo Mobile Lexicon
+\cite{WashoMobile:2008:Online}, Karuk Dictionary and Texts
+\cite{Karuk:2009:Online}, the OLD \cite{dunham2014}, and LingSync
+\cite{lingsync:2012}. Non web-based tools like FLEx,%
+\footnote{\url{http://fieldworks.sil.org/flex/}} %
+Toolbox,%
+\footnote{\url{http://www-01.sil.org/computing/toolbox/}} %
+and Shoebox%
+\footnote{\url{http://www-01.sil.org/computing/shoebox/}} %
+often lack cross-platform operability, multi-user support, or web accessibility
+\cite{Butler:2007}. In addition, these tools are designed primarily for
+practical lexicography and, as a result, focus on the creation of dictionary
+entries; however, this can prove inadequate for theoretical linguists, who deal
+primarily in linguistic examples at the sentence level and are interested also
+in negative data (i.e., ungrammatical forms).
+
+While LingSync and the OLD arose independently and consequently use different
+technology stacks, the teams behind LingSync and the OLD are, in order to
+reduce fragmentation of efforts and to combine strengths, collaborating on
+future developments. When referring collectively to both tools, we will
+henceforth use the term LingSync/OLD.
+
+The core virtue of web-based field apps, is that they allow fieldworkers to
+collaboratively create web-accessible stores of primary language data that
+would otherwise remain sequestered on local hard drives and handwritten notes,
+and thus largely inaccessible. This is especially important in the context of
+endangered languages where numbers of fluent speaker are rapidly declining
+\cite{fphlcc10}. Beyond existing web-based tools, LingSync/OLD also
+provide RESTful JSON-mediated APIs which enable labs who are already
+collaborating with computational linguistics/software engineering labs to
+customize their own data automation pipelines by incorporating their own
+in-house tools.
+
+
+\section{LingSync}
+\label{lingsync-api}
+LingSync is a set of open source software modules including client side web
+components and RESTful web services which allow groups of fieldworkers to
+collaboratively create web-accessible corpora of language data
+\cite{lingsync:2012}. Notable features include powerful searches over the data
+sets, encryption at a field level, social collaborative software features, an
+inclusive permission system, pluggable machine learning algorithms for building
+semi-automatic glossers, two Android based GUIs and five browser-based GUIs,
+one of which functions offline and provides flexible import functionality. This
+section provides an overview of the data structures, APIs, search and
+auto-glossing functionalities, as well as the technologies used, and the amount
+and type of data present on LingSync corpora.%
+
+\subsection{Data Structure}
+
+A LingSync database is referred to as a \emph{corpus} and contains
+\textit{datum}. The creator of a corpus controls access to that corpus and can
+grant read-only, read/comment, read/write, write-only and administrator access
+to other registered users. A \emph{datum} is a general-purpose linguistic
+unit---generally, a word, sentence or story---whose attributes are
+customizable. However, due to defaults in the LingSync data entry GUIs, each
+datum tends to have values for the following attributes: utterance (i.e., an
+orthographic, phonetic, or phonemic transcription), morphemes (i.e., segmented
+morpheme forms), glosses, translation, in addition to tags, comments, and a set
+of associated audio, image or video files. 
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+{
+       "label": "utterance",
+       "value": "Kichanaywan punqota",
+       "mask": "xxxxxxxxxxxx xxxxxxx",
+       "encrypted": "",
+       "shouldBeEncrypted": "true",
+       "help": "Unparsed utterance in the language, in 
+          orthography or transcription. Line 1 in your 
+          LaTeXed examples for handouts.",
+       "showToUserTypes": "all|machine|linguist",
+       "userchooseable": "disabled"
+}
+\end{verbatim}
+
+\caption{LingSync datum are composed of any number of DatumFields, with
+minimally the attributes above.}
+\label{lingsync-datastructure}
+\end{figure}
+
+LingSync uses new technology for building scalable decentralized data stores,
+specifically storing the data in a NoSQL, document database (Apache CouchDB%
+\footnote{\url{https://couchdb.apache.org/}}%
+) and therefore providing a non-rigid schema that allows for customization,
+adaptation, extension and inclusion of contributors' existing data structures.
+The use of a document store (similar to Toolbox) rather than a relational
+database allows data schema to change, which enables researchers to customize
+and modify data entry fields at any point during the course of research. Each
+\emph{datum} is traceable to a source (be it a publication or an elicitation
+session). The GUIs for interacting with the LingSync corpus module allow for
+bookmarking data into ordered lists labeled \textit{data lists} which can be
+used for publishing data sets or tracking data which must be cleaned or
+verified.
+
+LingSync takes special precautions to ensure privacy of data. All data is
+private by default, i.e., can only be accessed by authenticated users who have
+authorization for the corpus in question. Data can be encrypted at the
+attribute level, providing more fine-grained control over data access while
+permitting the corpus to be opened and with confidential items ``blacked'' out.
+A contributor may choose to publicize subsets of their data while keeping
+others encrypted and private, in accordance with the requirements of the
+speakers and communities who provide the data.
+
+
+\subsection{GUIs}
+
+There are currently five browser-based interfaces to the LingSync web services:
+the LingSync Prototype app, LingSync Spreadsheet, LingSync Activity Feeds, the
+LingSync Corpus pages, and the LingSync Lexicon Browser.
+
+The LingSync Prototype%
+\footnote{\url{https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa}} %
+is a Chrome app that can run offline (using IndexedDB for persistence) and can
+sync data with the server-side (CouchDB) storage when connectivity is restored.
+This online/offline functionality combines the best of both worlds: the
+cross-platform, collaboration, and data-sharing potential of a web application
+with the offline functioning of a desktop application. In addition, the
+LingSync Prototype provides an interface for customizing the \emph{datum}
+schema, a flexible import feature that helps users to upload data with a wide
+range of structures, export to .zip, .csv, .tex, .txt, .json, .xml, peer to
+peer full replication, and an interface for performing complex searches.
+
+LingSync Spreadsheet%
+\footnote{\url{http://app.lingsync.org}} %
+is a single-page client-side web application (SPA) with an interface that
+focuses solely on data entry. LingSync Spreadsheet was designed to appear
+spreadsheet-like so as to provide maximum productivity for students in field
+methods courses with no need for additional training, but with the added
+benefit of morpheme segmentation and gloss suggestions.
+
+\subsection{API}
+
+LingSync exposes a RESTful API where standard combinations of HTTP methods and
+URL patterns correspond to create, read, update, delete, and search operations
+on corpora and \emph{datum} (cf. \autoref{lingsync-auth} and
+\autoref{lingsync-datum}).
+
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --cookie-jar my-cookies.txt \
+    --header "Content-Type: application/json" \
+    --data '{"name": "public", "password": "none"}' \
+    https://corpus.lingsync.org/_session
+\end{verbatim}
+\normalsize
+\caption{Authenticating to a LingSync corpus service to access publicly
+available corpora.}
+\label{lingsync-auth}
+\end{figure}
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --request POST --cookie my-cookies.txt \
+ --header "Content-Type: application/json" \
+ --data '{"collection": "datums", "datumFields": 
+ [{"label": "utterance",   "value": "Noqata 
+ tusunayawanmi"}, { "label":  "morphemes",
+  "value": "Noqa-ta tusu-naya-wa-n-mi"}]}' 
+  https://corpus.lingsync.org/public-curldemo 
+
+$ curl --cookie my-cookies.txt \
+	https://corpus.lingsync.org/public-curldemo/\
+    _design/pages/_view/datums
+\end{verbatim}
+\normalsize
+\caption{Creating a record and requesting all data.}
+\label{lingsync-datum}
+\end{figure}
+
+
+\subsection{Search}
+
+It is possible to search across all LingSync public corpora using the
+ElasticSearch API. \autoref{lingsync-search} illustrates a search for data
+points which are grammatical and contain \textit{PAST$|$past$|$pst$|$pass} and
+potentially \textit{CAUS$|$CAUSE$|$caus$|$cause} and \textit{ACC$|$Acc$|$acc},
+for users interested in cross-linguistic co-occurrence of accusative and/or
+causative in past contexts.
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl  \
+ --data '{"query": {"bool": {"must": [],
+ "must_not": [{"term": { "datums.judgement": "*"}}],
+ "should": [{"term": {"datums.gloss": "acc" }},{ 
+   "regexp": {"datums.gloss": "cause?"}},{
+   "regexp": {"datums.gloss": "pa?st"}}]}},
+ "from": 0, "size": 50, "sort": [], "facets": {}}' \
+ http://searchdev.lingsync.org/_search
+\end{verbatim}
+\normalsize
+\caption{Complex cross-corpora search using ElasticSearch's API.}
+\label{lingsync-search}
+\end{figure}
+
+
+
+
+It is also possible to search for morphemes in a particular corpus using either
+ElasticSearch, as illustrated in \autoref{lingsync-search}, or CouchDB Map
+Reduce views, as illustrated in \autoref{lingsync-morpheme-search}.
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl  --cookie my-cookies.txt \
+  https://corpus.lingsync.org/lingllama-communitycorpus
+  /_design/demo/_view/datum_by_morpheme
+  ?key="naya"&include_docs=true
+\end{verbatim}
+\normalsize
+\caption{Searching a single corpus using CouchDB's Map Reduce API.}
+\label{lingsync-morpheme-search}
+\end{figure}
+
+
+
+\subsection{Audio-transcription Alignment}
+The Audio web service is capable of performing two services.
+\autoref{lingsync-aligner} illustrates the use of the
+Prosodylab-Aligner%
+\footnote{\url{https://github.com/kylebgorman/Prosodylab-Aligner}} %
+tool developed at the McGill Prosody Lab. This service significantly automates
+the association of transcriptions to relevant audio clips and therefore helps
+to provide a class of data that will prove valuable in applications such as
+talking dictionaries and language learning tools. \autoref{lingsync-video}
+illustrates an additional web service that wraps
+FFMPEG%
+\footnote{\url{http://www.ffmpeg.org/}} %
+and Praat%
+\footnote{\url{http://www.praat.org/}} %
+to convert any video or audio format to .mp3 and automatically generate
+syllable timings and suggested utterance boundaries for automatic chunking of
+data.
+
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl -k --cookie my-cookies.txt \
+  -F filesToUpload[]=@noqata_tusunayawami.wav \
+  -F filesToUpload[]=@noqata_tusunayawami.lab \
+  https://speechdev.lingsync.org/upload
+
+\end{verbatim}
+\normalsize
+\caption{Aligning audio and text via Prosodylab-Aligner web service.}
+\label{lingsync-aligner}
+\end{figure}
+
+
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl -k --cookie my-cookies.txt \
+ -F videoFile=@noqata_tusunayawami.mov \
+  https://speechdev.lingsync.org/upload/extract/utterances
+  
+ curl https://speechdev.lingsync.org
+ /utterances/noqata_tusunayawami/
+ noqata_tusunayawami.mp3 
+ 
+ curl https://speechdev.lingsync.org
+ /utterances/noqata_tusunayawami/
+ noqata_tusunayawami.mp3.TextGrid
+\end{verbatim}
+\normalsize
+\caption{Extracting audio and syllable timing from video files via the Audio web service.}
+\label{lingsync-video}
+\end{figure}
+
+
+\subsection{Reusing computational linguistics resources for low-resource languages}
+
+\autoref{lingsync-parse} illustrates an Inuktitut parsing web service which wraps an existing
+morphological analyzer for Inuktitut \cite{Farley:2012:Online}.
+
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl https://lexicondev.lingsync.org
+  /analysisbytierbyword/inuktitut/arraagunullu
+\end{verbatim}
+\normalsize
+\caption{Inuktitut morphological analyzer request.}
+\label{lingsync-parse}
+\end{figure}
+
+
+\subsection{Technologies}
+
+LingSync is built entirely using HTML5, its modules are written in JavaScript and web services are also written in JavaScript and run on the Node.js%
+\footnote{\url{http://nodejs.org/}} %
+software platform. Data is stored in JavaScript Object Notation (JSON) in Apache CouchDB%
+\footnote{\url{http://couchdb.apache.org/}} %
+on the server and in IndexedDB in the Prototype GUI on the client-side. Both GUIs are
+built on client side web technologies (HTML5, CSS, and JavaScript), with the LingSync
+Prototype using the Backbone%
+\footnote{\url{http://backbonejs.org/}} %
+framework and LingSync Spreadsheet the Angular%
+\footnote{\url{http://angularjs.org/}} %
+framework.
+
+
+\subsection{Extant LingSync Data}
+
+\autoref{lingsync-data} provides an overview of the corpora currently being
+developed using LingSync. In the past 1.5 years since LingSync was launched
+there are a surprising number of LingSync users (over 300) given its limited
+target audience of field linguistics teams. However, we estimate only 38 users
+have performed more than 100 activities in the system. There appear to be
+roughly 15 corpora which could be deemed ``active'' with more than 300
+activities. For privacy reasons, we do not know which languages are represented
+in the system.
+
+\begin{table}[h]
+\begin{center}
+\scriptsize
+\begin{tabular}{lrrrr}
+      \toprule
+                     ~ &  Active & Investigating & In-active & Total\\
+      \midrule
+      Public Corpora  &       2 &   1 &   2 & 5 \\ 
+      Private Corpora &      15 &  37 & 321 & 373\\ 
+      Users           &      38 &  43 & 220 & 301 \\
+      \bottomrule
+
+\end{tabular}
+\caption{Data in LingSync corpora (Feb 14, 2014).
+Active corpora ($>$300 activities). Investigating corpora (300-10 activities). Active users ($>$100 activities). Investigating users (100-10 activities).}
+\label{lingsync-data}
+ \end{center}
+ \normalsize
+\end{table}
+
+
+\section{OLD}
+\label{old-api}
+
+The OLD also exposes RESTful web services for search, create, read, update, and delete
+(SCRUD) operations. A language-specific OLD web service allows for concurrent
+multi-user read/write access to a relational fieldwork database. This section
+ reviews the database schema, the graphical user and
+application programming interfaces, the search and morphological parsing
+functionalities, the implementation technologies, and the data present on
+currently deployed OLD applications.
+
+
+\subsection{Database Schema}
+
+A simplified UML representation of the OLD schema is provided in
+\autoref{old-uml}. 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.35]{images/OLD_relational_model_UML.pdf}
+\caption{UML diagram of the OLD's relational model (abbreviated).}
+\label{old-uml}
+\end{center}
+\end{figure}
+
+The core object/resource of an OLD web service is the \textit{form}, which is
+used to represent morphemes, words, phrases, or sentences. A \emph{form} has
+attributes for (orthographic and phonetic) transcriptions, a morphological
+analysis (i.e., morpheme segmentation, glosses, and categories), a syntactic
+representation (e.g., a phrase structure tree in bracket notation), metadata
+(e.g., provenance), and related media files (e.g., audio/video recordings).
+Ordered pointers to OLD \emph{forms} are used to create both formatted texts
+(exportable as LaTeX) as well as corpora, including treebanks that can be
+searched structurally via an interface to the TGrep2%
+\footnote{\url{http://tedlab.mit.edu/~dr/Tgrep2/}} %
+utility. The model can also store morphological parser objects and their
+sub-components, i.e., finite-state transducer implementations of phonological
+and morphotactic models and \textit{N}-gram language model-based implementations
+of parse disambiguators.
+
+
+\subsection{GUI}
+
+The graphical user interface (GUI) of the OLD %
+is a collection of dynamically generated HTML pages containing a) web forms for
+creating and updating OLD objects and b) representations of text and
+\emph{form} objects (in interlinear glossed text (IGT) format) with embedded
+representations of associated files. OLD texts, search results, and individual
+\emph{forms} can be exported in (Xe)LaTeX, TSV, and plain text formats.
+
+A notable feature of the OLD GUI is its provision of visual feedback on the
+extent to which user-generated morphological analyses match existing lexical
+entries in the database. That is, when a user creates a morphologically complex
+\emph{form}, the IGT representation indicates, via color-coded internal links,
+whether the morpheme shapes and glosses match current lexical entries. This
+feature has proved to be quite useful in encouraging groups of fieldworkers to
+strive for consistency in glossing and morpheme shape representation.
+
+
+\subsection{API}
+
+OLD web services expose a RESTful API for SCRUD requests on resources. That is,
+combinations of URL patterns and HTTP methods names are mapped consistently and
+transparently to operations on the relevant resources. The payloads of all HTTP
+requests to and responses from an OLD web service are JSON. \autoref{old-auth}
+illustrates using \texttt{curl} to send a username and password as a JSON object
+to a locally served OLD web service; a cookie will be saved to \texttt{./my-cookies.txt} and
+the response body will contain the JSON object \texttt{\{"authenticated":
+true\}}.
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --cookie-jar my-cookies.txt \
+    --header "Content-Type: application/json" \
+    --data '{"username": "...", "password": "..."}' \
+    http://127.0.0.1:5000/login/authenticate
+\end{verbatim}
+\normalsize
+\caption{Authenticating to an OLD web service.}
+\label{old-auth}
+\end{figure}
+
+\autoref{old-form} illustrates using the HTTP POST method to request creation
+of an OLD \emph{form} object, and then (using the default GET method) requesting all
+\emph{forms} in the database. The first request returns a JSON object representing the
+\emph{form} just created and the second returns an array of objects, one for each \emph{form}
+in the database.%
+\footnote{In subsequent HTTP requests the cookie and header parameters are
+omitted for brevity.}
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --request POST --cookie my-cookies.txt \
+    --data '{"transcription": "omi imitaa", ... }' \
+    http://127.0.0.1:5000/forms
+
+$ curl http://127.0.0.1:5000/forms
+\end{verbatim}
+\normalsize
+\caption{Creating a \emph{form} and requesting all \emph{forms}.}
+\label{old-form}
+\end{figure}
+
+Given the consistency and transparency of this API, and given the fact that
+most programming languages have mature libraries for sending and receiving 
+HTTP requests and responses and for serializing to and parsing from JSON, OLD
+resources can easily be re-purposed in a variety of ways.
+
+
+\subsection{Search}
+
+An OLD web service can be searched via a JSON-based interface to the underlying
+RDBMS's query functionality, i.e., an SQL \texttt{WHERE} clause with joins
+handled automatically. \autoref{old-search} illustrates a search that returns
+all \emph{forms} with \textit{cat} as a translation, that are not ungrammatical, whose
+transcriptions begin with \textit{p}, and which have no morpheme gloss
+information. Note the use of the non-standard \texttt{SEARCH} method,%
+\footnote{The \texttt{POST} method with the URL path \texttt{/forms/search} is
+a synonym.} %
+the use of nested JSON arrays to represent hierarchically structured filters,
+the implicit join on the translation table, and the use of regular expressions.
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --request SEARCH \
+ --data '{"query": {"filter": ["and", [
+  ["Form", "translations", "transcription", "=", "cat"],
+  ["or", [["not", ["Form", "transcription", "=", "*"]],
+          ["Form", "grammaticality", "=", null]]],
+  ["Form", "transcription", "regex", "^p"],
+  ["Form", "morpheme_gloss", "=", ""]]]}}' \
+ http://127.0.0.1:5000/forms
+\end{verbatim}
+\normalsize
+\caption{Complex search.}
+\label{old-search}
+\end{figure}
+
+When a morphologically complex \emph{form} is created, an OLD web service generates
+a string representation of the morphological analysis, i.e., morpheme shapes,
+glosses, and categories. This attribute---labeled
+\texttt{break\_gloss\_category}---can be targeted by search filters, thus allowing
+for morphemes to be matched unambiguously. \autoref{old-morpheme-search}
+illustrates how one could search for all \emph{forms} containing a morpheme with the
+shape /wa/, that is glossed \textit{3SG}, and which has category \textit{Agr}.%
+\footnote{The OLD would serialize such a morpheme to \texttt{wa|3SG|Agr}. The
+delimiter used---in this case the vertical line character---can be configured on
+a per-application basis.}
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --request SEARCH \
+ --data '{"query": {"filter":
+  ["Form", "break_gloss_category", "regex",
+    "-wa\|3SG\|Agr( |-|$)"]}}' \
+ http://127.0.0.1:5000/forms
+\end{verbatim}
+\normalsize
+\caption{Unambiguous morpheme search.}
+\label{old-morpheme-search}
+\end{figure}
+
+An OLD corpus object consisting of a sequence of \emph{form} objects with syntactic
+representations in PTB-compatible bracket notation%
+\footnote{I.e., Penn Treebank bracket notation, cf. \cite{taylor2003penn} and
+\url{http://www.cis.upenn.edu/~treebank/}.} %
+can be written server-side to a treebank file and compiled to a binary format
+that can be searched using the TGrep2 utility. This allows for \emph{forms} to be
+searched according to complex syntactic structural patterns. \autoref{old-tgrep2}
+illustrates a search of corpus 1 for \emph{forms} whose syntactic
+representations have a TP or an IP node that immediately dominates a DP which
+itself dominates an AP, cf.  \cite{rohde2005tgrep2}.
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --request SEARCH \
+  --data '{"tgrep2pattern": "/^[TI]P$/ < (DP << AP)"}'
+  http://127.0.0.1:5000/corpora/1/tgrep2'
+\end{verbatim}
+\normalsize
+\caption{TGrep2 structural search.}
+\label{old-tgrep2}
+\end{figure}
+
+
+
+\subsection{Morphological Parsers}
+
+OLD web services allow for the creation of multiple morphological parsers.
+These consist of two-way morpho-phonological mappings implemented as
+finite-state transducers---using the Foma%
+\footnote{\url{http://code.google.com/p/foma}} %
+finite-state utility---and parse disambiguators implemented as \textit{N}-gram
+morpheme language models---using MITLM.%
+\footnote{\url{https://code.google.com/p/mitlm}}
+Contributors create hand-written phonology objects as ordered context-sensitive
+rewrite rules that are compiled to FSTs. Morphology FSTs and \textit{N}-gram-based
+disambiguator objects are induced by the system based on corpora created by the 
+user. \autoref{old-parse} illustrates a request to parse Fr. \textit{tombait};
+this will return a JSON object with \texttt{tombait} as its sole key with the 
+sole value being an array of zero or more candidate parses formatted as strings and 
+ordered from most to least probable, e.g., \texttt{["tombe|fall|V-ait|3SG.IMPV|Agr"]}.
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+$ curl --request PUT \
+  --data '{"transcriptions": ["tombait"]}'
+  http://127.0.0.1:5000/morphologicalparsers/1/parse'
+\end{verbatim}
+\normalsize
+\caption{Morphological parse request.}
+\label{old-parse}
+\end{figure}
+
+Since OLD morphological parsers can be created and parses requested entirely by
+issuing HTTP/JSON requests, other applications can easily make use of them. In
+addition, OLD morphological parser objects can be exported as .zip archives
+that contain all of the requisite binaries (i.e., compiled Foma and MITLM
+files) and a Python module and executable which together allow for the parser
+to be used locally via the command line or from within a Python program.
+
+Not only can parsers help to expedite the creation of morphological analyses,
+their components include functioning models of phonologies and morphologies that
+can be used to find empirical exceptions to analyses and/or potential errors
+during data entry.
+
+
+\subsection{Technologies}
+
+The OLD is written in Python using the Pylons web framework%
+\footnote{\url{http://www.pylonsproject.org/projects/pylons-framework/about}} %
+and an SQLAlchemy-mediated interface to the RDBMS (usually MySQL, but SQLite is also
+supported). It exposes a RESTful API where the content in the body of HTTP 
+requests and responses is formatted as JSON throughout.%
+\footnote{File data can be Base64 encoded and passed as values of JSON objects.
+However, such encoding is costly and is therefore optional.} %
+The GUI of the OLD v. 0.2 is HTML, CSS, and JavaScript (YUI \& jQuery).
+
+
+\subsection{Extant OLD Data}
+
+There are currently nine language-specific OLD applications in use. In total,
+there are about 19,000 \emph{forms} (primarily sentences), 300 texts, and 20 GB worth
+of audio files.  There are 180 registered users across all applications, of
+which 98 have entered and 87 have elicited at least one \emph{form}. The applications
+for Blackfoot, Nata, Gitksan, Okanagan, and Tlingit are seeing the most use. The
+exact figures are summarized in \autoref{old-data}.
+
+(Note that the values in the speakers column are taken from Ethnologue%
+\footnote{\url{http://www.ethnologue.com}} %
+and are provided only to give a rough indication of the speaker populations of
+the languages. Also, the three-character codes in the first column are the ISO
+639-3%
+\footnote{\url{http://www-01.sil.org/iso639-3}} %
+identifiers of the languages.)
+
+
+\begin{table}[h]
+ \begin{center}
+     \scriptsize
+\begin{tabular}{lrrrrr}
+
+      \toprule
+      language &                     \emph{forms}  & texts & audio & GB   & speakers \\
+      \midrule
+      Blackfoot (\textit{bla}) &     8,847  & 171   & 2,057 & 3.8  & 3,350    \\ % 11,075 4047074461 bytes
+      Nata (\textit{ntk}) &          3,219  & 32    & 0     & 0    & 36,000   \\ % 3,251  0 bytes
+      Gitksan (\textit{git}) &       2,174  & 6     & 36    & 3.5  & 930      \\ % 2,216  3787227136 bytes
+      Okanagan (\textit{oka}) &      1,798  & 39    & 87    & 0.3  & 770      \\ % 1,924  349478912 bytes
+      Tlingit (\textit{tli}) &       1,521  & 32    & 107   & 12   & 630      \\ % 1,660  12906459136 bytes
+      Plains Cree (\textit{crk}) &   686    & 10    & 0     & 0    & 260      \\ % 696    0 bytes
+      Ktunaxa (\textit{kut}) &       467    & 33    & 112   & 0.2  & 106      \\ % 612    176128000 bytes
+      Coeur d'Alene (\textit{crd}) & 377    & 0     & 199   & 0.0  & 2        \\ % 576    28659712 bytes
+      Kwak'wala (\textit{kwk}) &     98     & 1     & 1     & 0.0  & 585      \\ % 100    7450624 bytes
+      TOTAL &                        19,187 & 324   & 2,599 & 19.8 &         \\ % 22,110 21302477981 bytes
+      \bottomrule
+
+\end{tabular}
+\caption{Data in OLD applications (Feb 14, 2014)}
+\label{old-data}
+ \end{center}
+ \normalsize
+\end{table}
+
+
+
+\section{Data Privacy}
+\label{privacy}
+
+In many linguistic fieldwork contexts, speakers and communities require that
+the data they provide (all or portions thereof) be kept confidential.
+There are numerous valid reasons for imposing this requirement. It often happens
+that a speaker will speak quite candidly during a recorded elicitation session and
+may want to restrict access to all or parts of that recording for personal
+reasons. It also happens that particular stories or descriptions of rituals and
+cultural practices need to be restricted to just the language community or
+even to sub-groups within the community. In communities where historical knowledge 
+can be encoded in oral tradition, it is even possible that the narratives collected 
+by fieldworkers might have relevance in a legal context, e.g., in resource disputes.
+Given the post-colonial context of many fieldwork situations, there is an entirely
+understandable distrust of the dominant society that may result in speakers or
+communities adopting a generally cautious (or even zero tolerance) approach when
+it comes to sharing language data via a web-based application.
+
+It is important to note that LingSync and the OLD do, in fact, comply with this
+requirement by requiring authentication prior to data access, keeping data
+private by default, and, in the case of LingSync, allowing contributors to
+encrypt their data. Data is to be made public through LingSync/OLD only after
+an intentional decision to do so and in accordance with speaker and community
+requirements, which teams are encouraged to document in their corpora's Terms of
+Use, Copyright and License information.
+
+
+\section{Data Publishing}
+\label{open-data}
+
+LingSync/OLD users are able to make subsets of their data stores publicly
+accessible for the advancement of (at least) three distinct endeavors: 1)
+academic research, 2) the development of language learning tools for
+heritage and second language learners, and 3) the development of data sets for
+natural language processing of low-resource languages. Examples of this last
+endeavor might include the building of better search indexes, classifiers,
+and speech recognition and text-to-speech systems which can then be further
+used to facilitate the use of the data by language communities and researchers.
+
+A majority of LingSync/OLD contributors are doing fieldwork on languages that
+are not only under-resourced but also endangered. In this context, the primary
+interests of speaker consultants and their communities lie not in theoretical
+linguistic research but in the generation of resources that are directly
+relevant to the communities' goals and to increasing the community diaspora's
+access to language data. Linguists are now also much more aware of the need to
+create records that can be reused by the people we record and that will still be
+available for their descendants \cite[p.129]{Thieberger:2012}, as well as the
+importance of designing documentary projects in ways that allow speaker
+communities to benefit from the work of an outside researcher \cite{Good:2012}.
+
+Descriptive grammars and dictionaries are of variable utility in this domain.
+Learning grammars, web-accessible audio (i.e., ``talking'') dictionaries,
+culturally relevant narratives, pedagogical materials, and dedicated language
+learning software are generally more valuable to communities, yet these tend to
+require a dedicated effort to produce and do not efficiently exploit
+opportunities for the reuse of data gathered primarily for research purposes. 
+Data gathered for research purposes is often focused on edge cases, usually
+using small vocabulary sets to explore less frequent grammatical structures.
+In response to this, the Learn X Android app in \autoref{learn_x_screenshot}
+was created; it permits language learners to collaboratively create and share
+lessons with their peers and mentors. Heritage speakers can benefit from the
+same collaborative infrastructure under LingSync/OLD to build a corpus and share
+their lessons with each other. 
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{images/learnX}
+\caption{Screenshot of Learn X, an Android app which lets users build language
+learning apps using LingSync/OLD.}
+\label{learn_x_screenshot}
+\end{center}
+\end{figure}
+
+
+
+LingSync's permissions system was designed so that language community members
+and heritage speakers of the language can use the multimedia data collection
+features of Android phones (camera, audio, video) to construct their own
+language learning lessons which are saved into their own corpus and/or
+contributed to a team corpus.
+
+We are currently testing Learn X in the field%
+\footnote{\url{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian}} %
+(March-June 2014) with members of the TLG volunteers (Teach Learn Georgia).
+Like heritage learners, TLG volunteers spend their time surrounded with the
+language, can understand more than they can speak, and what they speak about is
+highly dependent on what their family speaks about most. LingSync's
+open-endedness and confidentiality settings make it easy for teams to create
+and share vocabularies/phrases.
+In fact, there are many other contexts which will not be acknowledged or printed
+in any online grammar or second language materials, contexts which users can
+elect to hide from other users, or share with certain users depending on their
+comfort level.
+
+
+
+\section{Conclusion}
+
+In this paper we have provided a brief overview of the LingSync/OLD projects as
+well as the resulting data and data uses. LingSync and the OLD excel at helping
+language communities and fieldworkers collaboratively gather, structure,
+search, and format primary and secondary linguistic data. While respecting
+community requirements and keeping some data private, teams are able to make
+select data sets accessible and reusable. For further discussion of how
+LingSync/OLD data can be exported/published in existing online linguistics
+repositories such as EOPAS%
+\footnote{\url{http://www.eopas.org/}} %
+and OLAC%
+\footnote{\url{http://www.language-archives.org/}} %
+see \cite{lingsync:2012}. For updates on other modules built upon the
+LingSync/OLD APIs see the project's completed milestones.%
+\footnote{\url{https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed}}
+
+
+
+\bibliographystyle{acl}
+\bibliography{bibliography}
+
+\end{document}
