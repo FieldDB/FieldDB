@@ -105,20 +105,23 @@ Montr\'eal \\
 \maketitle
 
 
-% BEGIN COMMENTED OUT VERSION OF PAPER AS IT WAS ON THU, APR 24, 2014, 16:34 PST
+\begin{abstract}
+The abstract needs to be rewritten once the paper has been rewritten.
+\end{abstract}
+
+
+
+% PREVIOUS ABSTRACT
 \begin{comment}
-
-
-
 \begin{abstract}
 LingSync and the Online Linguistic Database (OLD) are new models for the
 collection and management of data in endangered language settings. The
 Ling\-/Sync and OLD projects seek to build a community of computational and
 documentary linguists both by opening the project development on GitHub and
 also by creating web services and user interfaces which facilitate
-collaborative and inclusive linguistic fieldwork. This paper presents the \glspl{api}
-of these tools and resources generated thus far (i.e., languages being
-documented, numbers and types of entries). We also briefly discuss the
+collaborative and inclusive linguistic fieldwork. This paper presents the
+\glspl{api} of these tools and resources generated thus far (i.e., languages
+being documented, numbers and types of entries). We also briefly discuss the
 integration of specific computational methods into the systems, including the 
 McGill Prosodylab-Aligner which uses OpenFST and HTK for automatic audio
 alignment of novel data, as well as integration of various  open source
@@ -129,6 +132,15 @@ data private while also assisting language communities in developing an
 inclusive relationship with the data via community-focused web apps, lexicons
 and Android mobile apps.
 \end{abstract}
+\end{comment}
+% END PREVIOUS ABSTRACT
+
+
+
+\section*{Proposed restructuring of the paper}
+
+The paper used to be a compare and contrast layout, this made sense if we were comparing the tools like in Joel's dissertation. But what we are really doing in this workshop is arugeing for the tools, not choosing between them. I'd like to change the structure to be more thematic oriented, rather than divided by tools.
+
 
 \section{Reviewer comments}
 
@@ -213,33 +225,6 @@ test them agaist various data sets so that they can be refined. This is an
 interesting point (in my view), and one that should be included in the paper.
 
 
-\subsection{Really discuss the private data issue}
-
-``The so-called `discussion' of `the importance of allowing contributors to
-keep certain data private while also assisting language communities in
-developing \ldots' is not so much a discussion as it is a statement to the effect
-that communities should have the right to keep certain data private. This is
-totally superfluous. A more appropriate discussion is to what extent the
-scientific community should bother with private data and to what extent
-technology for such belongs in scientific conferences.''
-
-This is a good point. I think that the scientific community \textit{should}
-bother with LingSync/OLD data. The fact that this reviewer questions this claim
-indicates that we have swung too far in the direction of wanting to assure our
-users that their data are private. Of course private data is offensive to the
-sensibilities of any self-respecting open source programmer and/or academic.
-But we also need to recognize and have understanding for the valid requirements
-of our users. I think we need to make it clear that there are and will be
-public data sets. We need to make it clear that we understand that this is
-important too, e.g., for replicability of experiments. We need to build trust
-and one way to do that is by using the data that are made public in order to 
-generate resources and tools that are valuable to the owners of the data. And 
-this is a major goal of the OLD/LingSync (as I see it). These data are rare
-and, therefore, valuable. Smart NLP folks can make significant contributions to
-language documentation, theoretical linguistic research, language
-revitalization, and the better performance of their own models if they tackle
-our data.
-
 
 \subsection{Too technical}
 
@@ -252,7 +237,7 @@ our data.
 
 ``Define terms (e.g., RESTful).''
 
-I'm planning to use the \LaTeX{}~ glossaries package to consistently define all of
+I'm planning to use the \LaTeX glossaries package to consistently define all of
 the acronyms and technical jargon. I'm unsure if including an actual glossary
 section in the paper is a good idea though, or if there will even be room for
 this. Unfortunately there aren't many formatting options for the glossary listing
@@ -333,65 +318,237 @@ appropriate in such a short paper as this. I think we need to focus on the major
 themes.
 
 
+% COMMENTED OUT FOOTNOTE ON "REST"
+%\footnote{REST stands for REpresentational State Transfer
+    %\cite{fielding2000architectural} Here we use the term \textit{RESTful} to
+    %refer to a web site that exposes resources for retrieval and manipulation
+    %in accordance with standard HTTP (Hypertext Transfer Protocol) request
+    %patterns. A RESTful API (application programming interface) essentially
+    %makes it easy to programmatically interact with a web site in predictable
+%ways, thus facilitating its reuse in a variety of contexts.} %
+
+
+
+
 
 \section{Introduction}
 LingSync%
 \footnote{\url{https://www.lingsync.org/}; Source:
 \url{https://github.com/OpenSourceFieldlinguistics/FieldDB}.} %
 and the Online Linguistic Database (OLD)%
-\footnote{Source: \url{https://github.com/OpenSourceFieldlinguistics/old};
-    Documentation:
-\url{https://online-linguistic-database.readthedocs.org/en/latest/}.}%
-~are RESTful%
-\footnote{REST stands for REpresentational State Transfer
-    \cite{fielding2000architectural} Here we use the term \textit{RESTful} to
-    refer to a web site that exposes resources for retrieval and manipulation
-    in accordance with standard HTTP (Hypertext Transfer Protocol) request
-    patterns. A RESTful API (application programming interface) essentially
-    makes it easy to programmatically interact with a web site in predictable
-ways, thus facilitating its reuse in a variety of contexts.} %
-web apps which facilitate collaborative linguistic fieldwork. 
-Section \ref{other-software} provides an overview of existing web-based strategies
-currently employed by teams of fieldworker-researchers to share under-resourced
-language data and to derive web-available resources. The APIs
-(Application Programming Interfaces) of LingSync and the OLD are presented in
-\autoref{lingsync-api} and \autoref{old-api}, respectively. The systems'
-implementations of data privacy are discussed in \autoref{privacy}, while 
-\autoref{open-data} discusses data sharing with larger audiences---in
-particular, as part of language learning apps or as additional resources for
-adaptation of existing Natural Language Processing techniques to low-resource
-language data.
+\footnote{\url{http://www.onlinelinguisticdatabase.org}; Source:
+    \url{https://github.com/OpenSourceFieldlinguistics/old}; Documentation:
+\url{https://online-linguistic-database.readthedocs.org/en/latest/}.} %
+are software tools designed to facilitate linguistic fieldwork, especially that
+which targets endangered languages. The term \textit{linguistic fieldwork} is
+here given broad interpretation; that is, we take it to encompass all efforts
+in the domains of language documentation, description, revitalization, and
+linguistic research whenever these involve the elicitation of primary
+linguistic data from native speakers. The claim that these sub-endeavors of
+linguistic fieldwork are interconnected is central to the argument for the
+utility of LingSync and the OLD. In the endangered languages context, it is
+crucially important to develop tools and methodologies that contribute towards
+reciprocity between these subdomains and their practitioners. This paper argues
+that LingSync and the OLD accomplish this by facilitating data-sharing and
+collaboration among fieldworkers of various stripes and by implementing
+features that contribute to the accomplishment of their various goals.
+
+The argument is structured as follows. In \autoref{sec:fieldwork} we discuss
+the particular challenges of endangered language fieldwork and the
+opportunities for advancing the state of the art. We then argue that LingSync
+(\autoref{sec:lingsync}) and the OLD (\autoref{sec:old}) are beneficial to
+linguistic fieldwork by demonstrating that they facilitate data-sharing and
+collaboration, promote consistency, allow for sophisticated searches, automate
+the creation of segmented audio files and morphological analyses, permit the
+implementation and testing of models of grammatical components, expose
+re-purposable \glspl{api}, and contribute to language learning.%
+\smalltodo{Note: some of these components merit their own sections; for example,
+Learn X, which currently has its own section.}
 
 
-\section{Collaborative Fieldwork Software}
-\label{other-software}
-Over the past decade or so, a fragmented landscape of collaborative web-based%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Endangered Languages Fieldwork
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Endangered Languages Fieldwork}\label{sec:fieldwork}
+
+Endangered languages are valuable culturally and scientifically, to their
+communities of origin and to humanity as a whole (cf.
+\cite{harrison2007languages}). There is general recognition that concerted
+efforts must be made to document these languages while there is still time and,
+especially from the viewpoint of the communities, increase the rates at which
+they are learned and used, i.e., fight for their revitalization.  At the same
+time, much scholarly linguistic effort is being directed towards gathering data
+on these understudied languages for the purposes of scientific discovery.
+
+Clearly, successful revitalization, insofar as it produces thriving speaker
+populations, is a boon to documentation and research. It is also
+uncontroversial to assert that effective documentation will produce artifacts
+(e.g., dictionaries, grammars, collections of narratives) that are useful to
+revitalization and research. A less evident claim, but one that is made here,
+is that the work of linguistic researchers can benefit revitalization and
+documentation efforts. What is needed to realize this reciprocity, however, are
+tools and methods that make it easy for these various fieldwork actors to access
+and make effective use of the products of their labours.
+
+In an ideal situation, it would be easy for fieldworkers of various stripes to
+share and reuse the primary data (i.e., transcriptions, translations, and audio
+recordings) as well as primary analytical information (e.g., morphological
+analyses, categorizations, annotations) that are generated by themselves and
+their peers. Data would be available on the Internet (subject to the
+restrictions of communities, see below) in formats that are usable to both
+humans (i.e., \glspl{gui}) and machines (i.e., \glspl{api}). It would also be
+highly searchable and intelligently structured and, where possible, consistent.
+
+However, the current state of the art is, in our estimation, conspicuously
+distant from this ideal. Much of the data generated by linguistic fieldwork is
+still stored in handwritten notes or, if digitized, then in documents that are
+oftentimes unstructured, sequestered on local hard drives, or proprietarily
+formatted.
+
+% Footnotes for SIL tools URLS, not sure if we need them anymore.
+%\footnote{\url{http://fieldworks.sil.org/flex/}} %
+%\footnote{\url{http://www-01.sil.org/computing/toolbox/}} %
+%\footnote{\url{http://www-01.sil.org/computing/shoebox/}} %
+
+Many fieldworkers use FLEx \cite{sil-flex} or Toolbox/Shoebox%
+\footnote{Toolbox is the community-supported continuation of Shoebox after
+    \gls{sil} ceased actively supporting it.} %
+\cite{sil-toolbox-info}, desktop applications developed by \gls{sil}. However,
+these programs have limited or non-existent support for web-based collaboration
+and data-sharing, Toolbox/Shoebox lacking it altogether and FLEx with a limited
+implementation.  Moreover, they were developed primarily with practical
+lexicography in mind, and as such are not ideally suited to research-based
+linguistics where the primary artifacts generated are not dictionary entries
+but sentences and grammaticality judgments. Further demerits include limited
+cross-platform support,%
+\footnote{Neither FLEx nor Toolbox/Shoebox run natively on Mac operating
+    systems. FLEx runs natively on Linux but Toolbox/Shoebox does not.} %
+insufficient search functionality,%
+\footnote{While FLEx search has advanced significantly over that of
+    Toolbox/Shoebox, with a notably impressive interface for regular expression
+    creation, some highly useful search features are still lacking.} %
+and issues with open access to the source code.%
+\footnote{While both are freely available, FLEx's source is open while
+Toolbox/Shoebox's is closed.} %
+For reviews of these tools, see \cite{Butler:2007,rogers10,robinson07}.
+
+Over the past decade or so, a number of language-specific collaborative web-based%
 \footnote{We use the term \emph{web-based} to refer to tools which run online
 or offline in a browser and/or mobile device via the use of native interfaces
 and web services, as opposed to traditional offline desktop applications where
 there is little to no server side component.} %
-databases has arisen in response to the need for software that could allow
-linguistic fieldworkers to share their primary data (internally and with
-specific language communities), thereby increasing the efficiency of the
-fieldwork process and the numerous ventures which depend upon its products,
-i.e., documentation, description, analysis, and revitalization. Such database
-applications include the Myaamia Project \cite{Myaamia:2001}, the Yurok
-Documentation Project \cite{Yurok:2001:Online}, the Washo Project
-\cite{Washo:2005:Online}, \cite{Cihlar:2008}, the Washo Mobile Lexicon
-\cite{WashoMobile:2008:Online}, Karuk Dictionary and Texts
-\cite{Karuk:2009:Online}, the OLD \cite{dunham2014}, and LingSync
-\cite{lingsync:2012}. Non web-based tools like FLEx,%
-\footnote{\url{http://fieldworks.sil.org/flex/}} %
-Toolbox,%
-\footnote{\url{http://www-01.sil.org/computing/toolbox/}} %
-and Shoebox%
-\footnote{\url{http://www-01.sil.org/computing/shoebox/}} %
-often lack cross-platform operability, multi-user support, or web accessibility
-\cite{Butler:2007}. In addition, these tools are designed primarily for
-practical lexicography and, as a result, focus on the creation of dictionary
-entries; however, this can prove inadequate for theoretical linguists, who deal
-primarily in linguistic examples at the sentence level and are interested also
-in negative data (i.e., ungrammatical forms).
+databases have arisen, examples of which are the Myaamia Project
+\cite{Myaamia:2001}, the Yurok Documentation Project \cite{Yurok:2001:Online},
+the Washo Project \cite{Washo:2005:Online}, \cite{Cihlar:2008}, the Washo
+Mobile Lexicon \cite{WashoMobile:2008:Online}, and Karuk Dictionary and Texts
+\cite{Karuk:2009:Online}. More recently, collaborative web-based
+tools have arisen that, like FLEx and Toolbox, are not specific to any one language.
+In this family belong the OLD \cite{dunham2014} and LingSync \cite{lingsync:2012}
+as well as TypeCraft \cite{farrar10} and EOPAS.%
+\footnote{\url{http://www.eopas.org/}} %
+
+In order to appreciate the significance of web-based collaborative fieldwork
+software, it may be necessary to expand one's preconceptions of what linguistic
+fieldwork looks like in practice. Clearly there is an enduring appeal
+to the vision of the intrepid field linguist on a weeks-long journey to a
+remote and conspicuously Internet-less location in Papua New Guinea or Amazonia
+labouring at collecting texts from which to extract a descriptive phonology,
+morphology, and lexicon of some all-but-undiscovered language. However, this
+romantic vision is now arguably something of an anachronism, and certainly it
+is not the full picture. Present-day endangered languages fieldwork, especially
+in North America, is often conducted in universities, urban centers, or on
+reservations in speakers' houses with wireless access and by groups of
+researchers who are already well versed in the descriptive grammars and are
+working to elicit the syntactic, semantic, and pragmatic knowledge that depends
+upon these lower-level insights. As linguists with experience in this type of
+fieldwork-based research, the developers of LingSync and the OLD can attest to
+the fact that collaborative web-based tools for data storage and analysis respond
+to a very real requirement. In these contexts, great strides can be made simply
+by having easy, web-based, and highly searchable access to one's previously
+elicited data and that of one's peers and predecessors.
+
+
+
+
+\textbf{Begin private data stuff ... needs work.}
+
+Another aspect of endangered languages fieldwork that presents a unique set of
+challenges is the requirement of certain communities that (all or portions of)
+the raw data collected by fieldworkers be kept confidential. Given the
+post-colonial context in which many fieldwork situations are embedded, of many 
+
+There are numerous valid reasons for imposing this requirement. It often happens that a speaker
+will speak quite candidly during a recorded elicitation session and may want to
+restrict access to all or parts of that recording for personal reasons. It also
+happens that particular stories or descriptions of rituals and cultural
+practices need to be restricted to just the language community or even to
+sub-groups within the community. In communities where historical knowledge can
+be encoded in oral tradition, it is even possible that the narratives collected
+by fieldworkers might have relevance in a legal context, e.g., in resource
+disputes.
+
+Of course, basing claims on private data runs contrary to a core tenet of the
+scientific method, namely that claims must be able to be assessed with
+transparent access to the methods and data used to support them.
+
+
+``To what extent should the scientific community should bother with private data
+and to what extent technology for such belongs in scientific conferences.''
+
+This is a good point. I think that the scientific community \textit{should}
+bother with LingSync/OLD data. The fact that this reviewer questions this claim
+indicates that we have swung too far in the direction of wanting to assure our
+users that their data are private. Of course private data is offensive to the
+sensibilities of any self-respecting open source programmer and/or academic.
+But we also need to recognize and have understanding for the valid requirements
+of our users. I think we need to make it clear that there are and will be
+public data sets. We need to make it clear that we understand that this is
+important too, e.g., for replicability of experiments. We need to build trust
+and one way to do that is by using the data that are made public in order to 
+generate resources and tools that are valuable to the owners of the data. And 
+this is a major goal of the OLD/LingSync (as I see it). These data are rare
+and, therefore, valuable. Smart NLP folks can make significant contributions to
+language documentation, theoretical linguistic research, language
+revitalization, and the better performance of their own models if they tackle
+our data.
+
+
+Given the post-colonial context of many fieldwork situations, there
+is an entirely understandable distrust of the dominant society that may result
+in speakers or communities adopting a generally cautious (or even zero
+tolerance) approach when it comes to sharing language data via a web-based
+application.
+
+It is important to note that LingSync and the OLD do, in fact, comply with this
+requirement by requiring authentication prior to data access, keeping data
+private by default, and, in the case of LingSync, allowing contributors to
+encrypt their data. Data is to be made public through LingSync/OLD only after
+an intentional decision to do so and in accordance with speaker and community
+requirements, which teams are encouraged to document in their corpora's Terms of
+Use, Copyright and License information.
+
+
+\textbf{End data privacy stuff}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 While LingSync and the OLD arose independently and consequently use different
 technology stacks, the teams behind LingSync and the OLD are, in order to
@@ -411,8 +568,46 @@ customize their own data automation pipelines by incorporating their own
 in-house tools.
 
 
-\section{LingSync}
-\label{lingsync-api}
+
+Here we argue that there is a real need for software that can expedite the 
+accomplishment of fieldwork on endangered languages.
+
+This section will cover the following points:
+
+\begin{itemize}
+    \item fieldworkers of all stripes---i.e., linguistic researchers,
+        descriptive linguists, pure documentarians, revitalizers, and
+        educators---can work in a way that is mutually beneficial.
+        Otherwise put, re-purposing of data is useful and possible.
+        Wrap up the paragraph that says this with an illustration(s)
+    \item The development of fieldwork software \textit{is} fieldwork. It is
+        a form of research, a contribution to documentation and revitalization,
+        not simply the development of a product. That is, LingSync/OLD don't have
+        to blow FLEx/Toolbox/TypeCraft/EOPAS/etc. out of the water to be valuable.
+    \item allowing for data privacy is important; however, this does not mean
+        that all LingSync/OLD data are private or that computational linguists
+        should avoid this domain. To the contrary, computational linguistics has
+        a lot to offer here; lots of low-hanging fruit, as they like to say.
+    \item I want to say something here to the effect that we are excited by
+        the implications of this claim, namely that software engineers and
+        computational linguists will see in LingSync and the OLD opportunities
+        to contribute to aspects of linguistics and linguistic fieldwork that
+        they might not have otherwise envisioned
+\end{itemize}
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LingSync
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{LingSync}\label{sec:lingsync}
+
 LingSync is a set of open source software modules including client-side web
 components and RESTful web services which allow groups of fieldworkers to
 collaboratively create web-accessible corpora of language data
@@ -722,8 +917,7 @@ Active corpora ($>$300 activities). Investigating corpora (300-10 activities). A
 \end{table}
 
 
-\section{OLD}
-\label{old-api}
+\section{OLD}\label{sec:old}
 
 The OLD also exposes RESTful web services for search, create, read, update, and delete
 (SCRUD) operations. A language-specific OLD web service allows for concurrent
@@ -1021,32 +1215,6 @@ identifiers of the languages.)
 
 
 
-\section{Data Privacy}
-\label{privacy}
-
-In many linguistic fieldwork contexts, speakers and communities require that
-the data they provide (all or portions thereof) be kept confidential.
-There are numerous valid reasons for imposing this requirement. It often happens
-that a speaker will speak quite candidly during a recorded elicitation session and
-may want to restrict access to all or parts of that recording for personal
-reasons. It also happens that particular stories or descriptions of rituals and
-cultural practices need to be restricted to just the language community or
-even to sub-groups within the community. In communities where historical knowledge 
-can be encoded in oral tradition, it is even possible that the narratives collected 
-by fieldworkers might have relevance in a legal context, e.g., in resource disputes.
-Given the post-colonial context of many fieldwork situations, there is an entirely
-understandable distrust of the dominant society that may result in speakers or
-communities adopting a generally cautious (or even zero tolerance) approach when
-it comes to sharing language data via a web-based application.
-
-It is important to note that LingSync and the OLD do, in fact, comply with this
-requirement by requiring authentication prior to data access, keeping data
-private by default, and, in the case of LingSync, allowing contributors to
-encrypt their data. Data is to be made public through LingSync/OLD only after
-an intentional decision to do so and in accordance with speaker and community
-requirements, which teams are encouraged to document in their corpora's Terms of
-Use, Copyright and License information.
-
 
 \section{Data Publishing}
 \label{open-data}
@@ -1137,13 +1305,11 @@ LingSync/OLD APIs see the project's completed milestones.%
 \footnote{\url{https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed}}
 
 
-\printglossary
-
-\end{comment}
-
-% END COMMENTED OUT VERSION OF PAPER
+%\printglossary
 
 
+\bibliographystyle{acl}
+\bibliography{bibliography}
 
 
 \end{document}
