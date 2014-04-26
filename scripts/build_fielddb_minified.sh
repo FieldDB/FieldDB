@@ -68,3 +68,5 @@ cp -R couchapp_dev/lists couchapp_minified/lists
 
 rm -rf couchapp_minified/views
 cp -R couchapp_dev/views couchapp_minified/views
+
+rm -rf release
