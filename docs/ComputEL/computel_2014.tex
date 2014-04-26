@@ -38,7 +38,27 @@
 \newcommand{\smalltodo}[2][]
     {\todo[caption={#2}, #1]
     {\tiny#2\normalsize}}
+
+% Have \autoref use the special section symbol instead of `section'.
+\renewcommand{\sectionautorefname}{\S}
+\renewcommand{\subsectionautorefname}{\S}
+\renewcommand{\subsubsectionautorefname}{\S}
+
+% GLOSSARIES PACKAGE
+\usepackage{glossaries}
+\glossarystyle{tree}
+\makeglossaries
+% commands to run to build the glossaries and acronyms files:
+% makeindex -s computel_2014.ist -o computel_2014.gls computel_2014.glo
+% makeindex -t computel_2014.alg -s computel_2014.ist -o computel_2014.acr computel_2014.acn
+
 % End My Package Includes
+
+\newacronym{api}{API}{Aplication Programming Interface}
+\newacronym{gui}{GUI}{Graphical User Interface}
+\newacronym{cl}{CL}{computational linguistics}
+\newacronym{nlp}{NLP}{Natural Language Processing}
+\newacronym{sil}{SIL}{Summer Institute of Linguistics}
 
 
 %\setlength\titlebox{5cm}
@@ -55,8 +75,18 @@
     collection and management of data for language communities, linguists and
 language learners}
 
-% NOTE: BLIND PEER REVIEW MEANS THAT NAMES AND AFFILIATIONS MUST BE REMOVED
-% FROM THE SUBMITTED PAPER !!!!!!
+\author{Joel Dunham \\
+University of British Columbia,   \\
+Department of Linguistics \\
+{\tt jrwdunham@gmail.com} \\\And
+Gina Cook \\
+iLanguage Lab \\
+Montr\'eal \\
+{\tt gina.c.cook@gmail.com} \\  \\\And
+Joshua Horner \\
+Amilia  \\
+Montr\'eal \\
+{\tt jdhorner@gmail.com} \\ }
 
 %\author{First Author \\
 %  Affiliation / Address line 1 \\
@@ -73,13 +103,20 @@ language learners}
 
 \begin{document}
 \maketitle
+
+
+% BEGIN COMMENTED OUT VERSION OF PAPER AS IT WAS ON THU, APR 24, 2014, 16:34 PST
+\begin{comment}
+
+
+
 \begin{abstract}
 LingSync and the Online Linguistic Database (OLD) are new models for the
 collection and management of data in endangered language settings. The
 Ling\-/Sync and OLD projects seek to build a community of computational and
 documentary linguists both by opening the project development on GitHub and
 also by creating web services and user interfaces which facilitate
-collaborative and inclusive linguistic fieldwork. This paper presents the APIs
+collaborative and inclusive linguistic fieldwork. This paper presents the \glspl{api}
 of these tools and resources generated thus far (i.e., languages being
 documented, numbers and types of entries). We also briefly discuss the
 integration of specific computational methods into the systems, including the 
@@ -93,6 +130,209 @@ inclusive relationship with the data via community-focused web apps, lexicons
 and Android mobile apps.
 \end{abstract}
 
+\section{Reviewer comments}
+
+This is a temporary section used to list and discuss the reviewers' comments
+until they have been addressed in the body of the paper.
+
+
+\subsection{Bolster facilitation of collaborative fieldwork claim}
+
+``Most the evidence for this (i.e., LingSync/OLD's facilitation of
+collaboration) in the paper concerns `collaboration to produce code for
+making tools' not `collaboration to do the actual documentation'{}''
+
+I am not quite sure why this reviewer interpreted the paper in this way.
+I guess we need to emphasize \textit{how} LingSync/OLD faclitate linguistic
+fieldwork, and further support the argument for this claim. Also, the
+abstract seems to emphasize the ``develop these tools collaboratively''
+idea more than the ``use these tools to do collaborative fieldwork better.''
+
+
+\subsection{More comparison with other tools}
+
+``Compare the systems with other existing tools used by field linguistics
+(e.g., Shoebox)''
+
+My dissertation does this a bunch. So does the CCURL submission. So we could
+port a bunch of that here. This relates to the specific ``discuss TypeCraft''
+injunction from above.
+
+``Some relevant work is cited but other relevant work is missing, notably
+TypeCraft''
+
+Ok. This could be as minimal as inserting a reference. However, it may be that
+TypeCraft is so revolutionarily splendid that we need to address it in more
+detail than that.
+
+
+\subsection{Overemphasis of web-based-ness}
+
+``The dichotomy between web-based (in their terminology) and non web-based
+technology seems to be overemphasized. In many field situations web access is
+not available, and the distinction is then reduced to whether one decides
+to upload data to a repository or not, whenever there is web access.''
+
+I do not agree. I think that the reviewer sees it this way because we have not
+presented the argument well enough. The point is that collaboration and
+data-sharing will help to advance linguistic fieldwork in all of its aspects. 
+You don't just upload your work to a repository for the benefit of others (at
+least that's not the way I envision the OLD). You do preparatory research by
+searching a LingSync corpus/ OLD app in order to discover which of your
+questions can be answered in this way. This gives you a headstart. Then you do
+fieldwork and have a better chance of eliciting novel and interesting data. 
+Then you contribute back to the system, hopefully in a manner that is
+internally consistent or, better yet, consistent with the conventions of your
+peers. Then your data give your peers a headstart.
+
+
+\subsection{Morphological analysis implementations unclear}
+
+``The abstract promises to `briefly discuss the \ldots integration of various
+open source unsupervised and semi-unsupervised machine learning approaches to
+language independent morphological analysis' but there is only a discussion of
+the integration of a supervised approach. It would be of high interest whether
+the technology discussed in the paper provides an elegant approach to a
+very interactive kind of (semi-)supervised learning of morphology.''
+
+This is a good criticism. I don't think we live up to our abstract's promises
+here.
+
+We're not really doing any sophisticated machine learning stuff here in terms
+of morphological analyzers. At least the OLD is not. But, as I argue in my,
+dissertation, that is actually arguably a good thing in the unique domain of
+computationally assisted theoretical research on understudied languages. That
+is, we want to be able to give linguists (who are experts in the phonologies
+and morphologies of the languages they study) a good deal of control over the
+implementation of these models. While machine learning approaches are good for
+quickly creating morphological analyzers, that is not our only, or even our
+primary goal. The OLD's morphological parser functionality seeks to empower 
+linguists to use the formalisms they already know (e.g., CS phonological
+rewrite rules) to create implementations of their theories/generalizations and
+test them agaist various data sets so that they can be refined. This is an
+interesting point (in my view), and one that should be included in the paper.
+
+
+\subsection{Really discuss the private data issue}
+
+``The so-called `discussion' of `the importance of allowing contributors to
+keep certain data private while also assisting language communities in
+developing \ldots' is not so much a discussion as it is a statement to the effect
+that communities should have the right to keep certain data private. This is
+totally superfluous. A more appropriate discussion is to what extent the
+scientific community should bother with private data and to what extent
+technology for such belongs in scientific conferences.''
+
+This is a good point. I think that the scientific community \textit{should}
+bother with LingSync/OLD data. The fact that this reviewer questions this claim
+indicates that we have swung too far in the direction of wanting to assure our
+users that their data are private. Of course private data is offensive to the
+sensibilities of any self-respecting open source programmer and/or academic.
+But we also need to recognize and have understanding for the valid requirements
+of our users. I think we need to make it clear that there are and will be
+public data sets. We need to make it clear that we understand that this is
+important too, e.g., for replicability of experiments. We need to build trust
+and one way to do that is by using the data that are made public in order to 
+generate resources and tools that are valuable to the owners of the data. And 
+this is a major goal of the OLD/LingSync (as I see it). These data are rare
+and, therefore, valuable. Smart NLP folks can make significant contributions to
+language documentation, theoretical linguistic research, language
+revitalization, and the better performance of their own models if they tackle
+our data.
+
+
+\subsection{Too technical}
+
+\subsubsection{Make the paper more accessible to non-specialists}
+
+``Author needs to make the paper more accessible for a nonspecialist audience.''
+
+
+\subsubsection{Better define terms}
+
+``Define terms (e.g., RESTful).''
+
+I'm planning to use the \LaTeX{}~ glossaries package to consistently define all of
+the acronyms and technical jargon. I'm unsure if including an actual glossary
+section in the paper is a good idea though, or if there will even be room for
+this. Unfortunately there aren't many formatting options for the glossary listing
+that is generated. Even making it single-spaced would be an improvement; however,
+the setspace package seems to break the ACL stylesheet \ldots
+
+
+\subsection{Examples of actual use}
+
+``Show more examples of OLD and LingSync in actual use''
+
+I think that if we remove some of the API stuff (in fitting with other reviewer
+comments), we could replace that with more relevant stuff as suggested here. For
+example, show what the audio service, the parsers, the search functionality, the
+export, the data-sharing, the consistency features, etc. can do and why they are
+helpful to fieldworkers broadly construed (i.e., descriptive documentors,
+researchers, revitalizers, NLPers).
+
+
+\subsection{Demonstrate utility of our approach}
+
+``Demonstrate the utility of our approach, don't merely assert it!''
+
+This overlaps with some of the other criticisms. I think we address it by more
+clearly arguing why LingSync/OLD is good, i.e., motivating the need for
+data-sharing, collaboration, effective search, automated morphological
+analysis, model implementation for research, automated generation of audio file
+clips, facilitating the creation of consistent data sets, etc.
+
+
+\subsection{Opinions of field linguists}
+
+``I would like to know the opinions of field linguists about the systems''
+
+Well, we are field linguists ourselves. I know the lingsync team has collected some of this.
+So have I for the OLD. There is definitely more we could say here \ldots At the
+very least, we could make it clear that these systems were developed by field
+linguists for field linguists. I, at least, have no formal training in software
+engineering and little formal training in NLP \ldots But yeah, dig up those user
+comments \ldots maybe.
+
+
+
+\subsection{Clearly identify intellectual contribution}
+
+``Clearly identify [our] intellectual contribution, and how it addresses the
+inadequacies of the state of the art''
+
+This is a pretty general criticism, but it speaks to the lack of coherence in
+the paper. This could be addressed by fixing the introduction and better
+structuring the paper.
+
+The state of the art is lacking. We need more data-sharing. We need to marshal
+CL/NLP and software engineering advances towards endangered language fieldwork
+(s.l.) efforts.  We need programming-as-fieldwork to be recognized. We need to
+facilitate data re-use so that fieldwork is more efficient, faster. We need to
+make it easier for academics to give back to language communities while still
+fulfilling their grant obligations. LingSync/OLD does this.
+
+
+\subsection{Elaborate on distinctive needs of endangered languages}
+
+Say more about how our approach ``relates to the distinctive needs of working
+with endangered languages''
+
+This touches on the issue of the privacy requirements and whether the scientific
+community should bother with private data. This also relates to the perilous
+nature of much endangered language data. It's very important that research and
+even documentation efforts don't come at the cost of revitalization efforts.
+
+
+\subsection{Reduce low-level detail}
+
+``Too much space is given to the low-level infrastructure''
+
+I think that this is valid. All of the curl/API examples are useful but maybe not
+appropriate in such a short paper as this. I think we need to focus on the major
+themes.
+
+
 
 \section{Introduction}
 LingSync%
@@ -102,7 +342,15 @@ and the Online Linguistic Database (OLD)%
 \footnote{Source: \url{https://github.com/OpenSourceFieldlinguistics/old};
     Documentation:
 \url{https://online-linguistic-database.readthedocs.org/en/latest/}.}%
-~are RESTful web apps which facilitate collaborative linguistic fieldwork. 
+~are RESTful%
+\footnote{REST stands for REpresentational State Transfer
+    \cite{fielding2000architectural} Here we use the term \textit{RESTful} to
+    refer to a web site that exposes resources for retrieval and manipulation
+    in accordance with standard HTTP (Hypertext Transfer Protocol) request
+    patterns. A RESTful API (application programming interface) essentially
+    makes it easy to programmatically interact with a web site in predictable
+ways, thus facilitating its reuse in a variety of contexts.} %
+web apps which facilitate collaborative linguistic fieldwork. 
 Section \ref{other-software} provides an overview of existing web-based strategies
 currently employed by teams of fieldworker-researchers to share under-resourced
 language data and to derive web-available resources. The APIs
@@ -165,13 +413,13 @@ in-house tools.
 
 \section{LingSync}
 \label{lingsync-api}
-LingSync is a set of open source software modules including client side web
+LingSync is a set of open source software modules including client-side web
 components and RESTful web services which allow groups of fieldworkers to
 collaboratively create web-accessible corpora of language data
 \cite{lingsync:2012}. Notable features include powerful searches over the data
 sets, encryption at a field level, social collaborative software features, an
 inclusive permission system, pluggable machine learning algorithms for building
-semi-automatic glossers, two Android based GUIs and five browser-based GUIs,
+semi-automatic glossers, two Android-based \glspl{gui} and five browser-based \glspl{gui},
 one of which functions offline and provides flexible import functionality. This
 section provides an overview of the data structures, APIs, search and
 auto-glossing functionalities, as well as the technologies used, and the amount
@@ -184,7 +432,7 @@ A LingSync database is referred to as a \emph{corpus} and contains
 grant read-only, read/comment, read/write, write-only and administrator access
 to other registered users. A \emph{datum} is a general-purpose linguistic
 unit---generally, a word, sentence or story---whose attributes are
-customizable. However, due to defaults in the LingSync data entry GUIs, each
+customizable. However, due to defaults in the LingSync data entry \glspl{gui}, each
 datum tends to have values for the following attributes: utterance (i.e., an
 orthographic, phonetic, or phonemic transcription), morphemes (i.e., segmented
 morpheme forms), glosses, translation, in addition to tags, comments, and a set
@@ -221,7 +469,7 @@ The use of a document store (similar to Toolbox) rather than a relational
 database allows data schema to change, which enables researchers to customize
 and modify data entry fields at any point during the course of research. Each
 \emph{datum} is traceable to a source (be it a publication or an elicitation
-session). The GUIs for interacting with the LingSync corpus module allow for
+session). The \glspl{gui} for interacting with the LingSync corpus module allow for
 bookmarking data into ordered lists labeled \textit{data lists} which can be
 used for publishing data sets or tracking data which must be cleaned or
 verified.
@@ -333,7 +581,6 @@ $ curl  \
 
 
 
-
 It is also possible to search for morphemes in a particular corpus using either
 ElasticSearch, as illustrated in \autoref{lingsync-search}, or CouchDB Map
 Reduce views, as illustrated in \autoref{lingsync-morpheme-search}.
@@ -350,6 +597,7 @@ $ curl  --cookie my-cookies.txt \
 \caption{Searching a single corpus using CouchDB's Map Reduce API.}
 \label{lingsync-morpheme-search}
 \end{figure}
+
 
 
 
@@ -433,8 +681,8 @@ LingSync is built entirely using HTML5, its modules are written in JavaScript an
 \footnote{\url{http://nodejs.org/}} %
 software platform. Data is stored in JavaScript Object Notation (JSON) in Apache CouchDB%
 \footnote{\url{http://couchdb.apache.org/}} %
-on the server and in IndexedDB in the Prototype GUI on the client-side. Both GUIs are
-built on client side web technologies (HTML5, CSS, and JavaScript), with the LingSync
+on the server and in IndexedDB in the Prototype \gls{gui} on the client-side. Both \glspl{gui} are
+built on client-side web technologies (HTML5, CSS, and JavaScript), with the LingSync
 Prototype using the Backbone%
 \footnote{\url{http://backbonejs.org/}} %
 framework and LingSync Spreadsheet the Angular%
@@ -488,7 +736,14 @@ currently deployed OLD applications.
 
 \subsection{Database Schema}
 
-A simplified UML representation of the OLD schema is provided in
+A simplified UML%
+\footnote{\textit{UML} (Unified Modeling Language) is a standard for creating
+    a visual representation of the design of a system. In \autoref{old-uml}, the
+    boxes represent tables in a relational database, and the lines and their
+    labels the relations between the tables. Thus a form has zero or one
+    categories while a category has zero or more forms; a form has one or more
+translations and a translation has exactly one form; etc.} %
+representation of the OLD schema is provided in
 \autoref{old-uml}. 
 
 \begin{figure}[h]
@@ -511,26 +766,27 @@ searched structurally via an interface to the TGrep2%
 \footnote{\url{http://tedlab.mit.edu/~dr/Tgrep2/}} %
 utility. The model can also store morphological parser objects and their
 sub-components, i.e., finite-state transducer implementations of phonological
-and morphotactic models and \textit{N}-gram language model-based implementations
-of parse disambiguators.
+and morphotactic models (cf. \cite{beesley2003finite}) and $N$-gram language
+model-based (cf.  \cite{manning1999foundations}) implementations of parse
+disambiguators.
 
 
 \subsection{GUI}
 
-The graphical user interface (GUI) of the OLD %
+The \gls{gui} of the OLD %
 is a collection of dynamically generated HTML pages containing a) web forms for
 creating and updating OLD objects and b) representations of text and
 \emph{form} objects (in interlinear glossed text (IGT) format) with embedded
 representations of associated files. OLD texts, search results, and individual
 \emph{forms} can be exported in (Xe)LaTeX, TSV, and plain text formats.
 
-A notable feature of the OLD GUI is its provision of visual feedback on the
+A notable feature of the OLD \gls{gui} is its provision of visual feedback on the
 extent to which user-generated morphological analyses match existing lexical
 entries in the database. That is, when a user creates a morphologically complex
 \emph{form}, the IGT representation indicates, via color-coded internal links,
 whether the morpheme shapes and glosses match current lexical entries. This
-feature has proved to be quite useful in encouraging groups of fieldworkers to
-strive for consistency in glossing and morpheme shape representation.
+feature has proved to be quite useful in helping groups of fieldworkers to
+generate consistent morphological analyses.
 
 
 \subsection{API}
@@ -664,7 +920,6 @@ $ curl --request SEARCH \
 \end{figure}
 
 
-
 \subsection{Morphological Parsers}
 
 OLD web services allow for the creation of multiple morphological parsers.
@@ -716,7 +971,7 @@ supported). It exposes a RESTful API where the content in the body of HTTP
 requests and responses is formatted as JSON throughout.%
 \footnote{File data can be Base64 encoded and passed as values of JSON objects.
 However, such encoding is costly and is therefore optional.} %
-The GUI of the OLD v. 0.2 is HTML, CSS, and JavaScript (YUI \& jQuery).
+The \gls{gui} of the OLD v. 0.2 is HTML, CSS, and JavaScript (YUI \& jQuery).
 
 
 \subsection{Extant OLD Data}
@@ -882,8 +1137,13 @@ LingSync/OLD APIs see the project's completed milestones.%
 \footnote{\url{https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed}}
 
 
+\printglossary
 
-\bibliographystyle{acl}
-\bibliography{bibliography}
+\end{comment}
+
+% END COMMENTED OUT VERSION OF PAPER
+
+
+
 
 \end{document}
