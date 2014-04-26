@@ -12,7 +12,8 @@
     "angular-sanitize": "1.2.15",
     "angular-route": "1.2.15",
     "fontawesome": "~4.0.3",
-    "fielddb-activity-feed": "latest"
+    "fielddb-activity-feed": "latest",
+    "fielddb-angular": "latest"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
