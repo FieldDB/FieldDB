@@ -88,7 +88,7 @@ Montr\'eal \\
 Joshua Horner \\
 Amilia  \\
 Montr\'eal \\
-{\tt josh.horner@gmail.com} \\ }
+{\tt ~josh.horner@gmail.com} \\ }
 
 %\author{First Author \\
 %  Affiliation / Address line 1 \\
@@ -182,11 +182,17 @@ and Android mobile apps.
 \section{Endangered Languages Fieldwork}\label{sec:fieldwork}
 
 Endangered languages are valuable culturally and scientifically, to their
-communities of origin \cite{Ironstrack:2012} and to humanity as a whole \cite{harrison2007languages}. Efforts must be made to document these languages while there is still time and,
-especially from the viewpoint of the communities, increase the rates at which
-they are used and transmitted in the speakers daily lives \cite{Myaamia:2001}. 
-Many documentation efforts occur alongside a community effort for the revitalization of the language. 
-In the case of the Myaamia project, where there was no access to native speakers, the community has lead a reclamation \cite{Leonard:2012} of the language using only the products of language documentation efforts from previous centuries \cite{Costa:2012}.
+communities of origin \cite{Ironstrack:2012} and to humanity as a whole
+\cite{harrison2007languages}. Efforts must be made to document these languages
+while there is still time and, especially from the viewpoint of the
+communities, increase the rates at which they are used and transmitted in the
+speakers daily lives \cite{Myaamia:2001}.  Many documentation efforts occur
+alongside a community effort for the revitalization of the language.  In the
+case of the Myaamia project, where there was no access to native speakers, the
+community has lead a reclamation \cite{Leonard:2012} of the language using only
+the products of language documentation efforts from previous centuries
+\cite{Costa:2012}.
+
 %Much scholarly linguistic effort is being directed towards gathering data
 %on these understudied languages for the purposes of scientific discovery.
 
@@ -194,7 +200,7 @@ In the case of the Myaamia project, where there was no access to native speakers
 \label{sec:requirements}
 
 
-\subsubsection{Integration of Primary Data}
+\subsubsection{Integration of primary data}
  While language communities are demonstrating that it is possible to make use of only written texts/dictionaries/narratives to bring the language into their daily lives as second language speakers, 
  primary audio/video data \emph{in the form of engaging content} is crucial to enable future community members to foster native or creole-like proficiency. 
  Primary audio/video  have formed part of  language documentation efforts since the time of phonographs, yet have only rarely formed part of the accessible results produced by language documentation efforts. 
@@ -213,7 +219,17 @@ Securely and efficiently supporting the integration of primary audio/video data 
 \subsubsection{Curation of data}
 
 
-While most language documentation literature places emphasis on the creation of artifacts, an as yet unknown percentage of language documentation hours are actually dedicated to the curation and filtering of the data in preparation for publication as artifacts (either in engaging content for re-use in revitalization efforts, and/or citeable/ traceability data sets for research). Even ``a funding body like the ELDP cannot get all of its grantees [only 110 out of 216] to deposit in an archive in a timely fashion (or at all)'' \cite{Thieberger:2012}. We argue facilitating the collaborative curation of data is in-fact a core requirement of any data management or content curation software in \autoref{sec:existing-software}, a requirement which is largely overlooked by existing software.
+While most language documentation literature places emphasis on the creation of
+artifacts, an as yet unknown percentage of language documentation hours are
+actually dedicated to the curation and filtering of the data in preparation for
+publication as artifacts (either in engaging content for re-use in
+revitalization efforts, and/or citeable/ traceability data sets for research).
+Even ``a funding body like the ELDP cannot get all of its grantees [only 110
+out of 216] to deposit in an archive in a timely fashion (or at all)''
+\cite{Thieberger:2012}. We argue facilitating the collaborative curation of
+data is in-fact a core requirement of any data management or content curation
+software in \autoref{sec:existing-software}, a requirement which is largely
+overlooked by existing software.
 
 
 
@@ -290,7 +306,7 @@ even documentation efforts don't come at the cost of revitalization efforts.}
 %\footnote{\url{http://www-01.sil.org/computing/shoebox/}} %
 
 
-\subsubsection{Openable Data }
+\subsubsection{Openable data }
 
 Endangered languages fieldwork  presents a unique set of
 challenges. 
@@ -472,7 +488,7 @@ None of the dedicated language documentation software surveyed above are able to
 
 
 
-\section{Tool introductions}
+\section{New models for data collection and management}
 
 
 \subsection{LingSync}\label{sec:lingsync}
@@ -502,6 +518,13 @@ on the server-side and IndexedDB on the client-side.  Nearly all logic is perfor
 %framework.
 
 
+There are currently five browser-based interfaces to the LingSync web services:
+the LingSync Prototype app, LingSync Spreadsheet, LingSync Activity Feeds, the
+LingSync Corpus pages,  the LingSync Lexicon Browser, and two Android interfaces: Learn X and the Elicitation Session Recorder.
+
+For up-to-date examples of \gls{gui} interaction readers are encouraged to search for LingSync on YouTube, as of April 2014 there are over 40 videos made by users demonstrating diverse features in the systems.
+
+
 \smalltodo{Overemphasis of web-based-ness
 ``The dichotomy between web-based (in their terminology) and non web-based
 technology seems to be overemphasized. In many field situations web access is
@@ -520,6 +543,26 @@ internally consistent or, better yet, consistent with the conventions of your
 peers. Then your data give your peers a headstart.}
 
 
+%
+%The LingSync Prototype%
+%\footnote{\url{https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa}} %
+%is a single-page client-side web application (SPA) that can run offline as a Chrome App (using IndexedDB for persistence) and can
+%sync data with the server-side (CouchDB) storage when connectivity is restored.
+%This online/offline functionality combines the best of both worlds: the
+%cross-platform, collaboration, and data-sharing potential of a web application
+%with the offline functioning of a desktop application. In addition, the
+%LingSync Prototype provides an interface for customizing the \emph{datum}
+%schema, a flexible import feature that helps users to upload data with a wide
+%range of structures, export to .zip, .csv, .tex, .txt, .json, .xml, peer to
+%peer full replication, and an interface for performing complex searches.
+%
+%LingSync Spreadsheet%
+%\footnote{\url{http://app.lingsync.org}} %
+%is a single-page client-side web application with an interface that
+%focuses solely on data entry. LingSync Spreadsheet was designed to appear
+%spreadsheet-like so as to provide maximum productivity for students in field
+%methods courses with no need for additional training, but with the added
+%benefit of morpheme segmentation and gloss suggestions.
 
 \subsection{OLD}\label{sec:old}
 
@@ -542,7 +585,25 @@ supported). It exposes a RESTful API where the content in the body of HTTP
 requests and responses is formatted as JSON throughout.%
 \footnote{File data can be Base64 encoded and passed as values of JSON objects.
 However, such encoding is costly and is therefore optional.} %
-The \gls{gui} of the OLD v. 0.2 is dynamically generated HTML, CSS, and JavaScript (YUI \& jQuery).
+%The \gls{gui} of the OLD v. 0.2 is dynamically generated HTML, CSS, and JavaScript (YUI \& jQuery).
+
+
+
+The \gls{gui} of the OLD %
+is a collection of dynamically generated HTML pages containing a) web forms for
+creating and updating OLD objects and b) representations of text and
+\emph{form} objects (in interlinear glossed text (IGT) format) with embedded
+representations of associated files. OLD texts, search results, and individual
+\emph{forms} can be exported in (Xe)LaTeX, TSV, and plain text formats.
+
+A notable feature of the OLD \gls{gui} is its provision of visual feedback on the
+extent to which user-generated morphological analyses match existing lexical
+entries in the database. That is, when a user creates a morphologically complex
+\emph{form}, the IGT representation indicates, via color-coded internal links,
+whether the morpheme shapes and glosses match current lexical entries. This
+feature has proved to be quite useful in helping groups of fieldworkers to
+generate consistent morphological analyses.
+
 
 
 \subsection{LingSync/OLD}
@@ -553,61 +614,61 @@ reduce fragmentation of efforts and to combine strengths, collaborating on
 future developments. When referring collectively to both tools, we will
 henceforth use the term LingSync/OLD.
 
-\section{LingSync/OLD's contribution}
-
-
-%The core virtue of LingSync/OLD, is that they facilitate social collection and curation by language documentation teams of web-accessible stores of primary language data.
-%% that
-%%would otherwise remain sequestered on local hard drives and handwritten notes,
-%%and thus largely inaccessible. 
-%This is especially important in the context of
-%endangered languages where numbers of fluent speaker are rapidly declining
-%\cite{fphlcc10}. Beyond existing tools, LingSync/OLD also
-%provide RESTful JSON-mediated APIs which enable labs who are already
-%collaborating with computational linguistics/software engineering labs to
-%customize their own data automation pipelines by incorporating their own
-%in-house tools.
+%\section{LingSync/OLD's contribution}
 %
 %
-%Given the post-colonial context of many fieldwork situations, there
-%is an entirely understandable distrust of the dominant society that may result
-%in speakers or communities adopting a generally cautious (or even zero
-%tolerance) approach when it comes to sharing language data via a web-based
-%application. LingSync/OLD do, in fact, comply with this
-%requirement by requiring authentication prior to data access, keeping data
-%private by default, and, in the case of LingSync, allowing contributors to
-%encrypt their data. Data is to be made public through LingSync/OLD only after
-%an intentional decision to do so and in accordance with speaker and community
-%requirements, which teams are encouraged to document in their corpora's Terms of
-%Use, Copyright and License information.
-
-
-In this paper we hope to demonstrate that the  LingSync/OLD project is a plugin architecture conceived, researched and implemented by field workers for language documentation teams, and is a successful implementation of the requirements outlined in \autoref{sec:requirements}.
-%a vehicle of cross pollenation and interdisciplinary inclusion among the diverse stakeholders of a language documentation effort, including but not limited to field linguists, language community members, software developers and computational linguists.
-%; there is a real need for research software to be built using software engineering  industry best practices which can expedite the 
-%accomplishment of fieldwork on endangered languages.
-
-\begin{enumerate}
-    \item Inclusion of stakeholders
-%    ---i.e., linguistic researchers,
-%        descriptive linguists, pure documentarians, revitalizers, and
-%        educators---can work in a way that is mutually beneficial.
-%        The software lowers barriers to re-purposing of data.
-%    \item programming-fieldlinguists
-%    , not by third parties introduces a novel holistic way of thinking about language documentation software.  LingSync/OLD don't have
-%        to blow FLEx/Toolbox/TypeCraft/EOPAS/etc. out of the water to be valuable.
-    \item Openable data
-%     --- this does not mean
-%        that all LingSync/OLD data are private or that computational linguists
-%        should avoid this domain. To the contrary, computational linguistics has
-%        a lot to offer here; lots of low-hanging fruit, as they like to say.
-\item Indirect data which might not have otherwise been envisioned % I want to say something here to the effect that we are excited by
-%        the implications of this claim, namely that 
-%        software engineers and
-%        computational linguists will see in LingSync and the OLD opportunities
-%        to contribute to aspects of linguistics and linguistic fieldwork that
-%        they might not have otherwise envisioned
-\end{enumerate}
+%%The core virtue of LingSync/OLD, is that they facilitate social collection and curation by language documentation teams of web-accessible stores of primary language data.
+%%% that
+%%%would otherwise remain sequestered on local hard drives and handwritten notes,
+%%%and thus largely inaccessible. 
+%%This is especially important in the context of
+%%endangered languages where numbers of fluent speaker are rapidly declining
+%%\cite{fphlcc10}. Beyond existing tools, LingSync/OLD also
+%%provide RESTful JSON-mediated APIs which enable labs who are already
+%%collaborating with computational linguistics/software engineering labs to
+%%customize their own data automation pipelines by incorporating their own
+%%in-house tools.
+%%
+%%
+%%Given the post-colonial context of many fieldwork situations, there
+%%is an entirely understandable distrust of the dominant society that may result
+%%in speakers or communities adopting a generally cautious (or even zero
+%%tolerance) approach when it comes to sharing language data via a web-based
+%%application. LingSync/OLD do, in fact, comply with this
+%%requirement by requiring authentication prior to data access, keeping data
+%%private by default, and, in the case of LingSync, allowing contributors to
+%%encrypt their data. Data is to be made public through LingSync/OLD only after
+%%an intentional decision to do so and in accordance with speaker and community
+%%requirements, which teams are encouraged to document in their corpora's Terms of
+%%Use, Copyright and License information.
+%
+%
+%In this paper we hope to demonstrate that the  LingSync/OLD project is a plugin architecture conceived, researched and implemented by field workers for language documentation teams, and is a successful implementation of the requirements outlined in \autoref{sec:requirements}.
+%%a vehicle of cross pollenation and interdisciplinary inclusion among the diverse stakeholders of a language documentation effort, including but not limited to field linguists, language community members, software developers and computational linguists.
+%%; there is a real need for research software to be built using software engineering  industry best practices which can expedite the 
+%%accomplishment of fieldwork on endangered languages.
+%
+%\begin{enumerate}
+%    \item Inclusion of stakeholders
+%%    ---i.e., linguistic researchers,
+%%        descriptive linguists, pure documentarians, revitalizers, and
+%%        educators---can work in a way that is mutually beneficial.
+%%        The software lowers barriers to re-purposing of data.
+%%    \item programming-fieldlinguists
+%%    , not by third parties introduces a novel holistic way of thinking about language documentation software.  LingSync/OLD don't have
+%%        to blow FLEx/Toolbox/TypeCraft/EOPAS/etc. out of the water to be valuable.
+%    \item Openable data
+%%     --- this does not mean
+%%        that all LingSync/OLD data are private or that computational linguists
+%%        should avoid this domain. To the contrary, computational linguistics has
+%%        a lot to offer here; lots of low-hanging fruit, as they like to say.
+%\item Indirect data which might not have otherwise been envisioned % I want to say something here to the effect that we are excited by
+%%        the implications of this claim, namely that 
+%%        software engineers and
+%%        computational linguists will see in LingSync and the OLD opportunities
+%%        to contribute to aspects of linguistics and linguistic fieldwork that
+%%        they might not have otherwise envisioned
+%\end{enumerate}
 
 
 
@@ -834,54 +895,6 @@ identifiers of the languages.)
 %model-based (cf.  \cite{manning1999foundations}) implementations of parse
 %disambiguators.
 
-
-
-
-\section{GUIs}
-
-There are currently five browser-based interfaces to the LingSync web services:
-the LingSync Prototype app, LingSync Spreadsheet, LingSync Activity Feeds, the
-LingSync Corpus pages,  the LingSync Lexicon Browser, and two Android interfaces: Learn X and the Elicitation Session Recorder.
-
-For up-to-date examples of \gls{gui} interaction readers are encouraged to search for LingSync on YouTube, as of April 2014 there are over 20 videos made by users demonstrating diverse features in the systems.
-
-%
-%The LingSync Prototype%
-%\footnote{\url{https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa}} %
-%is a single-page client-side web application (SPA) that can run offline as a Chrome App (using IndexedDB for persistence) and can
-%sync data with the server-side (CouchDB) storage when connectivity is restored.
-%This online/offline functionality combines the best of both worlds: the
-%cross-platform, collaboration, and data-sharing potential of a web application
-%with the offline functioning of a desktop application. In addition, the
-%LingSync Prototype provides an interface for customizing the \emph{datum}
-%schema, a flexible import feature that helps users to upload data with a wide
-%range of structures, export to .zip, .csv, .tex, .txt, .json, .xml, peer to
-%peer full replication, and an interface for performing complex searches.
-%
-%LingSync Spreadsheet%
-%\footnote{\url{http://app.lingsync.org}} %
-%is a single-page client-side web application with an interface that
-%focuses solely on data entry. LingSync Spreadsheet was designed to appear
-%spreadsheet-like so as to provide maximum productivity for students in field
-%methods courses with no need for additional training, but with the added
-%benefit of morpheme segmentation and gloss suggestions.
-
-
-
-The \gls{gui} of the OLD %
-is a collection of dynamically generated HTML pages containing a) web forms for
-creating and updating OLD objects and b) representations of text and
-\emph{form} objects (in interlinear glossed text (IGT) format) with embedded
-representations of associated files. OLD texts, search results, and individual
-\emph{forms} can be exported in (Xe)LaTeX, TSV, and plain text formats.
-
-A notable feature of the OLD \gls{gui} is its provision of visual feedback on the
-extent to which user-generated morphological analyses match existing lexical
-entries in the database. That is, when a user creates a morphologically complex
-\emph{form}, the IGT representation indicates, via color-coded internal links,
-whether the morpheme shapes and glosses match current lexical entries. This
-feature has proved to be quite useful in helping groups of fieldworkers to
-generate consistent morphological analyses.
 
 
 
@@ -1260,7 +1273,7 @@ test them against various data sets so that they can be refined. This is an
 interesting point (in my view), and one that should be included in the paper.}
 
 
-LingSync uses a map reduce function which indexes data in a users corpus and generates precedence rules which are used to seed finite state automata which represent current morphological templates in the database \cite{Cook:2009}. In this way the glosser is ``trained" on the user's existing segmentation and glossing and automatically ``learns" as the user adds more data and the glossing/segmentation evolves over the course of data collection and analysis. While the implementation of the glosser is arguably simple in its approach, it has nonetheless received favorable comments from users who are used to existing semi-automatic glossing systems. The glosser's approach is different from FLEx which uses explicit morphological subcategorization or rules  \cite{Black:2006} which the user can define and later use in their description of the language.
+LingSync uses a map reduce function which indexes data in a users corpus and generates precedence rules which are used to seed finite state automata  \cite{Cook:2009} which represent current morphological templates in the database. In this way the glosser is ``trained" on the user's existing segmentation and glossing and automatically ``learns" as the user adds more data and the glossing/segmentation evolves over the course of data collection and analysis. While the implementation of the glosser is arguably simple in its approach, it has nonetheless received favorable comments from users who are used to existing semi-automatic glossing systems. The glosser's approach is different from FLEx which uses explicit morphological subcategorization or rules  \cite{Black:2006} which the user can define and later use in their description of the language.
 
 LingSync has a lexicon browser component which permits users to browse the ``learned"  relations between morphemes, and clean the data for consistency.  To satisfy the researchers desire to document generalizations which might not be immediately evident in the primary data  users are permitted to add declarative knowledge to learned rules but LingSync does not permit explicit addition of rules which are not gleaned from the data. While this is arguably a similar functionality to  curated lexicon or collocations dictionary, it encourages more grounding in primary data for language learners as all rules must have at least one example context in the corpus.
 % than abstract technical rules written explicitly by descriptive grammarians.  
