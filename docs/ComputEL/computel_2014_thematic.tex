@@ -1,5 +1,3 @@
-% I am creating a comment at the top of the paper! ha ha!
-%
 % File acl2014.tex
 %
 % Contact: koller@ling.uni-potsdam.de, yusuke@nii.ac.jp
@@ -68,6 +66,11 @@
 \newacronym{scrud}{SCRUD}{search, create, read, update, and delete}
 \newacronym{rdbms}{RDBMS}{relational database management system}
 \newacronym{igt}{IGT}{interlinear glossed text}
+\newacronym{fst}{FST}{finite-state transducer}
+\newacronym{cs}{CS}{context-sensitive}
+\newacronym{lm}{LM}{language model}
+\newacronym{url}{URL}{uniform resource locator}
+
 
 %\setlength\titlebox{5cm}
 
@@ -146,6 +149,11 @@ and Android mobile apps.
 
 
 \section{Introduction}
+
+Endangered languages fieldwork presents unique challenges and requirements that
+are not met by current software. This paper argues for the effectiveness of
+LingSync and the OLD in meeting these requirements.
+
 %LingSync%
 %\footnote{\url{https://www.lingsync.org/}; Source:
 %\url{https://github.com/OpenSourceFieldlinguistics/FieldDB}.} %
@@ -190,14 +198,17 @@ and Android mobile apps.
 Endangered languages are valuable culturally and scientifically, to their
 communities of origin \cite{Ironstrack:2012} and to humanity as a whole
 \cite{harrison2007languages}. Efforts must be made to document these languages
-while there is still time and, especially from the viewpoint of the
-communities, increase the rates at which they are used and transmitted in the
-speakers daily lives \cite{Myaamia:2001}.  Many documentation efforts occur
-alongside a community effort for the revitalization of the language.  In the
-case of the Myaamia project, where there was no access to native speakers, the
-community has lead a reclamation \cite{Leonard:2012} of the language using only
-the products of language documentation efforts from previous centuries
-\cite{Costa:2012}.
+while there is still time. The communities from which endangered languages
+originate, while also valuing documentation, are equally interested in
+increasing the rates at which their languages are transmitted and used
+\cite{Myaamia:2001}. In cases where there are no longer any native speakers, a
+community may embark upon a language reclamation project that is wholly
+dependent upon the the products of past language documentation efforts
+\cite{Leonard:2012,Costa:2012}. Alongside such documentation and
+revitalization/reclamation projects is research-driven linguistic fieldwork.
+These diversely motivated yet interconnected strands within endangered
+languages fieldwork conspire to produce a particular set of requirements for
+effective software in this domain.
 
 %Much scholarly linguistic effort is being directed towards gathering data
 %on these understudied languages for the purposes of scientific discovery.
@@ -214,19 +225,17 @@ the products of language documentation efforts from previous centuries
 
 %\subsubsection{Integration of primary data}
 While language communities are demonstrating that it is possible to make use of
-only written texts/dictionaries/narratives to bring the language into their
-daily lives as second language speakers \cite{Ironstrack:2012}, primary audio/video data \emph{in the
-form of engaging content} is crucial to enable future community members to
-foster native-like proficiency.%
+only written texts to bring the language into their daily lives as second
+language speakers \cite{Ironstrack:2012}, primary audio/video data \emph{in the
+form of engaging content} is crucial to fostering native-like proficiency.
 %\smalltodo{``creole-like proficiency'' bothers me. Does anyone really strive for
 %that? Yes, actually that is waht the Myaamia are striving for. it is why they us the word "reclamation, not revitalization" It also seems inaccurate. Also, it would be nice to have a reference for
 %the claim made in the first sentence here. Also, is ``non-inclusive'' better
 %than ``un-inclusive''?} %
-~Primary audio/video  have formed part of  language documentation efforts since
-the time of phonographs, yet have only rarely formed part of the accessible
-results produced by language documentation efforts.  We argue in
-\autoref{sec:existing-software} that this is  due to both technical limitations
-which are no longer present, as well as insufficient and non-inclusive software
+Primary audio data has been a product of language documentation efforts since
+the time of phonographs, yet only rarely have such audio (or video) products been
+made accessible. This is due both to technical limitations
+which are no longer present, and to insufficient and non-inclusive software
 requirements gathering with stakeholders when the projects were architected.
 %  or more likely either exist in archives or have been lost as technologies have changed over time.  
 Securely and efficiently supporting the integration of primary audio/video data
@@ -258,10 +267,11 @@ data in preparation for publication as artifacts.%
 research claims.}
 Even ``a funding body like the ELDP cannot get all of its grantees [only 110
 out of 216] to deposit in an archive in a timely fashion (or at all)''
-\cite{Thieberger:2012}. We argue (\autoref{sec:existing-software}) that
-facilitating the collaborative curation of data is, in fact, a core requirement
-of any data management or content curation software, one which is largely
-overlooked by existing software.
+\cite{Thieberger:2012}. Facilitating the collaborative curation of data is, in
+fact, a core requirement of any data management or content curation software,
+one which is largely overlooked by existing software (cf.
+\autoref{sec:existing-software}).%
+%\smalltodo{It seems tautologous to say that curation software requires curation.}
 
 
 %In an ideal situation, it would be easy for fieldworkers of various stripes to
@@ -282,17 +292,18 @@ A sustainable language documentation effort comes from the creation of a
 feedback loop where linguistic research benefits language communities,
 %\footnote{possibly in the form of language learning/immersion tools for heritage speakers}, 
 computational linguistics research on low-resource languages benefits software
-libraries, software developers use libraries which don't break content in
-low resource languages,%
+libraries, software developers use libraries which do not break content in
+low-resource languages,
 %\smalltodo{I do not understand the ``non-mainstream languages and writing
 %    systems'' qualifier.  Who is using the non-mainstream languages and writing
 %    systems? Is that an unsustainable or a sustainable thing? I don't get it. }~
 %\footnote{possibly in the form of open source libraries which non-specialized software developers can integrate into their software without needing to understand how it works}, 
-and increased language community presence on the web, in turn, benefits both
-linguistic and computational linguistic research in form of primary data.%
+and increased language community presence on the web, in turn, results in more
+accessible primary data, which is a benefit to both linguistic and computational
+linguistic research.
 %\smalltodo{How can you ``benefit research as primary data''? This sentence needs
 %rewriting methinks \ldots}~%
-However, realizing this feedback loop requires, we argue, tools that facilitate
+However, realizing this feedback loop requires tools that facilitate
 the inclusion of these various stakeholders in the process of language documentation
 \emph{while} the project is underway, not \emph{post hoc} when the data is ``polished,''
 which in 50\% of projects never happens \cite{Thieberger:2012}. This
@@ -464,13 +475,14 @@ our data.
 \end{requirement}
 
 
-Users have high expectations. They are accustomed to using professionally crafted
-software built by teams of hundreds of engineers and user experience experts
-(e.g., Facebook, Gmail, Google Docs, YouTube, Evernote, Dropbox). They can read
-their email on all devices, downloading and sync photos and videos
-automatically, have offline and mobile data there when they need it,
-seamlessly. 
-The overwhelmingly  reason users attribute to their use of popular curation software rather than software specifically designed for language documentation is due to the intangibles of the user experience itself  \cite{lingsync:2012}.
+Users have high expectations. They are accustomed to using professionally
+crafted software built by teams of hundreds of engineers and user experience
+experts (e.g., Facebook, Gmail, Google Docs, YouTube, Evernote, Dropbox). They
+can read their email on all devices, download and sync photos and videos
+automatically, and have offline and mobile data there when they need it.
+Users overwhelmingly attribute their use of popular curation
+software (rather than that specifically designed for language documentation) to
+the intangibles of the user experience itself \cite{lingsync:2012}.
 
 %\smalltodo{Ok. But how is this a requirement for language documentation
 %    software? Needs spelling out.}
@@ -520,13 +532,12 @@ The SIL tools were developed primarily with practical
 %lexicography. Note also that the reviews of the SIL tools cited here don't
 %actually support the claim here. The lexicographical focus claim is my own
 %criticism of the SIL tools. Hence my previous formulation \ldots}~%
-lexicography in mind, and as such are not ideally suited to research teams
-. For research teams, the primary
-artifacts generated are not dictionary entries but rather sentences and
-grammaticality judgments.  Research teams also spend only a percentage of their
-hours interacting with data management software \cite{Butler:2007,rogers10,robinson07}. Unlike professional
-lexicography teams, most research teams are unable to impose training upon all
-team members.%
+lexicography in mind, and as such are not ideally suited to research teams. For
+research teams, the primary artifacts generated are not dictionary entries but
+rather sentences and grammaticality judgments.  Research teams also spend only
+a percentage of their hours interacting with data management software
+\cite{Butler:2007,rogers10,robinson07}. Unlike professional lexicography teams,
+most research teams are unable to impose training upon all team members.%
 %\smalltodo{Sounds odd to ``impose'' training \ldots, sure but we have still not be able to get the PIs of lingsync to complete any training.}
 
  
@@ -1178,13 +1189,24 @@ d) $ curl --cookie my-cookies.txt\
 \begin{figure}
 \begin{center}
 \includegraphics[width=3in]{images/utterance_extraction}
-\caption{Screenshot of the utterance extraction results, a web service which converts any audio video into utterance intervals which can be converted into JSON using the PraatTextGridJS library can be converted into datum in LingSync.}
+\caption{Screenshot of the utterance extraction results, a web service which
+converts any audio/video into utterance intervals which can be converted into
+JSON using the PraatTextGridJS library.}
+% Original caption
+%\caption{Screenshot of the utterance extraction results, a web service which
+%converts any audio video into utterance intervals which can be converted into
+%JSON using the PraatTextGridJS library can be converted into datum in LingSync.}
+
 \label{utterance_extraction_screenshot}
 \end{center}
 \end{figure}
 
 \subsection{Semi-supervised morphological parsers}
 
+
+
+% BEGIN COMMENT
+\begin{comment}
 \smalltodo{Morphological analysis implementations unclear
 ``The abstract promises to `briefly discuss the \ldots integration of various
 open source unsupervised and semi-unsupervised machine learning approaches to
@@ -1207,6 +1229,9 @@ linguists to use the formalisms they already know (e.g., CS phonological
 rewrite rules) to create implementations of their theories/generalizations and
 test them against various data sets so that they can be refined. This is an
 interesting point (in my view), and one that should be included in the paper.}
+\end{comment}
+% END COMMENT
+
 
 
 LingSync's glosser  uses a MapReduce function which efficiently indexes data in
@@ -1253,10 +1278,73 @@ provide headwords and grammatical rules in context.%
 \end{figure}
 
 
+\subsection{Supervised Morphological Parsers}
+
+An OLD web service provides functionality that allows users to create any
+number of morphological parsers. The phonological mappings of these parsers
+are declared explicitly, using a formalism---\gls{cs} phonological rewrite
+rules \cite{chomsky68}---that is well understood by linguists. The lexicon,
+morphotactic rules, and parse candidate disambiguator components are
+automatically induced from corpora specified by the user. The fact that this
+implementation requires a good deal of explicit specification by the user
+should not be considered a demerit. By granting linguist fieldworkers a good
+degree of control over the specification of phonological, lexical, and
+morphotactic generalizations, the parser functionality allows for the automatic
+testing of these generalizations against large data sets. This assists
+in the discovery of counterexamples to generalizations, thereby expediting
+the improvement of models and advancing linguistic research. The OLD
+morphological parser implementation can, of course, co-exist with and
+complement less expert-dependent machine learning approaches to creating
+morphological parsers.
+
+The core component of an OLD morphological parser is a morphophonology that is
+modelled as a \gls{fst}%
+\footnote{\glspl{fst} are constructed using the open source finite-state
+compiler and C library foma: \url{http://code.google.com/p/foma}} %
+and which analyzes transcriptions to morphological analyses, i.e., morpheme
+segmentations, glosses, and categories. The morphophonology \gls{fst} is the
+composition of a phonology \gls{fst} that is created explicitly by the user
+(using \gls{cs} phonological rewrite rules) and a morphology (i.e., lexicon and
+morphotactic rules) that is induced from corpora constructed by the user, cf. 
+\cite{beesley2003finite,hulden2012}. When the morphophonology returns multiple
+parse candidates, the system employs an $N$-gram \gls{lm}%
+\footnote{OLD $N$-gram \glspl{lm} are estimated using MITLM:
+\url{https://code.google.com/p/mitlm/}.} %
+(estimated from a corpus specified by the parser's creator) to determine the
+most probable parse.
+
+Preliminary tests of the OLD morphological parser implementation have been
+performed using data from the Blackfoot OLD%
+\footnote{\url{http://bla.onlinelinguisticdatabase.org/}} %
+and the standard grammar \cite{frantz91} and dictionary \cite{frantz95} of the
+language. An initial parser implemented the phonology specified in
+\cite{frantz91} and defined a morphology with lexical items extracted from
+\cite{frantz95} and morphotactic rules induced from words analyzed by
+contributors to the system. Analysis of the performance of this parser
+(f-score: 0.21) confirms what researchers \cite{weber2013} have already
+observed, namely that the phonological and morphological generalizations of
+\cite{frantz91} cannot account for the location of morphologically conditioned
+prominence (i.e., pitch accent) in Blackfoot words.
+
+An improved Blackfoot parser, i.e., one which can predict prominence location
+based on the generalizations of \cite{weber2013}, is currently under
+development. The phonology of this parser makes use of a novel and useful
+feature, viz. the ability to specify phonological transformations that are
+aware of categorial context. This allows the phonology to capture the distinct
+nominal and verbal prominence location generalizations of Blackfoot.
+
+Since OLD morphological parsers can be created and parses requested entirely by
+issuing RESTful requests, other applications can easily make use of them. In
+addition, OLD morphological parser objects can be exported as .zip archives
+that contain all of the requisite binaries (i.e., compiled foma and MITLM
+files) and a Python module and executable which together allow for the parser
+to be used locally via the command line or from within a Python program.
 
 
 
 
+% BEGIN COMMENTING OUT OF OLD OLD PARSERS SECTION
+\begin{comment}
 \subsection{Supervised Morphological Parsers}
 
 OLD web services allow for the creation of multiple morphological parsers.
@@ -1299,6 +1387,9 @@ their components include functioning models of phonologies and morphologies that
 can be used to find empirical exceptions to analyses and/or potential errors
 during data entry.
 
+\end{comment}
+% END COMMENT
+
 
 
 \subsection{Existing Morphological Parsers}
@@ -1324,6 +1415,8 @@ $ curl --cookie my-cookies.txt\
 \label{open-data}
 
 
+% BEGIN COMMENT
+\begin{comment}
 \smalltodo{Examples of actual use
 ``Show more examples of OLD and LingSync in actual use''
 I think that if we remove some of the API stuff (in fitting with other reviewer
@@ -1332,6 +1425,8 @@ example, show what the audio service, the parsers, the search functionality, the
 export, the data-sharing, the consistency features, etc. can do and why they are
 helpful to fieldworkers broadly construed (i.e., descriptive documentors,
 researchers, revitalizers, NLPers).}
+\end{comment}
+% END COMMENT
 
 
 LingSync/OLD users are able to make subsets of their data stores publicly
@@ -1348,7 +1443,19 @@ natural language processing of low-resource languages.
 
 \subsection{Field linguists}
 
-Field linguists not only enter data but also seek to analyze it. The Lexicon Browser provides an alternative morpho-syntactic way of browsing a database as opposed to the linear order of text in an elicitation session or text organized by speaker or by tag. Data analysis in LingSync/OLD is facilitated by search  interfaces and the ability to use bots to re-categorize or re-annotate data but in an automatic and suggested-review-execute fashion. Field linguists may perform cross linguistic searches using MapReduces to normalize data. Primary resources are citable with unique urls. Data sets for publication can be annotated stored and discussed in the database itself and directly exported into LaTeX.  Screenshots of these functionalities are provided in \cite{lingsync:2012}.
+Field linguists not only enter data but also seek to analyze it. The LingSync
+Lexicon Browser provides an alternative morpho-syntactic way of browsing a
+database as opposed to the linear order of text in an elicitation session or
+text organized by speaker or by tag. Data analysis in LingSync/OLD is
+facilitated by search interfaces and the ability to use bots to re-categorize
+or re-annotate data but in an automatic and suggested-review-execute fashion.
+Field linguists may perform cross linguistic searches using MapReduces to
+normalize data. Primary resources are citable with unique \glspl{url}. Data
+sets for publication can be annotated stored and discussed in the database
+itself and directly exported into LaTeX. Screenshots of these functionalities
+are provided in \cite{lingsync:2012}.
+
+\textit{Joel: ``suggested-review-execute fashion'' does not make sense to me.}
 
 %	 Lexicon Browser
 %	, Data analysis
@@ -1413,7 +1520,16 @@ in any online grammar or second language materials, contexts which users can
 elect to hide from other users, or share with certain users depending on their
 comfort level.
 
-In addition to language learning resources communities may also benefit from descriptive grammars,  spell checkers, grammar checkers, autocorrect/predictive typing, subtitleing, translation memories, voice writing, content creation/language representation on the web, and improved access to relevant web search results. To facilitate access to content, we created a very simple Georgian transliteration module which makes it so that Georgian speakers can view text written latin letters by (predominately) iPhone content creators who do not have access to a Georgian keyboard, also freely available for download.\footnote{\url{https://chrome.google.com/webstore/detail/kartuli-glasses/ccmledaklimnhjchkcgideafpglhejja}}
+In addition to language learning resources, communities may also benefit from
+descriptive grammars, spell checkers, grammar checkers, autocorrect/predictive
+typing, subtitling, translation memories, voice writing, content
+creation/language representation on the web, and improved access to relevant
+web search results. To facilitate access to content, we created a very simple
+Georgian transliteration module which makes it so that Georgian speakers can
+view text written latin letters by (predominately) iPhone content creators who
+do not have access to a Georgian keyboard, also freely available for
+download.\footnote{\url{https://chrome.google.com/webstore/detail/kartuli-glasses/ccmledaklimnhjchkcgideafpglhejja}}
+
 
 \subsection{Computational Linguistics for Low-resource Languages}
 
@@ -1514,10 +1630,14 @@ During the Spring 2014 semester we are training computer science masters student
 %
 %\subsection{OLD}
 %
-For language documentation teams collaborating with Software Engineering labs or Computational Linguistics labs LingSync/OLD web services expose a RESTful \gls{api} for requests on resources.\footnote{RESTful means that 
-combinations of URL patterns and HTTP methods names are mapped consistently and
-transparently to operations on the relevant resources. The payloads of all HTTP
-requests and responses are \gls{json}}
+For language documentation teams collaborating with Software Engineering labs
+or Computational Linguistics labs LingSync/OLD web services expose a RESTful
+\gls{api} for requests on resources.%
+\footnote{RESTful means that combinations of \gls{url} patterns and HTTP methods
+    names are mapped consistently and transparently to operations on the
+    relevant resources. The payloads of all HTTP requests and responses are
+\gls{json}}
+
 %Given the consistency and transparency of this API, and given the fact that
 %most programming languages have mature libraries for sending and receiving 
 %HTTP requests and responses and for serializing to and parsing from JSON, OLD
@@ -1670,6 +1790,7 @@ c) $ curl --cookie my-cookies.txt\
 
 
 \section{Conclusion}
+
 %
 %In this paper we have provided a brief overview of the LingSync/OLD projects as
 %well as the resulting data and data uses. LingSync and the OLD excel at helping
