@@ -274,7 +274,7 @@ overlooked by existing software.
 %\subsubsection{Inclusion of stakeholders}
 
 \begin{requirement}
-	\label{req:inclusion}
+	\label{req:inclusive}
        Inclusion of stakeholders
 \end{requirement}
 
@@ -1358,40 +1358,22 @@ Field linguists not only enter data but also seek to analyze it. The Lexicon Bro
 %
 \subsection{Language Communities}
 
-A majority of LingSync/OLD contributors are doing fieldwork on languages that
+As discussed in Requirement \autoref{req:inclusive} a majority of LingSync/OLD contributors are doing fieldwork on languages that
 are not only under-resourced but also endangered. In this context, the primary
 interests of speaker consultants and their communities lie not in theoretical
 linguistic research but in the generation of resources that are directly
-relevant to the communities' goals and to increasing the community diaspora's
+relevant to the communities' revitalization goals and to increasing the community diaspora's
 access to language data. Linguists are now also much more aware of the need to
-create records that can be reused by the people we record and that will still be
+create records that can be reused by the community and that will still be
 available for their descendants \cite[p.129]{Thieberger:2012}, as well as the
 importance of designing documentary projects in ways that allow speaker
 communities to benefit from the work of an outside researcher \cite{Good:2012}.
 
 
-	 Descriptive grammars
-	, Bilingual Dictionaries 
-	, Monolingual Dictionaries
-	, Collocation Dictionaries
-	, Spell Checkers
-	, Grammar Checkers
-	, Autocorrect/Predictive typing
-	, Subtitleing
-	, Translation Memories
-	, Voice Writing
-	, Content Creation/Language representation on the web
-	, Improved access to relevant web search results
-	, Content Creation
-
-We created a georgian transliateration module with the use of Translitit library which makes it so that Georgian speakers can view text written latin letters by (predominately) iPhone content creators who do not have access to a Georgian keyboard. \footnote{https://chrome.google.com/webstore/detail/kartuli-glasses/ccmledaklimnhjchkcgideafpglhejja}
-
-
 \subsubsection{Language Learning}
 
-Descriptive grammars and dictionaries are of variable utility in this domain.
-Learning grammars, web-accessible audio (i.e., ``talking'') dictionaries,
-culturally relevant narratives, pedagogical materials, and dedicated language
+Descriptive grammars and word lists are of variable utility in the domain of second language acquisition/immersion.
+Learning grammars, web-accessible audio (i.e., ``talking'') dictionaries, bilingual dictionaries, monolingual dictionaries, collocation dictionaries, culturally relevant narratives, pedagogical materials, and dedicated language
 learning software are generally more valuable to communities, yet these tend to
 require a dedicated effort to produce and do not efficiently exploit
 opportunities for the reuse of data gathered primarily for research purposes. 
@@ -1403,8 +1385,6 @@ lessons with their peers and mentors. Heritage speakers can benefit from the
 same collaborative infrastructure under LingSync/OLD to build a corpus and share
 their lessons with each other. 
 
-
-
 \begin{figure}
 \begin{center}
 \includegraphics[width=3in]{images/learnX}
@@ -1414,17 +1394,15 @@ learning apps using LingSync/OLD.}
 \end{center}
 \end{figure}
 
-
-
 LingSync's permissions system was designed so that language community members
 and heritage speakers of the language can use the multimedia data collection
 features of Android phones (camera, audio, video) to construct their own
 language learning lessons which are saved into their own corpus and/or
 contributed to a team corpus.
 
-We are currently testing Learn X in the field%
+Learn X is freely available for download%
 \footnote{\url{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian}} %
-(March-June 2014) with members of the TLG volunteers (Teach Learn Georgia).
+ as ``Georgian Together" which we are field testing during the Spring 2014 semester with members of the TLG volunteers (Teach Learn Georgia).
 Like heritage learners, TLG volunteers spend their time surrounded with the
 language, can understand more than they can speak, and what they speak about is
 highly dependent on what their family speaks about most. LingSync's
@@ -1435,36 +1413,17 @@ in any online grammar or second language materials, contexts which users can
 elect to hide from other users, or share with certain users depending on their
 comfort level.
 
+In addition to language learning resources communities may also benefit from descriptive grammars,  spell checkers, grammar checkers, autocorrect/predictive typing, subtitleing, translation memories, voice writing, content creation/language representation on the web, and improved access to relevant web search results. To facilitate access to content, we created a very simple Georgian transliteration module which makes it so that Georgian speakers can view text written latin letters by (predominately) iPhone content creators who do not have access to a Georgian keyboard, also freely available for download.\footnote{\url{https://chrome.google.com/webstore/detail/kartuli-glasses/ccmledaklimnhjchkcgideafpglhejja}}
 
 \subsection{Computational Linguistics for Low-resource Languages}
 
-This section serves to inform field workers of alternative ways their corpora can serve the language community indirectly via the construction of computational tools and datasets which can help software developers build software which enables content in low-resource languages, further facilitate the use of minority languages in digital communication (either spoken or written). Thinking about these uses before and during data collection with speakers can help researchers think about consultants consent forms and explaining licensing to consultants as well as potentially explaining the benefits of the consultants participation in the language resources effort.
+Data collected by language documentation projects can also serve the language community indirectly via the construction of computational tools and datasets which can then help software developers build software which enables content in low-resource languages, further facilitating the use of minority languages in digital communication (both spoken and written). Thinking about these data uses before and during data collection with speakers can help field teams think about how to explaining the frequently abstract licensing language to consultants via consent forms as well as potentially concretely identifying the benefits  consultant's participation in the language resources effort has for other members in the community. Language documentation projects can also partner with Software Engineering or Computational Linguistics labs to recompile corpora into gold standard data, and training data, or crowd source annotations, build stemmers, and improve search and information retrieval. Many of these results can be used to build more complex systems including morphological analyzers, machine translation, text to speech systems, speech recognition systems and in some cases such as Georgian even text summarization for local law firms.
 
-	 Gold standard data
-	, Training data
-	, Crowd sourcing annotations
-	, Stemmers
-	, Information Retrieval
-	, Text Summarization\\
-	
-	We are currently investigating the feisability of adapting text summarization libraries for use with a law firm in Batumi, Georgia. 
-	
-	, Morphological Analyzers
-	, Machine Translation
-	, Text To Speech
-	, Speech Recognition
-
-The corpus data can also be used run through a transliteration bot to generate pronunciation dictionaries for ASR and TTS engines and serve as input  to  the open source Phonetisaurus Libraries \cite{Novak:2012} for the generation of pronunciation entries of novel words. 
-
-The corpus data can be extracted as raw text used to generate n-gram language models using the open source cmuclmtk \cite{Clarkson:1997} language model generation scripts which accept a pronunciation dictionary and sentence delimited corpus as input. 
-
-Acoustic models can be adapted from existing acoustic models via the export of utterance lines and corresponding audio and the  \cite{Elmahdy:2010}. 
-
-The language specific dictionary, language model, and adapted acoustic model can be used by Pocketsphinx web service to produce n-best hypothesis for novel audio. While we expect that the result will be poor for most small corpora in the system, automating the model training pipelines can serve to increase interest in the collection of the sorts of data which are required to have more representative language models and maybe even the aligned audio need to train new acoustic models, not simply adapt acoustic models from existing models \cite{Sarfraz:2010}.
+During the Spring 2014 semester we are training computer science masters students at the Batumi Shota Rustaveli  State University in how to use CMUSphinx tools to build speech recognition systems which can be delivered to Android smart phone users. Initial pipelines have been prototyped using Bash scripts but will not be in production as an Android app until after the semester is concluded (June 2014). Corpus data are first through a transliteration process to and then used to generate pronunciation dictionaries which serve as input  to the open source Phonetisaurus Libraries \cite{Novak:2012} for the generation of pronunciation entries of novel words. The corpus data is extracted as raw text and used to generate n-gram language models using the open source CMUCLMTK \cite{Clarkson:1997} language model generation scripts which accept a pronunciation dictionary and sentence delimited corpus as input. Acoustic models are adapted from existing acoustic models via the export of utterance lines and corresponding audio and the  \cite{Elmahdy:2010}. Finally, the language specific dictionary, language model, and adapted acoustic model are provided to the PocketSphinx Android library to produce n-best hypothesis for novel audio. While we expect that the result will be poor for most small corpora in the system, automating the model training pipelines can serve to increase interest in the process of speech recognition among software developers from minority language populations  and also encourage language communities to volunteer in the collection and annotation of the sorts of data which are required to have more representative language models and acoustic models \cite{Sarfraz:2010}. 
 
 
 
-\subsection{API}
+\subsubsection{API}
 %
 %
 %
@@ -1555,7 +1514,7 @@ The language specific dictionary, language model, and adapted acoustic model can
 %
 %\subsection{OLD}
 %
-LingSync/OLD web services expose a RESTful \gls{api} for requests on resources.\footnote{RESTful means that 
+For language documentation teams collaborating with Software Engineering labs or Computational Linguistics labs LingSync/OLD web services expose a RESTful \gls{api} for requests on resources.\footnote{RESTful means that 
 combinations of URL patterns and HTTP methods names are mapped consistently and
 transparently to operations on the relevant resources. The payloads of all HTTP
 requests and responses are \gls{json}}
