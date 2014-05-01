@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Directive: fielddbCorpusTermsOfUse', function () {
+xdescribe('Directive: fielddbCorpusTermsOfUse', function () {
 
   // load the directive's module
-  beforeEach(module('fieldDB'));
+  beforeEach(module('fielddbAngularApp'));
 
   var element,
     scope;

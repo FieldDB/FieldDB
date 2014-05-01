@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Directive: user', function () {
+xdescribe('Directive: user', function () {
 
   // load the directive's module
-  beforeEach(module('fieldDB'));
+  beforeEach(module('fielddbAngularApp'));
 
   var element,
     scope;
