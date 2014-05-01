@@ -3,9 +3,13 @@
 
 module.exports = function(config) {
   config.set({
+    plugins: [
+      'karma-chrome-launcher',
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
+    ],
     // base path, that will be used to resolve files and exclude
     basePath: '',
-
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
@@ -20,8 +24,21 @@ module.exports = function(config) {
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      'test/spec/**/*.js',
+
+      //location of templates
+      'app/views/**/*.html'
     ],
+
+    preprocessors: {
+        //location of templates
+        'app/views/**/*.html': 'html2js'
+    },
+
+    ngHtml2JsPreprocessor: {
+        // strip app from the file path
+        stripPrefix: 'app/'
+    },
 
     // list of files / patterns to exclude
     exclude: [],
@@ -35,7 +52,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // Start these browsers, currently available:
