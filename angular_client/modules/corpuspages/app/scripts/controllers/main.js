@@ -12,5 +12,5 @@ angular.module('corpuspagesApp')
 			corpus: null,
 			corpora: null
 		};
-		$scope.thisyear = (new Date()).getFullYear()
+		$scope.thisyear = (new Date()).getFullYear();
 	});

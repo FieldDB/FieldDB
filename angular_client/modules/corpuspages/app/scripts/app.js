@@ -5,7 +5,7 @@ angular
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ngRoute', 
+    'ngRoute',
     'fielddbActivityHeatmap',
     'fieldDB'
   ])
