@@ -7,7 +7,7 @@ angular
     'ngSanitize',
     'ngRoute',
     'fielddbActivityHeatmap',
-    'fieldDB'
+    'fielddbAngularApp'
   ])
   .config(function($routeProvider) {
     $routeProvider

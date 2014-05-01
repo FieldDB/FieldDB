@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fieldDB').directive('fielddbCorpusTermsOfUse', function() {
+angular.module('fielddbAngularApp').directive('fielddbCorpusTermsOfUse', function() {
 	var corpus = {};
 	corpus.title = 'Community Corpus';
 	corpus.termsOfUse = {

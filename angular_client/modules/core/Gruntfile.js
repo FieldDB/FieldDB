@@ -231,7 +231,7 @@ module.exports = function(grunt) {
             removeCommentsFromCDATA: true,
             removeOptionalTags: true
           },
-          module: 'fieldDB',
+          module: 'fielddbAngularApp',
         },
         cwd: 'app',
         src: 'views/**.html',

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fieldDB').directive('user', function() {
+angular.module('fielddbAngularApp').directive('user', function() {
   var user = {};
   user.firstname = 'Ling';
   user.lastname = 'Llama';
