@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fielddbApp')
+angular.module('fieldDB')
   .controller('MainCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

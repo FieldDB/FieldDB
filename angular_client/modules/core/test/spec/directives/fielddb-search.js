@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Directive: user', function () {
+describe('Directive: fielddbSearch', function () {
 
   // load the directive's module
-  beforeEach(module('corpuspagesApp'));
+  beforeEach(module('fieldDB'));
 
   var element,
     scope;
@@ -13,8 +13,8 @@ describe('Directive: user', function () {
   }));
 
   it('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<user></user>');
+    element = angular.element('<fielddb-search></fielddb-search>');
     element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the user directive');
+    expect(element.text()).toBe('this is the fielddbSearch directive');
   }));
 });
