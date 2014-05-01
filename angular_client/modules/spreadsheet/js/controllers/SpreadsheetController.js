@@ -52,9 +52,9 @@ define(
       };
 
       // TEST FOR CHROME BROWSER
-      var is_chrome = window.chrome;
+      var is_chrome = window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
       if (!is_chrome) {
-        $scope.not_chrome = true;
+        $scope.not_chrome = window.navigator.userAgent;
       }
       
       $scope.useAutoGlosser = true;
