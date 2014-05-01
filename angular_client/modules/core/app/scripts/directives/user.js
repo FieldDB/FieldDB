@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('corpuspagesApp').directive('user', function() {
+angular.module('fieldDB').directive('user', function() {
   var user = {};
   user.firstname = "Ling"
   user.lastname = "Llama"

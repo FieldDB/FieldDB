@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-  .module('fielddbApp', [
+  .module('fieldDB', [
     'ngCookies',
     'ngResource',
     'ngSanitize',

@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Directive: fielddbCorpusTermsOfUse', function () {
+describe('Directive: corpus', function () {
 
   // load the directive's module
-  beforeEach(module('corpuspagesApp'));
+  beforeEach(module('fieldDB'));
 
   var element,
     scope;
@@ -13,8 +13,8 @@ describe('Directive: fielddbCorpusTermsOfUse', function () {
   }));
 
   it('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<fielddb-corpus-terms-of-use></fielddb-corpus-terms-of-use>');
+    element = angular.element('<corpus></corpus>');
     element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the fielddbCorpusTermsOfUse directive');
+    expect(element.text()).toBe('this is the corpus directive');
   }));
 });

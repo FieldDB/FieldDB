@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('corpuspagesApp').directive('fielddbSearch', function() {
+angular.module('fieldDB').directive('fielddbSearch', function() {
 	var search = {}
 	search.sortBy = "dateCreated";
 	search.fields = ["utterance", "translation"];
