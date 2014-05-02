@@ -9,17 +9,18 @@ angular.module('fielddbAngularApp').directive('corpus', function() {
 
   var directiveDefinitionObject = {
     templateUrl: 'views/corpus.html', // or // function(tElement, tAttrs) { ... },
-    restrict: 'E',
-    transclude: false,
-    scope: false,
+    restrict: 'A',
+    transclude: true,
+    scope: true,
     // controller: function($scope, $element, $attrs, $transclude, otherInjectables) {
-    controller: function($scope, $element, $attrs, $transclude) {
-      console.log("in controller");
-      console.log($element.html());
-    },
+    // controller: function($scope, $element, $attrs, $transclude) {
+    //   console.log('in controller');
+    //   console.log($element.html());
+    // },
     link: function postLink(scope, element) {
-      console.log('in the link function');
-      element.text('this is the corpus directive');
+      console.log('in the link function', element);
+      scope.corpus = corpus;
+      // element.text('this is the corpus directive');
     },
     priority: 0,
     replace: false,
