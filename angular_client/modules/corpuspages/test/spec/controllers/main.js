@@ -1,17 +1,17 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: FieldDBCorpusPagesController', function () {
 
   // load the controller's module
   beforeEach(module('corpuspagesApp'));
 
-  var MainCtrl,
+  var FieldDBCorpusPagesController,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    FieldDBCorpusPagesController = $controller('FieldDBCorpusPagesController', {
       $scope: scope
     });
   }));
