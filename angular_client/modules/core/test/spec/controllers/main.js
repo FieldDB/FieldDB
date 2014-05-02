@@ -1,17 +1,17 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: FieldDBController', function () {
 
   // load the controller's module
   beforeEach(module('fielddbAngularApp'));
 
-  var MainCtrl,
+  var FieldDBController,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    FieldDBController = $controller('FieldDBController', {
       $scope: scope
     });
   }));

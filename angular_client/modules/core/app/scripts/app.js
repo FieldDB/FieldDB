@@ -11,7 +11,7 @@ angular
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        controller: 'FieldDBController'
       })
       .otherwise({
         redirectTo: '/'
