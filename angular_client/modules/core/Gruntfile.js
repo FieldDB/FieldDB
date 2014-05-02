@@ -33,9 +33,10 @@ module.exports = function(grunt) {
       },
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-        tasks: ['newer:jshint:all'],
+        // tasks: ['newer:jshint:all'],
+        tasks: ['build'],
         options: {
-          livereload: true
+          livereload: 35726
         }
       },
       jsTest: {
@@ -64,10 +65,10 @@ module.exports = function(grunt) {
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
+        port: 9002,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        livereload: 35728
       },
       livereload: {
         options: {
