@@ -1,14 +1,21 @@
 <h1>
-  {{corpus.title}}
+	{{corpus.title}}
 </h1>
 {{corpus.corpus}}
 <div>
-  <a href="http://app.lingsync.org/{{corpus.pouchname}}" class="pull-right">
-    <img src="{{corpus.gravatar}}" alt="Corpus image"/>
-  </a>
-  <div>
-    <div>
-      {{corpus.description}} 
-    </div>
-  </div>
+	<a href="http://app.lingsync.org/{{corpus.pouchname}}" class="pull-right">
+		<img src="{{corpus.gravatar}}" alt="Corpus image"/>
+	</a>
+	<div>
+		<div>
+			{{corpus.description}} 
+		</div>
+	</div>
+</div>
+
+<div data-fielddb-lexicon-connected-graph class="lexicon-connected-graph" corpus={{corpus}}></div>
+<div id="glosser"></div>
+<div data-fielddb-lexicon-nodes class="lexicon-nodes" corpus={{corpus}}> 
+</div> 
+<div id="lexicon">  
 </div>
