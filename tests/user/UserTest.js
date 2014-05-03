@@ -7,7 +7,7 @@ describe("User ", function() {
     var json = {
       username: "bill",
       gravatar: "67890954367898765",
-      anodfunction: function(input){
+      anodfunction: function(input) {
         console.log(input);
       }
     };
@@ -25,7 +25,7 @@ describe("User ", function() {
     expect(u.toJSON()).toEqual({
       username: 'bill',
       gravatar: '67890954367898765',
-      version : 'v2.0.1',
+      version: 'v2.0.1',
       firstname: '',
       lastname: '',
       email: '',
@@ -38,9 +38,22 @@ describe("User ", function() {
   it("should have a name constisting of firstname lastname ", function() {
     var u = new User();
     expect(u.name).toBeDefined();
+    
     u.firstname = "Bill";
     u.lastname = "Smith";
     expect(u.name).toEqual("Bill Smith");
+
+    expect(u.toJSON()).toEqual({
+      version: 'v2.0.1',
+      firstname: 'Bill',
+      lastname: 'Smith',
+      username: '',
+      email: '',
+      gravatar: '',
+      researchInterests: '',
+      affiliation: '',
+      description: ''
+    });
   });
 
   it("should have an empty or valid email address", function() {

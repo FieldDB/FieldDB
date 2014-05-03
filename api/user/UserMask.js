@@ -39,6 +39,19 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
     }
   },
 
+  defaults: {
+    value: {
+      username: "",
+      firstname: "",
+      lastname: "",
+      email: "",
+      gravatar: "",
+      researchInterests: "",
+      affiliation: "",
+      description: ""
+    }
+  },
+
   id: {
     get: function() {
       if (!this._username) {
