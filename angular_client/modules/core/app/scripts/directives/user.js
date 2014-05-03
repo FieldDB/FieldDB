@@ -5,7 +5,7 @@ angular.module('fielddbAngularApp').directive('user', function() {
   return {
     templateUrl: 'views/user.html',
     restrict: 'A',
-    transclude: true,
+    transclude: false,
     scope: {
       data: '=json'
     },

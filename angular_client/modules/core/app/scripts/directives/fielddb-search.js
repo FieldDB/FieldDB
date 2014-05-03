@@ -7,7 +7,7 @@ angular.module('fielddbAngularApp').directive('fielddbSearch', function() {
   return {
     templateUrl: 'views/search.html',
     restrict: 'A',
-    transclude: true,
+    transclude: false,
     scope: true,
     // controller: function($scope, $element, $attrs, $transclude) {},
     link: function postLink(scope, element, attrs) {
