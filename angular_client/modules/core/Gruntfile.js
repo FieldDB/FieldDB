@@ -371,6 +371,7 @@ module.exports = function(grunt) {
     'karma'
   ]);
 
+  /* might want to run $ grunt browserify in the FieldDB root to ensure the api build is up to date. */
   grunt.registerTask('build', [
     'clean:dist',
     'bowerInstall',
