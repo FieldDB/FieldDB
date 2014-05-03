@@ -32,6 +32,7 @@ module.exports = function(grunt) {
         dest: '<%= pkg.name %>.min.js'
       },
     },
+    // to run one folder of tests only: $ jasmine-node tests/corpus --matchall
     jasmine_node: {
       specNameMatcher: 'Test',
       projectRoot: './',
