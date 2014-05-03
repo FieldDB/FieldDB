@@ -46,6 +46,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: "v2.0.1"
   },
 
+  defaults: {
+    value: {}
+  },
+
   version: {
     get: function() {
       if (!this._version) {
@@ -66,11 +70,18 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function toJSON() {
-      var json = {};
-      for (var aproperty in this) {
+      var json = {},
+        aproperty,
+        underscorelessProperty;
+      for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
-          var underscorelessProperty = aproperty.replace(/^_/, "");
+          underscorelessProperty = aproperty.replace(/^_/, "");
           json[underscorelessProperty] = this[aproperty];
+        }
+      }
+      for (aproperty in this.defaults) {
+        if (!json[aproperty]) {
+          json[aproperty] = this.defaults[aproperty];
         }
       }
       return json;
