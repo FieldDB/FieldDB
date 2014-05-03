@@ -15,10 +15,6 @@ var MD5 = require("MD5");
  *           It is based on the title of the corpus and can be changed and looks 
  *           nicer than the dbname which cannot be changed. eg
  *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
- * @property {String} dbname This is the identifier of the corpus, it is set when 
- *           a corpus is created. It must be a file save name, and be a permitted 
- *           name in CouchDB which means it is [a-z] with no uppercase letters or 
- *           symbols, by convention it cannot contain -, but _ is acceptable.   
  * @property {String} description This is a short description that
  *           appears on the corpus details page
  * @property {Object} termsOfUse Terms of use set by the corpus team, includes 
@@ -61,6 +57,7 @@ var MD5 = require("MD5");
  */
 var CorpusMask = function CorpusMask(options) {
   FieldDBObject.apply(this, arguments);
+  
 };
 
 CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusMask.prototype */ {
@@ -303,24 +300,6 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
           }
         });
       });
-    }
-  },
-
-  dbname: {
-    get: function() {
-      if (!this._dbname) {
-        this._dbname = "";
-      }
-      return this._dbname;
-    },
-    set: function(value) {
-      if (value === this._dbname) {
-        return;
-      }
-      if (!value) {
-        value = "";
-      }
-      this._dbname = value.trim();
     }
   },
 
