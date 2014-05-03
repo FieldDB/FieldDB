@@ -1,5 +1,5 @@
 'use strict';
-
+console.log(FieldDB);
 angular
   .module('fielddbAngularApp', [
     'ngCookies',

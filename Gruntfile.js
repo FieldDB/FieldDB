@@ -19,7 +19,8 @@ module.exports = function(grunt) {
         options: {
           banner: '<%= banner %>',
           ignore: [],
-          shim: {}
+          shim: {},
+          basedir: './'
         }
       }
     },
@@ -58,7 +59,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/user/UserMask.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
       },
       test: {
          options: {
