@@ -5,7 +5,7 @@ angular.module('fielddbAngularApp').directive('fielddbCorpusTermsOfUse', functio
   return {
     templateUrl: 'views/terms-of-use.html',
     restrict: 'A',
-    transclude: true,
+    transclude: false,
     scope: {
       data: '=json'
     },
