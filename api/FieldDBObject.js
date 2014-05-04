@@ -5,11 +5,11 @@ var CORS = require("./CORS").CORS;
  * @class An extendable object which can recieve new parameters on creation.
  *
  * @param {Object} options Optional json initialization object
- * @property {String} dbname This is the identifier of the corpus, it is set when 
- *           a corpus is created. It must be a file save name, and be a permitted 
- *           name in CouchDB which means it is [a-z] with no uppercase letters or 
- *           symbols, by convention it cannot contain -, but _ is acceptable.   
- 
+ * @property {String} dbname This is the identifier of the corpus, it is set when
+ *           a corpus is created. It must be a file save name, and be a permitted
+ *           name in CouchDB which means it is [a-z] with no uppercase letters or
+ *           symbols, by convention it cannot contain -, but _ is acceptable.
+
  * @extends Object
  * @tutorial tests/FieldDBObjectTest.js
  */
@@ -50,7 +50,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       id = this.id;
       if (!id) {
         Q.nextTick(function() {
-          deffered.reject("Cannot fetch if there is no id");
+          deffered.reject({error: "Cannot fetch if there is no id"});
         });
         return deffered.promise;
       }
@@ -65,9 +65,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             continue;
           }
           self[aproperty] = result[aproperty];
-          deffered.resolve(self);
         }
+        deffered.resolve(self);
       }, function(reason) {
+        console.log(reason);
+        deffered.reject(reason);
+      }).fail(function(reason) {
         console.log(reason);
         deffered.reject(reason);
       });

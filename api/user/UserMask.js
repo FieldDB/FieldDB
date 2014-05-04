@@ -237,6 +237,23 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         }
       }
     }
+  },
+  validateUsername: {
+    value: function(value) {
+      var safeName = value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+      var validation = {
+        valid: true,
+        username: value,
+        original: value
+      };
+      if (safeName !== value) {
+        validation.valid = false;
+        validation.suggestion = safeName;
+        validation.username = safeName;
+      }
+      return validation;
+    }
   }
 });
+
 exports.UserMask = UserMask;
