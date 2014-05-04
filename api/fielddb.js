@@ -10,24 +10,26 @@
  * @requires        UserMask
  */
 (function(exports) {
-	'use strict';
-	var Export = require("./export/Export");
-	var FieldDBObject = require("./FieldDBObject").FieldDBObject;
-	var CORS = require("./CORS").CORS;
-	var Router = require("./Router").Router;
-	var UserMask = require("./user/UserMask").UserMask;
-	var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
+  'use strict';
+  var Export = require("./export/Export");
+  var FieldDBObject = require("./FieldDBObject").FieldDBObject;
+  var CORS = require("./CORS").CORS;
+  var Router = require("./Router").Router;
+  var UserMask = require("./user/UserMask").UserMask;
+  var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
+  var Q = require("q");
 
-	var FieldDB = {};
+  var FieldDB = {};
 
-	FieldDB.Export = Export;
-	FieldDB.FieldDBObject = FieldDBObject;
-	FieldDB.CORS = CORS;
-	FieldDB.Router = Router;
-	FieldDB.UserMask = UserMask;
-	FieldDB.CorpusMask = CorpusMask;
+  FieldDB.Export = Export;
+  FieldDB.FieldDBObject = FieldDBObject;
+  FieldDB.CORS = CORS;
+  FieldDB.Router = Router;
+  FieldDB.UserMask = UserMask;
+  FieldDB.CorpusMask = CorpusMask;
+  FieldDB.Q = Q;
 
-	exports.FieldDB = FieldDB;
-	global.FieldDB = FieldDB;
+  exports.FieldDB = FieldDB;
+  global.FieldDB = FieldDB;
 
 }(typeof exports === 'object' && exports || this));
