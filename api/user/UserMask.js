@@ -183,19 +183,19 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
 
   researchInterest: {
     get: function() {
-      if (!this._researchInterests) {
-        this._researchInterests = "";
+      if (!this._researchInterest) {
+        this._researchInterest = "";
       }
-      return this._researchInterests;
+      return this._researchInterest;
     },
     set: function(value) {
-      if (value === this._researchInterests) {
+      if (value === this._researchInterest) {
         return;
       }
       if (!value) {
         value = "";
       }
-      this._researchInterests = value.trim();
+      this._researchInterest = value.trim();
     }
   },
 

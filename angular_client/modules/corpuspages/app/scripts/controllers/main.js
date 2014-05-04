@@ -1,35 +1,46 @@
 'use strict';
 
-angular.module('corpuspagesApp').controller('FieldDBCorpusPagesController', ['$scope', 'FieldDBCorpusMaskFactory', 'Servers',
-  function($scope, FieldDBCorpusMaskFactory, Servers) {
+angular.module('corpuspagesApp').controller('FieldDBCorpusPagesController', ['$scope', 'Servers',
+  function($scope, Servers) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
       'Karma'
     ];
-    var team = {};
+    var team =  new FieldDB.UserMask({
+      username: 'team',
+      dbname: 'glossersample-quechua'
+    });
     $scope.team = team;
-    team.firstname = 'Linggg';
-    team.lastname = 'Llama';
-    team.name = 'LingLlama';
-    team.username = 'lingllama';
-    team.gravatar = 'https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=200&d=identicon&r=pg';
-    team.description = 'Hi! I\'m a sample user, anyone can log in as me (my password is phoneme, \'cause I like memes).';
-    team.researchInterest = 'Memes';
-    team.affiliation = 'http://lingllama.tumblr.com';
 
-    var corpus = new FieldDBCorpusMaskFactory({
-      dbname: 'gina-georgian',
+    if (!$scope.team.gravatar) {
+      $scope.status = 'Loading team details.';
+      team.fetch(Servers.getServiceUrl(null, 'corpus')).then(function(result) {
+        console.log('Suceeded to download team public details.', result);
+        $scope.status = 'Loaded team details.';
+        $scope.$apply();
+      }, function(result) {
+        console.log('Failed to download team public details.', result);
+        $scope.status = 'Failed to download team public details.';
+      });
+    }
+    var corpus = new FieldDB.CorpusMask({
+      dbname: 'glossersample-quechua'
     });
     console.log(corpus.toJSON());
     $scope.corpus = corpus;
     if (!$scope.corpus.title) {
-      corpus.fetch(Servers.getServiceUrl(null, "corpus")).then(function(result) {
-        console.log("Suceeded to download corpus public details.", result);
+      $scope.status = 'Loading corpus details.';
+      corpus.fetch(Servers.getServiceUrl(null, 'corpus')).then(function(result) {
+        console.log('Suceeded to download corpus public details.', result);
+        $scope.status = 'Loaded corpus details.';
+        $scope.$apply();
       }, function(result) {
-        console.log("Failed to download corpus public details.", result);
+        console.log('Failed to download corpus public details.', result);
+        $scope.status = 'Failed to download corpus public details.';
       });
     }
+
     $scope.corpora = null;
     $scope.thisyear = (new Date()).getFullYear();
   }
