@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fielddbAngularApp').directive('user', function() {
+angular.module('fielddbAngularApp').directive('fielddbUser', function() {
   return {
     templateUrl: 'views/user.html',
     restrict: 'A',

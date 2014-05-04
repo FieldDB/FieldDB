@@ -14,6 +14,7 @@
 	var Export = require("./export/Export");
 	var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 	var CORS = require("./CORS").CORS;
+	var Router = require("./Router").Router;
 	var UserMask = require("./user/UserMask").UserMask;
 	var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
 
@@ -22,6 +23,7 @@
 	FieldDB.Export = Export;
 	FieldDB.FieldDBObject = FieldDBObject;
 	FieldDB.CORS = CORS;
+	FieldDB.Router = Router;
 	FieldDB.UserMask = UserMask;
 	FieldDB.CorpusMask = CorpusMask;
 

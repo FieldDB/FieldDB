@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fielddbAngularApp').directive('corpus', function($timeout) {
+angular.module('fielddbAngularApp').directive('fielddbCorpus', function($timeout) {
 
   var directiveDefinitionObject = {
     templateUrl: 'views/corpus.html', // or // function(tElement, tAttrs) { ... },
