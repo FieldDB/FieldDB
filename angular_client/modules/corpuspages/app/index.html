@@ -22,13 +22,13 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="corpuspagesApp">
+  <body ng-app="corpuspagesApp" ng-controller="FieldDBController">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <nav class="navbar navbar-default navbar-fixed-top  navbar-inverse" role="navigation" ng-controller="FieldDBController">
+    <nav class="navbar navbar-default navbar-fixed-top  navbar-inverse" role="navigation">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -72,7 +72,9 @@
     </div>
 
     <footer class="footer navbar-fixed-bottom">
-      <div > <span data-fielddb-offline-controls></span><span ng-show="corpus.copyright"> ©</span> {{corpus.copyright}} {{corpus.startyear}} {{thisyear}} {{status}}
+      <div >
+        <span data-fielddb-offline-controls json="connection"></span>
+        <span ng-show="corpus.copyright"> ©</span> {{corpus.copyright}} {{corpus.startyear}} {{thisyear}} {{status}}
       </div>
     </footer>
 
