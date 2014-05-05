@@ -4,16 +4,7 @@ var CORS = CORS || {};
 CORS.bug = function(message) {
   console.log(message);
 };
-CORS.setXMLHttpRequestLocal = function(xmlhttp) {
-  CORS.XMLHttpRequestLocal = xmlhttp;
-};
-CORS.getXMLHttpRequestLocal = function() {
-  if (!CORS.XMLHttpRequestLocal) {
-    return new window.XMLHttpRequest();
-  } else {
-    return new CORS.XMLHttpRequestLocal();
-  }
-};
+
 CORS.makeCORSRequest = function(options) {
   var deffered = Q.defer();
 
@@ -35,7 +26,7 @@ CORS.makeCORSRequest = function(options) {
    * Helper function which handles IE
    */
   var createCORSRequest = function(method, url) {
-    var xhr = CORS.getXMLHttpRequestLocal();
+    var xhr = new window.XMLHttpRequest();
     if ("withCredentials" in xhr) {
       // XHR for Chrome/Firefox/Opera/Safari.
       xhr.open(method, url, true);
@@ -44,6 +35,7 @@ CORS.makeCORSRequest = function(options) {
       xhr = new XDomainRequest();
       xhr.open(method, url);
     } else {
+      // console.log(xhr);
       // CORS not supported.
       xhr = null;
     }
@@ -54,7 +46,7 @@ CORS.makeCORSRequest = function(options) {
   if (!xhr) {
     CORS.bug('CORS not supported, your browser is unable to contact the database.');
     deffered.reject('CORS not supported, your browser is unable to contact the database.');
-    return;
+    return deffered.promise;
   }
 
   //  if(options.method === "POST"){

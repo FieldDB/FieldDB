@@ -2,6 +2,13 @@
 
 angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope',
   function($scope) {
-    console.log("In the FieldDBController");
+    $scope.connection = {
+      online: true,
+      apiURL: 'https://localhost:3181/v2/',
+      offlineCouchURL: 'https://localhost:6984'
+    };
+    FieldDB.FieldDBConnection.connect();
+
+    console.log('In the FieldDBController', $scope.connection);
   }
 ]);
