@@ -105,6 +105,7 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('docs', ['jsdoc']);
+  grunt.registerTask('build', ['jshint', 'browserify', 'uglify']);
   grunt.registerTask('default', ['jshint', 'jasmine_node', 'browserify', 'uglify']);
   grunt.registerTask('default', ['jasmine_node', 'browserify', 'uglify']);
   grunt.registerTask('travis', ['jasmine_node', 'browserify', 'uglify', 'docs']);
