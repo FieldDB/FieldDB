@@ -1,0 +1,56 @@
+<div class="tabbable">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="#terms" data-toggle="tab">
+				Terms of Use for {{corpus.title}} {{corpus.copyright}}
+			</a>
+		</li>
+		<li>
+			<a href="#emeldtermsreccomendations" data-toggle="tab">
+				Why have a Terms of Use?
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div id="terms" class="tab-pane active">
+			<p>
+				{{corpus.termsOfUse.humanReadable}}
+			</p>
+			<span>
+				License: 
+			</span>
+			<a href="{{corpus.license.link}}" rel="license" title="More details about {{corpus.license.title}}">
+				{{corpus.license.title}}
+			</a>
+			<p>
+				{{corpus.license.humanReadable}}
+			</p>
+			<img ng-src="{{corpus.license.imgURL}}" alt="License"/>
+		</div>
+		<div id="emeldtermsreccomendations" class="tab-pane">
+			<ul>
+				<li>
+					<dl>
+						EMELD digital language documentation Best Practices #7:
+						<dt>
+							Rights
+						</dt>
+						<dd>
+							Resource creators, researchers and the speech communities who provide the primary data have different priorities over who has access to language resources.
+						</dd>
+						<dt>
+							Solution
+						</dt>
+						<dd>
+							Terms of use should be well documented, and enforced if necessary with encryption or licensing. It is important however to limit the duration of 
+							<a target="_blank" href="http://emeld.org/school/classroom/ethics/access.html">
+								access restrictions
+							</a>
+							: A resource whose access is permanently restricted to one user is of no long-term value since it cannot be used once that user is gone.
+						</dd>
+					</dl>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

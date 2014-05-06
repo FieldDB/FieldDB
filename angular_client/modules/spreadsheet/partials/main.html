@@ -2,14 +2,19 @@
 <br /> 
 <br /> 
 <div id="login_screen" ng-show="documentReady==true">  
-  <div ng-show="not_chrome==true">  
+  <div ng-show="not_chrome">  
     <h3>THIS SITE WAS DEVELOPED FOR CHROME.
     </h3>  
     <p>
-      It may not work as expected if you are using another browser.
+      It may not work as expected if you are using another browser:
+      {{not_chrome}}
       <br /> 
       <a  href="http://chrome.google.com">
-        <button class="btn btn-primary">Get  Chrome
+        <button class="btn btn-info">Get  Chrome
+        </button>
+      </a>
+      <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
+        <button class="btn btn-success">This browser works fine
         </button>
       </a>  
     </p>

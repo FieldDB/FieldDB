@@ -5,12 +5,33 @@
  * @module          FieldDB
  * @tutorial        tests/FieldDBTest.js
  * @requires        Export
+ * @requires        FieldDBObject
+ * @requires        CORS
+ * @requires        UserMask
  */
-var Export = require("./export/Export");
-
 (function(exports) {
-	'use strict';
+  'use strict';
+  var Export = require("./export/Export");
+  var FieldDBObject = require("./FieldDBObject").FieldDBObject;
+  var CORS = require("./CORS").CORS;
+  var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
+  var Router = require("./Router").Router;
+  var UserMask = require("./user/UserMask").UserMask;
+  var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
+  var Q = require("q");
 
-	exports.Export = Export;
+  var FieldDB = {};
+
+  FieldDB.Export = Export;
+  FieldDB.FieldDBObject = FieldDBObject;
+  FieldDB.CORS = CORS;
+  FieldDB.Router = Router;
+  FieldDB.UserMask = UserMask;
+  FieldDB.CorpusMask = CorpusMask;
+  FieldDB.Q = Q;
+  FieldDB.FieldDBConnection = FieldDBConnection;
+
+  exports.FieldDB = FieldDB;
+  global.FieldDB = FieldDB;
 
 }(typeof exports === 'object' && exports || this));

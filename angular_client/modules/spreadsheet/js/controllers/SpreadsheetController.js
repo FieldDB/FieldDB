@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "1.99.0ss";
+      $rootScope.appVersion = "2.0.0ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -52,9 +52,9 @@ define(
       };
 
       // TEST FOR CHROME BROWSER
-      var is_chrome = window.chrome;
+      var is_chrome = window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
       if (!is_chrome) {
-        $scope.not_chrome = true;
+        $scope.not_chrome = window.navigator.userAgent;
       }
       
       $scope.useAutoGlosser = true;

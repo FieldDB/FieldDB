@@ -1,42 +1,41 @@
 var CouchDBConnection = require("./CouchDBConnection");
-var OPrime = require('../../backbone_client/libs/OPrime.js');
+var FieldDBConnection = require('../../api/FieldDBConnection').FieldDBConnection;
+var CORS = require("../../api/CORSNode").CORS;
 
 var runCORSTests = function(whichServer) {
   /*
-   * Turn off CORS alerts
-   */
-  OPrime.bug = function(message) {
-    console.log(message);
-    //      expect(false).toBeTruthy();
-  };
-
-  var serverURL = "https://corpusdev.lingsync.org/_session";
-  if (whichServer == "Testing") {
-    serverURL = "https://corpusdev.lingsync.org/_session";
-  } else if (whichServer == "Stable") {
-    serverURL = "https://corpus.lingsync.org/_session";
-  } else if (whichServer == "McGill") {
-    serverURL = "https://prosody.linguistics.mcgill.ca/corpus/_session/";
-  } else if (whichServer == "Localhost") {
-    serverURL = "https://localhost:6984/_session";
-  }
-  console.log("Testing with: " + serverURL);
-  /*
    * Declare an object and its functions which will be in scope
    */
-  var user = {
-    name: "lingllama",
-    password: "phoneme"
-  };
 
   it('should be able asyncronously using CORS to login user ', function() {
 
-    var serverResult = new CouchDBConnection(serverURL, user);
+    var serverResult = null;
+    var user = {
+      username: "lingllama",
+      password: "phoneme"
+    };
     /*
      * Begin the async task
      */
     runs(function() {
-      serverResult.login();
+      FieldDBConnection.setXMLHttpRequestLocal(CORS)
+      FieldDBConnection.connection = {
+        localCouch: {
+          connected: false,
+          url: 'http://localhost:5984',
+          couchUser: null
+        },
+        centralAPI: {
+          connected: false,
+          url: 'http://localhost:3181/v2',
+          fieldDBUser: null
+        }
+      };
+      FieldDBConnection.connect().then(function(result) {
+        console.log("got a result runCORSTests");
+        serverResult = result;
+        console.log(serverResult);
+      });
     });
 
     /*
@@ -44,20 +43,25 @@ var runCORSTests = function(whichServer) {
      */
     waitsFor(function() {
       // console.log("Waiting for user " + user.name + " to login");
-      return serverResult.loggedIn();
-    }, "User " + user.name + " never logged in successfully", 3000);
+      return serverResult;
+    }, "Severs never contacted successfully", 10000);
 
     /*
      * Test the result
      */
     runs(function() {
-      console.log("Done waiting for user " + user.name + " to login");
-      serverResult.assertLoginSuccessful();
+      console.log("Done waiting for serverResult to login");
+      // serverResult.assertLoginSuccessful();
+      expect(serverResult.localCouch.couchUser).toBeDefined();
+      expect(serverResult.centralAPI.fieldDBUser).toBeDefined();
+
+      expect(serverResult.localCouch.couchUser.name).toEqual(this.user.username);
+      expect(serverResult.centralAPI.fieldDBUser.username).toEqual(this.user.username);
     });
 
   });
 
-  it('should be able asyncronously using CORS to upload a doc', function() {
+  xit('should be able asyncronously using CORS to upload a doc', function() {
     /*
      * Declare an object and its functions which will be in scope
      */
@@ -90,7 +94,7 @@ var runCORSTests = function(whichServer) {
     });
 
   });
-  it('should be able asyncronously using CORS to update a doc', function() {
+  xit('should be able asyncronously using CORS to update a doc', function() {
     /*
      * Declare an object and its functions which will be in scope
      */
@@ -135,7 +139,7 @@ xdescribe("CorpusWebService Testing: ", function() {
 //   describe("CorpusWebService Localhost: ", function() {
 //    runCORSTests("Localhost");
 //  });
-//   
+//
 /* TODO Turn these on when the other servers support CORS too */
 // describe("CorpusWebService Stable: ", function() {
 // runCORSTests("Stable");
