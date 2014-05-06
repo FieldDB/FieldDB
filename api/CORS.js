@@ -76,7 +76,7 @@ CORS.makeCORSRequest = function(options) {
     CORS.bug('There was an error making the CORS request to ' + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
     deffered.reject(e);
   };
-  if (options.method === "POST") {
+  if (options.data) {
     xhr.send(JSON.stringify(options.data));
   } else {
     xhr.send();
