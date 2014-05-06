@@ -7,7 +7,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope',
       apiURL: 'https://localhost:3181/v2/',
       offlineCouchURL: 'https://localhost:6984'
     };
-    FieldDB.FieldDBConnection.connect();
+    // FieldDB.FieldDBConnection.connect();
 
     console.log('In the FieldDBController', $scope.connection);
   }
