@@ -30,15 +30,16 @@ describe("User ", function() {
       lastname: '',
       email: '',
       affiliation: '',
-      researchInterests: '',
-      description: ''
+      researchInterest: '',
+      description: '',
+      researchInterests: ''
     });
   });
 
   it("should have a name constisting of firstname lastname ", function() {
     var u = new User();
     expect(u.name).toBeDefined();
-    
+
     u.firstname = "Bill";
     u.lastname = "Smith";
     expect(u.name).toEqual("Bill Smith");
