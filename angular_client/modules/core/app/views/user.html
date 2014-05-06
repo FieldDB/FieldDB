@@ -1,5 +1,5 @@
 <p class="text-center">
-	<img src="{{user.gravatar}}" alt="{{user.name}}" class="img-polaroid">
+	<img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&d=identicon" alt="{{user.name}}" class="img-polaroid">
 </p>
 <div >
 	<h1> {{user.firstname}} {{user.lastname}}</h1>
@@ -11,19 +11,19 @@
 			<i style="margin-top:3px" class="fa fa-folder-open"></i>
 			&nbsp;&nbsp;Interests: {{user.researchInterest}}
 		</dt>
-		<dd> 
+		<dd>
 		</dd>
 		<dt>
 			<i style="margin-top:3px" class="fa fa-user"></i>
 			&nbsp;&nbsp;Affiliation: {{user.affiliation}}
 		</dt>
-		<dd> 
+		<dd>
 		</dd>
 		<dt>
 			<i style="margin-top:3px" class="fa fa-comment"></i>
 			&nbsp;&nbsp;Description: {{user.description}}
 		</dt>
-		<dd> 
+		<dd>
 		</dd>
 	</dl>
 </div>
