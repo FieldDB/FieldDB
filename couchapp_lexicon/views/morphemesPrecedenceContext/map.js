@@ -21,7 +21,7 @@ function(doc) {
       removeSententialPunctuation: false,
       punctuationToRemoveAfterTokenization: null
     };
-    /* Assumes 
+    /* Assumes
      * - no capitals (eg. D or T for retroflex or R for uvular) as contrastive segments
      * - nor long vowels written as :
      * - nor numbers representing pharingeals
@@ -86,10 +86,14 @@ function(doc) {
             return;
           }
         }
+        // if its the gloss line, leave - and . punctuation and case sensitive
+        if(fields[key].label === 'gloss'){
+          fields[key].tokenizer = conservativeTokenizer;
+        }
         if (fields[key].mask) {
           fields[key].mask = fields[key].mask.trim();
           datumFieldsForDatumLevelContext[fields[key].label] = fields[key].mask;
-          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : aggressiveTokenizer);
+          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : conservativeTokenizer);
           if (fields[key].igt) {
             extendedIGTFields.push(fields[key].label);
           }
