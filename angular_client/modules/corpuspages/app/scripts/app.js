@@ -10,7 +10,8 @@ angular
     'fielddbAngularApp',
     'fielddbLexiconAngularApp'
   ])
-  .config(function($routeProvider) {
+  .config(function($routeProvider, $locationProvider) {
+    // $locationProvider.html5Mode(true);
     if (FieldDB && FieldDB.Router) {
       for (var when in FieldDB.Router.routes) {
         FieldDB.Router.routes[when].angularRoute.controller = 'FieldDBCorpusPagesController';
