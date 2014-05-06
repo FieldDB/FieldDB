@@ -4,8 +4,9 @@ angular.module('corpuspagesApp').controller('FieldDBCorpusPagesController', ['$s
   function($scope, $routeParams, $rootScope) {
     console.log('In the FieldDBCorpusPagesController', $routeParams);
 
-    if (!$routeParams || !$routeParams.team) {
+    if (!$routeParams || !$routeParams.team ) {
       console.log('Route params are undefined, not loading anything');
+      return;
     }
     var team = new FieldDB.UserMask({
       username: 'team',
