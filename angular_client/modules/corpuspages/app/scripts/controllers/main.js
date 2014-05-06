@@ -29,9 +29,8 @@ angular.module('corpuspagesApp').controller('FieldDBCorpusPagesController', ['$s
     $scope.corpora = null;
     $scope.thisyear = (new Date()).getFullYear();
 
-    FieldDB.FieldDBConnection.connect().
-    finally(function(userroles) {
-      $scope.authentication.userroles = userroles;
+    // FieldDB.FieldDBConnection.connect().done(function(userroles) {
+      // $scope.authentication.userroles = userroles;
       if (!$scope.team.gravatar) {
         $scope.status = 'Loading team details.';
         team.fetch(FieldDB.FieldDBConnection.connection.localCouch.url).then(function(result) {
@@ -56,7 +55,7 @@ angular.module('corpuspagesApp').controller('FieldDBCorpusPagesController', ['$s
           $scope.$apply();
         });
       }
-    });
+    // });
 
   }
 ]);
