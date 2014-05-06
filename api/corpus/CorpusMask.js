@@ -1,63 +1,62 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Q = require("q");
-var MD5 = require("MD5");
 
 /**
  * @class The CorpusMask is saved as corpus in the Couch repository,
- *        it is the publicly visible version of a corpus. By default it just says "This 
- *        corpus is private," when users decide to make some aspects of their corpsu 
- *        public they can customize the fields in their "corpus" object to display 
+ *        it is the publicly visible version of a corpus. By default it just says "This
+ *        corpus is private," when users decide to make some aspects of their corpsu
+ *        public they can customize the fields in their "corpus" object to display
  *        only certain sorts of data, even though the corpus is publicly discoverable.
  *
- * @property {String} title This is the title of the corpus, as set by the corpus 
+ * @property {String} title This is the title of the corpus, as set by the corpus
  *           team. It can contain any UTF-8 character.
  * @property {String} titleAsUrl This is what appears in the url on the main website.
- *           It is based on the title of the corpus and can be changed and looks 
+ *           It is based on the title of the corpus and can be changed and looks
  *           nicer than the dbname which cannot be changed. eg
  *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
  * @property {String} description This is a short description that
  *           appears on the corpus details page
- * @property {Object} termsOfUse Terms of use set by the corpus team, includes 
- *           a field for humanReadable terms which are displayed on the corpus 
- *           and included in corpus exports. 
- * @property {Object} license License set by the corpus team, includes a field 
- *           for humanReadable terms which are displayed on the corpus and 
- *           included in corpus exports, as well as a link to the license, imageUrl 
- *           for the image/logo of the license for easy recognition and 
- *           title of the license. 
- * @property {Object} copyright Who owns the copyright to the corpus, 
- *           by default it is set to the corpus team's name but teams can customize 
- *           it for example to make the corpus copyright of the language community 
- *           or speakers who contributed to the corpus. 
+ * @property {Object} termsOfUse Terms of use set by the corpus team, includes
+ *           a field for humanReadable terms which are displayed on the corpus
+ *           and included in corpus exports.
+ * @property {Object} license License set by the corpus team, includes a field
+ *           for humanReadable terms which are displayed on the corpus and
+ *           included in corpus exports, as well as a link to the license, imageUrl
+ *           for the image/logo of the license for easy recognition and
+ *           title of the license.
+ * @property {Object} copyright Who owns the copyright to the corpus,
+ *           by default it is set to the corpus team's name but teams can customize
+ *           it for example to make the corpus copyright of the language community
+ *           or speakers who contributed to the corpus.
  * @property {Object} location GPS location of the corpus (longitude, latitude and accuracy)
- *           The corpus can be plotted on a map using the accuracy as a radius 
+ *           The corpus can be plotted on a map using the accuracy as a radius
  *           of roughly where the data is from.
  * @property {String} remote The url of the remote eg:
  *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
- * @property {Array} couchConnections The url of couch remote(s) where the 
+ * @property {Array} couchConnections The url of couch remote(s) where the
  *           corpus is replicated or backed up.
- * @property {Array} olacConnections The url of OLAC remote(s) where the corpus 
+ * @property {Array} olacConnections The url of OLAC remote(s) where the corpus
  *           is archived or published.
  *
- * @property {Array} members Collection of public browsable/search engine 
+ * @property {Array} members Collection of public browsable/search engine
  *           discoverable members associated to the corpus
- * @property {Array} datumstates Collection of datum states for which data are 
- *           will be public browsable/search engine discoverable in the corpus. This 
- *           can be used to only show polished data or "checked" data on the public 
+ * @property {Array} datumstates Collection of datum states for which data are
+ *           will be public browsable/search engine discoverable in the corpus. This
+ *           can be used to only show polished data or "checked" data on the public
  *           page for example.
- * @property {Array} datumfields Collection of datum fields which will be  
+ * @property {Array} datumfields Collection of datum fields which will be
  *           public browsable/search engine discoverable  on public datum in the corpus
- * @property {Array} sessions Collection of public browsable/search engine 
+ * @property {Array} sessions Collection of public browsable/search engine
  *           discoverable sessions that belong to the corpus
- * @property {Array} datalists Collection of public browsable/search engine 
+ * @property {Array} datalists Collection of public browsable/search engine
  *           discoverable data lists created under the corpus
  *
  * @extends FieldDBObject
  * @tutorial tests/CorpusTest.js
  */
 var CorpusMask = function CorpusMask(options) {
+  console.log(options);
   FieldDBObject.apply(this, arguments);
-  
+
 };
 
 CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusMask.prototype */ {
@@ -263,7 +262,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
               //find out what the rev is in the database by fetching
               self.fetch({
                 success: function(model, response) {
-
+                  console.log(response);
                   modelwithhardcodedid._rev = self._rev;
 
                   db.put(modelwithhardcodedid, function(err, response) {
@@ -272,6 +271,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
                         failurecallback();
                       }
                     } else {
+                      console.log(response);
                       //this happens on subsequent save into pouch of this CorpusMask's id
                       if (typeof successcallback === "function") {
                         successcallback();
@@ -282,6 +282,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
                 },
                 //fetch error
                 error: function(e) {
+                  console.log(e);
                   if (typeof failurecallback === "function") {
                     failurecallback();
                   }
@@ -294,6 +295,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
               }
             }
           } else {
+            console.log(response);
             if (typeof successcallback === "function") {
               successcallback();
             }

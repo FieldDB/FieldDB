@@ -1,5 +1,4 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Q = require("q");
 var MD5 = require("MD5");
 
 /**
@@ -12,6 +11,7 @@ var MD5 = require("MD5");
  * @tutorial tests/UserTest.js
  */
 var UserMask = function UserMask(options) {
+  console.log(options);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -240,6 +240,14 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
   validateUsername: {
     value: function(value) {
+      if(!value){
+        return {
+        valid: false,
+        username: null,
+        original: null,
+        suggestion: null
+      };
+      }
       var safeName = value.toLowerCase().replace(/[^a-z0-9_]/g, '');
       var validation = {
         valid: true,
