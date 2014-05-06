@@ -1,6 +1,6 @@
 'use strict';
 
-var FieldDB = require('../api/fielddb.js');
+var FieldDB = require('../api/fielddb.js').FieldDB;
 /**
  <pre>
   ======== A Handy Little Jasmine Reference ========
@@ -49,10 +49,13 @@ var FieldDB = require('../api/fielddb.js');
 * @module  FieldDBTest
 * @extends  Jasmine.spec
 */
-describe("api/FieldDB.js", function() {
+xdescribe("api/FieldDB.js", function() {
 
   it("should load", function() {
     expect(FieldDB).toBeDefined();
+    // console.log(FieldDB);
+    expect(FieldDB.FieldDBObject).toBeDefined();
+    expect(FieldDB.UserMask).toBeDefined();
   });
 
 });

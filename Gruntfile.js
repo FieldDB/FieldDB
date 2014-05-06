@@ -12,25 +12,28 @@ module.exports = function(grunt) {
       '* Copyright (c) <%= grunt.template.today("yyyy") %> \n\t<%= pkg.contributors.join("\\n\\t")  %>\n' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     // Task configuration.
-    concat: {
-      options: {
-        banner: '<%= banner %>',
-        stripBanners: true
-      },
-      dist: {
+    browserify: {
+      src: {
         src: ['api/fielddb.js'],
-        dest: 'dist/<%= pkg.name %>.js'
-      },
+        dest: '<%= pkg.name %>.js',
+        options: {
+          banner: '<%= banner %>',
+          ignore: [],
+          shim: {},
+          basedir: './'
+        }
+      }
     },
     uglify: {
       options: {
         banner: '<%= banner %>'
       },
       dist: {
-        src: '<%= concat.dist.dest %>',
-        dest: 'dist/<%= pkg.name %>.min.js'
+        src: '<%= browserify.src.dest %>',
+        dest: '<%= pkg.name %>.min.js'
       },
     },
+    // to run one folder of tests only: $ jasmine-node tests/corpus --matchall
     jasmine_node: {
       specNameMatcher: 'Test',
       projectRoot: './',
@@ -56,13 +59,14 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/*.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
       },
       test: {
          options: {
-          jshintrc: 'tests/.jshintrc'
+          jshintrc: 'tests/.jshintrc',
+          ignores: ['tests/libs/**/*js']
         },
-        src: ['tests/**/*.js']
+        src: ['api/FieldDBTest.js']
       },
     },
     jsdoc: {
@@ -92,7 +96,7 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-jasmine-node');
   grunt.loadNpmTasks('grunt-jsdoc');
@@ -101,8 +105,8 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('docs', ['jsdoc']);
-  grunt.registerTask('default', ['jshint', 'jasmine_node', 'concat', 'uglify']);
-  grunt.registerTask('default', ['jasmine_node', 'concat', 'uglify']);
-  grunt.registerTask('travis', ['jasmine_node', 'concat', 'uglify', 'docs']);
+  grunt.registerTask('default', ['jshint', 'jasmine_node', 'browserify', 'uglify']);
+  grunt.registerTask('default', ['jasmine_node', 'browserify', 'uglify']);
+  grunt.registerTask('travis', ['jasmine_node', 'browserify', 'uglify', 'docs']);
 
 };

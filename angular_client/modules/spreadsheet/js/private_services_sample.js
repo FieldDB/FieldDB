@@ -10,7 +10,10 @@ define(
         'Servers',
         function($http, $rootScope) {
 
-          var localhost = true;
+          var localhost = false;
+          if (window.location.host.indexOf("example.org") === -1) {
+            localhost = true;
+          }
           var servers = {};
 
           if (localhost) {

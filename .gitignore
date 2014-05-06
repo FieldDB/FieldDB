@@ -34,6 +34,9 @@ proguard.cfg
 node_modules
 bin
 gen
+docs/javascript
+fielddb.js
+fielddb.min.js
 
 # Node #
 ########
