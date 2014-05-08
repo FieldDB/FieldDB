@@ -255,14 +255,20 @@ module.exports = function(grunt) {
           src: ['favicon.ico'],
           dest: 'release/'
         }, {
+          src: ['.htaccess'],
+          dest: 'release/'
+        }, {
+          src: ['404.html'],
+          dest: 'release/'
+        }, {
+          src: ['index.html'],
+          dest: 'release/'
+        }, {
           src: ['libs/require.min.js'],
           dest: 'release/'
         }, {
           src: ['libs/recorderjs/recorderWorker.js'],
           dest: 'release/'
-        }, {
-          src: ['manifest-build.json'],
-          dest: 'release/manifest.json'
         }]
       },
       spreadsheet_build_only: {
@@ -312,6 +318,25 @@ module.exports = function(grunt) {
         }
       }
     },
+    ngtemplates: {
+      app: {
+        options: {
+          htmlmin: {
+            collapseWhitespace: true,
+            collapseBooleanAttributes: true,
+            removeCommentsFromCDATA: true,
+            removeOptionalTags: true
+          },
+          // module: 'SpreadsheetStyleDataEntry',
+          bootstrap: function(module, script) {
+            return 'define([], function() { return { init: function(thismodule){\n\t thismodule.run(["$templateCache", function($templateCache) {  \n ' + script + ' }]);\n }\n};\n });';
+          }
+        },
+        cwd: '',
+        src: 'partials/**.html',
+        dest: 'js/partials.js'
+      }
+    },
     htmlmin: {
       release: {
         options: {
@@ -342,7 +367,7 @@ module.exports = function(grunt) {
     //     }]
     //   }
     // },
-    // 
+    //
 
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
@@ -426,7 +451,13 @@ module.exports = function(grunt) {
     //   }
     // },
     // concat: {
-    //   dist: {}
+    //   options: {
+    //     separator: ';',
+    //   },
+    //   dist: {
+    //     src: ['spreadsheet_build_dev/SpreadsheetStyleDataEntry.js', 'release/partials.js'],
+    //     dest: 'release/SpreadsheetStyleDataEntry.js',
+    //   },
     // },
 
     // Test settings
@@ -446,6 +477,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-angular-jasmine');
+  // grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.registerTask('serve', function(target) {
     if (target === 'dist') {
@@ -486,10 +519,11 @@ module.exports = function(grunt) {
     'copy:dist',
     'cdnify',
     'cssmin',
+    'ngtemplates',
     'uglify',
     'rev',
-    'usemin',
-    'htmlmin'
+    'usemin'
+    // 'htmlmin'
   ]);
 
   // grunt.registerTask('default', [
@@ -500,9 +534,10 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('test', ['jshint', 'jasmine']);
+  grunt.registerTask('partials', ['ngtemplates']);
 
-  grunt.registerTask('default', ['requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only', 'htmlmin', 'cssmin']);
+  grunt.registerTask('default', ['ngtemplates', 'requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only', 'cssmin']);
 
-  grunt.registerTask('all', ['jshint', 'jasmine', 'requirejs', 'uglify', 'copy:spreadsheet', 'htmlmin', 'cssmin']);
+  grunt.registerTask('all', ['jshint', 'jasmine', 'ngtemplates', 'requirejs', 'uglify', 'copy:spreadsheet', 'cssmin']);
 
 };
