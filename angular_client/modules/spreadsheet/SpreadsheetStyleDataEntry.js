@@ -11,6 +11,7 @@ require.config({
 		"Glosser": "bower_components/fielddb-glosser/fielddb-glosser",
 		"angular-md5": "bower_components/angular-md5/angular-md5",
 		"recorder": "libs/recorderjs/recorder",
+    "recorderWorker": "libs/recorderjs/recorderWorker.js",
 		"sjcl": "libs/sjcl",
 		"Q": "bower_components/q/q"
 	},

@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "2.0.0ss";
+      $rootScope.appVersion = "2.0.1ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -56,12 +56,12 @@ define(
       if (!is_chrome) {
         $scope.not_chrome = window.navigator.userAgent;
       }
-      
+
       $scope.useAutoGlosser = true;
       try {
         var previousValue = localStorage.getItem("useAutoGlosser");
         if (previousValue === "false") {
-          $scope.useAutoGlosser =  false; 
+          $scope.useAutoGlosser =  false;
         }
       } catch (e) {
         console.log("Use autoglosser was not previously set.");
@@ -504,7 +504,7 @@ define(
               for (var i = 0; i < dataFromServer.length; i++) {
                 if (dataFromServer[i].value.datumFields) {
                   var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.DB.pouchname + "/");
-                  
+
                   // Load data from current session into scope
                   if (!sessionID || sessionID == "none") {
                     scopeData.push(newDatumFromServer);
@@ -750,7 +750,7 @@ define(
           Preferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
           localStorage.setItem('SpreadsheetPreferences', JSON
             .stringify(Preferences));
-          
+
           // If the currently choosen corpus has a default template, overwrite the user's preferences
           if (selectedDB.preferredTemplate) {
             var fieldsForTemplate = {};
@@ -941,7 +941,7 @@ define(
                   sessionToMarkAsDeleted.trashed = "deleted";
                   var rev = sessionToMarkAsDeleted._rev;
                   Data.saveCouchDoc($rootScope.DB.pouchname, sessionToMarkAsDeleted).then(function(response) {
-                    
+
                     var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
                     $scope.addActivity([{
                       verb: "deleted",
@@ -1395,7 +1395,7 @@ define(
 
               $scope.saved = "saving";
               recordToBeSaved.pouchname = $rootScope.DB.pouchname;
-              // spreadsheetDatum.dateModified = 
+              // spreadsheetDatum.dateModified =
               // recordToBeSaved.timestamp = Date.now(); // these come from the edit function, and from the create function because the save can happen minutes or hours after the user actually modifies/creates the datum.
               promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
               saveDatumPromises.push(promiseToSaveThisDatum);
@@ -1412,7 +1412,7 @@ define(
 
             })($scope.allData[index]);
           }
-        } 
+        }
         Q.allSettled(saveDatumPromises)
           .done(function(success, reason) {
             if (reason) {
@@ -1621,7 +1621,7 @@ define(
                       console.log("Saved new activity");
                       // Deleting so that indices in scope are unchanged
                       delete $scope.activities[index];
-                    },  
+                    },
                     function() {
                       window
                         .alert("There was an error saving the activity. Please try again.");
@@ -1695,7 +1695,7 @@ define(
         if (dataToPost.newCorpusName !== "") {
           // Create new corpus
           Data.createcorpus(dataToPost).then(function(response) {
-            
+
             // Add new corpus to scope
             var newCorpus = {};
             newCorpus.pouchname = response.corpus.pouchname;
@@ -1889,7 +1889,7 @@ define(
           dataToPost.userRoleInfo.removeUser = true;
 
           Data.updateroles(dataToPost).then(function(response) {
-            
+
             var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
             $scope.addActivity([{
               verb: "removed",
@@ -1988,8 +1988,12 @@ define(
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         var context = new AudioContext();
         var mediaStreamSource = context.createMediaStreamSource(s);
-        recorder = new Recorder(mediaStreamSource);
-        recorder.record();
+        try{
+          recorder = new Recorder(mediaStreamSource);
+          recorder.record();
+        }catch(error){
+            onFail(error);
+        }
       };
 
       window.URL = window.URL || window.webkitURL;
@@ -2054,16 +2058,27 @@ define(
       };
 
       $scope.stopRecording = function(datum) {
-        recorder.stop();
-        $scope.closeAudioWarning();
-        clearInterval(audioRecordingInterval);
-        $scope.recordingStatus = "Record";
-        $scope.recordingButtonClass = "btn btn-success";
-        $scope.recordingIcon = "fa-microphone";
-        $scope.processingAudio = true;
-        recorder.exportWAV(function(s) {
-          $scope.uploadFile(datum, s);
-        });
+        if(recorder){
+          recorder.stop();
+          $scope.closeAudioWarning();
+          clearInterval(audioRecordingInterval);
+          $scope.recordingStatus = "Record";
+          $scope.recordingButtonClass = "btn btn-success";
+          $scope.recordingIcon = "fa-microphone";
+          if($scope.processingAudio){
+            return; //avoid double events which were leading to double audio.
+          }
+          $scope.processingAudio = true;
+
+          recorder.exportWAV(function(s) {
+            $scope.uploadFile(datum, s);
+          });
+        }else{
+          $scope.closeAudioWarning();
+          $scope.recordingStatus = "Record doesn't appear to be working currently in your browser";
+          $scope.recordingButtonClass = "btn";
+          $scope.recordingIcon = "fa-microphone-slash";
+        }
       };
 
       $scope.uploadFile = function(datum, file) {
@@ -2071,6 +2086,9 @@ define(
           $rootScope.newRecordHasBeenEdited = true;
         }
 
+        // if($scope.processingAudio){
+        //   return; //avoid double events which were leading to double audio.
+        // }
         $scope.processingAudio = true;
 
         var blobToBase64 = function(blob, cb) {
@@ -2161,6 +2179,9 @@ define(
                 "content_type": content_type,
                 "data": base64File
               };
+              // if(newAttachments[filename]){
+              //   return; //try to avoid double of the same file...
+              // }
               newAttachments[filename] = newAttachment;
               newAttachments[filename].description = description;
 
@@ -2174,6 +2195,9 @@ define(
                 };
 
                 $scope.$apply(function() {
+                  if(datum._attachments[filename]){
+                    return; //try to avoid double of the same file...
+                  }
                   datum._attachments[filename] = newAttachments[filename];
                   if (!Array.isArray(datum.audioVideo)) {
                     console.log("Upgrading audioVideo to a collection", datum.audioVideo);
@@ -2282,7 +2306,7 @@ define(
           Data.saveCouchDoc($rootScope.DB.pouchname, originalDoc).then(function(response) {
             console.log("Successfully uploaded attachment.");
 
-            
+
 
 
             // Reset file input field
@@ -2461,7 +2485,7 @@ define(
         Data.changePassword($scope.resetPasswordInfo).then(function(result){
           // console.log(result);
           Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
-          
+
           Preferences.savedState.password = sjcl.encrypt("password", $scope.resetPasswordInfo.confirmpassword);
           localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
 
