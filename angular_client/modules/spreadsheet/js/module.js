@@ -3,12 +3,12 @@ console.log("Loading the Spreadsheet module.");
 define(
   ["angular", "js/controllers/SpreadsheetController",
     "js/controllers/SettingsController",
-    "js/directives", "js/filters",
+    "js/directives", "js/filters", "js/partials",
     "js/services", "js/private_services"
   ],
   function(angular, SpreadsheetStyleDataEntryController,
     SpreadsheetStyleDataEntrySettingsController,
-    SpreadsheetStyleDataEntryDirectives, SpreadsheetStyleDataEntryFilters,
+    SpreadsheetStyleDataEntryDirectives, SpreadsheetStyleDataEntryFilters, SpreadsheetStyleDataEntryPartials,
     SpreadsheetStyleDataEntryServices, SpreadsheetPrivateServices) {
     /**
      * The main Spreadsheet Angular UI module.
@@ -55,5 +55,7 @@ define(
             });
           }
         ]);
+
+    SpreadsheetStyleDataEntryPartials.init(SpreadsheetStyleDataEntry)
     return SpreadsheetStyleDataEntry;
   });
