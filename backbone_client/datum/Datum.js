@@ -1,11 +1,11 @@
-define([ 
+define([
     "backbone",
-    "audio_video/AudioVideos", 
+    "audio_video/AudioVideos",
     "comment/Comment",
     "comment/Comments",
-    "datum/Datums", 
-    "datum/DatumField", 
-    "datum/DatumFields", 
+    "datum/Datums",
+    "datum/DatumField",
+    "datum/DatumFields",
     "datum/DatumTag",
     "datum/DatumTags",
     "image/Images",
@@ -13,12 +13,12 @@ define([
     "glosser/Tree",
     "OPrime"
 ], function(
-    Backbone, 
-    AudioVideos, 
+    Backbone,
+    AudioVideos,
     Comment,
     Comments,
     Datums,
-    DatumField, 
+    DatumField,
     DatumFields,
     DatumTag,
     DatumTags,
@@ -31,7 +31,7 @@ define([
     /**
      * @class The Datum widget is the place where all linguistic data is
      *        entered; one at a time.
-     * 
+     *
      * @property {DatumField} utterance The utterance field generally
      *           corresponds to the first line in linguistic examples that can
      *           either be written in the language's orthography or a
@@ -63,12 +63,12 @@ define([
      *           datum easier for search.
      * @property {Date} dateEntered The date the Datum was first saved.
      * @property {Date} dateModified The date the Datum was last saved.
-     * 
+     *
      * @description The initialize function brings up the datum widget in small
      *              view with one set of datum fields. However, the datum widget
      *              can contain more than datum field set and can also be viewed
      *              in full screen mode.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
@@ -83,7 +83,7 @@ define([
       if (!this.get("audioVideo")) {
         this.set("audioVideo", new AudioVideos());
       }
-      
+
       if (!this.get("images")) {
         this.set("images", new Images());
       }
@@ -91,12 +91,12 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      
+
       // If there are no datumTags, give it a new one
       if (!this.get("datumTags")) {
         this.set("datumTags", new DatumTags());
       }
-      
+
       if(!this.get("datumFields") || this.get("datumFields").length == 0){
         this.set("datumFields", window.app.get("corpus").get("datumFields").clone());
       }
@@ -104,13 +104,13 @@ define([
     /**
      * backbone-couchdb adaptor set up
      */
-    
+
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/datums",
-    
-    
+
+
     // Internal models: used by the parse function
     internalModels : {
       datumFields : DatumFields,
@@ -154,7 +154,7 @@ define([
     },
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
-     * 
+     *
      * @param {Function} callback A function that expects a single parameter. That
      * parameter is the result of calling "pages/datums". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
@@ -163,7 +163,7 @@ define([
      */
     getMostRecentIdsByDate : function(howmany, callback) {
       var self = this;
-      
+
       if(OPrime.isBackboneCouchDBApp()){
 //        alert("TODO check  getMostRecentIdsByDate");
         //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
@@ -187,12 +187,12 @@ define([
         });
         return;
       }
-      
-      
+
+
       try{
           self.pouch(function(err, db) {
             db.query("pages/datums", {reduce: false}, function(err, response) {
-              
+
               if(err){
                 if(window.toldSearchtomakebydateviews){
                   if (OPrime.debugMode) OPrime.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
@@ -208,22 +208,22 @@ define([
                 });
                 return;
               }
-              
+
               if ((!err) && (typeof callback == "function"))  {
                 if (OPrime.debugMode) OPrime.debug("Callback with: ", response.rows);
                 callback(response.rows);
               }
             });
           });
-        
+
       }catch(e){
 //        appView.datumsEditView.newDatum();
         appView.datumsEditView.render();
         alert("Couldnt show the most recent datums "+JSON.stringify(e));
-        
+
       }
     },
-    
+
     originalParse : Backbone.Model.prototype.parse,
     parse : function(originalModel) {
       /* if this is just a couchdb save result, dont process it */
@@ -386,11 +386,11 @@ define([
       var self = this;
       try{
         //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
-        window.pageTracker._trackPageview('/search_results.php?q='+queryString); 
+        window.pageTracker._trackPageview('/search_results.php?q='+queryString);
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("Search Analytics not working.");
       }
-      
+
       // Process the given query string into tokens
       var queryTokens = self.processQueryString(queryString);
       var doGrossKeywordMatch = false;
@@ -398,7 +398,7 @@ define([
         doGrossKeywordMatch = true;
         queryString = queryString.toLowerCase().replace(/\s/g,"");
       }
-      
+
       if(OPrime.isBackboneCouchDBApp()){
 
       // run a custom map reduce
@@ -435,7 +435,7 @@ define([
                 matchIds.push(response.rows[i].id);
               }
             }
-            
+
             if(typeof callback == "function"){
               //callback with the unique members of the array
               callback(_.unique(matchIds));
@@ -450,16 +450,16 @@ define([
 
         return;
       }
-        
-      
-      
+
+
+
       try{
           self.pouch(function(err, db) {
             db.query("pages/get_datum_fields", {reduce: false}, function(err, response) {
               var matchIds = [];
-              
+
               if (!err) {
-               
+
                 // Go through all the rows of results
                 for (i in response.rows) {
                   var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].key, queryString, doGrossKeywordMatch, queryTokens);
@@ -500,19 +500,19 @@ define([
       }
     },
     isThisMapReduceResultInTheSearchResults : function(searchablefields, queryString, doGrossKeywordMatch, queryTokens){
-      
+
       var wordboundary = " ";
       // If the user is using # to indicate word boundaries as linguists do... turn all word boundaries into #
       if (queryString.indexOf("#") > -1) {
         wordboundary = "#";
       }
-      
+
       var thisDatumIsIn = false;
       // If the query string is null, include all datumIds
       if (queryString.trim() === "") {
         thisDatumIsIn = true;
       } else if (doGrossKeywordMatch) {
-        // Take all the data in this object 
+        // Take all the data in this object
         var stringToSearchIn = JSON.stringify(searchablefields).toLowerCase();
         // Remove the labels
         stringToSearchIn = stringToSearchIn.replace(/"[^"]*":"/g, wordboundary).replace(/",/g, wordboundary).replace(/"}/g, wordboundary);
@@ -525,7 +525,7 @@ define([
 
         // Determine if this datum matches the first search criteria
         thisDatumIsIn = this.matchesSingleCriteria(searchablefields, queryTokens[0]);
-        
+
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
         for (var j = 1; j < queryTokens.length; j += 2) {
@@ -534,7 +534,7 @@ define([
             if (!thisDatumIsIn) {
               break;
             }
-            
+
             // Do an intersection
             thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(searchablefields, queryTokens[j+1]);
           } else {
@@ -544,19 +544,19 @@ define([
         }
       }
       return thisDatumIsIn;
-      
+
     },
     /**
      * Determines whether the given object to search through matches the given
      * search criteria.
-     * 
+     *
      * @param {Object} objectToSearchThrough An object representing a datum that
      * contains (key, value) pairs where the key is the datum field label and the
      * value is the datum field value of that attribute.
      * @param {String} criteria The single search criteria in the form of a string
      * made up of a label followed by a colon followed by the value that we wish
      * to match.
-     * 
+     *
      * @return {Boolean} True if the given object matches the given criteria.
      * False otherwise.
      */
@@ -579,7 +579,7 @@ define([
       //        return false;
       //      }
 
-      //If the query has a # in it, lets assume its a linguist looking for word boundaries since they use # to indicate the edge of words. 
+      //If the query has a # in it, lets assume its a linguist looking for word boundaries since they use # to indicate the edge of words.
       var wordboundary = " ";
       if (criteria.indexOf("#") > -1) {
         wordboundary = "#";
@@ -587,7 +587,7 @@ define([
 
       var searchResult  = false;
       if (objectToSearchThrough[label]) {
-        // Make it case in-sensitive 
+        // Make it case in-sensitive
         var stringToSearchThrough = objectToSearchThrough[label].toLowerCase();
         // Replace all spaces with the wordboundary (either a space, or a # if its a linguist)
         stringToSearchThrough = stringToSearchThrough.replace(/\s/g,wordboundary);
@@ -603,21 +603,21 @@ define([
       }
       return  searchResult;
     },
-    
+
     /**
      * Process the given string into an array of tokens where each token is
      * either a search criteria or an operator (AND or OR). Also makes each
      * search criteria token lowercase, so that searches will be case-
      * insensitive.
-     * 
+     *
      * @param {String} queryString The string to tokenize.
-     * 
+     *
      * @return {String} The tokenized string
      */
-    processQueryString : function(queryString) {      
+    processQueryString : function(queryString) {
       // Split on spaces
       var queryArray = queryString.split(" ");
-      
+
       // Create an array of tokens out of the query string where each token is
       // either a search criteria or an operator (AND or OR).
       var queryTokens = [];
@@ -632,13 +632,13 @@ define([
           currentString = "";
         } else if (currentString) {
           /* toLowerCase introduces a bug in search where camel case fields loose their capitals, then cant be matched with fields in the map reduce results */
-          currentString = currentString + " " + currentItem;//.toLowerCase();  
+          currentString = currentString + " " + currentItem;//.toLowerCase();
         } else {
           currentString = currentItem;//.toLowerCase();
         }
       }
       queryTokens.push(currentString);
-      
+
       return queryTokens;
     },
     getDisplayableFieldForActivitiesEtc : function(){
@@ -696,7 +696,7 @@ define([
     /**
      * Clone the current Datum and return the clone. The clone is put in the current
      * Session, regardless of the origin Datum's Session. //TODO it doesn tlook liek this is the case below:
-     * 
+     *
      * @return The clone of the current Datum.
      */
     clone : function() {
@@ -716,11 +716,11 @@ define([
 
       return datum;
     },
-    
+
     /**
      * This function is used to get the most prominent datumstate (now called
      * ValidationStatus) eg "CheckedWithSeberina" or "Deleted" or "ToBeChecked"
-     * 
+     *
      * @returns {String} a string which is the first item in the
      *          validationSatuts field
      */
@@ -729,7 +729,7 @@ define([
       var stati = this.get("datumFields").where({"label": "validationStatus"});
       stati = stati[0].get("mask").trim().split(", ");
       validationStatus = stati[0].trim();
-      
+
       if(!validationStatus){
         return this.setDefaultValidationStatus();
       }
@@ -742,7 +742,7 @@ define([
     /**
      * This function is used to colour a datum background to make
      * visually salient the validation status of the datum.
-     * 
+     *
      * @param status
      *            This is an optional string which is used to find the
      *            colour for a particular DatumState. If the string is
@@ -766,36 +766,36 @@ define([
         return "success";
       }
     },
-    
+
 
     /**
      * This function is used to set the primary status of the datum,
      * eg. put Deleted as the first item in the validation status.
-     * 
+     *
      * @param selectedValue
      *            This is a string which is the validation status
      *            you want the datum to be
      */
     preprendValidationStatus : function(selectedValue){
-      
+
       /* prepend this state to the new validationStates as of v1.46.2 */
       var n = this.get("datumFields").where({label: "validationStatus"})[0];
       var validationStatus = n.get("mask") || "";
       validationStatus = selectedValue + ", " +validationStatus ;
       var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(n){ return n });
       n.set("mask", uniqueStati.join(", "));
-    
+
     },
-    
+
     /**
-     * Make the  model marked as Deleted, mapreduce function will 
-     * ignore the deleted models so that it does not show in the app, 
-     * but deleted model remains in the database until the admin empties 
+     * Make the  model marked as Deleted, mapreduce function will
+     * ignore the deleted models so that it does not show in the app,
+     * but deleted model remains in the database until the admin empties
      * the trash.
-     * 
+     *
      * Also remove it from the view so the user cant see it.
-     * 
-     */ 
+     *
+     */
     putInTrash : function(){
       this.set("trashed", "deleted"+Date.now());
       this.preprendValidationStatus("Deleted");
@@ -831,12 +831,12 @@ define([
         }
       });
     },
-    
+
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
      * (\exg. \"a) and then copies it on the export modal so that when the user
      * switches over to their LaTeX file they only need to paste it in.
-     * 
+     *
      * We did a poll on Facebook among EGGers, and other linguists we know and
      * found that Linguex was very popular, and GB4E, so we did the export in
      * GB4E.
@@ -844,7 +844,7 @@ define([
     laTeXiT : function(showInExportModal) {
     	//corpus's most frequent fields
       var frequentFields = window.app.get("corpus").frequentFields;
-      //this datum/datalist's datumfields and their names 
+      //this datum/datalist's datumfields and their names
     	var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
         //Dont export the user fields
         if (field.label.toLowerCase().indexOf("byuser") > -1) {
@@ -935,7 +935,7 @@ define([
     			fields.splice(i,1);
     			fieldLabels.splice(i,1);
     		}
-    		
+
     	}
     	/*
       throughout this next section, print frequent fields and infrequent ones differently
@@ -991,7 +991,7 @@ define([
 
     	return result;
     },
-    
+
     latexitDataList : function(showInExportModal){
     	//this version prints new data as well as previously shown latex'd data (best for datalists)
     	var result = this.laTeXiT(showInExportModal);
@@ -1001,7 +1001,7 @@ define([
     	}
     	return result;
     },
-    
+
     latexitDatum : function(showInExportModal){
     	//this version prints new data and deletes previously shown latex'd data (best for datums)
     	var result = this.laTeXiT(showInExportModal);
@@ -1035,7 +1035,7 @@ define([
       result = result.replace(/}/g,"\\}");
       result = result.replace(/</g,"\\textless");
       result = result.replace(/>/g,"\\textgreater");
-      
+
       var tipas = app.get("authentication").get("userPrivate").get("prefs").get("unicodes").toJSON();
       for (var t = 0; t < tipas.length; t++) {
         if(tipas[t].tipa){
@@ -1046,7 +1046,24 @@ define([
     	result = result.replace(/CURLYBRACES/g,"{}");
     	return result;
     },
-    
+
+    getNumberInCollection: function(){
+      var number;
+      var numberField = this.get("datumFields").where({
+        label: "number"
+      })[0] || this.get("datumFields").where({
+        label: "itemnumber"
+      })[0] || this.get("datumFields").where({
+        label: "numberintext"
+      })[0] || this.get("datumFields").where({
+        label: "numberincollection"
+      })[0];
+      if (numberField) {
+        number = numberField.get("mask");
+      }
+      return number;
+    },
+
     datumIsInterlinearGlossText : function(fieldLabels) {
     	if(!fieldLabels){
         	fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
@@ -1063,16 +1080,16 @@ define([
     		}
     		if (fieldLabels[fieldLabel] == "translation"){
     			trans = true;
-    		}		
+    		}
     	}
     	if (gloss || utteranceOrMorphemes || trans){
     		return true;
     	}
-    	else{ 
+    	else{
     		return false;
     	}
     },
-    
+
     /**
     when pressing tab after filling morpheme line, guess different trees
     and display them in Latex formatting
@@ -1085,7 +1102,7 @@ define([
         syntacticTreeLatex +=  "\\item[\\sc{Left}] \\Tree " + trees.left;
         syntacticTreeLatex +=  " \\\\ \n \\item[\\sc{Right}] \\Tree " + trees.right;
         // syntacticTreeLatex +=  " \\\\ \n  \\item[\\sc{Mixed}] \\Tree " + trees.mixed; //TODO figure out why mixed doesnt work.
-        
+
         // syntacticTreeLatex +=  "Left: "+ trees.left;
         // syntacticTreeLatex +=  "\nRight:" + trees.right;
         // syntacticTreeLatex +=  "\nMixed: " + trees.mixed;
@@ -1126,12 +1143,12 @@ define([
       }
       return result;
     },
-    
+
     /**
      * This takes as an argument the order of fields and then creates a row of csv.
      */
     exportAsCSV : function(showInExportModal, orderedFields, printheader) {
-      
+
       var fieldsToExport = this.get("datumFields").toJSON().map(function(field){
         if (field.label.toLowerCase().indexOf("latex") > -1) {
           return {label:"", mask: ""};
@@ -1145,7 +1162,7 @@ define([
       var header = _.pluck(fieldsToExport, "label") || [];
       var fields = _.pluck(fieldsToExport, "mask") || [];
       var result = fields.join(",").replace(/,,/g, ",") + "\n";
-      
+
       // Ignore the print header, print it if there is nothing in the export box
       if (printheader || !$("#export-text-area").val()) {
         result = header.join(",").replace(/,,/g, ",") + "\n" +result;
@@ -1157,10 +1174,10 @@ define([
       }
       return result;
     },
-    
+
     /**
      * Encrypts the datum if it is confidential
-     * 
+     *
      * @returns {Boolean}
      */
     encrypt : function() {
@@ -1171,7 +1188,7 @@ define([
       //TODO scrub version history to get rid of all unencrypted versions.
       this.saveAndInterConnectInApp(window.app.router.renderDashboardOrNot, window.app.router.renderDashboardOrNot);
     },
-    
+
     /**
      * Decrypts the datum if it was encrypted
      */
@@ -1186,11 +1203,11 @@ define([
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.
-     * 
+     *
      * - Adds the datum to the top of the default data list in the corpus if it is in the right corpus
      * - Adds the datum to the datums container if it wasnt there already
-     * - Adds an activity to the logged in user with diff in what the user changed. 
-     * 
+     * - Adds an activity to the logged in user with diff in what the user changed.
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -1200,7 +1217,7 @@ define([
       var newModel = true;
       var user = {
         username: window.app.get("authentication").get("userPublic").get("username"),
-        gravatar: window.app.get("authentication").get("userPublic").get("gravatar"), 
+        gravatar: window.app.get("authentication").get("userPublic").get("gravatar"),
         firstname: window.app.get("authentication").get("userPublic").get("firstname"),
         lastname: window.app.get("authentication").get("userPublic").get("lastname")
       };
@@ -1224,7 +1241,7 @@ define([
             return grouped[grouped.length - 1];
           });
           modifiyersField.set("users", modifiers);
-          
+
           /* generate the users as a string using the users array */
           var usersAsString =  [];
           for(var user in modifiers){
@@ -1248,7 +1265,7 @@ define([
       }
       var timeSpentDetails = this.calculateEditTime();
       timeSpentDetails.totalTimeSpent = Date.now() - this.readstarttime;
-      timeSpentDetails.readTimeSpent = timeSpentDetails.totalTimeSpent - timeSpentDetails.editingTimeSpent; 
+      timeSpentDetails.readTimeSpent = timeSpentDetails.totalTimeSpent - timeSpentDetails.editingTimeSpent;
       //Convert to seconds
       timeSpentDetails.totalTimeSpent = timeSpentDetails.totalTimeSpent/1000;
       timeSpentDetails.readTimeSpent = timeSpentDetails.readTimeSpent/1000;
@@ -1268,12 +1285,12 @@ define([
         return;
       }
       //If it was decrypted, this will save the changes before we go into encryptedMode
-      
+
       this.get("datumFields").each(function(dIndex){
         //Anything can be done here, it is the set function which does all the work.
         dIndex.set("value", dIndex.get("mask"));
       });
-      
+
       // Store the current Session, the current corpus, and the current date
       // in the Datum
       this.set({
@@ -1283,15 +1300,15 @@ define([
         "jsonType" : "Datum"
       });
       if(!this.get("session")){
-        this.set("session" , window.app.get("currentSession")); 
+        this.set("session" , window.app.get("currentSession"));
         Util.debug("Setting the session on this datum to the current one.");
       }else{
         if (OPrime.debugMode) OPrime.debug("Not setting the session on this datum.");
       }
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
-      
+
       var oldrev = this.get("_rev");
-      
+
         self.save(null, {
           success : function(model, response) {
             if (OPrime.debugMode) OPrime.debug('Datum save success');
@@ -1323,7 +1340,7 @@ define([
                   context : " via Offline App.",
                   timeSpent : timeSpentDetails
                 });
-            
+
             window.app.addActivity(
                 {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
@@ -1344,7 +1361,7 @@ define([
 //            var defaultIndex = window.app.get("corpus").datalists.length - 1;
 //            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").datalists.models[defaultIndex].id){
 //              //Put it into the current data list views
-//              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
+//              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was,
 //              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
 //              //Put it into the ids of the current data list
 //              var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
@@ -1360,7 +1377,7 @@ define([
 //               */
 //              var positionInDefaultDataList = window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").indexOf(model.id);
 //              if(positionInDefaultDataList != -1 ){
-//                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
+//                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them.
 //                window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
 //              }
 //              window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").unshift(model.id);
@@ -1374,7 +1391,7 @@ define([
               //TODO check this
               var datumJson = model.get("datumFields").toJSON()
               var datumAsDBResponseRow = {};
-              for (var x in datumJson){ 
+              for (var x in datumJson){
                 datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
               }
               var queryTokens = self.processQueryString($("#search_box").val());
@@ -1396,7 +1413,7 @@ define([
               }
               if (thisDatumIsIn) {
                 // Insert the datum at the top of the search datums collection view
-                window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
+                window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was,
                 window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.unshift(model);
                 //Do the same to the datumids in the search data list itself
                 var positioninsearchresults = window.appView.searchEditView.searchDataListView.model.get("datumIds").indexOf(model.id);
@@ -1406,7 +1423,7 @@ define([
                 window.appView.searchEditView.searchDataListView.model.get("datumIds").unshift(model.id);
               }
             }//end of if search is open and running for Alan
-            
+
 
             //dont need to save the user every time when we change a datum.
 //            window.app.get("authentication").saveAndInterConnectInApp();
@@ -1431,7 +1448,7 @@ define([
      * the datum isn't in the current corpus it will call the fail
      * callback or it will alert a bug to the user. Override the fail
      * callback if you don't want the alert.
-     * 
+     *
      * @param successcallback
      * @param failurecallback
      * @deprecated
