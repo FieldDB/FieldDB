@@ -1,31 +1,31 @@
-{{#if withCheckbox}}
-	<div class="span1">
-	  <input type="checkbox" class="datum-checkboxes"></input>
-	  {{#if hasAudio}}<i class="icon-bullhorn play-audio"></i>{{/if}}
-	</div>
-	<div class="span1">
-	  {{#if judgement}}
-	    <span class = "latex-judgement">{{judgement}}</span> 
-	  {{/if}}
-	</div>
-	<div class="span10">
-{{/if}}
+<div class="{{scrollable}}" >
+  {{#if withCheckbox}}
+    <div class="span1">
+      <input type="checkbox" class="datum-checkboxes"></input>
+      {{#if hasAudio}}<i class="icon-bullhorn play-audio"></i>{{numberInCollection}}{{/if}}
+    </div>
+    <div class="span1">
+      {{#if judgement}}
+        <span class = "latex-judgement">{{judgement}}</span>
+      {{/if}}
+    </div>
+    <div class="span10">
+  {{/if}}
+  {{#each tuple}}
+    <span class="glossCouplet">
+      {{{this}}}
+    </span>
+  {{/each}}
+  <br />
+  <span class="datum-latex-translation">{{{translation}}}</span>
+  <dl>
+    {{#each additionalFields}}
+    <dt>{{label}}</dt>
+    <dd>{{{value}}}</dd>
+    {{/each}}
+  </dl>
 
-{{#each tuple}}
-  <span class="glossCouplet">
-    {{{this}}}
-  </span>
-{{/each}}
-<br />
-<span class="datum-latex-translation">{{{translation}}}</span>
-<dl>
-	{{#each additionalFields}}
-	<dt>{{label}}</dt>
-	<dd>{{{value}}}</dd>
-	{{/each}}
-</dl>
-
-{{#if withCheckbox}}
-	</div>
-{{/if}}
-
+  {{#if withCheckbox}}
+    </div>
+  {{/if}}
+</div>
