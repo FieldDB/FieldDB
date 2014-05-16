@@ -1326,7 +1326,7 @@ define(
       };
 
       $scope.deleteComment = function(comment, datum) {
-        if ($rootScope.readOnly === true) {
+        if ($rootScope.commentPermissions === false) {
           $rootScope.notificationMessage = "You do not have permission to delete comments.";
           $rootScope.openNotification();
           return;
@@ -1408,6 +1408,10 @@ define(
                 console.log(reason);
                 $scope.saved = "no";
                 window.alert("There was an error saving a record. " + reason);
+                // wish this would work:
+                // $rootScope.notificationMessage = "There was an error saving a record. " + reason;
+                // $rootScope.openNotification();
+                // return;
               });
 
             })($scope.allData[index]);
@@ -1749,39 +1753,24 @@ define(
           $scope.users = users;
 
           // Get privileges for logged in user
-          Data.async("_users", "org.couchdb.user:" + $rootScope.user.username)
-            .then(
-              function(response) {
-                if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
-                  // Admin
-                  $rootScope.admin = true;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = false;
-                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
-                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
-                  // Read-write
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = false;
-                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
-                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") === -1) {
-                  // Read-only
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = true;
-                  $rootScope.writeOnly = false;
-                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") === -1 &&
-                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
-                  // Write-only
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = true;
-                } else {
-                  // TODO Commenter
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = false;
-                }
-              });
+        Data.async("_users", "org.couchdb.user:" + $rootScope.user.username)
+          .then(
+            function(response) {
+              $rootScope.admin = false;
+              $rootScope.readPermissions = false;
+              $rootScope.writePermissions = false;
+              $rootScope.commentPermissions = false;
+
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
+                $rootScope.admin = true;
+              } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1) {
+                $rootScope.readPermissions = true;
+              } else if (response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+                $rootScope.writePermissions = true;
+              } else if (response.roles.indexOf($rootScope.DB.pouchname + "_commenter") > -1 ) {
+                $rootScope.commentPermissions = true;
+              }
+            });
         });
       };
 
@@ -2318,7 +2307,7 @@ define(
       };
 
       $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
-        if ($rootScope.readOnly === true) {
+        if ($rootScope.writePermissions === false) {
           $rootScope.notificationMessage = "You do not have permission to delete attachments.";
           $rootScope.openNotification();
           return;
