@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "2.0.1ss";
+      $rootScope.appVersion = "2.2.0ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -1763,15 +1763,18 @@ define(
 
               if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
                 $rootScope.admin = true;
-              } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1) {
+              }
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1) {
                 $rootScope.readPermissions = true;
-              } else if (response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+              }
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
                 $rootScope.writePermissions = true;
-              } else if (response.roles.indexOf($rootScope.DB.pouchname + "_commenter") > -1 ) {
+              }
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_commenter") > -1) {
                 $rootScope.commentPermissions = true;
               }
             });
-        });
+      });
       };
 
       $scope.updateUserRoles = function(newUserRoles) {

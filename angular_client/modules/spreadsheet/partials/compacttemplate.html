@@ -75,16 +75,6 @@
   </div>
 </div>
 
-<div class="row" ng-show="loading==false && readPermissions==false" ng-click="selectNone()">
-    <div class="span12 pagination-centered">
-        <h3>You are not permitted to view all data in this  <i class="fa whiteicon fa-cloud"></i> corpus.</h3>
-    </div>
-</div>
-
-<div ng-show="loading==false && writePermissions==true && readPermissions==false" class="pagination-centered">
-  <h2>You have write-only access to  <i class="fa whiteicon fa-cloud"></i> {{DB.title}}</h2>
-</div>
-
 <div class="row" ng-show="loading==true">
   <div class="span12 pagination-centered">
     <img src="img/loading-spinner.gif" width="100px">
