@@ -70,17 +70,17 @@
 			</div>
 		</div>
 		<div class="settingsItems row">
+        <h3>Writers</h3>
+      <div ng-repeat="user in users.writers" class="user_thumbnails">
+        <img
+          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        {{user.username}}
+      </div>
+    </div>
+    <div class="settingsItems row">
 				<h3>Readers</h3>
 			<div ng-repeat="user in users.readers" class="user_thumbnails">
-				<img
-					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
-				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
-				{{user.username}}
-			</div>
-		</div>
-		<div class="settingsItems row">
-				<h3>Writers</h3>
-			<div ng-repeat="user in users.writers" class="user_thumbnails">
 				<img
 					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
 				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
