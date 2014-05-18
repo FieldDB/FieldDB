@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "authentication/Authentication", 
+    "backbone",
+    "authentication/Authentication",
     "corpus/Corpus",
     "user/UserAppView",
     "user/UserRouter",
@@ -10,8 +10,8 @@ define([
     "text!locales/en/messages.json",
     "OPrime"
 ], function(
-    Backbone, 
-    Authentication, 
+    Backbone,
+    Authentication,
     Corpus,
     UserAppView,
     UserRouter,
@@ -25,13 +25,13 @@ define([
   /** @lends UserApp.prototype */
   {
     /**
-     * @class The UserApp handles the loading of the user page (login, welcome etc). 
-     * 
+     * @class The UserApp handles the loading of the user page (login, welcome etc).
+     *
      * @property {Authentication} authentication The auth member variable is an
      *           Authentication object permits access to the login and logout
      *           functions, and the database of users depending on whether the
      *           app is online or not. The authentication is the primary way to access the current user.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
@@ -86,19 +86,34 @@ define([
       }
       appself.get("authentication").loadEncryptedUser(u, function(success, errors){
         if(success == null){
-//        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);  
+//        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
 //        OPrime.setCookie("username","");
 //        OPrime.setCookie("token","");
 //        localStorage.removeItem("encryptedUser");
 //        window.location.replace('corpus.html');
           return;
         }else{
-          window.appView = new UserAppView({model: appself}); 
+          window.appView = new UserAppView({model: appself});
           window.appView.render();
           appself.router = new UserRouter();
           Backbone.history.start();
         }
       });
+    },
+    showSpinner : function(){
+        $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
+        $('.spinner-image').css({
+          'width' : function() {
+            return ($(document).width() * .1 ) + 'px';
+          },
+          'height' : function() {
+            return ($(document).width() * .1 ) + 'px';
+          },
+          'padding-top': '10em'
+        });
+    },
+    stopSpinner : function(){
+      $('#dashboard_loading_spinner').html("");
     },
     getCouchUrl : function(couchConnection, couchdbcommand) {
       if(!couchConnection){
@@ -143,12 +158,12 @@ define([
           OPrime.bug("Couldn't set the databse name off of the url, please report this.");
         }
       }
-      
+
       if(typeof callback == "function"){
         callback();
       }
       return;
-      
+
       alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
@@ -219,10 +234,10 @@ define([
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
-     * 
+     *
      * References:
      * http://guide.couchdb.org/draft/security.html
-     * 
+     *
      * @param username this can come from a username field in a login, or from the User model.
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
@@ -248,7 +263,7 @@ define([
         }
         return;
       }
-      
+
       var couchurl = this.getCouchUrl(couchConnection, "/_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
@@ -266,14 +281,14 @@ define([
                 "I logged you into your team server automatically, your syncs will be successful.",
                 "alert-info", "Online Mode:");
           }
-          
+
 
           /* if in chrome extension, or offline, turn on replication */
           if(OPrime.isChromeApp()){
             //TODO turn on pouch and start replicating and then redirect user to their user page(?)
 //            appself.replicateContinuouslyWithCouch();
           }
-          
+
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }
@@ -282,7 +297,7 @@ define([
           window
           .setTimeout(
               function() {
-                //try one more time 5 seconds later 
+                //try one more time 5 seconds later
                 $.couch.login({
                   name: username,
                   password: password,
@@ -298,7 +313,7 @@ define([
                       //TODO turn on pouch and start replicating and then redirect user to their user page(?)
 //                      appself.replicateContinuouslyWithCouch();
                     }
-                    
+
                     if (typeof succescallback == "function") {
                       succescallback(serverResults);
                     }
@@ -378,10 +393,10 @@ define([
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
-     * 
+     *
      * References:
      * http://guide.couchdb.org/draft/security.html
-     * 
+     *
      * @param username this can come from a username field in a login, or from the User model.
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
@@ -390,7 +405,7 @@ define([
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("couchConnection");
       }
-      
+
       /* if on android, turn on replication and dont get a session token */
       if(OPrime.isTouchDBApp()){
         Android.setCredentialsAndReplicate(couchConnection.pouchname,
@@ -403,13 +418,13 @@ define([
         }
         return;
       }
-      
+
       var couchurl = OPrime.getCouchUrl(couchConnection, "/_session");
 
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      
+
       $.couch.login({
         name: username,
         password: password,
@@ -417,19 +432,19 @@ define([
           if(window.appView){
             window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
           }
-          
+
           /* if in chrome extension, or offline, turn on replication */
           if(OPrime.isChromeApp()){
             //TODO turn on pouch and start replicating and then redirect user to their user page(?)
           }
-          
+
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }
         },
         error : function(serverResults){
           window.setTimeout(function(){
-            //try one more time 5 seconds later 
+            //try one more time 5 seconds later
             $.couch.login({
               name: username,
               password: password,
@@ -465,7 +480,7 @@ define([
         callback();
       }
     },
-    
+
     render: function(){
       $("#user-fullscreen").html("list of corpora goes here");
       return this;
