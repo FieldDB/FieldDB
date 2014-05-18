@@ -1,20 +1,20 @@
 define([
-    "backbone",
+    "backbone", 
     "handlebars",
-    "authentication/Authentication",
+    "authentication/Authentication", 
     "corpus/Corpus",
     "confidentiality_encryption/Confidential",
-    "user/User",
+    "user/User", 
     "user/UserMask",
     "user/UserReadView",
     "OPrime"
 ], function(
-    Backbone,
-    Handlebars,
+    Backbone, 
+    Handlebars, 
     Authentication,
     Corpus,
     Confidential,
-    User,
+    User, 
     UserMask,
     UserReadView
 ) {
@@ -23,46 +23,46 @@ define([
   {
     /**
      * @class This is the login logout surface.
-     *
-     * @description Starts the Authentication and initializes all its children.
+     * 
+     * @description Starts the Authentication and initializes all its children. 
      * This is where the dropdown menu for user related stuff is housed.
-     *
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("AUTH EDIT init: " + this.el);
-
+      
     //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
          model: this.model.get("userPublic")
       });
       this.userView.format = "link";
       this.userView.setElement($("#user-quickview"));
-
+      
       // Any time the Authentication model changes, re-render
       this.model.bind('change:state', this.render, this);
       this.model.get("userPublic").bind('change', this.render, this);
-
+      
       //save the version of the app into this view so we can use it when we create a user.
       var self = this;
-      OPrime.getVersion(function (ver) {
+      OPrime.getVersion(function (ver) { 
         self.appVersion = ver;
         self.model.get("userPrivate").set("currentAppVersion",ver);
       });
-
+      
     },
 
     /**
      * The underlying model of the AuthenticationEditView is an Authentication
-     */
+     */    
     model : Authentication,
 
     /**
      * The userView is a child of the AuthenticationEditView.
      */
     userView : UserReadView,
-
+    
     /**
      * Events that the AuthenticationEditView is listening to and their handlers.
      */
@@ -75,7 +75,7 @@ define([
 //        }
         $("#login_modal").show("modal");
       },
-
+      
       "keyup .registerusername" : function(e) {
         var code = e.keyCode || e.which;
         // code == 13 is the enter key
@@ -99,7 +99,7 @@ define([
       "click .register-new-user" : "registerNewUser",
       "keyup .registeruseremail" : function(e) {
         var code = e.keyCode || e.which;
-
+        
         // code == 13 is the enter key
         if (code == 13) {
           this.registerNewUser();
@@ -149,13 +149,13 @@ define([
         return false;
       }
     },
-
+    
     /**
      * The Handlebars template rendered as the AuthenticationEditView.
      */
     template : Handlebars.templates.authentication_edit_embedded,
     userTemplate : Handlebars.templates.user_read_link,
-
+    
     /**
      * Renders the AuthenticationEditView and all of its child Views.
      */
@@ -164,8 +164,8 @@ define([
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("Auth model was undefined, come back later.");
         return this;
-      }
-
+      }      
+      
       if(this.model.get("userPublic") != undefined){
         this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
         this.model.set( "username", this.model.get("userPublic").get("username") );
@@ -181,14 +181,14 @@ define([
       jsonToRender.locale_Create_a_new_user = Locale.get("locale_Create_a_new_user");
       jsonToRender.locale_Keyboard_Shortcuts = Locale.get("locale_Keyboard_Shortcuts");
       jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
-      jsonToRender.locale_Log_Out = Locale.get("locale_Log_Out");
+      jsonToRender.locale_Log_Out = Locale.get("locale_Log_Out");  
       jsonToRender.locale_New_User = Locale.get("locale_New_User");
       jsonToRender.locale_Private_Profile = Locale.get("locale_Private_Profile");
       jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
       jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
       jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
 
-
+            
       // Display the AuthenticationEditView
       this.setElement($("#authentication-embedded"));
       $(this.el).html(this.template(jsonToRender));
@@ -205,7 +205,7 @@ define([
         }else{
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
-
+        
       } else {
         $("#logout").hide();
         $("#login_form").show();
@@ -222,12 +222,12 @@ define([
 
         var mostLikelyAuthUrl = OPrime.getMostLikelyUserFriendlyAuthServerName();
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
-
+        
       }
 
       return this;
     },
-
+    
 
     /**
      * Logout backs up the user to the central server and then
@@ -236,27 +236,24 @@ define([
      */
     logout : function() {
       var authself = this.model;
-      // $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
-      // window.app.backUpUser(function(){
-      //   authself.logout();
-      // });
-      window.app.saveAndInterConnectInApp(function(){
+      $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
+      window.app.backUpUser(function(){
         authself.logout();
       });
     },
-
+    
     /**
      * Login tries to get the username and password from the user interface, and
      * calls the view's authenticate function.
      */
     login : function() {
       if (OPrime.debugMode) OPrime.debug("LOGIN");
-      this.authenticate(document.getElementById("username").value,
+      this.authenticate(document.getElementById("username").value, 
           document.getElementById("password").value,
           document.getElementById("authUrl").value
       );
     },
-
+    
     /**
      * Notes: LingLlama's user comes from his time after his PhD and before his
      * foray into the industry. This is when he started getting some results for
@@ -264,11 +261,11 @@ define([
      * Blamey and Tucker the Technician at blamestella.com
      * https://twitter.com/#!/tucker1927
      */
-    loadSample : function(appidsIn) {
+    loadSample : function(appidsIn) {      
     //  alert("loading sample");
 
     },
-
+    
     /**
      * Authenticate accepts a username and password, creates a simple user, and
      * passes that user to the authentication module for real authentication
@@ -276,12 +273,12 @@ define([
      * callback which will render views once the authentication server has
      * responded. If the authentication result is null, it can flash an error to
      * the user and then logs in as public.
-     *
+     * 
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
     authenticate : function(username, password, authUrl, sucescallback, failcallback, corpusloginsuccesscallback, corpusloginfailcallback) {
-
+      
       // Temporarily keep the given's credentials
       var tempuser = new User({
         username : username,
@@ -311,7 +308,7 @@ define([
 
         }
       };
-
+      
       var self = this;
       this.model.authenticate(tempuser, function(success) {
         if (success == null) {
@@ -338,7 +335,7 @@ define([
               window.location.href = "#render/true";
             }else{
               /*
-               *  Load their last corpus, session, datalist etc,
+               *  Load their last corpus, session, datalist etc, 
                *  only if it is not the ones already most recently loaded.
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
@@ -367,11 +364,11 @@ define([
                   window.app.router.showCorpusDashboard(couchConnection.pouchame, app.get("corpus").id);
                 }
               }
-            }
-          });
+            }                    
+          }); 
         }, whattodoifcouchloginerrors);
-
-
+        
+        
         var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
         if(self.model.get("userPrivate").get("username") == "public"){
           renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedOut";
@@ -387,7 +384,7 @@ define([
         }
       }, failcallback);
     },
-
+    
     /**
      * ShowQuickAuthentication view popups up a password entry view.
      * This is used to unlock confidential datum, or to unlock dangerous settings
@@ -396,7 +393,7 @@ define([
      */
     showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       var self = this;
-      window.hub.unsubscribe("quickAuthenticationClose", null, this);
+      window.hub.unsubscribe("quickAuthenticationClose", null, this); 
       if( this.model.get("userPrivate").get("username") == "lingllama" ){
         / * Show the quick auth but fill in the password, to simulate a user */
         $("#quick-authenticate-modal").modal("show");
@@ -405,7 +402,7 @@ define([
         window.hub.subscribe("quickAuthenticationClose",function(){
           window.appView.authView.authenticate("lingllama"
               , "phoneme"
-              , window.app.get("authentication").get("userPrivate").get("authUrl")
+              , window.app.get("authentication").get("userPrivate").get("authUrl") 
               , authsuccesscallback
               , authfailurecallback
               , corpusloginsuccesscallback
@@ -418,7 +415,7 @@ define([
         / * Dont show the quick auth, just authenticate */
         window.appView.authView.authenticate("public"
             , "none"
-            , window.app.get("authentication").get("userPrivate").get("authUrl")
+            , window.app.get("authentication").get("userPrivate").get("authUrl") 
             , authsuccesscallback
             , authfailurecallback
             , corpusloginsuccesscallback
@@ -427,7 +424,7 @@ define([
         $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose",function(){
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
-              , $("#quick-authenticate-password").val()
+              , $("#quick-authenticate-password").val() 
               , window.app.get("authentication").get("userPrivate").get("authUrl")
               , authsuccesscallback
               , authfailurecallback
@@ -476,7 +473,7 @@ define([
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
         if (OPrime.debugMode) OPrime.debug("User has entered an email and the passwords match. ");
-
+        
         $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>" );
         $(".welcome-screen-alerts").addClass("alert-success");
         $(".welcome-screen-alerts").show();
@@ -504,11 +501,11 @@ define([
               localStorage.removeItem("mostRecentDashboard");
               localStorage.removeItem("mostRecentCouchConnection");
               localStorage.removeItem("encryptedUser");
-
+            
               //Destropy cookies, and load the public user
               OPrime.setCookie("username", undefined, -365);
               OPrime.setCookie("token", undefined, -365);
-
+              
 //              var auth  = new Authentication({filledWithDefaults: true});
               var auth = new Authentication({
                 "confidential" : new Confidential({
@@ -521,7 +518,6 @@ define([
               OPrime.setCookie("token", serverResults.user.hash, 365);
               var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
               localStorage.setItem("encryptedUser", u);
-              localStorage.setItem("encryptedUser"+ auth.get("userPrivate").get("username"), u);
               $(".spinner-status").html("Building your database for you...");
 
               /*
@@ -531,7 +527,7 @@ define([
               var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouchname);
               OPrime.checkToSeeIfCouchAppIsReady(optionalCouchAppPath+"corpus.html", function(){
                 window.app.logUserIntoTheirCorpusServer(serverResults.user.corpuses[0], dataToPost.username, dataToPost.password, function(){
-
+                  
                   if(OPrime.isBackboneCouchDBApp()){
                     try{
                       Backbone.couch_connector.config.db_name = potentialpouchname;
@@ -540,7 +536,7 @@ define([
                     }
                   }else{
                     alert("TODO test what happens when not in a backbone couchdb app and registering a new user.");
-                  }
+                  }          
                   var newCorpusToBeSaved = new Corpus({
                     "filledWithDefaults" : true,
                     "title" : serverResults.user.username + "'s Corpus",
@@ -566,8 +562,7 @@ define([
                           auth.get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
                           var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
                           localStorage.setItem("encryptedUser", u);
-                          localStorage.setItem("encryptedUser"+ auth.get("userPrivate").get("username"), u);
-
+                          
                           var sucessorfailcallbackforcorpusmask = function(){
                             $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                             window.setTimeout(function(){
@@ -575,7 +570,7 @@ define([
                             },10000);
                           };
                           model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
-
+                          
                         },error : function(e,f,g) {
 //                          alert('New Corpus save error ' + f.reason +". Click OK to re-attempt to save your new corpus in 10 seconds...");
                           $(".spinner-status").html("New Corpus save error " + f.reason +". The app will re-attempt to save your new corpus in 10 seconds...");
@@ -618,7 +613,7 @@ define([
      * This function manages all the data flow from the auth server and
      * corpus server to get the app to load in the right order so that
      * all the models and views are loaded, and tied together
-     *
+     * 
      * @param username
      * @param password
      */
@@ -630,7 +625,7 @@ define([
       $(".welcome-screen-alerts").addClass("alert-success");
       $(".welcome-screen-alerts").removeClass("alert-error");
       $(".welcome-screen-alerts").show();
-
+      
       /*
        * Contact the server and register the new user
        */
@@ -644,30 +639,30 @@ define([
             $(".welcome-screen-alerts").removeClass("alert-success");
             $(".welcome-screen-alerts").addClass("alert-error");
             $(".welcome-screen-alerts").show();
-
+            
           } else if (serverResults.user) {
             $(".welcome-screen-alerts").html("Attempting to sync your data to this device...</p> <progress max='100'> <strong>Progress: working...</strong>" );
             $(".welcome-screen-alerts").show();
-
+            
             localStorage.removeItem("username");
             localStorage.removeItem("mostRecentDashboard");
             localStorage.removeItem("mostRecentCouchConnection");
             localStorage.removeItem("encryptedUser");
             localStorage.removeItem("helpShownCount");
             localStorage.removeItem("helpShownTimestamp");
-
+          
             //Destroy cookies, and load the public user
             OPrime.setCookie("username", undefined, -365);
             OPrime.setCookie("token", undefined, -365);
-
+            
             var auth  = new Authentication({filledWithDefaults: true});
-            auth.set("userPrivate", new User(serverResults.user));
+            auth.set("userPrivate", new User(serverResults.user)); 
             OPrime.setCookie("username", serverResults.user.username, 365);
             OPrime.setCookie("token", serverResults.user.hash, 365);
             auth.get("confidential").set("secretkey", serverResults.user.hash);
             var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
             localStorage.setItem("encryptedUser", u);
-            localStorage.setItem("encryptedUser"+ auth.get("userPrivate").get("username"), u);
+
             /*
              * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)
              */
@@ -691,7 +686,7 @@ define([
           $(".welcome-screen-alerts").show();
         }
       });
-
+      
     }
   });
 
