@@ -86,5 +86,14 @@
 				{{user.username}}
 			</div>
 		</div>
+    <div class="settingsItems row">
+        <h3>Commenters</h3>
+      <div ng-repeat="user in users.commenters" class="user_thumbnails">
+        <img
+          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        {{user.username}}
+      </div>
+    </div>
 	</div>
 </div>

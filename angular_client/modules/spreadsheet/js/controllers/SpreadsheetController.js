@@ -762,6 +762,8 @@ define(
 
 
           $scope.loadSessions();
+          $scope.loadUsersAndRoles();
+
         }
       };
 
@@ -1793,27 +1795,43 @@ define(
         $rootScope.loading = true;
         var rolesString = "";
         switch (newUserRoles.role) {
+          /*
+            NOTE THESE ROLES are not accurate reflections of the db roles,
+            they are a simplification which assumes the
+            admin -> writer -> commenter -> reader type of system.
+
+            Infact some users (technical support or project coordinators) might be only admin,
+            and some experiment participants might be only writers and
+            cant see each others data.
+
+            Probably the clients wanted the spreadsheet roles to appear implicative since its more common.
+            see https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1113
+          */
           case "admin":
             newUserRoles.admin = true;
             newUserRoles.reader = true;
+            newUserRoles.commenter = true;
             newUserRoles.writer = true;
             rolesString += " Admin"
             break;
           case "read_write":
             newUserRoles.admin = false;
             newUserRoles.reader = true;
+            newUserRoles.commenter = true;
             newUserRoles.writer = true;
             rolesString += " Writer Reader"
             break;
           case "read_only":
             newUserRoles.admin = false;
             newUserRoles.reader = true;
+            newUserRoles.commenter = false;
             newUserRoles.writer = false;
             rolesString += " Reader"
             break;
           case "write_only":
             newUserRoles.admin = false;
             newUserRoles.reader = false;
+            newUserRoles.commenter = true;
             newUserRoles.writer = true;
             rolesString += " Writer"
             break;
