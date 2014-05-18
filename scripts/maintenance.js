@@ -443,7 +443,7 @@ $.couch.allDbs({
         if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
           console.log("deploying to a beta tester");
         } else {
-          // return;
+          return;
         }
         var sourceDB = "";
         if (dbname.indexOf("activity_feed") > -1) {
@@ -644,6 +644,124 @@ $.couch.allDbs({
 });
 
 
+var blockNonContribAdminWritesNewCorpus = function(new_doc, old_doc, userCtx) {
+
+  var userCanWrite = false;
+  var failMessage = '';
+  if (userCtx.roles.indexOf(userCtx.db + '_writer') > -1) {
+    userCanWrite = true;
+  }
+  if (!userCanWrite && userCtx.roles.indexOf(userCtx.db + '_commenter') > -1) {
+    if (!old_doc) {
+      old_doc = {};
+    }
+    /* accept only comments, date modified and timestamp from the new doc */
+    delete new_doc.comments;
+    delete old_doc.comments;
+
+    delete new_doc.dateModified;
+    delete old_doc.dateModified;
+
+    delete new_doc.timestamp;
+    delete old_doc.timestamp;
+
+    delete new_doc._revisions
+    delete old_doc._revisions
+    delete new_doc._rev;
+    delete old_doc._rev;
+    if (new_doc.datumFields) {
+      for (var field = new_doc.datumFields.length - 1; field >= 0; field--) {
+        if (new_doc.datumFields[field].label === 'modifiedByUser') {
+          new_doc.datumFields[field] = {};
+        }
+      }
+      for (var field = old_doc.datumFields.length - 1; field >= 0; field--) {
+        if (old_doc.datumFields[field].label === 'modifiedByUser') {
+          old_doc.datumFields[field] = {};
+        }
+      }
+    }
+    if (JSON.stringify(old_doc) == JSON.stringify(new_doc)) {
+      userCanWrite = true;
+    } else {
+      failMessage = JSON.stringify(old_doc) + JSON.stringify(new_doc);
+    }
+  }
+
+  /* permit replication by admins */
+  if (userCtx.roles.indexOf('admin') > -1) {
+    userCanWrite = true;
+  }
+  if (userCtx.roles.indexOf('_admin') > -1) {
+    userCanWrite = true;
+  }
+
+  if (!userCanWrite) {
+    throw ({
+      'forbidden': 'Not Authorized, you are not a writer on ' + userCtx.db + ', you will have to ask ' + userCtx.db.replace(/-.*/, '') + ' to add you as a writer. You currently have these roles: ' + userCtx.roles
+    });
+  }
+};
+
+
+var blockNonContribAdminWritesNewCorpusActivityFeed = function(new_doc, old_doc, userCtx) {
+  var corpusdb = userCtx.db.replace('-activity_feed', '');
+
+  var userCanWrite = false;
+  /* let anyone with any role create an activity in the corpus, not necessary write to it */
+  if (userCtx.roles.indexOf(corpusdb + '_writer') > -1) {
+    userCanWrite = true;
+  }
+  if (userCtx.roles.indexOf(corpusdb + '_commenter') > -1) {
+    userCanWrite = true;
+  }
+  if (userCtx.roles.indexOf(corpusdb + '_reader') > -1) {
+    userCanWrite = true;
+  }
+  if (userCtx.roles.indexOf(corpusdb + '_admin') > -1) {
+    userCanWrite = true;
+  }
+
+  /* permit replication by admins */
+  if (userCtx.roles.indexOf('admin') > -1) {
+    userCanWrite = true;
+  }
+  if (userCtx.roles.indexOf('_admin') > -1) {
+    userCanWrite = true;
+  }
+
+  if (!userCanWrite) {
+    throw ({
+      'forbidden': 'Not Authorized to save an activity to this corpus, you are not a member of ' + corpusdb + ', you will have to ask ' + corpusdb.replace(/-.*/, '') + ' to add you as a member. You currently have these roles: ' + userCtx.roles
+    });
+  }
+};
+
+
+var blockNonContribAdminWritesNewUserActivityFeed = function(new_doc, old_doc, userCtx) {
+  var reconstructedUser = userCtx.db.replace('-activity_feed', '');
+
+  var userCanWrite = false;
+
+  if (userCtx.name === reconstructedUser) {
+    userCanWrite = true;
+  }
+
+  /* permit replication by admins */
+  if (userCtx.roles.indexOf('admin') > -1) {
+    userCanWrite = true;
+  }
+  if (userCtx.roles.indexOf('_admin') > -1) {
+    userCanWrite = true;
+  }
+
+  if (!userCanWrite) {
+    throw ({
+      'forbidden': 'Not Authorized, you are the owner of this activity feed: ' + reconstructedUser
+    });
+  }
+};
+
 
 /*
 Remove extra quotes in security docs
@@ -665,13 +783,15 @@ $.couch.allDbs({
             var securitydoc = serverResults;
             if (securitydoc.admins && securitydoc.admins.names) {
               var temp = securitydoc.admins.names.join(",") || "";
-              if (temp)
+              if (temp) {
                 securitydoc.admins.names = temp.replace(/"/g, "").split(",");
+              }
             }
             if (securitydoc.admins && securitydoc.admins.roles) {
               var temp = securitydoc.admins.roles.join(",") || "";
-              if (temp)
+              if (temp) {
                 securitydoc.admins.roles = temp.replace(/"/g, "").split(",");
+              }
             }
             if (securitydoc.members && securitydoc.members.names) {
               var temp = securitydoc.members.names.join(",") || "";
