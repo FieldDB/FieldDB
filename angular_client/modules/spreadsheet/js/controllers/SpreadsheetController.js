@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "2.2.1ss";
+      $rootScope.appVersion = "2.2.2ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -1829,6 +1829,13 @@ define(
             newUserRoles.writer = false;
             rolesString += " Reader"
             break;
+          case "read_comment_only":
+              newUserRoles.admin = false;
+              newUserRoles.reader = true;
+              newUserRoles.commenter = true;
+              newUserRoles.writer = false;
+              rolesString += " Reader Commenter"
+              break;
           case "write_only":
             newUserRoles.admin = false;
             newUserRoles.reader = false;
