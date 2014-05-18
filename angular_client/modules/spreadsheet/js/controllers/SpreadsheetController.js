@@ -805,6 +805,7 @@ define(
         localStorage.setItem('SpreadsheetPreferences', JSON
           .stringify(Preferences));
         $scope.loadData(activeSessionID);
+        $scope.loadUsersAndRoles();
         window.location.assign("#/spreadsheet/" + $rootScope.template);
       };
 
@@ -1628,9 +1629,9 @@ define(
                       // Deleting so that indices in scope are unchanged
                       delete $scope.activities[index];
                     },
-                    function() {
+                    function(reason) {
                       window
-                        .alert("There was an error saving the activity. Please try again.");
+                        .alert("There was an error saving the activity. "+ reason);
                       $scope.saved = "no";
                     });
               }
@@ -1755,7 +1756,7 @@ define(
           $scope.users = users;
 
           // Get privileges for logged in user
-        Data.async("_users", "org.couchdb.user:" + $rootScope.user.username)
+        Data.async("_users", "org.couchdb.user:" + $rootScope.loginInfo.username)
           .then(
             function(response) {
               $rootScope.admin = false;

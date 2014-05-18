@@ -72,7 +72,7 @@
 							{{getCurrentSessionName()}}<br /><i class="fa whiteicon fa-cloud"></i> {{DB.title}}
 						</div>
 						<div>
-							&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && writePermissions==true">{{getSavedState()}}</button>&nbsp;
+							&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">{{getSavedState()}}</button>&nbsp;
 							<button class="btn btn-warning" ng-click="logOut()"> <i class="fa whiteicon fa-arrow-right"></i> Log
 								out</button> <a href="http://lingsync.org/{{user.username}}" target="_blank" title="Visit your share page"><img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0"></a>
 						</div>

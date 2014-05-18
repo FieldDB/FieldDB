@@ -128,7 +128,7 @@
     </div>
   </div>
   <div class="container-fluid">
-    <div class="row" ng-show="expandCollapse==true && datum.id!=undefined && writePermissions==true">
+    <div class="row" ng-show="expandCollapse==true && datum.id!=undefined ">
       <div class="span10 expandedDataComments">
         <div class="expandedDataInner">
           <ul class="unstyled">
@@ -331,7 +331,7 @@
   </div>
 </div>
 
-<div arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || readPermissions == false ">
+<div arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || writePermissions==false">
   <div class="row">
     <form ng-submit="createRecord(newFieldData)" >
       <div class="span5">
