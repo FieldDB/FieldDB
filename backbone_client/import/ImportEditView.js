@@ -154,7 +154,7 @@ define( [
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. "+instructions);
                 } else {
-                  self.model.addAudioVideoFile(OPrime.audioUrl + "/" + self.model.get("pouchname") + "/" + results.files[fileIndex].fileBaseName + '.wav');
+                  self.model.addAudioVideoFile(OPrime.audioUrl + "/" + self.model.get("pouchname") + "/" + results.files[fileIndex].fileBaseName + '.mp3');
                   self.model.downloadTextGrid(results.files[fileIndex]);
                 }
               }
@@ -604,7 +604,7 @@ define( [
             testForEmptyness += $(item).html();
           });
           //if the table row has more than 2 non-white space characters, enter it as data
-          if(testForEmptyness.replace(/[^ ]/g,"").length >= 2){
+          if(testForEmptyness.replace(/[ \t\n]/g,"").length >= 2){
             array.push(datumObject);
           }else{
             //dont add blank datum
@@ -653,7 +653,7 @@ define( [
           this.model.get("files").map(function(fileDetails){
             var details = JSON.parse(JSON.stringify(fileDetails));
             delete details.textgrid;
-            audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".wav"] = details;
+            audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".mp3"] = details;
           });
         }
 
@@ -784,6 +784,7 @@ define( [
               audioVideo = new AudioVideo();
             }
             audioVideo.set("filename", value);
+            audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
             audioVideo.set("URL", OPrime.audioUrl + "/" + window.app.get("corpus").get("pouchname") + "/" + value);
             audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
             audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
