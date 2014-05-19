@@ -11,7 +11,7 @@ define([
     "datum/Session",
     "app/PaginatedUpdatingCollectionView",
     "xml2json",
-    "libs/textgrid",
+    "bower_components/textgrid/dist/textgrid",
     "OPrime"
 ], function(
     Backbone,
@@ -564,27 +564,53 @@ define([
         tierName;
       var header = [];
       var consultants = [];
-      for (itemIndex in textgrid.intervalsByXmin) {
-        if (!textgrid.intervalsByXmin.hasOwnProperty(itemIndex)) {
-          continue;
-        }
-        if (textgrid.intervalsByXmin[itemIndex]) {
-          row = {};
-          for (intervalIndex = 0; intervalIndex < textgrid.intervalsByXmin[itemIndex].length; intervalIndex++) {
-            interval = textgrid.intervalsByXmin[itemIndex][intervalIndex];
-            row.startTime = row.startTime ? row.startTime : interval.xmin;
-            row.endTime = row.endTime ? row.endTime : interval.xmax;
-            row.utterance = row.utterance ? row.utterance : interval.text.trim();
-            row.modality = "spoken";
-            row.tier = interval.tierName;
-            row.speakers = interval.speaker;
-            row.audioFileName = interval.fileName || audioFileName;
-            row.CheckedWithConsultant = interval.speaker;
-            consultants.push(row.speakers);
-            row[interval.tierName] = interval.text;
-            header.push(interval.tierName);
+      if (textgrid.isIGTNestedOrAlignedOrBySpeaker.probablyAligned) {
+        for (itemIndex in textgrid.intervalsByXmin) {
+          if (!textgrid.intervalsByXmin.hasOwnProperty(itemIndex)) {
+            continue;
           }
-          matrix.push(row);
+          if (textgrid.intervalsByXmin[itemIndex]) {
+            row = {};
+            for (intervalIndex = 0; intervalIndex < textgrid.intervalsByXmin[itemIndex].length; intervalIndex++) {
+              interval = textgrid.intervalsByXmin[itemIndex][intervalIndex];
+              row.startTime = row.startTime ? row.startTime : interval.xmin;
+              row.endTime = row.endTime ? row.endTime : interval.xmax;
+              row.utterance = row.utterance ? row.utterance : interval.text.trim();
+              row.modality = "spoken";
+              row.tier = interval.tierName;
+              row.speakers = interval.speaker;
+              row.audioFileName = interval.fileName || audioFileName;
+              row.CheckedWithConsultant = interval.speaker;
+              consultants.push(row.speakers);
+              row[interval.tierName] = interval.text;
+              header.push(interval.tierName);
+            }
+            matrix.push(row);
+          }
+        }
+      } else {
+        for (itemIndex in textgrid.intervalsByXmin) {
+          if (!textgrid.intervalsByXmin.hasOwnProperty(itemIndex)) {
+            continue;
+          }
+          if (textgrid.intervalsByXmin[itemIndex]) {
+            for (intervalIndex = 0; intervalIndex < textgrid.intervalsByXmin[itemIndex].length; intervalIndex++) {
+              row = {};
+              interval = textgrid.intervalsByXmin[itemIndex][intervalIndex];
+              row.startTime = row.startTime ? row.startTime : interval.xmin;
+              row.endTime = row.endTime ? row.endTime : interval.xmax;
+              row.utterance = row.utterance ? row.utterance : interval.text.trim();
+              row.modality = "spoken";
+              row.tier = interval.tierName;
+              row.speakers = interval.speaker;
+              row.audioFileName = interval.fileName || audioFileName;
+              row.CheckedWithConsultant = interval.speaker;
+              consultants.push(row.speakers);
+              row[interval.tierName] = interval.text;
+              header.push(interval.tierName);
+              matrix.push(row);
+            }
+          }
         }
       }
       header = _.unique(header);
