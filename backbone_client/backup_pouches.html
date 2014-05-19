@@ -1,18 +1,47 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>LingSync - Corpus Dashboard</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LingSync - Corpus Dashboard</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-<!-- Stylesheets -->
-<link rel="stylesheet" type="text/css" href="app/app.css">
-<link rel="stylesheet" type="text/css" href="app/app_opaque.css">
-<!-- END Stylesheets -->
+  <!-- Stylesheets -->
+  <link rel="stylesheet" type="text/css" href="app/app.css">
+  <link rel="stylesheet" type="text/css" href="app/app_opaque.css">
+  <link rel="stylesheet" type="text/css" href="app/sorry.css">
+
+  <!-- END Stylesheets -->
 </head>
-<body id="app" class="backup_page">
+<body id="app" class="backup_page body_background">
+  <div class="container well ">
 
+    <table class="">
+      <tr>
+        <td  id="goToSpreadsheetApp">
+
+          <image title="Open LingSync Online" src="images/icon128.png"/>
+          <h2>Open LingSync Online</h2>
+          <p>For entering data</p>
+
+        </td>
+        <td  id="goToCorpusPagesApp" >
+
+          <image title="Open LingSync Corpus Pages" src="images/iconCorpusPages.png"/>
+          <h2>Open LingSync<br>Corpus Pages</h2>
+          <p>For sharing your corpora</p>
+
+        </td>
+        <td id="goToPrototypeApp" >
+
+          <image title="Open Prototype" src="images/icon128_dev.png"/>
+          <h2>Open LingSync<br>Prototype</h2>
+          <p>For administering your corpora</p>
+
+        </td>
+      </tr>
+    </table>
+  </div>
   <div id="dashboard_loading_spinner"></div>
   <div id="app_view"></div>
 
@@ -23,13 +52,13 @@
 
 
   <!-- Le javascript
-    ================================================== -->
+  ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
 
   <script type="text/javascript" src="./libs/require.js"></script>
   <script type="text/javascript" src="./backup_pouches_dashboard.js"></script>
   <script type="text/javascript" src="./libs/d3.v2.js"></script>
-  
+
   <!-- <script type="text/javascript" src="./libs/ga.js"></script>
   <script type="text/javascript" src="./libs/analytics.js"></script> -->
 
