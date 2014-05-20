@@ -105,7 +105,7 @@ function(doc) {
           context.glosses = glosses;
         }
       }
-      var punctuationToRemove = /[#?!.,\/\(\)\*\#0-9]/g;
+      var punctuationToRemove = /[#?!,\/\(\)\*\#]/g;
       // Build triples
       for (var j in context.words) {
         var w = context.words[j];
