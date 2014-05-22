@@ -1,7 +1,7 @@
 function(doc) {
   var onlyErrors = false;
   var debug = false;
-  var maxDistance = 10;
+  var maxDistance = 1;
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
