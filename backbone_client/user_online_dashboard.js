@@ -36,7 +36,7 @@ require.config({
     "CryptoJS" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "$" : "libs/jquery",
+    "$" : "bower_components/jquery/dist/jquery.min",
     "wikitext" : "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
@@ -44,8 +44,9 @@ require.config({
     "handlebarsjs" : "libs/handlebars.runtime",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
-    "_" : "libs/underscore",
-    "backbonejs" : "libs/backbone",
+    "_" : "bower_components/underscore/underscore",
+    "underscore" : "bower_components/underscore/underscore",
+    "backbonejs" : "bower_components/backbone/backbone",
     "jquery-couch" : "libs/backbone_couchdb/jquery.couch",
     "backbone" : "libs/backbone_couchdb/backbone-couchdb",
 
@@ -150,13 +151,13 @@ require([ "user/UserApp", "backbone", "OPrime" ], function(App,
 // Backbone,
 // forcingpouchtoloadonbackboneearly
 // ) {
-//  
+//
 // /*
 // * Start the pub sub hub
 // */
 // window.hub = {};
 // OPrime.makePublisher(window.hub);
-// 
+//
 // /*
 // * Check for user's cookie and the dashboard so we can load it
 // */
@@ -181,10 +182,10 @@ require([ "user/UserApp", "backbone", "OPrime" ], function(App,
 // Backbone.history.start();
 // }
 // });
-//    
+//
 // } else {
 // // new user, let them register or login as themselves or lingllama
 // document.location.href='corpus.html';
 // }
-//  
+//
 // });
