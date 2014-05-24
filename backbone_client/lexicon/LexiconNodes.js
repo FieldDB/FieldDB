@@ -1,22 +1,22 @@
-define("lexicon/LexiconNodes", 
+define("lexicon/LexiconNodes",
     ["backbone",
      "lexicon/LexiconNode"],
     function(Backbone, LexiconNode) {
-  
+
   var LexiconNodes = Backbone.Collection.extend(
-      
-    /** @lends LexiconNodes.prototype */ 
-        
+
+    /** @lends LexiconNodes.prototype */
+
     {
       /**
-       * @class Lexicon Nodes is a collection of lexicon nodes is key value pair with an index of related datum. 
-       * 
+       * @class Lexicon Nodes is a collection of lexicon nodes is key value pair with an index of related datum.
+       *
        * @description
-       * 
+       *
        * @extends Backbone.Model
-       * 
+       *
        * @constructs
-       * 
+       *
        */
       internalModels : LexiconNode,
       model : LexiconNode,
@@ -35,7 +35,7 @@ define("lexicon/LexiconNodes",
     //defaultOptions : {unique: false, concatSimilarNodes: false},
     //if want to take the most recent node only
     defaultOptions : {unique: true, concatSimilarNodes: false},
-    
+
     //https://github.com/documentcloud/backbone/pull/808
     add : function(model, options) {
 //    	console.log("Overriding add");
@@ -58,12 +58,12 @@ define("lexicon/LexiconNodes",
             //put the new models info into the existing member of the collection
             if (OPrime.debugMode) OPrime.debug("Updating ", already[0].toJSON(), " to ", model.toJSON());
             already[0].set(model.toJSON());
-            return; //don't throw error, just happily return 
+            return; //don't throw error, just happily return
 //            throw new Error(["Can't add the same model to a set twice", already.id]);
           }
         }
-        this._byId[model.id] = model;
-        this._byCid[model.cid] = model;
+        // this._byId[model.id] = model;
+        // this._byCid[model.cid] = model;
         var index = options.at != null ? options.at :
                     this.comparator ? this.sortedIndex(model, this.comparator) :
                     this.length;
@@ -75,11 +75,11 @@ define("lexicon/LexiconNodes",
         return model;
       }
 
-   
 
-  
-  }); 
-  
-  return LexiconNodes; 
-  
-}); 
+
+
+  });
+
+  return LexiconNodes;
+
+});
