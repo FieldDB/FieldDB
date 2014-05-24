@@ -812,6 +812,7 @@ define( [
         d.set("datumFields", fields);
         if (audioVideo) {
           d.get("audioVideo").add(audioVideo);
+          // console.log( JSON.stringify(audioVideo.toJSON())+ JSON.stringify(fields.toJSON()));
         }
         // var states = window.app.get("corpus").get("datumStates").clone();
         // d.set("datumStates", states);
@@ -819,7 +820,7 @@ define( [
         //these are temp datums, dont save them until the user saves the data list
         this.importPaginatedDataListDatumsView.collection.add(d);
 //        this.dataListView.model.get("datumIds").push(d.id); the datum has no id, cannot put in datumIds
-
+        d.lookForSimilarDatum();
         this.model.get("datumArray").push(d);
       }
       this.model.set("consultants", _.unique(consultantsInThisImportSession).join(","));
