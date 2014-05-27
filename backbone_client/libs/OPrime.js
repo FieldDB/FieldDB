@@ -44,7 +44,7 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
     couchurl = couchurl + couchdbcommand;
   }
 
-    
+
   /* Switch user to the new dev servers if they have the old ones */
   couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g, "corpus.lingsync.org");
   couchurl = couchurl.replace(/corpusdev.lingsync.org/g, "corpus.lingsync.org");
@@ -54,7 +54,7 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
    * of couchdb directly
    */
   // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
-  
+
   return couchurl;
 };
 
@@ -178,7 +178,7 @@ OPrime.makePublisher = function(o) {
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
  * the cookie, and the number of days until the cookie expires.
- * 
+ *
  * @param c_name
  * @param value
  * @param exdays
@@ -244,7 +244,7 @@ OPrime.isBackboneCouchDBApp = function(){
 /**
  * If not running offline on an android or in a chrome extension, assume we are
  * online.
- * 
+ *
  * @returns {Boolean} true if not on offline Android or on a Chrome Extension
  */
 OPrime.onlineOnly = function() {
@@ -473,7 +473,7 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
         localAudioElement.removeEventListener('ended', window.audioEndListener);
       }
     });
-    
+
     window.actuallyPlayAudio = function(){
       audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
       OPrime.playingInterval = true;
@@ -524,7 +524,7 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     }
 
   }
-  
+
 }
 OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     callbackRecordingCompleted, callingcontext) {
@@ -770,7 +770,7 @@ OPrime.makeCORSRequest = function(options) {
     }
     return xhr;
   };
-  
+
   var xhr = createCORSRequest(options.method, options.url);
   if (!xhr) {
     OPrime.bug('CORS not supported, your browser is unable to contact the database.');
@@ -782,7 +782,7 @@ OPrime.makeCORSRequest = function(options) {
     xhr.setRequestHeader("Content-type","application/json");
     xhr.withCredentials = true;
 //  }
-  
+
   xhr.onload = function(e,f,g) {
     var text = xhr.responseText;
     if (OPrime.debugMode) OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
@@ -815,74 +815,82 @@ OPrime.makeCORSRequest = function(options) {
   } else {
     xhr.send();
   }
-  
+
 };
 
 
 
-OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
-    readycallback, failcallback) {
+OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback, failcallback) {
   if (readycallback) {
     OPrime.checkToSeeIfCouchAppIsReadyreadycallback = readycallback;
   }
+  if(!failcallback){
+    failcallback = function(){
+      OPrime.checkToSeeIfCouchAppIsReady(urlIsCouchAppReady, readycallback, failcallback);
+    }
+  }
   if (!$) {
     OPrime.bug("Can't check if DB is ready.");
-    console
-        .warn("Can't check if DB is ready, checkToSeeIfCouchAppIsReady function depends on JQuery at the moment...");
+    console.warn("Can't check if DB is ready, checkToSeeIfCouchAppIsReady function depends on JQuery at the moment...");
     return;
   }
-  $
-      .ajax({
-        type : 'GET',
-        url : urlIsCouchAppReady,
-        data : {},
-        beforeSend : function(xhr) {
-          // alert("before send" + JSON.stringify(xhr));
-          xhr.setRequestHeader('Accept', 'application/json');
-        },
-        complete : function(e, f, g) {
-          console.log(e, f, g);
-          // alert("Completed contacting the server.");
-        },
-        success : function(serverResults) {
-          console.log("serverResults" + JSON.stringify(serverResults));
-          OPrime.bug("Your database is ready.");
-          if (typeof readycallback == "function") {
-            readycallback();
+  var finishedWaiting = function() {
+    localStorage.setItem("urlIsCouchAppReady", urlIsCouchAppReady);
+    if (typeof OPrime.checkToSeeIfCouchAppIsReadyreadycallback == "function") {
+      OPrime.checkToSeeIfCouchAppIsReadyreadycallback();
+    }
+  };
+
+  var continueWaiting = function() {
+    window.setTimeout(failcallback, 2000);
+  };
+
+  OPrime.makeCORSRequest({
+    type: 'GET',
+    url: urlIsCouchAppReady,
+    data: {},
+    dataType: "json",
+    success: function(serverResults) {
+      console.log("serverResults" + JSON.stringify(serverResults));
+      if (serverResults) {
+        if (serverResults.error) {
+          continueWaiting();
+        } else if (serverResults.rows) {
+          finishedWaiting();
+        }
+      }
+    }, // end successful fetch
+    error: function(response) {
+      // alert("Error contacting the server.");
+
+      console.log("error response." + JSON.stringify(response));
+      // alert("error response." + JSON.stringify(response));
+
+
+      if (response.responseJSON) {
+        if (response.responseJSON.error) {
+          continueWaiting();
+        } else if (response.responseJSON.rows && response.responseJSON.rows.length > 0) {
+          finishedWaiting();
+        }
+      } else {
+        if (response.responseText) {
+          if (response.responseText.indexOf("<html") >= 0) {
+            finishedWaiting();
+            return;
           }
-        },// end successful fetch
-        error : function(response) {
-          // alert("Error contacting the server.");
-
-          console.log("error response." + JSON.stringify(response));
-          // alert("error response." + JSON.stringify(response));
-
-          if (response.responseText) {
-            if (response.responseText.indexOf("<html") >= 0) {
-              localStorage.setItem("urlIsCouchAppReady", urlIsCouchAppReady);
-              OPrime.bug("Your database is ready.");
-              if (typeof OPrime.checkToSeeIfCouchAppIsReadyreadycallback == "function") {
-                OPrime.checkToSeeIfCouchAppIsReadyreadycallback();
-              }
-              // window.location.replace(urlIsCouchAppReady);
-              return;
-            }
-            var error = JSON.parse(response.responseText);
-            if (error.error == "unauthorized") {
-              OPrime.bug("CouchDB ready but you need to get a session token, this can only happen when you are online.");
-            } else {
-              OPrime.bug("Waiting for database to be created...");
-              // Loop every 2 sec waiting for the database to load
-            }
+          var error = JSON.parse(response.responseText);
+          if (error.error == "unauthorized") {
+            alert("CouchDB ready but you need to get a session token, this can only happen when you are online.");
+          } else {
+            continueWaiting();
           }
-          window.setTimeout(failcallback, 2000);
-
-          // $("#user-welcome-modal").modal("show");
-
-        },
-        dataType : "json"
-      });
-
+        } else {
+          continueWaiting();
+        }
+      }
+    }
+  });
 };
 
 OPrime.sum = function(list) {

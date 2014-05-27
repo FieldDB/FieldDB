@@ -2,22 +2,25 @@
   <h1> <i class="icon-cloud"></i>  <span>{{locale_New_Corpus}}</span> <small class="new-corpus-pouchname">{{pouchname}}</small></h1>
   <p>{{locale_New_Corpus_Instructions}}</p>
   <p class="alert alert-danger hide">
-    <strong>{{locale_Warning}}</strong> 
+    <strong>{{locale_Warning}}</strong>
     <span>{{locale_New_Corpus_Warning}}</span>
   </p>
 </div>
 
 <div class="modal-body">
-	<label>{{locale_Title}}</label>  
+	<label>{{locale_Title}}</label>
 	<textarea class="corpus-title-input">{{title}}</textarea>
-	<label>{{locale_Description}}</label>
-	<textarea class="corpus-description-input">{{description}}</textarea>
-  <label>{{locale_Public_or_Private}}</label>
-  <input type="text" value="{{publicCorpus}}"  class=" public-or-private" data-provide="typeahead" data-items="4" 
+	<label hidden class="hidden">{{locale_Description}}</label>
+	<textarea hidden class="hidden corpus-description-input">{{description}}</textarea>
+  <label hidden class="hidden">{{locale_Public_or_Private}}</label>
+  <input hidden type="text" value="{{publicCorpus}}"  class="hidden public-or-private" data-provide="typeahead" data-items="4"
         data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
+  <br/>
+  <label>{{locale_Password}} {{locale_We_need_to_make_sure_its_you}}</label>
+  <input type="password" class="new-corpus-password"/>
 </div>
 
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">{{locale_Cancel}}</a>
-  <button class="btn btn-success pull-right save-corpus" value="Save">{{locale_Save}}</button>  
+  <button class="btn btn-success pull-right create-new-corpus" value="Save">{{locale_Save}}</button>
 </div>
