@@ -455,6 +455,7 @@ define([
       dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".registerpassword").val().trim();
       dataToPost.authUrl = OPrime.authUrl;
+      dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
       dataToPost.appVersionWhenCreated = this.appVersion;
       //Send a pouchname to create
       var corpusConnection = OPrime.defaultCouchConnection();
@@ -483,7 +484,6 @@ define([
         window.app.showSpinner();
         window.app.router.hideEverything();
         $(".spinner-status").html("Contacting the server...");
-
         /*
          * Contact the server and register the new user
          */
@@ -517,7 +517,7 @@ define([
 
               OPrime.setCookie("username", serverResults.user.username, 365);
               OPrime.setCookie("token", serverResults.user.hash, 365);
-              var u = auth.get("confidential").encrypt(JSON.stringify(serverResults.user));
+              var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
               localStorage.setItem("encryptedUser", u);
               $(".spinner-status").html("Building your database for you...");
 
@@ -530,26 +530,66 @@ define([
               var couchConnection =OPrime.defaultCouchConnection();
               couchConnection.pouchname =potentialpouchname;
               var nextCorpusUrl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/private_corpuses";
-              window.app.logUserIntoTheirCorpusServer(serverResults.user.corpuses[0], dataToPost.username, dataToPost.password, function() {
 
-                OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
+              window.app.logUserIntoTheirCorpusServer(serverResults.user.corpuses[0], dataToPost.username, dataToPost.password, function(){
+                OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function(){
 
-                  if (OPrime.isBackboneCouchDBApp()) {
-                    try {
+                  if(OPrime.isBackboneCouchDBApp()){
+                    try{
                       Backbone.couch_connector.config.db_name = potentialpouchname;
-                    } catch (e) {
+                    }catch(e){
                       OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
                     }
-                  } else {
+                  }else{
                     alert("TODO test what happens when not in a backbone couchdb app and registering a new user.");
                   }
-                  window.setTimeout(function() {
-                    var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouchname);
-                    window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialpouchname);
-                  }, 1000);
+                  var newCorpusToBeSaved = new Corpus({
+                    "filledWithDefaults" : true,
+                    "title" : serverResults.user.username + "'s Corpus",
+                    "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
+                    "team" : new UserMask({username: dataToPost.username}),
+                    "couchConnection" : couchConnection,
+                    "pouchname" : couchConnection.pouchname,
+                    "dateOfLastDatumModifiedToCheckForOldSession" : JSON.stringify(new Date())
+                  });
 
+                  newCorpusToBeSaved.prepareANewPouch(couchConnection, function(){
+//                    alert("Saving new corpus in register.");
+                    $(".spinner-status").html("Saving a corpus in your new database ...");
+
+                    window.functionToSaveNewCorpus = function(){
+                      newCorpusToBeSaved.save(null, {
+                        success : function(model, response) {
+                          model.get("publicSelf").set("corpusid", model.id);
+                          auth.get("userPrivate").set("mostRecentIds", {});
+                          auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
+                          model.get("couchConnection").corpusid = model.id;
+                          auth.get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
+                          auth.get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
+                          var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
+                          localStorage.setItem("encryptedUser", u);
+
+                          var sucessorfailcallbackforcorpusmask = function(){
+                            $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
+                            window.setTimeout(function(){
+                              window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
+                            },1000);
+                          };
+                          model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+
+                        },error : function(e,f,g) {
+//                          alert('New Corpus save error ' + f.reason +". Click OK to re-attempt to save your new corpus in 10 seconds...");
+                          $(".spinner-status").html("New Corpus save error " + f.reason +". The app will re-attempt to save your new corpus in 10 seconds...");
+                          window.corpusToBeSaved = newCorpusToBeSaved;
+                          window.setTimeout(window.functionToSaveNewCorpus, 10000);
+                        }
+                      });
+                    };
+                    window.functionToSaveNewCorpus();
+                  });
                 });
               });
+
             }
           },//end successful registration
           dataType : "",
@@ -563,7 +603,6 @@ define([
             $(".register-new-user").removeClass("disabled");
             $(".register-new-user").removeAttr("disabled");
             authedself.registering = false;
-            window.location.href = "#render/true";
 
           }
         });
@@ -573,6 +612,7 @@ define([
           $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
           $(".register-new-user").removeAttr("disabled");
+
       }
     },
     /**
