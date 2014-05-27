@@ -36,7 +36,7 @@ require.config({
 
     /* Handlebars html templating libraries and compiled templates */
     "handlebars" : "libs/compiled_handlebars",
-    "handlebarsjs" : "libs/handlebars.runtime",
+    "handlebarsjs" : "bower_components/handlebars/handlebars.runtime",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
     "_" : "bower_components/underscore/underscore",
