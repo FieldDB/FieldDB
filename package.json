@@ -36,7 +36,7 @@
     "Oriana <oriana.kilbourn-ceron@mail.mcgill.ca>"
   ],
   "dependencies": {
-    "handlebars": "*",
+    "handlebars": "1.3.0",
     "requirejs": "*",
     "q": "^1.0.1",
     "MD5": "^1.2.1"
