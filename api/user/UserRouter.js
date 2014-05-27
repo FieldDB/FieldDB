@@ -1,4 +1,4 @@
-define([ 
+define([
     "backbone",
     "corpus/Corpus",
     "corpus/CorpusMask",
@@ -20,7 +20,7 @@ define([
      * @description Routes URLs to handle the user dashboard. Mostly just
      *        shows the user a list of their corpora so they can switch
      *        between corpora.
-     * 
+     *
      * @extends Backbone.Router
      * @constructs
      */
@@ -28,17 +28,17 @@ define([
     },
 
     routes : {
-      "corpus/:pouchname/:id"           : "showCorpusDashboard", 
-      "corpus/:pouchname/"              : "guessCorpusIdAndShowDashboard", 
-      "corpus/:pouchname"               : "guessCorpusIdAndShowDashboard", 
+      "corpus/:pouchname/:id"           : "showCorpusDashboard",
+      "corpus/:pouchname/"              : "guessCorpusIdAndShowDashboard",
+      "corpus/:pouchname"               : "guessCorpusIdAndShowDashboard",
       "login/:pouchname"                : "showQuickAuthenticateAndRedirectToDatabase",
       "render/:render"                  : "showDashboard",
       ""                                : "showDashboard"
     },
-    
+
     /**
      * Displays the dashboard view of the user loaded in authentication
-     * 
+     *
      */
     showDashboard : function(renderOrNot) {
       if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
@@ -47,13 +47,13 @@ define([
     },
     /**
      * Displays the dashboard view of the user loaded in authentication
-     * 
+     *
      */
     showFullscreenUser : function() {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " );
     },
     showQuickAuthenticateAndRedirectToDatabase : function(pouchname){
-      window.app.set("corpus", new Corpus()); 
+      window.app.set("corpus", new Corpus());
       window.app.get("authentication").syncUserWithServer(function(){
         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(pouchname);
         window.location.replace(optionalCouchAppPath+"corpus.html");
@@ -102,16 +102,16 @@ define([
         });
       });
     },
-    
+
     /**
-     * Loads the requested corpus, and redirects the user to the corpus dashboard 
-     * 
+     * Loads the requested corpus, and redirects the user to the corpus dashboard
+     *
      * @param {String}
      *          pouchname The name of the corpus this datum is from.
      */
     showCorpusDashboard : function(pouchname, corpusid) {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: " );
-      
+
       /*
        * If the corpusid is not specified, then try to guess it by re-routing us to the guess function
        */
@@ -207,8 +207,27 @@ define([
           break;
         }
       }
+    },
+
+    hideEverything: function() {
+      $("#dashboard-view").hide();
+      $("#datums-embedded").hide();
+      $("#conversation-embedded").hide();
+      $("#data-list-fullscreen").hide();
+      $("#datum-container-fullscreen").hide();
+      $("#conversation-container-fullscreen").hide();
+      $("#corpus-embedded").hide();
+      $("#corpus-fullscreen").hide();
+      $("#search-fullscreen").hide();
+      $("#search-embedded").hide();
+      $("#session-embedded").hide();
+      $("#session-fullscreen").hide();
+      $('#public-user-page').hide();
+      $('#user-fullscreen').hide();
+      $('#import-fullscreen').hide();
+      $('#data-list-embedded').hide();
     }
-    
+
   });
 
   return UserRouter;
