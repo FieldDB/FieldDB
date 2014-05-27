@@ -1,13 +1,13 @@
-define([ 
-    "backbone", 
+define([
+    "backbone",
     "handlebars",
-    "app/App", 
+    "app/App",
     "app/AppRouter",
     "authentication/Authentication",
     "authentication/AuthenticationEditView",
     "comment/Comments",
-    "corpus/Corpus", 
-    "corpus/CorpusMask", 
+    "corpus/Corpus",
+    "corpus/CorpusMask",
     "corpus/CorpusEditView",
     "corpus/CorpusReadView",
     "corpus/CorpusLinkView",
@@ -19,7 +19,7 @@ define([
     "datum/DatumContainerEditView",
     "datum/DatumContainerReadView",
     "datum/DatumReadView",
-    "datum/DatumFields", 
+    "datum/DatumFields",
     "export/Export",
     "export/ExportReadView",
     "hotkey/HotKey",
@@ -44,14 +44,14 @@ define([
     "terminal",
     "OPrime"
 ], function(
-    Backbone, 
+    Backbone,
     Handlebars,
-    App, 
-    AppRouter, 
+    App,
+    AppRouter,
     Authentication,
     AuthenticationEditView,
     Comments,
-    Corpus, 
+    Corpus,
     CorpusMask,
     CorpusEditView,
     CorpusReadView,
@@ -97,9 +97,9 @@ define([
      *        handlebars. It contains the views of all the core models
      *        referenced in the app model and it will have partial handlebar of
      *        the navigation menu.
-     * 
+     *
      * @description Starts the application and initializes all its children.
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
@@ -107,7 +107,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
       this.format = "default";
-      
+
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
       this.setUpAndAssociateViewsAndModelsWithCurrentDataList();
@@ -115,14 +115,14 @@ define([
 
       // Create and initialize a Terminal
       this.term = new Terminal('terminal');
-      
+
       // Initialize the file system of the terminal
       this.term.initFS(false, 1024 * 1024);
-      
+
       window.saveApp = this.backUpUser;
       // Set up a timeout event every 10sec
 //      _.bindAll(this, "saveScreen");
-//      window.setInterval(this.saveScreen, 10000);     
+//      window.setInterval(this.saveScreen, 10000);
     },
     setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
       // Create three corpus views
@@ -133,7 +133,7 @@ define([
         model : this.model.get("corpus")
       });
       this.currentCorpusEditView.format = "leftSide";
-     
+
       if(this.currentCorpusReadView){
         this.currentCorpusReadView.destroy_view();
       }
@@ -141,7 +141,7 @@ define([
         model : this.model.get("corpus")
       });
       this.currentCorpusReadView.format = "leftSide";
-      
+
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( this.model.get("corpus").get("publicSelf") );
 
       //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
@@ -152,7 +152,7 @@ define([
         });
         this.corpusNewModalView.format = "modal";
       }
-      
+
       //TODO not sure if we should do this here
       // Create an ImportEditView
 
@@ -162,13 +162,13 @@ define([
       this.importView = new ImportEditView({
         model : new Import()
       });
-      
+
       //TODO not sure if we should do this here
       // Create an ExportReadView
       this.exportView = new ExportReadView({
         model : new Export()
       });
-      
+
       /*
        *  Create search views
        */
@@ -180,7 +180,7 @@ define([
       });
       this.searchEditView.format = "centreWell";
 
-      
+
       // Create the embedded and fullscreen DatumContainerEditView
       var datumsToBePassedAround = new Datums();
       datumsToBePassedAround.model = Datum; //TOOD workaround for model being missing
@@ -190,7 +190,7 @@ define([
       this.datumsReadView = new DatumContainerReadView({
         model : datumsToBePassedAround
       });
-      
+
       if(typeof callback == "function"){
         callback();
       }
@@ -204,7 +204,7 @@ define([
     setUpAndAssociateViewsAndModelsWithCurrentSession : function(callback){
       /*
        * Set up three session views
-       */ 
+       */
       if(this.currentSessionEditView){
         this.currentSessionEditView.destroy_view();
       }
@@ -212,7 +212,7 @@ define([
         model : this.model.get("currentSession")
       });
       this.currentSessionEditView.format = "leftSide";
-      
+
       if(this.currentSessionReadView){
         this.currentSessionReadView.destroy_view();
       }
@@ -220,7 +220,7 @@ define([
         model : this.model.get("currentSession")
       });
       this.currentSessionReadView.format = "leftSide";
-      
+
       //Only make a new session modal if it was not already created
       if(! this.sessionNewModalView){
         if (OPrime.debugMode) OPrime.debug("Creating an empty new session for the new Session modal.");
@@ -238,13 +238,13 @@ define([
       }
     },
     /*
-     * This function assures that whatever views on the dashboard that are coming from the user, are reassociated. it is currently after the user is synced from the server. 
+     * This function assures that whatever views on the dashboard that are coming from the user, are reassociated. it is currently after the user is synced from the server.
      * (which happens when the user authenticates so that if they were logged into another computer the can get their updated preferences.
      */
     associateCurrentUsersInternalModelsWithTheirViews : function(callback){
       this.userPreferenceView.model = this.model.get("authentication").get("userPrivate").get("prefs");
       this.userPreferenceView.model.bind("change:skin", this.userPreferenceView.renderSkin, this.userPreferenceView);
-      
+
       if(!this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")){
         this.model.get("authentication").get("userPrivate").get("prefs").set("unicodes", new InsertUnicodes());
         this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes").fill();
@@ -252,18 +252,18 @@ define([
       this.insertUnicodesView.model = this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes");
       this.insertUnicodesView.changeViewsOfInternalModels();
       this.insertUnicodesView.render();
-      
+
       this.hotkeyEditView.model = this.model.get("authentication").get("userPrivate").get("hotkeys");
       //TODO the hotkeys are probably not associated but because they are not finished, they can't be checked yet
-      
+
       this.modalEditUserView.changeViewsOfInternalModels();
       this.modalReadUserView.changeViewsOfInternalModels();
       this.modalReadUserView.render();
-      
+
       this.publicEditUserView.changeViewsOfInternalModels();
       this.publicReadUserView.changeViewsOfInternalModels();
       this.publicReadUserView.render();
-      
+
       if(typeof callback == "function"){
         callback();
       }
@@ -273,30 +273,30 @@ define([
       this.authView = new AuthenticationEditView({
         model : this.model.get("authentication")
       });
-      
-      /* 
+
+      /*
        * Set up the four user views
        */
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(this.model.get("authentication").get("userPublic") );
-      
+
       this.modalEditUserView = new UserEditView({
         model : this.model.get("authentication").get("userPrivate")
       });
       this.modalEditUserView.format = "modal";
       this.modalEditUserView.changeViewsOfInternalModels();
-      
+
       this.modalReadUserView = new UserReadView({
         model : this.model.get("authentication").get("userPrivate")
       });
       this.modalReadUserView.format = "modal";
       this.modalReadUserView.changeViewsOfInternalModels();
-      
+
 
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
         model : this.model.get("authentication").get("userPrivate").get("prefs")
       });
-      
+
       if(!this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")){
         this.model.get("authentication").get("userPrivate").get("prefs").set("unicodes", new InsertUnicodes());
         this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes").fill();
@@ -305,13 +305,13 @@ define([
       this.insertUnicodesView = new InsertUnicodesView({
         model : this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")
       });
-      this.insertUnicodesView.format = "minimized"; 
+      this.insertUnicodesView.format = "minimized";
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
         model : this.model.get("authentication").get("userPrivate").get("hotkeys")
       });
-      
+
       if(typeof callback == "function"){
         callback();
       }
@@ -337,7 +337,7 @@ define([
 //        if( this.currentPaginatedDataListDatumsView.filledBasedOnModels ){
 //          alert("The current paginated datum collection was filled iwth models. some info might be lost by doing this overwrite.")
 //        }
-//        
+//
 //        if( this.currentPaginatedDataListDatumsView.collection.length > this.model.get("currentDataList").get("datumIds").length){
 //          alert("The currentPaginatedDataListDatumsView already has more datum than the current datalist.");
 //        }
@@ -350,7 +350,7 @@ define([
         this.currentPaginatedDataListDatumsView.collection.reset(); //could also use backbone's reset which will empty the collection, or fill it with a new group.
 
       }
-      
+
       /*
        * This holds the ordered datums of the current data list, and is the important place to keep the
        * datum, it's ids will be saved into the currentdatalist when the currentdatalist is saved
@@ -361,8 +361,8 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "latex",
         childViewClass       : "row span12"
-      });  
-      
+      });
+
 
       this.corpusesReadView = new UpdatingCollectionView({
         collection : this.model.get("corpusesUserHasAccessTo"),
@@ -374,26 +374,26 @@ define([
        * fill collection with datum, this will render them at the same time.
        */
       this.currentPaginatedDataListDatumsView.fillWithIds(this.model.get("currentDataList").get("datumIds"), Datum);
-      
-      
+
+
       if(this.currentEditDataListView){
         this.currentEditDataListView.destroy_view();
       }
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
-      }); 
+      });
       this.currentEditDataListView.format = "minimized";
-      
-      
+
+
       if(this.currentReadDataListView){
         this.currentReadDataListView.destroy_view();
       }
       this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
-      });  
+      });
       this.currentReadDataListView.format = "minimized";
-      
-      
+
+
       if(typeof callback == "function"){
         callback();
       }
@@ -434,7 +434,7 @@ define([
         if($(e.target).attr("data-toggle") == "modal"){
           //let it close the dropdown and open the modal
         }else{
-          
+
           if(e){
             //dont close the dropdown
             e.stopPropagation();
@@ -505,7 +505,7 @@ define([
 //          e.stopPropagation();
 //        }
         var code = e.keyCode || e.which;
-        
+
         // code == 13 is the enter key
         if (code == 13) {
           if($("#search_box").val() == ""){
@@ -533,9 +533,9 @@ define([
           $(".sync-my-data").click();
         }
       }
-      
+
     },
-    
+
     /**
      * The Handlebars template rendered as the AppView.
      */
@@ -551,17 +551,17 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.el);
-      
+
       if (this.model == undefined) {
         alert("\tApp model is not defined, this is a very big bug. Refresh your browser, and let us know about this "+ OPrime.contactUs);
 
         return this;
       }
-      
+
       var jsonToRender = this.model.toJSON();
       jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
-      jsonToRender.locale_Differences_with_the_central_server = Locale.get("locale_Differences_with_the_central_server"); 
-      jsonToRender.locale_Instructions_to_show_on_dashboard = Locale.get("locale_Instructions_to_show_on_dashboard"); // Do we still use this instruction?  
+      jsonToRender.locale_Differences_with_the_central_server = Locale.get("locale_Differences_with_the_central_server");
+      jsonToRender.locale_Instructions_to_show_on_dashboard = Locale.get("locale_Instructions_to_show_on_dashboard"); // Do we still use this instruction?
       jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
       jsonToRender.locale_Need_save = Locale.get("locale_Need_save");
       jsonToRender.locale_Need_sync = Locale.get("locale_Need_sync");
@@ -574,9 +574,9 @@ define([
       jsonToRender.locale_View_Public_Profile_Tooltip = Locale.get("locale_View_Public_Profile_Tooltip");
       jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
       jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
-      jsonToRender.locale_to_beta_testers = Locale.get("locale_to_beta_testers"); // Do we still use this? 
+      jsonToRender.locale_to_beta_testers = Locale.get("locale_to_beta_testers"); // Do we still use this?
 
-      
+
       if (OPrime.debugMode) OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
       this.currentCorpusEditView.destroy_view();
       this.currentCorpusReadView.destroy_view();
@@ -587,17 +587,17 @@ define([
       this.currentEditDataListView.destroy_view();
       this.currentReadDataListView.destroy_view();
       this.currentPaginatedDataListDatumsView.destroy_view();
-      
+
       this.importView.destroy_view();
       this.searchEditView.destroy_view();
-      
-      
+
+
       this.destroy_view();
       if (OPrime.debugMode) OPrime.debug("Done Destroying the appview, so we dont get double events.");
 
       // Display the AppView
       this.setElement($("#app_view"));
-      
+
       jsonToRender.theme = "";
       var makeActivityFeedTransparent = app.get("authentication").get("userPrivate").get("prefs").get("transparentDashboard");
       if(makeActivityFeedTransparent != "false"){
@@ -622,7 +622,7 @@ define([
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
       }
-      
+
       /* Render the users prefered dashboard layout */
       this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
       var username = "";
@@ -657,25 +657,25 @@ define([
 
       this.renderReadonlyDashboardViews();
       this.insertUnicodesView.render();
-      
+
       //This forces the top search to render.
       this.searchEditView.format = "centreWell";
       this.searchEditView.render();
 
       this.corpusesReadView.el = $(this.el).find('.corpuses');
       this.corpusesReadView.render();
-      
+
       //put the version into the terminal, and into the user menu
-      OPrime.getVersion(function (ver) { 
+      OPrime.getVersion(function (ver) {
         app.set("version", ver);
         window.appView.term.VERSION_ = ver;
         $(".fielddb-version").html(ver);
       });
       this.exportView.render();
-     
+
       this.setTotalPouchDocs();
       this.setTotalBackboneDocs();
-      
+
       return this;
     },
     /**
@@ -688,7 +688,7 @@ define([
       this.renderEditableDatumsViews("centreWell");
       this.datumsEditView.showMostRecentDatum();
     },
-    
+
     // Display the Corpus Views
     renderEditableCorpusViews : function(format) {
       this.currentCorpusEditView.format = format;
@@ -698,7 +698,7 @@ define([
       this.currentCorpusReadView.format = format;
       this.currentCorpusReadView.render();
     },
-      
+
     // Display Session Views
     renderEditableSessionViews : function(format) {
       this.currentSessionEditView.format = format;
@@ -708,7 +708,7 @@ define([
       this.currentSessionReadView.format = format;
       this.currentSessionReadView.render();
     },
-    
+
     // Display Datums View
     renderEditableDatumsViews : function(format) {
       this.datumsEditView.format = format;
@@ -718,7 +718,7 @@ define([
       this.datumsReadView.format = format;
       this.datumsReadView.render();
     },
-    
+
     // Display DataList Views
     renderEditableDataListViews : function(format) {
       this.currentEditDataListView.format = format;
@@ -729,8 +729,8 @@ define([
       this.currentReadDataListView.render();
     },
 
-   
-    
+
+
     // Display User Views
     renderEditableUserViews : function(userid) {
       this.publicEditUserView.render();
@@ -750,29 +750,29 @@ define([
 //      ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
 //      ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
 //      ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
-//      
+//
 //      //all the replication etc happens in authView
 //      this.authView.loadSample(ids);
-//      
+//
 //      this.searchTopView.loadSample();
     },
-    
+
     /**
      * Save current state, synchronize the server and local databases.
-     * 
+     *
      * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
     backUpUser : function(callback) {
       this.model.backUpUser(callback);
     },
-    
+
     saveScreen : function() {
       // Save the Datum pages, if necessary
       this.datumsEditView.saveScreen();
     },
     /**
      * http://www.html5rocks.com/en/tutorials/dnd/basics/
-     * 
+     *
      * @param e event
      */
     dragUnicodeToField : function(e) {
@@ -782,9 +782,9 @@ define([
         e.stopPropagation(); // stops the browser from redirecting.
       }
       if (e.preventDefault) {
-        e.preventDefault(); 
+        e.preventDefault();
       }
-      
+
       //if it's a unicode dragging event
       if(window.appView.insertUnicodesView.dragSrcEl != null){
         // Don't do anything if dropping the same object we're dragging.
@@ -808,13 +808,13 @@ define([
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      
+
       $(this).addClass('over');
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
-      
+
       return false;
     },
-    
+
     /**
      * Helper functions to modify the status bars for unsaved and unsynced info
      */
@@ -862,13 +862,13 @@ define([
       if(this.totalPouchDocs.indexOf(id) == -1){
         this.totalPouchDocs.push(id);
       }
-      this.setTotalPouchDocs();      
+      this.setTotalPouchDocs();
     },
     addBackboneDoc : function(id){
       if(this.totalBackboneDocs.indexOf(id) == -1){
         this.totalBackboneDocs.push(id);
       }
-      this.setTotalBackboneDocs();      
+      this.setTotalBackboneDocs();
     },
     setTotalPouchDocs: function(){
       $(".unsynced-changes").attr("max", this.totalPouchDocs.length);
@@ -905,7 +905,7 @@ define([
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
         +"</div>");
-      
+
       /* Open the notificaitons area so they can see it */
       $("#notification_dropdown_trigger").dropdown("toggle");
       /* Close it 5 seconds later, if short text, 30 seconds if long text */
@@ -916,25 +916,25 @@ define([
       window.setTimeout(function(){
         $("#notification_dropdown_trigger").dropdown("toggle");
       }, numberOfMiliSecondsToWait);
-      
+
     },
     /**
-     * 
+     *
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
       if (OPrime.debugMode) OPrime.debug("DESTROYING APP VIEW ");
-      
+
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
-      $(this.el).removeData().unbind(); 
+      $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//    this.remove();  
+//    this.remove();
 //    Backbone.View.prototype.remove.call(this);
     }
-    
+
   });
 
   return AppView;
