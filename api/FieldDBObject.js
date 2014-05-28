@@ -36,8 +36,33 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   save: {
     value: function() {
+      var deffered = Q.defer(),
+        self = this;
+
       this._dateModified = Date.now();
-      //TODO return a promise from server/offline save etc
+      var url = this.id ? '/' + this.id : '';
+      url = this.url + url;
+      CORS.makeCORSRequest({
+        type: this.id ? 'PUT' : 'POST',
+        dataType: "json",
+        url: url,
+        data: this.toJSON()
+      }).then(function(result) {
+          console.log(result);
+          if (result.id) {
+            self.id = result.id;
+            self.rev = result.rev;
+            deffered.resolve(self);
+          } else {
+            deffered.reject();
+          }
+        },
+        function(reason) {
+          console.log(reason);
+          deffered.reject(reason);
+        });
+
+      return deffered.promise;
     }
   },
 
@@ -50,7 +75,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       id = this.id;
       if (!id) {
         Q.nextTick(function() {
-          deffered.reject({error: "Cannot fetch if there is no id"});
+          deffered.reject({
+            error: "Cannot fetch if there is no id"
+          });
         });
         return deffered.promise;
       }
@@ -85,6 +112,42 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   defaults: {
     value: {}
+  },
+
+  id: {
+    get: function() {
+      if (!this._id) {
+        this._id = "";
+      }
+      return this._id;
+    },
+    set: function(value) {
+      if (value === this._id) {
+        return;
+      }
+      if (!value) {
+        value = "";
+      }
+      this._id = value.trim();
+    }
+  },
+
+  rev: {
+    get: function() {
+      if (!this._rev) {
+        this._rev = "";
+      }
+      return this._rev;
+    },
+    set: function(value) {
+      if (value === this._rev) {
+        return;
+      }
+      if (!value) {
+        value = "";
+      }
+      this._rev = value.trim();
+    }
   },
 
   dbname: {
@@ -124,13 +187,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   toJSON: {
-    value: function toJSON() {
+    value: function() {
       var json = {},
         aproperty,
         underscorelessProperty;
       for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
           underscorelessProperty = aproperty.replace(/^_/, "");
+          if (underscorelessProperty === 'id' || underscorelessProperty === 'rev') {
+            underscorelessProperty = '_' + underscorelessProperty;
+          }
           json[underscorelessProperty] = this[aproperty];
         }
       }
@@ -139,6 +205,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           json[aproperty] = this.defaults[aproperty];
         }
       }
+      json._id = this.id;
+      delete json.id;
+      json._rev = this.rev;
+      delete json.rev;
+
       return json;
     }
   }
