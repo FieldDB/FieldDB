@@ -205,10 +205,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           json[aproperty] = this.defaults[aproperty];
         }
       }
-      json._id = this.id;
-      delete json.id;
-      json._rev = this.rev;
-      delete json.rev;
+      if (!json._id) {
+        delete json._id;
+      }
+      if (!json._rev) {
+        delete json._rev;
+      }
+
 
       return json;
     }
