@@ -40,6 +40,18 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         self = this;
 
       this._dateModified = Date.now();
+      if (!this.id) {
+        this._dateCreated = Date.now();
+        this.enteredByUser = {
+          browserVersion: navigator.appVersion
+        };
+      } else {
+        this.modifiedByUsers = this.modifiedByUsers || [];
+        this.modifiedByUsers.push({
+          browserVersion: navigator.appVersion
+        });
+      }
+
       var url = this.id ? '/' + this.id : '';
       url = this.url + url;
       CORS.makeCORSRequest({
