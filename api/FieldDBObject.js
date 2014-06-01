@@ -38,6 +38,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function() {
       var deffered = Q.defer(),
         self = this;
+      if (this.saving) {
+        console.warn("Save is in process....");
+        return;
+      }
+      this.saving = true;
 
       this._dateModified = Date.now();
       if (!this.id) {
@@ -61,6 +66,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         data: this.toJSON()
       }).then(function(result) {
           console.log(result);
+          self.saving = false;
           if (result.id) {
             self.id = result.id;
             self.rev = result.rev;
@@ -71,6 +77,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         },
         function(reason) {
           console.log(reason);
+          self.saving = false;
           deffered.reject(reason);
         });
 
