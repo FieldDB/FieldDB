@@ -1,12 +1,16 @@
 /* globals OPrime, window, $ */
-var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var AudioVideo = require("./../FieldDBObject").FieldDBObject;
+var AudioVideos = require('fielddb/api/Collection').Collection;
 var Collection = require('fielddb/api/Collection').Collection;
 var DataList = require("./../FieldDBObject").FieldDBObject;
-var Datum = rrequire("./../FieldDBObject").FieldDBObject;
+var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('fielddb/api/Collection').Collection;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var FileReader = {};
 var Session = require("./../FieldDBObject").FieldDBObject;
+var TextGrid = require('textgrid').TextGrid;
 var X2JS = {};
-
+var _ = {};
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
  *
@@ -21,6 +25,22 @@ var X2JS = {};
  * @extends FieldDBObject
  * @tutorial tests/CorpusTest.js
  */
+
+
+var getUnique = function(arrayObj) {
+  var u = {}, a = [];
+  for (var i = 0, l = arrayObj.length; i < l; ++i) {
+    if (u.hasOwnProperty(arrayObj[i])) {
+      continue;
+    }
+    if (arrayObj[i]) {
+      a.push(arrayObj[i]);
+      u[arrayObj[i]] = 1;
+    }
+  }
+  return a;
+};
+
 
 var Import = function Import(options) {
   console.log(options);
@@ -87,7 +107,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   readUri: {
     value: function(options) {
-      var text = 'hi text';
+      // var text = 'hi text';
 
       if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
         options.next();
@@ -315,7 +335,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       // This is continuing of 'split' issue in IE
       // remove all trailing space in each field
-      for (var i = 0; i < lineCSV.length; i++) {
+      var i,
+        j;
+      for (i = 0; i < lineCSV.length; i++) {
         lineCSV[i] = lineCSV[i].replace(/\s*$/g, "");
       }
 
@@ -323,10 +345,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         .replace(/^\s*|\s*$/g, "");
       var fstart = -1;
 
-      for (var i = 0; i < lineCSV.length; i++) {
+      for (i = 0; i < lineCSV.length; i++) {
         if (lineCSV[i].match(/"$/)) {
           if (fstart >= 0) {
-            for (var j = fstart + 1; j <= i; j++) {
+            for (j = fstart + 1; j <= i; j++) {
               lineCSV[fstart] = lineCSV[fstart] + "," + lineCSV[j];
               lineCSV[j] = "-DELETED-";
             }
@@ -336,10 +358,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         fstart = (lineCSV[i].match(/^"/)) ? i : fstart;
       }
 
-      var j = 0;
+      j = 0;
 
-      for (var i = 0; i < lineCSV.length; i++) {
-        if (lineCSV[i] != "-DELETED-") {
+      for (i = 0; i < lineCSV.length; i++) {
+        if (lineCSV[i] !== "-DELETED-") {
           CSV[j] = lineCSV[i];
           CSV[j] = CSV[j].replace(/^\s*|\s*$/g, ""); // remove leading & trailing
           // space
@@ -353,8 +375,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
   importXML: {
-    value: function(text, self, callback) {
-      alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+    value: function() {
+      throw "The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.";
     }
   },
   importElanXML: {
@@ -364,8 +386,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       window.text = text;
       var jsonObj = xmlParser.xml_str2json(text);
       if (OPrime.debugMode) {
-        OPrime.debug(jsonObj)
-      };
+        OPrime.debug(jsonObj);
+      }
 
       //add the header to the session
       //    HEADER can be put in the session and in the datalist
@@ -450,6 +472,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var matrix = [];
       var TIER = jsonObj.ANNOTATION_DOCUMENT.TIER;
 
+      var l,
+        annotation,
+        cell;
       //there are normally 8ish tiers, with different participants
       for (l in TIER) {
         //in those tiers are various amounts of annotations per participant
@@ -466,7 +491,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               matrix[annotation][annotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];
             }
           } catch (e) {
-            if (OPrime.debugMode) OPrime.debug("TIER " + l + " doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            if (OPrime.debugMode) {
+              OPrime.debug("TIER " + l + " doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            }
           }
 
           try {
@@ -474,7 +501,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               matrix[annotation][refannotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];
             }
           } catch (e) {
-            if (OPrime.debugMode) OPrime.debug("TIER " + l + " doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            if (OPrime.debugMode) {
+              OPrime.debug("TIER " + l + " doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            }
           }
 
         }
@@ -484,7 +513,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         var cells = [];
         //loop through all the column headings, find the data for that header and put it into a row of cells
         for (var h in header) {
-          var cell = matrix[d][header[h]];
+          cell = matrix[d][header[h]];
           if (cell) {
             cells.push(cell);
           } else {
@@ -516,7 +545,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   importTabbed: {
     value: function(text, self, callback) {
-      var rows = text.split("\n");
+      var rows = text.split("\n"),
+        l;
       if (rows.length < 3) {
         rows = text.split("\r");
         self.set("status", self.get("status", "Detected a \n line ending."));
@@ -592,7 +622,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               header.push(columnhead);
             } else {
               //add it to the current column head in the current datum, its just another line.
-              if (lines[1].trim() != "") {
+              if (lines[1].trim() !== "") {
                 matrix[currentDatum][columnhead] += lines[l];
               }
             }
@@ -600,7 +630,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
       }
       //only keep the unique headers
-      header = _.unique(header);
+      header = getUnique(header);
       var rows = [];
       for (var d in matrix) {
         var cells = [];
@@ -692,7 +722,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   addAudioVideoFile: {
     value: function(url) {
       if (!this.get("audioVideo")) {
-        this.set("audioVideo", new AudioVideos())
+        this.set("audioVideo", new AudioVideos());
       }
       this.get("audioVideo").add(new AudioVideo({
         filename: url.substring(url.lastIndexOf("/") + 1),
@@ -704,7 +734,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   importTextGrid: {
     value: function(text, self, callback) {
-      console.log(textgrid);
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var textgrid = TextGrid.textgridToIGT(text);
       var audioFileName = self.get("files")[0] ? self.get("files")[0].name : "copypastedtextgrid_unknownaudio";
@@ -717,12 +746,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var matrix = [],
         h,
         itemIndex,
-        pointIndex,
         intervalIndex,
-        point,
         row,
-        interval,
-        tierName;
+        interval;
       var header = [];
       var consultants = [];
       if (textgrid.isIGTNestedOrAlignedOrBySpeaker.probablyAligned) {
@@ -774,8 +800,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
         }
       }
-      header = _.unique(header);
-      consultants = _.unique(consultants);
+      header = getUnique(header);
+      consultants = getUnique(consultants);
       if (consultants.length > 0) {
         self.set("consultants", consultants.join(","));
       } else {
@@ -786,7 +812,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       for (var d in matrix) {
         var cells = [];
         //loop through all the column headings, find the data for that header and put it into a row of cells
-        for (var h in header) {
+        for (h in header) {
           var cell = matrix[d][header[h]];
           if (cell) {
             cells.push(cell);
@@ -816,11 +842,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
   importLatex: {
-    value: function(text, self, callback) {
-      alert("The app thinks this might be a LaTeX file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
-      if (typeof callback === "function") {
-        callback();
-      }
+    value: function() {
+      throw "The app thinks this might be a LaTeX file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.";
+      // if (typeof callback === "function") {
+      //   callback();
+      // }
     }
   },
   /**
@@ -835,8 +861,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * @param text
    */
   importTextIGT: {
-    value: function(text, self) {
-      var rows = text.split(/\n\n+/);
+    value: function(text, self, callback) {
+      var rows = text.split(/\n\n+/),
+        l;
+
       var macLineEndings = false;
       if (rows.length < 3) {
         rows = text.split("\r\r");
@@ -870,7 +898,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   importRawText: {
     value: function(text) {
       if (this.ignoreLineBreaksInRawText) {
-        text.replace(/\n+/, g, ' ').replace(/\r+/, g, ' ');
+        text.replace(/\n+/g, ' ').replace(/\r+/g, ' ');
       }
       this.datumCollection.add({
         label: 'orthography',
@@ -886,7 +914,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         OPrime.debug(files);
       }
       for (var i = 0, f; f = files[i]; i++) {
-        filedetails.push(escape(f.name), ' ', f.type || ' n/a', ' - ', f.size, ' bytes, last modified: ',
+        filedetails.push(window.escape(f.name), ' ', f.type || ' n/a', ' - ', f.size, ' bytes, last modified: ',
           f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : ' n/a');
 
         this.readFileIntoRawText(i);
@@ -937,7 +965,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * This function attempts to guess the format of the file/textarea, and calls the appropriate import handler.
    */
   guessFormatAndImport: {
-    value: function(fileIndex, callback) {
+    value: function(fileIndex) {
       var self = this;
       if (fileIndex === null) {
         fileIndex = 0;
