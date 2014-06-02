@@ -1,5 +1,4 @@
-var Import = require('../../api/import/Import').IMP;
-
+var Import = require('../../api/import/Import').Import;
 
 describe("api/import/Import", function() {
   it("should load", function() {
@@ -11,32 +10,40 @@ describe("api/import/Import", function() {
     expect(importer).toBeDefined();
   });
 
+});
+
+describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+  var importer;
+  beforeEach(function() {
+    importer = new Import();
+  });
+
+  it("should import raw text", function() {
+    expect(importer).toBeDefined();
+  });
 
 });
 
+
 describe("Import: as a morphologist I want to import my data from CSV", function() {
   it("should detect drag and drop", function() {
-
     expect(true).toBeTruthy();
-
   });
 
 });
 
 describe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
+
   it("should detect drag and drop", function() {
-
     expect(true).toBeTruthy();
-
   });
 
 });
 
 describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
+
   it("should detect drag and drop", function() {
-
     expect(true).toBeTruthy();
-
   });
 
 });

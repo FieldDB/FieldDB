@@ -1,9 +1,10 @@
 /* globals OPrime, window, $ */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var DataList = {};
-var Datum = {};
-var DatumFields = {};
-var Session = {};
+var Collection = require('fielddb/api/Collection').Collection;
+var DataList = require("./../FieldDBObject").FieldDBObject;
+var Datum = rrequire("./../FieldDBObject").FieldDBObject;
+var DatumFields = require('fielddb/api/Collection').Collection;
+var Session = require("./../FieldDBObject").FieldDBObject;
 var X2JS = {};
 
 /**
@@ -58,6 +59,138 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       dataList: DataList,
       datumFields: DatumFields,
       session: Session
+    }
+  },
+
+
+  addFileUri: {
+    value: function(options) {
+      if (!options) {
+        throw 'Options must be specified {}';
+      }
+      if (!options.uri) {
+        throw 'Uri must be specified in the options in order to import it' + JSON.stringify(options);
+      }
+
+      var datum = this.datumCollection.get(options.url);
+      if (!datum) {
+        datum = new Datum();
+
+      }
+
+      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        options.next();
+      }
+      return this;
+    }
+  },
+
+  readUri: {
+    value: function(options) {
+      var text = 'hi text';
+
+      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        options.next();
+      }
+      return this;
+    }
+  },
+
+  preprocess: {
+    value: function(options) {
+
+      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        options.next();
+      }
+      return this;
+    }
+  },
+
+  /**
+   * Executes the final import if the options indicate that it should be executed, by default it only produces a dry run.
+   *
+   * @type {Object}
+   */
+  import: {
+    value: function(options) {
+
+      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        options.next();
+      }
+      return this;
+    }
+  },
+
+  /**
+   * Holds meta data about the imported data list and references to the datum ids
+   *
+   * @type {Object}
+   */
+  datalist: {
+    get: function() {
+      if (!this._datalist) {
+        this._datalist = new FieldDBObject();
+      }
+      return this._datalist;
+    },
+    set: function(value) {
+      if (value === this._datalist) {
+        return;
+      }
+      this._datalist = value;
+    }
+  },
+
+  /**
+   * Holds the datum objects themselves while the import is in process
+   *
+   * @type {Object}
+   */
+  datumCollection: {
+    get: function() {
+      if (!this._datumCollection) {
+        this._datumCollection = new Collection({
+          inverted: false,
+          key: '_id'
+        });
+      }
+      return this._datumCollection;
+    },
+    set: function(value) {
+      if (value === this._datumCollection) {
+        return;
+      }
+      this._datumCollection = value;
+    }
+  },
+
+  /**
+   * Saves the import's state to file to be resumed or reviewed later
+   *
+   * @type {Object}
+   */
+  pause: {
+    value: function(options) {
+
+      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        options.next();
+      }
+      return this;
+    }
+  },
+
+  /**
+   * Resumes a previous import from a json object, or a uri containing json
+   *
+   * @type {Object}
+   */
+  resume: {
+    value: function(options) {
+
+      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        options.next();
+      }
+      return this;
     }
   },
 
@@ -701,7 +834,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    *
    * @param text
    */
-  importText: {
+  importTextIGT: {
     value: function(text, self) {
       var rows = text.split(/\n\n+/);
       var macLineEndings = false;
@@ -721,6 +854,28 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (typeof callback === "function") {
         callback();
       }
+    }
+  },
+  /**
+   * This function accepts text using double (or triple etc) spaces to indicate
+   * separate datum. Each line in the block is treated as a column in
+   * the table.
+   *
+   * If you have your data in Microsoft word or OpenOffice or plain
+   * text, then this will be the easiest format for you to import your
+   * data in.
+   *
+   * @param text
+   */
+  importRawText: {
+    value: function(text) {
+      if (this.ignoreLineBreaksInRawText) {
+        text.replace(/\n+/, g, ' ').replace(/\r+/, g, ' ');
+      }
+      this.datumCollection.add({
+        label: 'orthography',
+        value: text
+      });
     }
   },
   readFiles: {
@@ -819,7 +974,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         },
         handout: {
           confidence: 0,
-          importFunction: this.importText
+          importFunction: this.importTextIGT
         }
       };
 
