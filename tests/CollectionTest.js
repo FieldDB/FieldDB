@@ -71,6 +71,7 @@ describe('lib/Collection', function() {
   it('should load', function() {
     expect(Collection).toBeDefined();
   });
+
   describe('construction options', function() {
     var collection;
 
@@ -88,17 +89,24 @@ describe('lib/Collection', function() {
       expect(collection.primaryKey).toEqual('label');
     });
 
+    it('should use the primary key', function() {
+      expect(collection.find('utterance')[0]).toEqual(sampleCollection[0]);
+    });
+
     it('should accept inverted', function() {
       expect(collection.collection[0]).toEqual(sampleCollection[1]);
     });
 
-    it('should accept a primary key', function() {
-      expect(collection.find('utterance')[0]).toEqual(sampleCollection[0]);
+    it('should permit push to add to the bottom', function() {
+      collection.push(sampleCollection[2]);
+      expect(collection.collection[2]).toEqual(sampleCollection[2]);
     });
 
-    it('should accept a primary key', function() {
-      expect(collection.utterance).toEqual(sampleCollection[0]);
+    it('should permit unshift to add to the top', function() {
+      collection.unshift(sampleCollection[2]);
+      expect(collection.collection[0]).toEqual(sampleCollection[2]);
     });
+
 
   });
 

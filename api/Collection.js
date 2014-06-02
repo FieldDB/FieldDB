@@ -86,8 +86,13 @@ Collection.prototype = Object.create(Object.prototype, {
   },
 
   set: {
-    value: function(searchingFor, value, optionalKeyToIdentifyItem) {
+    value: function(searchingFor, value, optionalKeyToIdentifyItem, optionalInverted) {
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || '_id';
+
+      if (optionalInverted === null || optionalInverted === undefined) {
+        optionalInverted = this.inverted;
+      }
+
       for (var index in this.collection) {
         if (!this.collection.hasOwnProperty(index)) {
           continue;
@@ -96,13 +101,13 @@ Collection.prototype = Object.create(Object.prototype, {
           return this.collection[index] = value;
         }
       }
-      if (this.inverted) {
+      if (optionalInverted) {
         this.collection.unshift(value);
       } else {
         this.collection.push(value);
       }
       /* if not a reserved attribute, set on objcet for dot notation access */
-      if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON'].indexOf(searchingFor) === -1) {
+      if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON', 'length'].indexOf(searchingFor) === -1) {
         this[searchingFor] = value;
       } else {
         console.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
@@ -111,9 +116,33 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  length: {
+    get: function() {
+      if (this.collection) {
+        return this.collection.length;
+      } else {
+        return 0;
+      }
+    }
+  },
+
   add: {
     value: function(value) {
       this.set(value[this.primaryKey], value);
+    }
+  },
+
+  push: {
+    value: function(value) {
+      console.log(this.collection);
+      this.set(value[this.primaryKey], value, null, false);
+      console.log(this.collection);
+    }
+  },
+
+  unshift: {
+    value: function(value) {
+      this.set(value[this.primaryKey], value, null, true);
     }
   },
 
