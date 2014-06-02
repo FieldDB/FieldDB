@@ -1,15 +1,17 @@
 /* globals OPrime, window, $ */
 var AudioVideo = require("./../FieldDBObject").FieldDBObject;
-var AudioVideos = require('fielddb/api/Collection').Collection;
-var Collection = require('fielddb/api/Collection').Collection;
+var AudioVideos = require('./../Collection').Collection;
+var Collection = require('./../Collection').Collection;
+var CORS = require('./../CORS').CORS;
 var DataList = require("./../FieldDBObject").FieldDBObject;
 var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumFields = require('fielddb/api/Collection').Collection;
+var DatumFields = require('./../Collection').Collection;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var FileReader = {};
 var Session = require("./../FieldDBObject").FieldDBObject;
 var TextGrid = require('textgrid').TextGrid;
 var X2JS = {};
+var Q = require('q');
 var _ = {};
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
@@ -43,7 +45,7 @@ var getUnique = function(arrayObj) {
 
 
 var Import = function Import(options) {
-  console.log(options);
+  // console.log(options);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -85,6 +87,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   addFileUri: {
     value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
       if (!options) {
         throw 'Options must be specified {}';
       }
@@ -92,37 +97,86 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         throw 'Uri must be specified in the options in order to import it' + JSON.stringify(options);
       }
 
-      var datum = this.datumCollection.get(options.url);
-      if (!datum) {
-        datum = new Datum();
+      Q.nextTick(function() {
+        var datum = self.datumCollection.find(options.uri);
+        if (!datum) {
+          datum = new Datum();
+        }
+        options.datum = datum;
 
-      }
+        self.readUri(options)
+          .then(self.preprocess)
+          .then(self.import)
+          .then(function(result) {
+            if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+              options.next();
+            }
+            self.datumCollection.add(result.datum);
+            deferred.resolve(result);
+          }).fail(function(reason) {
+            deferred.reject(reason);
+          });
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
-        options.next();
-      }
-      return this;
+      });
+
+      return deferred.promise;
     }
   },
 
   readUri: {
     value: function(options) {
-      // var text = 'hi text';
+      var deferred = Q.defer(),
+        self = this;
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
-        options.next();
-      }
-      return this;
+      Q.nextTick(function() {
+        if (!options) {
+          throw 'Options must be specified {}';
+        }
+
+        if (options.readOptions) {
+          options.readOptions.readFileFunction(function(err, data) {
+            if (err) {
+              deferred.reject(err);
+            } else {
+              options.rawText = data;
+              deferred.resolve(options);
+            }
+          });
+        } else {
+          console.log('TODO reading url in browser');
+          CORS.makeCORSRequest({
+            type: 'GET',
+            dataType: 'json',
+            url: options.uri
+          }).then(function(data) {
+              console.log(data);
+              options.rawText = data;
+              deferred.resolve(options);
+            },
+            function(reason) {
+              console.log(reason);
+              deffered.reject(reason);
+            });
+        }
+
+      });
+      return deferred.promise;
+
     }
   },
 
   preprocess: {
     value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
-        options.next();
-      }
-      return this;
+      Q.nextTick(function() {
+        if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+          options.next();
+        }
+        deferred.resolve(options);
+      });
+      return deferred.promise;
     }
   },
 
@@ -133,11 +187,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   import: {
     value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
-        options.next();
-      }
-      return this;
+      Q.nextTick(function() {
+        if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+          options.next();
+        }
+        deferred.resolve(options);
+      });
+      return deferred.promise;
     }
   },
 
@@ -168,6 +227,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   datumCollection: {
     get: function() {
+      console.log('Getting Datum collection');
       if (!this._datumCollection) {
         this._datumCollection = new Collection({
           inverted: false,
