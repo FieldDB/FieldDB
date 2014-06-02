@@ -1,3 +1,19 @@
+var Import = require('../../api/import/Import').IMP;
+
+
+describe("api/import/Import", function() {
+  it("should load", function() {
+    expect(Import).toBeDefined();
+  });
+
+  it("should be able to instantiate an object", function() {
+    var importer = new Import();
+    expect(importer).toBeDefined();
+  });
+
+
+});
+
 describe("Import: as a morphologist I want to import my data from CSV", function() {
   it("should detect drag and drop", function() {
 
@@ -53,7 +69,7 @@ describe("Import Template", function() {
 // } catch(e) {}
 // this.router.navigate("elsewhere");
 // });
-//		  
+//
 // it("fires the index route with a blank hash", function() {
 // this.router.bind("route:index", this.routeSpy);
 // this.router.navigate("", true);
