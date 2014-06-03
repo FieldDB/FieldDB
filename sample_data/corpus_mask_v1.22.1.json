@@ -1,0 +1,106 @@
+{
+  "title": "Private Corpus",
+  "titleAsUrl": "private_corpus",
+  "description": "The details of this corpus are not public.",
+  "couchConnection": {
+    "protocol": "https://",
+    "domain": "ifielddevs.iriscouch.com",
+    "port": "443",
+    "pouchname": "sapir-firstcorpus",
+    "corpusid": "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1"
+  },
+  "pouchname": "sapir-firstcorpus",
+  "datumStates": [],
+  "datumFields": [{
+    "label": "judgement",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)",
+    "size": "3",
+    "userchooseable": "disabled"
+  }, {
+    "label": "utterance",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)",
+    "userchooseable": "disabled"
+  }, {
+    "label": "morphemes",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "gloss",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. ",
+    "userchooseable": "disabled"
+  }, {
+    "label": "translation",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. ",
+    "userchooseable": "disabled"
+  }],
+  "sessionFields": [{
+    "label": "dialect",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "language",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the langauge (or language family) if you would like to use it.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateElicited",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session took place.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "user",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateSEntered",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session was entered.",
+    "userchooseable": "disabled"
+  }],
+  "comments": [],
+  "dataLists": [],
+  "sessions": [],
+  "consultants": [],
+  "searchFields": [],
+  "permissions": [],
+  "_id": "corpus",
+  "_rev": "15-8827d30109002464115913b99384c1ab",
+  "id": "corpus"
+}

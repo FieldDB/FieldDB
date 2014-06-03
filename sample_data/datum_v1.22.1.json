@@ -1,0 +1,175 @@
+[{
+  "_id": "D3DE2F48-451F-4E1D-809C-AD5D9D7D8120",
+  "_rev": "2-0340541815a121228d17ea9e430deb8b",
+  "audioVideo": {
+    "URL": "",
+    "type": "audio"
+  },
+  "comments": [],
+  "dateEntered": "\"2012-09-26T13:51:49.463Z\"",
+  "dateModified": "\"2012-09-26T14:13:03.928Z\"",
+  "datumFields": [{
+    "label": "judgement",
+    "value": "Jaunpa much'a-sqa-mi ka-ni",
+    "mask": "Jaunpa much'a-sqa-mi ka-ni",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)",
+    "size": "3",
+    "userchooseable": "disabled"
+  }, {
+    "label": "utterance",
+    "value": "Jaunpa much'asqami kani.",
+    "mask": "Jaunpa much'asqami kani.",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)",
+    "userchooseable": "disabled"
+  }, {
+    "label": "morphemes",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "gloss",
+    "value": "Juan.gen kiss.pass.? be.1SG.",
+    "mask": "Juan.gen kiss.pass.? be.1SG.",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. ",
+    "userchooseable": "disabled"
+  }, {
+    "label": "translation",
+    "value": "`I was kissed by John.â",
+    "mask": "`I was kissed by John.â",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. ",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateElicited",
+    "value": "5/21/2010",
+    "mask": "5/21/2010",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This field came from file import ",
+    "userchooseable": ""
+  }, {
+    "label": "notes",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This field came from file import ",
+    "userchooseable": ""
+  }, {
+    "label": "checkedWithConsultant",
+    "value": "Lucia",
+    "mask": "Lucia",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This field came from file import ",
+    "userchooseable": ""
+  }, {
+    "label": "dialect",
+    "value": "Cusco Quechua",
+    "mask": "Cusco Quechua",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This field came from file import ",
+    "userchooseable": ""
+  }],
+  "datumStates": [{
+    "color": "success",
+    "showInSearchResults": "checked",
+    "selected": "",
+    "state": "Checked",
+    "consultant": {}
+  }, {
+    "color": "warning",
+    "showInSearchResults": "checked",
+    "selected": "",
+    "state": "To be checked",
+    "consultant": {}
+  }, {
+    "color": "important",
+    "showInSearchResults": "",
+    "selected": "selected",
+    "state": "Deleted",
+    "consultant": {}
+  }],
+  "datumTags": [{
+    "tag": "Passive"
+  }, {
+    "tag": "(Adjectival)"
+  }],
+  "pouchname": "sapir-firstcorpus",
+  "session": {
+    "sessionFields": [{
+      "label": "goal",
+      "value": "Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: Saturday, September 15, 2012",
+      "mask": "Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: Saturday, September 15, 2012",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This describes the goals of the session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "consultants",
+      "value": "Unknown",
+      "mask": "Unknown",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dialect",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "language",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the langauge (or language family) if you would like to use it.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateElicited",
+      "value": "Probably Prior to Saturday, September 15, 2012",
+      "mask": "Probably Prior to Saturday, September 15, 2012",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session took place.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "user",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateSEntered",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session was entered.",
+      "userchooseable": "disabled"
+    }],
+    "pouchname": "sapir-firstcorpus",
+    "comments": [],
+    "dateCreated": "\"2012-09-26T13:51:49.256Z\"",
+    "dateModified": "\"2012-09-26T13:51:49.257Z\"",
+    "_rev": "1-0e14ddfc0956bc08fcf522aafe8b3367",
+    "_id": "763568EE-BB24-48D2-BEAD-D46E22D11418"
+  }
+}]
