@@ -187,6 +187,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  pouchname: {
+    get: function() {
+      return this.dbname;
+    },
+    set: function(value) {
+      throw "Pouchname is deprecated, please use dbname instead.";
+    }
+  },
+
   version: {
     get: function() {
       if (!this._version) {
@@ -213,8 +222,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
           underscorelessProperty = aproperty.replace(/^_/, "");
-          if (underscorelessProperty === 'id' || underscorelessProperty === 'rev') {
-            underscorelessProperty = '_' + underscorelessProperty;
+          if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
+            underscorelessProperty = "_" + underscorelessProperty;
           }
           json[underscorelessProperty] = this[aproperty];
         }
@@ -231,10 +240,37 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete json._rev;
       }
 
+      return json;
+    }
+  },
+
+
+  /**
+   * Creates a deep copy of the object (not a reference)
+   * @return {[type]} a near-clone of the objcet
+   */
+  clone: {
+    value: function() {
+      var json = JSON.parse(JSON.stringify(this.toJSON()));
+
+      json.linkedData = json.linkedData || [];
+      var source = json._id;
+      if (json._rev) {
+        source = source + "?rev=" + json._rev;
+      }
+      json.linkedData.push({
+        uri: source,
+        relation: "clonedFrom"
+      });
+
+      /* Clear the current object's info which we shouldnt clone */
+      delete json._id;
+      delete json._rev;
 
       return json;
     }
   }
+
 });
 
 exports.FieldDBObject = FieldDBObject;
