@@ -1,6 +1,6 @@
 var Corpus = require("../../api/corpus/CorpusMask").CorpusMask;
 
-describe("Corpus ", function() {
+describe("CorpusMask ", function() {
 
 	it("should load", function() {
 		console.log(Corpus);
