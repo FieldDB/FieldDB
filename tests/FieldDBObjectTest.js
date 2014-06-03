@@ -73,16 +73,14 @@ describe("FieldDBObject", function() {
 
     it("should not introduce attributes that weren't in the original JSON", function() {
       var resultingJSON = penguin.toJSON();
-      resultingJSON.dateCreated = penguin.dateCreated; /* date created does get added */
       expect(resultingJSON).toEqual({
         body: [{
-          wings: 'flightless'
+          wings: "flightless"
         }, {
-          feet: 'good-for-walking'
+          feet: "good-for-walking"
         }],
-        _id: 'firstPenguin',
-        _rev: '2-123',
-        dateCreated: penguin.dateCreated,
+        _id: "firstPenguin",
+        _rev: "2-123",
         version: FieldDBObject.DEFAULT_VERSION
       });
 
@@ -93,6 +91,33 @@ describe("FieldDBObject", function() {
       expect(accessingAttributeShouldNotCauseItToExist).toEqual(FieldDBObject.DEFAULT_DATE);
 
       expect(penguin.toJSON()).toEqual(resultingJSON);
+    });
+
+
+    it("should be possible to request a smaller object with empty attributes removed if caller requests", function() {
+      var resultingJSON = new FieldDBObject({
+        body: [],
+        _id: "firstPenguin",
+        _rev: ""
+      }).toJSON(null, "removeEmptyAttributes");
+
+      expect(resultingJSON).toEqual({
+        _id: "firstPenguin",
+        version: FieldDBObject.DEFAULT_VERSION
+      });
+    });
+
+    it("should be possible to request a complete object if caller requests", function() {
+      var resultingJSON = new FieldDBObject({
+        dateCreated: 1,
+        _id: "123"
+      }).toJSON("complete");
+      expect(resultingJSON).toEqual({
+        _id: '123',
+        dbname: '',
+        version: 'v2.0.1',
+        dateCreated: 1
+      });
     });
 
     it("should not clone id and rev", function() {
@@ -126,8 +151,8 @@ describe("FieldDBObject", function() {
       var babypenguin = penguin.clone();
 
       expect(babypenguin.linkedData).toEqual([{
-        uri: 'firstPenguin?rev=2-123',
-        relation: 'clonedFrom'
+        uri: "firstPenguin?rev=2-123",
+        relation: "clonedFrom"
       }]);
     });
 

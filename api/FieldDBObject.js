@@ -16,7 +16,6 @@ var CORS = require("./CORS").CORS;
  */
 var FieldDBObject = function FieldDBObject(json) {
   // console.log("In parent an json", json);
-  Object.apply(this, arguments);
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
@@ -24,6 +23,7 @@ var FieldDBObject = function FieldDBObject(json) {
     // console.log("JSON: " + member);
     this[member] = json[member];
   }
+  Object.apply(this, arguments);
   if (!this.id) {
     this.dateCreated = Date.now();
   }
@@ -147,8 +147,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
 
-  defaults: {
-    value: {}
+  internalModels: {
+    value: {
+      _id: FieldDBObject.DEFAULT_STRING,
+      dbname: FieldDBObject.DEFAULT_STRING,
+      version: FieldDBObject.DEFAULT_VERSION,
+      dateCreated: FieldDBObject.DEFAULT_DATE,
+      // dateModified: FieldDBObject.DEFAULT_DATE
+    }
   },
 
   id: {
@@ -276,7 +282,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   toJSON: {
-    value: function() {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       var json = {},
         aproperty,
         underscorelessProperty;
@@ -290,14 +296,28 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
             underscorelessProperty = "_" + underscorelessProperty;
           }
-          json[underscorelessProperty] = this[aproperty];
+          if (!removeEmptyAttributes) {
+            json[underscorelessProperty] = this[aproperty];
+          } else {
+            if (!this[aproperty] || this[aproperty] === FieldDBObject.DEFAULT_COLLECTION || this[aproperty] === FieldDBObject.DEFAULT_ARRAY || this[aproperty] === FieldDBObject.DEFAULT_OBJECT || this[aproperty] === FieldDBObject.DEFAULT_STRING || this[aproperty] === FieldDBObject.DEFAULT_DATE || (this[aproperty].length !== undefined && this[aproperty].length === 0) || this[aproperty] === {}) {
+              // console.log(aproperty + " removeEmptyAttributes " + this[aproperty]);
+            } else {
+              // console.log(aproperty + " not empty " + JSON.stringify(this[aproperty]));
+              json[underscorelessProperty] = this[aproperty];
+            }
+          }
         }
       }
-      for (aproperty in this.defaults) {
-        if (!json[aproperty]) {
-          json[aproperty] = this.defaults[aproperty];
+
+      /* if the caller requests a complete object include the default for all defauls by calling get on them */
+      if (includeEvenEmptyAttributes) {
+        for (aproperty in this.internalModels) {
+          if (!json[aproperty]) {
+            json[aproperty] = this.internalModels[aproperty];
+          }
         }
       }
+
       if (!json._id) {
         delete json._id;
       }
@@ -315,7 +335,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    * @return {[type]} a near-clone of the objcet
    */
   clone: {
-    value: function() {
+    value: function(includeEvenEmptyAttributes) {
       var json = JSON.parse(JSON.stringify(this.toJSON()));
 
       json.linkedData = json.linkedData || [];
