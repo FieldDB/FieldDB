@@ -9,11 +9,15 @@
  * @tutorial tests/CollectionTest.js
  */
 var Collection = function Collection(json) {
-  for (var member in json) {
-    if (!json.hasOwnProperty(member)) {
-      continue;
+  if (Object.prototype.toString.call(json) === '[object Array]') {
+    this.collection = json;
+  } else {
+    for (var member in json) {
+      if (!json.hasOwnProperty(member)) {
+        continue;
+      }
+      this[member] = json[member];
     }
-    this[member] = json[member];
   }
   Object.apply(this, arguments);
 };

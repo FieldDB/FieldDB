@@ -107,6 +107,13 @@ describe('lib/Collection', function() {
       expect(collection.collection[0]).toEqual(sampleCollection[2]);
     });
 
+    it('should permit constrution with just an array', function() {
+      var newcollection = new Collection([
+        sampleCollection[0],
+        sampleCollection[1]
+      ]);
+      expect(collection.length).toEqual(2);
+    });
 
   });
 
