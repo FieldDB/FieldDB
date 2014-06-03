@@ -2,6 +2,62 @@
 var Q = require("q");
 var CORS = require("./CORS").CORS;
 
+
+// var FieldDBDate = function FieldDBDate(options) {
+//   // console.log("In FieldDBDate ", options);
+//   Object.apply(this, arguments);
+//   if (options) {
+//     this.timestamp = options;
+//   }
+// };
+
+// FieldDBDate.prototype = Object.create(Object.prototype, /** @lends FieldDBDate.prototype */ {
+//   constructor: {
+//     value: FieldDBDate
+//   },
+
+//   timestamp: {
+//     get: function() {
+//       return this._timestamp || 0;
+//     },
+//     set: function(value) {
+//       if (value === this._timestamp) {
+//         return;
+//       }
+//       if (!value) {
+//         delete this._timestamp;
+//         return;
+//       }
+//       if (value.replace) {
+//         try {
+//           value = value.replace(/["\\]/g, '');
+//           value = new Date(value);
+//           /* Use date modified as a timestamp if it isnt one already */
+//           value = value.getTime();
+//         } catch (e) {
+//           console.warn("Upgraded timestamp" + value);
+//         }
+//       }
+//       this._timestamp = value;
+//     }
+//   },
+
+//   toJSON: {
+//     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+//       var result = this._timestamp;
+
+//       if (includeEvenEmptyAttributes) {
+//         result = this._timestamp || 0;
+//       }
+
+//       if (removeEmptyAttributes && !this._timestamp) {
+//         result = 0;
+//       }
+//       return result;
+//     }
+//   }
+// });
+
 /**
  * @class An extendable object which can recieve new parameters on creation.
  *
@@ -21,6 +77,10 @@ var FieldDBObject = function FieldDBObject(json) {
       continue;
     }
     // console.log("JSON: " + member);
+    if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function") {
+      console.log("parsing member " + member, this.INTERNAL_MODELS[member]);
+      json[member] = new this.INTERNAL_MODELS[member](json[member]);
+    }
     this[member] = json[member];
   }
   Object.apply(this, arguments);
@@ -146,14 +206,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
-
-  internalModels: {
+  INTERNAL_MODELS: {
     value: {
       _id: FieldDBObject.DEFAULT_STRING,
+      _rev: FieldDBObject.DEFAULT_STRING,
       dbname: FieldDBObject.DEFAULT_STRING,
-      version: FieldDBObject.DEFAULT_VERSION,
+      version: FieldDBObject.DEFAULT_STRING,
       dateCreated: FieldDBObject.DEFAULT_DATE,
-      // dateModified: FieldDBObject.DEFAULT_DATE
+      dateModified: FieldDBObject.DEFAULT_DATE
     }
   },
 
@@ -281,6 +341,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  isEmpty: {
+    value: function(aproperty) {
+      var empty = !this[aproperty] || this[aproperty] === FieldDBObject.DEFAULT_COLLECTION || this[aproperty] === FieldDBObject.DEFAULT_ARRAY || this[aproperty] === FieldDBObject.DEFAULT_OBJECT || this[aproperty] === FieldDBObject.DEFAULT_STRING || this[aproperty] === FieldDBObject.DEFAULT_DATE || (this[aproperty].length !== undefined && this[aproperty].length === 0) || this[aproperty] === {};
+      /* TODO also return empty if it matches a default of any version of the model? */
+      return empty;
+    }
+  },
+
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       var json = {},
@@ -296,13 +364,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
             underscorelessProperty = "_" + underscorelessProperty;
           }
-          if (!removeEmptyAttributes) {
-            json[underscorelessProperty] = this[aproperty];
-          } else {
-            if (!this[aproperty] || this[aproperty] === FieldDBObject.DEFAULT_COLLECTION || this[aproperty] === FieldDBObject.DEFAULT_ARRAY || this[aproperty] === FieldDBObject.DEFAULT_OBJECT || this[aproperty] === FieldDBObject.DEFAULT_STRING || this[aproperty] === FieldDBObject.DEFAULT_DATE || (this[aproperty].length !== undefined && this[aproperty].length === 0) || this[aproperty] === {}) {
-              // console.log(aproperty + " removeEmptyAttributes " + this[aproperty]);
+          if (!removeEmptyAttributes || (removeEmptyAttributes && !this.isEmpty(aproperty))) {
+            if (this[aproperty] && typeof this[aproperty].toJSON === "function") {
+              json[underscorelessProperty] = this[aproperty].toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
             } else {
-              // console.log(aproperty + " not empty " + JSON.stringify(this[aproperty]));
               json[underscorelessProperty] = this[aproperty];
             }
           }
@@ -311,9 +376,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       /* if the caller requests a complete object include the default for all defauls by calling get on them */
       if (includeEvenEmptyAttributes) {
-        for (aproperty in this.internalModels) {
-          if (!json[aproperty]) {
-            json[aproperty] = this.internalModels[aproperty];
+        for (aproperty in this.INTERNAL_MODELS) {
+          if (!json[aproperty] && this.INTERNAL_MODELS) {
+            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
+              json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
+            } else {
+              json[aproperty] = this.INTERNAL_MODELS[aproperty];
+            }
           }
         }
       }
