@@ -1,6 +1,7 @@
 /* global window, OPrime */
-var Confidential = require("./../confidentiality_encryption/Confidential");
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var CorpusMask = require("./CorpusMask");
+var Collection = require('./../Collection').Collection;
 var Consultants = require('./../Collection').Collection;
 var DatumFields = require('./../Collection').Collection;
 var DatumStates = require('./../Collection').Collection;
@@ -10,6 +11,7 @@ var Session = require('./../FieldDBObject').FieldDBObject;
 var CORS = require('./../CORS').CORS;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Permissions = require('./../Collection').Collection;
+var Sessions = require('./../Collection').Collection;
 var Q = require('q');
 
 
@@ -61,13 +63,388 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
 
 
 var Corpus = function Corpus(options) {
-  console.log("Constructing corpus", options);
+  // console.log("Constructing corpus", options);
   FieldDBObject.apply(this, arguments);
 };
 
 Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
   constructor: {
     value: Corpus
+  },
+
+  title: {
+    get: function() {
+      return this._title || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._title) {
+        return;
+      }
+      if (!value) {
+        delete this._title;
+        return;
+      }
+      this._title = value.trim();
+      this._titleAsUrl = this._title;
+    }
+  },
+
+  titleAsUrl: {
+    get: function() {
+      return this._titleAsUrl || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._titleAsUrl) {
+        return;
+      }
+      if (!value) {
+        delete this._titleAsUrl;
+        return;
+      }
+      this._titleAsUrl = this._titleAsUrl.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_"); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
+    }
+  },
+
+  description: {
+    get: function() {
+      return this._description || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._description) {
+        return;
+      }
+      if (!value) {
+        delete this._description;
+        return;
+      }
+      this._description = value.trim();
+    }
+  },
+
+  couchConnection: {
+    get: function() {
+      throw "couchConnection is deprecated";
+    },
+    set: function(value) {
+      console.warn("couchConnection is deprecated");
+    }
+  },
+
+  replicatedCorpusUrls: {
+    get: function() {
+      return this._replicatedCorpusUrls || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._replicatedCorpusUrls) {
+        return;
+      }
+      if (!value) {
+        delete this._replicatedCorpusUrls;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._replicatedCorpusUrls = value;
+    }
+  },
+
+  olacExportConnections: {
+    get: function() {
+      return this._olacExportConnections || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._olacExportConnections) {
+        return;
+      }
+      if (!value) {
+        delete this._olacExportConnections;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._olacExportConnections = value;
+    }
+  },
+
+  termsOfUse: {
+    get: function() {
+      return this._termsOfUse || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._termsOfUse) {
+        return;
+      }
+      if (!value) {
+        delete this._termsOfUse;
+        return;
+      }
+      this._termsOfUse = value;
+    }
+  },
+
+  license: {
+    get: function() {
+      return this._license || {};
+    },
+    set: function(value) {
+      if (value === this._license) {
+        return;
+      }
+      if (!value) {
+        delete this._license;
+        return;
+      }
+      this._license = value;
+    }
+  },
+
+  copyright: {
+    get: function() {
+      return this._copyright || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._copyright) {
+        return;
+      }
+      if (!value) {
+        delete this._copyright;
+        return;
+      }
+      this._copyright = value.trim();
+    }
+  },
+
+  sessions: {
+    get: function() {
+      return this.unserializedSessions || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this.unserializedSessions) {
+        return;
+      }
+      if (!value) {
+        delete this.unserializedSessions;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Sessions(value);
+        }
+      }
+      this.unserializedSessions = value;
+    }
+  },
+
+  dateOfLastDatumModifiedToCheckForOldSession: {
+    get: function() {
+      var timestamp = 0;
+      if (this.sessions && this.sessions.length > 0) {
+        var mostRecentSession = this.sessions[this.sessions.length - 1];
+        if (mostRecentSession.dateModified) {
+          timestamp = mostRecentSession.dateModified;
+        }
+      }
+      return new Date(timestamp);
+    }
+  },
+
+
+  confidential: {
+    get: function() {
+      return this._confidential || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._confidential) {
+        return;
+      }
+      if (!value) {
+        delete this._confidential;
+        return;
+      }
+      this._confidential = value;
+    }
+  },
+
+  publicCorpus: {
+    get: function() {
+      return this._publicCorpus || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._publicCorpus) {
+        return;
+      }
+      if (!value) {
+        delete this._publicCorpus;
+        return;
+      }
+      if (value !== "Public" && value !== "Private") {
+        console.warn("Corpora can be either Public or Private");
+        value = "Private";
+      }
+      this._publicCorpus = value;
+    }
+  },
+
+  _collection: {
+    value: "private_corpuses"
+  },
+  collection: {
+    get: function() {
+      return this._collection;
+    }
+  },
+
+  teamExternalObject: {
+    value: null
+  },
+  team: {
+    get: function() {
+      return this.teamExternalObject;
+    },
+    set: function(value) {
+      if (value === this.teamExternalObject) {
+        return;
+      }
+      this.teamExternalObject = value;
+    }
+  },
+
+  publicSelfExternalObject: {
+    value: null
+  },
+  publicSelf: {
+    get: function() {
+      return this.publicSelfExternalObject;
+    },
+    set: function(value) {
+      if (value === this.publicSelfExternalObject) {
+        return;
+      }
+      this.publicSelfExternalObject = value;
+    }
+  },
+
+  comments: {
+    get: function() {
+      return this._comments || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._comments) {
+        return;
+      }
+      if (!value) {
+        delete this._comments;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._comments = value;
+    }
+  },
+
+  validationStati: {
+    get: function() {
+      return this._validationStati || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._validationStati) {
+        return;
+      }
+      if (!value) {
+        delete this._validationStati;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._validationStati = value;
+    }
+  },
+
+  tags: {
+    get: function() {
+      return this._tags || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._tags) {
+        return;
+      }
+      if (!value) {
+        delete this._tags;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._tags = value;
+    }
+  },
+
+  datumFields: {
+    get: function() {
+      return this._datumFields || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._datumFields) {
+        return;
+      }
+      if (!value) {
+        delete this._datumFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._datumFields = value;
+    }
+  },
+
+  conversationFields: {
+    get: function() {
+      return this._conversationFields || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._conversationFields) {
+        return;
+      }
+      if (!value) {
+        delete this._conversationFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._conversationFields = value;
+    }
+  },
+
+  sessionFields: {
+    get: function() {
+      return this._sessionFields || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._sessionFields) {
+        return;
+      }
+      if (!value) {
+        delete this._sessionFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._sessionFields = value;
+    }
   },
 
   loadOrCreateCorpusByPouchName: {
@@ -195,19 +572,33 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-  // Internal models: used by the parse function
-  internalModels: {
+  INTERNAL_MODELS: {
     value: {
+      _id: FieldDBObject.DEFAULT_STRING,
+      _rev: FieldDBObject.DEFAULT_STRING,
+      dbname: FieldDBObject.DEFAULT_STRING,
+      version: FieldDBObject.DEFAULT_STRING,
+      dateCreated: FieldDBObject.DEFAULT_DATE,
+      dateModified: FieldDBObject.DEFAULT_DATE,
+      comments: Comments,
+
+      title: FieldDBObject.DEFAULT_STRING,
+      titleAsUrl: FieldDBObject.DEFAULT_STRING,
+      description: FieldDBObject.DEFAULT_STRING,
+      termsOfUse: FieldDBObject,
+      license: FieldDBObject,
+      copyright: FieldDBObject.DEFAULT_STRING,
+      replicatedCorpusUrls: Collection,
+      olacExportConnections: Collection,
+      publicCorpus: FieldDBObject.DEFAULT_STRING,
       confidential: Confidential,
-      consultants: Consultants,
-      datumStates: DatumStates,
+
+      validationStati: DatumStates,
+      tags: Collection,
+
       datumFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
-      searchFields: DatumFields,
-      publicSelf: CorpusMask,
-      comments: Comments,
-      team: UserMask
     }
   },
 
@@ -302,7 +693,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       newCorpusJson.description = "Copy of: " + newCorpusJson.description;
 
       newCorpusJson.pouchname = newCorpusJson.pouchname + "copy";
-      newCorpusJson.replicatedCouchConnections = newCorpusJson.replicatedCouchConnections.map(function(remote) {
+      newCorpusJson.replicatedCorpusUrls = newCorpusJson.replicatedCorpusUrls.map(function(remote) {
         return remote.replace(new RegExp(this.pouchname, "g"), newCorpusJson.pouchname);
       });
 
@@ -368,17 +759,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       throw "I dont know how to prepareANewOfflinePouch";
     }
   },
-  team: {
-    get: function() {
-      return this.teamExternalObject;
-    },
-    set: function(value) {
-      if (value === this.teamExternalObject) {
-        return;
-      }
-      this.teamExternalObject = value;
-    }
-  },
+
   /**
    * Accepts two functions to call back when save is successful or
    * fails. If the fail callback is not overridden it will alert
@@ -601,25 +982,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
           }
         }
       }
-    }
-  },
-
-  title: {
-    get: function() {
-      if (!this._title) {
-        this._title = "";
-      }
-      return this._title;
-    },
-    set: function(value) {
-      if (value === this._title) {
-        return;
-      }
-      if (!value) {
-        value = "";
-      }
-      this._title = value.trim();
-      this._titleAsUrl = this._title.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_"); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
     }
   },
 
