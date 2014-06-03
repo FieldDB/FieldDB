@@ -104,7 +104,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   save: {
     value: function() {
-      var deffered = Q.defer(),
+      var deferred = Q.defer(),
         self = this;
       if (this.fetching) {
         console.warn("Fetching is in process, can't save right now...");
@@ -145,35 +145,35 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           if (result.id) {
             self.id = result.id;
             self.rev = result.rev;
-            deffered.resolve(self);
+            deferred.resolve(self);
           } else {
-            deffered.reject();
+            deferred.reject();
           }
         },
         function(reason) {
           console.log(reason);
           self.saving = false;
-          deffered.reject(reason);
+          deferred.reject(reason);
         });
 
-      return deffered.promise;
+      return deferred.promise;
     }
   },
 
   fetch: {
     value: function(optionalBaseUrl) {
-      var deffered = Q.defer(),
+      var deferred = Q.defer(),
         id,
         self;
 
       id = this.id;
       if (!id) {
         Q.nextTick(function() {
-          deffered.reject({
+          deferred.reject({
             error: "Cannot fetch if there is no id"
           });
         });
-        return deffered.promise;
+        return deferred.promise;
       }
       self = this;
 
@@ -194,15 +194,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             }
             self[aproperty] = result[aproperty];
           }
-          deffered.resolve(self);
+          deferred.resolve(self);
         },
         function(reason) {
           self.fetching = false;
           console.log(reason);
-          deffered.reject(reason);
+          deferred.reject(reason);
         });
 
-      return deffered.promise;
+      return deferred.promise;
     }
   },
 

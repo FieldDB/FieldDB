@@ -22,19 +22,19 @@ FieldDBConnection.connection = {
 };
 
 FieldDBConnection.connect = function(options) {
-  var deffered = Q.defer();
+  var deferred = Q.defer();
 
   if (this.timestamp && this.connection.couchUser && this.connection.fieldDBUser && Date.now() - this.timestamp < 1000) {
     console.log("connection information is not old.");
     Q.nextTick(function() {
-      deffered.resolve(this.connection);
+      deferred.resolve(this.connection);
     });
-    return deffered.promise;
+    return deferred.promise;
   }
 
-  var defferedLocal = Q.defer(),
-    defferedCentral = Q.defer(),
-    promises = [defferedLocal.promise, defferedCentral.promise],
+  var deferredLocal = Q.defer(),
+    deferredCentral = Q.defer(),
+    promises = [deferredLocal.promise, deferredCentral.promise],
     self = this;
 
   // Find out if this user is able to work offline with a couchdb
@@ -49,7 +49,7 @@ FieldDBConnection.connect = function(options) {
     if (!response || !response.userCtx) {
       self.connection.localCouch.connected = false;
       self.connection.localCouch.timestamp = Date.now();
-      defferedLocal.reject({
+      deferredLocal.reject({
         eror: 'Recieved an odd response from the local couch. Can\'t contact the local couchdb, it might be off or it might not be installed. This device can work online only.'
       });
       return;
@@ -69,11 +69,11 @@ FieldDBConnection.connect = function(options) {
         url: self.connection.localCouch.url + '/_session'
       }).then(function() {
         console.log('Logged the user in as the public user so they can only see public info.');
-        defferedLocal.resolve(response);
+        deferredLocal.resolve(response);
 
       }).fail(function(reason) {
         console.log('The public user doesnt exist on this couch...', reason);
-        defferedLocal.reject(reason);
+        deferredLocal.reject(reason);
       });
     }
 
@@ -82,7 +82,7 @@ FieldDBConnection.connect = function(options) {
     console.log(reason);
     self.connection.localCouch.connected = false;
     self.connection.localCouch.timestamp = Date.now();
-    defferedLocal.reject(reason);
+    deferredLocal.reject(reason);
   });
 
   // Find out if this user is able to work online with the central api
@@ -97,7 +97,7 @@ FieldDBConnection.connect = function(options) {
     if (!response || !response.user) {
       self.connection.centralAPI.connected = false;
       self.connection.centralAPI.timestamp = Date.now();
-      defferedCentral.reject({
+      deferredCentral.reject({
         eror: 'Received an odd response from the api. Can\'t contact the api server. This is a bug which must be reported.'
       });
       return;
@@ -117,11 +117,11 @@ FieldDBConnection.connect = function(options) {
         url: self.connection.centralAPI.url + '/users'
       }).then(function() {
         console.log('Logged the user in as the public user so they can only see public info.');
-        defferedCentral.resolve(response);
+        deferredCentral.resolve(response);
 
       }).fail(function(reason) {
         console.log('The public user doesn\'t exist on this couch...', reason);
-        defferedCentral.reject(reason);
+        deferredCentral.reject(reason);
       });
     }
 
@@ -130,15 +130,15 @@ FieldDBConnection.connect = function(options) {
     console.log(reason);
     self.connection.centralAPI.connected = false;
     self.connection.centralAPI.timestamp = Date.now();
-    defferedCentral.reject(reason);
+    deferredCentral.reject(reason);
   });
 
   Q.allSettled(promises).then(function(results) {
     console.log(results);
-    deffered.resolve(this.connection);
+    deferred.resolve(this.connection);
   });
 
-  return deffered.promise;
+  return deferred.promise;
 
 };
 

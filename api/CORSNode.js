@@ -9,7 +9,7 @@ CORS.bug = function(message) {
 };
 
 CORS.makeCORSRequest = function(options) {
-  var deffered = Q.defer();
+  var deferred = Q.defer();
   var data = options.data;
   if (!options.method) {
     options.method = options.type || "GET";
@@ -57,18 +57,18 @@ CORS.makeCORSRequest = function(options) {
         response = {
           error: output
         };
-        deffered.reject(response);
+        deferred.reject(response);
         return;
       }
       console.log("Server response, ", response);
-      deffered.resolve(response);
+      deferred.resolve(response);
     });
   });
 
   req.on('error', function(err) {
     console.log('Error requesting ' + JSON.stringify(urlObject));
     console.log(err);
-    deffered.reject(err);
+    deferred.reject(err);
   });
 
   if (data) {
@@ -80,7 +80,7 @@ CORS.makeCORSRequest = function(options) {
     req.end();
   }
 
-  return deffered.promise;
+  return deferred.promise;
 };
 
 if (exports) {

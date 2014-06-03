@@ -13,6 +13,7 @@ var TextGrid = require('textgrid').TextGrid;
 var X2JS = {};
 var Q = require('q');
 var _ = {};
+
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
  *
@@ -155,7 +156,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             },
             function(reason) {
               console.log(reason);
-              deffered.reject(reason);
+              deferred.reject(reason);
             });
         }
 

@@ -34,7 +34,7 @@
     },
     fetchAllDocuments: {
       value: function() {
-        var deffered = Q.defer(),
+        var deferred = Q.defer(),
           self = this;
 
         if (!this.url) {
@@ -46,9 +46,9 @@
           console.log(reason);
           self.register().then(function() {
             self.fetchAllDocuments().then(function(documents) {
-              deffered.resolve(documents);
+              deferred.resolve(documents);
             }, function(reason) {
-              deffered.reject(reason);
+              deferred.reject(reason);
             });
           });
         };
@@ -70,22 +70,22 @@
             url: self.url + "/" + self.dbname + "/" + self.allDocumentsMapReduce
           }).then(function(result) {
             if (result.rows && result.rows.length) {
-              deffered.resolve(result.rows.map(function(doc) {
+              deferred.resolve(result.rows.map(function(doc) {
                 return doc.value;
               }));
             } else {
-              deffered.resolve([]);
+              deferred.resolve([]);
             }
           }, cantLogIn);
 
 
         }, cantLogIn);
-        return deffered.promise;
+        return deferred.promise;
       }
     },
     register: {
       value: function() {
-        var deffered = Q.defer(),
+        var deferred = Q.defer(),
           self = this;
 
         if (!this.url) {
@@ -112,23 +112,23 @@
                 }
               }).then(function(session) {
                 console.log(session);
-                deffered.resolve(result.user);
+                deferred.resolve(result.user);
               }, function() {
                 console.log("Failed to login ");
-                deffered.reject();
+                deferred.reject();
               });
             } else {
-              deffered.reject();
+              deferred.reject();
             }
           },
           function(reason) {
             console.log(reason);
-            deffered.reject(reason);
+            deferred.reject(reason);
           }).fail(function(reason) {
           console.log(reason);
-          deffered.reject(reason);
+          deferred.reject(reason);
         });
-        return deffered.promise;
+        return deferred.promise;
       }
     }
   });
