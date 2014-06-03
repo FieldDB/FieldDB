@@ -1,3 +1,4 @@
+/* globals window */
 var Q = require("q");
 var CORS = require("./CORS").CORS;
 
@@ -15,18 +16,25 @@ var CORS = require("./CORS").CORS;
  */
 var FieldDBObject = function FieldDBObject(json) {
   // console.log("In parent an json", json);
+  Object.apply(this, arguments);
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
+    // console.log("JSON: " + member);
     this[member] = json[member];
   }
-  //force version to be set if it wasn't pre-set
-  if (!this.version) {
-    this.version = "";
+  if (!this.id) {
+    this.dateCreated = Date.now();
   }
-  Object.apply(this, arguments);
 };
+
+FieldDBObject.DEFAULT_STRING = "";
+FieldDBObject.DEFAULT_OBJECT = "";
+FieldDBObject.DEFAULT_ARRAY = [];
+FieldDBObject.DEFAULT_COLLECTION = [];
+FieldDBObject.DEFAULT_VERSION = "v2.0.1";
+FieldDBObject.DEFAULT_DATE = 0;
 
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
@@ -38,22 +46,29 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function() {
       var deffered = Q.defer(),
         self = this;
+      if (this.fetching) {
+        console.warn("Fetching is in process, can't save right now...");
+        return;
+      }
       if (this.saving) {
-        console.warn("Save is in process....");
+        console.warn("Save is in process...");
         return;
       }
       this.saving = true;
+
+      //update to this version
+      this.version = FieldDBObject.DEFAULT_VERSION;
 
       this._dateModified = Date.now();
       if (!this.id) {
         this._dateCreated = Date.now();
         this.enteredByUser = {
-          browserVersion: navigator.appVersion
+          browserVersion: window.navigator.appVersion
         };
       } else {
         this.modifiedByUsers = this.modifiedByUsers || [];
         this.modifiedByUsers.push({
-          browserVersion: navigator.appVersion
+          browserVersion: window.navigator.appVersion
         });
       }
 
@@ -101,33 +116,36 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return deffered.promise;
       }
       self = this;
+
+      this.fetching = true;
       CORS.makeCORSRequest({
         type: 'GET',
         dataType: "json",
         url: optionalBaseUrl + "/" + this.dbname + "/" + id
       }).then(function(result) {
-        for (var aproperty in result) {
-          if (!result.hasOwnProperty(aproperty)) {
-            continue;
+          self.fetching = false;
+
+          for (var aproperty in result) {
+            if (!result.hasOwnProperty(aproperty)) {
+              continue;
+            }
+            if (self[aproperty] !== result[aproperty]) {
+              console.warn("Overwriting " + aproperty + " : ", self[aproperty], " ->", result[aproperty]);
+            }
+            self[aproperty] = result[aproperty];
           }
-          self[aproperty] = result[aproperty];
-        }
-        deffered.resolve(self);
-      }, function(reason) {
-        console.log(reason);
-        deffered.reject(reason);
-      }).fail(function(reason) {
-        console.log(reason);
-        deffered.reject(reason);
-      });
+          deffered.resolve(self);
+        },
+        function(reason) {
+          self.fetching = false;
+          console.log(reason);
+          deffered.reject(reason);
+        });
 
       return deffered.promise;
     }
   },
 
-  defaultVersion: {
-    value: "v2.0.1"
-  },
 
   defaults: {
     value: {}
@@ -135,17 +153,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   id: {
     get: function() {
-      if (!this._id) {
-        this._id = "";
-      }
-      return this._id;
+      return this._id || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       if (value === this._id) {
         return;
       }
       if (!value) {
-        value = "";
+        delete this._id;
+        return;
       }
       this._id = value.trim();
     }
@@ -153,17 +169,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   rev: {
     get: function() {
-      if (!this._rev) {
-        this._rev = "";
-      }
-      return this._rev;
+      return this._rev || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       if (value === this._rev) {
         return;
       }
       if (!value) {
-        value = "";
+        delete this._rev;
+        return;
       }
       this._rev = value.trim();
     }
@@ -171,17 +185,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   dbname: {
     get: function() {
-      if (!this._dbname) {
-        this._dbname = "";
-      }
-      return this._dbname;
+      return this._dbname || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       if (value === this._dbname) {
         return;
       }
       if (!value) {
-        value = "";
+        delete this._dbname;
+        return;
       }
       this._dbname = value.trim();
     }
@@ -191,26 +203,75 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     get: function() {
       return this.dbname;
     },
-    set: function(value) {
-      throw "Pouchname is deprecated, please use dbname instead.";
+    set: function() {
+      console.warn("Pouchname is deprecated, please use dbname instead.");
     }
   },
 
   version: {
     get: function() {
-      if (!this._version) {
-        this._version = this.defaultVersion;
-      }
-      return this._version;
+      return this._version || FieldDBObject.DEFAULT_VERSION;
     },
     set: function(value) {
       if (value === this._version) {
         return;
       }
       if (!value) {
-        value = this.defaultVersion;
+        value = FieldDBObject.DEFAULT_VERSION;
       }
       this._version = value.trim();
+    }
+  },
+
+  dateCreated: {
+    get: function() {
+      return this._dateCreated || FieldDBObject.DEFAULT_DATE;
+    },
+    set: function(value) {
+      if (value === this._dateCreated) {
+        return;
+      }
+      if (!value) {
+        delete this._dateCreated;
+        return;
+      }
+      if (value.replace) {
+        try {
+          value = value.replace(/["\\]/g, '');
+          value = new Date(value);
+          /* Use date modified as a timestamp if it isnt one already */
+          value = value.getTime();
+        } catch (e) {
+          console.warn("Upgraded dateCreated" + value);
+        }
+      }
+      this._dateCreated = value;
+    }
+  },
+
+  dateModified: {
+    get: function() {
+      return this._dateModified || FieldDBObject.DEFAULT_DATE;
+    },
+    set: function(value) {
+      if (value === this._dateModified) {
+        return;
+      }
+      if (!value) {
+        delete this._dateModified;
+        return;
+      }
+      if (value.replace) {
+        try {
+          value = value.replace(/["\\]/g, '');
+          value = new Date(value);
+          /* Use date modified as a timestamp if it isnt one already */
+          value = value.getTime();
+        } catch (e) {
+          console.warn("Upgraded dateCreated" + value);
+        }
+      }
+      this._dateModified = value;
     }
   },
 
@@ -219,6 +280,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var json = {},
         aproperty,
         underscorelessProperty;
+
+      /* this object has been updated to this version */
+      this.version = this.version;
+
       for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
           underscorelessProperty = aproperty.replace(/^_/, "");
