@@ -47,7 +47,7 @@ describe("FieldDBObject", function() {
 
   });
 
-  describe("FieldDBObject Serialization", function() {
+  describe("serialization", function() {
     var penguin;
     var body = [{
       wings: "flightless"
@@ -113,10 +113,11 @@ describe("FieldDBObject", function() {
         _id: "123"
       }).toJSON("complete");
       expect(resultingJSON).toEqual({
+        dateCreated: 1,
         _id: '123',
-        dbname: '',
         version: 'v2.0.1',
-        dateCreated: 1
+        dbname: '',
+        dateModified: 0
       });
     });
 
