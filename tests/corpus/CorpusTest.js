@@ -1,8 +1,16 @@
+var Corpus = require("../../api/corpus/Corpus").CorpusMask;
+
+
+describe("Corpus", function(){
+  it("should be load", function() {
+    expect(Corpus).toBeDefined();
+  });
+});
+
 describe("Corpus: as a team we want to be able to go back in time in the corpus revisions", function() {
   it("should be able to import from GitHub repository", function() {
     expect(true).toBeTruthy();
   });
-
 });
 
 describe("Corpus: as a user I want to be able to import via drag and drop", function() {
