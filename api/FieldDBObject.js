@@ -407,13 +407,20 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function(includeEvenEmptyAttributes) {
       var json = JSON.parse(JSON.stringify(this.toJSON()));
 
-      json.linkedData = json.linkedData || [];
+      var relatedData;
+      if (json.datumFields && json.datumFields.relatedData) {
+        relatedData = json.datumFields.relatedData.json.relatedData || []
+      } else if (json.relatedData) {
+        relatedData = json.relatedData;
+      } else {
+        json.relatedData = relatedData = [];
+      }
       var source = json._id;
       if (json._rev) {
         source = source + "?rev=" + json._rev;
       }
-      json.linkedData.push({
-        uri: source,
+      relatedData.push({
+        URI: source,
         relation: "clonedFrom"
       });
 
