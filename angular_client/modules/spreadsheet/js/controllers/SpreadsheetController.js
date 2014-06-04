@@ -18,7 +18,7 @@ define(
 
     function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
 
-      $rootScope.appVersion = "2.0.1ss";
+      $rootScope.appVersion = "2.2.2ss";
       /* Modal controller TODO could move somewhere where the search is? */
       $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -762,6 +762,8 @@ define(
 
 
           $scope.loadSessions();
+          $scope.loadUsersAndRoles();
+
         }
       };
 
@@ -803,6 +805,7 @@ define(
         localStorage.setItem('SpreadsheetPreferences', JSON
           .stringify(Preferences));
         $scope.loadData(activeSessionID);
+        $scope.loadUsersAndRoles();
         window.location.assign("#/spreadsheet/" + $rootScope.template);
       };
 
@@ -1326,7 +1329,7 @@ define(
       };
 
       $scope.deleteComment = function(comment, datum) {
-        if ($rootScope.readOnly === true) {
+        if ($rootScope.commentPermissions === false) {
           $rootScope.notificationMessage = "You do not have permission to delete comments.";
           $rootScope.openNotification();
           return;
@@ -1408,6 +1411,10 @@ define(
                 console.log(reason);
                 $scope.saved = "no";
                 window.alert("There was an error saving a record. " + reason);
+                // wish this would work:
+                // $rootScope.notificationMessage = "There was an error saving a record. " + reason;
+                // $rootScope.openNotification();
+                // return;
               });
 
             })($scope.allData[index]);
@@ -1622,9 +1629,9 @@ define(
                       // Deleting so that indices in scope are unchanged
                       delete $scope.activities[index];
                     },
-                    function() {
+                    function(reason) {
                       window
-                        .alert("There was an error saving the activity. Please try again.");
+                        .alert("There was an error saving the activity. "+ reason);
                       $scope.saved = "no";
                     });
               }
@@ -1749,40 +1756,28 @@ define(
           $scope.users = users;
 
           // Get privileges for logged in user
-          Data.async("_users", "org.couchdb.user:" + $rootScope.user.username)
-            .then(
-              function(response) {
-                if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
-                  // Admin
-                  $rootScope.admin = true;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = false;
-                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
-                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
-                  // Read-write
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = false;
-                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1 &&
-                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") === -1) {
-                  // Read-only
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = true;
-                  $rootScope.writeOnly = false;
-                } else if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") === -1 &&
-                  response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
-                  // Write-only
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = true;
-                } else {
-                  // TODO Commenter
-                  $rootScope.admin = false;
-                  $rootScope.readOnly = false;
-                  $rootScope.writeOnly = false;
-                }
-              });
-        });
+        Data.async("_users", "org.couchdb.user:" + $rootScope.loginInfo.username)
+          .then(
+            function(response) {
+              $rootScope.admin = false;
+              $rootScope.readPermissions = false;
+              $rootScope.writePermissions = false;
+              $rootScope.commentPermissions = false;
+
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
+                $rootScope.admin = true;
+              }
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1) {
+                $rootScope.readPermissions = true;
+              }
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+                $rootScope.writePermissions = true;
+              }
+              if (response.roles.indexOf($rootScope.DB.pouchname + "_commenter") > -1) {
+                $rootScope.commentPermissions = true;
+              }
+            });
+      });
       };
 
       $scope.updateUserRoles = function(newUserRoles) {
@@ -1801,27 +1796,50 @@ define(
         $rootScope.loading = true;
         var rolesString = "";
         switch (newUserRoles.role) {
+          /*
+            NOTE THESE ROLES are not accurate reflections of the db roles,
+            they are a simplification which assumes the
+            admin -> writer -> commenter -> reader type of system.
+
+            Infact some users (technical support or project coordinators) might be only admin,
+            and some experiment participants might be only writers and
+            cant see each others data.
+
+            Probably the clients wanted the spreadsheet roles to appear implicative since its more common.
+            see https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1113
+          */
           case "admin":
             newUserRoles.admin = true;
             newUserRoles.reader = true;
+            newUserRoles.commenter = true;
             newUserRoles.writer = true;
             rolesString += " Admin"
             break;
           case "read_write":
             newUserRoles.admin = false;
             newUserRoles.reader = true;
+            newUserRoles.commenter = true;
             newUserRoles.writer = true;
             rolesString += " Writer Reader"
             break;
           case "read_only":
             newUserRoles.admin = false;
             newUserRoles.reader = true;
+            newUserRoles.commenter = false;
             newUserRoles.writer = false;
             rolesString += " Reader"
             break;
+          case "read_comment_only":
+              newUserRoles.admin = false;
+              newUserRoles.reader = true;
+              newUserRoles.commenter = true;
+              newUserRoles.writer = false;
+              rolesString += " Reader Commenter"
+              break;
           case "write_only":
             newUserRoles.admin = false;
             newUserRoles.reader = false;
+            newUserRoles.commenter = true;
             newUserRoles.writer = true;
             rolesString += " Writer"
             break;
@@ -2318,7 +2336,7 @@ define(
       };
 
       $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
-        if ($rootScope.readOnly === true) {
+        if ($rootScope.writePermissions === false) {
           $rootScope.notificationMessage = "You do not have permission to delete attachments.";
           $rootScope.openNotification();
           return;

@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "handlebars", 
+    "backbone",
+    "handlebars",
     "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
@@ -12,7 +12,7 @@ define([
     "app/UpdatingCollectionView",
     "OPrime"
 ], function(
-    Backbone, 
+    Backbone,
     Handlebars,
     AudioVideoReadView,
     Comment,
@@ -30,26 +30,26 @@ define([
     /**
      * @class The layout of a single Datum. It contains a datum state,
      *        datumFields, datumTags and a datum menu.
-     * 
+     *
      * @property {String} format Value formats are "latex", "leftSide", or "centreWell".
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      
+
       this.audioVideoView = new UpdatingCollectionView({
         collection           : this.model.get("audioVideo"),
         childViewConstructor : AudioVideoReadView,
         childViewTagName     : 'li'
       });
-      
+
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
-      
+
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
@@ -64,7 +64,7 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "datum"
       });
-      
+
       // this.sessionView = new SessionReadView({
       //   model : this.model.get("session"),
       //   });
@@ -77,7 +77,7 @@ define([
      * The underlying model of the DatumReadView is a Datum.
      */
     model : Datum,
-    
+
     /**
      * Events that the DatumReadView is listening to and their handlers.
      */
@@ -101,10 +101,10 @@ define([
         this.model.exportAsCSV(true, null);
         $("#export-modal").modal("show");
       },
-      
+
       "click .add-comment-datum" : 'insertNewComment',
 
-      
+
       /* Read Only Menu */
       "dblclick" : function(e) {
         if(e){
@@ -141,7 +141,7 @@ define([
      * The Handlebars template rendered as the DatumReadView.
      */
     template : Handlebars.templates.datum_read_embedded,
-    
+
     /**
      * The Handlebars template rendered as the DatumLatexView.
      */
@@ -161,21 +161,22 @@ define([
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
-      
+
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
         if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
       var jsonToRender = this.model.toJSON();
+      jsonToRender.numberInCollection = this.model.getNumberInCollection();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
       jsonToRender.datumstate = this.model.getValidationStatus();
-      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate); 
-      
+      jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
+
       jsonToRender.locale_Add = Locale.get("locale_Add");
       jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
       jsonToRender.locale_LaTeX = Locale.get("locale_LaTeX");
       jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get("locale_Plain_Text_Export_Tooltip");
-      
+
       jsonToRender.hasAudio = false;
       if(this.model.getAudioFileName()){
         jsonToRender.hasAudio = true;
@@ -185,32 +186,32 @@ define([
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
       }else{
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
-      } 
-           
-      if (this.format == "well") {        
+      }
+
+      if (this.format == "well") {
         // Display the DatumReadView
         $(this.el).html(this.template(jsonToRender));
 
         // Display audioVideo View
         this.audioVideoView.el = this.$(".audio_video_ul");
         this.audioVideoView.render();
-        
+
         // Display the DatumTagsView
         this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
-        
+
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
-        
+
         // Display the SessionView
-        // this.sessionView.el = this.$('.session-link'); 
+        // this.sessionView.el = this.$('.session-link');
         // this.sessionView.render();
-        
+
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
-        
+
       } else if (this.format == "latex" || this.format == "latexPreviewIGTonly") {
         //This gets the fields necessary from the model
         // This bit of code makes the datum look like its rendered by
@@ -242,7 +243,7 @@ define([
           doGrossKeywordMatch = true;
         }
 
-        // Converts lists into objects.  This is underscore 1.4's object function. 
+        // Converts lists into objects.  This is underscore 1.4's object function.
         // Probably this should be attached to a global object or underscore should be upgraded ...
         var list2object = function(list, values) {
           if (list == null) return {};
@@ -318,7 +319,7 @@ define([
         // If the value is splittable, i.e., its words will be split into <spans>
         // for IGT formatting, then splittable must be set to true.
         var highlightMatches = function(value, label, splittable) {
-          splittable = splittable || false; 
+          splittable = splittable || false;
           if (value && searchParams) {
             if (doGrossKeywordMatch) {
               return highlight(value, searchParams, splittable);
@@ -355,13 +356,17 @@ define([
 
     	//corpus's most frequent fields
         var frequentFields = window.app.get("corpus").frequentFields ;
-        //this datum/datalist's datumfields and their names 
+        //this datum/datalist's datumfields and their names
     	var fields = _.pluck(this.model.get("datumFields").toJSON(), "mask");
     	var fieldLabels = _.pluck(this.model.get("datumFields").toJSON(), "label");
     	//setting up for IGT case...
+    	var orthographyIndex = -1;
+    	var orthography = "";
     	var utteranceIndex = -1;
-    	var utterance = "";
-    	var morphemesIndex = -1;
+      var utterance = "";
+      var allomorphsIndex = -1;
+      var allomorphs = "";
+      var morphemesIndex = -1;
     	var morphemes = "";
     	var glossIndex = -1;
     	var gloss = "";
@@ -377,11 +382,23 @@ define([
              fieldLabels.splice(judgementIndex,1);
              fields.splice(judgementIndex,1);
           }
+          orthographyIndex = fieldLabels.indexOf("orthography");
+          if(orthographyIndex >= 0){
+               orthography = highlightMatches(fields[orthographyIndex], 'orthography', true);
+               fieldLabels.splice(orthographyIndex,1);
+               fields.splice(orthographyIndex,1);
+          }
           utteranceIndex = fieldLabels.indexOf("utterance");
           if(utteranceIndex >= 0){
                utterance = highlightMatches(fields[utteranceIndex], 'utterance', true);
                fieldLabels.splice(utteranceIndex,1);
                fields.splice(utteranceIndex,1);
+          }
+          allomorphsIndex = fieldLabels.indexOf("allomorphs");
+          if(allomorphsIndex >= 0){
+              allomorphs = highlightMatches(fields[allomorphsIndex], 'allomorphs', true);
+              fieldLabels.splice(allomorphsIndex,1);
+              fields.splice(allomorphsIndex,1);
           }
           morphemesIndex = fieldLabels.indexOf("morphemes");
           if(morphemesIndex >= 0){
@@ -406,7 +423,7 @@ define([
           // where uw1 is the first utterance word, mw1 is the first morphemes word, etc.
           // Note that any empty strings in params are filtered out (cf. _.compact).  This allows
           // Datums with only, say, utterance and gloss strings or only morphemes and gloss
-          // strings to be IGT-formatted.  
+          // strings to be IGT-formatted.
           var getIGTList = function (params) {
             return _.map(_.zip.apply(null, _.compact(_.map(params, function (p) {
               if (p) {
@@ -423,10 +440,12 @@ define([
               return this;
             }
 
-            var tuple = getIGTList([utterance, morphemes, gloss]);
-            // if there are only 3 or less words, they probably dont need the alignment visuall that much
+            var tuple = getIGTList([orthography, utterance, allomorphs, morphemes, gloss]);
+            // if there are only 3 or less words, they probably dont need the alignment visual that much
             if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
               return this;
+            } else if (this.format === "latexPreviewIGTonly" && tuple && tuple.length > 40){
+              jsonToRender.scrollable = "scrollable";
             }
             if (translation != "" && this.format !== "latexPreviewIGTonly") {
               jsonToRender.translation = "\u2018"+ translation +"\u2019";
@@ -436,7 +455,7 @@ define([
               jsonToRender.judgement = judgement;
             }
           } catch(e) {
-            console.log("Bug: something is wrong with this datum: "+JSON.stringify(e));
+            console.log("Bug: this datum is not IGT: "+JSON.stringify(e));
             jsonToRender.translation = "---";
           }
     	}
@@ -461,10 +480,10 @@ define([
         jsonToRender.withCheckbox = true;
       }
 
-       
+
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
-        
+
         if(this.format == "latex"){
           if(!jsonToRender.datumstatecolor){
             jsonToRender.datumstatecolor = "";
@@ -486,10 +505,10 @@ define([
           if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
         }
       }
-      
+
       return this;
     },
-    
+
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
@@ -503,7 +522,7 @@ define([
     },
     /**
      * Encrypts the datum if it is confidential
-     * 
+     *
      */
     encryptDatum : function() {
       this.model.encrypt();
@@ -519,7 +538,7 @@ define([
       this.render();
       $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
-    
+
     //Functions relating to the row of icon-buttons
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
@@ -544,15 +563,15 @@ define([
      * The copyDatum function copies all datum fields to the clipboard.
      */
     copyDatum : function() {
-      
+
       var text = $(".datum_field_input").val() || [];
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
       if (OPrime.debugMode) OPrime.debug(text);
- 
+
       return "";
-//    }, 
-//    
+//    },
+//
 //    showButtonHelp : function(){
 //      this.$(".button-help").tooltip("show");
     }

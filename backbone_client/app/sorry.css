@@ -1,4 +1,4 @@
-body{
+.body_background body{
 	width:580px;
 	height:300px;
 }
@@ -11,4 +11,9 @@ td{
 }
 tr{
 	vertical-align: top;
+}
+
+.backup_page td {
+  width: 30%;
+  text-align: center;
 }

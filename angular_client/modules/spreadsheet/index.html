@@ -43,13 +43,13 @@
 				</span>
 				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a class="menuitem"
 					ng-click="dataentry=true;navigateVerifySaved('none');loadData(activeSession);"> <i class="fa whiteicon fa-list"></i> Data
-						Entry</a></span> | 
+						Entry</a></span> |
 				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a class="menuitem"
 					ng-click="navigateVerifySaved('searchMenu');"> <i class="fa whiteicon fa-search"></i> Search</a>
-				</span> | 
+				</span> |
 				<span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}"> <a class="menuitem"
 					ng-click="navigateVerifySaved('editSession')"> <i class="fa whiteicon fa-calendar"></i> Session</a>
-				</span> | 
+				</span> |
 				<span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
 					<ul class="dropdown_nav">
 						<li><a class="menuitem"> <i class="fa whiteicon fa-cogs"></i> Settings</a>
@@ -59,8 +59,8 @@
 									ng-click="navigateVerifySaved('settings');"> <i class="fa whiteicon fa-cogs"></i> User Interface</a></li>
 							</ul></li>
 					</ul>
-				</span> | 
-				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;"> <i class="fa whiteicon fa-question-circle"></i> FAQ</a></span> | 
+				</span> |
+				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;"> <i class="fa whiteicon fa-question-circle"></i> FAQ</a></span> |
 				<span  ng-hide="data==undefined" ng-hide="dataentry==false">
 					<input type="checkbox" ng-model="useAutoGlosser">  <i class="fa whiteicon fa-bar-chart-o"></i> Semi-auto Glosser
 				</span>
@@ -68,11 +68,11 @@
 					class="rightMenuItems" ng-show="authenticated==true">
 					<div class="rightMenuItemsDiv">
 						<div ng-hide="DB==undefined">
-							<a class="floatLeft" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this {{DB.pouchname}}'s webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
+							<a class="floatLeft" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this {{DB.pouchname}}'s webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i>
 							{{getCurrentSessionName()}}<br /><i class="fa whiteicon fa-cloud"></i> {{DB.title}}
 						</div>
 						<div>
-							&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">{{getSavedState()}}</button>&nbsp;
+							&nbsp;<button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">{{getSavedState()}}</button>&nbsp;
 							<button class="btn btn-warning" ng-click="logOut()"> <i class="fa whiteicon fa-arrow-right"></i> Log
 								out</button> <a href="http://lingsync.org/{{user.username}}" target="_blank" title="Visit your share page"><img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0"></a>
 						</div>
@@ -102,17 +102,17 @@
 						Session</button>
 					&nbsp;&nbsp;
 					<span ng-hide="activeSession==undefined">
-					<button class="btn btn-success"
-						ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">Edit Session Info</button>
+					<button ng-show="writePermissions==true" class="btn btn-success"
+						ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >Edit Session Info</button>
 					&nbsp;&nbsp;
 				</span>
 					<span ng-show="(data | filter: activeSession).length==0">
-					<button class="btn btn-danger"
+					<button ng-show="writePermissions==true" class="btn btn-danger"
 						ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true"><i class="fa whiteicon fa-trash-o"></i> Delete
 						Session</button>
 						&nbsp;&nbsp;
 					</span>
-					<button class="btn btn-primary"
+					<button ng-show="writePermissions==true" class="btn btn-primary"
 						ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true"><i class="fa whiteicon fa-plus"></i> Create New Elicitation Session</button>
 				</div>
 				<div class="subSubMenubar"
@@ -202,7 +202,7 @@
 			</div>
 
 			<div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
-				<form class="form-horizontal"> <i class="fa whiteicon fa-search"></i>  
+				<form class="form-horizontal"> <i class="fa whiteicon fa-search"></i>
 					Search:&nbsp;<input type="text"
 						class="input-medium search-query" ng-model='searchTerm'>
 						&nbsp;<button class="btn btn-primary" ng-click="runSearch(searchTerm);">Go</button>
@@ -223,15 +223,15 @@
 					ng-click="navigateVerifySaved('home')"><img
 						src="img/icon48_dev.png" border="0" /></a>
 				</span>
-				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a class="menuitem" 
+				<span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}"><a class="menuitem"
 					ng-click="dataentry=true;navigateVerifySaved('none');loadData(activeSession)"><i class="fa whiteicon fa-list"></i>  Data
-						Entry</a></span> | 
-				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a class="menuitem" 
+						Entry</a></span> |
+				<span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}"> <a class="menuitem"
 					ng-click="navigateVerifySaved('searchMenu');"> <i class="fa whiteicon fa-search"></i>  Search</a>
-				</span> | 
-				<span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}"> <a class="menuitem" 
+				</span> |
+				<span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}"> <a class="menuitem"
 					ng-click="navigateVerifySaved('editSession')"><i class="fa whiteicon fa-calendar"></i> Session</a>
-				</span> | 
+				</span> |
 				<span ng-show="authenticated==true"  ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
 					<ul class="dropdown_nav navitem">
 						<li><a class="menuitem" href="#"> <i class="fa whiteicon fa-cogs"></i> Settings</a>
@@ -241,15 +241,15 @@
 									ng-click="navigateVerifySaved('settings');"> <i class="fa whiteicon fa-cogs"></i> User Interface</a></li>
 							</ul></li>
 					</ul>
-				</span> | 
-				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;"> <i class="fa whiteicon fa-question-circle"></i> FAQ</a></span> | 
+				</span> |
+				<span ng-class="{active_menu_class: activeMenu=='faq'}"><a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;"> <i class="fa whiteicon fa-question-circle"></i> FAQ</a></span> |
 				<span ng-hide="data==undefined" ng-hide="dataentry==false">
 					<input type="checkbox" ng-model="useAutoGlosser">  <i class="fa whiteicon fa-bar-chart-o"></i> Glosser
 				</span>
 				<br />
 				<div class="smallMenuBarInfo" ng-show="authenticated==true">
 					<div class="floatLeft smallMenuBarInfoItem" ng-hide="DB==undefined">
-						<a class="floatLeft"  href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this corpus' webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i> 
+						<a class="floatLeft"  href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this corpus' webpage"><img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0"></a>  <i class="fa whiteicon fa-calendar"></i>
 						{{getCurrentSessionName()}}<br /> <i class="fa whiteicon fa-cloud"></i> {{DB.title}}
 					</div>
 					<div class="smallMenuBarInfoItem">
@@ -507,7 +507,7 @@
 		<div class="loading_trouble_message" ng-hide="clickSuccess==true" class="clearCacheMessage">If
 			you are having trouble viewing the page, you may need to empty your
 			browser's cache.</div>
-			
+
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->

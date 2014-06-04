@@ -1,7 +1,7 @@
 function(doc) {
   var onlyErrors = false;
   var debug = false;
-  var maxDistance = 10;
+  var maxDistance = 1;
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
@@ -157,7 +157,7 @@ function(doc) {
           var value = wordIGT[key];
           var tokens = tokenize(value, morphemeWordAgnosticTokenizer);
           // If this is the utterance, or unsegmented field, then dont put it, instead add it to all tuples.
-          if (tokens.length > 1) {
+          if (tokens.length >= 1) {
             for (tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
               morphemeTuples[tokenIndex] = morphemeTuples[tokenIndex] || {};
               morphemeTuples[tokenIndex][key] = tokens[tokenIndex];
