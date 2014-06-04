@@ -100,9 +100,11 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "writingSystem": {
-      "id": "",
-      "referenceLink": ""
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      }
     },
     "help": "What was said/written using the alphabet/writing system of the language.",
     "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
@@ -115,9 +117,11 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "writingSystem": {
-      "id": "",
-      "referenceLink": ""
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      }
     },
     "help": "What was said/written in an alphabet the team is comfortable using.",
     "helpLinguists": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
@@ -130,7 +134,9 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "linguist",
     "defaultfield": true,
-    "alternates": [],
+    "json": {
+      "alternates": []
+    },
     "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
     "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
   }, {
@@ -142,7 +148,9 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "linguist",
     "defaultfield": true,
-    "alternates": [],
+    "json": {
+      "alternates": []
+    },
     "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
     "helpLinguists": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
   }, {
@@ -155,11 +163,13 @@
     "showToUserTypes": "linguist",
     "defaultfield": true,
     "language": "",
-    "alternates": [],
-    "conventions": {
-      "id": "",
-      "tagSet": [],
-      "referenceLink": ""
+    "json": {
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
     },
     "help": "Translation for each prefix, root and suffix in the words",
     "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
@@ -172,11 +182,13 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "machine, linguist",
     "defaultfield": true,
-    "alternates": [],
-    "conventions": {
-      "id": "",
-      "tagSet": [],
-      "referenceLink": ""
+    "json": {
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
     },
     "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
     "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
@@ -201,7 +213,9 @@
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "tags": [],
+    "json": {
+      "tags": []
+    },
     "help": "Tags for constructions or other info that you might want to use to categorize your data.",
     "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
   }, {
@@ -213,20 +227,25 @@
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "tags": [],
+    "json": {
+      "wiki": "",
+      "latex": ""
+    },
     "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
     "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
   }, {
-    "label": "links",
+    "label": "relatedData",
     "labelLinguists": "Related Data",
     "labelNonLinguists": "Linked to",
     "labelTranslators": "Linked to",
     "labelComputationalLinguist": "Linked Data",
-    "type": "links",
+    "type": "relatedData",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "links": [],
+    "json": {
+      "relatedData": []
+    },
     "help": "Related data in the database, or at any web url.",
     "helpLinguists": "Related data in the database, or at any web url.",
     "helpDevelopers": "Related data in the database, or at any web url."
@@ -239,7 +258,9 @@
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "tags": [],
+    "json": {
+      "tags": []
+    },
     "help": "Tags for constructions or other info that you might want to use to categorize your data.",
     "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
   }, {
@@ -251,7 +272,9 @@
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "tags": [],
+    "json": {
+      "tags": []
+    },
     "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
     "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
   }, {
@@ -264,9 +287,11 @@
     "showToUserTypes": "all",
     "readonly": true,
     "defaultfield": true,
-    "user": {},
-    "hardware": {},
-    "software": {},
+    "json": {
+      "user": {},
+      "hardware": {},
+      "software": {}
+    },
     "help": "The user who originally entered the datum",
     "helpLinguists": "The user who originally entered the datum"
   }, {
@@ -279,7 +304,9 @@
     "showToUserTypes": "all",
     "readonly": true,
     "defaultfield": true,
-    "users": [],
+    "json": {
+      "users": []
+    },
     "help": "An array of users who modified the datum",
     "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
   }, {
@@ -291,7 +318,9 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "machine",
     "defaultfield": true,
-    "alternates": [],
+    "json": {
+      "alternates": []
+    },
     "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
     "helpLinguists": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
   }],
@@ -303,7 +332,9 @@
     "type": "users",
     "shouldBeEncrypted": true,
     "defaultfield": true,
-    "users": [],
+    "json": {
+      "users": []
+    },
     "help": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer.",
     "helpLinguists": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
   }, {
@@ -314,7 +345,9 @@
     "type": "tags",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "tags": [],
+    "json": {
+      "tags": []
+    },
     "help": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality.",
     "helpLinguists": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
   }],
@@ -334,7 +367,9 @@
     "labelTranslators": "Language Speakers/Publication/Source",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "users": [],
+    "json": {
+      "users": []
+    },
     "help": "This is a comma seperated field of all the consultants/publications/sources who were were the source/present for this elicitation session.",
     "helpLinguists": "This is a comma seperated field of all the consultants/publications/sources who  were were the source/present for this elicitation session.",
     "helpDevelopers": "This is a comma seperated field of all the consultants (usernames, or anonymouse codes, or publication uri's) who were present for this elicitation session. This field also contains a (hidden) array of consultant/source masks if they are actual users of the system. "
@@ -367,14 +402,16 @@
     "labelComputationalLinguist": "Language Name (ISO 639-3)",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "language": {
-      "ethnologueUrl": "",
-      "wikipediaUrl": "",
-      "iso": "",
-      "locale": "",
-      "englishName": "",
-      "nativeName": "",
-      "alternateNames": ""
+    "json": {
+      "language": {
+        "ethnologueUrl": "",
+        "wikipediaUrl": "",
+        "iso": "",
+        "locale": "",
+        "englishName": "",
+        "nativeName": "",
+        "alternateNames": ""
+      }
     },
     "help": "This is the langauge name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
     "helpLinguists": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
@@ -386,10 +423,12 @@
     "labelTranslators": "Location",
     "shouldBeEncrypted": true,
     "defaultfield": true,
-    "location": {
-      "latitude": 0,
-      "longitude": 0,
-      "accuracy": 0
+    "json": {
+      "location": {
+        "latitude": 0,
+        "longitude": 0,
+        "accuracy": 0
+      }
     },
     "help": "This is the GPS location of the elicitation session (if available)",
     "helpLinguists": "This is the GPS location of the elicitation session (if available)"
@@ -401,10 +440,12 @@
     "labelTranslators": "Original Date Spoken/Published",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "timestamp": {
-      "start": null,
-      "end": null,
-      "accuracy": null
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
     },
     "help": "The date when the elicitation session took place, or when the datum was spoken/published.",
     "helpLinguists": "The date when the elicitation session took place, or when the datum was spoken/published."
@@ -415,7 +456,9 @@
     "labelTranslators": "Participants",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "users": [],
+    "json": {
+      "users": []
+    },
     "help": "This is a comma seperated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
     "helpLinguists": "This is a comma seperated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
     "helpDevelopers": "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. "
@@ -427,10 +470,12 @@
     "labelTranslators": "Date Entered",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "timestamp": {
-      "start": null,
-      "end": null,
-      "accuracy": null
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
     },
     "help": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book).",
     "helpLinguists": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
@@ -442,7 +487,9 @@
     "labelTranslators": "Device Hardware",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "device": {},
+    "json": {
+      "device": {}
+    },
     "help": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
     "helpLinguists": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
     "helpDevelopers": "Your app can save optional anonymous device details of the equipment/software which used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1"
