@@ -1,0 +1,34 @@
+{
+  "name": "FieldDB-Prototype",
+  "version": "2.0.2",
+  "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB",
+  "authors": [
+    "cesine <cesine@yahoo.com>",
+    "trisapeace <trisapeace@gmail.com>",
+    "hisakonog <hisakonog@gmail.com>",
+    "Emmy Cathcart <maryellencathcart@gmail.com>",
+    "Yuliya Manyakina <yulia.manyakina@gmail.com>",
+    "Elise <elise.mcclay@gmail.com>",
+    "gretchenmcc <gretchen.mcculloch@gmail.com>",
+    "jrwdunham <jrwdunham@gmail.com>",
+    "ghazan <gay.hazan@gmail.com>",
+    "Fieldlinguist <info@fieldlinguist.com>",
+    "zazoo <kimdan.ng@gmail.com>",
+    "louisa-bielig <louisa.bielig@gmail.com>",
+    "geekrax <rakshit@thetechtime.com>",
+    "Pablo Duboue <pablo.duboue@gmail.com>",
+    "Oriana <oriana.kilbourn-ceron@mail.mcgill.ca>"
+  ],
+  "description": "The original fielddb app",
+  "main": "corpus.html",
+  "license": "Apache 2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "textgrid": "~2.2.0"
+  }
+}

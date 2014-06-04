@@ -269,6 +269,9 @@ module.exports = function(grunt) {
         }, {
           src: ['libs/recorderjs/recorderWorker.js'],
           dest: 'release/'
+        }, {
+          src: ['bower_components/fielddb-glosser/fielddb-glosser.js'],
+          dest: 'release/'
         }]
       },
       spreadsheet_build_only: {

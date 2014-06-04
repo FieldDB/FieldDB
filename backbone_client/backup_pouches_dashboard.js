@@ -36,6 +36,34 @@ require(
     [ "pouch", "oprime" ],
     function(forcingpouchtoloadearly, OPrime) {
 
+      var goToPrototypeApp = function(){
+        var action_url = "corpus.html";
+        chrome.tabs.create({
+          url: action_url
+        });
+      }
+      document.getElementById("goToPrototypeApp").onclick = goToPrototypeApp;
+
+      var goToCorpusPagesApp = function(){
+        var action_url = "https://www.lingsync.org/public";
+        chrome.tabs.create({
+          url: action_url
+        });
+      }
+      document.getElementById("goToCorpusPagesApp").onclick = goToCorpusPagesApp;
+
+
+
+      var goToSpreadsheetApp = function(){
+        var action_url = "http://app.lingsync.org";
+        chrome.tabs.create({
+          url: action_url
+        });
+      }
+      document.getElementById("goToSpreadsheetApp").onclick = goToSpreadsheetApp;
+
+
+
       $('#dashboard_loading_spinner')
           .html(
               "<div class='finished-status'></div><img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Preparing for version 1.40...</p>");
@@ -86,7 +114,7 @@ require(
       window.backupPouch = function(pouchname) {
         /* Ignore pouches that don't need to be replicated */
         pouchname = pouchname.replace(/_id/g,"");
-        
+
         if (window.databasesThatDontNeedReplication.indexOf(pouchname) >= 0) {
           /* Go to the next pouch */
           window.currentPouch++;
@@ -175,9 +203,9 @@ require(
         name : "backupdatabases",
         password : "none"
       };
-      
+
       window.setTimeout(window.waitForPouchesList, 1000);
-      
+
       OPrime.makeCORSRequest({
         type : 'POST',
         url : "https://corpusdev.lingsync.org/_session",

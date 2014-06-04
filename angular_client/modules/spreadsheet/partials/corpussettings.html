@@ -41,6 +41,7 @@
 				<font size="3">
 				<input type="radio" name="userroles" value="admin" ng-model="newUserRoleInfo.role">Admin&nbsp;&nbsp;&nbsp;
 				<input type="radio" name="userroles" value="read_write"  ng-model="newUserRoleInfo.role">Read/Write&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="userroles" value="read_comment_only"  ng-model="newUserRoleInfo.role">Read/Comment-only&nbsp;&nbsp;&nbsp;
 				<input type="radio" name="userroles" value="read_only"  ng-model="newUserRoleInfo.role">Read-only&nbsp;&nbsp;&nbsp;
 				<input type="radio" name="userroles" value="write_only"  ng-model="newUserRoleInfo.role">Write-only<br />
 			</font>
@@ -69,6 +70,15 @@
 			</div>
 		</div>
 		<div class="settingsItems row">
+        <h3>Writers</h3>
+      <div ng-repeat="user in users.writers" class="user_thumbnails">
+        <img
+          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        {{user.username}}
+      </div>
+    </div>
+    <div class="settingsItems row">
 				<h3>Readers</h3>
 			<div ng-repeat="user in users.readers" class="user_thumbnails">
 				<img
@@ -77,14 +87,14 @@
 				{{user.username}}
 			</div>
 		</div>
-		<div class="settingsItems row">
-				<h3>Writers</h3>
-			<div ng-repeat="user in users.writers" class="user_thumbnails">
-				<img
-					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
-				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
-				{{user.username}}
-			</div>
-		</div>
+    <div class="settingsItems row">
+        <h3>Commenters</h3>
+      <div ng-repeat="user in users.commenters" class="user_thumbnails">
+        <img
+          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        {{user.username}}
+      </div>
+    </div>
 	</div>
 </div>

@@ -18,7 +18,7 @@ define([], function() {
           users: fieldDBDatum.datumFields[j].users
         };
       } else if (fieldDBDatum.datumFields[j].label === "comments") {
-        // if their corpus has comments datum field, dont overwrite the comments with it ... 
+        // if their corpus has comments datum field, dont overwrite the comments with it ...
         console.log("This datum had a comments datum field... :( ", fieldDBDatum.datumFields[j], fieldDBDatum.comments);
       } else {
         spreadsheetDatum[fieldDBDatum.datumFields[j].label] = fieldDBDatum.datumFields[j].mask;
@@ -41,15 +41,15 @@ define([], function() {
 
     if (fieldDBDatum.dateModified) {
       spreadsheetDatum.dateModified = fieldDBDatum.dateModified;
-    } 
+    }
 
-    spreadsheetDatum.datumTags = fieldDBDatum.datumTags;
+    // spreadsheetDatum.datumTags = fieldDBDatum.datumTags;
     spreadsheetDatum.comments = fieldDBDatum.comments;
     if (fieldDBDatum.session) {
       spreadsheetDatum.sessionID = fieldDBDatum.session._id;
       spreadsheetDatum.session = fieldDBDatum.session;
     } else {
-      window.alert("This record is missing a session, please report this to support@lingsync.org "+ fieldDBDatum._id);
+      window.alert("This record is missing a session, please report this to support@lingsync.org " + fieldDBDatum._id);
     }
 
     // upgrade to v1.90
@@ -85,21 +85,27 @@ define([], function() {
       }
     }
     // upgrade to v1.92
-    if(fieldDBDatum.datumTags && fieldDBDatum.datumTags.length >0){
+    var upgradedTags = spreadsheetDatum.tags ? spreadsheetDatum.tags.split(",") : [];
+    if (fieldDBDatum.datumTags && fieldDBDatum.datumTags.length > 0) {
       console.log("Upgrading datumTags to a datumField", fieldDBDatum.datumTags);
-      var upgradedTags = spreadsheetDatum.tags ? spreadsheetDatum.tags.split(",") : [];
-      fieldDBDatum.datumTags.map(function(datumTag){
-        if(datumTag.tag){
+      fieldDBDatum.datumTags.map(function(datumTag) {
+        if (datumTag.tag) {
           upgradedTags.push(datumTag.tag.trim())
-        } else{
+        } else {
           console.warn("This datum had datumTags but they were missing a tag inside", fieldDBDatum);
         }
       })
-      if(upgradedTags && upgradedTags.length > 0){
-        spreadsheetDatum.tags = upgradedTags.join(", ");
-        spreadsheetDatum.datumTags = [];
-      }
     }
+    if (upgradedTags && upgradedTags.length > 0) {
+      spreadsheetDatum.tags = [];
+      upgradedTags.map(function(tag) {
+        if (spreadsheetDatum.tags.indexOf(tag.trim()) === -1) {
+          spreadsheetDatum.tags.push(tag.trim());
+        }
+      });
+      spreadsheetDatum.tags = spreadsheetDatum.tags.join(", ");
+    }
+    spreadsheetDatum.datumTags = [];
 
     //TODO do we really need this flag?
     if (spreadsheetDatum.audioVideo.length > 0) {
@@ -132,8 +138,8 @@ define([], function() {
           if (key === "modifiedByUser") {
             hasModifiedByUser = true;
             fieldDBDatum.datumFields[i].users = spreadsheetDatum.modifiedByUser.users;
-            // fieldDBDatum.datumFields[i].mask = spreadsheetDatum.modifiedByUser.users; /TODO 
-            // fieldDBDatum.datumFields[i].value = spreadsheetDatum.modifiedByUser.users; /TODO 
+            // fieldDBDatum.datumFields[i].mask = spreadsheetDatum.modifiedByUser.users; /TODO
+            // fieldDBDatum.datumFields[i].value = spreadsheetDatum.modifiedByUser.users; /TODO
             fieldDBDatum.datumFields[i].readonly = true;
           } else if (key === "enteredByUser") {
             fieldDBDatum.datumFields[i].user = spreadsheetDatum.enteredByUser;
@@ -141,7 +147,7 @@ define([], function() {
             fieldDBDatum.datumFields[i].value = spreadsheetDatum.enteredByUser.username;
             fieldDBDatum.datumFields[i].readonly = true;
           } else if (key === "comments") {
-            //dont put the comments into the comments datum field if their corpus has one... 
+            //dont put the comments into the comments datum field if their corpus has one...
             if (typeof fieldDBDatum.datumFields[i].value != "string") {
               fieldDBDatum.datumFields[i].value = "";
               fieldDBDatum.datumFields[i].mask = "";
@@ -154,7 +160,7 @@ define([], function() {
       }
 
       /* If the key wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
-      if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "saved" &&  key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
+      if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "saved" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
         fieldDBDatum.datumFields.push({
           "label": key,
@@ -197,18 +203,18 @@ define([], function() {
 
 
     /* TODO tags shouldn't be in the datum they were deprecated in v40ish before the spreadsheet was created... */
-    if (spreadsheetDatum.datumTags && spreadsheetDatum.datumTags.length > 0) {
-      fieldDBDatum.datumTags = spreadsheetDatum.datumTags;
-    }
-    // Save comments TODO what if someone else modified it? need to merge the info... 
+    // if (spreadsheetDatum.datumTags && spreadsheetDatum.datumTags.length > 0) {
+    // }
+    fieldDBDatum.datumTags = spreadsheetDatum.datumTags;
+    // Save comments TODO what if someone else modified it? need to merge the info...
     if (spreadsheetDatum.comments && spreadsheetDatum.comments.length > 0) {
       fieldDBDatum.comments = spreadsheetDatum.comments;
     }
-    // Save audioVideo TODO what if someone else modified it? need to merge the info... 
+    // Save audioVideo TODO what if someone else modified it? need to merge the info...
     if (spreadsheetDatum.audioVideo && spreadsheetDatum.audioVideo.length > 0) {
       fieldDBDatum.audioVideo = spreadsheetDatum.audioVideo;
     }
-    // Save attachments TODO what if someone else modified it? need to merge the info... 
+    // Save attachments TODO what if someone else modified it? need to merge the info...
     if (spreadsheetDatum._attachments && spreadsheetDatum._attachments !== {}) {
       fieldDBDatum._attachments = spreadsheetDatum._attachments;
     }
