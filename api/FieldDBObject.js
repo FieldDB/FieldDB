@@ -401,7 +401,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   /**
    * Creates a deep copy of the object (not a reference)
-   * @return {[type]} a near-clone of the objcet
+   * @return {Object} a near-clone of the objcet
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
