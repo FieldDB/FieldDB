@@ -27,15 +27,18 @@
     "validationStatus": "Checked*",
     "color": "green",
     "default": true
+  },{
+    "validationStatus": "Published*",
+    "color": "blue"
   }, {
     "validationStatus": "ToBeChecked*",
     "color": "orange"
   }, {
-    "tag": "Approved*",
+    "tag": "ApprovedLanguageLearningContent*",
     "color": "green",
     "showInLanguageLearnignApps": true
   }, {
-    "tag": "Contributed*",
+    "tag": "ContributedLanguageLearningContent*",
     "color": "orange"
   }, {
     "validationStatus": "Deleted*",
@@ -177,21 +180,9 @@
     },
     "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
     "helpLinguist": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
-  }, {
-    "id": "syntacticTreeLatex",
-    "labelLinguist": "Syntactic Tree/Constituency (LaTeX)",
-    "labelLayperson": "",
-    "labelTranslator": "",
-    "type": "LaTeX",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "machine",
-    "defaultfield": true,
-    "alternates": [],
-    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
-    "helpLinguist": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
-  }, {
+  },  {
     "id": "translation",
-    "labelLinguist": "English",
+    "labelLinguist": "Translation",
     "labelLayperson": "English",
     "labelTranslator": "English",
     "type": "IGT, parallelText",
@@ -200,8 +191,32 @@
     "defaultfield": true,
     "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
     "language": "",
-    "helpLinguist": "The team's primary translation. It might not be English, just a language the team is comfortable with. There may also be additional translations in the other fields."
+    "helpLinguist": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
   }, {
+    "id": "context",
+    "labelLinguist": "Context",
+    "labelLayperson": "Context",
+    "labelTranslator": "Context",
+    "type": "wiki",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "tags": [],
+    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+    "helpLinguist": "Tags for constructions or other info that you might want to use to categorize your data."
+  },{
+    "id": "documentation",
+    "labelLinguist": "Discussion for Handouts",
+    "labelLayperson": "Additional Documentation",
+    "labelTranslator": "Documentation",
+    "type": "wiki, LaTeX",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "tags": [],
+    "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
+    "helpLinguist": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
+  },{
     "id": "tags",
     "labelLinguist": "Tags",
     "labelLayperson": "Tags",
@@ -253,6 +268,18 @@
     "users": [],
     "help": "An array of users who modified the datum",
     "helpLinguist": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
+  },{
+    "id": "syntacticTreeLatex",
+    "labelLinguist": "Syntactic Tree/Constituency (LaTeX)",
+    "labelLayperson": "",
+    "labelTranslator": "",
+    "type": "LaTeX",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "machine",
+    "defaultfield": true,
+    "alternates": [],
+    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+    "helpLinguist": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
   }],
   "conversationFields": [{
     "id": "speakers",
