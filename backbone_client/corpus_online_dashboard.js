@@ -31,16 +31,17 @@ require.config({
     "CryptoJS" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "$" : "libs/jquery",
+    "$" : "bower_components/jquery/dist/jquery.min",
     "wikitext" : "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
     "handlebars" : "libs/compiled_handlebars",
-    "handlebarsjs" : "libs/handlebars.runtime",
+    "handlebarsjs" : "bower_components/handlebars/handlebars.runtime",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
-    "_" : "libs/underscore",
-    "backbonejs" : "libs/backbone",
+    "_" : "bower_components/underscore/underscore",
+    "underscore" : "bower_components/underscore/underscore",
+    "backbonejs" : "bower_components/backbone/backbone",
     "jquery-couch" : "libs/backbone_couchdb/jquery.couch",
     "backbone" : "libs/backbone_couchdb/backbone-couchdb",
 
@@ -81,7 +82,7 @@ require.config({
     },
 
     "backbonejs" : {
-      deps : [ "_", "bootstrap" ],
+      deps : [ "underscore", "bootstrap" ],
       exports : "Backbone"
     },
     "handlebarsjs" : {
@@ -112,12 +113,12 @@ require([ "app/App", "backbone", "OPrime" ], function(App,
   window.app = new App({
     filledWithDefaults : true
   });
-  
+
   window.uploadAndGenerateTextGrid = function(files){
 //    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
 //    alert("I'm going to submit the upload form.");
 //    document.getElementById("uploadAudioForTextGridform").submit();
   };
-  
-  
+
+
 });

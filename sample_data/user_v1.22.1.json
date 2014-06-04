@@ -1,0 +1,155 @@
+{
+  "_id": "sapir",
+  "_rev": "51-6c32bf6991a8a65e7dd48ed778fe31a7",
+  "jsonType": "user",
+  "username": "sapir",
+  "email": "edwardsapir@fieldlinguist.com",
+  "corpuses": [{
+    "protocol": "https://",
+    "domain": "ifielddevs.iriscouch.com",
+    "port": "443",
+    "pouchname": "sapir-cherokee",
+    "corpusid": "E038ECA6-AC69-43F3-8EE8-56AD3CDC9162"
+  }, {
+    "protocol": "https://",
+    "domain": "ifielddevs.iriscouch.com",
+    "port": "443",
+    "pouchname": "sapir-firstcorpus",
+    "corpusid": "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1"
+  }],
+  "activityCouchConnection": {
+    "protocol": "https://",
+    "domain": "ifielddevs.iriscouch.com",
+    "port": "443",
+    "pouchname": "sapir-activity_feed"
+  },
+  "gravatar": "./../user/sapir_1910_gravatar.png",
+  "appVersionWhenCreated": "1.22.1",
+  "authUrl": "https://authdev.fieldlinguist.com:3183",
+  "salt": "$2a$10$/JtiVTuWCefSXbgIiTpZwu",
+  "hash": "$2a$10$/JtiVTuWCefSXbgIiTpZwuT7zvAp36QAwv0hTRxUGr.c3lh5XBjNa",
+  "created_at": "2012-09-26T13:45:17.127Z",
+  "updated_at": "2013-12-03T08:26:38.216Z",
+  "researchInterest": "Phonemes \n      ",
+  "affiliation": " Penn\n      ",
+  "description": "I am currently a PostDoc at U Penn. I'm interested in the mental represenation of sound, I'm currently working with Southern Paiute speakers. \n      ",
+  "subtitle": "",
+  "dataLists": [
+    "F7D2CCF3-7A6F-4DFD-9DFA-D43D6B44B94C",
+    "CABF84F4-39C0-4811-BA7C-CCDF776358E9",
+    "73DDE35D-1FC1-4C80-81FF-E904C69D7110",
+    "81B7D6F7-5ED0-4935-8E90-E9523AA3B391",
+    "90A3267C-5FED-492B-A109-F6AC0252D761",
+    "4E6859DE-9971-4749-B207-5B9950FA0109",
+    "19E63123-E950-4C72-9AB1-E253B1600B8F",
+    "3A8A4E20-ABC0-49A5-AC58-BE328A365940",
+    "4C46BA9C-80FE-4144-BC22-A0E0AE409271",
+    "4A160067-0630-44FF-BE49-9B98FEB24C3B"
+  ],
+  "prefs": {
+    "skin": "images/skins/purple.jpg",
+    "numVisibleDatum": "2",
+    "transparentDashboard": "false",
+    "alwaysRandomizeSkin": "true",
+    "numberOfItemsInPaginatedViews": "10",
+    "unicodes": [{
+      "symbol": "ɔ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɛ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɣ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɥ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɦ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɫ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ʃ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ʒ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ʔ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "λ ",
+      "tipa": "lambda",
+      "useCount": "0"
+    }, {
+      "symbol": "α ",
+      "tipa": "alpha",
+      "useCount": "0"
+    }, {
+      "symbol": "β ",
+      "tipa": "\beta",
+      "useCount": "0"
+    }, {
+      "symbol": "∀",
+      "tipa": "\forall",
+      "useCount": "0"
+    }, {
+      "symbol": "∃",
+      "tipa": "exists",
+      "useCount": "0"
+    }, {
+      "symbol": "∄",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∅",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∈",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∉",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∋",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∌",
+      "tipa": "",
+      "useCount": "0"
+    }]
+  },
+  "mostRecentIds": {
+    "corpusid": "E038ECA6-AC69-43F3-8EE8-56AD3CDC9162",
+    "datalistid": "F7D2CCF3-7A6F-4DFD-9DFA-D43D6B44B94C",
+    "sessionid": "514275FF-4ACC-4E69-B788-63C94C927987"
+  },
+  "firstname": "Ed",
+  "lastname": "Sapir",
+  "sessionHistory": [
+    "17C02B3F-2582-4F13-8C90-B4460A8B672E",
+    "514275FF-4ACC-4E69-B788-63C94C927987",
+    "763568EE-BB24-48D2-BEAD-D46E22D11418",
+    "BCE4AD53-8500-486C-9F21-6D23506D9FCC"
+  ],
+  "hotkeys": {
+    "firstKey": "",
+    "secondKey": "",
+    "description": ""
+  }
+}

@@ -25,14 +25,13 @@ describe("User ", function() {
     expect(u.toJSON()).toEqual({
       username: 'bill',
       gravatar: '67890954367898765',
-      version: 'v2.0.1',
       firstname: '',
       lastname: '',
       email: '',
       affiliation: '',
       researchInterest: '',
       description: '',
-      researchInterests: ''
+      version: u.version
     });
   });
 
@@ -44,16 +43,14 @@ describe("User ", function() {
     u.lastname = "Smith";
     expect(u.name).toEqual("Bill Smith");
 
-    expect(u.toJSON()).toEqual({
-      version: 'v2.0.1',
+    expect(u.toJSON("complete")).toEqual({
+      username: '',
+      dateCreated: u.dateCreated,
       firstname: 'Bill',
       lastname: 'Smith',
-      username: '',
-      email: '',
-      gravatar: '',
-      researchInterests: '',
-      affiliation: '',
-      description: ''
+      version: u.version,
+      dbname: '',
+      dateModified: 0
     });
   });
 

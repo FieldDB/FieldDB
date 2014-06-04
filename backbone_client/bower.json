@@ -29,6 +29,10 @@
     "bower_components"
   ],
   "dependencies": {
-    "textgrid": "~2.2.0"
+    "textgrid": "~2.2.0",
+    "backbone": "~1.1.2",
+    "underscore": "~1.6.0",
+    "jquery": "~2.1.1",
+    "handlebars": "~1.3.0"
   }
 }

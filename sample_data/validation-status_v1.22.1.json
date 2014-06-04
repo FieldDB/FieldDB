@@ -1,0 +1,19 @@
+[{
+  "color": "success",
+  "showInSearchResults": "checked",
+  "selected": "",
+  "state": "Checked",
+  "consultant": {}
+}, {
+  "color": "warning",
+  "showInSearchResults": "checked",
+  "selected": "",
+  "state": "To be checked",
+  "consultant": {}
+}, {
+  "color": "important",
+  "showInSearchResults": "",
+  "selected": "selected",
+  "state": "Deleted",
+  "consultant": {}
+}]
