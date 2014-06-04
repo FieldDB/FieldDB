@@ -2,6 +2,7 @@
 var AudioVideo = require("./../FieldDBObject").FieldDBObject;
 var AudioVideos = require('./../Collection').Collection;
 var Collection = require('./../Collection').Collection;
+// var Corpus = require('./../corpus/Corpus').Corpus;
 var CORS = require('./../CORS').CORS;
 var DataList = require("./../FieldDBObject").FieldDBObject;
 var Datum = require("./../FieldDBObject").FieldDBObject;
@@ -20,7 +21,7 @@ var _ = {};
  * @property {FileList} files These are the file(s) that were dragged in.
  * @property {String} pouchname This is the corpusid where the data should be imported
  * @property {DatumFields} fields The fields array contains titles of the data columns.
- * @property {DataList} dataList the datalist imported, to hold the data before it is saved.
+ * @property {DataList} datalist The datalist imported, to hold the data before it is saved.
  * @property {Event} event The drag/drop event.
  *
  * @description The initialize serves to bind import to all drag and drop events.
@@ -79,7 +80,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   internalModels: {
     value: {
-      dataList: DataList,
+      datalist: DataList,
       datumFields: DatumFields,
       session: Session
     }
@@ -277,10 +278,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   id: {
     get: function() {
-      return this._dataList.id;
+      return this.datalist.id;
     },
     set: function(value) {
-      return this._dataList.id = value;
+      return this.datalist.id = value;
     }
   },
 
@@ -990,7 +991,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.set("status", status);
 
       //      // Create a new DataListEditView
-      //      window.appView.importView.dataListView = new DataListEditView({
+      //      window.appView.importView.datalistView = new DataListEditView({
       //        model : new DataList({
       //          title : "Data from "+files[0].name,
       //          description : "This is the data list which would result from the import of these files."
@@ -998,7 +999,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       //            pouchname: this.get("pouchname")
       //        })
       //      });
-      //      window.appView.importView.dataListView.format = "import";
+      //      window.appView.importView.datalistView.format = "import";
       //      window.appView.importView.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
       //        collection           : new Datums(),
       //        childViewConstructor : DatumReadView,
@@ -1007,8 +1008,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       //      });
       //
       //      // Render the DataList
-      //      window.appView.importView.dataListView.format = "import";
-      //      window.appView.importView.dataListView.render();
+      //      window.appView.importView.datalistView.format = "import";
+      //      window.appView.importView.datalistView.render();
       //      window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
       //        $("#import-data-list").find(".import-data-list-paginated-view") );
       //
