@@ -218,6 +218,9 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
+  unserializedSessions:{
+    value: null
+  },
   sessions: {
     get: function() {
       return this.unserializedSessions || FieldDBObject.DEFAULT_COLLECTION;
