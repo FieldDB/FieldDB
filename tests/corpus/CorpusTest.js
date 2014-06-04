@@ -40,6 +40,12 @@ describe("Corpus", function() {
 
   describe("serialization ", function() {
 
+
+    xit("should clean v1.22.1 to a maximal json", function() {
+      var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
+      expect(corpus.toJSON("complete")).toEqual('');
+    });
+
     xit("should clean v1.22.1 to a minimaljson", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
       expect(corpus.toJSON(null, "lightweight")).toEqual({
