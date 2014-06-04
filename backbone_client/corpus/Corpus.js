@@ -1,4 +1,4 @@
-define([ 
+define([
     "backbone",
     "comment/Comment",
     "comment/Comments",
@@ -25,13 +25,13 @@ define([
     "glosser/Glosser",
     "OPrime"
 ], function(
-    Backbone, 
-    Comment, 
+    Backbone,
+    Comment,
     Comments,
     CorpusMask,
     Confidential,
     DatumField,
-    DatumFields, 
+    DatumFields,
     DatumState,
     DatumStates,
 //    forcingdataliststoloadearly,
@@ -58,12 +58,12 @@ define([
      *        their "branch" of the corpus will be pushed to the central
      *        remote, and we will show them a "diff" of what has
      *        changed.
-     * 
+     *
      * The Corpus may or may not be a git repository, so this class is
      * to abstract the functions we would expect the corpus to have,
      * regardless of how it is really stored on the disk.
-     * 
-     * 
+     *
+     *
      * @property {String} title This is used to refer to the corpus, and
      *           what appears in the url on the main website eg
      *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
@@ -71,37 +71,37 @@ define([
      *           appears on the corpus details page
      * @property {String} remote The git url of the remote eg:
      *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
-     *           
+     *
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
-     * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
+     * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
      * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
      * @property {Sessions} sessions Collection of sessions that belong to the corpus
      * @property {DataLists} datalists Collection of data lists created under the corpus
-     * @property {Permissions} permissions Collection of permissions groups associated to the corpus 
-     * 
-     *           
+     * @property {Permissions} permissions Collection of permissions groups associated to the corpus
+     *
+     *
      * @property {Glosser} glosser The glosser listens to
      *           orthography/utterence lines and attempts to guess the
      *           gloss.
      * @property {Lexicon} lexicon The lexicon is a list of morphemes,
      *           allomorphs and glosses which are used to index datum, and
      *           also to gloss datum.
-     * 
+     *
      * @description The initialize function probably checks to see if
      *              the corpus is new or existing and brings it down to
      *              the user's client.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("CORPUS INIT");
-      
+
       this.datalists =  new DataLists();
       this.sessions =  new Sessions();
 
-      
+
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -120,7 +120,7 @@ define([
 //      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
 //        + couchConnection.pouchname : OPrime.pouchUrl
 //        + couchConnection.pouchname);
-      
+
     },
     loadOrCreateCorpusByPouchName : function(couchConnection, sucessloadingorCreatingcallback){
       var couchurl = OPrime.getCouchUrl(couchConnection);
@@ -175,7 +175,7 @@ define([
                   sucessloadingorCreatingcallback();
                 }
               });
-              
+
               //end success to create new data list
             },function(){
               alert("Failed to create a session. ");
@@ -215,7 +215,7 @@ define([
       if(!this.get("confidential")){
         this.set("confidential", new Confidential({filledWithDefaults : true}) );
       }
-      
+
       if(!this.get("publicSelf")){
         this.set("publicSelf", new CorpusMask({
           "filledWithDefaults" : true,
@@ -223,13 +223,13 @@ define([
           "pouchname" : this.get("pouchname")
         }));
       }
-      
+
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Private");
       }
-      
+
       if( !this.get("datumStates") || this.get("datumStates").length == 0 ){
-        this.set("datumStates", new DatumStates([ 
+        this.set("datumStates", new DatumStates([
           new DatumState({
             state : "Checked",
             color : "success",
@@ -246,9 +246,9 @@ define([
           }),
         ]));
       }//end if to set datumStates
-      
+
       if(!this.get("datumFields") || this.get("datumFields").length == 0){
-        this.set("datumFields", new DatumFields([ 
+        this.set("datumFields", new DatumFields([
           new DatumField({
             label : "judgement",
             size : "3",
@@ -335,9 +335,9 @@ define([
           }),
         ]));
       }//end if to set datumFields
-      
+
       if(!this.get("conversationFields") || this.get("conversationFields").length == 0 ){
-          this.set("conversationFields", new DatumFields([ 
+          this.set("conversationFields", new DatumFields([
             new DatumField({
               label : "speakers",
               shouldBeEncrypted: "checked",
@@ -352,9 +352,9 @@ define([
             })
           ]));
       }
-      
+
       if(!this.get("sessionFields") || this.get("sessionFields").length == 0){
-        this.set("sessionFields", new DatumFields([ 
+        this.set("sessionFields", new DatumFields([
            new DatumField({
              label : "goal",
              shouldBeEncrypted: "",
@@ -412,21 +412,21 @@ define([
             help: "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
           })
         ]));
-        
+
       }//end if to set sessionFields
-      
-      
+
+
       // If there are no comments, create models
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
 //      this.loadPermissions();
-      
+
       if(typeof donefillingcallback == "function"){
         donefillingcallback();
       }
     },
-    
+
     originalParse : Backbone.Model.prototype.parse,
     parse : function(originalModel){
       /* if this is just a couchdb save result, dont process it */
@@ -443,11 +443,11 @@ define([
         originalModel.couchConnection.description = tmp.description;
         originalModel.couchConnection.titleAsUrl = tmp.titleAsUrl;
       }
-      /* Update the corpus to show all fields which are defaults on corpora, 
+      /* Update the corpus to show all fields which are defaults on corpora,
       they are only added permanently if saved. */
       var tempCorpus = new Corpus();
       tempCorpus.fillWithDefaults();
-      
+
       var corpusFields = tempCorpus.get("datumFields").toJSON();
       var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
 
@@ -504,13 +504,13 @@ define([
     /**
      * backbone-couchdb adaptor set up
      */
-    
+
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/private_corpuses",
-    
-    
+
+
     loadPermissions: function(doneLoadingPermissions){
       if (!this.get("team")){
         //If app is completed loaded use the user, otherwise put a blank user
@@ -521,7 +521,7 @@ define([
 //          this.set("team", new UserMask({pouchname: this.get("pouchname")}));
         }
       }
-      
+
       var corpusself = this;
       // load the permissions in from the server.
       window.app.get("authentication").fetchListOfUsersGroupedByPermissions(function(users){
@@ -536,7 +536,7 @@ define([
         typeaheadusers = JSON.stringify(typeaheadusers);
         var potentialusers = users.allusers || [];
         corpusself.permissions = new Permissions();
-        
+
         var admins = new Users();
         corpusself.permissions.add(new Permission({
           users : admins,
@@ -545,16 +545,16 @@ define([
           potentialusers : potentialusers,
           pouchname: corpusself.get("pouchname")
         }));
-        
+
         var writers = new Users();
         corpusself.permissions.add(new Permission({
-          users: writers, 
+          users: writers,
           role: "writer",
           typeaheadusers : typeaheadusers,
           potentialusers : potentialusers,
           pouchname: corpusself.get("pouchname")
         }));
-        
+
         var readers = new Users();
         corpusself.permissions.add(new Permission({
           users: readers,
@@ -563,7 +563,7 @@ define([
           potentialusers : potentialusers,
           pouchname: corpusself.get("pouchname")
         }));
-        
+
         if(users.admins && users.admins.length > 0){
           for ( var u in users.admins) {
             if(!users.admins[u].username){
@@ -601,14 +601,14 @@ define([
           }
         }
         //Set up the typeahead for the permissions edit
-        
+
         if(typeof doneLoadingPermissions == "function"){
           doneLoadingPermissions();
         }
       });
-      
+
     },
-    
+
     defaults : {
       title : "Untitled Corpus",
       titleAsUrl :"UntitledCorpus",
@@ -622,32 +622,32 @@ define([
 //      searchFields : DatumFields,
 //      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
     },
-    
+
     // Internal models: used by the parse function
     internalModels : {
       confidential :  Confidential,
       consultants : Consultants,
       datumStates : DatumStates,
-      datumFields : DatumFields, 
+      datumFields : DatumFields,
       conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
-//      sessions : Sessions, 
-//      dataLists : DataLists, 
+//      sessions : Sessions,
+//      dataLists : DataLists,
       publicSelf : CorpusMask,
       comments: Comments,
       team: UserMask
     },
-    
+
     /**
-     * Make the  model marked as Deleted, mapreduce function will 
-     * ignore the deleted models so that it does not show in the app, 
-     * but deleted model remains in the database until the admin empties 
+     * Make the  model marked as Deleted, mapreduce function will
+     * ignore the deleted models so that it does not show in the app,
+     * but deleted model remains in the database until the admin empties
      * the trash.
-     * 
+     *
      * Also remove it from the view so the user cant see it.
-     * 
-     */ 
+     *
+     */
     putInTrash : function(){
       OPrime.bug("Sorry deleting corpora is not available right now. Too risky... ");
       return;
@@ -657,16 +657,16 @@ define([
       window.location.href="user.html";
       });
     },
-        
+
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(commentstring) {
       var m = new Comment({
         "text" : commentstring,
      });
-      
+
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -677,7 +677,7 @@ define([
             teamOrPersonal : "team",
             context : " via Offline App."
           });
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -704,7 +704,7 @@ define([
         window.appView.sessionNewModalView.render();
       });
     },
-    /* 
+    /*
      */
     newCorpus : function(){
       $("#new-corpus-modal").modal("show");
@@ -752,8 +752,8 @@ define([
         attributes.sessionFields[x].mask = "";
         attributes.sessionFields[x].value = "";
       }
-      
-      
+
+
       window.appView.corpusNewModalView.model = new Corpus();
       //be sure internal models are parsed and built.
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
@@ -772,12 +772,12 @@ define([
       attributes.couchConnection.pouchname = this.get("pouchname")+"copy";
       attributes.publicSelf = {};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
-      
+
       window.appView.corpusNewModalView.model = new Corpus();
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
       window.appView.corpusNewModalView.render();
     },
-    
+
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     prepareANewPouch : function(couchConnection, callback) {
@@ -796,15 +796,15 @@ define([
       }else{
         Backbone.couch_connector.config.db_name = couchConnection.pouchname;
       }
-      
+
       if(typeof callback == "function"){
         callback();
       }
       return;
-      
-      
-      
-      
+
+
+
+
       alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
@@ -817,16 +817,84 @@ define([
       if (typeof callback == "function") {
         callback();
       }
-    }, 
+    },
+    'createCorpus': function(dataToPost) {
+      dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
+      dataToPost.authUrl = OPrime.defaultCouchConnection().authUrl;
+      dataToPost.newCorpusName = this.get("title");
+
+      var functionForError = function(err){
+        console.log(JSON.stringify(err));
+        var message = "Error creating your new corpus. "
+        if (err.userFriendlyErrors) {
+          message = message + err.userFriendlyErrors;
+        }
+        window.app.stopSpinner();
+        window.appView.toastUser(message, "alert-danger","New Corpus:");
+        $("#new-corpus-modal").find(".alert-danger").removeClass("hide");
+        $("#new-corpus-modal").find(".alert-danger").html(message);
+        $("#new-corpus-modal").modal("show");
+        window.location.href = "#render/true";
+      };
+      var config = {
+        method: "POST",
+        url: dataToPost.authUrl + "/newcorpus",
+        data: dataToPost,
+        withCredentials: true,
+        success: function(response) {
+          console.log("Created new corpus.");
+          console.log(JSON.stringify(response));
+          if (response.userFriendlyErrors) {
+            functionForError(response);
+          } else {
+            $(".spinner-status").html("Corpus created, waiting for it to be ready to use...");
+
+            /*
+             * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
+             */
+            var potentialpouchname = response.corpus.pouchname;
+            var couchConnection =OPrime.defaultCouchConnection();
+            couchConnection.pouchname =potentialpouchname;
+            var nextCorpusUrl = OPrime.getCouchUrl(couchConnection)+ "/_design/pages/_view/private_corpuses";
+
+            OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl , function() {
+              //              OPrime.bug("Attempting to save the new corpus in its database.");
+              if (OPrime.isBackboneCouchDBApp()) {
+                try {
+                  Backbone.couch_connector.config.db_name = potentialpouchname;
+                } catch (e) {
+                  OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
+                }
+              } else {
+                alert("TODO test what happens when not in a backbone couchdb app and creating a corpus for an existing user.");
+              }
+
+              window.setTimeout(function() {
+                var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouchname);
+                window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialpouchname );
+              }, 1000);
+
+            });
+
+          }
+        },
+        error: functionForError
+      };
+      window.app.router.hideEverything();
+      window.app.showSpinner();
+      $(".spinner-status").html("Contacting the server to create a database for your corpus...");
+      OPrime.makeCORSRequest(config);
+
+    },
     /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.
-     * 
+     *
      * - Adds the corpus to the corpus if it is in the right corpus, and wasn't already there
      * - Adds the corpus to the user if it wasn't already there
-     * - Adds an activity to the logged in user with diff in what the user changed. 
-     * 
+     * - Adds an activity to the logged in user with diff in what the user changed.
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -834,7 +902,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("Saving the Corpus");
       var self = this;
       var newModel = false;
-      
+
       /* Upgrade chrome app user corpora's to v1.38+ */
       var oldCouchConnection = this.get("couchConnection");
       if(oldCouchConnection){
@@ -848,120 +916,10 @@ define([
           this.set("couchConnection", oldCouchConnection);
         }
       }
-      
+
       if(!this.id){
-        /*
-         * If this is a new corpus, and we are not in it's database, ask the server to create the databse and loop until it is created, then save it.
-         */
-        newModel = true;
-        this.syncBeforeChangePouch = true;
-        var potentialpouchname = this.get("pouchname");
-        if(!this.get("pouchname")){
-          potentialpouchname = this.get("team").get("username")
-          +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
-          this.set("pouchname", potentialpouchname) ;
-        }
-        /*
-         * TODO this code doesn tmake sense ?
-         */
-        if(!this.get("couchConnection")){
-          this.get("couchConnection").pouchname = this.get("team").get("username")
-          +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
-        }
-        
-        
-
-        /*
-         * If its a chrome app, the user can create a new pouch
-         * offline without any problems... but they cant save to
-         * the backbone couchdb so we should still encourage
-         * them to be online when they make a new corpus.
-         */
-        if(OPrime.isChromeApp()){
-//          alert("TODO test what happens when creating a new corpus in chrome app");
-//          this.syncBeforeChangePouch = false;
-        }
-        
-        /* faking the date of last datum to avoid having a old session pop up */
-        this.set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
-        
-        delete this.get("couchConnection").corpusid;
-        //make sure the corpus is in the history of the user to trigger the server to create the database before we go further
-        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
-        if(pouches.indexOf(potentialpouchname) == -1){
-          window.app.get("authentication").get("userPrivate").get("corpuses").unshift(this.get("couchConnection"));
-        }
-//        window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
-//        window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = "";
-//        window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = this.get("couchConnection");
-        if(this.syncBeforeChangePouch){
-          var newCorpusToBeSaved = this;
-          window.app.showSpinner();
-          $(".spinner-status").html("Contacting the server to create a database for your corpus...");
-          window.app.get("authentication").syncUserWithServer(function(){
-            
-            /*
-             * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
-             */
-            var optionalCouchAppPath = "";
-            if(OPrime.isCouchApp()){
-              optionalCouchAppPath = "/"+potentialpouchname+"/_design/pages/";
-            }
-            OPrime.checkToSeeIfCouchAppIsReady(optionalCouchAppPath+"corpus.html", function(){
-//              OPrime.bug("Attempting to save the new corpus in its database.");
-              if(OPrime.isBackboneCouchDBApp()){
-                try{
-                  Backbone.couch_connector.config.db_name = potentialpouchname;
-                }catch(e){
-                  OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
-                }
-              }else{
-                alert("TODO test what happens when not in a backbone couchdb app and creating a corpus for an existing user.");
-              } 
-              
-              newCorpusToBeSaved.prepareANewPouch(window.app.get("authentication").get("userPrivate").get("corpuses")[0], function(){
-//                alert("Saving new corpus in new corpus menu.");
-                $(".spinner-status").html("Saving the corpus in your new database ...");
-
-                window.functionToSaveNewCorpus = function(){
-                  newCorpusToBeSaved.save(null, {
-                    success : function(model, response) {
-                      model.get("publicSelf").set("corpusid", model.id);
-                      window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
-                      window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
-                      model.get("couchConnection").corpusid = model.id;
-                      window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
-                      window.app.get("authentication").get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
-
-                      var sucessorfailcallbackforcorpusmask = function(){
-                        window.app.get("authentication").saveAndInterConnectInApp(function(){
-                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
-                          window.setTimeout(function(){
-                            window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
-                          },10000);
-                        });
-                      };
-                      model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
-
-                    },error : function(e,f,g) {
-                      $(".spinner-status").html("New Corpus save error " + f.reason +". The app will re-attempt to save your new corpus in 10 seconds...");
-                      window.corpusToBeSaved = newCorpusToBeSaved;
-                      window.setTimeout(window.functionToSaveNewCorpus, 10000);
-
-                    }
-                  });
-                };
-                window.functionToSaveNewCorpus();
-
-                
-              });
-            }, OPrime.checkToSeeIfCouchAppIsReady);
-            
-          });
-          if (OPrime.debugMode) OPrime.debug("Contacting the server to ask it to make a new database for you...");
-          return;
-        }
-        
+        alert("This is a strange situation...The app is trying to create a corpus.");
+        return;
       }else{
         this.get("couchConnection").corpusid = this.id;
         if(!this.get("couchConnection").path){
@@ -969,7 +927,7 @@ define([
         }
       }
       var oldrev = this.get("_rev");
-      
+
       /*
        * For some reason the corpus is getting an extra state that no one defined in it. this gets rid of it when we save.
        */
@@ -983,9 +941,9 @@ define([
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
-      
+
       this.set("timestamp", Date.now());
-      
+
         self.save(null, {
           success : function(model, response) {
             if (OPrime.debugMode) OPrime.debug('Corpus save success');
@@ -1000,7 +958,7 @@ define([
             var publicSelfMode = model.get("publicSelf");
             publicSelfMode.set("corpusid", model.id);
             publicSelfMode.saveAndInterConnectInApp();
-            
+
             if(window.appView){
               window.appView.toastUser("Sucessfully saved corpus: "+ title,"alert-success","Saved!");
               window.appView.addSavedDoc(model.id);
@@ -1103,16 +1061,16 @@ define([
               window.app.get("authentication").get("userPrivate").get("corpuses").splice(oldconnection, 1);
             }
             window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
-            
+
             if(newModel){
-              
+
               self.makeSureCorpusHasADataList(function(){
                 self.makeSureCorpusHasASession(function(){
                   //save the internal models go to the user dashboard to to load the corpus into the dashboard
                   self.save(null, {
                     success : function(model, response) {
                       window.app.get("authentication").saveAndInterConnectInApp(function(){
-                        
+
                       });
                     },error : function(e,f,g) {
                       alert('New Corpus save error' + f.reason);
@@ -1127,8 +1085,8 @@ define([
               },function(){
                 alert("Failed to create a datalist. "+e);
               });//end failure to create new data list
-              
-             
+
+
             }else{
               //if an existing corpus
               window.app.get("authentication").saveAndInterConnectInApp();
@@ -1142,7 +1100,7 @@ define([
 //            if(response && response.reason && response.reason == "unauthorized"){
 //              alert('Corpus save error: ' + response.reason);
 //              window.app.get("authentication").syncUserWithServer(function(){
-//              
+//
 //              });
 //            }
 
@@ -1163,7 +1121,7 @@ define([
           return;
         }
       }
-      
+
       var self = this;
       this.datalists.fetch({
         error : function(model, xhr, options) {
@@ -1203,7 +1161,7 @@ define([
               success : function(model, response) {
                 window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
                 self.datalists.unshift(model);
-                
+
                 if(typeof sucess == "function"){
                   sucess();
                 }else{
@@ -1222,7 +1180,7 @@ define([
         }
       });
     },
-    
+
     makeSureCorpusHasASession : function(suces, fail){
       if(!this.sessions){
         this.sessions = new Sessions();
@@ -1236,11 +1194,11 @@ define([
       var self = this;
       this.sessions.fetch({
         error : function(model, xhr, options) {
-          
+
           if (OPrime.debugMode) OPrime.debug("There was an error loading your sessions.");
           console.log(model,xhr,options);
           OPrime.bug("There was an error loading your sessions.");
-          
+
         },
         success : function(model, response, options) {
           if (response.length > 0) {
@@ -1258,7 +1216,7 @@ define([
             }); //MUST be a new model, other wise it wont save in a new pouch.
             s.set("dateCreated",JSON.stringify(new Date()));
             s.set("dateModified", JSON.stringify(new Date()));
-            
+
             if(!OPrime.isBackboneCouchDBApp()){
               alert("TODO test this setting pouch");
 //              s.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
@@ -1350,7 +1308,7 @@ define([
         }
         return;
       }
-      
+
         corpusself.pouch(function(err, db) {
           var modelwithhardcodedid = {
               "_id": "_design/"+viewparts[0],
@@ -1372,17 +1330,17 @@ define([
             if(err){
               if (OPrime.debugMode) OPrime.debug("The "+view+" view couldn't be created.");
             }else{
-              
+
               if (OPrime.debugMode) OPrime.debug("The "+view+" view was created.");
               if(typeof callbackpouchview == "function"){
                 callbackpouchview();
               }
-              
-              
+
+
             }
           });
       });
-      
+
     },
     /**
      * Accepts two functions success will be called if successful,
@@ -1390,7 +1348,7 @@ define([
      * the corpus isn't in the current corpus it will call the fail
      * callback or it will alert a bug to the user. Override the fail
      * callback if you don't want the alert.
-     * 
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -1450,13 +1408,13 @@ define([
       if(attributes.title){
         attributes.titleAsUrl = attributes.title.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");//this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
       }
-      return Backbone.Model.prototype.set.call( this, attributes, options ); 
+      return Backbone.Model.prototype.set.call( this, attributes, options );
     },
     /**
      * This function takes in a pouchname, which could be different
      * from the current corpus in case there is a master corpus with
      * more/better monolingual data.
-     * 
+     *
      * @param pouchname
      * @param callback
      */
@@ -1473,7 +1431,7 @@ define([
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
-     * 
+     *
      * @param pouchname
      * @param callback
      */
@@ -1486,17 +1444,17 @@ define([
       }
       this.lexicon.buildLexiconFromCouch(pouchname,callback);
     },
-    
+
     /**
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
-     * more representative datum 
+     * more representative datum
      * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
-     * 
+     *
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
-     * 
-     * If a url is passed, it contacts the server for fresh info. 
-     * 
+     *
+     * If a url is passed, it contacts the server for fresh info.
+     *
      * @param pouchname
      * @param callback
      */
@@ -1523,7 +1481,7 @@ define([
         }
         jsonUrl = couchurl + "/_design/pages/_view/get_frequent_fields?group=true";
       }
-     
+
       var self = this;
       OPrime.makeCORSRequest({
         type : 'GET',
@@ -1538,7 +1496,7 @@ define([
           try{
             var totalDatumCount = serverResults.rows[(_.pluck(
                 serverResults.rows, "key").indexOf("datumTotal"))].value;
-            
+
             for ( var field in serverResults.rows) {
               if(serverResults.rows[field].key == "datumTotal"){
                 continue;
@@ -1555,7 +1513,7 @@ define([
           if(frequentFields == []){
             frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
           }
-          
+
           /*
            * Hide machine only fields:
            */
@@ -1567,7 +1525,7 @@ define([
           if(doesThisCorpusHaveSyntacticTreeLatex > -1){
             frequentFields.splice(doesThisCorpusHaveSyntacticTreeLatex, 1);
           }
-          
+
           self.frequentDatumFields = frequentFields;
           if (typeof callback == "function") {
             callback(frequentFields);
@@ -1580,8 +1538,8 @@ define([
           if (typeof callback == "function") {
             callback(["judgement","utterance","morphemes","gloss","translation"]);
           }
-          
-          //end error 
+
+          //end error
         },
           dataType : "json"
         });
@@ -1589,13 +1547,13 @@ define([
     /**
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
-     * more representative datum 
+     * more representative datum
      * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
-     * 
+     *
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
-     * 
-     * If a url is passed, it contacts the server for fresh info. 
-     * 
+     *
+     * If a url is passed, it contacts the server for fresh info.
+     *
      * @param pouchname
      * @param callback
      */
@@ -1626,7 +1584,7 @@ define([
         }
         jsonUrl = couchurl + "/_design/pages/_view/get_corpus_validationStati?group=true";
       }
-     
+
       var self = this;
       OPrime.makeCORSRequest({
         type : 'GET',
@@ -1641,8 +1599,8 @@ define([
           if(frequentStates == []){
             frequentStates = ["Checked","Deleted","ToBeCheckedWithAnna","ToBeCheckedWithBill", "ToBeCheckedWithClaude"];
           }
-          
-          
+
+
           self.frequentDatumValidationStates = frequentStates;
           if (typeof callback == "function") {
             callback(frequentStates);
@@ -1659,7 +1617,7 @@ define([
           }
           window.getFrequentDatumValidationStatesPending = false;
 
-          //end error 
+          //end error
         },
           dataType : "json"
         });
@@ -1667,13 +1625,13 @@ define([
     /**
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
-     * more representative datum 
+     * more representative datum
      * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
-     * 
+     *
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
-     * 
-     * If a url is passed, it contacts the server for fresh info. 
-     * 
+     *
+     * If a url is passed, it contacts the server for fresh info.
+     *
      * @param pouchname
      * @param callback
      */
@@ -1704,7 +1662,7 @@ define([
         }
         jsonUrl = couchurl + "/_design/pages/_view/get_corpus_datum_tags?group=true";
       }
-     
+
       var self = this;
       OPrime.makeCORSRequest({
         type : 'GET',
@@ -1719,7 +1677,7 @@ define([
           if(frequentTags == []){
             frequentTags = ["Passive","WH","Indefinte","Generic", "Agent-y","Causative","Pro-drop","Ambigous"];
           }
-          
+
           self.frequentDatumTags = frequentTags;
           if (typeof callback == "function") {
             callback(frequentTags);
@@ -1736,7 +1694,7 @@ define([
           }
           window.getFrequentDatumTagsPending = false;
 
-          //end error 
+          //end error
         },
           dataType : "json"
         });
@@ -1745,6 +1703,6 @@ define([
 //      alert("TODO contact server to change the public private of the corpus");
     }
   });
-    
+
   return Corpus;
 });

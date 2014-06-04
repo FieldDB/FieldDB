@@ -1,603 +1,643 @@
-var Backbone = require("backbone");
-var CorpusMask = require("corpus/CorpusMask");
-var Confidential = require("confidentiality_encryption/Confidential");
-var Lexicon = require("lexicon/Lexicon");
-var Glosser = require("glosser/Glosser");
-
-var Corpus = Backbone.Model.extend(
-  /** @lends Corpus.prototype */
-  {
-    /**
-     * @class A corpus is like a git repository, it has a remote, a title
-     *        a description and perhaps a readme When the user hits sync
-     *        their "branch" of the corpus will be pushed to the central
-     *        remote, and we will show them a "diff" of what has
-     *        changed.
-     *
-     * The Corpus may or may not be a git repository, so this class is
-     * to abstract the functions we would expect the corpus to have,
-     * regardless of how it is really stored on the disk.
-     *
-     *
-     * @property {String} title This is used to refer to the corpus, and
-     *           what appears in the url on the main website eg
-     *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
-     * @property {String} description This is a short description that
-     *           appears on the corpus details page
-     * @property {String} remote The git url of the remote eg:
-     *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
-     *
-     * @property {Consultants} consultants Collection of consultants who contributed to the corpus
-     * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
-     * @property {DatumFields} datumfields Collection of datum fields used in the corpus
-     * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
-     * @property {Sessions} sessions Collection of sessions that belong to the corpus
-     * @property {DataLists} datalists Collection of data lists created under the corpus
-     * @property {Permissions} permissions Collection of permissions groups associated to the corpus
-     *
-     *
-     * @property {Glosser} glosser The glosser listens to
-     *           orthography/utterence lines and attempts to guess the
-     *           gloss.
-     * @property {Lexicon} lexicon The lexicon is a list of morphemes,
-     *           allomorphs and glosses which are used to index datum, and
-     *           also to gloss datum.
-     *
-     * @description The initialize function probably checks to see if
-     *              the corpus is new or existing and brings it down to
-     *              the user's client.
-     *
-     * @extends Backbone.Model
-     * @constructs
-     */
-    initialize: function() {
-      if (OPrime.debugMode) {
-        OPrime.debug("CORPUS INIT");
-      }
-
-      this.datalists = new DataLists();
-      this.sessions = new Sessions();
+/* global window, OPrime */
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
+var CorpusMask = require("./CorpusMask");
+var Collection = require('./../Collection').Collection;
+var Consultants = require('./../Collection').Collection;
+var DatumFields = require('./../Collection').Collection;
+var DatumStates = require('./../Collection').Collection;
+var Comments = require('./../Collection').Collection;
+var UserMask = require('./../Collection').Collection;
+var Session = require('./../FieldDBObject').FieldDBObject;
+var CORS = require('./../CORS').CORS;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Permissions = require('./../Collection').Collection;
+var Sessions = require('./../Collection').Collection;
+var Q = require('q');
 
 
-      if (this.get("filledWithDefaults")) {
-        this.fillWithDefaults();
-        this.unset("filledWithDefaults");
-      }
-      this.bind("change:publicCorpus", this.changeCorpusPublicPrivate, this);
+var DEFAULT_CORPUS_MODEL = require("./corpus.json");
 
-      //      var couchConnection = this.get("couchConnection");
-      //      if(!couchConnection){
-      //        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-      //        if(!localStorage.getItem("mostRecentCouchConnection")){
-      //          alert("Bug, need to take you back to the users page.");
-      //        }
-      //        this.set("couchConnection", couchConnection);
-      //      }
-      //      this.pouch = Backbone.sync
-      //      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-      //        + couchConnection.pouchname : OPrime.pouchUrl
-      //        + couchConnection.pouchname);
+/**
+ * @class A corpus is like a git repository, it has a remote, a title
+ *        a description and perhaps a readme When the user hits sync
+ *        their "branch" of the corpus will be pushed to the central
+ *        remote, and we will show them a "diff" of what has
+ *        changed.
+ *
+ * The Corpus may or may not be a git repository, so this class is
+ * to abstract the functions we would expect the corpus to have,
+ * regardless of how it is really stored on the disk.
+ *
+ *
+ * @property {String} title This is used to refer to the corpus, and
+ *           what appears in the url on the main website eg
+ *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
+ * @property {String} description This is a short description that
+ *           appears on the corpus details page
+ * @property {String} remote The git url of the remote eg:
+ *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
+ *
+ * @property {Consultants} consultants Collection of consultants who contributed to the corpus
+ * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
+ * @property {DatumFields} datumfields Collection of datum fields used in the corpus
+ * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
+ * @property {Sessions} sessions Collection of sessions that belong to the corpus
+ * @property {DataLists} datalists Collection of data lists created under the corpus
+ * @property {Permissions} permissions Collection of permissions groups associated to the corpus
+ *
+ *
+ * @property {Glosser} glosser The glosser listens to
+ *           orthography/utterence lines and attempts to guess the
+ *           gloss.
+ * @property {Lexicon} lexicon The lexicon is a list of morphemes,
+ *           allomorphs and glosses which are used to index datum, and
+ *           also to gloss datum.
+ *
+ * @description The initialize function probably checks to see if
+ *              the corpus is new or existing and brings it down to
+ *              the user's client.
+ *
+ * @extends FieldDBObject
+ * @tutorial tests/CorpusTest.js
+ */
 
+
+var Corpus = function Corpus(options) {
+  // console.log("Constructing corpus", options);
+  FieldDBObject.apply(this, arguments);
+};
+
+Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
+  constructor: {
+    value: Corpus
+  },
+
+  title: {
+    get: function() {
+      return this._title || FieldDBObject.DEFAULT_STRING;
     },
-    loadOrCreateCorpusByPouchName: function(pouchname, sucessloadingorCreatingcallback) {
-      var corpusself = this;
-      if (!this.get("publicSelf")) {
-        this.set("publicSelf", new CorpusMask({
-          "pouchname": pouchname
-        }));
+    set: function(value) {
+      if (value === this._title) {
+        return;
       }
-      var c = this.get("publicSelf");
-      this.get("publicSelf").id = "corpus";
-      c.fetch({
-        success: function(model, response, options) {
-          if (OPrime.debugMode) {
-            OPrime.debug("Success fetching corpus' public self: ", model, response, options);
-          }
-          if (!model.get("corpusid")) {
-            corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-            return;
-          }
-          corpusself.id = model.get("corpusid");
-          corpusself.set("pouchname", pouchname);
-          corpusself.fetch({
-            success: function(model) {
-              if (OPrime.debugMode) {
-                OPrime.debug("Corpus fetched successfully", model);
-              }
-              $(".spinner-status").html("Loading Datalist...");
-              corpusself.makeSureCorpusHasADataList(function() {
-                corpusself.datalists.at(0).setAsCurrentDataList(function() {
-                  $(".spinner-status").html("Datalist loaded.");
-                });
-                $(".spinner-status").html("Loading Elicitation Session...");
-                corpusself.makeSureCorpusHasASession(function() {
-                  corpusself.sessions.at(0).setAsCurrentSession(function() {
-                    $(".spinner-status").html("Session loaded.");
-                    if (typeof sucessloadingorCreatingcallback === "function") {
-                      sucessloadingorCreatingcallback();
-                    }
-                  });
+      if (!value) {
+        delete this._title;
+        return;
+      }
+      this._title = value.trim();
+      this._titleAsUrl = this._title;
+    }
+  },
 
-                  //end success to create new data list
-                }, function() {
-                  alert("Failed to create a session. ");
-                }); //end failure to create new data list
-                //end success to create new data list
-              }, function() {
-                alert("Failed to create a datalist. ");
-              }); //end failure to create new data list
-
-            },
-            error: function(model, xhr, options) {
-              $(".spinner-status").html("Downloading Corpus...");
-
-              if (OPrime.debugMode) {
-                OPrime.debug("Error fetching corpus  : ", model, xhr, options);
-              }
-              if (corpusself.islooping) {
-                OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..." + e);
-                return;
-              }
-              corpusself.islooping = true;
-              OPrime.bug("Trying to download this corpus to this device one more time..." + xhr.reason);
-              corpusself.loadOrCreateCorpusByPouchName(pouchname, sucessloadingorCreatingcallback);
-            }
-          });
-        },
-        error: function(model, xhr, options) {
-          $(".spinner-status").html("Creating Corpus...");
-
-          if (OPrime.debugMode) {
-            OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-          }
-          OPrime.bug("Error fetching your corpus' public view..." + xhr.reason);
-          corpusself.get("publicSelf").fillWithDefaults();
-          corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
-          corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
-          corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
-        }
-      });
+  titleAsUrl: {
+    get: function() {
+      return this._titleAsUrl || FieldDBObject.DEFAULT_STRING;
     },
-    fetchPublicSelf: function() {
-      try {
-        var corpusself = this;
-        if (!this.get("publicSelf")) {
-          this.set("publicSelf", new CorpusMask());
-        }
-        this.get("publicSelf").id = "corpus";
-        this.get("publicSelf").fetch({
-          sucess: function(model, response, options) {
-            if (OPrime.debugMode) {
-              OPrime.debug("Success fetching corpus' public self: ", model, response, options);
-            }
-          },
-          error: function(model, xhr, options) {
-            if (OPrime.debugMode) {
-              OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-            }
-            corpusself.get("publicSelf").fillWithDefaults();
-            corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
-            corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
-          }
-        });
-      } catch (e) {
-        OPrime.bug("");
+    set: function(value) {
+      if (value === this._titleAsUrl) {
+        return;
       }
+      if (!value) {
+        delete this._titleAsUrl;
+        return;
+      }
+      this._titleAsUrl = this._titleAsUrl.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_"); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
+    }
+  },
+
+  description: {
+    get: function() {
+      return this._description || FieldDBObject.DEFAULT_STRING;
     },
-    fillWithDefaults: function(donefillingcallback) {
-      if (!this.get("confidential")) {
-        this.set("confidential", new Confidential({
-          filledWithDefaults: true
-        }));
+    set: function(value) {
+      if (value === this._description) {
+        return;
       }
-
-      if (!this.get("publicSelf")) {
-        this.set("publicSelf", new CorpusMask({
-          "filledWithDefaults": true,
-          "couchConnection": this.get("couchConnection"),
-          "pouchname": this.get("pouchname")
-        }));
+      if (!value) {
+        delete this._description;
+        return;
       }
+      this._description = value.trim();
+    }
+  },
 
-      if (!this.get("publicCorpus")) {
-        this.set("publicCorpus", "Private");
-      }
-
-      if (!this.get("datumStates") || this.get("datumStates").length === 0) {
-        this.set("datumStates", new DatumStates([
-          new DatumState({
-            state: "Checked",
-            color: "success",
-            selected: "selected"
-          }),
-          new DatumState({
-            state: "To be checked",
-            color: "warning"
-          }), , new DatumState({
-            state: "Deleted",
-            color: "important",
-            showInSearchResults: ""
-          }),
-        ]));
-      } //end if to set datumStates
-
-      if (!this.get("datumFields") || this.get("datumFields").length === 0) {
-        this.set("datumFields", new DatumFields([
-          new DatumField({
-            label: "judgement",
-            size: "3",
-            shouldBeEncrypted: "",
-            showToUserTypes: "linguist",
-            userchooseable: "disabled",
-            help: "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
-          }),
-          new DatumField({
-            label: "utterance",
-            shouldBeEncrypted: "checked",
-            showToUserTypes: "all",
-            userchooseable: "disabled",
-            help: "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
-          }),
-          new DatumField({
-            label: "morphemes",
-            shouldBeEncrypted: "checked",
-            showToUserTypes: "linguist",
-            userchooseable: "disabled",
-            help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
-          }),
-          new DatumField({
-            label: "gloss",
-            shouldBeEncrypted: "checked",
-            showToUserTypes: "linguist",
-            userchooseable: "disabled",
-            help: "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
-          }),
-          new DatumField({
-            label: "syntacticCategory",
-            shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
-            userchooseable: "disabled",
-            help: "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish." +
-              " It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM)," +
-              " or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
-          }),
-          new DatumField({
-            label: "syntacticTreeLatex",
-            shouldBeEncrypted: "checked",
-            showToUserTypes: "machine",
-            userchooseable: "disabled",
-            help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
-          }),
-          new DatumField({
-            label: "translation",
-            shouldBeEncrypted: "checked",
-            showToUserTypes: "all",
-            userchooseable: "disabled",
-            help: "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends"
-          }),
-          new DatumField({
-            label: "tags",
-            shouldBeEncrypted: "",
-            showToUserTypes: "all",
-            userchooseable: "disabled",
-            help: "Tags for constructions or other info that you might want to use to categorize your data."
-          }),
-          new DatumField({
-            label: "validationStatus",
-            shouldBeEncrypted: "",
-            showToUserTypes: "all",
-            userchooseable: "disabled",
-            help: "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
-          })
-        ]));
-      } //end if to set datumFields
-
-      if (!this.get("conversationFields") || this.get("conversationFields").length === 0) {
-        this.set("conversationFields", new DatumFields([
-          new DatumField({
-            label: "speakers",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
-          }),
-          new DatumField({
-            label: "modality",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
-          })
-        ]));
-      }
-
-      if (!this.get("sessionFields") || this.get("sessionFields").length === 0) {
-        this.set("sessionFields", new DatumFields([
-          new DatumField({
-            label: "goal",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
-          }),
-          new DatumField({
-            label: "consultants",
-            shouldBeEncrypted: "",
-            userMasks: [],
-            help: "This is a comma seperated field of all the consultants who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the consultants if they are not anonymous or are actual users of the system. ",
-            userchooseable: "disabled"
-          }),
-          new DatumField({
-            label: "dialect",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "The dialect of this session (as precise as you'd like)."
-          }),
-          new DatumField({
-            label: "language",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "The language (or language family), if desired."
-          }),
-          new DatumField({
-            label: "dateElicited",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "The date when the elicitation session took place."
-          }),
-          new DatumField({
-            label: "user",
-            shouldBeEncrypted: "",
-            help: "This is the username of who created this elicitation session. There are other fields contains an array of participants and consultants. ",
-            userchooseable: "disabled"
-          }),
-          new DatumField({
-            label: "participants",
-            shouldBeEncrypted: "",
-            userMasks: [],
-            help: "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. ",
-            userchooseable: "disabled"
-          }),
-          new DatumField({
-            label: "dateSEntered",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "This field is deprecated, it was replaced by DateSessionEntered."
-          }),
-          new DatumField({
-            label: "DateSessionEntered",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
-          })
-        ]));
-
-      } //end if to set sessionFields
-
-
-      // If there are no comments, create models
-      if (!this.get("comments")) {
-        this.set("comments", new Comments());
-      }
-      //      this.loadPermissions();
-
-      if (typeof donefillingcallback === "function") {
-        donefillingcallback();
-      }
+  couchConnection: {
+    get: function() {
+      throw "couchConnection is deprecated";
     },
-    fillInDefaultLicenseAndTermsForUserIfMissing: function() {
-      if (!this.get("copyright")) {
-        this.set("copyright",
-          "Default: Add names of the copyright holders of the corpus.");
-      }
-      var defaultLicense = {
-        title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
-        humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-        link: "http://creativecommons.org/licenses/by-sa/3.0/"
-      };
-      if (!this.get("license")) {
-        this.set("license", defaultLicense);
-      }
-      var licenseUpdated = this.get("license");
-      if (typeof licenseUpdated === "string") {
-        licenseUpdated = {};
-      }
-      if (!licenseUpdated.title) {
-        licenseUpdated.title = defaultLicense.title;
-        this.set("license", licenseUpdated);
-      }
-      if (!licenseUpdated.humanReadable) {
-        licenseUpdated.humanReadable = defaultLicense.humanReadable;
-        this.set("license", licenseUpdated);
-      }
-      if (!licenseUpdated.link) {
-        licenseUpdated.link = defaultLicense.link;
-        this.set("license", licenseUpdated);
-      }
-      var defaultTerms = {
-        humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-      };
-      var termsUpdated = this.get("termsOfUse");
-      if (!termsUpdated || typeof termsUpdated === "string") {
-        termsUpdated = defaultTerms;
-        this.set("termsOfUse", defaultTerms);
-      }
+    set: function(value) {
+      console.warn("couchConnection is deprecated");
+    }
+  },
+
+  replicatedCorpusUrls: {
+    get: function() {
+      return this._replicatedCorpusUrls || FieldDBObject.DEFAULT_COLLECTION;
     },
-
-    /**
-     * backbone-couchdb adaptor set up
-     */
-
-    // The couchdb-connector is capable of mapping the url scheme
-    // proposed by the authors of Backbone to documents in your database,
-    // so that you don't have to change existing apps when you switch the sync-strategy
-    url: "/private_corpuses",
-
-
-    loadPermissions: function(doneLoadingPermissions) {
-      if (!this.get("team")) {
-        //If app is completed loaded use the user, otherwise put a blank user
-        if (window.appView) {
-          this.set("team", window.app.get("authentication").get("userPublic"));
-          //          this.get("team").id = window.app.get("authentication").get("userPublic").id;
-        } else {
-          //          this.set("team", new UserMask({pouchname: this.get("pouchname")}));
+    set: function(value) {
+      if (value === this._replicatedCorpusUrls) {
+        return;
+      }
+      if (!value) {
+        delete this._replicatedCorpusUrls;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
         }
       }
+      this._replicatedCorpusUrls = value;
+    }
+  },
 
-      var corpusself = this;
-      // load the permissions in from the server.
-      window.app.get("authentication").fetchListOfUsersGroupedByPermissions(function(users) {
-        var typeaheadusers = [];
-        for (var userX in users.notonteam) {
-          if (users.notonteam[userX].username) {
-            typeaheadusers.push(users.notonteam[userX].username);
+  olacExportConnections: {
+    get: function() {
+      return this._olacExportConnections || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._olacExportConnections) {
+        return;
+      }
+      if (!value) {
+        delete this._olacExportConnections;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._olacExportConnections = value;
+    }
+  },
+
+  termsOfUse: {
+    get: function() {
+      return this._termsOfUse || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._termsOfUse) {
+        return;
+      }
+      if (!value) {
+        delete this._termsOfUse;
+        return;
+      }
+      this._termsOfUse = value;
+    }
+  },
+
+  license: {
+    get: function() {
+      return this._license || {};
+    },
+    set: function(value) {
+      if (value === this._license) {
+        return;
+      }
+      if (!value) {
+        delete this._license;
+        return;
+      }
+      this._license = value;
+    }
+  },
+
+  copyright: {
+    get: function() {
+      return this._copyright || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._copyright) {
+        return;
+      }
+      if (!value) {
+        delete this._copyright;
+        return;
+      }
+      this._copyright = value.trim();
+    }
+  },
+
+  unserializedSessions:{
+    value: null
+  },
+  sessions: {
+    get: function() {
+      return this.unserializedSessions || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this.unserializedSessions) {
+        return;
+      }
+      if (!value) {
+        delete this.unserializedSessions;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Sessions(value);
+        }
+      }
+      this.unserializedSessions = value;
+    }
+  },
+
+  dateOfLastDatumModifiedToCheckForOldSession: {
+    get: function() {
+      var timestamp = 0;
+      if (this.sessions && this.sessions.length > 0) {
+        var mostRecentSession = this.sessions[this.sessions.length - 1];
+        if (mostRecentSession.dateModified) {
+          timestamp = mostRecentSession.dateModified;
+        }
+      }
+      return new Date(timestamp);
+    }
+  },
+
+
+  confidential: {
+    get: function() {
+      return this._confidential || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._confidential) {
+        return;
+      }
+      if (!value) {
+        delete this._confidential;
+        return;
+      }
+      this._confidential = value;
+    }
+  },
+
+  publicCorpus: {
+    get: function() {
+      return this._publicCorpus || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._publicCorpus) {
+        return;
+      }
+      if (!value) {
+        delete this._publicCorpus;
+        return;
+      }
+      if (value !== "Public" && value !== "Private") {
+        console.warn("Corpora can be either Public or Private");
+        value = "Private";
+      }
+      this._publicCorpus = value;
+    }
+  },
+
+  _collection: {
+    value: "private_corpuses"
+  },
+  collection: {
+    get: function() {
+      return this._collection;
+    }
+  },
+
+  teamExternalObject: {
+    value: null
+  },
+  team: {
+    get: function() {
+      return this.teamExternalObject;
+    },
+    set: function(value) {
+      if (value === this.teamExternalObject) {
+        return;
+      }
+      this.teamExternalObject = value;
+    }
+  },
+
+  publicSelfExternalObject: {
+    value: null
+  },
+  publicSelf: {
+    get: function() {
+      return this.publicSelfExternalObject;
+    },
+    set: function(value) {
+      if (value === this.publicSelfExternalObject) {
+        return;
+      }
+      this.publicSelfExternalObject = value;
+    }
+  },
+
+  comments: {
+    get: function() {
+      return this._comments || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._comments) {
+        return;
+      }
+      if (!value) {
+        delete this._comments;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._comments = value;
+    }
+  },
+
+  validationStati: {
+    get: function() {
+      return this._validationStati || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._validationStati) {
+        return;
+      }
+      if (!value) {
+        delete this._validationStati;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._validationStati = value;
+    }
+  },
+
+  tags: {
+    get: function() {
+      return this._tags || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._tags) {
+        return;
+      }
+      if (!value) {
+        delete this._tags;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._tags = value;
+    }
+  },
+
+  datumFields: {
+    get: function() {
+      return this._datumFields || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._datumFields) {
+        return;
+      }
+      if (!value) {
+        delete this._datumFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._datumFields = value;
+    }
+  },
+
+  conversationFields: {
+    get: function() {
+      return this._conversationFields || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._conversationFields) {
+        return;
+      }
+      if (!value) {
+        delete this._conversationFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._conversationFields = value;
+    }
+  },
+
+  sessionFields: {
+    get: function() {
+      return this._sessionFields || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._sessionFields) {
+        return;
+      }
+      if (!value) {
+        delete this._sessionFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new Collection(value);
+        }
+      }
+      this._sessionFields = value;
+    }
+  },
+
+  loadOrCreateCorpusByPouchName: {
+    value: function(pouchname) {
+      console.warn('TODO test loadOrCreateCorpusByPouchName');
+      if (!pouchname) {
+        throw "Cannot load corpus, its dbname was undefined";
+      }
+      var deferred = Q.defer(),
+        self = this;
+
+      pouchname = pouchname.trim();
+      this.pouchname = pouchname;
+
+      Q.nextTick(function() {
+
+        var tryAgainInCaseThereWasALag = function(reason) {
+          console.log(reason);
+          if (self.runningloadOrCreateCorpusByPouchName) {
+            deferred.reject(reason);
+          }
+          self.runningloadOrCreateCorpusByPouchName = true;
+          window.setTimeout(function() {
+            self.loadOrCreateCorpusByPouchName(pouchname);
+          }, 1000);
+        };
+
+        CORS.makeCORSRequest({
+          type: 'GET',
+          dataType: 'json',
+          url: self.url
+        }).then(function(data) {
+          console.log(data);
+          if (data.rows && data.rows.length > 0) {
+            self.runningloadOrCreateCorpusByPouchName = false;
+            self.id = data.rows[0].value._id;
+            self.fetch().then(deferred.resolve, deferred.reject);
           } else {
-            if (OPrime.debugMode) {
-              OPrime.debug("This user is invalid", users.notonteam[userX]);
-            }
+            tryAgainInCaseThereWasALag(data);
           }
-        }
-        typeaheadusers = JSON.stringify(typeaheadusers);
-        var potentialusers = users.allusers || [];
-        corpusself.permissions = new Permissions();
+        }, tryAgainInCaseThereWasALag);
 
-        var admins = new Users();
-        corpusself.permissions.add(new Permission({
-          users: admins,
-          role: "admin",
-          typeaheadusers: typeaheadusers,
-          potentialusers: potentialusers,
-          pouchname: corpusself.get("pouchname")
-        }));
-
-        var writers = new Users();
-        corpusself.permissions.add(new Permission({
-          users: writers,
-          role: "writer",
-          typeaheadusers: typeaheadusers,
-          potentialusers: potentialusers,
-          pouchname: corpusself.get("pouchname")
-        }));
-
-        var readers = new Users();
-        corpusself.permissions.add(new Permission({
-          users: readers,
-          role: "reader",
-          typeaheadusers: typeaheadusers,
-          potentialusers: potentialusers,
-          pouchname: corpusself.get("pouchname")
-        }));
-
-        var u;
-        var user;
-        if (users.admins && users.admins.length > 0) {
-          for (u in users.admins) {
-            if (!users.admins[u].username) {
-              continue;
-            }
-            user = {
-              "username": users.admins[u].username
-            };
-            if (users.admins[u].gravatar) {
-              user.gravatar = users.admins[u].gravatar;
-            }
-            admins.models.push(new UserMask(user));
-          }
-        }
-        if (users.writers && users.writers.length > 0) {
-          for (u in users.writers) {
-            if (!users.writers[u].username) {
-              continue;
-            }
-            user = {
-              "username": users.writers[u].username
-            };
-            if (users.writers[u].gravatar) {
-              user.gravatar = users.writers[u].gravatar;
-            }
-            writers.models.push(new UserMask(user));
-          }
-        }
-        if (users.readers && users.readers.length > 0) {
-          for (u in users.readers) {
-            if (!users.readers[u].username) {
-              continue;
-            }
-            user = {
-              "username": users.readers[u].username
-            };
-            if (users.readers[u].gravatar) {
-              user.gravatar = users.readers[u].gravatar;
-            }
-            readers.models.push(new UserMask(user));
-          }
-        }
-        //Set up the typeahead for the permissions edit
-
-        if (typeof doneLoadingPermissions === "function") {
-          doneLoadingPermissions();
-        }
       });
 
-    },
+      return deferred.promise;
+    }
+  },
 
-    defaults: {
-      title: "Untitled Corpus",
-      titleAsUrl: "UntitledCorpus",
-      description: "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
-      //      confidential :  Confidential,
-      //      consultants : Consultants,
-      //      datumStates : DatumStates,
-      //      datumFields : DatumFields,
-      //      conversationFields : DatumFields,
-      //      sessionFields : DatumFields,
-      //      searchFields : DatumFields,
-      //      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
-    },
+  fetchPublicSelf: {
+    value: function() {
+      console.warn('TODO test fetchPublicSelf');
+      if (!this.pouchname) {
+        throw "Cannot load corpus's public self, its dbname was undefined";
+      }
+      var deferred = Q.defer(),
+        self = this;
 
-    // Internal models: used by the parse function
-    internalModels: {
+      Q.nextTick(function() {
+
+        if (self.publicSelf && self.publicSelf.rev) {
+          deferred.resolve(self.publicSelf);
+          return;
+        }
+
+        self.publicSelf = new CorpusMask({
+          dbname: self.dbname
+        });
+
+        self.publicSelf.fetch()
+          .then(deferred.resolve, deferred.reject);
+
+      });
+      return deferred.promise;
+    }
+  },
+
+  /**
+   * backbone-couchdb adaptor set up
+   */
+
+  // The couchdb-connector is capable of mapping the url scheme
+  // proposed by the authors of Backbone to documents in your database,
+  // so that you don't have to change existing apps when you switch the sync-strategy
+  url: {
+    value: "/private_corpuses"
+  },
+
+  loadPermissions: {
+    value: function() {
+      console.warn('TODO test loadPermissions');
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        if (!self.permissions) {
+          self.permissions = new Permissions();
+        }
+        if (!self.permissions.pouchname) {
+          self.permissions.pouchname = self.pouchname;
+        }
+        self.permissions.fetch()
+          .then(deferred.resolve, deferred.reject);
+
+      });
+      return deferred.promise;
+    }
+  },
+
+  pouchname: {
+    get: function() {
+      return this.dbname;
+    },
+    set: function(value) {
+      if (this.dbname && this.dbname !== value) {
+        throw "Cannot change the pouchname of a corpus, you must create a new object first.";
+      }
+      this.dbname = value;
+    }
+  },
+
+  defaults: {
+    get: function() {
+      return DEFAULT_CORPUS_MODEL;
+    }
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      _id: FieldDBObject.DEFAULT_STRING,
+      _rev: FieldDBObject.DEFAULT_STRING,
+      dbname: FieldDBObject.DEFAULT_STRING,
+      version: FieldDBObject.DEFAULT_STRING,
+      dateCreated: FieldDBObject.DEFAULT_DATE,
+      dateModified: FieldDBObject.DEFAULT_DATE,
+      comments: Comments,
+
+      title: FieldDBObject.DEFAULT_STRING,
+      titleAsUrl: FieldDBObject.DEFAULT_STRING,
+      description: FieldDBObject.DEFAULT_STRING,
+      termsOfUse: FieldDBObject,
+      license: FieldDBObject,
+      copyright: FieldDBObject.DEFAULT_STRING,
+      replicatedCorpusUrls: Collection,
+      olacExportConnections: Collection,
+      publicCorpus: FieldDBObject.DEFAULT_STRING,
       confidential: Confidential,
-      consultants: Consultants,
-      datumStates: DatumStates,
+
+      validationStati: DatumStates,
+      tags: Collection,
+
       datumFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
-      searchFields: DatumFields,
-      //      sessions : Sessions, 
-      //      dataLists : DataLists, 
-      publicSelf: CorpusMask,
-      comments: Comments,
-      team: UserMask
-    },
+    }
+  },
 
-    /**
-     * Make the  model marked as Deleted, mapreduce function will
-     * ignore the deleted models so that it does not show in the app,
-     * but deleted model remains in the database until the admin empties
-     * the trash.
-     *
-     * Also remove it from the view so the user cant see it.
-     *
-     */
-    putInTrash: function() {
+  /**
+   * Make the  model marked as Deleted, mapreduce function will
+   * ignore the deleted models so that it does not show in the app,
+   * but deleted model remains in the database until the admin empties
+   * the trash.
+   *
+   * Also remove it from the view so the user cant see it.
+   *
+   */
+  putInTrash: {
+    value: function() {
       OPrime.bug("Sorry deleting corpora is not available right now. Too risky... ");
       if (true) {
         return;
       }
       /* TODO contact server to delte the corpus, if the success comes back, then do this */
-      this.set("trashed", "deleted" + Date.now());
-      this.saveAndInterConnectInApp(function() {
-        window.location.href = "user.html";
-      });
-    },
+      this.trashed = "deleted" + Date.now();
+      this.save();
+    }
+  },
 
-    //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment: function(commentstring) {
-      var m = new Comment({
+  /**
+   *  This the function called by the add button, it adds a new comment state both to the collection and the model
+   * @type {Object}
+   */
+  newComment: {
+    value: function(commentstring) {
+      var m = {
         "text": commentstring,
-      });
+      };
 
-      this.get("comments").add(m);
-      window.appView.addUnsavedDoc(this.id);
+      this.comments.add(m);
+      this.unsavedChanges = true;
 
       window.app.addActivity({
         verb: "commented",
@@ -618,784 +658,326 @@ var Corpus = Backbone.Model.extend(
         teamOrPersonal: "personal",
         context: " via Offline App."
       });
-    },
-    newSession: function() {
-      $("#new-session-modal").modal("show");
-      //Save the current session just in case
-      var self = this;
-      window.app.get("currentSession").saveAndInterConnectInApp(function() {
-        //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-        window.appView.sessionNewModalView.model = new Session({
-          comments: new Comments(),
-          pouchname: self.get("pouchname"),
-          sessionFields: window.app.get("currentSession").get("sessionFields").clone()
-        });
-        window.appView.sessionNewModalView.render();
+
+      return m;
+    }
+  },
+
+  /**
+   * Builds a new session in this corpus, copying the current session's fields (if available) or the corpus' session fields.
+   * @return {Session} a new session for this corpus
+   */
+  newSession: {
+    value: function() {
+      var sessionFields;
+      if (this.currentSession && this.currentSession.sessionFields) {
+        sessionFields = this.currentSession.sessionFields.clone();
+      } else {
+        sessionFields = this.sessionFields.clone();
+      }
+      var session = new Session({
+        pouchname: this.pouchname,
+        sessionFields: sessionFields
       });
-    },
-    /* 
-     */
-    newCorpus: function() {
-      $("#new-corpus-modal").modal("show");
-      //Save the current session just in case
-      this.saveAndInterConnectInApp();
-      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-      var attributes = JSON.parse(JSON.stringify(this.attributes));
-      // Clear the current data list's backbone info and info which we shouldnt clone
-      attributes._id = undefined;
-      attributes._rev = undefined;
-      /*
-       * WARNING this might not be a good idea, if you find strange side
-       * effects in corpora in the future, it might be due to this way
-       * of creating (duplicating) a corpus. However with a corpus it is
-       * a good idea to duplicate the permissions and settings so that
-       * the user won't have to redo them.
-       */
-      attributes.title = this.get("title") + " copy";
-      attributes.titleAsUrl = this.get("titleAsUrl") + "Copy";
-      attributes.description = "Copy of: " + this.get("description");
-      //      attributes.sessionFields = new DatumFields(attributes.sessionFields);
-      attributes.pouchname = this.get("pouchname") + "copy";
-      attributes.couchConnection.pouchname = this.get("pouchname") + "copy";
-      //      attributes.dataLists = [];
-      //      attributes.sessions = [];
-      attributes.comments = [];
-      attributes.publicSelf = {
-        filledWithDefaults: true
-      };
-      attributes.team = window.app.get("authentication").get("userPublic").toJSON();
-      //clear out search terms from the new corpus's datum fields
+      return session;
+    }
+  },
+
+  /**
+   * Builds a new corpus based on this one (if this is not the team's practice corpus)
+   * @return {Corpus} a new corpus based on this one
+   */
+  newCorpus: {
+    value: function() {
+      var newCorpusJson = this.clone();
+
+      newCorpusJson.title = newCorpusJson.title + " copy";
+      newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
+      newCorpusJson.description = "Copy of: " + newCorpusJson.description;
+
+      newCorpusJson.pouchname = newCorpusJson.pouchname + "copy";
+      newCorpusJson.replicatedCorpusUrls = newCorpusJson.replicatedCorpusUrls.map(function(remote) {
+        return remote.replace(new RegExp(this.pouchname, "g"), newCorpusJson.pouchname);
+      });
+
+      newCorpusJson.comments = [];
+
       /* use default datum fields if this is going to based on teh users' first practice corpus */
-      if (this.get("pouchname").indexOf("firstcorpus") > -1) {
-        attributes.datumFields = [];
+      if (this.pouchname.indexOf("firstcorpus") > -1) {
+        newCorpusJson.datumFields = DEFAULT_CORPUS_MODEL.datumFields;
+        newCorpusJson.conversationFields = DEFAULT_CORPUS_MODEL.conversationFields;
+        newCorpusJson.sessionFields = DEFAULT_CORPUS_MODEL.sessionFields;
       }
       var x;
-      for (x in attributes.datumFields) {
-        attributes.datumFields[x].mask = "";
-        attributes.datumFields[x].value = "";
+      //clear out search terms from the new corpus's datum fields
+      for (x in newCorpusJson.datumFields) {
+        newCorpusJson.datumFields[x].mask = "";
+        newCorpusJson.datumFields[x].value = "";
       }
       //clear out search terms from the new corpus's conversation fields
-      for (x in attributes.conversationFields) {
-        attributes.conversationFields[x].mask = "";
-        attributes.conversationFields[x].value = "";
+      for (x in newCorpusJson.conversationFields) {
+        newCorpusJson.conversationFields[x].mask = "";
+        newCorpusJson.conversationFields[x].value = "";
       }
       //clear out search terms from the new corpus's session fields
-      for (x in attributes.sessionFields) {
-        attributes.sessionFields[x].mask = "";
-        attributes.sessionFields[x].value = "";
+      for (x in newCorpusJson.sessionFields) {
+        newCorpusJson.sessionFields[x].mask = "";
+        newCorpusJson.sessionFields[x].value = "";
       }
 
+      return new Corpus(newCorpusJson);
+    }
+  },
 
-      window.appView.corpusNewModalView.model = new Corpus();
-      //be sure internal models are parsed and built.
-      window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
-      /* use default datum fields if this is going to based on teh users' first practice corpus */
-      window.appView.corpusNewModalView.model.fillWithDefaults();
-      window.appView.corpusNewModalView.render();
+  /**
+   * DO NOT store in attributes when saving to pouch (too big)
+   * @type {FieldDBGlosser}
+   */
+  glosser: {
+    get: function() {
+      return this.glosserExternalObject;
     },
-    newCorpusSimple: function() {
-      $("#new-corpus-modal").modal("show");
-      //Save the current session just in case
-      this.saveAndInterConnectInApp();
-      var attributes = {};
-      attributes.title = this.get("title") + " copy";
-      attributes.titleAsUrl = this.get("titleAsUrl") + "Copy";
-      attributes.pouchname = this.get("pouchname") + "copy";
-      attributes.couchConnection.pouchname = this.get("pouchname") + "copy";
-      attributes.publicSelf = {};
-      attributes.team = window.app.get("authentication").get("userPublic").toJSON();
-
-      window.appView.corpusNewModalView.model = new Corpus();
-      window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
-      window.appView.corpusNewModalView.render();
-    },
-
-    //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
-    lexicon: new Lexicon(), //DONOT store in attributes when saving to pouch (too big)
-    prepareANewPouch: function(couchConnection, callback) {
-      if (!couchConnection || couchConnection === undefined) {
-        console.log("App.changePouch couchConnection must be supplied.");
-        return;
-      } else {
-        console.log("prepareANewPouch setting couchConnection: ", couchConnection);
-      }
-      //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
-      //      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
-
-      if (OPrime.isChromeApp()) {
-        Backbone.couch_connector.config.base_url = window.app.getCouchUrl(couchConnection, "");
-        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
-      } else {
-        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
-      }
-
-      if (typeof callback === "function") {
-        callback();
-      }
-
-      if (true) {
+    set: function(value) {
+      if (value === this.glosserExternalObject) {
         return;
       }
+      this.glosserExternalObject = value;
+    }
+  },
 
-
-
-      alert("TODO set/validate that the the pouch connection");
-      if (this.pouch === undefined) {
-        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.pouchname);
-        this.pouch = Backbone.sync
-          .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + couchConnection.pouchname : OPrime.pouchUrl + couchConnection.pouchname);
-      }
-      if (typeof callback === "function") {
-        callback();
-      }
+  lexicon: {
+    get: function() {
+      return this.lexiconExternalObject;
     },
-    /**
-     * Accepts two functions to call back when save is successful or
-     * fails. If the fail callback is not overridden it will alert
-     * failure to the user.
-     *
-     * - Adds the corpus to the corpus if it is in the right corpus, and wasn't already there
-     * - Adds the corpus to the user if it wasn't already there
-     * - Adds an activity to the logged in user with diff in what the user changed.
-     *
-     * @param successcallback
-     * @param failurecallback
-     */
-    saveAndInterConnectInApp: function(successcallback, failurecallback) {
-      if (OPrime.debugMode) {
-        OPrime.debug("Saving the Corpus");
+    set: function(value) {
+      if (value === this.lexiconExternalObject) {
+        return;
       }
-      var self = this;
+      this.lexiconExternalObject = value;
+    }
+  },
+
+  prepareANewOfflinePouch: {
+    value: function() {
+      throw "I dont know how to prepareANewOfflinePouch";
+    }
+  },
+
+  /**
+   * Accepts two functions to call back when save is successful or
+   * fails. If the fail callback is not overridden it will alert
+   * failure to the user.
+   *
+   * - Adds the corpus to the corpus if it is in the right corpus, and wasn't already there
+   * - Adds the corpus to the user if it wasn't already there
+   * - Adds an activity to the logged in user with diff in what the user changed.
+   * @return {Promise} promise for the saved corpus
+   */
+  saveCorpus: {
+    value: function() {
+      var deferred = Q.defer(),
+        self = this;
+
       var newModel = false;
-
-      /* Upgrade chrome app user corpora's to v1.38+ */
-      var oldCouchConnection = this.get("couchConnection");
-      if (oldCouchConnection) {
-        if (oldCouchConnection.domain === "ifielddevs.iriscouch.com") {
-          oldCouchConnection.domain = "corpusdev.lingsync.org";
-          oldCouchConnection.port = "";
-          this.set("couchConnection", oldCouchConnection);
-        }
-      }
-
       if (!this.id) {
-        /*
-         * If this is a new corpus, and we are not in it's database, ask the server to create the databse and loop until it is created, then save it.
-         */
+        console.log('New corpus');
         newModel = true;
-        this.syncBeforeChangePouch = true;
-        var potentialpouchname = this.get("pouchname");
-        if (!this.get("pouchname")) {
-          potentialpouchname = this.get("team").get("username") + "-" + this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g, "");
-          this.set("pouchname", potentialpouchname);
-        }
-        /*
-         * TODO this code doesn tmake sense ?
-         */
-        if (!this.get("couchConnection")) {
-          this.get("couchConnection").pouchname = this.get("team").get("username") + "-" + this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g, "");
-        }
-
-
-
-        /*
-         * If its a chrome app, the user can create a new pouch
-         * offline without any problems... but they cant save to
-         * the backbone couchdb so we should still encourage
-         * them to be online when they make a new corpus.
-         */
-        if (OPrime.isChromeApp()) {
-          //          alert("TODO test what happens when creating a new corpus in chrome app");
-          //          this.syncBeforeChangePouch = false;
-        }
-
-        /* faking the date of last datum to avoid having a old session pop up */
-        this.set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()));
-
-        delete this.get("couchConnection").corpusid;
-        //make sure the corpus is in the history of the user to trigger the server to create the database before we go further
-        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
-        if (pouches.indexOf(potentialpouchname) === -1) {
-          window.app.get("authentication").get("userPrivate").get("corpuses").unshift(this.get("couchConnection"));
-        }
-        //        window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
-        //        window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = "";
-        //        window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = this.get("couchConnection");
-        if (this.syncBeforeChangePouch) {
-          var newCorpusToBeSaved = this;
-          window.app.showSpinner();
-          $(".spinner-status").html("Contacting the server to create a database for your corpus...");
-          window.app.get("authentication").syncUserWithServer(function() {
-
-            /*
-             * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
-             */
-            var optionalCouchAppPath = "";
-            if (OPrime.isCouchApp()) {
-              optionalCouchAppPath = "/" + potentialpouchname + "/_design/pages/";
-            }
-            OPrime.checkToSeeIfCouchAppIsReady(optionalCouchAppPath + "corpus.html", function() {
-              //              OPrime.bug("Attempting to save the new corpus in its database.");
-              if (OPrime.isBackboneCouchDBApp()) {
-                try {
-                  Backbone.couch_connector.config.db_name = potentialpouchname;
-                } catch (e) {
-                  OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
-                }
-              } else {
-                alert("TODO test what happens when not in a backbone couchdb app and creating a corpus for an existing user.");
-              }
-
-              newCorpusToBeSaved.prepareANewPouch(window.app.get("authentication").get("userPrivate").get("corpuses")[0], function() {
-                //                alert("Saving new corpus in new corpus menu.");
-                $(".spinner-status").html("Saving the corpus in your new database ...");
-
-                window.functionToSaveNewCorpus = function() {
-                  newCorpusToBeSaved.save(null, {
-                    success: function(model, response) {
-                      model.get("publicSelf").set("corpusid", model.id);
-                      window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
-                      window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
-                      model.get("couchConnection").corpusid = model.id;
-                      window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
-                      window.app.get("authentication").get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
-
-                      var sucessorfailcallbackforcorpusmask = function() {
-                        window.app.get("authentication").saveAndInterConnectInApp(function() {
-                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
-                          window.setTimeout(function() {
-                            window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialpouchname + "/" + model.id);
-                          }, 10000);
-                        });
-                      };
-                      model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
-
-                    },
-                    error: function(e, f, g) {
-                      $(".spinner-status").html("New Corpus save error " + f.reason + ". The app will re-attempt to save your new corpus in 10 seconds...");
-                      window.corpusToBeSaved = newCorpusToBeSaved;
-                      window.setTimeout(window.functionToSaveNewCorpus, 10000);
-
-                    }
-                  });
-                };
-                window.functionToSaveNewCorpus();
-
-
-              });
-            }, OPrime.checkToSeeIfCouchAppIsReady);
-
-          });
-          if (OPrime.debugMode) {
-            OPrime.debug("Contacting the server to ask it to make a new database for you...");
-          }
-          return;
-        }
-
       } else {
-        this.get("couchConnection").corpusid = this.id;
-        if (!this.get("couchConnection").path) {
-          this.get("couchConnection").path = "";
-        }
+        console.log('Existing corpus');
       }
       var oldrev = this.get("_rev");
 
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it. this gets rid of it when we save.
-       */
-      try {
-        var ds = this.get("datumStates").models;
-        for (var s in ds) {
-          if (ds[s].get("state") === undefined) {
-            this.get("datumStates").remove(ds[s]);
-          }
+      this.timestamp = Date.now();
+
+      self.unsavedChanges = false;
+      self.save().then(function(model) {
+        var title = model.title;
+        var differences = "#diff/oldrev/" + oldrev + "/newrev/" + model._rev;
+        var verb = "modified";
+        var verbicon = "icon-pencil";
+        if (newModel) {
+          verb = "added";
+          verbicon = "icon-plus";
         }
-      } catch (e) {
-        if (OPrime.debugMode) {
-          OPrime.debug("Removing empty states work around failed some thing was wrong.", e);
-        }
-      }
+        var teamid = self.pouchname.split("-")[0];
+        window.app.addActivity({
+          verb: "<a href='" + differences + "'>" + verb + "</a> ",
+          verbmask: verb,
+          verbicon: verbicon,
+          directobject: "<a href='#corpus/" + model.id + "'>" + title + "</a>",
+          directobjectmask: "a corpus",
+          directobjecticon: "icon-cloud",
+          indirectobject: "created by <a href='#user/" + teamid + "'>" + teamid + "</a>",
+          context: " via Offline App.",
+          contextmask: "",
+          teamOrPersonal: "personal"
+        });
+        window.app.addActivity({
+          verb: "<a href='" + differences + "'>" + verb + "</a> ",
+          verbmask: verb,
+          verbicon: verbicon,
+          directobject: "<a href='#corpus/" + model.id + "'>" + title + "</a>",
+          directobjectmask: "a corpus",
+          directobjecticon: "icon-cloud",
+          indirectobject: "created by <a href='#user/" + teamid + "'>this team</a>",
+          context: " via Offline App.",
+          contextmask: "",
+          teamOrPersonal: "team"
+        });
+        deferred.resolve(self);
+      }, deferred.reject);
 
-      this.set("timestamp", Date.now());
+      return deferred.promise;
+    }
+  },
 
-      self.save(null, {
-        success: function(model, response) {
-          if (OPrime.debugMode) {
-            OPrime.debug('Corpus save success');
-          }
-          var title = model.get("title");
-          var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
-          //TODO add privacy for corpus in corpus
-          //            if(window.app.get("corpus").get("keepCorpusDetailsPrivate")){
-          //              title = "";
-          //              differences = "";
-          //            }
-          //save the corpus mask too
-          var publicSelfMode = model.get("publicSelf");
-          publicSelfMode.set("corpusid", model.id);
-          publicSelfMode.saveAndInterConnectInApp();
-
-          if (window.appView) {
-            window.appView.toastUser("Sucessfully saved corpus: " + title, "alert-success", "Saved!");
-            window.appView.addSavedDoc(model.id);
-          }
-          var verb = "modified";
-          verbicon = "icon-pencil";
-          if (newModel) {
-            verb = "added";
-            verbicon = "icon-plus";
-          }
-          var teamid = model.get("team").id; //Works if UserMask was saved
-          if (!teamid) {
-            teamid = model.get("team")._id; //Works if UserMask came from a mongodb id
-            if (!teamid) {
-              if (model.get("team").get("username") === window.app.get("authentication").get("userPrivate").get("username")) {
-                teamid = window.app.get("authentication").get("userPrivate").id; //Assumes the user private and team are the same user...this is dangerous
-              }
-            }
-            /**
-             * The idea of the masks in the activity
-             * is that the teams/users can make a
-             * public activity feed, which they create
-             * a special widget user for, and if the
-             * widget user asks for activities, the
-             * map reduce function returns only the
-             * masks, whcih means that the original
-             * activities are protected. so if the
-             * activity is soemthing that you might
-             * want to appear in a really public feed,
-             * then add a mask to it, and it will
-             * automatically appear. this can probably
-             * be done for all activities later. Right
-             * now its only in the syncing aspect so
-             * at least we can test the map reduce
-             * function.
-             */
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbmask: verb,
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.id + "'>" + title + "</a>",
-              directobjectmask: "a corpus",
-              directobjecticon: "icon-cloud",
-              indirectobject: "created by <a href='#user/" + teamid + "'>" + teamid + "</a>",
-              context: " via Offline App.",
-              contextmask: "",
-              teamOrPersonal: "personal"
-            });
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbmask: verb,
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.id + "'>" + title + "</a>",
-              directobjectmask: "a corpus",
-              directobjecticon: "icon-cloud",
-              indirectobject: "created by <a href='#user/" + teamid + "'>this team</a>",
-              context: " via Offline App.",
-              contextmask: "",
-              teamOrPersonal: "team"
-            });
-          } else {
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbmask: verb,
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.id + "'>" + title + "</a>",
-              directobjectmask: "a corpus",
-              directobjecticon: "icon-cloud",
-              indirectobject: "created by <a href='#user/" + teamid + "'>" + teamid + "</a>",
-              context: " via Offline App.",
-              contextmask: "",
-              teamOrPersonal: "personal"
-            });
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbmask: verb,
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.id + "'>" + title + "</a>",
-              directobjectmask: "a corpus",
-              directobjecticon: "icon-cloud",
-              indirectobject: "created by <a href='#user/" + teamid + "'>this team</a>",
-              context: " via Offline App.",
-              contextmask: "",
-              teamOrPersonal: "team"
-            });
-          }
-          model.get("couchConnection").corpusid = model.id;
-          //make sure the corpus is updated in the history of the user
-          var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
-          var oldconnection = pouches.indexOf(model.get("couchConnection").pouchname);
-          if (oldconnection !== -1) {
-            window.app.get("authentication").get("userPrivate").get("corpuses").splice(oldconnection, 1);
-          }
-          window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
-
-          if (newModel) {
-
-            self.makeSureCorpusHasADataList(function() {
-              self.makeSureCorpusHasASession(function() {
-                //save the internal models go to the user dashboard to to load the corpus into the dashboard
-                self.save(null, {
-                  success: function(model, response) {
-                    window.app.get("authentication").saveAndInterConnectInApp(function() {
-
-                    });
-                  },
-                  error: function(e, f, g) {
-                    alert('New Corpus save error' + f.reason);
-                  }
-                });
-
-                //end success to create new session
-              }, function(e) {
-                alert("Failed to create a session. " + e);
-              }); //end failure to create new session
-              //end success to create new data list
-            }, function() {
-              alert("Failed to create a datalist. " + e);
-            }); //end failure to create new data list
-
-
-          } else {
-            //if an existing corpus
-            window.app.get("authentication").saveAndInterConnectInApp();
-            if (typeof successcallback === "function") {
-              successcallback();
-            }
-          }
-        },
-        error: function(model, response, options) {
-          if (OPrime.debugMode) {
-            OPrime.debug("Corpus save error", model, response, options);
-          }
-          //            if(response && response.reason && response.reason === "unauthorized"){
-          //              alert('Corpus save error: ' + response.reason);
-          //              window.app.get("authentication").syncUserWithServer(function(){
-          //              
-          //              });
-          //            }
-
-          if (typeof failurecallback === "function") {
-            failurecallback();
-          } else {}
-        }
-      });
-    },
-    makeSureCorpusHasADataList: function(sucess, failure) {
-      if (!this.datalists) {
-        this.datalists = new DataLists();
-      }
-      if (this.datalists.length > 0) {
-        if (typeof sucess === "function") {
-          sucess();
-          return;
-        }
-      }
-
-      var self = this;
-      this.datalists.fetch({
-        error: function(model, xhr, options) {
-          OPrime.bug("There was an error loading your datalists.");
-          console.log(model, xhr, options);
-          OPrime.bug("There was an error loading your datalists.");
-        },
-        success: function(model, response, options) {
-          if (response.length > 0) {
-            if (typeof sucess === "function") {
-              sucess();
-            } else {
-              if (OPrime.debugMode) {
-                OPrime.debug('the corpus has datalists');
-              }
-            }
-          } else {
-            if (OPrime.debugMode) {
-              OPrime.debug("You have no datalists, creating a new one...");
-            }
-            //create the first datalist for this corpus.
-            var dl = new DataList({
-              filledWithDefaults: true,
-              pouchname: self.get("pouchname")
-            }); //MUST be a new model, other wise it wont save in a new pouch.
-            dl.set({
-              "title": "Default Datalist - Empty",
-              "dateCreated": (new Date()).toDateString(),
-              "description": "The app comes with a default datalist which is empty. " +
-                "Once you have data in your corpus, you can create a datalist using Search. Imported data will also show up as a datalist. " +
-                "Datalists can be used to create handouts, export to LaTeX, or share with collaborators.",
-              "pouchname": self.get("pouchname")
-            });
-            dl.set("dateCreated", JSON.stringify(new Date()));
-            dl.set("dateModified", JSON.stringify(new Date()));
-            if (!OPrime.isBackboneCouchDBApp()) {
-              alert("TODO test this setting pouch");
-              //              dl.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
-            }
-            dl.save(null, {
-              success: function(model, response) {
-                window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-                self.datalists.unshift(model);
-
-                if (typeof sucess === "function") {
-                  sucess();
-                } else {
-                  if (OPrime.debugMode) {
-                    OPrime.debug('DataList save success' + model.id);
-                  }
-                }
-              },
-              error: function(e) {
-                if (typeof failure === "function") {
-                  failure();
-                } else {
-                  if (OPrime.debugMode) {
-                    OPrime.debug('DataList save error' + e);
-                  }
-                }
-              }
-            });
-          }
-        }
-      });
-    },
-
-    makeSureCorpusHasASession: function(suces, fail) {
-      if (!this.sessions) {
-        this.sessions = new Sessions();
-      }
-      if (this.sessions.length > 0) {
-        if (typeof suces === "function") {
-          suces();
-          return;
-        }
-      }
-      var self = this;
-      this.sessions.fetch({
-        error: function(model, xhr, options) {
-
-          if (OPrime.debugMode) {
-            OPrime.debug("There was an error loading your sessions.");
-          }
-          console.log(model, xhr, options);
-          OPrime.bug("There was an error loading your sessions.");
-
-        },
-        success: function(model, response, options) {
-          if (response.length > 0) {
-            if (typeof suces === "function") {
-              suces();
-            } else {
-              if (OPrime.debugMode) {
-                OPrime.debug('the corpus has sessions');
-              }
-            }
-          } else {
-            if (OPrime.debugMode) {
-              OPrime.debug("You have no sessions, creating a new one...");
-            }
-            var s = new Session({
-              sessionFields: self.get("sessionFields").clone(),
-              filledWithDefaults: true,
-              pouchname: self.get("pouchname")
-            }); //MUST be a new model, other wise it wont save in a new pouch.
-            s.set("dateCreated", JSON.stringify(new Date()));
-            s.set("dateModified", JSON.stringify(new Date()));
-
-            if (!OPrime.isBackboneCouchDBApp()) {
-              alert("TODO test this setting pouch");
-              //              s.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
-            }
-            s.save(null, {
-              success: function(model, response) {
-                window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
-                self.sessions.unshift(model);
-
-                if (typeof suces === "function") {
-                  suces();
-                } else {
-                  if (OPrime.debugMode) {
-                    OPrime.debug('Session save success' + model.id);
-                  }
-                }
-              },
-              error: function(e) {
-                if (typeof fail === "function") {
-                  fail();
-                } else {
-                  if (OPrime.debugMode) {
-                    OPrime.debug('Session save error' + e);
-                  }
-                }
-              }
-            });
-          }
-        }
-      });
-    },
-    /**
-     * If more views are added to corpora, add them here
-     * @returns {} an object containing valid map reduce functions
-     * TODO: add conversation search to the get_datum_fields function
-     */
-    validCouchViews: function() {
+  /**
+   * If more views are added to corpora, add them here
+   * @returns {} an object containing valid map reduce functions
+   * TODO: add conversation search to the get_datum_fields function
+   */
+  validDBQueries: {
+    value: function() {
       return {
-        "pages/datums": {
-          map: function(doc) {
-                try {
-                    /* if this document has been deleted, the ignore it and return immediately */
-                    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
-                    if (doc.collection == "datums" || (doc.datumFields && doc.session)) {
-                        var dateModified = doc.dateModified;
-                        if (dateModified) {
-                            try {
-                                dateModified = dateModified.replace(/"/g, "");
-                                dateModified = new Date(dateModified);
-                                /* Use date modified as a timestamp if it isnt one already */
-                                dateModified = dateModified.getTime();
-                            } catch (e) {
-                                //emit(error, null);
-                            }
-                        }
-                        emit(dateModified, doc);
-                    }
-                } catch (e) {
-                    //emit(e, 1);
-                }
-            }
+        activities: {
+          url: "/_design/pages/_view/activities",
+          map: require("./../../couchapp_dev/views/activities/map")
         },
-        "pages/get_datum_fields": {
-          map: function(doc) {
-            if ((doc.datumFields) && (doc.session)) {
-              var obj = {};
-              for (i = 0; i < doc.datumFields.length; i++) {
-                if (doc.datumFields[i].mask) {
-                  obj[doc.datumFields[i].label] = doc.datumFields[i].mask;
-                }
-              }
-              if (doc.session.sessionFields) {
-                for (j = 0; j < doc.session.sessionFields.length; j++) {
-                  if (doc.session.sessionFields[j].mask) {
-                    obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;
-                  }
-                }
-              }
-              emit(obj, doc._id);
-            }
-          }
+        add_synctactic_category: {
+          url: "/_design/pages/_view/add_synctactic_category",
+          map: require("./../../couchapp_dev/views/add_synctactic_category/map")
+        },
+        audioIntervals: {
+          url: "/_design/pages/_view/audioIntervals",
+          map: require("./../../couchapp_dev/views/audioIntervals/map")
+        },
+        byCollection: {
+          url: "/_design/pages/_view/byCollection",
+          map: require("./../../couchapp_dev/views/byCollection/map")
+        },
+        by_date: {
+          url: "/_design/pages/_view/by_date",
+          map: require("./../../couchapp_dev/views/by_date/map")
+        },
+        by_rhyming: {
+          url: "/_design/pages/_view/by_rhyming",
+          map: require("./../../couchapp_dev/views/by_rhyming/map"),
+          reduce: require("./../../couchapp_dev_/by_rhyming/reduce")
+        },
+        cleaning_example: {
+          url: "/_design/pages/_view/cleaning_example",
+          map: require("./../../couchapp_dev/views/cleaning_example/map")
+        },
+        corpuses: {
+          url: "/_design/pages/_view/corpuses",
+          map: require("./../../couchapp_dev/views/corpuses/map")
+        },
+        datalists: {
+          url: "/_design/pages/_view/datalists",
+          map: require("./../../couchapp_dev/views/datalists/map")
+        },
+        datums: {
+          url: "/_design/pages/_view/datums",
+          map: require("./../../couchapp_dev/views/datums/map")
+        },
+        datums_by_user: {
+          url: "/_design/pages/_view/datums_by_user",
+          map: require("./../../couchapp_dev/views/datums_by_user/map"),
+          reduce: require("./../../couchapp_dev_/datums_by_user/reduce")
+        },
+        datums_chronological: {
+          url: "/_design/pages/_view/datums_chronological",
+          map: require("./../../couchapp_dev/views/datums_chronological/map")
+        },
+        deleted: {
+          url: "/_design/pages/_view/deleted",
+          map: require("./../../couchapp_dev/views/deleted/map")
+        },
+        export_eopas_xml: {
+          url: "/_design/pages/_view/export_eopas_xml",
+          map: require("./../../couchapp_dev/views/export_eopas_xml/map"),
+          reduce: require("./../../couchapp_dev_/export_eopas_xml/reduce")
+        },
+        get_corpus_datum_tags: {
+          url: "/_design/pages/_view/get_corpus_datum_tags",
+          map: require("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
+          reduce: require("./../../couchapp_dev_/get_corpus_datum_tags/reduce")
+        },
+        get_corpus_fields: {
+          url: "/_design/pages/_view/get_corpus_fields",
+          map: require("./../../couchapp_dev/views/get_corpus_fields/map")
+        },
+        get_corpus_validationStati: {
+          url: "/_design/pages/_view/get_corpus_validationStati",
+          map: require("./../../couchapp_dev/views/get_corpus_validationStati/map"),
+          reduce: require("./../../couchapp_dev_/get_corpus_validationStati/reduce")
+        },
+        get_datum_fields: {
+          url: "/_design/pages/_view/get_datum_fields",
+          map: require("./../../couchapp_dev/views/get_datum_fields/map")
+        },
+        get_datums_by_session_id: {
+          url: "/_design/pages/_view/get_datums_by_session_id",
+          map: require("./../../couchapp_dev/views/get_datums_by_session_id/map")
+        },
+        get_frequent_fields: {
+          url: "/_design/pages/_view/get_frequent_fields",
+          map: require("./../../couchapp_dev/views/get_frequent_fields/map"),
+          reduce: require("./../../couchapp_dev_/get_frequent_fields/reduce")
+        },
+        get_search_fields_chronological: {
+          url: "/_design/pages/_view/get_search_fields_chronological",
+          map: require("./../../couchapp_dev/views/get_search_fields_chronological/map")
+        },
+        glosses_in_utterance: {
+          url: "/_design/pages/_view/glosses_in_utterance",
+          map: require("./../../couchapp_dev/views/glosses_in_utterance/map"),
+          reduce: require("./../../couchapp_dev_/glosses_in_utterance/reduce")
+        },
+        lexicon_create_tuples: {
+          url: "/_design/pages/_view/lexicon_create_tuples",
+          map: require("./../../couchapp_dev/views/lexicon_create_tuples/map"),
+          reduce: require("./../../couchapp_dev_/lexicon_create_tuples/reduce")
+        },
+        morpheme_neighbors: {
+          url: "/_design/pages/_view/morpheme_neighbors",
+          map: require("./../../couchapp_dev/views/morpheme_neighbors/map"),
+          reduce: require("./../../couchapp_dev_/morpheme_neighbors/reduce")
+        },
+        morphemes_in_gloss: {
+          url: "/_design/pages/_view/morphemes_in_gloss",
+          map: require("./../../couchapp_dev/views/morphemes_in_gloss/map"),
+          reduce: require("./../../couchapp_dev_/views/morphemes_in_gloss/reduce")
+        },
+        recent_comments: {
+          url: "/_design/pages/_view/recent_comments",
+          map: require("./../../couchapp_dev/views/recent_comments/map")
+        },
+        sessions: {
+          url: "/_design/pages/_view/sessions",
+          map: require("./../../couchapp_dev/views/sessions/map")
+        },
+        users: {
+          url: "/_design/pages/_view/users",
+          map: require("./../../couchapp_dev/views/users/map")
+        },
+        word_list: {
+          url: "/_design/pages/_view/word_list",
+          map: require("./../../couchapp_dev/views/word_list/map"),
+          reduce: require("./../../couchapp_dev_/word_list/reduce")
+        },
+        couchapp_dev_word_list_rdf: {
+          url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
+          map: require("./../../couchapp_dev_word_list_rdf/map"),
+          reduce: require("./../../couchapp_dev_word_list_rdf/reduce")
         }
       };
-    },
-    createPouchView: function(view, callbackpouchview) {
-      if (!window.validCouchViews) {
-        window.validCouchViews = this.validCouchViews();
-      }
-      var viewparts = view.split("/");
-      if (viewparts.length !== 2) {
-        console.log("Warning " + view + " is not a valid view name.");
-        return;
-      }
-      var corpusself = this;
-      if (!this.get("couchConnection")) {
-        return;
-      }
-      if (OPrime.isBackboneCouchDBApp()) {
-        //TODO make the view in couchdb shouldnt be necessary since it was created in the couchapp?
-        if (typeof callbackpouchview === "function") {
-          callbackpouchview();
-        }
-        return;
-      }
-      if (!corpusself.pouch) {
-        alert("TODO test this creating a view");
-        if (typeof callbackpouchview === "function") {
-          callbackpouchview();
-        }
-        return;
-      }
+    }
+  },
 
-      corpusself.pouch(function(err, db) {
-        var modelwithhardcodedid = {
-          "_id": "_design/" + viewparts[0],
-          "language": "javascript",
-          "views": {
-            //                "by_id" : {
-            //                      "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
-            //                  }
-          }
-        };
-        modelwithhardcodedid.views[viewparts[1]] = {
-          map: window.validCouchViews[view].map.toString()
-        };
-        if (window.validCouchViews[view].reduce) {
-          modelwithhardcodedid.views[viewparts[1]].reduce = window.validCouchViews[view].reduce.toString();
-        }
-
-        console.log("This is what the doc will look like: ", modelwithhardcodedid);
-        db.put(modelwithhardcodedid, function(err, response) {
-          if (OPrime.debugMode) {
-            OPrime.debug(response);
-          }
-          if (err) {
-            if (OPrime.debugMode) {
-              OPrime.debug("The " + view + " view couldn't be created.");
-            }
-          } else {
-
-            if (OPrime.debugMode) {
-              OPrime.debug("The " + view + " view was created.");
-            }
-            if (typeof callbackpouchview === "function") {
-              callbackpouchview();
-            }
-
-
-          }
-        });
-      });
-
-    },
-    /**
-     * Accepts two functions success will be called if successful,
-     * otherwise it will attempt to render the current corpus views. If
-     * the corpus isn't in the current corpus it will call the fail
-     * callback or it will alert a bug to the user. Override the fail
-     * callback if you don't want the alert.
-     *
-     * @param successcallback
-     * @param failurecallback
-     */
-    setAsCurrentCorpus: function(successcallback, failurecallback) {
-      if (window.app.get("corpus").id !== this.id) {
-        window.app.set("corpus", this);
-      }
-      window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
-      window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = this.get("couchConnection");
-      window.app.get("authentication").saveAndInterConnectInApp();
-
-      //If there is no view, we are done.
-      if (!window.appView) {
-        successcallback();
-        return;
-      }
-
-      if (window.appView) {
-        window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
-          if (typeof successcallback === "function") {
-            successcallback();
-          } else {
-            window.appView.toastUser("Sucessfully connected all views up to corpus: " + this.id, "alert-success", "Connected!");
-            //          window.appView.renderEditableCorpusViews();
-            //          window.appView.renderReadonlyCorpusViews();
-          }
-        });
-      } else {
-        if (typeof successcallback === "function") {
-          successcallback();
-        }
-      }
-    },
-    validate: function(attrs) {
+  validate: {
+    value: function(attrs) {
+      attrs = attrs || this;
       if (attrs.publicCorpus) {
         if (attrs.publicCorpus !== "Public") {
           if (attrs.publicCorpus !== "Private") {
@@ -1403,323 +985,150 @@ var Corpus = Backbone.Model.extend(
           }
         }
       }
-    },
-    set: function(key, value, options) {
-      var attributes;
+    }
+  },
 
-      // Handle both `"key", value` and `{key: value}` -style arguments.
-      if (_.isObject(key) || key === null) {
-        attributes = key;
-        options = value;
-      } else {
-        attributes = {};
-        attributes[key] = value;
-      }
-
-      options = options || {};
-      // do any other custom property changes here
-      if (attributes.title) {
-        attributes.titleAsUrl = attributes.title.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_"); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
-      }
-      return Backbone.Model.prototype.set.call(this, attributes, options);
-    },
-    /**
-     * This function takes in a pouchname, which could be different
-     * from the current corpus in case there is a master corpus with
-     * more/better monolingual data.
-     *
-     * @param pouchname
-     * @param callback
-     */
-    buildMorphologicalAnalyzerFromTeamServer: function(pouchname, callback) {
+  /**
+   * This function takes in a pouchname, which could be different
+   * from the current corpus in case there is a master corpus with
+   * more/better monolingual data.
+   *
+   * @param pouchname
+   * @param callback
+   */
+  buildMorphologicalAnalyzerFromTeamServer: {
+    value: function(pouchname, callback) {
       if (!pouchname) {
-        this.get("pouchname");
+        pouchname = this.pouchname;
       }
-      if (!callback) {
-        callback = null;
-      }
-      Glosser.downloadPrecedenceRules(pouchname, this.get("glosserURL"), callback);
-    },
-    /**
-     * This function takes in a pouchname, which could be different
-     * from the current corpus incase there is a master corpus wiht
-     * more/better monolingual data.
-     *
-     * @param pouchname
-     * @param callback
-     */
-    buildLexiconFromTeamServer: function(pouchname, callback) {
+      this.glosser.downloadPrecedenceRules(pouchname, this.glosserURL, callback);
+    }
+  },
+  /**
+   * This function takes in a pouchname, which could be different
+   * from the current corpus incase there is a master corpus wiht
+   * more/better monolingual data.
+   *
+   * @param pouchname
+   * @param callback
+   */
+  buildLexiconFromTeamServer: {
+    value: function(pouchname, callback) {
       if (!pouchname) {
-        this.get("pouchname");
-      }
-      if (!callback) {
-        callback = null;
+        pouchname = this.pouchname;
       }
       this.lexicon.buildLexiconFromCouch(pouchname, callback);
-    },
-
-    /**
-     * This function takes in a pouchname, which could be different
-     * from the current corpus incase there is a master corpus wiht
-     * more representative datum
-     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
-     *
-     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
-     *
-     * If a url is passed, it contacts the server for fresh info.
-     *
-     * @param pouchname
-     * @param callback
-     */
-    getFrequentDatumFields: function(jsonUrl, pouchname, callback) {
-      if (!jsonUrl) {
-        /* if we have already asked the server in this session, return */
-        if (this.frequentDatumFields) {
-          if (typeof callback === "function") {
-            callback(this.frequentDatumFields);
-          }
-          return;
-        }
-        var couchConnection = this.get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
-        if (!pouchname) {
-          pouchname = couchConnection.pouchname;
-          /* if the user has overriden the frequent fields, use their preferences */
-          if (this.get("frequentDatumFields")) {
-            if (typeof callback === "function") {
-              callback(this.get("frequentDatumFields"));
-            }
-            return;
-          }
-        }
-        jsonUrl = couchurl + "/_design/pages/_view/get_frequent_fields?group=true";
-      }
-
-      var self = this;
-      OPrime.makeCORSRequest({
-        type: 'GET',
-        url: jsonUrl,
-        success: function(serverResults) {
-          OPrime.debug("serverResults" + JSON.stringify(serverResults));
-
-          var counts = _.pluck(serverResults.rows, "value");
-          if (OPrime.debugMode) {
-            OPrime.debug(counts);
-          }
-          var frequentFields = [];
-          try {
-            var totalDatumCount = serverResults.rows[(_.pluck(
-              serverResults.rows, "key").indexOf("datumTotal"))].value;
-
-            for (var field in serverResults.rows) {
-              if (serverResults.rows[field].key === "datumTotal") {
-                continue;
-              }
-              if (serverResults.rows[field].value / totalDatumCount * 100 > 50) {
-                if (OPrime.debugMode) {
-                  OPrime.debug("Considering " + serverResults.rows[field].key + " as frequent (in more than 50% of datum) : " + serverResults.rows[field].value / totalDatumCount * 100);
-                }
-                frequentFields.push(serverResults.rows[field].key);
-              }
-            }
-          } catch (e) {
-            if (OPrime.debugMode) {
-              OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ", e);
-            }
-            frequentFields = ["judgement", "utterance", "morphemes", "gloss", "translation"];
-          }
-          if (frequentFields === []) {
-            frequentFields = ["judgement", "utterance", "morphemes", "gloss", "translation"];
-          }
-
-          /*
-           * Hide machine only fields:
-           */
-          var doesThisCorpusHaveSyntacticCategory = frequentFields.indexOf("syntacticCategory");
-          if (doesThisCorpusHaveSyntacticCategory > -1) {
-            frequentFields.splice(doesThisCorpusHaveSyntacticCategory, 1);
-          }
-          var doesThisCorpusHaveSyntacticTreeLatex = frequentFields.indexOf("syntacticTreeLatex");
-          if (doesThisCorpusHaveSyntacticTreeLatex > -1) {
-            frequentFields.splice(doesThisCorpusHaveSyntacticTreeLatex, 1);
-          }
-
-          self.frequentDatumFields = frequentFields;
-          if (typeof callback === "function") {
-            callback(frequentFields);
-          }
-        }, // end successful fetch
-        error: function(response) {
-          OPrime
-            .debug("There was a problem getting the frequent datum fields, using defaults." + JSON.stringify(response));
-          if (typeof callback === "function") {
-            callback(["judgement", "utterance", "morphemes", "gloss", "translation"]);
-          }
-
-          //end error 
-        },
-        dataType: "json"
-      });
-    },
-    /**
-     * This function takes in a pouchname, which could be different
-     * from the current corpus incase there is a master corpus wiht
-     * more representative datum
-     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
-     *
-     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
-     *
-     * If a url is passed, it contacts the server for fresh info.
-     *
-     * @param pouchname
-     * @param callback
-     */
-    getFrequentDatumValidationStates: function(jsonUrl, pouchname, callback) {
-      if (window.getFrequentDatumValidationStatesPending) {
-        return;
-      }
-      window.getFrequentDatumValidationStatesPending = true;
-      if (!jsonUrl) {
-        /* if we have already asked the server in this session, return */
-        if (this.frequentDatumValidationStates) {
-          if (typeof callback === "function") {
-            callback(this.frequentDatumValidationStates);
-          }
-          return;
-        }
-        var couchConnection = this.get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
-        if (!pouchname) {
-          pouchname = couchConnection.pouchname;
-          /* if the user has overriden the frequent fields, use their preferences */
-          if (this.get("frequentDatumValidationStates")) {
-            if (typeof callback === "function") {
-              callback(this.get("frequentDatumValidationStates"));
-            }
-            return;
-          }
-        }
-        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_validationStati?group=true";
-      }
-
-      var self = this;
-      OPrime.makeCORSRequest({
-        type: 'GET',
-        url: jsonUrl,
-        success: function(serverResults) {
-          OPrime.debug("serverResults" + JSON.stringify(serverResults));
-
-          var counts = _.pluck(serverResults.rows, "value");
-          if (OPrime.debugMode) {
-            OPrime.debug(counts);
-          }
-          var frequentStates = _.pluck(serverResults.rows, "key");
-          if (frequentStates === []) {
-            frequentStates = ["Checked", "Deleted", "ToBeCheckedWithAnna", "ToBeCheckedWithBill", "ToBeCheckedWithClaude"];
-          }
-
-
-          self.frequentDatumValidationStates = frequentStates;
-          if (typeof callback === "function") {
-            callback(frequentStates);
-          }
-          window.getFrequentDatumValidationStatesPending = false;
-
-        }, // end successful fetch
-        error: function(response) {
-          OPrime
-            .debug("There was a problem getting the frequentDatumValidationStates, using defaults." + JSON.stringify(response));
-          if (typeof callback === "function") {
-            callback(["Checked", "Deleted", "ToBeCheckedWithAnna", "ToBeCheckedWithBill", "ToBeCheckedWithClaude"]);
-          }
-          window.getFrequentDatumValidationStatesPending = false;
-
-          //end error 
-        },
-        dataType: "json"
-      });
-    },
-    /**
-     * This function takes in a pouchname, which could be different
-     * from the current corpus incase there is a master corpus wiht
-     * more representative datum
-     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
-     *
-     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
-     *
-     * If a url is passed, it contacts the server for fresh info.
-     *
-     * @param pouchname
-     * @param callback
-     */
-    getFrequentDatumTags: function(jsonUrl, pouchname, callback) {
-      if (window.getFrequentDatumTagsPending) {
-        return;
-      }
-      window.getFrequentDatumTagsPending = true;
-      if (!jsonUrl) {
-        /* if we have already asked the server in this session, return */
-        if (this.frequentDatumTags) {
-          if (typeof callback === "function") {
-            callback(this.frequentDatumTags);
-          }
-          return;
-        }
-        var couchConnection = this.get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
-        if (!pouchname) {
-          pouchname = couchConnection.pouchname;
-          /* if the user has overriden the frequent fields, use their preferences */
-          if (this.get("frequentDatumTags")) {
-            if (typeof callback === "function") {
-              callback(this.get("frequentDatumTags"));
-            }
-            return;
-          }
-        }
-        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_datum_tags?group=true";
-      }
-
-      var self = this;
-      OPrime.makeCORSRequest({
-        type: 'GET',
-        url: jsonUrl,
-        success: function(serverResults) {
-          OPrime.debug("serverResults" + JSON.stringify(serverResults));
-
-          var counts = _.pluck(serverResults.rows, "value");
-          if (OPrime.debugMode) {
-            OPrime.debug(counts);
-          }
-          var frequentTags = _.pluck(serverResults.rows, "key");
-          if (frequentTags === []) {
-            frequentTags = ["Passive", "WH", "Indefinte", "Generic", "Agent-y", "Causative", "Pro-drop", "Ambigous"];
-          }
-
-          self.frequentDatumTags = frequentTags;
-          if (typeof callback === "function") {
-            callback(frequentTags);
-          }
-          window.getFrequentDatumTagsPending = false;
-
-        }, // end successful fetch
-        error: function(response) {
-          OPrime
-            .debug("There was a problem getting the frequentDatumTags, using defaults." + JSON.stringify(response));
-          if (typeof callback === "function") {
-            callback(["Passive", "WH", "Indefinte", "Generic", "Agent-y", "Causative", "Pro-drop", "Ambigous"]);
-          }
-          window.getFrequentDatumTagsPending = false;
-
-          //end error 
-        },
-        dataType: "json"
-      });
-    },
-    changeCorpusPublicPrivate: function() {
-      //      alert("TODO contact server to change the public private of the corpus");
     }
-  });
+  },
 
-// return Corpus;
+  /**
+   * This function takes in a pouchname, which could be different
+   * from the current corpus incase there is a master corpus wiht
+   * more representative datum
+   * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+   *
+   * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+   *
+   * If a url is passed, it contacts the server for fresh info.
+   *
+   * @param pouchname
+   * @param callback
+   */
+  getFrequentDatumFields: {
+    value: function() {
+      return this.getFrequentValues("fields", ["judgement", "utterance", "morphemes", "gloss", "translation"]);
+    }
+  },
 
+  /**
+   * This function takes in a pouchname, which could be different
+   * from the current corpus incase there is a master corpus wiht
+   * more representative datum
+   * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   *
+   * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+   *
+   * If a url is passed, it contacts the server for fresh info.
+   *
+   * @param pouchname
+   * @param callback
+   */
+  getFrequentDatumValidationStates: {
+    value: function() {
+      return this.getFrequentValues("validationStatus", ["Checked", "Deleted", "ToBeCheckedByAnna", "ToBeCheckedByBill", "ToBeCheckedByClaude"]);
+    }
+  },
+
+  getFrequentValues: {
+    value: function(fieldname, defaults) {
+      var deferred = Q.defer(),
+        self;
+
+      if (!defaults) {
+        defaults = self["defaultFrequentDatum" + fieldname];
+      }
+
+      /* if we have already asked the server in this page load, return */
+      if (self["frequentDatum" + fieldname]) {
+        Q.nextTick(function() {
+          deferred.resolve(self["frequentDatum" + fieldname]);
+        });
+        return deferred.promise;
+      }
+
+      var jsonUrl = self.validDBQueries["get_corpus_" + fieldname].url + "?group=true&limit=100";
+      OPrime.makeCORSRequest({
+        type: 'GET',
+        dataType: "json",
+        url: jsonUrl,
+      }).then(function(serverResults) {
+        var frequentValues;
+        if (serverResults && serverResults.rows && serverResults.row.length > 2) {
+          frequentValues = serverResults.rows.map(function(fieldvalue) {
+            return fieldvalue.key;
+          });
+        } else {
+          frequentValues = defaults;
+        }
+
+        /*
+         * TODO Hide optionally specified values
+         */
+
+        self["frequentDatum" + fieldname] = frequentValues;
+        deferred.resolve(frequentValues);
+      }, function(response) {
+        console.log("resolving defaults for frequentDatum" + fieldname, response);
+        deferred.resolve(defaults);
+      });
+
+      return deferred.promise;
+    }
+  },
+  /**
+   * This function takes in a pouchname, which could be different
+   * from the current corpus incase there is a master corpus wiht
+   * more representative datum
+   * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   *
+   * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+   *
+   * If a url is passed, it contacts the server for fresh info.
+   *
+   * @param pouchname
+   * @param callback
+   */
+  getFrequentDatumTags: {
+    value: function() {
+      return this.getFrequentValues("tags", ["Passive", "WH", "Indefinte", "Generic", "Agent-y", "Causative", "Pro-drop", "Ambigous"]);
+    }
+  },
+  changeCorpusPublicPrivate: {
+    value: function() {
+      //      alert("TODO contact server to change the public private of the corpus");
+      throw " I dont know how change this corpus' public/private setting ";
+    }
+  }
+});
+
+exports.Corpus = Corpus;

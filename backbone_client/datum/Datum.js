@@ -382,6 +382,93 @@ define([
 
       return this.originalParse(originalModel);
     },
+    joinDatumOnFields: ["utterance", "orthography", "morphemes", "allomorphs", "translation"],
+    lookForSimilarDatum: function() {
+      var self = this;
+      var query = this.get("datumFields").toJSON().map(function(field) {
+        if (field.mask && field.mask.trim() && field.label && field.label.trim() && self.joinDatumOnFields.indexOf(field.label) > -1) {
+          return field.label + ":" + field.mask.trim();
+        }else{
+          return "";
+        }
+      });
+      query = query.join(" ").trim();
+      if (query && query.length > 10 /*dont bother looking to merge negligable data */) {
+        console.log("Would look for this " + query);
+        this.searchByQueryString(query, function(similarDatumIds) {
+          if (similarDatumIds) {
+            if (similarDatumIds.length > 1) {
+              var similarDatumString = "similarTo: " + similarDatumIds.join(", similarTo:");
+              self.get("datumFields").add({
+                label: "links",
+                mask: similarDatumString,
+                value: similarDatumString,
+                shouldBeEncrypted: "",
+                showToUserTypes: "",
+                userchooseable: "",
+                links: similarDatumIds.map(function(id) {
+                  return {
+                    URI: "/" + self.get("pouchname") + "/" + id,
+                    relation: "similarTo"
+                  }
+                }),
+                help: "Related datum in the database."
+              });
+            } else if (similarDatumIds.length === 1) {
+              var mergeThese = window.confirm("I found a datum which already contained " + query + " would you like to update it with this import instead of creating a new datum?");
+              if (mergeThese) {
+                var importDatum = self.clone();
+                self.id = similarDatumIds[0];
+                self.fetch({
+                  success: function(model) {
+                    console.log("Fetched the other datum using this one... ", model);
+                    if(importDatum.get("audioVideo") &&importDatum.get("audioVideo").length > 0){
+                      model.get("audioVideo").set(importDatum.get("audioVideo").models, {merge: true, remove: false});
+                      console.log("merged audio video", model.get("audioVideo"));
+                    }
+                    if(importDatum.get("images") &&importDatum.get("images").length > 0){
+                      model.get("images").set(importDatum.get("images").models, {merge: true, remove: false});
+                      console.log("merged images ", model.get("images"));
+                    }
+                    if(importDatum.get("datumFields") && importDatum.get("datumFields").length > 0){
+                      importDatum.get("datumFields").models.map(function(field) {
+                        if(!field.get("mask") || !field.get("mask").trim() ||  field.get("label").toLowerCase().indexOf("user") > -1||  field.get("label").toLowerCase().indexOf("validationstatus") > -1){
+                          return;
+                        }
+                        var previousField = model.get("datumFields").where({
+                          "label": field.get("label")
+                        });
+                        if (previousField && previousField.length > 0) {
+                          console.log(previousField[0].get("mask") + " -> " + field.get("mask"));
+                          previousField[0].set("mask", field.get("mask"));
+                        } else {
+                          console.log("new field", field);
+                          model.get("datumFields").add(field);
+                        }
+                      });
+                      // model.get("datumFields").set(importDatum.get("datumFields").models, {merge: true, remove: false});
+                      console.log("updated datumFields", model.get("datumFields"));
+                    }
+                    // for(var field in importDatum){
+                    //   if(field == "datumFields"){
+
+                    //   }else{
+                    //     if(importDatum.hasOwnProperty(field) && importDatum[field]){
+                    //       model.set(field, importDatum[field]);
+                    //     }
+                    //   }
+                    // }
+                  },
+                  error: function(e) {
+                    console.log("failed to merge the datum...");
+                  }
+                });
+              }
+            }
+          }
+        })
+      }
+    },
     searchByQueryString : function(queryString, callback) {
       var self = this;
       try{

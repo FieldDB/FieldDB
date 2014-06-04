@@ -235,7 +235,7 @@ define(
                     userIsAuthenticated(response.data.user);
                   }
 
-                }, 
+                },
                 function(err) {
                   console.log(err);
                   var message = "please report this.";
@@ -280,7 +280,7 @@ define(
                   window.setTimeout(function(){
                     window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
                   }, 1500)
-                  
+
                 });
               return promise;
             },
@@ -359,7 +359,7 @@ define(
             },
             'saveCouchDoc': saveCouchDoc,
             'saveSpreadsheetDatum': function(spreadsheetDatumToBeSaved) {
-              var deffered = Q.defer();
+              var deferred = Q.defer();
 
               Q.nextTick(function() {
                 // spreadsheetDatumToBeSaved.timestamp = Date.now();
@@ -368,20 +368,20 @@ define(
                   try {
                     var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
                   } catch (e) {
-                    deffered.reject("Error saving datum: " + JSON.stringify(e));
+                    deferred.reject("Error saving datum: " + JSON.stringify(e));
                     return;
                   }
                   saveCouchDoc(fieldDBDatum.pouchname, fieldDBDatum).then(function(response) {
                     console.log(response);
                     if (response.status >= 400) {
-                      deffered.reject("Error saving datum " + response.status);
+                      deferred.reject("Error saving datum " + response.status);
                       return;
                     }
                     if (!spreadsheetDatumToBeSaved.id) {
                       spreadsheetDatumToBeSaved.id = response.data.id;
                       spreadsheetDatumToBeSaved.rev = response.data.rev;
                     }
-                    deffered.resolve(spreadsheetDatumToBeSaved);
+                    deferred.resolve(spreadsheetDatumToBeSaved);
                   }, function(e) {
                     var reason = "Error saving datum. Maybe you're offline?";
                     if (e.data && e.data.reason) {
@@ -390,7 +390,7 @@ define(
                       reason = "Error saving datum: " + e.status;
                     }
                     console.log(reason, fieldDBDatum, e);
-                    deffered.reject(reason);
+                    deferred.reject(reason);
                   });
                 };
 
@@ -406,14 +406,14 @@ define(
                       reason = "Error getting the most recent version of the datum: " + e.status;
                     }
                     console.log(reason, spreadsheetDatumToBeSaved, e);
-                    deffered.reject(reason);
+                    deferred.reject(reason);
                   });
                 } else {
                   getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
                 }
 
               });
-              return deffered.promise;
+              return deferred.promise;
             },
             'blankDatumTemplate': getBlankDatumTemplate,
             'blankSessionTemplate': function() {

@@ -132,7 +132,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
         }, {
           label: "morphemes",
           labelMachine: "morphemes",
-          help: "Words divided into prefixes, root and suffixes",
+          help: "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
           helpLinguist: "Morpheme segmentation"
         }, {
           label: "gloss",
@@ -153,7 +153,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
           label: "dialect",
           labelMachine: "dialect",
           help: "Dialect of this example (city, village, region etc)",
-          helpLinguist: "This dialect may precise as the team chooses (province, region, city, village or some other measure of dialect)"
+          helpLinguist: "This dialect may be as precise as the team chooses (province, region, city, village or any other measure of dialect)"
         }, {
           label: "register",
           labelMachine: "register",
@@ -163,14 +163,14 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
           label: "language",
           labelMachine: "language",
           language: {
-            "ethnologueUrl": "",
-            "wikipediaUrl": "",
-            "iso": "",
-            "locale": "",
-            "englishName": "",
-            "nativeName": "",
-            "alternateNames": ""
-          },
+              ethnologueUrl: "",
+              wikipediaUrl: "",
+              iso: "",
+              locale: "",
+              englishName: "",
+              nativeName: "",
+              alternateNames: ""
+            },
           help: "This is the langauge (or language family)",
           helpLinguist: "This is the langauge (or language family)"
         }, {
@@ -181,9 +181,9 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
           label: "location",
           labelMachine: "location",
           location: {
-            "latitude": 0,
-            "longitude": 0,
-            "accuracy": 0
+              latitude: 0,
+              longitude: 0,
+              accuracy: 0
           },
           help: "This is the gps location of the elicitation session (if available)",
         }, {

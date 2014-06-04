@@ -6,7 +6,7 @@ CORS.bug = function(message) {
 };
 
 CORS.makeCORSRequest = function(options) {
-  var deffered = Q.defer();
+  var deferred = Q.defer();
 
   if (!options.method) {
     options.method = options.type || "GET";
@@ -45,8 +45,8 @@ CORS.makeCORSRequest = function(options) {
   var xhr = createCORSRequest(options.method, options.url);
   if (!xhr) {
     CORS.bug('CORS not supported, your browser is unable to contact the database.');
-    deffered.reject('CORS not supported, your browser is unable to contact the database.');
-    return deffered.promise;
+    deferred.reject('CORS not supported, your browser is unable to contact the database.');
+    return deferred.promise;
   }
 
   //  if(options.method === "POST"){
@@ -65,23 +65,23 @@ CORS.makeCORSRequest = function(options) {
     }
     if (xhr.status >= 400) {
       console.log("The request was unsuccesful "+ xhr.statusText);
-      deffered.reject(response);
+      deferred.reject(response);
     } else {
-      deffered.resolve(response);
+      deferred.resolve(response);
     }
   };
 
   xhr.onerror = function(e, f, g) {
     console.log(e, f, g);
     CORS.bug('There was an error making the CORS request to ' + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
-    deffered.reject(e);
+    deferred.reject(e);
   };
   if (options.data) {
     xhr.send(JSON.stringify(options.data));
   } else {
     xhr.send();
   }
-  return deffered.promise;
+  return deferred.promise;
 };
 
 if (exports) {
