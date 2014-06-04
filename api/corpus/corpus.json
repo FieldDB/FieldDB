@@ -27,7 +27,7 @@
     "validationStatus": "Checked*",
     "color": "green",
     "default": true
-  },{
+  }, {
     "validationStatus": "Published*",
     "color": "blue"
   }, {
@@ -82,20 +82,20 @@
   }],
   "datumFields": [{
     "id": "judgement",
-    "labelLinguist": "Gramaticality Judgement",
-    "labelLayperson": "Not-a-normal-thing-to-say",
-    "labelTranslator": "Grammatical/How-normal-Is-This-Example",
+    "labelLinguists": "Gramaticality Judgement",
+    "labelNonLinguists": "Not-a-normal-thing-to-say",
+    "labelTranslators": "Grammatical/How-normal-Is-This-Example",
     "size": "3",
     "shouldBeEncrypted": false,
     "showToUserTypes": "linguist",
     "defaultfield": true,
     "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
-    "helpLinguist": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
+    "helpLinguists": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
   }, {
     "id": "orthography",
-    "labelLinguist": "Orthography",
-    "labelLayperson": "Written",
-    "labelTranslator": "Orthography",
+    "labelLinguists": "Orthography",
+    "labelNonLinguists": "Written",
+    "labelTranslators": "Orthography",
     "type": "IGT, parallelText",
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
@@ -105,12 +105,12 @@
       "referenceLink": ""
     },
     "help": "What was said/written using the alphabet/writing system of the language.",
-    "helpLinguist": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
+    "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
   }, {
     "id": "utterance",
-    "labelLinguist": "Utterance",
-    "labelLayperson": "International Phonetic Alphabet (IPA)",
-    "labelTranslator": "Transliteration",
+    "labelLinguists": "Utterance",
+    "labelNonLinguists": "International Phonetic Alphabet (IPA)",
+    "labelTranslators": "Transliteration",
     "type": "IGT, parallelText",
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
@@ -120,36 +120,36 @@
       "referenceLink": ""
     },
     "help": "What was said/written in an alphabet the team is comfortable using.",
-    "helpLinguist": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
+    "helpLinguists": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
   }, {
     "id": "allomorphs",
-    "labelLinguist": "Allomorphs",
-    "labelLayperson": "",
-    "labelTranslator": "Prefixe-s-root-suffixe-s",
+    "labelLinguists": "Allomorphs",
+    "labelNonLinguists": "",
+    "labelTranslators": "Prefixe-s-root-suffixe-s",
     "type": "IGT",
     "shouldBeEncrypted": true,
     "showToUserTypes": "linguist",
     "defaultfield": true,
     "alternates": [],
     "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-    "helpLinguist": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
+    "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
   }, {
     "id": "morphemes",
-    "labelLinguist": "Morphemes",
-    "labelLayperson": "",
-    "labelTranslator": "Prefix-z-root-suffix-z",
+    "labelLinguists": "Morphemes",
+    "labelNonLinguists": "",
+    "labelTranslators": "Prefix-z-root-suffix-z",
     "type": "IGT",
     "shouldBeEncrypted": true,
     "showToUserTypes": "linguist",
     "defaultfield": true,
     "alternates": [],
     "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-    "helpLinguist": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
+    "helpLinguists": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
   }, {
     "id": "gloss",
-    "labelLinguist": "Gloss",
-    "labelLayperson": "Word-for-word Translation",
-    "labelTranslator": "Word-for-word Translation",
+    "labelLinguists": "Gloss",
+    "labelNonLinguists": "Word-for-word Translation",
+    "labelTranslators": "Word-for-word Translation",
     "type": "IGT",
     "shouldBeEncrypted": true,
     "showToUserTypes": "linguist",
@@ -162,12 +162,12 @@
       "referenceLink": ""
     },
     "help": "Translation for each prefix, root and suffix in the words",
-    "helpLinguist": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
+    "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
   }, {
     "id": "syntacticCategory",
-    "labelLinguist": "Morpho-Syntactic Category",
-    "labelLayperson": "",
-    "labelTranslator": "Part of Speech",
+    "labelLinguists": "Morpho-Syntactic Category",
+    "labelNonLinguists": "",
+    "labelTranslators": "Part of Speech",
     "type": "IGT",
     "shouldBeEncrypted": true,
     "showToUserTypes": "machine, linguist",
@@ -179,72 +179,86 @@
       "referenceLink": ""
     },
     "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
-    "helpLinguist": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
-  },  {
+    "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
+  }, {
     "id": "translation",
-    "labelLinguist": "Translation",
-    "labelLayperson": "English",
-    "labelTranslator": "English",
+    "labelLinguists": "Translation",
+    "labelNonLinguists": "English",
+    "labelTranslators": "English",
     "type": "IGT, parallelText",
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
     "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
     "language": "",
-    "helpLinguist": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
+    "helpLinguists": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
   }, {
     "id": "context",
-    "labelLinguist": "Context",
-    "labelLayperson": "Context",
-    "labelTranslator": "Context",
+    "labelLinguists": "Context",
+    "labelNonLinguists": "Context",
+    "labelTranslators": "Context",
     "type": "wiki",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
     "tags": [],
     "help": "Tags for constructions or other info that you might want to use to categorize your data.",
-    "helpLinguist": "Tags for constructions or other info that you might want to use to categorize your data."
-  },{
+    "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
+  }, {
     "id": "documentation",
-    "labelLinguist": "Discussion for Handouts",
-    "labelLayperson": "Additional Documentation",
-    "labelTranslator": "Documentation",
+    "labelLinguists": "Discussion for Handouts",
+    "labelNonLinguists": "Additional Documentation",
+    "labelTranslators": "Documentation",
     "type": "wiki, LaTeX",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
     "tags": [],
     "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
-    "helpLinguist": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
-  },{
+    "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
+  }, {
+    "label": "links",
+    "labelLinguists": "Related Data",
+    "labelNonLinguists": "Linked to",
+    "labelTranslators": "Linked to",
+    "labelComputationalLinguist": "Linked Data",
+    "type": "links",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "links": [],
+    "help": "Related data in the database, or at any web url.",
+    "helpLinguists": "Related data in the database, or at any web url.",
+    "helpDevelopers": "Related data in the database, or at any web url."
+  }, {
     "id": "tags",
-    "labelLinguist": "Tags",
-    "labelLayperson": "Tags",
-    "labelTranslator": "Tags",
+    "labelLinguists": "Tags",
+    "labelNonLinguists": "Tags",
+    "labelTranslators": "Tags",
     "type": "tags",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
     "tags": [],
     "help": "Tags for constructions or other info that you might want to use to categorize your data.",
-    "helpLinguist": "Tags for constructions or other info that you might want to use to categorize your data."
+    "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
   }, {
     "id": "validationStatus",
-    "labelLinguist": "Data validity/verification Status",
-    "labelLayperson": "Data validity/verification Status",
-    "labelTranslator": "Data validity/verification Status",
+    "labelLinguists": "Data validity/verification Status",
+    "labelNonLinguists": "Data validity/verification Status",
+    "labelTranslators": "Data validity/verification Status",
     "type": "tags",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
     "defaultfield": true,
     "tags": [],
     "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
-    "helpLinguist": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
+    "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
   }, {
     "id": "enteredByUser",
-    "labelLinguist": "Imported/Entered By",
-    "labelLayperson": "Entered By",
-    "labelTranslator": "Imported/Entered By",
+    "labelLinguists": "Imported/Entered By",
+    "labelNonLinguists": "Entered By",
+    "labelTranslators": "Imported/Entered By",
     "type": "users",
     "shouldBeEncrypted": "",
     "showToUserTypes": "all",
@@ -254,12 +268,12 @@
     "hardware": {},
     "software": {},
     "help": "The user who originally entered the datum",
-    "helpLinguist": "The user who originally entered the datum"
+    "helpLinguists": "The user who originally entered the datum"
   }, {
     "id": "modifiedByUser",
-    "labelLinguist": "Modified By",
-    "labelLayperson": "Modified By",
-    "labelTranslator": "Modified By",
+    "labelLinguists": "Modified By",
+    "labelNonLinguists": "Modified By",
+    "labelTranslators": "Modified By",
     "type": "users",
     "shouldBeEncrypted": "",
     "showToUserTypes": "all",
@@ -267,89 +281,89 @@
     "defaultfield": true,
     "users": [],
     "help": "An array of users who modified the datum",
-    "helpLinguist": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
-  },{
+    "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
+  }, {
     "id": "syntacticTreeLatex",
-    "labelLinguist": "Syntactic Tree/Constituency (LaTeX)",
-    "labelLayperson": "",
-    "labelTranslator": "",
+    "labelLinguists": "Syntactic Tree/Constituency (LaTeX)",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
     "type": "LaTeX",
     "shouldBeEncrypted": true,
     "showToUserTypes": "machine",
     "defaultfield": true,
     "alternates": [],
     "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
-    "helpLinguist": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
+    "helpLinguists": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
   }],
   "conversationFields": [{
     "id": "speakers",
-    "labelLinguist": "Speakers",
-    "labelLayperson": "Speakers",
-    "labelTranslator": "Speakers",
+    "labelLinguists": "Speakers",
+    "labelNonLinguists": "Speakers",
+    "labelTranslators": "Speakers",
     "type": "users",
     "shouldBeEncrypted": true,
     "defaultfield": true,
     "users": [],
     "help": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer.",
-    "helpLinguist": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
+    "helpLinguists": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
   }, {
     "id": "modality",
-    "labelLinguist": "Modality",
-    "labelLayperson": "Modality",
-    "labelTranslator": "Modality",
+    "labelLinguists": "Modality",
+    "labelNonLinguists": "Modality",
+    "labelTranslators": "Modality",
     "type": "tags",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "tags": [],
     "help": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality.",
-    "helpLinguist": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
+    "helpLinguists": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
   }],
   "sessionFields": [{
     "id": "goal",
-    "labelLinguist": "Goal",
-    "labelLayperson": "Goal",
-    "labelTranslator": "Goal",
+    "labelLinguists": "Goal",
+    "labelNonLinguists": "Goal",
+    "labelTranslators": "Goal",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "help": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature...",
-    "helpLinguist": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
+    "helpLinguists": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
   }, {
     "id": "source",
-    "labelLinguist": "Language Speakers/Publication/Source",
-    "labelLayperson": "By",
-    "labelTranslator": "Language Speakers/Publication/Source",
+    "labelLinguists": "Language Speakers/Publication/Source",
+    "labelNonLinguists": "By",
+    "labelTranslators": "Language Speakers/Publication/Source",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "users": [],
     "help": "This is a comma seperated field of all the consultants/publications/sources who were were the source/present for this elicitation session.",
-    "helpLinguist": "This is a comma seperated field of all the consultants/publications/sources who  were were the source/present for this elicitation session.",
+    "helpLinguists": "This is a comma seperated field of all the consultants/publications/sources who  were were the source/present for this elicitation session.",
     "helpDevelopers": "This is a comma seperated field of all the consultants (usernames, or anonymouse codes, or publication uri's) who were present for this elicitation session. This field also contains a (hidden) array of consultant/source masks if they are actual users of the system. "
   }, {
     "id": "dialect",
     "type": "language",
-    "labelLinguist": "Dialect",
-    "labelLayperson": "Dialect",
-    "labelTranslator": "Dialect",
+    "labelLinguists": "Dialect",
+    "labelNonLinguists": "Dialect",
+    "labelTranslators": "Dialect",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "help": "Dialect of this example (city, village, region etc)",
-    "helpLinguist": "This dialect may precise as the team chooses (province, region, city, village or any other measure of dialect)"
+    "helpLinguists": "This dialect may precise as the team chooses (province, region, city, village or any other measure of dialect)"
   }, {
     "id": "register",
     "type": "language",
-    "labelLinguist": "Social Register",
-    "labelLayperson": "Social Register",
-    "labelTranslator": "Social Register",
+    "labelLinguists": "Social Register",
+    "labelNonLinguists": "Social Register",
+    "labelTranslators": "Social Register",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "help": "Social register of this example (friends, children speaking with children, formal, religious, ceremonial etc)",
-    "helpLinguist": "This is an optional field which indicates the social register of the example (friends, children speaking with children, formal, religious, ceremonial etc)"
+    "helpLinguists": "This is an optional field which indicates the social register of the example (friends, children speaking with children, formal, religious, ceremonial etc)"
   }, {
     "id": "language",
     "type": "language",
-    "labelLinguist": "Language Name",
-    "labelLayperson": "Language Name",
-    "labelTranslator": "Language Name (Ethnologue)",
+    "labelLinguists": "Language Name",
+    "labelNonLinguists": "Language Name",
+    "labelTranslators": "Language Name (Ethnologue)",
     "labelComputationalLinguist": "Language Name (ISO 639-3)",
     "shouldBeEncrypted": false,
     "defaultfield": true,
@@ -363,13 +377,13 @@
       "alternateNames": ""
     },
     "help": "This is the langauge name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
-    "helpLinguist": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
+    "helpLinguists": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
   }, {
     "id": "location",
     "type": "location",
-    "labelLinguist": "Location",
-    "labelLayperson": "Location",
-    "labelTranslator": "Location",
+    "labelLinguists": "Location",
+    "labelNonLinguists": "Location",
+    "labelTranslators": "Location",
     "shouldBeEncrypted": true,
     "defaultfield": true,
     "location": {
@@ -378,13 +392,13 @@
       "accuracy": 0
     },
     "help": "This is the GPS location of the elicitation session (if available)",
-    "helpLinguist": "This is the GPS location of the elicitation session (if available)"
+    "helpLinguists": "This is the GPS location of the elicitation session (if available)"
   }, {
     "id": "dateElicited",
     "type": "date",
-    "labelLinguist": "Original Date Elicited",
-    "labelLayperson": "OriginalDate Spoken",
-    "labelTranslator": "Original Date Spoken/Published",
+    "labelLinguists": "Original Date Elicited",
+    "labelNonLinguists": "OriginalDate Spoken",
+    "labelTranslators": "Original Date Spoken/Published",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "timestamp": {
@@ -393,24 +407,24 @@
       "accuracy": null
     },
     "help": "The date when the elicitation session took place, or when the datum was spoken/published.",
-    "helpLinguist": "The date when the elicitation session took place, or when the datum was spoken/published."
+    "helpLinguists": "The date when the elicitation session took place, or when the datum was spoken/published."
   }, {
     "id": "participants",
-    "labelLinguist": "Eliciation Session Participants",
-    "labelLayperson": "Session Participants",
-    "labelTranslator": "Participants",
+    "labelLinguists": "Eliciation Session Participants",
+    "labelNonLinguists": "Session Participants",
+    "labelTranslators": "Participants",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "users": [],
     "help": "This is a comma seperated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
-    "helpLinguist": "This is a comma seperated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
+    "helpLinguists": "This is a comma seperated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
     "helpDevelopers": "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. "
   }, {
     "id": "DateSessionEntered",
     "type": "date",
-    "labelLinguist": "Date Entered",
-    "labelLayperson": "Date Entered",
-    "labelTranslator": "Date Entered",
+    "labelLinguists": "Date Entered",
+    "labelNonLinguists": "Date Entered",
+    "labelTranslators": "Date Entered",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "timestamp": {
@@ -419,18 +433,18 @@
       "accuracy": null
     },
     "help": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book).",
-    "helpLinguist": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
+    "helpLinguists": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
   }, {
     "id": "device",
     "type": "device",
-    "labelLinguist": "Device Hardware",
-    "labelLayperson": "Device Hardware",
-    "labelTranslator": "Device Hardware",
+    "labelLinguists": "Device Hardware",
+    "labelNonLinguists": "Device Hardware",
+    "labelTranslators": "Device Hardware",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "device": {},
     "help": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
-    "helpLinguist": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
+    "helpLinguists": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
     "helpDevelopers": "Your app can save optional anonymous device details of the equipment/software which used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1"
   }]
 }
