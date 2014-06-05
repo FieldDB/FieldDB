@@ -34,11 +34,11 @@
     "validationStatus": "ToBeChecked*",
     "color": "orange"
   }, {
-    "tag": "ApprovedLanguageLearningContent*",
+    "validationStatus": "ApprovedLanguageLearningContent*",
     "color": "green",
     "showInLanguageLearnignApps": true
   }, {
-    "tag": "ContributedLanguageLearningContent*",
+    "validationStatus": "ContributedLanguageLearningContent*",
     "color": "orange"
   }, {
     "validationStatus": "Deleted*",
@@ -162,8 +162,8 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "linguist",
     "defaultfield": true,
-    "language": "",
     "json": {
+      "language": "",
       "alternates": [],
       "conventions": {
         "id": "",
@@ -234,7 +234,7 @@
     "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
     "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
   }, {
-    "label": "relatedData",
+    "id": "relatedData",
     "labelLinguists": "Related Data",
     "labelNonLinguists": "Linked to",
     "labelTranslators": "Linked to",

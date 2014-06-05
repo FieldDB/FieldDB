@@ -78,8 +78,10 @@ var FieldDBObject = function FieldDBObject(json) {
     }
     // console.log("JSON: " + member);
     if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function") {
-      console.log("parsing member " + member, this.INTERNAL_MODELS[member]);
+      console.log("Parsing model: " + member );
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
+    } else {
+      console.log("  no model defined: " + member);
     }
     this[member] = json[member];
   }
@@ -256,6 +258,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     set: function(value) {
       if (value === this._dbname) {
         return;
+      }
+      if (this._dbname) {
+        throw "This is the " + this._dbname + ". You cannot change the dbname of a corpus, you must create a new object first.";
       }
       if (!value) {
         delete this._dbname;
