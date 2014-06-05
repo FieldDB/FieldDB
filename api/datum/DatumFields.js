@@ -1,43 +1,40 @@
-define([ 
-         "backbone", 
-         "datum/DatumField",
-         "OPrime"
-], function(
-         Backbone,
-         DatumField) {
-  var DatumFields = Backbone.Collection.extend(
-  /** @lends DatumFields.prototype */
-  {
-    /**
-     * @class Collection of Datum Field
-     * 
-     * @description The initialize function 
-     * 
-     * @extends Backbone.Collection
-     * @constructs
-     */
-    initialize : function() {
-    },
-    internalModels : DatumField,
-    model : DatumField,
-    
-    /** 
-     * Gets a copy DatumFields containing new (not references) DatumFields objects
-     * containing the same attributes.
-     * 
-     * @return The cloned DatumFields.
-     */
-    clone : function() {
-      var newCollection = new DatumFields();
-      
-      for (var i = 0; i < this.length; i++) {
-        newCollection.push(new DatumField(this.models[i].toJSON())); 
-      }
-      
-      return newCollection;
+var Collection = require('./../Collection').Collection;
+var DatumField = require('./../FieldDBObject').FieldDBObject;
+
+/**
+ * @class Collection of Datum Field
+ *
+ * @description The DatumFields is a minimal customization of the Collection
+ * to add an internal model of DatumField.
+ *
+ * @extends Collection
+ * @constructs
+ */
+var DatumFields = function DatumFields(options) {
+  console.log("Constructing DatumFields length: ", options.length);
+  Collection.apply(this, arguments);
+};
+
+DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFields.prototype */ {
+  constructor: {
+    value: DatumFields
+  },
+
+  /**
+   *  The primary key < v2 was 'label' but we changed to use 'id' so that
+   *  'label' could be used only for a human friendly (and customizable)
+   *  label while the id must remain unchanged for glossing and other automation.
+   * @type {Object}
+   */
+  primaryKey: {
+    value: 'id'
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      item: DatumField
     }
+  }
 
-  });
-
-  return DatumFields;
 });
+exports.DatumFields = DatumFields;

@@ -9,11 +9,11 @@
     "validationStatus": "ToBeChecked*",
     "color": "orange"
   }, {
-    "tag": "ApprovedLanguageLearningContent*",
+    "validationStatus": "ApprovedLanguageLearningContent*",
     "color": "green",
     "showInLanguageLearnignApps": true
   }, {
-    "tag": "ContributedLanguageLearningContent*",
+    "validationStatus": "ContributedLanguageLearningContent*",
     "color": "orange"
   }, {
     "validationStatus": "Deleted*",
