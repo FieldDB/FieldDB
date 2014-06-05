@@ -1,9 +1,11 @@
-var Import = require('../../api/import/Import').Import;
+var Import = require('./../../api/import/Import').Import;
+var Corpus = require('./../../api/corpus/Corpus').Corpus;
 var fs = require('fs');
 
 var specIsRunningTooLong = 5000;
 
 describe("api/import/Import", function() {
+
   it("should load", function() {
     expect(Import).toBeDefined();
   });
@@ -13,22 +15,59 @@ describe("api/import/Import", function() {
     expect(importer).toBeDefined();
   });
 
+  it("should be able to use a corpus", function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults);
+    expect(corpus).toBeDefined();
+    // console.log(corpus);
+    expect(corpus.dbname).toBeDefined();
+
+
+    var importer = new Import({
+      corpus: corpus
+    });
+    expect(importer).toBeDefined();
+  });
+
+  it("should be able to ask the corpus to create a datum", function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults);
+    corpus.dbname = dbname;
+    var datum = corpus.newDatum();
+    console.log(datum);
+    expect(datum).toBeDefined();
+  });
+
+
 });
 
-describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+xdescribe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
   var corpus,
     importer,
     localUri = './sample_data/orthography.txt',
     remoteUri = 'https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/sample_data/orthography.txt';
 
   beforeEach(function() {
-    corpus = {};
+    var dbname = "testingbatchimport-rawtext"
+    corpus = new Corpus({
+      dbname: dbname,
+      language: {
+        "ethnologueUrl": "",
+        "wikipediaUrl": "",
+        "iso": "ka",
+        "locale": "",
+        "englishName": "",
+        "nativeName": "",
+        "alternateNames": ""
+      }
+    });
     importer = new Import({
+      dbname: dbname,
       corpus: corpus
     });
   });
 
-  it('should accept a read function and a read hook', function(done) {
+  xit('should accept a read function and a read hook', function(done) {
     importer.addFileUri({
       uri: localUri,
       readOptions: {
@@ -89,7 +128,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
       }
     }).then(function(result) {
       console.log('after add file', result);
-      expect(result).toBeDefined();
+      expect(result.rawText).toBeDefined();
     }).then(done, done);
 
   }, specIsRunningTooLong);
@@ -109,7 +148,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
   });
 
 });
-describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+xdescribe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
   var importer;
   beforeEach(function() {
     importer = new Import();
@@ -122,22 +161,14 @@ describe("Batch Import: as a morphologist I want to import directories of text f
 });
 
 
-describe("Import: as a morphologist I want to import my data from CSV", function() {
+xdescribe("Import: as a morphologist I want to import my data from CSV", function() {
   it("should detect drag and drop", function() {
     expect(true).toBeTruthy();
   });
 
 });
 
-describe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
-
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
-  });
-
-});
-
-describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
+xdescribe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
 
   it("should detect drag and drop", function() {
     expect(true).toBeTruthy();
@@ -145,7 +176,15 @@ describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import 
 
 });
 
-describe("Import Template", function() {
+xdescribe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
+
+  it("should detect drag and drop", function() {
+    expect(true).toBeTruthy();
+  });
+
+});
+
+xdescribe("Import Template", function() {
 
   beforeEach(function() {
     // var d = document.createElement("div");

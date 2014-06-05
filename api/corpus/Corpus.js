@@ -3,6 +3,8 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var CorpusMask = require("./CorpusMask");
 var Collection = require('./../Collection').Collection;
 var Consultants = require('./../Collection').Collection;
+// var Datum = require('./../datum/Datum').Datum;
+var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var DatumStates = require('./../datum/DatumStates').DatumStates;
 var DatumTags = require('./../datum/DatumTags').DatumTags;
@@ -40,7 +42,7 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  *
  * @property {Consultants} consultants Collection of consultants who contributed to the corpus
  * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
- * @property {DatumFields} datumfields Collection of datum fields used in the corpus
+ * @property {DatumFields} datumFields Collection of datum fields used in the corpus
  * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
  * @property {Sessions} sessions Collection of sessions that belong to the corpus
  * @property {DataLists} datalists Collection of data lists created under the corpus
@@ -688,9 +690,13 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   newDatum: {
     value: function(options) {
       console.log("Creating a datum for this corpus");
-      var datum = new FieldDBObject({
-        datumfields: this.datumFields.clone()
+      if (!this.datumFields || !this.datumFields.clone) {
+        throw "This corpus has no default datum fields... It is unable to create a datum.";
+      }
+      var datum = new Datum({
+        datumFields: new DatumFields(this.datumFields.clone()),
       });
+      // console.log(datum.datumFields.utterance);
       return datum;
     }
   },
