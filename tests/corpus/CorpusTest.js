@@ -1,22 +1,16 @@
 var Corpus = require("../../api/corpus/Corpus").Corpus;
 var SAMPLE_v1_CORPUS_MODELS = require("../../sample_data/corpus_v1.22.1.json");
+var DatumFields  = require("../../api/datum/DatumFields").DatumFields;
 
 describe("Corpus", function() {
   it("should be load", function() {
     expect(Corpus).toBeDefined();
   });
 
-  describe("construction options", function() {
-    var corpus;
-
-    beforeEach(function() {
-      corpus = new Corpus({
-        pouchname: "lingllama-communitycorpus"
-      });
-    });
+  xdescribe("construction options", function() {
 
     it("should accept v1.22.1 json", function() {
-      corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
+      var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
       expect(corpus.dbname).toEqual("sapir-firstcorpus");
       expect(corpus.pouchname).toEqual("sapir-firstcorpus");
 
@@ -25,7 +19,7 @@ describe("Corpus", function() {
     });
 
     it("should accept v2.2 json", function() {
-      corpus = new Corpus({
+      var corpus = new Corpus({
         dbname: "lingllama-communitycorpus"
       });
       expect(corpus.dbname).toEqual("lingllama-communitycorpus");
@@ -36,9 +30,39 @@ describe("Corpus", function() {
       expect(serialized.datumfields).toBeUndefined();
     });
 
+    it("should not be able to change a dbname if it has been set", function() {
+      var corpus = new Corpus(Corpus.defaults);
+      expect(corpus.dbname).toEqual("");
+      corpus.dbname = "testingdefaultcorpuscreation-kartuli";
+      expect(function() {
+        corpus.dbname = "adiffernetuser-kartuli";
+      }).toThrow('This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of a corpus, you must create a new object first.');
+    });
+
   });
 
-  describe("serialization ", function() {
+
+  describe("datum creation", function() {
+    var corpus;
+
+    beforeEach(function() {
+      // console.log(Corpus.defaults);
+      corpus = new Corpus(Corpus.defaults);
+      corpus.dbname = "testingnewdatum-kartuli";
+    });
+
+    it("should have default datumFields", function() {
+      expect(corpus.datumFields instanceof DatumFields).toBeTruthy();
+      expect(corpus.datumFields.constructor === DatumFields)
+      console.log(corpus.datumFields.utterance);
+      // console.log(corpus.datumFields.toJSON());
+      expect(corpus.datumFields.utterance.labelLinguists).toEqual('Utterance');
+    });
+
+  });
+
+
+  xdescribe("serialization ", function() {
 
 
     xit("should clean v1.22.1 to a maximal json", function() {
@@ -100,19 +124,19 @@ describe("Corpus", function() {
 
 });
 
-describe("Corpus: as a team we want to be able to go back in time in the corpus revisions", function() {
+xdescribe("Corpus: as a team we want to be able to go back in time in the corpus revisions", function() {
   it("should be able to import from GitHub repository", function() {
     expect(true).toBeTruthy();
   });
 });
 
-describe("Corpus: as a user I want to be able to import via drag and drop", function() {
+xdescribe("Corpus: as a user I want to be able to import via drag and drop", function() {
   it("should detect drag and drop", function() {
     expect(true).toBeTruthy();
   });
 });
 
-describe("Corpus: as a user I want to be able to go offline, but still have the most recent objects in my corpus available", function() {
+xdescribe("Corpus: as a user I want to be able to go offline, but still have the most recent objects in my corpus available", function() {
   it("should have the most recent entries available", function() {
     expect(true).toBeTruthy();
   });
