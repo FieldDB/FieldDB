@@ -238,7 +238,7 @@
     "labelLinguists": "Related Data",
     "labelNonLinguists": "Linked to",
     "labelTranslators": "Linked to",
-    "labelComputationalLinguist": "Linked Data",
+    "labelComputationalLinguists": "Linked Data",
     "type": "relatedData",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
@@ -399,7 +399,7 @@
     "labelLinguists": "Language Name",
     "labelNonLinguists": "Language Name",
     "labelTranslators": "Language Name (Ethnologue)",
-    "labelComputationalLinguist": "Language Name (ISO 639-3)",
+    "labelComputationalLinguists": "Language Name (ISO 639-3)",
     "shouldBeEncrypted": false,
     "defaultfield": true,
     "json": {

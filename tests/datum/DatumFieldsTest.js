@@ -1,6 +1,6 @@
 'use strict';
 var DatumFields = require('./../../api/datum/DatumFields').DatumFields;
-var DatumField = require('./../../api/FieldDBObject').FieldDBObject;
+var DatumField = require('./../../api/datum/DatumField').DatumField;
 var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
 
 var sampleDatumFields = DEFAULT_CORPUS_MODEL.datumFields;

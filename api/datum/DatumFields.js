@@ -1,5 +1,5 @@
 var Collection = require('./../Collection').Collection;
-var DatumField = require('./../FieldDBObject').FieldDBObject;
+var DatumField = require('./../datum/DatumField').DatumField;
 
 /**
  * @class Collection of Datum Field
