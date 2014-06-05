@@ -130,6 +130,22 @@ describe('lib/DatumFields', function() {
         return item.labelLinguists;
       })).toEqual(['Utterance', 'Morphemes']);
     });
+
+
+    it('should be able to clone an existing collection', function() {
+      var newbarecollection = collection.clone();
+      // expect(newbarecollection).toEqual(sampleDatumFields);
+      var newcollection = new DatumFields(newbarecollection);
+      expect(newcollection.utterance).toEqual(collection.utterance);
+      expect(newcollection.utterance).not.toBe(collection.utterance);
+
+      newcollection.utterance = {
+        id: "utterance",
+        color: "blue"
+      };
+      expect(newcollection.utterance).not.toEqual(collection.utterance);
+    });
+
   });
 
   describe('non-lossy persistance', function() {

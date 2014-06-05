@@ -131,7 +131,7 @@ describe('lib/Collection', function() {
       collection.add({
         validationStatus: 'CheckedBySeberina',
         color: 'green'
-      })
+      });
       expect(collection.find(/^Checked*/)).toEqual([DEFAULT_DATUM_VALIDATION_STATI[0], {
         validationStatus: 'CheckedBySeberina',
         color: 'green'
@@ -182,6 +182,23 @@ describe('lib/Collection', function() {
         color: 'orange'
       }]);
     });
+
+    it('should be able to clone an existing collection', function() {
+      var newbarecollection = collection.clone();
+      expect(newbarecollection).toEqual(DEFAULT_DATUM_VALIDATION_STATI);
+      var newcollection = new Collection({
+        primaryKey: "validationStatus",
+        collection: newbarecollection
+      });
+      newcollection.checked = {
+        validationStatus: "Checked",
+        color: "blue"
+      };
+      expect(collection.checked).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(newcollection.checked).not.toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(collection.checked).not.toEqual(newcollection.checked);
+    });
+
   });
 
   describe('non-lossy persistance', function() {
@@ -218,7 +235,7 @@ describe('lib/Collection', function() {
       var collectionFromDB = JSON.stringify(collection);
       collection = new Collection({
         collection: JSON.parse(collectionFromDB)
-      })
+      });
       expect(collection.toJSON()).toEqual(collectionToLoad);
       expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
     });
@@ -227,7 +244,7 @@ describe('lib/Collection', function() {
       var collectionFromDB = collection.toJSON();
       collection = new Collection({
         collection: collectionFromDB
-      })
+      });
       expect(collection.toJSON()).toEqual(collectionToLoad);
       expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
     });
