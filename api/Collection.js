@@ -231,7 +231,16 @@ Collection.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      return this._collection;
+      var json = this._collection.map(function(item) {
+        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && typeof this.INTERNAL_MODELS.item === "function" && new this.INTERNAL_MODELS.item().toJSON === "function") {
+          console.log("This item has a toJSON, which we will call instead");
+          return item.toJSON();
+        } else {
+          return item;
+        }
+      });
+
+      return json;
     }
   },
 
