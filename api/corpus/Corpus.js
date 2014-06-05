@@ -689,15 +689,32 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   newDatum: {
     value: function(options) {
-      console.log("Creating a datum for this corpus");
-      if (!this.datumFields || !this.datumFields.clone) {
-        throw "This corpus has no default datum fields... It is unable to create a datum.";
-      }
-      var datum = new Datum({
-        datumFields: new DatumFields(this.datumFields.clone()),
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        console.log("Creating a datum for this corpus");
+        if (!self.datumFields || !self.datumFields.clone) {
+          throw "This corpus has no default datum fields... It is unable to create a datum.";
+        }
+        var datum = new Datum({
+          datumFields: new DatumFields(self.datumFields.clone()),
+        });
+        for (var field in options) {
+          if (!options.hasOwnProperty(field)) {
+            continue;
+          }
+          if (datum.datumFields[field]) {
+            console.log("  this option appears to be a datumField " + field);
+            datum.datumFields[field].value = options[field];
+          } else {
+            datum[field] = options[field];
+          }
+        }
+        deferred.resolve(datum);
       });
-      // console.log(datum.datumFields.utterance);
-      return datum;
+      return deferred.promise;
     }
   },
   /**
@@ -771,6 +788,23 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       }
       this.lexiconExternalObject = value;
+    }
+  },
+
+  find: {
+    value: function(uri) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!uri) {
+        throw 'Uri must be specified ';
+      }
+
+      Q.nextTick(function() {
+        deferred.resolve([]); /* TODO try fetching this uri */
+      });
+
+      return deferred.promise;
     }
   },
 
