@@ -20,7 +20,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var DatumField = function DatumField(options) {
-  console.log("Constructing DatumField ", options);
+  console.log("Constructing DatumField ", options.length);
   FieldDBObject.apply(this, arguments);
 };
 

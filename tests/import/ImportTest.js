@@ -111,7 +111,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
 
   it('should provide a preprocess hook', function(done) {
     expect(importer.preprocess).toBeDefined();
-
+    defaultOptions.rawText = "placeholder text ";
     importer
       .preprocess(defaultOptions)
       .then(function(result) {
