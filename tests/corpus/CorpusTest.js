@@ -7,7 +7,7 @@ describe("Corpus", function() {
     expect(Corpus).toBeDefined();
   });
 
-  xdescribe("construction options", function() {
+  describe("construction options", function() {
 
     it("should accept v1.22.1 json", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
@@ -51,12 +51,19 @@ describe("Corpus", function() {
       corpus.dbname = "testingnewdatum-kartuli";
     });
 
-    it("should have default datumFields", function() {
+      it("should have default datumFields", function() {
       expect(corpus.datumFields instanceof DatumFields).toBeTruthy();
       expect(corpus.datumFields.constructor === DatumFields)
-      console.log(corpus.datumFields.utterance);
+      // console.log(corpus.datumFields.utterance);
       // console.log(corpus.datumFields.toJSON());
       expect(corpus.datumFields.utterance.labelLinguists).toEqual('Utterance');
+      expect(corpus.datumFields.clone()).toBeDefined();
+    });
+
+    it("should create a datum with the datumFields", function() {
+      var datum = corpus.newDatum();
+      // console.log(datum.toJSON());
+      expect(datum.datumFields.utterance.labelLinguists).toEqual('Utterance');
     });
 
   });
