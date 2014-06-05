@@ -72,18 +72,22 @@ var CORS = require("./CORS").CORS;
  */
 var FieldDBObject = function FieldDBObject(json) {
   // console.log("In parent an json", json);
+  var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
     // console.log("JSON: " + member);
-    if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function") {
-      console.log("Parsing model: " + member );
+    if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
+      console.log("Parsing model: " + member);
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
     } else {
-      console.log("  simple model: " + member);
+      simpleModels.push(member);
     }
     this[member] = json[member];
+  }
+  if (simpleModels.length > 0) {
+    console.log("simpleModels", simpleModels.join(", "));
   }
   Object.apply(this, arguments);
   if (!this.id) {

@@ -64,7 +64,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       for (var index in value) {
         /* parse internal models as a model if specified */
-        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item) {
+        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value[index].constructor !== this.INTERNAL_MODELS.item) {
           value[index] = new this.INTERNAL_MODELS.item(value[index]);
         }
         this.add(value[index]);

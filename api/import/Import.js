@@ -3,9 +3,10 @@ var AudioVideo = require("./../FieldDBObject").FieldDBObject;
 var AudioVideos = require('./../Collection').Collection;
 var Collection = require('./../Collection').Collection;
 var CORS = require('./../CORS').CORS;
+var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
 var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumFields = require('./../Collection').Collection;
+var DatumFields = require('./../datum/DatumFields').DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var FileReader = {};
 var Session = require("./../FieldDBObject").FieldDBObject;
@@ -77,11 +78,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
-  internalModels: {
+  INTERNAL_MODELS: {
     value: {
       datalist: DataList,
       datumFields: DatumFields,
-      session: Session
+      session: Session,
+      corpus: Corpus
     }
   },
 
@@ -103,12 +105,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           .then(self.preprocess)
           .then(self.import)
           .then(function(result) {
+            console.log("Import is finished");
             if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
               options.next();
             }
+            // console.log('result.datum', result.datum);
             self.datumCollection.add(result.datum);
             deferred.resolve(result);
-          }).fail(function(reason) {
+          })
+          .fail(function(reason) {
             deferred.reject(reason);
           });
 
@@ -162,11 +167,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               options.datum = similarData[0];
               pipeline(options);
             } else {
+              // console.log("readUri corpus", self);
               self.corpus.newDatum().then(function(datum) {
                 options.datum = datum;
+
                 pipeline(options);
               });
             }
+          })
+          .fail(function(reason) {
+            deferred.reject(reason);
           });
 
       });
@@ -179,29 +189,30 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(options) {
       var deferred = Q.defer(),
         self = this;
+      // console.log("In the preprocess", this);
 
       Q.nextTick(function() {
         console.log("Preprocessing  ");
+        try {
 
-        var failFunction = function(reason) {
-          if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
-            options.next();
-          }
-          deferred.reject(reason);
-        };
+          var failFunction = function(reason) {
+            if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+              options.next();
+            }
+            deferred.reject(reason);
+          };
 
-        var successFunction = function(optionsWithResults) {
-          if (optionsWithResults && typeof optionsWithResults.next === 'function' /* enable use as middleware */ ) {
-            optionsWithResults.next();
-          }
-          deferred.resolve(optionsWithResults);
-        };
+          var successFunction = function(optionsWithResults) {
+            console.log("Preprocesing success");
+            if (optionsWithResults && typeof optionsWithResults.next === 'function' /* enable use as middleware */ ) {
+              optionsWithResults.next();
+            }
+            deferred.resolve(optionsWithResults);
+          };
 
-        self.corpus.newDatum({
-          orthography: options.rawText,
-          utterance: options.rawText
-        }).then(function(datum) {
-          options.datum = datum;
+          options.datum.datumFields.orthography.value = options.rawText;
+          options.datum.datumFields.utterance.value = options.rawText;
+          options.datum.id = options.uri;
 
           console.log("running write for preprocessed");
           if (options.preprocessOptions && options.preprocessOptions.writePreprocessedFileFunction) {
@@ -223,8 +234,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             successFunction(options);
           }
 
-        }, failFunction);
 
+        } catch (e) {
+          deferred.reject(e);
+        }
       });
       return deferred.promise;
     }
@@ -239,6 +252,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(options) {
       var deferred = Q.defer(),
         self = this;
+      console.log("in the import");
 
       Q.nextTick(function() {
         if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
@@ -1012,7 +1026,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         text.replace(/\n+/g, ' ').replace(/\r+/g, ' ');
       }
       this.datumCollection.add({
-        label: 'orthography',
+        id: 'orthography',
         value: text
       });
       console.log("added a datum to the collection");
