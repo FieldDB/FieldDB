@@ -61,6 +61,326 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   },
 
 
+
+  label: {
+    get: function() {
+      console.warn("label is deprecated, instead use a lable for appropraite user eg labelLinguists");
+      return this.labelLinguists;
+    },
+    set: function(value) {
+      console.warn("label is deprecated, instead use a lable for appropraite user eg labelLinguists");
+      this.labelLinguists = value;
+      this.id = value;
+    }
+  },
+
+
+  userchooseable: {
+    get: function() {
+      console.warn("userchooseable is deprecated, instead use defaultfield");
+      return this.defaultfield;
+    },
+    set: function(value) {
+      console.warn("userchooseable is deprecated, instead use defaultfield");
+      if (value === "disabled") {
+        value = true;
+      }
+      if (!value) {
+        value = false;
+      }
+      this.defaultfield = value;
+    }
+  },
+
+
+  labelLinguists: {
+    get: function() {
+      return this._labelLinguists || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._labelLinguists) {
+        return;
+      }
+      if (!value) {
+        delete this._labelLinguists;
+        return;
+      }
+      this._labelLinguists = value.trim();
+    }
+  },
+
+  labelNonLinguists: {
+    get: function() {
+      return this._labelNonLinguists || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._labelNonLinguists) {
+        return;
+      }
+      if (!value) {
+        delete this._labelNonLinguists;
+        return;
+      }
+      this._labelNonLinguists = value.trim();
+    }
+  },
+
+  labelTranslators: {
+    get: function() {
+      return this._labelTranslators || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._labelTranslators) {
+        return;
+      }
+      if (!value) {
+        delete this._labelTranslators;
+        return;
+      }
+      this._labelTranslators = value.trim();
+    }
+  },
+
+  labelComputationalLinguist: {
+    get: function() {
+      return this._labelComputationalLinguist || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._labelComputationalLinguist) {
+        return;
+      }
+      if (!value) {
+        delete this._labelComputationalLinguist;
+        return;
+      }
+      this._labelComputationalLinguist = value.trim();
+    }
+  },
+
+  type: {
+    get: function() {
+      return this._type || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._type) {
+        return;
+      }
+      if (!value) {
+        delete this._type;
+        return;
+      }
+      this._type = value.trim();
+    }
+  },
+
+  shouldBeEncrypted: {
+    get: function() {
+      return this._shouldBeEncrypted || FieldDBObject.DEFAULT_FALSE;
+    },
+    set: function(value) {
+      if (value === this._shouldBeEncrypted) {
+        return;
+      }
+      if (!value) {
+        delete this._shouldBeEncrypted;
+        return;
+      }
+      this._shouldBeEncrypted = !! value;
+    }
+  },
+
+  showToUserTypes: {
+    get: function() {
+      return this._showToUserTypes || "all";
+    },
+    set: function(value) {
+      if (value === this._showToUserTypes) {
+        return;
+      }
+      if (!value) {
+        delete this._showToUserTypes;
+        return;
+      }
+      this._showToUserTypes = value.trim();
+    }
+  },
+
+  defaultfield: {
+    get: function() {
+      return this._defaultfield || FieldDBObject.DEFAULT_FALSE;
+    },
+    set: function(value) {
+      if (value === this._defaultfield) {
+        return;
+      }
+      if (!value) {
+        delete this._defaultfield;
+        return;
+      }
+      this._defaultfield = !! value;
+    }
+  },
+
+  value: {
+    get: function() {
+      return this._value || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._value) {
+        return;
+      }
+      if (!value) {
+        delete this._value;
+        return;
+      }
+      this._value = value.trim();
+    }
+  },
+
+  mask: {
+    get: function() {
+      return this._mask || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._mask) {
+        return;
+      }
+      if (!value) {
+        delete this._mask;
+        return;
+      }
+      this._mask = value.trim();
+    }
+  },
+
+  encrypted: {
+    get: function() {
+      return this._encrypted || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._encrypted) {
+        return;
+      }
+      if (!value) {
+        delete this._encrypted;
+        return;
+      }
+      this._encrypted = value.trim();
+    }
+  },
+
+  json: {
+    get: function() {
+      return this._json || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._json) {
+        return;
+      }
+      if (!value) {
+        delete this._json;
+        return;
+      }
+      this._json = value;
+    }
+  },
+
+  help: {
+    get: function() {
+      return this._help || "Put your team's data entry conventions here (if any)...";
+    },
+    set: function(value) {
+      if (value === this._help) {
+        return;
+      }
+      if (!value) {
+        delete this._help;
+        return;
+      }
+      this._help = value.trim();
+    }
+  },
+
+  helpLinguists: {
+    get: function() {
+      return this._helpLinguists || "Put your team's data entry conventions here (if any)...";
+    },
+    set: function(value) {
+      if (value === this._helpLinguists) {
+        return;
+      }
+      if (!value) {
+        delete this._helpLinguists;
+        return;
+      }
+      this._helpLinguists = value.trim();
+    }
+  },
+
+  helpNonLinguists: {
+    get: function() {
+      return this._helpNonLinguists || "Put your team's data entry conventions here (if any)...";
+    },
+    set: function(value) {
+      if (value === this._helpNonLinguists) {
+        return;
+      }
+      if (!value) {
+        delete this._helpNonLinguists;
+        return;
+      }
+      this._helpNonLinguists = value.trim();
+    }
+  },
+
+  helpTranslators: {
+    get: function() {
+      return this._helpTranslators || "Put your team's data entry conventions here (if any)...";
+    },
+    set: function(value) {
+      if (value === this._helpTranslators) {
+        return;
+      }
+      if (!value) {
+        delete this._helpTranslators;
+        return;
+      }
+      this._helpTranslators = value.trim();
+    }
+  },
+
+  helpComputationalLinguists: {
+    get: function() {
+      return this._helpComputationalLinguists || "Put your team's data entry conventions here (if any)...";
+    },
+    set: function(value) {
+      if (value === this._helpComputationalLinguists) {
+        return;
+      }
+      if (!value) {
+        delete this._helpComputationalLinguists;
+        return;
+      }
+      this._helpComputationalLinguists = value.trim();
+    }
+  },
+
+  helpDevelopers: {
+    get: function() {
+      return this._helpDevelopers || "Put your team's data entry conventions here (if any)...";
+    },
+    set: function(value) {
+      if (value === this._helpDevelopers) {
+        return;
+      }
+      if (!value) {
+        delete this._helpDevelopers;
+        return;
+      }
+      this._helpDevelopers = value.trim();
+    }
+  },
+
   /**
    * Called before set and save, checks the attributes that the
    * user is attempting to set or save. If the user is trying to
@@ -247,7 +567,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     }
   },
 
-  mask: {
+  createMask: {
     value: function(stringToMask) {
       return stringToMask.replace(/[^_=. -]/g, "x");
     }

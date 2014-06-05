@@ -81,7 +81,7 @@ var FieldDBObject = function FieldDBObject(json) {
       console.log("Parsing model: " + member );
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
     } else {
-      console.log("  no model defined: " + member);
+      console.log("  simple model: " + member);
     }
     this[member] = json[member];
   }
