@@ -175,7 +175,7 @@ Collection.prototype = Object.create(Object.prototype, {
    *
    * Originally we used this for import to create datum field labels: .replace(/[-"'+=?./\[\]{}() ]/g,"")
    *
-   * @param  {[type]} member An object of the type of objects in this collection
+   * @param  {Object} member An object of the type of objects in this collection
    * @return {String}        The value of the primary key which is save to use as dot notation
    */
   getSanitizedDotNotationKey: {
