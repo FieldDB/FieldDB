@@ -3,7 +3,7 @@ var DatumState = require('./../FieldDBObject').FieldDBObject;
 
 /**
  * @class Collection of Datum validation states
- *
+ * @name  DatumStates
  * @description The DatumStates is a minimal customization of the Collection
  * to add an internal model of DatumState.
  *

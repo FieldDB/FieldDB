@@ -3,7 +3,7 @@ var DatumField = require('./../datum/DatumField').DatumField;
 
 /**
  * @class Collection of Datum Field
- *
+ * @name  DatumFields
  * @description The DatumFields is a minimal customization of the Collection
  * to add an internal model of DatumField.
  *
