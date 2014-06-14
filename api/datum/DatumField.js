@@ -4,7 +4,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @class The datum fields are the fields in the datum and session models.
  *        They can be freely added and should show up in the datum view
  *        according to frequency.
- *
+ *  @name  DatumField
  * @property size The size of the datum field refers to the width of the
  *           text area. Some of them, such as the judgment one will be very
  *           short, while others context can be infinitely long.

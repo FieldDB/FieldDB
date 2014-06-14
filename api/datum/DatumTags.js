@@ -3,7 +3,8 @@ var DatumTag = require('./../FieldDBObject').FieldDBObject;
 
 /**
  * @class Collection of Datum validation states
- *
+
+ * @name  DatumTags
  * @description The DatumTags is a minimal customization of the Collection
  * to add an internal model of DatumTag.
  *
