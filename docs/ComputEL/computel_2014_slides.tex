@@ -35,13 +35,16 @@ language learners}
 
  \AtBeginSubsection[]
  {
+ \setbeamertemplate{sidebar left}{}
    \begin{frame}<beamer>
      \frametitle{Outline}
      \tableofcontents[currentsection,currentsubsection]
    \end{frame}
+   \setbeamertemplate{sidebar left}[sidebar theme]
+
  }
 
-
+ \setbeamertemplate{sidebar left}{}
 \begin{frame}
   \titlepage
 \end{frame}
@@ -54,7 +57,7 @@ language learners}
 Endangered languages fieldwork
 \end{frame}
 
-\subsection{Software requirements}
+\subsection[Requirements]{Software requirements}
 
 \begin{frame}
 Software requirements
@@ -89,13 +92,51 @@ OLD
 User adoption
 \end{frame}
 
-\section[FieldLinguists]{Reusing existing tools and libraries}
+
+%\section[Data]{Using LingSync/OLD}\label{open-data}
+%
+%\begin{frame}
+%Using LingSync/OLD
+%\end{frame}
+
+
+\section[Plugins]{Plugins \& Reusing existing tools and libraries}
+
+\subsection{Audio}
+\subsubsection[Alignment]{Audio-transcription alignment}
+
+\begin{frame}
+Audio-transcription alignment
+\end{frame}
+
+
+\subsubsection[ASR]{Speech Recognition for Information Retrieval}
+
+\begin{frame}
+Speech Recognition for Legal Search in Kartuli
+\end{frame}
+
+
 \subsection{Morphology}
+
+
+
 \subsubsection[Existing]{Existing morphological parsers}
 
 \begin{frame}
 Existing morphological parsers
 \end{frame}
+
+
+
+
+\subsubsection[Statistical]{Semi-supervised morphological parsers}
+
+\begin{frame}
+Semi-supervised morphological parsers
+\end{frame}
+
+
 
 
 \subsubsection[Novel]{Novel morphological parsers}
@@ -104,40 +145,22 @@ Existing morphological parsers
 Novel morphological parsers
 \end{frame}
 
-\subsubsection[Statistical]{Semi-supervised morphological parsers}
 
-\begin{frame}
-Semi-supervised morphological parsers
-\end{frame}
 
-\subsection{Morphology}
 
-\subsubsection[Audio]{Audio-transcription alignment}
-
-\begin{frame}
-Audio-transcription alignment
-\end{frame}
-
-\section[CompLinguists]{Using LingSync/OLD}\label{open-data}
-
-\begin{frame}
-Using LingSync/OLD
-\end{frame}
-
-\section{Take Home}
+\section{The Take-Home}
 
 \begin{frame}
 Take Home
 \end{frame}
 
-\section*{Thanks}
+\section*{(Team)}
 
 \begin{frame}
 Acknowledgements
 \end{frame}
 
 
-\section*{References}
 
 \begin{frame}
 References
