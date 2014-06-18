@@ -1,5 +1,11 @@
 \documentclass{beamer}
 \usetheme{PaloAlto}
+\usepackage{graphicx}
+
+\newtheorem{requirement}{Requirement}
+
+
+
 \begin{document}
 
 
@@ -13,7 +19,7 @@
 \institute[UBC, LingSync.org]{\inst{1} University of British Columbia \and %
                       \inst{2} iLanguage Lab \and %
                       \inst{3} Amilia}
-                 
+
 
 \subtitle
 {New models for the collection and management of data for language communities, linguists and
@@ -33,21 +39,22 @@ language learners}
 
 
 
- \AtBeginSubsection[]
- {
- \setbeamertemplate{sidebar left}{}
-   \begin{frame}<beamer>
-     \frametitle{Outline}
-     \tableofcontents[currentsection,currentsubsection]
-   \end{frame}
-   \setbeamertemplate{sidebar left}[sidebar theme]
-
- }
+% \AtBeginSubsection[]
+% {
+% \setbeamertemplate{sidebar left}{}
+%   \begin{frame}<beamer>
+%     \frametitle{Outline}
+%     \tableofcontents[currentsection,currentsubsection]
+%   \end{frame}
+%   \setbeamertemplate{sidebar left}[sidebar theme]
+%
+% }
 
  \setbeamertemplate{sidebar left}{}
 \begin{frame}
   \titlepage
 \end{frame}
+   \setbeamertemplate{sidebar left}[sidebar theme]
 
 \section{Background}
 
@@ -60,22 +67,101 @@ Endangered languages fieldwork
 \subsection[Requirements]{Software requirements}
 
 \begin{frame}
-Software requirements
+
+
+\begin{requirement}
+	\label{req:primary-data}
+       Integration of primary data
+\end{requirement}
+
+
+\begin{requirement}
+	\label{req:curation}
+       Curation of data
+\end{requirement}
+
+
+\begin{requirement}
+	\label{req:inclusive}
+       Inclusion of stakeholders
+\end{requirement}
+
+\begin{requirement}
+	\label{req:openable}
+       Openable data
+\end{requirement}
+
+
+\begin{requirement}
+	\label{req:productivity}
+       User productivity
+\end{requirement}
 \end{frame}
 
 
 \subsection{Existing software}
 
 \begin{frame}
-Existing software
+
+
+%TODO will convert into latex diagrams once we are sure we want it.
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/other_software_sets}
+\label{othersoftware}
+\end{center}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+%TODO will convert into latex diagrams once we are sure we want it.
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/other_software}
+\caption{Many ad-hoc software combinations are used by teams.}
+\label{allothersoftware}
+\end{center}
+\end{figure}
 \end{frame}
 
 
 \section[LingSync/OLD]{New models for data collection and management}
 \subsection{LingSync}\label{sec:lingsync}
 
+
 \begin{frame}
-LingSync
+%TODO will convert into latex diagrams once we are sure we want it.
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/bridge_stakeholders}
+\label{lingsync:bridge}
+\end{center}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}
+%TODO will convert into latex diagrams once we are sure we want it.
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/architecture}
+\label{lingsync:architecture}
+\end{center}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+%TODO will convert into latex diagrams once we are sure we want it.
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/corpora}
+\label{lingsync:corpora}
+\end{center}
+\end{figure}
 \end{frame}
 
 \subsection{OLD}\label{sec:old}
