@@ -9,6 +9,37 @@
 \usepackage[sc]{mathpazo}
 \linespread{1.05}         % Palatino needs more leading (space between lines)
 \usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{url}
+
+% GLOSSARIES PACKAGE
+\usepackage{glossaries}
+\glossarystyle{tree}
+\makeglossaries
+% commands to run to build the glossaries and acronyms files:
+% makeindex -s computel_2014.ist -o computel_2014.gls computel_2014.glo
+% makeindex -t computel_2014.alg -s computel_2014.ist -o computel_2014.acr computel_2014.acn
+
+% End My Package Includes
+
+\newacronym{api}{API}{Aplication Programming Interface}
+\newacronym{gui}{GUI}{Graphical User Interface}
+\newacronym{ui}{UI}{user interface}
+\newacronym{cl}{CL}{computational linguistics}
+\newacronym{nlp}{NLP}{Natural Language Processing}
+\newacronym{sil}{SIL}{Summer Institute of Linguistics}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{npm}{NPM}{Node Package Manager}
+\newacronym{bdd}{BDD}{Behavior Driven Development}
+\newacronym{scrud}{SCRUD}{search, create, read, update, and delete}
+\newacronym{rdbms}{RDBMS}{relational database management system}
+\newacronym{igt}{IGT}{interlinear glossed text}
+\newacronym{fst}{FST}{finite-state transducer}
+\newacronym{cs}{CS}{context-sensitive}
+\newacronym{lm}{LM}{language model}
+\newacronym{url}{URL}{uniform resource locator}
+\newacronym{tsv}{TSV}{tab-separated values}
+\newacronym{tlg}{TLG}{Teach and Learn with Georgia}
 
 \hyphenpenalty= 7000 
 
@@ -372,6 +403,237 @@ Customizable data entry fields and data tags, as well as the data list  function
 %`My window'
 %
 %
+
+
+
+\section{Using LingSync}\label{open-data}
+
+LingSync users are able to make subsets of their data stores publicly
+accessible while the language documentation project is active for the
+advancement of (at least) three distinct endeavours: theoretical linguistic
+research (\ref{sec:fieldlinguists}), the development of language learning
+tools for heritage and second language learners
+(\ref{sec:lang-comunities}), and computational linguistic research on
+low-resource languages (\ref{sec:complinguistics}).
+
+
+
+\subsection{Field linguists}\label{sec:fieldlinguists}
+
+Field linguists not only enter data but also seek to analyze it. While this may
+appear to be a trivial claim, it is something which corpus linguistics software
+tools overlook. While corpus linguistic tools may be focused on counting
+occurrences or statistics on data coverage, field linguists are looking for
+fine-grained relations between elements in the system which have not yet been
+documented or understood well enough to be collapsed into typological lists. A number of alternative interfaces for data analysis have been created.
+The Lexicon Browser provides an alternative morpho-syntactic way of browsing a
+database as opposed to the linear order of text in an elicitation session or
+text organized by speaker or by tag. Data analysis in LingSync is
+facilitated by search  interfaces and the ability to use bots to re-categorize
+or re-annotate data but either in an automated fashion, or in a machine-suggested, expert-revised, machine-executed fashion.
+Field linguists may also perform cross linguistic searches using MapReduces to
+normalize data. Primary resources are citable with unique URLs and data sets
+for publication can be annotated, stored and discussed in the database itself
+and directly exported into LaTeX.  Screenshots of these functionalities and
+many others are provided in \cite{lingsync:2012}.
+
+
+\subsection{Language Communities}\label{sec:lang-comunities}
+
+As discussed in the inclusion of stakeholders Requirement (Req.
+\ref{req:inclusive}) a majority of LingSync contributors are doing
+fieldwork on languages that are not only under-resourced but also endangered.
+In this context, the primary interests of speaker consultants and their
+communities lie not in theoretical linguistic research but in the generation of
+resources that are directly relevant to the communities' revitalization goals
+and to increasing the community diaspora's access to language data. Linguists
+are now also much more aware of the need to create records that can be reused
+by the community and that will still be available for their descendants
+\cite[p.129]{Thieberger:2012}, as well as the importance of designing
+documentary projects in ways that allow speaker communities to benefit from the
+work of an outside researcher \cite{Good:2012}.
+
+
+\subsubsection{Language Learning}
+
+Descriptive grammars and word lists are of variable utility in the domain of
+second language acquisition/immersion.  Learning grammars, web-accessible audio
+(i.e., ``talking'') dictionaries, bilingual dictionaries, monolingual
+dictionaries, collocation dictionaries, culturally relevant narratives,
+pedagogical materials, and dedicated language learning software are generally
+more valuable to communities, yet these tend to require a dedicated effort to
+produce and do not efficiently exploit opportunities for the reuse of such data
+primarily for research purposes.  Data gathered for research purposes is often
+focused on edge cases, usually using small vocabulary sets to explore less
+frequent grammatical structures. In response to this, the Learn X Android app
+in \ref{learn_x_screenshot} was created; it permits the system to contain
+both data focused on edge cases and data driven by language learners
+themselves. Language learners can collaboratively create and share lessons with
+their peers and mentors using same collaborative infrastructure under
+LingSync to build a corpus and share their lessons with each other.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{figures/learnX}
+\caption{Screenshot of Learn X, an Android app which lets users build language
+learning apps using LingSync.}
+\label{learn_x_screenshot}
+\end{center}
+\end{figure}
+
+LingSync's permissions system was designed so that language community members
+and heritage speakers of the language can use the multimedia data collection
+features of Android phones (camera, audio, video) to construct their own
+language learning lessons which are saved into their own corpus and/or
+contributed to a team corpus.
+
+Learn X is freely available for download%
+\footnote{\url{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian}} %
+as ``Georgian Together'' which we are field testing during the Spring 2014
+semester with members of the \gls{tlg} volunteers.  Like heritage learners, TLG
+volunteers spend their time surrounded with the language, can understand more
+than they can speak, and what they speak about is highly dependent on what
+their family speaks about most. LingSync's open-endedness and confidentiality
+settings make it easy for teams to create and share vocabularies/phrases.
+In fact, there are many social contexts which will not be acknowledged or
+printed in any online grammar or second language materials, contexts which
+users can elect to hide from other users, or share with certain users depending
+on their comfort level.
+
+In addition to language learning resources, communities may also benefit from
+descriptive grammars, spell checkers, grammar checkers, autocorrect/predictive
+typing, subtitling, translation memories, voice writing, content
+creation/language representation on the web, and improved access to relevant
+web search results. To facilitate access to content, we created a very simple
+Georgian transliteration module which permits Georgian speakers to read
+Georgian written in the Latin alphabet by (predominately) iPhone content
+creators who do not have access to a Georgian keyboard, also freely available
+for download.%
+\footnote{\url{https://chrome.google.com/webstore/detail/kartuli-glasses/ccmledaklimnhjchkcgideafpglhejja}}
+
+
+\subsection{Software Development for Low-resource Languages}\label{sec:software}
+
+Many of the modules used to build LingSync can be integrated using HTML5 build tools in software for other purposes. All modules are registered on NPM as they stabalize. Readers are encouraged to consult \url{http://npmjs.org} for an up-to-date list.
+
+\subsection{Computational Linguistics for Low-resource Languages}\label{sec:complinguistics}
+
+Data collected by language documentation projects can also serve the language
+community indirectly via the construction of computational tools and data sets
+which can then help software developers build software which enables content in
+low-resource languages, further facilitating the use of minority languages in
+digital communication (both spoken and written). Thinking about these data uses
+before and during data collection with speakers can help field teams think
+about how to explaining the frequently abstract licensing language to
+consultants via consent forms as well as potentially concretely identifying the
+benefits  consultant's participation in the language resources effort has for
+other members in the community. Language documentation projects can also
+partner with Software Engineering or Computational Linguistics labs to
+recompile corpora into gold standard data, and training data, or crowd source
+annotations, build stemmers, and improve search and information retrieval. Many
+of these results can be used to build more complex systems including
+morphological analyzers, machine translation, text to speech systems, speech
+recognition systems and in some cases such as Georgian even text summarization
+for local law firms.
+
+During the Spring 2014 semester we are training computer science masters
+students at the Batumi Shota Rustaveli  State University in how to use
+CMUSphinx tools to build speech recognition systems which can be delivered to
+Android smart phone users. Initial pipelines have been prototyped using Bash
+scripts but will not be in production as an Android app until after the
+semester is concluded (June 2014). Corpus data are first through a
+transliteration process to and then used to generate pronunciation dictionaries
+which serve as input  to the open source Phonetisaurus Libraries
+\cite{Novak:2012} for the generation of pronunciation entries of novel words.
+The corpus data is extracted as raw text and used to generate n-gram language
+models using the open source CMUCLMTK \cite{Clarkson:1997} language model
+generation scripts which accept a pronunciation dictionary and sentence
+delimited corpus as input. Acoustic models are adapted from existing acoustic
+models via the export of utterance lines and corresponding audio and the 
+\cite{Elmahdy:2010}. Finally, the language specific dictionary, language model,
+and adapted acoustic model are provided to the PocketSphinx Android library to
+produce n-best hypothesis for novel audio. While we expect that the result will
+be poor for most small corpora in the system, automating the model training
+pipelines can serve to increase interest in the process of speech recognition
+among software developers from minority language populations  and also
+encourage language communities to volunteer in the collection and annotation of
+the sorts of data which are required to have more representative language
+models and acoustic models \cite{Sarfraz:2010}.
+
+
+\subsubsection{API}
+
+For language documentation teams collaborating with Software Engineering labs
+or Computational Linguistics labs LingSync web services expose a RESTful
+\gls{api} for requests on resources.%
+\footnote{RESTful means that combinations of \gls{url} patterns and HTTP methods
+    names are mapped consistently and transparently to operations on the
+    relevant resources. The payloads of all HTTP requests and responses are
+\gls{json}}
+
+\ref{fig:api-basic} illustrates the use of the LingSync \gls{api} for
+authentication, the creation of an new record, and requesting all records.
+\ref{fig:api-search} demonstrates use of the search \glspl{api}. Examples of
+more sophisticated  \glspl{api} which provide specialized processing for
+audio/video/image and text  are presented in \ref{sec:plugins}.
+
+\begin{figure}[h]
+\scriptsize
+
+\begin{verbatim}
+a) $ curl --cookie-jar my-cookies.txt\
+  --request PUT\
+  --header "Content-Type: application/json"\
+  --data '{"username":"public", "password":"none"}'\
+    https://api.lingsync.org/v2/users
+
+b) $ curl --cookie my-cookies.txt\
+  --request POST\
+  --data '{"transcription": "omi imitaa"}'\
+    https://api.lingsync.org/v2/corpora/public-curldemo
+
+c) $ curl --cookie my-cookies.txt\
+  --request GET\
+    https://api.lingsync.org/v2/corpora/public-curldemo
+\end{verbatim}
+\caption{\texttt{curl} requests for authentication (a), creating a record (b)
+and requesting all records (c)}
+\normalsize
+\label{fig:api-basic}
+\end{figure}
+
+
+\begin{figure}[h]
+\scriptsize
+\begin{verbatim}
+a) $ curl --cookie my-cookies.txt\
+  --request SEARCH\
+  --data '{"query": {"filter": ["and", [
+  ["data", "translations", "transcription", "=", "cat"],
+  ["or", [["not", ["data", "transcription", "=", "*"]],
+          ["data", "grammaticality", "=", null]]],
+  ["data", "transcription", "regex", "^p"],
+  ["data", "morpheme_gloss", "=", ""]]]}}'\
+ https://api.lingsync.org/v2/corpora/public-curldemo
+ 
+b) $ curl --cookie my-cookies.txt\
+  --request SEARCH\
+  --data '{"query": {"filter":
+  ["data", "break_gloss_category", "regex",
+    "-wa\|3SG\|Agr( |-|$)"]}}'\
+ https://api.lingsync.org/v2/corpora/public-curldemo
+
+c) $ curl --cookie my-cookies.txt\
+  --request SEARCH\
+  --data '{"tgrep2pattern": "/^[TI]P$/ < (DP << AP)"}'\
+  https://api.lingsync.org/v2/corpora
+\end{verbatim}
+\caption{\texttt{curl} requests for complex search (a), unambiguous morpheme
+search (b), TGrep2 structural search (c)}
+\normalsize
+\label{fig:api-search}
+\end{figure}
+
 
 \pagebreak
 
@@ -805,6 +1067,7 @@ Release new versions&	160&  Javascript \\
 
 
 
+\bibliography{ComputEL/bibliography}
 
 
 
