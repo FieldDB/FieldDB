@@ -1414,10 +1414,13 @@ $.couch.allDbs({
 /*
 Convert ACRA activities into fielddb activies
  */
+
+var lastPosition = 1402818525880;
 var database = $.couch.db("acra-learnx");
-var limit = 2000;
+var limit = 30000000;
 var saved = 0;
 var userswhoarentregisteredyet = [];
+// database.view("fielddb/activities?limit="+limit, {
 database.view("fielddb/activities", {
   success: function(actvities) {
     // console.log(actvities.rows);
@@ -1427,6 +1430,9 @@ database.view("fielddb/activities", {
       }
       saved += 1;
       var activity = row.value;
+      if (activity.timestamp < lastPosition) {
+        return;
+      }
       var pouchname = activity.pouchname;
       delete activity.pouchname;
       // console.log(pouchname);
