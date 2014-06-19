@@ -53,6 +53,16 @@
 \newacronym{flex}{FLEx}{FieldWorks Language Explorer}
 
 
+\setbeamertemplate{theorem begin}{{
+\inserttheoremheadfont
+\inserttheoremname
+\inserttheoremnumber
+\ifx\inserttheoremaddition\@empty\else\ \inserttheoremaddition \fi%
+\inserttheorempunctuation
+}}
+\setbeamertemplate{theorem end}{}
+
+
 \begin{document}
 
 
@@ -82,7 +92,7 @@
 % - Keep it simple, no one is interested in your street address.
 
 \date[ComputEL 2014] % (optional, should be abbreviation of conference name)
-{ComputEL Workshop, June 26 2014}
+{ComputEL Workshop, June 26 2014\\52nd Annual Meeting of the Association for Computational Linguistics }
 
 
 
@@ -107,10 +117,10 @@
 
 \subsection[Fieldwork]{Endangered languages fieldwork}\label{sec:fieldwork}
 
-\begin{frame}
-TODO Joel Endangered languages fieldwork
-\note{Joel presents}
-\end{frame}
+%\begin{frame}
+%TODO Joel Endangered languages fieldwork
+%\note{Joel presents}
+%\end{frame}
 
 
 
@@ -222,12 +232,12 @@ User productivity
 \note{Joel presents}
 \end{frame}
 
-\subsection{OLD}\label{sec:old}
+%\subsection{OLD}\label{sec:old}
 
-\begin{frame}
-TODO Joel OLD
-\note{Joel presents}
-\end{frame}
+%\begin{frame}
+%TODO Joel OLD
+%\note{Joel presents}
+%\end{frame}
 
 %\subsection{LingSync/OLD}
 
@@ -242,12 +252,12 @@ TODO Joel OLD
       \toprule
                      ~ &  Active & Investigating & In-active & Total\\
       \midrule
-      Public Corpora  &       2 &   1 &   2 & 5 \\ 
-      Private Corpora &      15 &  37 & 321 & 373\\ 
+      Public Corpora  &       2 &   1 &   2 & 5 \\
+      Private Corpora &      15 &  37 & 321 & 373\\
       Users           &      38 &  43 & 220 & 301 \\
       Documents & 13,408 & 2,763 & 4,541 &23,487\\
       Disk Size & 1GB & .9GB & 5.3GB& 7.2GB\\
-      
+
       \bottomrule
 
 \end{tabular}
@@ -262,39 +272,39 @@ activities; Investigating users: 100-10 activities.}
 \note{Joel presents}
 \end{frame}
 
-
-\begin{frame}
-
-\begin{table}[h]
- \begin{center}
-     \scriptsize
-\begin{tabular}{lrrrrr}
-
-      \toprule
-      language &                     \emph{forms}  & texts & audio & GB   & speakers \\
-      \midrule
-      Blackfoot (\textit{bla}) &     8,847  & 171   & 2,057 & 3.8  & 3,350    \\ % 11,075 4047074461 bytes
-      Nata (\textit{ntk}) &          3,219  & 32    & 0     & 0    & 36,000   \\ % 3,251  0 bytes
-      Gitksan (\textit{git}) &       2,174  & 6     & 36    & 3.5  & 930      \\ % 2,216  3787227136 bytes
-      Okanagan (\textit{oka}) &      1,798  & 39    & 87    & 0.3  & 770      \\ % 1,924  349478912 bytes
-      Tlingit (\textit{tli}) &       1,521  & 32    & 107   & 12   & 630      \\ % 1,660  12906459136 bytes
-      Plains Cree (\textit{crk}) &   686    & 10    & 0     & 0    & 260      \\ % 696    0 bytes
-      Ktunaxa (\textit{kut}) &       467    & 33    & 112   & 0.2  & 106      \\ % 612    176128000 bytes
-      Coeur d'Alene (\textit{crd}) & 377    & 0     & 199   & 0.0  & 2        \\ % 576    28659712 bytes
-      Kwak'wala (\textit{kwk}) &     98     & 1     & 1     & 0.0  & 585      \\ % 100    7450624 bytes
-      TOTAL &                        19,187 & 324   & 2,599 & 19.8 &         \\ % 22,110 21302477981 bytes
-      \bottomrule
-
-\end{tabular}
-\caption{Data in OLD applications (Feb 14, 2014)}
-\label{old-data}
- \end{center}
- \normalsize
-\end{table}
-
-
-\note{Joel presents}
-\end{frame}
+%
+%\begin{frame}
+%
+%\begin{table}[h]
+% \begin{center}
+%     \scriptsize
+%\begin{tabular}{lrrrrr}
+%
+%      \toprule
+%      language &                     \emph{forms}  & texts & audio & GB   & speakers \\
+%      \midrule
+%      Blackfoot (\textit{bla}) &     8,847  & 171   & 2,057 & 3.8  & 3,350    \\ % 11,075 4047074461 bytes
+%      Nata (\textit{ntk}) &          3,219  & 32    & 0     & 0    & 36,000   \\ % 3,251  0 bytes
+%      Gitksan (\textit{git}) &       2,174  & 6     & 36    & 3.5  & 930      \\ % 2,216  3787227136 bytes
+%      Okanagan (\textit{oka}) &      1,798  & 39    & 87    & 0.3  & 770      \\ % 1,924  349478912 bytes
+%      Tlingit (\textit{tli}) &       1,521  & 32    & 107   & 12   & 630      \\ % 1,660  12906459136 bytes
+%      Plains Cree (\textit{crk}) &   686    & 10    & 0     & 0    & 260      \\ % 696    0 bytes
+%      Ktunaxa (\textit{kut}) &       467    & 33    & 112   & 0.2  & 106      \\ % 612    176128000 bytes
+%      Coeur d'Alene (\textit{crd}) & 377    & 0     & 199   & 0.0  & 2        \\ % 576    28659712 bytes
+%      Kwak'wala (\textit{kwk}) &     98     & 1     & 1     & 0.0  & 585      \\ % 100    7450624 bytes
+%      TOTAL &                        19,187 & 324   & 2,599 & 19.8 &         \\ % 22,110 21302477981 bytes
+%      \bottomrule
+%
+%\end{tabular}
+%\caption{Data in OLD applications (Feb 14, 2014)}
+%\label{old-data}
+% \end{center}
+% \normalsize
+%\end{table}
+%
+%
+%\note{Joel presents}
+%\end{frame}
 
 %\section[Data]{Using LingSync/OLD}\label{open-data}
 %
@@ -351,7 +361,7 @@ activities; Investigating users: 100-10 activities.}
 %
 %\begin{figure}
 %\begin{center}
-%\includegraphics[width=2.5in]{../figures/farley} 
+%\includegraphics[width=2.5in]{../figures/farley}
 %\\
 %\includegraphics[width=2.5in]{../figures/inuktitut}
 %\caption{Screenshot of Farley's Morphological Analyzer wrapped in a Node.js Web Service And offered in a HTML5 User Interface  }
@@ -388,27 +398,27 @@ declarative knowledge not found in the lexicon training process.}
 
 
 
-
-\subsubsection[BlackFoot]{BlackFoot morphological parser}
-
-\begin{frame}
-TODO Joel BlackFoot morphological parser
-
-\note{Joel presents}
-\end{frame}
-
-
-\begin{frame}
-TODO Joel BlackFoot morphological parser
-
-\note{Joel presents}
-\end{frame}
-
-\begin{frame}
-TODO Joel BlackFoot morphological parser
-
-\note{Joel presents}
-\end{frame}
+%
+%\subsubsection[BlackFoot]{BlackFoot morphological parser}
+%
+%\begin{frame}
+%TODO Joel BlackFoot morphological parser
+%
+%\note{Joel presents}
+%\end{frame}
+%
+%
+%\begin{frame}
+%TODO Joel BlackFoot morphological parser
+%
+%\note{Joel presents}
+%\end{frame}
+%
+%\begin{frame}
+%TODO Joel BlackFoot morphological parser
+%
+%\note{Joel presents}
+%\end{frame}
 
 
 
@@ -416,12 +426,12 @@ TODO Joel BlackFoot morphological parser
 
 \begin{frame}
 \frametitle{Take Homes}
-%\begin{itemize}
-%\item High produtivitiy requirements
-%\item All stakeholders All devices
-%\item Modular Web Services and Plugin Architecture 
-%\item Open Source, Open Development, Open Data 
-%\end{itemize}
+\begin{itemize}
+\item High productivity requirements
+\item All stakeholders, all devices, anywhere
+\item Modular Web Services and Plugin Architecture
+\item Open Source, Open Development, Open Data
+\end{itemize}
 \note{Joel presents}
 \end{frame}
 
@@ -439,18 +449,54 @@ Turmanidze, Jason Smith, Martin Gausby, Pablo Duboue, Xianli Sun, James Crippen,
 Michael McAuliffe, Faryal
 Abbassi, Farah Abbasi, Tamilla Paghava, Esma Chkhikvadze, Nina Gatenadze, and
 Mari Mgeladze, Jessica Coon, Alan Bale and Michael
-Wagner 
+Wagner
 ~\\
 ~\\
 SSHRC Connection Grant (\#611-2012-0001) \\
  SSHRC
-Standard Research Grant (\#410-2011-2401) 
+Standard Research Grant (\#410-2011-2401)
 \end{frame}
 
 
 
 \begin{frame}
-References
+\tiny
+\begin{itemize}
+\item Dorothee Beermann and Pavel Mihaylov. 2012. TypeCraft collaborative databasing and resource sharing for linguists. Language Resources and Evaluation, pages 1?23.
+\item Kenneth R Beesley and Lauri Karttunen. 2003. Finitestate morphology: Xerox tools and techniques. CSLI, Stanford.
+\item H. Andrew Black and Gary F. Simons. 2006. The SIL FieldWorks Language Explorer approach to morphological parsing. In Computational Linguistics for Less-studied Languages: Proceedings of Texas Linguistics Society, Austin, TX.
+\item Lynnika Butler and Heather van Volkinburg. 2007. Review of FieldWorks Language Explorer (FLEx). Language Documentation \& Conservation, 1(1):100?106.
+\item MaryEllen Cathcart, Gina Cook, Theresa Deering, Yuliya Manyakina, Gretchen McCulloch, and Hisako Noguchi. 2012. LingSync: A free tool for creating and maintaining a shared database for communities, linguists and language learners. In Robert Henderson and Pablo Pablo, editors, Proceedings of FAMLi II: workshop on Corpus Approaches to Mayan Linguistics 2012, pages 247?250.
+%\item N. Chomsky and M. Halle. 1968. The Sound Pattern of English. Harper \& Row, New York.
+\item Jonathon E. Cihlar. 2008. Database development for language documentation: A case study in the Washo language. Master?s thesis, University of Chicago.
+\item Gina Cook. 2009. Morphological parsing of Inuktitut. Ms, Concordia University, Faculty of Engineering and Computer Science.
+\item David Costa. 2012. Surveying the sources on the Myaamia language. In Proceedings of the 2012 Myaamiaki Conference.
+\item N.H. De Jong and T Wempe. 2009. Praat script to detect syllable nuclei and measure speech rate automatically. Behavior research methods, 41(2):385? 390.
+\item Joel Dunham. 2014. Online Linguistic Database documentation. http://online-linguistic-database. readthedocs.org, March.
+\item Benoit Farley. 2012. The Uqailaut project. //www.inuktitutcomputing.ca, January.
+\item http: Scott Farrar. 2010. Review of TypeCraft. Language
+\item Documentation \& Conservation, 4:6065.
+\item Donald G. Frantz and Norma Jean Russell. 1995. Blackfoot Dictionary of Stems, Roots, and Affixes. Toronto: University of Toronto Press.
+\item Donald G. Frantz. 1991. Blackfoot Grammar. Toronto: University of Toronto Press.
+\item Andrew Garrett, Juliette Blevins, Lisa Conathan, Anna Jurgensen, Herman Leung, Adrienne Mamin, Rachel Maxson, Yoram Meroz, Mary Paster, Alysoun Quinby, William Richard, Ruth Rouvier, Kevin Ryan, and Tess Woo. 2001. The Yurok language project. http://linguistics.berkeley.edu/ yurok/index.php, January.
+  \item Andrew Garrett, Susan Gehr, Line Mikkelsen, Nicholas Baier, Kayla Carpenter, Erin Donnelly, Matthew Faytak, Kelsey Neely, Melanie Redeye, Clare Sandy, Tammy Stark, Shane Bilowitz, Anna Currey, Kouros Falati, Nina Gliozzo, Morgan Jacobs, Erik Maier, Karie Moorman, Olga Pipko, Jeff Spingeld, and Whitney White. 2009. Karuk dictionary and texts. http://linguistics.berkeley.edu/karuk/links. php, January.
+  \item Jeff Good. 2012a. Community collaboration in Africa: Experiences from northwest Cameroon. Language Documentation and Description, 11(1):2858.
+  \item Jeff Good. 2012b. Valuing technology: Finding the linguistsplaceinanewtechnologicaluniverse.In Louanna Furbee and Lenore Grenoble, editors, Language documentation: Practice and values, pages 111131. Benjamins, Amsterdam.
+  \item K David Harrison. 2007. When Languages Die: The Extinction of the Worlds Languages and the Erosion of Human Knowledge. Oxford University Press.
+  \item M. Hulden. 2012. foma: finite state compiler and C library (documentation). https://code.google.com/p/ foma/w/list.
+  \item George Ironstrack. 2012. Miloniteeheetaawi eehinki pimihkanaweeyankwi: Lets reflect on how far we have traveled. In Proceedings of the 2012 Myaamiaki Conference.
+  \item Wesley Leonard. 2012. Your language isnt extinct: the role of Myaamia in Language Reclamation. In Proceedings of the 2012 Myaamiaki Conference.
+  \item LingSync. 2012. WhitePaper. http: //OpenSourceFieldlinguistics.github.io/FieldDB/, January.
+  \item Stuart Robinson, Greg Aumann, and Steven Bird. 2007. Managing fieldwork data with ToolBox and the Natural Language Toolkit. Language Documentation \& Conservation, 1(1):4457.
+  \item Chris Rogers. 2010. Review of FieldWorks Language Explorer (FLEx) 3.0. Language Documentationation \& Conservation, 4:7884.
+  \item R. Schroeter and N. Thieberger. 2006. EOPAS, the EthnoER online representation of interlinear text. In Sebastian Nordoff, editor, Sustainable Data from Digital Fieldwork. University of Sydney, Sydney.
+  \item SIL International. 2013. Technical Notes on FieldWorks Send/Receive. http://fieldworks.sil.org/ wp-content/TechnicalDocs/, November.
+  \item Nick Thieberger. 2012. Using language documentation data in a broader context. In Frank Seifart, Geoffrey Haig, Nikolaus P. Himmelmann, Dagmar Jung, Anna Margetts, and Paul Trilsbeek, editors, Potentials of Language Documentation: Methods, Analyses, and Utilization. University of Hawaii Press, Honolulu.
+  \item Doug Troy and Andrew J. Strack. 2014. Metimankwiki kimehsoominaanaki we follow our ancestors trail: Sharing historical Myaamia language documents across myaamionki. In Proceedings of the 2014 Myaamiaki Conference.
+  \item N. Weber. 2013. Accent and prosody in Blackfoot verbs. http://www.academia.edu/4250143/Accent and prosody in Blackfoot verbs.
+  \item Alan Yu, Ryan Bochnak, Katie Franich, OzgeSarigul, Peter Snyder, Christina Weaver, Juan Bueno-Holle, Matt Faytak, Eric Morley, and Alice Rhomieux. 2005. The Washo project. http://washo.uchicago. edu/dictionary/dictionary.php, January.
+  \item AlanYu,RyanBochnak,KatieFranich,OzgeSarigul, Peter Snyder, Christina Weaver, Juan Bueno-Holle, Matt Faytak, Eric Morley, and Alice Rhomieux. 2008. The Washo mobile lexicon. http://washo. uchicago.edu/mobile/, January.
+\end{itemize}
 \end{frame}
 
 
