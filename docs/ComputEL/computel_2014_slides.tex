@@ -25,6 +25,32 @@
 
 \newtheorem{requirement}{Requirement}
 
+\usepackage{glossaries}
+\glossarystyle{tree}
+\makeglossaries
+
+
+
+\newacronym{api}{API}{application programming interface}
+\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+\newacronym{gui}{GUI}{graphical user interface}
+\newacronym{ui}{UI}{user interface}
+\newacronym{cl}{CL}{computational linguistics}
+\newacronym{nlp}{NLP}{Natural Language Processing}
+\newacronym{sil}{SIL}{Summer Institute of Linguistics}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{npm}{NPM}{Node Package Manager}
+\newacronym{bdd}{BDD}{behavior-driven development}
+\newacronym{scrud}{SCRUD}{search, create, read, update, and delete}
+\newacronym{rdbms}{RDBMS}{relational database management system}
+\newacronym{igt}{IGT}{interlinear glossed text}
+\newacronym{fst}{FST}{finite-state transducer}
+\newacronym{cs}{CS}{context-sensitive}
+\newacronym{lm}{LM}{language model}
+\newacronym{url}{URL}{uniform resource locator}
+\newacronym{tsv}{TSV}{tab-separated values}
+\newacronym{tlg}{TLG}{Teach and Learn with Georgia}
+\newacronym{flex}{FLEx}{FieldWorks Language Explorer}
 
 
 \begin{document}
@@ -82,8 +108,23 @@
 \subsection[Fieldwork]{Endangered languages fieldwork}\label{sec:fieldwork}
 
 \begin{frame}
-Endangered languages fieldwork
+TODO Joel Endangered languages fieldwork
+\note{Joel presents}
 \end{frame}
+
+
+
+\begin{frame}
+%TODO will convert into latex diagrams once we are sure we want it.
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/bridge_stakeholders}
+\label{lingsync:bridge}
+\end{center}
+\end{figure}
+\note{Joel presents}
+\end{frame}
+
 
 \subsection[Requirements]{Software requirements}
 
@@ -117,6 +158,8 @@ Openable data
 \label{req:productivity}
 User productivity
 \end{requirement}
+
+\note{Joel presents}
 \end{frame}
 
 
@@ -133,6 +176,7 @@ User productivity
 \end{center}
 \end{figure}
 
+\note{Joel presents}
 \end{frame}
 
 
@@ -145,22 +189,13 @@ User productivity
 \label{allothersoftware}
 \end{center}
 \end{figure}
+
+\note{Joel presents}
 \end{frame}
 
 
 \section[LingSync/OLD]{New models for data collection and management}
 \subsection{LingSync}\label{sec:lingsync}
-
-
-\begin{frame}
-%TODO will convert into latex diagrams once we are sure we want it.
-\begin{figure}
-\begin{center}
-\includegraphics[width=3in]{../figures/bridge_stakeholders}
-\label{lingsync:bridge}
-\end{center}
-\end{figure}
-\end{frame}
 
 
 
@@ -172,6 +207,7 @@ User productivity
 \label{lingsync:architecture}
 \end{center}
 \end{figure}
+\note{Joel presents}
 \end{frame}
 
 
@@ -183,12 +219,14 @@ User productivity
 \label{lingsync:corpora}
 \end{center}
 \end{figure}
+\note{Joel presents}
 \end{frame}
 
 \subsection{OLD}\label{sec:old}
 
 \begin{frame}
-OLD
+TODO Joel OLD
+\note{Joel presents}
 \end{frame}
 
 %\subsection{LingSync/OLD}
@@ -221,6 +259,7 @@ activities; Investigating users: 100-10 activities.}
  \normalsize
 \end{table}
 
+\note{Joel presents}
 \end{frame}
 
 
@@ -254,6 +293,7 @@ activities; Investigating users: 100-10 activities.}
 \end{table}
 
 
+\note{Joel presents}
 \end{frame}
 
 %\section[Data]{Using LingSync/OLD}\label{open-data}
@@ -266,17 +306,38 @@ activities; Investigating users: 100-10 activities.}
 \section[Plugins]{Plugins \& Reusing existing tools and libraries}
 
 \subsection{Audio}
-\subsubsection[Alignment]{Audio-transcription alignment}
-
-\begin{frame}
-Audio-transcription alignment
-\end{frame}
+%\subsubsection[Alignment]{Audio-transcription alignment}
+%
+%\begin{frame}
+%
+%\begin{figure}
+%\begin{center}
+%\includegraphics[width=3in]{../figures/utterance_extraction}
+%\caption{Screenshot of the utterance extraction process which converts any
+%audio/video into utterance intervals encoded either as \gls{json} or TextGrid using
+%the PraatTextGridJS library.}
+%\label{utterance_extraction_screenshot}
+%\end{center}
+%\end{figure}
+%
+%
+%\note{Josh/Gina presents}
+%\end{frame}
 
 
 \subsubsection[ASR]{Speech Recognition for Information Retrieval}
 
 \begin{frame}
-Speech Recognition for Legal Search in Kartuli
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/kartuli_speech_recognition}
+\caption{Screenshot of the Speech Recognition trainer}
+\label{speech_recognition_screenshot}
+\end{center}
+\end{figure}
+
+\note{Gina presents}
 \end{frame}
 
 
@@ -284,43 +345,106 @@ Speech Recognition for Legal Search in Kartuli
 
 
 
-\subsubsection[Existing]{Existing morphological parsers}
+%\subsubsection[Existing]{Existing morphological parsers}
+%
+%\begin{frame}
+%
+%\begin{figure}
+%\begin{center}
+%\includegraphics[width=2.5in]{../figures/farley} 
+%\\
+%\includegraphics[width=2.5in]{../figures/inuktitut}
+%\caption{Screenshot of Farley's Morphological Analyzer wrapped in a Node.js Web Service And offered in a HTML5 User Interface  }
+%\label{speech_recognition_screenshot}
+%\end{center}
+%\end{figure}
+%%\hspace{3in}\includegraphics[width=1in]{../figures/inuktitut_computing}
+%\includegraphics[width=1in]{../figures/inuktitut_computing}
+
+%\note{Josh/Gina presents}
+%\end{frame}
+
+
+
+
+\subsubsection[Kartuli]{Semi-supervised seeded morphological parsers}
 
 \begin{frame}
-Existing morphological parsers
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{../figures/lexicon_browser}\\
+\includegraphics[width=3in]{../figures/lexicon_browser2}
+\note{Screenshot of the Lexicon Browser, a web widget which lets users
+browse words or relations between morphemes in their corpus, clean and add
+declarative knowledge not found in the lexicon training process.}
+\label{lexicon_browser_screenshot}
+\end{center}
+\end{figure}
+
+\note{Gina presents}
 \end{frame}
 
 
 
 
-\subsubsection[Statistical]{Semi-supervised morphological parsers}
+\subsubsection[BlackFoot]{BlackFoot morphological parser}
 
 \begin{frame}
-Semi-supervised morphological parsers
+TODO Joel BlackFoot morphological parser
+
+\note{Joel presents}
 \end{frame}
 
 
-
-
-\subsubsection[Novel]{Novel morphological parsers}
-
 \begin{frame}
-Novel morphological parsers
+TODO Joel BlackFoot morphological parser
+
+\note{Joel presents}
 \end{frame}
 
+\begin{frame}
+TODO Joel BlackFoot morphological parser
+
+\note{Joel presents}
+\end{frame}
 
 
 
 \section{The Take-Home}
 
 \begin{frame}
-Take Home
+\frametitle{Take Homes}
+%\begin{itemize}
+%\item High produtivitiy requirements
+%\item All stakeholders All devices
+%\item Modular Web Services and Plugin Architecture 
+%\item Open Source, Open Development, Open Data 
+%\end{itemize}
+\note{Joel presents}
 \end{frame}
 
 \section*{(Team)}
 
 \begin{frame}
-Acknowledgements
+\frametitle{Acknowledgements}
+
+
+Tobin Skinner, Elise McClay, Louisa Bielig, MaryEllen Cathcart, Theresa Deering, Yuliya Manyakina, Gretchen
+McCulloch, Hisako Noguchi, Brian Doherty, Gay Hazan, Oriana Kilbourn, Kim Dan
+Nguyen, Rakshit Majithiya, Mietta Lennes, Nivja de Jong, Ton Wempe, Kyle
+Gorman, Curtis Mesher, Beso Beridze, Tornike Lasuridze, Zviadi Beradze, Rezo
+Turmanidze, Jason Smith, Martin Gausby, Pablo Duboue, Xianli Sun, James Crippen,
+Michael McAuliffe, Faryal
+Abbassi, Farah Abbasi, Tamilla Paghava, Esma Chkhikvadze, Nina Gatenadze, and
+Mari Mgeladze, Jessica Coon, Alan Bale and Michael
+Wagner 
+~\\
+~\\
+SSHRC Connection Grant (\#611-2012-0001) \\
+ SSHRC
+Standard Research Grant (\#410-2011-2401) 
 \end{frame}
 
 
