@@ -3,6 +3,10 @@
 \usepackage{fontspec}
 \setsansfont{Arial Unicode MS}
 
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{shapes,shapes.geometric,arrows,fit,calc,positioning,automata,}
+
 \usepackage{url}
 \usepackage{latexsym}
 \usepackage{graphicx}
@@ -129,17 +133,36 @@
 
 \begin{frame}
 \frametitle{Collaboration - თანამშრომლობა}
-
-%TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
 \begin{center}
-\includegraphics[width=3in]{../figures/bridge_stakeholders}
-\label{lingsync:bridge}
+\begin{small}
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
+	  researcher/.style={thick,circle,fill=blue},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
+	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
+	  to/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \node[researcher] (researcher1) {researcher};  \&  \& \node[researcher] (researcher2) {researcher};\\
+	      \&  \node[lingsync] (lingsyncold) {LingSync/OLD}; \\
+	    \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
+	  };
+
+	  \draw[to] (lingsyncold) -- node[midway,right] {} (researcher1);
+	  \draw[to] (lingsyncold) -- node[midway,left] {} (researcher2);
+	  \draw[to] (lingsyncold) -- node[midway,right] {} (documenter);		  
+	  \draw[to] (lingsyncold) -- node[midway,left] {} (revitalizer);
+\end{tikzpicture}
+\end{small}
 \end{center}
+\label{lingsync:bridge}
 \end{figure}
 \note{Joel presents}
 \end{frame}
-
 
 \subsection[Requirements ]{Software requirements}
 
