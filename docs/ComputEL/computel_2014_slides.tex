@@ -299,6 +299,61 @@ User productivity
 %TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
 \begin{center}
+
+\begin{small}
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.2cm},
+	  corpus/.style={thick,draw,fill=red,inner sep=0.3cm},
+	  versionedcorpus/.style={draw,thick,fill=red,inner sep=0.4cm},
+	  publiccorpus/.style={thick,fill=purple,inner sep=0.4cm},
+	  parser/.style={thick,fill=magenta,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=gray!50, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=blue},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,text=black,semithick,font=\sffamily\footnotesize},
+	  permissionread/.style={->,>=stealth',shorten >=1pt,text=black,draw=black,very thick,font=\sffamily\footnotesize},
+	  permissionwrite/.style={<->,>=stealth',shorten >=1pt,draw=black,very thick,font=\sffamily\footnotesize,text=black},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	   \node[text=black](encrypted) {encrypted bits}; \&  \node[text=black](versioning) {versioning}; \& \\
+	    \node[corpus] (corpus1) {LingSync\\Corpus};  \&   \node[versionedcorpus] (versionedcorpus) {LingSync\\Corpus};  \node[corpus] (corpus2) {Corpus$_{v2}$};  \& \node[publiccorpus] (corpuspublic) {Public\\~\\~\\~};  \node[corpus] (corpus3) {Corpus};  \\
+	    \&\\
+	     \node[researcher] (fieldworker) {User};  \&  \node[researcher] (collab) {User}; \& \node[researcher] (speaker) {User};\\
+	     \&\\
+	     \node[corpus] (corpus4) {My Other\\Corpus}; \\
+	  };
+	  \draw[twoway] (corpus1) -- node[midway,right] {} (fieldworker);
+	  \draw[twoway] (corpus4) -- node[midway,right] {} (fieldworker);
+	  \draw[twoway] (corpus2) -- node[midway,right] {} (collab);
+	  \draw[twoway] (corpus3) -- node[midway,right] {} (speaker);
+	  
+	  \draw[permissionread] (corpus1) -- node[midway,left,text=black] {read/comment} (collab);
+	  \draw[permissionwrite] (corpus1) -- node[midway,right,text=black] {read/write} (speaker);
+
+	  \draw[to] (corpus1) -- node[midway,left] {} (encrypted);
+	  \draw[to] (encrypted) -- node[midway,right] {} (corpus1);
+	  
+	  \draw[to] (corpus2) -- node[right] {} (versioning);
+	  \draw[to] (versioning) -- node[left] {} (versionedcorpus);
+
+\end{tikzpicture}
+\end{small}
+\end{center}
+\label{lingsync:corpora}
+\end{figure}
+\note{Joel presents}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Corpora - კორპუსები}
+
+%TODO will convert into latex diagrams once we are sure we want it.
+\begin{figure}
+\begin{center}
 \includegraphics[width=3in]{../figures/corpora}
 \label{lingsync:corpora}
 \end{center}
