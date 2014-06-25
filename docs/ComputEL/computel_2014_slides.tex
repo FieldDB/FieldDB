@@ -1,15 +1,25 @@
 \documentclass{beamer}
+\setbeameroption{show notes}
+%\setbeameroption{show only notes}
+%\setbeameroption{show notes on second screen} % My version of beamer must be too old for this version...
 \usetheme{PaloAlto}
+
 \usepackage{fontspec}
 \setsansfont{Arial Unicode MS}
+
+\usepackage{listings}
+\usepackage{expex}
+\resetcountonoverlays{excnt} % Needed so that ExPex example numbers aren't incremented on each overlay (see http://tex.stackexchange.com/questions/162646/example-numbering-changes-between-overlays)
+\usepackage{verbatim}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{graphicx}
+
 
 \usepackage{pgf}
 \usepackage{tikz}
 \usetikzlibrary{shapes,shapes.geometric,arrows,fit,calc,positioning,decorations.markings}
 
-\usepackage{url}
-\usepackage{latexsym}
-\usepackage{graphicx}
 
 
 % My Package Includes
@@ -32,34 +42,6 @@
 
 \newtheorem{requirement}{Requirement}
 
-\usepackage{glossaries}
-\glossarystyle{tree}
-\makeglossaries
-
-
-
-\newacronym{api}{API}{application programming interface}
-\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
-\newacronym{gui}{GUI}{graphical user interface}
-\newacronym{ui}{UI}{user interface}
-\newacronym{cl}{CL}{computational linguistics}
-\newacronym{nlp}{NLP}{Natural Language Processing}
-\newacronym{sil}{SIL}{Summer Institute of Linguistics}
-\newacronym{json}{JSON}{JavaScript Object Notation}
-\newacronym{npm}{NPM}{Node Package Manager}
-\newacronym{bdd}{BDD}{behavior-driven development}
-\newacronym{scrud}{SCRUD}{search, create, read, update, and delete}
-\newacronym{rdbms}{RDBMS}{relational database management system}
-\newacronym{igt}{IGT}{interlinear glossed text}
-\newacronym{fst}{FST}{finite-state transducer}
-\newacronym{cs}{CS}{context-sensitive}
-\newacronym{lm}{LM}{language model}
-\newacronym{url}{URL}{uniform resource locator}
-\newacronym{tsv}{TSV}{tab-separated values}
-\newacronym{tlg}{TLG}{Teach and Learn with Georgia}
-\newacronym{flex}{FLEx}{FieldWorks Language Explorer}
-
-
 \setbeamertemplate{theorem begin}{{
 \inserttheoremheadfont
 \inserttheoremname
@@ -68,6 +50,34 @@
 \inserttheorempunctuation
 }}
 \setbeamertemplate{theorem end}{}
+
+
+%\usepackage{glossaries}
+%\glossarystyle{tree}
+%\makeglossaries
+
+
+
+%\newacronym{api}{API}{application programming interface}
+%\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+%\newacronym{gui}{GUI}{graphical user interface}
+%\newacronym{ui}{UI}{user interface}
+%\newacronym{cl}{CL}{computational linguistics}
+%\newacronym{nlp}{NLP}{Natural Language Processing}
+%\newacronym{sil}{SIL}{Summer Institute of Linguistics}
+%\newacronym{json}{JSON}{JavaScript Object Notation}
+%\newacronym{npm}{NPM}{Node Package Manager}
+%\newacronym{bdd}{BDD}{behavior-driven development}
+%\newacronym{scrud}{SCRUD}{search, create, read, update, and delete}
+%\newacronym{rdbms}{RDBMS}{relational database management system}
+%\newacronym{igt}{IGT}{interlinear glossed text}
+%\newacronym{fst}{FST}{finite-state transducer}
+%\newacronym{cs}{CS}{context-sensitive}
+%\newacronym{lm}{LM}{language model}
+%\newacronym{url}{URL}{uniform resource locator}
+%\newacronym{tsv}{TSV}{tab-separated values}
+%\newacronym{tlg}{TLG}{Teach and Learn with Georgia}
+%\newacronym{flex}{FLEx}{FieldWorks Language Explorer}
 
 
 \begin{document}
@@ -117,22 +127,148 @@
 \setbeamertemplate{sidebar left}{}
 \begin{frame}
 \titlepage
+\note{Hello everyone. My name is Joel Dunham and this is Gina}
+\note[item]{We are here to talk to you today about LingSync and the
+Online Linguistic Database.}
+\note[item]{These are open source web-based tools that facilitate fieldwork
+    and collaborative approaches to fieldwork on endangered languages.}
+\note[item]{Our initial goal in this presentation is to provide you
+with an overview of the two systems.}
+\note[item]{However, we are at a transition point since we are beginning to
+    merge these two tools under the LingSync name and are very interested in
+    getting feedback on our approach from you, our learned peers, who have 
+    thought much about these issues; in general, we're very excited to be here
+    to be part of the discussion about how computational tools and
+    computational linguistic advances can benefit fieldwork on endangered
+    languages.}
 \end{frame}
 \setbeamertemplate{sidebar left}[sidebar theme]
 
+
+
+% BEGIN TEMPORARY COMMENT
+%\begin{comment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BACKGROUND
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Background}
+
+
+% FIELDWORK
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection[Fieldwork]{Endangered languages fieldwork}\label{sec:fieldwork}
 
-%\begin{frame}
-%TODO Joel Endangered languages fieldwork
-%\note{Joel presents}
-%\end{frame}
 
-
+% CONTEXT
+%===============================================================================
 
 \begin{frame}
-\frametitle{Collaboration - თანამშრომლობა}
+\frametitle{Context}
+\begin{itemize}
+    \item Context of rapid language loss (Harrison 2007, Krauss 1992)
+    \item Language diversity and vitality are valuable scientifically,
+        culturally, and socially (Hallett et al. 2007)
+    \item Computational approaches and formalisms can benefit fieldwork
+        (Bird 2009)
+    %\item Important differences (Crippen \& Robinson 2013)
+\end{itemize}
+\note[item]{So, it hardly needs to be stated that we are in a situation where
+    a significant portion of the world's languages are predicted to be extinct,
+    or "sleeping" to use the jargon of more optimistic commentators, in the
+    very near future.}
+\note[item]{Linguistic diversity and language vitality are valuable from a
+    number of perspectives. For those who might be sceptical of the value of
+    language vitality to social wellbeing, the Hallett et al. (2007) reference
+    here is to a study which finds a correlation between higher levels of
+    Aboriginal language use in British Columbia First Nations bands and lower
+    youth suicide rates.}
+\note[item]{And clearly we're all here because we think that computational
+    approaches can contribute in interesting and useful ways to the
+    documentation, study, and revitalization of these endangered languages.}
+
+\end{frame}
+
+
+% DEBATES
+%===============================================================================
+
+\begin{frame}
+\frametitle{Debates}
+\begin{itemize}
+    \item<1-> Documentation, description, and/or theoretical analysis?
+        \note[item]<1>{There are a number of ongoing debates that are relevant
+            here.}
+        \note[item]<1>{First, there is some disagreement over how we should
+            approach the urgent problem of language endangerement.}
+        \begin{itemize}
+            \item<2->Less description, more documentation, more recording, more
+                community involvement! (Woodbury 2003, Bird et al. 2014)
+                \note[item]<2>{Some argue that we should focus on documentation,
+                    on recording speech, respeakings, and translations, and on
+                    generating artifacts for future study.}
+            \item<3->Better description can prevent data graveyards (Beale
+                2014, Bender et al. 2014)
+                \note[item]<3>{Others point out that we can use computational
+                    tools and CL advances to expedite language description and
+                    analysis; this way we can avoid an unfortunate eventuality
+                    which sees a bunch of data that nobody can make sense of.}
+            \item<4->Theoretical linguistic analysis uncovers previously
+                unknown generalizations (Murray 2014)
+                \note[item]<4>{There is a related debate over the role of 
+                    theoretical linguistic analysis here, with some typologists
+                    advocating a descriptive approach and theoretical linguists
+                    responding in defense of a hypothesis-driven approach and the, to some,
+                    controversial elicitation methods, e.g., grammaticality judgments
+                    translation requests, that it entails. Sarah Murray, in a
+                    forthcoming paper, argues that the theoretical linguistic approach
+                    can lead to the discovery of significant generalizations that would
+                    otherwise remain hidden.}
+        \end{itemize}
+    \item<5->A duty to collaborate?
+        \note[item]<5>{A related debate asks whether the various types of
+            endangered language fieldworker have a duty to collaborate and,
+            relatedly, whose agenda should be given priority.}
+        \begin{itemize}
+            \item<6->Community agenda paramount; imperative to collaborate (Gerdts 2010)
+                \note[item]<6>{At one extreme lies the view that the goals of
+                    linguist fieldworkers should be subordinated to those of language
+                    communities.}
+            \item<7->Lone wolf linguistics is not necessarily unethical linguistics (Crippen \& Robinson 2013)
+                \note[item]<7>{Others point out that, for a variety of reasons,
+                    this is not always possible or desirable. The contexts of language
+                    endangerement are themselves diverse. Not all communities desire or
+                    are genuinely committed to documentation or revitalization. Not all
+                    communities need or desire the help of academic fieldworkers. In some
+                    cases, the political landscape of an endangered language
+                    community is just too complex for a field linguist to navigate. In 
+                    these types of situations, the best course of action for all parties
+                    involved may be for linguist fieldworkers to respectfully
+                    and ethically pursue their own research agenda.}
+        \end{itemize}
+    \item<8->Whatever we decide, let's maximize openness, access, sharing (data
+        and functionality)
+        \note[item]<8>{These are complex and relevant issues. However, to a certain
+            extent the LingSync/OLD approach can sidestep them. The attitude we advocate
+            is something along the lines of "can't we all just get along?". We want to
+            help contribute towards an infrastructure which facilitates, but does not
+            require, collaboration between stakeholders, an infrastructure which is 
+            flexible and general enough to be useful to different types of linguist 
+            and fieldworker. We want to help fieldworkers to make their data more useful
+            to their peers.}
+\end{itemize}
+\end{frame}
+
+
+% COLLABORATION
+%===============================================================================
+
+\begin{frame}
+\frametitle{Collaboration}
+
 \begin{figure}
 \begin{center}
 \begin{small}
@@ -158,54 +294,108 @@
 	  \draw[to] (lingsyncold) -- node[midway,left] {} (revitalizer);
 \end{tikzpicture}
 \end{small}
-\end{center}
 \label{lingsync:bridge}
+\end{center}
 \end{figure}
-\note{Joel presents}
+\note[item]{Here is a high-level overview of the role that we see LingSync (and
+    the OLD) playing in endangered languages fieldwork.}
+\note[item]{The software helps fieldworkers of various types and with
+    different goals to share data and collaborate, if they want to.}
+\note[item]{As will be discussed below, the systems offer features and
+    conveniences which respond to the requirements of different types
+    of fieldworker and fieldwork situation and which may make the system
+    worthwhile beyond the primary collaboration- and data-sharing
+    functionality.}
 \end{frame}
 
-\subsection[Requirements ]{Software requirements}
+
+
+\subsection[Requirements]{Software requirements}
 
 \begin{frame}
 
-\frametitle{Requirements - მოთხოვნები}
+\frametitle{Requirements}
+\note[item]<1>{So here we will briefly review the requirements that guided
+    the development of LingSync and the OLD.}
+\note[item]<1>{We are not claiming that LingSync and the OLD fully meet
+    all of these requirements. These are goals we are working towards.}
+
+\begin{uncoverenv}<2->
 \begin{requirement}
 \label{req:primary-data}
 Integration of primary data
 \end{requirement}
+\end{uncoverenv}
+\note[item]<2>{The software must be able to handle primary data. In particular,
+    we need to help fieldworkers share audio and video recordings (including
+    stimuli). The system should allow for the alignment of audio/video with
+    transcriptions and annotations and textual and audio/video data should be
+    displayed simultaneously. It should be possible to record audio right into
+    the application and, if possible, the text/audio alignment process should
+    be automated or partially automated.}
 
-
+\begin{uncoverenv}<3->
 \begin{requirement}
 \label{req:curation}
 Curation of data
 \end{requirement}
+\end{uncoverenv}
+\note[item]<3>{The system should facilitate the curation of data. For example,
+    initial elicitation can involve simply the uploading of recordings. Then,
+    subsequent waves of data curation can involve transcription at various
+    levels or the creation of morphological analyses and annotations of various
+    types, for example, tagging and categorizing.}
 
 
+\begin{uncoverenv}<4->
 \begin{requirement}
 \label{req:inclusive}
 Inclusion of stakeholders
 \end{requirement}
+\end{uncoverenv}
+\note[item]<4>{The software should allow for the inclusion of the various
+    stakeholders in the endangered languages fieldwork enterprise. That is, the
+    software should be useful to linguists with various types of expertise and
+    agendas (e.g., theoretical, typological, historical, computational), to
+    other types of academic researchers (e.g., to anthropologists), to
+    interested community members, and to fieldworkers enganged in
+    community-based documentation, education, and revitalization projects.}
 
+
+\begin{uncoverenv}<5->
 \begin{requirement}
 \label{req:openable}
 Openable data
 \end{requirement}
+\end{uncoverenv}
+\note[item]<5>{The system should allow fieldworkers to produce open data. That
+    is, data that are available for reuse via various GUIs and APIs. The system
+    should also be configurable such that access to portions of the data can be
+    restricted in accordance with the requirements of speakers and communities,
+    if necessary.}
 
 
+\begin{uncoverenv}<6->
 \begin{requirement}
 \label{req:productivity}
 User productivity
 \end{requirement}
+\end{uncoverenv}
+\note[item]<6>{The system should contribute to user productivity. It should
+    include well-designed interfaces as well as conveniences which expedite
+    repetitive tasks. It should also help with tasks that are particular to
+    linguistic fieldwork such as the creation of sophisticated searches over the
+    data sets.}
 
-\note{Joel presents}
+
 \end{frame}
 
 
-\subsection{Existing software }
+\subsection{Existing software}
 
 \begin{frame}
-\frametitle{Existing Software - არსებული აპლიკაცია}
 
+\frametitle{Existing Software }
 \begin{figure}
 \begin{center}
 \def\firstcircle{(0:-2cm) circle (2.5cm)}
@@ -239,8 +429,8 @@ User productivity
 
 \end{tikzpicture}
 \end{small}
-\end{center}
 \label{othersoftware}
+\end{center}
 \end{figure}
 
 \note{Joel presents}
@@ -248,8 +438,7 @@ User productivity
 
 
 \begin{frame}
-\frametitle{Ad-hoc Solutions - კომბინაციები}
-
+\frametitle{Ad-hoc Solutions}
 %TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
 \begin{center}
@@ -263,22 +452,20 @@ User productivity
 \end{frame}
 
 
-\section[LingSync]{New models for data collection and management}
-\subsection{Architecture}\label{sec:lingsync}
+\section[LingSync/OLD]{New models for data collection and management}
+\subsection{LingSync}\label{sec:lingsync}
 
 
 
 \begin{frame}
-\frametitle{LingSync Architecture - არქიტექტურა}
-%TODO will convert into latex diagrams once we are sure we want it.
+\frametitle{LingSync Architecture}
 \begin{figure}
+\begin{center}
 \begin{tabular}{lll}
 * many platforms & * online/offline\\
 * many purposes & * extendable
 \end{tabular}
-\begin{center}
 \begin{small}
-
 \tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
    1 with {\arrow[thick,green]{ triangle 60}}},
    double distance=4pt, shorten >= 8pt,
@@ -330,64 +517,9 @@ User productivity
 \end{frame}
 
 
-%\begin{frame}
-%\frametitle{Corpora - კორპუსები}
-%
-%\begin{figure}
-%\begin{center}
-%
-%\begin{small}
-%\begin{tikzpicture}[
-%	  every node/.style={align=center,text=white,draw=none},
-%	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.2cm},
-%	  corpus/.style={thick,draw,fill=red,inner sep=0.3cm},
-%	  versionedcorpus/.style={draw,thick,fill=red,inner sep=0.4cm},
-%	  publiccorpus/.style={thick,fill=purple,inner sep=0.4cm},
-%	  parser/.style={thick,fill=magenta,inner sep=0.3cm},
-%	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=gray!50, inner sep=0cm},
-%	  researcher/.style={thick,circle,fill=blue},
-%	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-%	  to/.style={->,>=stealth',shorten >=1pt,text=black,semithick,font=\sffamily\footnotesize},
-%	  permissionread/.style={->,>=stealth',shorten >=1pt,text=black,draw=black,very thick,font=\sffamily\footnotesize},
-%	  permissionwrite/.style={<->,>=stealth',shorten >=1pt,draw=black,very thick,font=\sffamily\footnotesize,text=black},
-%	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-%
-%	  % Position the nodes using a matrix layout
-%	  \matrix{
-%	   \node[text=black](encrypted) {encrypted bits}; \&  \node[text=black](versioning) {versioning}; \& \\
-%	    \node[corpus] (corpus1) {LingSync\\Corpus};  \&   \node[versionedcorpus] (versionedcorpus) {LingSync\\Corpus};  \node[corpus] (corpus2) {Corpus$_{v2}$};  \& \node[publiccorpus] (corpuspublic) {Public\\~\\~\\~};  \node[corpus] (corpus3) {Corpus};  \\
-%	    \&\\
-%	     \node[researcher] (fieldworker) {User};  \&  \node[researcher] (collab) {User}; \& \node[researcher] (speaker) {User};\\
-%	     \&\\
-%	     \node[corpus] (corpus4) {My Other\\Corpus}; \\
-%	  };
-%	  \draw[twoway] (corpus1) -- node[midway,right] {} (fieldworker);
-%	  \draw[twoway] (corpus4) -- node[midway,right] {} (fieldworker);zr
-%	  \draw[twoway] (corpus2) -- node[midway,right] {} (collab);
-%	  \draw[twoway] (corpus3) -- node[midway,right] {} (speaker);
-%	  
-%	  \draw[permissionread] (corpus1) -- node[midway,left,text=black] {read/comment} (collab);
-%	  \draw[permissionwrite] (corpus1) -- node[midway,right,text=black] {read/write} (speaker);
-%
-%	  \draw[to] (corpus1) -- node[midway,left] {} (encrypted);
-%	  \draw[to] (encrypted) -- node[midway,right] {} (corpus1);
-%	  
-%	  \draw[to] (corpus2) -- node[right] {} (versioning);
-%	  \draw[to] (versioning) -- node[left] {} (versionedcorpus);
-%
-%\end{tikzpicture}
-%\end{small}
-%\end{center}
-%\label{lingsync:corpora}
-%\end{figure}
-%\note{Joel presents}
-%\end{frame}
-
-
 \begin{frame}
-\frametitle{Corpora - კორპუსები}
-
-%TODO diagram is above but not finished
+\frametitle{Corpora}
+%TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
 \begin{center}
 \includegraphics[width=3in]{../figures/corpora}
@@ -397,20 +529,19 @@ User productivity
 \note{Joel presents}
 \end{frame}
 
-%\subsection{OLD}\label{sec:old}
+\subsection{OLD}\label{sec:old}
 
-%\begin{frame}
-%TODO Joel OLD
-%\note{Joel presents}
-%\end{frame}
+\begin{frame}
+TODO Joel OLD
+\note{Joel presents}
+\end{frame}
 
 %\subsection{LingSync/OLD}
 
 \subsection{User adoption}
 
 \begin{frame}
-
-\frametitle{User Adoption - მომხმარებლები}
+\frametitle{User Adoption}
 \begin{table}[h]
 \begin{center}
 \scriptsize
@@ -418,12 +549,12 @@ User productivity
       \toprule
                      ~ &  Active & Investigating & In-active & Total\\
       \midrule
-      Public Corpora  &       2 &   1 &   2 & 5 \\
-      Private Corpora &      15 &  37 & 321 & 373\\
+      Public Corpora  &       2 &   1 &   2 & 5 \\ 
+      Private Corpora &      15 &  37 & 321 & 373\\ 
       Users           &      38 &  43 & 220 & 301 \\
       Documents & 13,408 & 2,763 & 4,541 &23,487\\
       Disk Size & 1GB & .9GB & 5.3GB& 7.2GB\\
-
+      
       \bottomrule
 
 \end{tabular}
@@ -438,39 +569,39 @@ activities; Investigating users: 100-10 activities.}
 \note{Joel presents}
 \end{frame}
 
-%
-%\begin{frame}
-%
-%\begin{table}[h]
-% \begin{center}
-%     \scriptsize
-%\begin{tabular}{lrrrrr}
-%
-%      \toprule
-%      language &                     \emph{forms}  & texts & audio & GB   & speakers \\
-%      \midrule
-%      Blackfoot (\textit{bla}) &     8,847  & 171   & 2,057 & 3.8  & 3,350    \\ % 11,075 4047074461 bytes
-%      Nata (\textit{ntk}) &          3,219  & 32    & 0     & 0    & 36,000   \\ % 3,251  0 bytes
-%      Gitksan (\textit{git}) &       2,174  & 6     & 36    & 3.5  & 930      \\ % 2,216  3787227136 bytes
-%      Okanagan (\textit{oka}) &      1,798  & 39    & 87    & 0.3  & 770      \\ % 1,924  349478912 bytes
-%      Tlingit (\textit{tli}) &       1,521  & 32    & 107   & 12   & 630      \\ % 1,660  12906459136 bytes
-%      Plains Cree (\textit{crk}) &   686    & 10    & 0     & 0    & 260      \\ % 696    0 bytes
-%      Ktunaxa (\textit{kut}) &       467    & 33    & 112   & 0.2  & 106      \\ % 612    176128000 bytes
-%      Coeur d'Alene (\textit{crd}) & 377    & 0     & 199   & 0.0  & 2        \\ % 576    28659712 bytes
-%      Kwak'wala (\textit{kwk}) &     98     & 1     & 1     & 0.0  & 585      \\ % 100    7450624 bytes
-%      TOTAL &                        19,187 & 324   & 2,599 & 19.8 &         \\ % 22,110 21302477981 bytes
-%      \bottomrule
-%
-%\end{tabular}
-%\caption{Data in OLD applications (Feb 14, 2014)}
-%\label{old-data}
-% \end{center}
-% \normalsize
-%\end{table}
-%
-%
-%\note{Joel presents}
-%\end{frame}
+
+\begin{frame}
+
+\begin{table}[h]
+ \begin{center}
+     \scriptsize
+\begin{tabular}{lrrrrr}
+
+      \toprule
+      language &                     \emph{forms}  & texts & audio & GB   & speakers \\
+      \midrule
+      Blackfoot (\textit{bla}) &     8,847  & 171   & 2,057 & 3.8  & 3,350    \\ % 11,075 4047074461 bytes
+      Nata (\textit{ntk}) &          3,219  & 32    & 0     & 0    & 36,000   \\ % 3,251  0 bytes
+      Gitksan (\textit{git}) &       2,174  & 6     & 36    & 3.5  & 930      \\ % 2,216  3787227136 bytes
+      Okanagan (\textit{oka}) &      1,798  & 39    & 87    & 0.3  & 770      \\ % 1,924  349478912 bytes
+      Tlingit (\textit{tli}) &       1,521  & 32    & 107   & 12   & 630      \\ % 1,660  12906459136 bytes
+      Plains Cree (\textit{crk}) &   686    & 10    & 0     & 0    & 260      \\ % 696    0 bytes
+      Ktunaxa (\textit{kut}) &       467    & 33    & 112   & 0.2  & 106      \\ % 612    176128000 bytes
+      Coeur d'Alene (\textit{crd}) & 377    & 0     & 199   & 0.0  & 2        \\ % 576    28659712 bytes
+      Kwak'wala (\textit{kwk}) &     98     & 1     & 1     & 0.0  & 585      \\ % 100    7450624 bytes
+      TOTAL &                        19,187 & 324   & 2,599 & 19.8 &         \\ % 22,110 21302477981 bytes
+      \bottomrule
+
+\end{tabular}
+\caption{Data in OLD applications (Feb 14, 2014)}
+\label{old-data}
+ \end{center}
+ \normalsize
+\end{table}
+
+
+\note{Joel presents}
+\end{frame}
 
 %\section[Data]{Using LingSync/OLD}\label{open-data}
 %
@@ -504,8 +635,7 @@ activities; Investigating users: 100-10 activities.}
 \subsubsection[ASR]{Speech Recognition for Information Retrieval}
 
 \begin{frame}
-\frametitle{Android Speech Recognition - სალაპარაკო ენის გაგების სისტემა}
-
+\frametitle{Android Speech Recognition}
 \begin{figure}
 \begin{center}
 \includegraphics[width=3in]{../figures/kartuli_speech_recognition}
@@ -528,7 +658,7 @@ activities; Investigating users: 100-10 activities.}
 %
 %\begin{figure}
 %\begin{center}
-%\includegraphics[width=2.5in]{../figures/farley}
+%\includegraphics[width=2.5in]{../figures/farley} 
 %\\
 %\includegraphics[width=2.5in]{../figures/inuktitut}
 %\caption{Screenshot of Farley's Morphological Analyzer wrapped in a Node.js Web Service And offered in a HTML5 User Interface  }
@@ -548,7 +678,7 @@ activities; Investigating users: 100-10 activities.}
 
 \begin{frame}
 
-\frametitle{\large Interactive Lexicon Visualizations - ინტერაქტიული ლექსიკონის ვიზუალიზაციები}
+\frametitle{\large Interactive Lexicon Visualizations}
 
 \begin{figure}
 \begin{center}
@@ -564,49 +694,421 @@ declarative knowledge not found in the lexicon training process.}
 \note{Gina presents}
 \end{frame}
 
-
-
-%
-%\subsubsection[BlackFoot]{BlackFoot morphological parser}
-%
-%\begin{frame}
-%TODO Joel BlackFoot morphological parser
-%
-%\note{Joel presents}
-%\end{frame}
-%
-%
-%\begin{frame}
-%TODO Joel BlackFoot morphological parser
-%
-%\note{Joel presents}
-%\end{frame}
-%
-%\begin{frame}
-%TODO Joel BlackFoot morphological parser
-%
-%\note{Joel presents}
-%\end{frame}
+%\end{comment}
+% END TEMPORARY COMMENT
 
 
 
-\section{Take-Home}
+\subsubsection[Blackfoot]{OLD morphological parsers (Blackfoot)}
 
 \begin{frame}
-\frametitle{Take Homes - დამახსოვრება}
+\frametitle{OLD morphological parsers (Blackfoot)}
+Goals
 \begin{itemize}
-\item High productivity requirements
-\item All stakeholders, all devices, anywhere
-\item Modular Web Services and Plugin Architecture
-\item Open Source, Open Development, Open Data
+    \item Present and motivate the OLD's approach to creating morphological parsers
+    \item Demonstrate the use of this functionality via two Blackfoot parsers
 \end{itemize}
+\note{Now I'd like to discuss the OLD's morphological parser functionality. I
+    will present and motivate the OLD's approach to creating morphological
+    parsers with reference to two parsers created for the Blackfoot language.}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{OLD Morphological Parsers}
+Requirements (fieldworkers should be able to):
+\note{Here are the requirements that guided the design of the OLD's
+    functionality for creating morphological parsers}
+\begin{itemize}
+    \item create parsers that
+        \begin{itemize}
+            \item<1->are practical and forgiving
+                \note[item]<1>{Fieldworkers should be able to create
+                    morphological parsers that are practical and forgiving.  By
+                    \textit{practical} I mean that they should be able to
+                    suggest correct, or largely correct, word analyses during
+                    data entry. (High recall.) By \textit{forgiving} I mean that I want
+                    fieldworkers to be able to create parsers without first
+                    having a full and perfect analysis of the morphophonology
+                    of their language of study.}
+            \item<2->make use of existing fieldworker skills
+                \note[item]<2>{Since fieldworkers are being encouraged to create
+                    their own parsers, they should be able to do so by making use
+                    of the skills that they already have. That is, they should not
+                    be required to first learn wholly unfamiliar formalisms.}
+            \item<3->make use of data in the system
+                \note[item]<3>{Fieldworkers should be able to build parsers
+                    using the expertly analyzed data that already exist in ther
+                    databases; for example, morphologically analyzed words in
+                    IGT format and lexical entries.}
+            \item<4->are tailored to a specific purpose
+                \note[item]<4>{Fieldworkers should be able to create different
+                    parsers for different purposes. Examples include orthographic
+                    parsers which parse orthographic transcriptions and phonetic
+                    parsers which parse phonetic transcriptions. It should also
+                    be possible to tailor phonetic parsers to the grammars of
+                    individual speakers or dialects. Fieldworkers should also
+                    be able to create analysis-specific variants of all of
+                    these.}
+            \item<5->facilitate automated analysis testing
+                \note[item]<5>{Since the parsers are comprised of computational
+                    implementations of analyses and models of the lexicon,
+                    morphology, and phonology, they should facilitate the
+                    automated testing of these analyses and models against
+                    specified data sets in the system.}
+            \item<6->are reusable: spell-checkers, pronunciation dictionaries, \ldots
+                \note[item]<6>{The components of the parsers should be reusable for,
+                    say, the creation of spell-checkers or the generation of
+                    pronunciation dictionaries that can be used in
+                    audio-transcription aligners.}
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{OLD Morphological Parsers}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{../figures/OLD-parser-diagram-2}
+\caption{Architecture of an OLD morphological parser.}
+\label{fig:arch}
+\end{center}
+\end{figure}
+\note[item]{This diagram provides a high-level overview of the components of an
+    OLD morphological parser.}
+\note[item]{The morphophonology is a finite-state transducer that takes a
+    surface transcription as input and returns a set of candidate parses as
+    output; it is the composition of a phonology FST and a morphology FST.}
+\note[item]{The candidate ranker assigns a probability to each candidate parse 
+    returned by the morphophonology; it is built upon an $N$-gram language
+    model.}
+\end{frame}
+
+
+%\begin{frame}
+%\frametitle{OLD Phonologies}
+%\begin{itemize}
+    %\item<1->A transducer wholly defined by the fieldworker as ordered
+        %context-sensitive rewrite rules \`{a} la SPE
+%\end{itemize}
+%\note[item]{The phonology FST specifies phonological transformations or spelling
+%rules; \textit{It is completely specified by the fieldworker} as an ordered
+%list of context-sensitive rewrite rules using the regular expression rewrite
+%rule syntax accepted by foma and Xerox FST}
+%\note[item]{The morphology recognizes sequences of morphemes that correspond to
+%grammatical words. A morphology is constructed by the system using data
+%extracted from two OLD corpora that are created and specified by the
+%fieldworker. From the one corpus are extracted lexical items, i.e.,
+%morphemes. From the other corpus are extracted the sequences of categories
+%that constitute the morphotactic rules.}
+%\note[item]{The LM is estimated by the OLD based on the analyzed words in a
+%corpus created and specified by the fieldworker.}
+%\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{OLD Phonologies}
+
+\begin{itemize}
+    \item<1->Phonology: a transducer wholly defined by the fieldworker as ordered
+        context-sensitive rewrite rules
+        \note[item]<1>{An OLD phonology is a transducer that is wholly defined by
+            the fieldworker as an ordered list of context-sensitive rewrite
+            rules} 
+\end{itemize}
+
+\begin{uncoverenv}<2->
+\ex<nitsspiyi> /nit-ihpiyi/ $\rightarrow$ $<$nitsspiyi$>$\xe
+\end{uncoverenv}
+\note[item]<2>{Example (\getref{nitsspiyi}) shows a Blackfoot word segmented
+    into phonemically transcribed morphemes and its phonetico-orthographic
+    surface representation.}
+
+\vspace{-1cm}
+
+\begin{uncoverenv}<3->
+\ex<phonology>\verb+define phonology [+\\
+\verb+    [ "-" -> s || t _ i ] .o.+\\
+\verb+    [ i h -> s || s _ ] ] ;+\\
+\verb+#test nit-ihpiyi -> nitsspiyi+
+\xe
+\end{uncoverenv}
+\note[item]<3>{(\getref{phonology}) shows the definition of a simple phonology
+    FST that implements the mapping in (\getref{nitsspiyi}).}
+\note[item]<3>{The phonology is written in the regular expression rewrite rule
+    language that is accepted by FST tools like foma and Xerox FST.}
+
+\vspace{-0.5cm}
+
+\begin{itemize}
+    \item<4->make use of existing fieldworker skills
+        \note[item]<4>{Since these rewrite rules are simply notational variants of
+            the SPE-style rewrite rules that most linguistic fieldworkers are
+            familiar with, the system makes use of existing fieldworker skills}
+    \item<5->facilitate automated analysis testing
+        \note[item]<5>{Also, since the fieldworker has full control over the
+            definition of phonological transformations (or spelling rules),
+            they can use the functionality to test their analyses of this
+            component of the grammar. For example, the words in the database that
+            the morphophonology cannot recognize may lead to modifications of
+            the underlying analyses and models.}
+        \note[item]<5>{One restricted but useful example of automated analysis
+            testing is provided by the phonology test comment beneath the
+            phonology definition. The left side of the arrow is the underlying
+            representation and the right side is the surface representation.
+            The OLD recognizes these comments in FST rewrite rule scripts and
+            reports back on what percentage of the tests are passed by the
+            phonology. This facilitates test-driven phonology development.}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{OLD Morphologies and Morpheme LMs}
+\ex<danced>
+\begingl
+\gla Nitsspiyi //
+\glb nit-ihpiyi //
+\glb 1-dance //
+\glb agra-vai //
+\glft 'I danced.' //
+\endgl
+\xe
+\note[item]<1>{OLD applications are full of morphologically analyzed
+words like the Blackfoot one in (\getref{danced}).}
+
+\vspace{-1cm}
+
+\begin{uncoverenv}<2->
+%\ex<mtactic>W $\rightarrow$ AGR - VAI\\AGR $\rightarrow$ \textit{nit}\\VAI $\rightarrow$ \textit{ihpiyi}\xe
+\ex<mtactic>\begin{tabular}{lll}
+w & $\rightarrow$ & agr - vai \\
+agr & $\rightarrow$ & \emph{nit} \\
+vai & $\rightarrow$ & \emph{ihpiyi} \\
+\end{tabular}\xe
+\end{uncoverenv}
+\note[item]<2>{(\getref{mtactic}) is a rewrite rule representation
+of the morphological generalizations that can be extracted from a corpus
+of forms like (\getref{danced}) and implemented as an FST, in either the lexc
+or regex language.}
+\note[item]<2>{Note that the OLD does not currently allow users fine-grained
+    control over morphology specification. That is, it is not currently
+    possible to use flag diacritics to implement long-distance dependencies as
+    illustrated by Snoek et al. in the precedings of this workshop. Of course,
+    the OLD interface could easily be modified to allow users complete control
+    over morphologies, perhaps with the option of using the system-generated
+    lexical and morphotactic generalizations as a starting point.}
+
+\vspace{-1cm}
+
+\begin{uncoverenv}<3->
+\ex<lm>\begin{tabular}{lll}
+<s> & nit & ihpiyi \\
+nit & ihpiyi & </s> \\
+\end{tabular}\xe
+\end{uncoverenv}
+\note[item]<3>{(\getref{lm}) shows the morpheme trigrams that can be extracted
+from a corpus of IGT forms like (\getref{danced}).}
+
+\vspace{-1cm}
+
+\begin{itemize}
+    \item<4->make use of data in the system
+        \note[item]<4>{Since the morphology FST and the morpheme LM are
+            generated by the system based on data in the database, a
+            significant portion of the parser creation work is automated using
+            the endangered language data present in the OLD application.}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Blackfoot Parsers}
+\begin{itemize}
+    \item 2 parsers, both with identical morphologies and LMs:
+        \note[item]<1>{Now I'd like to quickly discuss two Blackfoot
+            parsers created using the OLD morphological parser functionality.}
+        \note[item]<1>{They have identical morphologies and morpheme language models.}
+        \begin{itemize}
+            \item<2-> lexical items from standard dictionary (Frantz 1995)
+                \note[item]<2>{The lexica of these parsers are the morphemes
+                    present in the standard dictionary of the language, Frantz
+                    and Russell's Blackfoot Dictionary of Stems, Roots, and
+                    Affixes.}
+            \item<3-> morphotactic rules extracted from 3,414 well analyzed
+                words types (BLA OLD)
+                \note[item]<3>{The morphotactic rules, that is, the set of
+                    category and delimiter sequences that correspond to valid
+                    words of the language, were extracted from the 3,414 well
+                    analyzed word types in the Blackfoot OLD. Well analyzed
+                    words are those with fieldworker-created morphological
+                    analyses such that all of the morphemes used have lexical
+                    entries in the database.}
+            \item<4-> morpheme LM estimated from 3,425 gold standard well
+                analyzed words (BLA OLD)
+                \note[item]<4>{The morpheme language models were estimated
+                    based on counts from the set of well analyzed words in the
+                    database such that a single best analysis can be
+                    identified. This is the gold standard used for both LM creation
+                    and evaluation. Each parser was created five times with a
+                    different randomly sampled 90\% training set and overall
+                    parser performance was tested against the corresponding
+                    10\% test set.}
+        \end{itemize}
+    \item<5->Parser 1: phonological rules and allomorphic alternations from
+        grammar (Frantz 1997)
+        \note[item]<5>{The two parsers differ in their phonologies. Parser 1
+            has a phonology which implements, as faithfully as I could manage,
+            the general phonological rules of the grammar and the lexically
+            conditioned allomorphic alternations described in that same text.}
+    \item<6->Parser 2: Parser 1's phonology with length and prominence
+        contrasts removed during generation; massively over-analyzes
+        \note[item]<6>{Parser 2 is an attempt to improve on Parser 1 by
+            modifying the phonology so that it recognizes many more surface
+            forms. During generation, this phonology maps long segments to
+            their short counterparts and de-accents accented characters.
+            Orthographically transcribed words must be de-accented and
+            de-lengthened prior to parsing attempts.}
+\end{itemize}
+\end{frame}
+
+%6,592 well analyzed word tokens
+%3,414 well analyzed word types
+%3,425 well gold standard well analyzed word types
+
+
+\begin{frame}
+\frametitle{Blackfoot Parser \char"2012{} Results}
+\begin{table}[t]
+\centering
+\footnotesize
+\begin{tabular}{llllllll}
+\toprule
+parser & succ. & F-score & prec. & rec. & phon. & morphon. & LM \\
+\midrule
+1      & 0.14       & 0.32    & 0.53      & 0.23   & 0.21      & 0.20    & 0.72 \\
+2      & 0.17       & 0.40    & 0.40      & 0.39   & 0.60      & 0.60    & 0.28 \\
+\bottomrule
+\end{tabular}
+\normalsize
+\caption{Blackfoot OLD morphological parser results.}
+\label{tab:p2-results}
+\end{table}
+
+\note[item]<1>{This table summarizes the results of evaluating these parsers.}
+\note[item]<1>{While neither has a very impressive overall success rate---14\% and
+    17\%, respectively---their F-scores show that they will be practical in
+    expediting the creation of IGT representations. With a GUI that presents
+    a ranked list of parses during data entry, fieldworker-contributors will
+    be able to edit auto-generated parses that contain, roughly and on average,
+    half of the correct morphemes.}
+\note[item]<1>{Also, the morphophonology transducer of Parser 2 is 60\%
+    accurate, meaning that 60\% of the time the correct analysis is in the
+    candidate set that it returns.  Therefore users could scroll through the
+    ranked list of candidates and choose the correct one; which would be faster
+    than typing it out manually.}
+\note[item]<2>{The phonology of Parser 1 has a 21\% success rate while that of
+    Parser 2 has a 60\% success rate. There are two primary explanations for
+    the poor performance of Parser 1's phonology, i.e., that which is faithful
+    to the grammar. First, the grammar's phonology does not account for
+    non-lexical prominence, i.e., accenting. Second, there is a lot of
+    inconsistency in terms of orthographic transcription in this
+    multi-contributor data set.}
+\note[item]<3>{It is interesting that the phonology of Parser 2 performs so much
+    better yet the gains in overall parse rate and F-score are not as
+    significant. Parser 2 essentially puts a far greater burden on the language
+    model, a burden which is too much for an LM based on counts from an extremely 
+    small corpus of 3,400 words. Parser 2's morphophonology transducer produces
+    approximately 1,800 analysis candidates per input word. As more well
+    analyzed words are added to the database with the aid of the parsers, the
+    LM will improve and, as a result, so too will the parser as a whole.}
+\note[item]<4>{Of course, another means of improving overall performance would
+    be to improve the performance of the phonology without causing it to 
+    massively overgenerate during analysis and put such a burden on the LM,
+    that is, by using fieldworker knowledge to write a phonology that can
+    predict the location of accented vowels. This is in the works.}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{OLD Morphological Parsers \char"2012{} Discussion}
+
+OLD parsers exemplify a particular set of principles for guiding
+computationally-assisted endangered languages fieldwork:
+\note[item]<1>{The OLD approach to creating morphological parsers illustrates
+    some general strategies that I would like to advocate in terms of
+    computationally-assisted fieldwork on endangered languages.}
+
+\begin{itemize}
+    \item<2->exploit both fieldworker expertise and automated methods of
+        grammar induction
+        \note[item]<2>{We need systems that can both make use of the expertise
+            of the fieldworkers who are creating these data sets, while also
+            helping them to bootstrap the process with statistical and machine
+            learning techniques. This is interestingly different from NLP where
+            the overarching requirement would seem to be the production of
+            results with as little expert guidance as one can get away with.}
+        \note[item]<2>{By allowing fieldworkers real control over the
+            specification of models, we not only make use of that skill set, we
+            also make it easier for them to automate the testing of their
+            analyses, and thereby to improve those analyses.}
+        \note[item]<2>{At the same time, we should be forgiving, i.e., we
+            should not REQUIRE a complete mastery of components of the grammar
+            prior to the creation of useful features like automatic
+            morphological analyzers.}
+        \item<3->use familiar representations:
+            \begin{itemize}
+                \item yes: (nit-ihpiyi, 1-dance, agra-vai)
+                \item no: ihpiyi+1+SG+PST
+            \end{itemize}
+        \note[item]<3>{We should also create systems that make use of representations
+            that are familiar to fieldworkers. This has already been mentioned with
+            respect to SPE-style context-sensitive rewrite rules in the specification
+            of phonologies. Another example of this, however, can be seen in the
+            fact that OLD parsers return morphological analyses in IGT format, i.e.,
+        a morpheme segmentation line, a gloss line, and a category line.}
+    \item<4->allow for multiple models
+        \note[item]<4>{We need to also enable fieldworkers to implement different
+            models for different purposes. In some situations, prescriptive models
+            are needed such as orthographic parsers that can parse orthographic
+            transcriptions and which can be used, for example, in the creation of
+            spell-checkers. In other situations, descriptive models of various types
+            are needed. For example, speaker-, dialect-, and/or analysis-specific
+            models that can analyze and generate phonetic representations and which
+            can be used to test analyses and, for example, to create
+            pronunciation dictionaries for audio-to-text alignment tools.}
+\end{itemize}
+\end{frame}
+
+%facilitate the creation of practical parsers (forgiving)
+
+%are practical and forgiving
+%make use of existing fieldworker skills
+%make use of data in the system
+%are tailored to a specific purpose
+%facilitate automated analysis testing
+%are reusable: spell-checkers, pronunciation dictionaries,
+
+
+\section{The Take-Home}
+
+\begin{frame}
+\frametitle{Take Homes}
+%\begin{itemize}
+%\item High productivitiy requirements
+%\item All stakeholders All devices
+%\item Modular Web Services and Plugin Architecture 
+%\item Open Source, Open Development, Open Data 
+%\end{itemize}
 \note{Joel presents}
 \end{frame}
 
 \section*{(Team)}
 
 \begin{frame}
-\frametitle{Acknowledgements - მადლობა}
+\frametitle{Acknowledgements}
 
 
 Tobin Skinner, Elise McClay, Louisa Bielig, MaryEllen Cathcart, Theresa Deering, Yuliya Manyakina, Gretchen
@@ -617,12 +1119,19 @@ Turmanidze, Jason Smith, Martin Gausby, Pablo Duboue, Xianli Sun, James Crippen,
 Michael McAuliffe, Faryal
 Abbasi, Farah Abbasi, Tamila Paghava, Esma Chkhikvadze, Nina Gatenadze, and
 Mari Mgeladze, Jessica Coon, Alan Bale and Michael
-Wagner
+Wagner 
 ~\\
 ~\\
 SSHRC Connection Grant (\#611-2012-0001) \\
  SSHRC
-Standard Research Grant (\#410-2011-2401)
+Standard Research Grant (\#410-2011-2401) 
+\note{We would like to thank our linguistics student interns, computer science student interns and countless other open source software developers who directly or indirectly helped build LingSync/OLD to what it is today and will be in the future. \\
+~\\
+We would like to thank the ComputEL workshop reviewers, our users and would be users for providing feedback, suggestions, asking tough questions, and sending bug reports. \\
+~\\
+We would like to thank our language consultants for their friendship, patience and for sharing their language with us.\\
+~\\
+We would also like to thank the SSHRC council for explicitly supporting "open source approaches to knowledge mobilzation." }
 \end{frame}
 
 
@@ -666,6 +1175,8 @@ Standard Research Grant (\#410-2011-2401)
 %  \item Alan Yu, Ryan Bochnak, Katie Franich, OzgeSarigul, Peter Snyder, Christina Weaver, Juan Bueno-Holle, Matt Faytak, Eric Morley, and Alice Rhomieux. 2005. The Washo project. http://washo.uchicago. edu/dictionary/dictionary.php, January.
 %  \item AlanYu,RyanBochnak,KatieFranich,OzgeSarigul, Peter Snyder, Christina Weaver, Juan Bueno-Holle, Matt Faytak, Eric Morley, and Alice Rhomieux. 2008. The Washo mobile lexicon. http://washo. uchicago.edu/mobile/, January.
 \end{itemize}
+
+\note{Blank note.}
 \end{frame}
 
 
