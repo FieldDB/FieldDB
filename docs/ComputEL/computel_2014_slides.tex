@@ -266,9 +266,127 @@ with an overview of the two systems.}
 % COLLABORATION
 %===============================================================================
 
+% GC I added the other steps in the original slides now that we have latex diagrams... not sure if this helps but might be useful for the contextualization in the fieldwork section above instead of some of the text sldies?
 \begin{frame}
 \frametitle{Collaboration}
+\begin{figure}
+\begin{center}
+\begin{small}
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
+	  researcher/.style={thick,circle,fill=blue},
+	  speaker/.style={thick,circle,fill=red},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
+	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=red,very thick,font=\sffamily\footnotesize}]
 
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \node[researcher] (researchera) {field\\researcher};  \&  \& \node[researcher] (researcherb) {field\\researcher};\\
+	      \&  \node[speaker] (speaker) {speaker}; \\
+	    \node[researcher] (researcherc) {field\\researcher};  \&  \& \node[researcher] (researcherd) {field\\researcher};\\
+	  };
+	  \draw[to] (speaker) -- node[midway,right] {} (researchera);
+	  \draw[to] (speaker) -- node[midway,left] {} (researcherb);
+	  \draw[to] (speaker) -- node[midway,right] {} (researcherc);		  
+	  \draw[to] (speaker) -- node[midway,left] {} (researcherd);
+\end{tikzpicture}
+\end{small}
+\end{center}
+\end{figure}
+\label{fieldwork}
+\note{blank note.}
+\end{frame}
+
+% GC I added the other steps in the original slides now that we have latex diagrams... not sure if this helps but might be useful for the contextualization in the fieldwork section above instead of some of the text sldies?
+\begin{frame}
+\frametitle{Collaboration}
+\begin{figure}
+\begin{center}
+\begin{small}
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
+	  researcher/.style={thick,circle,fill=blue},
+	  speaker/.style={thick,circle,fill=red},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
+	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=red,very thick,font=\sffamily\footnotesize},
+	  togreen/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \node[researcher] (researchera) {field\\researcher};  \&  \& \node[researcher] (researcherb) {field\\researcher};\\
+	      \&  \node[speaker] (speaker) {speaker}; \\
+	    \node[researcher] (researcherd) {field\\researcher};  \&  \& \node[researcher] (researcherc) {field\\researcher};\\
+	  };
+	  \draw[to] (speaker) -- node[midway,right] {} (researchera);
+	  \draw[to] (speaker) -- node[midway,left] {} (researcherb);
+	  \draw[to] (speaker) -- node[midway,right] {} (researcherc);		  
+	  \draw[to] (speaker) -- node[midway,left] {} (researcherd);
+	  
+	  \draw[togreen] (researchera) -- node[midway,left] {} (researcherb);
+	  \draw[togreen] (researcherb) -- node[midway,right] {} (researcherc);		  
+	  \draw[togreen] (researcherc) -- node[midway,left] {} (researcherd);
+	  \draw[togreen] (researcherd) -- node[midway,right] {} (researchera);
+
+\end{tikzpicture}
+\end{small}
+\end{center}
+\end{figure}
+\label{fieldworkcollaboration}
+\note{blank note.}
+\end{frame}
+
+
+% GC I added the other steps in the original slides now that we have latex diagrams... not sure if this helps but might be useful for the contextualization in the fieldwork section above instead of some of the text sldies?
+\begin{frame}
+\frametitle{Collaboration}
+\begin{figure}
+\begin{center}
+\begin{small}
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
+	  researcher/.style={thick,circle,fill=blue},
+%	  fieldwork/.style={thick,regular polygon, regular polygon sides=4,fill=red},
+	  fieldwork/.style={thick,fill=red,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
+	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=red,very thick,font=\sffamily\footnotesize},
+	  togreen/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \node[researcher] (researchera) {field\\researcher};  \&  \& \node[researcher] (researcherb) {researcher};\\
+	      \&  \node[fieldwork] (fieldwork) {fieldwork}; \\
+	    \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
+	  };
+	  \draw[to] (fieldwork) -- node[midway,right] {} (researchera);
+	  \draw[to] (fieldwork) -- node[midway,left] {} (researcherb);
+	  \draw[to] (fieldwork) -- node[midway,right] {} (researcherc);		  
+	  \draw[to] (fieldwork) -- node[midway,left] {} (researcherd);
+	  
+	  \draw[togreen] (researchera) -- node[midway,left] {} (researcherb);
+	  \draw[togreen] (researcherb) -- node[midway,right] {} (revitalizer);		  
+	  \draw[togreen] (revitalizer) -- node[midway,left] {} (documenter);
+	  \draw[togreen] (documenter) -- node[midway,right] {} (researchera);
+
+\end{tikzpicture}
+\end{small}
+\end{center}
+\end{figure}
+\label{fieldworkexternalcollaboration}
+\note{blank note.}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Collaboration}
 \begin{figure}
 \begin{center}
 \begin{small}
@@ -283,7 +401,7 @@ with an overview of the two systems.}
 
 	  % Position the nodes using a matrix layout
 	  \matrix{
-	    \node[researcher] (researcher1) {researcher};  \&  \& \node[researcher] (researcher2) {researcher};\\
+	    \node[researcher] (researcher1) {field\\researcher};  \&  \& \node[researcher] (researcher2) {researcher};\\
 	      \&  \node[lingsync] (lingsyncold) {LingSync/OLD}; \\
 	    \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
 	  };
@@ -410,7 +528,8 @@ User productivity
   \draw (-2cm,0.5cm)  node[text=black] {Share/};
   \draw (2cm,0.5cm)  node[text=black] {Interlinear Glossing};
 
-  \draw (0,-.4cm)  node[text=red] {\tiny LingSync};
+  \draw (0,-.4cm)  node[text=red] {\tiny LingSync/};
+  \draw (0,-.6cm)  node[text=red] {\tiny OLD};
   \draw (-2cm,1cm)  node[text=blue] {Google Docs};
   \draw (-1.3cm,-1.3cm)  node[text=blue] {Google};
   \draw (-1.3cm,-1.7cm)  node[text=blue] {Spreadsheets};
@@ -455,8 +574,368 @@ User productivity
 \section[LingSync/OLD]{New models for data collection and management}
 \subsection{LingSync}\label{sec:lingsync}
 
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+\begin{frame}
+\frametitle{LingSync Architecture}
+\begin{figure}
+\begin{center}
+\begin{small}
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  authentication/.style={thick,fill=green,inner sep=0.3cm},
+	  activity/.style={thick,fill=yellow!70!blue,inner sep=0.3cm},
+	  search/.style={thick,fill=black!10!red,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	     \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    	    \node[parser] (parser) {morpho-\\syntax}; \&  \node[authentication] (authentication) {authentication}; \& \node[activity] (activity) {activity};\\
+		    \& \node[search] (search) {search};\\
+	    };
+\end{tikzpicture}
+\end{small}
+\label{lingsync:webservices}
+\end{center}
+\end{figure}
+\note{LingSync has many web services}
+\end{frame}
 
 
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+\begin{frame}
+\frametitle{LingSync Architecture}
+\begin{figure}
+\begin{center}
+\begin{small}
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  activity/.style={thick,fill=green,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	  \node[researcher] (importexport) {Import\\Export}; \& \node[researcher] (lexbrowser) {Lexicon\\Browser};  \& \node[documenter] (corpuspages) {Public\\URLs}; \& \node[revitalizer] (asr) {Android\\ASR};\\
+	   \node[researcher] (mapreduce) {Map\\Reduce}; \& \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn X};  \\
+	  };
+
+\end{tikzpicture}
+\end{small}
+\label{lingsync:uis}
+\end{center}
+\end{figure}
+\note{And many user interfaces for different stakeholders in mobile and desktop contexts}
+\end{frame}
+
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+\begin{frame}
+\frametitle{LingSync Architecture}
+\begin{figure}
+\begin{center}
+\begin{small}
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  activity/.style={thick,fill=green,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
+	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+	  };
+
+\end{tikzpicture}
+\end{small}
+\label{lingsync:architecture}
+\end{center}
+\end{figure}
+\note{Lets look how the core web services and user interfaces}
+\end{frame}
+
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+\begin{frame}
+\frametitle{LingSync Architecture}
+\begin{figure}
+\begin{center}
+\begin{small}
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  activity/.style={thick,fill=green,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
+	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+% Actually there are more UIs:
+%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
+	  };
+
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
+	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
+	  \draw[to] (lexicon) -- node[midway] {} (parser);
+	  \draw[to] (corpus) -- node[midway] {} (parser);
+	  \draw[to] (parser) -- node[midway,right] {} (prototype);
+	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
+%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
+	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
+\end{tikzpicture}
+\end{small}
+\label{lingsync:architecture}
+\end{center}
+\end{figure}
+\note{ are connected}
+\end{frame}
+
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+\begin{frame}
+\frametitle{LingSync Architecture}
+\begin{figure}
+\begin{center}
+\begin{tabular}{lll}
+* many platforms \\
+\end{tabular}
+\begin{small}
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  activity/.style={thick,fill=green,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
+	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+% Actually there are more UIs:
+%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
+	  };
+
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
+	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
+	  \draw[to] (lexicon) -- node[midway] {} (parser);
+	  \draw[to] (corpus) -- node[midway] {} (parser);
+	  \draw[to] (parser) -- node[midway,right] {} (prototype);
+	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
+%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
+	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
+\end{tikzpicture}
+\end{small}
+\label{lingsync:architecture}
+\end{center}
+\end{figure}
+\note{to serve many platforms}
+\end{frame}
+
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+\begin{frame}
+\frametitle{LingSync Architecture}
+\begin{figure}
+\begin{center}
+\begin{tabular}{lll}
+* many platforms  & * online/offline \\
+\end{tabular}
+\begin{small}
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  activity/.style={thick,fill=green,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
+	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+% Actually there are more UIs:
+%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
+	  };
+
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
+	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
+	  \draw[to] (lexicon) -- node[midway] {} (parser);
+	  \draw[to] (corpus) -- node[midway] {} (parser);
+	  \draw[to] (parser) -- node[midway,right] {} (prototype);
+	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
+%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
+	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
+\end{tikzpicture}
+\end{small}
+\label{lingsync:architecture}
+\end{center}
+\end{figure}
+\note{in online, offline and low bandwidth situations}
+\end{frame}
+
+
+
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+\begin{frame}
+\frametitle{LingSync Architecture}
+\begin{figure}
+\begin{center}
+\begin{tabular}{lll}
+* many platforms  & * online/offline \\
+* many purposes
+\end{tabular}
+\begin{small}
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  activity/.style={thick,fill=green,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
+	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+% Actually there are more UIs:
+%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
+	  };
+
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
+	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
+	  \draw[to] (lexicon) -- node[midway] {} (parser);
+	  \draw[to] (corpus) -- node[midway] {} (parser);
+	  \draw[to] (parser) -- node[midway,right] {} (prototype);
+	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
+%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
+	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
+\end{tikzpicture}
+\end{small}
+\label{lingsync:architecture}
+\end{center}
+\end{figure}
+\note{letting the corpus grow for many purposes}
+\end{frame}
+
+
+% GC I added some more frames from the why lingsync slides, you can comment them out if you want
 \begin{frame}
 \frametitle{LingSync Architecture}
 \begin{figure}
@@ -513,7 +992,7 @@ User productivity
 \label{lingsync:architecture}
 \end{center}
 \end{figure}
-\note{Joel presents}
+\note{the architecture is modular and extendable}
 \end{frame}
 
 
