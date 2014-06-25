@@ -5,7 +5,7 @@
 
 \usepackage{pgf}
 \usepackage{tikz}
-\usetikzlibrary{shapes,shapes.geometric,arrows,fit,calc,positioning,automata,}
+\usetikzlibrary{shapes,shapes.geometric,arrows,fit,calc,positioning,decorations.markings}
 
 \usepackage{url}
 \usepackage{latexsym}
@@ -278,6 +278,13 @@ User productivity
 \end{tabular}
 \begin{center}
 \begin{small}
+
+\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   1 with {\arrow[thick,green]{ triangle 60}}},
+   double distance=4pt, shorten >= 8pt,
+   preaction = {decorate},
+   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+
 \begin{tikzpicture}[
 	  every node/.style={align=center,text=white,draw=none},
 	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
