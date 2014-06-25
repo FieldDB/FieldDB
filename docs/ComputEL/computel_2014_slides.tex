@@ -243,8 +243,49 @@ User productivity
 \frametitle{LingSync Architecture - არქიტექტურა}
 %TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
+\begin{tabular}{lll}
+* many platforms & * online/offline\\
+* many purposes & * extendable
+\end{tabular}
 \begin{center}
-\includegraphics[width=3in]{../figures/architecture}
+\begin{small}
+\begin{tikzpicture}[
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  audio/.style={thick,fill=pink,inner sep=0.3cm},
+	  corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  lexicon/.style={thick,fill=purple,inner sep=0.3cm},
+	  parser/.style={thick,fill=magenta,inner sep=0.3cm},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=gray!50, inner sep=0cm},
+	  researcher/.style={thick,circle,fill=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    \node[parser] (parser) {morpho-\\syntax}; \& \& \& \\
+	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+% Actually there are more UIs:
+%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
+	  };
+
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
+	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
+	  \draw[to] (lexicon) -- node[midway] {} (parser);
+	  \draw[to] (corpus) -- node[midway] {} (parser);
+	  \draw[to] (parser) -- node[midway,right] {} (prototype);
+	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
+	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
+%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
+	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
+	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
+\end{tikzpicture}
+\end{small}
 \label{lingsync:architecture}
 \end{center}
 \end{figure}
