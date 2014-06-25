@@ -206,12 +206,41 @@ User productivity
 \begin{frame}
 \frametitle{Existing Software - არსებული აპლიკაცია}
 
-%TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
 \begin{center}
-\includegraphics[width=3in]{../figures/other_software_sets}
-\label{othersoftware}
+\def\firstcircle{(0:-2cm) circle (2.5cm)}
+\def\secondcircle{(0:2cm) circle (2.5cm)}
+\def\thirdcircle{(0,-2.5cm) circle (2.5cm)} 
+\begin{small}
+\begin{tikzpicture}
+  \draw \firstcircle node {Collaborate};
+  \draw \secondcircle node {Features};
+  \draw \thirdcircle node {Structure};
+  
+  \draw (-2cm,0.5cm)  node[text=black] {Share/};
+  \draw (2cm,0.5cm)  node[text=black] {Interlinear Glossing};
+
+  \draw (0,-.4cm)  node[text=red] {\tiny LingSync};
+  \draw (-2cm,1cm)  node[text=blue] {Google Docs};
+  \draw (-1.3cm,-1.3cm)  node[text=blue] {Google};
+  \draw (-1.3cm,-1.7cm)  node[text=blue] {Spreadsheets};
+%  \draw (0,-3cm)  node[text=blue] {\tiny Desktop Database Apps};
+  \draw (0,-3.5cm)  node[text=blue] {MS Access};
+  \draw (0,-4cm)  node[text=blue] {FileMaker Pro};
+%  \draw (0,-4cm)  node[text=blue] {\tiny Desktop Spreadsheet };
+  \draw (0,-4.5cm)  node[text=blue] {MS Excel};
+
+  \draw (0.8cm,-1cm)  node[text=blue] {FLEx};
+  \draw (1.5cm,-1.5cm)  node[text=blue] {Toolbox};
+  \draw (1.2cm,-2cm)  node[text=blue] {ELAN};
+
+  \draw (4cm,-2cm)  node[text=blue] { \LaTeX};
+  \draw (4cm,-3cm)  node[text=blue] {MS Word};
+
+\end{tikzpicture}
+\end{small}
 \end{center}
+\label{othersoftware}
 \end{figure}
 
 \note{Joel presents}
@@ -293,65 +322,64 @@ User productivity
 \end{frame}
 
 
+%\begin{frame}
+%\frametitle{Corpora - კორპუსები}
+%
+%\begin{figure}
+%\begin{center}
+%
+%\begin{small}
+%\begin{tikzpicture}[
+%	  every node/.style={align=center,text=white,draw=none},
+%	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.2cm},
+%	  corpus/.style={thick,draw,fill=red,inner sep=0.3cm},
+%	  versionedcorpus/.style={draw,thick,fill=red,inner sep=0.4cm},
+%	  publiccorpus/.style={thick,fill=purple,inner sep=0.4cm},
+%	  parser/.style={thick,fill=magenta,inner sep=0.3cm},
+%	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=gray!50, inner sep=0cm},
+%	  researcher/.style={thick,circle,fill=blue},
+%	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+%	  to/.style={->,>=stealth',shorten >=1pt,text=black,semithick,font=\sffamily\footnotesize},
+%	  permissionread/.style={->,>=stealth',shorten >=1pt,text=black,draw=black,very thick,font=\sffamily\footnotesize},
+%	  permissionwrite/.style={<->,>=stealth',shorten >=1pt,draw=black,very thick,font=\sffamily\footnotesize,text=black},
+%	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+%
+%	  % Position the nodes using a matrix layout
+%	  \matrix{
+%	   \node[text=black](encrypted) {encrypted bits}; \&  \node[text=black](versioning) {versioning}; \& \\
+%	    \node[corpus] (corpus1) {LingSync\\Corpus};  \&   \node[versionedcorpus] (versionedcorpus) {LingSync\\Corpus};  \node[corpus] (corpus2) {Corpus$_{v2}$};  \& \node[publiccorpus] (corpuspublic) {Public\\~\\~\\~};  \node[corpus] (corpus3) {Corpus};  \\
+%	    \&\\
+%	     \node[researcher] (fieldworker) {User};  \&  \node[researcher] (collab) {User}; \& \node[researcher] (speaker) {User};\\
+%	     \&\\
+%	     \node[corpus] (corpus4) {My Other\\Corpus}; \\
+%	  };
+%	  \draw[twoway] (corpus1) -- node[midway,right] {} (fieldworker);
+%	  \draw[twoway] (corpus4) -- node[midway,right] {} (fieldworker);zr
+%	  \draw[twoway] (corpus2) -- node[midway,right] {} (collab);
+%	  \draw[twoway] (corpus3) -- node[midway,right] {} (speaker);
+%	  
+%	  \draw[permissionread] (corpus1) -- node[midway,left,text=black] {read/comment} (collab);
+%	  \draw[permissionwrite] (corpus1) -- node[midway,right,text=black] {read/write} (speaker);
+%
+%	  \draw[to] (corpus1) -- node[midway,left] {} (encrypted);
+%	  \draw[to] (encrypted) -- node[midway,right] {} (corpus1);
+%	  
+%	  \draw[to] (corpus2) -- node[right] {} (versioning);
+%	  \draw[to] (versioning) -- node[left] {} (versionedcorpus);
+%
+%\end{tikzpicture}
+%\end{small}
+%\end{center}
+%\label{lingsync:corpora}
+%\end{figure}
+%\note{Joel presents}
+%\end{frame}
+
+
 \begin{frame}
 \frametitle{Corpora - კორპუსები}
 
-%TODO will convert into latex diagrams once we are sure we want it.
-\begin{figure}
-\begin{center}
-
-\begin{small}
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.2cm},
-	  corpus/.style={thick,draw,fill=red,inner sep=0.3cm},
-	  versionedcorpus/.style={draw,thick,fill=red,inner sep=0.4cm},
-	  publiccorpus/.style={thick,fill=purple,inner sep=0.4cm},
-	  parser/.style={thick,fill=magenta,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=gray!50, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=blue},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,text=black,semithick,font=\sffamily\footnotesize},
-	  permissionread/.style={->,>=stealth',shorten >=1pt,text=black,draw=black,very thick,font=\sffamily\footnotesize},
-	  permissionwrite/.style={<->,>=stealth',shorten >=1pt,draw=black,very thick,font=\sffamily\footnotesize,text=black},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	   \node[text=black](encrypted) {encrypted bits}; \&  \node[text=black](versioning) {versioning}; \& \\
-	    \node[corpus] (corpus1) {LingSync\\Corpus};  \&   \node[versionedcorpus] (versionedcorpus) {LingSync\\Corpus};  \node[corpus] (corpus2) {Corpus$_{v2}$};  \& \node[publiccorpus] (corpuspublic) {Public\\~\\~\\~};  \node[corpus] (corpus3) {Corpus};  \\
-	    \&\\
-	     \node[researcher] (fieldworker) {User};  \&  \node[researcher] (collab) {User}; \& \node[researcher] (speaker) {User};\\
-	     \&\\
-	     \node[corpus] (corpus4) {My Other\\Corpus}; \\
-	  };
-	  \draw[twoway] (corpus1) -- node[midway,right] {} (fieldworker);
-	  \draw[twoway] (corpus4) -- node[midway,right] {} (fieldworker);
-	  \draw[twoway] (corpus2) -- node[midway,right] {} (collab);
-	  \draw[twoway] (corpus3) -- node[midway,right] {} (speaker);
-	  
-	  \draw[permissionread] (corpus1) -- node[midway,left,text=black] {read/comment} (collab);
-	  \draw[permissionwrite] (corpus1) -- node[midway,right,text=black] {read/write} (speaker);
-
-	  \draw[to] (corpus1) -- node[midway,left] {} (encrypted);
-	  \draw[to] (encrypted) -- node[midway,right] {} (corpus1);
-	  
-	  \draw[to] (corpus2) -- node[right] {} (versioning);
-	  \draw[to] (versioning) -- node[left] {} (versionedcorpus);
-
-\end{tikzpicture}
-\end{small}
-\end{center}
-\label{lingsync:corpora}
-\end{figure}
-\note{Joel presents}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Corpora - კორპუსები}
-
-%TODO will convert into latex diagrams once we are sure we want it.
+%TODO diagram is above but not finished
 \begin{figure}
 \begin{center}
 \includegraphics[width=3in]{../figures/corpora}
