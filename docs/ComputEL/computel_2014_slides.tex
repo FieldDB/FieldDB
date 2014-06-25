@@ -285,6 +285,7 @@ User productivity
 	  corpus/.style={thick,fill=red,inner sep=0.3cm},
 	  lexicon/.style={thick,fill=purple,inner sep=0.3cm},
 	  parser/.style={thick,fill=magenta,inner sep=0.3cm},
+	  activity/.style={thick,fill=green,inner sep=0.3cm},
 	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=gray!50, inner sep=0cm},
 	  researcher/.style={thick,circle,fill=black},
 	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
@@ -294,7 +295,7 @@ User productivity
 	  % Position the nodes using a matrix layout
 	  \matrix{
 	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    \node[parser] (parser) {morpho-\\syntax}; \& \& \& \\
+	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
 	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
 % Actually there are more UIs:
 %	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
