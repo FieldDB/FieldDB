@@ -1,5 +1,5 @@
 \documentclass{beamer}
-%\setbeameroption{show notes}
+\setbeameroption{show notes}
 %\setbeameroption{show only notes}
 %\setbeameroption{show notes on second screen} % My version of beamer must be too old for this option...
 \usetheme{PaloAlto}
@@ -787,10 +787,22 @@ activities; Investigating users: 100-10 activities.}
 %\end{frame}
 
 
+
+
+\begin{frame}
+\frametitle{Plugins}
+\begin{itemize}
+  \item Audio
+  \item Lexicon
+\end{itemize}
+
+\note{In this section I will show some screenshots of a couple of our more interesting plugins for~\\~ \\audio processing and\\lexicon visualization.}
+\end{frame}
+
 \subsubsection[ASR]{Speech Recognition for Information Retrieval}
 
 \begin{frame}
-\frametitle{Android Speech Recognition}
+\frametitle{Kartuli Speech Recognizer}
 \begin{figure}
 \begin{center}
 \includegraphics[width=3in]{../../figures/kartuli_speech_recognition}
@@ -799,7 +811,7 @@ activities; Investigating users: 100-10 activities.}
 \end{center}
 \end{figure}
 
-\note{Gina presents}
+\note{The Android speech recognition app is an app which is available on Google play for Kartuli speakers. It was built last semester while I was in the field in Batumi. The app uses the Learn X interface to permit users to read sentences and train it to to their voice. The sentences the users say become datum in their private corpus which is in turn used to re-train their own personal language model. The users are given the option to add more examples, and delete examples of what was recognized. If you would like to see it in action you can download it from the Play store, (search for Kartuli speech recognizer) or come see us at the demos later. We have built baseline models for Kartuli but the app can be used for any language. Of course, the app is experimental and probably wont deliver very good results but we are hoping by letting users import their sms or texts the app will be come personalized enough to recognize their own speech. }
 \end{frame}
 
 
@@ -846,7 +858,9 @@ declarative knowledge not found in the lexicon training process.}
 \end{center}
 \end{figure}
 
-\note{Gina presents}
+\note{Here are two lexicon visualizations we have so far. The first lets you see precendecnce order of morphemes in your corpus in a connected graph where the node on the left is the beginning of the word and the node ont he right is the end of the word. You can also choose not to plot the end nodes, and then you can see if the corpus has a focus on one morpheme. This data here is from M.E. Cathcart's dissertation Impulsatives, the syntax of desire (available on GitHub) about the interactions of the morpheme's -naya and -ta in Cusco Quechua. \\
+
+The second visualization is a word cloud visualization that Josh built using Jason Davie's D3 word cloud engine. Unlike Wordle, it runs in Javascript (not a Java applet) and so it works on iPads, Androids and all browsers. It also supports the full unicode character set, and we added some logic for automatic detection of function words (stop words) and a user interface for our language consultants to use the word cloud to enter head words. segmentation, gloss or other lexical information which causes the cloud to be come more representative of the document as it is cleaned. The app is on Google Play and on the Chrome Store search for iLanguage Cloud or come see us at the demos.}
 \end{frame}
 
 %\end{comment}
