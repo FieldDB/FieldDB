@@ -1,5 +1,5 @@
 \documentclass{beamer}
-\setbeameroption{show notes}
+%\setbeameroption{show notes}
 %\setbeameroption{show only notes}
 %\setbeameroption{show notes on second screen} % My version of beamer must be too old for this option...
 \usetheme{PaloAlto}
@@ -180,7 +180,7 @@ with an overview of the two systems.}
     a significant portion of the world's languages are predicted to be extinct,
     or "sleeping" to use a more optimistic jargon, in the very near future.}
 \note[item]{Linguistic diversity and language vitality are valuable from a
-    number of perspectives. For those who might be sceptical of a strong link
+    number of perspectives. For those who might be skeptical of a strong link
     between language vitality and social well-being, the Hallett et al. (2007)
     reference may be interesting: it describes a study which finds a
     correlation between higher levels of Aboriginal language use in British
@@ -202,7 +202,7 @@ with an overview of the two systems.}
         \note[item]<1>{There are a number of ongoing debates that are relevant
             here.}
         \note[item]<1>{First, there is some disagreement over how we should
-            approach the urgent problem of language endangerement.}
+            approach the urgent problem of language endangerment.}
         \begin{itemize}
             \item<2->Less description, more documentation, more recording, more
                 community involvement! (Woodbury 2003, Bird et al. 2014)
@@ -220,7 +220,7 @@ with an overview of the two systems.}
                 \note[item]<4>{There is a related debate over the role of
                     theoretical linguistic analysis here, with some typologists
                     advocating a descriptive approach and theoretical linguists
-                    responding in defense of a hypothesis-driven approach and its
+                    responding in defence of a hypothesis-driven approach and its
                     attendant elicitation methods---i.e., translation from the metalanguage
                     and the gathering of grammaticality judgments---that are controversial
                     to some. In a recent paper in support of the theoretical
@@ -242,7 +242,7 @@ with an overview of the two systems.}
             \item<7->Lone wolf linguistics is not necessarily unethical linguistics (Crippen \& Robinson 2013)
                 \note[item]<7>{Others point out that, for a variety of reasons,
                     this is not always possible or desirable. The contexts of language
-                    endangerement are themselves diverse. Not all communities desire or
+                    endangerment are themselves diverse. Not all communities desire or
                     are genuinely committed to documentation or revitalization. Not all
                     communities need or desire the help of academic fieldworkers. In some
                     cases, the political landscape of an endangered language
@@ -393,7 +393,7 @@ Inclusion of stakeholders
     software should be useful to linguists with various types of expertise and
     agendas (e.g., theoretical, typological, historical, computational), to
     other types of academic researchers (e.g., to anthropologists), to
-    interested community members, and to fieldworkers enganged in
+    interested community members, and to fieldworkers engaged in
     community-based documentation, education, and revitalization projects.}
 
 
@@ -446,7 +446,8 @@ User productivity
   \draw \thirdcircle node {Structure};
 
   \draw (-2cm,0.5cm)  node[text=black] {Share/};
-  \draw (2cm,0.5cm)  node[text=black] {Interlinear Glossing};
+  %\draw (2cm,0.5cm)  node[text=black] {Interlinear Glossing};
+  \draw (2cm,0.5cm)  node[text=black] {Fieldwork};
 
   \draw (0,-.4cm)  node[text=red] {\tiny LingSync};
   \draw (-2cm,1cm)  node[text=blue] {Google Docs};
@@ -485,7 +486,7 @@ User productivity
     programmatic interaction.}
 \note[item]{Like FLEx, Toolbox, and ELAN, LingSync and the OLD provide features
     specifically designed to facilitate fieldwork tasks. Examples include
-    presentation of data in IGT format, grammar modeling and automated
+    presentation of data in IGT format, grammar modelling and automated
     morphological parsing, and export to formats used in linguistics.}
 \note[item]{Finally, like web applications such as Google Spreadsheets, LingSync
     and the OLD allow multiple contributors to share data and perform fieldwork
@@ -613,37 +614,39 @@ User productivity
 \label{lingsync:corpora}
 \end{center}
 \end{figure}
-\note[item]{This next diagram depicts LingSync corpora.}
-\note[item]{A fieldworker can create any number of corpora. A fieldworker
+
+\note[item]<1>{This next diagram depicts LingSync corpora.}
+\note[item]<1>{A fieldworker can create any number of corpora. A fieldworker
     may grant access at various levels to any one of his/her corpora. A
     corpus may also be made public so that it can be accessed without
     password-based authentication.}
-\note[item]{Portions of a corpus can be encrypted at a fine-grained level
+\note[item]<1>{Portions of a corpus can be encrypted at a fine-grained level
     if that kind of control over access is required.}
-\note[item]{Finally, LingSync implements version control, meaning that all
+\note[item]<1>{Finally, LingSync implements version control, meaning that all
     states are saved prior to modification and changes can be undone. Clearly,
     this is an important feature in the context of collaborative data creation.}
+
+\note[item]<2>{The OLD architecture is similar to that of LingSync in many respects}
+\note[item]<2>{Without going into too much detail, the major architectural
+    difference between the two systems is that in a language-specific OLD application users
+    contribute to a single repository of language data to which all other users, by default,
+    have access; in contrast, LingSync, as mentioned above, assumes allows users
+    to create private corpora that they can grant various levels of access to.
+    %Essentially, the OLD assumes more data-sharing from the offset while LingSync assumes
+    % smaller teams of collaborators who can open subsets of their data as desired.
+}
 
 \end{frame}
 
 \subsection{OLD}\label{sec:old}
 
-\begin{frame}
-%TODO Joel insert diagram about the OLD architecture here.
-\note[item]{The OLD is a web service with a RESTful API and a browser-based GUI}
-\note[item]{While similar to LingSync in many respects, the major architectural
-    difference between the two systems is that the OLD assumes that users will
-    be contributing to a single repository of language data on a given
-    language; in contrast, LingSync, as mentioned above, assumes allows users
-    to create private corpora that they can grant various levels of access to.}
-\end{frame}
 
 %\subsection{LingSync/OLD}
 
 \subsection{Generality in Data Structure}\label{sec:generality}
 
 \begin{frame}
-\frametitle{Generalty in data structure}
+\frametitle{Generality in data structure}
 \begin{itemize}
     \item FLEx, Toolbox, etc.
         \begin{itemize}
@@ -668,7 +671,7 @@ User productivity
     words, or morphemes.}
 \note[item]<1>{Texts, corpora, and records of elicitation sessions can then be
     constructed as (possibly ordered) sets of these data points.}
-\note[item]<1>{Similarily, grammars can be created as texts which embed via reference
+\note[item]<1>{Similarly, grammars can be created as texts which embed via reference
     these data points. And dictionaries could be constructed from these units as
     well.}
 \note[item]<2>{This contrasts with the data structures that underpin FLEx and
@@ -796,7 +799,7 @@ activities; Investigating users: 100-10 activities.}
   \item Lexicon
 \end{itemize}
 
-\note{In this section I will show some screenshots of a couple of our more interesting plugins for~\\~ \\audio processing and\\lexicon visualization. For other plugins and modules that can be re-used outside of lingsync see our GitHub or search for LingSync on YouTube.}
+\note{In this section I will show some screenshots of a couple of our more interesting plugins for~\\~ \\audio processing and\\lexicon visualization.}
 \end{frame}
 
 \subsubsection[ASR]{Speech Recognition for Information Retrieval}
@@ -810,18 +813,12 @@ activities; Investigating users: 100-10 activities.}
 \label{speech_recognition_screenshot}
 \end{center}
 \end{figure}
-
-\note{The Android speech recognition app is an app which is available on Google play for Kartuli speakers. \\
-
-It was built last semester while I was in the field in Batumi.
-
-The app uses the Learn X interface to permit users to train it to to their voice and vocabulary.
-
-The sentences the users say become datum in their private corpus which is in turn used to re-train their own personal language model.
-
-If you would like to see it in action you can download it from the Play store, (search for Kartuli speech recognizer) or come see us at the demos later.
-
-We dont expect recognition rates better than 10\% but we are hoping by letting users import their SMS or other text on their Android it will be come personalized enough to recognize their own speech in limited contexts such as SMS messages. }
+\note[item]{The Android speech recognition app is an app which is available on Google play for Kartuli speakers.}
+\note[item]{It was built last semester while I was in the field in Batumi.}
+\note[item]{The app uses the Learn X interface to permit users to train it to to their voice and vocabulary.}
+\note[item]{The sentences the users say become datum in their private corpus which is in turn used to re-train their own personal language model.}
+\note[item]{If you would like to see it in action you can download it from the Play store, (search for Kartuli speech recognizer) or come see us at the demos later.}
+\note[item]{We dont expect recognition rates better than 10\% but we are hoping by letting users import their SMS or other text on their Android it will be come personalized enough to recognize their own speech in limited contexts such as SMS messages. }
 \end{frame}
 
 
@@ -899,8 +896,8 @@ Goals
     language which is from the Algonquian language family and which is spoken
     in Alberta, Canada and Montana, USA.}
 \note[item]{This portion of our presentation should segue nicely into the next talk
-    which discusses a similar but interestingly different approach to modeling
-    the morphology and phonology of another Algonquian language: Plains Cree.}
+    which discusses a similar but interestingly different approach to modelling
+    the morphology and phonology of another endangered Algonquian language: Plains Cree.}
 \end{frame}
 
 
@@ -917,7 +914,7 @@ Requirements (fieldworkers should be able to):
                     morphological parsers that are practical and forgiving.  By
                     \textit{practical} I mean that they should be able to
                     suggest correct, or largely correct, word analyses during
-                    data entry. (High recall.) By \textit{forgiving} I mean that I want
+                    data entry. By \textit{forgiving} I mean that I want
                     fieldworkers to be able to create parsers without first
                     having a full and perfect analysis of the morphophonology
                     of their language of study.}
@@ -928,7 +925,7 @@ Requirements (fieldworkers should be able to):
                     be required to first learn wholly unfamiliar formalisms.}
             \item<3->make use of data in the system
                 \note[item]<3>{Fieldworkers should be able to build parsers
-                    using the expertly analyzed data that already exist in ther
+                    using the expertly analyzed data that already exist in their
                     databases; for example, morphologically analyzed words in
                     IGT format and categorized and phonemically transcribed
                     lexical entries.}
