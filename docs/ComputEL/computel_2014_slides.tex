@@ -1,7 +1,7 @@
 \documentclass{beamer}
-\setbeameroption{show notes}
+%\setbeameroption{show notes}
 %\setbeameroption{show only notes}
-%\setbeameroption{show notes on second screen} % My version of beamer must be too old for this version...
+%\setbeameroption{show notes on second screen} % My version of beamer must be too old for this option...
 \usetheme{PaloAlto}
 
 \usepackage{fontspec}
@@ -127,7 +127,7 @@
 \setbeamertemplate{sidebar left}{}
 \begin{frame}
 \titlepage
-\note{Hello everyone. My name is Joel Dunham and this is Gina}
+\note{Hello everyone. My name is Joel and this is Gina.}
 \note[item]{We are here to talk to you today about LingSync and the
 Online Linguistic Database.}
 \note[item]{These are open source web-based tools that facilitate fieldwork
@@ -136,7 +136,7 @@ Online Linguistic Database.}
 with an overview of the two systems.}
 \note[item]{However, we are at a transition point since we are beginning to
     merge these two tools under the LingSync name and are very interested in
-    getting feedback on our approach from you, our learned peers, who have 
+    getting feedback on our approach from you, our learned peers, who have
     thought much about these issues; in general, we're very excited to be here
     to be part of the discussion about how computational tools and
     computational linguistic advances can benefit fieldwork on endangered
@@ -178,17 +178,16 @@ with an overview of the two systems.}
 \end{itemize}
 \note[item]{So, it hardly needs to be stated that we are in a situation where
     a significant portion of the world's languages are predicted to be extinct,
-    or "sleeping" to use the jargon of more optimistic commentators, in the
-    very near future.}
+    or "sleeping" to use a more optimistic jargon, in the very near future.}
 \note[item]{Linguistic diversity and language vitality are valuable from a
-    number of perspectives. For those who might be sceptical of the value of
-    language vitality to social wellbeing, the Hallett et al. (2007) reference
-    here is to a study which finds a correlation between higher levels of
-    Aboriginal language use in British Columbia First Nations bands and lower
-    youth suicide rates.}
+    number of perspectives. For those who might be sceptical of a strong link
+    between language vitality and social well-being, the Hallett et al. (2007)
+    reference may be interesting: it describes a study which finds a
+    correlation between higher levels of Aboriginal language use in British
+    Columbia First Nations bands and lower youth suicide rates.}
 \note[item]{And clearly we're all here because we think that computational
     approaches can contribute in interesting and useful ways to the
-    documentation, study, and revitalization of these endangered languages.}
+    documentation, study, and/or revitalization of endangered languages.}
 
 \end{frame}
 
@@ -210,23 +209,26 @@ with an overview of the two systems.}
                 \note[item]<2>{Some argue that we should focus on documentation,
                     on recording speech, respeakings, and translations, and on
                     generating artifacts for future study.}
-            \item<3->Better description can prevent data graveyards (Beale
-                2014, Bender et al. 2014)
+                \item<3->Better description can prevent “data graveyards”
+                    (Gippert et al. 2006, cf. Beale 2014)
                 \note[item]<3>{Others point out that we can use computational
                     tools and CL advances to expedite language description and
                     analysis; this way we can avoid an unfortunate eventuality
                     which sees a bunch of data that nobody can make sense of.}
             \item<4->Theoretical linguistic analysis uncovers previously
                 unknown generalizations (Murray 2014)
-                \note[item]<4>{There is a related debate over the role of 
+                \note[item]<4>{There is a related debate over the role of
                     theoretical linguistic analysis here, with some typologists
                     advocating a descriptive approach and theoretical linguists
-                    responding in defense of a hypothesis-driven approach and the, to some,
-                    controversial elicitation methods, e.g., grammaticality judgments
-                    translation requests, that it entails. Sarah Murray, in a
-                    forthcoming paper, argues that the theoretical linguistic approach
-                    can lead to the discovery of significant generalizations that would
-                    otherwise remain hidden.}
+                    responding in defense of a hypothesis-driven approach and its
+                    attendant elicitation methods---i.e., translation from the metalanguage
+                    and the gathering of grammaticality judgments---that are controversial
+                    to some. In a recent paper in support of the theoretical
+                    linguistic side of this debate, Sarah Murray argues, convincingly
+                    in my estimation, that hypothesis-driven fieldwork
+                    involving the elicitation of negative data can lead to the
+                    discovery of significant generalizations that, under a
+                    purely descriptive approach, would remain hidden.}
         \end{itemize}
     \item<5->A duty to collaborate?
         \note[item]<5>{A related debate asks whether the various types of
@@ -244,19 +246,19 @@ with an overview of the two systems.}
                     are genuinely committed to documentation or revitalization. Not all
                     communities need or desire the help of academic fieldworkers. In some
                     cases, the political landscape of an endangered language
-                    community is just too complex for a field linguist to navigate. In 
+                    community is just too complex for a field linguist to navigate. In
                     these types of situations, the best course of action for all parties
                     involved may be for linguist fieldworkers to respectfully
                     and ethically pursue their own research agenda.}
         \end{itemize}
-    \item<8->Whatever we decide, let's maximize openness, access, sharing (data
-        and functionality)
+    \item<8->Whatever we decide, let's maximize openness, access, and the sharing and reuse
+        of both data and functionality
         \note[item]<8>{These are complex and relevant issues. However, to a certain
             extent the LingSync/OLD approach can sidestep them. The attitude we advocate
             is something along the lines of "can't we all just get along?". We want to
             help contribute towards an infrastructure which facilitates, but does not
-            require, collaboration between stakeholders, an infrastructure which is 
-            flexible and general enough to be useful to different types of linguist 
+            require, collaboration between stakeholders, an infrastructure which is
+            flexible and general enough to be useful to different types of linguist
             and fieldworker. We want to help fieldworkers to make their data more useful
             to their peers.}
 \end{itemize}
@@ -266,150 +268,32 @@ with an overview of the two systems.}
 % COLLABORATION
 %===============================================================================
 
-% GC I added the other steps in the original slides now that we have latex diagrams... not sure if this helps but might be useful for the contextualization in the fieldwork section above instead of some of the text sldies?
 \begin{frame}
 \frametitle{Collaboration}
+
 \begin{figure}
 \begin{center}
 \begin{small}
 \begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
-	  researcher/.style={thick,circle,fill=blue},
-	  speaker/.style={thick,circle,fill=red},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
-	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=red,very thick,font=\sffamily\footnotesize}]
+    every node/.style={align=center,text=white,draw=none},
+    every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
+    researcher/.style={thick,circle,fill=blue},
+    revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
+    lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
+    documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
+    to/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
 
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \node[researcher] (researchera) {field\\researcher};  \&  \& \node[researcher] (researcherb) {field\\researcher};\\
-	      \&  \node[speaker] (speaker) {speaker}; \\
-	    \node[researcher] (researcherc) {field\\researcher};  \&  \& \node[researcher] (researcherd) {field\\researcher};\\
-	  };
-	  \draw[to] (speaker) -- node[midway,right] {} (researchera);
-	  \draw[to] (speaker) -- node[midway,left] {} (researcherb);
-	  \draw[to] (speaker) -- node[midway,right] {} (researcherc);		  
-	  \draw[to] (speaker) -- node[midway,left] {} (researcherd);
-\end{tikzpicture}
-\end{small}
-\end{center}
-\end{figure}
-\label{fieldwork}
-\note{blank note.}
-\end{frame}
+    % Position the nodes using a matrix layout
+    \matrix{
+      \node[researcher] (researcher1) {researcher};  \&  \& \node[researcher] (researcher2) {researcher};\\
+        \&  \node[lingsync] (lingsyncold) {LingSync/OLD}; \\
+      \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
+    };
 
-% GC I added the other steps in the original slides now that we have latex diagrams... not sure if this helps but might be useful for the contextualization in the fieldwork section above instead of some of the text sldies?
-\begin{frame}
-\frametitle{Collaboration}
-\begin{figure}
-\begin{center}
-\begin{small}
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
-	  researcher/.style={thick,circle,fill=blue},
-	  speaker/.style={thick,circle,fill=red},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
-	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=red,very thick,font=\sffamily\footnotesize},
-	  togreen/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \node[researcher] (researchera) {field\\researcher};  \&  \& \node[researcher] (researcherb) {field\\researcher};\\
-	      \&  \node[speaker] (speaker) {speaker}; \\
-	    \node[researcher] (researcherd) {field\\researcher};  \&  \& \node[researcher] (researcherc) {field\\researcher};\\
-	  };
-	  \draw[to] (speaker) -- node[midway,right] {} (researchera);
-	  \draw[to] (speaker) -- node[midway,left] {} (researcherb);
-	  \draw[to] (speaker) -- node[midway,right] {} (researcherc);		  
-	  \draw[to] (speaker) -- node[midway,left] {} (researcherd);
-	  
-	  \draw[togreen] (researchera) -- node[midway,left] {} (researcherb);
-	  \draw[togreen] (researcherb) -- node[midway,right] {} (researcherc);		  
-	  \draw[togreen] (researcherc) -- node[midway,left] {} (researcherd);
-	  \draw[togreen] (researcherd) -- node[midway,right] {} (researchera);
-
-\end{tikzpicture}
-\end{small}
-\end{center}
-\end{figure}
-\label{fieldworkcollaboration}
-\note{blank note.}
-\end{frame}
-
-
-% GC I added the other steps in the original slides now that we have latex diagrams... not sure if this helps but might be useful for the contextualization in the fieldwork section above instead of some of the text sldies?
-\begin{frame}
-\frametitle{Collaboration}
-\begin{figure}
-\begin{center}
-\begin{small}
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
-	  researcher/.style={thick,circle,fill=blue},
-%	  fieldwork/.style={thick,regular polygon, regular polygon sides=4,fill=red},
-	  fieldwork/.style={thick,fill=red,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
-	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=red,very thick,font=\sffamily\footnotesize},
-	  togreen/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \node[researcher] (researchera) {field\\researcher};  \&  \& \node[researcher] (researcherb) {researcher};\\
-	      \&  \node[fieldwork] (fieldwork) {fieldwork}; \\
-	    \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
-	  };
-	  \draw[to] (fieldwork) -- node[midway,right] {} (researchera);
-	  \draw[to] (fieldwork) -- node[midway,left] {} (researcherb);
-	  \draw[to] (fieldwork) -- node[midway,right] {} (researcherc);		  
-	  \draw[to] (fieldwork) -- node[midway,left] {} (researcherd);
-	  
-	  \draw[togreen] (researchera) -- node[midway,left] {} (researcherb);
-	  \draw[togreen] (researcherb) -- node[midway,right] {} (revitalizer);		  
-	  \draw[togreen] (revitalizer) -- node[midway,left] {} (documenter);
-	  \draw[togreen] (documenter) -- node[midway,right] {} (researchera);
-
-\end{tikzpicture}
-\end{small}
-\end{center}
-\end{figure}
-\label{fieldworkexternalcollaboration}
-\note{blank note.}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Collaboration}
-\begin{figure}
-\begin{center}
-\begin{small}
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
-	  researcher/.style={thick,circle,fill=blue},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
-	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
-	  to/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \node[researcher] (researcher1) {field\\researcher};  \&  \& \node[researcher] (researcher2) {researcher};\\
-	      \&  \node[lingsync] (lingsyncold) {LingSync/OLD}; \\
-	    \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
-	  };
-
-	  \draw[to] (lingsyncold) -- node[midway,right] {} (researcher1);
-	  \draw[to] (lingsyncold) -- node[midway,left] {} (researcher2);
-	  \draw[to] (lingsyncold) -- node[midway,right] {} (documenter);		  
-	  \draw[to] (lingsyncold) -- node[midway,left] {} (revitalizer);
+    \draw[to] (lingsyncold) -- node[midway,right] {} (researcher1);
+    \draw[to] (lingsyncold) -- node[midway,left] {} (researcher2);
+    \draw[to] (lingsyncold) -- node[midway,right] {} (documenter);
+    \draw[to] (lingsyncold) -- node[midway,left] {} (revitalizer);
 \end{tikzpicture}
 \end{small}
 \label{lingsync:bridge}
@@ -427,16 +311,45 @@ with an overview of the two systems.}
 \end{frame}
 
 
+%\begin{frame}
+%\frametitle{Collaboration}
+
+%TODO will convert into latex diagrams once we are sure we want it.
+%\begin{figure}
+%\begin{center}
+%\includegraphics[width=3in]{../../figures/bridge_stakeholders}
+%\label{lingsync:bridge}
+%\end{center}
+%\end{figure}
+%\note[item]{Here is a high-level overview of the role that we see LingSync and
+    %the OLD playing in endangered languages fieldwork.}
+%\note[item]{The software helps a diverse range of linguistic fieldworkers to
+    %share data and to collaborate, if they want to.}
+%\note[item]{By "linguistic fieldworker" here, I refer to anyone who works with
+    %speakers to generate language data, whether they be concerned primarily
+    %with revitalization, documentation, description, or theoretical analysis.}
+%\note[item]{As will be discussed below, the systems offer features and
+    %conveniences which respond to the requirements of different types
+    %of fieldworker and which result in a utility beyond the primary
+    %collaboration- and data-sharing functionality.}
+%\end{frame}
+
+
 
 \subsection[Requirements]{Software requirements}
+
+
+% REQUIREMENTS
+%===============================================================================
 
 \begin{frame}
 
 \frametitle{Requirements}
 \note[item]<1>{So here we will briefly review the requirements that guided
     the development of LingSync and the OLD.}
-\note[item]<1>{We are not claiming that LingSync and the OLD fully meet
-    all of these requirements. These are goals we are working towards.}
+\note[item]<1>{We are not claiming that our tools fully meet all of these
+    requirements. These are goals we have been and are presently working
+    towards.}
 
 \begin{uncoverenv}<2->
 \begin{requirement}
@@ -446,11 +359,12 @@ Integration of primary data
 \end{uncoverenv}
 \note[item]<2>{The software must be able to handle primary data. In particular,
     we need to help fieldworkers share audio and video recordings (including
-    stimuli). The system should allow for the alignment of audio/video with
-    transcriptions and annotations and textual and audio/video data should be
-    displayed simultaneously. It should be possible to record audio right into
-    the application and, if possible, the text/audio alignment process should
-    be automated or partially automated.}
+    experimental stimuli). The system should allow for the alignment of
+    audio/video with transcriptions and other textual data; the audio/video and
+    textual data should be displayed simultaneously for easy cross-reference.
+    It should be possible to record audio right into the application and, if
+    possible, the text/audio alignment process should be automated or partially
+    automated.}
 
 \begin{uncoverenv}<3->
 \begin{requirement}
@@ -458,11 +372,14 @@ Integration of primary data
 Curation of data
 \end{requirement}
 \end{uncoverenv}
-\note[item]<3>{The system should facilitate the curation of data. For example,
-    initial elicitation can involve simply the uploading of recordings. Then,
-    subsequent waves of data curation can involve transcription at various
-    levels or the creation of morphological analyses and annotations of various
-    types, for example, tagging and categorizing.}
+\note[item]<3>{The system should facilitate the curation of data, that is, its
+    iterative and collaborative refinement over time. For example, the
+    initial output of elicitation could be simply an audio recording and a
+    transcription of salient forms. Then, subsequent waves of data curation can
+    involve transcription at various levels and/or the creation of
+    morphological analyses and annotations of various types, for example,
+    tagging and categorizing. Various automations of the data curation process
+    are possible.}
 
 
 \begin{uncoverenv}<4->
@@ -500,16 +417,19 @@ User productivity
 \end{requirement}
 \end{uncoverenv}
 \note[item]<6>{The system should contribute to user productivity. It should
-    include well-designed interfaces as well as conveniences which expedite
+    include well-designed user interfaces as well as conveniences which expedite
     repetitive tasks. It should also help with tasks that are particular to
     linguistic fieldwork such as the creation of sophisticated searches over the
     data sets.}
-
 
 \end{frame}
 
 
 \subsection{Existing software}
+
+
+% EXISTING SOFTWARE
+%===============================================================================
 
 \begin{frame}
 
@@ -518,18 +438,17 @@ User productivity
 \begin{center}
 \def\firstcircle{(0:-2cm) circle (2.5cm)}
 \def\secondcircle{(0:2cm) circle (2.5cm)}
-\def\thirdcircle{(0,-2.5cm) circle (2.5cm)} 
+\def\thirdcircle{(0,-2.5cm) circle (2.5cm)}
 \begin{small}
 \begin{tikzpicture}
   \draw \firstcircle node {Collaborate};
   \draw \secondcircle node {Features};
   \draw \thirdcircle node {Structure};
-  
+
   \draw (-2cm,0.5cm)  node[text=black] {Share/};
   \draw (2cm,0.5cm)  node[text=black] {Interlinear Glossing};
 
-  \draw (0,-.4cm)  node[text=red] {\tiny LingSync/};
-  \draw (0,-.6cm)  node[text=red] {\tiny OLD};
+  \draw (0,-.4cm)  node[text=red] {\tiny LingSync};
   \draw (-2cm,1cm)  node[text=blue] {Google Docs};
   \draw (-1.3cm,-1.3cm)  node[text=blue] {Google};
   \draw (-1.3cm,-1.7cm)  node[text=blue] {Spreadsheets};
@@ -552,447 +471,136 @@ User productivity
 \end{center}
 \end{figure}
 
-\note{Joel presents}
+%\begin{table}
+%\begin{center}
+%\includegraphics[width=3in]{../../figures/other_software_sets}
+%\label{othersoftware}
+%\end{center}
+%\end{table}
+
+\note[item]{This Venn diagram depicts how we see LingSync (and the OLD) with
+    respect so some of the other tools used by fieldworkers.}
+\note[item]{Like data in general-purpose database and spreadsheet
+    applications, LingSync/OLD data are structured, which facilitates
+    programmatic interaction.}
+\note[item]{Like FLEx, Toolbox, and ELAN, LingSync and the OLD provide features
+    specifically designed to facilitate fieldwork tasks. Examples include
+    presentation of data in IGT format, grammar modeling and automated
+    morphological parsing, and export to formats used in linguistics.}
+\note[item]{Finally, like web applications such as Google Spreadsheets, LingSync
+    and the OLD allow multiple contributors to share data and perform fieldwork
+    tasks collaboratively.}
+
 \end{frame}
 
 
+% AD HOC SOLUTIONS --- TODO: I think this frame should maybe be removed
+%===============================================================================
+
 \begin{frame}
-\frametitle{Ad-hoc Solutions}
+\frametitle{Ad hoc Solutions}
 %TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
 \begin{center}
-\includegraphics[width=3in]{../figures/other_software}
-\caption{Many ad-hoc software combinations are used by teams.}
+\includegraphics[width=3in]{../../figures/other_software}
+\caption{Many ad hoc software combinations are used by teams.}
 \label{allothersoftware}
 \end{center}
 \end{figure}
-
-\note{Joel presents}
+\note[item]{This table compares LingSync/OLD to a number of other software
+    tools used by fieldworkers.}
+\note[item]{In particular, note that LingSync/OLD functions online and
+    offline, works on all major platforms (since it consists of web services
+    and browser-based and mobile platform-based GUIs), implements version
+    control so that modifications can be undone, exposes a simple API to
+    facilitate programmatic use, provides a variety of advanced search
+    capabilities, is open source, and has import and export features.}
 \end{frame}
 
 
 \section[LingSync/OLD]{New models for data collection and management}
 \subsection{LingSync}\label{sec:lingsync}
 
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
+
+
 \begin{frame}
 \frametitle{LingSync Architecture}
 \begin{figure}
 \begin{center}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  authentication/.style={thick,fill=green,inner sep=0.3cm},
-	  activity/.style={thick,fill=yellow!70!blue,inner sep=0.3cm},
-	  search/.style={thick,fill=black!10!red,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	     \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    	    \node[parser] (parser) {morpho-\\syntax}; \&  \node[authentication] (authentication) {authentication}; \& \node[activity] (activity) {activity};\\
-		    \& \node[search] (search) {search};\\
-	    };
-\end{tikzpicture}
-\end{small}
-\label{lingsync:webservices}
-\end{center}
-\end{figure}
-\note{LingSync has many web services}
-\end{frame}
-
-
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
-\begin{frame}
-\frametitle{LingSync Architecture}
-\begin{figure}
-\begin{center}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  activity/.style={thick,fill=green,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	  \node[researcher] (importexport) {Import\\Export}; \& \node[researcher] (lexbrowser) {Lexicon\\Browser};  \& \node[documenter] (corpuspages) {Public\\URLs}; \& \node[revitalizer] (asr) {Android\\ASR};\\
-	   \node[researcher] (mapreduce) {Map\\Reduce}; \& \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn X};  \\
-	  };
-
-\end{tikzpicture}
-\end{small}
-\label{lingsync:uis}
-\end{center}
-\end{figure}
-\note{And many user interfaces for different stakeholders in mobile and desktop contexts}
-\end{frame}
-
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
-\begin{frame}
-\frametitle{LingSync Architecture}
-\begin{figure}
-\begin{center}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  activity/.style={thick,fill=green,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
-	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
-	  };
-
-\end{tikzpicture}
-\end{small}
+\includegraphics[width=3in]{../../figures/architecture}
 \label{lingsync:architecture}
 \end{center}
 \end{figure}
-\note{Lets look how the core web services and user interfaces}
-\end{frame}
 
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
-\begin{frame}
-\frametitle{LingSync Architecture}
-\begin{figure}
-\begin{center}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  activity/.style={thick,fill=green,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
-	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
-% Actually there are more UIs:
-%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
-	  };
-
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
-	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
-	  \draw[to] (lexicon) -- node[midway] {} (parser);
-	  \draw[to] (corpus) -- node[midway] {} (parser);
-	  \draw[to] (parser) -- node[midway,right] {} (prototype);
-	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
-%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
-	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
-\end{tikzpicture}
-\end{small}
-\label{lingsync:architecture}
-\end{center}
-\end{figure}
-\note{ are connected}
-\end{frame}
-
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
-\begin{frame}
-\frametitle{LingSync Architecture}
-\begin{figure}
-\begin{center}
-\begin{tabular}{lll}
-* many platforms \\
-\end{tabular}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  activity/.style={thick,fill=green,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
-	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
-% Actually there are more UIs:
-%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
-	  };
-
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
-	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
-	  \draw[to] (lexicon) -- node[midway] {} (parser);
-	  \draw[to] (corpus) -- node[midway] {} (parser);
-	  \draw[to] (parser) -- node[midway,right] {} (prototype);
-	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
-%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
-	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
-\end{tikzpicture}
-\end{small}
-\label{lingsync:architecture}
-\end{center}
-\end{figure}
-\note{to serve many platforms}
-\end{frame}
-
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
-\begin{frame}
-\frametitle{LingSync Architecture}
-\begin{figure}
-\begin{center}
-\begin{tabular}{lll}
-* many platforms  & * online/offline \\
-\end{tabular}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  activity/.style={thick,fill=green,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
-	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
-% Actually there are more UIs:
-%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
-	  };
-
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
-	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
-	  \draw[to] (lexicon) -- node[midway] {} (parser);
-	  \draw[to] (corpus) -- node[midway] {} (parser);
-	  \draw[to] (parser) -- node[midway,right] {} (prototype);
-	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
-%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
-	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
-\end{tikzpicture}
-\end{small}
-\label{lingsync:architecture}
-\end{center}
-\end{figure}
-\note{in online, offline and low bandwidth situations}
-\end{frame}
+% LATEX GRAPHIC COMMENTED OUT BECAUSE I DON'T UNDERSTAND THE "PHONETIC" BOX
+%\begin{figure}
+%\begin{center}
+%\begin{tabular}{lll}
+%* many platforms & * online/offline\\
+%* many purposes & * extendable
+%\end{tabular}
+%\begin{small}
+%\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
+   %1 with {\arrow[thick,green]{ triangle 60}}},
+   %double distance=4pt, shorten >= 8pt,
+   %preaction = {decorate},
+   %postaction = {draw,line width=4pt, green, shorten >= 8pt}]
+%
+%\begin{tikzpicture}[
+    %every node/.style={align=center,text=white,draw=none},
+    %every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+    %audio/.style={thick,fill=magenta,inner sep=0.3cm},
+    %corpus/.style={thick,fill=red,inner sep=0.3cm},
+    %lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+    %parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+    %activity/.style={thick,fill=green,inner sep=0.3cm},
+    %revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+    %researcher/.style={thick,circle,fill=black},
+    %documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+    %to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+    %twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+%
+    %% Position the nodes using a matrix layout
+    %\matrix{
+      %\&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+      %\node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
+      %\&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+%% Actually there are more UIs:
+%%     \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
+    %};
+%
+    %\draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
+    %\draw[twoway] (audio) -- node[midway,right] {} (corpus);
+    %\draw[to] (lexicon) -- node[midway] {} (parser);
+    %\draw[to] (corpus) -- node[midway] {} (parser);
+    %\draw[to] (parser) -- node[midway,right] {} (prototype);
+    %\draw[to] (parser) -- node[midway,right] {} (spreadsheet);
+    %\draw[twoway] (corpus) -- node[midway,right] {} (prototype);
+    %\draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
+    %\draw[twoway] (corpus) -- node[midway,right] {} (learnx);
+    %\draw[twoway] (audio) -- node[midway,right] {} (prototype);
+%%    \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
+    %\draw[twoway] (audio) -- node[midway,right] {} (learnx);
+    %\draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
+%\end{tikzpicture}
+%\end{small}
+%\label{lingsync:architecture}
+%\end{center}
+%\end{figure}
 
 
-
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
-\begin{frame}
-\frametitle{LingSync Architecture}
-\begin{figure}
-\begin{center}
-\begin{tabular}{lll}
-* many platforms  & * online/offline \\
-* many purposes
-\end{tabular}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  activity/.style={thick,fill=green,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
-	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
-% Actually there are more UIs:
-%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
-	  };
-
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
-	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
-	  \draw[to] (lexicon) -- node[midway] {} (parser);
-	  \draw[to] (corpus) -- node[midway] {} (parser);
-	  \draw[to] (parser) -- node[midway,right] {} (prototype);
-	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
-%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
-	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
-\end{tikzpicture}
-\end{small}
-\label{lingsync:architecture}
-\end{center}
-\end{figure}
-\note{letting the corpus grow for many purposes}
-\end{frame}
-
-
-% GC I added some more frames from the why lingsync slides, you can comment them out if you want
-\begin{frame}
-\frametitle{LingSync Architecture}
-\begin{figure}
-\begin{center}
-\begin{tabular}{lll}
-* many platforms & * online/offline\\
-* many purposes & * extendable
-\end{tabular}
-\begin{small}
-\tikzstyle{todouble} = [thick, green,decoration={markings,mark=at position
-   1 with {\arrow[thick,green]{ triangle 60}}},
-   double distance=4pt, shorten >= 8pt,
-   preaction = {decorate},
-   postaction = {draw,line width=4pt, green, shorten >= 8pt}]
-
-\begin{tikzpicture}[
-	  every node/.style={align=center,text=white,draw=none},
-	  every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-	  audio/.style={thick,fill=magenta,inner sep=0.3cm},
-	  corpus/.style={thick,fill=red,inner sep=0.3cm},
-	  lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-	  parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-	  activity/.style={thick,fill=green,inner sep=0.3cm},
-	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-	  researcher/.style={thick,circle,fill=black},
-	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-	  to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-	  twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
-
-	  % Position the nodes using a matrix layout
-	  \matrix{
-	    \&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-	    \node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
-	    \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
-% Actually there are more UIs:
-%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
-	  };
-
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
-	  \draw[twoway] (audio) -- node[midway,right] {} (corpus);
-	  \draw[to] (lexicon) -- node[midway] {} (parser);
-	  \draw[to] (corpus) -- node[midway] {} (parser);
-	  \draw[to] (parser) -- node[midway,right] {} (prototype);
-	  \draw[to] (parser) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (prototype);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
-	  \draw[twoway] (corpus) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (audio) -- node[midway,right] {} (prototype);
-%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
-	  \draw[twoway] (audio) -- node[midway,right] {} (learnx);
-	  \draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
-\end{tikzpicture}
-\end{small}
-\label{lingsync:architecture}
-\end{center}
-\end{figure}
-\note{the architecture is modular and extendable}
+\note[item]{This diagram provides a high-level overview of the various
+    components that make up LingSync.}
+\note[item]{The core components are the corpus web service where the
+    bulk of user data are stored and the two primary GUIs---the Spreadsheet
+    web application and the Prototype online/offline Chrome app---which
+    mediate user interaction with the corpus web service.}
+\note[item]{The audio web service can make lossy copies of large files,
+    can identify utterances within large files, and can align transcriptions
+    and audio files using another tool called the ProsodyLab-Aligner.}
+\note[item]{The parser component depicted here is the OLD's morphological
+    parser functionality which we plan to plug in to LingSync. This component
+    will be discussed momentarily.}
 \end{frame}
 
 
@@ -1001,21 +609,75 @@ User productivity
 %TODO will convert into latex diagrams once we are sure we want it.
 \begin{figure}
 \begin{center}
-\includegraphics[width=3in]{../figures/corpora}
+\includegraphics[width=3in]{../../figures/corpora}
 \label{lingsync:corpora}
 \end{center}
 \end{figure}
-\note{Joel presents}
+\note[item]{This next diagram depicts LingSync corpora.}
+\note[item]{A fieldworker can create any number of corpora. A fieldworker
+    may grant access at various levels to any one of his/her corpora. A
+    corpus may also be made public so that it can be accessed without
+    password-based authentication.}
+\note[item]{Portions of a corpus can be encrypted at a fine-grained level
+    if that kind of control over access is required.}
+\note[item]{Finally, LingSync implements version control, meaning that all
+    states are saved prior to modification and changes can be undone. Clearly,
+    this is an important feature in the context of collaborative data creation.}
+
 \end{frame}
 
 \subsection{OLD}\label{sec:old}
 
 \begin{frame}
-TODO Joel OLD
-\note{Joel presents}
+%TODO Joel insert diagram about the OLD architecture here.
+\note[item]{The OLD is a web service with a RESTful API and a browser-based GUI}
+\note[item]{While similar to LingSync in many respects, the major architectural
+    difference between the two systems is that the OLD assumes that users will
+    be contributing to a single repository of language data on a given
+    language; in contrast, LingSync, as mentioned above, assumes allows users
+    to create private corpora that they can grant various levels of access to.}
 \end{frame}
 
 %\subsection{LingSync/OLD}
+
+\subsection{Generality in Data Structure}\label{sec:generality}
+
+\begin{frame}
+\frametitle{Generalty in data structure}
+\begin{itemize}
+    \item FLEx, Toolbox, etc.
+        \begin{itemize}
+            \item lexical entry is primary
+            \item Boasian trilogy: texts, grammar, and dictionary
+        \end{itemize}
+    \item LingSync and OLD
+        \begin{itemize}
+            \item datum/form is primary
+            \item elicitations, corpora, texts, grammar, dictionary
+        \end{itemize}
+\end{itemize}
+\note[item]<1>{Note that the data structures assumed by LingSync and the OLD
+    are arguably more general than those of similar applications like FLEx and
+    Toolbox.}
+\note[item]<1>{This greater generality allows these tools to be useful to a wider
+    range of fieldworkers.}
+\note[item]<1>{Under the LingSync/OLD conception, the fundamental unit of data is
+    something quite unconstrained which in LingSync is called a "datum" and in
+    the OLD is called a "form".}
+\note[item]<1>{This abstract data unit may be used to represent sentences, phrases,
+    words, or morphemes.}
+\note[item]<1>{Texts, corpora, and records of elicitation sessions can then be
+    constructed as (possibly ordered) sets of these data points.}
+\note[item]<1>{Similarily, grammars can be created as texts which embed via reference
+    these data points. And dictionaries could be constructed from these units as
+    well.}
+\note[item]<2>{This contrasts with the data structures that underpin FLEx and
+    Toolbox; these tools assume that a grammar and a dictionary with supporting
+    texts are the ultimate goals of the fieldworkers who use them. However,
+    this is not always the case.}
+
+\end{frame}
+
 
 \subsection{User adoption}
 
@@ -1028,12 +690,12 @@ TODO Joel OLD
       \toprule
                      ~ &  Active & Investigating & In-active & Total\\
       \midrule
-      Public Corpora  &       2 &   1 &   2 & 5 \\ 
-      Private Corpora &      15 &  37 & 321 & 373\\ 
+      Public Corpora  &       2 &   1 &   2 & 5 \\
+      Private Corpora &      15 &  37 & 321 & 373\\
       Users           &      38 &  43 & 220 & 301 \\
       Documents & 13,408 & 2,763 & 4,541 &23,487\\
       Disk Size & 1GB & .9GB & 5.3GB& 7.2GB\\
-      
+
       \bottomrule
 
 \end{tabular}
@@ -1045,7 +707,10 @@ activities; Investigating users: 100-10 activities.}
  \normalsize
 \end{table}
 
-\note{Joel presents}
+\note[item]{This table shows some stats on the extent to which LingSync is being
+    used at present.}
+\note[item]{There are, in total, some 300 users, 400 corpora and 24,000
+    documents, i.e., the general-purpose data points mentioned above.}
 \end{frame}
 
 
@@ -1078,8 +743,19 @@ activities; Investigating users: 100-10 activities.}
  \normalsize
 \end{table}
 
+\note[item]{Here we see the extent to which the OLD is being used.}
+\note[item]{OLD applications are language-specific and independent entities.}
+\note[item]{Here we can see that fieldwork is being performed on nine
+    endangered and/or under-documented languages using the OLD software.}
+\note[item]{The languages that have seen the most use are Blackfoot,
+    Nata, Gitksan, Okanagan, and Tlingit.}
+\note[item]{The speaker population figures in the rightmost column are
+    from Ethnologue and are probably optimistic or out-of-date. In any
+    cases, most of these languages are endangered to highly endangered.}
+\note[item]{We assert that these usage statistics, while perhaps modest
+    from certain perspectives, are nevertheless indicative of a need for
+    software tools like LingSync and the OLD.}
 
-\note{Joel presents}
 \end{frame}
 
 %\section[Data]{Using LingSync/OLD}\label{open-data}
@@ -1098,7 +774,7 @@ activities; Investigating users: 100-10 activities.}
 %
 %\begin{figure}
 %\begin{center}
-%\includegraphics[width=3in]{../figures/utterance_extraction}
+%\includegraphics[width=3in]{../../figures/utterance_extraction}
 %\caption{Screenshot of the utterance extraction process which converts any
 %audio/video into utterance intervals encoded either as \gls{json} or TextGrid using
 %the PraatTextGridJS library.}
@@ -1117,7 +793,7 @@ activities; Investigating users: 100-10 activities.}
 \frametitle{Android Speech Recognition}
 \begin{figure}
 \begin{center}
-\includegraphics[width=3in]{../figures/kartuli_speech_recognition}
+\includegraphics[width=3in]{../../figures/kartuli_speech_recognition}
 \caption{Screenshot of the Speech Recognition trainer}
 \label{speech_recognition_screenshot}
 \end{center}
@@ -1137,15 +813,15 @@ activities; Investigating users: 100-10 activities.}
 %
 %\begin{figure}
 %\begin{center}
-%\includegraphics[width=2.5in]{../figures/farley} 
+%\includegraphics[width=2.5in]{../../figures/farley}
 %\\
-%\includegraphics[width=2.5in]{../figures/inuktitut}
+%\includegraphics[width=2.5in]{../../figures/inuktitut}
 %\caption{Screenshot of Farley's Morphological Analyzer wrapped in a Node.js Web Service And offered in a HTML5 User Interface  }
 %\label{speech_recognition_screenshot}
 %\end{center}
 %\end{figure}
-%%\hspace{3in}\includegraphics[width=1in]{../figures/inuktitut_computing}
-%\includegraphics[width=1in]{../figures/inuktitut_computing}
+%%\hspace{3in}\includegraphics[width=1in]{../../figures/inuktitut_computing}
+%\includegraphics[width=1in]{../../figures/inuktitut_computing}
 
 %\note{Josh/Gina presents}
 %\end{frame}
@@ -1161,8 +837,8 @@ activities; Investigating users: 100-10 activities.}
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=3in]{../figures/lexicon_browser}\\
-\includegraphics[width=3in]{../figures/lexicon_browser2}
+\includegraphics[width=3in]{../../figures/lexicon_browser}\\
+\includegraphics[width=3in]{../../figures/lexicon_browser2}
 \note{Screenshot of the Lexicon Browser, a web widget which lets users
 browse words or relations between morphemes in their corpus, clean and add
 declarative knowledge not found in the lexicon training process.}
@@ -1187,16 +863,21 @@ Goals
     \item Present and motivate the OLD's approach to creating morphological parsers
     \item Demonstrate the use of this functionality via two Blackfoot parsers
 \end{itemize}
-\note{Now I'd like to discuss the OLD's morphological parser functionality. I
+\note[item]{Now I'd like to discuss the OLD's morphological parser functionality. I
     will present and motivate the OLD's approach to creating morphological
-    parsers with reference to two parsers created for the Blackfoot language.}
+    parsers with reference to two parsers created for Blackfoot, an endangered
+    language which is from the Algonquian language family and which is spoken
+    in Alberta, Canada and Montana, USA.}
+\note[item]{This portion of our presentation should segue nicely into the next talk
+    which discusses a similar but interestingly different approach to modeling
+    the morphology and phonology of another Algonquian language: Plains Cree.}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{OLD Morphological Parsers}
 Requirements (fieldworkers should be able to):
-\note{Here are the requirements that guided the design of the OLD's
+\note[item]<1>{Here are the requirements that guided the design of the OLD's
     functionality for creating morphological parsers}
 \begin{itemize}
     \item create parsers that
@@ -1219,7 +900,8 @@ Requirements (fieldworkers should be able to):
                 \note[item]<3>{Fieldworkers should be able to build parsers
                     using the expertly analyzed data that already exist in ther
                     databases; for example, morphologically analyzed words in
-                    IGT format and lexical entries.}
+                    IGT format and categorized and phonemically transcribed
+                    lexical entries.}
             \item<4->are tailored to a specific purpose
                 \note[item]<4>{Fieldworkers should be able to create different
                     parsers for different purposes. Examples include orthographic
@@ -1249,7 +931,7 @@ Requirements (fieldworkers should be able to):
 \frametitle{OLD Morphological Parsers}
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{../figures/OLD-parser-diagram-2}
+\includegraphics[width=0.6\textwidth]{../../figures/OLD-parser-diagram-2}
 \caption{Architecture of an OLD morphological parser.}
 \label{fig:arch}
 \end{center}
@@ -1258,8 +940,9 @@ Requirements (fieldworkers should be able to):
     OLD morphological parser.}
 \note[item]{The morphophonology is a finite-state transducer that takes a
     surface transcription as input and returns a set of candidate parses as
-    output; it is the composition of a phonology FST and a morphology FST.}
-\note[item]{The candidate ranker assigns a probability to each candidate parse 
+    output; it is the composition of a phonology transducer and a morphology
+    transducer.}
+\note[item]{The candidate ranker assigns a probability to each candidate parse
     returned by the morphophonology; it is built upon an $N$-gram language
     model.}
 \end{frame}
@@ -1291,9 +974,9 @@ Requirements (fieldworkers should be able to):
 \begin{itemize}
     \item<1->Phonology: a transducer wholly defined by the fieldworker as ordered
         context-sensitive rewrite rules
-        \note[item]<1>{An OLD phonology is a transducer that is wholly defined by
-            the fieldworker as an ordered list of context-sensitive rewrite
-            rules} 
+        \note[item]<1>{An OLD phonology is a transducer that is defined explicitly
+            and in its entirety by the fieldworker as an ordered list of
+            context-sensitive rewrite rules.}
 \end{itemize}
 
 \begin{uncoverenv}<2->
@@ -1315,7 +998,7 @@ Requirements (fieldworkers should be able to):
 \note[item]<3>{(\getref{phonology}) shows the definition of a simple phonology
     FST that implements the mapping in (\getref{nitsspiyi}).}
 \note[item]<3>{The phonology is written in the regular expression rewrite rule
-    language that is accepted by FST tools like foma and Xerox FST.}
+    language that is accepted by FST toolkits like foma and Xerox's XFST.}
 
 \vspace{-0.5cm}
 
@@ -1323,13 +1006,20 @@ Requirements (fieldworkers should be able to):
     \item<4->make use of existing fieldworker skills
         \note[item]<4>{Since these rewrite rules are simply notational variants of
             the SPE-style rewrite rules that most linguistic fieldworkers are
-            familiar with, the system makes use of existing fieldworker skills}
+            familiar with, the system makes use of existing fieldworker skills.}
+        \note[item]<4>{The second line in (\getref{phonology}), for example, is
+            a rule which transforms the hyphen morpheme delimiter to an "s" when
+            it occurs after a "t" and before an "i". A fieldworker can immediately
+            begin using this formalism after learning a few simple notational
+            oddities, such as the use of double vertical lines in place of the
+            forward slash that is customary in rule-based phonology texts.}
     \item<5->facilitate automated analysis testing
         \note[item]<5>{Also, since the fieldworker has full control over the
             definition of phonological transformations (or spelling rules),
             they can use the functionality to test their analyses of this
-            component of the grammar. For example, the words in the database that
-            the morphophonology cannot recognize may lead to modifications of
+            component of the grammar. For example, the parser can be used to
+            automate the discovery of words in the database that its
+            morphophonology cannot analyze; This may lead to modifications of
             the underlying analyses and models.}
         \note[item]<5>{One restricted but useful example of automated analysis
             testing is provided by the phonology test comment beneath the
@@ -1367,10 +1057,10 @@ agr & $\rightarrow$ & \emph{nit} \\
 vai & $\rightarrow$ & \emph{ihpiyi} \\
 \end{tabular}\xe
 \end{uncoverenv}
-\note[item]<2>{(\getref{mtactic}) is a rewrite rule representation
-of the morphological generalizations that can be extracted from a corpus
-of forms like (\getref{danced}) and implemented as an FST, in either the lexc
-or regex language.}
+\note[item]<2>{(\getref{mtactic}) is a rewrite rule representation of the
+    morphological generalizations that can be extracted from a corpus of forms
+    like (\getref{danced}) and implemented as an FST, in either the Lexicon
+    Compiler (lexc) or Regular Expression Rewrite Rule (regex) language.}
 \note[item]<2>{Note that the OLD does not currently allow users fine-grained
     control over morphology specification. That is, it is not currently
     possible to use flag diacritics to implement long-distance dependencies as
@@ -1498,13 +1188,13 @@ parser & succ. & F-score & prec. & rec. & phon. & morphon. & LM \\
 \note[item]<3>{It is interesting that the phonology of Parser 2 performs so much
     better yet the gains in overall parse rate and F-score are not as
     significant. Parser 2 essentially puts a far greater burden on the language
-    model, a burden which is too much for an LM based on counts from an extremely 
+    model, a burden which is too much for an LM based on counts from an extremely
     small corpus of 3,400 words. Parser 2's morphophonology transducer produces
     approximately 1,800 analysis candidates per input word. As more well
     analyzed words are added to the database with the aid of the parsers, the
     LM will improve and, as a result, so too will the parser as a whole.}
 \note[item]<4>{Of course, another means of improving overall performance would
-    be to improve the performance of the phonology without causing it to 
+    be to improve the performance of the phonology without causing it to
     massively overgenerate during analysis and put such a burden on the LM,
     that is, by using fieldworker knowledge to write a phonology that can
     predict the location of accented vowels. This is in the works.}
@@ -1575,12 +1265,15 @@ computationally-assisted endangered languages fieldwork:
 
 \begin{frame}
 \frametitle{Take Homes}
-%\begin{itemize}
-%\item High productivitiy requirements
-%\item All stakeholders All devices
-%\item Modular Web Services and Plugin Architecture 
-%\item Open Source, Open Development, Open Data 
-%\end{itemize}
+\begin{itemize}
+    \item LingSync/OLD are effective tools for facilitating fieldwork on endangered languages
+    \item All stakeholders All devices
+    %\item High productivitiy requirements
+    \item Modular Web Services and Plugin Architecture
+    \item Open Source, Open Development, Open Data
+    \item Synthesizing fieldworker and CL expertise
+\end{itemize}
+
 \note{Joel presents}
 \end{frame}
 
@@ -1589,28 +1282,37 @@ computationally-assisted endangered languages fieldwork:
 \begin{frame}
 \frametitle{Acknowledgements}
 
-
-Tobin Skinner, Elise McClay, Louisa Bielig, MaryEllen Cathcart, Theresa Deering, Yuliya Manyakina, Gretchen
-McCulloch, Hisako Noguchi, Brian Doherty, Gay Hazan, Oriana Kilbourn, Kim Dan
-Nguyen, Rakshit Majithiya, Mietta Lennes, Nivja de Jong, Ton Wempe, Kyle
-Gorman, Curtis Mesher, Beso Beridze, Tornike Lasuridze, Zviadi Beradze, Rezo
-Turmanidze, Jason Smith, Martin Gausby, Pablo Duboue, Xianli Sun, James Crippen,
-Michael McAuliffe, Faryal
+\small
+Tobin Skinner, Elise McClay, Louisa Bielig, MaryEllen Cathcart, Theresa
+Deering, Yuliya Manyakina, Gretchen McCulloch, Hisako Noguchi, Brian Doherty,
+Gay Hazan, Oriana Kilbourn, Kim Dan Nguyen, Rakshit Majithiya, Mietta Lennes,
+Nivja de Jong, Ton Wempe, Kyle Gorman, Curtis Mesher, Beso Beridze, Tornike
+Lasuridze, Zviadi Beradze, Rezo Turmanidze, Jason Smith, Martin Gausby, Pablo
+Duboue, Xianli Sun, James Crippen, Michael McAuliffe, Patrick Littell, Faryal
 Abbasi, Farah Abbasi, Tamila Paghava, Esma Chkhikvadze, Nina Gatenadze, and
-Mari Mgeladze, Jessica Coon, Alan Bale and Michael
-Wagner 
+Mari Mgeladze, Jessica Coon, Alan Bale, Michael Wagner, Henry Davis, Lisa
+Matthewson, Alexandre Bouchard-Côté
 ~\\
 ~\\
 SSHRC Connection Grant (\#611-2012-0001) \\
- SSHRC
-Standard Research Grant (\#410-2011-2401) 
-\note{We would like to thank our linguistics student interns, computer science student interns and countless other open source software developers who directly or indirectly helped build LingSync/OLD to what it is today and will be in the future. \\
+SSHRC Standard Research Grant (\#410-2011-2401) \\
+SSHRC Image, Text, Sound \& Technology (\#849-2009-0056)
+\normalsize
+\note{We would like to thank our linguistics student interns, computer science
+    student interns and countless other open source software developers who
+    directly or indirectly helped build LingSync/OLD to what it is today and
+    will be in the future. \\
 ~\\
-We would like to thank the ComputEL workshop reviewers, our users and would be users for providing feedback, suggestions, asking tough questions, and sending bug reports. \\
+We would like to thank the ComputEL workshop reviewers, our users and would be
+users for providing feedback, suggestions, asking tough questions, and sending
+bug reports. \\
 ~\\
-We would like to thank our language consultants for their friendship, patience and for sharing their language with us.\\
+We would like to thank our language consultants for their friendship, patience
+and for sharing their language with us.\\
 ~\\
-We would also like to thank the SSHRC council for explicitly supporting "open source approaches to knowledge mobilzation." }
+We would also like to thank the SSHRC council for explicitly supporting "open
+source approaches to knowledge mobilzation." }
+
 \end{frame}
 
 
@@ -1630,6 +1332,7 @@ We would also like to thank the SSHRC council for explicitly supporting "open so
 %\item David Costa. 2012. Surveying the sources on the Myaamia language. In Proceedings of the 2012 Myaamiaki Conference.
 \item N.H. De Jong and T Wempe. 2009. Praat script to detect syllable nuclei and measure speech rate automatically. Behavior research methods, 41(2):385-390.
 %\item Joel Dunham. 2014. Online Linguistic Database documentation. http://online-linguistic-database. readthedocs.org, March.
+\item Joel Dunham. 2014. The Online Linguistic Database: Software for linguistic fieldwork. PhD dissertation, UBC. (\textit{To appear.})
 \item Benoit Farley. 2012. The Uqailaut project. http://www.inuktitutcomputing.ca, January.
 %\item http: Scott Farrar. 2010. Review of TypeCraft. Language
 %\item Documentation \& Conservation, 4:6065.
@@ -1644,6 +1347,7 @@ We would also like to thank the SSHRC council for explicitly supporting "open so
 %  \item George Ironstrack. 2012. Miloniteeheetaawi eehinki pimihkanaweeyankwi: Lets reflect on how far we have traveled. In Proceedings of the 2012 Myaamiaki Conference.
 %  \item Wesley Leonard. 2012. Your language isnt extinct: the role of Myaamia in Language Reclamation. In Proceedings of the 2012 Myaamiaki Conference.
 %  \item LingSync. 2012. WhitePaper. http: //OpenSourceFieldlinguistics.github.io/FieldDB/, January.
+  \item D. Hallett, M. J. Chandler, and C. E. Lalonde. 2007. Aboriginal language knowledge and youth suicide. Cognitive Development, 22(3):392–399.
   \item Stuart Robinson, Greg Aumann, and Steven Bird. 2007. Managing fieldwork data with ToolBox and the Natural Language Toolkit. Language Documentation \& Conservation, 1(1):4457.
 %  \item Chris Rogers. 2010. Review of FieldWorks Language Explorer (FLEx) 3.0. Language Documentationation \& Conservation, 4:7884.
   \item R. Schroeter and N. Thieberger. 2006. EOPAS, the EthnoER online representation of interlinear text. In Sebastian Nordoff, editor, Sustainable Data from Digital Fieldwork. University of Sydney, Sydney.
