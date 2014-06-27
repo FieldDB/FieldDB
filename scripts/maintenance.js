@@ -1414,8 +1414,8 @@ $.couch.allDbs({
 /*
 Convert ACRA activities into fielddb activies
  */
-
-var lastPosition = 1402818525880;
+//1402818525880
+var lastPosition = 1403792172786;//1403792172786
 var database = $.couch.db("acra-learnx");
 var limit = 30000000;
 var saved = 0;
