@@ -136,7 +136,7 @@ Online Linguistic Database.}
 with an overview of the two systems.}
 \note[item]{However, we are at a transition point since we are beginning to
     merge these two tools under the LingSync name and are very interested in
-    getting feedback on our approach from you, our learned peers, who have
+    getting feedback on our approach from you, our learned peers, who have 
     thought much about these issues; in general, we're very excited to be here
     to be part of the discussion about how computational tools and
     computational linguistic advances can benefit fieldwork on endangered
@@ -177,8 +177,8 @@ with an overview of the two systems.}
     %\item Important differences (Crippen \& Robinson 2013)
 \end{itemize}
 \note[item]{So, it hardly needs to be stated that we are in a situation where
-    a significant portion of the world's languages are predicted to be extinct,
-    or "sleeping" to use a more optimistic jargon, in the very near future.}
+    a significant portion of the world's languages are predicted to be extinct
+    or "sleeping" in the very near future.}
 \note[item]{Linguistic diversity and language vitality are valuable from a
     number of perspectives. For those who might be skeptical of a strong link
     between language vitality and social well-being, the Hallett et al. (2007)
@@ -217,7 +217,7 @@ with an overview of the two systems.}
                     which sees a bunch of data that nobody can make sense of.}
             \item<4->Theoretical linguistic analysis uncovers previously
                 unknown generalizations (Murray 2014)
-                \note[item]<4>{There is a related debate over the role of
+                \note[item]<4>{There is a related debate over the role of 
                     theoretical linguistic analysis here, with some typologists
                     advocating a descriptive approach and theoretical linguists
                     responding in defence of a hypothesis-driven approach and its
@@ -246,7 +246,7 @@ with an overview of the two systems.}
                     are genuinely committed to documentation or revitalization. Not all
                     communities need or desire the help of academic fieldworkers. In some
                     cases, the political landscape of an endangered language
-                    community is just too complex for a field linguist to navigate. In
+                    community is just too complex for a field linguist to navigate. In 
                     these types of situations, the best course of action for all parties
                     involved may be for linguist fieldworkers to respectfully
                     and ethically pursue their own research agenda.}
@@ -257,8 +257,8 @@ with an overview of the two systems.}
             extent the LingSync/OLD approach can sidestep them. The attitude we advocate
             is something along the lines of "can't we all just get along?". We want to
             help contribute towards an infrastructure which facilitates, but does not
-            require, collaboration between stakeholders, an infrastructure which is
-            flexible and general enough to be useful to different types of linguist
+            require, collaboration between stakeholders, an infrastructure which is 
+            flexible and general enough to be useful to different types of linguist 
             and fieldworker. We want to help fieldworkers to make their data more useful
             to their peers.}
 \end{itemize}
@@ -275,25 +275,25 @@ with an overview of the two systems.}
 \begin{center}
 \begin{small}
 \begin{tikzpicture}[
-    every node/.style={align=center,text=white,draw=none},
-    every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
-    researcher/.style={thick,circle,fill=blue},
-    revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
-    lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
-    documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
-    to/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+	  every node/.style={align=center,text=white,draw=none},
+	  every matrix/.style={ampersand replacement=\&,column sep=0.25cm,row sep=0.2cm},
+	  researcher/.style={thick,circle,fill=blue},
+	  revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=blue,inner sep=-0.2cm},
+	  lingsync/.style={thick,fill=green,regular polygon, regular polygon sides=4,inner sep=-.3cm,text=black},
+	  documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,inner sep=-.2cm,fill=blue},
+	  to/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
 
-    % Position the nodes using a matrix layout
-    \matrix{
-      \node[researcher] (researcher1) {researcher};  \&  \& \node[researcher] (researcher2) {researcher};\\
-        \&  \node[lingsync] (lingsyncold) {LingSync/OLD}; \\
-      \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
-    };
+	  % Position the nodes using a matrix layout
+	  \matrix{
+	    \node[researcher] (researcher1) {researcher};  \&  \& \node[researcher] (researcher2) {researcher};\\
+	      \&  \node[lingsync] (lingsyncold) {LingSync/OLD}; \\
+	    \node[documenter] (documenter) {documenter};  \&  \& \node[revitalizer] (revitalizer) {revitalizer};\\
+	  };
 
-    \draw[to] (lingsyncold) -- node[midway,right] {} (researcher1);
-    \draw[to] (lingsyncold) -- node[midway,left] {} (researcher2);
-    \draw[to] (lingsyncold) -- node[midway,right] {} (documenter);
-    \draw[to] (lingsyncold) -- node[midway,left] {} (revitalizer);
+	  \draw[to] (lingsyncold) -- node[midway,right] {} (researcher1);
+	  \draw[to] (lingsyncold) -- node[midway,left] {} (researcher2);
+	  \draw[to] (lingsyncold) -- node[midway,right] {} (documenter);		  
+	  \draw[to] (lingsyncold) -- node[midway,left] {} (revitalizer);
 \end{tikzpicture}
 \end{small}
 \label{lingsync:bridge}
@@ -373,8 +373,8 @@ Curation of data
 \end{requirement}
 \end{uncoverenv}
 \note[item]<3>{The system should facilitate the curation of data, that is, its
-    iterative and collaborative refinement over time. For example, the
-    initial output of elicitation could be simply an audio recording and a
+    iterative and collaborative refinement over time. For example, the 
+    initial output of elicitation could be simply an audio recording and a 
     transcription of salient forms. Then, subsequent waves of data curation can
     involve transcription at various levels and/or the creation of
     morphological analyses and annotations of various types, for example,
@@ -438,13 +438,13 @@ User productivity
 \begin{center}
 \def\firstcircle{(0:-2cm) circle (2.5cm)}
 \def\secondcircle{(0:2cm) circle (2.5cm)}
-\def\thirdcircle{(0,-2.5cm) circle (2.5cm)}
+\def\thirdcircle{(0,-2.5cm) circle (2.5cm)} 
 \begin{small}
 \begin{tikzpicture}
   \draw \firstcircle node {Collaborate};
   \draw \secondcircle node {Features};
   \draw \thirdcircle node {Structure};
-
+  
   \draw (-2cm,0.5cm)  node[text=black] {Share/};
   %\draw (2cm,0.5cm)  node[text=black] {Interlinear Glossing};
   \draw (2cm,0.5cm)  node[text=black] {Fieldwork};
@@ -548,41 +548,41 @@ User productivity
    %postaction = {draw,line width=4pt, green, shorten >= 8pt}]
 %
 %\begin{tikzpicture}[
-    %every node/.style={align=center,text=white,draw=none},
-    %every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
-    %audio/.style={thick,fill=magenta,inner sep=0.3cm},
-    %corpus/.style={thick,fill=red,inner sep=0.3cm},
-    %lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
-    %parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
-    %activity/.style={thick,fill=green,inner sep=0.3cm},
-    %revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
-    %researcher/.style={thick,circle,fill=black},
-    %documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
-    %to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
-    %twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
+	  %every node/.style={align=center,text=white,draw=none},
+	  %every matrix/.style={ampersand replacement=\&,column sep=0.8cm,row sep=0.7cm},
+	  %audio/.style={thick,fill=magenta,inner sep=0.3cm},
+	  %corpus/.style={thick,fill=red,inner sep=0.3cm},
+	  %lexicon/.style={thick,fill=yellow!30!red,inner sep=0.3cm},
+	  %parser/.style={thick,fill=blue!40!red,inner sep=0.3cm},
+	  %activity/.style={thick,fill=green,inner sep=0.3cm},
+	  %revitalizer/.style={thick,regular polygon, regular polygon sides=3,fill=black!60!green, inner sep=0cm},
+	  %researcher/.style={thick,circle,fill=black},
+	  %documenter/.style={thick,rounded corners,regular polygon, regular polygon sides=4,fill=blue, inner sep=0cm},
+	  %to/.style={->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize},
+	  %twoway/.style={<->,>=stealth',shorten >=1pt,draw=green,very thick,font=\sffamily\footnotesize}]
 %
-    %% Position the nodes using a matrix layout
-    %\matrix{
-      %\&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
-      %\node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
-      %\&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
+	  %% Position the nodes using a matrix layout
+	  %\matrix{
+	    %\&  \node[lexicon] (lexicon) {lexicon};  \&   \node[corpus] (corpus) {corpus};  \& \node[audio] (audio) {phonetic};   \\
+	    %\node[parser] (parser) {morpho-\\syntax}; \& \& \&\\ %\node[activity] (activity) {activity};\\
+	    %\&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[revitalizer] (learnx) {Learn\\X};  \\
 %% Actually there are more UIs:
-%%     \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
-    %};
+%%	   \node[researcher] (lexbrowser) {Lexicon\\Browser};   \&  \node[researcher] (prototype) {Prototype};  \& \node[documenter] (spreadsheet) {Spread-\\sheet};  \& \node[documenter] (corpuspages) {Public\\URLs};  \& \node[revitalizer] (learnx) {learnx};  \& \node[revitalizer] (asr) {ASR};\\
+	  %};
 %
-    %\draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
-    %\draw[twoway] (audio) -- node[midway,right] {} (corpus);
-    %\draw[to] (lexicon) -- node[midway] {} (parser);
-    %\draw[to] (corpus) -- node[midway] {} (parser);
-    %\draw[to] (parser) -- node[midway,right] {} (prototype);
-    %\draw[to] (parser) -- node[midway,right] {} (spreadsheet);
-    %\draw[twoway] (corpus) -- node[midway,right] {} (prototype);
-    %\draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
-    %\draw[twoway] (corpus) -- node[midway,right] {} (learnx);
-    %\draw[twoway] (audio) -- node[midway,right] {} (prototype);
-%%    \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
-    %\draw[twoway] (audio) -- node[midway,right] {} (learnx);
-    %\draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
+	  %\draw[twoway] (lexicon) -- node[midway,right] {} (corpus);
+	  %\draw[twoway] (audio) -- node[midway,right] {} (corpus);
+	  %\draw[to] (lexicon) -- node[midway] {} (parser);
+	  %\draw[to] (corpus) -- node[midway] {} (parser);
+	  %\draw[to] (parser) -- node[midway,right] {} (prototype);
+	  %\draw[to] (parser) -- node[midway,right] {} (spreadsheet);
+	  %\draw[twoway] (corpus) -- node[midway,right] {} (prototype);
+	  %\draw[twoway] (corpus) -- node[midway,right] {} (spreadsheet);
+	  %\draw[twoway] (corpus) -- node[midway,right] {} (learnx);
+	  %\draw[twoway] (audio) -- node[midway,right] {} (prototype);
+%%	  \draw[twoway] (audio) -- node[midway,right] {} (spreadsheet); %TODO its not supposed to be missing this arrow, it just happened as the app was being developed... the spreadsheet DOES have audio, but the audio is going straight into the corpus rather than being preprocessed.
+	  %\draw[twoway] (audio) -- node[midway,right] {} (learnx);
+	  %\draw[twoway] (lexicon) -- node[midway,right] {} (prototype);
 %\end{tikzpicture}
 %\end{small}
 %\label{lingsync:architecture}
@@ -596,8 +596,7 @@ User productivity
     bulk of user data are stored and the two primary GUIs---the Spreadsheet
     web application and the Prototype online/offline Chrome app---which
     mediate user interaction with the corpus web service.}
-\note[item]{The audio web service can make lossy copies of large files,
-    can identify utterances within large files, and can align transcriptions
+\note[item]{The audio web service can identify utterances within large files, and can align transcriptions
     and audio files using another tool called the ProsodyLab-Aligner.}
 \note[item]{The parser component depicted here is the OLD's morphological
     parser functionality which we plan to plug in to LingSync. This component
@@ -628,7 +627,7 @@ User productivity
 
 \note[item]<2>{The OLD architecture is similar to that of LingSync in many respects}
 \note[item]<2>{Without going into too much detail, the major architectural
-    difference between the two systems is that in a language-specific OLD application users
+    difference between the two systems is that in a language-specific OLD application users 
     contribute to a single repository of language data to which all other users, by default,
     have access; in contrast, LingSync, as mentioned above, assumes allows users
     to create private corpora that they can grant various levels of access to.
@@ -693,12 +692,12 @@ User productivity
       \toprule
                      ~ &  Active & Investigating & In-active & Total\\
       \midrule
-      Public Corpora  &       2 &   1 &   2 & 5 \\
-      Private Corpora &      15 &  37 & 321 & 373\\
+      Public Corpora  &       2 &   1 &   2 & 5 \\ 
+      Private Corpora &      15 &  37 & 321 & 373\\ 
       Users           &      38 &  43 & 220 & 301 \\
       Documents & 13,408 & 2,763 & 4,541 &23,487\\
       Disk Size & 1GB & .9GB & 5.3GB& 7.2GB\\
-
+      
       \bottomrule
 
 \end{tabular}
@@ -795,8 +794,8 @@ activities; Investigating users: 100-10 activities.}
 \begin{frame}
 \frametitle{Plugins}
 \begin{itemize}
-  \item Audio
-  \item Lexicon
+	\item Audio
+	\item Lexicon
 \end{itemize}
 
 \note{In this section I will show some screenshots of a couple of our more interesting plugins for~\\~ \\audio processing and\\lexicon visualization.}
@@ -832,7 +831,7 @@ activities; Investigating users: 100-10 activities.}
 %
 %\begin{figure}
 %\begin{center}
-%\includegraphics[width=2.5in]{../../figures/farley}
+%\includegraphics[width=2.5in]{../../figures/farley} 
 %\\
 %\includegraphics[width=2.5in]{../../figures/inuktitut}
 %\caption{Screenshot of Farley's Morphological Analyzer wrapped in a Node.js Web Service And offered in a HTML5 User Interface  }
@@ -969,7 +968,7 @@ Requirements (fieldworkers should be able to):
     surface transcription as input and returns a set of candidate parses as
     output; it is the composition of a phonology transducer and a morphology
     transducer.}
-\note[item]{The candidate ranker assigns a probability to each candidate parse
+\note[item]{The candidate ranker assigns a probability to each candidate parse 
     returned by the morphophonology; it is built upon an $N$-gram language
     model.}
 \end{frame}
@@ -1037,7 +1036,7 @@ Requirements (fieldworkers should be able to):
         \note[item]<4>{The second line in (\getref{phonology}), for example, is
             a rule which transforms the hyphen morpheme delimiter to an "s" when
             it occurs after a "t" and before an "i". A fieldworker can immediately
-            begin using this formalism after learning a few simple notational
+            begin using this formalism after learning a few simple notational 
             oddities, such as the use of double vertical lines in place of the
             forward slash that is customary in rule-based phonology texts.}
     \item<5->facilitate automated analysis testing
@@ -1215,13 +1214,13 @@ parser & succ. & F-score & prec. & rec. & phon. & morphon. & LM \\
 \note[item]<3>{It is interesting that the phonology of Parser 2 performs so much
     better yet the gains in overall parse rate and F-score are not as
     significant. Parser 2 essentially puts a far greater burden on the language
-    model, a burden which is too much for an LM based on counts from an extremely
+    model, a burden which is too much for an LM based on counts from an extremely 
     small corpus of 3,400 words. Parser 2's morphophonology transducer produces
     approximately 1,800 analysis candidates per input word. As more well
     analyzed words are added to the database with the aid of the parsers, the
     LM will improve and, as a result, so too will the parser as a whole.}
 \note[item]<4>{Of course, another means of improving overall performance would
-    be to improve the performance of the phonology without causing it to
+    be to improve the performance of the phonology without causing it to 
     massively overgenerate during analysis and put such a burden on the LM,
     that is, by using fieldworker knowledge to write a phonology that can
     predict the location of accented vowels. This is in the works.}
@@ -1296,8 +1295,8 @@ computationally-assisted endangered languages fieldwork:
     \item LingSync/OLD are effective tools for facilitating fieldwork on endangered languages
     \item All stakeholders All devices
     %\item High productivitiy requirements
-    \item Modular Web Services and Plugin Architecture
-    \item Open Source, Open Development, Open Data
+    \item Modular Web Services and Plugin Architecture 
+    \item Open Source, Open Development, Open Data 
     \item Synthesizing fieldworker and CL expertise
 \end{itemize}
 
