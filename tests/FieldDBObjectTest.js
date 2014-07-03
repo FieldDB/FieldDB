@@ -151,8 +151,8 @@ describe("FieldDBObject", function() {
     it("should add a new linked data to the original", function() {
       var babypenguin = penguin.clone();
 
-      expect(babypenguin.linkedData).toEqual([{
-        uri: "firstPenguin?rev=2-123",
+      expect(babypenguin.relatedData).toEqual([{
+        URI: "firstPenguin?rev=2-123",
         relation: "clonedFrom"
       }]);
     });
