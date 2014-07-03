@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #IF you want to customize the home's location, change this variable
-echo $FIELDDB_HOME || {
-  FIELDDB_HOME=$HOME/fielddbhome
-}
+FIELDDB_HOME=$HOME/fielddbhome
+
 # For wget on mac using:  "curl -O --retry 999 --retry-max-time 0 -C -"
 
 # We need git to do anything, anyone who is running this script should have git installed
@@ -122,9 +121,11 @@ open -a Google\ Chrome docs/javascript/Corpus.html;
 echo "Building the Prototype App, it was written in Backbone.js, and needs you to pre-compile your Handlebars templates before you can open it"
 echo "Preparing to compiling the Prototype's handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
 cd backbone_client
+echo " Installing client side dependancies (managed by Bower)"
 bower install
 
 echo 'The handlebars templates have to be compiled and turned into javascript before you can run the Chrome App (as of Chrome manifest v2 you cant use any sort of Eval in your code, and templates generally require eval. So this means that before you can use the app, we now have "build step" ie, run this script if you have changed anything in the .handlebars files)'
+cd $FIELDDB_HOME/FieldDB
 ./scripts/build_templates.sh
 echo "If you want to get started developing or using the Offline Chrome App, you now can load it as an Chrome Extension."
 echo 'Instructions:'
@@ -142,7 +143,11 @@ open http://developer.chrome.com/extensions/getstarted.html#unpacked;
 
 echo "Building the Spreadsheet App, it is written in Angular.js and needs you to bower install its dependancies before you can open it"
 cd angular_client/modules/spreadsheet
+echo " Installing client side dependancies (managed by Bower)"
 bower install
+
+echo " Creating a private services file which you can use to change the servers the spreadsheet app contacts"
+cp js/private_services_sample.js js/private_services.js
 grunt
 
 echo "What is your GitHub username (so we can set that to the origin of the repos instead of the main project)"
