@@ -72,16 +72,22 @@ var CORS = require("./CORS").CORS;
  */
 var FieldDBObject = function FieldDBObject(json) {
   // console.log("In parent an json", json);
+  var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
     // console.log("JSON: " + member);
-    if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function") {
-      console.log("parsing member " + member, this.INTERNAL_MODELS[member]);
+    if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
+      console.log("Parsing model: " + member);
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
+    } else {
+      simpleModels.push(member);
     }
     this[member] = json[member];
+  }
+  if (simpleModels.length > 0) {
+    console.log("simpleModels", simpleModels.join(", "));
   }
   Object.apply(this, arguments);
   if (!this.id) {
@@ -257,6 +263,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (value === this._dbname) {
         return;
       }
+      if (this._dbname) {
+        throw "This is the " + this._dbname + ". You cannot change the dbname of a corpus, you must create a new object first.";
+      }
       if (!value) {
         delete this._dbname;
         return;
@@ -407,13 +416,20 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function(includeEvenEmptyAttributes) {
       var json = JSON.parse(JSON.stringify(this.toJSON()));
 
-      json.linkedData = json.linkedData || [];
+      var relatedData;
+      if (json.datumFields && json.datumFields.relatedData) {
+        relatedData = json.datumFields.relatedData.json.relatedData || []
+      } else if (json.relatedData) {
+        relatedData = json.relatedData;
+      } else {
+        json.relatedData = relatedData = [];
+      }
       var source = json._id;
       if (json._rev) {
         source = source + "?rev=" + json._rev;
       }
-      json.linkedData.push({
-        uri: source,
+      relatedData.push({
+        URI: source,
         relation: "clonedFrom"
       });
 

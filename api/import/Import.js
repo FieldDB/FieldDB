@@ -2,11 +2,11 @@
 var AudioVideo = require("./../FieldDBObject").FieldDBObject;
 var AudioVideos = require('./../Collection').Collection;
 var Collection = require('./../Collection').Collection;
-// var Corpus = require('./../corpus/Corpus').Corpus;
 var CORS = require('./../CORS').CORS;
+var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
 var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumFields = require('./../Collection').Collection;
+var DatumFields = require('./../datum/DatumFields').DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var FileReader = {};
 var Session = require("./../FieldDBObject").FieldDBObject;
@@ -78,11 +78,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
-  internalModels: {
+  INTERNAL_MODELS: {
     value: {
       datalist: DataList,
       datumFields: DatumFields,
-      session: Session
+      session: Session,
+      corpus: Corpus
     }
   },
 
@@ -100,22 +101,19 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
 
       Q.nextTick(function() {
-        var datum = self.datumCollection.find(options.uri);
-        if (!datum) {
-          datum = new Datum();
-        }
-        options.datum = datum;
-
         self.readUri(options)
           .then(self.preprocess)
           .then(self.import)
           .then(function(result) {
+            console.log("Import is finished");
             if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
               options.next();
             }
+            // console.log('result.datum', result.datum);
             self.datumCollection.add(result.datum);
             deferred.resolve(result);
-          }).fail(function(reason) {
+          })
+          .fail(function(reason) {
             deferred.reject(reason);
           });
 
@@ -135,31 +133,51 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           throw 'Options must be specified {}';
         }
 
-        if (options.readOptions) {
-          options.readOptions.readFileFunction(function(err, data) {
-            if (err) {
-              deferred.reject(err);
-            } else {
-              options.rawText = data;
-              deferred.resolve(options);
-            }
-          });
-        } else {
-          console.log('TODO reading url in browser');
-          CORS.makeCORSRequest({
-            type: 'GET',
-            dataType: 'json',
-            url: options.uri
-          }).then(function(data) {
-              console.log(data);
-              options.rawText = data;
-              deferred.resolve(options);
-            },
-            function(reason) {
-              console.log(reason);
-              deferred.reject(reason);
+        var pipeline = function(optionsWithADatum) {
+          if (optionsWithADatum.readOptions) {
+            optionsWithADatum.readOptions.readFileFunction(function(err, data) {
+              if (err) {
+                deferred.reject(err);
+              } else {
+                optionsWithADatum.rawText = data;
+                deferred.resolve(optionsWithADatum);
+              }
             });
-        }
+          } else {
+            console.log('TODO reading url in browser');
+            CORS.makeCORSRequest({
+              type: 'GET',
+              dataType: 'json',
+              uri: optionsWithADatum.uri
+            }).then(function(data) {
+                console.log(data);
+                optionsWithADatum.rawText = data;
+                deferred.resolve(optionsWithADatum);
+              },
+              function(reason) {
+                console.log(reason);
+                deferred.reject(reason);
+              });
+          }
+        };
+
+        self.corpus.find(options.uri)
+          .then(function(similarData) {
+            if (similarData.length === 1) {
+              options.datum = similarData[0];
+              pipeline(options);
+            } else {
+              // console.log("readUri corpus", self);
+              self.corpus.newDatum().then(function(datum) {
+                options.datum = datum;
+
+                pipeline(options);
+              });
+            }
+          })
+          .fail(function(reason) {
+            deferred.reject(reason);
+          });
 
       });
       return deferred.promise;
@@ -171,12 +189,55 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(options) {
       var deferred = Q.defer(),
         self = this;
+      // console.log("In the preprocess", this);
 
       Q.nextTick(function() {
-        if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
-          options.next();
+        console.log("Preprocessing  ");
+        try {
+
+          var failFunction = function(reason) {
+            if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+              options.next();
+            }
+            deferred.reject(reason);
+          };
+
+          var successFunction = function(optionsWithResults) {
+            console.log("Preprocesing success");
+            if (optionsWithResults && typeof optionsWithResults.next === 'function' /* enable use as middleware */ ) {
+              optionsWithResults.next();
+            }
+            deferred.resolve(optionsWithResults);
+          };
+
+          options.datum.datumFields.orthography.value = options.rawText;
+          options.datum.datumFields.utterance.value = options.rawText;
+          options.datum.id = options.uri;
+
+          console.log("running write for preprocessed");
+          if (options.preprocessOptions && options.preprocessOptions.writePreprocessedFileFunction) {
+            options.preprocessedUrl = options.uri.substring(0, options.uri.lastIndexOf(".")) + "_preprocessed.json";
+            var preprocessResult = JSON.stringify(options.datum.toJSON(), null, 2);
+            deferred.resolve(options);
+
+            options.preprocessOptions.writePreprocessedFileFunction(options.preprocessedUrl,
+              preprocessResult,
+              function(err, data) {
+                console.log("Wrote " + options.preprocessedUrl);
+                if (err) {
+                  failFunction(err);
+                } else {
+                  successFunction(options)
+                }
+              });
+          } else {
+            successFunction(options);
+          }
+
+
+        } catch (e) {
+          deferred.reject(e);
         }
-        deferred.resolve(options);
       });
       return deferred.promise;
     }
@@ -191,6 +252,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(options) {
       var deferred = Q.defer(),
         self = this;
+      console.log("in the import");
 
       Q.nextTick(function() {
         if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
@@ -236,6 +298,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           key: '_id'
         });
       }
+      console.log("Returning a collection");
       return this._datumCollection;
     },
     set: function(value) {
@@ -455,7 +518,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       //    HEADER can be put in the session and in the datalist
       var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g, "\n").replace(/[\[\]{}]/g, "").replace(/:/g, " : ").replace(/"/g, "").replace(/\\n/g, "").replace(/file : /g, "file:").replace(/ : \//g, ":/").trim();
       //TODO turn these into session fields
-      self.set("status", self.get("status") + "\n" + annotationDetails);
+      self.set("status", self.status + "\n" + annotationDetails);
 
 
       var header = [];
@@ -745,11 +808,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             }
             var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
             fileDetails.description = message;
-            self.set("status", self.get("status") + "<br/>" + message);
-            self.set("fileDetails", self.get("status") + message);
+            self.set("status", self.status + "<br/>" + message);
+            self.set("fileDetails", self.status + message);
             window.appView.toastUser(message, "alert-info", "Import:");
-            self.set("rawText", self.get("rawText").trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results);
-            self.importTextGrid(self.get("rawText"), self, null);
+            self.set("rawText", self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results);
+            self.importTextGrid(self.rawText, self, null);
           } else {
             console.log(results);
             fileDetails.textgrid = "Error result was empty. " + results;
@@ -963,9 +1026,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         text.replace(/\n+/g, ' ').replace(/\r+/g, ' ');
       }
       this.datumCollection.add({
-        label: 'orthography',
+        id: 'orthography',
         value: text
       });
+      console.log("added a datum to the collection");
     }
   },
   readFiles: {
@@ -985,7 +1049,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       }
 
-      var status = this.get("status");
+      var status = this.status;
       this.set("fileDetails", filedetails.join(''));
       status = status + filedetails.join('');
       this.set("status", status);
@@ -1075,7 +1139,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           importType.csv.confidence++;
         } else if (fileExtension === "txt") {
           //If there are more than 20 tabs in the file, try tabbed.
-          if (self.get("rawText").split("\t").length > 20) {
+          if (self.rawText.split("\t").length > 20) {
             importType.tabbed.confidence++;
           } else {
             importType.handout.confidence++;
@@ -1101,7 +1165,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var mostLikelyImport = _.max(importType, function(obj) {
         return obj.confidence;
       });
-      mostLikelyImport.importFunction(self.get("rawText"), self, null); //no callback, TODO strange loss of reference in importview
+      mostLikelyImport.importFunction(self.rawText, self, null); //no callback, TODO strange loss of reference in importview
       self.set("status", "");
     }
   },
