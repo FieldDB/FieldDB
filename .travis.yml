@@ -22,6 +22,7 @@ env:
 before_install:
   # Download and configure deps
   npm install -g grunt-cli &&
+  npm install -g jasmine-node && 
   npm install
 before_script:
   # Make sure the emulator has started before running tests
