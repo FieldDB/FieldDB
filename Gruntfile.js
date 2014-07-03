@@ -35,18 +35,24 @@ module.exports = function(grunt) {
     },
     // to run one folder of tests only: $ jasmine-node tests/corpus --matchall
     jasmine_node: {
-      specNameMatcher: 'Test',
-      projectRoot: './',
-      requirejs: false,
-      forceExit: true,
-      isVerbose: true,
-      showColors: true,
-      jUnit: {
-        report: true,
-        savePath: './build/reports/jasmine/',
-        consolidate: true,
-        useDotNotation: false
-      }
+      options: {
+        match: '.',
+        matchall: false,
+        extensions: 'js',
+        specNameMatcher: 'Test',
+        projectRoot: './',
+        requirejs: false,
+        forceExit: true,
+        isVerbose: true,
+        showColors: true,
+        jUnit: {
+          report: true,
+          savePath: './build/reports/jasmine/',
+          consolidate: true,
+          useDotNotation: false
+        }
+      },
+      all: ['tests/']
     },
     jshint: {
       options: {
@@ -62,7 +68,7 @@ module.exports = function(grunt) {
         src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
       },
       test: {
-         options: {
+        options: {
           jshintrc: 'tests/.jshintrc',
           ignores: ['tests/libs/**/*js']
         },
@@ -71,7 +77,7 @@ module.exports = function(grunt) {
     },
     jsdoc: {
       dist: {
-        jsdoc : 'node_modules/.bin/jsdoc',
+        jsdoc: 'node_modules/.bin/jsdoc',
         src: ['api/**/*.js'],
         // src: ['api/**/*.js', '!tests/libs/**/*.js', 'tests/**/*.js'],
         options: {
