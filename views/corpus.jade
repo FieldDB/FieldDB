@@ -75,7 +75,7 @@ block content
             a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
         .tab-content
           .tab-pane.active#terms
-            p #{corpora[0].corpusinfo.terms.humanReadable}
+            p #{corpora[0].corpusinfo.termsOfUse.humanReadable}
             span License: 
             a(href="#{corpora[0].corpusinfo.license.link}", rel="license", title="#{corpora[0].corpusinfo.license.title}") #{corpora[0].corpusinfo.license.title}
             p #{corpora[0].corpusinfo.license.humanReadable}
