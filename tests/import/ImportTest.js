@@ -1,9 +1,11 @@
-var Import = require('../../api/import/Import').Import;
+var Import = require('./../../api/import/Import').Import;
+var Corpus = require('./../../api/corpus/Corpus').Corpus;
 var fs = require('fs');
 
 var specIsRunningTooLong = 5000;
 
 describe("api/import/Import", function() {
+
   it("should load", function() {
     expect(Import).toBeDefined();
   });
@@ -13,6 +15,30 @@ describe("api/import/Import", function() {
     expect(importer).toBeDefined();
   });
 
+  it("should be able to use a corpus", function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults);
+    expect(corpus).toBeDefined();
+    // console.log(corpus);
+    expect(corpus.dbname).toBeDefined();
+
+
+    var importer = new Import({
+      corpus: corpus
+    });
+    expect(importer).toBeDefined();
+  });
+
+  it("should be able to ask the corpus to create a datum", function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults);
+    corpus.dbname = dbname;
+    var datum = corpus.newDatum();
+    console.log(datum);
+    expect(datum).toBeDefined();
+  });
+
+
 });
 
 describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
@@ -21,40 +47,89 @@ describe("Batch Import: as a morphologist I want to import directories of text f
     localUri = './sample_data/orthography.txt',
     remoteUri = 'https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/sample_data/orthography.txt';
 
+  var defaultOptions = {
+    uri: localUri,
+    readOptions: {
+      readFileFunction: function(callback) {
+        fs.readFile(localUri, 'utf8', callback);
+      }
+    },
+    preprocessOptions: {
+      writePreprocessedFileFunction: function(filename, body, callback) {
+        fs.writeFile(filename, body, 'utf8', callback);
+      },
+      transliterate: true,
+      joinLines: true,
+    },
+    importOptions: {
+      dryRun: true,
+      fromPreprocessedFile: true
+    }
+  };
+
   beforeEach(function() {
-    corpus = {};
+    var dbname = "testingbatchimport-rawtext"
+    corpus = new Corpus(Corpus.defaults);
+    corpus.dbname = dbname;
+    corpus.language = {
+      "ethnologueUrl": "",
+      "wikipediaUrl": "",
+      "iso": "ka",
+      "locale": "",
+      "englishName": "",
+      "nativeName": "",
+      "alternateNames": ""
+    };
     importer = new Import({
+      dbname: dbname,
       corpus: corpus
     });
   });
 
   it('should accept a read function and a read hook', function(done) {
-    importer.addFileUri({
-      uri: localUri,
-      readOptions: {
-        readFileFunction: function(callback) {
-          fs.readFile(localUri, 'utf8', callback);
-        }
-      }
-    }).then(function(result) {
-      console.log('after add file', result);
-      // expect(result).toBeDefined();
-    }).then(done, done);
+    importer
+      .readUri(defaultOptions)
+      .then(function(result) {
+        console.log('after read file', result);
+        expect(result).toBeDefined();
+        expect(result.rawText.substring(0, 20)).toEqual('Noqata qan qaparinay');
+      })
+      .then(done, done);
   }, specIsRunningTooLong);
 
 
-  xit('should read a url if no a read function is defined', function(done) {
-    importer.addFileUri({
-      uri: remoteUri
-    }).then(function(result) {
-      console.log('after add file', result);
-      expect(result).toBeDefined();
-    }).then(done, done);
+  xit('should read a uri if no a read function is defined', function(done) {
+    importer
+      .readUri({
+        uri: remoteUri
+      })
+      .then(function(result) {
+        console.log('after read file', result);
+        expect(result.datum.datumFields.orthography).toBeDefined();
+      }).then(done, done);
   }, specIsRunningTooLong);
 
-  it('should provide a preprocess hook', function() {
+  it('should provide a preprocess hook', function(done) {
     expect(importer.preprocess).toBeDefined();
-  });
+    defaultOptions.rawText = "placeholder text ";
+    importer
+      .preprocess(defaultOptions)
+      .then(function(result) {
+        console.log('after preprocess file');
+        expect(result.datum.datumFields.utterance).toBeDefined();
+        expect(result.preprocessedUrl).toEqual('./sample_data/orthography_preprocessed.json');
+
+        if (result.datum.datumFields.orthography.value !== result.rawText.trim()) {
+          expect(result.datum.datumFields.originalText.value)
+            .toEqual(result.rawText.trim());
+        } else {
+          expect(result.datum.datumFields.orthography.value)
+            .toEqual(result.rawText.trim());
+        }
+      })
+      .then(done, done);
+
+  }, specIsRunningTooLong);
 
   it('should provide a import hook', function() {
     expect(importer.import).toBeDefined();
@@ -64,7 +139,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
     expect(importer.datalist).toBeDefined();
   });
 
-  it('should be able to import from a uri', function(done) {
+  xit('should be able to import from a uri', function(done) {
 
     importer.addFileUri({
       uri: localUri,
@@ -89,7 +164,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
       }
     }).then(function(result) {
       console.log('after add file', result);
-      expect(result).toBeDefined();
+      expect(result.rawText).toBeDefined();
     }).then(done, done);
 
   }, specIsRunningTooLong);
@@ -109,7 +184,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
   });
 
 });
-describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+xdescribe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
   var importer;
   beforeEach(function() {
     importer = new Import();
@@ -122,22 +197,14 @@ describe("Batch Import: as a morphologist I want to import directories of text f
 });
 
 
-describe("Import: as a morphologist I want to import my data from CSV", function() {
+xdescribe("Import: as a morphologist I want to import my data from CSV", function() {
   it("should detect drag and drop", function() {
     expect(true).toBeTruthy();
   });
 
 });
 
-describe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
-
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
-  });
-
-});
-
-describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
+xdescribe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
 
   it("should detect drag and drop", function() {
     expect(true).toBeTruthy();
@@ -145,7 +212,15 @@ describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import 
 
 });
 
-describe("Import Template", function() {
+xdescribe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
+
+  it("should detect drag and drop", function() {
+    expect(true).toBeTruthy();
+  });
+
+});
+
+xdescribe("Import Template", function() {
 
   beforeEach(function() {
     // var d = document.createElement("div");

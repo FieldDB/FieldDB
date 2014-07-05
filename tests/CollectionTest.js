@@ -1,7 +1,7 @@
 'use strict';
 
 var Collection = require('../api/Collection').Collection;
-
+var DEFAULT_DATUM_VALIDATION_STATI = require("./../api/datum/validation-status.json");
 /*
   ======== A Handy Little Jasmine Reference ========
 https://github.com/pivotal/jasmine/wiki/Matchers
@@ -42,29 +42,6 @@ https://github.com/pivotal/jasmine/wiki/Matchers
     });
 
 */
-var sampleCollection = [{
-  label: "utterance",
-  labelMachine: "utterance",
-  help: "What was said/written",
-  value: "Noqata tusunayawanmi",
-  mask: "Noqata tusunayawanmi",
-  helpLinguist: "Line 1 in examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
-}, {
-  label: "translation",
-  labelMachine: "translation",
-  value: "I feel like dancing.",
-  mask: "I feel like dancing.",
-  help: "Free translation into whatever language the corpus team chooses",
-  language: "en",
-  helpLinguist: "Morpheme segmentation"
-}, {
-  label: "morphemes",
-  labelMachine: "morphemes",
-  value: "Noqa-ta tusu-naya-wa-n-mi",
-  mask: "Noqa-ta tusu-naya-wa-n-mi",
-  help: "Words divided into prefixes, root and suffixes",
-  helpLinguist: "Morpheme segmentation"
-}];
 
 describe('lib/Collection', function() {
 
@@ -78,41 +55,48 @@ describe('lib/Collection', function() {
     beforeEach(function() {
       collection = new Collection({
         inverted: true,
-        primaryKey: 'label'
+        primaryKey: 'validationStatus'
       });
 
-      collection.add(sampleCollection[0]);
-      collection.add(sampleCollection[1]);
+      collection.add(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      collection.add(DEFAULT_DATUM_VALIDATION_STATI[1]);
     });
 
     it('should accept a primary key', function() {
-      expect(collection.primaryKey).toEqual('label');
+      expect(collection.primaryKey).toEqual('validationStatus');
     });
 
-    it('should use the primary key', function() {
-      expect(collection.find('utterance')[0]).toEqual(sampleCollection[0]);
+    it('should use the primary key to get members using dot notation', function() {
+      expect(collection.Published_).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
     });
 
     it('should accept inverted', function() {
-      expect(collection.collection[0]).toEqual(sampleCollection[1]);
+      expect(collection.collection[0]).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
     });
 
     it('should permit push to add to the bottom', function() {
-      collection.push(sampleCollection[2]);
-      expect(collection.collection[2]).toEqual(sampleCollection[2]);
+      collection.push(DEFAULT_DATUM_VALIDATION_STATI[2]);
+      expect(collection.collection[2]).toEqual(DEFAULT_DATUM_VALIDATION_STATI[2]);
     });
 
     it('should permit unshift to add to the top', function() {
-      collection.unshift(sampleCollection[2]);
-      expect(collection.collection[0]).toEqual(sampleCollection[2]);
+      collection.unshift(DEFAULT_DATUM_VALIDATION_STATI[2]);
+      expect(collection.collection[0]).toEqual(DEFAULT_DATUM_VALIDATION_STATI[2]);
     });
 
     it('should permit constrution with just an array', function() {
-      var newcollection = new Collection([
-        sampleCollection[0],
-        sampleCollection[1]
-      ]);
-      expect(collection.length).toEqual(2);
+      var newcollection = new Collection([{
+        id: 'a',
+        type: 'tags'
+      }, {
+        id: 'z',
+        value: 'somethign\n with a line break',
+        type: 'wiki'
+      }, {
+        id: 'c',
+        type: 'date'
+      }]);
+      expect(newcollection.length).toEqual(3);
     });
 
   });
@@ -122,46 +106,111 @@ describe('lib/Collection', function() {
 
     beforeEach(function() {
       collection = new Collection({
-        primaryKey: 'label',
-        collection: sampleCollection
+        primaryKey: 'validationStatus',
+        collection: DEFAULT_DATUM_VALIDATION_STATI
       });
     });
 
     it('should seem like an object by providing dot notation for primaryKeys ', function() {
-      expect(collection.utterance).toEqual(sampleCollection[0]);
+      expect(collection.Checked_).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+    });
+
+    it('should seem like an object by providing case insensitive cleaned dot notation for primaryKeys ', function() {
+      expect(collection.checked).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
     });
 
     it('should return undefined for items which are not in the collection', function() {
-      expect(collection.gloss).toBeUndefined();
+      expect(collection.Removed).toBeUndefined();
     });
 
     it('should be able to find items by primary key', function() {
-      expect(collection.find('utterance')).toEqual([sampleCollection[0]]);
+      expect(collection.find('Checked*')).toEqual([DEFAULT_DATUM_VALIDATION_STATI[0]]);
+    });
+
+    it('should be able to find items by primary key using a regex', function() {
+      collection.add({
+        validationStatus: 'CheckedBySeberina',
+        color: 'green'
+      });
+      expect(collection.find(/^Checked*/)).toEqual([DEFAULT_DATUM_VALIDATION_STATI[0], {
+        validationStatus: 'CheckedBySeberina',
+        color: 'green'
+      }]);
     });
 
     it('should be able to find items by any attribute', function() {
-      expect(collection.find('help', 'What was said/written')).toEqual([sampleCollection[0]]);
+      expect(collection.find('color', 'green')).toEqual([{
+        validationStatus: 'Checked*',
+        color: 'green',
+        default: true
+      }, {
+        validationStatus: 'ApprovedLanguageLearningContent*',
+        color: 'green',
+        showInLanguageLearnignApps: true
+      }]);
     });
 
     it('should accpet a RegExp to find items', function() {
-      expect(collection.find('help', /(written|translation)/i)).toEqual([sampleCollection[0], sampleCollection[1]]);
+      expect(collection.find('color', /(red|black)/i)).toEqual([{
+        validationStatus: 'Deleted*',
+        color: 'red',
+        showInSearchResults: false,
+        showInLanguageLearnignApps: false
+      }, {
+        validationStatus: 'Duplicate*',
+        color: 'red',
+        showInSearchResults: false,
+        showInLanguageLearnignApps: false
+      }]);
     });
 
+    /*TODO chagne this to 'ren' once we have fuzzy find for real */
     it('should be able to fuzzy find items by any attribute', function() {
-      expect(collection.fuzzyFind('value', 'nay')).toEqual([sampleCollection[0], sampleCollection[2]]);
+      expect(collection.fuzzyFind('color', 'r.*n')).toEqual([{
+        validationStatus: 'Checked*',
+        color: 'green',
+        default: true
+      }, {
+        validationStatus: 'ToBeChecked*',
+        color: 'orange'
+      }, {
+        validationStatus: 'ApprovedLanguageLearningContent*',
+        color: 'green',
+        showInLanguageLearnignApps: true
+      }, {
+        validationStatus: 'ContributedLanguageLearningContent*',
+        color: 'orange'
+      }]);
     });
+
+    it('should be able to clone an existing collection', function() {
+      var newbarecollection = collection.clone();
+      expect(newbarecollection).toEqual(DEFAULT_DATUM_VALIDATION_STATI);
+      var newcollection = new Collection({
+        primaryKey: "validationStatus",
+        collection: newbarecollection
+      });
+      newcollection.checked = {
+        validationStatus: "Checked",
+        color: "blue"
+      };
+      expect(collection.checked).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(newcollection.checked).not.toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(collection.checked).not.toEqual(newcollection.checked);
+    });
+
   });
 
   describe('non-lossy persistance', function() {
     var collection,
       collectionToLoad = [{
-        _id: 'a',
+        id: 'a',
         type: 'datum'
       }, {
-        _id: 'z',
+        id: 'z',
         type: 'datum'
       }, {
-        _id: 'c',
+        id: 'c',
         type: 'datum'
       }];
 
@@ -186,7 +235,7 @@ describe('lib/Collection', function() {
       var collectionFromDB = JSON.stringify(collection);
       collection = new Collection({
         collection: JSON.parse(collectionFromDB)
-      })
+      });
       expect(collection.toJSON()).toEqual(collectionToLoad);
       expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
     });
@@ -195,7 +244,7 @@ describe('lib/Collection', function() {
       var collectionFromDB = collection.toJSON();
       collection = new Collection({
         collection: collectionFromDB
-      })
+      });
       expect(collection.toJSON()).toEqual(collectionToLoad);
       expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
     });
