@@ -3,8 +3,11 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var CorpusMask = require("./CorpusMask");
 var Collection = require('./../Collection').Collection;
 var Consultants = require('./../Collection').Collection;
-var DatumFields = require('./../Collection').Collection;
-var DatumStates = require('./../Collection').Collection;
+// var Datum = require('./../datum/Datum').Datum;
+var Datum = require("./../FieldDBObject").FieldDBObject;
+var DatumFields = require('./../datum/DatumFields').DatumFields;
+var DatumStates = require('./../datum/DatumStates').DatumStates;
+var DatumTags = require('./../datum/DatumTags').DatumTags;
 var Comments = require('./../Collection').Collection;
 var UserMask = require('./../Collection').Collection;
 var Session = require('./../FieldDBObject').FieldDBObject;
@@ -39,7 +42,7 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  *
  * @property {Consultants} consultants Collection of consultants who contributed to the corpus
  * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
- * @property {DatumFields} datumfields Collection of datum fields used in the corpus
+ * @property {DatumFields} datumFields Collection of datum fields used in the corpus
  * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
  * @property {Sessions} sessions Collection of sessions that belong to the corpus
  * @property {DataLists} datalists Collection of data lists created under the corpus
@@ -66,6 +69,7 @@ var Corpus = function Corpus(options) {
   // console.log("Constructing corpus", options);
   FieldDBObject.apply(this, arguments);
 };
+Corpus.defaults = DEFAULT_CORPUS_MODEL;
 
 Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
   constructor: {
@@ -218,7 +222,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-  unserializedSessions:{
+  unserializedSessions: {
     value: null
   },
   sessions: {
@@ -451,16 +455,16 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   },
 
   loadOrCreateCorpusByPouchName: {
-    value: function(pouchname) {
+    value: function(dbname) {
       console.warn('TODO test loadOrCreateCorpusByPouchName');
-      if (!pouchname) {
+      if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
       var deferred = Q.defer(),
         self = this;
 
-      pouchname = pouchname.trim();
-      this.pouchname = pouchname;
+      dbname = dbname.trim();
+      this.dbname = dbname;
 
       Q.nextTick(function() {
 
@@ -471,7 +475,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
           }
           self.runningloadOrCreateCorpusByPouchName = true;
           window.setTimeout(function() {
-            self.loadOrCreateCorpusByPouchName(pouchname);
+            self.loadOrCreateCorpusByPouchName(dbname);
           }, 1000);
         };
 
@@ -499,7 +503,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   fetchPublicSelf: {
     value: function() {
       console.warn('TODO test fetchPublicSelf');
-      if (!this.pouchname) {
+      if (!this.dbname) {
         throw "Cannot load corpus's public self, its dbname was undefined";
       }
       var deferred = Q.defer(),
@@ -546,8 +550,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         if (!self.permissions) {
           self.permissions = new Permissions();
         }
-        if (!self.permissions.pouchname) {
-          self.permissions.pouchname = self.pouchname;
+        if (!self.permissions.dbname) {
+          self.permissions.dbname = self.dbname;
         }
         self.permissions.fetch()
           .then(deferred.resolve, deferred.reject);
@@ -559,12 +563,11 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   pouchname: {
     get: function() {
+      console.warn("pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
     set: function(value) {
-      if (this.dbname && this.dbname !== value) {
-        throw "Cannot change the pouchname of a corpus, you must create a new object first.";
-      }
+      console.warn("pouchname is deprecated, use dbname instead.");
       this.dbname = value;
     }
   },
@@ -597,8 +600,9 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       confidential: Confidential,
 
       validationStati: DatumStates,
-      tags: Collection,
+      tags: DatumTags,
 
+      datumFields: DatumFields,
       datumFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
@@ -676,13 +680,43 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         sessionFields = this.sessionFields.clone();
       }
       var session = new Session({
-        pouchname: this.pouchname,
+        dbname: this.dbname,
         sessionFields: sessionFields
       });
       return session;
     }
   },
 
+  newDatum: {
+    value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        console.log("Creating a datum for this corpus");
+        if (!self.datumFields || !self.datumFields.clone) {
+          throw "This corpus has no default datum fields... It is unable to create a datum.";
+        }
+        var datum = new Datum({
+          datumFields: new DatumFields(self.datumFields.clone()),
+        });
+        for (var field in options) {
+          if (!options.hasOwnProperty(field)) {
+            continue;
+          }
+          if (datum.datumFields[field]) {
+            console.log("  this option appears to be a datumField " + field);
+            datum.datumFields[field].value = options[field];
+          } else {
+            datum[field] = options[field];
+          }
+        }
+        deferred.resolve(datum);
+      });
+      return deferred.promise;
+    }
+  },
   /**
    * Builds a new corpus based on this one (if this is not the team's practice corpus)
    * @return {Corpus} a new corpus based on this one
@@ -695,15 +729,15 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
       newCorpusJson.description = "Copy of: " + newCorpusJson.description;
 
-      newCorpusJson.pouchname = newCorpusJson.pouchname + "copy";
+      newCorpusJson.dbname = newCorpusJson.dbname + "copy";
       newCorpusJson.replicatedCorpusUrls = newCorpusJson.replicatedCorpusUrls.map(function(remote) {
-        return remote.replace(new RegExp(this.pouchname, "g"), newCorpusJson.pouchname);
+        return remote.replace(new RegExp(this.dbname, "g"), newCorpusJson.dbname);
       });
 
       newCorpusJson.comments = [];
 
       /* use default datum fields if this is going to based on teh users' first practice corpus */
-      if (this.pouchname.indexOf("firstcorpus") > -1) {
+      if (this.dbname.indexOf("firstcorpus") > -1) {
         newCorpusJson.datumFields = DEFAULT_CORPUS_MODEL.datumFields;
         newCorpusJson.conversationFields = DEFAULT_CORPUS_MODEL.conversationFields;
         newCorpusJson.sessionFields = DEFAULT_CORPUS_MODEL.sessionFields;
@@ -757,6 +791,23 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
+  find: {
+    value: function(uri) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!uri) {
+        throw 'Uri must be specified ';
+      }
+
+      Q.nextTick(function() {
+        deferred.resolve([]); /* TODO try fetching this uri */
+      });
+
+      return deferred.promise;
+    }
+  },
+
   prepareANewOfflinePouch: {
     value: function() {
       throw "I dont know how to prepareANewOfflinePouch";
@@ -799,7 +850,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
           verb = "added";
           verbicon = "icon-plus";
         }
-        var teamid = self.pouchname.split("-")[0];
+        var teamid = self.dbname.split("-")[0];
         window.app.addActivity({
           verb: "<a href='" + differences + "'>" + verb + "</a> ",
           verbmask: verb,
@@ -989,40 +1040,40 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   },
 
   /**
-   * This function takes in a pouchname, which could be different
+   * This function takes in a dbname, which could be different
    * from the current corpus in case there is a master corpus with
    * more/better monolingual data.
    *
-   * @param pouchname
+   * @param dbname
    * @param callback
    */
   buildMorphologicalAnalyzerFromTeamServer: {
-    value: function(pouchname, callback) {
-      if (!pouchname) {
-        pouchname = this.pouchname;
+    value: function(dbname, callback) {
+      if (!dbname) {
+        dbname = this.dbname;
       }
-      this.glosser.downloadPrecedenceRules(pouchname, this.glosserURL, callback);
+      this.glosser.downloadPrecedenceRules(dbname, this.glosserURL, callback);
     }
   },
   /**
-   * This function takes in a pouchname, which could be different
+   * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more/better monolingual data.
    *
-   * @param pouchname
+   * @param dbname
    * @param callback
    */
   buildLexiconFromTeamServer: {
-    value: function(pouchname, callback) {
-      if (!pouchname) {
-        pouchname = this.pouchname;
+    value: function(dbname, callback) {
+      if (!dbname) {
+        dbname = this.dbname;
       }
-      this.lexicon.buildLexiconFromCouch(pouchname, callback);
+      this.lexicon.buildLexiconFromCouch(dbname, callback);
     }
   },
 
   /**
-   * This function takes in a pouchname, which could be different
+   * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
    * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
@@ -1031,7 +1082,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
    *
    * If a url is passed, it contacts the server for fresh info.
    *
-   * @param pouchname
+   * @param dbname
    * @param callback
    */
   getFrequentDatumFields: {
@@ -1041,7 +1092,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   },
 
   /**
-   * This function takes in a pouchname, which could be different
+   * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
    * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
@@ -1050,7 +1101,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
    *
    * If a url is passed, it contacts the server for fresh info.
    *
-   * @param pouchname
+   * @param dbname
    * @param callback
    */
   getFrequentDatumValidationStates: {
@@ -1106,7 +1157,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
   /**
-   * This function takes in a pouchname, which could be different
+   * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
    * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
@@ -1115,7 +1166,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
    *
    * If a url is passed, it contacts the server for fresh info.
    *
-   * @param pouchname
+   * @param dbname
    * @param callback
    */
   getFrequentDatumTags: {

@@ -443,7 +443,7 @@ $.couch.allDbs({
         if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
           console.log("deploying to a beta tester");
         } else {
-          return;
+          //return; /* deploy to only beta testers */
         }
         var sourceDB = "";
         if (dbname.indexOf("activity_feed") > -1) {
@@ -1408,6 +1408,55 @@ $.couch.allDbs({
   },
   error: function(error) {
     console.log("Error getting db list", error);
+  }
+});
+
+/*
+Convert ACRA activities into fielddb activies
+ */
+//1402818525880
+var lastPosition = 1403792172786;//1403792172786
+var database = $.couch.db("acra-learnx");
+var limit = 30000000;
+var saved = 0;
+var userswhoarentregisteredyet = [];
+// database.view("fielddb/activities?limit="+limit, {
+database.view("fielddb/activities", {
+  success: function(actvities) {
+    // console.log(actvities.rows);
+    actvities.rows.map(function(row) {
+      if (saved > limit) {
+        return;
+      }
+      saved += 1;
+      var activity = row.value;
+      if (activity.timestamp < lastPosition) {
+        return;
+      }
+      var pouchname = activity.pouchname;
+      delete activity.pouchname;
+      // console.log(pouchname);
+      var activityDB = $.couch.db(pouchname);
+      activityDB.saveDoc(activity, {
+        success: function(serverResults) {
+          console.log("saved activity for " + pouchname, JSON.stringify(serverResults));
+        },
+        error: function(serverResults) {
+          console.log("There was a problem saving the activity.", serverResults);
+          if (serverResults !== 409) {
+            console.log(activity);
+          }
+
+          if (serverResults === 404) {
+            userswhoarentregisteredyet.push(activity.user.username);
+          }
+        }
+      });
+    });
+
+  },
+  error: function(error) {
+    console.log("There was no activities view ", +JSON.stringify(error));
   }
 });
 
