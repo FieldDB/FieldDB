@@ -91,7 +91,7 @@
         "message": "Date Elicited",
         "description": "title for session info textbox. The date of the elicitation session."
     },
-    "locale_save_canges_button": {
+    "locale_save_changes_button": {
         "message": "Save Changes",
         "description": "button"
     },
@@ -148,7 +148,7 @@
         "description": "audio recording warning message in Audio Warning Modal "
     },
     "locale_time_left": {
-        "message": "Time left:",
+        "message": "Time left: ",
         "description": "indicating recording time left in Audio Warning Modal"
     },
     "locale_stop_recording_button": {
@@ -216,7 +216,7 @@
         "description": "message appears under top menu bar and warns read only user"
     },
     "locale_write_only_message": {
-        "message": "You have write-only access to <i class=\"fa whiteicon fa-cloud\"></i>",
+        "message": "You have write-only access to ",
         "description": "Person List Bio Header"
     },
     "locale_no_data_message": {
@@ -277,15 +277,15 @@
     },
     "locale_not_admin_message": {
         "message": "You are not an admin for <b>{{DB.title}}</b>. Please contact an admin if you wish to alter user access to this corpus.",
-        "description": "warning message for non-admin users in corpus settings"
+        "description": "warning message for non-admin users in corpus settings. Do double curly brackets embedded inside double curly brackets work?"
     },
     "locale_add_existing_user_message": {
-        "message": "Add an existing user to <b>{{DB.title}}</b>",
+        "message": "Add an existing user to ",
         "description": "title for adding existing user div"
     },
     "locale_only_add_registered_users_message": {
         "message": "*You may only add users already registered on the {{serverLabels[serverCode]}} server",
-        "description": "warning about adding users"
+        "description": "warning about adding users. Do double curly brackets inside double curly brackets work?"
     },
     "locale_admin_radio": {
         "message": "Admin",
@@ -308,7 +308,7 @@
         "description": "add button"
     },
     "locale_users_with_access_message": {
-        "message": "Users with access to <b>{{DB.title}}</b>",
+        "message": "Users with access to ",
         "description": "over-arching title for lists of users with different access types"
     },
     "locale_admins": {
@@ -328,7 +328,7 @@
         "description": "warning if user's browser isn't chrome"
     },
     "locale_other_browser_message": {
-        "message": "It may not work as expected if you are using another browser: {{not_chrome}}",
+        "message": "It may not work as expected if you are using another browser: ",
         "description": "warning if user's browser isn't chrome"
     },
     "locale_get_chrome_button": {
@@ -345,7 +345,7 @@
     },
     "locale_select_create_session": {
         "message": "Select a session and click Go, or create a new session.",
-        "description": "message askig to select or create a session before loading datums"
+        "description": "message askig users to select or create a session before loading datums"
     },
     "locale_choose_existing_session_dropdown": {
         "message": "Choose existing session...",
@@ -385,7 +385,7 @@
     },
     "locale_access": {
         "message": "Access",
-        "description": "title followed by te nam of a corpus"
+        "description": "title followed by te name of a corpus"
     },
     "locale_access_lingllama": {
         "message": "Access LingLlama's Community Corpus",
@@ -436,7 +436,7 @@
         "description": "button to contact the server to reset password, different from reset_password_button_1. see #426"
     },
     "locale_server": {
-        "message": "Server<sup>*</sup>",
+        "message": "Server",
         "description": "title for the server dropbox on Register page"
     },
     "locale_data_shared_message": {
@@ -459,8 +459,8 @@
         "message": "All",
         "description": "option in number of records to display dropdown"
     },
-    "locale_template": {
-        "message": "title for template setting",
+    "locale_templates": {
+        "message": "Templates",
         "description": "title for template setting"
     },
     "locale_full_template": {
@@ -468,7 +468,7 @@
         "description": "title for full template in template setting"
     },
     "locale_default_template": {
-        "message": "Default template for",
+        "message": "Default template for ",
         "description": "footnote notifying the default template for the corpus"
     },
     "locale_empty_dropdown": {
@@ -484,7 +484,7 @@
         "description": "button to activate full template"
     },
     "locale_set_as_default_button": {
-        "message": "Set as default template for",
+        "message": "Set as default template for ",
         "description": "button to set the template as default"
     },
     "locale_compact_template": {
@@ -520,11 +520,11 @@
         "description": "edit button"
     },
     "locale_rename_tags": {
-        "message": "Click EDIT button to rename tag:",
+        "message": "Click EDIT button to rename tag: ",
         "description": "tags"
     },
     "locale_rename_fields": {
-        "message": "Click EDIT button to rename field:",
+        "message": "Click EDIT button to rename field: ",
         "description": "fields"
     },
     "locale_update_button": {
@@ -646,5 +646,13 @@
     "locale_contact_answer": {
         "message": "For any other questions or comments, you may <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> or <a target=\"_blank\" href=\"https://www.facebook.com/LingSyncApp\">ask other users on Facebook</a>.",
         "description": "links screw up the json format so I leave it empty for the moment"
+    },
+    "locale_delete_duplicate_tags_button": {
+        "message": "Delete Duplicate Tags",
+        "description": " "
+    },
+    "locale_save_button": {
+        "message": "Save",
+        "description": " "
     }
 }
