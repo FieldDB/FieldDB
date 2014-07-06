@@ -1,30 +1,11 @@
 function(doc) {
   var utils = {
 
-    digestReport: function(doc) {
-      if (doc.USER_CRASH_DATE) {
-        var value = {
-          user_crash_date: doc.USER_CRASH_DATE,
-          android_version: doc.ANDROID_VERSION,
-          application_version_name: doc.APP_VERSION_NAME,
-          application_package: doc.APPLICATION_PACKAGE
-        };
-        if (doc.SIGNATURE) {
-          value.signature = doc.SIGNATURE;
-        } else {
-          value.stack_trace = doc.STACK_TRACE;
-        }
-        if (doc.INSTALLATION_ID) {
-          value.installation_id = doc.INSTALLATION_ID;
-        }
-
-        value.device = utils.getDevice(doc);
-
-        return value;
-      }
-    },
-
     digestCustomData: function(doc) {
+      // If it is a real bug, don't process it as an activity.
+      if (doc.SIGNATURE && doc.SIGNATURE.full && doc.SIGNATURE.full.indexOf("***") === -1) {
+        return;
+      }
       var docid = "undefined";
       var oldrev = "undefined";
       var newrev = "undefined";
@@ -91,16 +72,41 @@ function(doc) {
       // };
       var androidCustomData = doc.CUSTOM_DATA;
       if (androidCustomData) {
+        if (doc.user_ip) {
+          personalCorpusActivity.ip = doc.user_ip;
+          teamActivity.ip = doc.user_ip;
+        } else if (doc.requestHeaders && doc.requestHeaders["X-Forwarded-For"]) {
+          personalCorpusActivity.ip = doc.requestHeaders["X-Forwarded-For"];
+          teamActivity.ip = doc.requestHeaders["X-Forwarded-For"];
+        }
+        if (androidCustomData.dbname && androidCustomData.dbname.indexOf("kartulispeechrec") > -1) {
+          userdbname = androidCustomData.dbname.replace("-kartuli", "-firstcorpus");
+          teamdbname = "speechrecognition-kartuli";
+          personalCorpusActivity.indirectobject = "in Kartuli Speech Recognition Corpus";
+          teamActivity.indirectobject = "in Kartuli Speech Recognition Corpus";
+          personalCorpusActivity.context /= " via Kartuli Speech Recognizer";
+          teamActivity.context = " via Kartuli Speech Recognizer";
+        }
         if (androidCustomData.registerUser || androidCustomData.username) {
           username = androidCustomData.username || androidCustomData.registerUser;
           personalCorpusActivity.user.username = username;
           teamActivity.user.username = username;
+          if (username.indexOf("kartulispeechrec") > -1) {
+            userdbname = username + "-firstcorpus";
+            teamdbname = "speechrecognition-kartuli";
+            personalCorpusActivity.indirectobject = "in Kartuli Speech Recognition Corpus";
+            teamActivity.indirectobject = "in Kartuli Speech Recognition Corpus";
+            personalCorpusActivity.context /= " via Kartuli Speech Recognizer";
+            teamActivity.context = " via Kartuli Speech Recognizer";
+          }
+        }
+        if (androidCustomData.urlString) {
           if (androidCustomData.urlString.indexOf("speechrec.kartuli") > -1 || androidCustomData.urlString.indexOf("speechrecognition.kartuli") > -1) {
             userdbname = username + "-firstcorpus";
             teamdbname = "speechrecognition-kartuli";
             personalCorpusActivity.indirectobject = "in Kartuli Speech Recognition Corpus";
             teamActivity.indirectobject = "in Kartuli Speech Recognition Corpus";
-            personalCorpusActivity.context = " via Kartuli Speech Recognizer";
+            personalCorpusActivity.context /= " via Kartuli Speech Recognizer";
             teamActivity.context = " via Kartuli Speech Recognizer";
           } else if (androidCustomData.urlString.indexOf("migmaq") > -1) {
             userdbname = username + "-firstcorpus";
@@ -114,6 +120,7 @@ function(doc) {
             teamActivity.indirectobject = "in Kartuli";
           }
         }
+
         if (androidCustomData && androidCustomData.urlString) {
           docid = androidCustomData.urlString.substring(androidCustomData.urlString.lastIndexOf("/") + 1);
           if (androidCustomData.action && androidCustomData.action.indexOf("totalDatumEditsOnPause") > -1) {
@@ -129,7 +136,7 @@ function(doc) {
           teamActivity.directobject = "<a target='_blank' href='#corpus/" + teamdbname + "/datum/" + docid + "'>a datum</a>";
         }
 
-        if (androidCustomData.action.indexOf("register") > -1 || androidCustomData.downloadDatums) {
+        if (androidCustomData.action && androidCustomData.action.indexOf("register") > -1 || androidCustomData.downloadDatums) {
           personalCorpusActivity.verb = "logged in";
           teamActivity.verb = "logged in";
           personalCorpusActivity.verbicon = "icon-check";
@@ -138,8 +145,7 @@ function(doc) {
           teamActivity.directobjecticon = "icon-user";
           personalCorpusActivity.directobject = "";
           teamActivity.directobject = "";
-        } else
-        if (androidCustomData.action.indexOf("download") > -1) {
+        } else if (androidCustomData.action && androidCustomData.action.indexOf("download") > -1) {
           directobject = androidCustomData.action.split(":::");
           personalCorpusActivity.verb = "downloaded ";
           teamActivity.verb = "downloaded";
@@ -153,8 +159,7 @@ function(doc) {
           }
           personalCorpusActivity.directobject = directobject[1];
           teamActivity.directobject = directobject[1];
-        } else
-        if (androidCustomData.action.indexOf("capture") > -1) {
+        } else if (androidCustomData.action && androidCustomData.action.indexOf("capture") > -1) {
           directobject = androidCustomData.action;
           try {
             directobject = androidCustomData.action.replace("}", "");
@@ -182,8 +187,7 @@ function(doc) {
           }
           personalCorpusActivity.directobject = directobject;
           teamActivity.directobject = directobject;
-        } else
-        if (androidCustomData.action.indexOf("loadDatum") > -1) {
+        } else if (androidCustomData.action && androidCustomData.action.indexOf("loadDatum") > -1) {
           docid = androidCustomData.action;
           try {
             docid = androidCustomData.action.replace("{loadDatum : ", "").replace("}", "");
@@ -208,7 +212,7 @@ function(doc) {
             personalCorpusActivity.timestamp = timestamp;
             teamActivity.timestamp = timestamp;
           } catch (e) {
-            // this activiit will have no date
+            // this activity will have no date
           }
         }
 
@@ -228,8 +232,8 @@ function(doc) {
       personalCorpusActivity.deviceName = deviceName;
       teamActivity.deviceName = deviceName;
 
-      personalCorpusActivity.androidDetails = doc.CUSTOM_DATA;
-      teamActivity.androidDetails = doc.CUSTOM_DATA;
+      personalCorpusActivity.androidDetails = androidCustomData;
+      teamActivity.androidDetails = androidCustomData;
 
       personalCorpusActivity.pouchname = userdbname + "-activity_feed";
       teamActivity.pouchname = teamdbname + "-activity_feed";
@@ -285,23 +289,25 @@ function(doc) {
     }
   };
 
-  // CommonJS bindings
-  if (typeof(exports) === 'object') {
-    exports.digestReport = utils.digestReport;
-  }
+  try {
 
-
-
-  if (doc.APP_VERSION_NAME) {
-    var activities = utils.digestCustomData(doc);
-    var now = Date.now();
-    var lastPosition = 1403805265615;
-    if (activities.teamActivity.timestamp < lastPosition) {
-      return;
+    if (doc.APP_VERSION_NAME) {
+      var activities = utils.digestCustomData(doc);
+      if (!activities) {
+        return;
+      }
+      var now = Date.now();
+      // var lastPosition = 1403805265615;
+      // if (activities.teamActivity.timestamp < lastPosition) {
+      //   return;
+      // }
+      var since = (now - activities.teamActivity.timestamp) / 60000;
+      emit(since, activities.teamActivity);
+      emit(since, activities.personalCorpusActivity);
+      emit(since, activities.personalActivity);
     }
-    var since = (now - activities.teamActivity.timestamp) / 60000;
-    emit(since, activities.teamActivity);
-    emit(since, activities.personalCorpusActivity);
-    emit(since, activities.personalActivity);
+
+  } catch (e) {
+    emit(e, doc);
   }
 }
