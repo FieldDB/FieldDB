@@ -1414,14 +1414,13 @@ $.couch.allDbs({
 /*
 Convert ACRA activities into fielddb activies
  */
-//1402818525880
-var lastPosition = 1403792172786;//1403792172786
+// var lastPosition = 1403805265615; // 1403792172786 // 1402818525880 // 1403792172786
 var database = $.couch.db("acra-learnx");
-var limit = 30000000;
+var limit = 1000;
 var saved = 0;
 var userswhoarentregisteredyet = [];
-// database.view("fielddb/activities?limit="+limit, {
-database.view("fielddb/activities", {
+database.view("fielddb/activities?limit="+limit, {
+// database.view("fielddb/activities", {
   success: function(actvities) {
     // console.log(actvities.rows);
     actvities.rows.map(function(row) {
@@ -1430,9 +1429,9 @@ database.view("fielddb/activities", {
       }
       saved += 1;
       var activity = row.value;
-      if (activity.timestamp < lastPosition) {
-        return;
-      }
+      // if (activity.timestamp < lastPosition) {
+        // return;
+      // }
       var pouchname = activity.pouchname;
       delete activity.pouchname;
       // console.log(pouchname);
@@ -1440,11 +1439,28 @@ database.view("fielddb/activities", {
       activityDB.saveDoc(activity, {
         success: function(serverResults) {
           console.log("saved activity for " + pouchname, JSON.stringify(serverResults));
+          database.removeDoc(activity, {
+            success: function(serverResults) {
+              console.log("removed activity for " + activity._id);
+            },
+            error: function(serverResults) {
+              console.log("There was a problem removing the activity." + activity._id);
+            }
+          });
         },
         error: function(serverResults) {
           console.log("There was a problem saving the activity.", serverResults);
           if (serverResults !== 409) {
             console.log(activity);
+          }else{
+            database.removeDoc(activity, {
+            success: function(serverResults) {
+              console.log("removed activity for " + activity._id);
+            },
+            error: function(serverResults) {
+              console.log("There was a problem removing the activity." + activity._id);
+            }
+          });
           }
 
           if (serverResults === 404) {

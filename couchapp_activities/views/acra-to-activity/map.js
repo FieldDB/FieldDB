@@ -35,6 +35,7 @@ function(doc) {
 
       var personalCorpusActivity = {
         _id: doc._id,
+        _rev: doc._rev,
         timestamp: 0,
         verb: "default",
         verbicon: "icon-default",
@@ -58,6 +59,7 @@ function(doc) {
       };
       var teamActivity = {
         _id: doc._id,
+        _rev: doc._rev,
         timestamp: 0,
         verb: "default",
         verbicon: "icon-default",
@@ -93,7 +95,7 @@ function(doc) {
           username = androidCustomData.username || androidCustomData.registerUser;
           personalCorpusActivity.user.username = username;
           teamActivity.user.username = username;
-          if (androidCustomData.urlString.indexOf("speechrec.kartuli") > -1) {
+          if (androidCustomData.urlString.indexOf("speechrec.kartuli") > -1 || androidCustomData.urlString.indexOf("speechrecognition.kartuli") > -1) {
             userdbname = username + "-firstcorpus";
             teamdbname = "speechrecognition-kartuli";
             personalCorpusActivity.indirectobject = "in Kartuli Speech Recognition Corpus";
@@ -292,7 +294,12 @@ function(doc) {
 
   if (doc.APP_VERSION_NAME) {
     var activities = utils.digestCustomData(doc);
-    var since = (Date.now() - activities.teamActivity.timestamp) / 60000;
+    var now = Date.now();
+    var lastPosition = 1403805265615;
+    if (activities.teamActivity.timestamp < lastPosition) {
+      return;
+    }
+    var since = (now - activities.teamActivity.timestamp) / 60000;
     emit(since, activities.teamActivity);
     emit(since, activities.personalCorpusActivity);
     emit(since, activities.personalActivity);
