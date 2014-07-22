@@ -15,7 +15,7 @@ angular.module('fielddbAngularApp').directive('fielddbCorpus', function($timeout
     //   console.log($element.html());
     // },
     link: function postLink(scope, element) {
-      console.log('in the link function', element);
+      // console.log('in the link function', element);
     },
     priority: 0,
     replace: false,
