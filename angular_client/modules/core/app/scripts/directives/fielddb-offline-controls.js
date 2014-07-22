@@ -8,10 +8,7 @@ angular.module('fielddbAngularApp').directive('fielddbOfflineControls', function
     scope: {
       connection: '=json'
     },
-    link: function postLink(scope, element, attrs) {
-      console.log("offline", scope);
-      // element.text('this is the fielddbOfflineControls directive');
+    link: function postLink() {
     }
   };
 });
-'use strict';
