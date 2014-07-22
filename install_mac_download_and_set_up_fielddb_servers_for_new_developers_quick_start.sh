@@ -150,6 +150,31 @@ echo " Creating a private services file which you can use to change the servers 
 cp js/private_services_sample.js js/private_services.js
 grunt
 
+echo "Building the Core angular components, they are written in Angular.js and need you to bower install its dependancies before you can open the other components which depend on them. It also uses sym links for local files in this project instead of bower "
+cd angular_client/modules/core
+bower install
+ls app/bower_components/fielddb || {
+  mkdir app/bower_components/fielddb
+  ln -s $FIELDDB_HOME/FieldDB/fielddb.js app/bower_components/fielddb/fielddb.js
+}
+
+echo "Building the Corpus pages app, it is written in Angular.js and needs you to bower install its dependancies before you can open it. It also uses sym links for local files in this project instead of bower (these need to be on your computer, although we will eventually move them to bower when they are stable)"
+cd angular_client/modules/corpuspages
+bower install
+ls app/bower_components/fielddb-angular || {
+  ln -s $FIELDDB_HOME/FieldDB/angular_client/modules/core app/bower_components/fielddb-angular
+}
+ls app/bower_components/fielddb-lexicon-angular || {
+  ln -s $FIELDDB_HOME/FieldDBLexicon app/bower_components/fielddb-lexicon-angular
+}
+ls app/bower_components/fielddb-activity-feed || {
+  ln -s $FIELDDB_HOME/FieldDBActivityFeed app/bower_components/fielddb-activity-feed
+}
+ls app/bower_components/fielddb || {
+  mkdir app/bower_components/fielddb
+  ln -s $FIELDDB_HOME/FieldDB/fielddb.js app/bower_components/fielddb/fielddb.js
+}
+
 echo "What is your GitHub username (so we can set that to the origin of the repos instead of the main project)"
 echo -n "(e.g. myusernameontgithub) and press [ENTER]: "
 read github_username;
