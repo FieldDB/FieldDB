@@ -215,6 +215,24 @@ AddDefaultCharset utf-8
   # RewriteBase /
 </IfModule>
 
+
+# ------------------------------------------------------------------------------
+# | Enabling html5 mode which makes deep links without a /#corpus/93jew2io332  |
+# ------------------------------------------------------------------------------
+
+# If you are not using Nodejs there are some rules you need to create to use
+# Angularjs’s html5mode. For Apache you need to add the following rewrite rule
+# to a .htaccess file or virtualhost.
+# More Info: http://jasonhardin.com/angularjs-apache-rewrite-rule-html5mode/
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !index
+    RewriteRule (.*) index.html [L]
+</IfModule>
+
 # ------------------------------------------------------------------------------
 # | Suppressing / Forcing the "www." at the beginning of URLs                  |
 # ------------------------------------------------------------------------------
