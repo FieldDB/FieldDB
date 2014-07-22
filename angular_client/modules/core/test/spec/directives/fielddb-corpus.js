@@ -1,35 +1,34 @@
 'use strict';
 
-describe('Directive: corpus', function() {
+describe('Directive: fielddb-corpus', function() {
 
   // load the directive's module and the template
   beforeEach(module('fielddbAngularApp', 'views/corpus.html'));
-  var element, scope, compileFunction;
+  var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    $rootScope.corpus = {
+    el = angular.element('<div data-fielddb-corpus json="corpus"></div>');
+    scope = $rootScope.$new();
+    scope.corpus = {
       title: 'Community Corpus',
       description: 'Testing if corpus directive can load'
     };
-    element = angular.element('<div data-fielddb-corpus json="corpus"></div>');
-    scope = $rootScope;
-    compileFunction = $compile(element);
+    compileFunction = $compile(el);
     // bring html from templateCache
     scope.$digest();
-    console.log('post compile', element.html()); // <== html here has {{}}
+    console.log('post compile', el.html()); // <== html here has {{}}
   }));
 
   // http://stackoverflow.com/questions/17223850/how-to-test-directives-that-use-templateurl-and-controllers
-  it('should make a corpus element', function() {
+  it('should make a corpus element with contents from scope', function() {
 
     inject(function() {
-      compileFunction(scope);
-      // scope.$digest();
-      console.log('post link', element.html()); // <== the html {{}} are bound
+      compileFunction(scope); // <== the html {{}} are bound
+      scope.$digest(); // <== digest to get the render to show the bound values
+      console.log('post link', el.html());
       console.log('scope corpus ', scope.corpus);
 
-      scope.$digest(); // <== digest to get the render to show the bound values
-      expect(element.find('h1').text().trim()).toEqual('Community Corpus');
+      expect(el.find('h1').text().trim()).toEqual('Community Corpus');
     });
   });
 });
