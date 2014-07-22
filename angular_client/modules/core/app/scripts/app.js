@@ -15,5 +15,5 @@ angular.module('fielddbAngularApp', [
   'ngSanitize',
   'ngRoute'
 ]).config(function($routeProvider) {
-
+  console.log($routeProvider);
 });

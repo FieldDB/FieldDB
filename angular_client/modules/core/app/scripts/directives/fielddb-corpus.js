@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fielddbAngularApp').directive('fielddbCorpus', function($timeout) {
+angular.module('fielddbAngularApp').directive('fielddbCorpus', function() {
 
   var directiveDefinitionObject = {
     templateUrl: 'views/corpus.html', // or // function(tElement, tAttrs) { ... },
@@ -14,8 +14,7 @@ angular.module('fielddbAngularApp').directive('fielddbCorpus', function($timeout
     //   console.log('in controller');
     //   console.log($element.html());
     // },
-    link: function postLink(scope, element) {
-      // console.log('in the link function', element);
+    link: function postLink() {
     },
     priority: 0,
     replace: false,
