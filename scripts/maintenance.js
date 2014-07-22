@@ -1414,37 +1414,54 @@ $.couch.allDbs({
 /*
 Convert ACRA activities into fielddb activies
  */
-//1402818525880
-var lastPosition = 1403792172786;//1403792172786
+// var lastPosition = 1403805265615; // 1403792172786 // 1402818525880 // 1403792172786
+var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1400736954477", "anonymous1400736954477", "anonymous1399110330026", "anonymous1399110330026", "anonymous1399110330026", "anonymous1400736954477", "anonymous1399110330026", "anonymous1400736954477", "anonymous1398813694591", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398684166784", "anonymous1398813694591", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398684166784", "anonymous1398352584238", "anonymous1398352584238", "testinganonymous1397397203061", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1398067003561", "anonymous1398067003561", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397669513717", "anonymous1398352584238", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1397669513717", "testinganonymous1397397203061", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397886261314", "anonymous1397770209950", "anonymous1397770209950", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "anonymous1397933228605", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397886261314", "testinganonymous1397397203061", "anonymous1397770209950", "anonymous1397770209950", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397038853807", "anonymous1397045636195", "anonymous1397045636195", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "anonymous1397330457860", "anonymous1397380321265", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397038853807", "anonymous1397045636195", "anonymous1397045636195", "anonymous1396806997435", "anonymous1396806997435"];
 var database = $.couch.db("acra-learnx");
-var limit = 30000000;
+var limit = 1000;
 var saved = 0;
-var userswhoarentregisteredyet = [];
-// database.view("fielddb/activities?limit="+limit, {
-database.view("fielddb/activities", {
+database.view("fielddb/activities?limit=" + limit, {
+  // database.view("fielddb/activities", {
   success: function(actvities) {
     // console.log(actvities.rows);
     actvities.rows.map(function(row) {
-      if (saved > limit) {
-        return;
-      }
+      // if (saved > limit) {
+      //   return;
+      // }
       saved += 1;
       var activity = row.value;
-      if (activity.timestamp < lastPosition) {
-        return;
-      }
+      // if (activity.timestamp < lastPosition) {
+      // return;
+      // }
       var pouchname = activity.pouchname;
+      // console.log(pouchname);
       delete activity.pouchname;
       // console.log(pouchname);
       var activityDB = $.couch.db(pouchname);
       activityDB.saveDoc(activity, {
         success: function(serverResults) {
           console.log("saved activity for " + pouchname, JSON.stringify(serverResults));
+          database.removeDoc(activity, {
+            success: function(serverResults) {
+              console.log("removed activity for " + activity._id);
+            },
+            error: function(serverResults) {
+              console.log("There was a problem removing the activity." + activity._id);
+            }
+          });
         },
         error: function(serverResults) {
           console.log("There was a problem saving the activity.", serverResults);
           if (serverResults !== 409) {
             console.log(activity);
+          } else {
+            database.removeDoc(activity, {
+              success: function(serverResults) {
+                console.log("removed activity for " + activity._id);
+              },
+              error: function(serverResults) {
+                console.log("There was a problem removing the activity." + activity._id);
+              }
+            });
           }
 
           if (serverResults === 404) {
@@ -1460,6 +1477,72 @@ database.view("fielddb/activities", {
   }
 });
 
+/*
+Make sure all speech rec activities are in the central activities too
+*/
+/*
+Verify corpus doc
+ */
+var targetpouchname = "speechrecognition-kartuli-activity_feed";
+var targetdatabase = $.couch.db(targetpouchname);
+$.couch.allDbs({
+  success: function(results) {
+    console.log(results);
+    results.map(function(dbname) {
+      if (dbname.indexOf("activity_feed") === -1) {
+        // console.log("This db is not an activity feed " + dbname);
+        return;
+      }
+      if (dbname.indexOf("kartulispeechrec") === -1) {
+        // console.log("This db is not a speech recognition user " + dbname);
+        return;
+      }
+      if (dbname.indexOf("firstcorpus") === -1) {
+        // console.log("This db is not a speech recognition user's activity for the corpus " + dbname);
+        return;
+      }
+      console.log("This is a speech recognition user " + dbname);
+      var database = $.couch.db(dbname);
+      database.allDocs({
+        success: function(result) {
+          //console.log(result);
+          result.rows.map(function(row) {
+            database.openDoc(row.id, {
+              success: function(originalDoc) {
+                console.log(originalDoc.pouchname);
+                if (!originalDoc.teamOrPersonal) {
+                  return;
+                }
+                originalDoc.pouchname = targetpouchname;
+                targetdatabase.saveDoc(originalDoc, {
+                  success: function(serverResults) {
+                    console.log("saved activity in central activities " + originalDoc._id);
+                  },
+                  error: function(serverResults) {
+                    console.log("There was a problem saving the doc." + originalDoc._id);
+                  }
+                });
+
+              },
+              error: function(error) {
+                console.log("Error opening database's docs ", error);
+              }
+            });
+          });
+
+        },
+        error: function(error) {
+          console.log("Error opening the database ", error);
+        }
+      });
+
+
+    });
+  },
+  error: function(error) {
+    console.log("Error getting db list", error);
+  }
+});
 
 /*
 Import ilanguages.org georgian phrase data
