@@ -11,7 +11,7 @@ angular.module('fielddbAngularApp').directive('fielddbCorpusTermsOfUse', functio
     },
     // controller: function($scope, $element, $attrs, $transclude) {},
     link: function postLink(scope, element, attrs) {
-      console.log(attrs);
+      // console.log(attrs);
 
       // element.text('this is the corpus directive');
     }
