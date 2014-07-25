@@ -1,39 +1,33 @@
 (function(exports) {
 
   var Q = require('q');
-  var CORS = require('fielddb/api/CORS').CORS;
-  var FieldDBObject = require('fielddb/api/FieldDBObject').FieldDBObject;
+  var CORS = require('../CORS').CORS;
+  var FieldDBObject = require('../FieldDBObject').FieldDBObject;
 
   var Database = function Database(options) {
-    // console.log("In Database ", options);
+    console.log("In Database ", options);
     FieldDBObject.apply(this, arguments);
   };
 
-  var DEFAULTALLDOCUMENTSMAPREDUCE = '_design/pages/_view/datums?descending=true&limit=10';
+  var DEFAULT_COLLECTION_MAPREDUCE = '_design/pages/_view/COLLECTION?descending=true';
+
   Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
     constructor: {
       value: Database
     },
-    allDocumentsMapReduce: {
-      get: function() {
-        if (!this._allDocumentsMapReduce) {
-          // this._allDocumentsMapReduce = "";
-          return DEFAULTALLDOCUMENTSMAPREDUCE;
-        }
-        return this._allDocumentsMapReduce;
-      },
-      set: function(value) {
-        if (value === this._allDocumentsMapReduce) {
-          return;
-        }
-        if (!value) {
-          value = "";
-        }
-        this._allDocumentsMapReduce = value.trim();
-      }
+
+    DEFAULT_COLLECTION_MAPREDUCE: {
+      value: DEFAULT_COLLECTION_MAPREDUCE
     },
+
     fetchAllDocuments: {
       value: function() {
+        return this.fetchCollection("datums");
+      }
+    },
+
+    fetchCollection: {
+      value: function(collectionType) {
         var deferred = Q.defer(),
           self = this;
 
@@ -42,32 +36,38 @@
           return;
         }
 
+        if (!collectionType) {
+          console.warn("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
+          return;
+        }
+
         var cantLogIn = function(reason) {
           console.log(reason);
-          self.register().then(function() {
-            self.fetchAllDocuments().then(function(documents) {
-              deferred.resolve(documents);
-            }, function(reason) {
-              deferred.reject(reason);
-            });
-          });
+          deferred.reject(reason);
+          // self.register().then(function() {
+          //   self.fetchCollection(collectionType).then(function(documents) {
+          //     deferred.resolve(documents);
+          //   }, function(reason) {
+          //     deferred.reject(reason);
+          //   });
+          // });
         };
 
-        CORS.makeCORSRequest({
-          type: 'POST',
-          dataType: "json",
-          url: self.url + "/_session",
-          data: {
-            name: self.dbname.split("-")[0],
-            password: 'testtest'
-          }
-        }).then(function(session) {
+        // CORS.makeCORSRequest({
+        //   type: 'POST',
+        //   dataType: "json",
+        //   url: self.url + "/_session",
+        //   data: {
+        //     name: self.dbname.split("-")[0],
+        //     password: 'testtest'
+        //   }
+        // }).then(function(session) {
 
 
           CORS.makeCORSRequest({
             type: 'GET',
             dataType: "json",
-            url: self.url + "/" + self.dbname + "/" + self.allDocumentsMapReduce
+            url: self.url + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
           }).then(function(result) {
             if (result.rows && result.rows.length) {
               deferred.resolve(result.rows.map(function(doc) {
@@ -79,10 +79,11 @@
           }, cantLogIn);
 
 
-        }, cantLogIn);
+        // }, cantLogIn);
         return deferred.promise;
       }
     },
+
     register: {
       value: function() {
         var deferred = Q.defer(),

@@ -14,6 +14,8 @@
   var Export = require("./export/Export");
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
   var CORS = require("./CORS").CORS;
+  var Database = require("./corpus/Database").Database;
+  var PsycholinguisticsDatabase = require("./corpus/PsycholinguisticsDatabase").PsycholinguisticsDatabase;
   var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
   var Router = require("./Router").Router;
   var UserMask = require("./user/UserMask").UserMask;
@@ -25,6 +27,8 @@
   FieldDB.Export = Export;
   FieldDB.FieldDBObject = FieldDBObject;
   FieldDB.CORS = CORS;
+  FieldDB.Database = Database;
+  FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
   FieldDB.UserMask = UserMask;
   FieldDB.CorpusMask = CorpusMask;
