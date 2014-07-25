@@ -64,22 +64,97 @@
         // }).then(function(session) {
 
 
-          CORS.makeCORSRequest({
-            type: 'GET',
-            dataType: "json",
-            url: self.url + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
-          }).then(function(result) {
-            if (result.rows && result.rows.length) {
-              deferred.resolve(result.rows.map(function(doc) {
-                return doc.value;
-              }));
-            } else {
-              deferred.resolve([]);
-            }
-          }, cantLogIn);
+        CORS.makeCORSRequest({
+          type: 'GET',
+          dataType: "json",
+          url: self.url + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
+        }).then(function(result) {
+          if (result.rows && result.rows.length) {
+            deferred.resolve(result.rows.map(function(doc) {
+              return doc.value;
+            }));
+          } else {
+            deferred.resolve([]);
+          }
+        }, cantLogIn);
 
 
         // }, cantLogIn);
+        return deferred.promise;
+      }
+    },
+
+    login: {
+      value: function(loginDetails) {
+        var deferred = Q.defer(),
+          self = this;
+
+        if (!this.authUrl) {
+          console.warn("Cannot login  with out a url");
+          return;
+        }
+        CORS.makeCORSRequest({
+          type: 'POST',
+          dataType: "json",
+          url: this.authUrl + "/login",
+          data: loginDetails
+        }).then(function(result) {
+            if (result.user) {
+              CORS.makeCORSRequest({
+                type: 'POST',
+                dataType: "json",
+                url: self.url + "/_session",
+                data: {
+                  name: result.user.username,
+                  password: loginDetails.password
+                }
+              }).then(function(sessionInfo) {
+                // console.log(sessionInfo);
+                result.user.roles = sessionInfo.roles;
+                deferred.resolve(result.user);
+              }, function() {
+                console.log("Failed to login ");
+                deferred.reject("Something is wrong.");
+              });
+            } else {
+              deferred.reject(result.userFriendlyErrors.join(" "));
+            }
+          },
+          function(reason) {
+            console.log(reason);
+            deferred.reject(reason);
+          }).fail(function(reason) {
+          console.log(reason);
+          deferred.reject(reason);
+        });
+        return deferred.promise;
+      }
+    },
+
+    logout: {
+      value: function() {
+        var deferred = Q.defer();
+
+        if (!this.url) {
+          console.warn("Cannot logout  with out a url");
+          return;
+        }
+        CORS.makeCORSRequest({
+          type: 'DELETE',
+          dataType: "json",
+          url: this.url + "/_session"
+        }).then(function(result) {
+            if (result.ok) {
+              deferred.resolve(result);
+            } else {
+              deferred.reject(result);
+            }
+          },
+          function(reason) {
+            console.log(reason);
+            deferred.reject(reason);
+
+          });
         return deferred.promise;
       }
     },

@@ -1,3 +1,5 @@
+/* globals window, XDomainRequest */
+
 var Q = require("q");
 var CORS = CORS || {};
 
@@ -56,8 +58,8 @@ CORS.makeCORSRequest = function(options) {
     xhr.withCredentials = true;
     //  }
 
-    xhr.onload = function(e, f, g) {
-      console.log("Server response, ", xhr);
+    xhr.onload = function() {
+      // console.log("Server response, ", xhr);
       var response = xhr.response;
       try {
         response = JSON.parse(xhr.response);
