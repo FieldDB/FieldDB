@@ -19,6 +19,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       user.authenticated = true;
       user.accessibleDBS = user.accessibleDBS || [];
       $scope.authentication.user = user;
+      // $scope.team = user;
       // $rootScope.authenticated = true;
       user.roles.map(function(role) {
         var dbname = role.substring(0, role.lastIndexOf('_'));
@@ -29,7 +30,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       console.log($scope);
       if (window.location.pathname === '/welcome' || window.location.pathname === '/bienvenu') {
         $scope.$apply(function() {
-          $location.path('/db/' + $scope.authentication.user.accessibleDBS[0]);
+          $location.path('/' + $scope.authentication.user.accessibleDBS[0].replace("-","/"));
         });
       }
       $scope.$digest();
