@@ -65,7 +65,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/corpus/Database.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/CORS.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/corpus/Database.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
       },
       test: {
         options: {
@@ -92,7 +92,7 @@ module.exports = function(grunt) {
       },
       lib: {
         files: '<%= jshint.lib.src %>',
-        tasks: ['jshint:lib', 'jasmine_node']
+        tasks: ['jshint:lib', 'jasmine_node', 'browserify']
       },
       test: {
         files: '<%= jshint.test.src %>',

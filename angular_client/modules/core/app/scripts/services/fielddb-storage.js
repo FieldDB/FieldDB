@@ -12,6 +12,8 @@ angular.module('fielddbAngularApp').factory('fielddbStorage', function fielddbSt
   var username = '';
   var dbname = 'testingphophlo-debugging';
   FieldDB.BASE_DB_URL = 'https://corpusdev.example.org';
+  FieldDB.BASE_AUTH_URL = 'https://authdev.example.org';
+
   var db;
   var accessibleDBS = [];
 
@@ -47,7 +49,8 @@ angular.module('fielddbAngularApp').factory('fielddbStorage', function fielddbSt
         db = db || new FieldDB.PsycholinguisticsDatabase({
           username: username,
           dbname: dbname,
-          url: FieldDB.BASE_DB_URL
+          url: FieldDB.BASE_DB_URL,
+          authUrl: FieldDB.BASE_AUTH_URL
         });
         console.log('fetching docs for ', db.toJSON());
         db.fetchCollection(collectionType).then(function(result) {

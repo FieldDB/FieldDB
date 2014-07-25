@@ -10,7 +10,86 @@
  */
 angular.module('fielddbAngularApp').directive('fielddbAuthentication', function() {
   FieldDB.BASE_DB_URL = 'https://corpusdev.example.org';
+  FieldDB.BASE_AUTH_URL = 'https://authdev.example.org';
+
+
   var controller = function($scope, $location) {
+
+    var processUserDetails = function(user) {
+      user.authenticated = true;
+      user.accessibleDBS = user.accessibleDBS || [];
+      $scope.authentication.user = user;
+      // $rootScope.authenticated = true;
+      user.roles.map(function(role) {
+        var dbname = role.substring(0, role.lastIndexOf('_'));
+        if (role.indexOf('-') > -1 && role.indexOf('_reader') > -1 && user.accessibleDBS.indexOf(dbname) === -1) {
+          user.accessibleDBS.push(dbname);
+        }
+      });
+      console.log($scope);
+      if (window.location.pathname === '/welcome' || window.location.pathname === '/bienvenu') {
+        $scope.$apply(function() {
+          $location.path('/db/' + $scope.authentication.user.accessibleDBS[0]);
+        });
+      }
+      $scope.$digest();
+    };
+
+    $scope.loginDetails = $scope.loginDetails || {};
+
+    $scope.authenticate = function(loginDetails) {
+      $scope.isContactingServer = true;
+      $scope.status = "";
+      var db = new FieldDB.PsycholinguisticsDatabase({
+        username: loginDetails.username,
+        dbname: 'default',
+        url: FieldDB.BASE_DB_URL,
+        authUrl: FieldDB.BASE_AUTH_URL
+      });
+      db.login(loginDetails).then(function(user) {
+        console.log("User has been downloaded. ", user);
+        processUserDetails(user);
+        // $scope.isContactingServer = false;
+      }, function(reason) {
+        $scope.status = reason;
+        // $scope.isContactingServer = false;
+      }).catch(function() {
+        $scope.isContactingServer = false;
+        $scope.loginDetails.password = "";
+        $scope.$digest();
+      }).done(function() {
+        $scope.isContactingServer = false;
+        $scope.loginDetails.password = "";
+        $scope.$digest();
+      });
+    };
+
+    $scope.logout = function() {
+      $scope.status = "";
+      var db = new FieldDB.PsycholinguisticsDatabase({
+        username: $scope.loginDetails.username,
+        dbname: 'default',
+        url: FieldDB.BASE_DB_URL,
+        authUrl: FieldDB.BASE_AUTH_URL
+      });
+      db.logout().then(function(user) {
+        console.log("User has been logged out. ");
+        $scope.authentication = {};
+        if (window.location.pathname !== '/welcome' && window.location.pathname !== '/bienvenu') {
+          $scope.$apply(function() {
+            $location.path('/welcome/');
+          });
+        }
+        $scope.$digest();
+      }, function(reason) {
+        $scope.status = reason;
+        $scope.$digest();
+      }).done(function() {
+        $scope.isContactingServer = false;
+        $scope.$digest();
+      });
+    };
+
     console.log('Scope authentication is ', $scope);
     $scope.authentication = $scope.authentication || {};
     var user = {
@@ -24,22 +103,8 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       console.log(sessionInfo);
       if (sessionInfo.ok && sessionInfo.userCtx.name) {
         user.username = sessionInfo.userCtx.name;
-        user.authenticated = true;
-        $scope.authentication.user = user;
-        // $rootScope.authenticated = true;
-        sessionInfo.userCtx.roles.map(function(role) {
-          var dbname = role.substring(0, role.lastIndexOf('_'));
-          if (role.indexOf('-') > -1 && role.indexOf('_reader') > -1 && user.accessibleDBS.indexOf(dbname) === -1) {
-            user.accessibleDBS.push(dbname);
-          }
-        });
-        console.log($scope);
-        if (window.location.pathname === '/welcome' || window.location.pathname === '/bienvenu') {
-          $scope.$apply(function() {
-            $location.path('/db/' + $scope.authentication.user.accessibleDBS[0]);
-          });
-        }
-        $scope.$digest();
+        user.roles = sessionInfo.userCtx.roles;
+        processUserDetails(user);
       } else {
         $scope.$apply(function() {
           $location.path('/welcome');
