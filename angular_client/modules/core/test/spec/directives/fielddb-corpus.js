@@ -1,37 +1,34 @@
 'use strict';
 
-describe('Directive: corpus', function() {
+describe('Directive: fielddb-corpus', function() {
 
-  // load the directive's module
-  beforeEach(module('fielddbAngularApp'));
-  // load the directive's template
-  beforeEach(module('views/corpus.html'));
-
-  var element,
-    scope,
-    linkFn;
+  // load the directive's module and the template
+  beforeEach(module('fielddbAngularApp', 'views/corpus.html'));
+  var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
+    el = angular.element('<div data-fielddb-corpus json="corpus"></div>');
     scope = $rootScope.$new();
-    element = angular.element('<corpus></corpus>');
-    linkFn = $compile(element);
-
-    // have to digest to bring html from templateCache
+    scope.corpus = {
+      title: 'Community Corpus',
+      description: 'Testing if corpus directive can load'
+    };
+    compileFunction = $compile(el);
+    // bring html from templateCache
     scope.$digest();
-
-    // the html here will still have {{}}
-    // console.log('post compile', element.html());
+    console.log('post compile', el.html()); // <== html here has {{}}
   }));
 
   // http://stackoverflow.com/questions/17223850/how-to-test-directives-that-use-templateurl-and-controllers
-  it('should make hidden element visible', inject(function($compile) {
-    // this will create a new scope (since our directive creates 
-    // new scope), runs the controller with it, and bind 
-    // the element to that new scope
-    linkFn(scope);
-    scope.$digest();
+  it('should make a corpus element with contents from scope', function() {
 
-    console.log(element.html());
-    expect(element.text()).toBe('this is the corpus directive');
-  }));
+    inject(function() {
+      compileFunction(scope); // <== the html {{}} are bound
+      scope.$digest(); // <== digest to get the render to show the bound values
+      console.log('post link', el.html());
+      console.log('scope corpus ', scope.corpus);
+
+      expect(el.find('h1').text().trim()).toEqual('Community Corpus');
+    });
+  });
 });

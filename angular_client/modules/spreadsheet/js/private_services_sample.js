@@ -24,6 +24,12 @@ define(
               userFriendlyServerName: "Localhost"
             };
           }
+          servers.production = {
+            auth: "https://auth.example.org",
+            corpus: "https://corpus.example.org",
+            serverCode: "production",
+            userFriendlyServerName: "Example"
+          };
           servers.testing = {
             auth: "https://authdev.example.org",
             corpus: "https://corpusdev.example.org",
@@ -31,18 +37,12 @@ define(
             userFriendlyServerName: "Example Beta"
           };
 
-          // servers.production = {
-          //   auth: "https://auth.example.org",
-          //   corpus: "https://corpus.example.org",
-          //   serverCode: "production",
-          //   userFriendlyServerName: "Example"
-          // };
 
           return {
             'getServiceUrl': function(label, serviceType) {
               var serverInfo = {};
 
-              serverInfo = servers[label];  
+              serverInfo = servers[label];
               if (!serverInfo) {
                 throw "Request for an invalid server: " + label;
               }
