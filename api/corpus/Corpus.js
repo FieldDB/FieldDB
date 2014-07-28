@@ -1,20 +1,21 @@
-/* global window, OPrime */
+/* global window, OPrime, FieldDB */
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var CorpusMask = require("./CorpusMask");
 var Collection = require('./../Collection').Collection;
-var Consultants = require('./../Collection').Collection;
+// var Consultants = require('./../Collection').Collection;
 // var Datum = require('./../datum/Datum').Datum;
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var DatumStates = require('./../datum/DatumStates').DatumStates;
 var DatumTags = require('./../datum/DatumTags').DatumTags;
 var Comments = require('./../Collection').Collection;
-var UserMask = require('./../Collection').Collection;
+// var UserMask = require('./../Collection').Collection;
 var Session = require('./../FieldDBObject').FieldDBObject;
 var CORS = require('./../CORS').CORS;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Permissions = require('./../Collection').Collection;
 var Sessions = require('./../Collection').Collection;
+var DataLists = require('./../Collection').Collection;
 var Q = require('q');
 
 
@@ -66,7 +67,7 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
 
 
 var Corpus = function Corpus(options) {
-  // console.log("Constructing corpus", options);
+  console.log("Constructing corpus", options);
   FieldDBObject.apply(this, arguments);
 };
 Corpus.defaults = DEFAULT_CORPUS_MODEL;
@@ -127,9 +128,9 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   couchConnection: {
     get: function() {
-      throw "couchConnection is deprecated";
+      console.warn("couchConnection is deprecated");
     },
-    set: function(value) {
+    set: function() {
       console.warn("couchConnection is deprecated");
     }
   },
@@ -147,7 +148,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._replicatedCorpusUrls = value;
@@ -167,7 +168,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._olacExportConnections = value;
@@ -238,7 +239,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Sessions(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this.unserializedSessions = value;
@@ -347,7 +348,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._comments = value;
@@ -367,7 +368,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._validationStati = value;
@@ -387,7 +388,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._tags = value;
@@ -407,7 +408,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._datumFields = value;
@@ -427,7 +428,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._conversationFields = value;
@@ -447,7 +448,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._sessionFields = value;
@@ -472,6 +473,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
           console.log(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
             deferred.reject(reason);
+            return;
           }
           self.runningloadOrCreateCorpusByPouchName = true;
           window.setTimeout(function() {
@@ -482,13 +484,18 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         CORS.makeCORSRequest({
           type: 'GET',
           dataType: 'json',
-          url: self.url
+          url: FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.url
         }).then(function(data) {
           console.log(data);
           if (data.rows && data.rows.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
             self.id = data.rows[0].value._id;
-            self.fetch().then(deferred.resolve, deferred.reject);
+            self.fetch(FieldDB.BASE_DB_URL).then(function(result) {
+              console.log('Finished fetch of corpus ', result);
+              deferred.resolve(result);
+            }, function(reason) {
+              deferred.reject(reason);
+            });
           } else {
             tryAgainInCaseThereWasALag(data);
           }
@@ -587,6 +594,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       dateCreated: FieldDBObject.DEFAULT_DATE,
       dateModified: FieldDBObject.DEFAULT_DATE,
       comments: Comments,
+      sessions: Sessions,
+      datalists: DataLists,
 
       title: FieldDBObject.DEFAULT_STRING,
       titleAsUrl: FieldDBObject.DEFAULT_STRING,
@@ -602,7 +611,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       validationStati: DatumStates,
       tags: DatumTags,
 
-      datumFields: DatumFields,
       datumFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
@@ -793,8 +801,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   find: {
     value: function(uri) {
-      var deferred = Q.defer(),
-        self = this;
+      var deferred = Q.defer();
 
       if (!uri) {
         throw 'Uri must be specified ';
@@ -890,138 +897,138 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   validDBQueries: {
     value: function() {
       return {
-        activities: {
-          url: "/_design/pages/_view/activities",
-          map: require("./../../couchapp_dev/views/activities/map")
-        },
-        add_synctactic_category: {
-          url: "/_design/pages/_view/add_synctactic_category",
-          map: require("./../../couchapp_dev/views/add_synctactic_category/map")
-        },
-        audioIntervals: {
-          url: "/_design/pages/_view/audioIntervals",
-          map: require("./../../couchapp_dev/views/audioIntervals/map")
-        },
-        byCollection: {
-          url: "/_design/pages/_view/byCollection",
-          map: require("./../../couchapp_dev/views/byCollection/map")
-        },
-        by_date: {
-          url: "/_design/pages/_view/by_date",
-          map: require("./../../couchapp_dev/views/by_date/map")
-        },
-        by_rhyming: {
-          url: "/_design/pages/_view/by_rhyming",
-          map: require("./../../couchapp_dev/views/by_rhyming/map"),
-          reduce: require("./../../couchapp_dev_/by_rhyming/reduce")
-        },
-        cleaning_example: {
-          url: "/_design/pages/_view/cleaning_example",
-          map: require("./../../couchapp_dev/views/cleaning_example/map")
-        },
-        corpuses: {
-          url: "/_design/pages/_view/corpuses",
-          map: require("./../../couchapp_dev/views/corpuses/map")
-        },
-        datalists: {
-          url: "/_design/pages/_view/datalists",
-          map: require("./../../couchapp_dev/views/datalists/map")
-        },
-        datums: {
-          url: "/_design/pages/_view/datums",
-          map: require("./../../couchapp_dev/views/datums/map")
-        },
-        datums_by_user: {
-          url: "/_design/pages/_view/datums_by_user",
-          map: require("./../../couchapp_dev/views/datums_by_user/map"),
-          reduce: require("./../../couchapp_dev_/datums_by_user/reduce")
-        },
-        datums_chronological: {
-          url: "/_design/pages/_view/datums_chronological",
-          map: require("./../../couchapp_dev/views/datums_chronological/map")
-        },
-        deleted: {
-          url: "/_design/pages/_view/deleted",
-          map: require("./../../couchapp_dev/views/deleted/map")
-        },
-        export_eopas_xml: {
-          url: "/_design/pages/_view/export_eopas_xml",
-          map: require("./../../couchapp_dev/views/export_eopas_xml/map"),
-          reduce: require("./../../couchapp_dev_/export_eopas_xml/reduce")
-        },
-        get_corpus_datum_tags: {
-          url: "/_design/pages/_view/get_corpus_datum_tags",
-          map: require("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
-          reduce: require("./../../couchapp_dev_/get_corpus_datum_tags/reduce")
-        },
-        get_corpus_fields: {
-          url: "/_design/pages/_view/get_corpus_fields",
-          map: require("./../../couchapp_dev/views/get_corpus_fields/map")
-        },
-        get_corpus_validationStati: {
-          url: "/_design/pages/_view/get_corpus_validationStati",
-          map: require("./../../couchapp_dev/views/get_corpus_validationStati/map"),
-          reduce: require("./../../couchapp_dev_/get_corpus_validationStati/reduce")
-        },
-        get_datum_fields: {
-          url: "/_design/pages/_view/get_datum_fields",
-          map: require("./../../couchapp_dev/views/get_datum_fields/map")
-        },
-        get_datums_by_session_id: {
-          url: "/_design/pages/_view/get_datums_by_session_id",
-          map: require("./../../couchapp_dev/views/get_datums_by_session_id/map")
-        },
-        get_frequent_fields: {
-          url: "/_design/pages/_view/get_frequent_fields",
-          map: require("./../../couchapp_dev/views/get_frequent_fields/map"),
-          reduce: require("./../../couchapp_dev_/get_frequent_fields/reduce")
-        },
-        get_search_fields_chronological: {
-          url: "/_design/pages/_view/get_search_fields_chronological",
-          map: require("./../../couchapp_dev/views/get_search_fields_chronological/map")
-        },
-        glosses_in_utterance: {
-          url: "/_design/pages/_view/glosses_in_utterance",
-          map: require("./../../couchapp_dev/views/glosses_in_utterance/map"),
-          reduce: require("./../../couchapp_dev_/glosses_in_utterance/reduce")
-        },
-        lexicon_create_tuples: {
-          url: "/_design/pages/_view/lexicon_create_tuples",
-          map: require("./../../couchapp_dev/views/lexicon_create_tuples/map"),
-          reduce: require("./../../couchapp_dev_/lexicon_create_tuples/reduce")
-        },
-        morpheme_neighbors: {
-          url: "/_design/pages/_view/morpheme_neighbors",
-          map: require("./../../couchapp_dev/views/morpheme_neighbors/map"),
-          reduce: require("./../../couchapp_dev_/morpheme_neighbors/reduce")
-        },
-        morphemes_in_gloss: {
-          url: "/_design/pages/_view/morphemes_in_gloss",
-          map: require("./../../couchapp_dev/views/morphemes_in_gloss/map"),
-          reduce: require("./../../couchapp_dev_/views/morphemes_in_gloss/reduce")
-        },
-        recent_comments: {
-          url: "/_design/pages/_view/recent_comments",
-          map: require("./../../couchapp_dev/views/recent_comments/map")
-        },
-        sessions: {
-          url: "/_design/pages/_view/sessions",
-          map: require("./../../couchapp_dev/views/sessions/map")
-        },
-        users: {
-          url: "/_design/pages/_view/users",
-          map: require("./../../couchapp_dev/views/users/map")
-        },
-        word_list: {
-          url: "/_design/pages/_view/word_list",
-          map: require("./../../couchapp_dev/views/word_list/map"),
-          reduce: require("./../../couchapp_dev_/word_list/reduce")
-        },
-        couchapp_dev_word_list_rdf: {
-          url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
-          map: require("./../../couchapp_dev_word_list_rdf/map"),
-          reduce: require("./../../couchapp_dev_word_list_rdf/reduce")
-        }
+        // activities: {
+        //   url: "/_design/pages/_view/activities",
+        //   map: require("./../../couchapp_dev/views/activities/map")
+        // },
+        // add_synctactic_category: {
+        //   url: "/_design/pages/_view/add_synctactic_category",
+        //   map: require("./../../couchapp_dev/views/add_synctactic_category/map")
+        // },
+        // audioIntervals: {
+        //   url: "/_design/pages/_view/audioIntervals",
+        //   map: require("./../../couchapp_dev/views/audioIntervals/map")
+        // },
+        // byCollection: {
+        //   url: "/_design/pages/_view/byCollection",
+        //   map: require("./../../couchapp_dev/views/byCollection/map")
+        // },
+        // by_date: {
+        //   url: "/_design/pages/_view/by_date",
+        //   map: require("./../../couchapp_dev/views/by_date/map")
+        // },
+        // by_rhyming: {
+        //   url: "/_design/pages/_view/by_rhyming",
+        //   map: require("./../../couchapp_dev/views/by_rhyming/map"),
+        //   reduce: require("./../../couchapp_dev/views/by_rhyming/reduce")
+        // },
+        // cleaning_example: {
+        //   url: "/_design/pages/_view/cleaning_example",
+        //   map: require("./../../couchapp_dev/views/cleaning_example/map")
+        // },
+        // corpuses: {
+        //   url: "/_design/pages/_view/corpuses",
+        //   map: require("./../../couchapp_dev/views/corpuses/map")
+        // },
+        // datalists: {
+        //   url: "/_design/pages/_view/datalists",
+        //   map: require("./../../couchapp_dev/views/datalists/map")
+        // },
+        // datums: {
+        //   url: "/_design/pages/_view/datums",
+        //   map: require("./../../couchapp_dev/views/datums/map")
+        // },
+        // datums_by_user: {
+        //   url: "/_design/pages/_view/datums_by_user",
+        //   map: require("./../../couchapp_dev/views/datums_by_user/map"),
+        //   reduce: require("./../../couchapp_dev/views/datums_by_user/reduce")
+        // },
+        // datums_chronological: {
+        //   url: "/_design/pages/_view/datums_chronological",
+        //   map: require("./../../couchapp_dev/views/datums_chronological/map")
+        // },
+        // deleted: {
+        //   url: "/_design/pages/_view/deleted",
+        //   map: require("./../../couchapp_dev/views/deleted/map")
+        // },
+        // export_eopas_xml: {
+        //   url: "/_design/pages/_view/export_eopas_xml",
+        //   map: require("./../../couchapp_dev/views/export_eopas_xml/map"),
+        //   reduce: require("./../../couchapp_dev/views/export_eopas_xml/reduce")
+        // },
+        // get_corpus_datum_tags: {
+        //   url: "/_design/pages/_view/get_corpus_datum_tags",
+        //   map: require("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
+        //   reduce: require("./../../couchapp_dev/views/get_corpus_datum_tags/reduce")
+        // },
+        // get_corpus_fields: {
+        //   url: "/_design/pages/_view/get_corpus_fields",
+        //   map: require("./../../couchapp_dev/views/get_corpus_fields/map")
+        // },
+        // get_corpus_validationStati: {
+        //   url: "/_design/pages/_view/get_corpus_validationStati",
+        //   map: require("./../../couchapp_dev/views/get_corpus_validationStati/map"),
+        //   reduce: require("./../../couchapp_dev/views/get_corpus_validationStati/reduce")
+        // },
+        // get_datum_fields: {
+        //   url: "/_design/pages/_view/get_datum_fields",
+        //   map: require("./../../couchapp_dev/views/get_datum_fields/map")
+        // },
+        // get_datums_by_session_id: {
+        //   url: "/_design/pages/_view/get_datums_by_session_id",
+        //   map: require("./../../couchapp_dev/views/get_datums_by_session_id/map")
+        // },
+        // get_frequent_fields: {
+        //   url: "/_design/pages/_view/get_frequent_fields",
+        //   map: require("./../../couchapp_dev/views/get_frequent_fields/map"),
+        //   reduce: require("./../../couchapp_dev/views/get_frequent_fields/reduce")
+        // },
+        // get_search_fields_chronological: {
+        //   url: "/_design/pages/_view/get_search_fields_chronological",
+        //   map: require("./../../couchapp_dev/views/get_search_fields_chronological/map")
+        // },
+        // glosses_in_utterance: {
+        //   url: "/_design/pages/_view/glosses_in_utterance",
+        //   map: require("./../../couchapp_dev/views/glosses_in_utterance/map"),
+        //   reduce: require("./../../couchapp_dev/views/glosses_in_utterance/reduce")
+        // },
+        // lexicon_create_tuples: {
+        //   url: "/_design/pages/_view/lexicon_create_tuples",
+        //   map: require("./../../couchapp_dev/views/lexicon_create_tuples/map"),
+        //   reduce: require("./../../couchapp_dev/views/lexicon_create_tuples/reduce")
+        // },
+        // morpheme_neighbors: {
+        //   url: "/_design/pages/_view/morpheme_neighbors",
+        //   map: require("./../../couchapp_dev/views/morpheme_neighbors/map"),
+        //   reduce: require("./../../couchapp_dev/views/morpheme_neighbors/reduce")
+        // },
+        // morphemes_in_gloss: {
+        //   url: "/_design/pages/_view/morphemes_in_gloss",
+        //   map: require("./../../couchapp_dev/views/morphemes_in_gloss/map"),
+        //   reduce: require("./../../couchapp_dev/views/morphemes_in_gloss/reduce")
+        // },
+        // recent_comments: {
+        //   url: "/_design/pages/_view/recent_comments",
+        //   map: require("./../../couchapp_dev/views/recent_comments/map")
+        // },
+        // sessions: {
+        //   url: "/_design/pages/_view/sessions",
+        //   map: require("./../../couchapp_dev/views/sessions/map")
+        // },
+        // users: {
+        //   url: "/_design/pages/_view/users",
+        //   map: require("./../../couchapp_dev/views/users/map")
+        // },
+        // word_list: {
+        //   url: "/_design/pages/_view/word_list",
+        //   map: require("./../../couchapp_dev/views/word_list/map"),
+        //   reduce: require("./../../couchapp_dev/views/word_list/reduce")
+        // },
+        // couchapp_dev_word_list_rdf: {
+        //   url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
+        //   map: require("./../../couchapp_dev/views/word_list_rdf/map"),
+        //   reduce: require("./../../couchapp_dev/views/word_list_rdf/reduce")
+        // }
       };
     }
   },

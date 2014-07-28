@@ -60,20 +60,17 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     value: {} // There are no nested models
   },
 
-
-
   label: {
     get: function() {
-      console.warn("label is deprecated, instead use a lable for appropraite user eg labelLinguists");
+      console.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
       return this.labelLinguists;
     },
     set: function(value) {
-      console.warn("label is deprecated, instead use a lable for appropraite user eg labelLinguists");
+      console.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
       this.labelLinguists = value;
       this.id = value;
     }
   },
-
 
   userchooseable: {
     get: function() {
