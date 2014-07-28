@@ -1,4 +1,5 @@
 'use strict';
+/* globals FieldDB */
 
 angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '$routeParams', '$rootScope',
   function($scope, $routeParams, $rootScope) {
@@ -21,6 +22,8 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
         return;
       }
       $scope.loginDetails.username = $routeParams.team;
+      $rootScope.currentCorpusDashboard = $routeParams.team + '/' + $routeParams.corpusid;
+
       var team = new FieldDB.UserMask({
         username: 'team',
       });
@@ -67,7 +70,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
           console.log('Failed to download corpus details.', result);
           $rootScope.status = 'Failed to download corpus details. Are you sure this is the corpus you wanted to see: ' + corpus.dbname;
           $scope.$apply();
-        }).catch(function(error){
+        }).catch(function(error) {
           console.log(error);
         });
       }
