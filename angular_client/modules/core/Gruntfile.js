@@ -41,7 +41,6 @@ module.exports = function(grunt) {
       },
       templates: {
         files: ['<%= yeoman.app %>/views/{,*/}*.html'],
-        // tasks: ['newer:jshint:all'],
         tasks: ['ngtemplates'],
         options: {
           livereload: 35726
@@ -244,7 +243,7 @@ module.exports = function(grunt) {
         },
         cwd: 'app',
         src: 'views/**.html',
-        dest: 'dist/scripts/templates.js'
+        dest: '<%= yeoman.dist %>/scripts/templates.js'
       }
     },
 
@@ -391,7 +390,7 @@ module.exports = function(grunt) {
     'copy:dist',
     'cdnify',
     'cssmin',
-    'uglify',
+    // 'uglify',
     'ngtemplates',
     // 'rev',
     'usemin'
