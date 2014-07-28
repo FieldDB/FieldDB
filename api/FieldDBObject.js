@@ -414,11 +414,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
+      console.warn(includeEvenEmptyAttributes + " includeEvenEmptyAttributes is not used ");
       var json = JSON.parse(JSON.stringify(this.toJSON()));
 
       var relatedData;
       if (json.datumFields && json.datumFields.relatedData) {
-        relatedData = json.datumFields.relatedData.json.relatedData || []
+        relatedData = json.datumFields.relatedData.json.relatedData || [];
       } else if (json.relatedData) {
         relatedData = json.relatedData;
       } else {

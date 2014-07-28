@@ -21,7 +21,7 @@ FieldDBConnection.connection = {
   }
 };
 
-FieldDBConnection.connect = function(options) {
+FieldDBConnection.connect = function() {
   var deferred = Q.defer();
 
   if (this.timestamp && this.connection.couchUser && this.connection.fieldDBUser && Date.now() - this.timestamp < 1000) {

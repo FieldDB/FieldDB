@@ -24,6 +24,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
+    <div>This is just a library which you can use in your code. See README.md for how to use this library which contains FieldDB Angular components<div>
     <div class="container" ng-view=""></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -51,11 +52,11 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/fielddb/fielddb.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="bower_components/fielddb/fielddb.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/directives/fielddb-corpus.js"></script>
@@ -63,6 +64,8 @@
         <script src="scripts/directives/fielddb-search.js"></script>
         <script src="scripts/directives/fielddb-corpus-terms-of-use.js"></script>
         <script src="scripts/directives/fielddb-offline-controls.js"></script>
+        <script src="scripts/services/fielddb-storage.js"></script>
+        <script src="scripts/directives/fielddb-authentication.js"></script>
         <!-- endbuild -->
 </body>
 </html>

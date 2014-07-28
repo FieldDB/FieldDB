@@ -1,5 +1,5 @@
 'use strict';
-
+/* globals FieldDB */
 angular
   .module('corpuspagesApp', [
     'ngCookies',
@@ -11,10 +11,11 @@ angular
     'fielddbLexiconAngularApp'
   ])
   .config(function($routeProvider, $locationProvider) {
-    // $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(true);
+
     if (FieldDB && FieldDB.Router) {
       for (var when in FieldDB.Router.routes) {
-        FieldDB.Router.routes[when].angularRoute.controller = 'FieldDBCorpusPagesController';
+        FieldDB.Router.routes[when].angularRoute.controller = 'FieldDBController';
         $routeProvider.when(FieldDB.Router.routes[when].path, FieldDB.Router.routes[when].angularRoute);
       }
       if (FieldDB.Router.otherwise) {

@@ -1,5 +1,6 @@
 // Generated on 2014-04-23 using generator-angular 0.8.0
 'use strict';
+var modRewrite = require('connect-modrewrite');
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -7,7 +8,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
@@ -33,7 +34,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-        tasks: ['newer:jshint:all'],
+        tasks: ['newer:jshint:all', 'karma'],
         options: {
           livereload: 35727
         }
@@ -62,12 +63,41 @@ module.exports = function (grunt) {
     },
 
     // The actual grunt server settings
+    // https://github.com/gruntjs/grunt-contrib-connect#middleware
     connect: {
       options: {
         port: 9003,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35727
+        livereload: 35727,
+        // directory: 'app',
+        middleware: function(connect, options, middlewares) {
+          middlewares = middlewares || [];
+          /* injecting a custom middleware into the array of default middlewares works */
+          middlewares.push(function(req, res, next) {
+            if (req.url !== '/hello/world') return next();
+            res.end('Hello, world from port #' + options.port + '!');
+          });
+
+          /* enabling html5 mode (no # in urls) so that all urls are redirected to index.html
+           http://stackoverflow.com/questions/17080494/using-grunt-server-how-can-i-redirect-all-requests-to-root-url
+          */
+          var directory = options.directory || options.base[options.base.length - 1];
+          // enable Angular's HTML5 mode
+          middlewares.push(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']));
+          if (!Array.isArray(options.base)) {
+            options.base = [options.base];
+          }
+          options.base.forEach(function(base) {
+            // Serve static files.
+            middlewares.push(connect.static(base));
+          });
+          // Make directory browse-able.
+          middlewares.push(connect.directory(directory));
+
+
+          return middlewares;
+        }
       },
       livereload: {
         options: {
@@ -342,7 +372,7 @@ module.exports = function (grunt) {
   });
 
 
-  grunt.registerTask('serve', function (target) {
+  grunt.registerTask('serve', function(target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
     }
@@ -357,7 +387,7 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('server', function (target) {
+  grunt.registerTask('server', function(target) {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve:' + target]);
   });

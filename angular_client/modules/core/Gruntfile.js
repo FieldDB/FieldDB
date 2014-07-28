@@ -39,6 +39,14 @@ module.exports = function(grunt) {
           livereload: 35726
         }
       },
+      templates: {
+        files: ['<%= yeoman.app %>/views/{,*/}*.html'],
+        // tasks: ['newer:jshint:all'],
+        tasks: ['ngtemplates'],
+        options: {
+          livereload: 35726
+        }
+      },
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
