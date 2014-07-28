@@ -116,3 +116,128 @@
   left: 1rem;
   padding-left: 2rem;
 }
+
+/* FieldDB styles */
+
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.gravatar-small {
+  height: 2em;
+}
+
+.gravatar-medium {
+  height: 4em;
+}
+
+.gravatar-large {
+  height: 8em;
+}
+
+.copyright, .terms, .license{
+  opacity: .5;
+}
+
+.interlinear-gloss-tuple {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  vertical-align: top;
+  /*necessary for when utteranceArray/morphemeArray/glossArray have different lengths*/
+}
+
+.export-large-textarea {
+  width: 100%;
+  height: 15em;
+}
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.halfopacity {
+  opacity: 0.5;
+}
+
+.drop-zone {
+  border: dashed;
+  border-color: #1E90FF;
+}
+
+.over {
+  border-color: #000;
+  background: #999 !important;
+}
+/*http://html5demos.com/drag*/
+*
+[draggable=true] {
+  -moz-user-select: none;
+  -khtml-user-drag: element;
+  cursor: move;
+}
+
+*
+:-khtml-drag {
+  background-color: rgba(238, 238, 238, 0.5);
+  /* padding: 1em; */
+  border: dashed #333 2px;
+  color: #000;
+}
+
+progress {
+  width: 100%;
+}
+
+.datum-tag {
+  padding: 1px 9px 2px !important;
+  -webkit-border-radius: 9px !important;
+  -moz-border-radius: 9px !important;
+  border-radius: 9px !important;
+  border-color: #3A87AD !important;
+  font-size: .85em !important;
+  font-weight: bold !important;
+  line-height: 1em !important;
+  color: white !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+  white-space: nowrap !important;
+  vertical-align: baseline !important;
+  background-color: #3A87AD !important;
+  text-align: center;
+}
+
+.word-wrap {
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.datum-translation {
+  font-style: italic;
+}
+
+.scrollable {
+  overflow: auto !important;
+  height: 25em !important;
+  width: 100%;
+}
+
