@@ -5,7 +5,7 @@ var Collection = require('./../Collection').Collection;
 var CORS = require('./../CORS').CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
-var Datum = require("./../FieldDBObject").FieldDBObject;
+// var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var FileReader = {};
@@ -32,7 +32,8 @@ var _ = {};
 
 
 var getUnique = function(arrayObj) {
-  var u = {}, a = [];
+  var u = {},
+    a = [];
   for (var i = 0, l = arrayObj.length; i < l; ++i) {
     if (u.hasOwnProperty(arrayObj[i])) {
       continue;
@@ -47,7 +48,7 @@ var getUnique = function(arrayObj) {
 
 
 var Import = function Import(options) {
-  // console.log(options);
+  console.log(" new import ", options);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -187,8 +188,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   preprocess: {
     value: function(options) {
-      var deferred = Q.defer(),
-        self = this;
+      var deferred = Q.defer();
       // console.log("In the preprocess", this);
 
       Q.nextTick(function() {
@@ -223,11 +223,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             options.preprocessOptions.writePreprocessedFileFunction(options.preprocessedUrl,
               preprocessResult,
               function(err, data) {
-                console.log("Wrote " + options.preprocessedUrl);
+                console.log("Wrote " + options.preprocessedUrl, data);
                 if (err) {
                   failFunction(err);
                 } else {
-                  successFunction(options)
+                  successFunction(options);
                 }
               });
           } else {
@@ -250,8 +250,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   import: {
     value: function(options) {
-      var deferred = Q.defer(),
-        self = this;
+      var deferred = Q.defer();
       console.log("in the import");
 
       Q.nextTick(function() {
@@ -861,7 +860,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(text, self, callback) {
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var textgrid = TextGrid.textgridToIGT(text);
-      var audioFileName = self.get("files")[0] ? self.get("files")[0].name : "copypastedtextgrid_unknownaudio";
+      var audioFileName = self.files[0] ? self.files[0].name : "copypastedtextgrid_unknownaudio";
       audioFileName = audioFileName.replace(/\.textgrid/i, "");
       if (!textgrid || !textgrid.intervalsByXmin) {
         if (typeof callback === "function") {
@@ -1035,7 +1034,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   readFiles: {
     value: function() {
       var filedetails = [];
-      var files = this.get("files");
+      var files = this.files;
       if (OPrime.debugMode) {
         OPrime.debug(files);
       }
@@ -1050,9 +1049,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
 
       var status = this.status;
-      this.set("fileDetails", filedetails.join(''));
+      this.fileDetails = filedetails.join('');
       status = status + filedetails.join('');
-      this.set("status", status);
+      this.status = status;
 
       //      // Create a new DataListEditView
       //      window.appView.importView.datalistView = new DataListEditView({
@@ -1082,7 +1081,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   readFileIntoRawText: {
     value: function(index, callback) {
       var self = this;
-      this.readBlob(this.get("files")[index], function() {
+      this.readBlob(this.files[index], function() {
         self.guessFormatAndImport(null, callback);
       });
     }
@@ -1133,8 +1132,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       };
 
       //if the user is just typing, try raw text
-      if (self.get("files")[fileIndex]) {
-        var fileExtension = self.get("files")[fileIndex].name.split('.').pop().toLowerCase();
+      if (self.files[fileIndex]) {
+        var fileExtension = self.files[fileIndex].name.split('.').pop().toLowerCase();
         if (fileExtension === "csv") {
           importType.csv.confidence++;
         } else if (fileExtension === "txt") {
@@ -1166,7 +1165,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return obj.confidence;
       });
       mostLikelyImport.importFunction(self.rawText, self, null); //no callback, TODO strange loss of reference in importview
-      self.set("status", "");
+      self.status = "";
     }
   },
   readBlob: {
