@@ -4,15 +4,15 @@
     <div>
       <!--Body content-->
       <h1>
-        <span>Import {{locale_Import}}</span> <small>{{pouchname}}</small>
+        <span>{{locale.locale_Import}}</span> <small>{{corpus.dbname}}</small>
       </h1>
 
       <h5>
-        <span>{{locale_Import_Instructions}}</span> <a
-          href="http://www.facebook.com/LingSyncApp" target="_blank"><i
-          class="icons icon-facebook"></i></a> <a
-          href="https://twitter.com/lingsync" target="_blank"><i
-          class="icons icon-twitter"></i></a>
+        <span>{{locale.locale_Import_Instructions}}</span> <a
+        href="http://www.facebook.com/LingSyncApp" target="_blank"><i
+        class="icons icon-facebook"></i></a> <a
+        href="https://twitter.com/lingsync" target="_blank"><i
+        class="icons icon-twitter"></i></a>
       </h5>
       <blockquote class="status">
         {{status}}
@@ -23,31 +23,26 @@
   <div class="row-fluid"></div>
 
   <div class="well" id="import-first-step">
-    <span>{{locale_Import_First_Step}}</span>
+    <span>{{locale.locale_Import_First_Step}}</span>
     <label ng-show="linguistApp">
       <i class="fa fa-gift"></i>
       <span>New! Import long audio/video stimuli(s)</span>
     </label>
     <form class="form-inline button-group btn-mini" role="form">
-        <span class="btn btn-file btn-info">
-          <span>
-            <i class="fa fa-file"></i>
-            Choose file(s)
-          </span>
-          <input type="file" multiple="true" name="files" ng-file-select="onFileSelect($files)" data-multiple="true" value="Audio/Video/Image/Text files to be imported"/>
+      <span class="btn btn-file btn-info">
+        <span>
+          <i class="fa fa-file"></i>
+          Choose file(s)
         </span>
-        <button class="btn btn-info" ng-click="onFileSelect($files)">
-          <i class="fa fa-upload"></i>
-          <span> Open</span>
-        </button>
+        <input type="file" multiple="true" name="files" ng-file-select="onFileSelect($files)" data-multiple="true" value="Audio/Video/Image/Text files to be imported"/>
+      </span>
       <input class="hidden" type="text" name="uptoken" ng-model="uploadInfo.token"/>
       <input class="hidden" type="text" name="username" ng-model="uploadInfo.username" />
       <input class="hidden" type="text" name="dbname" ng-model="uploadInfo.dbname"/>
       <input class="hidden" type="text" name="returnTextGrid" ng-model="uploadInfo.returnTextGrid"/>
     </form>
 
-    <textarea class="export-large-textarea drop-zone" placeholder="{{locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="over" ng-file-drag-over-delay="200">
-    </textarea>
+    <textarea class="export-large-textarea drop-zone" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="over" ng-file-drag-over-delay="200"></textarea>
 
     <div class="btn-group pull-right">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
@@ -68,10 +63,10 @@
   </div>
 
   <div class="well hidden" ng-show="importSecondStep">
-    <span>{{locale_Import_Second_Step}}</span>
+    <span>{{locale.locale_Import_Second_Step}}</span>
 
     <button
-      class="btn btn-info add-column pull-right hide">{{locale_Add_Extra_Columns}}</button>
+    class="btn btn-info add-column pull-right hide">{{locale.locale_Add_Extra_Columns}}</button>
 
     <div class=" container span11">
 
@@ -80,16 +75,16 @@
 
     <div class="scrollable">
       <table id="csv-table-area"
-        class=" table table-striped table-bordered table-condensed "></table>
+      class=" table table-striped table-bordered table-condensed "></table>
     </div>
 
     <button
-      class="btn btn-success approve-import hide">{{locale_Attempt_Import}}</button>
+    class="btn btn-success approve-import hide">{{locale.locale_Attempt_Import}}</button>
 
   </div>
 
   <div class="well hidden container-fluid" ng-show="importThirdStep">
-    <span>{{locale_Import_Third_Step}}</span>
+    <span>{{locale.locale_Import_Third_Step}}</span>
 
     <div id="import-data-list" class=" row-fluid">
 
@@ -105,10 +100,10 @@
     <div id="import-session" class="well"></div>
 
     <button
-      class="btn btn-success approve-save disabled">{{locale_Save_And_Import}}</button>
+    class="btn btn-success approve-save disabled">{{locale.locale_Save_And_Import}}</button>
 
     <progress class="import-progress" max="5" value="0">
-      <strong>{{locale_percent_completed}}</strong>
+      <strong>{{locale.locale_percent_completed}}</strong>
     </progress>
 
   </div>
