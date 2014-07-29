@@ -13,7 +13,8 @@ angular.module('fielddbAngularApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'angularFileUpload'
 ]).config(function($routeProvider) {
   console.log($routeProvider);
 });
