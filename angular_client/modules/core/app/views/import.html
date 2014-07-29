@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="row-fluid ">
+  <div class="row-fluid">
 
     <div>
       <!--Body content-->
@@ -20,66 +20,54 @@
 
     </div>
   </div>
-  <div class="row-fluid "></div>
+  <div class="row-fluid"></div>
 
   <div class="well" id="import-first-step">
     <span>{{locale_Import_First_Step}}</span>
-    <form class="form-inline button-group" id="uploadAudioForTextGridform" enctype="multipart/form-data" action="{{audioServerUrl}}" method="post">
-      <label ng-show="linguistApp">
-        <i class="fa fa-gift"></i>
-        <span >New! Import long audio/video stimuli(s) </span>
-      </label>
-      <div class="input-prepend">
-        <span class="btn btn-default btn-file btn-info btn-mini">
+    <label ng-show="linguistApp">
+      <i class="fa fa-gift"></i>
+      <span>New! Import long audio/video stimuli(s)</span>
+    </label>
+    <form class="form-inline button-group btn-mini" role="form">
+        <span class="btn btn-file btn-info">
           <span>
             <i class="fa fa-file"></i>
             Choose file(s)
           </span>
-          <input id="uploadAudioForTextGridformFiles" type="file" multiple="true" name="files" value="Audio/Video files to be imported"/>
+          <input type="file" multiple="true" name="files" ng-file-select="onFileSelect($files)" data-multiple="true" value="Audio/Video/Image/Text files to be imported"/>
         </span>
-      </div>
-      <div class="input-append">
-        <button class="btn btn-info btn-mini" type="submit">
+        <button class="btn btn-info" ng-click="onFileSelect($files)">
           <i class="fa fa-upload"></i>
-          <span> Upload</span>
+          <span> Open</span>
         </button>
-      </div>
-      <input class="hidden" type="text" name="token" value="{{audiouploadtoken}}"/>
-      <input class="hidden" type="text" name="username" value="{{username}}"/>
-      <input class="hidden" type="text" name="dbname" value="{{pouchname}}"/>
-      <input class="hidden" type="text" name="returnTextGrid" value="true"/>
+      <input class="hidden" type="text" name="uptoken" ng-model="uploadInfo.token"/>
+      <input class="hidden" type="text" name="username" ng-model="uploadInfo.username" />
+      <input class="hidden" type="text" name="dbname" ng-model="uploadInfo.dbname"/>
+      <input class="hidden" type="text" name="returnTextGrid" ng-model="uploadInfo.returnTextGrid"/>
     </form>
 
-    <textarea
-      class="export-large-textarea  drop-zone" placeholder="{{locale_Drag_and_Drop_Placeholder}}">{{rawText}}</textarea>
+    <textarea class="export-large-textarea drop-zone" placeholder="{{locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="over" ng-file-drag-over-delay="200">
+    </textarea>
 
     <div class="btn-group pull-right">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
         <span>Import from</span> <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu">
-        <li><a class="import-format" id="format-csv" tabindex="-1"
-          href="#">CSV</a></li>
-        <li><a class="import-format" id="format-tabbed" tabindex="-1"
-          href="#">Tabbed</a></li>
-        <li><a class="import-format" id="format-xml" tabindex="-1"
-          href="#">XML</a></li>
-        <li><a class="import-format" id="format-elanxml" tabindex="-1"
-          href="#">ElanXML</a></li>
-        <li><a class="import-format" id="format-toolbox" tabindex="-1"
-          href="#">Toolbox</a></li>
-        <li><a class="import-format" id="format-praat" tabindex="-1"
-          href="#">Praat Text Grid</a></li>
-        <li><a class="import-format" id="format-latex" tabindex="-1"
-          href="#">LaTex</a></li>
-        <li><a class="import-format" id="format-handout" tabindex="-1"
-          href="#">Handout</a></li>
+      <ul class="dropdown-menu" ng-model="whichFormatToImport">
+        <li><a class="import-format" tabindex="-1">CSV</a></li>
+        <li><a class="import-format" tabindex="-1">Tabbed</a></li>
+        <li><a class="import-format" tabindex="-1">XML</a></li>
+        <li><a class="import-format" tabindex="-1">ElanXML</a></li>
+        <li><a class="import-format" tabindex="-1">Toolbox</a></li>
+        <li><a class="import-format" tabindex="-1">Praat Text Grid</a></li>
+        <li><a class="import-format" tabindex="-1">LaTex</a></li>
+        <li><a class="import-format" tabindex="-1">Handout</a></li>
       </ul>
     </div>
     <span class="pull-right">Did the app guess the wrong format?</span>
   </div>
 
-  <div class="well hidden " id="import-second-step">
+  <div class="well hidden" ng-show="importSecondStep">
     <span>{{locale_Import_Second_Step}}</span>
 
     <button
@@ -100,13 +88,13 @@
 
   </div>
 
-  <div class="well hidden container-fluid " id="import-third-step">
+  <div class="well hidden container-fluid" ng-show="importThirdStep">
     <span>{{locale_Import_Third_Step}}</span>
 
     <div id="import-data-list" class=" row-fluid">
 
       <div id="import-data-list-header"  ></div>
-      <div class=" container span11 ">
+      <div class=" container span11">
         <ul class="unstyled  import-data-list-paginated-view"></ul>
         <div class="pagination-control row span11"></div>
       </div>
