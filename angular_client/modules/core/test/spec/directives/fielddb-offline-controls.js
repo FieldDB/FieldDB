@@ -1,4 +1,5 @@
 'use strict';
+var debug = false;
 
 describe('Directive: fielddb-offline-controls', function() {
 
@@ -17,7 +18,9 @@ describe('Directive: fielddb-offline-controls', function() {
     compileFunction = $compile(el);
     // bring html from templateCache
     scope.$digest();
-    console.log('post compile', el.html()); // <== html here has {{}}
+    if (debug) {
+      console.log('post compile', el.html()); // <== html here has {{}}
+    }
   }));
 
   // http://stackoverflow.com/questions/17223850/how-to-test-directives-that-use-templateurl-and-controllers
@@ -26,9 +29,11 @@ describe('Directive: fielddb-offline-controls', function() {
     inject(function() {
       compileFunction(scope); // <== the html {{}} are bound
       scope.$digest(); // <== digest to get the render to show the bound values
-      console.log('post link', el.html());
-      console.log('scope connection ', scope.connection);
-      console.log(el.find('input'));
+      if (debug) {
+        console.log('post link', el.html());
+        console.log('scope connection ', scope.connection);
+        console.log(el.find('input'));
+      }
 
       expect(el.find('input')[0].checked).toEqual(true);
     });
