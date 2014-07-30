@@ -1,4 +1,5 @@
 'use strict';
+var debug = false;
 
 describe('Directive: fielddb-participants', function() {
 
@@ -20,7 +21,9 @@ describe('Directive: fielddb-participants', function() {
     compileFunction = $compile(el);
     // bring html from templateCache
     scope.$digest();
-    console.log('post compile', el.html()); // <== html here has {{}}
+    if (debug) {
+      console.log('post compile', el.html()); // <== html here has {{}}
+    }
   }));
 
   // http://stackoverflow.com/questions/17223850/how-to-test-directives-that-use-templateurl-and-controllers
@@ -29,12 +32,14 @@ describe('Directive: fielddb-participants', function() {
     inject(function() {
       compileFunction(scope); // <== the html {{}} are bound
       scope.$digest(); // <== digest to get the render to show the bound values
-      console.log('post link', el.html());
-      console.log('scope team ', scope.team);
-      console.log('scope participants1 ', scope.participants1);
-      // console.log(angular.element(el.find('h1')));
-      expect(angular.element(el.find('h1')[0]).text().trim()).toEqual('Anony Mouse');
-      expect(angular.element(el.find('h1')[1]).text().trim()).toEqual('Ling Llama');
+      if (debug) {
+        console.log('post link', el.html());
+        console.log('scope team ', scope.team);
+        console.log('scope participants1 ', scope.participants1);
+        // console.log(angular.element(el.find('h1')));
+      }
+      expect(angular.element(el.find('h1')[1]).text().trim()).toEqual('Anony Mouse');
+      expect(angular.element(el.find('h1')[3]).text().trim()).toEqual('Ling Llama');
     });
   });
 });
