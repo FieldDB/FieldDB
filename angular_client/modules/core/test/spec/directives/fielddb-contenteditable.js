@@ -8,12 +8,9 @@ describe('Directive: fielddb-contenteditable', function() {
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    el = angular.element('      <form name="myForm"> <h1 contenteditable fielddb-contenteditable     name="myWidget" ng-model="corpus.title" strip-br="true" required></h1> <span ng-show="myForm.myWidget.$error.required">Required!</span> <hr> <textarea  ng-model="corpus.title"></textarea> </form>');
+    el = angular.element('<div> <span contenteditable="true" ng-model="userContent" strip-br="true" select-non-editable="true"> </span><textarea ng-model="userContent"></textarea></div> ');
     scope = $rootScope.$new();
-    scope.corpus = {
-      title: 'Community Corpus',
-      description: 'Testing if contenteditable directive can load'
-    };
+    scope.userContent='Community Corpus';
     compileFunction = $compile(el);
     // bring html from templateCache
     scope.$digest();
@@ -33,15 +30,13 @@ describe('Directive: fielddb-contenteditable', function() {
         console.log('scope contenteditable ', scope.corpus);
       }
 
-      expect(el.find('h1').text().trim()).toEqual('Community Corpus');
-      expect(el.find('textarea').text().trim()).toEqual('Community Corpus');
+      expect(el.find('span').text().trim()).toEqual('Community Corpus');
+      expect(el.find('textarea').val().trim()).toEqual('Community Corpus');
 
-      el.find('h1').text(scope.corpus.title);
-      expect(el.find('h1').text().trim()).toEqual('Community Corpus');
-
-      el.find('h1').text('My new title');
-      expect(scope.corpus.title).toEqual('My new title');
-
+      el.find('span').text('My new title');
+      el.find('span')[0].click();
+      el.find('span')[0].blur();
+      // expect(scope.userContent).toEqual('My new title');
     });
 
   });
