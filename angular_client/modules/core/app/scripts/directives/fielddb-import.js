@@ -1,4 +1,5 @@
 'use strict';
+/* globals FieldDB */
 
 /**
  * @ngdoc directive
@@ -21,13 +22,31 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
 
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
-      for (var i = 0; i < $files.length; i++) {
-        var file = $files[i];
+      if (processOffline) {
+        $scope.importer = $scope.importer || new FieldDB.Import({
+          files: $files,
+          corpus: $scope.corpus,
+          dbname: $scope.corpus.dbname,
+          status: '',
+          error: '',
+          rawText: ''
+        });
 
-        if (processOffline) {
+        console.log($scope.importer);
+        $scope.importer.readFiles({}).then(function(sucessfullOptions) {
+          console.log('Finished reading files ', sucessfullOptions);
+          $scope.$digest();
+          $scope.importer.guessFormatAndImport();
+          $scope.$digest();
 
+        }, function(failedOptions) {
+          console.log('Error reading files ', failedOptions);
+          $scope.$digest();
+        });
+      } else {
+        for (var i = 0; i < $files.length; i++) {
+          var file = $files[i];
 
-        } else {
           $scope.upload = $upload.upload({
             url: 'server/upload/url', //upload.php script, node.js route, or servlet url
             //method: 'POST' or 'PUT',
@@ -56,6 +75,11 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
     };
     /*jshint camelcase: false */
     $scope.locale = {
+      locale_Import_First_Step: 'Step 1: Drag & drop, copy-paste or type your data into the text area, or select audio/video file(s) from your computer. Yes, you can edit the data inside the text area.',
+      locale_Import_Second_Step: 'Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.',
+      locale_Add_Extra_Columns: 'Insert Extra Columns',
+      locale_Attempt_Import: 'Preview Import',
+      locale_Import_Third_Step: 'Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import.',
       locale_Import: 'Importer des liste(s) de classe (.csv)',
       locale_Drag_and_Drop_Placeholder: 'Drag and drop files, copy-paste or type your data here. (Or use the Choose file(s) button)'
     };

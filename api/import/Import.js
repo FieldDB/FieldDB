@@ -1,4 +1,4 @@
-/* globals OPrime, window, $ */
+/* globals OPrime, window, $, FileReader */
 var AudioVideo = require("./../FieldDBObject").FieldDBObject;
 var AudioVideos = require('./../Collection').Collection;
 var Collection = require('./../Collection').Collection;
@@ -8,12 +8,12 @@ var DataList = require("./../FieldDBObject").FieldDBObject;
 // var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var FileReader = {};
+// var FileReader = {};
 var Session = require("./../FieldDBObject").FieldDBObject;
 var TextGrid = require('textgrid').TextGrid;
 var X2JS = {};
 var Q = require('q');
-var _ = {};
+var _ = require('underscore');
 
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
@@ -381,14 +381,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var rows = text.split("\n");
       if (rows.length < 3) {
         rows = text.split("\r");
-        self.set("status", self.get("status", "Detected a \r line ending."));
+        self.status = self.status + " Detected a \r line ending.";
       }
       var firstrow = rows[0];
       var hasQuotes = false;
       //If it looks like it already has quotes:
       if (rows[0].split('","').length > 2 && rows[5].split('","').length > 2) {
         hasQuotes = true;
-        self.set("status", self.get("status", "Detected text was already surrounded in quotes."));
+        self.status = self.status + " Detected text was already surrounded in quotes.";
       }
       for (var l in rows) {
         if (hasQuotes) {
@@ -415,9 +415,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           header = self.parseLineCSV(firstrow);
         }
       }
-      self.set("extractedHeader", header);
+      self.extractedHeader = header;
 
-      self.set("asCSV", rows);
+      self.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -1032,58 +1032,89 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
   readFiles: {
-    value: function() {
-      var filedetails = [];
-      var files = this.files;
-      if (OPrime.debugMode) {
-        OPrime.debug(files);
-      }
-      for (var i = 0, f; f = files[i]; i++) {
-        filedetails.push(window.escape(f.name), ' ', f.type || ' n/a', ' - ', f.size, ' bytes, last modified: ',
-          f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : ' n/a');
+    value: function(options) {
+      var deferred = Q.defer(),
+        self = this,
+        promisses = [];
 
-        this.readFileIntoRawText(i);
-        //        this.set("asCSV", this.importCSV(f.getBytes()));
-        //      this.set("asXML", this.importCSV(f.getBytes()));
+      Q.nextTick(function() {
 
-      }
+        var fileDetails = [];
+        var files = self.files;
 
-      var status = this.status;
-      this.fileDetails = filedetails.join('');
-      status = status + filedetails.join('');
-      this.status = status;
+        for (var i = 0, f; f = files[i]; i++) {
+          var details = [window.escape(f.name), f.type || 'n/a', '-', f.size, 'bytes, last modified:', f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a'].join(' ');
+          self.status = self.status + '; ' + details;
+          fileDetails.push(JSON.parse(JSON.stringify(f)));
+          promisses.push(self.readFileIntoRawText({
+            file: f
+          }));
+        }
 
-      //      // Create a new DataListEditView
-      //      window.appView.importView.datalistView = new DataListEditView({
-      //        model : new DataList({
-      //          title : "Data from "+files[0].name,
-      //          description : "This is the data list which would result from the import of these files."
-      //            + this.get("fileDetails"),
-      //            pouchname: this.get("pouchname")
-      //        })
-      //      });
-      //      window.appView.importView.datalistView.format = "import";
-      //      window.appView.importView.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
-      //        collection           : new Datums(),
-      //        childViewConstructor : DatumReadView,
-      //        childViewTagName     : "li",
-      //        childViewFormat      : "latex"
-      //      });
-      //
-      //      // Render the DataList
-      //      window.appView.importView.datalistView.format = "import";
-      //      window.appView.importView.datalistView.render();
-      //      window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
-      //        $("#import-data-list").find(".import-data-list-paginated-view") );
-      //
+        self.fileDetails = fileDetails;
+
+        Q.allSettled(promisses).then(function(results) {
+          deferred.resolve(results.map(function(result) {
+            return result.value;
+          }));
+        }, function(results) {
+          self.error = 'Error processing files';
+          deferred.reject(results);
+        }).catch(function(error) {
+          console.warn('There was an error when importing these options ', error, options);
+        });
+
+      });
+      return deferred.promise;
     }
   },
   readFileIntoRawText: {
-    value: function(index, callback) {
-      var self = this;
-      this.readBlob(this.files[index], function() {
-        self.guessFormatAndImport(null, callback);
+    value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+      console.log('readFileIntoRawText', options);
+
+      Q.nextTick(function() {
+        if (!options) {
+          options = {
+            error: 'Options must be defined for readFileIntoRawText'
+          };
+          deferred.reject(options);
+          return;
+        }
+        if (!options.file) {
+          options.error = 'Options: file must be defined for readFileIntoRawText';
+          deferred.reject(options);
+          return;
+        }
+        options.start = options.start ? parseInt(options.start, 10) : 0;
+        options.stop = options.stop ? parseInt(options.stop, 10) : options.file.size - 1;
+        var reader = new FileReader();
+
+        // If we use onloadend, we need to check the readyState.
+        reader.onloadend = function(evt) {
+          if (evt.target.readyState === FileReader.DONE) { // DONE === 2
+            options.rawText = evt.target.result;
+            self.rawText = self.rawText + options.rawText;
+            self.importSecondStep = true;
+            deferred.resolve(options);
+          }
+        };
+
+        var blob = '';
+        if (options.file.slice) {
+          blob = options.file.slice(options.start, options.stop + 1);
+        } else if (options.file.mozSlice) {
+          blob = options.file.mozSlice(options.start, options.stop + 1);
+        } else if (options.file.webkitSlice) {
+          blob = options.file.webkitSlice(options.start, options.stop + 1);
+        }
+        // reader.readAsBinaryString(blob);
+        // reader.readAsText(blob, 'UTF-8');
+        reader.readAsText(blob);
+
       });
+      return deferred.promise;
     }
   },
   /**
@@ -1091,8 +1122,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   guessFormatAndImport: {
     value: function(fileIndex) {
-      var self = this;
-      if (fileIndex === null) {
+      if (!fileIndex) {
         fileIndex = 0;
       }
 
@@ -1132,13 +1162,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       };
 
       //if the user is just typing, try raw text
-      if (self.files[fileIndex]) {
-        var fileExtension = self.files[fileIndex].name.split('.').pop().toLowerCase();
+      if (this.files[fileIndex]) {
+        var fileExtension = this.files[fileIndex].name.split('.').pop().toLowerCase();
         if (fileExtension === "csv") {
           importType.csv.confidence++;
         } else if (fileExtension === "txt") {
           //If there are more than 20 tabs in the file, try tabbed.
-          if (self.rawText.split("\t").length > 20) {
+          if (this.rawText.split("\t").length > 20) {
             importType.tabbed.confidence++;
           } else {
             importType.handout.confidence++;
@@ -1164,37 +1194,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var mostLikelyImport = _.max(importType, function(obj) {
         return obj.confidence;
       });
-      mostLikelyImport.importFunction(self.rawText, self, null); //no callback, TODO strange loss of reference in importview
-      self.status = "";
+      this.status = "";
+      mostLikelyImport.importFunction.apply(this, [this.rawText, this, null]); //no callback
     }
   },
   readBlob: {
     value: function(file, callback, opt_startByte, opt_stopByte) {
-      //console.log(this);
-      var start = parseInt(opt_startByte) || 0;
-      var stop = parseInt(opt_stopByte) || file.size - 1;
-      var reader = new FileReader();
-
-      var self = this;
-      // If we use onloadend, we need to check the readyState.
-      reader.onloadend = function(evt) {
-        if (evt.target.readyState === FileReader.DONE) { // DONE === 2
-          self.set("rawText", evt.target.result);
-          if (typeof callback === "function") {
-            callback();
-          }
-        }
-      };
-      var blob = '';
-      if (file.webkitSlice) {
-        blob = file.webkitSlice(start, stop + 1);
-      } else if (file.mozSlice) {
-        blob = file.mozSlice(start, stop + 1);
-      } else if (file.slice) {
-        blob = file.slice(start, stop + 1);
-      }
-      reader.readAsBinaryString(blob);
-      //      reader.readAsText(file);
+      console.warn('Read blob is deprecated', file, callback, opt_startByte, opt_stopByte);
     }
   }
 });
