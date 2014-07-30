@@ -19,7 +19,11 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
       // file is uploaded successfully
       console.log(data, status, headers, config);
     };
-
+    $scope.removeRow = function(row) {
+      console.log('remove ', row);
+      var removed = $scope.importer.asCSV.splice(row, 1);
+      console.log(removed);
+    };
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
       if (processOffline) {

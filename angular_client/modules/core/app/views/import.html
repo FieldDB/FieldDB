@@ -75,12 +75,13 @@
 
     <div class="scrollable">
       <table id="csv-table-area" class="table table-striped table-bordered table-condensed "> <tr>
-        <th ng-repeat="headerCell in importer.extractedHeader" contenteditable>
-          {{headerCell}}
+        <th></th>
+        <th ng-repeat="headerCell in importer.extractedHeader" contenteditable ng-model="headerCell">
         </th>
       </tr>
       <tr ng-repeat="row in importer.asCSV">
-        <td ng-repeat="cell in row" contenteditable>{{cell}}</td>
+        <td ng-click="removeRow($index)"><i class="fa fa-times-circle"></i></td>
+        <td ng-repeat="cell in row" contenteditable ng-model="cell"></td>
       </tr>
     </table>
   </div>
