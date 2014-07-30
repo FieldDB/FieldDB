@@ -36,11 +36,12 @@
     "Oriana <oriana.kilbourn-ceron@mail.mcgill.ca>"
   ],
   "dependencies": {
-    "handlebars": "1.3.0",
-    "requirejs": "2.1.11",
-    "q": "1.0.1",
     "MD5": "1.2.1",
-    "textgrid": "2.2.0"
+    "handlebars": "1.3.0",
+    "q": "1.0.1",
+    "requirejs": "2.1.11",
+    "textgrid": "2.2.0",
+    "underscore": "^1.6.0"
   },
   "devDependencies": {
     "grunt": "*",

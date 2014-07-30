@@ -197,6 +197,86 @@ xdescribe("Batch Import: as a morphologist I want to import directories of text 
 });
 
 
+describe("Import: as a psycholinguist I want to import a list of participants from CSV", function() {
+  it("should error if a options are not passed in", function(done) {
+    var importer = new Import();
+
+    importer.readFileIntoRawText().then(function(success) {
+      console.log(success);
+      expect(false).toBeTruthy();
+    }, function(options) {
+      console.log(options);
+      expect(options.error).toEqual('Options must be defined for readFileIntoRawText');
+    }).then(done, done);
+
+  }, specIsRunningTooLong);
+
+  it("should error if a file is not passed in", function(done) {
+    var importer = new Import();
+
+    importer.readFileIntoRawText({}).then(function(success) {
+      console.log(success);
+      expect(false).toBeTruthy();
+    }, function(options) {
+      console.log(options);
+      expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
+    }).then(done, done);
+
+  }, specIsRunningTooLong);
+
+  it("should process csv participants", function() {
+    var importer = new Import({
+      rawText: fs.readFileSync('sample_data/students.csv', 'utf8')
+    });
+
+    importer.importCSV(importer.rawText, importer);
+    expect(importer.extractedHeader).toEqual(['studentid', 'coursenumber', 'firstname', 'lastname', 'dateofbirth']);
+    expect(importer.asCSV).toEqual([
+      ['StudentID', 'CourseNumber', 'FirstName', 'LastName', 'DateOfBirth'],
+      ['13245654', '210', 'Damiane', 'Alexandre', '2010-02-02'],
+      ['13245655', '210', 'Ariane', 'Ardouin', '2010-02-01'],
+      ['13245656', '210', 'Michel', 'Barbot', '2010-04-22'],
+      ['13245657', '210', 'Abeau', 'Burban', '2010-04-24'],
+      ['13245658', '210', 'Marylene', 'Collomb', '2010-01-14'],
+      ['13245659', '210', 'Mathea', 'Cotton', '2009-12-15'],
+      ['13245660', '210', 'Jade', 'Dray', '2010-06-10'],
+      ['13245661', '211', 'Etienne', 'Gaborit', '2010-05-11'],
+      ['13245662', '211', 'Emilien', 'Grosset', '2010-05-10'],
+      ['13245663', '211', 'Adrienne', 'Hainaut', '2010-07-29'],
+      ['13245664', '211', 'Humbert', 'Henin', '2010-07-31'],
+      ['13245665', '211', 'Renate', 'Lafargue', '2010-04-22'],
+      ['13245666', '211', 'Jean-Joël', 'Lalande', '2010-03-23'],
+      ['13245667', '211', 'Lothaire', 'Le Blanc', '2010-03-22'],
+      ['13245668', '211', 'Benedicte', 'Le Breton', '2010-06-10'],
+      ['']
+    ]);
+
+  });
+
+
+  xit("should read a file when in a browser", function(done) {
+    var importer = new Import();
+
+    importer.readFileIntoRawText({
+      file: {
+        "webkitRelativePath": "",
+        "lastModifiedDate": "2014-07-29T21:38:44.000Z",
+        "name": "students.csv",
+        "type": "text/csv",
+        "size": 651
+      }
+    }).then(function(success) {
+      console.log(success);
+      expect(false).toBeTruthy();
+    }, function(options) {
+      console.log(options);
+      expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
+    }).then(done, done);
+
+  }, specIsRunningTooLong);
+
+});
+
 xdescribe("Import: as a morphologist I want to import my data from CSV", function() {
   it("should detect drag and drop", function() {
     expect(true).toBeTruthy();

@@ -15,7 +15,7 @@
         class="icons icon-twitter"></i></a>
       </h5>
       <blockquote class="status">
-        {{status}}
+        {{importer.status}}
       </blockquote>
 
     </div>
@@ -42,7 +42,7 @@
       <input class="hidden" type="text" name="returnTextGrid" ng-model="uploadInfo.returnTextGrid"/>
     </form>
 
-    <textarea class="export-large-textarea drop-zone" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="over" ng-file-drag-over-delay="200"></textarea>
+    <textarea class="export-large-textarea drop-zone" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="over" ng-file-drag-over-delay="200" ng-model="importer.rawText"></textarea>
 
     <div class="btn-group pull-right">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
@@ -62,49 +62,54 @@
     <span class="pull-right">Did the app guess the wrong format?</span>
   </div>
 
-  <div class="well hidden" ng-show="importSecondStep">
+  <div class="well" ng-show="importer.importSecondStep">
     <span>{{locale.locale_Import_Second_Step}}</span>
 
-    <button
-    class="btn btn-info add-column pull-right hide">{{locale.locale_Add_Extra_Columns}}</button>
-
+    <button class="btn btn-info add-column pull-right hide">{{locale.locale_Add_Extra_Columns}}</button>
     <div class=" container span11">
 
-      <div id="import-datum-field-labels" class="row-fluid"></div>
+      <div id="import-datum-field-labels" class="row-fluid">
+        <span class="pull-left label label-info" draggable ng-repeat="participantFields in importer.corpus.participantFields">{{participantFields.id}}</span>
+      </div>
     </div>
 
     <div class="scrollable">
-      <table id="csv-table-area"
-      class=" table table-striped table-bordered table-condensed "></table>
-    </div>
+      <table id="csv-table-area" class="table table-striped table-bordered table-condensed "> <tr>
+        <th ng-repeat="headerCell in importer.extractedHeader" contenteditable>
+          {{headerCell}}
+        </th>
+      </tr>
+      <tr ng-repeat="row in importer.asCSV">
+        <td ng-repeat="cell in row" contenteditable>{{cell}}</td>
+      </tr>
+    </table>
+  </div>
 
-    <button
-    class="btn btn-success approve-import hide">{{locale.locale_Attempt_Import}}</button>
+  <button class="btn btn-success approve-import hide">{{locale.locale_Attempt_Import}}</button>
+</div>
+
+<div class="well container-fluid" ng-show="importer.importThirdStep">
+  <span>{{locale.locale_Import_Third_Step}}</span>
+
+  <div id="import-data-list" class=" row-fluid">
+
+    <div id="import-data-list-header"  ></div>
+    <div class=" container span11">
+      <ul class="unstyled  import-data-list-paginated-view"></ul>
+      <div class="pagination-control row span11"></div>
+    </div>
 
   </div>
 
-  <div class="well hidden container-fluid" ng-show="importThirdStep">
-    <span>{{locale.locale_Import_Third_Step}}</span>
 
-    <div id="import-data-list" class=" row-fluid">
+  <div id="import-session" class="well"></div>
 
-      <div id="import-data-list-header"  ></div>
-      <div class=" container span11">
-        <ul class="unstyled  import-data-list-paginated-view"></ul>
-        <div class="pagination-control row span11"></div>
-      </div>
+  <button
+  class="btn btn-success approve-save disabled">{{locale.locale_Save_And_Import}}</button>
 
-    </div>
+  <progress class="import-progress" max="5" value="0">
+    <strong>{{locale.locale_percent_completed}}</strong>
+  </progress>
 
-
-    <div id="import-session" class="well"></div>
-
-    <button
-    class="btn btn-success approve-save disabled">{{locale.locale_Save_And_Import}}</button>
-
-    <progress class="import-progress" max="5" value="0">
-      <strong>{{locale.locale_percent_completed}}</strong>
-    </progress>
-
-  </div>
+</div>
 </div>
