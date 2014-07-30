@@ -20,6 +20,7 @@ var Q = require('q');
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
+var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus.json");
 
 /**
  * @class A corpus is like a git repository, it has a remote, a title
@@ -348,7 +349,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+          value = new this.INTERNAL_MODELS['comments'](value);
         }
       }
       this._comments = value;
@@ -368,7 +369,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+          value = new this.INTERNAL_MODELS['datumStates'](value);
         }
       }
       this._validationStati = value;
@@ -388,7 +389,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+          value = new this.INTERNAL_MODELS['tags'](value);
         }
       }
       this._tags = value;
@@ -408,10 +409,30 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+          value = new this.INTERNAL_MODELS['datumFields'](value);
         }
       }
       this._datumFields = value;
+    }
+  },
+
+  participantFields: {
+    get: function() {
+      return this._participantFields || DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.participantFields;
+    },
+    set: function(value) {
+      if (value === this._participantFields) {
+        return;
+      }
+      if (!value) {
+        delete this._participantFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['participantFields'](value);
+        }
+      }
+      this._participantFields = value;
     }
   },
 
@@ -428,7 +449,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+          value = new this.INTERNAL_MODELS['conversationFields'](value);
         }
       }
       this._conversationFields = value;
@@ -612,6 +633,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       tags: DatumTags,
 
       datumFields: DatumFields,
+      participantFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
     }
@@ -755,6 +777,12 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       for (x in newCorpusJson.datumFields) {
         newCorpusJson.datumFields[x].mask = "";
         newCorpusJson.datumFields[x].value = "";
+      }
+      if (newCorpusJson.participantFields) {
+        for (x in newCorpusJson.participantFields) {
+          newCorpusJson.participantFields[x].mask = "";
+          newCorpusJson.participantFields[x].value = "";
+        }
       }
       //clear out search terms from the new corpus's conversation fields
       for (x in newCorpusJson.conversationFields) {
