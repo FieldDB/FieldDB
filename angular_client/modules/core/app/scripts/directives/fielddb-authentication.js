@@ -42,6 +42,9 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       }
       $scope.$digest();
     };
+    $scope.register = function(registerDetails) {
+      console.warn('TODO', registerDetails);
+    };
 
     $scope.login = function(loginDetails) {
       $scope.isContactingServer = true;
