@@ -49,6 +49,13 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
+    },
     "help": "Optional date of birth of the participant, if required by the experimental analysis (ie participants of 20 months performed differently from participants of 22 months).",
     "helpLinguists": "Optional date of birth of the participant, if required by the experimental analysis (ie participants of 20 months performed differently from participants of 22 months)."
   }, {
@@ -61,5 +68,33 @@
     "defaultfield": true,
     "help": "Optional course or section number, if used by the participants result reports or experimental conditions.",
     "helpLinguists": "Optional course or section number, if used by the participants result reports or experimental conditions."
+  }, {
+    "id": "gender",
+    "labelLinguists": "Gender",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "choices": ["Female", "Male", "Unknown"],
+      "children": ["Girl", "Boy", "Unknown"],
+      "adult": ["Woman", "Man", "Unknown"]
+    },
+    "help": "Optional gender or biological sex of the participant, if used by the participants result reports or experimental conditions.",
+    "helpLinguists": "Optional gender or biological sex of the participant, if used by the participants result reports or experimental conditions."
+  }, {
+    "id": "hemisphericDominance",
+    "labelLinguists": "Hemispheric dominance (handedness)",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "choices": ["Right", "Left", "Unknown"]
+    },
+    "help": "Optional right or left handedness or hemispheric dominante of the participant, if used by the participants result reports or experimental conditions.",
+    "helpLinguists": "Optional right or left handedness or hemispheric dominante of the participant, if used by the participants result reports or experimental conditions."
   }]
 }
