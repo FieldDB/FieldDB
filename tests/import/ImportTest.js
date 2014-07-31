@@ -5,7 +5,7 @@ var fs = require('fs');
 
 var specIsRunningTooLong = 5000;
 
-xdescribe("api/import/Import", function() {
+describe("api/import/Import", function() {
 
   it("should load", function() {
     expect(Import).toBeDefined();
@@ -41,7 +41,7 @@ xdescribe("api/import/Import", function() {
 
 });
 
-xdescribe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
   var corpus,
     importer,
     localUri = './sample_data/orthography.txt',
@@ -239,7 +239,7 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
 });
 
 
-xdescribe("Import: as a psycholinguist I want to import a list of participants from CSV", function() {
+describe("Import: as a psycholinguist I want to import a list of participants from CSV", function() {
   it("should error if a options are not passed in", function(done) {
     var importer = new Import();
 
@@ -361,7 +361,7 @@ xdescribe("Import Template", function() {
 
 });
 
-// xdescribe("Import routes", function() {
+// describe("Import routes", function() {
 // beforeEach(function() {
 // this.router = new ImportRouter;
 // this.routeSpy = sinon.spy();
