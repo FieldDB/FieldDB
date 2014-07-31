@@ -72,7 +72,7 @@ module.exports = function(grunt) {
           jshintrc: 'tests/.jshintrc',
           ignores: ['tests/libs/**/*js']
         },
-        src: ['api/FieldDBTest.js']
+        src: ['tests/FieldDBTest.js', 'tests/import/ImportTest.js']
       },
     },
     jsdoc: {

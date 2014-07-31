@@ -1,4 +1,4 @@
-/* globals OPrime, window, $, FileReader */
+/* globals OPrime, window, escape, $, FileReader */
 var AudioVideo = require("./../FieldDBObject").FieldDBObject;
 var AudioVideos = require('./../Collection').Collection;
 var Collection = require('./../Collection').Collection;
@@ -1031,24 +1031,47 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       console.log("added a datum to the collection");
     }
   },
+  /**
+   * Reads the import's array of files using a supplied readOptions or using
+   * the readFileIntoRawText function which uses the browsers FileReader API.
+   * It can read only part of a file if start and stop are passed in the options.
+   *
+   * @param  Object options Options can be specified to pass start and stop bytes
+   * for the files to be read.
+   *
+   * @return Promise Returns a promise which will have an array of results
+   * for each file which was requested to be read
+   */
   readFiles: {
     value: function(options) {
       var deferred = Q.defer(),
         self = this,
         promisses = [];
 
+      options = options || {};
       Q.nextTick(function() {
 
         var fileDetails = [];
         var files = self.files;
 
-        for (var i = 0, f; f = files[i]; i++) {
-          var details = [window.escape(f.name), f.type || 'n/a', '-', f.size, 'bytes, last modified:', f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a'].join(' ');
+
+        for (var i = 0, file; file = files[i]; i++) {
+          var details = [escape(file.name), file.type || 'n/a', '-', file.size, 'bytes, last modified:', file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a'].join(' ');
           self.status = self.status + '; ' + details;
-          fileDetails.push(JSON.parse(JSON.stringify(f)));
-          promisses.push(self.readFileIntoRawText({
-            file: f
-          }));
+          fileDetails.push(JSON.parse(JSON.stringify(file)));
+          if (options.readOptions) {
+            promisses.push(options.readOptions.readFileFunction.apply(self, [{
+              file: file.name,
+              start: options.start,
+              stop: options.stop
+            }]));
+          } else {
+            promisses.push(self.readFileIntoRawText({
+              file: file,
+              start: options.start,
+              stop: options.stop
+            }));
+          }
         }
 
         self.fileDetails = fileDetails;
@@ -1068,6 +1091,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       return deferred.promise;
     }
   },
+  /**
+   * Reads a file using the FileReader API, can read only part of a file if start and stop are passed in the options.
+   * @param  Object options Options can be specified to pass start and stop bytes for the file to be read.
+   * @return Promise Returns a promise which will have an array of results for each file which was requested to be read
+   */
   readFileIntoRawText: {
     value: function(options) {
       var deferred = Q.defer(),
