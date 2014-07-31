@@ -55,7 +55,7 @@ describe("Corpus", function() {
 
     it("should have default datumFields", function() {
       expect(corpus.datumFields instanceof DatumFields).toBeTruthy();
-      expect(corpus.datumFields.constructor === DatumFields)
+      expect(corpus.datumFields.constructor === DatumFields);
       // console.log(corpus.datumFields.utterance);
       // console.log(corpus.datumFields.toJSON());
       expect(corpus.datumFields.utterance.labelLinguists).toEqual('Utterance');

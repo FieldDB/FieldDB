@@ -68,7 +68,7 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
 
 
 var Corpus = function Corpus(options) {
-  console.log("Constructing corpus", options);
+  this.debug("Constructing corpus", options);
   FieldDBObject.apply(this, arguments);
 };
 Corpus.defaults = DEFAULT_CORPUS_MODEL;
@@ -129,10 +129,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   couchConnection: {
     get: function() {
-      console.warn("couchConnection is deprecated");
+      this.warn("couchConnection is deprecated");
     },
     set: function() {
-      console.warn("couchConnection is deprecated");
+      this.warn("couchConnection is deprecated");
     }
   },
 
@@ -290,7 +290,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       }
       if (value !== "Public" && value !== "Private") {
-        console.warn("Corpora can be either Public or Private");
+        this.warn("Corpora can be either Public or Private");
         value = "Private";
       }
       this._publicCorpus = value;
@@ -478,7 +478,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   loadOrCreateCorpusByPouchName: {
     value: function(dbname) {
-      console.warn('TODO test loadOrCreateCorpusByPouchName');
+      this.todo('test loadOrCreateCorpusByPouchName');
       if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
@@ -491,7 +491,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       Q.nextTick(function() {
 
         var tryAgainInCaseThereWasALag = function(reason) {
-          console.log(reason);
+          self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
             deferred.reject(reason);
             return;
@@ -507,12 +507,12 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
           dataType: 'json',
           url: FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.url
         }).then(function(data) {
-          console.log(data);
+          self.debug(data);
           if (data.rows && data.rows.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
             self.id = data.rows[0].value._id;
             self.fetch(FieldDB.BASE_DB_URL).then(function(result) {
-              console.log('Finished fetch of corpus ', result);
+              self.debug('Finished fetch of corpus ', result);
               deferred.resolve(result);
             }, function(reason) {
               deferred.reject(reason);
@@ -530,7 +530,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   fetchPublicSelf: {
     value: function() {
-      console.warn('TODO test fetchPublicSelf');
+      this.todo('test fetchPublicSelf');
       if (!this.dbname) {
         throw "Cannot load corpus's public self, its dbname was undefined";
       }
@@ -569,7 +569,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   loadPermissions: {
     value: function() {
-      console.warn('TODO test loadPermissions');
+      this.todo('test loadPermissions');
       var deferred = Q.defer(),
         self = this;
 
@@ -591,11 +591,11 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   pouchname: {
     get: function() {
-      console.warn("pouchname is deprecated, use dbname instead.");
+      this.warn("pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
     set: function(value) {
-      console.warn("pouchname is deprecated, use dbname instead.");
+      this.warn("pouchname is deprecated, use dbname instead.");
       this.dbname = value;
     }
   },
@@ -724,7 +724,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
       Q.nextTick(function() {
 
-        console.log("Creating a datum for this corpus");
+        self.debug("Creating a datum for this corpus");
         if (!self.datumFields || !self.datumFields.clone) {
           throw "This corpus has no default datum fields... It is unable to create a datum.";
         }
@@ -736,7 +736,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
             continue;
           }
           if (datum.datumFields[field]) {
-            console.log("  this option appears to be a datumField " + field);
+            self.debug("  this option appears to be a datumField " + field);
             datum.datumFields[field].value = options[field];
           } else {
             datum[field] = options[field];
@@ -866,10 +866,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
       var newModel = false;
       if (!this.id) {
-        console.log('New corpus');
+        self.debug('New corpus');
         newModel = true;
       } else {
-        console.log('Existing corpus');
+        self.debug('Existing corpus');
       }
       var oldrev = this.get("_rev");
 
@@ -1184,7 +1184,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         self["frequentDatum" + fieldname] = frequentValues;
         deferred.resolve(frequentValues);
       }, function(response) {
-        console.log("resolving defaults for frequentDatum" + fieldname, response);
+        self.debug("resolving defaults for frequentDatum" + fieldname, response);
         deferred.resolve(defaults);
       });
 

@@ -20,7 +20,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var DatumField = function DatumField(options) {
-  console.log("Constructing DatumField ", options.length);
+  this.debug("Constructing DatumField ", options.length);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -62,11 +62,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   label: {
     get: function() {
-      console.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
+      this.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
       return this.labelLinguists;
     },
     set: function(value) {
-      console.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
+      this.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
       this.labelLinguists = value;
       this.id = value;
     }
@@ -74,11 +74,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   userchooseable: {
     get: function() {
-      console.warn("userchooseable is deprecated, instead use defaultfield");
+      this.warn("userchooseable is deprecated, instead use defaultfield");
       return this.defaultfield;
     },
     set: function(value) {
-      console.warn("userchooseable is deprecated, instead use defaultfield");
+      this.warn("userchooseable is deprecated, instead use defaultfield");
       if (value === "disabled") {
         value = true;
       }
@@ -388,7 +388,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
    */
   validate: {
     value: function(attributes) {
-      console.log("Vaidating is commented out ", attributes);
+      this.tood("Vaidating is commented out ", attributes);
       //      if(attributes.mask){
       //        if(attributes.shouldBeEncrypted !== "checked" ){
       //          //user can modify the mask, no problem.

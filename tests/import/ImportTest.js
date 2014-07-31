@@ -19,7 +19,7 @@ describe("api/import/Import", function() {
   it("should be able to use a corpus", function() {
     var corpus = new Corpus(Corpus.defaults);
     expect(corpus).toBeDefined();
-    // console.log(corpus);
+    corpus.debug(corpus);
     expect(corpus.dbname).toBeDefined();
 
 
@@ -34,7 +34,7 @@ describe("api/import/Import", function() {
     var corpus = new Corpus(Corpus.defaults);
     corpus.dbname = dbname;
     var datum = corpus.newDatum();
-    console.log(datum);
+    corpus.debug(datum);
     expect(datum).toBeDefined();
   });
 
@@ -90,7 +90,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
     importer
       .readUri(defaultOptions)
       .then(function(result) {
-        console.log('after read file', result);
+        importer.debug('after read file', result);
         expect(result).toBeDefined();
         expect(result.rawText.substring(0, 20)).toEqual('Noqata qan qaparinay');
       })
@@ -104,7 +104,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
         uri: remoteUri
       })
       .then(function(result) {
-        console.log('after read file', result);
+        importer.debug('after read file', result);
         expect(result.datum.datumFields.orthography).toBeDefined();
       }).then(done, done);
   }, specIsRunningTooLong);
@@ -115,7 +115,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
     importer
       .preprocess(defaultOptions)
       .then(function(result) {
-        console.log('after preprocess file');
+        importer.debug('after preprocess file');
         expect(result.datum.datumFields.utterance).toBeDefined();
         expect(result.preprocessedUrl).toEqual('./sample_data/orthography_preprocessed.json');
 
@@ -160,10 +160,10 @@ describe("Batch Import: as a morphologist I want to import directories of text f
         fromPreprocessedFile: true
       },
       next: function() {
-        console.log('Next middle ware placeholder');
+        importer.debug('Next middle ware placeholder');
       }
     }).then(function(result) {
-      console.log('after add file', result);
+      importer.debug('after add file', result);
       expect(result.rawText).toBeDefined();
     }).then(done, done);
 
@@ -202,17 +202,17 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
     importer.readFiles({
       readOptions: {
         readFileFunction: function(options) {
-          console.log('Reading file', options);
+          importer.debug('Reading file', options);
           var thisFileDeferred = Q.defer();
           Q.nextTick(function() {
             fs.readFile(options.file, {
               encoding: 'utf8'
             }, function(err, data) {
-              console.log('Finished reading this file', err, data);
+              importer.debug('Finished reading this file', err, data);
               if (err) {
                 thisFileDeferred.reject(err);
               } else {
-                console.log('options', options);
+                importer.debug('options', options);
                 options.rawText = data;
                 importer.rawText = importer.rawText + data;
                 thisFileDeferred.resolve(options);
@@ -223,7 +223,7 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
         }
       }
     }).then(function(success) {
-      console.log('success', success);
+      importer.debug('success', success);
 
       expect(importer.status).toEqual('undefined; sample_data/students.csv n/a -  bytes, last modified: n/a; sample_data/students2.csv n/a -  bytes, last modified: n/a');
       expect(importer.fileDetails).toEqual([{
@@ -249,10 +249,10 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     var importer = new Import();
 
     importer.readFileIntoRawText().then(function(success) {
-      console.log(success);
+      importer.debug(success);
       expect(false).toBeTruthy();
     }, function(options) {
-      console.log(options);
+      importer.debug(options);
       expect(options.error).toEqual('Options must be defined for readFileIntoRawText');
     }).then(done, done);
 
@@ -262,10 +262,10 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     var importer = new Import();
 
     importer.readFileIntoRawText({}).then(function(success) {
-      console.log(success);
+      importer.debug(success);
       expect(false).toBeTruthy();
     }, function(options) {
-      console.log(options);
+      importer.debug(options);
       expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
     }).then(done, done);
 
@@ -313,10 +313,10 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
         "size": 651
       }
     }).then(function(success) {
-      console.log(success);
+      importer.debug(success);
       expect(false).toBeTruthy();
     }, function(options) {
-      console.log(options);
+      importer.debug(options);
       expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
     }).then(done, done);
 

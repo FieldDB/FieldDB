@@ -1,3 +1,5 @@
+/* globals window */
+
 var regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
   replace(/\x08/g, '\\x08');
@@ -15,7 +17,7 @@ var regExpEscape = function(s) {
  * @tutorial tests/CollectionTest.js
  */
 var Collection = function Collection(json) {
-  console.log('Constructing a collection');
+  this.debug('Constructing a collection');
 
   /* accepts just an array in construction */
   if (Object.prototype.toString.call(json) === '[object Array]') {
@@ -32,13 +34,13 @@ var Collection = function Collection(json) {
   }
   if (!this.primaryKey) {
     var defaultKey = 'id'; /*TODO try finding the key that exists in all objects if id doesnt exist? */
-    console.log('  Using default primary key of ' + defaultKey);
+    this.debug('  Using default primary key of ' + defaultKey);
     this.primaryKey = defaultKey;
   }
   if (json.collection) {
     this.collection = json.collection;
   }
-  console.log('  array of length ' + this.collection.length);
+  this.debug('  array of length ' + this.collection.length);
   Object.apply(this, arguments);
 };
 
@@ -46,6 +48,119 @@ var Collection = function Collection(json) {
 Collection.prototype = Object.create(Object.prototype, {
   constructor: {
     value: Collection
+  },
+
+  /**
+   * Can be set to true to debug all collections, or false to debug no collections and true only on the instances of objects which
+   * you want to debug.
+   *
+   * @type {Boolean}
+   */
+  debugMode: {
+    get: function() {
+      if (this.perObjectDebugMode === undefined) {
+        return false;
+      } else {
+        return this.perObjectDebugMode;
+      }
+    },
+    set: function(value) {
+      if (value === this.perObjectDebugMode) {
+        return;
+      }
+      if (value === null || value === undefined) {
+        delete this.perObjectDebugMode;
+        return;
+      }
+      this.perObjectDebugMode = value;
+    }
+  },
+  debug: {
+    value: function(message, message2, message3, message4) {
+      try {
+        if (window.navigator && window.navigator.appName === 'Microsoft Internet Explorer') {
+          return;
+        }
+      } catch (e) {
+        //do nothing, we are in node or some non-friendly browser.
+      }
+      if (this.debugMode) {
+        console.log(message);
+
+        if (message2) {
+          console.log(message2);
+        }
+        if (message3) {
+          console.log(message3);
+        }
+        if (message4) {
+          console.log(message4);
+        }
+      }
+    }
+  },
+  verboseMode: {
+    get: function() {
+      if (this.perObjectVerboseMode === undefined) {
+        return false;
+      } else {
+        return this.perObjectVerboseMode;
+      }
+    },
+    set: function(value) {
+      if (value === this.perObjectVerboseMode) {
+        return;
+      }
+      if (value === null || value === undefined) {
+        delete this.perObjectVerboseMode;
+        return;
+      }
+      this.perObjectVerboseMode = value;
+    }
+  },
+  verbose: {
+    value: function(message, message2, message3, message4) {
+      if (this.verboseMode) {
+        this.debug(message, message2, message3, message4);
+      }
+    }
+  },
+  bug: {
+    value: function(message) {
+      try {
+        window.alert(message);
+      } catch (e) {
+        console.warn('COLLECTION BUG: ' + message);
+      }
+    }
+  },
+  warn: {
+    value: function(message, message2, message3, message4) {
+      console.warn('COLLECTION WARN: ' + message);
+      if (message2) {
+        console.warn(message2);
+      }
+      if (message3) {
+        console.warn(message3);
+      }
+      if (message4) {
+        console.warn(message4);
+      }
+    }
+  },
+  todo: {
+    value: function(message, message2, message3, message4) {
+      console.warn('COLLECTION TODO: ' + message);
+      if (message2) {
+        console.warn(message2);
+      }
+      if (message3) {
+        console.warn(message3);
+      }
+      if (message4) {
+        console.warn(message4);
+      }
+    }
   },
 
   collection: {
@@ -95,10 +210,10 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || 'id';
-      // console.log('searchingFor', searchingFor);
+      // self.debug('searchingFor', searchingFor);
       if (fuzzy) {
         searchingFor = new RegExp('.*' + searchingFor + '.*', 'i');
-        console.log('fuzzy ', searchingFor);
+        this.debug('fuzzy ', searchingFor);
       }
       if (!searchingFor.test || typeof searchingFor.test !== 'function') {
         /* if not a regex, the excape it */
@@ -107,7 +222,7 @@ Collection.prototype = Object.create(Object.prototype, {
         }
         searchingFor = new RegExp('^' + searchingFor + '$');
       }
-      console.log('searchingFor', searchingFor);
+      this.debug('searchingFor', searchingFor);
       for (var index in this.collection) {
         if (!this.collection.hasOwnProperty(index)) {
           continue;
@@ -185,14 +300,14 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var value = member[this.primaryKey];
       if (!value) {
-        console.warn('This object is missing a value for the prmary key ' + this.primaryKey + '... it will be hard to find in the collection.', member);
+        this.warn('This object is missing a value for the prmary key ' + this.primaryKey + '... it will be hard to find in the collection.', member);
         return;
       }
       if (value.trim) {
         value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_');
       }
       if (value !== member[this.primaryKey]) {
-        console.warn('using a modified the dot notation key of this object to be ' + value);
+        this.warn('using a modified the dot notation key of this object to be ' + value);
       }
       return value;
     }
@@ -204,16 +319,16 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!dotNotationKey) {
         throw 'The primary key is undefined on this object, it cannot be added!';
       }
-      console.log('adding ' + dotNotationKey);
+      this.debug('adding ' + dotNotationKey);
       this.set(dotNotationKey, value);
     }
   },
 
   push: {
     value: function(value) {
-      // console.log(this.collection);
+      // self.debug(this.collection);
       this.set(this.getSanitizedDotNotationKey(value), value, null, false);
-      // console.log(this.collection);
+      // self.debug(this.collection);
     }
   },
 
@@ -231,9 +346,12 @@ Collection.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      if (removeEmptyAttributes) {
+        this.todo('removeEmptyAttributes is not implemented: ' + removeEmptyAttributes);
+      }
       var json = this._collection.map(function(item) {
         if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && typeof this.INTERNAL_MODELS.item === "function" && new this.INTERNAL_MODELS.item().toJSON === "function") {
-          console.log("This item has a toJSON, which we will call instead");
+          this.debug("This item has a toJSON, which we will call instead");
           return item.toJSON();
         } else {
           return item;
@@ -250,6 +368,9 @@ Collection.prototype = Object.create(Object.prototype, {
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
+      if (includeEvenEmptyAttributes) {
+        this.todo('includeEvenEmptyAttributes is not implemented: ' + includeEvenEmptyAttributes);
+      }
       var json = JSON.parse(JSON.stringify(this.toJSON()));
 
       return json;

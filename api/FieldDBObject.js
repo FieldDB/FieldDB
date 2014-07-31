@@ -143,7 +143,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log(message);
+        console.log('DEBUG: ' + message);
 
         if (message2) {
           console.log(message2);
@@ -188,13 +188,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       try {
         window.alert(message);
       } catch (e) {
-        console.warn(message);
+        console.warn('BUG: '+ message);
       }
     }
   },
   warn: {
     value: function(message, message2, message3, message4) {
-      console.warn(message);
+      console.warn('WARN: '+ message);
       if (message2) {
         console.warn(message2);
       }
