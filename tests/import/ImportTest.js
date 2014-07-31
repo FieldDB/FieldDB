@@ -224,13 +224,18 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
       }
     }).then(function(success) {
       console.log('success', success);
+
       expect(importer.status).toEqual('undefined; sample_data/students.csv n/a -  bytes, last modified: n/a; sample_data/students2.csv n/a -  bytes, last modified: n/a');
       expect(importer.fileDetails).toEqual([{
         name: 'sample_data/students.csv'
       }, {
         name: 'sample_data/students2.csv'
       }]);
-      expect(importer.rawText).toEqual('StudentID,CourseNumber,FirstName,LastName,DateOfBirth\n13245654,210,Damiane,Alexandre,2010-02-02\n13245655,210,Ariane,Ardouin,2010-02-01\n13245656,210,Michel,Barbot,2010-04-22\n13245657,210,Abeau,Burban,2010-04-24\n13245658,210,Marylene,Collomb,2010-01-14\n13245659,210,Mathea,Cotton,2009-12-15\n13245660,210,Jade,Dray,2010-06-10\n13245661,211,Etienne,Gaborit,2010-05-11\n13245662,211,Emilien,Grosset,2010-05-10\n13245663,211,Adrienne,Hainaut,2010-07-29\n13245664,211,Humbert,Henin,2010-07-31\n13245665,211,Renate,Lafargue,2010-04-22\n13245666,211,Jean-Joël,Lalande,2010-03-23\n13245667,211,Lothaire,Le Blanc,2010-03-22\n13245668,211,Benedicte,Le Breton,2010-06-10\nStudentID,CourseNumber,FirstName,LastName,DateOfBirth\n13245669,212,Marius,Mignon,2010-06-12\n13245670,212,Amelie,Regnault,2010-03-04\n13245671,212,Armande,Sicard,2009-12-14\n13245672,212,Corine,Thiebaud,2010-03-04\n13245673,212,Alfredine,Voirin,2010-03-06\n');
+
+      // Ensure that the files are truely read by counting the length and the number of commas
+      expect(importer.rawText.length).toEqual(902);
+      expect(importer.rawText.match(/,/g).length).toEqual(88);
+
     }, function(options) {
       expect(options).toEqual('It should not error');
     }).then(done, done);
