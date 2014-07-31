@@ -185,6 +185,390 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
     }
   },
+  convertTableIntoDataList: {
+    value: function() {
+      $(".import-progress").val($(".import-progress").val() + 1);
+      this.model.set("datumArray", []);
+      this.model.get("session").setConsultants(this.model.get("consultants"));
+      var consultantsInThisImportSession = [];
+      /* clear out the data list views and datum views
+       *
+       * Copied from SearchEditView
+       */
+      if (this.importPaginatedDataListDatumsView) {
+        this.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
+        var coll = this.importPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
+        //this.importPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        delete this.importPaginatedDataListDatumsView.collection;
+        delete this.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
+      }
+      /*
+       * This holds the ordered datums of the temp import data list
+       */
+      this.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+        collection: new Datums(),
+        childViewConstructor: DatumReadView,
+        childViewTagName: "li",
+        childViewFormat: "latex",
+        childViewClass: "row span11"
+      });
+
+      if (this.dataListView) {
+        this.dataListView.destroy_view();
+        delete this.dataListView.model; //tell the garbage collector we are done.
+      }
+
+      var filename = " typing/copy paste into text area";
+      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
+      try {
+        filename = this.model.get("files").map(function(file) {
+          return file.name;
+        }).join(", ");
+        descript = "This is the data list which results from the import of these file(s). " + this.model.get("fileDetails");
+      } catch (e) {
+        //do nothing
+      }
+
+      this.dataListView = new DataListEditView({
+        model: new DataList({
+          "pouchname": window.app.get("corpus").get("pouchname"),
+          "title": "Data from " + filename,
+          "description": descript,
+          "audioVideo": this.model.get("audioVideo")
+        }),
+      });
+      this.dataListView.format = "import";
+      this.dataListView.render();
+      this.importPaginatedDataListDatumsView.renderInElement(
+        $("#import-data-list").find(".import-data-list-paginated-view"));
+
+
+      if (this.model.get("session") != undefined) {
+        if (this.sessionView) {
+          this.sessionView.destroy_view();
+        }
+        /* put metadata in the session goals */
+        var sessionGoal = this.model.get("session").get("sessionFields").where({
+          label: "goal"
+        })[0];
+        if (sessionGoal) {
+          sessionGoal.set("mask", this.model.metadataLines.join("\n") + "\n" + sessionGoal.get("mask"));
+        }
+        this.sessionView = new SessionEditView({
+          model: this.model.get("session")
+        });
+        this.sessionView.format = "import";
+        this.sessionView.render();
+      }
+      /* end views set up */
+
+      this.model.set("datumArray", []);
+      var headers = [];
+      $("#csv-table-area").find('th').each(function(index, item) {
+        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, "");
+        if (!newDatumFieldLabel) {
+          return;
+        }
+        if (headers.indexOf(newDatumFieldLabel) >= 0) {
+          OPrime.bug("You seem to have some column labels that are duplicated" +
+            " (the same label on two columns). This will result in a strange " +
+            "import where only the second of the two will be used in the import. " +
+            "Is this really what you want?.");
+        }
+        headers[index] = newDatumFieldLabel;
+      });
+      /*
+       * Create new datum fields for new columns
+       */
+      for (f in headers) {
+        if (headers[f] == "" || headers[f] == undefined) {
+          //do nothing
+        } else if (headers[f] == "CheckedWithConsultant") {
+          // do nothing
+        } else if (headers[f] == "ToBeCheckedWithConsultant") {
+          // do nothing
+        } else {
+          if (this.model.get("datumFields").where({
+            label: headers[f]
+          })[0] == undefined) {
+            var newfield = new DatumField({
+              label: headers[f],
+              shouldBeEncrypted: "checked",
+              userchooseable: "",
+              help: "This field came from file import " + this.model.get("status")
+            });
+            this.model.get("datumFields").add(newfield);
+            window.app.get("corpus").get("datumFields").add(newfield);
+          }
+        }
+      }
+
+      /*
+       * Cycle through all the rows in table and create a datum with the matching fields.
+       */
+      var array = [];
+      try {
+        //Import from html table that the user might have edited.
+        $("#csv-table-area").find('tr').has('td').each(function() {
+          var datumObject = {};
+          var testForEmptyness = "";
+          $('td', $(this)).each(function(index, item) {
+            var newfieldValue = $(item).html().trim();
+            /*
+             * the import sometimes inserts &nbsp into the data,
+             * often when the csv detection didnt work. This might
+             * slow import down significantly. i tested it, it looks
+             * like this isnt happening to the data anymore so i
+             * turned this off, but if we notice &nbsp in the
+             * datagain we can turn it back on . for #855
+             */
+            //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
+            //              OPrime.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
+            //            }
+            datumObject[headers[index]] = $(item).html().trim();
+            testForEmptyness += $(item).html();
+          });
+          //if the table row has more than 2 non-white space characters, enter it as data
+          if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
+            array.push(datumObject);
+          } else {
+            //dont add blank datum
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:" + testForEmptyness + ": ");
+          }
+        });
+      } catch (e) {
+        //Import from the array instead of using jquery and html
+        alert(JSON.stringify(e));
+        var rows = this.model.get("asCSV");
+        for (var r in rows) {
+          var datumObject = {};
+          var testForEmptyness = "";
+          for (var c in headers) {
+            datumObject[headers[c]] = rows[r][c];
+            testForEmptyness += rows[r][c];
+          }
+          //if the table row has more than 2 non-white space characters, enter it as data
+          if (testForEmptyness.replace(/\W/g, "").length >= 2) {
+            array.push(datumObject);
+          } else {
+            //dont add blank datum
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:" + testForEmptyness + ": ");
+          }
+        }
+      }
+
+      /*
+       * after building an array of datumobjects, turn them into backbone objects
+       */
+      for (a in array) {
+        var d = new Datum({
+          filledWithDefaults: true,
+          pouchname: window.app.get("corpus").get("pouchname")
+        });
+        //copy the corpus's datum fields and empty them.
+        var datumfields = app.get("corpus").get("datumFields").toJSON();
+        for (var x in datumfields) {
+          datumfields[x].mask = "";
+          datumfields[x].value = "";
+        }
+        var fields = new DatumFields(datumfields);
+        var audioVideo = null;
+        var audioFileDescriptionsKeyedByFilename = {};
+        if (this.model.get("files") && this.model.get("files").map) {
+          this.model.get("files").map(function(fileDetails) {
+            var details = JSON.parse(JSON.stringify(fileDetails));
+            delete details.textgrid;
+            audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".mp3"] = details;
+          });
+        }
+
+        $.each(array[a], function(index, value) {
+          if (index == "" || index == undefined) {
+            //do nothing
+          }
+          /* TODO removing old tag code for */
+          //          else if (index == "datumTags") {
+          //            var tags = value.split(" ");
+          //            for(g in tags){
+          //              var t = new DatumTag({
+          //                "tag" : tags[g]
+          //              });
+          //              d.get("datumTags").add(t);
+          //            }
+          //          }
+          /* turn the CheckedWithConsultant and ToBeCheckedWithConsultantinto columns into a status, with that string as the person */
+          else if (index.toLowerCase().indexOf("checkedwithconsultant") > -1) {
+            var consultants = [];
+            if (value.indexOf(",") > -1) {
+              consultants = value.split(",");
+            } else if (value.indexOf(";") > -1) {
+              consultants = value.split(";");
+            } else {
+              consultants = value.split(" ");
+            }
+            var validationStati = [];
+            for (g in consultants) {
+              var consultantusername = consultants[g].toLowerCase();
+              consultantsInThisImportSession.push(consultantusername);
+              if (!consultantusername) {
+                continue;
+              }
+              var validationType = "CheckedWith";
+              var validationColor = "success";
+              if (index.toLowerCase().indexOf("ToBeChecked") > -1) {
+                validationType = "ToBeCheckedWith";
+                validationColor = "warning";
+              }
+
+              var validationString = validationType + consultants[g].replace(/[- _.]/g, "");
+              validationStati.push(validationString);
+              var n = fields.where({
+                label: "validationStatus"
+              })[0];
+              /* add to any exisitng validation states */
+              var validationStatus = n.get("mask") || "";
+              validationStatus = validationStatus + " ";
+              validationStatus = validationStatus + validationStati.join(" ");
+              var uniqueStati = _.unique(validationStatus.trim().split(" "));
+              n.set("mask", uniqueStati.join(" "));
+
+              //              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
+              //              /* get the initials from the data */
+              //              var consultantCode = consultants[g].replace(/[a-z -]/g,"");
+              //              if(consultantusername.length == 2){
+              //                consultantCode = consultantusername;
+              //              }
+              //              if(consultantCode.length < 2){
+              //                consultantCode = consultantCode+"C";
+              //              }
+              //              var c = new Consultant("username", consultantCode);
+              //              /* use the value in the cell for the checked with state, but don't keep the spaces */
+              //              var validationType = "CheckedWith";
+              //              if(index.toLowerCase().indexOf("ToBeChecked") > -1){
+              //                validationType = "ToBeCheckedWith";
+              //              }
+              //              /*
+              //               * This function uses the consultant code to create a new validation status
+              //               */
+              //              var onceWeGetTheConsultant = function(){
+              //                var validationString = validationType+consultants[g].replace(/ /g,"");
+              //                validationStati.push(validationString);
+              //                var n = fields.where({label: "validationStatus"})[0];
+              //                if(n != undefined){
+              //                  /* add to any exisitng validation states */
+              //                  var validationStatus = n.get("mask") || "";
+              //                  validationStatus = validationStatus + " ";
+              //                  validationStatus = validationStatus + validationStati.join(" ");
+              //                  var uniqueStati = _.unique(validationStatus.trim().split(" "));
+              //                  n.set("mask", uniqueStati.join(" "));
+              //                }
+              //              };
+              //              /*
+              //               * This function creates a consultant code and then calls
+              //               * onceWeGetTheConsultant to create a new validation status
+              //               */
+              //              var callIfItsANewConsultant = function(){
+              //                var dialect =  "";
+              //                var language =  "";
+              //                try{
+              //                  dialect = fields.where({label: "dialect"})[0] || "";
+              //                  language = fields.where({label: "language"})[0] || "";
+              //                }catch(e){
+              //                  OPrime.debug("Couldn't get this consultant's dialect or language");
+              //                }
+              //                c = new Consultant({filledWithDefaults: true});
+              //                c.set("username", Date.now());
+              //                if(dialect)
+              //                  c.set("dialect", dialect);
+              //                if(dialect)
+              //                  c.set("language", language);
+              //
+              //                onceWeGetTheConsultant();
+              //              };
+              //              c.fetch({
+              //                success : function(model, response, options) {
+              //                  onceWeGetTheConsultant();
+              //                },
+              //                error : function(model, xhr, options) {
+              //                  callIfItsANewConsultant();
+              //                }
+              //              });
+
+
+            }
+          } else if (index == "validationStatus") {
+            var n = fields.where({
+              label: index
+            })[0];
+            if (n != undefined) {
+              /* add to any exisitng validation states */
+              var validationStatus = n.get("mask") || "";
+              validationStatus = validationStatus + " ";
+              validationStatus = validationStatus + value;
+              var uniqueStati = _.unique(validationStatus.trim().split(" "));
+              n.set("mask", uniqueStati.join(" "));
+            }
+          } else if (index == "audioFileName") {
+            if (!audioVideo) {
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("filename", value);
+            audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
+            audioVideo.set("URL", OPrime.audioUrl + "/" + window.app.get("corpus").get("pouchname") + "/" + value);
+            audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
+            audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
+          } else if (index == "startTime") {
+            if (!audioVideo) {
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("startTime", value);
+          } else if (index == "endTime") {
+            if (!audioVideo) {
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("endTime", value);
+          } else {
+            var knownlowercasefields = "utterance,gloss,morphemes,translation".split();
+            if (knownlowercasefields.indexOf(index.toLowerCase()) > -1) {
+              index = index.toLowerCase();
+            }
+            var n = fields.where({
+              label: index
+            })[0];
+            if (n != undefined) {
+              n.set("mask", value);
+            }
+          }
+        });
+        d.set("datumFields", fields);
+        if (audioVideo) {
+          d.get("audioVideo").add(audioVideo);
+          // console.log( JSON.stringify(audioVideo.toJSON())+ JSON.stringify(fields.toJSON()));
+        }
+        // var states = window.app.get("corpus").get("datumStates").clone();
+        // d.set("datumStates", states);
+        d.set("session", this.model.get("session"));
+        //these are temp datums, dont save them until the user saves the data list
+        this.importPaginatedDataListDatumsView.collection.add(d);
+        //        this.dataListView.model.get("datumIds").push(d.id); the datum has no id, cannot put in datumIds
+        d.lookForSimilarDatum();
+        this.model.get("datumArray").push(d);
+      }
+      this.model.set("consultants", _.unique(consultantsInThisImportSession).join(","));
+      this.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
+
+      $(".approve-save").removeAttr("disabled");
+      $(".approve-save").removeClass("disabled");
+    }
+  },
+  // savedcount : 0,
+  // savedindex : [],
+  // savefailedcount : 0,
+  // savefailedindex : [],
+  // nextsavedatum : 0,
 
   preprocess: {
     value: function(options) {
