@@ -185,12 +185,39 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   bug: {
     value: function(message) {
-      window.alert(message);
+      try {
+        window.alert(message);
+      } catch (e) {
+        console.warn(message);
+      }
     }
   },
   warn: {
-    value: function(message) {
+    value: function(message, message2, message3, message4) {
       console.warn(message);
+      if (message2) {
+        console.warn(message2);
+      }
+      if (message3) {
+        console.warn(message3);
+      }
+      if (message4) {
+        console.warn(message4);
+      }
+    }
+  },
+  todo: {
+    value: function(message, message2, message3, message4) {
+      console.warn('TODO: ' + message);
+      if (message2) {
+        console.warn(message2);
+      }
+      if (message3) {
+        console.warn(message3);
+      }
+      if (message4) {
+        console.warn(message4);
+      }
     }
   },
 

@@ -174,6 +174,9 @@ describe("FieldDBObject", function() {
       }
       console.log(' Done debugMode testing');
 
+      buggy.warn('This will print a warning', buggy);
+      buggy.bug('This will print an warning in Nodejs');
+      buggy.todo('This will print a todo', buggy);
     });
 
   });
