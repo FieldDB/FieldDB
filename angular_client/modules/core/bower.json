@@ -5,7 +5,7 @@
     "angular": "1.2.15",
     "json3": "~3.2.6",
     "es5-shim": "~2.1.0",
-    "jquery": "~1.11.0",
+    "jquery": "2.0",
     "bootstrap": "~3.0.3",
     "angular-resource": "1.2.15",
     "angular-cookies": "1.2.15",
@@ -14,7 +14,8 @@
     "fielddb": "2.0.2",
     "ng-file-upload": "~1.6.3",
     "ng-file-upload-shim": "~1.6.3",
-    "angular-contenteditable": "~0.3.7"
+    "angular-contenteditable": "~0.3.7",
+    "angular-dragdrop": "~1.0.7"
   },
   "main": "dist/scripts/scripts.js",
   "devDependencies": {

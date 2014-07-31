@@ -5,6 +5,8 @@
  * @ngdoc directive
  * @name fielddbAngularApp.directive:fielddbImport
  * @description
+ *
+ * uses drag and drop from https://github.com/codef0rmer/angular-dragdrop example: https://stackoverflow.com/questions/18679645/angularjs-drag-and-drop-plugin-drop-issue
  * # fielddbImport
  */
 angular.module('fielddbAngularApp').directive('fielddbImport', function() {

@@ -69,14 +69,15 @@
     <div class=" container span11">
 
       <div id="import-datum-field-labels" class="row-fluid">
-        <span class="pull-left label label-info" draggable ng-repeat="participantFields in importer.corpus.participantFields">{{participantFields.id}}</span>
+        <span class="pull-left label label-info" draggable ng-repeat="participantField in importer.corpus.participantFields"  data-drag="true" data-jqyoui-options="{revert: 'invalid', cursor: 'move', helper: 'clone'}" jqyoui-draggable="{index: {{$index}},  animate:true, placeholder: 'keep'}" ng-model="participantField.labelLinguists">{{participantField.labelLinguists}}</span>
       </div>
     </div>
 
     <div class="scrollable">
       <table id="csv-table-area" class="table table-striped table-bordered table-condensed "> <tr>
         <th></th>
-        <th ng-repeat="headerCell in importer.extractedHeader" contenteditable ng-model="headerCell">
+        <th class="drop-zone" ng-repeat="headerCell in importer.extractedHeader" >
+          <input ng-model="headerCell" data-drop="true" data-jqyoui-options="{hoverClass: 'over'}" jqyoui-droppable="{multiple:true}"/>
         </th>
       </tr>
       <tr ng-repeat="row in importer.asCSV">

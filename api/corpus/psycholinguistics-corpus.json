@@ -3,7 +3,7 @@
   "participantFields": [{
     "id": "participantCode",
     "labelLinguists": "Participant Code",
-    "labelNonLinguists": "",
+    "labelNonLinguists": "Student Number",
     "labelTranslators": "",
     "shouldBeEncrypted": false,
     "showToUserTypes": "psycholinguist",
