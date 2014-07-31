@@ -19,7 +19,7 @@ describe("FieldDBObject", function() {
     it("should accept a json object on extended classes", function() {
 
       var Child = function Child(options) {
-        // console.log("In Child ", options);
+        this.debug("In Child ", options);
         FieldDBObject.apply(this, arguments);
       };
 
@@ -87,7 +87,7 @@ describe("FieldDBObject", function() {
       var accessingAttributeShouldNotCauseItToExist = penguin.dbname;
       expect(accessingAttributeShouldNotCauseItToExist).toEqual(FieldDBObject.DEFAULT_STRING);
 
-      var accessingAttributeShouldNotCauseItToExist = penguin.dateModified;
+      accessingAttributeShouldNotCauseItToExist = penguin.dateModified;
       expect(accessingAttributeShouldNotCauseItToExist).toEqual(FieldDBObject.DEFAULT_DATE);
 
       expect(penguin.toJSON()).toEqual(resultingJSON);

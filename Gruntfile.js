@@ -65,14 +65,14 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
       },
       test: {
         options: {
           jshintrc: 'tests/.jshintrc',
           ignores: ['tests/libs/**/*js']
         },
-        src: ['tests/FieldDBTest.js', 'tests/import/ImportTest.js']
+        src: ['tests/FieldDBTest.js', 'tests/FieldDBObjectTest.js', 'tests/import/ImportTest.js', 'tests/CollectionTest.js', 'tests/corpus/CorpusTest.js', 'tests/datum/DatumFieldsTest.js']
       },
     },
     jsdoc: {

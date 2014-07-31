@@ -11,7 +11,7 @@ var DatumField = require('./../datum/DatumField').DatumField;
  * @constructs
  */
 var DatumFields = function DatumFields(options) {
-  console.log("Constructing DatumFields length: ", options.length);
+  this.debug("Constructing DatumFields length: ", options.length);
   Collection.apply(this, arguments);
 };
 

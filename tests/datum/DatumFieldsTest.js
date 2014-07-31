@@ -15,7 +15,7 @@ describe('lib/DatumFields', function() {
     var collection;
 
     beforeEach(function() {
-      console.log("beforeEach");
+      // console.log("beforeEach");
       collection = new DatumFields({
         inverted: true,
         primaryKey: 'id',

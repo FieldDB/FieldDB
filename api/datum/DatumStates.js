@@ -11,7 +11,7 @@ var DatumState = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var DatumStates = function DatumStates(options) {
-  console.log("Constructing DatumStates length: ", options.length);
+  this.debug("Constructing DatumStates length: ", options.length);
   Collection.apply(this, arguments);
 };
 
