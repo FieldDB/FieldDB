@@ -15,7 +15,8 @@ angular.module('fielddbAngularApp', [
   'ngSanitize',
   'ngRoute',
   'angularFileUpload',
-  'contenteditable'
+  'contenteditable',
+  'ngDragDrop'
 ]).config(function($routeProvider) {
   console.log($routeProvider);
 });
