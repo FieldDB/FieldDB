@@ -159,4 +159,22 @@ describe("FieldDBObject", function() {
 
   });
 
+  describe("debugging", function() {
+    it("should be able to debug one object if we want", function() {
+      var buggy = new FieldDBObject();
+      buggy.debugMode = true;
+      expect(buggy.debugMode).toEqual(true);
+      buggy.debug('This is some debug output', buggy, FieldDBObject);
+      buggy.debugMode = false;
+      console.log('It should say \' Done debugMode testing\' after this: ');
+      buggy.debug('THERE WAS SOME OUTPUT', buggy, FieldDBObject);
+      if(buggy.debugMode){
+        buggy.debugMode = true;
+        buggy.debug('THIS IS SOME HEAVY STRINGIFICATION OUPUT THAT IS AVOIDED', JSON.stringify(buggy), JSON.stringify(FieldDBObject));
+      }
+      console.log(' Done debugMode testing');
+
+    });
+
+  });
 });

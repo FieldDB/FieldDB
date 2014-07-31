@@ -4,7 +4,7 @@ var CORS = require("./CORS").CORS;
 
 
 // var FieldDBDate = function FieldDBDate(options) {
-//   // console.log("In FieldDBDate ", options);
+//   // this.debug("In FieldDBDate ", options);
 //   Object.apply(this, arguments);
 //   if (options) {
 //     this.timestamp = options;
@@ -35,7 +35,7 @@ var CORS = require("./CORS").CORS;
 //           /* Use date modified as a timestamp if it isnt one already */
 //           value = value.getTime();
 //         } catch (e) {
-//           console.warn("Upgraded timestamp" + value);
+//           this.warn("Upgraded timestamp" + value);
 //         }
 //       }
 //       this._timestamp = value;
@@ -71,15 +71,15 @@ var CORS = require("./CORS").CORS;
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
-  // console.log("In parent an json", json);
+  this.verbose("In parent an json", json);
   var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
-    // console.log("JSON: " + member);
+    this.verbose("JSON: " + member);
     if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      console.log("Parsing model: " + member);
+      this.debug("Parsing model: " + member);
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
     } else {
       simpleModels.push(member);
@@ -87,7 +87,7 @@ var FieldDBObject = function FieldDBObject(json) {
     this[member] = json[member];
   }
   if (simpleModels.length > 0) {
-    console.log("simpleModels", simpleModels.join(", "));
+    this.debug("simpleModels", simpleModels.join(", "));
   }
   Object.apply(this, arguments);
   if (!this.id) {
@@ -108,16 +108,103 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: FieldDBObject
   },
 
+  /**
+   * Can be set to true to debug all objects, or false to debug no objects and true only on the instances of objects which
+   * you want to debug.
+   *
+   * @type {Boolean}
+   */
+  debugMode: {
+    get: function() {
+      if (this.perObjectDebugMode === undefined) {
+        return false;
+      } else {
+        return this.perObjectDebugMode;
+      }
+    },
+    set: function(value) {
+      if (value === this.perObjectDebugMode) {
+        return;
+      }
+      if (value === null || value === undefined) {
+        delete this.perObjectDebugMode;
+        return;
+      }
+      this.perObjectDebugMode = value;
+    }
+  },
+  debug: {
+    value: function(message, message2, message3, message4) {
+      try {
+        if (window.navigator && window.navigator.appName === 'Microsoft Internet Explorer') {
+          return;
+        }
+      } catch (e) {
+        //do nothing, we are in node or some non-friendly browser.
+      }
+      if (this.debugMode) {
+        console.log(message);
+
+        if (message2) {
+          console.log(message2);
+        }
+        if (message3) {
+          console.log(message3);
+        }
+        if (message4) {
+          console.log(message4);
+        }
+      }
+    }
+  },
+  verboseMode: {
+    get: function() {
+      if (this.perObjectVerboseMode === undefined) {
+        return false;
+      } else {
+        return this.perObjectVerboseMode;
+      }
+    },
+    set: function(value) {
+      if (value === this.perObjectVerboseMode) {
+        return;
+      }
+      if (value === null || value === undefined) {
+        delete this.perObjectVerboseMode;
+        return;
+      }
+      this.perObjectVerboseMode = value;
+    }
+  },
+  verbose: {
+    value: function(message, message2, message3, message4) {
+      if (this.verboseMode) {
+        this.debug(message, message2, message3, message4);
+      }
+    }
+  },
+  bug: {
+    value: function(message) {
+      window.alert(message);
+    }
+  },
+  warn: {
+    value: function(message) {
+      console.warn(message);
+    }
+  },
+
   save: {
     value: function() {
       var deferred = Q.defer(),
         self = this;
+
       if (this.fetching) {
-        console.warn("Fetching is in process, can't save right now...");
+        self.warn("Fetching is in process, can't save right now...");
         return;
       }
       if (this.saving) {
-        console.warn("Save is in process...");
+        self.warn("Save is in process...");
         return;
       }
       this.saving = true;
@@ -146,7 +233,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         url: url,
         data: this.toJSON()
       }).then(function(result) {
-          console.log(result);
+          this.debug(result);
           self.saving = false;
           if (result.id) {
             self.id = result.id;
@@ -157,7 +244,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           }
         },
         function(reason) {
-          console.log(reason);
+          self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
         });
@@ -196,7 +283,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               continue;
             }
             if (self[aproperty] !== result[aproperty]) {
-              console.warn("Overwriting " + aproperty + " : ", self[aproperty], " ->", result[aproperty]);
+              self.warn("Overwriting " + aproperty + " : ", self[aproperty], " ->", result[aproperty]);
             }
             self[aproperty] = result[aproperty];
           }
@@ -204,7 +291,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         },
         function(reason) {
           self.fetching = false;
-          console.log(reason);
+          self.debug(reason);
           deferred.reject(reason);
         });
 
@@ -279,7 +366,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       return this.dbname;
     },
     set: function() {
-      console.warn("Pouchname is deprecated, please use dbname instead.");
+      this.warn("Pouchname is deprecated, please use dbname instead.");
     }
   },
 
@@ -317,7 +404,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
         } catch (e) {
-          console.warn("Upgraded dateCreated" + value);
+          this.warn("Upgraded dateCreated" + value);
         }
       }
       this._dateCreated = value;
@@ -343,7 +430,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
         } catch (e) {
-          console.warn("Upgraded dateCreated" + value);
+          this.warn("Upgraded dateModified" + value);
         }
       }
       this._dateModified = value;
@@ -414,7 +501,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
-      console.warn(includeEvenEmptyAttributes + " includeEvenEmptyAttributes is not used ");
+      if (includeEvenEmptyAttributes) {
+        this.warn(includeEvenEmptyAttributes + " TODO includeEvenEmptyAttributes is not used ");
+      }
       var json = JSON.parse(JSON.stringify(this.toJSON()));
 
       var relatedData;
