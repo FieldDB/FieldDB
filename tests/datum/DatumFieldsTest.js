@@ -30,6 +30,19 @@ describe('lib/DatumFields', function() {
       expect(collection.primaryKey).toEqual('id');
     });
 
+    it('should provide case insensitive lower and original case of a primary key', function() {
+
+      collection = new DatumFields({
+        collection: [{
+          id: 'thisIsCamelCase'
+        }]
+      });
+      console.log(collection._collection);
+      expect(collection.thisIsCamelCase).toBeDefined();
+      expect(collection.thisiscamelcase).toBeDefined();
+      expect(collection._collection.length).toEqual(1);
+    });
+
     it('should use the primary key for find', function() {
       expect(collection.find('utterance')[0].id).toEqual(sampleDatumFields[2].id);
     });
