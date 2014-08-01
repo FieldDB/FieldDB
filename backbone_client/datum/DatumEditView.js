@@ -227,7 +227,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumEditView.
      */
-    template : Handlebars.templates.datum_edit_embedded,
+    template : Handlebars.templates.lesson_edit_embedded,
 
     /**
      * Renders the DatumEditView and all of its partials.
@@ -241,6 +241,8 @@ define([
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
+      jsonToRender.utterance = jsonToRender.datumFields.toJSON()[1].mask;
+      jsonToRender.translation = jsonToRender.datumFields.toJSON()[6].mask;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
       jsonToRender.datumstate = this.model.getValidationStatus();
       if(jsonToRender.datumstate.length > 30){
