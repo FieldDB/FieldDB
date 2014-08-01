@@ -1,5 +1,5 @@
 var Collection = require('./../Collection').Collection;
-var DatumTag = require('./../FieldDBObject').FieldDBObject;
+var DatumTag = require('./DatumTag').DatumTag;
 
 /**
  * @class Collection of Datum validation states
