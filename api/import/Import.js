@@ -224,7 +224,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           correspondingDatumField[0].labelLinguists = item;
           correspondingDatumField[0].help = 'This field came from file import';
           var lookAgain = self.corpus.datumFields.find(correspondingDatumField[0].id);
-          if(lookAgain.length){
+          if (lookAgain.length) {
 
           }
         }
@@ -238,33 +238,20 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         headers.push(correspondingDatumField[0]);
         return item;
       });
-      return headers;
       /*
-       * Create new datum fields for new columns
+       * Convert new datum fields into a category, if types of a category
        */
       for (var f in headers) {
-        if (headers[f] === "" || headers[f] === undefined) {
+        if (headers[f].id === "" || headers[f].id === undefined) {
           //do nothing
-        } else if (headers[f] === "CheckedWithConsultant") {
-          // do nothing
-        } else if (headers[f] === "ToBeCheckedWithConsultant") {
-          // do nothing
-        } else {
-          if (this.get("datumFields").where({
-            label: headers[f]
-          })[0] === undefined) {
-            var newfield = new DatumField({
-              id: headers[f],
-              labelLinguist: headers[f],
-              shouldBeEncrypted: "checked",
-              userchooseable: "",
-              help: "This field came from file import " + this.get("status")
-            });
-            this.get("datumFields").add(newfield);
-            window.app.get("corpus").get("datumFields").add(newfield);
+        } else if (headers[f].id.toLowerCase().indexOf("checkedwith") > -1 || headers[f].id.toLowerCase().indexOf("checkedby") > -1 || headers[f].id.toLowerCase().indexOf("publishedin") > -1) {
+          var validationStatusFields = self.corpus.datumFields.find('validationStatus');
+          if (validationStatusFields.length > 0) {
+            headers[f] = validationStatusFields[0];
           }
         }
       }
+      return headers;
 
       /*
        * Cycle through all the rows in table and create a datum with the matching fields.
