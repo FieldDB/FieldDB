@@ -18,11 +18,7 @@ describe('lib/DatumFields', function() {
       // console.log("beforeEach");
       collection = new DatumFields({
         inverted: true,
-        primaryKey: 'id',
-        collection: [sampleDatumFields[0], sampleDatumFields[2]],
-        INTERNAL_MODELS: {
-          item: DatumField
-        }
+        collection: [sampleDatumFields[0], sampleDatumFields[2]]
       });
     });
 
@@ -46,8 +42,6 @@ describe('lib/DatumFields', function() {
       // expect(collection.utterance.constructor).toEqual(Object);
       expect(collection.utterance.constructor).toEqual(DatumField);
     });
-
-
 
     it("should turn the id into a camelCased safe value for use as property of an object, if it wasn't already", function() {
       var u = new DatumField();
@@ -85,8 +79,7 @@ describe('lib/DatumFields', function() {
 
     beforeEach(function() {
       collection = new DatumFields({
-        inverted: true,
-        primaryKey: 'id'
+        inverted: true
       });
 
       collection.add(sampleDatumFields[0]);
@@ -114,7 +107,6 @@ describe('lib/DatumFields', function() {
 
     beforeEach(function() {
       collection = new DatumFields({
-        primaryKey: 'id',
         collection: sampleDatumFields
       });
       collection.utterance.value = "Noqata tusunayawanmi";
