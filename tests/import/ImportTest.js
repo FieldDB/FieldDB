@@ -378,7 +378,7 @@ describe("Import: as a morphologist I want to import my data from CSV", function
       var headers = importer.convertTableIntoDataList();
       console.log(JSON.stringify(headers));
       expect(headers[0].id).toEqual("dateElicited");
-      expect(headers[8].id).toEqual('checkedWithConsultant');
+      expect(headers[8].id).toEqual('validationStatus');
       expect(headers[9].id).toEqual('sourcePublication');
       expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
 
