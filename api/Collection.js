@@ -304,7 +304,7 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        throw 'The primary key is undefined on this object, it cannot be added!', member;
+        throw 'The primary key is undefined on this object, it cannot be added!';
       }
       var value = member[this.primaryKey];
       if (!value) {
@@ -393,7 +393,7 @@ Collection.prototype = Object.create(Object.prototype, {
    */
   sanitizeStringForPrimaryKey: {
     value: function(value) {
-      console.log('sanitizeStringForPrimaryKey');
+      this.debug('sanitizeStringForPrimaryKey');
       if (!value) {
         return null;
       }
