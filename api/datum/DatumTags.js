@@ -12,7 +12,7 @@ var DatumTag = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var DatumTags = function DatumTags(options) {
-  console.log("Constructing DatumTags length: ", options.length);
+  console.log("Constructing DatumTags length: ", options);
   Collection.apply(this, arguments);
 };
 
