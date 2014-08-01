@@ -19,7 +19,9 @@
   var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
   var Router = require("./Router").Router;
   var UserMask = require("./user/UserMask").UserMask;
+  var Corpus = require("./corpus/Corpus").Corpus;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
+  var Import = require("./import/Import").Import;
   var Q = require("q");
 
   var FieldDB = {};
@@ -31,7 +33,9 @@
   FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
   FieldDB.UserMask = UserMask;
+  FieldDB.Corpus = Corpus;
   FieldDB.CorpusMask = CorpusMask;
+  FieldDB.Import = Import;
   FieldDB.Q = Q;
   FieldDB.FieldDBConnection = FieldDBConnection;
 

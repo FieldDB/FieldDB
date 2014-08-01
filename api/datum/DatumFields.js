@@ -11,7 +11,7 @@ var DatumField = require('./../datum/DatumField').DatumField;
  * @constructs
  */
 var DatumFields = function DatumFields(options) {
-  console.log("Constructing DatumFields length: ", options.length);
+  this.debug("Constructing DatumFields length: ", options);
   Collection.apply(this, arguments);
 };
 
@@ -34,6 +34,10 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
     value: {
       item: DatumField
     }
+  },
+
+  capitalizeFirstCharacterOfPrimaryKeys: {
+    value: false
   }
 
 });

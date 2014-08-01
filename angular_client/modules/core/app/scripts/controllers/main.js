@@ -1,4 +1,5 @@
 'use strict';
+/* globals FieldDB */
 
 angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '$routeParams', '$rootScope',
   function($scope, $routeParams, $rootScope) {
@@ -20,6 +21,9 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
         console.log('Route params are undefined, not loading anything');
         return;
       }
+      $scope.loginDetails.username = $routeParams.team;
+      $rootScope.currentCorpusDashboard = $routeParams.team + '/' + $routeParams.corpusid;
+
       var team = new FieldDB.UserMask({
         username: 'team',
       });
@@ -31,7 +35,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       $scope.team = team;
 
 
-      var corpus = new FieldDB.CorpusMask({
+      var corpus = new FieldDB.Corpus({
         dbname: team.dbname
       });
       console.log(corpus.toJSON());
@@ -57,14 +61,17 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       }
       if (!$scope.corpus.title) {
         $scope.status = 'Loading corpus details.';
-        corpus.fetch(FieldDB.FieldDBConnection.connection.localCouch.url).then(function(result) {
-          console.log('Suceeded to download corpus public details.', result);
+        corpus.loadOrCreateCorpusByPouchName(corpus.dbname).then(function(result) {
+          console.log('Suceeded to download corpus details.', result);
           $rootScope.status = 'Loaded corpus details.';
+
           $scope.$apply();
         }, function(result) {
-          console.log('Failed to download corpus public details.', result);
+          console.log('Failed to download corpus details.', result);
           $rootScope.status = 'Failed to download corpus details. Are you sure this is the corpus you wanted to see: ' + corpus.dbname;
           $scope.$apply();
+        }).catch(function(error) {
+          console.log(error);
         });
       }
     };

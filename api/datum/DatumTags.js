@@ -1,5 +1,5 @@
 var Collection = require('./../Collection').Collection;
-var DatumTag = require('./../FieldDBObject').FieldDBObject;
+var DatumTag = require('./DatumTag').DatumTag;
 
 /**
  * @class Collection of Datum validation states
@@ -12,7 +12,7 @@ var DatumTag = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var DatumTags = function DatumTags(options) {
-  console.log("Constructing DatumTags length: ", options.length);
+  console.log("Constructing DatumTags length: ", options);
   Collection.apply(this, arguments);
 };
 

@@ -1,21 +1,21 @@
-var Collection = require('./../Collection').Collection;
-var DatumState = require('./../FieldDBObject').FieldDBObject;
+var DatumTags = require('./DatumTags').DatumTags;
+var DatumState = require('./DatumTag').DatumTag;
 
 /**
- * @class Collection of Datum validation states
+ * @class DatumStates of Datum validation states
  * @name  DatumStates
- * @description The DatumStates is a minimal customization of the Collection
+ * @description The DatumStates is a minimal customization of the DatumTags
  * to add an internal model of DatumState.
  *
- * @extends Collection
+ * @extends DatumTags
  * @constructs
  */
 var DatumStates = function DatumStates(options) {
-  console.log("Constructing DatumStates length: ", options.length);
-  Collection.apply(this, arguments);
+  this.debug("Constructing DatumStates length: ", options);
+  DatumTags.apply(this, arguments);
 };
 
-DatumStates.prototype = Object.create(Collection.prototype, /** @lends DatumStates.prototype */ {
+DatumStates.prototype = Object.create(DatumTags.prototype, /** @lends DatumStates.prototype */ {
   constructor: {
     value: DatumStates
   },

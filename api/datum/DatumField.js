@@ -20,7 +20,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var DatumField = function DatumField(options) {
-  console.log("Constructing DatumField ", options.length);
+  this.debug("Constructing DatumField ", options);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -60,28 +60,50 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     value: {} // There are no nested models
   },
 
-
+  id: {
+    get: function() {
+      return this._id || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._id) {
+        return;
+      }
+      if (!value) {
+        delete this._id;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      var originalValue = value + "";
+      value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
+      if (value === null) {
+        this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+        return;
+      }
+      this._id = value;
+    }
+  },
 
   label: {
     get: function() {
-      console.warn("label is deprecated, instead use a lable for appropraite user eg labelLinguists");
+      this.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
       return this.labelLinguists;
     },
     set: function(value) {
-      console.warn("label is deprecated, instead use a lable for appropraite user eg labelLinguists");
+      this.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
       this.labelLinguists = value;
       this.id = value;
     }
   },
 
-
   userchooseable: {
     get: function() {
-      console.warn("userchooseable is deprecated, instead use defaultfield");
+      this.warn("userchooseable is deprecated, instead use defaultfield");
       return this.defaultfield;
     },
     set: function(value) {
-      console.warn("userchooseable is deprecated, instead use defaultfield");
+      this.warn("userchooseable is deprecated, instead use defaultfield");
       if (value === "disabled") {
         value = true;
       }
@@ -391,7 +413,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
    */
   validate: {
     value: function(attributes) {
-      console.log("Vaidating is commented out ", attributes);
+      this.tood("Vaidating is commented out ", attributes);
       //      if(attributes.mask){
       //        if(attributes.shouldBeEncrypted !== "checked" ){
       //          //user can modify the mask, no problem.

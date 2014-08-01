@@ -1,24 +1,26 @@
-/* global window, OPrime */
+/* global window, OPrime, FieldDB */
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var CorpusMask = require("./CorpusMask");
 var Collection = require('./../Collection').Collection;
-var Consultants = require('./../Collection').Collection;
+// var Consultants = require('./../Collection').Collection;
 // var Datum = require('./../datum/Datum').Datum;
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var DatumStates = require('./../datum/DatumStates').DatumStates;
 var DatumTags = require('./../datum/DatumTags').DatumTags;
 var Comments = require('./../Collection').Collection;
-var UserMask = require('./../Collection').Collection;
+// var UserMask = require('./../Collection').Collection;
 var Session = require('./../FieldDBObject').FieldDBObject;
 var CORS = require('./../CORS').CORS;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Permissions = require('./../Collection').Collection;
 var Sessions = require('./../Collection').Collection;
+var DataLists = require('./../Collection').Collection;
 var Q = require('q');
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
+var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus.json");
 
 /**
  * @class A corpus is like a git repository, it has a remote, a title
@@ -66,10 +68,18 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
 
 
 var Corpus = function Corpus(options) {
-  // console.log("Constructing corpus", options);
+  this.debug("Constructing corpus", options);
   FieldDBObject.apply(this, arguments);
 };
 Corpus.defaults = DEFAULT_CORPUS_MODEL;
+if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+  Corpus.defaults_psycholinguistics = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
+  for (var property in DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+    if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.hasOwnProperty(property)) {
+      Corpus.defaults_psycholinguistics[property] = DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL[property];
+    }
+  }
+}
 
 Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
   constructor: {
@@ -127,10 +137,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   couchConnection: {
     get: function() {
-      throw "couchConnection is deprecated";
+      this.warn("couchConnection is deprecated");
     },
-    set: function(value) {
-      console.warn("couchConnection is deprecated");
+    set: function() {
+      this.warn("couchConnection is deprecated");
     }
   },
 
@@ -147,7 +157,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._replicatedCorpusUrls = value;
@@ -167,7 +177,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._olacExportConnections = value;
@@ -238,7 +248,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Sessions(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this.unserializedSessions = value;
@@ -288,7 +298,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       }
       if (value !== "Public" && value !== "Private") {
-        console.warn("Corpora can be either Public or Private");
+        this.warn("Corpora can be either Public or Private");
         value = "Private";
       }
       this._publicCorpus = value;
@@ -347,7 +357,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['comments'](value);
         }
       }
       this._comments = value;
@@ -367,7 +377,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['datumStates'](value);
         }
       }
       this._validationStati = value;
@@ -387,7 +397,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['tags'](value);
         }
       }
       this._tags = value;
@@ -407,10 +417,30 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['datumFields'](value);
         }
       }
       this._datumFields = value;
+    }
+  },
+
+  participantFields: {
+    get: function() {
+      return this._participantFields || DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.participantFields;
+    },
+    set: function(value) {
+      if (value === this._participantFields) {
+        return;
+      }
+      if (!value) {
+        delete this._participantFields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['participantFields'](value);
+        }
+      }
+      this._participantFields = value;
     }
   },
 
@@ -427,7 +457,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['conversationFields'](value);
         }
       }
       this._conversationFields = value;
@@ -447,7 +477,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new Collection(value);
+          value = new this.INTERNAL_MODELS['sessionFields'](value);
         }
       }
       this._sessionFields = value;
@@ -456,7 +486,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   loadOrCreateCorpusByPouchName: {
     value: function(dbname) {
-      console.warn('TODO test loadOrCreateCorpusByPouchName');
+      this.todo('test loadOrCreateCorpusByPouchName');
       if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
@@ -469,9 +499,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       Q.nextTick(function() {
 
         var tryAgainInCaseThereWasALag = function(reason) {
-          console.log(reason);
+          self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
             deferred.reject(reason);
+            return;
           }
           self.runningloadOrCreateCorpusByPouchName = true;
           window.setTimeout(function() {
@@ -482,13 +513,18 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         CORS.makeCORSRequest({
           type: 'GET',
           dataType: 'json',
-          url: self.url
+          url: FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.url
         }).then(function(data) {
-          console.log(data);
+          self.debug(data);
           if (data.rows && data.rows.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
             self.id = data.rows[0].value._id;
-            self.fetch().then(deferred.resolve, deferred.reject);
+            self.fetch(FieldDB.BASE_DB_URL).then(function(result) {
+              self.debug('Finished fetch of corpus ', result);
+              deferred.resolve(result);
+            }, function(reason) {
+              deferred.reject(reason);
+            });
           } else {
             tryAgainInCaseThereWasALag(data);
           }
@@ -502,7 +538,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   fetchPublicSelf: {
     value: function() {
-      console.warn('TODO test fetchPublicSelf');
+      this.todo('test fetchPublicSelf');
       if (!this.dbname) {
         throw "Cannot load corpus's public self, its dbname was undefined";
       }
@@ -541,7 +577,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   loadPermissions: {
     value: function() {
-      console.warn('TODO test loadPermissions');
+      this.todo('test loadPermissions');
       var deferred = Q.defer(),
         self = this;
 
@@ -563,11 +599,11 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   pouchname: {
     get: function() {
-      console.warn("pouchname is deprecated, use dbname instead.");
+      this.warn("pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
     set: function(value) {
-      console.warn("pouchname is deprecated, use dbname instead.");
+      this.warn("pouchname is deprecated, use dbname instead.");
       this.dbname = value;
     }
   },
@@ -587,6 +623,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       dateCreated: FieldDBObject.DEFAULT_DATE,
       dateModified: FieldDBObject.DEFAULT_DATE,
       comments: Comments,
+      sessions: Sessions,
+      datalists: DataLists,
 
       title: FieldDBObject.DEFAULT_STRING,
       titleAsUrl: FieldDBObject.DEFAULT_STRING,
@@ -603,7 +641,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       tags: DatumTags,
 
       datumFields: DatumFields,
-      datumFields: DatumFields,
+      participantFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
     }
@@ -694,7 +732,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
       Q.nextTick(function() {
 
-        console.log("Creating a datum for this corpus");
+        self.debug("Creating a datum for this corpus");
         if (!self.datumFields || !self.datumFields.clone) {
           throw "This corpus has no default datum fields... It is unable to create a datum.";
         }
@@ -706,7 +744,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
             continue;
           }
           if (datum.datumFields[field]) {
-            console.log("  this option appears to be a datumField " + field);
+            self.debug("  this option appears to be a datumField " + field);
             datum.datumFields[field].value = options[field];
           } else {
             datum[field] = options[field];
@@ -747,6 +785,12 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       for (x in newCorpusJson.datumFields) {
         newCorpusJson.datumFields[x].mask = "";
         newCorpusJson.datumFields[x].value = "";
+      }
+      if (newCorpusJson.participantFields) {
+        for (x in newCorpusJson.participantFields) {
+          newCorpusJson.participantFields[x].mask = "";
+          newCorpusJson.participantFields[x].value = "";
+        }
       }
       //clear out search terms from the new corpus's conversation fields
       for (x in newCorpusJson.conversationFields) {
@@ -793,8 +837,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   find: {
     value: function(uri) {
-      var deferred = Q.defer(),
-        self = this;
+      var deferred = Q.defer();
 
       if (!uri) {
         throw 'Uri must be specified ';
@@ -831,10 +874,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
       var newModel = false;
       if (!this.id) {
-        console.log('New corpus');
+        self.debug('New corpus');
         newModel = true;
       } else {
-        console.log('Existing corpus');
+        self.debug('Existing corpus');
       }
       var oldrev = this.get("_rev");
 
@@ -890,138 +933,138 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   validDBQueries: {
     value: function() {
       return {
-        activities: {
-          url: "/_design/pages/_view/activities",
-          map: require("./../../couchapp_dev/views/activities/map")
-        },
-        add_synctactic_category: {
-          url: "/_design/pages/_view/add_synctactic_category",
-          map: require("./../../couchapp_dev/views/add_synctactic_category/map")
-        },
-        audioIntervals: {
-          url: "/_design/pages/_view/audioIntervals",
-          map: require("./../../couchapp_dev/views/audioIntervals/map")
-        },
-        byCollection: {
-          url: "/_design/pages/_view/byCollection",
-          map: require("./../../couchapp_dev/views/byCollection/map")
-        },
-        by_date: {
-          url: "/_design/pages/_view/by_date",
-          map: require("./../../couchapp_dev/views/by_date/map")
-        },
-        by_rhyming: {
-          url: "/_design/pages/_view/by_rhyming",
-          map: require("./../../couchapp_dev/views/by_rhyming/map"),
-          reduce: require("./../../couchapp_dev_/by_rhyming/reduce")
-        },
-        cleaning_example: {
-          url: "/_design/pages/_view/cleaning_example",
-          map: require("./../../couchapp_dev/views/cleaning_example/map")
-        },
-        corpuses: {
-          url: "/_design/pages/_view/corpuses",
-          map: require("./../../couchapp_dev/views/corpuses/map")
-        },
-        datalists: {
-          url: "/_design/pages/_view/datalists",
-          map: require("./../../couchapp_dev/views/datalists/map")
-        },
-        datums: {
-          url: "/_design/pages/_view/datums",
-          map: require("./../../couchapp_dev/views/datums/map")
-        },
-        datums_by_user: {
-          url: "/_design/pages/_view/datums_by_user",
-          map: require("./../../couchapp_dev/views/datums_by_user/map"),
-          reduce: require("./../../couchapp_dev_/datums_by_user/reduce")
-        },
-        datums_chronological: {
-          url: "/_design/pages/_view/datums_chronological",
-          map: require("./../../couchapp_dev/views/datums_chronological/map")
-        },
-        deleted: {
-          url: "/_design/pages/_view/deleted",
-          map: require("./../../couchapp_dev/views/deleted/map")
-        },
-        export_eopas_xml: {
-          url: "/_design/pages/_view/export_eopas_xml",
-          map: require("./../../couchapp_dev/views/export_eopas_xml/map"),
-          reduce: require("./../../couchapp_dev_/export_eopas_xml/reduce")
-        },
-        get_corpus_datum_tags: {
-          url: "/_design/pages/_view/get_corpus_datum_tags",
-          map: require("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
-          reduce: require("./../../couchapp_dev_/get_corpus_datum_tags/reduce")
-        },
-        get_corpus_fields: {
-          url: "/_design/pages/_view/get_corpus_fields",
-          map: require("./../../couchapp_dev/views/get_corpus_fields/map")
-        },
-        get_corpus_validationStati: {
-          url: "/_design/pages/_view/get_corpus_validationStati",
-          map: require("./../../couchapp_dev/views/get_corpus_validationStati/map"),
-          reduce: require("./../../couchapp_dev_/get_corpus_validationStati/reduce")
-        },
-        get_datum_fields: {
-          url: "/_design/pages/_view/get_datum_fields",
-          map: require("./../../couchapp_dev/views/get_datum_fields/map")
-        },
-        get_datums_by_session_id: {
-          url: "/_design/pages/_view/get_datums_by_session_id",
-          map: require("./../../couchapp_dev/views/get_datums_by_session_id/map")
-        },
-        get_frequent_fields: {
-          url: "/_design/pages/_view/get_frequent_fields",
-          map: require("./../../couchapp_dev/views/get_frequent_fields/map"),
-          reduce: require("./../../couchapp_dev_/get_frequent_fields/reduce")
-        },
-        get_search_fields_chronological: {
-          url: "/_design/pages/_view/get_search_fields_chronological",
-          map: require("./../../couchapp_dev/views/get_search_fields_chronological/map")
-        },
-        glosses_in_utterance: {
-          url: "/_design/pages/_view/glosses_in_utterance",
-          map: require("./../../couchapp_dev/views/glosses_in_utterance/map"),
-          reduce: require("./../../couchapp_dev_/glosses_in_utterance/reduce")
-        },
-        lexicon_create_tuples: {
-          url: "/_design/pages/_view/lexicon_create_tuples",
-          map: require("./../../couchapp_dev/views/lexicon_create_tuples/map"),
-          reduce: require("./../../couchapp_dev_/lexicon_create_tuples/reduce")
-        },
-        morpheme_neighbors: {
-          url: "/_design/pages/_view/morpheme_neighbors",
-          map: require("./../../couchapp_dev/views/morpheme_neighbors/map"),
-          reduce: require("./../../couchapp_dev_/morpheme_neighbors/reduce")
-        },
-        morphemes_in_gloss: {
-          url: "/_design/pages/_view/morphemes_in_gloss",
-          map: require("./../../couchapp_dev/views/morphemes_in_gloss/map"),
-          reduce: require("./../../couchapp_dev_/views/morphemes_in_gloss/reduce")
-        },
-        recent_comments: {
-          url: "/_design/pages/_view/recent_comments",
-          map: require("./../../couchapp_dev/views/recent_comments/map")
-        },
-        sessions: {
-          url: "/_design/pages/_view/sessions",
-          map: require("./../../couchapp_dev/views/sessions/map")
-        },
-        users: {
-          url: "/_design/pages/_view/users",
-          map: require("./../../couchapp_dev/views/users/map")
-        },
-        word_list: {
-          url: "/_design/pages/_view/word_list",
-          map: require("./../../couchapp_dev/views/word_list/map"),
-          reduce: require("./../../couchapp_dev_/word_list/reduce")
-        },
-        couchapp_dev_word_list_rdf: {
-          url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
-          map: require("./../../couchapp_dev_word_list_rdf/map"),
-          reduce: require("./../../couchapp_dev_word_list_rdf/reduce")
-        }
+        // activities: {
+        //   url: "/_design/pages/_view/activities",
+        //   map: require("./../../couchapp_dev/views/activities/map")
+        // },
+        // add_synctactic_category: {
+        //   url: "/_design/pages/_view/add_synctactic_category",
+        //   map: require("./../../couchapp_dev/views/add_synctactic_category/map")
+        // },
+        // audioIntervals: {
+        //   url: "/_design/pages/_view/audioIntervals",
+        //   map: require("./../../couchapp_dev/views/audioIntervals/map")
+        // },
+        // byCollection: {
+        //   url: "/_design/pages/_view/byCollection",
+        //   map: require("./../../couchapp_dev/views/byCollection/map")
+        // },
+        // by_date: {
+        //   url: "/_design/pages/_view/by_date",
+        //   map: require("./../../couchapp_dev/views/by_date/map")
+        // },
+        // by_rhyming: {
+        //   url: "/_design/pages/_view/by_rhyming",
+        //   map: require("./../../couchapp_dev/views/by_rhyming/map"),
+        //   reduce: require("./../../couchapp_dev/views/by_rhyming/reduce")
+        // },
+        // cleaning_example: {
+        //   url: "/_design/pages/_view/cleaning_example",
+        //   map: require("./../../couchapp_dev/views/cleaning_example/map")
+        // },
+        // corpuses: {
+        //   url: "/_design/pages/_view/corpuses",
+        //   map: require("./../../couchapp_dev/views/corpuses/map")
+        // },
+        // datalists: {
+        //   url: "/_design/pages/_view/datalists",
+        //   map: require("./../../couchapp_dev/views/datalists/map")
+        // },
+        // datums: {
+        //   url: "/_design/pages/_view/datums",
+        //   map: require("./../../couchapp_dev/views/datums/map")
+        // },
+        // datums_by_user: {
+        //   url: "/_design/pages/_view/datums_by_user",
+        //   map: require("./../../couchapp_dev/views/datums_by_user/map"),
+        //   reduce: require("./../../couchapp_dev/views/datums_by_user/reduce")
+        // },
+        // datums_chronological: {
+        //   url: "/_design/pages/_view/datums_chronological",
+        //   map: require("./../../couchapp_dev/views/datums_chronological/map")
+        // },
+        // deleted: {
+        //   url: "/_design/pages/_view/deleted",
+        //   map: require("./../../couchapp_dev/views/deleted/map")
+        // },
+        // export_eopas_xml: {
+        //   url: "/_design/pages/_view/export_eopas_xml",
+        //   map: require("./../../couchapp_dev/views/export_eopas_xml/map"),
+        //   reduce: require("./../../couchapp_dev/views/export_eopas_xml/reduce")
+        // },
+        // get_corpus_datum_tags: {
+        //   url: "/_design/pages/_view/get_corpus_datum_tags",
+        //   map: require("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
+        //   reduce: require("./../../couchapp_dev/views/get_corpus_datum_tags/reduce")
+        // },
+        // get_corpus_fields: {
+        //   url: "/_design/pages/_view/get_corpus_fields",
+        //   map: require("./../../couchapp_dev/views/get_corpus_fields/map")
+        // },
+        // get_corpus_validationStati: {
+        //   url: "/_design/pages/_view/get_corpus_validationStati",
+        //   map: require("./../../couchapp_dev/views/get_corpus_validationStati/map"),
+        //   reduce: require("./../../couchapp_dev/views/get_corpus_validationStati/reduce")
+        // },
+        // get_datum_fields: {
+        //   url: "/_design/pages/_view/get_datum_fields",
+        //   map: require("./../../couchapp_dev/views/get_datum_fields/map")
+        // },
+        // get_datums_by_session_id: {
+        //   url: "/_design/pages/_view/get_datums_by_session_id",
+        //   map: require("./../../couchapp_dev/views/get_datums_by_session_id/map")
+        // },
+        // get_frequent_fields: {
+        //   url: "/_design/pages/_view/get_frequent_fields",
+        //   map: require("./../../couchapp_dev/views/get_frequent_fields/map"),
+        //   reduce: require("./../../couchapp_dev/views/get_frequent_fields/reduce")
+        // },
+        // get_search_fields_chronological: {
+        //   url: "/_design/pages/_view/get_search_fields_chronological",
+        //   map: require("./../../couchapp_dev/views/get_search_fields_chronological/map")
+        // },
+        // glosses_in_utterance: {
+        //   url: "/_design/pages/_view/glosses_in_utterance",
+        //   map: require("./../../couchapp_dev/views/glosses_in_utterance/map"),
+        //   reduce: require("./../../couchapp_dev/views/glosses_in_utterance/reduce")
+        // },
+        // lexicon_create_tuples: {
+        //   url: "/_design/pages/_view/lexicon_create_tuples",
+        //   map: require("./../../couchapp_dev/views/lexicon_create_tuples/map"),
+        //   reduce: require("./../../couchapp_dev/views/lexicon_create_tuples/reduce")
+        // },
+        // morpheme_neighbors: {
+        //   url: "/_design/pages/_view/morpheme_neighbors",
+        //   map: require("./../../couchapp_dev/views/morpheme_neighbors/map"),
+        //   reduce: require("./../../couchapp_dev/views/morpheme_neighbors/reduce")
+        // },
+        // morphemes_in_gloss: {
+        //   url: "/_design/pages/_view/morphemes_in_gloss",
+        //   map: require("./../../couchapp_dev/views/morphemes_in_gloss/map"),
+        //   reduce: require("./../../couchapp_dev/views/morphemes_in_gloss/reduce")
+        // },
+        // recent_comments: {
+        //   url: "/_design/pages/_view/recent_comments",
+        //   map: require("./../../couchapp_dev/views/recent_comments/map")
+        // },
+        // sessions: {
+        //   url: "/_design/pages/_view/sessions",
+        //   map: require("./../../couchapp_dev/views/sessions/map")
+        // },
+        // users: {
+        //   url: "/_design/pages/_view/users",
+        //   map: require("./../../couchapp_dev/views/users/map")
+        // },
+        // word_list: {
+        //   url: "/_design/pages/_view/word_list",
+        //   map: require("./../../couchapp_dev/views/word_list/map"),
+        //   reduce: require("./../../couchapp_dev/views/word_list/reduce")
+        // },
+        // couchapp_dev_word_list_rdf: {
+        //   url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
+        //   map: require("./../../couchapp_dev/views/word_list_rdf/map"),
+        //   reduce: require("./../../couchapp_dev/views/word_list_rdf/reduce")
+        // }
       };
     }
   },
@@ -1149,7 +1192,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         self["frequentDatum" + fieldname] = frequentValues;
         deferred.resolve(frequentValues);
       }, function(response) {
-        console.log("resolving defaults for frequentDatum" + fieldname, response);
+        self.debug("resolving defaults for frequentDatum" + fieldname, response);
         deferred.resolve(defaults);
       });
 
