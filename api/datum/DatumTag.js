@@ -1,33 +1,24 @@
-define( [
-    "backbone"
-], function(
-    Backbone
-) {
-  var DatumTag = Backbone.Model.extend(
-  /** @lends DatumTag.prototype */
-  {
-    /**
-     * @class The DatumTag allows the user to label data with grammatical tags
-     *        i.e. passive, causative. This is useful for searches.
-     * 
-     * @description The initialize function brings up a field in which the user
-     *              can enter tags.
-     * @constructs
-     */
-    initialize : function() {
-    },
-    
-    // Internal models: used by the parse function
-    internalModels : {
-      // There are no nested models
-    },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
-    }
-  });
+var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 
-  return DatumTag;
+/**
+ * @class The DatumTag allows the user to label data with grammatical tags
+ *        i.e. passive, causative. This is useful for searches.
+ *
+ * @name  DatumTag
+ * @description The initialize function brings up a field in which the user
+ *              can enter tags.@class FieldDBObject of Datum validation states
+ * @extends FieldDBObject
+ * @constructs
+ */
+var DatumTag = function DatumTag(options) {
+  console.log("Constructing DatumTag length: ", options);
+  FieldDBObject.apply(this, arguments);
+};
+
+DatumTag.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumTag.prototype */ {
+  constructor: {
+    value: DatumTag
+  }
+
 });
+exports.DatumTag = DatumTag;

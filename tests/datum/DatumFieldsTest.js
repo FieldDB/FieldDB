@@ -15,14 +15,10 @@ describe('lib/DatumFields', function() {
     var collection;
 
     beforeEach(function() {
-      console.log("beforeEach");
+      // console.log("beforeEach");
       collection = new DatumFields({
         inverted: true,
-        primaryKey: 'id',
-        collection: [sampleDatumFields[0], sampleDatumFields[2]],
-        INTERNAL_MODELS: {
-          item: DatumField
-        }
+        collection: [sampleDatumFields[0], sampleDatumFields[2]]
       });
     });
 
@@ -32,6 +28,19 @@ describe('lib/DatumFields', function() {
 
     it('should accept a primary key', function() {
       expect(collection.primaryKey).toEqual('id');
+    });
+
+    it('should provide case insensitive lower and original case of a primary key', function() {
+
+      collection = new DatumFields({
+        collection: [{
+          id: 'thisIsCamelCase'
+        }]
+      });
+      console.log(collection._collection);
+      expect(collection.thisIsCamelCase).toBeDefined();
+      expect(collection.thisiscamelcase).toBeDefined();
+      expect(collection._collection.length).toEqual(1);
     });
 
     it('should use the primary key for find', function() {
@@ -45,6 +54,23 @@ describe('lib/DatumFields', function() {
     it('should accept model of items to be defined', function() {
       // expect(collection.utterance.constructor).toEqual(Object);
       expect(collection.utterance.constructor).toEqual(DatumField);
+    });
+
+    it("should turn the id into a camelCased safe value for use as property of an object, if it wasn't already", function() {
+      var u = new DatumField();
+      u.id = "Date Elicited";
+      expect(u.id).toEqual('dateElicited');
+      u.id = "utterance";
+      expect(u.id).toEqual('utterance');
+      u.id = "CheckedWithConsultant";
+      expect(u.id).toEqual('checkedWithConsultant');
+      u.id = "source/publication";
+      expect(u.id).toEqual('sourcePublication');
+      u.id = "a.field-with*dangerous characters (for import)";
+      expect(u.id).toEqual('aFieldWithDangerousCharactersForImport');
+      u.id = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ";
+      expect(u.id).toEqual('internationalization');
+
     });
 
   });
@@ -66,8 +92,7 @@ describe('lib/DatumFields', function() {
 
     beforeEach(function() {
       collection = new DatumFields({
-        inverted: true,
-        primaryKey: 'id'
+        inverted: true
       });
 
       collection.add(sampleDatumFields[0]);
@@ -95,7 +120,6 @@ describe('lib/DatumFields', function() {
 
     beforeEach(function() {
       collection = new DatumFields({
-        primaryKey: 'id',
         collection: sampleDatumFields
       });
       collection.utterance.value = "Noqata tusunayawanmi";

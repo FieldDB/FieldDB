@@ -4,11 +4,11 @@
     &nbsp;
     <input type="password" placeholder="Password" class="form-control" ng-model="loginDetails.password" name="password" tabindex="2"/>
     &nbsp;
-    <button type="submit" class="btn btn-default" ng-click="authenticate(loginDetails)" tabindex="3">
+    <button type="submit" class="btn btn-default" ng-click="login(loginDetails)" tabindex="3">
       Login
     </button>
   </div>
-  {{status}}
+  {{authentication.error}}
   <button ng-show="authentication.user.authenticated" class="btn btn-default" ng-click="logout()" tabindex="3">
     Logout
   </button>

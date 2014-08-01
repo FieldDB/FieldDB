@@ -5,7 +5,7 @@
   var FieldDBObject = require('../FieldDBObject').FieldDBObject;
 
   var Database = function Database(options) {
-    console.log("In Database ", options);
+    this.debug("In Database ", options);
     FieldDBObject.apply(this, arguments);
   };
 
@@ -32,17 +32,17 @@
           self = this;
 
         if (!this.url) {
-          console.warn("Cannot fetch data with out a url");
+          self.warn("Cannot fetch data with out a url");
           return;
         }
 
         if (!collectionType) {
-          console.warn("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
+          self.warn("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
           return;
         }
 
         var cantLogIn = function(reason) {
-          console.log(reason);
+          self.debug(reason);
           deferred.reject(reason);
           // self.register().then(function() {
           //   self.fetchCollection(collectionType).then(function(documents) {
@@ -90,7 +90,7 @@
           self = this;
 
         if (!this.authUrl) {
-          console.warn("Cannot login  with out a url");
+          self.warn("Cannot login  with out a url");
           return;
         }
         CORS.makeCORSRequest({
@@ -109,11 +109,11 @@
                   password: loginDetails.password
                 }
               }).then(function(sessionInfo) {
-                // console.log(sessionInfo);
+                // self.debug(sessionInfo);
                 result.user.roles = sessionInfo.roles;
                 deferred.resolve(result.user);
               }, function() {
-                console.log("Failed to login ");
+                self.debug("Failed to login ");
                 deferred.reject("Something is wrong.");
               });
             } else {
@@ -121,10 +121,10 @@
             }
           },
           function(reason) {
-            console.log(reason);
+            self.debug(reason);
             deferred.reject(reason);
           }).fail(function(reason) {
-          console.log(reason);
+          self.debug(reason);
           deferred.reject(reason);
         });
         return deferred.promise;
@@ -136,7 +136,7 @@
         var deferred = Q.defer();
 
         if (!this.url) {
-          console.warn("Cannot logout  with out a url");
+          this.warn("Cannot logout  with out a url");
           return;
         }
         CORS.makeCORSRequest({
@@ -151,7 +151,7 @@
             }
           },
           function(reason) {
-            console.log(reason);
+            this.debug(reason);
             deferred.reject(reason);
 
           });
@@ -165,7 +165,7 @@
           self = this;
 
         if (!this.url) {
-          console.warn("Cannot fetch data with out a url");
+          self.warn("Cannot fetch data with out a url");
           return;
         }
         CORS.makeCORSRequest({
@@ -187,10 +187,10 @@
                   password: 'testtest'
                 }
               }).then(function(session) {
-                console.log(session);
+                self.debug(session);
                 deferred.resolve(result.user);
               }, function() {
-                console.log("Failed to login ");
+                self.debug("Failed to login ");
                 deferred.reject();
               });
             } else {
@@ -198,10 +198,10 @@
             }
           },
           function(reason) {
-            console.log(reason);
+            self.debug(reason);
             deferred.reject(reason);
           }).fail(function(reason) {
-          console.log(reason);
+          self.debug(reason);
           deferred.reject(reason);
         });
         return deferred.promise;
@@ -209,7 +209,6 @@
     }
   });
 
-  console.log(Database);
   exports.Database = Database;
 
 })(typeof exports === 'undefined' ? this['Database'] = {} : exports);

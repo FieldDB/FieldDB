@@ -1,5 +1,6 @@
 var Import = require('./../../api/import/Import').Import;
 var Corpus = require('./../../api/corpus/Corpus').Corpus;
+var Q = require('q');
 var fs = require('fs');
 
 var specIsRunningTooLong = 5000;
@@ -16,10 +17,9 @@ describe("api/import/Import", function() {
   });
 
   it("should be able to use a corpus", function() {
-    var dbname = "testingcorpusinimport-firstcorpus";
     var corpus = new Corpus(Corpus.defaults);
     expect(corpus).toBeDefined();
-    // console.log(corpus);
+    corpus.debug(corpus);
     expect(corpus.dbname).toBeDefined();
 
 
@@ -34,7 +34,7 @@ describe("api/import/Import", function() {
     var corpus = new Corpus(Corpus.defaults);
     corpus.dbname = dbname;
     var datum = corpus.newDatum();
-    console.log(datum);
+    corpus.debug(datum);
     expect(datum).toBeDefined();
   });
 
@@ -68,7 +68,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
   };
 
   beforeEach(function() {
-    var dbname = "testingbatchimport-rawtext"
+    var dbname = "testingbatchimport-rawtext";
     corpus = new Corpus(Corpus.defaults);
     corpus.dbname = dbname;
     corpus.language = {
@@ -90,7 +90,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
     importer
       .readUri(defaultOptions)
       .then(function(result) {
-        console.log('after read file', result);
+        importer.debug('after read file', result);
         expect(result).toBeDefined();
         expect(result.rawText.substring(0, 20)).toEqual('Noqata qan qaparinay');
       })
@@ -104,7 +104,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
         uri: remoteUri
       })
       .then(function(result) {
-        console.log('after read file', result);
+        importer.debug('after read file', result);
         expect(result.datum.datumFields.orthography).toBeDefined();
       }).then(done, done);
   }, specIsRunningTooLong);
@@ -115,7 +115,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
     importer
       .preprocess(defaultOptions)
       .then(function(result) {
-        console.log('after preprocess file');
+        importer.debug('after preprocess file');
         expect(result.datum.datumFields.utterance).toBeDefined();
         expect(result.preprocessedUrl).toEqual('./sample_data/orthography_preprocessed.json');
 
@@ -160,16 +160,16 @@ describe("Batch Import: as a morphologist I want to import directories of text f
         fromPreprocessedFile: true
       },
       next: function() {
-        console.log('Next middle ware placeholder');
+        importer.debug('Next middle ware placeholder');
       }
     }).then(function(result) {
-      console.log('after add file', result);
+      importer.debug('after add file', result);
       expect(result.rawText).toBeDefined();
     }).then(done, done);
 
   }, specIsRunningTooLong);
 
-  describe('lib/Import', function() {
+  xdescribe('lib/Import', function() {
 
     it('should be able to pause an import', function() {
       var importer = new Import();
@@ -184,23 +184,211 @@ describe("Batch Import: as a morphologist I want to import directories of text f
   });
 
 });
-xdescribe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+describe("Batch Import: as a Field Methods instructor or psycholinguistics experiment administrator I want to import a class list of users/informants/participants", function() {
   var importer;
   beforeEach(function() {
-    importer = new Import();
+    importer = new Import({
+      files: [{
+        name: 'sample_data/students.csv'
+      }, {
+        name: 'sample_data/students2.csv'
+      }],
+      rawText: ""
+    });
   });
 
-  it("should import raw text", function() {
+  it("should read multiple files using an optionally injected read function", function(done) {
     expect(importer).toBeDefined();
-  });
+    importer.readFiles({
+      readOptions: {
+        readFileFunction: function(options) {
+          importer.debug('Reading file', options);
+          var thisFileDeferred = Q.defer();
+          Q.nextTick(function() {
+            fs.readFile(options.file, {
+              encoding: 'utf8'
+            }, function(err, data) {
+              importer.debug('Finished reading this file', err, data);
+              if (err) {
+                thisFileDeferred.reject(err);
+              } else {
+                importer.debug('options', options);
+                options.rawText = data;
+                importer.rawText = importer.rawText + data;
+                thisFileDeferred.resolve(options);
+              }
+            });
+          });
+          return thisFileDeferred.promise;
+        }
+      }
+    }).then(function(success) {
+      importer.debug('success', success);
+
+      expect(importer.status).toEqual('undefined; sample_data/students.csv n/a -  bytes, last modified: n/a; sample_data/students2.csv n/a -  bytes, last modified: n/a');
+      expect(importer.fileDetails).toEqual([{
+        name: 'sample_data/students.csv'
+      }, {
+        name: 'sample_data/students2.csv'
+      }]);
+
+      // Ensure that the files are truely read by counting the length and the number of commas
+      expect(importer.rawText.length).toEqual(926);
+      expect(importer.rawText.match(/,/g).length).toEqual(88);
+
+    }, function(options) {
+      expect(options).toEqual('It should not error');
+    }).then(done, done);
+  }, specIsRunningTooLong);
 
 });
 
 
-xdescribe("Import: as a morphologist I want to import my data from CSV", function() {
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
+describe("Import: as a psycholinguist I want to import a list of participants from CSV", function() {
+  it("should error if a options are not passed in", function(done) {
+    var importer = new Import();
+
+    importer.readFileIntoRawText().then(function(success) {
+      importer.debug(success);
+      expect(false).toBeTruthy();
+    }, function(options) {
+      importer.debug(options);
+      expect(options.error).toEqual('Options must be defined for readFileIntoRawText');
+    }).then(done, done);
+
+  }, specIsRunningTooLong);
+
+  it("should error if a file is not passed in", function(done) {
+    var importer = new Import();
+
+    importer.readFileIntoRawText({}).then(function(success) {
+      importer.debug(success);
+      expect(false).toBeTruthy();
+    }, function(options) {
+      importer.debug(options);
+      expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
+    }).then(done, done);
+
+  }, specIsRunningTooLong);
+
+  it("should process csv participants", function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults_psycholinguistics);
+    corpus.dbname = dbname;
+
+    var importer = new Import({
+      corpus: corpus,
+      rawText: fs.readFileSync('sample_data/students.csv', 'utf8')
+    });
+
+    importer.importCSV(importer.rawText, importer);
+    expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
+    expect(importer.asCSV.length).toEqual(17);
+
   });
+
+
+  xit("should read a file when in a browser", function(done) {
+    var importer = new Import();
+
+    importer.readFileIntoRawText({
+      file: {
+        "webkitRelativePath": "",
+        "lastModifiedDate": "2014-07-29T21:38:44.000Z",
+        "name": "students.csv",
+        "type": "text/csv",
+        "size": 651
+      }
+    }).then(function(success) {
+      importer.debug(success);
+      expect(false).toBeTruthy();
+    }, function(options) {
+      importer.debug(options);
+      expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
+    }).then(done, done);
+
+  }, specIsRunningTooLong);
+
+});
+
+describe("Import: as a morphologist I want to import my data from CSV", function() {
+  var importer;
+  beforeEach(function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults);
+    corpus.dbname = dbname;
+
+    importer = new Import({
+      corpus: corpus,
+      files: [{
+        name: 'sample_data/sample_filemaker.csv'
+      }, {
+        name: 'sample_data/sample_filemaker.csv'
+      }],
+      rawText: ""
+    });
+  });
+
+  it("should read IGT files and convert them into a table", function(done) {
+    expect(importer).toBeDefined();
+    importer.readFiles({
+      readOptions: {
+        readFileFunction: function(options) {
+          importer.debug('Reading file', options);
+          var thisFileDeferred = Q.defer();
+          Q.nextTick(function() {
+            fs.readFile(options.file, {
+              encoding: 'utf8'
+            }, function(err, data) {
+              importer.debug('Finished reading this file', err, data);
+              if (err) {
+                thisFileDeferred.reject(err);
+              } else {
+                importer.debug('options', options);
+                options.rawText = data;
+                importer.rawText = importer.rawText + data;
+                thisFileDeferred.resolve(options);
+              }
+            });
+          });
+          return thisFileDeferred.promise;
+        }
+      }
+    }).then(function(success) {
+      importer.debug('success', success);
+
+      expect(importer.status).toEqual('undefined; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a');
+      expect(importer.fileDetails).toEqual([{
+        name: 'sample_data/sample_filemaker.csv'
+      }, {
+        name: 'sample_data/sample_filemaker.csv'
+      }]);
+
+      // Ensure that the files are truely read by counting the length and the number of commas
+      expect(importer.rawText.length).toEqual(25324);
+      expect(importer.rawText.match(/,/g).length).toEqual(1330);
+
+      // Ensure the data is read into CSV format
+      importer.guessFormatAndPreviewImport();
+      expect(importer.asCSV.length).toEqual(147);
+      expect(importer.asCSV[4]).toEqual(['5/7/2010', '*Payta suwanayan monikita', 'Pay-ta suwa-naya-n moniki-ta', 'he-ACC steal.naya.3SG little animal-ACC', 'He feels like stealing the little animal', '', '', 'Impulsative', 'Seberina', 'Cusco Quechua']);
+
+      // Build data
+      expect(importer.extractedHeader).toEqual(['Date Elicited', 'utterance', 'morphemes', 'gloss', 'translation', 'comments', '', 'tags', 'CheckedWithConsultant', 'source/publication', 'a.field-with*dangerous characters (for import)']);
+      var headers = importer.convertTableIntoDataList();
+      console.log(JSON.stringify(headers));
+      expect(headers[0].id).toEqual("dateElicited");
+      expect(headers[8].id).toEqual('validationStatus');
+      expect(headers[9].id).toEqual('sourcePublication');
+      expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
+
+      //TODO finish IGT import later
+
+    }, function(options) {
+      expect(options).toEqual('It should not error');
+    }).then(done, done);
+  }, specIsRunningTooLong);
+
 
 });
 

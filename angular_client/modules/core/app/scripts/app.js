@@ -13,7 +13,10 @@ angular.module('fielddbAngularApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'angularFileUpload',
+  'contenteditable',
+  'ngDragDrop'
 ]).config(function($routeProvider) {
   console.log($routeProvider);
 });
