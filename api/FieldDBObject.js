@@ -585,7 +585,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    */
   sanitizeStringForPrimaryKey: {
     value: function(value) {
-      console.log('sanitizeStringForPrimaryKey');
+      this.debug('sanitizeStringForPrimaryKey');
       if (!value) {
         return null;
       }
