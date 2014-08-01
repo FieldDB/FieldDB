@@ -72,6 +72,14 @@ var Corpus = function Corpus(options) {
   FieldDBObject.apply(this, arguments);
 };
 Corpus.defaults = DEFAULT_CORPUS_MODEL;
+if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+  Corpus.defaults_psycholinguistics = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
+  for (var property in DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+    if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.hasOwnProperty(property)) {
+      Corpus.defaults_psycholinguistics[property] = DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL[property];
+    }
+  }
+}
 
 Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
   constructor: {
