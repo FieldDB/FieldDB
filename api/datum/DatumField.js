@@ -20,7 +20,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var DatumField = function DatumField(options) {
-  this.debug("Constructing DatumField ", options.length);
+  this.debug("Constructing DatumField ", options);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -58,6 +58,31 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   // Internal models: used by the parse function
   internalModels: {
     value: {} // There are no nested models
+  },
+
+  id: {
+    get: function() {
+      return this._id || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._id) {
+        return;
+      }
+      if (!value) {
+        delete this._id;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      var originalValue = value + "";
+      value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
+      if (value === null) {
+        this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+        return;
+      }
+      this._id = value;
+    }
   },
 
   label: {
