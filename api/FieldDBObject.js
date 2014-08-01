@@ -1,7 +1,7 @@
 /* globals window */
 var Q = require("q");
 var CORS = require("./CORS").CORS;
-
+var Diacritics = require('diacritic');
 
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
@@ -188,13 +188,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       try {
         window.alert(message);
       } catch (e) {
-        console.warn('BUG: '+ message);
+        console.warn('BUG: ' + message);
       }
     }
   },
   warn: {
     value: function(message, message2, message3, message4) {
-      console.warn('WARN: '+ message);
+      console.warn('WARN: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -349,7 +349,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete this._id;
         return;
       }
-      this._id = value.trim();
+      if (value.trim) {
+        value = value.trim();
+      }
+      var originalValue = value + "";
+      value = this.sanitizeStringForPrimaryKey(value);
+      if (value === null) {
+        this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+        return;
+      }
+      this._id = value;
     }
   },
 
@@ -365,7 +374,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete this._rev;
         return;
       }
-      this._rev = value.trim();
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._rev = value;
     }
   },
 
@@ -384,7 +396,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete this._dbname;
         return;
       }
-      this._dbname = value.trim();
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._dbname = value;
     }
   },
 
@@ -408,7 +423,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!value) {
         value = FieldDBObject.DEFAULT_VERSION;
       }
-      this._version = value.trim();
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._version = value;
     }
   },
 
@@ -555,6 +573,46 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json._rev;
 
       return json;
+    }
+  },
+
+  /**
+   *  Cleans a value to become a primary key on an object (replaces punctuation and symbols with underscore)
+   *  formerly: item.replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, "")
+   *
+   * @param  String value the potential primary key to be cleaned
+   * @return String       the value cleaned and safe as a primary key
+   */
+  sanitizeStringForPrimaryKey: {
+    value: function(value) {
+      console.log('sanitizeStringForPrimaryKey');
+      if (!value) {
+        return null;
+      }
+      if (value.trim) {
+        value = Diacritics.clean(value);
+        value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_/, '').replace(/_$/, '');
+        return this.camelCased(value);
+      } else if (typeof value === 'number') {
+        return parseInt(value, 10);
+      } else {
+        return null;
+      }
+    }
+  },
+
+  camelCased: {
+    value: function(value) {
+      if (!value) {
+        return null;
+      }
+      if (value.replace) {
+        value = value.replace(/_([a-zA-Z])/g, function(word) {
+          return word[1].toUpperCase();
+        });
+        value = value[0].toLowerCase() + value.substring(1, value.length);
+      }
+      return value;
     }
   }
 
