@@ -233,7 +233,7 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
       }]);
 
       // Ensure that the files are truely read by counting the length and the number of commas
-      expect(importer.rawText.length).toEqual(902);
+      expect(importer.rawText.length).toEqual(926);
       expect(importer.rawText.match(/,/g).length).toEqual(88);
 
     }, function(options) {
@@ -272,31 +272,18 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
   }, specIsRunningTooLong);
 
   it("should process csv participants", function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults_psycholinguistics);
+    corpus.dbname = dbname;
+
     var importer = new Import({
+      corpus: corpus,
       rawText: fs.readFileSync('sample_data/students.csv', 'utf8')
     });
 
     importer.importCSV(importer.rawText, importer);
-    expect(importer.extractedHeader).toEqual(['studentid', 'coursenumber', 'firstname', 'lastname', 'dateofbirth']);
-    expect(importer.asCSV).toEqual([
-      ['StudentID', 'CourseNumber', 'FirstName', 'LastName', 'DateOfBirth'],
-      ['13245654', '210', 'Damiane', 'Alexandre', '2010-02-02'],
-      ['13245655', '210', 'Ariane', 'Ardouin', '2010-02-01'],
-      ['13245656', '210', 'Michel', 'Barbot', '2010-04-22'],
-      ['13245657', '210', 'Abeau', 'Burban', '2010-04-24'],
-      ['13245658', '210', 'Marylene', 'Collomb', '2010-01-14'],
-      ['13245659', '210', 'Mathea', 'Cotton', '2009-12-15'],
-      ['13245660', '210', 'Jade', 'Dray', '2010-06-10'],
-      ['13245661', '211', 'Etienne', 'Gaborit', '2010-05-11'],
-      ['13245662', '211', 'Emilien', 'Grosset', '2010-05-10'],
-      ['13245663', '211', 'Adrienne', 'Hainaut', '2010-07-29'],
-      ['13245664', '211', 'Humbert', 'Henin', '2010-07-31'],
-      ['13245665', '211', 'Renate', 'Lafargue', '2010-04-22'],
-      ['13245666', '211', 'Jean-Joël', 'Lalande', '2010-03-23'],
-      ['13245667', '211', 'Lothaire', 'Le Blanc', '2010-03-22'],
-      ['13245668', '211', 'Benedicte', 'Le Breton', '2010-06-10'],
-      ['']
-    ]);
+    expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
+    expect(importer.asCSV.length).toEqual(17);
 
   });
 
@@ -324,10 +311,84 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
 });
 
-xdescribe("Import: as a morphologist I want to import my data from CSV", function() {
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
+describe("Import: as a morphologist I want to import my data from CSV", function() {
+  var importer;
+  beforeEach(function() {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.defaults);
+    corpus.dbname = dbname;
+
+    importer = new Import({
+      corpus: corpus,
+      files: [{
+        name: 'sample_data/sample_filemaker.csv'
+      }, {
+        name: 'sample_data/sample_filemaker.csv'
+      }],
+      rawText: ""
+    });
   });
+
+  it("should read IGT files and convert them into a table", function(done) {
+    expect(importer).toBeDefined();
+    importer.readFiles({
+      readOptions: {
+        readFileFunction: function(options) {
+          importer.debug('Reading file', options);
+          var thisFileDeferred = Q.defer();
+          Q.nextTick(function() {
+            fs.readFile(options.file, {
+              encoding: 'utf8'
+            }, function(err, data) {
+              importer.debug('Finished reading this file', err, data);
+              if (err) {
+                thisFileDeferred.reject(err);
+              } else {
+                importer.debug('options', options);
+                options.rawText = data;
+                importer.rawText = importer.rawText + data;
+                thisFileDeferred.resolve(options);
+              }
+            });
+          });
+          return thisFileDeferred.promise;
+        }
+      }
+    }).then(function(success) {
+      importer.debug('success', success);
+
+      expect(importer.status).toEqual('undefined; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a');
+      expect(importer.fileDetails).toEqual([{
+        name: 'sample_data/sample_filemaker.csv'
+      }, {
+        name: 'sample_data/sample_filemaker.csv'
+      }]);
+
+      // Ensure that the files are truely read by counting the length and the number of commas
+      expect(importer.rawText.length).toEqual(25324);
+      expect(importer.rawText.match(/,/g).length).toEqual(1330);
+
+      // Ensure the data is read into CSV format
+      importer.guessFormatAndPreviewImport();
+      expect(importer.asCSV.length).toEqual(147);
+      expect(importer.asCSV[4]).toEqual(['5/7/2010', '*Payta suwanayan monikita', 'Pay-ta suwa-naya-n moniki-ta', 'he-ACC steal.naya.3SG little animal-ACC', 'He feels like stealing the little animal', '', '', 'Impulsative', 'Seberina', 'Cusco Quechua']);
+
+      // Build data
+      expect(importer.extractedHeader).toEqual(['Date Elicited', 'utterance', 'morphemes', 'gloss', 'translation', 'comments', '', 'tags', 'CheckedWithConsultant', 'source/publication', 'a.field-with*dangerous characters (for import)']);
+      var headers = importer.convertTableIntoDataList();
+      console.log(JSON.stringify(headers));
+      expect(headers[0].id).toEqual("dateElicited");
+      expect(headers[8].id).toEqual('checkedWithConsultant');
+      expect(headers[9].id).toEqual('sourcePublication');
+      expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
+
+      //TODO finish IGT import later
+
+    }, function(options) {
+      expect(options).toEqual('It should not error');
+    }).then(done, done);
+  }, specIsRunningTooLong);
+
 
 });
 
