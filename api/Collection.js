@@ -1,4 +1,5 @@
 /* globals window */
+var Diacritics = require('diacritic');
 
 var regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
@@ -201,7 +202,10 @@ Collection.prototype = Object.create(Object.prototype, {
   find: {
     value: function(arg1, arg2, fuzzy) {
       var results = [],
-        searchingFor, optionalKeyToIdentifyItem;
+        searchingFor,
+        optionalKeyToIdentifyItem,
+        sanitzedSearchingFor;
+
       if (arg1 && arg2) {
         searchingFor = arg2;
         optionalKeyToIdentifyItem = arg1;
@@ -213,7 +217,8 @@ Collection.prototype = Object.create(Object.prototype, {
       this.debug('searchingFor', searchingFor);
       if (fuzzy) {
         searchingFor = new RegExp('.*' + searchingFor + '.*', 'i');
-        this.debug('fuzzy ', searchingFor);
+        sanitzedSearchingFor = new RegExp('.*' + this.sanitizeStringForPrimaryKey(searchingFor) + '.*', 'i');
+        this.debug('fuzzy ', searchingFor, sanitzedSearchingFor);
       }
       if (!searchingFor || !searchingFor.test || typeof searchingFor.test !== 'function') {
         /* if not a regex, the excape it */
@@ -229,8 +234,11 @@ Collection.prototype = Object.create(Object.prototype, {
         }
         if (searchingFor.test(this.collection[index][optionalKeyToIdentifyItem])) {
           results.push(this.collection[index]);
+        } else if (fuzzy && sanitzedSearchingFor.test(this.collection[index][optionalKeyToIdentifyItem])) {
+          results.push(this.collection[index]);
         }
       }
+
       return results;
     }
   },
@@ -400,7 +408,9 @@ Collection.prototype = Object.create(Object.prototype, {
       }
     }
   },
-
+  capitalizeFirstCharacterOfPrimaryKeys: {
+    value: true
+  },
   camelCased: {
     value: function(value) {
       if (!value) {
@@ -410,7 +420,11 @@ Collection.prototype = Object.create(Object.prototype, {
         value = value.replace(/_([a-zA-Z])/g, function(word) {
           return word[1].toUpperCase();
         });
-        value = value[0].toLowerCase() + value.substring(1, value.length);
+        if (this.capitalizeFirstCharacterOfPrimaryKeys) {
+          value = value[0].toUpperCase() + value.substring(1, value.length);
+        } else {
+          value = value[0].toLowerCase() + value.substring(1, value.length);
+        }
       }
       return value;
     }

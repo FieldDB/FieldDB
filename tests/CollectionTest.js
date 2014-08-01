@@ -67,7 +67,7 @@ describe('lib/Collection', function() {
     });
 
     it('should use the primary key to get members using dot notation', function() {
-      expect(collection.Published_).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
+      expect(collection.Published).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
     });
 
     it('should accept inverted', function() {
@@ -109,10 +109,11 @@ describe('lib/Collection', function() {
         primaryKey: 'validationStatus',
         collection: DEFAULT_DATUM_VALIDATION_STATI
       });
+      // collection.debugMode = true;
     });
 
     it('should seem like an object by providing dot notation for primaryKeys ', function() {
-      expect(collection.Checked_).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(collection.Checked).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
     });
 
     it('should seem like an object by providing case insensitive cleaned dot notation for primaryKeys ', function() {
