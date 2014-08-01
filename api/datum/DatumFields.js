@@ -34,6 +34,10 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
     value: {
       item: DatumField
     }
+  },
+
+  capitalizeFirstCharacterOfPrimaryKeys: {
+    value: false
   }
 
 });
