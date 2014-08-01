@@ -210,14 +210,14 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || 'id';
-      // self.debug('searchingFor', searchingFor);
+      this.debug('searchingFor', searchingFor);
       if (fuzzy) {
         searchingFor = new RegExp('.*' + searchingFor + '.*', 'i');
         this.debug('fuzzy ', searchingFor);
       }
-      if (!searchingFor.test || typeof searchingFor.test !== 'function') {
+      if (!searchingFor || !searchingFor.test || typeof searchingFor.test !== 'function') {
         /* if not a regex, the excape it */
-        if (searchingFor.indexOf('/') !== 0) {
+        if (searchingFor && searchingFor.indexOf('/') !== 0) {
           searchingFor = regExpEscape(searchingFor);
         }
         searchingFor = new RegExp('^' + searchingFor + '$');
@@ -296,16 +296,14 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        throw 'The primary key is undefined on this object, it cannot be added!';
+        throw 'The primary key is undefined on this object, it cannot be added!', member;
       }
       var value = member[this.primaryKey];
       if (!value) {
         this.warn('This object is missing a value for the prmary key ' + this.primaryKey + '... it will be hard to find in the collection.', member);
         return;
       }
-      if (value.trim) {
-        value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_');
-      }
+      value = this.sanitizeStringForPrimaryKey(value);
       if (value !== member[this.primaryKey]) {
         this.warn('using a modified the dot notation key of this object to be ' + value);
       }
@@ -317,7 +315,8 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(value) {
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
-        throw 'The primary key is undefined on this object, it cannot be added!';
+        this.warn('The primary key is undefined on this object, it cannot be added! ', value);
+        throw 'The primary key is undefined on this object, it cannot be added! ' + value;
       }
       this.debug('adding ' + dotNotationKey);
       this.set(dotNotationKey, value);
@@ -375,7 +374,48 @@ Collection.prototype = Object.create(Object.prototype, {
 
       return json;
     }
+  },
+
+  /**
+   *  Cleans a value to become a primary key on an object (replaces punctuation and symbols with underscore)
+   *  formerly: item.replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, "")
+   *
+   * @param  String value the potential primary key to be cleaned
+   * @return String       the value cleaned and safe as a primary key
+   */
+  sanitizeStringForPrimaryKey: {
+    value: function(value) {
+      console.log('sanitizeStringForPrimaryKey');
+      if (!value) {
+        return null;
+      }
+      if (value.trim) {
+        value = Diacritics.clean(value);
+        value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_/, '').replace(/_$/, '');
+        return this.camelCased(value);
+      } else if (typeof value === 'number') {
+        return parseInt(value, 10);
+      } else {
+        return null;
+      }
+    }
+  },
+
+  camelCased: {
+    value: function(value) {
+      if (!value) {
+        return null;
+      }
+      if (value.replace) {
+        value = value.replace(/_([a-zA-Z])/g, function(word) {
+          return word[1].toUpperCase();
+        });
+        value = value[0].toLowerCase() + value.substring(1, value.length);
+      }
+      return value;
+    }
   }
+
 
 });
 

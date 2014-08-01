@@ -45,6 +45,23 @@ describe("FieldDBObject", function() {
       expect(u.dateCreated).toBeDefined();
     });
 
+    it("should turn the id into a camelCased safe value for use as property of an object, if it wasn't already", function() {
+      var u = new FieldDBObject();
+      u.id = "Date Elicited";
+      expect(u.id).toEqual('dateElicited');
+      u.id = "utterance";
+      expect(u.id).toEqual('utterance');
+      u.id = "CheckedWithConsultant";
+      expect(u.id).toEqual('checkedWithConsultant');
+      u.id = "source/publication";
+      expect(u.id).toEqual('sourcePublication');
+      u.id = "a.field-with*dangerous characters (for import)";
+      expect(u.id).toEqual('aFieldWithDangerousCharactersForImport');
+      u.id = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ";
+      expect(u.id).toEqual('internationalization');
+
+    });
+
   });
 
   describe("serialization", function() {
@@ -168,7 +185,7 @@ describe("FieldDBObject", function() {
       buggy.debugMode = false;
       console.log('It should say \' Done debugMode testing\' after this: ');
       buggy.debug('THERE WAS SOME OUTPUT', buggy, FieldDBObject);
-      if(buggy.debugMode){
+      if (buggy.debugMode) {
         buggy.debugMode = true;
         buggy.debug('THIS IS SOME HEAVY STRINGIFICATION OUPUT THAT IS AVOIDED', JSON.stringify(buggy), JSON.stringify(FieldDBObject));
       }
