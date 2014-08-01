@@ -215,6 +215,10 @@ Collection.prototype = Object.create(Object.prototype, {
 
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || 'id';
       this.debug('searchingFor', searchingFor);
+
+      if (this[searchingFor]) {
+        results.push(this[searchingFor]);
+      }
       if (fuzzy) {
         searchingFor = new RegExp('.*' + searchingFor + '.*', 'i');
         sanitzedSearchingFor = new RegExp('.*' + this.sanitizeStringForPrimaryKey(searchingFor) + '.*', 'i');
@@ -409,7 +413,17 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
   capitalizeFirstCharacterOfPrimaryKeys: {
-    value: true
+    value: {
+      get: function() {
+        if (this._capitalizeFirstCharacterOfPrimaryKeys === undefined) {
+          return false;
+        }
+        return this._capitalizeFirstCharacterOfPrimaryKeys;
+      },
+      set: function(value) {
+        this._capitalizeFirstCharacterOfPrimaryKeys = value;
+      }
+    }
   },
   camelCased: {
     value: function(value) {
