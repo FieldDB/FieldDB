@@ -352,12 +352,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (value.trim) {
         value = value.trim();
       }
-      var originalValue = value + "";
-      value = this.sanitizeStringForPrimaryKey(value);
-      if (value === null) {
-        this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
-        return;
-      }
+      // var originalValue = value + "";
+      // value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
+      // if (value === null) {
+      //   this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+      //   return;
+      // }
       this._id = value;
     }
   },
