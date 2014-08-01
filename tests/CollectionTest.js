@@ -55,7 +55,8 @@ describe('lib/Collection', function() {
     beforeEach(function() {
       collection = new Collection({
         inverted: true,
-        primaryKey: 'validationStatus'
+        primaryKey: 'validationStatus',
+        capitalizeFirstCharacterOfPrimaryKeys: true
       });
 
       collection.add(DEFAULT_DATUM_VALIDATION_STATI[0]);
@@ -68,6 +69,7 @@ describe('lib/Collection', function() {
 
     it('should use the primary key to get members using dot notation', function() {
       expect(collection.Published).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
+      expect(collection.published).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
     });
 
     it('should accept inverted', function() {
@@ -107,9 +109,10 @@ describe('lib/Collection', function() {
     beforeEach(function() {
       collection = new Collection({
         primaryKey: 'validationStatus',
-        collection: DEFAULT_DATUM_VALIDATION_STATI
+        collection: DEFAULT_DATUM_VALIDATION_STATI,
+        capitalizeFirstCharacterOfPrimaryKeys: true
       });
-      // collection.debugMode = true;
+      collection.debugMode = true;
     });
 
     it('should seem like an object by providing dot notation for primaryKeys ', function() {
