@@ -35,14 +35,15 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
           dbname: $scope.corpus.dbname,
           status: '',
           error: '',
-          rawText: ''
+          rawText: '',
+          importType: 'participants'
         });
 
         console.log($scope.importer);
         $scope.importer.readFiles({}).then(function(sucessfullOptions) {
           console.log('Finished reading files ', sucessfullOptions);
           $scope.$digest();
-          $scope.importer.guessFormatAndImport();
+          $scope.importer.guessFormatAndPreviewImport();
           $scope.$digest();
 
         }, function(failedOptions) {

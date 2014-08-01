@@ -87,7 +87,7 @@
     </table>
   </div>
 
-  <button class="btn btn-success approve-import hide">{{locale.locale_Attempt_Import}}</button>
+  <button class="btn btn-success approve-import" ng-show="importer.asCSV.length > 0" ng-click="importer.convertTableIntoDataList()">{{locale.locale_Attempt_Import}}</button>
 </div>
 
 <div class="well container-fluid" ng-show="importer.importThirdStep">
