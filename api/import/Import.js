@@ -190,99 +190,55 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function() {
       var self = this;
 
-      $(".import-progress").val($(".import-progress").val() + 1);
-      this.model.set("datumArray", []);
-      this.model.get("session").setConsultants(this.model.get("consultants"));
-      var consultantsInThisImportSession = [];
-      /* clear out the data list views and datum views
-       *
-       * Copied from SearchEditView
-       */
-      if (this.importPaginatedDataListDatumsView) {
-        this.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
-        var coll = this.importPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
-        //this.importPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
-        while (coll.length > 0) {
-          coll.pop();
-        }
-        delete this.importPaginatedDataListDatumsView.collection;
-        delete this.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
-      }
-      /*
-       * This holds the ordered datums of the temp import data list
-       */
-      // this.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
-      //   collection: new Datums(),
-      //   childViewConstructor: DatumReadView,
-      //   childViewTagName: "li",
-      //   childViewFormat: "latex",
-      //   childViewClass: "row span11"
-      // });
-
-      if (this.dataListView) {
-        this.dataListView.destroy_view();
-        delete this.dataListView.model; //tell the garbage collector we are done.
-      }
+      this.progress.total = this.progress.total + 1;
+      this.datumArray = [];
+      this.consultants = [];
 
       var filename = " typing/copy paste into text area";
       var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
       try {
-        filename = this.model.get("files").map(function(file) {
+        filename = this.files.map(function(file) {
           return file.name;
         }).join(", ");
-        descript = "This is the data list which results from the import of these file(s). " + this.model.get("fileDetails");
+        descript = "This is the data list which results from the import of these file(s). " + this.get("fileDetails");
       } catch (e) {
         //do nothing
       }
-
-      // this.dataListView = new DataListEditView({
-      //   model: new DataList({
-      //     "pouchname": window.app.get("corpus").get("pouchname"),
-      //     "title": "Data from " + filename,
-      //     "description": descript,
-      //     "audioVideo": this.model.get("audioVideo")
-      //   }),
-      // });
-      // this.dataListView.format = "import";
       this.render();
-      // this.importPaginatedDataListDatumsView.renderInElement(
-      //   $("#import-data-list").find(".import-data-list-paginated-view"));
 
-
-      if (this.model.get("session") !== undefined) {
-        if (this.sessionView) {
-          this.sessionView.destroy_view();
-        }
+      if (this.session !== undefined) {
+        this.session.setConsultants(this.consultants);
         /* put metadata in the session goals */
-        var sessionGoal = this.model.get("session").get("sessionFields").where({
-          label: "goal"
-        })[0];
-        if (sessionGoal) {
-          sessionGoal.set("mask", this.model.metadataLines.join("\n") + "\n" + sessionGoal.get("mask"));
-        }
-        // this.sessionView = new SessionEditView({
-        //   model: this.model.get("session")
-        // });
-        // this.sessionView.format = "import";
+        this.session.goal = this.metadataLines.join("\n") + "\n" + this.session.goal;
         this.render('session');
       }
-      /* end views set up */
 
-      this.model.set("datumArray", []);
       var headers = [];
-      $("#csv-table-area").find('th').each(function(index, item) {
-        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, "");
-        if (!newDatumFieldLabel) {
-          return;
+      this.extractedHeader.map(function(item) {
+        /* TODO look up the header instead) */
+        self.corpus.datumFields.debugMode = true;
+        var correspondingDatumField = self.corpus.datumFields.find(self.corpus.datumFields.primaryKey, item, true);
+        if (!correspondingDatumField || correspondingDatumField.length === 0) {
+          correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
+          correspondingDatumField[0].id = item;
+          correspondingDatumField[0].labelLinguists = item;
+          correspondingDatumField[0].help = 'This field came from file import';
+          var lookAgain = self.corpus.datumFields.find(correspondingDatumField[0].id);
+          if(lookAgain.length){
+
+          }
         }
-        if (headers.indexOf(newDatumFieldLabel) >= 0) {
+        console.log('correspondingDatumField ', correspondingDatumField);
+        if (headers.indexOf(correspondingDatumField) >= 0) {
           self.bug("You seem to have some column labels that are duplicated" +
             " (the same label on two columns). This will result in a strange " +
             "import where only the second of the two will be used in the import. " +
             "Is this really what you want?.");
         }
-        headers[index] = newDatumFieldLabel;
+        headers.push(correspondingDatumField[0]);
+        return item;
       });
+      return headers;
       /*
        * Create new datum fields for new columns
        */
@@ -294,7 +250,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         } else if (headers[f] === "ToBeCheckedWithConsultant") {
           // do nothing
         } else {
-          if (this.model.get("datumFields").where({
+          if (this.get("datumFields").where({
             label: headers[f]
           })[0] === undefined) {
             var newfield = new DatumField({
@@ -302,9 +258,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               labelLinguist: headers[f],
               shouldBeEncrypted: "checked",
               userchooseable: "",
-              help: "This field came from file import " + this.model.get("status")
+              help: "This field came from file import " + this.get("status")
             });
-            this.model.get("datumFields").add(newfield);
+            this.get("datumFields").add(newfield);
             window.app.get("corpus").get("datumFields").add(newfield);
           }
         }
@@ -348,7 +304,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       } catch (e) {
         //Import from the array instead of using jquery and html
         self.bug(JSON.stringify(e));
-        var rows = this.model.get("asCSV");
+        var rows = this.get("asCSV");
         for (var r in rows) {
           var datumObject = {};
           var testForEmptyness = "";
@@ -404,7 +360,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           var validationStati = [];
           for (var g in consultants) {
             var consultantusername = consultants[g].toLowerCase();
-            consultantsInThisImportSession.push(consultantusername);
+            this.consultants.push(consultantusername);
             if (!consultantusername) {
               continue;
             }
@@ -549,8 +505,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         var fields = new DatumFields(datumfields);
         var audioVideo = null;
         var audioFileDescriptionsKeyedByFilename = {};
-        if (this.model.get("files") && this.model.get("files").map) {
-          this.model.get("files").map(eachFileDetails);
+        if (this.files && this.files.map) {
+          this.files.map(eachFileDetails);
         }
 
         $.each(array[a], forEachRow);
@@ -563,14 +519,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         // var states = window.app.get("corpus").get("datumStates").clone();
         // d.set("datumStates", states);
-        d.set("session", this.model.get("session"));
+        d.set("session", this.get("session"));
         //these are temp datums, dont save them until the user saves the data list
         this.importPaginatedDataListDatumsView.collection.add(d);
         //        this.dataListView.model.get("datumIds").push(d.id); the datum has no id, cannot put in datumIds
         d.lookForSimilarDatum();
-        this.model.get("datumArray").push(d);
+        this.get("datumArray").push(d);
       }
-      this.model.set("consultants", _.unique(consultantsInThisImportSession).join(","));
+      this.set("consultants", _.unique(this.consultants).join(","));
       this.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
 
       $(".approve-save").removeAttr("disabled");
@@ -658,6 +614,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         deferred.resolve(options);
       });
       return deferred.promise;
+    }
+  },
+
+  render: {
+    value: function(options) {
+      this.warn('Rendering, but the render was not injected for this importer.', options);
     }
   },
 
@@ -806,7 +768,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       /* get the first line and set it to be the header by default */
       var header = [];
       if (rows.length > 3) {
-        firstrow = firstrow.toLowerCase().replace(/[-"'+=?./\[\]{}() ]/g, "");
+        firstrow = firstrow;
         if (hasQuotes) {
           header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split('","');
         } else {
@@ -1447,12 +1409,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         promisses = [];
 
       options = options || {};
+      this.progress = {
+        total: 0,
+        current: 0
+      };
       Q.nextTick(function() {
 
         var fileDetails = [];
         var files = self.files;
 
-
+        self.progress.total = files.length;
         for (var i = 0, file; file = files[i]; i++) {
           var details = [escape(file.name), file.type || 'n/a', '-', file.size, 'bytes, last modified:', file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a'].join(' ');
           self.status = self.status + '; ' + details;
@@ -1546,7 +1512,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   /**
    * This function attempts to guess the format of the file/textarea, and calls the appropriate import handler.
    */
-  guessFormatAndImport: {
+  guessFormatAndPreviewImport: {
     value: function(fileIndex) {
       if (!fileIndex) {
         fileIndex = 0;
