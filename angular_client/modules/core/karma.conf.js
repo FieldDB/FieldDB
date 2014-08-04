@@ -5,6 +5,8 @@ module.exports = function(config) {
   config.set({
     plugins: [
       'karma-chrome-launcher',
+      'karma-firefox-launcher',
+      'karma-phantomjs-launcher',
       'karma-jasmine',
       'karma-ng-html2js-preprocessor'
     ],
@@ -16,15 +18,20 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'app/bower_components/ng-file-upload-shim/angular-file-upload-shim.js',
+      'app/bower_components/jquery/jquery.js',
+      'app/bower_components/jquery-ui/jquery-ui.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
+      'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-resource/angular-resource.js',
       'app/bower_components/angular-cookies/angular-cookies.js',
+      'app/bower_components/angular-touch/angular-touch.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-contenteditable/angular-contenteditable.js',
       'app/bower_components/fielddb/fielddb.js',
       'app/bower_components/ng-file-upload/angular-file-upload.js',
+      'app/bower_components/angular-dragdrop/src/angular-dragdrop.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
@@ -67,7 +74,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
 
     // Continuous Integration mode
