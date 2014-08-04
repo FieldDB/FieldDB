@@ -2,6 +2,9 @@
   "name": "fielddb-angular",
   "version": "0.0.0",
   "dependencies": {
+  },
+  "main": "dist/scripts/scripts.js",
+  "devDependencies": {
     "jquery": "2.0",
     "jquery-ui": "~1.11.0",
     "ng-file-upload-shim": "~1.6.4",
@@ -19,10 +22,7 @@
     "angular-route": "1.2.16",
     "ng-file-upload": "~1.6.4",
     "angular-contenteditable": "~0.3.7",
-    "angular-dragdrop": "~1.0.7"
-  },
-  "main": "dist/scripts/scripts.js",
-  "devDependencies": {
+    "angular-dragdrop": "~1.0.7",
     "angular-mocks": "1.2.15",
     "angular-scenario": "1.2.15"
   }
