@@ -13,9 +13,12 @@ Or, download the [production version][js] and the [optional html templates][html
 [js]: https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/angular_client/modules/core/dist/scripts/scripts.js
 [html_templates]: https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/angular_client/modules/core/dist/scripts/templates.js
 
-In your app load the js and templates(use the default optional, or declare your own):
+In your app load the `script.js` and optionally:
+* `vendor.js` packages together all the dependancies for `fielddb-angular`, or you can use the copies in your own app if they are already there (see `bower.json` for a list of `fielddb-angular`'s dependancies) 
+* `templates.js` if you want to use use some or all of the default tempaltes, or you can declare your own in your own project as long as they have the same name (eg, a custom `user.html`):
 
 ```html
+<script src="bower_components/fielddb-angular/dist/scripts/vendor.js"></script>
 <script src="bower_components/fielddb-angular/dist/scripts/scripts.js"></script>
 <script src="bower_components/fielddb-angular/dist/scripts/templates.js"></script>
 ```
@@ -64,6 +67,26 @@ To show a team's profile:
 
 ```html
 <div data-fielddb-user json="team"></div>
+```
+
+To show a login/logout button:
+
+```html
+<div data-fielddb-authentication json="authentication"></div>
+```
+
+To show an import widget:
+
+```html
+<div data-fielddb-import json="{type: 'users'}"></div>
+```
+
+```html
+<div data-fielddb-import json="{type: 'participants'}"></div>
+```
+
+```html
+<div data-fielddb-import json="{type: 'datum'}"></div>
 ```
 
 
