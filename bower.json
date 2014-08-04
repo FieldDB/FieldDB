@@ -1,7 +1,14 @@
 {
   "name": "fielddb",
   "version": "0.93.3",
-  "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB",
+  "homepage": "http://opensourcefieldlinguistics.github.io/FieldDB/",
+  "bugs": {
+    "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
+  },
   "authors": [
     "cesine <cesine@yahoo.com>",
     "trisapeace <trisapeace@gmail.com>",
