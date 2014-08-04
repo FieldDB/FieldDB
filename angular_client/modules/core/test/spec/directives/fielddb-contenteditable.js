@@ -10,7 +10,7 @@ describe('Directive: fielddb-contenteditable', function() {
   beforeEach(inject(function($rootScope, $compile) {
     el = angular.element('<div> <span contenteditable="true" ng-model="userContent" strip-br="true" select-non-editable="true"> </span><textarea ng-model="userContent"></textarea></div> ');
     scope = $rootScope.$new();
-    scope.userContent='Community Corpus';
+    scope.userContent = 'Community Corpus';
     compileFunction = $compile(el);
     // bring html from templateCache
     scope.$digest();
@@ -34,8 +34,13 @@ describe('Directive: fielddb-contenteditable', function() {
       expect(el.find('textarea').val().trim()).toEqual('Community Corpus');
 
       el.find('span').text('My new title');
-      el.find('span')[0].click();
-      el.find('span')[0].blur();
+      if (el.find('span')[0] && el.find('span')[0].click) {
+        el.find('span')[0].click();
+      }
+      if (el.find('span')[0] && el.find('span')[0].blur) {
+        el.find('span')[0].blur();
+      }
+
       // expect(scope.userContent).toEqual('My new title');
     });
 
