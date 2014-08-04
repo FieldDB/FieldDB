@@ -8,10 +8,11 @@ A library of Angular components which can be reused to create new widgets or das
 
 Install the module with: `bower install fielddb-angular --save`
 
-Or, download the [production version][js] and the [optional html templates][html_templates].
+Or, download the [production version][js],  [optional vendor libraries][vendor], and the [optional html templates][html_templates].
 
-[js]: https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/angular_client/modules/core/dist/scripts/scripts.js
-[html_templates]: https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/angular_client/modules/core/dist/scripts/templates.js
+[js]: https://raw.github.com/OpenSourceFieldlinguistics/bower-fielddb-angular/master/dist/scripts/scripts.js
+[html_templates]: https://raw.github.com/OpenSourceFieldlinguistics/bower-fielddb-angular/master/dist/scripts/templates.js
+[vendor]: https://raw.github.com/OpenSourceFieldlinguistics/bower-fielddb-angular/master/dist/scripts/vendor.js
 
 In your app load the `script.js` and optionally:
 * `vendor.js` packages together all the dependancies for `fielddb-angular`, or you can use the copies in your own app if they are already there (see `bower.json` for a list of `fielddb-angular`'s dependancies) 
@@ -91,13 +92,16 @@ To show an import widget:
 
 
 ## Contributing
+
+Get the source code from https://github.com/OpenSourceFieldlinguistics/FieldDB. (https://github.com/OpenSourceFieldlinguistics/bower-fielddb-angular is only for hosting the bower compiled version) 
+
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 _Also, please don't edit files in the "dist" subdirectory as they are generated via Grunt. You'll find source code in the "lib" subdirectory!_
 
 ## Release History
 
-* Used in corpus pages so far only
+* v2.14.0 second iteration of psycho linguistics dashboard (example at https://github.com/ProjetDeRechercheSurLecriture/DyslexDisorthGame/tree/master/angular_client)
 
 ## License
 Copyright (c) 2013-2014 FieldDB Contributors
