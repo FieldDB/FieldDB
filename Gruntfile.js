@@ -65,7 +65,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js','api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
       },
       test: {
         options: {
@@ -99,9 +99,17 @@ module.exports = function(grunt) {
         tasks: ['jshint:test', 'jasmine_node']
       },
     },
+    exec: {
+      buildFieldDBAngularCore: {
+        cmd: function() {
+          return "bash scripts/build_fielddb_angular_core.sh";
+        }
+      }
+    }
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-jasmine-node');
@@ -114,6 +122,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['jshint', 'browserify', 'uglify']);
   grunt.registerTask('default', ['jshint', 'jasmine_node', 'browserify', 'uglify']);
   grunt.registerTask('default', ['jasmine_node', 'browserify', 'uglify']);
-  grunt.registerTask('travis', ['jasmine_node', 'browserify', 'uglify', 'docs']);
+  grunt.registerTask('travis', ['jasmine_node', 'browserify', 'uglify', 'docs', 'exec:buildFieldDBAngularCore']);
+  grunt.registerTask('fielddb-angular', ['exec:buildFieldDBAngularCore']);
 
 };
