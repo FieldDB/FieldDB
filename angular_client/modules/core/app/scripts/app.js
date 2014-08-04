@@ -10,10 +10,12 @@
 //     });
 // }
 angular.module('fielddbAngularApp', [
+  'ngAnimate',
   'ngCookies',
   'ngResource',
-  'ngSanitize',
   'ngRoute',
+  'ngSanitize',
+  'ngTouch',
   'angularFileUpload',
   'contenteditable',
   'ngDragDrop'
