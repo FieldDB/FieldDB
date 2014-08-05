@@ -1,64 +1,6 @@
 {
   "description": "This is first database which contains the results of your experiment, you can use it to play with the app... When you want to make a real database, click New : Database/Corpus",
-  "participantFields": [{
-    "id": "participantCode",
-    "labelLinguists": "Participant Code",
-    "labelNonLinguists": "Student Number",
-    "labelTranslators": "",
-    "shouldBeEncrypted": false,
-    "showToUserTypes": "psycholinguist",
-    "defaultfield": true,
-    "help": "A field to anonymously identify participants.",
-    "helpLinguists": "A field to anonymously identify your participants (by default it can be a timestamp or a combination of experimenter initials, participant initials and testing day)."
-  }, {
-    "id": "firstName",
-    "labelLinguists": "First Name",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "help": "The first name of the participant to be printed on welcome pages and/or result reports.",
-    "helpLinguists": "The first name of the participant to be printed on welcome pages and/or result reports."
-  }, {
-    "id": "lastName",
-    "labelLinguists": "Last Name",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "help": "The last name of the participant to be printed on welcome pages and/or result reports.",
-    "helpLinguists": "The last name of the participant to be printed on welcome pages and/or result reports."
-  }, {
-    "id": "username",
-    "labelLinguists": "Username",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "help": "Optional username of the participant, if the participant is registered in the system.",
-    "helpLinguists": "Optional username of the participant, if the participant is registered in the system."
-  }, {
-    "id": "dateOfBirth",
-    "labelLinguists": "Date of Birth",
-    "type": "date",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "timestamp": {
-        "start": null,
-        "end": null,
-        "accuracy": null
-      }
-    },
-    "help": "Optional date of birth of the participant, if required by the experimental analysis (ie participants of 20 months performed differently from participants of 22 months).",
-    "helpLinguists": "Optional date of birth of the participant, if required by the experimental analysis (ie participants of 20 months performed differently from participants of 22 months)."
-  }, {
+  "participantFields": [ {
     "id": "courseNumber",
     "labelLinguists": "Course/Class/Section Number",
     "labelNonLinguists": "",
@@ -68,21 +10,6 @@
     "defaultfield": true,
     "help": "Optional course or section number, if used by the participants result reports or experimental conditions.",
     "helpLinguists": "Optional course or section number, if used by the participants result reports or experimental conditions."
-  }, {
-    "id": "gender",
-    "labelLinguists": "Gender",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "choices": ["Female", "Male", "Unknown"],
-      "children": ["Girl", "Boy", "Unknown"],
-      "adult": ["Woman", "Man", "Unknown"]
-    },
-    "help": "Optional gender or biological sex of the participant, if used by the participants result reports or experimental conditions.",
-    "helpLinguists": "Optional gender or biological sex of the participant, if used by the participants result reports or experimental conditions."
   }, {
     "id": "hemisphericDominance",
     "labelLinguists": "Hemispheric dominance (handedness)",
