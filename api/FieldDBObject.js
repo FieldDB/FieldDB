@@ -239,16 +239,23 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       //update to this version
       this.version = FieldDBObject.DEFAULT_VERSION;
 
+      var browserVersion;
+      try {
+        browserVersion = window.navigator.appVersion;
+      } catch (e) {
+        browserVersion = 'PhantomJS unknown';
+      }
+
       this._dateModified = Date.now();
       if (!this.id) {
         this._dateCreated = Date.now();
         this.enteredByUser = {
-          browserVersion: window.navigator.appVersion
+          browserVersion: browserVersion
         };
       } else {
         this.modifiedByUsers = this.modifiedByUsers || [];
         this.modifiedByUsers.push({
-          browserVersion: window.navigator.appVersion
+          browserVersion: browserVersion
         });
       }
 
