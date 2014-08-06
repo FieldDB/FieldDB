@@ -607,7 +607,8 @@
     "labelLinguists": "Confidentiality Setting",
     "labelNonLinguists": "Confidentiality Setting",
     "labelTranslators": "Confidentiality Setting",
-    "shouldBeEncrypted": true,
+    "shouldBeEncrypted": false,
+    "value": "anonymous",
     "showToUserTypes": "all",
     "defaultfield": true,
     "json": {
