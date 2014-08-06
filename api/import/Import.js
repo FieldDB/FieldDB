@@ -5,7 +5,8 @@ var Collection = require('./../Collection').Collection;
 var CORS = require('./../CORS').CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
-// var Datum = require("./../FieldDBObject").FieldDBObject;
+var Participant = require("./../FieldDBObject").FieldDBObject;
+var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumField = require('./../datum/DatumField').DatumField;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -296,7 +297,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       try {
         //Import from html table that the user might have edited.
         this.asCSV.map(function(row) {
-          var datumObject = {};
+          var docToSave = {};
           var testForEmptyness = "";
           for (var index = 0; index < row.length; index++) {
             var item = row[index];
@@ -312,12 +313,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
             //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
             //            }
-            datumObject[headers[index].id] = item.trim();
+            docToSave[headers[index].id] = item.trim();
             testForEmptyness += item.trim();
           }
           //if the table row has more than 2 non-white space characters, enter it as data
           if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
-            array.push(datumObject);
+            array.push(docToSave);
           } else {
             //dont add blank datum
             if (self.debugMode) {
@@ -330,15 +331,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self.bug(JSON.stringify(e));
         var rows = this.asCSV;
         for (var r in rows) {
-          var datumObject = {};
+          var docToSave = {};
           var testForEmptyness = "";
           for (var c in headers) {
-            datumObject[headers[c]] = rows[r][c];
+            docToSave[headers[c]] = rows[r][c];
             testForEmptyness += rows[r][c];
           }
           //if the table row has more than 2 non-white space characters, enter it as data
           if (testForEmptyness.replace(/\W/g, "").length >= 2) {
-            array.push(datumObject);
+            array.push(docToSave);
           } else {
             //dont add blank datum
             if (self.debugMode) {
@@ -347,11 +348,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
         }
       }
-      // for (var datumObject in array) {
-      //   var datum = new Datum(array[datumObject]);
-      //   datum.url = "https://corpusdev.lingsync.org/" + this.corpus.debname;
-      //   datum.save();
-      // }
+      for (var doc in array) {
+        var builtDoc;
+        if (this.importType === 'participants') {
+          builtDoc = new Participant(array[doc]);
+          builtDoc.id = array[doc].participantCode || Date.now();
+        } else {
+          builtDoc = new Datum(array[doc]);
+        }
+        builtDoc.url = "https://corpusdev.lingsync.org/" + this.corpus.debname;
+        console.log('would save', builtDoc);
+        // builtDoc.save();
+      }
 
       return headers;
 
