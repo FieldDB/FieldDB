@@ -177,6 +177,9 @@ describe("FieldDBObject", function() {
       buggy.warn('This will print a warning', buggy);
       buggy.bug('This will print an warning in Nodejs');
       buggy.todo('This will print a todo', buggy);
+      expect(buggy.toJSON().warnMessage).toBeUndefined();
+      expect(buggy.toJSON().bugMesssage).toBeUndefined();
+      expect(buggy.toJSON().todoMessage).toBeUndefined();
     });
 
   });
