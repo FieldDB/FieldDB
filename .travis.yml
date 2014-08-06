@@ -1,7 +1,12 @@
-language: javascript
+language: node_js
 
 node_js:
   - 0.10
+
+# Travis supports running a real browser (Firefox) with a virtual screen. Just update your .travis.yml to set up the virtual screen like this:
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 
 # whitelist
 #branches:
@@ -22,7 +27,8 @@ env:
 before_install:
   # Download and configure deps
   npm install -g grunt-cli &&
-  npm install -g git://github.com/kacperus/jasmine-node.git &&
+  npm install -g bower &&
+  npm install -g jasmine-node &&
   npm install
 before_script:
   # Make sure the emulator has started before running tests
