@@ -1,61 +1,34 @@
-define( [ 
-    "backbone", 
-    "user/UserMask" 
-], function(
-    Backbone,
-    UserMask
-) {
-  var Consultant = UserMask.extend(
-  /** @lends Consultant.prototype */
-  {
-    /**
-     * @class A consultant is a type of user. It has the same information as a user plus extra,
-     * but we want some info (e.g. first & last name, date of birth) to be kept confidential. Consultant's gravatar should 
-     * be locked to default unless he/she wants to be public. 
-     * It also has permissions about the level of access to the data (read only, add/edit). 
-     * 
-     *  
-     * @property {String} consultantcode This is to keep the confidentiality of the consultant (like a participant code in a survey). 
-     * @property {String} birthDate This is consultant's date of birth, to be kept confidential
-     * @property {String} language This is consultant's language 
-     * @property {String} dialect This is consultant's dialect 
-     * 
-     * @description The initialize function probably checks to see if the user is existing and create a new account if it is new. 
-     * 
-     * @extends Backbone.Model
-     * 
-     * @constructs
-     * 
-     */
-    initialize : function(attributes) {
-      Consultant.__super__.initialize.call(this, attributes);
+var Speaker = require('./Speaker').Speaker;
 
-      if(this.get("filledWithDefaults")){
-        this.fillWithDefaults();
-        this.unset("filledWithDefaults");
-      }
-    },
-    
-    fillWithDefaults : function(){
-      this.set("consultantcode" , "");
-//      this.set("birthDate", "");
-      this.set("language", "");
-      this.set("dialect", "");
-    },
-    
-    internalModels : {
-      // There are no nested models
-    },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
-    }
-  });
+/**
+ *
+ * @class The Consultant (commonly refered to as a 'language consultant')
+ * is a type of Speaker with any additional fields or metadata that a
+ * team might use to to cluster consultants into dialects or variations.
+ *
+ * A consultant might also be associated to a user. In this case a consultant
+ * has the same information as a user plus extra, some info (e.g. date of birth)
+ * which must be kept confidential. Consultant's gravatar are default
+ * unless he/she wants to be public associated with/his username.
+ * Consultants which are also users have permissions about the
+ * level of access to the data (read only, add/edit).
+ *
+ *
+ * @name  Consultant
+ * @extends Speaker
+ * @constructs
+ */
+var Consultant = function Consultant(options) {
+  this.debug("Constructing Consultant: ", options);
+  Speaker.apply(this, arguments);
+};
 
-  return Consultant;
-}); 
+Consultant.defaults = Speaker.defaults;
 
+Consultant.prototype = Object.create(Speaker.prototype, /** @lends Consultant.prototype */ {
+  constructor: {
+    value: Consultant
+  }
 
-
+});
+exports.Consultant = Consultant;
