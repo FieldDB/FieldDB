@@ -185,6 +185,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   bug: {
     value: function(message) {
+      this.bugMessage = message;
       try {
         window.alert(message);
       } catch (e) {
@@ -194,6 +195,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   warn: {
     value: function(message, message2, message3, message4) {
+      this.warnMessage = message;
       console.warn('WARN: ' + message);
       if (message2) {
         console.warn(message2);
@@ -541,6 +543,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!json._rev) {
         delete json._rev;
       }
+      delete json.bugMessage;
+      delete json.warnMessage;
 
       return json;
     }
