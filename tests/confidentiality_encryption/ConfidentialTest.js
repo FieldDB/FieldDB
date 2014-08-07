@@ -46,7 +46,7 @@ describe("Confidential: as a language consultant I want to be able to give data 
     });
     confidential.decryptedMode = true;
     confidential.debugMode = true;
-    message = SAMPLE_COMPLEX_OBJECT;
+    var message = SAMPLE_COMPLEX_OBJECT;
     expect(confidential.decrypt(confidential.encrypt(message)).datumFields.length).toEqual(16);
     message = ["zero", "one", "two", "three"];
     expect(confidential.decrypt(confidential.encrypt(message))).toEqual(message);
