@@ -1,7 +1,7 @@
 /* globals window */
-var Q = require("q");
 var CORS = require("./CORS").CORS;
 var Diacritics = require('diacritic');
+var Q = require("q");
 
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
@@ -72,6 +72,10 @@ var Diacritics = require('diacritic');
  */
 var FieldDBObject = function FieldDBObject(json) {
   this.verbose("In parent an json", json);
+  // Set the confidential first, so the rest of the fields can be encrypted
+  if (json && json.confidential) {
+    this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
+  }
   var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
@@ -545,6 +549,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       delete json.bugMessage;
       delete json.warnMessage;
+      if (this._collection !== "private_corpuses") {
+        delete json.confidential;
+      } else {
+        this.warn("serializing confidential in this object " + this._collection);
+      }
 
       return json;
     }
