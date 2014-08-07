@@ -79,6 +79,7 @@ if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
       Corpus.defaults_psycholinguistics[property] = DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL[property];
     }
   }
+  Corpus.defaults_psycholinguistics.participantFields = Corpus.defaults.speakerFields.concat(Corpus.defaults_psycholinguistics.participantFields);
 }
 
 Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
@@ -426,7 +427,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   participantFields: {
     get: function() {
-      return this._participantFields || DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.participantFields;
+      if (!this._participantFields) {
+        this._participantFields = new this.INTERNAL_MODELS['participantFields'](Corpus.defaults_psycholinguistics.participantFields);
+      }
+      return this._participantFields;
     },
     set: function(value) {
       if (value === this._participantFields) {
