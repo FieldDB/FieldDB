@@ -1,4 +1,5 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 
 /**
  * @class The datum fields are the fields in the datum and session models.
@@ -284,7 +285,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           return this._value.trim();
         } else {
           if (!this.decryptedMode) {
-            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
+            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");//" mask: "+ this._mask +" value: " +this._value);
             return this.mask || FieldDBObject.DEFAULT_STRING;
           } else {
             if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
@@ -306,7 +307,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
                 return this.mask;
               }
               var decryptedValue = this.confidential.decrypt(this._encryptedValue);
-              this.debug("decryptedValue", decryptedValue);
+              this.debug("decryptedValue "+ decryptedValue);
               return decryptedValue;
             }
           }
@@ -414,7 +415,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         delete this._mask;
         return;
       }
-      console.log("Setting datum field mask "+ value);
+      console.log("Setting datum field mask " + value);
       this._mask = value.trim();
     }
   },
@@ -732,7 +733,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   createMask: {
     value: function(stringToMask) {
-      return stringToMask.replace(/[^_=. -]/g, "x");
+      return stringToMask.replace(/[^_=., -]/g, "x");
     }
   },
 
@@ -752,6 +753,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     set: function(value) {
       if (value === this.confidentialEncrypter) {
         return;
+      }
+      if (typeof value.encrypt !== "function" && value.secretkey) {
+        value = new Confidential(value);
       }
       this.confidentialEncrypter = value;
     }
