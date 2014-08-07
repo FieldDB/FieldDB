@@ -19,7 +19,9 @@ var regExpEscape = function(s) {
  */
 var Collection = function Collection(json) {
   this.debug('Constructing a collection');
-
+  if (!json) {
+    json = {};
+  }
   /* accepts just an array in construction */
   if (Object.prototype.toString.call(json) === '[object Array]') {
     json = {
@@ -281,8 +283,10 @@ Collection.prototype = Object.create(Object.prototype, {
       /* if not a reserved attribute, set on objcet for dot notation access */
       if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON', 'length'].indexOf(searchingFor) === -1) {
         this[searchingFor] = value;
-        /* also provide a case insensitive cleaned version */
-        this[searchingFor.toLowerCase().replace(/_/g, '')] = value;
+        /* also provide a case insensitive cleaned version if the key can be lower cased */
+        if (typeof searchingFor.toLowerCase === 'function') {
+          this[searchingFor.toLowerCase().replace(/_/g, '')] = value;
+        }
       } else {
         console.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
       }
