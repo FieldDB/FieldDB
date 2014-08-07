@@ -288,7 +288,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     expect(importer.asCSV.length).toEqual(17);
 
     // Step 2: build participants
-    importer.debugMode = true;
+    // importer.debugMode = true;
     var headers = importer.convertTableIntoDataList();
 
     // console.log(JSON.stringify(importer.importFields, null, 2));
