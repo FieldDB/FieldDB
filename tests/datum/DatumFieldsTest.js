@@ -5,8 +5,7 @@ var DatumFields = require('./../../api/datum/DatumFields').DatumFields;
 var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
 
 var sampleDatumFields = function(){
-  return DEFAULT_CORPUS_MODEL.datumFields;
-  // return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
+  return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
 };
 
 describe('lib/DatumFields', function() {
@@ -81,7 +80,7 @@ describe('lib/DatumFields', function() {
 
   describe('array-like construction', function() {
 
-    it('should permit constrution with just an array', function() {
+    it('should permit construction with just an array', function() {
       var newcollection = new DatumFields([
         sampleDatumFields()[0],
         sampleDatumFields()[1]

@@ -71,16 +71,6 @@ var Corpus = function Corpus(options) {
   this.debug("Constructing corpus", options);
   FieldDBObject.apply(this, arguments);
 };
-Corpus.defaults = DEFAULT_CORPUS_MODEL;
-if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
-  Corpus.defaults_psycholinguistics = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
-  for (var property in DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
-    if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.hasOwnProperty(property)) {
-      Corpus.defaults_psycholinguistics[property] = DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL[property];
-    }
-  }
-  Corpus.defaults_psycholinguistics.participantFields = Corpus.defaults.speakerFields.concat(Corpus.defaults_psycholinguistics.participantFields);
-}
 
 Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
   constructor: {
@@ -428,7 +418,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   participantFields: {
     get: function() {
       if (!this._participantFields) {
-        this._participantFields = new this.INTERNAL_MODELS['participantFields'](Corpus.defaults_psycholinguistics.participantFields);
+        this._participantFields = new this.INTERNAL_MODELS['participantFields'](Corpus.prototype.defaults_psycholinguistics.participantFields);
       }
       return this._participantFields;
     },
@@ -614,7 +604,24 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   defaults: {
     get: function() {
-      return DEFAULT_CORPUS_MODEL;
+      return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
+    }
+  },
+
+  defaults_psycholinguistics: {
+    get: function() {
+      var doc = this.defaults;
+
+      if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+        for (var property in DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+          if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.hasOwnProperty(property)) {
+            doc[property] = DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL[property];
+          }
+        }
+        doc.participantFields = this.defaults.speakerFields.concat(doc.participantFields);
+      }
+
+      return JSON.parse(JSON.stringify(doc));
     }
   },
 

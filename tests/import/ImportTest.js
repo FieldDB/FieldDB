@@ -17,7 +17,7 @@ describe("api/import/Import", function() {
   });
 
   it("should be able to use a corpus", function() {
-    var corpus = new Corpus(Corpus.defaults);
+    var corpus = new Corpus(Corpus.prototype.defaults);
     expect(corpus).toBeDefined();
     corpus.debug(corpus);
     expect(corpus.dbname).toBeDefined();
@@ -31,7 +31,7 @@ describe("api/import/Import", function() {
 
   it("should be able to ask the corpus to create a datum", function() {
     var dbname = "testingcorpusinimport-firstcorpus";
-    var corpus = new Corpus(Corpus.defaults);
+    var corpus = new Corpus(Corpus.prototype.defaults);
     corpus.dbname = dbname;
     var datum = corpus.newDatum();
     corpus.debug(datum);
@@ -69,7 +69,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
 
   beforeEach(function() {
     var dbname = "testingbatchimport-rawtext";
-    corpus = new Corpus(Corpus.defaults);
+    corpus = new Corpus(Corpus.prototype.defaults);
     corpus.dbname = dbname;
     corpus.language = {
       "ethnologueUrl": "",
@@ -273,7 +273,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
   it("should process csv participants", function() {
     var dbname = "testingcorpusinimport-firstcorpus";
-    var corpus = new Corpus(Corpus.defaults_psycholinguistics);
+    var corpus = new Corpus(Corpus.prototype.defaults_psycholinguistics);
     corpus.dbname = dbname;
 
     var importer = new Import({
@@ -284,6 +284,18 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     importer.importCSV(importer.rawText, importer);
     expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
     expect(importer.asCSV.length).toEqual(17);
+
+    // return;
+    // importer.debugMode = true;
+    // // console.log(corpus.participantFields.find('anonymouscode'));
+
+    // var headers = importer.convertTableIntoDataList();
+    // console.log(JSON.stringify(headers, null, 2));
+    // expect(headers[0].id).toEqual("anonymousCode");
+    // expect(headers[1].id).toEqual('courseNumber');
+    // expect(headers[2].id).toEqual('firstname');
+    // expect(headers[3].id).toEqual('lastname');
+    // expect(headers[4].id).toEqual('dateOfBirth');
 
   });
 
@@ -315,7 +327,7 @@ describe("Import: as a morphologist I want to import my data from CSV", function
   var importer;
   beforeEach(function() {
     var dbname = "testingcorpusinimport-firstcorpus";
-    var corpus = new Corpus(Corpus.defaults);
+    var corpus = new Corpus(Corpus.prototype.defaults);
     corpus.dbname = dbname;
 
     importer = new Import({
