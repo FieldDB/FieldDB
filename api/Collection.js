@@ -442,6 +442,54 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       return value;
     }
+  },
+
+  encrypted: {
+    get: function() {
+      return;
+    },
+    set: function(value) {
+      if (this._collection) {
+        if (this._collection.map === undefined) {
+          this.warn("This collection isn't an array, this is odd", this);
+        }
+        this._collection.map(function(item) {
+          item.encrypted = value;
+        });
+      }
+    }
+  },
+
+  confidential: {
+    get: function() {
+      return;
+    },
+    set: function(value) {
+      if (this._collection) {
+        if (this._collection.map === undefined) {
+          this.warn("This collection isn't an array, this is odd", this);
+        }
+        this._collection.map(function(item) {
+          item.confidential = value;
+        });
+      }
+    }
+  },
+
+  decryptedMode: {
+    get: function() {
+      return;
+    },
+    set: function(value) {
+      if (this._collection) {
+        if (this._collection.map === undefined) {
+          this.warn("This collection isn't an array, this is odd", this);
+        }
+        this._collection.map(function(item) {
+          item.decryptedMode = value;
+        });
+      }
+    }
   }
 
 
