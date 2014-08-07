@@ -551,6 +551,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json.warnMessage;
       if (this._collection !== "private_corpuses") {
         delete json.confidential;
+        delete json.confidentialEncrypter;
       } else {
         this.warn("serializing confidential in this object " + this._collection);
       }
