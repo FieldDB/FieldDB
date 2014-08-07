@@ -33,7 +33,7 @@ describe("Corpus", function() {
     });
 
     it("should not be able to change a dbname if it has been set", function() {
-      var corpus = new Corpus(Corpus.defaults);
+      var corpus = new Corpus(Corpus.prototype.defaults);
       expect(corpus.dbname).toEqual("");
       corpus.dbname = "testingdefaultcorpuscreation-kartuli";
       expect(function() {
@@ -48,8 +48,8 @@ describe("Corpus", function() {
     var corpus;
 
     beforeEach(function() {
-      // console.log(Corpus.defaults);
-      corpus = new Corpus(Corpus.defaults);
+      // console.log(Corpus.prototype.defaults);
+      corpus = new Corpus(Corpus.prototype.defaults);
       corpus.dbname = "testingnewdatum-kartuli";
     });
 
@@ -136,7 +136,7 @@ describe("Corpus", function() {
 
 describe("Corpus: as a psycholinguist I want to have any number of fields on my participants.", function() {
   it("should be have speaker fields on participants", function() {
-    expect(Corpus.defaults_psycholinguistics.participantFields.length).toBe(10);
+    expect(Corpus.prototype.defaults_psycholinguistics.participantFields.length).toBe(10);
   });
 });
 
