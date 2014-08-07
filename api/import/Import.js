@@ -227,7 +227,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       this.extractedHeader.map(function(item) {
         /* TODO look up the header instead) */
-        self.importFields.debugMode = true;
+        // self.importFields.debugMode = true;
         var correspondingDatumField = self.importFields.find(self.importFields.primaryKey, item, true);
         if (!correspondingDatumField || correspondingDatumField.length === 0) {
           correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
@@ -239,7 +239,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
           }
         }
-        console.log('correspondingDatumField ', correspondingDatumField);
+        // console.log('correspondingDatumField ', correspondingDatumField);
         if (headers.indexOf(correspondingDatumField) >= 0) {
           self.bug("You seem to have some column labels that are duplicated" +
             " (the same label on two columns). This will result in a strange " +
@@ -341,7 +341,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           } else {
             docToSave.datumFields[headers[index].id].value = item.trim();
           }
-          console.log('new doc', docToSave);
+          // console.log('new doc', docToSave);
 
           testForEmptyness += item.trim();
         }
@@ -360,10 +360,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.documentCollection._collection.map(function(builtDoc) {
         if (self.importType === 'participants') {
           builtDoc.id = builtDoc.anonymousCode || Date.now();
+          builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
+          // console.log(' saving', builtDoc.id);
+          savePromises.push(builtDoc.save());
         }
-        builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
-        console.log(' saving', builtDoc.id);
-        savePromises.push(builtDoc.save());
       });
 
 
