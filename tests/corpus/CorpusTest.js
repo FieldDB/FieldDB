@@ -134,6 +134,13 @@ describe("Corpus", function() {
 
 });
 
+describe("Corpus: as a psycholinguist I want to have any number of fields on my participants.", function() {
+  it("should be have speaker fields on participants", function() {
+    expect(Corpus.defaults_psycholinguistics.participantFields.length).toBe(10);
+  });
+});
+
+
 xdescribe("Corpus: as a team we want to be able to go back in time in the corpus revisions", function() {
   it("should be able to import from GitHub repository", function() {
     expect(true).toBeTruthy();
