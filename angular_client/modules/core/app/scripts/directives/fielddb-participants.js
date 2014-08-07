@@ -38,12 +38,12 @@ angular.module('fielddbAngularApp').directive('fielddbParticipants', function() 
 
     };
 
-    $scope.$watch('authentication.user', function(newValue, oldValue) {
-      if (newValue) {
-        console.log('user is authenticated.');
-        fetchParticipants();
-      }
-    });
+    // $scope.$watch('authentication.user', function(newValue) {
+    //   if (newValue) {
+    //     console.log('user is authenticated.');
+    //     fetchParticipants();
+    //   }
+    // });
 
     window.setTimeout(function() {
       fetchParticipants();
