@@ -278,25 +278,37 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
     var importer = new Import({
       corpus: corpus,
-      rawText: fs.readFileSync('sample_data/students.csv', 'utf8')
+      rawText: fs.readFileSync('sample_data/students.csv', 'utf8'),
+      importType: "participants"
     });
 
+    // Step 1: import CSV
     importer.importCSV(importer.rawText, importer);
     expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
     expect(importer.asCSV.length).toEqual(17);
 
-    // return;
-    // importer.debugMode = true;
-    // // console.log(corpus.participantFields.find('anonymouscode'));
+    // Step 2: build participants
+    importer.debugMode = true;
+    var headers = importer.convertTableIntoDataList();
 
-    // var headers = importer.convertTableIntoDataList();
-    // console.log(JSON.stringify(headers, null, 2));
-    // expect(headers[0].id).toEqual("anonymousCode");
-    // expect(headers[1].id).toEqual('courseNumber');
-    // expect(headers[2].id).toEqual('firstname');
-    // expect(headers[3].id).toEqual('lastname');
-    // expect(headers[4].id).toEqual('dateOfBirth');
+    // console.log(JSON.stringify(importer.importFields, null, 2));
+    expect(headers[0].id).toEqual("anonymousCode");
+    expect(headers[1].id).toEqual('courseNumber');
+    expect(headers[2].id).toEqual('firstName');
+    expect(headers[3].id).toEqual('lastName');
+    expect(headers[4].id).toEqual('dateOfBirth');
 
+    importer.documentCollection._collection[1].fields.decryptedMode = true;
+    expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual('Damiane');
+    expect(importer.documentCollection._collection[1].fields.firstname.mask).toEqual('xxxxxxx');
+
+    importer.documentCollection._collection[2].fields.decryptedMode = true;
+    expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual('Ariane');
+    expect(importer.documentCollection._collection[2].fields.firstname.mask).toEqual('xxxxxx');
+
+    importer.documentCollection._collection[3].fields.decryptedMode = true;
+    expect(importer.documentCollection._collection[3].fields.firstname.value).toEqual('Michel');
+    expect(importer.documentCollection._collection[3].fields.firstname.mask).toEqual('xxxxxx');
   });
 
 
