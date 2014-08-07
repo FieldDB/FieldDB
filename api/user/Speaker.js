@@ -12,7 +12,7 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
  * Each consultant has their own I-language and/or dialects which they
  * speak (unlike a published source which usually discusses an E-language
  * or standard or normal expected production of an utterance.)
- * Speakers can have any number of additional speakerFields or metadata
+ * Speakers can have any number of additional fields or metadata
  * that a team might use to help cluster or understand variation in data.
  *
  * As 'Informant' is not politically correct in many contexts, and 'consultant' is
@@ -35,10 +35,6 @@ var Speaker = function Speaker(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-Speaker.defaults = {
-  speakerFields: DEFAULT_CORPUS_MODEL.speakerFields
-};
-
 Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.prototype */ {
   constructor: {
     value: Speaker
@@ -57,26 +53,35 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
       username: FieldDBObject.DEFAULT_STRING,
       anonymousCode: FieldDBObject.DEFAULT_STRING,
       gravatar: FieldDBObject.DEFAULT_STRING,
-      speakerFields: DatumFields,
+      fields: DatumFields,
       user: UserMask,
       confidential: Confidential
     }
   },
 
+  defaults: {
+    get: function() {
+      var doc = {
+        fields: DEFAULT_CORPUS_MODEL.speakerFields
+      };
+      return JSON.parse(JSON.stringify(doc));
+    }
+  },
+
   confidentiality: {
     get: function() {
-      if (this.speakerFields) {
-        return this.speakerFields.confidentiality.value;
+      if (this.fields) {
+        return this.fields.confidentiality.value;
       } else {
         return;
       }
     },
     set: function(value) {
-      if (!this.speakerFields) {
-        this.speakerFields = new DatumFields(JSON.parse(JSON.stringify(Speaker.defaults.speakerFields)));
+      if (!this.fields) {
+        this.fields = new DatumFields(this.defaults.fields);
       }
       // this.warn("Cannot change the public/private of " + this.collection + " (it must be anonymous). " + value);
-      this.speakerFields.confidentiality.value = value;
+      this.fields.confidentiality.value = value;
     }
   },
 
@@ -99,63 +104,78 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
 
   username: {
     get: function() {
-      console.log('this.speakerFields.username.value :', this.speakerFields.username.value + ":");
-      if (this.speakerFields && this.speakerFields.username && this.speakerFields.username.value) {
+      if (this.fields && this.fields.username && this.fields.username.value) {
+        console.log('this.fields.username.value :', this.fields.username.value + ":");
 
-        if (this.speakerFields.confidentiality.value === "generalize") {
-          this.speakerFields.username.mask = "A native speaker";
-        } else if (this.speakerFields.confidentiality.value === "team") {
+        if (this.fields.confidentiality.value === "generalize") {
+          this.fields.username.mask = "A native speaker";
+        } else if (this.fields.confidentiality.value === "team") {
           this.todo("IF the user is part of the team, they can see the username of the consultant.");
-          this.speakerFields.username.mask = this.anonymousCode;
-        } else if (this.speakerFields.confidentiality.value === "anonymous") {
-          this.speakerFields.username.mask = this.anonymousCode;
-        } else if (this.speakerFields.confidentiality.value === "public") {
-          this.speakerFields.speaker.mask = value;
+          this.fields.username.mask = this.anonymousCode;
+        } else if (this.fields.confidentiality.value === "anonymous") {
+          this.fields.username.mask = this.anonymousCode || this.fields.username.mask;
+        } else if (this.fields.confidentiality.value === "public") {
+          this.fields.username.mask = this.fields.username.value;
         } else {
-          this.speakerFields.username.mask = "A native speaker";
+          this.fields.username.mask = "A native speaker";
         }
 
-        return this.speakerFields.username.mask;
+        if (this.fields.username.decryptedMode) {
+          return this.fields.username.value;
+        } else {
+          return this.fields.username.mask;
+        }
       } else {
         return;
       }
     },
     set: function(value) {
       if (!this.confidential) {
-        this.warn("Cannot set the username before the anonymousCode is set");
+        this.warn("Cannot set the username before the confidential is set");
         return;
       }
-      if (!this.speakerFields) {
-        this.speakerFields = new DatumFields(JSON.parse(JSON.stringify(Speaker.defaults.speakerFields)));
+      if (!this.fields) {
+        this.fields = new DatumFields(this.defaults.fields);
       }
-      this.speakerFields.username.debugMode = true;
-      // this.speakerFields.username.decryptedMode = true;
-      this.speakerFields.username.confidential = this.confidential;
-      this.speakerFields.username.encrypted = true;
-      this.speakerFields.username.value = value;
+      // this.fields.username.debugMode = true;
+      // this.fields.username.decryptedMode = true;
+      this.fields.username.confidential = this.confidential;
+      this.fields.username.value = value;
     }
   },
 
+  encryptByCorpus: {
+    value: true
+  },
   anonymousCode: {
     get: function() {
-      if (this.speakerFields) {
-        return this.speakerFields.anonymousCode.value;
+      if (this.fields) {
+        return this.fields.anonymousCode.value;
       } else {
         return;
       }
     },
     set: function(value) {
-      if (this.username && value.toLowerCase().indexOf(this.username) > -1) {
+      var actualUsername;
+      if (this.fields && this.fields.username && this.fields.username.value) {
+        this.fields.username.decryptedMode = true;
+        actualUsername = this.fields.username.value;
+        this.fields.username.decryptedMode = false;
+      }
+      if (actualUsername && value.toLowerCase().indexOf(actualUsername) > -1) {
         this.bug('Cannot set the anonymous code to contain any part of the user\'s actual username, this would potentially breach their confidentiality.');
         return;
       }
-      if (!this.speakerFields) {
-        this.speakerFields = new DatumFields(JSON.parse(JSON.stringify(Speaker.defaults.speakerFields)));
+      if (!this.fields) {
+        this.fields = new DatumFields(this.defaults.fields);
       }
-      this.speakerFields.anonymousCode.value = value;
-      this.confidential = new Confidential({
-        secretkey: value
-      });
+      this.fields.anonymousCode.value = value;
+      this.id = value;
+      if (!this.encryptByCorpus) {
+        this.confidential = new Confidential({
+          secretkey: value
+        });
+      }
     }
   },
 
@@ -167,84 +187,98 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
       if (value === this.confidentialEncrypter) {
         return;
       }
+      if (typeof value.encrypt !== "function" && value.secretkey) {
+        value = new this.INTERNAL_MODELS['confidential'](value);
+      }
       this.confidentialEncrypter = value;
+      if (this.fields) {
+        console.log('setting speaker fields confidential in the Speaker.confidential set function.');
+        this.fields.confidential = value;
+      }
     }
   },
 
   dateOfBirth: {
     get: function() {
-      if (this.speakerFields) {
-        return this.speakerFields.dateOfBirth.value;
+      if (this.fields) {
+        return this.fields.dateOfBirth.value;
       } else {
         return;
       }
     },
     set: function(value) {
-      if (this.speakerFields) {
-        this.speakerFields.debugMode = true;
-        this.speakerFields.dateOfBirth.value = value;
+      if (this.fields) {
+        this.fields.debugMode = true;
+        this.fields.dateOfBirth.value = value;
       } else {
-        this.speakerFields = new DatumFields(JSON.parse(JSON.stringify(Speaker.defaults.speakerFields)));
-        this.speakerFields.dateOfBirth.value = value;
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.dateOfBirth.value = value;
       }
     }
   },
 
   languages: {
     get: function() {
-      if (this.speakerFields) {
-        return this.speakerFields.languages.value;
+      if (this.fields) {
+        return this.fields.languages.value;
       } else {
         return;
       }
     },
     set: function(value) {
-      if (this.speakerFields) {
-        this.speakerFields.debugMode = true;
-        this.speakerFields.languages.value = value;
+      if (this.fields) {
+        this.fields.debugMode = true;
+        this.fields.languages.value = value;
       } else {
-        this.speakerFields = new DatumFields(JSON.parse(JSON.stringify(Speaker.defaults.speakerFields)));
-        this.speakerFields.languages.value = value;
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.languages.value = value;
       }
     }
   },
 
   dialects: {
     get: function() {
-      if (this.speakerFields) {
-        return this.speakerFields.languages.value;
+      if (this.fields) {
+        return this.fields.languages.value;
       } else {
         return;
       }
     },
     set: function(value) {
-      if (this.speakerFields) {
-        this.speakerFields.debugMode = true;
-        this.speakerFields.languages.value = value;
+      if (this.fields) {
+        this.fields.debugMode = true;
+        this.fields.languages.value = value;
       } else {
-        this.speakerFields = new DatumFields(JSON.parse(JSON.stringify(Speaker.defaults.speakerFields)));
-        this.speakerFields.languages.value = value;
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.languages.value = value;
       }
     }
   },
 
-  speakerFields: {
+  fields: {
     get: function() {
-      return this._speakerFields;
+      if (this._fields) {
+        console.log('setting speaker fields confidential in the Speaker.fields get function.');
+
+        // this._fields.encrypted = true;
+        // this._fields.decryptedMode = true;
+        this._fields.confidential = this.confidential;
+      }
+      return this._fields;
     },
     set: function(value) {
-      if (value === this._speakerFields) {
+      if (value === this._fields) {
         return;
       }
       if (!value) {
-        delete this._speakerFields;
+        delete this._fields;
         return;
       } else {
         if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['speakerFields'](value);
+          value = new this.INTERNAL_MODELS['fields'](value);
         }
       }
-      this._speakerFields = value;
+      this._fields = value;
     }
   },
 
@@ -278,7 +312,19 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
       }
       this.userMask = value;
     }
+  },
+
+  decryptedMode: {
+    get: function() {
+      return;
+    },
+    set: function(value) {
+      if (this._fields) {
+        this._fields.decryptedMode = value;
+      }
+    }
   }
+
 
 });
 exports.Speaker = Speaker;
