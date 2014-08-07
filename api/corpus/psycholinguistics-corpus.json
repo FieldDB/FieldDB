@@ -6,6 +6,7 @@
     "labelNonLinguists": "",
     "labelTranslators": "",
     "shouldBeEncrypted": true,
+    "encrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
     "help": "Optional course or section number, if used by the participants result reports or experimental conditions.",
