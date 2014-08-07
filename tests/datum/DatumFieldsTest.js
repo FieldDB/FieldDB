@@ -4,7 +4,10 @@ var DatumField = require('./../../api/datum/DatumField').DatumField;
 var DatumFields = require('./../../api/datum/DatumFields').DatumFields;
 var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
 
-var sampleDatumFields = DEFAULT_CORPUS_MODEL.datumFields;
+var sampleDatumFields = function(){
+  return DEFAULT_CORPUS_MODEL.datumFields;
+  // return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
+};
 
 describe('lib/DatumFields', function() {
 
@@ -19,7 +22,7 @@ describe('lib/DatumFields', function() {
       // console.log("beforeEach");
       collection = new DatumFields({
         inverted: true,
-        collection: [sampleDatumFields[0], sampleDatumFields[2]]
+        collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
       });
     });
 
@@ -38,18 +41,18 @@ describe('lib/DatumFields', function() {
           id: 'thisIsCamelCase'
         }]
       });
-      console.log(collection._collection);
+      // console.log(collection._collection);
       expect(collection.thisIsCamelCase).toBeDefined();
       expect(collection.thisiscamelcase).toBeDefined();
       expect(collection._collection.length).toEqual(1);
     });
 
     it('should use the primary key for find', function() {
-      expect(collection.find('utterance')[0].id).toEqual(sampleDatumFields[2].id);
+      expect(collection.find('utterance')[0].id).toEqual(sampleDatumFields()[2].id);
     });
 
     it('should accept inverted', function() {
-      expect(collection.collection[0].id).toEqual(sampleDatumFields[2].id);
+      expect(collection.collection[0].id).toEqual(sampleDatumFields()[2].id);
     });
 
     it('should accept model of items to be defined', function() {
@@ -80,8 +83,8 @@ describe('lib/DatumFields', function() {
 
     it('should permit constrution with just an array', function() {
       var newcollection = new DatumFields([
-        sampleDatumFields[0],
-        sampleDatumFields[1]
+        sampleDatumFields()[0],
+        sampleDatumFields()[1]
       ]);
       expect(newcollection.length).toEqual(2);
     });
@@ -96,8 +99,8 @@ describe('lib/DatumFields', function() {
         inverted: true
       });
 
-      collection.add(sampleDatumFields[0]);
-      collection.add(sampleDatumFields[2]);
+      collection.add(sampleDatumFields()[0]);
+      collection.add(sampleDatumFields()[2]);
     });
 
     it('should be able to add items', function() {
@@ -105,13 +108,13 @@ describe('lib/DatumFields', function() {
     });
 
     it('should permit push to add to the bottom', function() {
-      collection.push(sampleDatumFields[3]);
-      expect(collection.collection[2]).toEqual(sampleDatumFields[3]);
+      collection.push(sampleDatumFields()[3]);
+      expect(collection.collection[2]).toEqual(sampleDatumFields()[3]);
     });
 
     it('should permit unshift to add to the top', function() {
-      collection.unshift(sampleDatumFields[4]);
-      expect(collection.collection[0]).toEqual(sampleDatumFields[4]);
+      collection.unshift(sampleDatumFields()[4]);
+      expect(collection.collection[0]).toEqual(sampleDatumFields()[4]);
     });
 
   });
@@ -121,7 +124,7 @@ describe('lib/DatumFields', function() {
 
     beforeEach(function() {
       collection = new DatumFields({
-        collection: sampleDatumFields
+        collection: sampleDatumFields()
       });
       collection.utterance.value = "Noqata tusunayawanmi";
       collection.morphemes.value = "Noqa-ta tusu-naya-wa-n-mi";
@@ -141,7 +144,7 @@ describe('lib/DatumFields', function() {
     });
 
     it('should be able to find items by any attribute', function() {
-      expect(collection.find('help', 'What was said/written using the alphabet/writing system of the language.')[0].id).toEqual(sampleDatumFields[1].id);
+      expect(collection.find('help', 'What was said/written using the alphabet/writing system of the language.')[0].id).toEqual(sampleDatumFields()[1].id);
     });
 
     it('should accpet a RegExp to find items', function() {
@@ -159,7 +162,8 @@ describe('lib/DatumFields', function() {
 
     it('should be able to clone an existing collection', function() {
       var newbarecollection = collection.clone();
-      // expect(newbarecollection).toEqual(sampleDatumFields);
+      // console.log(newbarecollection);
+      // expect(newbarecollection).toEqual(sampleDatumFields());
       var newcollection = new DatumFields(newbarecollection);
       expect(newcollection.utterance.value).toEqual(collection.utterance.value);
       expect(newcollection.utterance.mask).toEqual(collection.utterance.mask);
@@ -321,4 +325,49 @@ describe('lib/DatumFields', function() {
 
   });
 
+  describe('confidentiality', function() {
+
+    it('should be able to set an encrypter on any DatumField', function() {
+      var doc = new DatumField();
+      doc.confidential = {
+        secretkey: 'secretkey'
+      };
+      expect(doc.confidential.secretkey).toEqual('secretkey');
+    });
+  });
+
+
+  describe('confidentiality', function() {
+    var fields;
+
+    beforeEach(function() {
+      fields = new DatumFields({
+        inverted: true,
+        collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
+      });
+    });
+
+    it('should be able to set encrypted on members of  datumfields', function() {
+      fields.encrypted = true;
+      // console.log(fields);
+      expect(fields.judgement.encrypted).toEqual(true);
+    });
+
+    it('should be able to set confidential on members of a datumfields', function() {
+      fields.confidential = {
+        secretkey: 'secretkey'
+      };
+      fields.encrypted = true;
+      fields.decryptedMode = true;
+
+      expect(fields.judgement.confidential.secretkey).toEqual('secretkey');
+      expect(fields.utterance.confidential.secretkey).toEqual('secretkey');
+      expect(typeof fields.judgement.confidential.encrypt).toEqual('function');
+      expect(typeof fields.utterance.confidential.encrypt).toEqual('function');
+      fields.utterance.value = "hi";
+      expect(fields.utterance.mask).toEqual('xx');
+      fields.judgement.value = "*";
+      expect(fields.judgement.mask).toEqual('*');
+    });
+  });
 });

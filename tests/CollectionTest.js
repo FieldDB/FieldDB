@@ -2,6 +2,7 @@
 
 var Collection = require('../api/Collection').Collection;
 var DEFAULT_DATUM_VALIDATION_STATI = require("./../api/datum/validation-status.json");
+
 /*
   ======== A Handy Little Jasmine Reference ========
 https://github.com/pivotal/jasmine/wiki/Matchers
@@ -42,6 +43,9 @@ https://github.com/pivotal/jasmine/wiki/Matchers
     });
 
 */
+var useDefaults = function() {
+  return JSON.parse(JSON.stringify(DEFAULT_DATUM_VALIDATION_STATI));
+};
 
 describe('lib/Collection', function() {
 
@@ -59,8 +63,8 @@ describe('lib/Collection', function() {
         capitalizeFirstCharacterOfPrimaryKeys: true
       });
 
-      collection.add(DEFAULT_DATUM_VALIDATION_STATI[0]);
-      collection.add(DEFAULT_DATUM_VALIDATION_STATI[1]);
+      collection.add(useDefaults()[0]);
+      collection.add(useDefaults()[1]);
     });
 
     it('should accept a primary key', function() {
@@ -68,22 +72,22 @@ describe('lib/Collection', function() {
     });
 
     it('should use the primary key to get members using dot notation', function() {
-      expect(collection.Published).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
-      expect(collection.published).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
+      expect(collection.Published).toEqual(useDefaults()[1]);
+      expect(collection.published).toEqual(useDefaults()[1]);
     });
 
     it('should accept inverted', function() {
-      expect(collection.collection[0]).toEqual(DEFAULT_DATUM_VALIDATION_STATI[1]);
+      expect(collection.collection[0]).toEqual(useDefaults()[1]);
     });
 
     it('should permit push to add to the bottom', function() {
-      collection.push(DEFAULT_DATUM_VALIDATION_STATI[2]);
-      expect(collection.collection[2]).toEqual(DEFAULT_DATUM_VALIDATION_STATI[2]);
+      collection.push(useDefaults()[2]);
+      expect(collection.collection[2]).toEqual(useDefaults()[2]);
     });
 
     it('should permit unshift to add to the top', function() {
-      collection.unshift(DEFAULT_DATUM_VALIDATION_STATI[2]);
-      expect(collection.collection[0]).toEqual(DEFAULT_DATUM_VALIDATION_STATI[2]);
+      collection.unshift(useDefaults()[2]);
+      expect(collection.collection[0]).toEqual(useDefaults()[2]);
     });
 
     it('should permit constrution with just an array', function() {
@@ -109,18 +113,18 @@ describe('lib/Collection', function() {
     beforeEach(function() {
       collection = new Collection({
         primaryKey: 'validationStatus',
-        collection: DEFAULT_DATUM_VALIDATION_STATI,
+        collection: useDefaults(),
         capitalizeFirstCharacterOfPrimaryKeys: true
       });
       collection.debugMode = true;
     });
 
     it('should seem like an object by providing dot notation for primaryKeys ', function() {
-      expect(collection.Checked).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(collection.Checked).toEqual(useDefaults()[0]);
     });
 
     it('should seem like an object by providing case insensitive cleaned dot notation for primaryKeys ', function() {
-      expect(collection.checked).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(collection.checked).toEqual(useDefaults()[0]);
     });
 
     it('should return undefined for items which are not in the collection', function() {
@@ -128,7 +132,7 @@ describe('lib/Collection', function() {
     });
 
     it('should be able to find items by primary key', function() {
-      expect(collection.find('Checked*')).toEqual([DEFAULT_DATUM_VALIDATION_STATI[0]]);
+      expect(collection.find('Checked*')).toEqual([useDefaults()[0]]);
     });
 
     it('should be able to find items by primary key using a regex', function() {
@@ -136,7 +140,7 @@ describe('lib/Collection', function() {
         validationStatus: 'CheckedBySeberina',
         color: 'green'
       });
-      expect(collection.find(/^Checked*/)).toEqual([DEFAULT_DATUM_VALIDATION_STATI[0], {
+      expect(collection.find(/^Checked*/)).toEqual([useDefaults()[0], {
         validationStatus: 'CheckedBySeberina',
         color: 'green'
       }]);
@@ -189,7 +193,7 @@ describe('lib/Collection', function() {
 
     it('should be able to clone an existing collection', function() {
       var newbarecollection = collection.clone();
-      expect(newbarecollection).toEqual(DEFAULT_DATUM_VALIDATION_STATI);
+      expect(newbarecollection).toEqual(useDefaults());
       var newcollection = new Collection({
         primaryKey: "validationStatus",
         collection: newbarecollection
@@ -198,8 +202,8 @@ describe('lib/Collection', function() {
         validationStatus: "Checked",
         color: "blue"
       };
-      expect(collection.checked).toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
-      expect(newcollection.checked).not.toEqual(DEFAULT_DATUM_VALIDATION_STATI[0]);
+      expect(collection.checked).toEqual(useDefaults()[0]);
+      expect(newcollection.checked).not.toEqual(useDefaults()[0]);
       expect(collection.checked).not.toEqual(newcollection.checked);
     });
 
@@ -255,4 +259,28 @@ describe('lib/Collection', function() {
 
   });
 
+  describe('confidentiality', function() {
+    var collection;
+
+    beforeEach(function() {
+      collection = new Collection({
+        primaryKey: 'validationStatus',
+        collection: useDefaults(),
+        capitalizeFirstCharacterOfPrimaryKeys: true
+      });
+      collection.debugMode = true;
+    });
+
+    it('should be able to set encrypted on members of a collection', function() {
+      collection.encrypted = true;
+      expect(collection.checked.encrypted).toEqual(true);
+    });
+
+    it('should be able to set confidential on members of a collection', function() {
+      collection.confidential = {
+        secretkey: 'secretkey'
+      };
+      expect(collection.checked.confidential.secretkey).toEqual('secretkey');
+    });
+  });
 });
