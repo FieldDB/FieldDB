@@ -555,6 +555,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       } else {
         this.warn("serializing confidential in this object " + this._collection);
       }
+      if (this.dataType) {
+        json.dataType = this.dataType;
+      }
 
       return json;
     }

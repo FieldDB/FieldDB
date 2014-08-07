@@ -40,7 +40,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
     value: Speaker
   },
 
-  collection: {
+  dataType: {
     value: "speakers"
   },
 
