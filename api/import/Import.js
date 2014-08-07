@@ -113,7 +113,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               options.next();
             }
             // self.debug('result.datum', result.datum);
-            self.datumCollection.add(result.datum);
+            self.documentCollection.add(result.datum);
             deferred.resolve(result);
           })
           .fail(function(reason) {
@@ -304,86 +304,68 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       /*
        * Cycle through all the rows in table and create a datum with the matching fields.
        */
-      var array = [];
-      try {
-        //Import from html table that the user might have edited.
-        this.asCSV.map(function(row) {
-          var docToSave;
-          if (self.importType === 'participants') {
-            docToSave = new Participant({
-              confidential: self.corpus.confidential,
-              fields: new DatumFields(headers)
-            });
-          } else {
-            docToSave = new Datum({
-              datumFields: headers
-            });
+      this.documentCollection = new Collection({
+        primaryKey: "dateCreated"
+      });
+      //Import from html table that the user might have edited.
+      this.asCSV.map(function(row) {
+        var docToSave;
+        if (self.importType === 'participants') {
+          docToSave = new Participant({
+            confidential: self.corpus.confidential,
+            fields: new DatumFields(JSON.parse(JSON.stringify(headers)))
+          });
+        } else {
+          docToSave = new Datum({
+            datumFields: new DatumFields(JSON.parse(JSON.stringify(headers)))
+          });
 
-          }
-          var testForEmptyness = "";
-          for (var index = 0; index < row.length; index++) {
-            var item = row[index];
-            // var newfieldValue = $(item).html().trim();
-            /*
-             * the import sometimes inserts &nbsp into the data,
-             * often when the csv detection didnt work. This might
-             * slow import down significantly. i tested it, it looks
-             * like this isnt happening to the data anymore so i
-             * turned this off, but if we notice &nbsp in the
-             * datagain we can turn it back on . for #855
-             */
-            //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
-            //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
-            //            }
-            if (self.importType === 'participants') {
-              docToSave.fields[headers[index].id].value = item.trim();
-            } else {
-              docToSave.datumFields[headers[index].id].value = item.trim();
-            }
-            testForEmptyness += item.trim();
-          }
-          //if the table row has more than 2 non-white space characters, enter it as data
-          if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
-            array.push(docToSave);
+        }
+        var testForEmptyness = "";
+        for (var index = 0; index < row.length; index++) {
+          var item = row[index];
+          // var newfieldValue = $(item).html().trim();
+          /*
+           * the import sometimes inserts &nbsp into the data,
+           * often when the csv detection didnt work. This might
+           * slow import down significantly. i tested it, it looks
+           * like this isnt happening to the data anymore so i
+           * turned this off, but if we notice &nbsp in the
+           * datagain we can turn it back on . for #855
+           */
+          //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
+          //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
+          //            }
+          if (self.importType === 'participants') {
+            docToSave.fields[headers[index].id].value = item.trim();
           } else {
-            //dont add blank datum
-            if (self.debugMode) {
-              self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
-            }
+            docToSave.datumFields[headers[index].id].value = item.trim();
           }
-        });
-      } catch (e) {
-        //Import from the array instead of using jquery and html
-        self.bug(JSON.stringify(e));
-        var rows = this.asCSV;
-        for (var r in rows) {
-          var docToSave = {};
-          var testForEmptyness = "";
-          for (var c in headers) {
-            docToSave[headers[c]] = rows[r][c];
-            testForEmptyness += rows[r][c];
-          }
-          //if the table row has more than 2 non-white space characters, enter it as data
-          if (testForEmptyness.replace(/\W/g, "").length >= 2) {
-            array.push(docToSave);
-          } else {
-            //dont add blank datum
-            if (self.debugMode) {
-              self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
-            }
+          console.log('new doc', docToSave);
+
+          testForEmptyness += item.trim();
+        }
+        //if the table row has more than 2 non-white space characters, enter it as data
+        if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
+          self.documentCollection.add(docToSave);
+        } else {
+          //dont add blank datum
+          if (self.debugMode) {
+            self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
           }
         }
-      }
-      for (var doc in array) {
-        var builtDoc = array[doc];
-        if (this.importType === 'participants') {
-          // array[doc]
-          builtDoc.id = array[doc].participantCode || Date.now();
+      });
+
+      var savePromises = [];
+      this.documentCollection._collection.map(function(builtDoc) {
+        if (self.importType === 'participants') {
+          builtDoc.id = builtDoc.anonymousCode || Date.now();
         }
-        builtDoc.url = "https://corpusdev.lingsync.org/" + this.corpus.dbname;
-        console.log('would save', builtDoc);
-        // builtDoc.save();
-      }
+        builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
+        console.log(' saving', builtDoc.id);
+        savePromises.push(builtDoc.save());
+      });
+
 
       return headers;
 
@@ -711,23 +693,23 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    *
    * @type {Object}
    */
-  datumCollection: {
+  documentCollection: {
     get: function() {
       this.debug('Getting Datum collection');
-      if (!this._datumCollection) {
-        this._datumCollection = new Collection({
+      if (!this._documentCollection) {
+        this._documentCollection = new Collection({
           inverted: false,
           key: '_id'
         });
       }
       this.debug("Returning a collection");
-      return this._datumCollection;
+      return this._documentCollection;
     },
     set: function(value) {
-      if (value === this._datumCollection) {
+      if (value === this._documentCollection) {
         return;
       }
-      this._datumCollection = value;
+      this._documentCollection = value;
     }
   },
 
@@ -1447,7 +1429,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (this.ignoreLineBreaksInRawText) {
         text.replace(/\n+/g, ' ').replace(/\r+/g, ' ');
       }
-      this.datumCollection.add({
+      this.documentCollection.add({
         id: 'orthography',
         value: text
       });
