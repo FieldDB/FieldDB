@@ -17,7 +17,7 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
  *
  * As 'Informant' is not politically correct in many contexts, and 'consultant' is
  * ambigious word outside of field work, the word 'speaker' is used in communication with
- * users and in the url.
+ * users and in the url of db queries/api.
  *
  * A speaker might also be associated to a user. In this case a speaker
  * has the same information as a user plus extra, some info (e.g. date of birth)
@@ -38,10 +38,6 @@ var Speaker = function Speaker(options) {
 Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.prototype */ {
   constructor: {
     value: Speaker
-  },
-
-  url: {
-    value: "/speakers"
   },
 
   collection: {
