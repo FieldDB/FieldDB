@@ -5,7 +5,7 @@ var Collection = require('./../Collection').Collection;
 var CORS = require('./../CORS').CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
-var Participant = require("./../FieldDBObject").FieldDBObject;
+var Participant = require("./../user/Participant").Participant;
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumField = require('./../datum/DatumField').DatumField;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
@@ -190,7 +190,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   convertTableIntoDataList: {
     value: function() {
       var self = this;
-
+      if (!this.progress) {
+        this.progress = {
+          total: 0,
+          current: 0
+        };
+      }
       this.progress.total = this.progress.total + 1;
       this.datumArray = [];
       this.consultants = [];
@@ -216,7 +221,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       var headers = [];
       if (this.importType === 'participants') {
-        this.importFields = new DatumFields(this.corpus.participantFields);
+        this.importFields = new DatumFields(this.corpus.participantFields.clone());
       } else {
         this.importFields = new DatumFields(this.corpus.datumFields.clone());
       }
@@ -254,36 +259,42 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         } else if (headers[f].id.toLowerCase().indexOf("checkedwith") > -1 || headers[f].id.toLowerCase().indexOf("checkedby") > -1 || headers[f].id.toLowerCase().indexOf("publishedin") > -1) {
           fieldToGeneralize = self.importFields.find('validationStatus');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("codepermanent") > -1) {
-          fieldToGeneralize = self.importFields.find('participantcode');
+          fieldToGeneralize = self.importFields.find('anonymouscode');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("nsection") > -1) {
           fieldToGeneralize = self.importFields.find('coursenumber');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("prenom") > -1) {
           fieldToGeneralize = self.importFields.find('firstname');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("nomdefamille") > -1) {
           fieldToGeneralize = self.importFields.find('lastname');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("datedenaissance") > -1) {
           fieldToGeneralize = self.importFields.find('dateofbirth');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
@@ -297,7 +308,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       try {
         //Import from html table that the user might have edited.
         this.asCSV.map(function(row) {
-          var docToSave = {};
+          var docToSave;
+          if (self.importType === 'participants') {
+            docToSave = new Participant({
+              confidential: self.corpus.confidential,
+              fields: new DatumFields(headers)
+            });
+          } else {
+            docToSave = new Datum({
+              datumFields: headers
+            });
+
+          }
           var testForEmptyness = "";
           for (var index = 0; index < row.length; index++) {
             var item = row[index];
@@ -313,7 +335,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
             //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
             //            }
-            docToSave[headers[index].id] = item.trim();
+            if (self.importType === 'participants') {
+              docToSave.fields[headers[index].id].value = item.trim();
+            } else {
+              docToSave.datumFields[headers[index].id].value = item.trim();
+            }
             testForEmptyness += item.trim();
           }
           //if the table row has more than 2 non-white space characters, enter it as data
@@ -349,14 +375,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
       }
       for (var doc in array) {
-        var builtDoc;
+        var builtDoc = array[doc];
         if (this.importType === 'participants') {
-          builtDoc = new Participant(array[doc]);
+          // array[doc]
           builtDoc.id = array[doc].participantCode || Date.now();
-        } else {
-          builtDoc = new Datum(array[doc]);
         }
-        builtDoc.url = "https://corpusdev.lingsync.org/" + this.corpus.debname;
+        builtDoc.url = "https://corpusdev.lingsync.org/" + this.corpus.dbname;
         console.log('would save', builtDoc);
         // builtDoc.save();
       }
