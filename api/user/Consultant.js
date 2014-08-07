@@ -1,4 +1,5 @@
 var Speaker = require('./Speaker').Speaker;
+var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
 /**
  *
@@ -23,11 +24,18 @@ var Consultant = function Consultant(options) {
   Speaker.apply(this, arguments);
 };
 
-Consultant.defaults = Speaker.defaults;
-
 Consultant.prototype = Object.create(Speaker.prototype, /** @lends Consultant.prototype */ {
   constructor: {
     value: Consultant
+  },
+
+  defaults: {
+    get: function() {
+      var doc = {
+        fields: DEFAULT_CORPUS_MODEL.consultantFields || DEFAULT_CORPUS_MODEL.speakerFields
+      };
+      return JSON.parse(JSON.stringify(doc));
+    }
   }
 
 });
