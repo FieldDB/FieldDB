@@ -233,7 +233,7 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
       }]);
 
       // Ensure that the files are truely read by counting the length and the number of commas
-      expect(importer.rawText.length).toEqual(926);
+      expect(importer.rawText.length).toEqual(1006);
       expect(importer.rawText.match(/,/g).length).toEqual(88);
 
     }, function(options) {
