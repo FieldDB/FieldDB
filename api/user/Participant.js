@@ -19,6 +19,10 @@ Participant.prototype = Object.create(Speaker.prototype, /** @lends Participant.
     value: Participant
   },
 
+  dataType: {
+    value: "participants"
+  },
+
   defaults: {
     get: function() {
       var doc = {
