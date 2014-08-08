@@ -33,13 +33,22 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         url: FieldDB.BASE_DB_URL,
         authUrl: FieldDB.BASE_AUTH_URL
       });
+      db.debugMode = true;
+
       // console.log('fetching docs for ', db.toJSON());
       db.fetchCollection('speakers').then(function(results) {
 
         console.log('downloaded docs', results);
         $scope.docs = $scope.docs || [];
-        results.map(function(row) {
-          $scope.docs.push(row);
+        results.map(function(doc) {
+          if (doc.type && FieldDB[doc.type]) {
+            db.debug("Converting doc into type " + doc.type);
+            doc.confidential = $scope.corpus.confidential;
+            doc = new FieldDB[doc.type](doc);
+          } else {
+            db.warn("This doc does not have a type, it might display oddly ", doc);
+          }
+          $scope.docs.push(doc);
         });
         $scope.$digest();
 
