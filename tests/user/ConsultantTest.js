@@ -30,6 +30,13 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
 
   });
 
+  it("should be of type Consultant", function() {
+    var consultant = new Consultant({
+      confidential: mockcorpus.confidential
+    });
+    expect(consultant.type).toEqual("Consultant");
+  });
+
   it("should set an consultant code", function() {
     var consultant = new Consultant({
       confidential: mockcorpus.confidential

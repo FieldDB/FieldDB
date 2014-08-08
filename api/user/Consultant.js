@@ -29,6 +29,10 @@ Consultant.prototype = Object.create(Speaker.prototype, /** @lends Consultant.pr
     value: Consultant
   },
 
+  api: {
+    value: "consultants"
+  },
+
   defaults: {
     get: function() {
       var doc = {

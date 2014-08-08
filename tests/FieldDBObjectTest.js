@@ -37,6 +37,8 @@ describe("FieldDBObject", function() {
         aproperty: "adifferentvalue"
       });
       expect(u2.aproperty).toEqual("adifferentvalue");
+      expect(u2.type).toEqual("Child");
+
     });
 
 
@@ -81,7 +83,8 @@ describe("FieldDBObject", function() {
         }],
         _id: "firstPenguin",
         _rev: "2-123",
-        version: FieldDBObject.DEFAULT_VERSION
+        version: FieldDBObject.DEFAULT_VERSION,
+        type: "FieldDBObject"
       });
 
       var accessingAttributeShouldNotCauseItToExist = penguin.dbname;
@@ -103,7 +106,8 @@ describe("FieldDBObject", function() {
 
       expect(resultingJSON).toEqual({
         _id: "firstPenguin",
-        version: FieldDBObject.DEFAULT_VERSION
+        version: FieldDBObject.DEFAULT_VERSION,
+        type: "FieldDBObject"
       });
     });
 
@@ -113,6 +117,7 @@ describe("FieldDBObject", function() {
         _id: "123"
       }).toJSON("complete");
       expect(resultingJSON).toEqual({
+        type: 'FieldDBObject',
         dateCreated: 1,
         _id: '123',
         version: 'v2.0.1',

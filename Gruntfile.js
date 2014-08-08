@@ -72,7 +72,7 @@ module.exports = function(grunt) {
           jshintrc: 'tests/.jshintrc',
           ignores: ['tests/libs/**/*js']
         },
-        src: ['tests/FieldDBTest.js', 'tests/FieldDBObjectTest.js', 'tests/confidentiality_encryption/ConfidentialTest.js', 'tests/import/ImportTest.js', 'tests/CollectionTest.js', 'tests/corpus/CorpusTest.js', 'tests/datum/DatumFieldsTest.js', 'tests/user/ConsultantTest.js']
+        src: ['tests/FieldDBTest.js', 'tests/FieldDBObjectTest.js', 'tests/confidentiality_encryption/ConfidentialTest.js', 'tests/import/ImportTest.js', 'tests/CollectionTest.js', 'tests/corpus/CorpusTest.js', 'tests/datum/DatumFieldsTest.js', 'tests/user/UserTest.js', 'tests/user/ConsultantTest.js']
       },
     },
     jsdoc: {
