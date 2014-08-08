@@ -422,6 +422,7 @@
     "labelNonLinguists": "Location",
     "labelTranslators": "Location",
     "shouldBeEncrypted": true,
+    "encrypted": true,
     "defaultfield": true,
     "json": {
       "location": {
@@ -493,5 +494,133 @@
     "help": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
     "helpLinguists": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
     "helpDevelopers": "Your app can save optional anonymous device details of the equipment/software which used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1"
+  }],
+  "speakerFields": [{
+    "id": "anonymousCode",
+    "labelLinguists": "Anonymous Code",
+    "labelNonLinguists": "Anonymous Code",
+    "labelTranslators": "Anonymous Code",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "A field to anonymously identify language speakers/participants.",
+    "helpLinguists": "A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc)."
+  }, {
+    "id": "firstName",
+    "labelLinguists": "First Name",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "The first name of the speaker/participant (optional, encrypted if speaker is anonymous)",
+    "helpLinguists": "The first name of the speaker/participant (optional, should be encrypted if speaker should remain anonymous)"
+  }, {
+    "id": "lastName",
+    "labelLinguists": "Last Name",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "The last name of the speaker/participant (encrypted)",
+    "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)"
+  }, {
+    "id": "username",
+    "labelLinguists": "Username",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "Optional username of the speaker/participant, if the speaker/participant is registered in the system (encrypted).",
+    "helpLinguists": "Optional username of the speaker/participant, if the speaker/participant is registered in the system (encrypted)."
+  }, {
+    "id": "dateOfBirth",
+    "type": "date",
+    "labelLinguists": "Date of Birth",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
+    },
+    "help": "Optional date of birth of the speaker/participant, if used by the experimental analysis (ie speaker/participants of 20 months performed differently from speaker/participants of 22 months).",
+    "helpLinguists": "Optional date of birth of the speaker/participant, if used by the experimental analysis (ie speaker/participants of 20 months performed differently from speaker/participants of 22 months)."
+  }, {
+    "id": "gender",
+    "labelLinguists": "Gender",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "choices": ["Female", "Male", "Unknown"],
+      "children": ["Girl", "Boy", "Unknown"],
+      "adult": ["Woman", "Man", "Unknown"]
+    },
+    "help": "Optional gender or biological sex of the speaker/participant, if used by the speaker/participants result reports or experimental analysis.",
+    "helpLinguists": "Optional gender or biological sex of the speaker/participant, if used by the speaker/participants result reports or experimental analysis."
+  }, {
+    "id": "languages",
+    "type": "language collection",
+    "labelLinguists": "Language(s) Spoken/Understood",
+    "labelNonLinguists": "Language(s) Spoken/Understood",
+    "labelTranslators": "Language(s) Spoken/Understood (Ethnologue)",
+    "labelComputationalLinguists": "Language(s) Spoken/Understood (ISO 639-3)",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "languages": [{
+        "language": {
+          "ethnologueUrl": "",
+          "wikipediaUrl": "",
+          "iso": "",
+          "locale": "",
+          "englishName": "",
+          "nativeName": "",
+          "alternateNames": ""
+        },
+        "fluency": {
+          "comprehensionFluency": "",
+          "speakingFluency": "",
+          "readingFluency": "",
+          "writingFluency": ""
+        },
+        "dates": {
+          "start": "",
+          "end": "",
+          "proportionOfUse": ""
+        }
+      }]
+    },
+    "help": "This is the langauge name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
+    "helpLinguists": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
+  }, {
+    "id": "confidentiality",
+    "labelLinguists": "Confidentiality Setting",
+    "labelNonLinguists": "Confidentiality Setting",
+    "labelTranslators": "Confidentiality Setting",
+    "shouldBeEncrypted": false,
+    "value": "anonymous",
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "choices": ["generalize", "team", "anonymous", "public"]
+    },
+    "help": "Confidentiality setting of this speaker. By default the speaker is anonymous which means data can be associated to one speaker, but the speaker cannot be identified) hidden means data will be associated to the entire speaker population of the corpus, team means that team members can see the consultant's identity, but the outsiders of the team can only see an anonymous user, public means the speaker has signed a consent form and has asked that his/her data to be associated his/her user account or identity.",
+    "helpLinguists": "Confidentiality setting of this speaker. By default the speaker is anonymous which means data can be associated to the speaker, but the speaker cannot be identified) hidden means data will be associated to the entire speaker population of the corpus, team means that team members can see the consultant's identity, but the outsiders of the team can only see an anonymous user, public means the speaker has signed a consent form and has asked that his/her data to be associated his/her user account or identity."
   }]
 }

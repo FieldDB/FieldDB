@@ -1,7 +1,7 @@
 /* globals window */
-var Q = require("q");
 var CORS = require("./CORS").CORS;
 var Diacritics = require('diacritic');
+var Q = require("q");
 
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
@@ -72,6 +72,10 @@ var Diacritics = require('diacritic');
  */
 var FieldDBObject = function FieldDBObject(json) {
   this.verbose("In parent an json", json);
+  // Set the confidential first, so the rest of the fields can be encrypted
+  if (json && json.confidential) {
+    this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
+  }
   var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
@@ -106,6 +110,14 @@ FieldDBObject.DEFAULT_DATE = 0;
 FieldDBObject.prototype = Object.create(Object.prototype, {
   constructor: {
     value: FieldDBObject
+  },
+
+  type: {
+    get: function() {
+      var funcNameRegex = /function (.{1,})\(/;
+      var results = (funcNameRegex).exec((this).constructor.toString());
+      return (results && results.length > 1) ? results[1] : "";
+    }
   },
 
   /**
@@ -185,6 +197,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   bug: {
     value: function(message) {
+      this.bugMessage = message;
       try {
         window.alert(message);
       } catch (e) {
@@ -194,6 +207,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   warn: {
     value: function(message, message2, message3, message4) {
+      this.warnMessage = message;
       console.warn('WARN: ' + message);
       if (message2) {
         console.warn(message2);
@@ -239,16 +253,23 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       //update to this version
       this.version = FieldDBObject.DEFAULT_VERSION;
 
+      var browserVersion;
+      try {
+        browserVersion = window.navigator.appVersion;
+      } catch (e) {
+        browserVersion = 'PhantomJS unknown';
+      }
+
       this._dateModified = Date.now();
       if (!this.id) {
         this._dateCreated = Date.now();
         this.enteredByUser = {
-          browserVersion: window.navigator.appVersion
+          browserVersion: browserVersion
         };
       } else {
         this.modifiedByUsers = this.modifiedByUsers || [];
         this.modifiedByUsers.push({
-          browserVersion: window.navigator.appVersion
+          browserVersion: browserVersion
         });
       }
 
@@ -492,7 +513,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      var json = {},
+      var json = {
+        type: this.type
+      },
         aproperty,
         underscorelessProperty;
 
@@ -533,6 +556,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (!json._rev) {
         delete json._rev;
+      }
+      delete json.bugMessage;
+      delete json.warnMessage;
+      if (this._collection !== "private_corpuses") {
+        delete json.confidential;
+        delete json.confidentialEncrypter;
+      } else {
+        this.warn("serializing confidential in this object " + this._collection);
+      }
+      if (this.api) {
+        json.api = this.api;
       }
 
       return json;

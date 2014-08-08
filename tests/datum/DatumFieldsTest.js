@@ -1,9 +1,12 @@
 'use strict';
-var DatumFields = require('./../../api/datum/DatumFields').DatumFields;
+var Confidential = require("./../../api/confidentiality_encryption/Confidential").Confidential;
 var DatumField = require('./../../api/datum/DatumField').DatumField;
+var DatumFields = require('./../../api/datum/DatumFields').DatumFields;
 var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
 
-var sampleDatumFields = DEFAULT_CORPUS_MODEL.datumFields;
+var sampleDatumFields = function(){
+  return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
+};
 
 describe('lib/DatumFields', function() {
 
@@ -18,7 +21,7 @@ describe('lib/DatumFields', function() {
       // console.log("beforeEach");
       collection = new DatumFields({
         inverted: true,
-        collection: [sampleDatumFields[0], sampleDatumFields[2]]
+        collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
       });
     });
 
@@ -37,18 +40,18 @@ describe('lib/DatumFields', function() {
           id: 'thisIsCamelCase'
         }]
       });
-      console.log(collection._collection);
+      // console.log(collection._collection);
       expect(collection.thisIsCamelCase).toBeDefined();
       expect(collection.thisiscamelcase).toBeDefined();
       expect(collection._collection.length).toEqual(1);
     });
 
     it('should use the primary key for find', function() {
-      expect(collection.find('utterance')[0].id).toEqual(sampleDatumFields[2].id);
+      expect(collection.find('utterance')[0].id).toEqual(sampleDatumFields()[2].id);
     });
 
     it('should accept inverted', function() {
-      expect(collection.collection[0].id).toEqual(sampleDatumFields[2].id);
+      expect(collection.collection[0].id).toEqual(sampleDatumFields()[2].id);
     });
 
     it('should accept model of items to be defined', function() {
@@ -77,10 +80,10 @@ describe('lib/DatumFields', function() {
 
   describe('array-like construction', function() {
 
-    it('should permit constrution with just an array', function() {
+    it('should permit construction with just an array', function() {
       var newcollection = new DatumFields([
-        sampleDatumFields[0],
-        sampleDatumFields[1]
+        sampleDatumFields()[0],
+        sampleDatumFields()[1]
       ]);
       expect(newcollection.length).toEqual(2);
     });
@@ -95,8 +98,8 @@ describe('lib/DatumFields', function() {
         inverted: true
       });
 
-      collection.add(sampleDatumFields[0]);
-      collection.add(sampleDatumFields[2]);
+      collection.add(sampleDatumFields()[0]);
+      collection.add(sampleDatumFields()[2]);
     });
 
     it('should be able to add items', function() {
@@ -104,13 +107,13 @@ describe('lib/DatumFields', function() {
     });
 
     it('should permit push to add to the bottom', function() {
-      collection.push(sampleDatumFields[3]);
-      expect(collection.collection[2]).toEqual(sampleDatumFields[3]);
+      collection.push(sampleDatumFields()[3]);
+      expect(collection.collection[2]).toEqual(sampleDatumFields()[3]);
     });
 
     it('should permit unshift to add to the top', function() {
-      collection.unshift(sampleDatumFields[4]);
-      expect(collection.collection[0]).toEqual(sampleDatumFields[4]);
+      collection.unshift(sampleDatumFields()[4]);
+      expect(collection.collection[0]).toEqual(sampleDatumFields()[4]);
     });
 
   });
@@ -120,7 +123,7 @@ describe('lib/DatumFields', function() {
 
     beforeEach(function() {
       collection = new DatumFields({
-        collection: sampleDatumFields
+        collection: sampleDatumFields()
       });
       collection.utterance.value = "Noqata tusunayawanmi";
       collection.morphemes.value = "Noqa-ta tusu-naya-wa-n-mi";
@@ -140,7 +143,7 @@ describe('lib/DatumFields', function() {
     });
 
     it('should be able to find items by any attribute', function() {
-      expect(collection.find('help', 'What was said/written using the alphabet/writing system of the language.')[0].id).toEqual(sampleDatumFields[1].id);
+      expect(collection.find('help', 'What was said/written using the alphabet/writing system of the language.')[0].id).toEqual(sampleDatumFields()[1].id);
     });
 
     it('should accpet a RegExp to find items', function() {
@@ -158,9 +161,13 @@ describe('lib/DatumFields', function() {
 
     it('should be able to clone an existing collection', function() {
       var newbarecollection = collection.clone();
-      // expect(newbarecollection).toEqual(sampleDatumFields);
+      // console.log(newbarecollection);
+      // expect(newbarecollection).toEqual(sampleDatumFields());
       var newcollection = new DatumFields(newbarecollection);
-      expect(newcollection.utterance).toEqual(collection.utterance);
+      expect(newcollection.utterance.value).toEqual(collection.utterance.value);
+      expect(newcollection.utterance.mask).toEqual(collection.utterance.mask);
+      expect(newcollection.utterance.labelLinguists).toEqual(collection.utterance.labelLinguists);
+      // expect(newcollection.utterance).toEqual(collection.utterance);
       expect(newcollection.utterance).not.toBe(collection.utterance);
 
       newcollection.utterance = {
@@ -210,8 +217,10 @@ describe('lib/DatumFields', function() {
       collection = new DatumFields({
         collection: JSON.parse(collectionFromDB)
       });
-      expect(collection.toJSON()).toEqual(collectionToLoad);
-      expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
+      expect(collection.toJSON()[1].value).toEqual(collectionToLoad[1].value);
+      expect(collection.toJSON()[1].mask).toEqual(collectionToLoad[1].mask);
+      expect(collection.toJSON()[1].encrypted).toEqual(collectionToLoad[1].encrypted);
+      // expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad)); //key ordering changed
     });
 
     it('should seem to not loose information when toJSONed and reloaded', function() {
@@ -228,4 +237,136 @@ describe('lib/DatumFields', function() {
 
   });
 
+  describe('confidentiality', function() {
+
+    it('should set parese legacy shouldBeEncrypted \"\" and change from false to true', function() {
+      var field = new DatumField({
+        encrypted: "checked",
+        help: "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning.",
+        label: "judgement",
+        mask: "",
+        shouldBeEncrypted: "",
+        showToUserTypes: "linguist",
+        size: "3",
+        userchooseable: "disabled",
+        value: ""
+      });
+      expect(field.shouldBeEncrypted).toEqual(undefined);
+      field.shouldBeEncrypted = true;
+      expect(field.shouldBeEncrypted).toBe(true);
+    });
+
+    it('should parse legacy shouldBeEncrypted checked', function() {
+      var field = new DatumField({
+        alternates: ["noqata tusu-nay-wanmi", "noqata tusunaywanmi"],
+        encrypted: "",
+        help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+        label: "morphemes",
+        mask: "noqa-ta tusu-nay-wa-n-mi",
+        shouldBeEncrypted: "checked",
+        showToUserTypes: "linguist",
+        userchooseable: "disabled",
+        value: "noqa-ta tusu-nay-wa-n-mi"
+      });
+      expect(field.shouldBeEncrypted).toBe(true);
+    });
+
+    it('should not permit to change shouldBeEncrypted from true to false', function() {
+      var field = new DatumField({
+        alternates: ["noqata tusu-nay-wanmi", "noqata tusunaywanmi"],
+        encrypted: "",
+        help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+        label: "morphemes",
+        mask: "noqa-ta tusu-nay-wa-n-mi",
+        shouldBeEncrypted: "checked",
+        showToUserTypes: "linguist",
+        userchooseable: "disabled",
+        value: "noqa-ta tusu-nay-wa-n-mi"
+      });
+      expect(field.shouldBeEncrypted).toBe(true);
+      // field.debugMode = true;
+      field.shouldBeEncrypted = false;
+      expect(field.shouldBeEncrypted).toBe(true);
+      expect(field.warnMessage).toBe("This field's shouldBeEncrypted cannot be undone. Only a corpus administrator can change shouldBeEncrypted to false if it has been true before.");
+    });
+
+    it('should decript encrypted datum if in decryptedMode', function() {
+      var field = new DatumField({
+        alternates: ["noqata tusu-nay-wanmi", "noqata tusunaywanmi"],
+        encrypted: "checked",
+        help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+        label: "morphemes",
+        mask: "xxxx-xx xxxx-xxx-xx-x-xx",
+        shouldBeEncrypted: "checked",
+        showToUserTypes: "linguist",
+        userchooseable: "disabled",
+        value: "confidential:VTJGc2RHVmtYMThLQVdieUkxbmtlZEZ1d2h2RkMyTzF5MTFhMSt6Z2M5TmpYQVc0c3FpdGd5d1NJN1RHeG9qcg=="
+      });
+      // field.debugMode = true;
+      // field.repairMissingEncryption = true;
+      field.confidential = new Confidential({
+        secretkey: "5e65e603-8d4e-4aea-9d68-64da15b081d5"
+      });
+      expect(field.value).toBe('xxxx-xx xxxx-xxx-xx-x-xx');
+      field.decryptedMode = true;
+      expect(field.value).toBe('noqa-ta tusu-nay-wa-n-mi');
+
+      field.value = "noqa-ta tusu-nay-wan-mi ";
+      expect(field.value).toBe('noqa-ta tusu-nay-wan-mi');
+
+      field.decryptedMode = false;
+      field.value = "noqa-ta tusu-nay-wan changed without access";
+      expect(field.warnMessage).toEqual("User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.value).toBe('xxxx-xx xxxx-xxx-xxx-xx');
+      expect(field.warnMessage).toEqual("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      // console.log(field.toJSON());
+    });
+
+  });
+
+  describe('confidentiality', function() {
+
+    it('should be able to set an encrypter on any DatumField', function() {
+      var doc = new DatumField();
+      doc.confidential = {
+        secretkey: 'secretkey'
+      };
+      expect(doc.confidential.secretkey).toEqual('secretkey');
+    });
+  });
+
+
+  describe('confidentiality', function() {
+    var fields;
+
+    beforeEach(function() {
+      fields = new DatumFields({
+        inverted: true,
+        collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
+      });
+    });
+
+    it('should be able to set encrypted on members of  datumfields', function() {
+      fields.encrypted = true;
+      // console.log(fields);
+      expect(fields.judgement.encrypted).toEqual(true);
+    });
+
+    it('should be able to set confidential on members of a datumfields', function() {
+      fields.confidential = {
+        secretkey: 'secretkey'
+      };
+      fields.encrypted = true;
+      fields.decryptedMode = true;
+
+      expect(fields.judgement.confidential.secretkey).toEqual('secretkey');
+      expect(fields.utterance.confidential.secretkey).toEqual('secretkey');
+      expect(typeof fields.judgement.confidential.encrypt).toEqual('function');
+      expect(typeof fields.utterance.confidential.encrypt).toEqual('function');
+      fields.utterance.value = "hi";
+      expect(fields.utterance.mask).toEqual('xx');
+      fields.judgement.value = "*";
+      expect(fields.judgement.mask).toEqual('*');
+    });
+  });
 });
