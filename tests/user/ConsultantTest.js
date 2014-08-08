@@ -11,7 +11,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
       }
     };
   });
-  describe("Construction", function(){
+  describe("Construction", function() {
 
     it("should not bleed defaults", function() {
       var consultant = new Consultant({
@@ -152,7 +152,6 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     expect(consultant.fields.username.value).toEqual('');
   });
 
-
   it("should mask the consultant's username", function() {
     var doc = JSON.parse(JSON.stringify(Consultant.prototype.defaults));
     doc.confidential = mockcorpus.confidential;
@@ -165,6 +164,40 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     expect(consultant.username).toEqual("A native speaker");
     expect(consultant.fields.username.mask).toEqual("A native speaker");
     expect(consultant.fields.username.value).toEqual("A native speaker");
+  });
+
+  it("should parse an encrypted consultant", function() {
+    var doc = {
+      _id: "migm740610ea",
+      _rev: "1-66d7dcf2ec5756f96705e4c190efbf7b",
+      fields: [ {
+        _id: "firstName",
+        labelLinguists: "Prénom",
+        shouldBeEncrypted: true,
+        encrypted: true,
+        showToUserTypes: "all",
+        defaultfield: true,
+        help: "The first name of the speaker/participant (optional, encrypted if speaker is anonymous)",
+        helpLinguists: "The first name of the speaker/participant (optional, should be encrypted if speaker should remain anonymous)",
+        version: "v2.0.1",
+        encryptedValue: "confidential:VTJGc2RHVmtYMTljQjh4ZXFtRTBPYm5aUm9WbXdvbTVuSHZFWmMzaU1xQT0=",
+        mask: "xxxxxx",
+        value: "xxxxxx",
+        dateCreated: 0,
+        dateModified: 0
+      }],
+      dateCreated: 1407516364440,
+      version: "v2.0.1",
+      dateModified: 1407516364460
+    };
+    doc.confidential = mockcorpus.confidential;
+    var consultant = new Consultant(doc);
+
+    expect(consultant.firstname).toEqual("xxxxxx");
+    expect(consultant.fields.firstname.mask).toEqual("xxxxxx");
+    expect(consultant.fields.firstname.value).toEqual("xxxxxx");
+    expect(consultant.fields.firstname.encryptedValue).toEqual("confidential:VTJGc2RHVmtYMTljQjh4ZXFtRTBPYm5aUm9WbXdvbTVuSHZFWmMzaU1xQT0=");
+
   });
 
 });
