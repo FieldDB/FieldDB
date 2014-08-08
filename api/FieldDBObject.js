@@ -558,6 +558,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete json._rev;
       }
       delete json.saving;
+      delete json.decryptedMode;
       delete json.bugMessage;
       delete json.warnMessage;
       if (this._collection !== "private_corpuses") {

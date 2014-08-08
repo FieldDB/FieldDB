@@ -350,9 +350,10 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
 
   decryptedMode: {
     get: function() {
-      return;
+      return this._decryptedMode;
     },
     set: function(value) {
+      this._decryptedMode = value;
       if (this._fields) {
         this._fields.decryptedMode = value;
       }
