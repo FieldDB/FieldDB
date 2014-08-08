@@ -6,13 +6,15 @@
  * @description
  * # fielddbDoc
  */
-angular.module('fielddbAngularApp')
-  .directive('fielddbDoc', function () {
-    return {
-      template: '<div></div>',
-      restrict: 'E',
-      link: function postLink(scope, element, attrs) {
-        element.text('this is the fielddbDoc directive');
-      }
-    };
-  });
+angular.module('fielddbAngularApp').directive('fielddbDoc', function() {
+  return {
+    template: '<div data-fielddb-user json="doc"></div>',
+    restrict: 'A',
+    transclude: false,
+    scope: {
+      doc: '=json'
+    },
+    // controller: function($scope, $element, $attrs, $transclude) {},
+    link: function postLink() {}
+  };
+});
