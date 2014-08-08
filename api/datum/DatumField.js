@@ -22,6 +22,13 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
  */
 var DatumField = function DatumField(options) {
   this.debug("Constructing DatumField ", options);
+  // Let encryptedValue and value from serialization be set
+  if (options && options.encryptedValue) {
+    options._encryptedValue = options.encryptedValue;
+  }
+  if (options && options.value) {
+    options._value = options.value;
+  }
   FieldDBObject.apply(this, arguments);
 };
 
@@ -285,7 +292,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           return this._value.trim();
         } else {
           if (!this.decryptedMode) {
-            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");//" mask: "+ this._mask +" value: " +this._value);
+            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode."); //" mask: "+ this._mask +" value: " +this._value);
             return this.mask || FieldDBObject.DEFAULT_STRING;
           } else {
             if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
@@ -307,7 +314,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
                 return this.mask;
               }
               var decryptedValue = this.confidential.decrypt(this._encryptedValue);
-              this.debug("decryptedValue "+ decryptedValue);
+              this.debug("decryptedValue " + decryptedValue);
               return decryptedValue;
             }
           }
