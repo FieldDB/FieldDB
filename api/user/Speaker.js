@@ -213,6 +213,44 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
     }
   },
 
+  firstname: {
+    get: function() {
+      if (this.fields) {
+        return this.fields.firstname.value;
+      } else {
+        return;
+      }
+    },
+    set: function(value) {
+      if (this.fields) {
+        // this.fields.debugMode = true;
+        this.fields.firstname.value = value;
+      } else {
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.firstname.value = value;
+      }
+    }
+  },
+
+  lastname: {
+    get: function() {
+      if (this.fields) {
+        return this.fields.lastname.value;
+      } else {
+        return;
+      }
+    },
+    set: function(value) {
+      if (this.fields) {
+        // this.fields.debugMode = true;
+        this.fields.lastname.value = value;
+      } else {
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.lastname.value = value;
+      }
+    }
+  },
+
   languages: {
     get: function() {
       if (this.fields) {
