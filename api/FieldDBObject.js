@@ -514,8 +514,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       var json = {
-        type: this.type
-      },
+          type: this.type
+        },
         aproperty,
         underscorelessProperty;
 
@@ -557,6 +557,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!json._rev) {
         delete json._rev;
       }
+      delete json.saving;
       delete json.bugMessage;
       delete json.warnMessage;
       if (this._collection !== "private_corpuses") {
