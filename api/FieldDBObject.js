@@ -112,6 +112,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: FieldDBObject
   },
 
+  type: {
+    get: function() {
+      var funcNameRegex = /function (.{1,})\(/;
+      var results = (funcNameRegex).exec((this).constructor.toString());
+      return (results && results.length > 1) ? results[1] : "";
+    }
+  },
+
   /**
    * Can be set to true to debug all objects, or false to debug no objects and true only on the instances of objects which
    * you want to debug.
@@ -505,7 +513,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      var json = {},
+      var json = {
+        type: this.type
+      },
         aproperty,
         underscorelessProperty;
 
@@ -555,8 +565,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       } else {
         this.warn("serializing confidential in this object " + this._collection);
       }
-      if (this.dataType) {
-        json.dataType = this.dataType;
+      if (this.api) {
+        json.api = this.api;
       }
 
       return json;

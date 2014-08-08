@@ -23,6 +23,7 @@ describe("User ", function() {
     expect(u.description).toBeDefined();
 
     expect(u.toJSON()).toEqual({
+      type: 'UserMask',
       username: 'bill',
       gravatar: '67890954367898765',
       firstname: '',
@@ -44,6 +45,7 @@ describe("User ", function() {
     expect(u.name).toEqual("Bill Smith");
 
     expect(u.toJSON("complete")).toEqual({
+      type: 'UserMask',
       username: '',
       dateCreated: u.dateCreated,
       firstname: 'Bill',

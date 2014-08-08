@@ -19,7 +19,7 @@ Participant.prototype = Object.create(Speaker.prototype, /** @lends Participant.
     value: Participant
   },
 
-  dataType: {
+  api: {
     value: "participants"
   },
 
