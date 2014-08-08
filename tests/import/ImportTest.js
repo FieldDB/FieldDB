@@ -294,8 +294,8 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     // console.log(JSON.stringify(importer.importFields, null, 2));
     expect(headers[0].id).toEqual("anonymousCode");
     expect(headers[1].id).toEqual('courseNumber');
-    expect(headers[2].id).toEqual('firstName');
-    expect(headers[3].id).toEqual('lastName');
+    expect(headers[2].id).toEqual('firstname');
+    expect(headers[3].id).toEqual('lastname');
     expect(headers[4].id).toEqual('dateOfBirth');
 
     importer.documentCollection._collection[1].fields.decryptedMode = true;
