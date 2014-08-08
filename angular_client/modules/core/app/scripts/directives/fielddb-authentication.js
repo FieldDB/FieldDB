@@ -9,9 +9,8 @@
  * # fielddbAuthentication
  */
 angular.module('fielddbAngularApp').directive('fielddbAuthentication', function() {
-  FieldDB.BASE_DB_URL = 'https://corpusdev.example.org';
-  FieldDB.BASE_AUTH_URL = 'https://authdev.example.org';
-
+  FieldDB.BASE_DB_URL = 'https://localhost:6984';
+  FieldDB.BASE_AUTH_URL = 'https://localhost:3183';
 
   var controller = function($scope, $location) {
     /* initialize or confirm scope is prepared */
