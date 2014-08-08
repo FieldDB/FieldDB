@@ -280,8 +280,8 @@ Collection.prototype = Object.create(Object.prototype, {
       } else {
         this.collection.push(value);
       }
-      /* if not a reserved attribute, set on objcet for dot notation access */
-      if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON', 'length'].indexOf(searchingFor) === -1) {
+      /* if not a reserved attribute, set on object for dot notation access */
+      if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON', 'length', 'encrypted', 'confidential', 'decryptedMode'].indexOf(searchingFor) === -1) {
         this[searchingFor] = value;
         /* also provide a case insensitive cleaned version if the key can be lower cased */
         if (typeof searchingFor.toLowerCase === 'function') {
