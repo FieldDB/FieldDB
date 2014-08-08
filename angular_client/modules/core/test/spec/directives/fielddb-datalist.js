@@ -3,22 +3,22 @@
 'use strict';
 var debug = false;
 var specIsRunningTooLong = 500000;
-describe('Directive: fielddb-participants', function() {
+describe('Directive: fielddb-datalist', function() {
 
-  describe('multiple lists of participants', function() {
+  describe('multiple lists of datalists', function() {
 
     // load the directive's module and the template
-    beforeEach(module('fielddbAngularApp', 'views/user.html', 'views/participants.html'));
+    beforeEach(module('fielddbAngularApp', 'views/user.html', 'views/datalist.html'));
     var el, scope, compileFunction;
 
     beforeEach(inject(function($rootScope, $compile) {
-      el = angular.element('<div data-fielddb-participants json="participants2"></div> <div data-fielddb-participants json="participants1"></div>');
+      el = angular.element('<div data-fielddb-datalist json="docs2"></div> <div data-fielddb-datalist json="docs1"></div>');
       scope = $rootScope.$new();
-      scope.participants1 = [{
+      scope.docs1 = [{
         firstname: 'Ling',
         lastname: 'Llama'
       }];
-      scope.participants2 = [{
+      scope.docs2 = [{
         firstname: 'Anony',
         lastname: 'Mouse'
       }];
@@ -31,7 +31,7 @@ describe('Directive: fielddb-participants', function() {
     }));
 
     // http://stackoverflow.com/questions/17223850/how-to-test-directives-that-use-templateurl-and-controllers
-    it('should make a participants element with contents from scope', function() {
+    it('should make a datalist element with contents from scope', function() {
 
       inject(function() {
         compileFunction(scope); // <== the html {{}} are bound
@@ -39,7 +39,7 @@ describe('Directive: fielddb-participants', function() {
         if (debug) {
           console.log('post link', el.html());
           console.log('scope team ', scope.team);
-          console.log('scope participants1 ', scope.participants1);
+          console.log('scope docs1 ', scope.docs1);
           // console.log(angular.element(el.find('h1')));
         }
         expect(angular.element(el.find('h1')[1]).text().trim()).toEqual('Anony Mouse');
@@ -49,10 +49,10 @@ describe('Directive: fielddb-participants', function() {
   });
 
 
-  describe('fetch of corpus participants', function() {
+  describe('fetch of corpus datalist', function() {
 
     // load the directive's module and the template
-    beforeEach(module('fielddbAngularApp', 'views/user.html', 'views/participants.html'));
+    beforeEach(module('fielddbAngularApp', 'views/user.html', 'views/datalist.html'));
     var el, scope, compileFunction, httpBackend, http;
 
     beforeEach(inject(function($rootScope, $compile, $controller, $httpBackend, $http) {
@@ -61,7 +61,7 @@ describe('Directive: fielddb-participants', function() {
       scope = $rootScope.$new();
       scope.corpus = {
         dbname: 'testing-phophlo',
-        participants: []
+        docs: []
       };
 
       // mock the network request
@@ -79,7 +79,7 @@ describe('Directive: fielddb-participants', function() {
         lastname: 'Tiger'
       }]);
 
-      el = angular.element('<div data-fielddb-participants json="corpus.participants" corpus="corpus"></div>');
+      el = angular.element('<div data-fielddb-datalist json="corpus.docs" corpus="corpus"></div>');
       compileFunction = $compile(el);
       // bring html from templateCache
       scope.$digest();
@@ -89,18 +89,18 @@ describe('Directive: fielddb-participants', function() {
 
     }));
 
-    it('should mock network request of 3 participants', function() {
+    it('should mock network request of 3 docs', function() {
       // call the network request
       http.get(FieldDB.BASE_DB_URL + '/' + scope.corpus.dbname + '/_design/psycholinguistics/_view/speakers?descending=true').then(function(result) {
-        result.data.map(function(participant) {
-          scope.corpus.participants.push(participant);
+        result.data.map(function(doc) {
+          scope.corpus.docs.push(doc);
           // scope.$digest();
         });
       });
 
       // flush the mock backend
       httpBackend.flush();
-      expect(scope.corpus.participants.length).toBe(3);
+      expect(scope.corpus.docs.length).toBe(3);
 
       inject(function() {
         compileFunction(scope); // <== the html {{}} are bound
@@ -108,12 +108,12 @@ describe('Directive: fielddb-participants', function() {
         if (debug) {
           console.log('post link', el.html());
           console.log('scope team ', scope.team);
-          console.log('scope participants ', scope.participants);
+          console.log('scope docs ', scope.docs);
           // console.log(angular.element(el.find('h1')));
         }
 
         // expect(angular.element(el.find('h1').length)).toEqual(' ');
-        expect(angular.element(el.find('h1')[0]).text().trim()).toEqual('Participants');
+        expect(angular.element(el.find('h1')[0]).text().trim()).toEqual('List');
         expect(angular.element(el.find('h1')[1]).text().trim()).toEqual('Ling Llama');
         expect(angular.element(el.find('h1')[2]).text().trim()).toEqual('Anony Mouse');
         expect(angular.element(el.find('h1')[3]).text().trim()).toEqual('Teammate Tiger');
@@ -145,7 +145,7 @@ describe('Directive: fielddb-participants', function() {
 
     }, specIsRunningTooLong);
 
-    it('should try to display corpus participants from a database using CORS', function() {
+    it('should try to display corpus docs from a database using CORS', function() {
       var value, flag;
 
       runs(function() {
@@ -164,15 +164,15 @@ describe('Directive: fielddb-participants', function() {
           if (debug) {
             console.log('post link', el.html());
             console.log('scope team ', scope.team);
-            console.log('scope participants ', scope.participants);
+            console.log('scope docs ', scope.docs);
           }
         });
         return flag;
-      }, 'The participants should try to be downloaded ', 100);
+      }, 'The docs should try to be downloaded ', 100);
 
       runs(function() {
         expect(value).toBeGreaterThan(0);
-        expect(el.scope().corpus.fetchParticipantsExponentialDecay).toBeGreaterThan(31000);
+        expect(el.scope().corpus.fetchDocsExponentialDecay).toBeGreaterThan(31000);
       });
 
     });
