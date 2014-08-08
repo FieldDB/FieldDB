@@ -5,7 +5,8 @@ var Collection = require('./../Collection').Collection;
 var CORS = require('./../CORS').CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
-// var Datum = require("./../FieldDBObject").FieldDBObject;
+var Participant = require("./../user/Participant").Participant;
+var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumField = require('./../datum/DatumField').DatumField;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -112,7 +113,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               options.next();
             }
             // self.debug('result.datum', result.datum);
-            self.datumCollection.add(result.datum);
+            self.documentCollection.add(result.datum);
             deferred.resolve(result);
           })
           .fail(function(reason) {
@@ -189,7 +190,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   convertTableIntoDataList: {
     value: function() {
       var self = this;
-
+      if (!this.progress) {
+        this.progress = {
+          total: 0,
+          current: 0
+        };
+      }
       this.progress.total = this.progress.total + 1;
       this.datumArray = [];
       this.consultants = [];
@@ -215,13 +221,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       var headers = [];
       if (this.importType === 'participants') {
-        this.importFields = new DatumFields(this.corpus.participantFields);
+        this.importFields = new DatumFields(this.corpus.participantFields.clone());
       } else {
         this.importFields = new DatumFields(this.corpus.datumFields.clone());
       }
       this.extractedHeader.map(function(item) {
         /* TODO look up the header instead) */
-        self.importFields.debugMode = true;
+        // self.importFields.debugMode = true;
         var correspondingDatumField = self.importFields.find(self.importFields.primaryKey, item, true);
         if (!correspondingDatumField || correspondingDatumField.length === 0) {
           correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
@@ -233,7 +239,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
           }
         }
-        console.log('correspondingDatumField ', correspondingDatumField);
+        // console.log('correspondingDatumField ', correspondingDatumField);
         if (headers.indexOf(correspondingDatumField) >= 0) {
           self.bug("You seem to have some column labels that are duplicated" +
             " (the same label on two columns). This will result in a strange " +
@@ -253,36 +259,42 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         } else if (headers[f].id.toLowerCase().indexOf("checkedwith") > -1 || headers[f].id.toLowerCase().indexOf("checkedby") > -1 || headers[f].id.toLowerCase().indexOf("publishedin") > -1) {
           fieldToGeneralize = self.importFields.find('validationStatus');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("codepermanent") > -1) {
-          fieldToGeneralize = self.importFields.find('participantcode');
+          fieldToGeneralize = self.importFields.find('anonymouscode');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("nsection") > -1) {
           fieldToGeneralize = self.importFields.find('coursenumber');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("prenom") > -1) {
           fieldToGeneralize = self.importFields.find('firstname');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("nomdefamille") > -1) {
           fieldToGeneralize = self.importFields.find('lastname');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("datedenaissance") > -1) {
           fieldToGeneralize = self.importFields.find('dateofbirth');
           if (fieldToGeneralize.length > 0) {
+            this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
             fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
             headers[f] = fieldToGeneralize[0];
           }
@@ -292,66 +304,68 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       /*
        * Cycle through all the rows in table and create a datum with the matching fields.
        */
-      var array = [];
-      try {
-        //Import from html table that the user might have edited.
-        this.asCSV.map(function(row) {
-          var datumObject = {};
-          var testForEmptyness = "";
-          for (var index = 0; index < row.length; index++) {
-            var item = row[index];
-            // var newfieldValue = $(item).html().trim();
-            /*
-             * the import sometimes inserts &nbsp into the data,
-             * often when the csv detection didnt work. This might
-             * slow import down significantly. i tested it, it looks
-             * like this isnt happening to the data anymore so i
-             * turned this off, but if we notice &nbsp in the
-             * datagain we can turn it back on . for #855
-             */
-            //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
-            //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
-            //            }
-            datumObject[headers[index].id] = item.trim();
-            testForEmptyness += item.trim();
-          }
-          //if the table row has more than 2 non-white space characters, enter it as data
-          if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
-            array.push(datumObject);
+      this.documentCollection = new Collection({
+        primaryKey: "dateCreated"
+      });
+      //Import from html table that the user might have edited.
+      this.asCSV.map(function(row) {
+        var docToSave;
+        if (self.importType === 'participants') {
+          docToSave = new Participant({
+            confidential: self.corpus.confidential,
+            fields: new DatumFields(JSON.parse(JSON.stringify(headers)))
+          });
+        } else {
+          docToSave = new Datum({
+            datumFields: new DatumFields(JSON.parse(JSON.stringify(headers)))
+          });
+
+        }
+        var testForEmptyness = "";
+        for (var index = 0; index < row.length; index++) {
+          var item = row[index];
+          // var newfieldValue = $(item).html().trim();
+          /*
+           * the import sometimes inserts &nbsp into the data,
+           * often when the csv detection didnt work. This might
+           * slow import down significantly. i tested it, it looks
+           * like this isnt happening to the data anymore so i
+           * turned this off, but if we notice &nbsp in the
+           * datagain we can turn it back on . for #855
+           */
+          //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
+          //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
+          //            }
+          if (self.importType === 'participants') {
+            docToSave.fields[headers[index].id].value = item.trim();
           } else {
-            //dont add blank datum
-            if (self.debugMode) {
-              self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
-            }
+            docToSave.datumFields[headers[index].id].value = item.trim();
           }
-        });
-      } catch (e) {
-        //Import from the array instead of using jquery and html
-        self.bug(JSON.stringify(e));
-        var rows = this.asCSV;
-        for (var r in rows) {
-          var datumObject = {};
-          var testForEmptyness = "";
-          for (var c in headers) {
-            datumObject[headers[c]] = rows[r][c];
-            testForEmptyness += rows[r][c];
-          }
-          //if the table row has more than 2 non-white space characters, enter it as data
-          if (testForEmptyness.replace(/\W/g, "").length >= 2) {
-            array.push(datumObject);
-          } else {
-            //dont add blank datum
-            if (self.debugMode) {
-              self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
-            }
+          // console.log('new doc', docToSave);
+
+          testForEmptyness += item.trim();
+        }
+        //if the table row has more than 2 non-white space characters, enter it as data
+        if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
+          self.documentCollection.add(docToSave);
+        } else {
+          //dont add blank datum
+          if (self.debugMode) {
+            self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
           }
         }
-      }
-      // for (var datumObject in array) {
-      //   var datum = new Datum(array[datumObject]);
-      //   datum.url = "https://corpusdev.lingsync.org/" + this.corpus.debname;
-      //   datum.save();
-      // }
+      });
+
+      var savePromises = [];
+      this.documentCollection._collection.map(function(builtDoc) {
+        if (self.importType === 'participants') {
+          builtDoc.id = builtDoc.anonymousCode || Date.now();
+          builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
+          // console.log(' saving', builtDoc.id);
+          savePromises.push(builtDoc.save());
+        }
+      });
+
 
       return headers;
 
@@ -679,23 +693,23 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    *
    * @type {Object}
    */
-  datumCollection: {
+  documentCollection: {
     get: function() {
       this.debug('Getting Datum collection');
-      if (!this._datumCollection) {
-        this._datumCollection = new Collection({
+      if (!this._documentCollection) {
+        this._documentCollection = new Collection({
           inverted: false,
           key: '_id'
         });
       }
       this.debug("Returning a collection");
-      return this._datumCollection;
+      return this._documentCollection;
     },
     set: function(value) {
-      if (value === this._datumCollection) {
+      if (value === this._documentCollection) {
         return;
       }
-      this._datumCollection = value;
+      this._documentCollection = value;
     }
   },
 
@@ -1415,7 +1429,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (this.ignoreLineBreaksInRawText) {
         text.replace(/\n+/g, ' ').replace(/\r+/g, ' ');
       }
-      this.datumCollection.add({
+      this.documentCollection.add({
         id: 'orthography',
         value: text
       });

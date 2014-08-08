@@ -1,4 +1,5 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 
 /**
  * @class The datum fields are the fields in the datum and session models.
@@ -87,11 +88,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   label: {
     get: function() {
-      this.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
+      this.warn("label is deprecated, instead use a label for appropriate user eg labelLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
       return this.labelLinguists;
     },
     set: function(value) {
-      this.warn("label is deprecated, instead use a label for appropraite user eg labelLinguists");
+      this.warn("label is deprecated, instead use a label for appropriate user eg labelLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
       this.labelLinguists = value;
       this.id = value;
     }
@@ -200,14 +201,40 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       return this._shouldBeEncrypted || FieldDBObject.DEFAULT_FALSE;
     },
     set: function(value) {
+      this.verbose("Setting shouldBeEncrypted " + value, this);
+
       if (value === this._shouldBeEncrypted) {
         return;
       }
-      if (!value) {
-        delete this._shouldBeEncrypted;
+      if (value === "checked") {
+        value = true;
+      }
+      value = !!value;
+      this.verbose("Setting shouldBeEncrypted " + value, this);
+      if (this._shouldBeEncrypted === true && value === false) {
+        this.warn("This field's shouldBeEncrypted cannot be undone. Only a corpus administrator can change shouldBeEncrypted to false if it has been true before.");
         return;
       }
-      this._shouldBeEncrypted = !! value;
+      this._shouldBeEncrypted = value;
+    }
+  },
+
+  encrypted: {
+    get: function() {
+      return this._encrypted || FieldDBObject.DEFAULT_FALSE;
+    },
+    set: function(value) {
+      if (value === this._encrypted) {
+        return;
+      }
+      if (!value) {
+        delete this._encrypted;
+        return;
+      }
+      if (value === "checked") {
+        value = true;
+      }
+      this._encrypted = !!value;
     }
   },
 
@@ -239,23 +266,140 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         delete this._defaultfield;
         return;
       }
-      this._defaultfield = !! value;
+      this._defaultfield = !!value;
     }
   },
-
+  repairMissingEncryption: {
+    value: true
+  },
   value: {
     get: function() {
-      return this._value || FieldDBObject.DEFAULT_STRING;
+      if (!this._value) {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+      // If there was a value before, there are extra precautions
+      if (!this._shouldBeEncrypted) {
+        return this._value.trim();
+      } else {
+        if (!this.encrypted) {
+          return this._value.trim();
+        } else {
+          if (!this.decryptedMode) {
+            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");//" mask: "+ this._mask +" value: " +this._value);
+            return this.mask || FieldDBObject.DEFAULT_STRING;
+          } else {
+            if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
+              this.warn("The value was supposed to be encrypted but was not encrypted. This should not happen, it might only happen if an app was editing the data and didn't have the encryption implemented. Not overwritting the value.");
+              if (this.repairMissingEncryption && this.confidential) {
+                var encryptedValue = this.confidential.encrypt(this._value);
+                this.warn(" Encrypting the value " + this._value);
+                this._encryptedValue = encryptedValue;
+                this._mask = this.createMask(this._value);
+                this._value = this._mask;
+              } else {
+                return this._value.trim();
+              }
+            }
+            if (this._encryptedValue.indexOf("confidential:") === 0) {
+              // All conditions are satisified, decrypt the value and give it to the user
+              if (!this.confidential) {
+                this.warn("This field's encrypter hasnt been set. It cannot be decrypted yet.");
+                return this.mask;
+              }
+              var decryptedValue = this.confidential.decrypt(this._encryptedValue);
+              this.debug("decryptedValue "+ decryptedValue);
+              return decryptedValue;
+            }
+          }
+        }
+      }
+      this.bug("The value wasn't returned, this should never happen and is a bug in the logic.");
+
     },
     set: function(value) {
       if (value === this._value) {
         return;
       }
       if (!value) {
-        delete this._value;
-        return;
+        var fieldCanBeDeleted = !this._shouldBeEncrypted || (this._shouldBeEncrypted && this.decryptedMode);
+        if (fieldCanBeDeleted) {
+          delete this._value;
+          delete this._mask;
+          delete this._encryptedValue;
+          return;
+        } else {
+          this.warn("The value was removed by the user, but they are not able to edit the field currently.");
+          return;
+        }
       }
-      this._value = value.trim();
+      var encryptedValue;
+      value = value.trim();
+      if (!this._shouldBeEncrypted) {
+        this._encryptedValue = value;
+        this._mask = value;
+        this._value = this._mask;
+        return;
+      } else {
+        if (!this.encrypted) {
+          this._encryptedValue = value;
+          this._mask = value;
+          this._value = this._mask;
+          return;
+        } else {
+          if (!this._value) {
+            // If there was no value before, set the new value
+
+            if (!this.confidential) {
+              if (value.indexOf("confidential:") === 0 && !this._encryptedValue) {
+                this._encryptedValue = value;
+                this._value = this.mask;
+                this.debug("This is probably a new field initialization from old data (the value has 'confidential:' in it, and yet the encryptedValue isn't set");
+              } else {
+                this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
+              }
+              return;
+            }
+            encryptedValue = this.confidential.encrypt(value);
+            this._encryptedValue = encryptedValue;
+            this._mask = this.createMask(value);
+            this._value = this._mask;
+
+          } else {
+
+            // If there was a value before, there are extra precautions
+            if (!this.decryptedMode) {
+              this.warn("User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
+              return;
+            } else {
+              if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
+                this.warn("The value was changed, and it was supposed to be encrypted but was not encrypted. This should not happen, it might only happen if an app was editing the data and didn't have the encryption implemented.");
+                if (this.repairMissingEncryption && this.confidential) {
+                  encryptedValue = this.confidential.encrypt(value);
+                  this._encryptedValue = encryptedValue;
+                  this._mask = this.createMask(value);
+                  this._value = this._mask;
+                  this.warn(" Overwritting the value.");
+                } else {
+                  this.warn(" Not overwritting the value.");
+                  return;
+                }
+              }
+
+              // All conditions are satisified, accept the new value.
+              if (!this.confidential) {
+                this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
+                return;
+              }
+              encryptedValue = this.confidential.encrypt(value);
+              this._encryptedValue = encryptedValue;
+              this._mask = this.createMask(value);
+              this._value = this._mask;
+
+            }
+          }
+        }
+
+      }
     }
   },
 
@@ -271,23 +415,21 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         delete this._mask;
         return;
       }
+      console.log("Setting datum field mask " + value);
       this._mask = value.trim();
     }
   },
 
-  encrypted: {
+
+  encryptedValue: {
     get: function() {
-      return this._encrypted || FieldDBObject.DEFAULT_STRING;
+      return this._encryptedValue || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._encrypted) {
+      if (value === this._encryptedValue) {
         return;
       }
-      if (!value) {
-        delete this._encrypted;
-        return;
-      }
-      this._encrypted = value.trim();
+      this.warn("encryptedValue cannot be changed directly, instead field must be in decryptedMode and then set the value." + value);
     }
   },
 
@@ -591,7 +733,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   createMask: {
     value: function(stringToMask) {
-      return stringToMask.replace(/[^_=. -]/g, "x");
+      return stringToMask.replace(/[^_=., -]/g, "x");
     }
   },
 
@@ -601,6 +743,21 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       if (typeof callback === "function") {
         callback();
       }
+    }
+  },
+
+  confidential: {
+    get: function() {
+      return this.confidentialEncrypter;
+    },
+    set: function(value) {
+      if (value === this.confidentialEncrypter) {
+        return;
+      }
+      if (typeof value.encrypt !== "function" && value.secretkey) {
+        value = new Confidential(value);
+      }
+      this.confidentialEncrypter = value;
     }
   }
 
