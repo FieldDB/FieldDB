@@ -172,7 +172,7 @@ describe('Directive: fielddb-datalist', function() {
 
       runs(function() {
         expect(value).toBeGreaterThan(0);
-        expect(el.scope().corpus.fetchDocsExponentialDecay).toBeGreaterThan(31000);
+        expect(el.scope().corpus.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);
       });
 
     });
