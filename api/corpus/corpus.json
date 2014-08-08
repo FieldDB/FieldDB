@@ -506,7 +506,7 @@
     "help": "A field to anonymously identify language speakers/participants.",
     "helpLinguists": "A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc)."
   }, {
-    "id": "firstName",
+    "id": "firstname",
     "labelLinguists": "First Name",
     "labelNonLinguists": "",
     "labelTranslators": "",
@@ -517,7 +517,7 @@
     "help": "The first name of the speaker/participant (optional, encrypted if speaker is anonymous)",
     "helpLinguists": "The first name of the speaker/participant (optional, should be encrypted if speaker should remain anonymous)"
   }, {
-    "id": "lastName",
+    "id": "lastname",
     "labelLinguists": "Last Name",
     "labelNonLinguists": "",
     "labelTranslators": "",
