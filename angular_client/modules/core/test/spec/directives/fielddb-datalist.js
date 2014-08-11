@@ -71,7 +71,10 @@ describe('Directive: fielddb-datalist', function() {
 
       scope = $rootScope.$new();
       scope.corpus = {
-        dbname: 'testing-phophlo'
+        dbname: 'testing-phophlo',
+        confidential: {
+          secretkey: 'a'
+        }
       };
       scope.participantsList = {
         api: 'participants',
@@ -118,7 +121,8 @@ describe('Directive: fielddb-datalist', function() {
 
       inject(function() {
         compileFunction(scope); // <== the html {{}} are bound
-        scope.participantsList.title = 'List';
+        scope.participantsList.title = 'Participant List';
+        scope.participantsList.description = 'This is a list of all participants who are currently in this corpus.';
         scope.$digest(); // <== digest to get the render to show the bound values
         if (debug) {
           console.log('post link', el.html());
@@ -128,15 +132,14 @@ describe('Directive: fielddb-datalist', function() {
         }
 
         // expect(angular.element(el.find('h1').length)).toEqual(' ');
-        expect(angular.element(el.find('h1')[0]).text().trim()).toEqual('List');
+        expect(angular.element(el.find('h1')[0]).text().trim()).toEqual('Participant List');
+        expect(angular.element(el.find('p')[0]).text().trim()).toContain('This is a list of all participants');
         expect(angular.element(el.find('h1')[1]).text().trim()).toEqual('Ling Llama');
         expect(angular.element(el.find('h1')[2]).text().trim()).toEqual('Anony Mouse');
         expect(angular.element(el.find('h1')[3]).text().trim()).toEqual('Teammate Tiger');
       });
 
     });
-
-
 
     it('should run async tests', function() {
       var value, flag;
@@ -148,12 +151,10 @@ describe('Directive: fielddb-datalist', function() {
           flag = true;
         }, 500);
       });
-
       waitsFor(function() {
         value++;
         return flag;
       }, 'The Value should be incremented', 750);
-
       runs(function() {
         expect(value).toBeGreaterThan(0);
       });
@@ -168,7 +169,7 @@ describe('Directive: fielddb-datalist', function() {
         value = 0;
         setTimeout(function() {
           flag = true;
-        }, 50);
+        }, 500);
       });
 
       waitsFor(function() {
@@ -183,14 +184,15 @@ describe('Directive: fielddb-datalist', function() {
           }
         });
         return flag;
-      }, 'The docs should try to be downloaded ', 100);
+      }, 'The docs should try to be downloaded ', 1000);
 
       runs(function() {
         expect(value).toBeGreaterThan(0);
-        // expect(el.scope().datalist.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);
+        console.log('el scope participantsList', el.scope().participantsList);
+        expect(el.scope().participantsList.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);
       });
 
-    });
-  }, specIsRunningTooLong);
+    }, specIsRunningTooLong);
+  });
 
 });
