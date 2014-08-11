@@ -122,7 +122,8 @@ describe("FieldDBObject", function() {
         _id: '123',
         version: 'v2.0.1',
         dbname: '',
-        dateModified: 0
+        dateModified: 0,
+        comments: []
       });
     });
 

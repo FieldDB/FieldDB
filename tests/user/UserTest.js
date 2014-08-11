@@ -43,6 +43,12 @@ describe("User ", function() {
     u.firstname = "Bill";
     u.lastname = "Smith";
     expect(u.name).toEqual("Bill Smith");
+  });
+
+  it("should have a complete serialization if the user requests ", function() {
+    var u = new User();
+    u.firstname = "Bill";
+    u.lastname = "Smith";
 
     expect(u.toJSON("complete")).toEqual({
       type: 'UserMask',
@@ -52,7 +58,8 @@ describe("User ", function() {
       lastname: 'Smith',
       version: u.version,
       dbname: '',
-      dateModified: 0
+      dateModified: 0,
+      comments: []
     });
   });
 
