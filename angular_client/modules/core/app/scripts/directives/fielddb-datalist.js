@@ -36,17 +36,18 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       db.debugMode = true;
 
       // console.log('fetching docs for ', db.toJSON());
+      $scope.datalist.title = '';
       db.fetchCollection($scope.datalist.api).then(function(results) {
 
         console.log('downloaded docs', results);
         $scope.datalist.docs = $scope.datalist.docs || [];
         results.map(function(doc) {
           if (doc.type && FieldDB[doc.type]) {
-            db.debug("Converting doc into type " + doc.type);
+            db.debug('Converting doc into type ' + doc.type);
             doc.confidential = $scope.corpus.confidential;
             doc = new FieldDB[doc.type](doc);
           } else {
-            db.warn("This doc does not have a type, it might display oddly ", doc);
+            db.warn('This doc does not have a type, it might display oddly ', doc);
           }
           $scope.datalist.docs.push(doc);
         });
