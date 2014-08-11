@@ -146,7 +146,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   anonymousCode: {
     get: function() {
       if (this.fields) {
-        return this.fields.anonymousCode.value;
+        return this.fields.anonymousCode.value.toUpperCase();
       } else {
         return;
       }
