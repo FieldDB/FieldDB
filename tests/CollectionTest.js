@@ -234,6 +234,11 @@ describe('lib/Collection', function() {
       };
     });
 
+
+    it('should have a type of Collection', function() {
+      expect(collection.type).toEqual('Collection');
+    });
+
     it('should seem like an array when serialized', function() {
       expect(collection.toJSON()).toEqual(collectionToLoad);
       expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));

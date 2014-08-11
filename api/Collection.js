@@ -53,6 +53,14 @@ Collection.prototype = Object.create(Object.prototype, {
     value: Collection
   },
 
+  type: {
+    get: function() {
+      var funcNameRegex = /function (.{1,})\(/;
+      var results = (funcNameRegex).exec((this).constructor.toString());
+      return (results && results.length > 1) ? results[1] : "";
+    }
+  },
+
   /**
    * Can be set to true to debug all collections, or false to debug no collections and true only on the instances of objects which
    * you want to debug.
