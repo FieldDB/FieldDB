@@ -33,7 +33,22 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
   },
 
   api: {
-    value: "datalists"
+    get: function() {
+      return this._api || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._api) {
+        return;
+      }
+      if (!value) {
+        delete this._api;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._api = value;
+    }
   },
 
   defaults: {
@@ -50,7 +65,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
   // Internal models: used by the parse function
   INTERNAL_MODELS: {
     value: {
-      // comments: Comments,
+      comments: Comments,
       docs: Collection
     }
   },
