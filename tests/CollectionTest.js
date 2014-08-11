@@ -207,6 +207,13 @@ describe('lib/Collection', function() {
       expect(collection.checked).not.toEqual(newcollection.checked);
     });
 
+    it('should provide map on its internal collection', function() {
+      expect(collection.map).toBeDefined();
+      expect(collection.map(function(item) {
+        return item.validationStatus;
+      })).toEqual([ 'Checked*', 'Published*', 'ToBeChecked*', 'ApprovedLanguageLearningContent*', 'ContributedLanguageLearningContent*', 'Deleted*', 'Duplicate*']);
+    });
+
   });
 
   describe('non-lossy persistance', function() {
