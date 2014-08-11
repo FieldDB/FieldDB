@@ -403,6 +403,19 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  map: {
+    get: function() {
+      if (this._collection && typeof this._collection.map === "function") {
+        var self = this;
+        return function(callback) {
+          return this._collection.map.apply(self._collection, [callback])
+        }
+      } else {
+        return undefined;
+      }
+    }
+  },
+
   /**
    *  Cleans a value to become a primary key on an object (replaces punctuation and symbols with underscore)
    *  formerly: item.replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, "")
