@@ -12,16 +12,27 @@ describe('Directive: fielddb-datalist', function() {
     var el, scope, compileFunction;
 
     beforeEach(inject(function($rootScope, $compile) {
-      el = angular.element('<div data-fielddb-datalist json="docs2"></div> <div data-fielddb-datalist json="docs1"></div>');
+      el = angular.element('<div data-fielddb-datalist json="datalist2"></div> <div data-fielddb-datalist json="datalist1"></div>');
       scope = $rootScope.$new();
-      scope.docs1 = [{
-        firstname: 'Ling',
-        lastname: 'Llama'
-      }];
-      scope.docs2 = [{
-        firstname: 'Anony',
-        lastname: 'Mouse'
-      }];
+      scope.datalist1 = {
+        title: 'Sample users',
+        description: 'This is a sample datalist of users',
+        docs: [{
+          firstname: 'Ling',
+          lastname: 'Llama'
+        }, {
+          firstname: 'Teammate',
+          lastname: 'Tiger'
+        }]
+      };
+      scope.datalist2 = {
+        title: 'Sample participants',
+        description: 'This is a sample datalist of participants',
+        docs: [{
+          firstname: 'Anony',
+          lastname: 'Mouse'
+        }]
+      };
       compileFunction = $compile(el);
       // bring html from templateCache
       scope.$digest();
@@ -39,7 +50,7 @@ describe('Directive: fielddb-datalist', function() {
         if (debug) {
           console.log('post link', el.html());
           console.log('scope team ', scope.team);
-          console.log('scope docs1 ', scope.docs1);
+          console.log('scope datalist1 ', scope.datalist1);
           // console.log(angular.element(el.find('h1')));
         }
         expect(angular.element(el.find('h1')[1]).text().trim()).toEqual('Anony Mouse');
@@ -60,7 +71,10 @@ describe('Directive: fielddb-datalist', function() {
 
       scope = $rootScope.$new();
       scope.corpus = {
-        dbname: 'testing-phophlo',
+        dbname: 'testing-phophlo'
+      };
+      scope.participantsList = {
+        api: 'participants',
         docs: []
       };
 
@@ -68,7 +82,7 @@ describe('Directive: fielddb-datalist', function() {
       // http://odetocode.com/blogs/scott/archive/2013/06/11/angularjs-tests-with-an-http-mock.aspx
       httpBackend = $httpBackend;
       http = $http;
-      httpBackend.when('GET', FieldDB.BASE_DB_URL + '/' + scope.corpus.dbname + '/_design/psycholinguistics/_view/speakers?descending=true').respond([{
+      httpBackend.when('GET', FieldDB.BASE_DB_URL + '/' + scope.corpus.dbname + '/_design/psycholinguistics/_view/' + scope.participantsList.api + '?descending=true').respond([{
         firstname: 'Ling',
         lastname: 'Llama'
       }, {
@@ -79,7 +93,7 @@ describe('Directive: fielddb-datalist', function() {
         lastname: 'Tiger'
       }]);
 
-      el = angular.element('<div data-fielddb-datalist json="corpus.docs" corpus="corpus"></div>');
+      el = angular.element('<div data-fielddb-datalist json="participantsList" corpus="corpus"></div>');
       compileFunction = $compile(el);
       // bring html from templateCache
       scope.$digest();
@@ -91,16 +105,16 @@ describe('Directive: fielddb-datalist', function() {
 
     it('should mock network request of 3 docs', function() {
       // call the network request
-      http.get(FieldDB.BASE_DB_URL + '/' + scope.corpus.dbname + '/_design/psycholinguistics/_view/speakers?descending=true').then(function(result) {
+      http.get(FieldDB.BASE_DB_URL + '/' + scope.corpus.dbname + '/_design/psycholinguistics/_view/' + scope.participantsList.api + '?descending=true').then(function(result) {
         result.data.map(function(doc) {
-          scope.corpus.docs.push(doc);
+          scope.participantsList.docs.push(doc);
           // scope.$digest();
         });
       });
 
       // flush the mock backend
       httpBackend.flush();
-      expect(scope.corpus.docs.length).toBe(3);
+      expect(scope.participantsList.docs.length).toBe(3);
 
       inject(function() {
         compileFunction(scope); // <== the html {{}} are bound
@@ -172,7 +186,7 @@ describe('Directive: fielddb-datalist', function() {
 
       runs(function() {
         expect(value).toBeGreaterThan(0);
-        expect(el.scope().corpus.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);
+        expect(el.scope().datalist.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);
       });
 
     });

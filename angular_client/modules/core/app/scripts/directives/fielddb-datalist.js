@@ -17,7 +17,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       if (!FieldDB.BASE_DB_URL || !$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey) {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         $timeout(function() {
-          if ($scope.docs && $scope.docs.length > 0) {
+          if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
             return;
           } else {
             fetchDatalistDocsIfEmpty();
@@ -36,10 +36,10 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       db.debugMode = true;
 
       // console.log('fetching docs for ', db.toJSON());
-      db.fetchCollection('speakers').then(function(results) {
+      db.fetchCollection($scope.datalist.api).then(function(results) {
 
         console.log('downloaded docs', results);
-        $scope.docs = $scope.docs || [];
+        $scope.datalist.docs = $scope.datalist.docs || [];
         results.map(function(doc) {
           if (doc.type && FieldDB[doc.type]) {
             db.debug("Converting doc into type " + doc.type);
@@ -48,7 +48,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
           } else {
             db.warn("This doc does not have a type, it might display oddly ", doc);
           }
-          $scope.docs.push(doc);
+          $scope.datalist.docs.push(doc);
         });
         $scope.$digest();
 
@@ -56,12 +56,12 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
         console.log('No docs docs...', reason);
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
-        $scope.corpus.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
+        $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
         console.log(' No connetion, Waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
         $scope.$digest();
 
         $timeout(function() {
-          if ($scope.docs && $scope.docs.length > 0) {
+          if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
             return;
           } else {
             fetchDatalistDocsIfEmpty();
@@ -82,7 +82,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     restrict: 'A',
     transclude: false,
     scope: {
-      docs: '=json',
+      datalist: '=json',
       corpus: '=corpus'
     },
     controller: controller,
