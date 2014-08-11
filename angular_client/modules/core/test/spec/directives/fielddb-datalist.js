@@ -19,10 +19,12 @@ describe('Directive: fielddb-datalist', function() {
         description: 'This is a sample datalist of users',
         docs: [{
           firstname: 'Ling',
-          lastname: 'Llama'
+          lastname: 'Llama',
+          type: 'UserMask'
         }, {
           firstname: 'Teammate',
-          lastname: 'Tiger'
+          lastname: 'Tiger',
+          type: 'UserMask'
         }]
       };
       scope.datalist2 = {
@@ -30,7 +32,8 @@ describe('Directive: fielddb-datalist', function() {
         description: 'This is a sample datalist of participants',
         docs: [{
           firstname: 'Anony',
-          lastname: 'Mouse'
+          lastname: 'Mouse',
+          type: 'Participant'
         }]
       };
       compileFunction = $compile(el);
@@ -51,7 +54,7 @@ describe('Directive: fielddb-datalist', function() {
           console.log('post link', el.html());
           console.log('scope team ', scope.team);
           console.log('scope datalist1 ', scope.datalist1);
-          // console.log(angular.element(el.find('h1')));
+          console.log(angular.element());
         }
         expect(angular.element(el.find('h1')[1]).text().trim()).toEqual('Anony Mouse');
         expect(angular.element(el.find('h1')[3]).text().trim()).toEqual('Ling Llama');
@@ -87,13 +90,16 @@ describe('Directive: fielddb-datalist', function() {
       http = $http;
       httpBackend.when('GET', FieldDB.BASE_DB_URL + '/' + scope.corpus.dbname + '/_design/psycholinguistics/_view/' + scope.participantsList.api + '?descending=true').respond([{
         firstname: 'Ling',
-        lastname: 'Llama'
+        lastname: 'Llama',
+        type: 'Participant'
       }, {
         firstname: 'Anony',
-        lastname: 'Mouse'
+        lastname: 'Mouse',
+        type: 'Participant'
       }, {
         firstname: 'Teammate',
-        lastname: 'Tiger'
+        lastname: 'Tiger',
+        type: 'Participant'
       }]);
 
       el = angular.element('<div data-fielddb-datalist json="participantsList" corpus="corpus"></div>');
