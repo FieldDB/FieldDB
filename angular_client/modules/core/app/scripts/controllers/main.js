@@ -15,6 +15,16 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       //   authenticated: true
       // }
     };
+    $scope.participantsList = {
+      api: 'participants'
+    };
+
+    $scope.hasParticipants = function() {
+      if (!$scope.participantsList || !$scope.participantsList.docs || !$scope.participantsList.docs.length) {
+        return false;
+      }
+      return $scope.participantsList.docs.length > 0;
+    };
 
     var processRouteParams = function() {
       if (!$routeParams || !$routeParams.team) {
