@@ -408,8 +408,8 @@ Collection.prototype = Object.create(Object.prototype, {
       if (this._collection && typeof this._collection.map === "function") {
         var self = this;
         return function(callback) {
-          return this._collection.map.apply(self._collection, [callback])
-        }
+          return this._collection.map.apply(self._collection, [callback]);
+        };
       } else {
         return undefined;
       }
