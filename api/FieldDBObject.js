@@ -354,7 +354,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       dbname: FieldDBObject.DEFAULT_STRING,
       version: FieldDBObject.DEFAULT_STRING,
       dateCreated: FieldDBObject.DEFAULT_DATE,
-      dateModified: FieldDBObject.DEFAULT_DATE
+      dateModified: FieldDBObject.DEFAULT_DATE,
+      comments: FieldDBObject.DEFAULT_COLLECTION
     }
   },
 
@@ -500,6 +501,22 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
       this._dateModified = value;
+    }
+  },
+
+  comments: {
+    get: function() {
+      return this._comments || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._comments) {
+        return;
+      }
+      if (!value) {
+        delete this._comments;
+        return;
+      }
+      this._comments = value;
     }
   },
 
