@@ -117,6 +117,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var funcNameRegex = /function (.{1,})\(/;
       var results = (funcNameRegex).exec((this).constructor.toString());
       return (results && results.length > 1) ? results[1] : "";
+    },
+    set: function(value) {
+      if (value !== this.type) {
+        this.warn('Using type ' + this.type + ' when the incoming object was ' + value);
+      }
     }
   },
 
