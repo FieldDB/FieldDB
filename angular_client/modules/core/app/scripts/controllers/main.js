@@ -15,9 +15,9 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       //   authenticated: true
       // }
     };
-    $scope.participantsList = {
+    $scope.participantsList = new FieldDB.DataList({
       api: 'participants'
-    };
+    });
 
     $scope.hasParticipants = function() {
       if (!$scope.participantsList || !$scope.participantsList.docs || !$scope.participantsList.docs.length) {

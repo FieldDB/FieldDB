@@ -65,7 +65,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/confidentiality_encryption/Confidential.js',  'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js',  'api/datum/DatumField.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/user/Speaker.js', 'api/user/Consultant.js', 'api/user/Participant.js', 'api/corpus/CorpusMask.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/confidentiality_encryption/Confidential.js',  'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js',  'api/datum/DatumField.js', 'api/data_list/DataList.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/user/Speaker.js', 'api/user/Consultant.js', 'api/user/Participant.js', 'api/corpus/CorpusMask.js']
       },
       test: {
         options: {
