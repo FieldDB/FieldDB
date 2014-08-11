@@ -23,8 +23,10 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
             fetchDatalistDocsIfEmpty();
           }
         }, fetchDatalistDocsExponentialDecay);
-        console.log(' No URL or corpus specified, waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
-
+        console.log(' No URL or corpus specified, waiting another ' + $scope.datalist.fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
+        if ($scope.datalist) {
+          $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
+        }
         return;
       }
 
@@ -74,6 +76,10 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     };
 
     fetchDatalistDocsIfEmpty();
+
+    $scope.canAddNewItemsToDataList = function() {
+      return false;
+    };
 
   };
   controller.$inject = ['$scope', '$timeout'];
