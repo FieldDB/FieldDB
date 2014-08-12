@@ -19,6 +19,7 @@
   var PsycholinguisticsDatabase = require("./corpus/PsycholinguisticsDatabase").PsycholinguisticsDatabase;
   var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
   var Router = require("./Router").Router;
+  var User = require("./user/User").User;
   var UserMask = require("./user/UserMask").UserMask;
   var Team = require("./user/Team").Team;
   var Speaker = require("./user/Speaker").Speaker;
@@ -39,6 +40,7 @@
   FieldDB.Database = Database;
   FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
+  FieldDB.User = User;
   FieldDB.UserMask = UserMask;
   FieldDB.Team = Team;
   FieldDB.Speaker = Speaker;
