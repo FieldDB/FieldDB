@@ -27,6 +27,7 @@
   var Corpus = require("./corpus/Corpus").Corpus;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
+  var Search = require("./search/Search").Search;
   var Q = require("q");
 
   var FieldDB = {};
@@ -46,6 +47,7 @@
   FieldDB.Corpus = Corpus;
   FieldDB.CorpusMask = CorpusMask;
   FieldDB.Import = Import;
+  FieldDB.Search = Search;
   FieldDB.Q = Q;
   FieldDB.FieldDBConnection = FieldDBConnection;
 
