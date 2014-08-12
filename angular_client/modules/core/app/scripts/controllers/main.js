@@ -10,14 +10,49 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
     };
     FieldDB.FieldDBConnection.connection.localCouch.url = FieldDB.BASE_DB_URL;
 
-    $scope.authentication = {
-      // user: {
-      //   authenticated: true
-      // }
+    $scope.authentication = $scope.authentication || {
+      user: {
+        authenticated: false
+      }
     };
+    $scope.loginDetails = $scope.loginDetails || {
+      username: '',
+      password: ''
+    };
+
+    $scope.speakersList = new FieldDB.DataList({
+      api: 'speakers'
+    });
+    $scope.consultantsList = new FieldDB.DataList({
+      api: 'consultants'
+    });
     $scope.participantsList = new FieldDB.DataList({
       api: 'participants'
     });
+
+    $scope.sessionsList = new FieldDB.DataList({
+      api: 'sessions'
+    });
+    $scope.datalistsList = new FieldDB.DataList({
+      api: 'datalists'
+    });
+    $scope.datumsList = new FieldDB.DataList({
+      api: 'datums'
+    });
+
+    $scope.responsesList = new FieldDB.DataList({
+      api: 'responses'
+    });
+    $scope.reportsList = new FieldDB.DataList({
+      api: 'reports'
+    });
+
+    $scope.importer = $scope.importer || null;
+    $scope.search = $scope.search || null;
+    $scope.currentDoc = $scope.currentDoc || null;
+    $scope.team = $scope.team || null;
+    $scope.corpus = $scope.corpus || null;
+    $scope.thisyear = (new Date()).getFullYear();
 
     $scope.hasParticipants = function() {
       if (!$scope.participantsList || !$scope.participantsList.docs || !$scope.participantsList.docs.length) {
@@ -27,63 +62,117 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
     };
 
     var processRouteParams = function() {
-      if (!$routeParams || !$routeParams.team) {
-        console.log('Route params are undefined, not loading anything');
+      if (!$routeParams) {
+        console.warn('Route params are undefined, not loading anything');
         return;
       }
-      $scope.loginDetails.username = $routeParams.team;
-      $rootScope.currentCorpusDashboard = $routeParams.team + '/' + $routeParams.corpusid;
+      $scope.routeParams = $routeParams;
 
-      var team = new FieldDB.UserMask({
-        username: 'team',
-      });
-      team.dbname = team.validateUsername($routeParams.team).username + '-' + team.validateUsername($routeParams.corpusid).username;
-      if (team.dbname.split('-').length < 2) {
-        $scope.status = 'Please try another url of the form teamname/corpusname ' + team.dbname + ' is not valid.';
-        return;
+      /*
+       * Handle precise routes
+       */
+      if ($routeParams.importType) {
+        $scope.importer = $scope.importer || new FieldDB.Import({
+          importType: $routeParams.importType
+        });
+      } else if ($routeParams.reportType) {
+        $scope.reportsList.filter = function(report) {
+          if ($routeParams.reportType.match(report.type.toLowerCase())) {
+            return true;
+          } else {
+            return false;
+          }
+        };
+      } else if ($routeParams.speakerType) {
+        $scope.speakersList.filter = function(speaker) {
+          if ($routeParams.speakerType.match(speaker.type.toLowerCase())) {
+            return true;
+          } else {
+            return false;
+          }
+        };
+      } else if ($routeParams.searchQuery) {
+        $scope.search = $scope.search || new FieldDB.Search({
+          searchKeywords: $routeParams.searchQuery
+        });
+      } else if ($routeParams.docid) {
+        if ($scope.doc && $scope.doc.save) {
+          $scope.doc.bug('Switching to another document without saving...');
+        }
+        $scope.doc = new FieldDB.FieldDBObject({
+          id: $routeParams.docid
+        });
       }
-      $scope.team = team;
 
+      /*
+       * Letting the url determine which team is loaded
+       */
+      if ($routeParams.team) {
+        if ($scope.team && $scope.team.save) {
+          $scope.team.bug('Switching to another team without saving...');
+        }
+        $scope.team = new FieldDB.Team({
+          username: $routeParams.team
+        });
 
-      var corpus = new FieldDB.Corpus({
-        dbname: team.dbname
-      });
-      console.log(corpus.toJSON());
-      $scope.corpus = corpus;
+        /*
+         * Letting the url determine which corpus is loaded
+         */
+        if ($routeParams.corpusid) {
+          $rootScope.currentCorpusDashboardDBname = $scope.team.validateUsername($routeParams.team).username + '-' + $scope.team.validateUsername($routeParams.corpusid).username;
+          if ($rootScope.currentCorpusDashboardDBname.split('-').length < 2) {
+            $scope.status = 'Please try another url of the form teamname/corpusname ' + $rootScope.currentCorpusDashboardDBname + ' is not valid.';
+            return;
+          }
 
+          $scope.team.dbname = $rootScope.currentCorpusDashboardDBname;
+          if ($scope.corpus && $scope.corpus.save) {
+            $scope.corpus.bug('Switching to another corpus without saving...');
+          }
+          if (!$scope.corpus || $rootScope.currentCorpusDashboardDBname !== $scope.corpus.dbname) {
+            $scope.corpus = new FieldDB.Corpus({
+              dbname: $rootScope.currentCorpusDashboardDBname
+            });
+          }
+        }
+      }
 
-      $scope.corpora = null;
-      $scope.thisyear = (new Date()).getFullYear();
+      /*
+       * Fetching models if they are not complete
+       */
 
       // FieldDB.FieldDBConnection.connect().done(function(userroles) {
       // $scope.authentication.userroles = userroles;
-      if (!$scope.team.gravatar) {
-        $scope.status = 'Loading team details.';
-        team.fetch(FieldDB.FieldDBConnection.connection.localCouch.url).then(function(result) {
-          console.log('Suceeded to download team public details.', result);
-          $rootScope.status = 'Loaded team details.';
+      if ($scope.team && !$scope.team.gravatar) {
+        $scope.team.status = 'Loading team details.';
+        $scope.team.fetch(FieldDB.FieldDBConnection.connection.localCouch.url).then(function(result) {
+          console.log('Suceeded to download team\'s public details.', result);
+          $rootScope.status = $scope.team.status = 'Loaded team details.';
           $scope.$apply();
         }, function(result) {
           console.log('Failed to download team public details.', result);
-          $rootScope.status = 'Failed to download team public details.';
+          $rootScope.status = $scope.team.status = 'Failed to download team public details.';
           $scope.$apply();
         });
       }
-      if (!$scope.corpus.title) {
-        $scope.status = 'Loading corpus details.';
-        corpus.loadOrCreateCorpusByPouchName(corpus.dbname).then(function(result) {
-          console.log('Suceeded to download corpus details.', result);
-          $rootScope.status = 'Loaded corpus details.';
 
+      if ($scope.corpus && !$scope.corpus.title) {
+        $scope.corpus.status = 'Loading corpus details.';
+        $scope.corpus.loadOrCreateCorpusByPouchName($scope.corpus.dbname).then(function(result) {
+          console.log('Suceeded to download corpus details.', result);
+          $rootScope.status = $scope.corpus.status = 'Loaded corpus details.';
           $scope.$apply();
         }, function(result) {
           console.log('Failed to download corpus details.', result);
-          $rootScope.status = 'Failed to download corpus details. Are you sure this is the corpus you wanted to see: ' + corpus.dbname;
+
+          $rootScope.status = $scope.corpus.status = 'Failed to download corpus details. Are you sure this is the corpus you wanted to see: ' + $scope.corpus.dbname;
+          $scope.loginDetails.username = $scope.team.username;
           $scope.$apply();
         }).catch(function(error) {
           console.log(error);
         });
       }
+
     };
     processRouteParams();
     // FieldDB.FieldDBConnection.connect();
