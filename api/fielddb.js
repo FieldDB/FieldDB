@@ -20,7 +20,7 @@
   var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
   var Router = require("./Router").Router;
   var UserMask = require("./user/UserMask").UserMask;
-  var Team = require("./user/UserMask").UserMask;
+  var Team = require("./user/Team").Team;
   var Speaker = require("./user/Speaker").Speaker;
   var Consultant = require("./user/Consultant").Consultant;
   var Participant = require("./user/Participant").Participant;
