@@ -29,15 +29,14 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
       if (processOffline) {
-        $scope.importer = $scope.importer || new FieldDB.Import({
-          files: $files,
-          corpus: $scope.corpus,
-          dbname: $scope.corpus.dbname,
-          status: '',
-          error: '',
-          rawText: '',
-          importType: 'participants'
-        });
+        $scope.importer = $scope.importer || new FieldDB.Import();
+        $scope.importer.status = '';
+        $scope.importer.error = '';
+        $scope.importer.rawText = '';
+        $scope.importer.importType = $scope.importer.importType || 'data';
+        $scope.corpus = $scope.corpus;
+        $scope.importer.dbname = $scope.corpus.dbname || 'default';
+        $scope.files = $files;
 
         console.log($scope.importer);
         $scope.importer.readFiles({}).then(function(sucessfullOptions) {
