@@ -1,4 +1,3 @@
-/*globals FieldDB */
 'use strict';
 
 /**
@@ -45,17 +44,24 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
           return scope.$eval(attrs.compile);
         },
         function(value) {
+          console.log('Scope value changed', value);
           // when the 'compile' expression changes
           // assign it into the current DOM
           console.log('doc type is ', scope.doc.type);
           if (templates[scope.doc.type]) {
             element.html(templates[scope.doc.type]);
-            if (scope && scope.doc && !scope.doc.toJSON) {
+            if (scope && scope.doc && !scope.doc.fetch) {
               console.warn('This doc doesnt have the FieldDBObject methods to it, cant turn it into a ' + scope.doc.type + ' without loosing its references. Please pass it as a complex object if you need its functionality.');
               // scope.doc = new FieldDB[scope.doc.type](scope.doc);
             }
           } else {
             element.html('{{doc.type}} Unable to display this document.');
+            if (scope && scope.doc && scope.doc.fetch) {
+              console.log('TODO fetch the doc details and refresh the render to the right template if necessary');
+              // doc.fetch().then(function(){
+              //   scope.$digest();
+              // });
+            }
           }
           console.log('Using html: ' + element.html());
 
