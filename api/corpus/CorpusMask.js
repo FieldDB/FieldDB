@@ -262,7 +262,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
               //find out what the rev is in the database by fetching
               self.fetch({
                 success: function(model, response) {
-                  this.debug(response);
+                  self.debug(response);
                   modelwithhardcodedid._rev = self._rev;
 
                   db.put(modelwithhardcodedid, function(err, response) {
@@ -271,7 +271,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
                         failurecallback();
                       }
                     } else {
-                      this.debug(response);
+                      self.debug(response);
                       //this happens on subsequent save into pouch of this CorpusMask's id
                       if (typeof successcallback === "function") {
                         successcallback();
@@ -282,7 +282,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
                 },
                 //fetch error
                 error: function(e) {
-                  this.debug(e);
+                  self.debug(e);
                   if (typeof failurecallback === "function") {
                     failurecallback();
                   }
@@ -295,7 +295,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
               }
             }
           } else {
-            this.debug(response);
+            self.debug(response);
             if (typeof successcallback === "function") {
               successcallback();
             }
