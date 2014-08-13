@@ -46,7 +46,7 @@ angular.module('fielddbAngularApp').factory('fielddbStorage', function fielddbSt
       var deferred = FieldDB.Q.defer();
 
       var onceUsernameIsKnown = function() {
-        db = db || new FieldDB.PsycholinguisticsDatabase({
+        db = db || new FieldDB.Database({
           username: username,
           dbname: dbname,
           url: FieldDB.BASE_DB_URL,

@@ -49,7 +49,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
     $scope.login = function(loginDetails) {
       $scope.isContactingServer = true;
       $scope.authentication.error = '';
-      var db = new FieldDB.PsycholinguisticsDatabase({
+      var db = new FieldDB.Database({
         username: loginDetails.username,
         dbname: 'default',
         url: FieldDB.BASE_DB_URL,
@@ -75,7 +75,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
 
     $scope.logout = function() {
       $scope.authentication.error = '';
-      var db = new FieldDB.PsycholinguisticsDatabase({
+      var db = new FieldDB.Database({
         username: $scope.loginDetails.username,
         dbname: 'default',
         url: FieldDB.BASE_DB_URL,
