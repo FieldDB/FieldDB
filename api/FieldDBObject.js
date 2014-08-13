@@ -564,7 +564,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         for (aproperty in this.INTERNAL_MODELS) {
           if (!json[aproperty] && this.INTERNAL_MODELS) {
-            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
+            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
               json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
             } else {
               json[aproperty] = this.INTERNAL_MODELS[aproperty];
