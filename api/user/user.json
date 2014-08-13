@@ -9,17 +9,22 @@
     "port": "",
     "pouchname": "",
     "path": "",
-    "corpusid": ""
+    "authUrl": "",
+    "userFriendlyServerName": ""
   }],
   "activityCouchConnection": {
     "protocol": "",
     "domain": "",
     "port": "",
     "pouchname": "",
-    "path": ""
+    "path": "",
+    "authUrl": "",
+    "userFriendlyServerName": ""
   },
+  "appbrand": "",
   "gravatar": "",
-  "appVersionWhenCreated": "1.28.3",
+  "appVersionWhenCreated": "2.2.2ss",
+  "authServerVersionWhenCreated": "2.12.0",
   "authUrl": "",
   "created_at": "",
   "updated_at": "",
@@ -30,112 +35,113 @@
   "dataLists": [],
   "prefs": {
     "skin": "",
-    "numVisibleDatum": "2",
+    "numVisibleDatum": 2,
     "transparentDashboard": "false",
     "alwaysRandomizeSkin": "true",
-    "numberOfItemsInPaginatedViews": "10",
+    "numberOfItemsInPaginatedViews": 10,
     "unicodes": [{
       "symbol": "ɔ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
+    }, {
+      "symbol": "ə",
+      "tipa": "",
+      "useCount": 0
     }, {
       "symbol": "ɛ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "ɣ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "ɥ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "ɦ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "ɫ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "ʃ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "ʒ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "ʔ",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "λ ",
       "tipa": "lambda",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "α ",
       "tipa": "alpha",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "β ",
       "tipa": "\beta",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "∀",
       "tipa": "\forall",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "∃",
       "tipa": "exists",
-      "useCount": "0"
+      "useCount": 0
+    }, {
+      "symbol": "°",
+      "tipa": "^{circ}",
+      "useCount": 0
     }, {
       "symbol": "∄",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "∅",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "∈",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "∉",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "∋",
       "tipa": "",
-      "useCount": "0"
+      "useCount": 0
     }, {
       "symbol": "∌",
       "tipa": "",
-      "useCount": "0"
-    }],
-    "preferedDashboardLayout": "default"
+      "useCount": 0
+    }]
   },
   "mostRecentIds": {
-    "corpusid": "",
-    "datalistid": "",
-    "sessionid": "",
     "couchConnection": {
       "protocol": "",
       "domain": "",
       "port": "",
       "pouchname": "",
       "path": "",
-      "corpusid": ""
+      "authUrl": "",
+      "userFriendlyServerName": ""
     }
   },
   "firstname": "",
   "lastname": "",
   "sessionHistory": [],
-  "hotkeys": {
-    "firstKey": "",
-    "secondKey": "",
-    "description": ""
-  }
+  "hotkeys": {}
 }
