@@ -1417,9 +1417,9 @@ $.couch.allDbs({
 Convert ACRA activities into fielddb activies
  */
 // var lastPosition = 1403805265615; // 1403792172786 // 1402818525880 // 1403792172786
-var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1400736954477", "anonymous1399110330026", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397770209950", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397045636195", "anonymous1396806997435", "anonymous1401873037326", "anonymous1406914718135", "anonymous1406763577954", "anonymous1406297431603", "anonymous1406234565430", "anonymous1402474075836", "anonymous1405713207104", "anonymous1405713402347", "anonymous1404380629344", "anonymous1404965136766", "anonymous1404797396604"];
-var database = $.couch.db("acra-learnx-backup");
-var limit = 2000;
+var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1400736954477", "anonymous1399110330026", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397770209950", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397045636195", "anonymous1396806997435", "anonymous1401873037326", "anonymous1406914718135", "anonymous1406763577954", "anonymous1406297431603", "anonymous1406234565430", "anonymous1402474075836", "anonymous1405713207104", "anonymous1405713402347", "anonymous1404380629344", "anonymous1404965136766", "anonymous1404797396604", "anonymous1404357779017", "anonymous1407418050247", "anonymouskartulispeechrecognition1407415600066", "anonymouskartulispeechrecognition1407340889235", "anonymous1406189989271", "anonymous1406137962123", "anonymous1402771637598", "anonymous1404546617895", "anonymous1404543172048", "anonymous1404510294987", "anonymous1404477292397", "anonymous1404379286889", "anonymouskartulispeechrecognition1404251000382", "anonymous1403954098791", "anonymous1403820277996", "anonymous1403770114403", "anonymous1403695449072", "anonymous1403614517620", "anonymous1403215176702", "anonymous1401396176832", "anonymous1397372490908", "anonymous1396791663422", "anonymous1396717008518"];
+var database = $.couch.db("acra-learnx");
+var limit = 4000;
 var saved = 0;
 database.view("fielddb/activities?limit=" + limit, {
   // database.view("fielddb/activities", {
@@ -1509,7 +1509,7 @@ database.view("fielddb/activities?limit=" + limit, {
   http://garmoncheg.blogspot.ca/2013/11/couchdb-restoring-deletedupdated.html
   http://stackoverflow.com/questions/4273140/couchdb-changes-notifications-jquery-couch-js-couch-app-db-changes-usage
  */
-var database = $.couch.db("acra-learnx-backup");
+var database = $.couch.db("acra-learnx");
 var limit = 2000;
 var saved = 0;
 $.ajax({
@@ -1577,6 +1577,30 @@ $.ajax({
     console.log("Couldnt open all docs ", JSON.stringify(error));
   }
 });
+
+/* Remove duplicates from Acra activity conversion */
+var database = $.couch.db("community-georgian-activity_feed");
+var limit = 4;
+database.view("debugging/remove-duplicates?limit=" + limit, {
+  success: function(actvities) {
+    // console.log(actvities.rows);
+    actvities.rows.map(function(row) {
+      console.log("Would remove ", row.value);
+      database.removeDoc(row.value, {
+        success: function(serverResults) {
+          console.log("removed duplicate activity " ,serverResults);
+        },
+        error: function(serverResults) {
+          console.log("There was a problem removing the duplicate activity." + row);
+        }
+      });
+    })
+  },
+  error: function(error) {
+    console.log("Couldnt open all duplicates ", JSON.stringify(error));
+  }
+});
+
 
 /*
 Make sure all speech rec activities are in the central activities too
