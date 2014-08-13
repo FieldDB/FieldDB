@@ -14,7 +14,7 @@ describe("InsertUnicode: as a User I want to use my favourite symbols", function
   it("should accept serializations from <v2.0", function() {
     var unicodes = new InsertUnicodes(SAMPLE_USER.prefs.unicodes);
     expect(unicodes).toBeDefined();
-    expect(unicodes.length).toEqual(20);
+    expect(unicodes.length).toEqual(22);
   });
 
   it("should be able to fill with default symbols", function() {
