@@ -29,6 +29,9 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
     $scope.participantsList = new FieldDB.DataList({
       api: 'participants'
     });
+    $scope.usersList = new FieldDB.DataList({
+      api: 'users'
+    });
 
     $scope.sessionsList = new FieldDB.DataList({
       api: 'sessions'
