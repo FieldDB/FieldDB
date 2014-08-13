@@ -112,7 +112,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     get: function() {
       if (!this._docIds && this.docs && this.docs.length > 0) {
         this._docIds = this.docs.map(function(doc) {
-          console.log('geting doc id of this doc ', doc);
+          this.debug('geting doc id of this doc ', doc);
           return doc.id;
         });
       }
@@ -186,7 +186,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
               id: id
             });
             obj.fetch().then(function(results) {
-              console.log("Fetched datum to get audio file", results);
+              this.debug("Fetched datum to get audio file", results);
               if (doc.audioVideo) {
 
                 obj.audioVideo.map(function(audioVideoFile) {

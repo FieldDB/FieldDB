@@ -3,7 +3,7 @@
   var FieldDBDatabase = require('./Database').Database;
 
   var PsycholinguisticsDatabase = function PsycholinguisticsDatabase(options) {
-    console.log("In PsycholinguisticsDatabase ", options);
+    this.debug("In PsycholinguisticsDatabase ", options);
     FieldDBDatabase.apply(this, arguments);
   };
   var DEFAULT_COLLECTION_MAPREDUCE = '_design/psycholinguistics/_view/COLLECTION?descending=true';
@@ -18,7 +18,6 @@
     }
   });
 
-  console.log(PsycholinguisticsDatabase);
   exports.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
 
 })(typeof exports === 'undefined' ? this['PsycholinguisticsDatabase'] = {} : exports);

@@ -12,7 +12,7 @@ var DatumTag = require('./DatumTag').DatumTag;
  * @constructs
  */
 var DatumTags = function DatumTags(options) {
-  console.log("Constructing DatumTags length: ", options);
+  this.debug("Constructing DatumTags ", options);
   Collection.apply(this, arguments);
 };
 
