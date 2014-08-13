@@ -54,7 +54,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @tutorial tests/CorpusTest.js
  */
 var CorpusMask = function CorpusMask(options) {
-  console.log(options);
+  this.debug(options);
   FieldDBObject.apply(this, arguments);
 
 };
@@ -262,7 +262,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
               //find out what the rev is in the database by fetching
               self.fetch({
                 success: function(model, response) {
-                  console.log(response);
+                  this.debug(response);
                   modelwithhardcodedid._rev = self._rev;
 
                   db.put(modelwithhardcodedid, function(err, response) {
@@ -271,7 +271,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
                         failurecallback();
                       }
                     } else {
-                      console.log(response);
+                      this.debug(response);
                       //this happens on subsequent save into pouch of this CorpusMask's id
                       if (typeof successcallback === "function") {
                         successcallback();
@@ -282,7 +282,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
                 },
                 //fetch error
                 error: function(e) {
-                  console.log(e);
+                  this.debug(e);
                   if (typeof failurecallback === "function") {
                     failurecallback();
                   }
@@ -295,7 +295,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
               }
             }
           } else {
-            console.log(response);
+            this.debug(response);
             if (typeof successcallback === "function") {
               successcallback();
             }

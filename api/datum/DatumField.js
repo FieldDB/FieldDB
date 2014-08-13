@@ -422,7 +422,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         delete this._mask;
         return;
       }
-      console.log("Setting datum field mask " + value);
+      this.debug("Setting datum field mask " + value);
       this._mask = value.trim();
     }
   },

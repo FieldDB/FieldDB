@@ -11,7 +11,7 @@ var MD5 = require("MD5");
  * @tutorial tests/UserTest.js
  */
 var UserMask = function UserMask(options) {
-  console.log(options);
+  this.debug("Constructing a UserMask " + options);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -240,13 +240,13 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
   validateUsername: {
     value: function(value) {
-      if(!value){
+      if (!value) {
         return {
-        valid: false,
-        username: null,
-        original: null,
-        suggestion: null
-      };
+          valid: false,
+          username: null,
+          original: null,
+          suggestion: null
+        };
       }
       var safeName = value.toLowerCase().replace(/[^a-z0-9_]/g, '');
       var validation = {

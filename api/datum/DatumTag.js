@@ -11,7 +11,7 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var DatumTag = function DatumTag(options) {
-  this.debug("Constructing DatumTag length: ", options);
+  this.debug("Constructing DatumTag ", options);
   FieldDBObject.apply(this, arguments);
 };
 
