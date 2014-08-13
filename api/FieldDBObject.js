@@ -73,7 +73,7 @@ var Q = require("q");
 var FieldDBObject = function FieldDBObject(json) {
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
-  if (json && json.confidential) {
+  if (json && json.confidential && this.INTERNAL_MODELS['confidential']) {
     this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
   }
   var simpleModels = [];
