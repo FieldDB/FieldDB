@@ -20,6 +20,7 @@ function(doc) {
           }
         }
       }
+      doc.type = "Datum";
       emit(datum.user, datum);
     }
   } catch (e) {
