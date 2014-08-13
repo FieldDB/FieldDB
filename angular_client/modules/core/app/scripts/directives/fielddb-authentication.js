@@ -24,7 +24,8 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
     var processUserDetails = function(user) {
       user.authenticated = true;
       user.accessibleDBS = user.accessibleDBS || [];
-      $scope.authentication.user = user;
+      $scope.authentication.user = new FieldDB.User(user);
+
       // $scope.team = user;
       // $rootScope.authenticated = true;
       user.roles.map(function(role) {
