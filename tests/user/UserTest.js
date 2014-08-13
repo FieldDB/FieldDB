@@ -1,5 +1,4 @@
-var User = require("../../api/user/UserMask").UserMask;
-
+var User = require("../../api/user/User").User;
 
 describe("User ", function() {
 
@@ -23,7 +22,7 @@ describe("User ", function() {
     expect(u.description).toBeDefined();
 
     expect(u.toJSON()).toEqual({
-      type: 'UserMask',
+      type: 'User',
       username: 'bill',
       gravatar: '67890954367898765',
       firstname: '',
@@ -32,7 +31,8 @@ describe("User ", function() {
       affiliation: '',
       researchInterest: '',
       description: '',
-      version: u.version
+      version: u.version,
+      api: 'users'
     });
   });
 
@@ -45,21 +45,43 @@ describe("User ", function() {
     expect(u.name).toEqual("Bill Smith");
   });
 
+  it("should have a user preferences ", function() {
+    var u = new User();
+    expect(u.prefs).toBeDefined();
+    expect(u.prefs.preferedDashboardType).toEqual('');
+  });
+
+  it("should guess an appropriate dashboard for a user", function() {
+    var u = new User({
+      appbrand: "phophlo",
+      // prefs: {}
+    });
+
+    // u.appbrand = "phophlo";
+    expect(u.prefs.type).toEqual('UserPreference');
+    expect(u.prefs.preferedDashboardType).toEqual('experimenter');
+  });
+
   it("should have a complete serialization if the user requests ", function() {
     var u = new User();
     u.firstname = "Bill";
     u.lastname = "Smith";
 
-    expect(u.toJSON("complete")).toEqual({
-      type: 'UserMask',
+    expect(u.toJSON("complete")).toEqual( {
+      type: 'User',
       username: '',
       dateCreated: u.dateCreated,
       firstname: 'Bill',
       lastname: 'Smith',
       version: u.version,
-      dbname: '',
-      dateModified: 0,
-      comments: []
+      prefs: {
+        type: 'UserPreference',
+        dateCreated: u.dateCreated,
+        version: u.version,
+        hotkeys: [],
+        unicodes: []
+      },
+      api: 'users'
     });
   });
 
