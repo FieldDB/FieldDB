@@ -29,7 +29,7 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
     Response: '<div data-fielddb-user json="doc"></div>'
   };
   return {
-    template: '{{doc.type}} Unable to display this document.',
+    template: '{{doc.type}} Unable to display this document. {{doc._id}}',
     restrict: 'A',
     transclude: false,
     scope: {
