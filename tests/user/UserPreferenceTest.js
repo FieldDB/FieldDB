@@ -14,7 +14,7 @@ describe("Test UserPreference", function() {
   it("should accept serializations from <v2.0", function() {
     var prefs = new UserPreference(SAMPLE_USER.prefs);
     expect(prefs).toBeDefined();
-    expect(prefs.unicodes.length).toEqual(20);
+    expect(prefs.unicodes.length).toEqual(22);
   });
 
   it("should allow users to change their preferences", function() {
