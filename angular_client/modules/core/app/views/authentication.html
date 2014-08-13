@@ -12,4 +12,14 @@
   <button ng-show="authentication.user.authenticated" class="btn btn-default" ng-click="logout()" tabindex="3">
     Logout
   </button>
+  <select ng-model="authentication.user.prefs.preferedDashboardType" title="Which kind of dashboard defaults would you like to use view this corpus?">
+    <option value="psycholinguistNormalUser">Experiment Administrator (basic)</option>
+    <option value="psycholinguistPowerUser">Psycho Linguist (advanced)</option>
+    <option value="fieldlinguistNormalUser">Field Linguist (basic)</option>
+    <option value="fieldlinguistPowerUser">Field Linguist/Translator (advanced)</option>
+    <option value="speaker">Language Speaker</option>
+    <option value="languageLearnerCourseUser">Language Learner (course work)</option>
+    <option value="languageLearnerImmersionUser">Language Learner (immersion)</option>
+    <option value="translatorNormalUser">Translator</option>
+  </select>
 </form>
