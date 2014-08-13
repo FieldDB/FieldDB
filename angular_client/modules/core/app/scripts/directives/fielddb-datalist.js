@@ -58,7 +58,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
               guessedType = 'DataList';
             }
             if (FieldDB[guessedType]) {
-              db.warn('Converting doc into type ' + doc.type);
+              db.warn('Converting doc into guessed type ' + guessedType);
               doc.confidential = $scope.corpus.confidential;
               doc = new FieldDB[guessedType](doc);
             }
