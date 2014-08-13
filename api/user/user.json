@@ -8,16 +8,18 @@
     "domain": "",
     "port": "",
     "pouchname": "",
+    "path": "",
     "corpusid": ""
   }],
   "activityCouchConnection": {
     "protocol": "",
     "domain": "",
     "port": "",
-    "pouchname": ""
+    "pouchname": "",
+    "path": ""
   },
   "gravatar": "",
-  "appVersionWhenCreated": "1.22.1",
+  "appVersionWhenCreated": "1.28.3",
   "authUrl": "",
   "created_at": "",
   "updated_at": "",
@@ -112,12 +114,21 @@
       "symbol": "∌",
       "tipa": "",
       "useCount": "0"
-    }]
+    }],
+    "preferedDashboardLayout": "default"
   },
   "mostRecentIds": {
     "corpusid": "",
     "datalistid": "",
-    "sessionid": ""
+    "sessionid": "",
+    "couchConnection": {
+      "protocol": "",
+      "domain": "",
+      "port": "",
+      "pouchname": "",
+      "path": "",
+      "corpusid": ""
+    }
   },
   "firstname": "",
   "lastname": "",
