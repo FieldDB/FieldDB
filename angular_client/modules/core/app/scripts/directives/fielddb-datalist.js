@@ -30,7 +30,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         return;
       }
 
-      db = db || new FieldDB.PsycholinguisticsDatabase({
+      db = db || new FieldDB.Database({
         dbname: $scope.corpus.dbname,
         url: FieldDB.BASE_DB_URL,
         authUrl: FieldDB.BASE_AUTH_URL
@@ -40,6 +40,8 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       // console.log('fetching docs for ', db.toJSON());
       $scope.datalist.title = '';
       db.fetchCollection($scope.datalist.api).then(function(results) {
+        // Reset the exponential decay to normal for subsequent requests
+        fetchDatalistDocsExponentialDecay = 2000;
 
         console.log('downloaded docs', results);
         $scope.datalist.docs = $scope.datalist.docs || [];
