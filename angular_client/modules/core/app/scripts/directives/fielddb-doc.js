@@ -55,7 +55,7 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
               // scope.doc = new FieldDB[scope.doc.type](scope.doc);
             }
           } else {
-            element.html('{{doc.type}} Unable to display this document.');
+            element.html('{{doc.type}} Unable to display this document. {{doc._id}}');
             if (scope && scope.doc && scope.doc.fetch) {
               console.log('TODO fetch the doc details and refresh the render to the right template if necessary');
               // doc.fetch().then(function(){
