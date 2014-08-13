@@ -1,50 +1,40 @@
-define([
-    "backbone"
-] ,function(
-    Backbone
-) {
-  var HotKey = Backbone.Model.extend(
-  /** @lends HotKey.prototype */
-  {
-    /**
-     * @class A HotKey is a keyboard shortcut that uses one key (or a
-     *        combination thereof) which allows users to execute a command
-     *        without using a mouse, a menu, etc.
-     * 
-     * @description The initialize function probably checks to see if any
-     *              hotkeys exist and creates a new one if there are none.
-     * 
-     * @extends Backbone.Model
-     * @constructs
-     */
+var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 
-    // This is the constructor. It is called whenever you make a new
-    // HotKey.
-    initialize : function() {
-      // this.bind('error', function(model, error) {
-      // // TODO Handle validation errors
-      // });
+/**
+ * @class A HotKey is a keyboard shortcut that uses one key (or a
+ *        combination thereof) which allows users to execute a command
+ *        without using a mouse, a menu, etc.
+ *
+ * @name  HotKey
+ * @extends FieldDBObject
+ * @constructs
+ */
+var HotKey = function HotKey(options) {
+  this.debug("Constructing HotKey", options);
+  FieldDBObject.apply(this, arguments);
+};
 
-    },
+HotKey.prototype = Object.create(FieldDBObject.prototype, /** @lends HotKey.prototype */ {
+  constructor: {
+    value: HotKey
+  },
 
-    defaults : {
-      firstKey : "",
-      secondKey : "",
-      functiontocall : function() {},
-      description : ""
-    },
-    
-    // Internal models: used by the parse function
-    internalModels : {
-      // There are no nested models
-    },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
+  defaults: {
+    value: {
+      firstKey: "",
+      secondKey: "",
+      functiontocall: function() {},
+      description: ""
     }
-  });
+  },
 
-  return HotKey;
+  keySequence: {
+    get: function() {
+      var value = this.firstKey + "+" + this.secondKey;
+      this.debug('Getting keySequence '+ value);
+      return value;
+    }
+  }
+
 });
+exports.HotKey = HotKey;
