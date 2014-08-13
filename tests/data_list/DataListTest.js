@@ -1,3 +1,5 @@
+/* globals spyOn */
+
 var DataList = require('./../../api/data_list/DataList').DataList;
 var specIsRunningTooLong = 5000;
 
