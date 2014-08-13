@@ -45,7 +45,7 @@ describe("Confidential: as a language consultant I want to be able to give data 
       secretkey: Confidential.secretKeyGenerator()
     });
     confidential.decryptedMode = true;
-    confidential.debugMode = true;
+    // confidential.debugMode = true;
     var message = JSON.parse(JSON.stringify(SAMPLE_COMPLEX_OBJECT));
     expect(confidential.decrypt(confidential.encrypt(message)).datumFields.length).toEqual(16);
     message = ["zero", "one", "two", "three"];

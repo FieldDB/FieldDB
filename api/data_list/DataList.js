@@ -110,9 +110,11 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   docIds: {
     get: function() {
+      var self = this;
+
       if (!this._docIds && this.docs && this.docs.length > 0) {
         this._docIds = this.docs.map(function(doc) {
-          this.debug('geting doc id of this doc ', doc);
+          self.debug('geting doc id of this doc ', doc);
           return doc.id;
         });
       }

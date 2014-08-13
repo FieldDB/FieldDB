@@ -319,14 +319,17 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   user: {
     get: function() {
       if (!this.userMask) {
+
+        var self = this;
         if (this.public && this.username) {
           this.userMask = new this.INTERNAL_MODELS['user']({});
           this.userMask.username = this.username;
           this.userMask.fetch().then(function(result) {
-            this.debug('Fetched speaker\'s user mask', result);
+            self.debug('Fetched speaker\'s user mask', result);
           }, function(error) {
-            this.debug('Failed to fetch speaker\'s user mask', error);
+            self.debug('Failed to fetch speaker\'s user mask', error);
           });
+
         } else {
           this.userMask = {};
         }
