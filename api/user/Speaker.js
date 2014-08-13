@@ -101,7 +101,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   username: {
     get: function() {
       if (this.fields && this.fields.username && this.fields.username.value) {
-        // console.log('this.fields.username.value :', this.fields.username.value + ":");
+        // this.debug('this.fields.username.value :', this.fields.username.value + ":");
 
         if (this.fields.confidentiality.value === "generalize") {
           this.fields.username.mask = "A native speaker";
@@ -188,7 +188,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
       }
       this.confidentialEncrypter = value;
       if (this.fields) {
-        // console.log('setting speaker fields confidential in the Speaker.confidential set function.');
+        // this.debug('setting speaker fields confidential in the Speaker.confidential set function.');
         this.fields.confidential = value;
       }
     }
@@ -292,7 +292,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   fields: {
     get: function() {
       if (this._fields) {
-        // console.log('setting speaker fields confidential in the Speaker.fields get function.');
+        // this.debug('setting speaker fields confidential in the Speaker.fields get function.');
 
         // this._fields.encrypted = true;
         // this._fields.decryptedMode = true;
@@ -323,9 +323,9 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
           this.userMask = new this.INTERNAL_MODELS['user']({});
           this.userMask.username = this.username;
           this.userMask.fetch().then(function(result) {
-            console.log('Fetched speaker\'s user mask', result);
+            this.debug('Fetched speaker\'s user mask', result);
           }, function(error) {
-            console.log('Failed to fetch speaker\'s user mask', error);
+            this.debug('Failed to fetch speaker\'s user mask', error);
           });
         } else {
           this.userMask = {};
