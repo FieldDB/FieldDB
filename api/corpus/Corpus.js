@@ -259,7 +259,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-
   confidential: {
     get: function() {
       return this._confidential || FieldDBObject.DEFAULT_OBJECT;
@@ -271,6 +270,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       if (!value) {
         delete this._confidential;
         return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['confidential'](value);
+        }
       }
       this._confidential = value;
     }
@@ -293,15 +296,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         value = "Private";
       }
       this._publicCorpus = value;
-    }
-  },
-
-  _collection: {
-    value: "private_corpuses"
-  },
-  collection: {
-    get: function() {
-      return this._collection;
     }
   },
 
@@ -507,7 +501,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         CORS.makeCORSRequest({
           type: 'GET',
           dataType: 'json',
-          url: FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.url
+          url: self.url ? self.url : FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.api
         }).then(function(data) {
           self.debug(data);
           if (data.rows && data.rows.length > 0) {
@@ -565,8 +559,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   // The couchdb-connector is capable of mapping the url scheme
   // proposed by the authors of Backbone to documents in your database,
   // so that you don't have to change existing apps when you switch the sync-strategy
-  url: {
-    value: "/private_corpuses"
+  api: {
+    value: "private_corpuses"
   },
 
   loadPermissions: {
