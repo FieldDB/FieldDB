@@ -1,6 +1,6 @@
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var HotKeys = require('./../Collection').Collection;
-var InsertUnicodes = require('./../Collection').Collection;
+var HotKeys = require('./../hotkey/HotKeys').HotKeys;
+var InsertUnicodes = require('./../unicode/UnicodeSymbols').InsertUnicodes;
 
 /**
  * @class  Hold preferences for users like the skin of the app
@@ -42,11 +42,39 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
     }
   },
 
-  preferedDashboardLayout: {
+  preferedDashboardType: {
     get: function() {
-      return this._preferedDashboardLayout;
+      this.debug("getting preferedDashboardType " + this._preferedDashboardType);
+      if (!this._preferedDashboardType && this.preferedDashboardLayout) {
+        this.debug("getting preferedDashboardType from _preferedDashboardLayout ");
+      }
+      return this._preferedDashboardType || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
+      this.debug("setting _preferedDashboardType from " + value);
+      if (value === this._preferedDashboardType) {
+        return;
+      }
+      if (!value) {
+        delete this._preferedDashboardType;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._preferedDashboardType = value;
+    }
+  },
+
+  preferedDashboardLayout: {
+    get: function() {
+      this.debug("getting preferedDashboardLayout from ");
+
+      return this._preferedDashboardLayout || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      this.debug("setting preferedDashboardLayout from " + value);
+
       if (value === this._preferedDashboardLayout) {
         return;
       }
@@ -64,7 +92,49 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       }
 
       this._preferedDashboardLayout = value;
-      delete this.hotkeys;
+    }
+  },
+
+  hotkeys: {
+    get: function() {
+      return this._hotkeys || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._hotkeys) {
+        return;
+      }
+      if (!value) {
+        delete this._hotkeys;
+        return;
+      } else {
+        if (value.firstKey) {
+          value = [value];
+        }
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['hotkeys'](value);
+        }
+      }
+      this._hotkeys = value;
+    }
+  },
+
+  unicodes: {
+    get: function() {
+      return this._unicodes || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._unicodes) {
+        return;
+      }
+      if (!value) {
+        delete this._unicodes;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['unicodes'](value);
+        }
+      }
+      this._unicodes = value;
     }
   }
 
