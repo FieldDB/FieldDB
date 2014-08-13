@@ -61,20 +61,14 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
    */
   subtitle: {
     get: function() {
-      return this._subtitle || (this.firstname + " " + this.lastname).replace("undefined", "").trim();
+      return this.name;
     },
     set: function(value) {
-      if (value === this._subtitle) {
+      if (value === this.name) {
         return;
       }
-      if (!value) {
-        delete this._subtitle;
-        return;
-      }
-      if (value.trim) {
-        value = value.trim();
-      }
-      this._subtitle = value;
+      this.warn("subtitle is deprecated, use name instead.");
+      this.name = value;
     }
   }
 
