@@ -221,7 +221,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
     get: function() {
       this.firstname = this.firstname || "";
       this.lastname = this.lastname || "";
-      return this.firstname + " " + this.lastname;
+      return (this.firstname + " " + this.lastname).trim();
     },
     set: function(value) {
       if (!value) {
