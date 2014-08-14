@@ -1,7 +1,9 @@
 <h1>{{datalist.title}}</h1>
 <p>{{datalist.description}}</p>
 <div ng-repeat="item in datalist.docs">
-  <div data-fielddb-doc json="item">
+  <div data-fielddb-doc json="item" corpus="corpus">
   </div>
 </div>
 <div ng-show="canAddNewItemsToDataList()"><i class="fa fa-plus-circle"></i> Add </div>
+
+{{datalist.warn}}
