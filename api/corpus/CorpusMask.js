@@ -1,5 +1,4 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var Collection = require('./../Collection').Collection;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var DatumStates = require('./../datum/DatumStates').DatumStates;
 var DatumTags = require('./../datum/DatumTags').DatumTags;
@@ -115,7 +114,7 @@ CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusM
       filteredCorpus.validationStati = publicStates;
 
       var publicableTags = [];
-      filteredCorpus.tags.map(function(tag) {
+      filteredCorpus.tags.map(function() {
         // none
       });
       filteredCorpus.tags = publicableTags;
