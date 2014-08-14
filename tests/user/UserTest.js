@@ -67,7 +67,8 @@ describe("User ", function() {
     u.firstname = "Bill";
     u.lastname = "Smith";
 
-    expect(u.toJSON("complete")).toEqual( {
+    var result = u.toJSON("complete");
+    expect(result).toEqual( {
       type: 'User',
       username: '',
       dateCreated: u.dateCreated,
@@ -76,7 +77,7 @@ describe("User ", function() {
       version: u.version,
       prefs: {
         type: 'UserPreference',
-        dateCreated: u.dateCreated,
+        dateCreated: result.prefs.dateCreated,
         version: u.version,
         hotkeys: [],
         unicodes: []
