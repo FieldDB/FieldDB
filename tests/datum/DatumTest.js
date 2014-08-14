@@ -31,7 +31,7 @@ describe("Test Datum", function() {
     datum.datumFields.judgement = "*";
     expect(datum.datumFields.judgement).toEqual("*");
 
-    var datum = new Datum();
+    datum = new Datum();
     datum.datumFields.tags = "Causative";
     expect(datum.datumFields.tags).toEqual("Causative");
   });
