@@ -6,7 +6,9 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
     $scope.connection = {
       online: true,
       apiURL: 'https://localhost:3181/v2/',
-      offlineCouchURL: 'https://localhost:6984'
+      offlineCouchURL: 'https://localhost:6984',
+      brand: 'LingSync',
+      website: 'http://lingsync.org'
     };
     FieldDB.FieldDBConnection.connection.localCouch.url = FieldDB.BASE_DB_URL;
 
