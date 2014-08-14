@@ -16,17 +16,17 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
     Participant: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
 
     Corpus: '<div data-fielddb-corpus json="doc" corpus="corpus"></div>',
-    Session: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    Session: '<div data-fielddb-datum json="doc" corpus="corpus"></div>',
 
     DataList: '<div data-fielddb-datalist json="doc" corpus="corpus"></div>',
     Lesson: '<div data-fielddb-datalist json="doc" corpus="corpus"></div>',
     TestBlock: '<div data-fielddb-datalist json="doc" corpus="corpus"></div>',
 
-    Datum: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
-    MultipleChoice: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
-    Stimulus: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    Datum: '<div data-fielddb-datum json="doc" corpus="corpus"></div>',
+    MultipleChoice: '<div data-fielddb-datum json="doc" corpus="corpus"></div>',
+    Stimulus: '<div data-fielddb-datum json="doc" corpus="corpus"></div>',
 
-    Response: '<div data-fielddb-user json="doc" corpus="corpus"></div>'
+    Response: '<div data-fielddb-datum json="doc" corpus="corpus"></div>'
   };
   return {
     template: '{{doc.type}} Unable to display this document. {{doc._id}}',
