@@ -100,7 +100,7 @@ var FieldDBObject = function FieldDBObject(json) {
 };
 
 FieldDBObject.DEFAULT_STRING = "";
-FieldDBObject.DEFAULT_OBJECT = "";
+FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v2.0.1";
@@ -432,10 +432,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   pouchname: {
     get: function() {
+      this.warn("pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
-    set: function() {
+    set: function(value) {
       this.warn("Pouchname is deprecated, please use dbname instead.");
+      this.dbname = value;
     }
   },
 
@@ -641,20 +643,39 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    * @param  String value the potential primary key to be cleaned
    * @return String       the value cleaned and safe as a primary key
    */
-  sanitizeStringForPrimaryKey: {
-    value: function(value) {
-      this.debug('sanitizeStringForPrimaryKey');
+  sanitizeStringForFileSystem: {
+    value: function(value, optionalReplacementCharacter) {
+      this.debug('sanitizeStringForPrimaryKey ' + value);
       if (!value) {
         return null;
       }
+      if (optionalReplacementCharacter === undefined || optionalReplacementCharacter === "-") {
+        optionalReplacementCharacter = '_';
+      }
       if (value.trim) {
         value = Diacritics.clean(value);
-        value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_/, '').replace(/_$/, '');
-        return this.camelCased(value);
+        this.debug('sanitizeStringForPrimaryKey ' + value);
+
+        value = value.trim().replace(/[^a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, '').replace(/_$/, '');
+        this.debug('sanitizeStringForPrimaryKey ' + value);
+        return value;
       } else if (typeof value === 'number') {
         return parseInt(value, 10);
       } else {
         return null;
+      }
+    }
+  },
+
+  sanitizeStringForPrimaryKey: {
+    value: function(value, optionalReplacementCharacter) {
+      this.debug('sanitizeStringForPrimaryKey ' + value);
+      if (!value) {
+        return null;
+      }
+      value = this.sanitizeStringForFileSystem(value, optionalReplacementCharacter);
+      if (value && typeof value !== 'number') {
+        return this.camelCased(value);
       }
     }
   },
