@@ -7,8 +7,8 @@ describe("Test UserPreference", function() {
     var p = new UserPreference();
     expect(p.preferedDashboardType).toEqual('');
     expect(p.preferedDashboardLayout).toEqual('');
-    expect(p.hotkeys).toEqual([]);
-    expect(p.unicodes).toEqual([]);
+    expect(p.hotkeys.length).toEqual(0);
+    expect(p.unicodes.length).toEqual(0);
   });
 
   it("should accept serializations from <v2.0", function() {
