@@ -27,7 +27,8 @@
     },
 
     fetchCollection: {
-      value: function(collectionType) {
+      value: function(collectionType, start, end, limit) {
+        this.todo('Provide pagination ', start, end, limit);
         var deferred = Q.defer(),
           self = this;
 
