@@ -39,7 +39,16 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
       // console.log('fetching docs for ', db.toJSON());
       // $scope.datalist.title = '';
-      db.fetchCollection($scope.datalist.api).then(function(results) {
+      var whatToFetch = $scope.datalist.api;
+      if ($scope.datalist.docIds && $scope.datalist.docIds.length && $scope.datalist.docIds.length >= 0) {
+        whatToFetch = $scope.datalist.docIds;
+      }
+      if (whatToFetch === []) {
+        $scope.datalist.docs = [];
+        $scope.$digest();
+        return;
+      }
+      db.fetchCollection(whatToFetch).then(function(results) {
         // Reset the exponential decay to normal for subsequent requests
         fetchDatalistDocsExponentialDecay = 2000;
 
@@ -52,8 +61,11 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
             doc = new FieldDB[doc.type](doc);
           } else {
             db.warn('This doc does not have a type, it might display oddly ', doc);
-            var guessedType = $scope.datalist.api[0].toUpperCase() + $scope.datalist.api.substring(1, $scope.datalist.api.length);
-            guessedType = guessedType.replace(/s$/, '');
+            var guessedType = doc.jsonType || 'FieldDBObject';
+            if ($scope.datalist.api) {
+              guessedType = $scope.datalist.api[0].toUpperCase() + $scope.datalist.api.substring(1, $scope.datalist.api.length);
+              guessedType = guessedType.replace(/s$/, '');
+            }
             if (guessedType === 'Datalist') {
               guessedType = 'DataList';
             }
