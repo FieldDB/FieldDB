@@ -656,7 +656,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         value = Diacritics.clean(value);
         this.debug('sanitizeStringForPrimaryKey ' + value);
 
-        value = value.trim().replace(/[^a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, '').replace(/_$/, '');
+        value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, '').replace(/_$/, '');
         this.debug('sanitizeStringForPrimaryKey ' + value);
         return value;
       } else if (typeof value === 'number') {
@@ -672,6 +672,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.debug('sanitizeStringForPrimaryKey ' + value);
       if (!value) {
         return null;
+      }
+      if (value.replace) {
+        value = value.replace(/-/g, "_");
       }
       value = this.sanitizeStringForFileSystem(value, optionalReplacementCharacter);
       if (value && typeof value !== 'number') {
