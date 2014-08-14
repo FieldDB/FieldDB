@@ -142,7 +142,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
          * Letting the url determine which corpus is loaded
          */
         if ($routeParams.corpusid) {
-          $rootScope.currentCorpusDashboardDBname = $scope.team.validateUsername($routeParams.team).username + '-' + $scope.team.validateUsername($routeParams.corpusid).username;
+          $rootScope.currentCorpusDashboardDBname = $scope.team.validateUsername($routeParams.team).username + '-' + $scope.team.sanitizeStringForFileSystem($routeParams.corpusid).toLowerCase();
           if ($rootScope.currentCorpusDashboardDBname.split('-').length < 2) {
             $scope.status = 'Please try another url of the form teamname/corpusname ' + $rootScope.currentCorpusDashboardDBname + ' is not valid.';
             return;
