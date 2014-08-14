@@ -16,9 +16,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
     /* initialize or confirm scope is prepared */
     $scope.loginDetails = $scope.loginDetails || {};
     $scope.authentication = $scope.authentication || {};
-    $scope.authentication.user = $scope.authentication.user || {
-      accessibleDBS: []
-    };
+    $scope.authentication.user = $scope.authentication.user || {};
     console.log('Scope authentication is ', $scope);
 
     var processUserDetails = function(user) {
