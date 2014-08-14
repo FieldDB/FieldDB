@@ -8,32 +8,33 @@
  */
 angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
   var templates = {
-    UserMask: '<div data-fielddb-user json="doc"></div>',
-    User: '<div data-fielddb-user json="doc"></div>',
-    Team: '<div data-fielddb-user json="doc"></div>',
-    Speaker: '<div data-fielddb-user json="doc"></div>',
-    Consultant: '<div data-fielddb-user json="doc"></div>',
-    Participant: '<div data-fielddb-user json="doc"></div>',
+    UserMask: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    User: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    Team: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    Speaker: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    Consultant: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    Participant: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
 
-    Corpus: '<div data-fielddb-corpus json="doc"></div>',
-    Session: '<div data-fielddb-user json="doc"></div>',
+    Corpus: '<div data-fielddb-corpus json="doc" corpus="corpus"></div>',
+    Session: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
 
-    DataList: '<div data-fielddb-datalist json="doc"></div>',
-    Lesson: '<div data-fielddb-datalist json="doc"></div>',
-    TestBlock: '<div data-fielddb-datalist json="doc"></div>',
+    DataList: '<div data-fielddb-datalist json="doc" corpus="corpus"></div>',
+    Lesson: '<div data-fielddb-datalist json="doc" corpus="corpus"></div>',
+    TestBlock: '<div data-fielddb-datalist json="doc" corpus="corpus"></div>',
 
-    Datum: '<div data-fielddb-user json="doc"></div>',
-    MultipleChoice: '<div data-fielddb-user json="doc"></div>',
-    Stimulus: '<div data-fielddb-user json="doc"></div>',
+    Datum: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    MultipleChoice: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
+    Stimulus: '<div data-fielddb-user json="doc" corpus="corpus"></div>',
 
-    Response: '<div data-fielddb-user json="doc"></div>'
+    Response: '<div data-fielddb-user json="doc" corpus="corpus"></div>'
   };
   return {
     template: '{{doc.type}} Unable to display this document. {{doc._id}}',
     restrict: 'A',
     transclude: false,
     scope: {
-      doc: '=json'
+      doc: '=json',
+      corpus: '=corpus'
     },
     link: function postLink(scope, element, attrs) {
 

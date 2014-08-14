@@ -32,13 +32,17 @@
           self = this;
 
         if (!this.url) {
-          self.warn("Cannot fetch data with out a url");
-          return;
+          Q.nextTick(function() {
+            deferred.reject("Cannot fetch data with out a url");
+          });
+          return deferred.promise;
         }
 
         if (!collectionType) {
-          self.warn("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
-          return;
+          Q.nextTick(function() {
+            deferred.reject("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
+          });
+          return deferred.promise;
         }
 
         var cantLogIn = function(reason) {
@@ -63,20 +67,47 @@
         //   }
         // }).then(function(session) {
 
-
-        CORS.makeCORSRequest({
-          type: 'GET',
-          dataType: "json",
-          url: self.url + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
-        }).then(function(result) {
-          if (result.rows && result.rows.length) {
-            deferred.resolve(result.rows.map(function(doc) {
-              return doc.value;
+        if (Object.prototype.toString.call(collectionType) === '[object Array]') {
+          var promises = [];
+          collectionType.map(function(id) {
+            promises.push(CORS.makeCORSRequest({
+              type: 'GET',
+              dataType: "json",
+              url: self.url + "/" + self.dbname + "/" + id
             }));
-          } else {
-            deferred.resolve([]);
-          }
-        }, cantLogIn);
+          });
+
+          Q.allSettled(promises).then(function(results) {
+            console.log(results);
+            if (results.length) {
+              deferred.resolve(results.map(function(result) {
+                if (result.state === "fulfilled") {
+                  return result.value;
+                } else {
+                  return {};
+                }
+              }));
+            } else {
+              deferred.resolve([]);
+            }
+          }, cantLogIn);
+
+        } else {
+          CORS.makeCORSRequest({
+            type: 'GET',
+            dataType: "json",
+            url: self.url + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
+          }).then(function(result) {
+            if (result.rows && result.rows.length) {
+              deferred.resolve(result.rows.map(function(doc) {
+                return doc.value;
+              }));
+            } else {
+              deferred.resolve([]);
+            }
+          }, cantLogIn);
+        }
+
 
 
         // }, cantLogIn);
