@@ -19,6 +19,11 @@ angular.module('fielddbAngularApp').directive('fielddbDatum', function() {
         $scope.datum.decryptedMode = !$scope.datum.decryptedMode;
       };
       $scope.showThisFieldForThisUserType = function(field) {
+        // Don't show empty fields
+        if (!field.value) {
+          return false;
+        }
+        // Only values which would be interesting for this user
         var prefs = $rootScope.getUserPreferences()
         console.log(prefs);
         var userType = prefs.preferedDashboardType || "experimenterNormalUser";
