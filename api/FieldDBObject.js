@@ -160,7 +160,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log('DEBUG: ' + message);
+        console.log(this.type.toUpperCase() + ' DEBUG: ' + message);
 
         if (message2) {
           console.log(message2);
@@ -211,7 +211,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       try {
         window.alert(message);
       } catch (e) {
-        console.warn('BUG: ' + message);
+        console.warn(this.type.toUpperCase() + ' BUG: ' + message);
       }
     }
   },
@@ -223,7 +223,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.warnMessage = "";
       }
       this.warnMessage = this.warnMessage + message;
-      console.warn('WARN: ' + message);
+      console.warn(this.type.toUpperCase() + ' WARN: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -237,7 +237,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn('TODO: ' + message);
+      console.warn(this.type.toUpperCase() + ' TODO: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -320,7 +320,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function(optionalBaseUrl) {
       var deferred = Q.defer(),
         id,
-        self;
+        self = this;
 
       id = this.id;
       if (!id) {
@@ -331,13 +331,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
         return deferred.promise;
       }
-      self = this;
 
       this.fetching = true;
       CORS.makeCORSRequest({
         type: 'GET',
         dataType: "json",
-        url: optionalBaseUrl + "/" + this.dbname + "/" + id
+        url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
           self.fetching = false;
 

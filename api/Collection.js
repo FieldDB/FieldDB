@@ -96,7 +96,7 @@ Collection.prototype = Object.create(Object.prototype, {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log(message);
+        console.log(this.type.toUpperCase() + ' DEBUG:' + message);
 
         if (message2) {
           console.log(message2);
@@ -141,13 +141,13 @@ Collection.prototype = Object.create(Object.prototype, {
       try {
         window.alert(message);
       } catch (e) {
-        console.warn('COLLECTION BUG: ' + message);
+        console.warn(this.type.toUpperCase() + ' BUG: ' + message);
       }
     }
   },
   warn: {
     value: function(message, message2, message3, message4) {
-      console.warn('COLLECTION WARN: ' + message);
+      console.warn(this.type.toUpperCase() + ' WARN: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -161,7 +161,7 @@ Collection.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn('COLLECTION TODO: ' + message);
+      console.warn(this.type.toUpperCase() + ' TODO: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -323,7 +323,8 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        throw 'The primary key is undefined on this object, it cannot be added!';
+        this.warn('The primary key is undefined, nothing can be added!', this);
+        throw 'The primary key is undefined, nothing can be added!';
       }
       var value = member[this.primaryKey];
       if (!value) {
