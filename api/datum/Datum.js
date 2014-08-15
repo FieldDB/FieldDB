@@ -87,6 +87,52 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
+  audioVideo: {
+    get: function() {
+      if (this._audioVideo && this._audioVideo.type === 'AudioVideos') {
+        this._audioVideo.dbname = this.dbname;
+      }
+      return this._audioVideo || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._audioVideo) {
+        return;
+      }
+      if (!value) {
+        delete this._audioVideo;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['audioVideo'] === 'function') {
+          value = new this.INTERNAL_MODELS['audioVideo'](value);
+        }
+      }
+      this._audioVideo = value;
+    }
+  },
+
+  images: {
+    get: function() {
+      if (this._images && this._images.type === 'Images') {
+        this._images.dbname = this.dbname;
+      }
+      return this._images || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._images) {
+        return;
+      }
+      if (!value) {
+        delete this._images;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['images'] === 'function') {
+          value = new this.INTERNAL_MODELS['images'](value);
+        }
+      }
+      this._images = value;
+    }
+  },
+
   // The couchdb-connector is capable of mapping the url scheme
   // proposed by the authors of Backbone to documents in your database,
   // so that you don't have to change existing apps when you switch the sync-strategy
