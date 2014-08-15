@@ -15,6 +15,7 @@
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
   var CORS = require("./CORS").CORS;
   var DataList = require("./data_list/DataList").DataList;
+  var Datum = require("./datum/Datum").Datum;
   var Database = require("./corpus/Database").Database;
   var PsycholinguisticsDatabase = require("./corpus/PsycholinguisticsDatabase").PsycholinguisticsDatabase;
   var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
@@ -37,6 +38,7 @@
   FieldDB.FieldDBObject = FieldDBObject;
   FieldDB.CORS = CORS;
   FieldDB.DataList = DataList;
+  FieldDB.Datum = Datum;
   FieldDB.Database = Database;
   FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
