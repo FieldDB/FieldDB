@@ -20,16 +20,21 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
     var processUserDetails = function(user) {
       user.authenticated = true;
       user.accessibleDBS = user.accessibleDBS || [];
-      $scope.authentication.user = new FieldDB.User(user);
-
-      // $scope.team = user;
-      // $rootScope.authenticated = true;
       user.roles.map(function(role) {
         var dbname = role.substring(0, role.lastIndexOf('_'));
         if (role.indexOf('-') > -1 && role.indexOf('_reader') > -1 && user.accessibleDBS.indexOf(dbname) === -1) {
           user.accessibleDBS.push(dbname);
         }
+        return role;
       });
+      try {
+        $scope.authentication.user = new FieldDB.User(user);
+      } catch (e) {
+        console.log('problem parsing user', e, user);
+      }
+
+      // $scope.team = user;
+      // $rootScope.authenticated = true;
       console.log($scope);
       if (window.location.pathname === '/welcome' || window.location.pathname === '/bienvenu') {
         $scope.$apply(function() {
@@ -39,19 +44,13 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       $scope.$digest();
     };
     $scope.register = function(registerDetails) {
-      console.warn('TODO', registerDetails);
+      console.warn('TODO use $scope.corpus.register', registerDetails);
     };
 
     $scope.login = function(loginDetails) {
       $scope.isContactingServer = true;
       $scope.authentication.error = '';
-      var db = new FieldDB.Database({
-        username: loginDetails.username,
-        dbname: 'default',
-        // url: FieldDB.Database.BASE_DB_URL,
-        authUrl: FieldDB.BASE_AUTH_URL
-      });
-      db.login(loginDetails).then(function(user) {
+      FieldDB.Database.prototype.login(loginDetails).then(function(user) {
         console.log('User has been downloaded. ', user);
         processUserDetails(user);
         // $scope.isContactingServer = false;
@@ -71,18 +70,17 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
 
     $scope.logout = function() {
       $scope.authentication.error = '';
-      var db = new FieldDB.Database({
-        username: $scope.loginDetails.username,
-        dbname: 'default',
-        // url: FieldDB.Database.BASE_DB_URL,
-        authUrl: FieldDB.BASE_AUTH_URL
-      });
-      db.logout().then(function(serverReply) {
+      FieldDB.Database.prototype.logout().then(function(serverReply) {
         console.log('User has been logged out. ', serverReply);
-        $scope.authentication = {};
+        $scope.authentication = {
+          user: {
+            authenticated: false
+          }
+        };
         if (window.location.pathname !== '/welcome' && window.location.pathname !== '/bienvenu') {
           $scope.$apply(function() {
             $location.path('/welcome/');
+            window.location.replace("/welcome");
           });
         }
         $scope.$digest();
@@ -96,11 +94,11 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
     };
 
     $scope.resumeAuthenticationSession = function() {
-      FieldDB.CORS.makeCORSRequest({
-        type: 'GET',
-        dataType: 'json',
-        url: FieldDB.Database.prototype.BASE_DB_URL + '/_session'
-      }).then(function(sessionInfo) {
+      // if (!$scope.corpus) {
+      //   console.log('User cant resume authentication session, corpus is not defined ');
+      //   return;
+      // }
+      FieldDB.Database.prototype.resumeAuthenticationSession().then(function(sessionInfo) {
         console.log(sessionInfo);
         if (sessionInfo.ok && sessionInfo.userCtx.name) {
           $scope.authentication.user.username = sessionInfo.userCtx.name;

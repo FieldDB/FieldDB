@@ -8,6 +8,7 @@ var Database = function Database(options) {
 };
 
 var DEFAULT_COLLECTION_MAPREDUCE = '_design/pages/_view/COLLECTION?descending=true';
+var DEFAULT_BASE_AUTH_URL = "https://localhost:3181";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
   constructor: {
@@ -16,6 +17,15 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   DEFAULT_COLLECTION_MAPREDUCE: {
     value: DEFAULT_COLLECTION_MAPREDUCE
+  },
+
+  BASE_AUTH_URL: {
+    get: function() {
+      return DEFAULT_BASE_AUTH_URL;
+    },
+    set: function(value) {
+      DEFAULT_BASE_AUTH_URL = value;
+    }
   },
 
   BASE_DB_URL: {
@@ -34,8 +44,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   fetchCollection: {
-    value: function(collectionType, start, end, limit) {
-      this.todo('Provide pagination ', start, end, limit);
+    value: function(collectionType, start, end, limit, reduce) {
+      this.todo('Provide pagination ', start, end, limit, reduce);
       var deferred = Q.defer(),
         self = this,
         baseUrl = this.url;
@@ -125,28 +135,49 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
-  login: {
-    value: function(loginDetails) {
+  resumeAuthenticationSession: {
+    value: function() {
       var deferred = Q.defer(),
-        self = this,
         baseUrl = this.url;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
       }
 
-      if (!this.authUrl) {
-        self.warn("Cannot login with out an auth url");
-        Q.nextTick(function() {
-          deferred.reject("Cannot login with out an auth url");
-        });
-        return deferred.promise;
+      CORS.makeCORSRequest({
+        type: 'GET',
+        dataType: 'json',
+        url: baseUrl + '/_session'
+      }).then(function(sessionInfo) {
+        console.log(sessionInfo);
+        deferred.resolve(sessionInfo);
+      }, function(reason) {
+        deferred.reject(reason);
+      });
+
+      return deferred.promise;
+    }
+  },
+
+  login: {
+    value: function(loginDetails) {
+      var deferred = Q.defer(),
+        self = this,
+        baseUrl = this.url,
+        authUrl = this.authUrl;
+
+      if (!baseUrl) {
+        baseUrl = this.BASE_DB_URL;
+      }
+
+      if (!authUrl) {
+        authUrl = this.BASE_AUTH_URL;
       }
 
       CORS.makeCORSRequest({
         type: 'POST',
         dataType: "json",
-        url: this.authUrl + "/login",
+        url: authUrl + "/login",
         data: loginDetails
       }).then(function(result) {
           if (result.user) {
