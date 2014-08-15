@@ -81,7 +81,7 @@ var FieldDBObject = function FieldDBObject(json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
-    this.verbose("JSON: " + member);
+    this.debug("JSON: " + member, this.INTERNAL_MODELS);
     if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
       this.debug("Parsing model: " + member);
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
@@ -202,7 +202,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   bug: {
     value: function(message) {
-      this.bugMessage = message;
+      if (this.bugMessage) {
+        this.bugMessage += ";;; ";
+      } else {
+        this.bugMessage = "";
+      }
+      this.bugMessage = this.bugMessage + message;
       try {
         window.alert(message);
       } catch (e) {
@@ -212,7 +217,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   warn: {
     value: function(message, message2, message3, message4) {
-      this.warnMessage = message;
+      if (this.warnMessage) {
+        this.warnMessage += ";;; ";
+      } else {
+        this.warnMessage = "";
+      }
+      this.warnMessage = this.warnMessage + message;
       console.warn('WARN: ' + message);
       if (message2) {
         console.warn(message2);
