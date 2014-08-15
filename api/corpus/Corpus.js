@@ -3,7 +3,6 @@ var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var Session = require('./../FieldDBObject').FieldDBObject;
-var CORS = require('./../CORS').CORS;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Permissions = require('./../Collection').Collection;
 var Q = require('q');
@@ -463,15 +462,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           }, 1000);
         };
 
-        CORS.makeCORSRequest({
-          type: 'GET',
-          dataType: 'json',
-          url: baseUrl + '/' + self.dbname + '/_design/pages/_view/' + self.api
-        }).then(function(data) {
-          self.debug(data);
-          if (data.rows && data.rows.length > 0) {
+        self.fetchCollection(self.api).then(function(corpora) {
+          self.debug(corpora);
+          if (corpora.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
-            self.id = data.rows[0].value._id;
+            self.id = corpora[0]._id;
             self.fetch(self.BASE_DB_URL).then(function(result) {
               self.debug('Finished fetch of corpus ', result);
               deferred.resolve(result);
@@ -479,7 +474,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
               deferred.reject(reason);
             });
           } else {
-            tryAgainInCaseThereWasALag(data);
+            tryAgainInCaseThereWasALag(corpora);
           }
         }, tryAgainInCaseThereWasALag);
 
@@ -1096,25 +1091,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         return deferred.promise;
       }
 
-      var jsonUrl = self.validDBQueries["get_corpus_" + fieldname].url + "?group=true&limit=100";
-      OPrime.makeCORSRequest({
-        type: 'GET',
-        dataType: "json",
-        url: jsonUrl,
-      }).then(function(serverResults) {
-        var frequentValues;
-        if (serverResults && serverResults.rows && serverResults.row.length > 2) {
-          frequentValues = serverResults.rows.map(function(fieldvalue) {
-            return fieldvalue.key;
-          });
-        } else {
-          frequentValues = defaults;
-        }
-
+      // var jsonUrl = self.validDBQueries["get_corpus_" + fieldname].url + "?group=true&limit=100";
+      this.fetchCollection("frequentDatum" + fieldname, 0, 0, 100, true).then(function(frequentValues) {
         /*
          * TODO Hide optionally specified values
          */
-
         self["frequentDatum" + fieldname] = frequentValues;
         deferred.resolve(frequentValues);
       }, function(response) {
