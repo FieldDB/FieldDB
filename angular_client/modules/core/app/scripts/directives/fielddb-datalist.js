@@ -14,7 +14,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
   var controller = function($scope, $timeout) {
     var fetchDatalistDocsIfEmpty = function() {
 
-      if (!FieldDB.BASE_DB_URL || !$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey) {
+      if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey) {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         $timeout(function() {
           if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
@@ -23,7 +23,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
             fetchDatalistDocsIfEmpty();
           }
         }, fetchDatalistDocsExponentialDecay);
-        console.log(' No URL or corpus specified, waiting another ' + $scope.datalist.fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
+        console.log(' No corpus specified, waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
         if ($scope.datalist) {
           $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
         }
@@ -32,7 +32,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
       db = db || new FieldDB.Database({
         dbname: $scope.corpus.dbname,
-        url: FieldDB.BASE_DB_URL,
+        // url: FieldDB.Database.BASE_DB_URL,
         authUrl: FieldDB.BASE_AUTH_URL
       });
       db.debugMode = true;

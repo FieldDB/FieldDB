@@ -8,7 +8,7 @@ var Database = function Database(options) {
 };
 
 var DEFAULT_COLLECTION_MAPREDUCE = '_design/pages/_view/COLLECTION?descending=true';
-
+var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
   constructor: {
     value: Database
@@ -16,6 +16,15 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   DEFAULT_COLLECTION_MAPREDUCE: {
     value: DEFAULT_COLLECTION_MAPREDUCE
+  },
+
+  BASE_DB_URL: {
+    get: function() {
+      return DEFAULT_BASE_DB_URL;
+    },
+    set: function(value) {
+      DEFAULT_BASE_DB_URL = value;
+    }
   },
 
   fetchAllDocuments: {
@@ -28,13 +37,15 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(collectionType, start, end, limit) {
       this.todo('Provide pagination ', start, end, limit);
       var deferred = Q.defer(),
-        self = this;
+        self = this,
+        baseUrl = this.url;
 
-      if (!this.url) {
-        Q.nextTick(function() {
-          deferred.reject("Cannot fetch data with out a url");
-        });
-        return deferred.promise;
+      if (!baseUrl) {
+        baseUrl = this.BASE_DB_URL;
+        // Q.nextTick(function() {
+        //   deferred.reject("Cannot fetch data with out a url");
+        // });
+        // return deferred.promise;
       }
 
       if (!collectionType) {
@@ -72,7 +83,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           promises.push(CORS.makeCORSRequest({
             type: 'GET',
             dataType: "json",
-            url: self.url + "/" + self.dbname + "/" + id
+            url: baseUrl + "/" + self.dbname + "/" + id
           }));
         });
 
@@ -95,7 +106,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: 'GET',
           dataType: "json",
-          url: self.url + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
+          url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
         }).then(function(result) {
           if (result.rows && result.rows.length) {
             deferred.resolve(result.rows.map(function(doc) {

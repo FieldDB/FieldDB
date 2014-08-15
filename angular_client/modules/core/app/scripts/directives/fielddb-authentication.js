@@ -9,9 +9,6 @@
  * # fielddbAuthentication
  */
 angular.module('fielddbAngularApp').directive('fielddbAuthentication', function() {
-  FieldDB.BASE_DB_URL = 'https://localhost:6984';
-  FieldDB.BASE_SPEECH_URL = 'https://localhost:3184';
-  FieldDB.BASE_AUTH_URL = 'https://localhost:3183';
 
   var controller = function($scope, $location) {
     /* initialize or confirm scope is prepared */
@@ -51,7 +48,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       var db = new FieldDB.Database({
         username: loginDetails.username,
         dbname: 'default',
-        url: FieldDB.BASE_DB_URL,
+        // url: FieldDB.Database.BASE_DB_URL,
         authUrl: FieldDB.BASE_AUTH_URL
       });
       db.login(loginDetails).then(function(user) {
@@ -77,7 +74,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       var db = new FieldDB.Database({
         username: $scope.loginDetails.username,
         dbname: 'default',
-        url: FieldDB.BASE_DB_URL,
+        // url: FieldDB.Database.BASE_DB_URL,
         authUrl: FieldDB.BASE_AUTH_URL
       });
       db.logout().then(function(serverReply) {
@@ -102,7 +99,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       FieldDB.CORS.makeCORSRequest({
         type: 'GET',
         dataType: 'json',
-        url: FieldDB.BASE_DB_URL + '/_session'
+        url: FieldDB.Database.prototype.BASE_DB_URL + '/_session'
       }).then(function(sessionInfo) {
         console.log(sessionInfo);
         if (sessionInfo.ok && sessionInfo.userCtx.name) {

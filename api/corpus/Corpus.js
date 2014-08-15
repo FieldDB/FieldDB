@@ -1,4 +1,4 @@
-/* global window, OPrime, FieldDB */
+/* global window, OPrime */
 var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
@@ -440,13 +440,17 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         throw "Cannot load corpus, its dbname was undefined";
       }
       var deferred = Q.defer(),
-        self = this;
+        self = this,
+        baseUrl = this.url;
 
       dbname = dbname.trim();
       this.dbname = dbname;
 
       Q.nextTick(function() {
 
+        if (!baseUrl) {
+          baseUrl = self.BASE_DB_URL;
+        }
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
@@ -462,13 +466,13 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         CORS.makeCORSRequest({
           type: 'GET',
           dataType: 'json',
-          url: self.url ? self.url : FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.api
+          url: baseUrl + '/' + self.dbname + '/_design/pages/_view/' + self.api
         }).then(function(data) {
           self.debug(data);
           if (data.rows && data.rows.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
             self.id = data.rows[0].value._id;
-            self.fetch(FieldDB.BASE_DB_URL).then(function(result) {
+            self.fetch(self.BASE_DB_URL).then(function(result) {
               self.debug('Finished fetch of corpus ', result);
               deferred.resolve(result);
             }, function(reason) {

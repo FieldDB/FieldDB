@@ -15,9 +15,19 @@ var AudioVideo = function AudioVideo(options) {
   FieldDBObject.apply(this, arguments);
 };
 
+var DEFAULT_BASE_SPEECH_URL = "https://localhost:6984";
 AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVideo.prototype */ {
   constructor: {
     value: AudioVideo
+  },
+
+  BASE_SPEECH_URL: {
+    get: function() {
+      return DEFAULT_BASE_SPEECH_URL;
+    },
+    set: function(value) {
+      DEFAULT_BASE_SPEECH_URL = value;
+    }
   },
 
   api: {
@@ -45,10 +55,9 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
 
   URL: {
     get: function() {
-      var FieldDB = FieldDB || {};
       if (!this._URL && this.filename) {
-        var baseurl = this.url ? this.url : FieldDB.BASE_SPEECH_URL;
-        return baseurl + '/' + this.dbname + '/' + this.filename;
+        var baseUrl = this.url ? this.url : this.BASE_SPEECH_URL;
+        return baseUrl + '/' + this.dbname + '/' + this.filename;
       }
       return this._URL || FieldDBObject.DEFAULT_STRING;
     },

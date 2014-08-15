@@ -29,4 +29,8 @@ angular.module('fielddbAngularApp', [
     'https://*.lingsync.org/**'
   ]);
 
+  FieldDB.Database.prototype.BASE_DB_URL = 'https://corpusdev.example.org';
+  FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = 'https://speechdev.example.org';
+  FieldDB.BASE_AUTH_URL = 'https://authdev.example.org';
+
 });
