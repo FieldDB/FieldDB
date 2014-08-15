@@ -81,7 +81,7 @@ describe("CorpusMask ", function() {
     expect(corpus.datumFields.judgement.labelNonLinguists).toEqual("Not-a-normal-thing-to-say");
     expect(corpus.datumFields.orthography.labelNonLinguists).toEqual("Written");
     expect(corpus.datumFields.utterance.labelNonLinguists).toEqual("International Phonetic Alphabet (IPA)");
-    expect(corpus.datumFields.morphemes.labelNonLinguists).toEqual("");
+    expect(corpus.datumFields.morphemes.labelNonLinguists).toEqual("Segmentation");
     expect(corpus.datumFields.translation.labelNonLinguists).toEqual("English");
     expect(corpus.sessionFields.length).toEqual(4);
     expect(corpus.sessionFields.dialect.labelNonLinguists).toEqual("Dialect");
