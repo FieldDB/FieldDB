@@ -14,10 +14,24 @@ angular.module('fielddbAngularApp').directive('fielddbDatum', function() {
     scope: {
       datum: '=json'
     },
-    controller: function($scope) {
+    controller: function($scope, $rootScope) {
       $scope.toggleViewDecryptedDetails = function() {
         $scope.datum.decryptedMode = !$scope.datum.decryptedMode;
       };
+      $scope.showThisFieldForThisUserType = function(field) {
+        var prefs = $rootScope.getUserPreferences()
+        console.log(prefs);
+        var userType = prefs.preferedDashboardType || "experimenterNormalUser";
+        if (!field.showToUserTypes) {
+          return true;
+        }
+        if (field.showToUserTypes === "all" || userType.indexOf(field.showToUserTypes) > -1) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+
     },
     link: function postLink() {}
   };
