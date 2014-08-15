@@ -10,6 +10,7 @@
  */
 angular.module('fielddbAngularApp').directive('fielddbAuthentication', function() {
   FieldDB.BASE_DB_URL = 'https://localhost:6984';
+  FieldDB.BASE_SPEECH_URL = 'https://localhost:3184';
   FieldDB.BASE_AUTH_URL = 'https://localhost:3183';
 
   var controller = function($scope, $location) {
