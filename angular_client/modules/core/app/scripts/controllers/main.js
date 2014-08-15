@@ -10,7 +10,6 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       brand: 'LingSync',
       website: 'http://lingsync.org'
     };
-    FieldDB.FieldDBConnection.connection.localCouch.url = FieldDB.BASE_DB_URL;
 
     $scope.authentication = $scope.authentication || {
       user: {
@@ -187,7 +186,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       // $scope.authentication.userroles = userroles;
       if ($scope.team && !$scope.team.gravatar) {
         $scope.team.status = 'Loading team details.';
-        $scope.team.fetch(FieldDB.FieldDBConnection.connection.localCouch.url).then(function(result) {
+        $scope.team.fetch(FieldDB.Database.prototype.BASE_DB_URL).then(function(result) {
           console.log('Suceeded to download team\'s public details.', result);
           $rootScope.status = $scope.team.status = 'Loaded team details.';
           $scope.$apply();
