@@ -58,7 +58,7 @@ var Session = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var Datum = function Datum(options) {
-  this.debug("Constructing Datum length: ", options);
+  this.debug("Constructing Datum: ", options);
   FieldDBObject.apply(this, arguments);
 };
 
@@ -79,7 +79,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         delete this._datumFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
+        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['datumFields'] === 'function') {
           value = new this.INTERNAL_MODELS['datumFields'](value);
         }
       }
@@ -95,7 +95,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   },
 
   // Internal models: used by the parse function
-  internalModels: {
+  INTERNAL_MODELS: {
     value: {
       datumFields: DatumFields,
       audioVideo: AudioVideos,
