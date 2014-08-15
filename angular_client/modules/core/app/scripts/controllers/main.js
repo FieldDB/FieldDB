@@ -191,8 +191,8 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
           $rootScope.status = $scope.team.status = 'Loaded team details.';
           $scope.$apply();
         }, function(result) {
-          console.log('Failed to download team public details.', result);
-          $rootScope.status = $scope.team.status = 'Failed to download team public details.';
+          console.log('Failed to download team details.', result);
+          $rootScope.status = $scope.team.status = 'Failed to download team details.';
           $scope.$apply();
         });
       }
