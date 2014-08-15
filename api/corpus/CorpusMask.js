@@ -1,4 +1,5 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
+var Database = require('./Database').Database;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
 var DatumStates = require('./../datum/DatumStates').DatumStates;
 var DatumTags = require('./../datum/DatumTags').DatumTags;
@@ -59,15 +60,15 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  * @property {Array} datalists Collection of public browsable/search engine
  *           discoverable data lists created under the corpus
  *
- * @extends FieldDBObject
+ * @extends Database
  * @tutorial tests/CorpusMaskTest.js
  */
 var CorpusMask = function CorpusMask(options) {
   this.debug(options);
-  FieldDBObject.apply(this, arguments);
+  Database.apply(this, arguments);
 };
 
-CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusMask.prototype */ {
+CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.prototype */ {
   constructor: {
     value: CorpusMask
   },
