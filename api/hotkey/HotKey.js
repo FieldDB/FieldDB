@@ -31,7 +31,7 @@ HotKey.prototype = Object.create(FieldDBObject.prototype, /** @lends HotKey.prot
   keySequence: {
     get: function() {
       var value = this.firstKey + "+" + this.secondKey;
-      this.debug('Getting keySequence '+ value);
+      this.debug('Getting keySequence ' + value);
       return value;
     }
   }
