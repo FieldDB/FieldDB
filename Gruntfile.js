@@ -72,7 +72,7 @@ module.exports = function(grunt) {
           jshintrc: 'tests/.jshintrc',
           ignores: ['tests/libs/**/*js']
         },
-        src: ['tests/FieldDBTest.js', 'tests/FieldDBObjectTest.js', 'tests/CollectionTest.js', 'tests/activity/*.js', 'tests/app/*.js', 'tests/audioVideo/*.js', 'tests/authentication/*.js', 'tests/comment/*.js', 'tests/confidentiality_encryption/*.js', 'tests/corpus/*.js', 'tests/data_list/*.js', 'tests/datum/*.js', 'tests/export/*.js', 'tests/glosser/*.js', 'tests/hotkey/*.js', 'tests/import/*.js', 'tests/insert_unicode/*.js', 'tests/lexicon/*.js', 'tests/permission/*.js', 'tests/search/*.js', 'tests/user/*.js']
+        src: ['tests/FieldDBTest.js', 'tests/FieldDBObjectTest.js', 'tests/CollectionTest.js', 'tests/activity/*.js', 'tests/app/*.js', 'tests/audioVideo/*.js', 'tests/authentication/*.js', 'tests/comment/*.js', 'tests/confidentiality_encryption/*.js', 'tests/corpus/*.js', 'tests/data_list/*.js', 'tests/datum/*.js', 'tests/export/*.js', 'tests/glosser/*.js', 'tests/hotkey/*.js', 'tests/image/*.js', 'tests/import/*.js', 'tests/insert_unicode/*.js', 'tests/lexicon/*.js', 'tests/permission/*.js', 'tests/search/*.js', 'tests/user/*.js']
       },
     },
     jsdoc: {
