@@ -232,7 +232,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         if (!correspondingDatumField || correspondingDatumField.length === 0) {
           correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
           correspondingDatumField[0].id = item;
-          correspondingDatumField[0].labelLinguists = item;
+          if (this.importType === 'participants') {
+            correspondingDatumField[0].labelExperimenters = item;
+          } else {
+            correspondingDatumField[0].labelFieldLinguists = item;
+          }
           correspondingDatumField[0].help = 'This field came from file import';
           var lookAgain = self.importFields.find(correspondingDatumField[0].id);
           if (lookAgain.length) {
@@ -260,42 +264,48 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           fieldToGeneralize = self.importFields.find('validationStatus');
           if (fieldToGeneralize.length > 0) {
             this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
+            fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+            fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("codepermanent") > -1) {
           fieldToGeneralize = self.importFields.find('anonymouscode');
           if (fieldToGeneralize.length > 0) {
             this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
+            fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+            fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("nsection") > -1) {
           fieldToGeneralize = self.importFields.find('coursenumber');
           if (fieldToGeneralize.length > 0) {
             this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
+            fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+            fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("prenom") > -1) {
           fieldToGeneralize = self.importFields.find('firstname');
           if (fieldToGeneralize.length > 0) {
             this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
+            fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+            fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("nomdefamille") > -1) {
           fieldToGeneralize = self.importFields.find('lastname');
           if (fieldToGeneralize.length > 0) {
             this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
+            fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+            fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
             headers[f] = fieldToGeneralize[0];
           }
         } else if (headers[f].id.toLowerCase().indexOf("datedenaissance") > -1) {
           fieldToGeneralize = self.importFields.find('dateofbirth');
           if (fieldToGeneralize.length > 0) {
             this.debug("This header matches an existing corpus field. ", fieldToGeneralize);
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
+            fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+            fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
             headers[f] = fieldToGeneralize[0];
           }
         }

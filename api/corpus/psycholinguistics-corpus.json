@@ -2,7 +2,7 @@
   "description": "This is first database which contains the results of your experiment, you can use it to play with the app... When you want to make a real database, click New : Database/Corpus",
   "participantFields": [ {
     "id": "courseNumber",
-    "labelLinguists": "Course/Class/Section Number",
+    "labelExperimenter": "Course/Class/Section Number",
     "labelNonLinguists": "",
     "labelTranslators": "",
     "shouldBeEncrypted": true,
@@ -13,7 +13,7 @@
     "helpLinguists": "Optional course or section number, if used by the participants result reports or experimental conditions."
   }, {
     "id": "hemisphericDominance",
-    "labelLinguists": "Hemispheric dominance (handedness)",
+    "labelExperimenter": "Hemispheric dominance (handedness)",
     "labelNonLinguists": "",
     "labelTranslators": "",
     "shouldBeEncrypted": true,

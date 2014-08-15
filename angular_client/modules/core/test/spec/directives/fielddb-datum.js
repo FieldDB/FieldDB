@@ -14,7 +14,7 @@ describe('Directive: fielddb-datum', function() {
       datumFields: [{
         'id': 'morphemes',
         'value': 'Noqa-ta tusu-nay-wa-n-mi',
-        'labelLinguists': 'Morphemes',
+        'labelFieldLinguists': 'Morphemes',
         'labelNonLinguists': '',
         'labelTranslators': 'Prefix-z-root-suffix-z',
         'type': 'IGT',
@@ -31,7 +31,7 @@ describe('Directive: fielddb-datum', function() {
       datumFields: [{
         'id': 'morphemes',
         'value': 'Noqa-ta tusu-nay-wan-mi',
-        'labelLinguists': 'Morphemes',
+        'labelFieldLinguists': 'Morphemes',
         'labelNonLinguists': '',
         'labelTranslators': 'Prefix-z-root-suffix-z',
         'type': 'IGT',
