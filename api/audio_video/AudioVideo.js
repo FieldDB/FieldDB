@@ -64,7 +64,25 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
       }
       this._URL = value;
     }
+  },
+
+  type: {
+    get: function() {
+      if (!this._type && this.filename) {
+        this._type = "audio/" + this.filename.split('.').pop();
+      }
+      return this._type || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._type) {
+        return;
+      }
+      console.warn("type cannot be set, it is automatically determined from the filename");
+      value = "audio/" + this.filename.split('.').pop();
+      this._type = value;
+    }
   }
+
 
 });
 exports.AudioVideo = AudioVideo;
