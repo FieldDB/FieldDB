@@ -1,14 +1,15 @@
 /* globals window, $, _ , OPrime*/
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var AudioVideos = require('./../Collection').Collection;
+var AudioVideos = require('./../audio_video/AudioVideos').AudioVideos;
 var Comments = require('./../Collection').Collection;
 var Datums = require('./../Collection').Collection;
 var DatumField = require('./DatumField').DatumField;
 var DatumFields = require('./DatumFields').DatumFields;
-var DatumState = require('./../FieldDBObject').FieldDBObject;
+// var DatumState = require('./../FieldDBObject').FieldDBObject;
 var DatumStates = require('./DatumStates').DatumStates;
-var DatumTag = require('./../FieldDBObject').FieldDBObject;
+// var DatumTag = require('./../FieldDBObject').FieldDBObject;
 var DatumTags = require('./DatumTags').DatumTags;
+var Images = require('./../image/Images').Images;
 var Session = require('./../FieldDBObject').FieldDBObject;
 
 /**
@@ -101,7 +102,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       session: Session,
       comments: Comments,
       datumStates: DatumStates,
-      datumTags: DatumTags
+      datumTags: DatumTags,
+      images: Images
     }
   },
 
