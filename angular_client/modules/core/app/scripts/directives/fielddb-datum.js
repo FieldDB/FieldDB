@@ -24,16 +24,19 @@ angular.module('fielddbAngularApp').directive('fielddbDatum', function() {
           return false;
         }
         // Only values which would be interesting for this user
-        var prefs = $rootScope.getUserPreferences()
+        var prefs = $rootScope.getUserPreferences();
         console.log(prefs);
-        var userType = prefs.preferedDashboardType || "experimenterNormalUser";
+        var userType = prefs.preferedDashboardType || 'experimenterNormalUser';
         if (!field.showToUserTypes) {
           return true;
         }
-        if (field.showToUserTypes === "all" || userType.indexOf(field.showToUserTypes) > -1) {
-          return true;
-        } else {
-          return false;
+        var showToTypes = field.showToUserTypes.trim().split(',');
+        for (var type = 0; type < showToTypes.length; type++) {
+          if (showToTypes[type].trim() === 'all' || userType.indexOf(showToTypes[type].trim()) > -1) {
+            return true;
+          } else {
+            return false;
+          }
         }
       };
 
