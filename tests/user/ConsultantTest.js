@@ -172,7 +172,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
       _rev: "1-66d7dcf2ec5756f96705e4c190efbf7b",
       fields: [ {
         _id: "firstName",
-        labelLinguists: "Prénom",
+        labelExperimenters: "Prénom",
         shouldBeEncrypted: true,
         encrypted: true,
         showToUserTypes: "all",

@@ -41,7 +41,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     get: function() {
       return {
         id: Date.now(),
-        labelLinguists: "",
+        labelFieldLinguists: "",
+        labelPsychoLinguists: "",
+        labelExperimenters: "",
         labelNonLinguists: "",
         labelTranslators: "",
         labelComputationalLinguist: "",
@@ -95,12 +97,12 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   label: {
     get: function() {
-      this.warn("label is deprecated, instead use a label for appropriate user eg labelLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      return this.labelLinguists;
+      this.warn("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      return this._labelFieldLinguists || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      this.warn("label is deprecated, instead use a label for appropriate user eg labelLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      this.labelLinguists = value;
+      this.warn("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.labelFieldLinguists = value;
       this.id = value;
     }
   },
@@ -122,26 +124,57 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     }
   },
 
-
-  labelLinguists: {
+  labelFieldLinguists: {
     get: function() {
-      return this._labelLinguists || FieldDBObject.DEFAULT_STRING;
+      return this._labelFieldLinguists || this.label;
     },
     set: function(value) {
-      if (value === this._labelLinguists) {
+      if (value === this._labelFieldLinguists) {
         return;
       }
       if (!value) {
-        delete this._labelLinguists;
+        delete this._labelFieldLinguists;
         return;
       }
-      this._labelLinguists = value.trim();
+      this._labelFieldLinguists = value.trim();
+    }
+  },
+
+  labelPsychoLinguists: {
+    get: function() {
+      return this._labelPsychoLinguists || this.labelFieldLinguists;
+    },
+    set: function(value) {
+      if (value === this._labelPsychoLinguists) {
+        return;
+      }
+      if (!value) {
+        delete this._labelPsychoLinguists;
+        return;
+      }
+      this._labelPsychoLinguists = value.trim();
+    }
+  },
+
+  labelExperimenter: {
+    get: function() {
+      return this._labelExperimenter || this.labelNonLinguists;
+    },
+    set: function(value) {
+      if (value === this._labelExperimenter) {
+        return;
+      }
+      if (!value) {
+        delete this._labelExperimenter;
+        return;
+      }
+      this._labelExperimenter = value.trim();
     }
   },
 
   labelNonLinguists: {
     get: function() {
-      return this._labelNonLinguists || FieldDBObject.DEFAULT_STRING;
+      return this._labelNonLinguists || this.label;
     },
     set: function(value) {
       if (value === this._labelNonLinguists) {
@@ -157,7 +190,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   labelTranslators: {
     get: function() {
-      return this._labelTranslators || FieldDBObject.DEFAULT_STRING;
+      return this._labelTranslators || this.labelNonLinguists;
     },
     set: function(value) {
       if (value === this._labelTranslators) {
@@ -173,7 +206,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   labelComputationalLinguist: {
     get: function() {
-      return this._labelComputationalLinguist || FieldDBObject.DEFAULT_STRING;
+      return this._labelComputationalLinguist || this.label;
     },
     set: function(value) {
       if (value === this._labelComputationalLinguist) {
