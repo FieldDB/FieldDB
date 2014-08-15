@@ -10,7 +10,11 @@
     "pouchname": "",
     "path": "",
     "authUrl": "",
-    "userFriendlyServerName": ""
+    "userFriendlyServerName": "",
+    "title": "",
+    "corpusid": "",
+    "titleAsUrl": "",
+    "description": "The details of this corpus are not public."
   }],
   "activityCouchConnection": {
     "protocol": "",
@@ -23,8 +27,8 @@
   },
   "appbrand": "",
   "gravatar": "",
-  "appVersionWhenCreated": "2.2.2ss",
-  "authServerVersionWhenCreated": "2.12.0",
+  "appVersionWhenCreated": "1.62.2",
+  "authServerVersionWhenCreated": "",
   "authUrl": "",
   "created_at": "",
   "updated_at": "",
@@ -35,7 +39,7 @@
   "dataLists": [],
   "prefs": {
     "skin": "",
-    "numVisibleDatum": 2,
+    "numVisibleDatum": "10",
     "transparentDashboard": "false",
     "alwaysRandomizeSkin": "true",
     "numberOfItemsInPaginatedViews": 10,
@@ -127,9 +131,15 @@
       "symbol": "∌",
       "tipa": "",
       "useCount": 0
-    }]
+    }],
+    "preferedDashboardLayout": "default",
+    "showNewDatumAtTopOrBottomOfDataEntryArea": "bottom",
+    "hotkeys": []
   },
   "mostRecentIds": {
+    "corpusid": "",
+    "datalistid": "",
+    "sessionid": "",
     "couchConnection": {
       "protocol": "",
       "domain": "",
@@ -137,11 +147,29 @@
       "pouchname": "",
       "path": "",
       "authUrl": "",
-      "userFriendlyServerName": ""
+      "userFriendlyServerName": "",
+      "corpusid": ""
     }
   },
   "firstname": "",
   "lastname": "",
   "sessionHistory": [],
-  "hotkeys": {}
+  "hotkeys": {
+    "firstKey": "",
+    "secondKey": "",
+    "description": "",
+    "filledWithDefaults": true
+  },
+  "newCorpusConnections": [{
+    "protocol": "",
+    "domain": "",
+    "port": "",
+    "pouchname": "",
+    "path": "",
+    "authUrl": "",
+    "userFriendlyServerName": ""
+  }],
+  "roles": [],
+  "authenticated": true,
+  "accessibleDBS": []
 }
