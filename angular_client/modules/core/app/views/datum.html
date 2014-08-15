@@ -1,55 +1,65 @@
 <div class="pull-right">
    <!-- Issue #797 -->
-
-  <button class="btn btn-{{buttonColor}} save-datum"
-    value="Save">{{locale_Save}}</button>
+  <button hidden class="btn btn-{{datum.buttonColor}} save-datum"
+    value="Save">{{locale.locale_Save}}</button>
 </div>
 
-<a class="datum_id" name={{_id}}></a>
+<a class="datum_id" name="{{datum._id}}"></a>
 
-<!-- image area  -->
-<div class="row images-area" > </div>
+<!-- image area -->
+<div class="row images-area" ng-repeat="image in datum.images">
+  <img ng-src="{{image.URL}}" title="{{image.caption}}"/>
+  <p>{{image.caption}}</p>
+</div>
 
 <!-- datum IGT preview area to see what you're doing -->
-<div class="row preview_IGT_area" > </div>
-
+<div class="row preview_IGT_area"> </div>
 
 <!-- list for the fields -->
 <table class="datum_fields_ul unstyled"></table>
-<a  href="#"   title="{{locale_See_Fields}}" rel="tooltip" >
-  <i class="icons icon-list-alt pull-right"> </i>
+
+<a href="#" title="{{locale.locale_See_Fields}}" rel="tooltip">
+  <i class="icons fa fa-list-alt pull-right"> </i>
 </a>
 <!-- Datum Edit view specialized fields and menu area -->
 <div class="row-fluid ">
   <div class="span6">
     <!-- Buttons for various actions -->
-    <div class=" btn-group">
-      <a href="#corpus/{{pouchname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale_Insert_New_Datum}}" rel="tooltip">
-        <i class=" icon-plus"></i></a>
-      <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Duplicate}}" rel="tooltip">
-        <i class=" icon-copy"></i></a>
-      <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Encrypt}}" rel="tooltip">
-        <i class=" {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>
-      <a href="#" class="btn btn-mini btn-primary" title="{{locale_Show_confidential_items_Tooltip}}" rel="tooltip">
-        <i class=" {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
+    <div class="btn-group" >
+      <a href="#corpus/{{datum.pouchname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale.locale_Insert_New_Datum}}" rel="tooltip">
+        <i class="fa fa-plus"></i></a>
+      <a href="#" class="btn btn-mini btn-primary" title="{{locale.locale_Duplicate}}" rel="tooltip">
+        <i class="fa fa-copy"></i></a>
+      <a href="#" class="btn btn-mini btn-primary" title="{{locale.locale_Encrypt}}" rel="tooltip">
+        <i class="fa" ng-class="{'fa-lock': !datum.encrypted, 'fa-unlock': datum.encrypted}"></i>
       </a>
-      <a  href="#" class="btn btn-mini btn-primary play-audio" title="{{locale_Play_Audio}}" rel="tooltip">
-        <i class=" icon-bullhorn"></i></a>
-      <a  href="#" class="btn btn-mini btn-info" title="{{locale_Plain_Text_Export_Tooltip}}" rel="tooltip" >
-        <i class=" icon-paste"></i></a>
-      <a href="#" class="LaTeX btn btn-mini btn-info" title="{{locale_LaTeX}}" rel="tooltip">
+      <a href="#" class="btn btn-mini btn-primary" title="{{locale.locale_Show_confidential_items_Tooltip}}" rel="tooltip">
+        <i class="fa" ng-class="{'fa-eye': !datum.decryptedMode, 'fa-eye-slash': datum.decryptedMode}"></i>
+      </a>
+      <a href="#" class="btn btn-mini btn-primary play-audio" title="{{locale.locale_Play_Audio}}" rel="tooltip">
+        <i class="fa fa-bullhorn"></i>
+      </a>
+      <a href="#" class="btn btn-mini btn-info" title="{{locale.locale_Plain_Text_Export_Tooltip}}" rel="tooltip">
+        <i class="fa fa-paste"></i>
+      </a>
+      <a href="#" class="LaTeX btn btn-mini btn-info" title="{{locale.locale_LaTeX}}" rel="tooltip">
         <i>LaTeX</i>
       </a>
-      <a href="#" class="CSV btn btn-mini btn-info" title="{{locale_CSV_Tooltip}}" rel="tooltip">
+      <a href="#" class="CSV btn btn-mini btn-info" title="{{locale.locale_CSV_Tooltip}}" rel="tooltip">
         <i>CSV</i>
       </a>
       <a href="#" class="btn btn-mini  btn-danger trash-button" title="Put datum in the trash" rel="tooltip">
-      <i class="icon-trash "></i>
-    </a>
+        <i class="fa fa-trash "></i>
+      </a>
     </div>
     <br/>
-    <a href="#" class="audio_video" title="{{locale_Drag_and_Drop_Audio_Tooltip}}" rel="tooltip"></a>
-    <ul class="audio_video_ul unstyled"></ul>
+    <a href="#" class="audio_video" title="{{locale.locale_Drag_and_Drop_Audio_Tooltip}}" rel="tooltip"></a>
+    <ul class="audio_video_ul unstyled" ng-repeat="audioVideo in datum.audioVideos">
+      <audio ng-src="{{audioVideo.URL}}" title="{{audioVideo.description}}" controls>
+      </audio>
+      <p>{{audioVideo.description}}</p>
+    </ul>
+
   </div>
   <div class="span3 border-left hide">
     <!-- list for the tags -->
@@ -59,22 +69,22 @@
       <div class="input-append ">
         <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4"
               data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]"
-        /><button class=" btn btn-small btn-primary add_datum_tag" type="button">
-          <i class=" icon-tag"></i>
-          <span>{{locale_Add}}</span>
+        /><button class="btn btn-small btn-primary add_datum_tag" type="button">
+          <i class="fa fa-tag"></i>
+          <span>{{locale.locale_Add}}</span>
         </button>
       </div>
     </div>
   </div>
   <div class="datum_state span3 border-left">
-      <span class="label label-{{datumstatecolor}} datum-primary-validation-status-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datumstate}}</span></span><br/>
+      <span class="label label-{{datum.datumstatecolor}} datum-primary-validation-status-color "><i class = "fa fa-flag"></i><span class="datum-state-value">{{datum.datumstate}}</span></span><br/>
   </div>
 </div>
 
 <ul class="comments unstyled"></ul>
 <div class="extra-datum-info-which-can-be-hidden">
-  <span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
-  <span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
+  <span class="last-modified">{{datum.dateModified}}</span><i class="fa fa-save "></i><br/>
+  <span class="date-created">{{datum.dateEntered}}</span><i class="fa fa-time"></i><br/>
 
   <span class="session-link"></span>
 
