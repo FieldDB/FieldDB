@@ -128,12 +128,21 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   login: {
     value: function(loginDetails) {
       var deferred = Q.defer(),
-        self = this;
+        self = this,
+        baseUrl = this.url;
+
+      if (!baseUrl) {
+        baseUrl = this.BASE_DB_URL;
+      }
 
       if (!this.authUrl) {
-        self.warn("Cannot login  with out a url");
-        return;
+        self.warn("Cannot login with out an auth url");
+        Q.nextTick(function() {
+          deferred.reject("Cannot login with out an auth url");
+        });
+        return deferred.promise;
       }
+
       CORS.makeCORSRequest({
         type: 'POST',
         dataType: "json",
@@ -144,7 +153,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             CORS.makeCORSRequest({
               type: 'POST',
               dataType: "json",
-              url: self.url + "/_session",
+              url: baseUrl + "/_session",
               data: {
                 name: result.user.username,
                 password: loginDetails.password
@@ -174,16 +183,17 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   logout: {
     value: function() {
-      var deferred = Q.defer();
+      var deferred = Q.defer(),
+        baseUrl = this.url;
 
-      if (!this.url) {
-        this.warn("Cannot logout  with out a url");
-        return;
+      if (!baseUrl) {
+        baseUrl = this.BASE_DB_URL;
       }
+
       CORS.makeCORSRequest({
         type: 'DELETE',
         dataType: "json",
-        url: this.url + "/_session"
+        url: baseUrl + "/_session"
       }).then(function(result) {
           if (result.ok) {
             deferred.resolve(result);
@@ -203,12 +213,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   register: {
     value: function() {
       var deferred = Q.defer(),
-        self = this;
+        self = this,
+        baseUrl = this.url;
 
-      if (!this.url) {
-        self.warn("Cannot fetch data with out a url");
-        return;
+      if (!baseUrl) {
+        baseUrl = this.BASE_DB_URL;
       }
+
       CORS.makeCORSRequest({
         type: 'POST',
         dataType: "json",
@@ -222,7 +233,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             CORS.makeCORSRequest({
               type: 'POST',
               dataType: "json",
-              url: self.url + "/_session",
+              url: baseUrl + "/_session",
               data: {
                 name: result.user.username,
                 password: 'testtest'
