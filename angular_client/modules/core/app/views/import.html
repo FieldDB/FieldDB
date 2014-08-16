@@ -16,6 +16,10 @@
       </h5>
       <blockquote class="status">
         {{importer.status}}
+        {{importer.bugMessage}}
+        {{importer.warnMessage}}
+        {{importer.corpus.bugMessage}}
+        {{importer.corpus.warnMessage}}
       </blockquote>
 
     </div>
@@ -62,7 +66,7 @@
     <span class="pull-right">Did the app guess the wrong format?</span>
   </div>
 
-  <div class="well" ng-show="importer.importSecondStep">
+  <div class="well" ng-show="importer.showImportSecondStep">
     <span>{{locale.locale_Import_Second_Step}}</span>
 
     <button class="btn btn-info add-column pull-right hide">{{locale.locale_Add_Extra_Columns}}</button>
@@ -87,31 +91,23 @@
     </table>
   </div>
 
-  <button class="btn btn-success approve-import" ng-show="importer.asCSV.length > 0" ng-click="importer.convertTableIntoDataList()">{{locale.locale_Attempt_Import}}</button>
+  <button class="btn btn-success approve-import" ng-show="importer.asCSV.length > 0" ng-click="runImport()">{{locale.locale_Attempt_Import}}</button>
 </div>
 
-<div class="well container-fluid" ng-show="importer.importThirdStep">
+<progress  class="import-progress" max="{{importer.progress.total}}" value="{{importer.progress.completed}}">
+  <strong>{{locale.locale_percent_completed}}</strong>
+</progress>
+
+<div class="well container-fluid" ng-show="importer.showImportThirdStep">
   <span>{{locale.locale_Import_Third_Step}}</span>
 
-  <div id="import-data-list" class=" row-fluid">
-
-    <div id="import-data-list-header"  ></div>
-    <div class=" container span11">
-      <ul class="unstyled  import-data-list-paginated-view"></ul>
-      <div class="pagination-control row span11"></div>
-    </div>
-
-  </div>
-
+  <div class="row-fluid" data-fielddb-datalist json="importer.datalist" corpus="importer.corpus" >
 
   <div id="import-session" class="well"></div>
 
   <button
   class="btn btn-success approve-save disabled">{{locale.locale_Save_And_Import}}</button>
 
-  <progress class="import-progress" max="5" value="0">
-    <strong>{{locale.locale_percent_completed}}</strong>
-  </progress>
 
 </div>
 </div>
