@@ -115,6 +115,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       if ($routeParams.importType) {
         $scope.importer = $scope.importer || new FieldDB.Import({
           importType: $routeParams.importType
+          // corpus: $scope.corpus
         });
       } else if ($routeParams.reportType) {
         $scope.reportsList.filter = function(report) {
@@ -160,6 +161,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
          * Letting the url determine which corpus is loaded
          */
         if ($routeParams.corpusid) {
+          $rootScope.currentCorpusDashboard = $scope.team.validateUsername($routeParams.team).username + '/' + $scope.team.sanitizeStringForFileSystem($routeParams.corpusid).toLowerCase();
           $rootScope.currentCorpusDashboardDBname = $scope.team.validateUsername($routeParams.team).username + '-' + $scope.team.sanitizeStringForFileSystem($routeParams.corpusid).toLowerCase();
           if ($rootScope.currentCorpusDashboardDBname.split('-').length < 2) {
             $scope.status = 'Please try another url of the form teamname/corpusname ' + $rootScope.currentCorpusDashboardDBname + ' is not valid.';
@@ -202,6 +204,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
         $scope.corpus.loadOrCreateCorpusByPouchName($scope.corpus.dbname).then(function(result) {
           console.log('Suceeded to download corpus details.', result);
           $rootScope.status = $scope.corpus.status = 'Loaded corpus details.';
+          $scope.importer.corpus = $scope.corpus;
           $scope.$apply();
         }, function(result) {
           console.log('Failed to download corpus details.', result);
