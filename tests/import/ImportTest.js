@@ -414,14 +414,17 @@ describe("Import: as a morphologist I want to import my data from CSV", function
 
       // Build data
       expect(importer.extractedHeader).toEqual(['Date Elicited', 'utterance', 'morphemes', 'gloss', 'translation', 'comments', '', 'tags', 'CheckedWithConsultant', 'source/publication', 'a.field-with*dangerous characters (for import)']);
-      var headers = importer.convertTableIntoDataList();
-      console.log(JSON.stringify(headers));
-      expect(headers[0].id).toEqual("dateElicited");
-      expect(headers[8].id).toEqual('validationStatus');
-      expect(headers[9].id).toEqual('sourcePublication');
-      expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
+      importer.convertTableIntoDataList().then(function() {
+        var headers = importer.discoveredHeaders;
+        console.log(JSON.stringify(headers));
+        expect(headers[0].id).toEqual("dateElicited");
+        expect(headers[8].id).toEqual('validationStatus');
+        expect(headers[9].id).toEqual('sourcePublication');
+        expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
+        //TODO finish IGT import later
 
-      //TODO finish IGT import later
+      });
+
 
     }, function(options) {
       expect(options).toEqual('It should not error');
