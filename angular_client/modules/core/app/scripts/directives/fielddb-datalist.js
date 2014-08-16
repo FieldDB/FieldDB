@@ -13,7 +13,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
   var controller = function($scope, $timeout) {
     var fetchDatalistDocsIfEmpty = function() {
 
-      if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey) {
+      if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         $timeout(function() {
           if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
