@@ -108,6 +108,26 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
+  docs: {
+    get: function() {
+      return this._docs || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._docs) {
+        return;
+      }
+      if (!value) {
+        delete this._docs;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['docs'] === 'function') {
+          value = new this.INTERNAL_MODELS['docs'](value);
+        }
+      }
+      this._docs = value;
+    }
+  },
+
   docIds: {
     get: function() {
       var self = this;
