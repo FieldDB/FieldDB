@@ -80,7 +80,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
         if (window.location.pathname !== '/welcome' && window.location.pathname !== '/bienvenu') {
           $scope.$apply(function() {
             $location.path('/welcome/');
-            window.location.replace("/welcome");
+            window.location.replace('/welcome');
           });
         }
         $scope.$digest();
