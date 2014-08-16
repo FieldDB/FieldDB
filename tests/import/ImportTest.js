@@ -271,7 +271,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
   }, specIsRunningTooLong);
 
-  it("should process csv participants", function() {
+  it("should process csv participants", function(done) {
     var dbname = "testingcorpusinimport-firstcorpus";
     var corpus = new Corpus(Corpus.prototype.defaults_psycholinguistics);
     corpus.dbname = dbname;
@@ -286,30 +286,45 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     importer.importCSV(importer.rawText, importer);
     expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
     expect(importer.asCSV.length).toEqual(17);
+    expect(importer.showImportSecondStep).toBeTruthy();
 
     // Step 2: build participants
     // importer.debugMode = true;
-    var headers = importer.convertTableIntoDataList();
+    importer.convertTableIntoDataList().then(function(results) {
+      var headers = importer.discoveredHeaders;
+      expect(headers[0].id).toEqual("anonymousCode");
+      expect(headers[1].id).toEqual('courseNumber');
+      expect(headers[2].id).toEqual('firstname');
+      expect(headers[3].id).toEqual('lastname');
+      expect(headers[4].id).toEqual('dateOfBirth');
+
+      importer.documentCollection._collection[1].fields.decryptedMode = true;
+      expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual('Damiane');
+      expect(importer.documentCollection._collection[1].fields.firstname.mask).toEqual('xxxxxxx');
+
+      importer.documentCollection._collection[2].fields.decryptedMode = true;
+      expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual('Ariane');
+      expect(importer.documentCollection._collection[2].fields.firstname.mask).toEqual('xxxxxx');
+
+      importer.documentCollection._collection[3].fields.decryptedMode = true;
+      expect(importer.documentCollection._collection[3].fields.firstname.value).toEqual('Michel');
+      expect(importer.documentCollection._collection[3].fields.firstname.mask).toEqual('xxxxxx');
+
+      expect(importer.progress.total).toEqual(17);
+      expect(importer.progress.completed).toEqual(17);
+
+      expect(results.length).toEqual(16);
+
+      expect(importer.datalist).toBeDefined();
+      expect(importer.datalist.title).toEqual("Import Data");
+      expect(importer.datalist.description).toEqual("This is the data list which results from the import of the text typed/pasted in the import text area.");
+      expect(importer.datalist.docs.length).toEqual(16);
+      expect(importer.showImportThirdStep).toBeTruthy();
+
+    }).then(done, done);
 
     // console.log(JSON.stringify(importer.importFields, null, 2));
-    expect(headers[0].id).toEqual("anonymousCode");
-    expect(headers[1].id).toEqual('courseNumber');
-    expect(headers[2].id).toEqual('firstname');
-    expect(headers[3].id).toEqual('lastname');
-    expect(headers[4].id).toEqual('dateOfBirth');
-
-    importer.documentCollection._collection[1].fields.decryptedMode = true;
-    expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual('Damiane');
-    expect(importer.documentCollection._collection[1].fields.firstname.mask).toEqual('xxxxxxx');
-
-    importer.documentCollection._collection[2].fields.decryptedMode = true;
-    expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual('Ariane');
-    expect(importer.documentCollection._collection[2].fields.firstname.mask).toEqual('xxxxxx');
-
-    importer.documentCollection._collection[3].fields.decryptedMode = true;
-    expect(importer.documentCollection._collection[3].fields.firstname.value).toEqual('Michel');
-    expect(importer.documentCollection._collection[3].fields.firstname.mask).toEqual('xxxxxx');
-  });
+  }, specIsRunningTooLong);
 
 
   xit("should read a file when in a browser", function(done) {
