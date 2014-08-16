@@ -38,7 +38,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       if ($scope.datalist.docIds && $scope.datalist.docIds.length && $scope.datalist.docIds.length >= 0) {
         whatToFetch = $scope.datalist.docIds;
       }
-      if (whatToFetch === []) {
+      if (!whatToFetch || whatToFetch === []) {
         $scope.datalist.docs = [];
         $scope.$digest();
         return;
@@ -72,7 +72,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
           }
           $scope.datalist.docs.push(doc);
         });
-        $scope.$digest();
+        // $scope.$digest();
 
       }, function(reason) {
 
