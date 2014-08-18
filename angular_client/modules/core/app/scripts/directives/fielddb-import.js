@@ -29,15 +29,14 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
       if (processOffline) {
-        $scope.importer = $scope.importer || new FieldDB.Import({
-          files: $files,
-          corpus: $scope.corpus,
-          dbname: $scope.corpus.dbname,
-          status: '',
-          error: '',
-          rawText: '',
-          importType: 'participants'
-        });
+        $scope.importer = $scope.importer || new FieldDB.Import();
+        $scope.importer.status = '';
+        $scope.importer.error = '';
+        $scope.importer.rawText = '';
+        $scope.importer.importType = $scope.importer.importType || 'data';
+        $scope.importer.corpus = $scope.corpus;
+        $scope.importer.dbname = $scope.corpus.dbname || 'default';
+        $scope.importer.files = $files;
 
         console.log($scope.importer);
         $scope.importer.readFiles({}).then(function(sucessfullOptions) {
@@ -80,12 +79,23 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
            It could also be used to monitor the progress of a normal http post/put request with large data*/
       // $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
     };
+
+    $scope.runImport = function() {
+      if (!$scope.importer) {
+        return;
+      }
+      $scope.importer.convertTableIntoDataList().then(function(results) {
+        console.log('Import is completed. ', results);
+        console.log(' Progress ',$scope.importer.progress);
+        // $scope.$digest();
+      });
+    };
     /*jshint camelcase: false */
     $scope.locale = {
       locale_Import_First_Step: 'Step 1: Drag & drop, copy-paste or type your data into the text area, or select audio/video file(s) from your computer. Yes, you can edit the data inside the text area.',
       locale_Import_Second_Step: 'Step 2: Drag and drop or type the field names in column headers. Edit data in the table as needed.',
       locale_Add_Extra_Columns: 'Insert Extra Columns',
-      locale_Attempt_Import: 'Preview Import',
+      locale_Attempt_Import: 'Import ',
       locale_Import_Third_Step: 'Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import.',
       locale_Import: 'Importer des liste(s) de classe (.csv)',
       locale_Drag_and_Drop_Placeholder: 'Drag and drop files, copy-paste or type your data here. (Or use the Choose file(s) button)'

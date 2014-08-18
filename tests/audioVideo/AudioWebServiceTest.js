@@ -1,3 +1,5 @@
+/* globals runs, waitsFor */
+
 var AudioService = AudioService || require("./AudioService");
 var CouchDBConnection =  CouchDBConnection || require("../corpus/CouchDBConnection");
 var OPrime =  OPrime || require('../../backbone_client/libs/OPrime.js');
@@ -11,18 +13,19 @@ var runCORSTests = function(whichServer) {
     console.log(message);
     // expect(false).toBeTruthy();
   };
+  var corpusServerUrl;
 
   var serverURL = "https://audiodev.lingsync.org";
-  if (whichServer == "Testing") {
+  if (whichServer === "Testing") {
     serverURL = "https://audiodev.lingsync.org";
     corpusServerUrl = "https://corpusdev.lingsync.org/_session";
-  } else if (whichServer == "Stable") {
+  } else if (whichServer === "Stable") {
     serverURL = "https://audio.lingsync.org";
     corpusServerUrl = "https://corpus.lingsync.org/_session";
-  } else if (whichServer == "McGill") {
+  } else if (whichServer === "McGill") {
     serverURL = "https://prosody.linguistics.mcgill.ca/corpus";
     corpusServerUrl = "https://corpusdev.lingsync.org/_session";
-  } else if (whichServer == "Localhost") {
+  } else if (whichServer === "Localhost") {
     serverURL = "http://localhost:3184";
     corpusServerUrl = "https://localhost:6984/_session";
   }
@@ -113,7 +116,7 @@ var runCORSTests = function(whichServer) {
 xdescribe("AudioWebService Localhost: ", function() {
   runCORSTests("Localhost");
 });
-//   
+//
 /* TODO Turn these on when the other servers support CORS too */
 // describe("AudioWebService Stable: ", function() {
 // runCORSTests("Stable");

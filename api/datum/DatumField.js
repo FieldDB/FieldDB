@@ -22,6 +22,13 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
  */
 var DatumField = function DatumField(options) {
   this.debug("Constructing DatumField ", options);
+  // Let encryptedValue and value from serialization be set
+  if (options && options.encryptedValue) {
+    options._encryptedValue = options.encryptedValue;
+  }
+  if (options && options.value) {
+    options._value = options.value;
+  }
   FieldDBObject.apply(this, arguments);
 };
 
@@ -34,7 +41,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     get: function() {
       return {
         id: Date.now(),
-        labelLinguists: "",
+        labelFieldLinguists: "",
+        labelPsychoLinguists: "",
+        labelExperimenters: "",
         labelNonLinguists: "",
         labelTranslators: "",
         labelComputationalLinguist: "",
@@ -88,12 +97,12 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   label: {
     get: function() {
-      this.warn("label is deprecated, instead use a label for appropriate user eg labelLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      return this.labelLinguists;
+      this.warn("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      return this._labelFieldLinguists || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      this.warn("label is deprecated, instead use a label for appropriate user eg labelLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      this.labelLinguists = value;
+      this.warn("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.labelFieldLinguists = value;
       this.id = value;
     }
   },
@@ -115,26 +124,57 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     }
   },
 
-
-  labelLinguists: {
+  labelFieldLinguists: {
     get: function() {
-      return this._labelLinguists || FieldDBObject.DEFAULT_STRING;
+      return this._labelFieldLinguists || this.label;
     },
     set: function(value) {
-      if (value === this._labelLinguists) {
+      if (value === this._labelFieldLinguists) {
         return;
       }
       if (!value) {
-        delete this._labelLinguists;
+        delete this._labelFieldLinguists;
         return;
       }
-      this._labelLinguists = value.trim();
+      this._labelFieldLinguists = value.trim();
+    }
+  },
+
+  labelPsychoLinguists: {
+    get: function() {
+      return this._labelPsychoLinguists || this.labelFieldLinguists;
+    },
+    set: function(value) {
+      if (value === this._labelPsychoLinguists) {
+        return;
+      }
+      if (!value) {
+        delete this._labelPsychoLinguists;
+        return;
+      }
+      this._labelPsychoLinguists = value.trim();
+    }
+  },
+
+  labelExperimenter: {
+    get: function() {
+      return this._labelExperimenter || this.labelNonLinguists;
+    },
+    set: function(value) {
+      if (value === this._labelExperimenter) {
+        return;
+      }
+      if (!value) {
+        delete this._labelExperimenter;
+        return;
+      }
+      this._labelExperimenter = value.trim();
     }
   },
 
   labelNonLinguists: {
     get: function() {
-      return this._labelNonLinguists || FieldDBObject.DEFAULT_STRING;
+      return this._labelNonLinguists || this.label;
     },
     set: function(value) {
       if (value === this._labelNonLinguists) {
@@ -150,7 +190,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   labelTranslators: {
     get: function() {
-      return this._labelTranslators || FieldDBObject.DEFAULT_STRING;
+      return this._labelTranslators || this.labelNonLinguists;
     },
     set: function(value) {
       if (value === this._labelTranslators) {
@@ -166,7 +206,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   labelComputationalLinguist: {
     get: function() {
-      return this._labelComputationalLinguist || FieldDBObject.DEFAULT_STRING;
+      return this._labelComputationalLinguist || this.label;
     },
     set: function(value) {
       if (value === this._labelComputationalLinguist) {
@@ -285,7 +325,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           return this._value.trim();
         } else {
           if (!this.decryptedMode) {
-            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");//" mask: "+ this._mask +" value: " +this._value);
+            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode."); //" mask: "+ this._mask +" value: " +this._value);
             return this.mask || FieldDBObject.DEFAULT_STRING;
           } else {
             if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
@@ -307,7 +347,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
                 return this.mask;
               }
               var decryptedValue = this.confidential.decrypt(this._encryptedValue);
-              this.debug("decryptedValue "+ decryptedValue);
+              this.debug("decryptedValue " + decryptedValue);
               return decryptedValue;
             }
           }
@@ -415,7 +455,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         delete this._mask;
         return;
       }
-      console.log("Setting datum field mask " + value);
+      this.debug("Setting datum field mask " + value);
       this._mask = value.trim();
     }
   },

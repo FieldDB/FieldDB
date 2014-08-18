@@ -1,5 +1,5 @@
 var DatumTags = require('./DatumTags').DatumTags;
-var DatumState = require('./DatumTag').DatumTag;
+var DatumState = require('./DatumState').DatumState;
 
 /**
  * @class DatumStates of Datum validation states

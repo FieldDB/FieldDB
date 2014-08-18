@@ -207,6 +207,13 @@ describe('lib/Collection', function() {
       expect(collection.checked).not.toEqual(newcollection.checked);
     });
 
+    it('should provide map on its internal collection', function() {
+      expect(collection.map).toBeDefined();
+      expect(collection.map(function(item) {
+        return item.validationStatus;
+      })).toEqual([ 'Checked*', 'Published*', 'ToBeChecked*', 'ApprovedLanguageLearningContent*', 'ContributedLanguageLearningContent*', 'Deleted*', 'Duplicate*']);
+    });
+
   });
 
   describe('non-lossy persistance', function() {
@@ -232,6 +239,11 @@ describe('lib/Collection', function() {
       collection.anotherHelperFunction = function() {
         console.log('called');
       };
+    });
+
+
+    it('should have a type of Collection', function() {
+      expect(collection.type).toEqual('Collection');
     });
 
     it('should seem like an array when serialized', function() {

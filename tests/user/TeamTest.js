@@ -1,40 +1,36 @@
-describe("as a User I want to set up my team name", function() {
-	it("should set default team name", function() {
-		expect(true).toBeTruthy();
-		// var u = new User();
-		// expect(u.get("teamname")).toEqual("");
-	});
+var Team = require("./../../api/user/Team").Team;
+describe("as a Team I want to set up my team name", function() {
+  it("should set default team subtitle", function() {
+    var team = new Team();
+    expect(team.subtitle).toEqual("");
+  });
 
-	it("should set user's team name", function() {
-		expect(true).toBeTruthy();
-		// var u = new User();
-		// u.set("username", "elingllama");
-		// u.set("teams", ["YaleNavajo"]);
-		// expect("elingllama" == u.teams(["YaleNavajo"])).tobeTruthy();
-	});
-
-
+  it("should use team as id", function() {
+    var team = new Team();
+    team.username = "elingllama";
+    expect(team.id).toEqual("team");
+  });
 });
 
 
-describe("as a Team member, I want to be able to add and delete members", function() {
-	it("should add a new team member", function() {
-		expect(true).toBeTruthy();
-		//			var u = new User(); 
-		//            expect(true).toBeTruthy();
-	});
+xdescribe("as a Team member, I want to be able to add and delete members", function() {
+  it("should add a new team member", function() {
+    expect(true).toBeTruthy();
+    //			var u = new Team();
+    //            expect(true).toBeTruthy();
+  });
 
-	it("should delete a team member", function() {
-		expect(true).toBeTruthy();
-		//            expect(true).toBeTruthy();
-	});
+  it("should delete a team member", function() {
+    expect(true).toBeTruthy();
+    //            expect(true).toBeTruthy();
+  });
 
-	it("should modify member's permissions", function() {
-		expect(true).toBeTruthy();
-		//			var permission = new Permission();
-		//			expect(true).toBeTruthy();
+  it("should modify member's permissions", function() {
+    expect(true).toBeTruthy();
+    //			var permission = new Permission();
+    //			expect(true).toBeTruthy();
 
-	});
+  });
 
 
 

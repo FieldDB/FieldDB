@@ -4,7 +4,7 @@ var debug = false;
 describe('Directive: fielddb-doc', function() {
 
   // load the directive's module and the template
-  beforeEach(module('fielddbAngularApp',  'views/user.html'));
+  beforeEach(module('fielddbAngularApp', 'views/user.html'));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
@@ -13,12 +13,14 @@ describe('Directive: fielddb-doc', function() {
     scope.user = {
       firstname: 'Ling',
       lastname: 'Llama',
-      description: 'I like memes.'
+      description: 'I like memes.',
+      type: 'UserMask'
     };
     scope.team = {
       firstname: 'Awesome',
       lastname: 'Phonologists',
-      description: 'We love phonology.'
+      description: 'We love phonology.',
+      type: 'Team'
     };
     compileFunction = $compile(el);
     // bring html from templateCache
