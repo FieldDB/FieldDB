@@ -190,3 +190,92 @@ describe("FieldDBObject", function() {
 
   });
 });
+
+describe("merging", function() {
+
+  it("should be able to merge one object if we want", function() {
+    var aBaseObject = new FieldDBObject({
+      externalString: "easy model",
+      externalEqualString: "merging",
+      externalArray: ["four"],
+      externalObject: new FieldDBObject({
+        internalString: "internal",
+        internalTrue: true,
+        internalEmptyString: "",
+        internalFalse: false,
+        internalNumber: 2,
+        missingInTarget: "i'm a old property",
+        // debugMode: true
+      }),
+      // debugMode: true
+    });
+    expect(aBaseObject.type).toEqual("FieldDBObject");
+
+    var atriviallyDifferentObject = new FieldDBObject({
+      externalString: "trivial model",
+      externalEqualString: "merging",
+      externalArray: ["one", "two", "three"],
+      externalObject: new FieldDBObject({
+        internalString: "internal overwrite",
+        internalTrue: true,
+        internalEmptyString: "",
+        internalFalse: false,
+        internalNumber: 2,
+        missingInOriginal: "i'm a new property",
+        // debugMode: true
+      }),
+      // debugMode: true
+    });
+    expect(atriviallyDifferentObject.type).toEqual("FieldDBObject");
+    expect(aBaseObject.externalString).toEqual("easy model");
+
+    var resultObject = aBaseObject.merge("self", atriviallyDifferentObject, "overwrite");
+    expect(resultObject.externalString).toEqual("trivial model");
+    expect(resultObject.externalEqualString).toEqual("merging");
+    expect(resultObject.externalArray).toEqual(['four', 'one', 'two', 'three']);
+    expect(resultObject.warnMessage).toEqual("Overwriting contents of externalString (this may cause disconnection in listeners)");
+
+    expect(resultObject.externalObject.internalString).toEqual("internal overwrite");
+    expect(resultObject.externalObject.internalTrue).toEqual(true);
+    expect(resultObject.externalObject.internalEmptyString).toEqual("");
+    expect(resultObject.externalObject.internalFalse).toEqual(false);
+    expect(resultObject.externalObject.internalNumber).toEqual(2);
+    expect(resultObject.externalObject.missingInTarget).toEqual("i'm a old property");
+    expect(resultObject.externalObject.missingInOriginal).toEqual("i'm a new property");
+    expect(resultObject.externalObject.warnMessage).toEqual("Overwriting contents of internalString (this may cause disconnection in listeners)");
+
+  });
+
+  it("should reject to merge items with different ids", function() {
+    var aBaseObject = new FieldDBObject({
+      externalString: "old string",
+      externalObject: new FieldDBObject({
+        _id: "aw1we24",
+        internalString: "some object",
+      }),
+      // debugMode: true
+    });
+    expect(aBaseObject.type).toEqual("FieldDBObject");
+
+    var atriviallyDifferentObjectWithADifferentInternalObject = new FieldDBObject({
+      externalString: "new string",
+      externalObject: new FieldDBObject({
+        _id: "ye12waer8",
+        internalString: "a different object",
+        // debugMode: true
+      }),
+      // debugMode: true
+    });
+    expect(atriviallyDifferentObjectWithADifferentInternalObject.type).toEqual("FieldDBObject");
+    expect(aBaseObject.externalString).toEqual("old string");
+
+    var resultObject = aBaseObject.merge("self", atriviallyDifferentObjectWithADifferentInternalObject, "overwrite");
+    expect(resultObject.externalString).toEqual("new string");
+
+    expect(resultObject.externalObject._id).toEqual("aw1we24");
+    expect(resultObject.externalObject.internalString).toEqual("some object");
+    expect(resultObject.externalObject.warnMessage).toEqual("Refusing to merge these objects, they have different ids: aw1we24  and ye12waer8");
+
+  });
+
+});
