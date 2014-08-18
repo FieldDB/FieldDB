@@ -8,51 +8,82 @@
  */
 angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
-  var db;
   var fetchDatalistDocsExponentialDecay = 2000;
 
   var controller = function($scope, $timeout) {
     var fetchDatalistDocsIfEmpty = function() {
 
-      if (!FieldDB.BASE_DB_URL || !$scope.corpus) {
+      if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         $timeout(function() {
-          if ($scope.docs && $scope.docs.length > 0) {
+          if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
             return;
           } else {
             fetchDatalistDocsIfEmpty();
           }
         }, fetchDatalistDocsExponentialDecay);
-        console.log(' No URL specified, Waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
-
+        console.log(' No real corpus is available, waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
+        if ($scope.datalist) {
+          $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
+        }
         return;
       }
 
-      db = db || new FieldDB.PsycholinguisticsDatabase({
-        dbname: $scope.corpus.dbname,
-        url: FieldDB.BASE_DB_URL,
-        authUrl: FieldDB.BASE_AUTH_URL
-      });
-      // console.log('fetching docs for ', db.toJSON());
-      db.fetchCollection('speakers').then(function(results) {
+      $scope.corpus.authUrl = FieldDB.BASE_AUTH_URL;
+      // $scope.corpus.debugMode = true;
+
+      // console.log('fetching docs for ', $scope.corpus.toJSON());
+      // $scope.datalist.title = '';
+      var whatToFetch = $scope.datalist.api;
+      if ($scope.datalist.docIds && $scope.datalist.docIds.length && $scope.datalist.docIds.length >= 0) {
+        whatToFetch = $scope.datalist.docIds;
+      }
+      if (!whatToFetch || whatToFetch === []) {
+        $scope.datalist.docs = [];
+        $scope.$digest();
+        return;
+      }
+      $scope.corpus.fetchCollection(whatToFetch).then(function(results) {
+        // Reset the exponential decay to normal for subsequent requests
+        fetchDatalistDocsExponentialDecay = 2000;
 
         console.log('downloaded docs', results);
-        $scope.docs = $scope.docs || [];
-        results.map(function(row) {
-          $scope.docs.push(row);
+        $scope.datalist.docs = $scope.datalist.docs || [];
+        results.map(function(doc) {
+          if (doc.type && FieldDB[doc.type]) {
+            $scope.corpus.debug('Converting doc into type ' + doc.type);
+            doc.confidential = $scope.corpus.confidential;
+            doc = new FieldDB[doc.type](doc);
+          } else {
+            $scope.corpus.warn('This doc does not have a type, it might display oddly ', doc);
+            var guessedType = doc.jsonType || 'FieldDBObject';
+            if ($scope.datalist.api) {
+              guessedType = $scope.datalist.api[0].toUpperCase() + $scope.datalist.api.substring(1, $scope.datalist.api.length);
+              guessedType = guessedType.replace(/s$/, '');
+            }
+            if (guessedType === 'Datalist') {
+              guessedType = 'DataList';
+            }
+            if (FieldDB[guessedType]) {
+              $scope.corpus.warn('Converting doc into guessed type ' + guessedType);
+              doc.confidential = $scope.corpus.confidential;
+              doc = new FieldDB[guessedType](doc);
+            }
+          }
+          $scope.datalist.docs.push(doc);
         });
-        $scope.$digest();
+        // $scope.$digest();
 
       }, function(reason) {
 
         console.log('No docs docs...', reason);
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
-        $scope.corpus.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
+        $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
         console.log(' No connetion, Waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
         $scope.$digest();
 
         $timeout(function() {
-          if ($scope.docs && $scope.docs.length > 0) {
+          if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
             return;
           } else {
             fetchDatalistDocsIfEmpty();
@@ -65,6 +96,10 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
     fetchDatalistDocsIfEmpty();
 
+    $scope.canAddNewItemsToDataList = function() {
+      return false;
+    };
+
   };
   controller.$inject = ['$scope', '$timeout'];
 
@@ -73,7 +108,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     restrict: 'A',
     transclude: false,
     scope: {
-      docs: '=json',
+      datalist: '=json',
       corpus: '=corpus'
     },
     controller: controller,

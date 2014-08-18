@@ -101,7 +101,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   username: {
     get: function() {
       if (this.fields && this.fields.username && this.fields.username.value) {
-        // console.log('this.fields.username.value :', this.fields.username.value + ":");
+        // this.debug('this.fields.username.value :', this.fields.username.value + ":");
 
         if (this.fields.confidentiality.value === "generalize") {
           this.fields.username.mask = "A native speaker";
@@ -146,7 +146,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   anonymousCode: {
     get: function() {
       if (this.fields) {
-        return this.fields.anonymousCode.value;
+        return this.fields.anonymousCode.value.toUpperCase();
       } else {
         return;
       }
@@ -188,7 +188,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
       }
       this.confidentialEncrypter = value;
       if (this.fields) {
-        // console.log('setting speaker fields confidential in the Speaker.confidential set function.');
+        // this.debug('setting speaker fields confidential in the Speaker.confidential set function.');
         this.fields.confidential = value;
       }
     }
@@ -209,6 +209,44 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
       } else {
         this.fields = new DatumFields(this.defaults.fields);
         this.fields.dateOfBirth.value = value;
+      }
+    }
+  },
+
+  firstname: {
+    get: function() {
+      if (this.fields) {
+        return this.fields.firstname.value;
+      } else {
+        return;
+      }
+    },
+    set: function(value) {
+      if (this.fields) {
+        // this.fields.debugMode = true;
+        this.fields.firstname.value = value;
+      } else {
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.firstname.value = value;
+      }
+    }
+  },
+
+  lastname: {
+    get: function() {
+      if (this.fields) {
+        return this.fields.lastname.value;
+      } else {
+        return;
+      }
+    },
+    set: function(value) {
+      if (this.fields) {
+        // this.fields.debugMode = true;
+        this.fields.lastname.value = value;
+      } else {
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.lastname.value = value;
       }
     }
   },
@@ -254,7 +292,7 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   fields: {
     get: function() {
       if (this._fields) {
-        // console.log('setting speaker fields confidential in the Speaker.fields get function.');
+        // this.debug('setting speaker fields confidential in the Speaker.fields get function.');
 
         // this._fields.encrypted = true;
         // this._fields.decryptedMode = true;
@@ -281,14 +319,17 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
   user: {
     get: function() {
       if (!this.userMask) {
+
+        var self = this;
         if (this.public && this.username) {
           this.userMask = new this.INTERNAL_MODELS['user']({});
           this.userMask.username = this.username;
           this.userMask.fetch().then(function(result) {
-            console.log('Fetched speaker\'s user mask', result);
+            self.debug('Fetched speaker\'s user mask', result);
           }, function(error) {
-            console.log('Failed to fetch speaker\'s user mask', error);
+            self.debug('Failed to fetch speaker\'s user mask', error);
           });
+
         } else {
           this.userMask = {};
         }
@@ -312,9 +353,10 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
 
   decryptedMode: {
     get: function() {
-      return;
+      return this._decryptedMode;
     },
     set: function(value) {
+      this._decryptedMode = value;
       if (this._fields) {
         this._fields.decryptedMode = value;
       }

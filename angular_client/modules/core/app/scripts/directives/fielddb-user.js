@@ -8,8 +8,11 @@ angular.module('fielddbAngularApp').directive('fielddbUser', function() {
     scope: {
       user: '=json'
     },
-    // controller: function($scope, $element, $attrs, $transclude) {},
-    link: function postLink() {
-    }
+    controller: function($scope) {
+      $scope.toggleViewDecryptedDetails = function() {
+        $scope.user.decryptedMode = !$scope.user.decryptedMode;
+      };
+    },
+    link: function postLink() {}
   };
 });

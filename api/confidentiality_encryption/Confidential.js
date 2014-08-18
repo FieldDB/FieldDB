@@ -101,7 +101,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
           encrypted = encrypted.replace("confidential:", "");
           // decode base64
           encrypted = atob(encrypted);
-          this.verbose("Decrypting after turning on decrypted mode " + encrypted, self.secretkey);
+          self.verbose("Decrypting after turning on decrypted mode " + encrypted, self.secretkey);
           result = AES.decrypt(encrypted, self.secretkey).toString(CryptoEncoding);
           try {
             if ((result.indexOf("{") === 0 && result.indexOf("}") === result.length - 1) || (result.indexOf("[") === 0 && result.indexOf("]") === result.length - 1)) {

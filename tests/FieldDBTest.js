@@ -49,7 +49,7 @@ var FieldDB = require('../api/fielddb.js').FieldDB;
 * @module  FieldDBTest
 * @extends  Jasmine.spec
 */
-xdescribe("api/FieldDB.js", function() {
+describe("api/FieldDB.js", function() {
 
   it("should load", function() {
     expect(FieldDB).toBeDefined();

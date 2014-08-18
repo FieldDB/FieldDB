@@ -73,7 +73,7 @@ var Q = require("q");
 var FieldDBObject = function FieldDBObject(json) {
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
-  if (json && json.confidential) {
+  if (json && json.confidential && this.INTERNAL_MODELS['confidential']) {
     this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
   }
   var simpleModels = [];
@@ -81,7 +81,7 @@ var FieldDBObject = function FieldDBObject(json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
-    this.verbose("JSON: " + member);
+    this.debug("JSON: " + member, this.INTERNAL_MODELS);
     if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
       this.debug("Parsing model: " + member);
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
@@ -100,7 +100,7 @@ var FieldDBObject = function FieldDBObject(json) {
 };
 
 FieldDBObject.DEFAULT_STRING = "";
-FieldDBObject.DEFAULT_OBJECT = "";
+FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v2.0.1";
@@ -117,6 +117,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var funcNameRegex = /function (.{1,})\(/;
       var results = (funcNameRegex).exec((this).constructor.toString());
       return (results && results.length > 1) ? results[1] : "";
+    },
+    set: function(value) {
+      if (value !== this.type) {
+        this.warn('Using type ' + this.type + ' when the incoming object was ' + value);
+      }
     }
   },
 
@@ -155,7 +160,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log('DEBUG: ' + message);
+        console.log(this.type.toUpperCase() + ' DEBUG: ' + message);
 
         if (message2) {
           console.log(message2);
@@ -197,18 +202,28 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   bug: {
     value: function(message) {
-      this.bugMessage = message;
+      if (this.bugMessage) {
+        this.bugMessage += ";;; ";
+      } else {
+        this.bugMessage = "";
+      }
+      this.bugMessage = this.bugMessage + message;
       try {
         window.alert(message);
       } catch (e) {
-        console.warn('BUG: ' + message);
+        console.warn(this.type.toUpperCase() + ' BUG: ' + message);
       }
     }
   },
   warn: {
     value: function(message, message2, message3, message4) {
-      this.warnMessage = message;
-      console.warn('WARN: ' + message);
+      if (this.warnMessage) {
+        this.warnMessage += ";;; ";
+      } else {
+        this.warnMessage = "";
+      }
+      this.warnMessage = this.warnMessage + message;
+      console.warn(this.type.toUpperCase() + ' WARN: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -222,7 +237,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn('TODO: ' + message);
+      console.warn(this.type.toUpperCase() + ' TODO: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -305,7 +320,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function(optionalBaseUrl) {
       var deferred = Q.defer(),
         id,
-        self;
+        self = this;
 
       id = this.id;
       if (!id) {
@@ -316,13 +331,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
         return deferred.promise;
       }
-      self = this;
 
       this.fetching = true;
       CORS.makeCORSRequest({
         type: 'GET',
         dataType: "json",
-        url: optionalBaseUrl + "/" + this.dbname + "/" + id
+        url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
           self.fetching = false;
 
@@ -354,7 +368,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       dbname: FieldDBObject.DEFAULT_STRING,
       version: FieldDBObject.DEFAULT_STRING,
       dateCreated: FieldDBObject.DEFAULT_DATE,
-      dateModified: FieldDBObject.DEFAULT_DATE
+      dateModified: FieldDBObject.DEFAULT_DATE,
+      comments: FieldDBObject.DEFAULT_COLLECTION
     }
   },
 
@@ -426,10 +441,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   pouchname: {
     get: function() {
+      this.warn("pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
-    set: function() {
+    set: function(value) {
       this.warn("Pouchname is deprecated, please use dbname instead.");
+      this.dbname = value;
     }
   },
 
@@ -503,6 +520,22 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  comments: {
+    get: function() {
+      return this._comments || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._comments) {
+        return;
+      }
+      if (!value) {
+        delete this._comments;
+        return;
+      }
+      this._comments = value;
+    }
+  },
+
   isEmpty: {
     value: function(aproperty) {
       var empty = !this[aproperty] || this[aproperty] === FieldDBObject.DEFAULT_COLLECTION || this[aproperty] === FieldDBObject.DEFAULT_ARRAY || this[aproperty] === FieldDBObject.DEFAULT_OBJECT || this[aproperty] === FieldDBObject.DEFAULT_STRING || this[aproperty] === FieldDBObject.DEFAULT_DATE || (this[aproperty].length !== undefined && this[aproperty].length === 0) || this[aproperty] === {};
@@ -514,8 +547,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       var json = {
-        type: this.type
-      },
+          type: this.type
+        },
         aproperty,
         underscorelessProperty;
 
@@ -542,7 +575,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         for (aproperty in this.INTERNAL_MODELS) {
           if (!json[aproperty] && this.INTERNAL_MODELS) {
-            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
+            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
               json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
             } else {
               json[aproperty] = this.INTERNAL_MODELS[aproperty];
@@ -557,6 +590,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!json._rev) {
         delete json._rev;
       }
+      delete json.saving;
+      delete json.decryptedMode;
       delete json.bugMessage;
       delete json.warnMessage;
       if (this._collection !== "private_corpuses") {
@@ -617,20 +652,42 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    * @param  String value the potential primary key to be cleaned
    * @return String       the value cleaned and safe as a primary key
    */
-  sanitizeStringForPrimaryKey: {
-    value: function(value) {
-      this.debug('sanitizeStringForPrimaryKey');
+  sanitizeStringForFileSystem: {
+    value: function(value, optionalReplacementCharacter) {
+      this.debug('sanitizeStringForPrimaryKey ' + value);
       if (!value) {
         return null;
       }
+      if (optionalReplacementCharacter === undefined || optionalReplacementCharacter === "-") {
+        optionalReplacementCharacter = '_';
+      }
       if (value.trim) {
         value = Diacritics.clean(value);
-        value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_/, '').replace(/_$/, '');
-        return this.camelCased(value);
+        this.debug('sanitizeStringForPrimaryKey ' + value);
+
+        value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, '').replace(/_$/, '');
+        this.debug('sanitizeStringForPrimaryKey ' + value);
+        return value;
       } else if (typeof value === 'number') {
         return parseInt(value, 10);
       } else {
         return null;
+      }
+    }
+  },
+
+  sanitizeStringForPrimaryKey: {
+    value: function(value, optionalReplacementCharacter) {
+      this.debug('sanitizeStringForPrimaryKey ' + value);
+      if (!value) {
+        return null;
+      }
+      if (value.replace) {
+        value = value.replace(/-/g, "_");
+      }
+      value = this.sanitizeStringForFileSystem(value, optionalReplacementCharacter);
+      if (value && typeof value !== 'number') {
+        return this.camelCased(value);
       }
     }
   },

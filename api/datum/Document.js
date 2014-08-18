@@ -3,7 +3,7 @@
   var FieldDBObject = require('fielddb/api/FieldDBObject').FieldDBObject;
 
   var Document = function Document(options) {
-    // console.log("In Document ", options);
+    this.debug("In Document ", options);
     FieldDBObject.apply(this, arguments);
   };
 
@@ -13,7 +13,6 @@
     }
   });
 
-  console.log(Document);
   exports.Document = Document;
 
 })(typeof exports === 'undefined' ? this['Document'] = {} : exports);

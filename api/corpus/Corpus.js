@@ -1,21 +1,10 @@
-/* global window, OPrime, FieldDB */
-var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var CorpusMask = require("./CorpusMask");
-var Collection = require('./../Collection').Collection;
-// var Consultants = require('./../Collection').Collection;
-// var Datum = require('./../datum/Datum').Datum;
+/* global window, OPrime */
+var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require('./../datum/DatumFields').DatumFields;
-var DatumStates = require('./../datum/DatumStates').DatumStates;
-var DatumTags = require('./../datum/DatumTags').DatumTags;
-var Comments = require('./../Collection').Collection;
-// var UserMask = require('./../Collection').Collection;
 var Session = require('./../FieldDBObject').FieldDBObject;
-var CORS = require('./../CORS').CORS;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Permissions = require('./../Collection').Collection;
-var Sessions = require('./../Collection').Collection;
-var DataLists = require('./../Collection').Collection;
 var Q = require('q');
 
 
@@ -62,69 +51,40 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
  *              the corpus is new or existing and brings it down to
  *              the user's client.
  *
- * @extends FieldDBObject
+ * @extends CorpusMask
  * @tutorial tests/CorpusTest.js
  */
 
 
 var Corpus = function Corpus(options) {
   this.debug("Constructing corpus", options);
-  FieldDBObject.apply(this, arguments);
+  CorpusMask.apply(this, arguments);
 };
 
-Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
+Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototype */ {
   constructor: {
     value: Corpus
   },
 
-  title: {
+  id: {
     get: function() {
-      return this._title || FieldDBObject.DEFAULT_STRING;
+      return this._id || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._title) {
+      if (value === this._id) {
         return;
       }
       if (!value) {
-        delete this._title;
+        delete this._id;
         return;
       }
-      this._title = value.trim();
-      this._titleAsUrl = this._title;
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._id = value;
     }
   },
 
-  titleAsUrl: {
-    get: function() {
-      return this._titleAsUrl || FieldDBObject.DEFAULT_STRING;
-    },
-    set: function(value) {
-      if (value === this._titleAsUrl) {
-        return;
-      }
-      if (!value) {
-        delete this._titleAsUrl;
-        return;
-      }
-      this._titleAsUrl = this._titleAsUrl.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_"); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
-    }
-  },
-
-  description: {
-    get: function() {
-      return this._description || FieldDBObject.DEFAULT_STRING;
-    },
-    set: function(value) {
-      if (value === this._description) {
-        return;
-      }
-      if (!value) {
-        delete this._description;
-        return;
-      }
-      this._description = value.trim();
-    }
-  },
 
   couchConnection: {
     get: function() {
@@ -259,7 +219,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-
   confidential: {
     get: function() {
       return this._confidential || FieldDBObject.DEFAULT_OBJECT;
@@ -271,6 +230,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       if (!value) {
         delete this._confidential;
         return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['confidential'](value);
+        }
       }
       this._confidential = value;
     }
@@ -293,15 +256,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         value = "Private";
       }
       this._publicCorpus = value;
-    }
-  },
-
-  _collection: {
-    value: "private_corpuses"
-  },
-  collection: {
-    get: function() {
-      return this._collection;
     }
   },
 
@@ -485,13 +439,17 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         throw "Cannot load corpus, its dbname was undefined";
       }
       var deferred = Q.defer(),
-        self = this;
+        self = this,
+        baseUrl = this.url;
 
       dbname = dbname.trim();
       this.dbname = dbname;
 
       Q.nextTick(function() {
 
+        if (!baseUrl) {
+          baseUrl = self.BASE_DB_URL;
+        }
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
@@ -504,23 +462,19 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
           }, 1000);
         };
 
-        CORS.makeCORSRequest({
-          type: 'GET',
-          dataType: 'json',
-          url: FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.url
-        }).then(function(data) {
-          self.debug(data);
-          if (data.rows && data.rows.length > 0) {
+        self.fetchCollection(self.api).then(function(corpora) {
+          self.debug(corpora);
+          if (corpora.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
-            self.id = data.rows[0].value._id;
-            self.fetch(FieldDB.BASE_DB_URL).then(function(result) {
+            self.id = corpora[0]._id;
+            self.fetch(self.BASE_DB_URL).then(function(result) {
               self.debug('Finished fetch of corpus ', result);
               deferred.resolve(result);
             }, function(reason) {
               deferred.reject(reason);
             });
           } else {
-            tryAgainInCaseThereWasALag(data);
+            tryAgainInCaseThereWasALag(corpora);
           }
         }, tryAgainInCaseThereWasALag);
 
@@ -565,8 +519,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   // The couchdb-connector is capable of mapping the url scheme
   // proposed by the authors of Backbone to documents in your database,
   // so that you don't have to change existing apps when you switch the sync-strategy
-  url: {
-    value: "/private_corpuses"
+  api: {
+    value: "private_corpuses"
   },
 
   loadPermissions: {
@@ -591,17 +545,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-  pouchname: {
-    get: function() {
-      this.warn("pouchname is deprecated, use dbname instead.");
-      return this.dbname;
-    },
-    set: function(value) {
-      this.warn("pouchname is deprecated, use dbname instead.");
-      this.dbname = value;
-    }
-  },
-
   defaults: {
     get: function() {
       return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
@@ -622,39 +565,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       }
 
       return JSON.parse(JSON.stringify(doc));
-    }
-  },
-
-  INTERNAL_MODELS: {
-    value: {
-      _id: FieldDBObject.DEFAULT_STRING,
-      _rev: FieldDBObject.DEFAULT_STRING,
-      dbname: FieldDBObject.DEFAULT_STRING,
-      version: FieldDBObject.DEFAULT_STRING,
-      dateCreated: FieldDBObject.DEFAULT_DATE,
-      dateModified: FieldDBObject.DEFAULT_DATE,
-      comments: Comments,
-      sessions: Sessions,
-      datalists: DataLists,
-
-      title: FieldDBObject.DEFAULT_STRING,
-      titleAsUrl: FieldDBObject.DEFAULT_STRING,
-      description: FieldDBObject.DEFAULT_STRING,
-      termsOfUse: FieldDBObject,
-      license: FieldDBObject,
-      copyright: FieldDBObject.DEFAULT_STRING,
-      replicatedCorpusUrls: Collection,
-      olacExportConnections: Collection,
-      publicCorpus: FieldDBObject.DEFAULT_STRING,
-      confidential: Confidential,
-
-      validationStati: DatumStates,
-      tags: DatumTags,
-
-      datumFields: DatumFields,
-      participantFields: DatumFields,
-      conversationFields: DatumFields,
-      sessionFields: DatumFields,
     }
   },
 
@@ -1181,25 +1091,11 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return deferred.promise;
       }
 
-      var jsonUrl = self.validDBQueries["get_corpus_" + fieldname].url + "?group=true&limit=100";
-      OPrime.makeCORSRequest({
-        type: 'GET',
-        dataType: "json",
-        url: jsonUrl,
-      }).then(function(serverResults) {
-        var frequentValues;
-        if (serverResults && serverResults.rows && serverResults.row.length > 2) {
-          frequentValues = serverResults.rows.map(function(fieldvalue) {
-            return fieldvalue.key;
-          });
-        } else {
-          frequentValues = defaults;
-        }
-
+      // var jsonUrl = self.validDBQueries["get_corpus_" + fieldname].url + "?group=true&limit=100";
+      this.fetchCollection("frequentDatum" + fieldname, 0, 0, 100, true).then(function(frequentValues) {
         /*
          * TODO Hide optionally specified values
          */
-
         self["frequentDatum" + fieldname] = frequentValues;
         deferred.resolve(frequentValues);
       }, function(response) {

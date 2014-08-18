@@ -53,6 +53,14 @@ Collection.prototype = Object.create(Object.prototype, {
     value: Collection
   },
 
+  type: {
+    get: function() {
+      var funcNameRegex = /function (.{1,})\(/;
+      var results = (funcNameRegex).exec((this).constructor.toString());
+      return (results && results.length > 1) ? results[1] : "";
+    }
+  },
+
   /**
    * Can be set to true to debug all collections, or false to debug no collections and true only on the instances of objects which
    * you want to debug.
@@ -88,7 +96,7 @@ Collection.prototype = Object.create(Object.prototype, {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log(message);
+        console.log(this.type.toUpperCase() + ' DEBUG:' + message);
 
         if (message2) {
           console.log(message2);
@@ -133,13 +141,13 @@ Collection.prototype = Object.create(Object.prototype, {
       try {
         window.alert(message);
       } catch (e) {
-        console.warn('COLLECTION BUG: ' + message);
+        console.warn(this.type.toUpperCase() + ' BUG: ' + message);
       }
     }
   },
   warn: {
     value: function(message, message2, message3, message4) {
-      console.warn('COLLECTION WARN: ' + message);
+      console.warn(this.type.toUpperCase() + ' WARN: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -153,7 +161,7 @@ Collection.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn('COLLECTION TODO: ' + message);
+      console.warn(this.type.toUpperCase() + ' TODO: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -280,8 +288,8 @@ Collection.prototype = Object.create(Object.prototype, {
       } else {
         this.collection.push(value);
       }
-      /* if not a reserved attribute, set on objcet for dot notation access */
-      if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON', 'length'].indexOf(searchingFor) === -1) {
+      /* if not a reserved attribute, set on object for dot notation access */
+      if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON', 'length', 'encrypted', 'confidential', 'decryptedMode'].indexOf(searchingFor) === -1) {
         this[searchingFor] = value;
         /* also provide a case insensitive cleaned version if the key can be lower cased */
         if (typeof searchingFor.toLowerCase === 'function') {
@@ -315,7 +323,8 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        throw 'The primary key is undefined on this object, it cannot be added!';
+        this.warn('The primary key is undefined, nothing can be added!', this);
+        throw 'The primary key is undefined, nothing can be added!';
       }
       var value = member[this.primaryKey];
       if (!value) {
@@ -392,6 +401,19 @@ Collection.prototype = Object.create(Object.prototype, {
       var json = JSON.parse(JSON.stringify(this.toJSON()));
 
       return json;
+    }
+  },
+
+  map: {
+    get: function() {
+      if (this._collection && typeof this._collection.map === "function") {
+        var self = this;
+        return function(callback) {
+          return this._collection.map.apply(self._collection, [callback]);
+        };
+      } else {
+        return undefined;
+      }
     }
   },
 
@@ -497,7 +519,24 @@ Collection.prototype = Object.create(Object.prototype, {
         });
       }
     }
+  },
+
+  dbname: {
+    get: function() {
+      return;
+    },
+    set: function(value) {
+      if (this._collection) {
+        if (this._collection.map === undefined) {
+          this.warn("This collection isn't an array, this is odd", this);
+        }
+        this._collection.map(function(item) {
+          item.dbname = value;
+        });
+      }
+    }
   }
+
 
 
 });

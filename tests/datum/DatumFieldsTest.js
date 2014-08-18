@@ -139,7 +139,7 @@ describe('lib/DatumFields', function() {
     });
 
     it('should be able to find items by primary key', function() {
-      expect(collection.find('utterance')[0].labelLinguists).toEqual('Utterance');
+      expect(collection.find('utterance')[0].labelFieldLinguists).toEqual('Utterance');
     });
 
     it('should be able to find items by any attribute', function() {
@@ -148,13 +148,13 @@ describe('lib/DatumFields', function() {
 
     it('should accpet a RegExp to find items', function() {
       expect(collection.find('type', /(tags|parallelText)/i).map(function(item) {
-        return item.labelLinguists;
+        return item.labelFieldLinguists;
       })).toEqual(['Orthography', 'Utterance', 'Translation', 'Tags', 'Data validity/verification Status']);
     });
 
     it('should be able to fuzzy find items by any attribute', function() {
       expect(collection.fuzzyFind('value', 'nay').map(function(item) {
-        return item.labelLinguists;
+        return item.labelFieldLinguists;
       })).toEqual(['Utterance', 'Morphemes']);
     });
 
@@ -166,7 +166,7 @@ describe('lib/DatumFields', function() {
       var newcollection = new DatumFields(newbarecollection);
       expect(newcollection.utterance.value).toEqual(collection.utterance.value);
       expect(newcollection.utterance.mask).toEqual(collection.utterance.mask);
-      expect(newcollection.utterance.labelLinguists).toEqual(collection.utterance.labelLinguists);
+      expect(newcollection.utterance.labelFieldLinguists).toEqual(collection.utterance.labelFieldLinguists);
       // expect(newcollection.utterance).toEqual(collection.utterance);
       expect(newcollection.utterance).not.toBe(collection.utterance);
 
@@ -287,7 +287,7 @@ describe('lib/DatumFields', function() {
       // field.debugMode = true;
       field.shouldBeEncrypted = false;
       expect(field.shouldBeEncrypted).toBe(true);
-      expect(field.warnMessage).toBe("This field's shouldBeEncrypted cannot be undone. Only a corpus administrator can change shouldBeEncrypted to false if it has been true before.");
+      expect(field.warnMessage).toBe("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist;;; userchooseable is deprecated, instead use defaultfield;;; This field's shouldBeEncrypted cannot be undone. Only a corpus administrator can change shouldBeEncrypted to false if it has been true before.");
     });
 
     it('should decript encrypted datum if in decryptedMode', function() {
@@ -316,9 +316,9 @@ describe('lib/DatumFields', function() {
 
       field.decryptedMode = false;
       field.value = "noqa-ta tusu-nay-wan changed without access";
-      expect(field.warnMessage).toEqual("User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.warnMessage).toEqual("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist;;; userchooseable is deprecated, instead use defaultfield;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
       expect(field.value).toBe('xxxx-xx xxxx-xxx-xxx-xx');
-      expect(field.warnMessage).toEqual("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.warnMessage).toEqual("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist;;; userchooseable is deprecated, instead use defaultfield;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
       // console.log(field.toJSON());
     });
 
