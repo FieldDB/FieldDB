@@ -316,6 +316,88 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  merge: {
+    value: function(callOnSelf, anotherObject, optionalOverwriteOrAsk) {
+      var targetObject,
+        aproperty,
+        targetPropertyIsEmpty,
+        overwrite,
+        localCallOnSelf;
+
+      if (callOnSelf === "self") {
+        this.debug("Merging properties into myself. ");
+        targetObject = this;
+      } else {
+        targetObject = callOnSelf
+      }
+
+      if (targetObject.id && anotherObject.id && targetObject.id !== anotherObject.id) {
+        this.warn("Refusing to merge these objects, they have different ids: " + targetObject.id + "  and " + anotherObject.id, targetObject, anotherObject);
+        return targetObject;
+      }
+
+      for (aproperty in anotherObject) {
+        if (!anotherObject.hasOwnProperty(aproperty)) {
+          continue;
+        }
+
+
+        if (anotherObject[aproperty] === undefined) {
+          // no op, the new one isn't set
+          this.debug(aproperty + " was missing in new object");
+        } else if (targetObject[aproperty] === anotherObject[aproperty]) {
+          // no op, they are equal enough
+          this.debug(aproperty + " were equal.");
+        } else if (!targetObject[aproperty] || targetObject[aproperty] === [] || targetObject[aproperty].length === 0 || targetObject[aproperty] === {}) {
+          targetPropertyIsEmpty = true;
+          this.debug(aproperty + " was previously empty, taking the new value");
+          targetObject[aproperty] = anotherObject[aproperty];
+        } else {
+          //  if two arrays: concat
+          if (Object.prototype.toString.call(targetObject[aproperty]) === '[object Array]' && Object.prototype.toString.call(targetObject[aproperty]) === '[object Array]') {
+            this.debug(aproperty + " was an array, concatinating with the new value", targetObject[aproperty], " ->", anotherObject[aproperty]);
+            targetObject[aproperty] = targetObject[aproperty].concat(anotherObject[aproperty]);
+
+            //TODO unique it?
+            this.debug("  ", targetObject[aproperty]);
+          } else {
+            overwrite = optionalOverwriteOrAsk;
+            if (optionalOverwriteOrAsk !== "overwrite") {
+              overwrite = window.confirm("Do you want to overwrite " + aproperty);
+            }
+            if (overwrite) {
+              // if two objects: recursively merge
+              if (typeof targetObject[aproperty].merge === "function") {
+                var localCallOnSelf;
+                if (callOnSelf === "self") {
+                  localCallOnSelf = callOnSelf;
+                } else {
+                  localCallOnSelf = targetObject[aproperty]
+                }
+                this.debug("Requesting merge of internal property " + aproperty + " using method: " + localCallOnSelf);
+                var result = targetObject[aproperty].merge(localCallOnSelf, anotherObject[aproperty], optionalOverwriteOrAsk);
+                this.debug("after internal merge ", result);
+                this.debug("after internal merge ", targetObject[aproperty]);
+              } else {
+                this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)", targetObject[aproperty], " ->", anotherObject[aproperty]);
+                targetObject[aproperty] = anotherObject[aproperty];
+              }
+            }
+          }
+        }
+      }
+
+      // for (aproperty in targetObject) {
+      //   if (!targetObject.hasOwnProperty(aproperty)) {
+      //     continue;
+      //   }
+      //   this.debug("todo merge this property " + aproperty + " backwards too");
+      // }
+
+      return targetObject;
+    }
+  },
+
   fetch: {
     value: function(optionalBaseUrl) {
       var deferred = Q.defer(),
@@ -339,16 +421,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
           self.fetching = false;
-
-          for (var aproperty in result) {
-            if (!result.hasOwnProperty(aproperty)) {
-              continue;
-            }
-            if (self[aproperty] !== result[aproperty]) {
-              self.warn("Overwriting " + aproperty + " : ", self[aproperty], " ->", result[aproperty]);
-            }
-            self[aproperty] = result[aproperty];
-          }
+          self.merge("self", result, "overwrite");
           deferred.resolve(self);
         },
         function(reason) {
