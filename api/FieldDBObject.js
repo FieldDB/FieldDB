@@ -328,7 +328,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.debug("Merging properties into myself. ");
         targetObject = this;
       } else {
-        targetObject = callOnSelf
+        targetObject = callOnSelf;
       }
 
       if (targetObject.id && anotherObject.id && targetObject.id !== anotherObject.id) {
@@ -354,7 +354,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           targetObject[aproperty] = anotherObject[aproperty];
         } else {
           //  if two arrays: concat
-          if (Object.prototype.toString.call(targetObject[aproperty]) === '[object Array]' && Object.prototype.toString.call(targetObject[aproperty]) === '[object Array]') {
+          if (Object.prototype.toString.call(targetObject[aproperty]) === '[object Array]' && Object.prototype.toString.call(anotherObject[aproperty]) === '[object Array]') {
             this.debug(aproperty + " was an array, concatinating with the new value", targetObject[aproperty], " ->", anotherObject[aproperty]);
             targetObject[aproperty] = targetObject[aproperty].concat(anotherObject[aproperty]);
 
@@ -368,11 +368,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             if (overwrite) {
               // if two objects: recursively merge
               if (typeof targetObject[aproperty].merge === "function") {
-                var localCallOnSelf;
                 if (callOnSelf === "self") {
                   localCallOnSelf = callOnSelf;
                 } else {
-                  localCallOnSelf = targetObject[aproperty]
+                  localCallOnSelf = targetObject[aproperty];
                 }
                 this.debug("Requesting merge of internal property " + aproperty + " using method: " + localCallOnSelf);
                 var result = targetObject[aproperty].merge(localCallOnSelf, anotherObject[aproperty], optionalOverwriteOrAsk);
