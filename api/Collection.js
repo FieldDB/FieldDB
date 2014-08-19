@@ -473,6 +473,104 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  merge: {
+    value: function(callOnSelf, anotherCollection, optionalOverwriteOrAsk) {
+      var targetCollection,
+        overwrite,
+        localCallOnSelf,
+        self = this;
+
+      if (callOnSelf === "self") {
+        this.debug("Merging into myself. ");
+        targetCollection = this;
+      } else {
+        targetCollection = callOnSelf;
+      }
+
+      if (!anotherCollection || anotherCollection.length === 0) {
+        this.debug("The new collection was empty, not merging.", anotherCollection);
+        return targetCollection;
+      }
+
+      targetCollection._collection.map(function(item) {
+        var idToMatch = item[targetCollection.primaryKey];
+        var anotherItem = anotherCollection[idToMatch];
+
+        if (item !== targetCollection[idToMatch]) {
+          self.bug(" Looking at an item that doesnt match the targetCollection's member of " + idToMatch);
+        }
+
+        if (anotherItem === undefined) {
+          // no op, the new one isn't set
+          self.debug(idToMatch + " was missing in new collection");
+        } else if (item === anotherItem) {
+          // no op, they are equal enough
+          self.debug(idToMatch + " were equal.", item, anotherItem);
+        } else if (!item || item === [] || item.length === 0 || item === {}) {
+          self.debug(idToMatch + " was previously empty, taking the new value");
+          item = anotherItem;
+        } else {
+          //  if two arrays: concat
+          if (Object.prototype.toString.call(item) === '[object Array]' && Object.prototype.toString.call(anotherItem) === '[object Array]') {
+            self.debug(idToMatch + " was an array, concatinating with the new value", item, " ->", anotherItem);
+            item = item.concat(anotherItem);
+
+            //TODO unique it?
+            self.debug("  ", item);
+          } else {
+            overwrite = optionalOverwriteOrAsk;
+            if (optionalOverwriteOrAsk !== "overwrite") {
+              overwrite = window.confirm("Do you want to overwrite " + idToMatch);
+            }
+            if (overwrite) {
+              // if two objects: recursively merge
+              if (typeof item.merge === "function") {
+                if (callOnSelf === "self") {
+                  localCallOnSelf = callOnSelf;
+                } else {
+                  localCallOnSelf = item;
+                }
+                self.debug("Requesting merge of internal property " + idToMatch + " using method: " + localCallOnSelf);
+                var result = item.merge(localCallOnSelf, anotherItem, optionalOverwriteOrAsk);
+                self.debug("after internal merge ", result);
+                self.debug("after internal merge ", item);
+              } else {
+                self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)", item, " ->", anotherItem);
+                item = anotherItem;
+              }
+            }
+          }
+        }
+      });
+      anotherCollection._collection.map(function(anotherItem) {
+        var idToMatch = anotherItem[targetCollection.primaryKey];
+        var item = targetCollection[idToMatch];
+
+        if (anotherItem !== anotherCollection[idToMatch]) {
+          self.bug(" Looking at an item that doesnt match the anotherCollection's member of " + idToMatch);
+        }
+
+        if (item === undefined) {
+          self.debug(idToMatch + " was missing in target, adding it");
+          targetCollection.add(anotherItem);
+        } else if (anotherItem === undefined) {
+          // no op, the new one isn't set
+          self.debug(idToMatch + " was oddly undefined");
+        } else if (item === anotherItem) {
+          // no op, they are equal enough
+          // self.debug(idToMatch + " were equal.", item, anotherItem);
+        } else if (!anotherItem || anotherItem === [] || anotherItem.length === 0 || anotherItem === {}) {
+          self.warn(idToMatch + " was empty in the new collection, so it was replaced with an empty item.");
+          item = anotherItem;
+        } else {
+          // both exist and are not equal, and so have already been merged above.
+          self.debug(idToMatch + " existed in both and are not equal, and so have already been merged above.");
+        }
+      });
+
+      return targetCollection;
+    }
+  },
   encrypted: {
     get: function() {
       return;

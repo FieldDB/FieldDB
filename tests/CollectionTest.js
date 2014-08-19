@@ -1,6 +1,7 @@
 'use strict';
 
 var Collection = require('../api/Collection').Collection;
+var FieldDBObject = require('../api/FieldDBObject').FieldDBObject;
 var DEFAULT_DATUM_VALIDATION_STATI = require("./../api/datum/validation-status.json");
 
 /*
@@ -211,7 +212,7 @@ describe('lib/Collection', function() {
       expect(collection.map).toBeDefined();
       expect(collection.map(function(item) {
         return item.validationStatus;
-      })).toEqual([ 'Checked*', 'Published*', 'ToBeChecked*', 'ApprovedLanguageLearningContent*', 'ContributedLanguageLearningContent*', 'Deleted*', 'Duplicate*']);
+      })).toEqual(['Checked*', 'Published*', 'ToBeChecked*', 'ApprovedLanguageLearningContent*', 'ContributedLanguageLearningContent*', 'Deleted*', 'Duplicate*']);
     });
 
   });
@@ -294,5 +295,90 @@ describe('lib/Collection', function() {
       };
       expect(collection.checked.confidential.secretkey).toEqual('secretkey');
     });
+  });
+
+  describe('merging', function() {
+
+    it('should be able to merge items in collections using their primary key', function() {
+      var aBaseCollection = new Collection([new FieldDBObject({
+          id: "one",
+          missingInNew: "hi"
+        }), new FieldDBObject({
+          id: "two"
+        }),
+        new FieldDBObject({
+          id: "three",
+          externalObject: new FieldDBObject({
+            internalString: "internal",
+            internalTrue: true,
+            internalEmptyString: "",
+            internalFalse: false,
+            internalNumber: 2,
+            internalEqualString: "i'm a old property",
+            // debugMode: true
+          })
+        }), new FieldDBObject({
+          id: "four"
+        }), {
+          id: "onlyinTarget"
+        }, {
+          id: "willBeOverwritten",
+          missingInNew: "this isnt a FieldDBObject so it will be undefined after merge."
+        }
+      ]);
+      expect(aBaseCollection.type).toEqual("Collection");
+      expect(aBaseCollection.three.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.onlyintarget).toBeDefined();
+
+      var atriviallyDifferentCollection = new Collection([new FieldDBObject({
+          id: "one"
+        }), new FieldDBObject({
+          id: "two",
+          missingInOriginal: "hi there"
+        }), {
+          id: "willBeOverwritten",
+          missingInOriginal: "this isnt a FieldDBObject so it will be fully overwritten."
+        },
+        new FieldDBObject({
+          id: "three",
+          externalObject: new FieldDBObject({
+            internalString: "internal is different",
+            internalTrue: true,
+            internalEmptyString: "",
+            internalFalse: false,
+            internalNumber: 2,
+            internalEqualString: "i'm a old property",
+            // debugMode: true
+          })
+        }), aBaseCollection.four, {
+          id: "onlyinNew"
+        }
+      ]);
+
+      expect(atriviallyDifferentCollection.type).toEqual("Collection");
+      expect(atriviallyDifferentCollection.three.type).toEqual("FieldDBObject");
+
+      var result = aBaseCollection.merge("self", atriviallyDifferentCollection, "overwrite");
+      expect(result).toBeDefined();
+      expect(result).toEqual(aBaseCollection);
+
+      expect(result.one.missingInNew).toEqual("hi");
+      expect(result.two.missingInOriginal).toEqual("hi there");
+      expect(result.three.externalObject.internalString).toEqual("internal is different");
+      expect(result.three.externalObject.internalTrue).toEqual(true);
+      expect(result.three.externalObject.internalEmptyString).toEqual("");
+      expect(result.three.externalObject.internalFalse).toEqual(false);
+      expect(result.three.externalObject.internalNumber).toEqual(2);
+      expect(result.three.externalObject.internalEqualString).toEqual("i'm a old property");
+
+      expect(result.four).toBeDefined();
+
+      expect(result.onlyintarget).toBeDefined();
+      expect(result.onlyinnew).toBeDefined();
+      expect(result.willbeoverwritten).toBeDefined();
+
+
+    });
+
   });
 });
