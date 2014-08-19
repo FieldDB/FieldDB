@@ -230,6 +230,7 @@ describe("merging", function() {
     expect(aBaseObject.externalString).toEqual("easy model");
 
     var resultObject = aBaseObject.merge("self", atriviallyDifferentObject, "overwrite");
+    expect(resultObject).toEqual(aBaseObject);
     expect(resultObject.externalString).toEqual("trivial model");
     expect(resultObject.externalEqualString).toEqual("merging");
     expect(resultObject.externalArray).toEqual(['four', 'one', 'two', 'three']);
