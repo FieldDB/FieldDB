@@ -171,7 +171,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
       _id: "migm740610ea",
       _rev: "1-66d7dcf2ec5756f96705e4c190efbf7b",
       fields: [ {
-        _id: "firstName",
+        _id: "firstname",
         labelExperimenters: "Prénom",
         shouldBeEncrypted: true,
         encrypted: true,
@@ -183,6 +183,21 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
         encryptedValue: "confidential:VTJGc2RHVmtYMTljQjh4ZXFtRTBPYm5aUm9WbXdvbTVuSHZFWmMzaU1xQT0=",
         mask: "xxxxxx",
         value: "xxxxxx",
+        dateCreated: 0,
+        dateModified: 0
+      }, {
+        _id: "lastname",
+        labelExperimenters: "Last name",
+        shouldBeEncrypted: true,
+        encrypted: true,
+        showToUserTypes: "all",
+        defaultfield: true,
+        help: "The first name of the speaker/participant (optional, encrypted if speaker is anonymous)",
+        helpLinguists: "The first name of the speaker/participant (optional, should be encrypted if speaker should remain anonymous)",
+        version: "v2.0.1",
+        encryptedValue: "confidential:VTJGc2RHVmtYMTljQjh4ZXFtRTBPYm5aUm9WbXdvbTVuSHZFWmMzaU1xQT0=",
+        mask: "xxxxxx-xxx",
+        value: "xxxxxx-xxx",
         dateCreated: 0,
         dateModified: 0
       }],
@@ -197,7 +212,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     expect(consultant.fields.firstname.mask).toEqual("xxxxxx");
     expect(consultant.fields.firstname.value).toEqual("xxxxxx");
     expect(consultant.fields.firstname.encryptedValue).toEqual("confidential:VTJGc2RHVmtYMTljQjh4ZXFtRTBPYm5aUm9WbXdvbTVuSHZFWmMzaU1xQT0=");
-
+    expect(consultant.name).toEqual("xxxxxx xxxxxx-xxx");
   });
 
 });
