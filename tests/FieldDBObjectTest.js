@@ -234,7 +234,7 @@ describe("merging", function() {
     expect(resultObject.externalString).toEqual("trivial model");
     expect(resultObject.externalEqualString).toEqual("merging");
     expect(resultObject.externalArray).toEqual(['four', 'one', 'two', 'three']);
-    expect(resultObject.warnMessage).toEqual("Overwriting contents of externalString (this may cause disconnection in listeners)");
+    expect(resultObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
     expect(resultObject.externalObject.internalString).toEqual("internal overwrite");
     expect(resultObject.externalObject.internalTrue).toEqual(true);
@@ -243,7 +243,7 @@ describe("merging", function() {
     expect(resultObject.externalObject.internalNumber).toEqual(2);
     expect(resultObject.externalObject.missingInTarget).toEqual("i'm a old property");
     expect(resultObject.externalObject.missingInOriginal).toEqual("i'm a new property");
-    expect(resultObject.externalObject.warnMessage).toEqual("Overwriting contents of internalString (this may cause disconnection in listeners)");
+    expect(resultObject.externalObject.warnMessage).toContain("Overwriting contents of internalString (this may cause disconnection in listeners)");
 
   });
 
