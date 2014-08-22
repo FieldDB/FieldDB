@@ -1,5 +1,5 @@
-var AES = require("crypto-js/aes");
-var CryptoEncoding = require("crypto-js/enc-utf8");
+var AES = require("./Crypto_AES").CryptoJS.AES;
+var CryptoEncoding = require("./Crypto_AES").CryptoJS.enc.Utf8;
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 var atob = require('atob');
 var btoa = require('btoa');

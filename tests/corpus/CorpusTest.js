@@ -134,6 +134,84 @@ describe("Corpus", function() {
 
 });
 
+
+
+describe("Corpus: as a user I want to be able to merge two corpora", function() {
+  var oneCorpus;
+  var anotherCorpus;
+
+  beforeEach(function() {
+    oneCorpus = new Corpus({
+      dbname: "teammatetiger-quechua",
+      title: "Quechua Corpus",
+      datumFields: [{
+        "label": "utterance",
+        "help": "Teammate's help info"
+      }]
+    });
+    anotherCorpus = new Corpus({
+      dbname: "lingllama-quechua",
+      title: "Quechua",
+      datumFields: [{
+        "label": "utterance",
+        "help": "An adapted utterance line for quechua data"
+      }]
+    });
+  });
+
+  it("should merge the corpus details into the first corpus", function() {
+    oneCorpus.merge("self", anotherCorpus, "overwrite&changeDBname");
+    expect(oneCorpus).toBeDefined();
+    expect(oneCorpus.title).toEqual("Quechua");
+    expect(oneCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
+  });
+
+  it("should be able to ask the user what to do if the corpus details conflict", function() {
+    oneCorpus.merge("self", anotherCorpus, "changeDBname");
+    expect(oneCorpus).toBeDefined();
+    expect(oneCorpus.confirmMessage).toContain('I found a conflict for _dbname, Do you want to overwrite it from "teammatetiger-quechua" -> "lingllama-quechua"');
+    expect(oneCorpus.confirmMessage).toContain('I found a conflict for _title, Do you want to overwrite it from "Quechua Corpus" -> "Quechua"');
+    expect(oneCorpus.confirmMessage).toContain('I found a conflict for _titleAsUrl, Do you want to overwrite it from "quechua_corpus" -> "quechua"');
+  });
+
+  it("should merge the corpus details into a third corpus without affecting the other corpora", function() {
+    var aNewCorpus = new Corpus({
+      dbname: "comunity-quechua",
+      datumFields: [{
+        "label": "morphemes",
+        "help": "A help text"
+      }]
+    });
+    expect(aNewCorpus.dbname).toEqual("comunity-quechua");
+    expect(aNewCorpus.title).toEqual("");
+
+    aNewCorpus.merge(oneCorpus, anotherCorpus, "overwrite&keepDBname");
+    expect(aNewCorpus).toBeDefined();
+
+    expect(aNewCorpus.dbname).toEqual("comunity-quechua");
+    expect(aNewCorpus.title).toEqual("Quechua");
+    expect(aNewCorpus.datumFields.morphemes.help).toEqual("A help text");
+    expect(aNewCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
+
+    expect(oneCorpus.dbname).toEqual("teammatetiger-quechua");
+    expect(oneCorpus.title).toEqual("Quechua Corpus");
+    expect(oneCorpus.datumFields.utterance.help).toEqual("Teammate's help info");
+    expect(oneCorpus.datumFields.morphemes).toBeUndefined();
+
+    expect(anotherCorpus.dbname).toEqual("lingllama-quechua");
+    expect(anotherCorpus.title).toEqual("Quechua");
+    expect(anotherCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
+    expect(anotherCorpus.datumFields.morphemes).toBeUndefined();
+
+  });
+
+  xit("should change the dbname of the datum to the target corpus dbname", function() {
+    expect(true).toBeTruthy();
+  });
+
+});
+
+
 describe("Corpus: as a psycholinguist I want to have any number of fields on my participants.", function() {
   it("should be have speaker fields on participants", function() {
     expect(Corpus.prototype.defaults_psycholinguistics.participantFields.length).toBe(10);
