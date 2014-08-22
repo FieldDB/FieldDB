@@ -145,6 +145,22 @@ Collection.prototype = Object.create(Object.prototype, {
       }
     }
   },
+  confirm: {
+    value: function(message) {
+      if (this.confirmMessage) {
+        this.confirmMessage += "\n";
+      } else {
+        this.confirmMessage = "";
+      }
+      this.confirmMessage = this.confirmMessage + message;
+      try {
+        return window.confirm(message);
+      } catch (e) {
+        console.warn(this.type.toUpperCase() + ' ASKING USER: ' + message + ' pretending they said no.');
+        return false;
+      }
+    }
+  },
   warn: {
     value: function(message, message2, message3, message4) {
       console.warn(this.type.toUpperCase() + ' WARN: ' + message);
@@ -274,6 +290,9 @@ Collection.prototype = Object.create(Object.prototype, {
       if (optionalInverted === null || optionalInverted === undefined) {
         optionalInverted = this.inverted;
       }
+      if (this[searchingFor]) {
+        return this[searchingFor];
+      }
 
       for (var index in this.collection) {
         if (!this.collection.hasOwnProperty(index)) {
@@ -283,11 +302,6 @@ Collection.prototype = Object.create(Object.prototype, {
           return this.collection[index] = value;
         }
       }
-      if (optionalInverted) {
-        this.collection.unshift(value);
-      } else {
-        this.collection.push(value);
-      }
       /* if not a reserved attribute, set on object for dot notation access */
       if (['collection', 'primaryKey', 'find', 'set', 'add', 'inverted', 'toJSON', 'length', 'encrypted', 'confidential', 'decryptedMode'].indexOf(searchingFor) === -1) {
         this[searchingFor] = value;
@@ -295,6 +309,13 @@ Collection.prototype = Object.create(Object.prototype, {
         if (typeof searchingFor.toLowerCase === 'function') {
           this[searchingFor.toLowerCase().replace(/_/g, '')] = value;
         }
+
+        if (optionalInverted) {
+          this.collection.unshift(value);
+        } else {
+          this.collection.push(value);
+        }
+
       } else {
         console.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
       }
@@ -473,6 +494,129 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  merge: {
+    value: function(callOnSelf, anotherCollection, optionalOverwriteOrAsk) {
+      var aCollection,
+        resultCollection,
+        overwrite,
+        localCallOnSelf,
+        self = this;
+
+      if (callOnSelf === "self") {
+        this.debug("Merging into myself. ");
+        aCollection = this;
+      } else {
+        aCollection = callOnSelf;
+      }
+      resultCollection = this;
+      if (!optionalOverwriteOrAsk) {
+        optionalOverwriteOrAsk = "";
+      }
+
+      if (!anotherCollection || anotherCollection.length === 0) {
+        this.debug("The new collection was empty, not merging.", anotherCollection);
+        return resultCollection;
+      }
+
+      aCollection._collection.map(function(anItem) {
+        var idToMatch = anItem[aCollection.primaryKey].toLowerCase();
+        var anotherItem = anotherCollection[idToMatch];
+        var resultItem = resultCollection[idToMatch];
+        if (!resultItem && typeof anItem.constructor === "function") {
+          var json = anItem.toJSON ? anItem.toJSON() : anItem;
+          resultItem = new anItem.constructor(json);
+          resultCollection.add(resultItem);
+        }
+
+        if (anItem !== aCollection[idToMatch]) {
+          self.bug(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch);
+        }
+
+        if (anotherItem === undefined) {
+          // no op, the new one isn't set
+          self.debug(idToMatch + " was missing in new collection");
+          resultCollection[idToMatch] = anItem;
+
+        } else if (anItem === anotherItem) {
+          // no op, they are equal enough
+          self.debug(idToMatch + " were equal.", anItem, anotherItem);
+          if (resultItem !== anItem) {
+            resultCollection[idToMatch] = anItem;
+          }
+        } else if (!anItem || anItem === [] || anItem.length === 0 || anItem === {}) {
+          self.debug(idToMatch + " was previously empty, taking the new value");
+          resultCollection[idToMatch] = anotherItem;
+        } else {
+          //  if two arrays: concat
+          if (Object.prototype.toString.call(anItem) === '[object Array]' && Object.prototype.toString.call(anotherItem) === '[object Array]') {
+            self.debug(idToMatch + " was an array, concatinating with the new value", anItem, " ->", anotherItem);
+            resultItem = anItem.concat(anotherItem);
+
+            //TODO unique it?
+            self.debug("  ", resultItem);
+          } else {
+            // if two fielddbObjects: recursively merge
+            if (typeof resultItem.merge === "function") {
+              if (callOnSelf === "self") {
+                localCallOnSelf = callOnSelf;
+              } else {
+                localCallOnSelf = anItem;
+              }
+              self.debug("Requesting merge of internal property " + idToMatch + " using method: " + localCallOnSelf);
+              var result = resultItem.merge(localCallOnSelf, anotherItem, optionalOverwriteOrAsk);
+              self.debug("after internal merge ", result);
+              // resultCollection[idToMatch] = resultItem;
+              self.debug("after internal merge ", resultItem);
+
+            } else {
+              overwrite = optionalOverwriteOrAsk;
+              if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
+                // overwrite = self.confirm("Do you want to overwrite " + idToMatch);
+                overwrite = self.confirm("I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem));
+              }
+              if (overwrite) {
+                self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)", anItem, " ->", anotherItem);
+                resultCollection[idToMatch] = anotherItem;
+              } else {
+                resultCollection[idToMatch] = anItem;
+
+              }
+            }
+          }
+        }
+      });
+      anotherCollection._collection.map(function(anotherItem) {
+        var idToMatch = anotherItem[aCollection.primaryKey];
+        var anItem = aCollection[idToMatch];
+        var resultItem = resultCollection[idToMatch];
+
+        if (anotherItem !== anotherCollection[idToMatch]) {
+          self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
+        }
+
+        if (anItem === undefined) {
+          self.debug(idToMatch + " was missing in target, adding it");
+          resultCollection.add(anotherItem);
+        } else if (anotherItem === undefined) {
+          // no op, the new one isn't set
+          self.debug(idToMatch + " was oddly undefined");
+          resultCollection[idToMatch] = anItem;
+        } else if (anItem === anotherItem) {
+          // no op, they are equal enough
+          // self.debug(idToMatch + " were equal.", anItem, anotherItem);
+          resultCollection[idToMatch] = anItem;
+        } else if (!anotherItem || anotherItem === [] || anotherItem.length === 0 || anotherItem === {}) {
+          self.warn(idToMatch + " was empty in the new collection, so it was replaced with an empty anItem.");
+          resultCollection[idToMatch] = anotherItem;
+        } else {
+          // both exist and are not equal, and so have already been merged above.
+          self.debug(idToMatch + " existed in both and are not equal, and so have already been merged above.");
+        }
+      });
+
+      return resultCollection;
+    }
+  },
   encrypted: {
     get: function() {
       return;

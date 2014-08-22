@@ -37,6 +37,58 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  get: {
+    value: function(id) {
+      if (!this.dbname) {
+        this.bug("Cannot get something if the dbname is not defined ", id);
+        throw "Cannot get something if the dbname is not defined ";
+      }
+      var baseUrl = this.url;
+      if (!baseUrl) {
+        baseUrl = this.BASE_DB_URL;
+      }
+      return CORS.makeCORSRequest({
+        method: "GET",
+        url: baseUrl + "/" + this.dbname + "/" + id
+      });
+    }
+  },
+
+  set: {
+    value: function(arg1, arg2) {
+      if (!this.dbname) {
+        this.bug("Cannot get something if the dbname is not defined ", arg1, arg2);
+        throw "Cannot get something if the dbname is not defined ";
+      }
+      var baseUrl = this.url,
+        key,
+        value;
+
+      if (!arg2) {
+        value = arg1;
+      } else {
+        key = arg1;
+        value = arg2;
+        value.id = key;
+      }
+      if (!baseUrl) {
+        baseUrl = this.BASE_DB_URL;
+      }
+      return CORS.makeCORSRequest({
+        method: "POST",
+        data: value,
+        url: baseUrl + "/" + this.dbname
+      });
+    }
+  },
+
+  delete: {
+    value: function(options) {
+      this.bug("Deleting data is not permitted.", options);
+      throw "Deleting data is not permitted.";
+    }
+  },
+
   fetchAllDocuments: {
     value: function() {
       return this.fetchCollection("datums");

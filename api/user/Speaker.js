@@ -27,15 +27,15 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
  * access to the data (read only, add/edit).
  *
  * @name  Speaker
- * @extends FieldDBObject
+ * @extends UserMask
  * @constructs
  */
 var Speaker = function Speaker(options) {
   this.debug("Constructing Speaker: ", options);
-  FieldDBObject.apply(this, arguments);
+  UserMask.apply(this, arguments);
 };
 
-Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.prototype */ {
+Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototype */ {
   constructor: {
     value: Speaker
   },
@@ -215,18 +215,20 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
 
   firstname: {
     get: function() {
-      if (this.fields) {
+      if (this.fields && this.fields.firstname) {
         return this.fields.firstname.value;
       } else {
         return;
       }
     },
     set: function(value) {
-      if (this.fields) {
+      if (!this.fields) {
+        this.fields = new DatumFields(this.defaults.fields);
+      }
+      if (this.fields && this.fields.firstname) {
         // this.fields.debugMode = true;
         this.fields.firstname.value = value;
       } else {
-        this.fields = new DatumFields(this.defaults.fields);
         this.fields.firstname.value = value;
       }
     }
@@ -234,18 +236,20 @@ Speaker.prototype = Object.create(FieldDBObject.prototype, /** @lends Speaker.pr
 
   lastname: {
     get: function() {
-      if (this.fields) {
+      if (this.fields && this.fields.lastname) {
         return this.fields.lastname.value;
       } else {
         return;
       }
     },
     set: function(value) {
-      if (this.fields) {
+      if (!this.fields) {
+        this.fields = new DatumFields(this.defaults.fields);
+      }
+      if (this.fields && this.fields.lastname) {
         // this.fields.debugMode = true;
         this.fields.lastname.value = value;
       } else {
-        this.fields = new DatumFields(this.defaults.fields);
         this.fields.lastname.value = value;
       }
     }
