@@ -298,15 +298,16 @@ describe('lib/Collection', function() {
   });
 
   describe('merging', function() {
+    var aBaseCollection;
+    var atriviallyDifferentCollection;
 
-    it('should be able to merge items in collections using their primary key', function() {
-      var aBaseCollection = new Collection([new FieldDBObject({
+    beforeEach(function() {
+      aBaseCollection = new Collection([new FieldDBObject({
           id: "one",
           missingInNew: "hi"
         }), new FieldDBObject({
           id: "two"
-        }),
-        new FieldDBObject({
+        }), new FieldDBObject({
           id: "three",
           externalObject: new FieldDBObject({
             internalString: "internal",
@@ -324,13 +325,14 @@ describe('lib/Collection', function() {
         }, {
           id: "willBeOverwritten",
           missingInNew: "this isnt a FieldDBObject so it will be undefined after merge."
-        }
+        },
+        new FieldDBObject({
+          id: "conflictingContents",
+          conflicting: "in first collection"
+        })
       ]);
-      expect(aBaseCollection.type).toEqual("Collection");
-      expect(aBaseCollection.three.type).toEqual("FieldDBObject");
-      expect(aBaseCollection.onlyintarget).toBeDefined();
 
-      var atriviallyDifferentCollection = new Collection([new FieldDBObject({
+      atriviallyDifferentCollection = new Collection([new FieldDBObject({
           id: "one"
         }), new FieldDBObject({
           id: "two",
@@ -352,33 +354,87 @@ describe('lib/Collection', function() {
           })
         }), aBaseCollection.four, {
           id: "onlyinNew"
-        }
+        },
+        new FieldDBObject({
+          id: "conflictingContents",
+          conflicting: "in second collection"
+        })
       ]);
+
+    });
+
+    it('should be able to merge items in collections using their primary key', function() {
+      expect(aBaseCollection.type).toEqual("Collection");
+      expect(aBaseCollection.three.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.onlyintarget).toBeDefined();
 
       expect(atriviallyDifferentCollection.type).toEqual("Collection");
       expect(atriviallyDifferentCollection.three.type).toEqual("FieldDBObject");
 
       var result = aBaseCollection.merge("self", atriviallyDifferentCollection, "overwrite");
-      expect(result).toBeDefined();
-      expect(result).toEqual(aBaseCollection);
+      expect(result).toBe(aBaseCollection);
+      expect(aBaseCollection).toEqual(aBaseCollection);
 
-      expect(result.one.missingInNew).toEqual("hi");
-      expect(result.two.missingInOriginal).toEqual("hi there");
-      expect(result.three.externalObject.internalString).toEqual("internal is different");
-      expect(result.three.externalObject.internalTrue).toEqual(true);
-      expect(result.three.externalObject.internalEmptyString).toEqual("");
-      expect(result.three.externalObject.internalFalse).toEqual(false);
-      expect(result.three.externalObject.internalNumber).toEqual(2);
-      expect(result.three.externalObject.internalEqualString).toEqual("i'm a old property");
+      expect(aBaseCollection.one.missingInNew).toEqual("hi");
+      expect(aBaseCollection.two.missingInOriginal).toEqual("hi there");
+      expect(aBaseCollection.conflictingcontents.conflicting).toEqual("in second collection");
+      expect(aBaseCollection.three.externalObject.internalString).toEqual("internal is different");
+      expect(aBaseCollection.three.externalObject.internalTrue).toEqual(true);
+      expect(aBaseCollection.three.externalObject.internalEmptyString).toEqual("");
+      expect(aBaseCollection.three.externalObject.internalFalse).toEqual(false);
+      expect(aBaseCollection.three.externalObject.internalNumber).toEqual(2);
+      expect(aBaseCollection.three.externalObject.internalEqualString).toEqual("i'm a old property");
 
-      expect(result.four).toBeDefined();
+      expect(aBaseCollection.four).toBeDefined();
 
-      expect(result.onlyintarget).toBeDefined();
-      expect(result.onlyinnew).toBeDefined();
-      expect(result.willbeoverwritten).toBeDefined();
-
-
+      expect(aBaseCollection.onlyintarget).toBeDefined();
+      expect(aBaseCollection.onlyinnew).toBeDefined();
+      expect(aBaseCollection.willbeoverwritten).toBeDefined();
     });
 
+    it('should be able to merge two collections in into a third collection', function() {
+      expect(aBaseCollection.type).toEqual("Collection");
+      expect(aBaseCollection.three.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.onlyintarget).toBeDefined();
+
+      expect(atriviallyDifferentCollection.type).toEqual("Collection");
+      expect(atriviallyDifferentCollection.three.type).toEqual("FieldDBObject");
+
+      var aThirdCollection = new Collection();
+      var result = aThirdCollection.merge(aBaseCollection, atriviallyDifferentCollection, "overwrite");
+      expect(result).toBe(aThirdCollection);
+      expect(aThirdCollection).not.toEqual(aBaseCollection);
+      expect(aThirdCollection).not.toEqual(atriviallyDifferentCollection);
+
+      expect(aThirdCollection.one.missingInNew).toEqual("hi");
+      expect(aThirdCollection.two.missingInOriginal).toEqual("hi there");
+      expect(aThirdCollection.three.externalObject.internalString).toEqual("internal is different");
+      expect(aThirdCollection.three.externalObject.internalTrue).toEqual(true);
+      expect(aThirdCollection.three.externalObject.internalEmptyString).toEqual("");
+      expect(aThirdCollection.three.externalObject.internalFalse).toEqual(false);
+      expect(aThirdCollection.three.externalObject.internalNumber).toEqual(2);
+      expect(aThirdCollection.three.externalObject.internalEqualString).toEqual("i'm a old property");
+
+      expect(aThirdCollection.four).toBeDefined();
+
+      expect(aThirdCollection.onlyintarget).toBeDefined();
+      expect(aThirdCollection.onlyinnew).toBeDefined();
+      expect(aThirdCollection.willbeoverwritten).toBeDefined();
+    });
+
+    it('should be able to merge two collections into a third collection', function() {
+      var result = aBaseCollection.merge("self", atriviallyDifferentCollection);
+      expect(result).toBeDefined();
+      expect(result).toBe(aBaseCollection);
+      expect(aBaseCollection.confirmMessage).toContain('I found a conflict for willbeoverwritten, Do you want to overwrite it from {"id":"willBeOverwritten","missingInNew":"this isnt a FieldDBObject so it will be undefined after merge."} -> {"id":"willBeOverwritten","missingInOriginal":"this isnt a FieldDBObject so it will be fully overwritten."}');
+      expect(aBaseCollection.conflictingcontents).toEqual(aBaseCollection._collection[6]);
+      expect(aBaseCollection.conflictingcontents.conflicting).toEqual('in first collection');
+      expect(aBaseCollection._collection.length).toEqual(8);
+      expect(aBaseCollection._collection.map(function(item) {
+        return item.id
+      })).toEqual(['one', 'two', 'three', 'four', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents', 'onlyinNew']);
+      expect(aBaseCollection.conflictingcontents.confirmMessage).toEqual('I found a conflict for conflicting, Do you want to overwrite it from "in first collection" -> "in second collection"');
+      expect(aBaseCollection.three.externalObject.confirmMessage).toContain('I found a conflict for internalString, Do you want to overwrite it from "internal" -> "internal is different"');
+    });
   });
 });
