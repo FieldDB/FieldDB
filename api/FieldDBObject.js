@@ -82,7 +82,7 @@ var FieldDBObject = function FieldDBObject(json) {
       continue;
     }
     this.debug("JSON: " + member, this.INTERNAL_MODELS);
-    if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
+    if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
       this.debug("Parsing model: " + member);
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
     } else {
