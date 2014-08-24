@@ -442,8 +442,11 @@ $.couch.allDbs({
         }
         if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
           console.log("deploying to a beta tester");
+          return;
+        } else if (dbname.indexOf("phophlo") > -1) {
+          console.log("deploying to a phophlo user");
         } else {
-          return; /* deploy to only beta testers */
+          return; /* deploy to only beta testers and/or phophlo users */
         }
         var sourceDB = "";
         if (dbname.indexOf("activity_feed") > -1) {
@@ -1588,7 +1591,7 @@ database.view("debugging/remove-duplicates?limit=" + limit, {
       console.log("Would remove ", row.value);
       database.removeDoc(row.value, {
         success: function(serverResults) {
-          console.log("removed duplicate activity " ,serverResults);
+          console.log("removed duplicate activity ", serverResults);
         },
         error: function(serverResults) {
           console.log("There was a problem removing the duplicate activity." + row);
