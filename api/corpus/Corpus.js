@@ -467,7 +467,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           if (corpora.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
             self.id = corpora[0]._id;
-            self.fetch(self.BASE_DB_URL).then(function(result) {
+            self.fetch(baseUrl).then(function(result) {
               self.debug('Finished fetch of corpus ', result);
               deferred.resolve(result);
             }, function(reason) {
