@@ -1,8 +1,18 @@
+/* globals window */
 var AES = require("crypto-js/aes");
 var CryptoEncoding = require("crypto-js/enc-utf8");
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var atob = require('atob');
-var btoa = require('btoa');
+
+try {
+  if (!window.atob) {
+    console.log("ATOB is not defined, loading from npm");
+  }
+} catch (e) {
+  console.log(e);
+  window = {};
+  window.atob = require('atob');
+  window.btoa = require('btoa');
+}
 
 /**
  * @class Confidential
@@ -78,9 +88,9 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
         this.debug("Converted object to string before encryption");
       }
       var result = AES.encrypt(value, this.secretkey);
-      this.verbose(this.secretkey, result.toString(), btoa(result.toString()));
+      this.verbose(this.secretkey, result.toString(), window.btoa(result.toString()));
       // return the base64 version to save it as a string in the corpus
-      return "confidential:" + btoa(result.toString());
+      return "confidential:" + window.btoa(result.toString());
     }
   },
 
@@ -100,7 +110,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
         this.turnOnDecryptedMode(function() {
           encrypted = encrypted.replace("confidential:", "");
           // decode base64
-          encrypted = atob(encrypted);
+          encrypted = window.atob(encrypted);
           self.verbose("Decrypting after turning on decrypted mode " + encrypted, self.secretkey);
           result = AES.decrypt(encrypted, self.secretkey).toString(CryptoEncoding);
           try {
@@ -116,7 +126,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
       } else {
         encrypted = encrypted.replace("confidential:", "");
         // decode base64
-        encrypted = atob(encrypted);
+        encrypted = window.atob(encrypted);
         this.verbose("Decrypting " + encrypted, this.secretkey);
         result = AES.decrypt(encrypted, this.secretkey).toString(CryptoEncoding);
         try {
