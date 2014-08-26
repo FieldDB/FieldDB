@@ -434,7 +434,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   loadOrCreateCorpusByPouchName: {
     value: function(dbname) {
-      this.todo('test loadOrCreateCorpusByPouchName');
       if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
