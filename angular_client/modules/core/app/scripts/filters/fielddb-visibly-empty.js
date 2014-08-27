@@ -8,9 +8,14 @@
  * # fielddbVisiblyEmpty
  * Filter in the fielddbAngularApp.
  */
-angular.module('fielddbAngularApp')
-  .filter('fielddbVisiblyEmpty', function () {
-    return function (input) {
-      return 'fielddbVisiblyEmpty filter: ' + input;
-    };
-  });
+angular.module('fielddbAngularApp').filter('fielddbVisiblyEmpty', function() {
+  return function(input) {
+    if (input.trim) {
+      input = input.trim();
+    }
+    if (input === '' || input === undefined || input === null) {
+      return '--';
+    }
+    return input;
+  };
+});
