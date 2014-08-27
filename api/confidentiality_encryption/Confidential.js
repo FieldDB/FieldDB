@@ -9,6 +9,7 @@ try {
   }
 } catch (e) {
   console.log(e);
+  /*jshint -W020 */
   window = {};
   window.atob = require('atob');
   window.btoa = require('btoa');
