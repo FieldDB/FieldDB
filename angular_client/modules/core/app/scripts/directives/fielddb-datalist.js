@@ -6,7 +6,7 @@
  * @description
  * # fielddbDatalist
  */
-angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
+angular.module('fielddbAngularApp').directive('fielddbDatalist', function($compile) {
 
   var fetchDatalistDocsExponentialDecay = 2000;
 
@@ -105,8 +105,15 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
   };
   controller.$inject = ['$scope', '$timeout'];
 
+  // http://stackoverflow.com/questions/21835471/angular-js-directive-dynamic-templateurl
+  var templates = {
+    DataList: 'views/datalist.html',
+    Lesson: 'views/datalist.html',
+    SubExperimentDataList: 'views/sub-experiment-datalist.html'
+  };
+
   var directiveDefinitionObject = {
-    templateUrl: 'views/datalist.html', // or // function(tElement, tAttrs) { ... },
+    template: '<div ng-include="contentUrl"></div>',
     restrict: 'A',
     transclude: false,
     scope: {
@@ -114,7 +121,54 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       corpus: '=corpus'
     },
     controller: controller,
-    link: function postLink() {},
+    link: function postLink(scope, element, attrs) {
+
+      // https://docs.angularjs.org/api/ng/service/$compile
+      scope.$watch(
+        function(scope) {
+          // watch the 'compile' expression for changes
+          return scope.$eval(attrs.compile);
+        },
+        function(value) {
+          console.log('Datalist Scope value changed', value);
+          // when the 'compile' expression changes
+          // assign it into the current DOM
+          if (!scope.doc) {
+            return;
+          }
+          console.log('doc type is ', scope.doc.type);
+          if (templates[scope.doc.type]) {
+            scope.contentUrl = templates[scope.doc.type];
+            // element.html(templates[scope.doc.type]);
+            if (scope && scope.doc && !scope.doc.fetch) {
+              console.warn('This doc doesnt have the FieldDBObject methods to it, cant turn it into a ' + scope.doc.type + ' without loosing its references. Please pass it as a complex object if you need its functionality.');
+              // scope.doc = new FieldDB[scope.doc.type](scope.doc);
+            }
+          } else {
+            // element.html('{{doc.type}} Unable to display this document. {{doc._id}}');
+            scope.contentUrl = templates.DataList;
+
+            if (scope && scope.doc && scope.doc.fetch) {
+              console.log('TODO fetch the doc details and refresh the render to the right template if necessary');
+              // doc.fetch().then(function(){
+              //   scope.$digest();
+              // });
+            }
+          }
+          // attrs.$observe("ver", function(v) {
+          //   scope.contentUrl = 'content/excerpts/hymn-' + v + '.html';
+          // });
+          console.log('Using html: ' + element.html());
+
+          // compile the new DOM and link it to the current
+          // scope.
+          // NOTE: we only compile .childNodes so that
+          // we don't get into infinite loop compiling ourselves
+          $compile(element.contents())(scope);
+        }
+      );
+
+    },
     priority: 0,
     replace: false,
     controllerAs: 'stringAlias'
