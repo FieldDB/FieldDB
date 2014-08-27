@@ -588,7 +588,7 @@ Collection.prototype = Object.create(Object.prototype, {
       anotherCollection._collection.map(function(anotherItem) {
         var idToMatch = anotherItem[aCollection.primaryKey];
         var anItem = aCollection[idToMatch];
-        var resultItem = resultCollection[idToMatch];
+        // var resultItem = resultCollection[idToMatch];
 
         if (anotherItem !== anotherCollection[idToMatch]) {
           self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
