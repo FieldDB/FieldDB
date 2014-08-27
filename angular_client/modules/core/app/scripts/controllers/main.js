@@ -204,7 +204,9 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
         $scope.corpus.loadOrCreateCorpusByPouchName($scope.corpus.dbname).then(function(result) {
           console.log('Suceeded to download corpus details.', result);
           $rootScope.status = $scope.corpus.status = 'Loaded corpus details.';
-          $scope.importer.corpus = $scope.corpus;
+          if ($scope.importer) {
+            $scope.importer.corpus = $scope.corpus;
+          }
           $scope.$apply();
         }, function(result) {
           console.log('Failed to download corpus details.', result);
