@@ -107,10 +107,10 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
   var directiveDefinitionObject = {
     templateUrl: function(elem, attrs) {
-      if (attrs.view === "SubExperimentDataList") {
-        return 'views/sub-experiment-datalist.html'
-      } else if (attrs.view === "Lesson") {
-        return 'views/datalist.html'
+      if (attrs.view === 'SubExperimentDataList') {
+        return 'views/sub-experiment-datalist.html';
+      } else if (attrs.view === 'Lesson') {
+        return 'views/datalist.html';
       } else {
         return 'views/datalist.html';
       }
