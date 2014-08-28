@@ -1,16 +1,16 @@
 <div class="row" ng-hide="datum.fetching==true">
   <!-- Show when editing -->
   <div ng-show="selected==$index">
-    <form ng-submit="markAsEdited(fieldData, datum);">
+    <form ng-submit="markAsEdited(datum);">
       <div class="span5">
-        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field1"  value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}"  >
-        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2"  value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}"  >
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3"  value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}"  >
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column1].value" ng-hide="fields.column1.label==''" placeholder="{{fields.column1.title}}" title="{{fields.column1.title}}">
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column2].value"  value="{{datum[fields.column2.label]}}" ng-hide="fields.column2.label==''" placeholder="{{fields.column2.title}}" title="{{fields.column2.title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column3].value" ng-hide="fields.column3.label==''" placeholder="{{fields.column3.title}}" title="{{fields.column3.title}}">
       </div>
       <div class="span5">
-        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field4"  value="{{datum[fields.field4.label]}}" ng-hide="fields.field4.label==''" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}"  >
-        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6"  value="{{datum[fields.field6.label]}}" ng-hide="fields.field6.label==''" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}"  >
-        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field7"  value="{{datum[fields.field7.label]}}" ng-hide="fields.field7.label==''" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}"  >
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column4].value" ng-hide="fields.column4.label==''" placeholder="{{fields.column4.title}}" title="{{fields.column4.title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column5].value" ng-hide="fields.column5.label==''" placeholder="{{fields.column5.title}}" title="{{fields.column5.title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column6].value" ng-hide="fields.column6.label==''" placeholder="{{fields.column6.title}}" title="{{fields.column6.title}}">
       </textarea>
     </div>
     <div class="span2 entered_modified_info">
@@ -62,7 +62,7 @@
         <div class="expandedDataInner">
           <ul class="unstyled">
             <li ng-hide="fields.field5.label==''" ng-repeat="comment in datum.comments">
-              <a ng-click="deleteComment(comment, datum)" class=" floatLeft delete_button"  >
+              <a ng-click="deleteComment(comment, datum)" class=" floatLeft delete_button">
                 <i class="fa fa-times-circle">
                 </i>
               </a>
@@ -73,7 +73,7 @@
               </i> {{comment.timestamp | fielddbPrettyDate}}
             </li>
           </ul>
-          <button ng-show="commentPermissions==true" class="btn btn-primary" ng-click="addComment(datum);"  >
+          <button ng-show="commentPermissions==true" class="btn btn-primary" ng-click="addComment(datum);">
             <i class="fa whiteicon fa-comment">
             </i> Add Comment
           </button>
@@ -83,7 +83,7 @@
     <div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
       <div class="span3 expandedData">
         <div class="expandedDataInner">
-          <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true"  >
+          <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldsAsColumns, datum);" ng-show="audioCompatible==true">
             <i class="fa {{recordingIcon}}">
             </i>&nbsp;{{recordingStatus}}
           </button>
@@ -95,7 +95,7 @@
             <i class="fa fa-bullhorn">
             </i>&nbsp;
             <input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload'   />
-            <button class="btn btn-primary" ng-click="uploadFile(datum);"  >
+            <button class="btn btn-primary" ng-click="uploadFile(datum);">
               <i class="fa whiteicon fa-file">
               </i> Upload File(s)
             </button>&nbsp;&nbsp;
@@ -126,7 +126,7 @@
             <td>
               <span class="form-horizontal">
                 <input type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' > &nbsp;
-                <button hidden  class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined"  >Save Description
+                <button hidden  class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined">Save Description
                 </button>
               </span>
             </td>
@@ -139,7 +139,7 @@
           </tr>
         </table>
         <hr />
-        <button class="btn btn-inverse" type="button" ng-click="deleteRecord(datum)"  >
+        <button class="btn btn-inverse" type="button" ng-click="deleteRecord(datum)">
           <i class="fa fa-trash-o">
           </i> Delete This Record
         </button>
