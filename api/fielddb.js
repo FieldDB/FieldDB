@@ -15,6 +15,7 @@
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
   var CORS = require("./CORS").CORS;
   var DataList = require("./data_list/DataList").DataList;
+  var SubExperimentDataList = require("./data_list/SubExperimentDataList").SubExperimentDataList;
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;
   var Datum = require("./datum/Datum").Datum;
   var Database = require("./corpus/Database").Database;
@@ -39,6 +40,7 @@
   FieldDB.FieldDBObject = FieldDBObject;
   FieldDB.CORS = CORS;
   FieldDB.DataList = DataList;
+  FieldDB.SubExperimentDataList = SubExperimentDataList;
   FieldDB.AudioVideo = AudioVideo;
   FieldDB.Datum = Datum;
   FieldDB.Database = Database;

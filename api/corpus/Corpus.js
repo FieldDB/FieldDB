@@ -434,7 +434,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   loadOrCreateCorpusByPouchName: {
     value: function(dbname) {
-      this.todo('test loadOrCreateCorpusByPouchName');
       if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
@@ -467,7 +466,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           if (corpora.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
             self.id = corpora[0]._id;
-            self.fetch(self.BASE_DB_URL).then(function(result) {
+            self.fetch(baseUrl).then(function(result) {
               self.debug('Finished fetch of corpus ', result);
               deferred.resolve(result);
             }, function(reason) {
@@ -984,7 +983,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         // couchapp_dev_word_list_rdf: {
         //   url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
         //   map: requireoff("./../../couchapp_dev/views/word_list_rdf/map"),
-        //   reduce: require("./../../couchapp_dev/views/word_list_rdf/reduce")
+        //   reduce: requireoff("./../../couchapp_dev/views/word_list_rdf/reduce")
         // }
       };
     }

@@ -1,0 +1,16 @@
+<div class="row" ng-class="{'scrollable': datum.datumFields.utterance.value.length > 100}">
+  <div class="col-md-1">
+    <input type="checkbox" class="datum-checkboxes"></input>
+    <i ng-show="datum.audioVideo.length > 0" class="icon-bullhorn play-audio"></i>{{datum.numberInCollection}}
+  </div>
+  <div class="col-md-1">
+    <span class="latex-judgement">{{datum.datumFields.judgement.value}}</span>
+  </div>
+  <div class="col-md-6">
+    <span ng-repeat="tuple in datum.igt" class="glossCouplet">
+      {{tuple}}
+    </span>
+    <br />
+    <span class="datum-latex-translation">{{datum.datumFields.translation.value}}</span>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "handlebars", 
+    "backbone",
+    "handlebars",
     "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
@@ -19,8 +19,8 @@ define([
     "glosser/Glosser",
     "OPrime"
 ], function(
-    Backbone, 
-    Handlebars, 
+    Backbone,
+    Handlebars,
     AudioVideoReadView,
     Comment,
     Comments,
@@ -44,9 +44,9 @@ define([
      * @class The layout of a single editable Datum. It contains a datum
      *        state, datumFields, datumTags and a datum menu. This is where
      *        the user enters theirs data, the main task of our application.
-     * 
+     *
      * @property {String} format Valid values are "well"
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
@@ -57,13 +57,13 @@ define([
         childViewConstructor : AudioVideoReadView,
         childViewTagName     : 'li'
       });
-      
+
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
-      
+
       this.imagesEditView = new ImagesView({
         model : this.model.get("images"),
       });
@@ -75,7 +75,7 @@ define([
       this.datumEasierToReadIGTAlignedView = new DatumReadView({
         model : this.model
       });
-      
+
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
@@ -96,7 +96,7 @@ define([
         model : this.model.get("session"),
         });
       this.sessionView.format = "link";
-      
+
       this.model.bind("change:audioVideo", this.playAudio, this);
       this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
       this.bind("change:datumFields", this.reloadIGTPreview, this);
@@ -108,7 +108,7 @@ define([
      * The underlying model of the DatumEditView is a Datum.
      */
     model : Datum,
-    
+
     /**
      * Events that the DatumEditView is listening to and their handlers.
      */
@@ -165,14 +165,14 @@ define([
       "click .add_datum_tag" : "insertNewDatumTag",
       "keyup .add_tag" : function(e) {
         var code = e.keyCode || e.which;
-        
+
         // code == 13 is the enter key
         if (code == 13) {
           this.insertNewDatumTag();
         }
       },
       "blur .validationStatus" : "updateDatumStateColor",
-      
+
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
       "focus .morphemes .datum_field_input" : function(e){
@@ -212,7 +212,7 @@ define([
         /* save the state of the datum when the comment is added, and render it*/
         this.saveButton();
         this.commentReadView.render();
-      }, 
+      },
       //Delete button remove a comment
       "click .remove-comment-button" : function(e) {
         if(e){
@@ -220,14 +220,14 @@ define([
           e.preventDefault();
         }
         this.model.get("comments").remove(this.commentEditView.model);
-      },     
-    
+      },
+
     },
 
     /**
      * The Handlebars template rendered as the DatumEditView.
      */
-    template : Handlebars.templates.lesson_edit_embedded,
+    template : Handlebars.templates.datum_edit_embedded,
 
     /**
      * Renders the DatumEditView and all of its partials.
@@ -235,7 +235,7 @@ define([
     render : function() {
       this.model.startReadTimeIfNotAlreadyStarted();
       if (OPrime.debugMode) OPrime.debug("DATUM render: " );
-      
+
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
@@ -249,9 +249,9 @@ define([
          jsonToRender.datumstate =  jsonToRender.datumstate.substring(0,12) + "..." + jsonToRender.datumstate.substring(jsonToRender.datumstate.length-12, jsonToRender.datumstate.length);
       }
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
-      jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified); 
+      jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
 
-//    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip); 
+//    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip);
       jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
       jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get("locale_Drag_and_Drop_Audio_Tooltip");
       jsonToRender.locale_Duplicate = Locale.get("locale_Duplicate");
@@ -270,51 +270,51 @@ define([
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
       }else{
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
-      } 
+      }
       if (!this.model.id) {
         jsonToRender.buttonColor = "primary";
       }
-      
-      
-      
+
+
+
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
-         
+
         // Display audioVideo View
         this.audioVideoView.el = this.$(".audio_video_ul");
         this.audioVideoView.render();
-        
+
         // Display the DatumTagsView
         this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
-        
+
         // Display the CommentReadView
         this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
-        
+
         // Display the CommentEditView
-        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.el = $(this.el).find('.new-comment-area');
         this.commentEditView.render();
-        
+
         // Display the imagesEditView
-        this.imagesEditView.el = $(this.el).find('.images-area'); 
+        this.imagesEditView.el = $(this.el).find('.images-area');
         this.imagesEditView.render();
 
         // Display the DatumReadView
-        this.datumEasierToReadIGTAlignedView.el = $(this.el).find('.preview_IGT_area'); 
+        this.datumEasierToReadIGTAlignedView.el = $(this.el).find('.preview_IGT_area');
         this.datumEasierToReadIGTAlignedView.format = "latexPreviewIGTonly";
         this.datumEasierToReadIGTAlignedView.render();
-        
+
         // Display the SessionView
-        this.sessionView.el = this.$('.session-link'); 
+        this.sessionView.el = this.$('.session-link');
         this.sessionView.render();
-        
+
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
-        
-        
+
+
         var self = this;
         this.getFrequentFields(function(){
           self.hideRareFields();
@@ -324,7 +324,7 @@ define([
 
       return this;
     },
-    
+
     rareFields : [],
     frequentFields: null,
     getFrequentFields : function(whenfieldsareknown){
@@ -371,7 +371,7 @@ define([
       this.updateDatumStateColor();
 
     },
-    
+
     showRareFields : function(e){
       if(e){
         e.stopPropagation();
@@ -387,8 +387,8 @@ define([
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
 
     },
-    
-  
+
+
     /**
      * Encrypts the datum if it is confidential
      */
@@ -416,7 +416,7 @@ define([
     },
 
     needsSave : false,
-    
+
     saveButton : function(e){
       if(e){
         e.stopPropagation();
@@ -424,7 +424,7 @@ define([
       }
       this.model.saveAndInterConnectInApp();
     },
-    
+
     /**
      * If the model needs to be saved, saves it.
      */
@@ -442,7 +442,7 @@ define([
         });
       }
     },
-    
+
     insertNewDatumTag : function(e) {
       if(e){
         e.stopPropagation();
@@ -452,13 +452,13 @@ define([
       var t = new DatumTag({
         "tag" : this.$el.find(".add_tag").val()
       });
-      
-      // Add the new DatumTag to the Datum's list for datumTags 
+
+      // Add the new DatumTag to the Datum's list for datumTags
       this.model.get("datumTags").add(t);
-      
+
       // Reset the "add" textbox
       this.$el.find(".add_tag").val("");
-      
+
       return false;
     },
 
@@ -479,7 +479,7 @@ define([
       $(this.el).find(".datum_fields_ul textarea").addClass("datum-primary-validation-status-outline-color-"+jsonToRender.datumstatecolor);
 
     },
-    
+
     /**
      * Adds a new Datum to the current Corpus in the current Session. It is
      * placed at the top of the datumsView, pushing off the bottom Datum, if
@@ -493,12 +493,12 @@ define([
       // Add a new Datum to the top of the Datum stack
       appView.datumsEditView.newDatum();
     },
-    
-    /** 
+
+    /**
      * Adds a new Datum to the current Corpus in the current Session with the same
      * values as the Datum where the Copy button was clicked.
      */
-    duplicateDatum : function(e) { 
+    duplicateDatum : function(e) {
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -510,10 +510,10 @@ define([
       d.set("session", app.get("currentSession"));
       window.appView.datumsEditView.prependDatum(d);
     },
-    
+
     /**
      * See definition in the model
-     * 
+     *
      */
     putInTrash : function(e){
       if(e){
@@ -524,7 +524,7 @@ define([
         this.model.putInTrash();
       }
     },
-    
+
     /*
      * this function can be used to play datum automatically
      */
@@ -537,7 +537,7 @@ define([
         $(e.target).addClass("disabled");
       }
     },
-    
+
     /*
      * This function helps the user know that the app is saving his/her data often,
      * it updates the time, without re-rendering the datum
@@ -584,15 +584,15 @@ define([
       if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine ) )) {
         this.previousUtterance = utteranceLine;
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
-        
+
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
         this.previousMorphemesGuess.push(morphemesLine);
-        
+
         var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
         var alternates = morphemesField.get("alternates") || [];
         alternates.push(utteranceLine);
-        
-        // If the guessed morphemes is different than the unparsed utterance, and different than the previous morphemes line we guessed on 
+
+        // If the guessed morphemes is different than the unparsed utterance, and different than the previous morphemes line we guessed on
         if (morphemesLine != utteranceLine && morphemesLine != "" &&  (!this.previousMorphemes || (this.previousMorphemes != morphemesLine )) ){
           this.previousMorphemes = morphemesLine;
           //hey we have a new idea, so trigger the gloss guessing too
@@ -617,10 +617,10 @@ define([
         this.previousMorphemes = morphemesLine;
 
         var glossLine = Glosser.glossFinder(morphemesLine);
-        
+
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
-        
+
         this.previousGlossGuess = this.previousGlossGuess || [];
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
         if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
@@ -648,7 +648,7 @@ define([
         /* These put the syntacticTree into the actual datum fields on the screen so the user can see them */
         if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
           this.$el.find(".syntacticTreeLatex .datum_field_input").val(syntacticTreeLatex);
-        }        
+        }
         var treeField = this.model.get("datumFields").where({label: "syntacticTreeLatex"})[0];
         if (treeField) {
           treeField.set("mask", syntacticTreeLatex);
@@ -675,12 +675,12 @@ define([
       window.app.get("corpus").getFrequentDatumValidationStates(null, null, function(results){
         validationStatusField.set("alternates", results);
       });
-      
+
       var tagField =  this.model.get("datumFields").where({label: "tags"})[0];
       window.app.get("corpus").getFrequentDatumTags(null, null, function(results){
         tagField.set("alternates", results);
       });
-      
+
     },
     reloadIGTPreview: function(){
       // Display the DatumReadView

@@ -55,12 +55,11 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
             doc.confidential = $scope.corpus.confidential;
             doc = new FieldDB[doc.type](doc);
           } else {
-            $scope.corpus.warn('This doc does not have a type, it might display oddly ', doc);
-            var guessedType = doc.jsonType || 'FieldDBObject';
+            var guessedType = doc.jsonType || doc.collection || 'FieldDBObject';
             if ($scope.datalist.api) {
               guessedType = $scope.datalist.api[0].toUpperCase() + $scope.datalist.api.substring(1, $scope.datalist.api.length);
-              guessedType = guessedType.replace(/s$/, '');
             }
+            guessedType = guessedType.replace(/s$/, '');
             if (guessedType === 'Datalist') {
               guessedType = 'DataList';
             }
@@ -68,11 +67,14 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
               $scope.corpus.warn('Converting doc into guessed type ' + guessedType);
               doc.confidential = $scope.corpus.confidential;
               doc = new FieldDB[guessedType](doc);
+            } else {
+              $scope.corpus.warn('This doc does not have a type, it might display oddly ', doc);
             }
           }
-          $scope.datalist.docs.push(doc);
+
+          $scope.datalist.docs.add(doc);
         });
-        // $scope.$digest();
+        $scope.$digest();
 
       }, function(reason) {
 
@@ -104,7 +106,15 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
   controller.$inject = ['$scope', '$timeout'];
 
   var directiveDefinitionObject = {
-    templateUrl: 'views/datalist.html', // or // function(tElement, tAttrs) { ... },
+    templateUrl: function(elem, attrs) {
+      if (attrs.view === 'SubExperimentDataList') {
+        return 'views/sub-experiment-datalist.html';
+      } else if (attrs.view === 'Lesson') {
+        return 'views/datalist.html';
+      } else {
+        return 'views/datalist.html';
+      }
+    },
     restrict: 'A',
     transclude: false,
     scope: {

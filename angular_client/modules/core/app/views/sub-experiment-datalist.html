@@ -1,0 +1,27 @@
+<h1>Titles:</h1>
+<ul>
+  <li ng-repeat="context in datalist.title">{{context}}</li>
+</ul>
+Descriptions:
+<ul>
+  <li ng-repeat="context in datalist.description">{{context}}</li>
+</ul>
+Instructions:
+<ul>
+  <li ng-repeat="context in datalist.instructions">{{context}}</li>
+</ul>
+Reinforcement Cartoon:
+<ul>
+  <li>{{datalist.reinforcementAnimation.firstImageSrc}}</li>
+  <li ng-repeat="image in datalist.reinforcementAnimation.animationImages">{{image.incompleteImageFile}}</li>
+  <li>{{datalist.reinforcementAnimation.lastImageSrc}}</li>
+</ul>
+<p ng-model="datalist.label"></p>
+<div ng-repeat="item in datalist.docs">
+  <div data-fielddb-doc json="item" corpus="corpus">
+  </div>
+</div>
+<div ng-show="canAddNewItemsToDataList()"><i class="fa fa-plus-circle"></i> Add </div>
+
+{{datalist.warnMessage}}
+{{datalist.docs.warnMessage}}

@@ -3,7 +3,7 @@
 var Q = require("q");
 
 var CORS = {
-  debugMode: true,
+  debugMode: false,
   debug: function(a, b, c) {
     if (this.debugMode) {
       console.log(a, b, c);
@@ -48,7 +48,7 @@ CORS.makeCORSRequest = function(options) {
     deferred = Q.defer(),
     xhr;
 
-  this.debugMode = true;
+  // this.debugMode = true;
   if (!options.method) {
     options.method = options.type || "GET";
   }
@@ -102,7 +102,7 @@ CORS.makeCORSRequest = function(options) {
       deferred.resolve(response);
     }
 
-    self.debugMode = false;
+    // self.debugMode = false;
   };
 
   xhr.onerror = function(e, f, g) {
