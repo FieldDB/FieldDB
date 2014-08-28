@@ -25,48 +25,48 @@
  */
 angular.module('fielddbAngularApp').filter('fielddbAgoDate', function() {
   return function(input) {
-    if (!time) {
+    if (!input) {
       return undefined;
     }
-    time = time.replace(/"/g, "");
-    var date = new Date((time || "").replace(/-/g, "/").replace(/[TZ]/g, " "));
-    var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g, "");
-    var greenwichdate = new Date((greenwichtimenow || "").replace(/-/g, "/")
-      .replace(/[TZ]/g, " "));
+    input = input.replace(/"/g, '');
+    var date = new Date((input || '').replace(/-/g, '/').replace(/[TZ]/g, ' '));
+    var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g, '');
+    var greenwichdate = new Date((greenwichtimenow || '').replace(/-/g, '/')
+      .replace(/[TZ]/g, ' '));
     var diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
-    var day_diff = Math.floor(diff / 86400);
+    var dayDiff = Math.floor(diff / 86400);
 
-    if (isNaN(day_diff) || day_diff < 0) {
+    if (isNaN(dayDiff) || dayDiff < 0) {
       return undefined;
     }
 
-    if (day_diff >= 548) {
-      return Math.ceil(day_diff / 365) + " years ago";
+    if (dayDiff >= 548) {
+      return Math.ceil(dayDiff / 365) + ' years ago';
     }
-    if (day_diff >= 40) {
-      return Math.ceil(day_diff / 31) + " months ago";
+    if (dayDiff >= 40) {
+      return Math.ceil(dayDiff / 31) + ' months ago';
     }
-    if (day_diff >= 14) {
-      return Math.ceil(day_diff / 7) + " weeks ago";
+    if (dayDiff >= 14) {
+      return Math.ceil(dayDiff / 7) + ' weeks ago';
     }
-    if (day_diff >= 2) {
-      return Math.ceil(day_diff / 1) + " days ago";
+    if (dayDiff >= 2) {
+      return Math.ceil(dayDiff / 1) + ' days ago';
     }
-    if (day_diff >= 1) {
-      return "Yesterday";
+    if (dayDiff >= 1) {
+      return 'Yesterday';
     }
     if (diff >= 4000) {
-      return Math.floor(diff / 3600) + " hours ago";
+      return Math.floor(diff / 3600) + ' hours ago';
     }
     //  if(diff >= 7200 ){
-    //    Math.floor(diff / 3600) + " 1 hour ago";
+    //    Math.floor(diff / 3600) + ' 1 hour ago';
     //  }
     if (diff >= 70) {
-      return Math.floor(diff / 60) + " minutes ago";
+      return Math.floor(diff / 60) + ' minutes ago';
     }
     if (diff >= 120) {
-      return "1 minute ago";
+      return '1 minute ago';
     }
-    return "just now";
+    return 'just now';
   };
 });
