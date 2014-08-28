@@ -3,9 +3,6 @@
   <div ng-show="selected==$index">
     <form ng-submit="markAsEdited(fieldData, datum);">
       <div class="span5">
-        <div class="focus_box_div">
-          <input focus />
-        </div>
         <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field1"  value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}"  >
         <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2"  value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}"  >
         <input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3"  value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}"  >
@@ -83,10 +80,10 @@
         </div>
       </div>
     </div>
-    <div class="row" ng-show="expandCollapse==true && datum.id!=undefined && writePermissions==true">
+    <div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
       <div class="span3 expandedData">
         <div class="expandedDataInner">
-          <button ng-hide="writePermissions==false" ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true"  >
+          <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true"  >
             <i class="fa {{recordingIcon}}">
             </i>&nbsp;{{recordingStatus}}
           </button>
@@ -117,7 +114,7 @@
           <tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
             <td>
               <span class="form-horizontal">
-                <a ng-show="writePermissions==true" class="delete_button btn btn-danger floatLeft" ng-click="deleteAttachmentFromCorpus(datum, audioFile.filename, audioFile.description)">
+                <a class="delete_button btn btn-danger floatLeft" ng-click="deleteAttachmentFromCorpus(datum, audioFile.filename, audioFile.description)">
                   <i class="fa fa-trash-o whiteicon">
                   </i>
                 </a>
@@ -142,7 +139,7 @@
           </tr>
         </table>
         <hr />
-        <button ng-show="writePermissions==true" class="btn btn-inverse" type="button" ng-click="deleteRecord(datum)"  >
+        <button class="btn btn-inverse" type="button" ng-click="deleteRecord(datum)"  >
           <i class="fa fa-trash-o">
           </i> Delete This Record
         </button>
