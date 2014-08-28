@@ -4,16 +4,16 @@
     <form ng-submit="markAsEdited(fieldData, datum);">
       <div class="span5">
         <div class="focus_box_div">
-          <input ng-disabled="writePermissions==false" focus />
+          <input focus />
         </div>
-        <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field1"  value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}"  >
-        <input ng-disabled="writePermissions==false" guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2"  value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}"  >
-        <input ng-disabled="writePermissions==false" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3"  value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}"  >
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field1"  value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}"  >
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2"  value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}"  >
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3"  value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}"  >
       </div>
       <div class="span5">
-        <input ng-disabled="writePermissions==false" keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field4"  value="{{datum[fields.field4.label]}}" ng-hide="fields.field4.label==''" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}"  >
-        <input ng-disabled="writePermissions==false" keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6"  value="{{datum[fields.field6.label]}}" ng-hide="fields.field6.label==''" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}"  >
-        <input ng-disabled="writePermissions==false" keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field7"  value="{{datum[fields.field7.label]}}" ng-hide="fields.field7.label==''" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}"  >
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field4"  value="{{datum[fields.field4.label]}}" ng-hide="fields.field4.label==''" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}"  >
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6"  value="{{datum[fields.field6.label]}}" ng-hide="fields.field6.label==''" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}"  >
+        <input keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field7"  value="{{datum[fields.field7.label]}}" ng-hide="fields.field7.label==''" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}"  >
       </textarea>
     </div>
     <div class="span2 entered_modified_info">
@@ -97,7 +97,7 @@
           <form id='form_{{datum.id}}_audio-file'>
             <i class="fa fa-bullhorn">
             </i>&nbsp;
-            <input ng-disabled="writePermissions==false" id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload'   />
+            <input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload'   />
             <button class="btn btn-primary" ng-click="uploadFile(datum);"  >
               <i class="fa whiteicon fa-file">
               </i> Upload File(s)
@@ -128,7 +128,7 @@
             </td>
             <td>
               <span class="form-horizontal">
-                <input ng-disabled="writePermissions==false" type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' > &nbsp;
+                <input type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' > &nbsp;
                 <button hidden  class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)" ng-show="datum.id!=undefined"  >Save Description
                 </button>
               </span>
