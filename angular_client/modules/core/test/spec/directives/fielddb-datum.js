@@ -4,7 +4,7 @@ var debug = false;
 describe('Directive: fielddb-datum', function() {
 
   // load the directive's module and the template
-  beforeEach(module('fielddbAngularApp', 'views/datum.html'));
+  beforeEach(module('fielddbAngularApp', 'views/datum.html', 'views/datum_list_item.html', 'views/datum_igt.html', 'views/datum_spreadsheet.html', 'views/datum_language_lesson.html', 'views/datum_stimulus.html', 'views/datum_generic.html'));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
