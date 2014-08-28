@@ -3,14 +3,14 @@
   <div ng-show="selected==$index">
     <form ng-submit="markAsEdited(datum);">
       <div class="span5">
-        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[0].label].value" ng-hide="fieldsAsColumns[0].label==''" placeholder="{{fieldsAsColumns[0].title}}" title="{{fieldsAsColumns[0].title}}">
-        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[1].label].value"  value="{{datum[fieldsAsColumns[1].label]}}" ng-hide="fieldsAsColumns[1].label==''" placeholder="{{fieldsAsColumns[1].title}}" title="{{fieldsAsColumns[1].title}}">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[2].label].value" ng-hide="fieldsAsColumns[2].label==''" placeholder="{{fieldsAsColumns[2].title}}" title="{{fieldsAsColumns[2].title}}">
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[corpus.datumFields[0].label].value" ng-hide="corpus.datumFields[0].label==''" placeholder="{{corpus.datumFields[0].help}}" title="{{corpus.datumFields[0].help}}">
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[corpus.datumFields[1].label].value"  value="{{datum[corpus.datumFields[1].label]}}" ng-hide="corpus.datumFields[1].label==''" placeholder="{{corpus.datumFields[1].help}}" title="{{corpus.datumFields[1].help}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[corpus.datumFields[2].label].value" ng-hide="corpus.datumFields[2].label==''" placeholder="{{corpus.datumFields[2].help}}" title="{{corpus.datumFields[2].help}}">
       </div>
       <div class="span5">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[3].label].value" ng-hide="fieldsAsColumns[3].label==''" placeholder="{{fieldsAsColumns[3].title}}" title="{{fieldsAsColumns[3].title}}">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[4].label].value" ng-hide="fieldsAsColumns[4].label==''" placeholder="{{fieldsAsColumns[4].title}}" title="{{fieldsAsColumns[4].title}}">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[5].label].value" ng-hide="fieldsAsColumns[5].label==''" placeholder="{{fieldsAsColumns[5].title}}" title="{{fieldsAsColumns[5].title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[corpus.datumFields[3].label].value" ng-hide="corpus.datumFields[3].label==''" placeholder="{{corpus.datumFields[3].help}}" title="{{corpus.datumFields[3].help}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[corpus.datumFields[4].label].value" ng-hide="corpus.datumFields[4].label==''" placeholder="{{corpus.datumFields[4].help}}" title="{{corpus.datumFields[4].help}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[corpus.datumFields[5].label].value" ng-hide="corpus.datumFields[5].label==''" placeholder="{{corpus.datumFields[5].help}}" title="{{corpus.datumFields[5].help}}">
       </textarea>
     </div>
     <div class="span2 entered_modified_info">
@@ -61,7 +61,7 @@
       <div class="span10 expandedDataComments">
         <div class="expandedDataInner">
           <ul class="unstyled">
-            <li ng-hide="fieldsAsColumns.field5.label==''" ng-repeat="comment in datum.comments">
+            <li ng-hide="corpus.prefs.dontShowComments" ng-repeat="comment in datum.comments">
               <a ng-click="deleteComment(comment, datum)" class=" floatLeft delete_button">
                 <i class="fa fa-times-circle">
                 </i>
@@ -83,7 +83,7 @@
     <div class="row" ng-show="expandCollapse==true && datum.id!=undefined">
       <div class="span3 expandedData">
         <div class="expandedDataInner">
-          <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldsAsColumns, datum);" ng-show="audioCompatible==true">
+          <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(datum);" ng-show="audioCompatible==true">
             <i class="fa {{recordingIcon}}">
             </i>&nbsp;{{recordingStatus}}
           </button>
