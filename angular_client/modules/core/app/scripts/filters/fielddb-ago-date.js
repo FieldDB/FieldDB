@@ -26,47 +26,88 @@
 angular.module('fielddbAngularApp').filter('fielddbAgoDate', function() {
   return function(input) {
     if (!input) {
-      return undefined;
+      return '--';
     }
-    input = input.replace(/"/g, '');
-    var date = new Date((input || '').replace(/-/g, '/').replace(/[TZ]/g, ' '));
-    var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g, '');
-    var greenwichdate = new Date((greenwichtimenow || '').replace(/-/g, '/')
-      .replace(/[TZ]/g, ' '));
-    var diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
-    var dayDiff = Math.floor(diff / 86400);
+    if (input.replace) {
+      input = input.replace(/\"/g, '');
+    }
+    if (input.trim) {
+      input = input.trim();
+    }
+    if (!input) {
+      return '--';
+    }
+    // For unknown historical reasons in the spreadsheet app
+    // there were some dates that were unknown and were set
+    // to a random? date like this:
+    if (input === '2000-09-06T16:31:30.988Z' || (input >= new Date('2000-09-06T16:31:30.000Z') && input <= new Date('2000-09-06T16:31:31.000Z'))) {
+      return 'N/A';
+    }
+    if (!input.toLocaleDateString) {
+      input = new Date(input);
+    }
+
+    var greenwichdate = new Date();
+    var minuteDiff = ((greenwichdate.getTime() - input.getTime()) / 1000);
+    var dayDiff = Math.floor(minuteDiff / 86400);
 
     if (isNaN(dayDiff) || dayDiff < 0) {
-      return undefined;
+      return '--';
     }
-
-    if (dayDiff >= 548) {
-      return Math.ceil(dayDiff / 365) + ' years ago';
+    if (dayDiff >= 1430) {
+      return (Math.round(dayDiff / 365) + ' years ago');
+    }
+    if (dayDiff >= 1278) {
+      return '3.5 years ago';
+    }
+    if (dayDiff >= 1065) {
+      return '3 years ago';
+    }
+    if (dayDiff >= 913) {
+      return '2.5 years ago';
+    }
+    if (dayDiff >= 730) {
+      return '2 years ago';
+    }
+    if (dayDiff >= 540) {
+      return '1.5 years ago';
+    }
+    if (dayDiff >= 50) {
+      return (Math.round(dayDiff / 31) + ' months ago');
+    }
+    if (dayDiff >= 48) {
+      return '1.5 months ago';
     }
     if (dayDiff >= 40) {
-      return Math.ceil(dayDiff / 31) + ' months ago';
+      return '1 month ago';
     }
-    if (dayDiff >= 14) {
-      return Math.ceil(dayDiff / 7) + ' weeks ago';
+    if (dayDiff >= 16) {
+      return (Math.round(dayDiff / 7) + ' weeks ago').replace('1 weeks', '1 week');
     }
     if (dayDiff >= 2) {
-      return Math.ceil(dayDiff / 1) + ' days ago';
+      return (Math.round(dayDiff / 1) + ' days ago').replace('1 days', '1 day');
     }
     if (dayDiff >= 1) {
       return 'Yesterday';
     }
-    if (diff >= 4000) {
-      return Math.floor(diff / 3600) + ' hours ago';
+
+    if (minuteDiff >= 5000) {
+      return (Math.floor(minuteDiff / 3600) + ' hours ago').replace('1 hours', '1.5 hours');
     }
-    //  if(diff >= 7200 ){
-    //    Math.floor(diff / 3600) + ' 1 hour ago';
+
+    if (minuteDiff >= 4000) {
+      return '1 hour ago';
+    }
+    //  if(minuteDiff >= 7200 ){
+    //    Math.floor(minuteDiff / 3600) + ' 1 hour ago';
     //  }
-    if (diff >= 70) {
-      return Math.floor(diff / 60) + ' minutes ago';
+    if (minuteDiff >= 70) {
+      return Math.floor(minuteDiff / 60) + ' minutes ago';
     }
-    if (diff >= 120) {
+    if (minuteDiff >= 120) {
       return '1 minute ago';
     }
     return 'just now';
+
   };
 });
