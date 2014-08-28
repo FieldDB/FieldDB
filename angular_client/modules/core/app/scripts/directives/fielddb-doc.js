@@ -44,8 +44,8 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
           // watch the 'compile' expression for changes
           return scope.$eval(attrs.compile);
         },
-        function(value) {
-          console.log('Scope value changed', value);
+        function() {
+          // console.log('Scope value changed', value);
           // when the 'compile' expression changes
           // assign it into the current DOM
           console.log('doc type is ', scope.doc.type);
@@ -64,7 +64,7 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
               // });
             }
           }
-          console.log('Using html: ' + element.html());
+          // console.log('Using html: ' + element.html());
 
           // compile the new DOM and link it to the current
           // scope.
