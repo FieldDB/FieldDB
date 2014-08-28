@@ -1,13 +1,13 @@
 <div class="pull-right">
 	 <!-- Issue #797 -->
-	
+
 	<button class="btn btn-{{buttonColor}} save-datum"
 		value="Save">{{locale_Save}}</button>
 </div>
 <h1>Gegina'matimgewei</h1>
-<h3>{{utterance}}</h3>
-<p><i>{{translation}}</i></p>
-<a class="datum_id" name={{_id}}></a>
+<h3>{{datum.datumFields.utterance.value}}</h3>
+<p><i>{{datum.datumFields.translation.value}}</i></p>
+<a class="datum_id" name="{{datum.id}}"></a>
 
 <!-- image area  -->
 <div class="row images-area" > </div>
@@ -28,14 +28,14 @@
 	    <a href="#corpus/{{pouchname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale_Insert_New_Datum}}" rel="tooltip">
 	      <i class=" icon-plus"></i></a>
 	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Duplicate}}" rel="tooltip">
-	      <i class=" icon-copy"></i></a>  
+	      <i class=" icon-copy"></i></a>
 	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Encrypt}}" rel="tooltip">
-	      <i class=" {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a> 
+	      <i class=" {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>
 	    <a href="#" class="btn btn-mini btn-primary" title="{{locale_Show_confidential_items_Tooltip}}" rel="tooltip">
 	      <i class=" {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
 	    </a>
 	    <a  href="#" class="btn btn-mini btn-primary play-audio" title="{{locale_Play_Audio}}" rel="tooltip">
-	      <i class=" icon-bullhorn"></i></a>  
+	      <i class=" icon-bullhorn"></i></a>
 	    <a  href="#" class="btn btn-mini btn-info" title="{{locale_Plain_Text_Export_Tooltip}}" rel="tooltip" >
 	      <i class=" icon-paste"></i></a>
 	    <a href="#" class="LaTeX btn btn-mini btn-info" title="{{locale_LaTeX}}" rel="tooltip">
@@ -58,30 +58,30 @@
 		<div class="controls  no-margin-left">
 			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->
 			<div class="input-append ">
-			  <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4" 
-	            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]" 
+			  <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4"
+	            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]"
 	      /><button class=" btn btn-small btn-primary add_datum_tag" type="button">
 	        <i class=" icon-tag"></i>
-	        <span>{{locale_Add}}</span> 
+	        <span>{{locale_Add}}</span>
 	      </button>
 	    </div>
 		</div>
 	</div>
 	<div class="datum_state span3 border-left hide">
-	    <span class="label label-{{datumstatecolor}} datum-primary-validation-status-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datumstate}}</span></span><br/>
+	    <span class="label label-{{datumstatecolor}} datum-primary-validation-status-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datum.datumstate}}</span></span><br/>
 	</div>
 </div>
 
-<ul class="comments unstyled"></ul> 
+<ul class="comments unstyled"></ul>
 <div class="extra-datum-info-which-can-be-hidden">
 	<!-- list for the fields -->
 	<table class="datum_fields_ul unstyled language-learning-lesson"></table>
-	<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
-	<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
+	<span class="last-modified">{{datum.dateModified}}</span><i class=" icon-save "></i><br/>
+	<span class="date-created">{{datum.dateEntered}}</span><i class=" icon-time"></i><br/>
 
 	<span class="session-link hide"></span>
 
 	<!-- Datum comments -->
-	<div class="new-comment-area"></div>  
+	<div class="new-comment-area"></div>
 
 </div>
