@@ -1256,3 +1256,48 @@ ul
 }
 
 @import url("../libs/terminal/terminal.css");
+
+.language-learning-lesson .morphemes{
+	display: none !important;
+}
+
+.language-learning-lesson .judgement{
+	display: none !important;
+}
+
+.language-learning-lesson .gloss{
+	display: none !important;
+}
+
+.language-learning-lesson .syntacticCategory{
+	display: none !important;
+}
+
+.language-learning-lesson .syntacticTreeLatex{
+	display: none !important;
+}
+
+.language-learning-lesson .validationStatus{
+	display: none !important;
+}
+
+
+.language-learning-lesson .enteredByUser{
+	display: none !important;
+}
+
+.language-learning-lesson .modifiedByUser{
+	display: none !important;
+}
+.language-learning-lesson .orthography{
+	display: none !important;
+}
+.language-learning-lesson .russian{
+	display: none !important;
+}
+.language-learning-lesson .startTime{
+	display: none !important;
+}
+.language-learning-lesson .endTime{
+	display: none !important;
+}
