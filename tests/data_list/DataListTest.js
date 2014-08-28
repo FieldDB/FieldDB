@@ -124,4 +124,36 @@ describe("Data List", function() {
     });
   });
 
+  describe("psycholinguistics", function() {
+    it("should permit complex title objects", function() {
+      var dl = new DataList({
+        "label": "practice",
+        "title": {
+          "default": "localized_practice",
+          "gamified_title": "localized_gamified_practice"
+        },
+        "description": {
+          "default": "localized_practice_description_for_teacher",
+          "for_child": "localized_practice_description_for_child",
+          "for_parent": "localized_practice_description_for_parent",
+          "for_experimentAdministrator": "localized_practice_description_for_teacher",
+          "for_school_records": "localized_practice_description_for_school_record",
+          "for_experimentAdministratorSpecialist": "localized_practice_description_for_slp"
+        },
+        "instructions": {
+          "default": "localized_practice_instructions_for_teacher",
+          "for_child": "localized_practice_instructions_for_child",
+          "for_parent": "localized_practice_instructions_for_parent",
+          "for_experimentAdministrator": "localized_practice_instructions_for_teacher",
+          "for_school_records": "localized_practice_instructions_for_school_record",
+          "for_experimentAdministratorSpecialist": "localized_practice_instructions_for_slp"
+        }
+      });
+
+      expect(dl).toBeDefined();
+      expect(dl.title.default).toEqual('localized_practice');
+      expect(dl.description.default).toEqual('localized_practice_description_for_teacher');
+      expect(dl.instructions.default).toEqual('localized_practice_instructions_for_teacher');
+    });
+  });
 });

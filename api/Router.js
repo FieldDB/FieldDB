@@ -57,6 +57,13 @@ Router.routes.push({
   }
 });
 Router.routes.push({
+  path: '/:team/:corpusid/data',
+  angularRoute: {
+    templateUrl: 'views/all-data-page.html',
+    controller: 'OverrideYourControllerHere'
+  }
+});
+Router.routes.push({
   path: '/:team/:corpusid/search/:searchQuery',
   angularRoute: {
     templateUrl: 'views/search-page.html',

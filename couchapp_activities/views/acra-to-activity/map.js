@@ -136,7 +136,7 @@ function(doc) {
           teamActivity.directobject = "<a target='_blank' href='#corpus/" + teamdbname + "/datum/" + docid + "'>a datum</a>";
         }
 
-        if (androidCustomData.action && androidCustomData.action.indexOf("register") > -1 || androidCustomData.downloadDatums) {
+        if (androidCustomData.action && (androidCustomData.action.indexOf("register") > -1 || androidCustomData.action.indexOf("login") > -1  ) || androidCustomData.downloadDatums) {
           personalCorpusActivity.verb = "logged in";
           teamActivity.verb = "logged in";
           personalCorpusActivity.verbicon = "icon-check";
@@ -179,6 +179,7 @@ function(doc) {
             personalCorpusActivity.directobjecticon = "icon-audio";
             teamActivity.directobjecticon = "icon-audio";
           }
+
           if (androidCustomData.action.indexOf("Video") > -1) {
             personalCorpusActivity.verb = "videoed";
             teamActivity.verb = "videoed";
@@ -187,6 +188,50 @@ function(doc) {
           }
           personalCorpusActivity.directobject = directobject;
           teamActivity.directobject = directobject;
+          // } else if (androidCustomData.action.indexOf("recognizedAudio") > -1) {
+          //   personalCorpusActivity.verb = "recorded";
+          //   teamActivity.verb = "recorded";
+          //   personalCorpusActivity.verbicon = "icon-plus";
+          //   teamActivity.verbicon = "icon-plus";
+          //   personalCorpusActivity.directobjecticon = "icon-microphone";
+          //   teamActivity.directobjecticon = "icon-microphone";
+          // }
+        } else if (androidCustomData.action.indexOf("openedTrainer") > -1) {
+          personalCorpusActivity.verb = "trained";
+          teamActivity.verb = "trained";
+          personalCorpusActivity.verbicon = "icon-bar-chart";
+          teamActivity.verbicon = "icon-bar-chart";
+          personalCorpusActivity.directobjecticon = "icon-microphone";
+          teamActivity.directobjecticon = "icon-microphone";
+          personalCorpusActivity.directobject = androidCustomData.action;
+          teamActivity.directobject = androidCustomData.action;
+        } else if (androidCustomData.action.indexOf("recognizedHypotheses") > -1 || androidCustomData.action.indexOf("receivedFinalHypotheses") > -1) {
+          personalCorpusActivity.verb = "received an ASR result";
+          teamActivity.verb = "received an ASR result";
+          personalCorpusActivity.verbicon = "icon-refresh";
+          teamActivity.verbicon = "icon-refresh";
+          personalCorpusActivity.directobjecticon = "icon-microphone";
+          teamActivity.directobjecticon = "icon-microphone";
+          personalCorpusActivity.directobject = androidCustomData.action;
+          teamActivity.directobject = androidCustomData.action;
+        } else if (androidCustomData.action.indexOf("recognizedPartialHypotheses") > -1) {
+          personalCorpusActivity.verb = "received a partial ASR result";
+          teamActivity.verb = "received a partial ASR result";
+          personalCorpusActivity.verbicon = "icon-refresh";
+          teamActivity.verbicon = "icon-refresh";
+          personalCorpusActivity.directobjecticon = "icon-microphone";
+          teamActivity.directobjecticon = "icon-microphone";
+          personalCorpusActivity.directobject = androidCustomData.action;
+          teamActivity.directobject = androidCustomData.action;
+        } else if (androidCustomData.action.indexOf("recognizeSpeech") > -1 || androidCustomData.action.indexOf("requestedRecognizeSpeech") > -1) {
+          personalCorpusActivity.verb = "used Speech Recognizer";
+          teamActivity.verb = "used Speech Recognizer";
+          personalCorpusActivity.verbicon = "icon-plus";
+          teamActivity.verbicon = "icon-plus";
+          personalCorpusActivity.directobjecticon = "icon-microphone";
+          teamActivity.directobjecticon = "icon-microphone";
+          personalCorpusActivity.directobject = androidCustomData.action;
+          teamActivity.directobject = androidCustomData.action;
         } else if (androidCustomData.action && androidCustomData.action.indexOf("loadDatum") > -1) {
           docid = androidCustomData.action;
           try {
@@ -296,6 +341,9 @@ function(doc) {
       if (!activities) {
         return;
       }
+      // if (activities.teamActivity.pouchname !== "speechrecognition-kartuli-activity_feed") {
+      //   return;
+      // }
       var now = Date.now();
       // var lastPosition = 1403805265615;
       // if (activities.teamActivity.timestamp < lastPosition) {
