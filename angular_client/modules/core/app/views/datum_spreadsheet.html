@@ -1,4 +1,4 @@
-<div arrow-key class="row relativePosition" ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}"  ng-click="selectRow($index)" ng-hide="datum.fetching==true">
+<div class="row" ng-hide="datum.fetching==true">
   <!-- Show when editing -->
   <div ng-show="selected==$index">
     <form ng-submit="markAsEdited(fieldData, datum);">
@@ -151,7 +151,7 @@
   </div>
 </div>
 <!-- Show when not editing -->
-<div ng-show="selected!=$index">
+<div hidden ng-show="selected!=$index">
   <div class="span1 search_checkbox" ng-show="searching==true">
     <input ng-disabled="writePermissions==false" type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
   </div>
@@ -263,52 +263,3 @@
   </div>
 </div>
 
-<div arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || writePermissions==false">
-  <div class="row">
-    <form ng-submit="createRecord(newFieldData)" >
-      <div class="span5">
-        <div class="focus_box_div">
-          <input ng-disabled="writePermissions==false" focus />
-        </div>
-        <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''" >
-        <input ng-disabled="writePermissions==false" guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''" >
-        <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">
-      </div>
-      <div class="span5">
-        <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">
-        <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">
-        <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field7" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">
-      </textarea>
-    </div>
-    <div class="span2">
-      <button ng-show="selected=='newEntry'" ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false">
-        <i class="fa whiteicon fa-plus">
-        </i> Create New
-      </button>&nbsp;
-      <div class="expandCollapseButton">
-        <i class="fa whiteicon" ng-class="{'fa-list': !expandCollapse, 'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()" ng-show="selected=='newEntry'">
-        </i>
-      </div>
-      <br />
-      <span ng-show="newFieldDatahasAudio==true">
-        <i class="fa {{recordingIcon}}">
-        </i>
-      </span>
-    </div>
-  </form>
-</div>
-<br />
-<div class="pagination-centered page_navigation" ng-hide="loading==true || data==undefined || numberOfResultPages(allData.length)==1 || numberOfResultPages(allData.length)==0 ">
-  <button class="btn btn-inverse btn-mini" ng-disabled="currentPage == 0" ng-click="pageBackward();">
-    <font size="4">
-      <b>&larr;
-      </b>
-    </font>
-  </button> &nbsp;{{currentPage+1}} of {{numberOfResultPages(allData.length)}}&nbsp;
-  <button class="btn btn-inverse btn-mini" ng-disabled="currentPage >= (allData | filter: filterTerm).length/resultSize - 1" ng-click="pageForward()">
-    <font size="4">
-      <b>&rarr;
-      </b>
-    </font>
-  </button>
-</div>
