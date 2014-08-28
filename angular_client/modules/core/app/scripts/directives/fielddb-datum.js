@@ -12,7 +12,8 @@ angular.module('fielddbAngularApp').directive('fielddbDatum', function() {
     restrict: 'A',
     transclude: false,
     scope: {
-      datum: '=json'
+      datum: '=json',
+      corpus: '=corpus'
     },
     controller: function($scope, $rootScope) {
       $scope.toggleViewDecryptedDetails = function() {
@@ -38,6 +39,10 @@ angular.module('fielddbAngularApp').directive('fielddbDatum', function() {
             return false;
           }
         }
+      };
+      $scope.expanded = false;
+      $scope.toggleExpanded = function() {
+        $scope.expanded = !$scope.expanded;
       };
 
     },
