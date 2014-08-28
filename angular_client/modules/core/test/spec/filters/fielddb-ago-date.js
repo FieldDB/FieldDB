@@ -168,12 +168,12 @@ describe('Filter: fielddbAgoDate', function() {
     });
 
     it('should detect 8 months ago ', function() {
-      var inputDate = Date.now() - onemonth*8.18;
+      var inputDate = Date.now() - onemonth * 8.18;
       expect(fielddbAgoDate(inputDate)).toBe('8 months ago');
     });
 
     it('should detect 16 months ago ', function() {
-      var inputDate = Date.now() - onemonth*16.18;
+      var inputDate = Date.now() - onemonth * 16.18;
       expect(fielddbAgoDate(inputDate)).toBe('16 months ago');
     });
 
@@ -182,61 +182,61 @@ describe('Filter: fielddbAgoDate', function() {
   describe('over a year and a half ago', function() {
 
     it('should detect 18 months ago is 1.5 years ago', function() {
-      var inputDate = Date.now() - onemonth*18;
+      var inputDate = Date.now() - onemonth * 18;
       expect(fielddbAgoDate(inputDate)).toBe('1.5 years ago');
     });
 
     it('should detect 24 months ago is 2 years ago', function() {
-      var inputDate = Date.now() - onemonth*24;
+      var inputDate = Date.now() - onemonth * 24;
       expect(fielddbAgoDate(inputDate)).toBe('2 years ago');
     });
 
     it('should detect 31 months ago is 2.5 years ago', function() {
-      var inputDate = Date.now() - onemonth*31;
+      var inputDate = Date.now() - onemonth * 31;
       expect(fielddbAgoDate(inputDate)).toBe('2.5 years ago');
     });
 
     it('should detect almost 3 years ago is 3 years ago', function() {
-      var inputDate = Date.now() - onemonth*35;
+      var inputDate = Date.now() - onemonth * 35;
       expect(fielddbAgoDate(inputDate)).toBe('3 years ago');
     });
 
     it('should detect 3.5 years ago is 3.5 years ago', function() {
-      var inputDate = Date.now() - onemonth*42;
+      var inputDate = Date.now() - onemonth * 42;
       expect(fielddbAgoDate(inputDate)).toBe('3.5 years ago');
     });
 
     it('should detect almost 4 years ago is 4 years ago', function() {
-      var inputDate = Date.now() - onemonth*47;
+      var inputDate = Date.now() - onemonth * 47;
       expect(fielddbAgoDate(inputDate)).toBe('4 years ago');
     });
 
   });
 
   describe('diverse inputs', function() {
+    var inputDate = JSON.stringify(new Date(Date.now() - onemonth * 2));
 
     it('should convert json dates with escaped quotes into ago', function() {
-      var inputDate = '\"2014-07-14T14:39:10.916Z\"';
+      inputDate = '\"' + inputDate + '\"';
       expect(fielddbAgoDate(inputDate)).toBe('2 months ago');
     });
 
     it('should convert json dates with quotes into ago', function() {
-      var inputDate = '"2014-07-14T14:39:10.916Z"';
+      inputDate = '"' + inputDate + '"';
       expect(fielddbAgoDate(inputDate)).toBe('2 months ago');
     });
 
     it('should convert json dates into ago', function() {
-      var inputDate = '2014-07-14T14:39:10.916Z';
       expect(fielddbAgoDate(inputDate)).toBe('2 months ago');
     });
 
     it('should convert timestamps into ago', function() {
-      var inputDate = 1405348750916;
+      inputDate = Date.now() - onemonth * 2;
       expect(fielddbAgoDate(inputDate)).toBe('2 months ago');
     });
 
     it('should convert dates into ago', function() {
-      var inputDate = new Date(1405348750916);
+      inputDate = new Date(Date.now() - onemonth * 2);
       expect(fielddbAgoDate(inputDate)).toBe('2 months ago');
     });
 
