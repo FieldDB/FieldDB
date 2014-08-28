@@ -227,7 +227,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumEditView.
      */
-    template : Handlebars.templates.lesson_edit_embedded,
+    template : Handlebars.templates.datum_edit_embedded,
 
     /**
      * Renders the DatumEditView and all of its partials.
