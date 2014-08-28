@@ -3,14 +3,14 @@
   <div ng-show="selected==$index">
     <form ng-submit="markAsEdited(datum);">
       <div class="span5">
-        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column1].value" ng-hide="fields.column1.label==''" placeholder="{{fields.column1.title}}" title="{{fields.column1.title}}">
-        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column2].value"  value="{{datum[fields.column2.label]}}" ng-hide="fields.column2.label==''" placeholder="{{fields.column2.title}}" title="{{fields.column2.title}}">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column3].value" ng-hide="fields.column3.label==''" placeholder="{{fields.column3.title}}" title="{{fields.column3.title}}">
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[0].label].value" ng-hide="fieldsAsColumns[0].label==''" placeholder="{{fieldsAsColumns[0].title}}" title="{{fieldsAsColumns[0].title}}">
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[1].label].value"  value="{{datum[fieldsAsColumns[1].label]}}" ng-hide="fieldsAsColumns[1].label==''" placeholder="{{fieldsAsColumns[1].title}}" title="{{fieldsAsColumns[1].title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[2].label].value" ng-hide="fieldsAsColumns[2].label==''" placeholder="{{fieldsAsColumns[2].title}}" title="{{fieldsAsColumns[2].title}}">
       </div>
       <div class="span5">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column4].value" ng-hide="fields.column4.label==''" placeholder="{{fields.column4.title}}" title="{{fields.column4.title}}">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column5].value" ng-hide="fields.column5.label==''" placeholder="{{fields.column5.title}}" title="{{fields.column5.title}}">
-        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns.column6].value" ng-hide="fields.column6.label==''" placeholder="{{fields.column6.title}}" title="{{fields.column6.title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[3].label].value" ng-hide="fieldsAsColumns[3].label==''" placeholder="{{fieldsAsColumns[3].title}}" title="{{fieldsAsColumns[3].title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[4].label].value" ng-hide="fieldsAsColumns[4].label==''" placeholder="{{fieldsAsColumns[4].title}}" title="{{fieldsAsColumns[4].title}}">
+        <input keypress-mark-as-edited class="span5" type="text" ng-model="datum[fieldsAsColumns[5].label].value" ng-hide="fieldsAsColumns[5].label==''" placeholder="{{fieldsAsColumns[5].title}}" title="{{fieldsAsColumns[5].title}}">
       </textarea>
     </div>
     <div class="span2 entered_modified_info">
@@ -61,7 +61,7 @@
       <div class="span10 expandedDataComments">
         <div class="expandedDataInner">
           <ul class="unstyled">
-            <li ng-hide="fields.field5.label==''" ng-repeat="comment in datum.comments">
+            <li ng-hide="fieldsAsColumns.field5.label==''" ng-repeat="comment in datum.comments">
               <a ng-click="deleteComment(comment, datum)" class=" floatLeft delete_button">
                 <i class="fa fa-times-circle">
                 </i>
