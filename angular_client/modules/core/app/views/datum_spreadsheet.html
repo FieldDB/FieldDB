@@ -91,9 +91,9 @@
         <br />
         <br />
       </span>
-      <span title="Date entered {{datum.dateEntered | standardDate}}">
+      <span title="Date entered {{datum.dateEntered | fielddbPrettyDate}}">
         <i class="fa whiteicon fa-clock-o">
-        </i> Entered: {{datum.dateEntered | standardDate}}
+        </i> Entered: {{datum.dateEntered | fielddbPrettyDate}}
       </span>
       <br />
       <span ng-hide="!datum.enteredByUser">
@@ -101,9 +101,9 @@
         <br />
       </span>
       <br />
-      <span title="Date modified {{datum.dateModified | standardDate}}">
+      <span title="Date modified {{datum.dateModified | fielddbPrettyDate}}">
         <i class="fa whiteicon fa-clock-o">
-        </i>Last edit: {{datum.dateModified | standardDate}}
+        </i>Last edit: {{datum.dateModified | fielddbPrettyDate}}
       </span>
       <br />
       <span ng-hide="!datum.modifiedByUser.users[0]">
@@ -141,7 +141,7 @@
               <i class="fa fa-comment">
               </i> {{comment.text}}
               <i class="fa fa-clock-o">
-              </i> {{comment.timestamp | standardDateFromTimestamp}}
+              </i> {{comment.timestamp | fielddbPrettyDate}}
             </li>
           </ul>
           <button ng-show="commentPermissions==true" class="btn btn-primary" ng-click="addComment(datum);"  >
@@ -224,24 +224,24 @@
     <input ng-disabled="writePermissions==false" type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
   </div>
   <div ng-class="{span5: searching!=true, span4: searching==true}">
-    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">{{datum[fields.field1.label] | neverEmpty}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">{{datum[fields.field1.label] | fielddbVisiblyEmpty}}
     </span>
     <br />
-    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">{{datum[fields.field2.label] | neverEmpty}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">{{datum[fields.field2.label] | fielddbVisiblyEmpty}}
     </span>
     <br />
-    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">{{datum[fields.field3.label] | neverEmpty}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">{{datum[fields.field3.label] | fielddbVisiblyEmpty}}
     </span>
     <br />
   </div>
   <div ng-class="{span5: searching!=true, span4: searching==true}">
-    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">{{datum[fields.field4.label] | neverEmpty}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">{{datum[fields.field4.label] | fielddbVisiblyEmpty}}
     </span>
     <br />
-    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">{{datum[fields.field6.label] | neverEmpty}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">{{datum[fields.field6.label] | fielddbVisiblyEmpty}}
     </span>
     <br />
-    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">{{datum[fields.field7.label] | neverEmpty}}
+    <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">{{datum[fields.field7.label] | fielddbVisiblyEmpty}}
     </span>
     <br />
 
@@ -257,7 +257,7 @@
     </span>
     <span title="Date entered">
       <i class="fa whiteicon fa-clock-o">
-      </i> Entered: {{datum.dateEntered | standardDate}}
+      </i> Entered: {{datum.dateEntered | fielddbPrettyDate}}
       <br />
       <span ng-hide="!datum.enteredByUser">
         <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">
@@ -266,7 +266,7 @@
       <br />
       <span title="Date modified">
         <i class="fa whiteicon fa-clock-o">
-        </i>Last edit: {{datum.dateModified | standardDate}}
+        </i>Last edit: {{datum.dateModified | fielddbPrettyDate}}
       </span>
       <br />
       <span ng-hide="!datum.modifiedByUser.users[0]">
@@ -296,7 +296,7 @@
               <i class="floatLeft fa fa-comment">
               </i> {{comment.text}}
               <i class="fa fa-clock-o">
-              </i> {{comment.timestamp | standardDateFromTimestamp}}
+              </i> {{comment.timestamp | fielddbPrettyDate}}
             </li>
           </ul>
         </div>
