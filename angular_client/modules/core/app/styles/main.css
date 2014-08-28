@@ -121,23 +121,23 @@
 
 
 .btn-file {
-    position: relative;
-    overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
 .btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 999px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 999px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
 }
 
 .gravatar-small {
@@ -245,3 +245,67 @@ progress {
   border: 1px solid red;
 }
 
+
+.Spreadsheet-selectedRow {
+  background-color: #6D8CA0;
+  border: 2px solid;
+}
+
+.Spreadsheet-selectedRow input{
+  width: 100%;
+}
+
+.Spreadsheet-unselectedRow:nth-child(odd) {
+  background-color: #F1F0FF;
+}
+
+.Spreadsheet-unselectedRow {
+  background-color: #FCFCFC;
+}
+
+.Spreadsheet-unselectedNewRow {
+  background-color: #5D5E5E;
+}
+
+.Spreadsheet-unselectedGreyRow:nth-child(odd) {
+  background-color: #F1F0F1;
+}
+
+.Spreadsheet-unselectedGreyRow {
+  background-color: #FCFCFC;
+}
+
+.Spreadsheet-expandCollapseButton {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.Spreadsheet-expandedData {
+  border: 2px solid #102E37;
+  background-color: #F0F5FF;
+  min-height: 35px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.Spreadsheet-expandedDataInner {
+  padding: 10px;
+}
+
+.Spreadsheet-expandedDataComments {
+  border: 2px solid #102E37;
+  background-color: #F0F5FF;
+  min-height: 35px;
+  border-radius: 15px;
+}
+
+.Spreadsheet-expandedData form {
+  margin: 0;
+  padding: 0;
+}
+
+
+.whiteicon{
+  color: white;
+}
