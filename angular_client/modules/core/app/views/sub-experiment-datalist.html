@@ -1,4 +1,5 @@
-<h1>Titles:</h1>
+<h1 ng-model="datalist.label"></h1>
+<h3>Titles:</h3>
 <ul>
   <li ng-repeat="context in datalist.title">{{context}}</li>
 </ul>
@@ -16,12 +17,26 @@ Reinforcement Cartoon:
   <li ng-repeat="image in datalist.reinforcementAnimation.animationImages">{{image.incompleteImageFile}}</li>
   <li>{{datalist.reinforcementAnimation.lastImageSrc}}</li>
 </ul>
-<p ng-model="datalist.label"></p>
-<div ng-repeat="item in datalist.docs">
-  <div data-fielddb-doc json="item" corpus="corpus">
+<div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" ui-on-Drop="onDrop($event, $data, datalist.docs._collection)">
+  <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop stimuli to re-order them</div>
+  <div class="well" ng-class="{'col-md-12': datalist.showDocCheckboxes}" ng-repeat="item in datalist.docs._collection track by $index">
+    <div ng-class="{'col-md-1': datalist.showDocCheckboxes || datalist.showDocPosition}">
+      <span><input type="checkbox" ng-show="datalist.showDocCheckboxes"/></span>
+      <span
+      class="badge badge-info"
+      ng-show="datalist.showDocPosition"
+      title="Position in list"
+      ui-draggable="datalist.docsAreReorderable"
+      drag="item"
+      on-drop-success="dropSuccessHandler($event, $index, datalist.docs._collection)">N. {{$index +1}}</span>
+    </div>
+    <div  ng-class="{'col-md-10': datalist.showDocCheckboxes}" data-fielddb-datum json="item" corpus="corpus">
+    </div>
   </div>
 </div>
 <div ng-show="canAddNewItemsToDataList()"><i class="fa fa-plus-circle"></i> Add </div>
 
-{{datalist.warnMessage}}
-{{datalist.docs.warnMessage}}
+<blockquote hidden ng-hide="true" class="status">
+  {{datalist.warnMessage}}
+  {{datalist.docs.warnMessage}}
+</blockquote>
