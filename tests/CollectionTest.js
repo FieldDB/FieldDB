@@ -217,6 +217,98 @@ describe('lib/Collection', function() {
 
   });
 
+  describe('cleaning contents', function() {
+    var collection,
+      item,
+      item2,
+      item3;
+
+    beforeEach(function() {
+      collection = new Collection({
+        debugMode: true,
+        primaryKey: "validationStatus",
+        collection: [, new FieldDBObject({
+          validationStatus: "one",
+          difference: "lowercase"
+        }), new FieldDBObject({
+          validationStatus: "one",
+          difference: "lowercase"
+        }), new FieldDBObject({
+          validationStatus: "_one_",
+          difference: "underscores"
+        }), new FieldDBObject({
+          validationStatus: "ONE",
+          difference: "uppercase and after one"
+        }), new FieldDBObject({
+          validationStatus: "two"
+        }), new FieldDBObject({
+          validationStatus: "three"
+        }), new FieldDBObject({
+          validationStatus: "four"
+        })],
+        capitalizeFirstCharacterOfPrimaryKeys: true
+      });
+      collection.debugMode = true;
+      item = collection.ONE;
+      item2 = collection.one;
+      item3 = collection.three;
+    });
+
+
+    it('should work for strange collections', function() {
+      expect(collection).toBeDefined();
+      expect(collection.find("difference", "lowercase")[0].difference).toEqual("lowercase");
+      expect(collection.find("difference", "underscores")[0].difference).toEqual("underscores");
+      expect(collection.length).toBe(6);
+      expect(item).toBeDefined();
+      expect(item.difference).toBe('uppercase and after one');
+      expect(item2).toBeDefined();
+      expect(item2.difference).toBe('uppercase and after one');
+      expect(collection.collection[0].difference).toEqual('lowercase');
+      expect(collection.collection[1].difference).toEqual('underscores');
+      expect(collection.collection[2].difference).toEqual('uppercase and after one');
+      expect(item3).toBeDefined();
+    });
+
+    xit('should give the index of a item', function() {
+      expect(collection.indexOf).toBeDefined();
+
+      expect(item).toBeDefined();
+      expect(collection.indexOf(item)).toBe(1);
+      expect(collection.collection[collection.indexOf(item)]).toBe(item);
+      expect(collection.indexOf(item2)).toBe(1);
+      expect(collection.collection[collection.indexOf(item2)]).toBe(item2);
+      expect(collection.indexOf(item3)).toBe(2);
+      expect(collection.collection[collection.indexOf(item3)]).toBe(item3);
+    });
+
+    xit('should give the index of a simple object', function() {
+      expect(collection.indexOf(item.toJSON())).toBe(0);
+    });
+
+    it('should give the index using only the primary key', function() {
+      expect(collection.indexOf).toBeDefined();
+    });
+
+    it('should be possible to reorder items', function() {
+      expect(collection.reorder).toBeDefined();
+    });
+
+    it('should be possible to remove an item', function() {
+      expect(collection.remove).toBeDefined();
+    });
+
+    it('should be possible to remove a simple object', function() {
+      expect(collection.remove).toBeDefined();
+    });
+
+    it('should be possible to remove a primary key', function() {
+      expect(collection.remove).toBeDefined();
+    });
+
+  });
+
+
   describe('non-lossy persistance', function() {
     var collection,
       collectionToLoad = [{
