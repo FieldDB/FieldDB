@@ -332,6 +332,45 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  equals: {
+    value: function(anotherObject) {
+      for (var aproperty in this) {
+        if (!this.hasOwnProperty(aproperty)) {
+          continue;
+        }
+        if (typeof this[aproperty].equals === "function") {
+          if (!this[aproperty].equals(anotherObject[aproperty])) {
+            this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            return false;
+          }
+        } else if (this[aproperty] === anotherObject[aproperty]) {
+          this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
+          // return true;
+        } else if (anotherObject[aproperty] === undefined) {
+          this.debug(aproperty + ": " + this[aproperty] + " not equal " + anotherObject[aproperty]);
+          return false;
+        } else {
+          if (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode") {
+            this.debug(aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            return false;
+          }
+        }
+      }
+      if (typeof anotherObject.equals === "function") {
+        if (this.dontRecurse === undefined) {
+          this.dontRecurse = true;
+          anotherObject.dontRecurse = true;
+          if (!anotherObject.equals(this)) {
+            return false;
+          }
+        }
+      }
+      delete this.dontRecurse;
+      delete anotherObject.dontRecurse;
+      return true;
+    }
+  },
+
   merge: {
     value: function(callOnSelf, anotherObject, optionalOverwriteOrAsk) {
       var anObject,
