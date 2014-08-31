@@ -1,5 +1,6 @@
 /* globals window */
 var Diacritics = require('diacritic');
+var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 
 var regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
@@ -245,6 +246,17 @@ Collection.prototype = Object.create(Object.prototype, {
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || 'id';
       this.debug('searchingFor', searchingFor);
 
+      if (typeof searchingFor === "object" && !(searchingFor instanceof RegExp)) {
+        var key = searchingFor[this.primaryKey];
+        if (!key && this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && typeof this.INTERNAL_MODELS.item === "function" && !(searchingFor instanceof this.INTERNAL_MODELS.item)) {
+          searchingFor = new this.INTERNAL_MODELS.item(searchingFor);
+        } else if (!key && !(searchingFor instanceof FieldDBObject)) {
+          searchingFor = new FieldDBObject(searchingFor);
+          key = searchingFor[this.primaryKey];
+        }
+        searchingFor = key;
+      }
+
       if (this[searchingFor]) {
         results.push(this[searchingFor]);
       }
@@ -290,8 +302,14 @@ Collection.prototype = Object.create(Object.prototype, {
       if (optionalInverted === null || optionalInverted === undefined) {
         optionalInverted = this.inverted;
       }
-      if (this[searchingFor]) {
+
+      if (value && this[searchingFor] && (value === this[searchingFor] || (this[searchingFor].equals && this[searchingFor].equals(value)))) {
+        this.warn("Not setting this, it already exists in the collection");
         return this[searchingFor];
+      }
+
+      if (value === null || value === undefined) {
+        this.remove(searchingFor, optionalKeyToIdentifyItem);
       }
 
       for (var index in this.collection) {
@@ -299,7 +317,9 @@ Collection.prototype = Object.create(Object.prototype, {
           continue;
         }
         if (this.collection[index][optionalKeyToIdentifyItem] === searchingFor) {
-          return this.collection[index] = value;
+          this.warn("Overwriting an existing value");
+          this.collection[index] = value;
+          return value;
         }
       }
       /* if not a reserved attribute, set on object for dot notation access */
@@ -310,14 +330,14 @@ Collection.prototype = Object.create(Object.prototype, {
           this[searchingFor.toLowerCase().replace(/_/g, '')] = value;
         }
 
-        if (optionalInverted) {
-          this.collection.unshift(value);
-        } else {
-          this.collection.push(value);
-        }
-
       } else {
         console.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
+      }
+
+      if (optionalInverted) {
+        this.collection.unshift(value);
+      } else {
+        this.collection.push(value);
       }
       return value;
     }
@@ -354,7 +374,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       value = this.sanitizeStringForPrimaryKey(value);
       if (value !== member[this.primaryKey]) {
-        this.warn('using a modified the dot notation key of this object to be ' + value);
+        this.warn('using a sanitized the dot notation key of this object to be ' + value);
       }
       return value;
     }
@@ -388,7 +408,82 @@ Collection.prototype = Object.create(Object.prototype, {
 
   remove: {
     value: function(searchingFor, optionalKeyToIdentifyItem) {
-      return this.set(searchingFor, null, optionalKeyToIdentifyItem);
+      var removed = this.removedCollection || [],
+        itemIndex,
+        key,
+        keysToRemove = [];
+
+      // Look for the real item(s) in the collection
+      searchingFor = this.find(searchingFor);
+
+      if (Object.prototype.toString.call(searchingFor) !== '[object Array]') {
+        searchingFor = [searchingFor];
+      }
+      // For every item, delete the dot reference to it
+      for (var itemIndex = 0; itemIndex < searchingFor.length; itemIndex++) {
+        key = searchingFor[itemIndex][this.primaryKey];
+        keysToRemove.push(key);
+
+        removed.push(this[key]);
+        delete this[key];
+
+        removed.push(this[key.toLowerCase().replace(/_/g, '')]);
+        delete this[key.toLowerCase().replace(/_/g, '')];
+      }
+
+      // For every item in the collection, if it matches, remove it from the collection
+      this.debug(keysToRemove);
+      for (itemIndex = this.collection.length - 1; itemIndex >= 0; itemIndex--) {
+        if (keysToRemove.indexOf(this.collection[itemIndex][this.primaryKey]) > -1) {
+          this.collection.splice(itemIndex, 1);
+          // itemIndex = itemIndex - 1;
+        }
+      }
+      if (removed.length === 0) {
+        this.warn("Cant remove object that wasnt part of the collection.", searchingFor);
+      }
+      this.removedCollection = removed;
+      return removed;
+    }
+  },
+
+  indexOf: {
+    value: function(doc) {
+      if (!this._collection || this.collection.length === 0) {
+        return -1;
+      }
+      for (var docIndex = 0; docIndex < this._collection.length; docIndex++) {
+        var key = doc[this.primaryKey];
+        if (!key) {
+          doc = this.find(doc);
+          if (doc && doc.length > 0) {
+            doc = doc[0];
+          } else {
+            return -1;
+          }
+          key = doc[this.primaryKey];
+        }
+        if (this._collection[docIndex][this.primaryKey] === key) {
+          return docIndex;
+        }
+
+      }
+      return -1;
+    }
+  },
+
+  reorder: {
+    value: function(old_index, new_index) {
+      if (typeof old_index === "object") {
+        old_index = this.indexOf(old_index);
+      }
+      if (new_index >= this._collection.length) {
+        var k = new_index - this._collection.length;
+        while ((k--) + 1) {
+          this._collection.push(undefined);
+        }
+      }
+      this._collection.splice(new_index, 0, this._collection.splice(old_index, 1)[0]);
     }
   },
 
@@ -447,7 +542,7 @@ Collection.prototype = Object.create(Object.prototype, {
    */
   sanitizeStringForPrimaryKey: {
     value: function(value) {
-      this.debug('sanitizeStringForPrimaryKey');
+      this.debug('sanitizeStringForPrimaryKey ' + value);
       if (!value) {
         return null;
       }
