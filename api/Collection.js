@@ -137,8 +137,15 @@ Collection.prototype = Object.create(Object.prototype, {
       }
     }
   },
+
   bug: {
     value: function(message) {
+      if (this.bugMessage) {
+        this.bugMessage += ";;; ";
+      } else {
+        this.bugMessage = "";
+      }
+      this.bugMessage = this.bugMessage + message;
       try {
         window.alert(message);
       } catch (e) {
@@ -164,6 +171,12 @@ Collection.prototype = Object.create(Object.prototype, {
   },
   warn: {
     value: function(message, message2, message3, message4) {
+      if (this.warnMessage) {
+        this.warnMessage += ";;; ";
+      } else {
+        this.warnMessage = "";
+      }
+      this.warnMessage = this.warnMessage + message;
       console.warn(this.type.toUpperCase() + ' WARN: ' + message);
       if (message2) {
         console.warn(message2);
@@ -303,8 +316,8 @@ Collection.prototype = Object.create(Object.prototype, {
         optionalInverted = this.inverted;
       }
 
-      if (value && this[searchingFor] && (value === this[searchingFor] || (this[searchingFor].equals && this[searchingFor].equals(value)))) {
-        this.warn("Not setting this, it already exists in the collection");
+      if (value && this[searchingFor] && (value === this[searchingFor] || (typeof this[searchingFor].equals === "function" && this[searchingFor].equals(value)))) {
+        this.warn("Not setting "+searchingFor+", it already the same in the collection");
         return this[searchingFor];
       }
 
@@ -372,9 +385,10 @@ Collection.prototype = Object.create(Object.prototype, {
         this.warn('This object is missing a value for the prmary key ' + this.primaryKey + '... it will be hard to find in the collection.', member);
         return;
       }
+      var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
       if (value !== member[this.primaryKey]) {
-        this.warn('using a sanitized the dot notation key of this object to be ' + value);
+        this.warn('The sanitized the dot notation key of this object is not the same as its primaryKey: ' + oldValue + " -> " + value);
       }
       return value;
     }
