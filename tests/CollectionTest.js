@@ -54,7 +54,7 @@ describe('lib/Collection', function() {
     expect(Collection).toBeDefined();
   });
 
-  describe('construction options', function() {
+  xdescribe('construction options', function() {
     var collection;
 
     beforeEach(function() {
@@ -108,7 +108,7 @@ describe('lib/Collection', function() {
 
   });
 
-  describe('acessing contents', function() {
+  xdescribe('acessing contents', function() {
     var collection;
 
     beforeEach(function() {
@@ -226,25 +226,25 @@ describe('lib/Collection', function() {
     beforeEach(function() {
       collection = new Collection({
         debugMode: true,
-        primaryKey: "validationStatus",
+        primaryKey: "name",
         collection: [, new FieldDBObject({
-          validationStatus: "one",
+          name: "one",
           difference: "lowercase"
         }), new FieldDBObject({
-          validationStatus: "one",
+          name: "one",
           difference: "lowercase"
         }), new FieldDBObject({
-          validationStatus: "_one_",
+          name: "_one_",
           difference: "underscores"
         }), new FieldDBObject({
-          validationStatus: "ONE",
+          name: "ONE",
           difference: "uppercase and after one"
         }), new FieldDBObject({
-          validationStatus: "two"
+          name: "two"
         }), new FieldDBObject({
-          validationStatus: "three"
+          name: "three"
         }), new FieldDBObject({
-          validationStatus: "four"
+          name: "four"
         })],
         capitalizeFirstCharacterOfPrimaryKeys: true
       });
@@ -255,8 +255,14 @@ describe('lib/Collection', function() {
     });
 
 
-    it('should work for strange collections', function() {
+    it('should work for collections with primary key clashes', function() {
       expect(collection).toBeDefined();
+      expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: one -> One");
+      expect(collection.warnMessage).toContain("Not setting One, it already the same in the collection");
+      expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: _one_ -> One");
+      expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: two -> Two");
+      expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: three -> Three");
+      expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: four -> Four");
       expect(collection.find("difference", "lowercase")[0].difference).toEqual("lowercase");
       expect(collection.find("difference", "underscores")[0].difference).toEqual("underscores");
       expect(collection.length).toBe(6);
@@ -270,32 +276,112 @@ describe('lib/Collection', function() {
       expect(item3).toBeDefined();
     });
 
-    xit('should give the index of a item', function() {
+    it('should give the index of a item', function() {
       expect(collection.indexOf).toBeDefined();
 
       expect(item).toBeDefined();
-      expect(collection.indexOf(item)).toBe(1);
+      expect(collection.indexOf(item)).toBe(2);
       expect(collection.collection[collection.indexOf(item)]).toBe(item);
-      expect(collection.indexOf(item2)).toBe(1);
+      expect(collection.indexOf(item2)).toBe(2);
       expect(collection.collection[collection.indexOf(item2)]).toBe(item2);
-      expect(collection.indexOf(item3)).toBe(2);
+      expect(collection.indexOf(item3)).toBe(4);
       expect(collection.collection[collection.indexOf(item3)]).toBe(item3);
     });
 
-    xit('should give the index of a simple object', function() {
-      expect(collection.indexOf(item.toJSON())).toBe(0);
+    it('should give the index of a simple object', function() {
+      expect(collection.indexOf(item.toJSON())).toBe(2);
+      expect(collection.indexOf(item.toJSON())).toBe(2);
+      expect(collection.collection[collection.indexOf(item.toJSON())]).toBe(item);
+      expect(collection.indexOf(item2.toJSON())).toBe(2);
+      expect(collection.collection[collection.indexOf(item2.toJSON())]).toBe(item2);
+      expect(collection.indexOf(item3.toJSON())).toBe(4);
+      expect(collection.collection[collection.indexOf(item3.toJSON())]).toBe(item3);
     });
 
     it('should give the index using only the primary key', function() {
-      expect(collection.indexOf).toBeDefined();
+      expect(collection.indexOf("one")).toBe(2);
+      expect(collection.indexOf("one")).toBe(2);
+      expect(collection.collection[collection.indexOf("one")]).toBe(item);
+      expect(collection.indexOf("two")).toBe(3);
+      expect(collection.indexOf("three")).toBe(4);
+      expect(collection.collection[collection.indexOf("three")]).toBe(item3);
     });
 
-    it('should be possible to reorder items', function() {
+    it('should be possible to reorder items by index', function() {
       expect(collection.reorder).toBeDefined();
+      expect(collection.collection[2].name).toBe("ONE");
+      expect(collection.collection[3].name).toBe("two");
+      expect(collection.collection[4].name).toBe("three");
+
+      collection.reorder(4, 2);
+
+      expect(collection.collection[0].name).toBe("one");
+      expect(collection.collection[1].name).toBe("_one_");
+      expect(collection.collection[2].name).toBe("three");
+      expect(collection.collection[3].name).toBe("ONE");
+      expect(collection.collection[4].name).toBe("two");
+      expect(collection.collection[5].name).toBe("four");
+
+    });
+
+    it('should be possible to reorder items using a bare object', function() {
+
+      expect(collection.collection[0].name).toBe("one");
+      expect(collection.collection[1].name).toBe("_one_");
+      expect(collection.collection[2].name).toBe("ONE");
+      expect(collection.collection[3].name).toBe("two");
+      expect(collection.collection[4].name).toBe("three");
+      expect(collection.collection[5].name).toBe("four");
+
+      collection.reorder(collection.collection[5].toJSON(), 0);
+
+      expect(collection.collection[0].name).toBe("four");
+      expect(collection.collection[1].name).toBe("one");
+      expect(collection.collection[2].name).toBe("_one_");
+      expect(collection.collection[3].name).toBe("ONE");
+      expect(collection.collection[4].name).toBe("two");
+      expect(collection.collection[5].name).toBe("three");
+
+    });
+
+    it('should be possible to reorder items using an object', function() {
+
+      expect(collection.collection[0].name).toBe("one");
+      expect(collection.collection[1].name).toBe("_one_");
+      expect(collection.collection[2].name).toBe("ONE");
+      expect(collection.collection[3].name).toBe("two");
+      expect(collection.collection[4].name).toBe("three");
+      expect(collection.collection[5].name).toBe("four");
+
+      collection.reorder(collection.collection[5], 0);
+
+      expect(collection.collection[0].name).toBe("four");
+      expect(collection.collection[1].name).toBe("one");
+      expect(collection.collection[2].name).toBe("_one_");
+      expect(collection.collection[3].name).toBe("ONE");
+      expect(collection.collection[4].name).toBe("two");
+      expect(collection.collection[5].name).toBe("three");
+
     });
 
     it('should be possible to remove an item', function() {
       expect(collection.remove).toBeDefined();
+
+      expect(collection.collection[0].name).toBe("one");
+      expect(collection.collection[1].name).toBe("_one_");
+      expect(collection.collection[2].name).toBe("ONE");
+      expect(collection.collection[3].name).toBe("two");
+      expect(collection.collection[4].name).toBe("three");
+      expect(collection.collection[5].name).toBe("four");
+
+      var removedOne = collection.remove("one");
+      expect(removedOne).toEqual(" ");
+      expect(removedOne.length).toEqual(" ");
+      expect(removedOne[0]).toEqual(" ");
+      expect(removedOne[1]).toEqual(" ");
+      expect(removedOne[2]).toEqual(" ");
+      expect(removedOne[3]).toEqual(" ");
+
     });
 
     it('should be possible to remove a simple object', function() {
@@ -309,7 +395,7 @@ describe('lib/Collection', function() {
   });
 
 
-  describe('non-lossy persistance', function() {
+  xdescribe('non-lossy persistance', function() {
     var collection,
       collectionToLoad = [{
         id: 'a',
@@ -364,7 +450,7 @@ describe('lib/Collection', function() {
 
   });
 
-  describe('confidentiality', function() {
+  xdescribe('confidentiality', function() {
     var collection;
 
     beforeEach(function() {
@@ -389,7 +475,7 @@ describe('lib/Collection', function() {
     });
   });
 
-  describe('merging', function() {
+  xdescribe('merging', function() {
     var aBaseCollection;
     var atriviallyDifferentCollection;
 
