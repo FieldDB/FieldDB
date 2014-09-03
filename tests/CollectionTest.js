@@ -136,6 +136,14 @@ describe('lib/Collection', function() {
       expect(collection.find('Checked*')).toEqual([useDefaults()[0]]);
     });
 
+    it('should be return an empty array if nothing was searched for', function() {
+      expect(collection.find('')).toEqual([]);
+    });
+
+    it('should be return an empty array if nothing was searched for', function() {
+      expect(collection.find({})).toEqual([]);
+    });
+
     it('should be able to find items by primary key using a regex', function() {
       collection.add({
         validationStatus: 'CheckedBySeberina',
@@ -225,7 +233,7 @@ describe('lib/Collection', function() {
 
     beforeEach(function() {
       collection = new Collection({
-        debugMode: true,
+        // debugMode: true,
         primaryKey: "name",
         collection: [, new FieldDBObject({
           name: "chicken",
@@ -242,16 +250,16 @@ describe('lib/Collection', function() {
         }), new FieldDBObject({
           name: "duck"
         }), new FieldDBObject({
-          name: "pidgeon"
+          name: "pigeon"
         }), new FieldDBObject({
           name: "turkey"
         })],
         capitalizeFirstCharacterOfPrimaryKeys: true
       });
-      collection.debugMode = true;
+      // collection.debugMode = true;
       item = collection.CHICKEN;
       item2 = collection.chicken;
-      item3 = collection.pidgeon;
+      item3 = collection.pigeon;
     });
 
 
@@ -261,7 +269,7 @@ describe('lib/Collection', function() {
       expect(collection.warnMessage).toContain("Not setting Chicken, it already the same in the collection");
       expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: _chicken_ -> Chicken");
       expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: duck -> Duck");
-      expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: pidgeon -> Pidgeon");
+      expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: pigeon -> Pigeon");
       expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: turkey -> Turkey");
       expect(collection.find("difference", "lowercase")[0].difference).toEqual("lowercase");
       expect(collection.find("difference", "underscores")[0].difference).toEqual("underscores");
@@ -303,21 +311,21 @@ describe('lib/Collection', function() {
       expect(collection.indexOf("chicken")).toBe(2);
       expect(collection.collection[collection.indexOf("chicken")]).toBe(item);
       expect(collection.indexOf("duck")).toBe(3);
-      expect(collection.indexOf("pidgeon")).toBe(4);
-      expect(collection.collection[collection.indexOf("pidgeon")]).toBe(item3);
+      expect(collection.indexOf("pigeon")).toBe(4);
+      expect(collection.collection[collection.indexOf("pigeon")]).toBe(item3);
     });
 
     it('should be possible to reorder items by index', function() {
       expect(collection.reorder).toBeDefined();
       expect(collection.collection[2].name).toBe("CHICKEN");
       expect(collection.collection[3].name).toBe("duck");
-      expect(collection.collection[4].name).toBe("pidgeon");
+      expect(collection.collection[4].name).toBe("pigeon");
 
       collection.reorder(4, 2);
 
       expect(collection.collection[0].name).toBe("chicken");
       expect(collection.collection[1].name).toBe("_chicken_");
-      expect(collection.collection[2].name).toBe("pidgeon");
+      expect(collection.collection[2].name).toBe("pigeon");
       expect(collection.collection[3].name).toBe("CHICKEN");
       expect(collection.collection[4].name).toBe("duck");
       expect(collection.collection[5].name).toBe("turkey");
@@ -330,7 +338,7 @@ describe('lib/Collection', function() {
       expect(collection.collection[1].name).toBe("_chicken_");
       expect(collection.collection[2].name).toBe("CHICKEN");
       expect(collection.collection[3].name).toBe("duck");
-      expect(collection.collection[4].name).toBe("pidgeon");
+      expect(collection.collection[4].name).toBe("pigeon");
       expect(collection.collection[5].name).toBe("turkey");
 
       collection.reorder(collection.collection[5].toJSON(), 0);
@@ -340,7 +348,7 @@ describe('lib/Collection', function() {
       expect(collection.collection[2].name).toBe("_chicken_");
       expect(collection.collection[3].name).toBe("CHICKEN");
       expect(collection.collection[4].name).toBe("duck");
-      expect(collection.collection[5].name).toBe("pidgeon");
+      expect(collection.collection[5].name).toBe("pigeon");
 
     });
 
@@ -350,7 +358,7 @@ describe('lib/Collection', function() {
       expect(collection.collection[1].name).toBe("_chicken_");
       expect(collection.collection[2].name).toBe("CHICKEN");
       expect(collection.collection[3].name).toBe("duck");
-      expect(collection.collection[4].name).toBe("pidgeon");
+      expect(collection.collection[4].name).toBe("pigeon");
       expect(collection.collection[5].name).toBe("turkey");
 
       collection.reorder(collection.collection[5], 0);
@@ -360,40 +368,131 @@ describe('lib/Collection', function() {
       expect(collection.collection[2].name).toBe("_chicken_");
       expect(collection.collection[3].name).toBe("CHICKEN");
       expect(collection.collection[4].name).toBe("duck");
-      expect(collection.collection[5].name).toBe("pidgeon");
+      expect(collection.collection[5].name).toBe("pigeon");
 
     });
 
-    it('should be possible to remove an item', function() {
-      var removedOne = collection.remove(collection.collection[1]);
-      expect(removedOne).toEqual();
+    xit('should be possible to remove an item', function() {
+      // collection.debugMode = true;
+      var chicken = collection.collection[1];
+      expect(chicken.name).toEqual("_chicken_");
+      expect(collection.length).toEqual(6);
+
+      var removedOne = collection.remove(chicken);
+      expect(collection.length).toEqual(5);
+      expect(removedOne).toEqual([chicken]);
+      expect(collection.removedCollection).toEqual([chicken]);
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
+      var uppercasechicken = collection.collection[1];
+      expect(uppercasechicken.name).toEqual("CHICKEN");
+      expect(collection.length).toEqual(5);
+
+      removedOne = collection.remove(uppercasechicken);
+      expect(collection.length).toEqual(4);
+      expect(removedOne).toEqual([uppercasechicken]);
+      expect(collection.removedCollection).toEqual([chicken, uppercasechicken]);
+
+      expect(collection.length).toEqual(4);
+      removedOne = collection.remove(chicken);
+      expect(collection.length).toEqual(4);
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
+
+      // expect(chicken).toEqual( ' ');
+      expect(collection.warnMessage).toContain("Didn't remove object(s) which were not in the collection.");
+      expect(removedOne).toEqual([]);
+      expect(collection.removedCollection).toEqual([chicken, uppercasechicken]);
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
+
+      collection.warnMessage = "";
+      expect(collection.warnMessage).not.toContain("Didn't remove object(s) which were not in the collection.");
+      expect(collection.remove({})).toEqual([]);
+      expect(collection.warnMessage).toContain("Didn't remove object(s) which were not in the collection.");
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
+
+      expect(collection.length).toEqual(4);
+      removedOne = collection.remove(collection.duck);
+      expect(collection.length).toEqual(3);
+      expect(removedOne.length).toEqual(1);
+      expect(removedOne[0].name).toEqual("duck");
+
     });
 
     it('should be possible to remove a simple object', function() {
-      expect(collection.remove).toBeDefined();
+      collection.debugMode = true;
+      var duck = collection.collection[3].toJSON();
+      expect(duck.type).toEqual("FieldDBObject");
+      expect(duck.name).toEqual("duck");
+      expect(collection.length).toEqual(6);
+
+      var removedOne = collection.remove(duck);
+      expect(collection.length).toEqual(5);
+      expect(removedOne.length).toEqual(1);
+      expect(collection.warnMessage).toContain("One of the requested removal items dont match what was removed");
+      expect(removedOne[0].name).toEqual(duck.name);
+      expect(removedOne[0].difference).toEqual(duck.difference);
+
+      var pigeon = collection.collection[3].toJSON();
+      collection.warnMessage = "";
+      expect(pigeon.name).toEqual("pigeon");
+      expect(collection.length).toEqual(5);
+      removedOne = collection.remove(pigeon);
+      expect(collection.length).toEqual(4);
+      expect(collection.warnMessage).toContain("One of the requested removal items dont match what was removed");
+
     });
 
-    xit('should be possible to remove a primary key', function() {
+    it('should be possible to remove objects matching a regular expression', function() {
+      var removedAFew = collection.remove({
+        name: /.*chicken.*/i
+      });
+      expect(removedAFew.length).toEqual(3);
+      expect(removedAFew[0].name).toEqual("CHICKEN");
+      expect(removedAFew[1].name).toEqual("_chicken_");
+      expect(removedAFew[2].name).toEqual("chicken");
+
+      expect(collection.length).toEqual(3);
+      expect(collection.collection[0].name).toEqual("duck");
+      expect(collection.collection[1].name).toEqual("pigeon");
+      expect(collection.collection[2].name).toEqual("turkey");
+    });
+
+
+    it('should be possible to remove a primary key', function() {
       expect(collection.remove).toBeDefined();
 
       expect(collection.collection[0].name).toBe("chicken");
       expect(collection.collection[1].name).toBe("_chicken_");
       expect(collection.collection[2].name).toBe("CHICKEN");
-      expect(collection.collection[3].name).toBe("two");
-      expect(collection.collection[4].name).toBe("pidgeon");
+      expect(collection.collection[3].name).toBe("duck");
+      expect(collection.collection[4].name).toBe("pigeon");
       expect(collection.collection[5].name).toBe("turkey");
 
       var removedOne = collection.remove("chicken");
-      expect(removedOne).toEqual(" ");
-      expect(removedOne.length).toEqual(" ");
-      expect(removedOne[0]).toEqual(" ");
-      expect(removedOne[1]).toEqual(" ");
-      expect(removedOne[2]).toEqual(" ");
-      expect(removedOne[3]).toEqual(" ");
+      expect(removedOne.length).toEqual(2);
+      expect(removedOne[0].name).toEqual("CHICKEN");
+      expect(removedOne[1].name).toEqual("chicken");
+
+      removedOne = collection.remove("duck");
+      expect(removedOne.length).toEqual(1);
+      expect(removedOne[0].name).toEqual("duck");
+      expect(collection.duck).toBeUndefined();
     });
 
-    it('should be possible to remove items', function() {});
+    it('should be possible to remove multiple primary keys', function() {
+      var removedOne = collection.remove(["duck", "pigeon"]);
+      expect(removedOne.length).toEqual(2);
+      expect(removedOne[0].name).toEqual("pigeon");
+      expect(removedOne[1].name).toEqual("duck");
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
+    });
 
+    it('should be possible to remove multiple items', function() {
+      var removedOne = collection.remove([collection.duck, collection.pigeon]);
+      expect(removedOne.length).toEqual(2);
+      expect(removedOne[0].name).toEqual("pigeon");
+      expect(removedOne[1].name).toEqual("duck");
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
+    });
   });
 
 
@@ -611,7 +710,7 @@ describe('lib/Collection', function() {
       expect(aBaseCollection.conflictingcontents.conflicting).toEqual('in first collection');
       expect(aBaseCollection._collection.length).toEqual(8);
       expect(aBaseCollection._collection.map(function(item) {
-        return item.id
+        return item.id;
       })).toEqual(['one', 'two', 'three', 'four', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents', 'onlyinNew']);
       expect(aBaseCollection.conflictingcontents.confirmMessage).toEqual('I found a conflict for conflicting, Do you want to overwrite it from "in first collection" -> "in second collection"');
       expect(aBaseCollection.three.externalObject.confirmMessage).toContain('I found a conflict for internalString, Do you want to overwrite it from "internal" -> "internal is different"');

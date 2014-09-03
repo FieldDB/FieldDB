@@ -257,17 +257,34 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || 'id';
-      this.debug('searchingFor', searchingFor);
+      this.debug('find is searchingFor', searchingFor);
+      if (!searchingFor) {
+        return results;
+      }
+
+      if (Object.prototype.toString.call(searchingFor) === '[object Array]') {
+        this.bug("User is using find on an array... ths is best re-coded to use search or something else.", searchingFor);
+        this.todo("User is using find on an array... ths is best re-coded to use search or something else. Instead running find only on the first item in the array.");
+        searchingFor = searchingFor[0];
+      }
 
       if (typeof searchingFor === "object" && !(searchingFor instanceof RegExp)) {
+        // this.debug('find is searchingFor an object', searchingFor);
+        if (Object.keys(searchingFor).length === 0) {
+          return results;
+        }
+
         var key = searchingFor[this.primaryKey];
         if (!key && this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && typeof this.INTERNAL_MODELS.item === "function" && !(searchingFor instanceof this.INTERNAL_MODELS.item)) {
           searchingFor = new this.INTERNAL_MODELS.item(searchingFor);
         } else if (!key && !(searchingFor instanceof FieldDBObject)) {
           searchingFor = new FieldDBObject(searchingFor);
-          key = searchingFor[this.primaryKey];
+        } else {
+          this.bug("This searchingFor is a object, and has no key. this is a problem. ", searchingFor);
         }
+        key = searchingFor[this.primaryKey];
         searchingFor = key;
+        // this.debug('find is searchingFor an object whose key is ', searchingFor);
       }
 
       if (this[searchingFor]) {
@@ -278,9 +295,10 @@ Collection.prototype = Object.create(Object.prototype, {
         sanitzedSearchingFor = new RegExp('.*' + this.sanitizeStringForPrimaryKey(searchingFor) + '.*', 'i');
         this.debug('fuzzy ', searchingFor, sanitzedSearchingFor);
       }
+      console.log("searching for somethign with indexOf", searchingFor);
       if (!searchingFor || !searchingFor.test || typeof searchingFor.test !== 'function') {
         /* if not a regex, the excape it */
-        if (searchingFor && searchingFor.indexOf('/') !== 0) {
+        if (searchingFor && searchingFor.indexOf && searchingFor.indexOf('/') !== 0) {
           searchingFor = regExpEscape(searchingFor);
         }
         searchingFor = new RegExp('^' + searchingFor + '$');
@@ -421,43 +439,83 @@ Collection.prototype = Object.create(Object.prototype, {
   },
 
   remove: {
-    value: function(searchingFor, optionalKeyToIdentifyItem) {
-      this.debug("optionalKeyToIdentifyItem" + optionalKeyToIdentifyItem);
-      var removed = this.removedCollection || [],
+    value: function(requestedRemoveFor, optionalKeyToIdentifyItem) {
+      if (optionalKeyToIdentifyItem) {
+        this.todo("remove optionalKeyToIdentifyItem " + optionalKeyToIdentifyItem);
+      }
+      var removed = [],
         itemIndex,
         key,
-        keysToRemove = [];
+        searchingFor = [],
+        self = this;
 
+      if (Object.prototype.toString.call(requestedRemoveFor) !== '[object Array]') {
+        requestedRemoveFor = [requestedRemoveFor];
+      }
       // Look for the real item(s) in the collection
-      searchingFor = this.find(searchingFor);
+      requestedRemoveFor.map(function(requestedRemoveItem) {
+        searchingFor = searchingFor.concat(self.find(requestedRemoveItem));
+      });
 
-      if (Object.prototype.toString.call(searchingFor) !== '[object Array]') {
-        searchingFor = [searchingFor];
+      this.debug("requested remove of ", searchingFor);
+      if (searchingFor.length === 0) {
+        this.warn("Didn't remove object(s) which were not in the collection.", searchingFor);
+        return removed;
       }
-      // For every item, delete the dot reference to it
+      /*
+       * For every item, delete the dot reference to it
+       */
       for (itemIndex = 0; itemIndex < searchingFor.length; itemIndex++) {
-        key = searchingFor[itemIndex][this.primaryKey];
-        keysToRemove.push(key);
+        if (!searchingFor[itemIndex] || searchingFor[itemIndex] === {}) {
+          this.debug("skipping ", searchingFor[itemIndex]);
+          continue;
+        }
+        key = this.getSanitizedDotNotationKey(searchingFor[itemIndex]);
+        if (!key) {
+          this.warn("This item had no primary key, it will only be removed from the collection. ", searchingFor[itemIndex]);
+        }
 
-        removed.push(this[key]);
-        delete this[key];
+        if (this[key]) {
+          this.debug("removed dot notation for ", key);
+          delete this[key];
+        }
 
-        removed.push(this[key.toLowerCase().replace(/_/g, '')]);
-        delete this[key.toLowerCase().replace(/_/g, '')];
+        if (this[key.toLowerCase().replace(/_/g, '')]) {
+          this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ''));
+          delete this[key.toLowerCase().replace(/_/g, '')];
+        }
+
       }
 
-      // For every item in the collection, if it matches, remove it from the collection
-      this.debug(keysToRemove);
+      /*
+       * For every item in the collection, if it matches, remove it from the collection
+       */
       for (itemIndex = this.collection.length - 1; itemIndex >= 0; itemIndex--) {
-        if (keysToRemove.indexOf(this.collection[itemIndex][this.primaryKey]) > -1) {
-          this.collection.splice(itemIndex, 1);
-          // itemIndex = itemIndex - 1;
+        if (searchingFor.indexOf(this.collection[itemIndex]) > -1 && removed.indexOf(this.collection[itemIndex]) === -1) {
+          var thisremoved = this.collection.splice(itemIndex, 1);
+          removed = removed.concat(thisremoved);
+          // Find out if each removed item was requested
+          for (var removedIndex = 0; removedIndex < thisremoved.length; removedIndex++) {
+            if (typeof requestedRemoveFor[0] === "object" && typeof thisremoved[removedIndex].equals === "function") {
+              var itMatches = false;
+              for (var requestedIndex = 0; requestedIndex < requestedRemoveFor.length; requestedIndex++) {
+                if (thisremoved[removedIndex].equals(requestedRemoveFor[requestedIndex])) {
+                  itMatches = true;
+                }
+              }
+              if (!itMatches) {
+                this.warn("One of the requested removal items dont match what was removed ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
+              }
+            }
+          }
         }
       }
+
       if (removed.length === 0) {
-        this.warn("Cant remove object that wasnt part of the collection.", searchingFor);
+        this.warn("Didn't remove object(s) which were not in the collection.", searchingFor);
       }
-      this.removedCollection = removed;
+      this.removedCollection = this.removedCollection || [];
+      this.removedCollection = this.removedCollection.concat(removed);
       return removed;
     }
   },
