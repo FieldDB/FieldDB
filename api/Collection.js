@@ -317,7 +317,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       if (value && this[searchingFor] && (value === this[searchingFor] || (typeof this[searchingFor].equals === "function" && this[searchingFor].equals(value)))) {
-        this.warn("Not setting "+searchingFor+", it already the same in the collection");
+        this.warn("Not setting " + searchingFor + ", it already the same in the collection");
         return this[searchingFor];
       }
 
@@ -422,6 +422,7 @@ Collection.prototype = Object.create(Object.prototype, {
 
   remove: {
     value: function(searchingFor, optionalKeyToIdentifyItem) {
+      this.debug("optionalKeyToIdentifyItem" + optionalKeyToIdentifyItem);
       var removed = this.removedCollection || [],
         itemIndex,
         key,
@@ -434,7 +435,7 @@ Collection.prototype = Object.create(Object.prototype, {
         searchingFor = [searchingFor];
       }
       // For every item, delete the dot reference to it
-      for (var itemIndex = 0; itemIndex < searchingFor.length; itemIndex++) {
+      for (itemIndex = 0; itemIndex < searchingFor.length; itemIndex++) {
         key = searchingFor[itemIndex][this.primaryKey];
         keysToRemove.push(key);
 
