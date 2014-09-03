@@ -693,7 +693,13 @@ Collection.prototype = Object.create(Object.prototype, {
         if (!resultItem && typeof anItem.constructor === "function") {
           var json = anItem.toJSON ? anItem.toJSON() : anItem;
           resultItem = new anItem.constructor(json);
-          resultCollection.add(resultItem);
+          var existingInCollection = resultCollection.find(resultItem);
+          if (existingInCollection.length === 0) {
+            resultCollection.add(resultItem);
+          } else {
+            resultItem = existingInCollection[0];
+            self.debug("resultItem was already in the resultCollection  ", existingInCollection, resultItem);
+          }
         }
 
         if (anItem !== aCollection[idToMatch]) {
@@ -764,7 +770,14 @@ Collection.prototype = Object.create(Object.prototype, {
 
         if (anItem === undefined) {
           self.debug(idToMatch + " was missing in target, adding it");
-          resultCollection.add(anotherItem);
+          var existingInCollection = resultCollection.find(anotherItem);
+          if (existingInCollection.length === 0) {
+            resultCollection.add(anotherItem);
+          } else {
+            resultItem = existingInCollection[0];
+            self.debug("anotherItem was already in the resultCollection ", existingInCollection, anotherItem);
+          }
+
         } else if (anotherItem === undefined) {
           // no op, the new one isn't set
           self.debug(idToMatch + " was oddly undefined");
@@ -785,6 +798,7 @@ Collection.prototype = Object.create(Object.prototype, {
       return resultCollection;
     }
   },
+
   encrypted: {
     get: function() {
       return;

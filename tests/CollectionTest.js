@@ -54,7 +54,7 @@ describe('lib/Collection', function() {
     expect(Collection).toBeDefined();
   });
 
-  xdescribe('construction options', function() {
+  describe('construction options', function() {
     var collection;
 
     beforeEach(function() {
@@ -108,7 +108,7 @@ describe('lib/Collection', function() {
 
   });
 
-  xdescribe('acessing contents', function() {
+  describe('acessing contents', function() {
     var collection;
 
     beforeEach(function() {
@@ -496,7 +496,7 @@ describe('lib/Collection', function() {
   });
 
 
-  xdescribe('non-lossy persistance', function() {
+  describe('non-lossy persistance', function() {
     var collection,
       collectionToLoad = [{
         id: 'a',
@@ -551,7 +551,7 @@ describe('lib/Collection', function() {
 
   });
 
-  xdescribe('confidentiality', function() {
+  describe('confidentiality', function() {
     var collection;
 
     beforeEach(function() {
@@ -576,18 +576,18 @@ describe('lib/Collection', function() {
     });
   });
 
-  xdescribe('merging', function() {
+  describe('merging', function() {
     var aBaseCollection;
     var atriviallyDifferentCollection;
 
     beforeEach(function() {
       aBaseCollection = new Collection([new FieldDBObject({
-          id: "one",
+          id: "penguin",
           missingInNew: "hi"
         }), new FieldDBObject({
-          id: "two"
+          id: "cuckoo"
         }), new FieldDBObject({
-          id: "three",
+          id: "robin",
           externalObject: new FieldDBObject({
             internalString: "internal",
             internalTrue: true,
@@ -598,7 +598,7 @@ describe('lib/Collection', function() {
             // debugMode: true
           })
         }), new FieldDBObject({
-          id: "four"
+          id: "cardinal"
         }), {
           id: "onlyinTarget"
         }, {
@@ -612,16 +612,16 @@ describe('lib/Collection', function() {
       ]);
 
       atriviallyDifferentCollection = new Collection([new FieldDBObject({
-          id: "one"
+          id: "penguin"
         }), new FieldDBObject({
-          id: "two",
+          id: "cuckoo",
           missingInOriginal: "hi there"
         }), {
           id: "willBeOverwritten",
           missingInOriginal: "this isnt a FieldDBObject so it will be fully overwritten."
         },
         new FieldDBObject({
-          id: "three",
+          id: "robin",
           externalObject: new FieldDBObject({
             internalString: "internal is different",
             internalTrue: true,
@@ -631,7 +631,7 @@ describe('lib/Collection', function() {
             internalEqualString: "i'm a old property",
             // debugMode: true
           })
-        }), aBaseCollection.four, {
+        }), aBaseCollection.cardinal, {
           id: "onlyinNew"
         },
         new FieldDBObject({
@@ -644,27 +644,40 @@ describe('lib/Collection', function() {
 
     it('should be able to merge items in collections using their primary key', function() {
       expect(aBaseCollection.type).toEqual("Collection");
-      expect(aBaseCollection.three.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.robin.type).toEqual("FieldDBObject");
       expect(aBaseCollection.onlyintarget).toBeDefined();
+      expect(aBaseCollection._collection.length).toEqual(7);
+      expect(aBaseCollection._collection.map(function(item) {
+        return item.id
+      })).toEqual(['penguin', 'cuckoo', 'robin', 'cardinal', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents']);
 
       expect(atriviallyDifferentCollection.type).toEqual("Collection");
-      expect(atriviallyDifferentCollection.three.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection.robin.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection._collection.length).toEqual(7);
+      expect(atriviallyDifferentCollection._collection.map(function(item) {
+        return item.id
+      })).toEqual(['penguin', 'cuckoo', 'willBeOverwritten', 'robin', 'cardinal', 'onlyinNew', 'conflictingContents']);
 
+      aBaseCollection.debugMode = true;
       var result = aBaseCollection.merge("self", atriviallyDifferentCollection, "overwrite");
       expect(result).toBe(aBaseCollection);
-      expect(aBaseCollection).toEqual(aBaseCollection);
+      // expect(aBaseCollection).toEqual(aBaseCollection);
+      expect(aBaseCollection._collection.length).toEqual(8);
+      expect(aBaseCollection._collection.map(function(item) {
+        return item.id
+      })).toEqual(['penguin', 'cuckoo', 'robin', 'cardinal', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents', 'onlyinNew']);
 
-      expect(aBaseCollection.one.missingInNew).toEqual("hi");
-      expect(aBaseCollection.two.missingInOriginal).toEqual("hi there");
+      expect(aBaseCollection.penguin.missingInNew).toEqual("hi");
+      expect(aBaseCollection.cuckoo.missingInOriginal).toEqual("hi there");
       expect(aBaseCollection.conflictingcontents.conflicting).toEqual("in second collection");
-      expect(aBaseCollection.three.externalObject.internalString).toEqual("internal is different");
-      expect(aBaseCollection.three.externalObject.internalTrue).toEqual(true);
-      expect(aBaseCollection.three.externalObject.internalEmptyString).toEqual("");
-      expect(aBaseCollection.three.externalObject.internalFalse).toEqual(false);
-      expect(aBaseCollection.three.externalObject.internalNumber).toEqual(2);
-      expect(aBaseCollection.three.externalObject.internalEqualString).toEqual("i'm a old property");
+      expect(aBaseCollection.robin.externalObject.internalString).toEqual("internal is different");
+      expect(aBaseCollection.robin.externalObject.internalTrue).toEqual(true);
+      expect(aBaseCollection.robin.externalObject.internalEmptyString).toEqual("");
+      expect(aBaseCollection.robin.externalObject.internalFalse).toEqual(false);
+      expect(aBaseCollection.robin.externalObject.internalNumber).toEqual(2);
+      expect(aBaseCollection.robin.externalObject.internalEqualString).toEqual("i'm a old property");
 
-      expect(aBaseCollection.four).toBeDefined();
+      expect(aBaseCollection.cardinal).toBeDefined();
 
       expect(aBaseCollection.onlyintarget).toBeDefined();
       expect(aBaseCollection.onlyinnew).toBeDefined();
@@ -673,47 +686,53 @@ describe('lib/Collection', function() {
 
     it('should be able to merge two collections in into a third collection', function() {
       expect(aBaseCollection.type).toEqual("Collection");
-      expect(aBaseCollection.three.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.robin.type).toEqual("FieldDBObject");
       expect(aBaseCollection.onlyintarget).toBeDefined();
+      expect(aBaseCollection._collection.length).toEqual(7);
 
       expect(atriviallyDifferentCollection.type).toEqual("Collection");
-      expect(atriviallyDifferentCollection.three.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection.robin.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection._collection.length).toEqual(7);
 
       var aThirdCollection = new Collection();
       var result = aThirdCollection.merge(aBaseCollection, atriviallyDifferentCollection, "overwrite");
       expect(result).toBe(aThirdCollection);
+      expect(aThirdCollection._collection.length).toEqual(8);
+      expect(aBaseCollection._collection.length).toEqual(7);
+      expect(atriviallyDifferentCollection._collection.length).toEqual(7);
+
       expect(aThirdCollection).not.toEqual(aBaseCollection);
       expect(aThirdCollection).not.toEqual(atriviallyDifferentCollection);
 
-      expect(aThirdCollection.one.missingInNew).toEqual("hi");
-      expect(aThirdCollection.two.missingInOriginal).toEqual("hi there");
-      expect(aThirdCollection.three.externalObject.internalString).toEqual("internal is different");
-      expect(aThirdCollection.three.externalObject.internalTrue).toEqual(true);
-      expect(aThirdCollection.three.externalObject.internalEmptyString).toEqual("");
-      expect(aThirdCollection.three.externalObject.internalFalse).toEqual(false);
-      expect(aThirdCollection.three.externalObject.internalNumber).toEqual(2);
-      expect(aThirdCollection.three.externalObject.internalEqualString).toEqual("i'm a old property");
+      expect(aThirdCollection.penguin.missingInNew).toEqual("hi");
+      expect(aThirdCollection.cuckoo.missingInOriginal).toEqual("hi there");
+      expect(aThirdCollection.robin.externalObject.internalString).toEqual("internal is different");
+      expect(aThirdCollection.robin.externalObject.internalTrue).toEqual(true);
+      expect(aThirdCollection.robin.externalObject.internalEmptyString).toEqual("");
+      expect(aThirdCollection.robin.externalObject.internalFalse).toEqual(false);
+      expect(aThirdCollection.robin.externalObject.internalNumber).toEqual(2);
+      expect(aThirdCollection.robin.externalObject.internalEqualString).toEqual("i'm a old property");
 
-      expect(aThirdCollection.four).toBeDefined();
+      expect(aThirdCollection.cardinal).toBeDefined();
 
       expect(aThirdCollection.onlyintarget).toBeDefined();
       expect(aThirdCollection.onlyinnew).toBeDefined();
       expect(aThirdCollection.willbeoverwritten).toBeDefined();
     });
 
-    it('should be able to merge two collections into a third collection', function() {
+    it('should be able to request confirmation for merging two collections into a third collection', function() {
       var result = aBaseCollection.merge("self", atriviallyDifferentCollection);
       expect(result).toBeDefined();
       expect(result).toBe(aBaseCollection);
+      expect(aBaseCollection._collection.length).toEqual(8);
       expect(aBaseCollection.confirmMessage).toContain('I found a conflict for willbeoverwritten, Do you want to overwrite it from {"id":"willBeOverwritten","missingInNew":"this isnt a FieldDBObject so it will be undefined after merge."} -> {"id":"willBeOverwritten","missingInOriginal":"this isnt a FieldDBObject so it will be fully overwritten."}');
       expect(aBaseCollection.conflictingcontents).toEqual(aBaseCollection._collection[6]);
       expect(aBaseCollection.conflictingcontents.conflicting).toEqual('in first collection');
-      expect(aBaseCollection._collection.length).toEqual(8);
       expect(aBaseCollection._collection.map(function(item) {
         return item.id;
-      })).toEqual(['one', 'two', 'three', 'four', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents', 'onlyinNew']);
-      expect(aBaseCollection.conflictingcontents.confirmMessage).toEqual('I found a conflict for conflicting, Do you want to overwrite it from "in first collection" -> "in second collection"');
-      expect(aBaseCollection.three.externalObject.confirmMessage).toContain('I found a conflict for internalString, Do you want to overwrite it from "internal" -> "internal is different"');
+      })).toEqual(['penguin', 'cuckoo', 'robin', 'cardinal', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents', 'onlyinNew']);
+      expect(aBaseCollection.conflictingcontents.confirmMessage).toContain('I found a conflict for conflicting, Do you want to overwrite it from "in first collection" -> "in second collection"');
+      expect(aBaseCollection.robin.externalObject.confirmMessage).toContain('I found a conflict for internalString, Do you want to overwrite it from "internal" -> "internal is different"');
     });
   });
 });
