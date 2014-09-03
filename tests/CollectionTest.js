@@ -648,14 +648,14 @@ describe('lib/Collection', function() {
       expect(aBaseCollection.onlyintarget).toBeDefined();
       expect(aBaseCollection._collection.length).toEqual(7);
       expect(aBaseCollection._collection.map(function(item) {
-        return item.id
+        return item.id;
       })).toEqual(['penguin', 'cuckoo', 'robin', 'cardinal', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents']);
 
       expect(atriviallyDifferentCollection.type).toEqual("Collection");
       expect(atriviallyDifferentCollection.robin.type).toEqual("FieldDBObject");
       expect(atriviallyDifferentCollection._collection.length).toEqual(7);
       expect(atriviallyDifferentCollection._collection.map(function(item) {
-        return item.id
+        return item.id;
       })).toEqual(['penguin', 'cuckoo', 'willBeOverwritten', 'robin', 'cardinal', 'onlyinNew', 'conflictingContents']);
 
       aBaseCollection.debugMode = true;
@@ -664,7 +664,7 @@ describe('lib/Collection', function() {
       // expect(aBaseCollection).toEqual(aBaseCollection);
       expect(aBaseCollection._collection.length).toEqual(8);
       expect(aBaseCollection._collection.map(function(item) {
-        return item.id
+        return item.id;
       })).toEqual(['penguin', 'cuckoo', 'robin', 'cardinal', 'onlyinTarget', 'willBeOverwritten', 'conflictingContents', 'onlyinNew']);
 
       expect(aBaseCollection.penguin.missingInNew).toEqual("hi");
