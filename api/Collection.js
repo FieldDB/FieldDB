@@ -279,7 +279,7 @@ Collection.prototype = Object.create(Object.prototype, {
           searchingFor = new this.INTERNAL_MODELS.item(searchingFor);
         } else if (!key && !(searchingFor instanceof FieldDBObject)) {
           searchingFor = new FieldDBObject(searchingFor);
-        } else {
+        } else if (!key) {
           this.bug("This searchingFor is a object, and has no key. this is a problem. ", searchingFor);
         }
         key = searchingFor[this.primaryKey];
@@ -295,7 +295,7 @@ Collection.prototype = Object.create(Object.prototype, {
         sanitzedSearchingFor = new RegExp('.*' + this.sanitizeStringForPrimaryKey(searchingFor) + '.*', 'i');
         this.debug('fuzzy ', searchingFor, sanitzedSearchingFor);
       }
-      console.log("searching for somethign with indexOf", searchingFor);
+      // this.debug("searching for somethign with indexOf", searchingFor);
       if (!searchingFor || !searchingFor.test || typeof searchingFor.test !== 'function') {
         /* if not a regex, the excape it */
         if (searchingFor && searchingFor.indexOf && searchingFor.indexOf('/') !== 0) {
