@@ -12,11 +12,11 @@ Instructions:
   <li ng-repeat="context in datalist.instructions">{{context}}</li>
 </ul>
 Reinforcement Cartoon:
-<ul>
-  <li>{{datalist.reinforcementAnimation.firstImageSrc}}</li>
-  <li ng-repeat="image in datalist.reinforcementAnimation.animationImages">{{image.incompleteImageFile}}</li>
-  <li>{{datalist.reinforcementAnimation.lastImageSrc}}</li>
-</ul>
+<div>
+  <img title="Before Start" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.firstImageSrc}}"/>
+  <img title="N. {{$index + 1}}"  class="gravatar-medium" ng-repeat="image in datalist.reinforcementAnimation.animationImages" ng-src="{{image.incompleteImageFile}}"/>
+  <img title="After Last" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.lastImageSrc}}"/>
+</div>
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" ui-on-Drop="onDrop($event, $data, datalist.docs._collection)">
   <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop stimuli to re-order them</div>
   <div class="well" ng-class="{'col-md-12': datalist.showDocCheckboxes}" ng-repeat="item in datalist.docs._collection track by $index">
