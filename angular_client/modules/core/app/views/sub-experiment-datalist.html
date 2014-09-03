@@ -35,6 +35,7 @@ Reinforcement Cartoon:
         on-drop-success="dropSuccessHandler($event, $index, datalist.docs._collection)">
         N. {{$index +1}}
       </span>
+      <span ng-click="removeItemFromList(item)"><i class="fa fa-times-circle"></i></span>
     </div>
     <div  ng-class="{'col-md-10': datalist.showDocCheckboxes}" data-fielddb-datum json="item" corpus="corpus">
     </div>
