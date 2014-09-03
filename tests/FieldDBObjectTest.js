@@ -398,5 +398,5 @@ describe("FieldDBObject", function() {
       expect(item1.equals(item2)).toBe(false);
 
     });
-  })
+  });
 });
