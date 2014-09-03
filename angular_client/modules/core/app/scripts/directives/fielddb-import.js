@@ -28,14 +28,14 @@ angular.module('fielddbAngularApp').directive('fielddbImport', function() {
     };
 
     $scope.dropSuccessHandler = function(participantFieldLabel){
-      $scope.importer.debug("dropSuccessHandler", participantFieldLabel);
-      $scope.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
-      $scope.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
+      $scope.importer.debug('dropSuccessHandler', participantFieldLabel);
+      $scope.importer.todo('change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield');
+      $scope.importer.todo('Use this dropSuccessHandler function for creating an acivity?');
     };
     $scope.onDropRecieved = function(data, extractedHeader, headerCellIndex){
-      $scope.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
+      $scope.importer.debug('onDropRecieved', data, extractedHeader, headerCellIndex);
       extractedHeader[headerCellIndex] = data;
-      $scope.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
+      $scope.importer.todo('change Import.js to use fields for the extractedHeader cells instead of just labels.');
     };
 
     $scope.onFileSelect = function($files) {
