@@ -1,3 +1,42 @@
 <div class="row">
-  <img ng-repeat="image in datum.images._collection" ng-src="{{image.URL}}" title="{{image.caption}}"/>
+
+  <a class="datum_id" name="{{datum._id}}"></a>
+
+  <!-- list for the fields -->
+  <dl class="col-md-6 datum_fields_ul">
+    <dt>Orthography: </dt>
+    <dd title="datum.datumFields.orthography.help" contenteditable ng-model="datum.datumFields.orthography.value"></dd>
+    <dt>International Phonetic Alphabet:</dt>
+    <dd title="datum.datumFields.utterance.help" contenteditable ng-model="datum.datumFields.utterance.value"></dd>
+    <dt>Tags: </dt>
+    <dd title="datum.datumFields.tags.help" contenteditable ng-model="datum.datumFields.tags.value"></dd>
+  </dl>
+
+  <div class="col-md-6 images-area">
+    <p ng-repeat="image in datum.images._collection">
+      <img class="gravatar-large" ng-src="{{image.URL}}" title="{{image.caption}}"/>
+      <br/>
+      {{image.caption}}
+    </p>
+
+    <div class="audio_video_ul">
+      <p ng-repeat="audioVideo in datum.audioVideo._collection">
+        <audio title="{{audioVideo.description}} {{audioVideo.startTime}} - {{audioVideo.endTime}}" preload controls>
+          <source ng-src="{{audioVideo.URL}}" type="{{audioVideo.audioType}}"/>
+        </audio>
+      </p>
+    </div>
+  </div>
+
+  <div  class="col-md-6">
+    <ul class="comments unstyled" >
+      <li ng-repeat="comment in datum.comments">comment.text</li>
+    </ul>
+
+    <div class="extra-datum-info-which-can-be-hidden">
+      <i class="fa fa-save "></i> <span class="last-modified" title="{{datum.dateModified | fielddbPrettyDate}}">{{datum.dateModified | fielddbAgoDate}}</span><br/>
+      <i class="fa fa-time "></i> <span class="date-created" title="{{datum.dateEntered | fielddbPrettyDate}}">{{datum.dateEntered | fielddbPrettyDate}}</span><br/>
+    </div>
+  </div>
+
 </div>
