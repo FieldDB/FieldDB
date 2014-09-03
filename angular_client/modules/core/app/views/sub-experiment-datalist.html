@@ -17,18 +17,24 @@ Reinforcement Cartoon:
   <img title="N. {{$index + 1}}"  class="gravatar-medium" ng-repeat="image in datalist.reinforcementAnimation.animationImages" ng-src="{{image.incompleteImageFile}}"/>
   <img title="After Last" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.lastImageSrc}}"/>
 </div>
-<div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" ui-on-Drop="onDrop($event, $data, datalist.docs._collection)">
+<div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
   <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop stimuli to re-order them</div>
-  <div class="well" ng-class="{'col-md-12': datalist.showDocCheckboxes}" ng-repeat="item in datalist.docs._collection track by $index">
+  <div class="well"
+  ng-class="{'col-md-12': datalist.showDocCheckboxes}"
+  ng-repeat="item in datalist.docs._collection track by $index"
+  drag-hover-class="drop-zone-instructions-can-reorder-here"
+  ui-on-Drop="onDrop($event, $data, $index, datalist.docs._collection)">
     <div ng-class="{'col-md-1': datalist.showDocCheckboxes || datalist.showDocPosition}">
       <span><input type="checkbox" ng-show="datalist.showDocCheckboxes"/></span>
       <span
-      class="badge badge-info"
-      ng-show="datalist.showDocPosition"
-      title="Position in list"
-      ui-draggable="datalist.docsAreReorderable"
-      drag="item"
-      on-drop-success="dropSuccessHandler($event, $index, datalist.docs._collection)">N. {{$index +1}}</span>
+        class="badge badge-info"
+        ng-show="datalist.showDocPosition"
+        title="Position in list"
+        ui-draggable="true"
+        drag="item"
+        on-drop-success="dropSuccessHandler($event, $index, datalist.docs._collection)">
+        N. {{$index +1}}
+      </span>
     </div>
     <div  ng-class="{'col-md-10': datalist.showDocCheckboxes}" data-fielddb-datum json="item" corpus="corpus">
     </div>
