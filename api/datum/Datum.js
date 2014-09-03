@@ -1,7 +1,7 @@
 /* globals window, $, _ , OPrime*/
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 var AudioVideos = require('./../audio_video/AudioVideos').AudioVideos;
-var Comments = require('./../Collection').Collection;
+var Comments = require('./../comment/Comments').Comments;
 var Datums = require('./../Collection').Collection;
 var DatumField = require('./DatumField').DatumField;
 var DatumFields = require('./DatumFields').DatumFields;

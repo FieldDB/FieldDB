@@ -684,6 +684,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!value) {
         delete this._comments;
         return;
+      } else {
+        if (typeof this.INTERNAL_MODELS['comments'] === "function" && Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['comments'](value);
+        }
       }
       this._comments = value;
     }

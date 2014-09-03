@@ -1,7 +1,7 @@
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Collection = require("./../Collection").Collection;
-var Comments = require("./../Collection").Collection;
+var Comments = require("./../comment/Comments").Comments;
 var Q = require("q");
 
 /**
