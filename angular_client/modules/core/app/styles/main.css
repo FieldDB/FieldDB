@@ -161,19 +161,12 @@
   margin-left: 5px;
   margin-right: 5px;
   vertical-align: top;
-  /*necessary for when utteranceArray/morphemeArray/glossArray have different lengths*/
+  /* necessary for when utteranceArray/morphemeArray/glossArray have different lengths */
 }
 
-.export-large-textarea {
+.fielddb-large-textarea {
   width: 100%;
   height: 15em;
-}
-/* Prevent the text contents of draggable elements from being selectable. */
-[draggable] {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .halfopacity {
@@ -185,24 +178,28 @@
   border-color: #1E90FF;
 }
 
-.over {
+.drop-zone-can-drop-now {
   border-color: #000;
   background: #999 !important;
 }
-/*http://html5demos.com/drag*/
+
+/* http://html5demos.com/drag */
+/* Prevent the text contents of draggable elements from being selectable. */
 *
 [draggable=true] {
   -moz-user-select: none;
-  -khtml-user-drag: element;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
   cursor: move;
+  user-select: none;
 }
 
-*
-:-khtml-drag {
-  background-color: rgba(238, 238, 238, 0.5);
+.draggable-being-dragged {
+  /*background-color: rgba(238, 238, 238, 0.5);*/
+  opacity: 0.5;
   /* padding: 1em; */
-  border: dashed #333 2px;
-  color: #000;
+  /*border: dashed #333 2px;*/
+  /*color: #000;*/
 }
 
 progress {
