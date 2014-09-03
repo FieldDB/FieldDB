@@ -18,7 +18,7 @@ Reinforcement Cartoon:
   <img title="After Last" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.lastImageSrc}}"/>
 </div>
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
-  <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop stimuli to re-order them</div>
+  <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a stimulus' number to re-order it</div>
   <div class="well"
   ng-class="{'col-md-12': datalist.showDocCheckboxes}"
   ng-repeat="item in datalist.docs._collection track by $index"
