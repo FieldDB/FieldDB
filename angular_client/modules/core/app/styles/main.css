@@ -183,6 +183,14 @@
   background: #999 !important;
 }
 
+.drop-zone-instructions-can-reorder-here:before {
+  content: 'Drop here to re-order before this item';
+  display: block;
+  color: white;
+  font-size: x-large;
+  font-weight: 800;
+}
+
 /* http://html5demos.com/drag */
 /* Prevent the text contents of draggable elements from being selectable. */
 *
