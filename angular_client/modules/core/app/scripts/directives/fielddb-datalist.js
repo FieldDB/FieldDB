@@ -11,6 +11,26 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
   var fetchDatalistDocsExponentialDecay = 2000;
 
   var controller = function($scope, $timeout) {
+
+    // $scope.dropSuccessHandler = function($event, index, array) {
+    //   // array.splice(index, 1);
+    //   // $scope.orphanedItem =
+    //   console.log('removing ' + index);
+    // };
+
+    $scope.onDrop = function($event, $data, index) {
+      console.log('inserting at ' + index, $data);
+      if ($scope.datalist && $scope.datalist.docs) {
+        $scope.datalist.docs.reorder($data, index);
+      }
+    };
+
+    $scope.removeItemFromList = function(item) {
+      if ($scope.datalist && $scope.datalist.docs) {
+        $scope.datalist.docs.remove(item);
+      }
+    };
+
     var fetchDatalistDocsIfEmpty = function() {
 
       if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
@@ -63,6 +83,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
             if (guessedType === 'Datalist') {
               guessedType = 'DataList';
             }
+
             if (FieldDB[guessedType]) {
               $scope.corpus.warn('Converting doc into guessed type ' + guessedType);
               doc.confidential = $scope.corpus.confidential;
@@ -71,8 +92,12 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
               $scope.corpus.warn('This doc does not have a type, it might display oddly ', doc);
             }
           }
-
           $scope.datalist.docs.add(doc);
+          if (doc.type === 'Datum') {
+            $scope.datalist.showDocPosition = true;
+            $scope.datalist.showDocCheckboxes = true;
+            $scope.datalist.docsAreReorderable = true;
+          }
         });
         $scope.$digest();
 
