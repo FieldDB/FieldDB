@@ -21,6 +21,9 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     $scope.onDrop = function($event, $data, index) {
       console.log('inserting at ' + index, $data);
       if ($scope.datalist && $scope.datalist.docs) {
+        if ($scope.datalist.docs.find($data).length === 0) {
+          $scope.datalist.docs.add($data);
+        }
         $scope.datalist.docs.reorder($data, index);
       }
     };
@@ -29,6 +32,12 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       if ($scope.datalist && $scope.datalist.docs) {
         $scope.datalist.docs.remove(item);
       }
+    };
+
+    $scope.save = function() {
+      $scope.datalist.save().then(function() {
+        $scope.$digest();
+      });
     };
 
     var fetchDatalistDocsIfEmpty = function() {
@@ -97,6 +106,21 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     };
 
     fetchDatalistDocsIfEmpty();
+
+    $scope.undo = function() {
+      var type = $scope.datalist.type;
+      if (!type || !FieldDB[type]) {
+        type = "DataList";
+      }
+      $scope.datalist = new FieldDB[type]({
+        id: $scope.datalist.id,
+        dbname: $scope.datalist.dbname,
+        url: $scope.datalist.url
+      });
+      $scope.datalist.fetch(FieldDB.Database.prototype.BASE_DB_URL).then(function() {
+        fetchDatalistDocsIfEmpty();
+      });
+    };
 
     $scope.canAddNewItemsToDataList = function() {
       return false;
