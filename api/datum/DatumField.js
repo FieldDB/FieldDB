@@ -799,6 +799,25 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       }
       this.confidentialEncrypter = value;
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      delete json.dateCreated;
+      delete json.dateModified;
+      delete json.comments;
+      delete json.dbname;
+
+      json.id = json._id;
+      delete json._id;
+
+      json.type = this.type;
+      delete json._type;
+
+      console.log(json);
+      return json;
+    }
   }
 
 });

@@ -426,7 +426,7 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(value) {
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
         value = new this.INTERNAL_MODELS.item(value);
-        this.debug("casting an item to match the internal model", value)
+        this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item)
       }
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
@@ -579,9 +579,11 @@ Collection.prototype = Object.create(Object.prototype, {
       if (removeEmptyAttributes) {
         this.todo('removeEmptyAttributes is not implemented: ' + removeEmptyAttributes);
       }
+      var self = this;
+
       var json = this._collection.map(function(item) {
-        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && typeof this.INTERNAL_MODELS.item === "function" && new this.INTERNAL_MODELS.item().toJSON === "function") {
-          this.debug("This item has a toJSON, which we will call instead");
+        if (typeof item.toJSON === "function") {
+          self.debug("This item has a toJSON, which we will call instead");
           return item.toJSON();
         } else {
           return item;
