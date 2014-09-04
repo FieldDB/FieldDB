@@ -312,17 +312,21 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         url: url,
         data: this.toJSON()
       }).then(function(result) {
-          this.debug(result);
+          self.debug("saved ", result);
           self.saving = false;
           if (result.id) {
             self.id = result.id;
             self.rev = result.rev;
             deferred.resolve(self);
           } else {
-            deferred.reject();
+            deferred.reject(result);
           }
         },
         function(reason) {
+          self.debug(reason);
+          self.saving = false;
+          deferred.reject(reason);
+        }).catch(function(reason){
           self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
