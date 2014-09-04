@@ -69,7 +69,10 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
         console.log('downloaded docs', results);
         $scope.datalist.confidential = $scope.corpus.confidential;
-        $scope.datalist.populate(results);
+        $scope.datalist.populate(results.map(function(doc) {
+          doc.url = FieldDB.Database.prototype.BASE_DB_URL + '/' + $scope.corpus.dbname;
+          return doc;
+        }));
 
         $scope.$digest();
 
