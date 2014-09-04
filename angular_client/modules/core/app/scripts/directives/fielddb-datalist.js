@@ -68,7 +68,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         fetchDatalistDocsExponentialDecay = 2000;
 
         console.log('downloaded docs', results);
-        $scope.datalist.confidential($scope.corpus.confidential);
+        $scope.datalist.confidential = $scope.corpus.confidential;
         $scope.datalist.populate(results);
 
         $scope.$digest();
