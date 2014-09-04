@@ -747,6 +747,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!json._rev) {
         delete json._rev;
       }
+      json.pouchname = json.dbname;
+      this.todo("Adding pouchname for backward compatability until prototype can handle dbname");
+
       delete json.saving;
       delete json.decryptedMode;
       delete json.bugMessage;
