@@ -276,91 +276,92 @@ OPrime.getVersion = function(callback) {
 // this function is modified from the original in that it expects dates that
 // were created using
 // JSON.stringify(new Date())
-OPrime.prettyDate = function(time) {
-  if (!time) {
-    return undefined;
-  }
-  time = time.replace(/"/g, "");
-  var date = new Date((time || "").replace(/-/g, "/").replace(/[TZ]/g, " "));
-  var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g, "");
-  var greenwichdate = new Date((greenwichtimenow || "").replace(/-/g, "/")
-      .replace(/[TZ]/g, " "));
-  var diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
-  var day_diff = Math.floor(diff / 86400);
+OPrime.prettyDate = function(input) {
+    if (!input) {
+      return '--';
+    }
+    if (input.replace) {
+      input = input.replace(/\"/g, '');
+    }
+    if (input.trim) {
+      input = input.trim();
+    }
+    if (!input) {
+      return '--';
+    }
+    // For unknown historical reasons in the spreadsheet app
+    // there were some dates that were unknown and were set
+    // to a random? date like this:
+    if (input === '2000-09-06T16:31:30.988Z' || (input >= new Date('2000-09-06T16:31:30.000Z') && input <= new Date('2000-09-06T16:31:31.000Z'))) {
+      return 'N/A';
+    }
+    if (!input.toLocaleDateString) {
+      input = new Date(input);
+    }
 
-  if (isNaN(day_diff) || day_diff < 0 ) {
-    return undefined;
-  }
+    var greenwichdate = new Date();
+    var minuteDiff = ((greenwichdate.getTime() - input.getTime()) / 1000);
+    var dayDiff = Math.floor(minuteDiff / 86400);
 
-  if (day_diff >= 548) {
-    return Math.ceil(day_diff / 365) + " years ago";
-  }
-  if (day_diff >= 40) {
-    return Math.ceil(day_diff / 31) + " months ago";
-  }
-  if (day_diff >= 14) {
-    return Math.ceil(day_diff / 7) + " weeks ago";
-  }
-  if (day_diff >= 2) {
-    return Math.ceil(day_diff / 1) + " days ago";
-  }
-  if (day_diff >= 1) {
-    return "Yesterday";
-  }
-  if(diff >= 4000 ){
-    return Math.floor(diff / 3600) + " hours ago";
-  }
-//  if(diff >= 7200 ){
-//    Math.floor(diff / 3600) + " 1 hour ago";
-//  }
-  if(diff >= 70 ){
-    return Math.floor(diff / 60) + " minutes ago";
-  }
-  if(diff >= 120 ){
-    return "1 minute ago";
-  }
-  return "just now";
-};
+    if (isNaN(dayDiff) || dayDiff < 0) {
+      return '--';
+    }
+    if (dayDiff >= 1430) {
+      return (Math.round(dayDiff / 365) + ' years ago');
+    }
+    if (dayDiff >= 1278) {
+      return '3.5 years ago';
+    }
+    if (dayDiff >= 1065) {
+      return '3 years ago';
+    }
+    if (dayDiff >= 913) {
+      return '2.5 years ago';
+    }
+    if (dayDiff >= 730) {
+      return '2 years ago';
+    }
+    if (dayDiff >= 540) {
+      return '1.5 years ago';
+    }
+    if (dayDiff >= 50) {
+      return (Math.round(dayDiff / 31) + ' months ago');
+    }
+    if (dayDiff >= 48) {
+      return '1.5 months ago';
+    }
+    if (dayDiff >= 40) {
+      return '1 month ago';
+    }
+    if (dayDiff >= 16) {
+      return (Math.round(dayDiff / 7) + ' weeks ago').replace('1 weeks', '1 week');
+    }
+    if (dayDiff >= 2) {
+      return (Math.round(dayDiff / 1) + ' days ago').replace('1 days', '1 day');
+    }
+    if (dayDiff >= 1) {
+      return 'Yesterday';
+    }
 
-OPrime.prettyTimestamp = function(timestamp) {
-  var date = new Date(timestamp);
-  var greenwichtimenow = new Date();
-  var diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
-  var day_diff = Math.floor(diff / 86400);
+    if (minuteDiff >= 5000) {
+      return (Math.floor(minuteDiff / 3600) + ' hours ago').replace('1 hours', '1.5 hours');
+    }
 
-  if (isNaN(day_diff) || day_diff < 0) {
-    return;
-  }
+    if (minuteDiff >= 4000) {
+      return '1 hour ago';
+    }
+    //  if(minuteDiff >= 7200 ){
+    //    Math.floor(minuteDiff / 3600) + ' 1 hour ago';
+    //  }
+    if (minuteDiff >= 70) {
+      return Math.floor(minuteDiff / 60) + ' minutes ago';
+    }
+    if (minuteDiff >= 120) {
+      return '1 minute ago';
+    }
+    return 'just now';
 
-  if (day_diff >= 548) {
-    return Math.ceil(day_diff / 365) + " years ago";
-  }
-  if (day_diff >= 40) {
-    return Math.ceil(day_diff / 31) + " months ago";
-  }
-  if (day_diff >= 14) {
-    return Math.ceil(day_diff / 7) + " weeks ago";
-  }
-  if (day_diff >= 2) {
-    return Math.ceil(day_diff / 1) + " days ago";
-  }
-  if (day_diff >= 1) {
-    return "Yesterday";
-  }
-  if(diff >= 4000 ){
-    return Math.floor(diff / 3600) + " hours ago";
-  }
-//  if(diff >= 7200 ){
-//    Math.floor(diff / 3600) + " 1 hour ago";
-//  }
-  if(diff >= 70 ){
-    return Math.floor(diff / 60) + " minutes ago";
-  }
-  if(diff >= 120 ){
-    return "1 minute ago";
-  }
-  return "just now";
-};
+  };
 
 /*
  * Audio functions
