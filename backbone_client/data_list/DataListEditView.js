@@ -1,6 +1,6 @@
 
-define( [ 
-    "backbone", 
+define( [
+    "backbone",
     "handlebars",
     "audio_video/AudioVideoReadView",
     "comment/Comment",
@@ -13,15 +13,15 @@ define( [
     "datum/Datums",
     "app/UpdatingCollectionView"
 ], function(
-    Backbone, 
+    Backbone,
     Handlebars,
     AudioVideoReadView,
     Comment,
     Comments,
     CommentReadView,
     CommentEditView,
-    DataList, 
-    Datum, 
+    DataList,
+    Datum,
     DatumReadView,
     Datums,
     UpdatingCollectionView
@@ -33,11 +33,11 @@ define( [
      * @class This is a page where the user can create their own datalist. They
      *        can pick datum and then drag them over to their own customized
      *        data list.
-     *        
+     *
      * @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide", "centreWell",
      * "fullscreen", "import", "minimized" "search" "search-minimized"
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
@@ -45,17 +45,17 @@ define( [
       if (OPrime.debugMode) OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
-      
+
       // If the model's title changes, chances are its a new datalist, re-render its internal models.
       this.model.bind('change:dateCreated', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
-      
+
       this.model.bind('change:datumIds', function(){
         this.render();
       }, this);
-      
+
     },
 
     /**
@@ -83,11 +83,11 @@ define( [
         /* save the state of the datalist when the comment is added, and render it*/
         this.updatePouch();
         this.commentReadView.render();
-        
-        
+
+
 //        this.model.get("comments").unshift(this.commentEditView.model);
 //        this.commentEditView.model = new Comment();
-      }, 
+      },
       //Delete button remove a comment
       "click .remove-comment-button" : function(e) {
         if(e){
@@ -95,23 +95,23 @@ define( [
           e.preventDefault();
         }
         this.model.get("comments").remove(this.commentEditView.model);
-      }, 
+      },
 
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
-      
+
       "blur .data-list-title": "updateTitle",
       "blur .data-list-description": "updateDescription",
 
       "click .icon-book" :"showReadonly",
-      
+
 //      Issue #797
       "click .trash-button" : "putInTrash",
-        
+
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
-      
+
       "click .icon-minus-sign" : function(e) {
         e.preventDefault();
         if(this.format == "search"){
@@ -167,7 +167,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        
+
         this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
         return false;
       },
@@ -184,7 +184,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        
+
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
 //        $(".icon-unlock").toggleClass("icon-unlock icon-lock");
 
@@ -195,7 +195,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        
+
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
 //        $(".icon-lock").toggleClass("icon-unlock icon-lock");
 
@@ -233,9 +233,9 @@ define( [
         return false;
       }
     },
-    
+
     templateFullscreen : Handlebars.templates.data_list_edit_embedded,
-   
+
     embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
 
     templateSummary : Handlebars.templates.data_list_summary_edit_embedded,
@@ -258,39 +258,45 @@ define( [
         }
         appView.currentReadDataListView.destroy_view();
       }
-      
+
       var jsonToRender = this.model.toJSON();
+      if (jsonToRender.title.default) {
+        jsonToRender.title = jsonToRender.title.default;
+      }
+      if (jsonToRender.description.default) {
+        jsonToRender.description = jsonToRender.description.default;
+      }
       jsonToRender.locale_Add = Locale.get("locale_Add");
       jsonToRender.locale_Decrypt_checked = Locale.get("locale_Decrypt_checked");
-      jsonToRender.locale_Description = Locale.get("locale_Description"); 
+      jsonToRender.locale_Description = Locale.get("locale_Description");
       jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked");
       jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV");
       jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX");
-      jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist"); 
-      jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist");       
+      jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist");
+      jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist");
       jsonToRender.locale_Plain_Text_Export_Tooltip_checked = Locale.get("locale_Plain_Text_Export_Tooltip_checked");
       jsonToRender.locale_Play_Audio_checked = Locale.get("locale_Play_Audio_checked");
       jsonToRender.locale_Remove_checked_from_datalist_tooltip = Locale.get("locale_Remove_checked_from_datalist_tooltip");
-      jsonToRender.locale_Save = Locale.get("locale_Save"); 
+      jsonToRender.locale_Save = Locale.get("locale_Save");
       jsonToRender.locale_Show_Datalist = Locale.get("locale_Show_Datalist");
       jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
-      jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");       
+      jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
       jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
-      jsonToRender.locale_Title = Locale.get("locale_Title"); 
+      jsonToRender.locale_Title = Locale.get("locale_Title");
 
       if(jsonToRender.decryptedMode){
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip"); 
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
       }else{
-        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip"); 
+        jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
       }
-      
+
 
       if (this.format == "leftSide") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
-        
+
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
 
@@ -299,19 +305,19 @@ define( [
 
         this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
-        
+
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
-        
+
       } else if (this.format == "centreWell") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
-        
+
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
-        
+
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-embedded").find(".current-data-list-paginated-view") );
-        
+
       }else if (this.format == "search") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
 
@@ -325,17 +331,17 @@ define( [
             $("#search-data-list-quickview").find(".search-data-list-paginated-view") );
         $(".search-data-list-paginated-view").show();
         $("#search-data-list-quickview-header").parent().find(".pagination-control").show();
-        
+
       } else if (this.format == "search-minimized") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
-        
+
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
 //        $(this.el).addClass("well");
         try {
           $(".search-data-list-paginated-view").hide();
           $("#search-data-list-quickview-header").parent().find(".pagination-control").hide();
-          
+
         } catch(e) {
           if (OPrime.debugMode) OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
         }
@@ -345,7 +351,7 @@ define( [
 
         this.setElement($("#import-data-list-header"));
         $(this.el).html(this.importTemplate(jsonToRender));
-        
+
       } else if (this.format == "minimized") {
         if (OPrime.debugMode) OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
@@ -359,7 +365,7 @@ define( [
         if (OPrime.debugMode) OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
 
-          
+
       if (this.format !== "link" && !this.format == "search") {
         this.model.view = window.appView.currentPaginatedDataListDatumsView;
       }
@@ -376,22 +382,22 @@ define( [
           // Display the CommentReadView          this.commentReadView.el = this.$el.find(".comments");
           this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
-          
+
           // Display the CommentEditView
-          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.el = $(this.el).find('.new-comment-area');
           this.commentEditView.render();
 
         }
       }catch(e){
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
-      
+
       return this;
-    }, 
-    
+    },
+
     /**
      * See definition in the model
-     * 
+     *
      */
     putInTrash : function(e){
       if(e){
@@ -403,18 +409,18 @@ define( [
       }
     },
 
-    
+
     changeViewsOfInternalModels : function() {
-   
+
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
-      
+
       this.commentEditView = new CommentEditView({
         model : new Comment(),
-      }); 
+      });
 
       this.audioVideoView = new UpdatingCollectionView({
         collection           : this.model.get("audioVideo"),
@@ -423,7 +429,7 @@ define( [
       });
     },
     /**
-     * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items. 
+     * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items.
      * @returns {Array}
      */
     getAllCheckedDatums : function(){
@@ -445,7 +451,7 @@ define( [
     },
     removeDatumFromThisList : function(datumIds){
       if(datumIds == this.model.get("datumIds")){
-        return; //return quietly, refuse to remove all datum in a data list. 
+        return; //return quietly, refuse to remove all datum in a data list.
       }
       try{
         this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
@@ -463,7 +469,7 @@ define( [
 //      this.render();
       window.location.href = "#render/true";
     },
-    
+
     resizeFullscreen : function(e){
       if(e){
         e.stopPropagation();
@@ -475,19 +481,29 @@ define( [
     },
 
     updateTitle: function(){
-      this.model.set("title", this.$el.find(".data-list-title").val());
+      var newValue = this.$el.find(".data-list-title").val();
+      if (typeof this.model.get("title") === "object") {
+        this.model.get("title").default = newValue;
+      } else {
+        this.model.set("title", newValue);
+      }
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
-    
-    updateDescription: function(){
-      this.model.set("description", this.$el.find(".data-list-description").val());
-      if(this.model.id){
+
+    updateDescription: function() {
+      var newValue = this.$el.find(".data-list-description").val();
+      if (typeof this.model.get("description") === "object") {
+        this.model.get("description").default = newValue;
+      } else {
+        this.model.set("description", newValue);
+      }
+      if (this.model.id) {
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
-    
+
     //bound to pencil
     showReadonly :function(e){
       if(e){
@@ -497,7 +513,7 @@ define( [
       window.appView.currentReadDataListView.format = this.format;
       window.appView.currentReadDataListView.render();
     },
-    
+
     updatePouch : function(e) {
       if(e){
         e.stopPropagation();
@@ -509,14 +525,14 @@ define( [
         window.appView.currentReadDataListView.render();
       });
     },
-    
+
     saveSearchDataList : function(e, callback, failurecallback){
       if(e){
         e.stopPropagation();
         e.preventDefault();
       }
-      
-     
+
+
 //      var self = this;
 //      this.model.saveAndInterConnectInApp(function(){
 //          self.format = "search-minimized";
@@ -524,7 +540,7 @@ define( [
 //          self.model.setAsCurrentDataList();
 //        window.appView.renderReadonlyDataListViews("leftSide");
 //      });
-      
+
       var searchself = appView.searchEditView.searchDataListView; //TODO this was because the wrong tempalte was in the serach data list.for some reason the model is a function here when i click on the save button on the temp serach data list. this is a workaround.
 
       /* if there is no call back, make this the full screen data list. */
@@ -549,9 +565,9 @@ define( [
       }
       alert("TODO");
     },
-    
+
     /**
-     * 
+     *
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
@@ -560,10 +576,10 @@ define( [
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
-      $(this.el).removeData().unbind(); 
+      $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//      this.remove();  
+//      this.remove();
 //      Backbone.View.prototype.remove.call(this);
       }
   });
