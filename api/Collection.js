@@ -232,6 +232,16 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  getKeys: {
+    value: function() {
+      var self = this;
+
+      return this.collection.map(function(item) {
+        return self.getSanitizedDotNotationKey(item);
+      });
+    }
+  },
+
   /**
    * Loops through the collection (inefficiently, from start to end) to find
    * something which matches.
