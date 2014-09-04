@@ -219,12 +219,12 @@ Collection.prototype = Object.create(Object.prototype, {
         value = [];
       }
       for (var index in value) {
+        if (!value.hasOwnProperty(index)) {
+          continue;
+        }
         /* parse internal models as a model if specified */
         if (!value[index]) {
           this.warn(index + " is undefined on this member of the collection", value);
-        }
-        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value[index] && value[index].constructor !== this.INTERNAL_MODELS.item) {
-          value[index] = new this.INTERNAL_MODELS.item(value[index]);
         }
         this.add(value[index]);
       }
@@ -414,6 +414,10 @@ Collection.prototype = Object.create(Object.prototype, {
 
   add: {
     value: function(value) {
+      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
+        value = new this.INTERNAL_MODELS.item(value);
+        this.debug("casting an item to match the internal model", value)
+      }
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
         this.warn('The primary key ' + this.primaryKey + ' is undefined on this object, it cannot be added! ', value);
