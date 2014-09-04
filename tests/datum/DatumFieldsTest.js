@@ -4,7 +4,7 @@ var DatumField = require('./../../api/datum/DatumField').DatumField;
 var DatumFields = require('./../../api/datum/DatumFields').DatumFields;
 var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
 
-var sampleDatumFields = function(){
+var sampleDatumFields = function() {
   return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
 };
 
@@ -209,30 +209,38 @@ describe('lib/DatumFields', function() {
       var asStringified = JSON.stringify(collection);
       // console.log(asStringified);
       expect(JSON.parse(asStringified)[2].type).toEqual('date');
-      expect(asStringified).toEqual(JSON.stringify(collectionToLoad));
+      expect(JSON.parse(asStringified)[0].type).toEqual(collectionToLoad[0].type);
+      expect(JSON.parse(asStringified)[1].value).toEqual(collectionToLoad[1].value);
+      expect(JSON.parse(asStringified)[2].type).toEqual(collectionToLoad[2].type);
     });
 
     it('should seem not loose information when serialized and reloaded', function() {
       var collectionFromDB = JSON.stringify(collection);
       collection = new DatumFields({
+        debugMode: true,
         collection: JSON.parse(collectionFromDB)
       });
-      expect(collection.toJSON()[1].value).toEqual(collectionToLoad[1].value);
-      expect(collection.toJSON()[1].mask).toEqual(collectionToLoad[1].mask);
-      expect(collection.toJSON()[1].encrypted).toEqual(collectionToLoad[1].encrypted);
-      // expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad)); //key ordering changed
+      var collectionFromToJSON = collection.toJSON();
+      expect(collectionFromToJSON[0].id).toEqual(collectionToLoad[0].id);
+      expect(collectionFromToJSON[0].type).toEqual(collectionToLoad[0].type);
+      expect(collectionFromToJSON[0]._type).toBeUndefined();
+      expect(collectionFromToJSON[0]._id).toBeUndefined();
+      expect(collectionFromToJSON[1].mask).toEqual(collectionToLoad[1].value);
+      expect(collectionFromToJSON[1].encryptedValue).toEqual(collectionToLoad[1].value);
     });
 
     it('should seem to not loose information when toJSONed and reloaded', function() {
       var collectionFromDB = collection.toJSON();
       expect(collectionFromDB[2].id).toEqual('c');
-      expect(collectionFromDB).toEqual(collectionToLoad);
 
       var collectionReloaded = new DatumFields({
         collection: collectionFromDB
       });
 
-      expect(JSON.stringify(collectionReloaded)).toEqual(JSON.stringify(collectionFromDB));
+      expect(collectionReloaded._collection[0].id).toEqual(collectionFromDB[0].id);
+      expect(collectionReloaded._collection[0].type).toEqual(collectionFromDB[0].type);
+      expect(collectionReloaded._collection[1].mask).toEqual(collectionFromDB[1].value);
+      expect(collectionReloaded._collection[1].encryptedValue).toEqual(collectionFromDB[1].value);
     });
 
   });
