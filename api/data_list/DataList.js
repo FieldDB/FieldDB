@@ -312,6 +312,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       // Force docIds to be set to current docs
+      this.docIds = null;
       this.docIds = this.docIds;
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
       delete json.docs;
