@@ -1,4 +1,5 @@
-<button class="btn pull-right" ng-click="datalist.save()" ng-class="{'btn-default': datalist.saving, 'btn-success': !datalist.saving}">Save</button>
+<button class="btn pull-right" ng-click="save()" ng-class="{'btn-default': datalist.saving, 'btn-success': !datalist.saving}">Save</button>
+<button class="btn pull-right" ng-click="undo()" ng-class="{'btn-default': datalist.saving, 'btn-inverse': !datalist.saving}">Undo</button>
 <h1 ng-model="datalist.label"></h1>
 <h3>Titles:</h3>
 <ul>
