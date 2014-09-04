@@ -426,7 +426,7 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(value) {
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
         value = new this.INTERNAL_MODELS.item(value);
-        this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item)
+        this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item);
       }
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
@@ -790,7 +790,7 @@ Collection.prototype = Object.create(Object.prototype, {
           if (existingInCollection.length === 0) {
             resultCollection.add(anotherItem);
           } else {
-            resultItem = existingInCollection[0];
+            anotherItem = existingInCollection[0];
             self.debug("anotherItem was already in the resultCollection ", existingInCollection, anotherItem);
           }
 
