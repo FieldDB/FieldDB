@@ -37,7 +37,7 @@ Comment.prototype = Object.create(FieldDBObject.prototype, /** @lends Comment.pr
 
   timestamp: {
     get: function() {
-      return this._timestamp || this.label;
+      return this._timestamp;
     },
     set: function(value) {
       if (value === this._timestamp) {
@@ -47,7 +47,7 @@ Comment.prototype = Object.create(FieldDBObject.prototype, /** @lends Comment.pr
         delete this._timestamp;
         return;
       }
-      if (("" + value.indexOf("Z")) > -1) {
+      if (("" + value).indexOf("Z") > -1) {
         value = (new Date(value)).getTime();
       }
 
@@ -96,3 +96,5 @@ Comment.prototype = Object.create(FieldDBObject.prototype, /** @lends Comment.pr
   }
 
 });
+
+exports.Comment = Comment;
