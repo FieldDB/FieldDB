@@ -68,37 +68,9 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         fetchDatalistDocsExponentialDecay = 2000;
 
         console.log('downloaded docs', results);
-        $scope.datalist.docs = $scope.datalist.docs || [];
-        results.map(function(doc) {
-          if (doc.type && FieldDB[doc.type]) {
-            $scope.corpus.debug('Converting doc into type ' + doc.type);
-            doc.confidential = $scope.corpus.confidential;
-            doc = new FieldDB[doc.type](doc);
-          } else {
-            var guessedType = doc.jsonType || doc.collection || 'FieldDBObject';
-            if ($scope.datalist.api) {
-              guessedType = $scope.datalist.api[0].toUpperCase() + $scope.datalist.api.substring(1, $scope.datalist.api.length);
-            }
-            guessedType = guessedType.replace(/s$/, '');
-            if (guessedType === 'Datalist') {
-              guessedType = 'DataList';
-            }
+        $scope.datalist.confidential($scope.corpus.confidential);
+        $scope.datalist.populate(results);
 
-            if (FieldDB[guessedType]) {
-              $scope.corpus.warn('Converting doc into guessed type ' + guessedType);
-              doc.confidential = $scope.corpus.confidential;
-              doc = new FieldDB[guessedType](doc);
-            } else {
-              $scope.corpus.warn('This doc does not have a type, it might display oddly ', doc);
-            }
-          }
-          $scope.datalist.docs.add(doc);
-          if (doc.type === 'Datum') {
-            $scope.datalist.showDocPosition = true;
-            $scope.datalist.showDocCheckboxes = true;
-            $scope.datalist.docsAreReorderable = true;
-          }
-        });
         $scope.$digest();
 
       }, function(reason) {

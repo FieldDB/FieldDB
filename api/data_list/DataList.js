@@ -1,3 +1,4 @@
+/* globals FieldDB */
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Collection = require("./../Collection").Collection;
@@ -110,7 +111,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   docs: {
     get: function() {
-      return this._docs || FieldDBObject.DEFAULT_COLLECTION;
+      return this._docs;
     },
     set: function(value) {
       if (value === this._docs) {
@@ -128,11 +129,63 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
+  add: {
+    value: function(value) {
+      if (!this.docs) {
+        this.docs = [];
+      }
+      this.docs.add(value);
+    }
+  },
+
+  populate: {
+    value: function(results) {
+      var self = this;
+
+      this.docs = this.docs || [];
+      results.map(function(doc) {
+        try {
+          if (doc.type && FieldDB && FieldDB[doc.type]) {
+            self.debug('Converting doc into type ' + doc.type);
+            doc.confidential = self.confidential;
+            doc = new FieldDB[doc.type](doc);
+          } else {
+            var guessedType = doc.jsonType || doc.collection || 'FieldDBObject';
+            if (self.api) {
+              guessedType = self.api[0].toUpperCase() + self.api.substring(1, self.api.length);
+            }
+            guessedType = guessedType.replace(/s$/, '');
+            if (guessedType === 'Datalist') {
+              guessedType = 'DataList';
+            }
+
+            if (FieldDB[guessedType]) {
+              self.warn('Converting doc into guessed type ' + guessedType);
+              doc.confidential = self.confidential;
+              doc = new FieldDB[guessedType](doc);
+            } else {
+              self.warn('This doc does not have a type, it might display oddly ', doc);
+            }
+          }
+        } catch (e) {
+          self.warn("error converting this doc ", e);
+          doc = new FieldDBObject(doc);
+        }
+        self.docs.add(doc);
+        if (doc.type === 'Datum') {
+          self.showDocPosition = true;
+          self.showDocCheckboxes = true;
+          self.docsAreReorderable = true;
+        }
+      });
+    }
+  },
+
   docIds: {
     get: function() {
       var self = this;
 
-      if (!this._docIds && this.docs && this.docs.length > 0) {
+      if ((!this._docIds || this._docIds.length === 0) && (this.docs && this.docs.length > 0)) {
         this._docIds = this.docs.map(function(doc) {
           self.debug('geting doc id of this doc ', doc);
           return doc.id;
@@ -252,6 +305,20 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           return id;
         }
       });
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      // Force docIds to be set to current docs
+      this.docIds = this.docIds;
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      delete json.docs;
+      this.todo("Adding datumIds for backward compatability until prototype can handle docIds");
+      json.datumIds = this.docIds;
+
+      console.log(json);
+      return json;
     }
   }
 
