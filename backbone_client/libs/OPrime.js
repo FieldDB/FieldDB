@@ -260,7 +260,35 @@ OPrime.getVersion = function(callback) {
   };
   xmlhttp.send(null);
 };
+OPrime.escapeLatexChars = function(input) {
+  var result = input;
+  if (!result.replace) {
+    return "error parsing field, please report this." + JSON.stringify(input);
+  }
+  //curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
+  result = result.replace(/\\/g, "\\textbackslashCURLYBRACES");
+  result = result.replace(/\^/g, "\\textasciicircumCURLYBRACES");
+  result = result.replace(/\~/g, "\\textasciitildeCURLYBRACES");
+  result = result.replace(/#/g, "\\#");
+  result = result.replace(/\$/g, "\\$");
+  result = result.replace(/%/g, "\\%");
+  result = result.replace(/&/g, "\\&");
+  result = result.replace(/_/g, "\\_");
+  result = result.replace(/{/g, "\\{");
+  result = result.replace(/}/g, "\\}");
+  result = result.replace(/</g, "\\textless");
+  result = result.replace(/>/g, "\\textgreater");
 
+  var tipas = app.get("authentication").get("userPrivate").get("prefs").get("unicodes").toJSON();
+  for (var t = 0; t < tipas.length; t++) {
+    if (tipas[t].tipa) {
+      var symbolAsRegularExpession = new RegExp(tipas[t].symbol, "g");
+      result = result.replace(symbolAsRegularExpession, tipas[t].tipa);
+    }
+  }
+  result = result.replace(/CURLYBRACES/g, "{}");
+  return result;
+};
 /*
  * JavaScript Pretty Date Copyright (c) 2011 John Resig (ejohn.org) Licensed
  * under the MIT and GPL licenses.
@@ -362,7 +390,7 @@ OPrime.prettyDate = function(input) {
     return 'just now';
 
   };
-
+OPrime.prettyTimestamp = OPrime.prettyDate;
 /*
  * Audio functions
  */

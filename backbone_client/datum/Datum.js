@@ -996,18 +996,18 @@ define([
     		//print the main IGT, escaping special latex chars
         var judgementClosingBracketIfAny = "";
         if (judgement) {
-          result = result + "\[" + this.escapeLatexChars(judgement) + "\] {";
+          result = result + "\[" + OPrime.escapeLatexChars(judgement) + "\] {";
           judgementClosingBracketIfAny = " } ";
         }
         if (translation) {
           translation = "`" + translation + "'";
         }
     		result = result
-    			+ " \\glll " +  this.escapeLatexChars(utterance) + "\\\\"
-          + "\n\t" + this.escapeLatexChars(morphemes) + "\\\\"
-    			+ "\n\t" + this.escapeLatexChars(gloss) + " \\\\" + judgementClosingBracketIfAny
-    			+ "\n\n \\glt \\emph{" + this.escapeLatexChars(translation) + " \} "
-    			+ "\n\\label\{" +this.escapeLatexChars(utterance).toLowerCase().replace(/[^a-z0-9]/g,"") + "\}";
+    			+ " \\glll " +  OPrime.escapeLatexChars(utterance) + "\\\\"
+          + "\n\t" + OPrime.escapeLatexChars(morphemes) + "\\\\"
+    			+ "\n\t" + OPrime.escapeLatexChars(gloss) + " \\\\" + judgementClosingBracketIfAny
+    			+ "\n\n \\glt \\emph{" + OPrime.escapeLatexChars(translation) + " \} "
+    			+ "\n\\label\{" +OPrime.escapeLatexChars(utterance).toLowerCase().replace(/[^a-z0-9]/g,"") + "\}";
 
           // This is maybe what gb4e actually looks like, the one we had before seemed off...
           // \begin{exe}
@@ -1048,8 +1048,8 @@ define([
     		for (var field in fields){
     			if(fields[field] && (frequentFields.indexOf(fieldLabels[field])>=0)){
     				result = result
-    				+ "\n\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+    				+ "\n\t \\item\[\\sc\{" + OPrime.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + OPrime.escapeLatexChars(fields[field]) ;
     			} else if(fields[field]){
             /* If as a field that is designed for LaTex dont excape the LaTeX characters */
             if (fieldLabels[field].toLowerCase().indexOf("latex") > -1) {
@@ -1065,8 +1065,8 @@ define([
               }
             } else {
                 result = result
-                + "\n%\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-                + "\}\] " + this.escapeLatexChars(fields[field]) ;
+                + "\n%\t \\item\[\\sc\{" + OPrime.escapeLatexChars(fieldLabels[field])
+                + "\}\] " + OPrime.escapeLatexChars(fields[field]) ;
             }
     			}
     		}
@@ -1104,36 +1104,6 @@ define([
         }
         $("#export-text-area").val(result);
       }
-    	return result;
-    },
-
-    escapeLatexChars : function(input){
-    	var result = input;
-      if(!result.replace){
-        return "error parsing field, please report this."+JSON.stringify(input);
-      }
-      //curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
-      result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
-      result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
-      result = result.replace(/\~/g,"\\textasciitildeCURLYBRACES");
-      result = result.replace(/#/g,"\\#");
-      result = result.replace(/\$/g,"\\$");
-      result = result.replace(/%/g,"\\%");
-      result = result.replace(/&/g,"\\&");
-      result = result.replace(/_/g,"\\_");
-      result = result.replace(/{/g,"\\{");
-      result = result.replace(/}/g,"\\}");
-      result = result.replace(/</g,"\\textless");
-      result = result.replace(/>/g,"\\textgreater");
-
-      var tipas = app.get("authentication").get("userPrivate").get("prefs").get("unicodes").toJSON();
-      for (var t = 0; t < tipas.length; t++) {
-        if(tipas[t].tipa){
-          var symbolAsRegularExpession = new RegExp(tipas[t].symbol,"g");
-          result = result.replace(symbolAsRegularExpession,tipas[t].tipa);
-        }
-      }
-    	result = result.replace(/CURLYBRACES/g,"{}");
     	return result;
     },
 
