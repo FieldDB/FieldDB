@@ -17,7 +17,7 @@ describe("Corpus", function() {
       expect(corpus.pouchname).toEqual("sapir-firstcorpus");
 
       var serialized = corpus.toJSON();
-      expect(serialized.pouchname).toBeUndefined();
+      expect(serialized.pouchname).toBeDefined();
     });
 
     it("should accept v2.2 json", function() {
@@ -28,7 +28,7 @@ describe("Corpus", function() {
       expect(corpus.pouchname).toEqual("lingllama-communitycorpus");
 
       var serialized = corpus.toJSON();
-      expect(serialized.pouchname).toBeUndefined();
+      expect(serialized.pouchname).toBeDefined();
       expect(serialized.datumfields).toBeUndefined();
     });
 

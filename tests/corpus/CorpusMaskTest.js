@@ -44,6 +44,7 @@ describe("CorpusMask ", function() {
       speakerFields: [],
       conversationFields: [],
       sessionFields: [],
+      pouchname: 'lingllama-communitycorpus',
       api: 'corpora'
     });
   });
