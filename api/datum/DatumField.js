@@ -803,6 +803,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
       delete json.dateCreated;
       delete json.dateModified;
