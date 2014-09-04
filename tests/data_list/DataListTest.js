@@ -2,6 +2,7 @@
 
 var DataList = require('./../../api/data_list/DataList').DataList;
 var specIsRunningTooLong = 5000;
+var SAMPLE_DATALIST_MODEL = require("../../api/data_list/datalist.json");
 
 describe("Data List", function() {
   describe("construction", function() {
@@ -45,6 +46,79 @@ describe("Data List", function() {
       });
       expect(list.docs.length).toEqual(3);
       expect(list.docIds).toEqual(['docone', 'doctwo', 'docthree']);
+    });
+
+  });
+
+  describe("serialization", function() {
+
+    it("should convert docs into datumIds", function() {
+      var list = new DataList({
+        docs: [{
+          "id": "docone"
+        }, {
+          "id": "doctwo"
+        }, {
+          "id": "docthree"
+        }]
+      });
+      expect(list).toBeDefined();
+      var listToSave = list.toJSON();
+      expect(listToSave.docIds).toEqual(['docone', 'doctwo', 'docthree']);
+      expect(listToSave.datumIds).toEqual(['docone', 'doctwo', 'docthree']);
+      expect(listToSave.docs).toBeUndefined();
+    });
+
+    it("should serialize existing datalists without breaking prototype app", function() {
+      var list = new DataList(SAMPLE_DATALIST_MODEL);
+      var listToSave = list.toJSON();
+      expect(listToSave._id).toEqual(list.id);
+      expect(listToSave.title).toEqual(list.title);
+      expect(listToSave.description).toEqual(list.description);
+      expect(listToSave.dbname).toEqual(list.dbname);
+      expect(listToSave.datumIds).toEqual(list.datumIds);
+      expect(listToSave.pouchname).toEqual(list.pouchname);
+      expect(listToSave.dateCreated).toEqual(list.dateCreated);
+      expect(listToSave.dateModified).toEqual(list.dateModified);
+      expect(listToSave.comments).toBeDefined();
+      expect(listToSave.comments[0].type).toEqual("Comment");
+      expect(listToSave.comments[0].text).toEqual(list.comments.collection[0].text);
+      expect(listToSave.comments[0].username).toEqual(list.comments.collection[0].username);
+      expect(listToSave.comments[0].gravatar).toEqual(list.comments.collection[0].gravatar);
+      expect(listToSave.comments[0].timestamp).toEqual(1348670525349);
+    });
+
+    it("should serialize datalists with docs into docIds", function() {
+      var list = new DataList(SAMPLE_DATALIST_MODEL);
+      list.datumIds = [];
+
+      expect(list.datumIds).toEqual([]);
+      list.populate([{
+        _id: "5EB57D1E-5D97-428E-A9C7-377DEEC02A14"
+      }, {
+        _id: "F60C2FE6-20FB-4B2B-BB3A-448B0784DBE5"
+      }, {
+        _id: "D43A71E0-EFE3-4BC4-AABA-FDD152890326"
+      }, {
+        _id: "B31DB3E0-1F43-4FE0-9299-D1C85F0C4C62"
+      }, {
+        _id: "AF976245-1157-47DE-8B6A-28A7542D3497"
+      }, {
+        _id: "23489BDF-68EF-46C9-BB06-4C8EC9D77F48"
+      }, {
+        _id: "944C2CDE-74B8-4322-8940-72E8DD134841"
+      }, {
+        _id: "ED5A2292-659E-4B27-A352-9DBC5065207E"
+      }, {
+        _id: "924726BF-FAE7-4472-BD99-A13FCB5FEEFF"
+      }]);
+
+      expect(list.docs.length).toEqual(9);
+      expect(list.docIds).toEqual(SAMPLE_DATALIST_MODEL.datumIds);
+
+      var listToSave = list.toJSON();
+      expect(listToSave.datumIds).toEqual(SAMPLE_DATALIST_MODEL.datumIds);
+
     });
 
   });
