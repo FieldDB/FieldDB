@@ -702,6 +702,9 @@ define([
      * @return {String} The tokenized string
      */
     processQueryString : function(queryString) {
+      if (!queryString) {
+        queryString = "";
+      }
       // Split on spaces
       var queryArray = queryString.split(" ");
 
