@@ -1,3 +1,6 @@
+var Activity = require("../../api/activity/Activity").Activity;
+var Activities = require("../../api/activity/Activities").Activities;
+
 describe("Activities: Test Activity Feed replication.", function() {
   it("should have an id if it gets inserted into pouch.", function() {
     // var a = new Activity();
@@ -10,6 +13,29 @@ describe("Activities: Test Activity Feed replication.", function() {
 
 describe(
   "Activities: As a user, I want to be updated on team news.", function() {
+
+    describe("construction", function() {
+
+      it("should be load", function() {
+        expect(Activity).toBeDefined();
+        expect(Activities).toBeDefined();
+      });
+
+      it("should be defined", function() {
+        var activites = new Activities();
+        expect(activites).toBeDefined();
+        expect(activites.type).toEqual("Activities");
+
+        activites.add({
+          verb: "updated"
+        });
+        expect(activites.length).toEqual(1);
+        expect(activites.collection[0].type).toEqual("Activity");
+
+      });
+
+    });
+
     it("should show my most recent team's activities by default.", function() {
       expect(true).toBeTruthy();
     });
