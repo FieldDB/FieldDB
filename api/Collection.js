@@ -358,7 +358,8 @@ Collection.prototype = Object.create(Object.prototype, {
           continue;
         }
         if (this.collection[index][optionalKeyToIdentifyItem] === searchingFor) {
-          this.warn("Overwriting an existing value");
+          this.warn("Overwriting an existing collection member " + searchingFor + " (they have the same key but are not equal nor the same object) ");
+          this.debug("Overwriting ", this.collection[index], "->", value);
           this.collection[index] = value;
           return value;
         }
@@ -372,7 +373,7 @@ Collection.prototype = Object.create(Object.prototype, {
         }
 
       } else {
-        console.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
+        this.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
       }
 
       if (optionalInverted) {
@@ -518,7 +519,8 @@ Collection.prototype = Object.create(Object.prototype, {
                 }
               }
               if (!itMatches) {
-                this.warn("One of the requested removal items dont match what was removed ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
+                this.warn("One of the requested removal items dont match what was removed ");
+                this.debug("One of the requested removal items dont match what was removed ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
               }
             }
           }
@@ -765,7 +767,8 @@ Collection.prototype = Object.create(Object.prototype, {
                 overwrite = self.confirm("I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem));
               }
               if (overwrite) {
-                self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)", anItem, " ->", anotherItem);
+                self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
+                self.debug("Overwriting  ", anItem, " ->", anotherItem);
                 resultCollection[idToMatch] = anotherItem;
               } else {
                 resultCollection[idToMatch] = anItem;
