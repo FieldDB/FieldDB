@@ -217,7 +217,7 @@ describe('lib/DatumFields', function() {
     it('should seem not loose information when serialized and reloaded', function() {
       var collectionFromDB = JSON.stringify(collection);
       collection = new DatumFields({
-        debugMode: true,
+        // debugMode: true,
         collection: JSON.parse(collectionFromDB)
       });
       var collectionFromToJSON = collection.toJSON();
@@ -295,7 +295,7 @@ describe('lib/DatumFields', function() {
       // field.debugMode = true;
       field.shouldBeEncrypted = false;
       expect(field.shouldBeEncrypted).toBe(true);
-      expect(field.warnMessage).toBe("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist;;; userchooseable is deprecated, instead use defaultfield;;; This field's shouldBeEncrypted cannot be undone. Only a corpus administrator can change shouldBeEncrypted to false if it has been true before.");
+      expect(field.warnMessage).toContain("This field's shouldBeEncrypted cannot be undone. Only a corpus administrator can change shouldBeEncrypted to false if it has been true before.");
     });
 
     it('should decript encrypted datum if in decryptedMode', function() {
@@ -324,9 +324,9 @@ describe('lib/DatumFields', function() {
 
       field.decryptedMode = false;
       field.value = "noqa-ta tusu-nay-wan changed without access";
-      expect(field.warnMessage).toEqual("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist;;; userchooseable is deprecated, instead use defaultfield;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.warnMessage).toContain("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
       expect(field.value).toBe('xxxx-xx xxxx-xxx-xxx-xx');
-      expect(field.warnMessage).toEqual("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist;;; userchooseable is deprecated, instead use defaultfield;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.warnMessage).toContain("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
       // console.log(field.toJSON());
     });
 
