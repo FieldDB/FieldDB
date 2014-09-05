@@ -110,7 +110,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     $scope.undo = function() {
       var type = $scope.datalist.type;
       if (!type || !FieldDB[type]) {
-        type = "DataList";
+        type = 'DataList';
       }
       $scope.datalist = new FieldDB[type]({
         id: $scope.datalist.id,
