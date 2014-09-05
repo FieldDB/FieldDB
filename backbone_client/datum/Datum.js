@@ -951,9 +951,11 @@ define([
       var fields = _.pluck(fieldsToExport, "mask");
     	var fieldLabels = _.pluck(fieldsToExport, "label");
     	//setting up for IGT case...
-    	var utteranceIndex = -1;
-    	var utterance = "";
-    	var morphemesIndex = -1;
+    	var orthographyIndex = -1;
+      var orthography = "";
+      var utteranceIndex = -1;
+      var utterance = "";
+      var morphemesIndex = -1;
     	var morphemes = "";
     	var glossIndex = -1;
     	var gloss = "";
@@ -969,12 +971,18 @@ define([
            fieldLabels.splice(judgementIndex,1);
            fields.splice(judgementIndex,1);
         }
-    	  utteranceIndex = fieldLabels.indexOf("utterance");
-    		if(utteranceIndex >= 0){
-    			 utterance = fields[utteranceIndex];
-    			 fieldLabels.splice(utteranceIndex,1);
-    			 fields.splice(utteranceIndex,1);
-    		}
+        orthographyIndex = fieldLabels.indexOf("orthography");
+        if(orthographyIndex >= 0){
+           orthography = fields[orthographyIndex];
+           fieldLabels.splice(orthographyIndex,1);
+           fields.splice(orthographyIndex,1);
+        }
+        utteranceIndex = fieldLabels.indexOf("utterance");
+        if(utteranceIndex >= 0){
+           utterance = fields[utteranceIndex];
+           fieldLabels.splice(utteranceIndex,1);
+           fields.splice(utteranceIndex,1);
+        }
     		morphemesIndex = fieldLabels.indexOf("morphemes");
     		if(morphemesIndex >= 0){
     			morphemes = fields[morphemesIndex];
@@ -1002,8 +1010,15 @@ define([
         if (translation) {
           translation = "`" + translation + "'";
         }
+        if (orthography) {
+          result = result
+          + " \\glll " + OPrime.escapeLatexChars(orthography) + "\\\\";
+          // + "\n\t" + OPrime.escapeLatexChars(utterance) + "\\\\";
+        } else {
+          result = result
+          + " \\glll " + OPrime.escapeLatexChars(utterance) + "\\\\";
+        }
     		result = result
-    			+ " \\glll " +  OPrime.escapeLatexChars(utterance) + "\\\\"
           + "\n\t" + OPrime.escapeLatexChars(morphemes) + "\\\\"
     			+ "\n\t" + OPrime.escapeLatexChars(gloss) + " \\\\" + judgementClosingBracketIfAny
     			+ "\n\n \\glt \\emph{" + OPrime.escapeLatexChars(translation) + " \} "
