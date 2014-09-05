@@ -157,7 +157,7 @@ describe("Data List", function() {
           "audioVideo": []
         }]
       });
-      list.debugMode = true;
+      // list.debugMode = true;
       list.getAllAudioAndVideoFiles().then(function(urls) {
         expect(urls).toEqual(['http://youtube.com/iwoamoiemqo32', 'http://soundcloud.com/iwoa/moiemqo32', 'http://localhost:3184/example/oiemqo32']);
         // expect(dl.playDatum()).toBeTruthy();
