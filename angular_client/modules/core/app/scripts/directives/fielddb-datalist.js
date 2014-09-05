@@ -68,7 +68,9 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         whatToFetch = $scope.datalist.docIds;
       }
       if (!whatToFetch || whatToFetch === []) {
-        $scope.datalist.docs = [];
+        // $scope.datalist.docs = {
+        //   _collection: []
+        // };
         $scope.$digest();
         return;
       }
