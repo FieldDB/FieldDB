@@ -117,7 +117,7 @@ describe('lib/Collection', function() {
         collection: useDefaults(),
         capitalizeFirstCharacterOfPrimaryKeys: true
       });
-      collection.debugMode = true;
+      // collection.debugMode = true;
     });
 
     it('should seem like an object by providing dot notation for primaryKeys ', function() {
@@ -260,6 +260,47 @@ describe('lib/Collection', function() {
       item = collection.CHICKEN;
       item2 = collection.chicken;
       item3 = collection.pigeon;
+    });
+
+    it('should not set/complain about setting an object to itself.', function() {
+      var duck = collection._collection[3];
+      expect(duck).toBeDefined();
+      expect(collection.duck).toEqual(duck);
+
+
+      collection.set("duck", duck);
+      expect(collection.duck).toEqual(duck);
+      expect(collection.warnMessage).not.toContain('Overwriting an existing collection member duck (they have the same key but are not equal nor the same object)');
+
+    });
+
+
+    it('should not set/complain about setting an equivalent object to itself.', function() {
+      var duck = collection._collection[3];
+      expect(duck).toBeDefined();
+      expect(collection.duck).toEqual(duck);
+
+      collection.set("duck", new FieldDBObject({
+        name: "duck",
+      }));
+      expect(collection.duck).toEqual(duck);
+      expect(collection.warnMessage).not.toContain('Overwriting an existing collection member duck (they have the same key but are not equal nor the same object)');
+
+    });
+
+
+    it('should complain about setting a non equivalent object to itself.', function() {
+      var duck = collection._collection[3];
+      expect(duck).toBeDefined();
+      expect(collection.duck).toEqual(duck);
+
+      collection.set("duck", new FieldDBObject({
+        name: "duck",
+        feet: "yellow"
+      }));
+      expect(collection.duck).toEqual(duck);
+      expect(collection.warnMessage).toContain('Overwriting an existing collection member duck (they have the same key but are not equal nor the same object)');
+
     });
 
 
@@ -418,7 +459,7 @@ describe('lib/Collection', function() {
     });
 
     it('should be possible to remove a simple object', function() {
-      collection.debugMode = true;
+      // collection.debugMode = true;
       var duck = collection.collection[3].toJSON();
       expect(duck.type).toEqual("FieldDBObject");
       expect(duck.name).toEqual("duck");
@@ -560,7 +601,7 @@ describe('lib/Collection', function() {
         collection: useDefaults(),
         capitalizeFirstCharacterOfPrimaryKeys: true
       });
-      collection.debugMode = true;
+      // collection.debugMode = true;
     });
 
     it('should be able to set encrypted on members of a collection', function() {
@@ -658,7 +699,7 @@ describe('lib/Collection', function() {
         return item.id;
       })).toEqual(['penguin', 'cuckoo', 'willBeOverwritten', 'robin', 'cardinal', 'onlyinNew', 'conflictingContents']);
 
-      aBaseCollection.debugMode = true;
+      // aBaseCollection.debugMode = true;
       var result = aBaseCollection.merge("self", atriviallyDifferentCollection, "overwrite");
       expect(result).toBe(aBaseCollection);
       // expect(aBaseCollection).toEqual(aBaseCollection);
