@@ -1,48 +1,58 @@
 [{
-   "_id": "4e0076c14732da4da9a24cc24b5b418b",
-   "_rev": "1-2254da0a38ef467945101e2c327672f5",
-   "verb": "<a target='_blank' href='#diff/oldrev/8-dbcfc98f711b25ed568f0065fc6c9bef/newrev/9-34962d60f6612d2728ecc744518a384e'>updated</a> ",
-   "verbicon": "icon-pencil",
-   "directobject": "<a target='_blank' href='#corpus/gina-inuktitut/datum/38b751d2a58a13f04a201ac9f9903185'>nunaqjuaqli aaqkiksimalaunngilaq sunataqaranilu, itijuqjuamik taaqtualuulluni; guutiullu anirngninga ingirralauqpuq imaaluup qulaagut.</a> ",
+   "_id": "6081c579-c46a-4b5d-8509-3f1f2c069c1b_rev_3-1c92ba1c862184cb8a873981b5ab57b6",
+   "_rev": "1-9c253925338711b34618b107b1efc45b",
+   "timestamp": 1396708861000,
+   "verb": "viewed",
+   "verbicon": "icon-eye",
+   "directobject": "<a target='_blank' href='#corpus/anonymous1396552744249-firstcorpus/datum/loadDatum:::723a8b707e579087aa36c2e338ecdb4c'>a datum</a>",
    "directobjecticon": "icon-list",
-   "indirectobject": "in <a target='_blank' href='#corpus/C78E3F31-824E-4B5D-A540-9423AF8AECE5'>Inuktitut</a>",
-   "context": " via Offline App.",
+   "indirectobject": "in Kartuli",
+   "context": " via LearnX App.",
    "teamOrPersonal": "personal",
-   "timeSpent": {
-       "editingTimeSpent": 39.222,
-       "editingTimeDetails": [
-           "9838:::morphemes->nuna-q-juaq-li aaqkiksimalaunngilaq su-na-taqa-rani-lu, itijuqjua-mik taaq-tu-alu-u-lluni; guuti-ul-lu anirngninga ingirra-lauq-puq imaa-lu-up qula-agut.",
-           "29384:::gloss->land-?-big-? ? ?-?-?-?-? ?.3SG.big-? ? God-? ? ? ? ?"
-       ],
-       "totalTimeSpent": 3033.353,
-       "readTimeSpent": 2994.131
-   },
    "user": {
-       "username": "lingllama",
-       "gravatar": "user/user_gravatar.png",
-       "authUrl": "https://authdev.lingsync.org"
+       "username": "anonymous1396552744249",
+       "gravatar": ""
    },
-   "timestamp": 1379517910090,
-   "dateModified": "\"2013-09-18T15:25:10.090Z\""
+   "dateModified": "",
+   "appVersion": "1.102.1",
+   "ip": "92.54.210.89",
+   "deviceName": "samsung google Galaxy Nexus",
+   "androidDetails": {
+       "action": "loadDatum:::723a8b707e579087aa36c2e338ecdb4c",
+       "username": "anonymous1396552744249",
+       "urlString": "content://com.github.opensourcefieldlinguistics.fielddb.datum/datums/723a8b707e579087aa36c2e338eb17ec",
+       "deviceDetails": "{name: 'Samsun Galaxy Nexus', model: 'Galaxy Nexus', product: 'takju', manufacturer: 'Samsun', appversion: '1.102.1', sdk: '18', osversion: '3.0.72-gfb3c9ac(776638)',device: 'maguro', screen: {height: '1184', width: '720', ratio: '1.0', currentOrientation: 'portrait'}, serial: '014E38590801D010', identifier: 'f9f73de09d97046a', wifiMACaddress: '20:64:32:c4:8d:e9', timestamp: '1396708861743',location:{longitude: '0.0', latitude: '0.0', accuracy: '0.0'} , telephonyDeviceId:'351746053637305'}"
+   },
+   "originalId": "6081c579-c46a-4b5d-8509-3f1f2c069c1b",
+   "originalRev": "3-1c92ba1c862184cb8a873981b5ab57b6"
 }, {
-   "_id": "49e123785049b1a89f49dcc66684c331",
-   "_rev": "1-dde9b14ea9346f94a9a67cba0c455556",
-   "verb": "<a target='_blank' href='#diff/oldrev/1-be32177d7e33016939a3cbda187b9eaf/newrev/1-be32177d7e33016939a3cbda187b9eaf'>updated</a> ",
-   "verbicon": "icon-pencil",
-   "directobjecticon": "icon-list",
-   "directobject": "<a target='_blank' href='#data/38b751d2a58a13f04a201ac9f9022623'>gen:50:22 juusipi itjiptimiinginnalauqpuq, ilani ataatangatalu iglumiuqatingit; juusipilu arraagunik 110-nik inuulauqpuq.</a> ",
-   "indirectobject": "in <a target='_blank' href='#corpus/C78E3F31-824E-4B5D-A540-9423AF8AECE5'>Inuktitut</a>",
+   "_id": "a623a7e3-8e17-43e4-972f-e7ee4711de12_rev_3-ec4e9c3776a47adbe5d0d85c36714411",
+   "_rev": "1-b34f69f35261a7b4d580c0287eba9eae",
+   "timestamp": 1402762251853,
+   "verb": "recorded",
+   "verbicon": "icon-plus",
+   "directobject": "sad_xar___2014-06-14_19.10_1402762251832.mp3",
+   "directobjecticon": "icon-audio",
+   "indirectobject": "in Kartuli Speech Recognition Corpus",
    "teamOrPersonal": "team",
-   "context": " via Futon Bot.",
+   "context": " via Kartuli Speech Recognizer",
    "user": {
-       "username": "inuktituttransliterationbot",
-       "gravatar": "968b8e7fb72b5ffe2915256c28a9414c",
-       "_id": "inuktituttransliterationbot",
-       "collection": "bots",
-       "firstname": "Inuktitut",
-       "lastname": "Transliteration Bot",
-       "email": ""
+       "username": "anonymouskartulispeechrec1402762230967",
+       "gravatar": ""
    },
-   "timestamp": 1370794522819,
-   "dateModified": "2013-08-31T01:44:01.476Z"
+   "dateModified": "",
+   "appVersion": "2.4.0",
+   "ip": "88.238.179.235",
+   "deviceName": "GENERAL_MOBILE GM Discovery",
+   "androidDetails": {
+       "action": "{captureAudio : /sdcard/kartuli-speechrec/anonymouskartulispeechrec1402762230967-kartuli/sad_xar___2014-06-14_19.10_1402762251832.mp3}",
+       "username": "anonymouskartulispeechrec1402762230967",
+       "deviceDetails": "{name: 'GENERAL_MOBIL Discovery', model: 'Discovery', product: 'GENERAL_MOBILE', manufacturer: 'GENERAL_MOBIL', appversion: '2.4.0', sdk: '17', osversion: '3.4.5(eng.android.1394084448)',device: 'GENERAL_MOBILE', screen: {height: '1280', width: '720', ratio: '1.0', currentOrientation: 'portrait'}, serial: 'R8SW6TNVF6WGKF49', identifier: '9927e1c60dc26461', wifiMACaddress: 'b8:98:f7:2d:36:8b', timestamp: '1402762251853',location:{longitude: '28.8654277', latitude: '41.0608898', accuracy: '32.0'} , telephonyDeviceId:'353183065040609'}",
+       "urlString": "content://com.github.opensourcefieldlinguistics.fielddb.speechrec.kartuli.datum/datums/sms2",
+       "registerUser": "anonymouskartulispeechrec1402762230967",
+       "dbname": "anonymouskartulispeechrec1402762230967-kartuli",
+       "androidTimestamp": 1402762251853
+   },
+   "originalId": "a623a7e3-8e17-43e4-972f-e7ee4711de12",
+   "originalRev": "3-ec4e9c3776a47adbe5d0d85c36714411"
 }]
