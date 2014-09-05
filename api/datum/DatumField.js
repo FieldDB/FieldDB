@@ -97,11 +97,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   label: {
     get: function() {
-      this.warn("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.todo("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
       return this._labelFieldLinguists || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      this.warn("label is deprecated, instead use a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.todo("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
       this.labelFieldLinguists = value;
       this.id = value;
     }
@@ -816,7 +816,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       json.type = this.type;
       delete json._type;
 
-      console.log(json);
+      this.debug(json);
       return json;
     }
   }
