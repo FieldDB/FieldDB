@@ -36,9 +36,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
     $scope.save = function() {
       $scope.datalist.save().then(function() {
-        if (!$scope.$$phase) {
-          $scope.$digest();
-        }
+        $scope.$digest();
       });
     };
 
@@ -71,9 +69,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       }
       if (!whatToFetch || whatToFetch === []) {
         $scope.datalist.docs = [];
-        if (!$scope.$$phase) {
-          $scope.$digest();
-        }
+        $scope.$digest();
         return;
       }
       $scope.corpus.fetchCollection(whatToFetch).then(function(results) {
@@ -87,9 +83,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
           return doc;
         }));
 
-        if (!$scope.$$phase) {
-          $scope.$digest();
-        }
+        $scope.$digest();
 
       }, function(reason) {
 
@@ -97,9 +91,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
         console.log(' No connetion, Waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
-        if (!$scope.$$phase) {
-          $scope.$digest();
-        }
+        $scope.$digest();
 
         $timeout(function() {
           if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
@@ -113,9 +105,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
     };
 
-    if (!$scope.datalist.docs || $scope.datalist.docs.length === 0) {
-      fetchDatalistDocsIfEmpty();
-    }
+    fetchDatalistDocsIfEmpty();
 
     $scope.undo = function() {
       var type = $scope.datalist.type;
