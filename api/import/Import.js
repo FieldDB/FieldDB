@@ -398,10 +398,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             var promise = builtDoc.save();
 
             promise.then(function(success) {
-              console.log(success);
+              self.debug(success);
               self.progress.completed++;
             }, function(error) {
-              console.log(error);
+              self.debug(error);
               self.progress.completed++;
             });
             savePromises.push(promise);
@@ -409,11 +409,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         });
 
         Q.allSettled(savePromises).then(function(results) {
-          console.log(results);
+          self.debug(results);
           deferred.resolve(results);
           self.progress.completed++;
         },function(results) {
-          console.log(results);
+          self.debug(results);
           deferred.resolve(results);
           self.progress.completed++;
         });
