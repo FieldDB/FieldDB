@@ -103,7 +103,7 @@ describe("Contextualizer", function() {
       expect(contextualizer.localize(datalist.instructions)).toEqual("Choose the right picture to help the mouse eat the cheese.");
 
       contextualizer.currentLocale = "fr";
-      contextualizer.debugMode = true;
+      // contextualizer.debugMode = true;
       expect(contextualizer.localize(datalist.title)).toEqual("On prepare!");
       expect(contextualizer.localize(datalist.description)).toEqual("Pour ce jeu, tu devras écouter des sons pour aider la souris à manger tous les morceaux de fromage!");
       expect(contextualizer.localize(datalist.instructions)).toEqual("Choisi la bonne image pour aider la souris à manger tous les morceaux de fromage.");
