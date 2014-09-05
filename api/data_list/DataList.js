@@ -319,7 +319,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.todo("Adding datumIds for backward compatability until prototype can handle docIds");
       json.datumIds = this.docIds;
 
-      console.log(json);
+      this.debug(json);
       return json;
     }
   }
