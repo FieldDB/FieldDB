@@ -11,8 +11,6 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
  * @property {Date} timestamp Describe timestamp here.
  *
  * @name  Comment
- * @description The initialize function brings up a field in which the user
- *              can enter tags.@class FieldDBObject of Datum validation states
  * @extends FieldDBObject
  * @constructs
  */
@@ -58,9 +56,7 @@ Comment.prototype = Object.create(FieldDBObject.prototype, /** @lends Comment.pr
   /**
    * The edit function allows users to edit a comment.
    *
-   * @param {String}
-   *          newtext Takes new text and replaces old one.
-   *
+   * @param {String}  newtext Takes new text and replaces old one.
    */
   edit: {
     value: function(newtext) {
