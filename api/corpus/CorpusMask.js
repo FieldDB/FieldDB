@@ -81,7 +81,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       if (value === this._id) {
         return;
       }
-      console.warn("CorpusMask id cannot be set, it is 'corpus' by default." + value);
+      this.warn("CorpusMask id cannot be set, it is 'corpus' by default." + value);
       value = "corpus";
       this._id = value;
     }
@@ -210,7 +210,10 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       if (value === this._titleAsUrl) {
         return;
       }
-      this.warn("titleAsUrl cannot be set directly, setting the title will cause it to be set.");
+      // If an app is explicity trying to overwrite a titleAsUrl, complain.
+      if (this._titleAsUrl) {
+        this.warn("titleAsUrl cannot be set directly, setting the title will cause it to be set.");
+      }
     }
   },
 
