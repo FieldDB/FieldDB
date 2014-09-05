@@ -1,48 +1,48 @@
 [{
-   "_id": "4AC9F904-E450-4CA8-85A7-BE27165D9AC7",
-   "_rev": "1-43b2d301cfb57b0d9c6a39f329a8d654",
-   "verb": "uploaded",
-   "verbicon": "icon-arrow-up",
-   "directobject": "your activity feed (docs read: 4, docs written: 2)",
-   "indirectobject": "to your activity feed server",
-   "context": "via Offline App",
-   "teamOrPersonal": "personal",
-   "user": {
-       "username": "lingllama",
-       "gravatar": "https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87?s",
-       "pouchname": "lingllama-cherokee",
-       "authUrl": "https://authdev.fieldlinguist.com:3183",
-       "_id": "lingllama",
-       "id": "lingllama"
-   },
-   "timestamp": 1359130902740,
-   "dateModified": "\"2013-01-25T16:21:42.740Z\"",
-   "pouchname": "lingllama-activity_feed"
-}, {
-   "_id": "89bc4d7dcc2b1fc9a7bb0f4f4744182d",
-   "_rev": "1-b06dfeffee98054e91f524f586c283f3",
-   "verb": "<a target='_blank' href='#diff/oldrev/undefined/newrev/1-701f44686ae45a27d4e5a08ed6c26dc8'>added</a> ",
-   "verbicon": "icon-plus",
-   "directobjecticon": "icon-calendar",
-   "directobject": "<a target='_blank' href='#session/89bc4d7dcc2b1fc9a7bb0f4f474415e4'>This data was collected by ME Cathcart for her dissertation \"Impulsatives: The syntax and semantics of involuntary desire\" for more of her data: https://github.com/mecathcart/Impulsatives</a> ",
-   "indirectobject": "in <a target='_blank' href='#corpus/89bc4d7dcc2b1fc9a7bb0f4f4743e705'>CommunityCorpus</a>",
-   "teamOrPersonal": "team",
+   "_id": "4e0076c14732da4da9a24cc24b5b418b",
+   "_rev": "1-2254da0a38ef467945101e2c327672f5",
+   "verb": "<a target='_blank' href='#diff/oldrev/8-dbcfc98f711b25ed568f0065fc6c9bef/newrev/9-34962d60f6612d2728ecc744518a384e'>updated</a> ",
+   "verbicon": "icon-pencil",
+   "directobject": "<a target='_blank' href='#corpus/gina-inuktitut/datum/38b751d2a58a13f04a201ac9f9903185'>nunaqjuaqli aaqkiksimalaunngilaq sunataqaranilu, itijuqjuamik taaqtualuulluni; guutiullu anirngninga ingirralauqpuq imaaluup qulaagut.</a> ",
+   "directobjecticon": "icon-list",
+   "indirectobject": "in <a target='_blank' href='#corpus/C78E3F31-824E-4B5D-A540-9423AF8AECE5'>Inuktitut</a>",
    "context": " via Offline App.",
+   "teamOrPersonal": "personal",
+   "timeSpent": {
+       "editingTimeSpent": 39.222,
+       "editingTimeDetails": [
+           "9838:::morphemes->nuna-q-juaq-li aaqkiksimalaunngilaq su-na-taqa-rani-lu, itijuqjua-mik taaq-tu-alu-u-lluni; guuti-ul-lu anirngninga ingirra-lauq-puq imaa-lu-up qula-agut.",
+           "29384:::gloss->land-?-big-? ? ?-?-?-?-? ?.3SG.big-? ? God-? ? ? ? ?"
+       ],
+       "totalTimeSpent": 3033.353,
+       "readTimeSpent": 2994.131
+   },
    "user": {
        "username": "lingllama",
-       "gravatar": "https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87?s",
-       "authUrl": "https://authdev.lingsync.org",
-       "id": "lingllama",
-       "_id": "lingllama",
-       "_rev": "7-69a4b72e44bb28591f8998b761b65b05",
-       "firstname": "Ling",
-       "lastname": "Llama",
-       "email": "lingllama@lingsync.org",
-       "researchInterest": "Memes \n       \n       \n      ",
-       "affiliation": "http://lingllama.tumblr.com",
-       "description": "",
-       "collection": "users"
+       "gravatar": "user/user_gravatar.png",
+       "authUrl": "https://authdev.lingsync.org"
    },
-   "timestamp": 1363561654252,
-   "dateModified": "\"2013-03-17T23:07:34.252Z\""
+   "timestamp": 1379517910090,
+   "dateModified": "\"2013-09-18T15:25:10.090Z\""
+}, {
+   "_id": "49e123785049b1a89f49dcc66684c331",
+   "_rev": "1-dde9b14ea9346f94a9a67cba0c455556",
+   "verb": "<a target='_blank' href='#diff/oldrev/1-be32177d7e33016939a3cbda187b9eaf/newrev/1-be32177d7e33016939a3cbda187b9eaf'>updated</a> ",
+   "verbicon": "icon-pencil",
+   "directobjecticon": "icon-list",
+   "directobject": "<a target='_blank' href='#data/38b751d2a58a13f04a201ac9f9022623'>gen:50:22 juusipi itjiptimiinginnalauqpuq, ilani ataatangatalu iglumiuqatingit; juusipilu arraagunik 110-nik inuulauqpuq.</a> ",
+   "indirectobject": "in <a target='_blank' href='#corpus/C78E3F31-824E-4B5D-A540-9423AF8AECE5'>Inuktitut</a>",
+   "teamOrPersonal": "team",
+   "context": " via Futon Bot.",
+   "user": {
+       "username": "inuktituttransliterationbot",
+       "gravatar": "968b8e7fb72b5ffe2915256c28a9414c",
+       "_id": "inuktituttransliterationbot",
+       "collection": "bots",
+       "firstname": "Inuktitut",
+       "lastname": "Transliteration Bot",
+       "email": ""
+   },
+   "timestamp": 1370794522819,
+   "dateModified": "2013-08-31T01:44:01.476Z"
 }]
