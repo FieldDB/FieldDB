@@ -276,7 +276,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       if (this.saving) {
-        self.warn("Save is in process...");
+        self.warn("Save was already in process...");
         return;
       }
       this.saving = true;
@@ -326,7 +326,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
-        }).catch(function(reason){
+        })
+        .catch(function(reason) {
           self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
@@ -401,7 +402,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (anObject.dbname && anotherObject.dbname && anObject.dbname !== anotherObject.dbname) {
         if (optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
-          this.warn("Permitting a merge of objects from different databases: " + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
+          this.warn("Permitting a merge of objects from different databases: " + anObject.dbname + "  and " + anotherObject.dbname);
+          this.debug("Merging ", anObject, anotherObject);
         } else if (optionalOverwriteOrAsk.indexOf("changeDBname") === -1) {
           this.warn("Refusing to merge these objects, they come from different databases: " + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
           return null;
@@ -460,7 +462,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
                   // resultObject._dbname = this.dbname;
                   this.warn(" Keeping _dbname of " + resultObject.dbname);
                 } else {
-                  this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)", anObject[aproperty], " ->", anotherObject[aproperty]);
+                  this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+                  this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
+
                   resultObject[aproperty] = anotherObject[aproperty];
                 }
               } else {
