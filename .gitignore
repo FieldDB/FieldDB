@@ -17,7 +17,7 @@ spreadsheet_build_dev
 *private*
 *mcgill*
 
-# Ignore natural lib 
+# Ignore natural lib
 public/libs/natural/
 
 .wav
@@ -77,6 +77,9 @@ npm-debug.log
 *.ps
 *(busy)
 *.pdfsync
+*.vrb
+*.snm
+*.nav
 
 # Compiled source #
 ###################
