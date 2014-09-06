@@ -21,9 +21,9 @@ Activities.prototype = Object.create(Collection.prototype, /** @lends Activities
     value: Activities
   },
 
-  primaryKey: {
-    value: 'timestamp'
-  },
+  // primaryKey: {
+  //   value: 'timestamp' //not unique enough
+  // },
 
   INTERNAL_MODELS: {
     value: {
@@ -31,49 +31,84 @@ Activities.prototype = Object.create(Collection.prototype, /** @lends Activities
     }
   },
 
-  add: {
-    value: function(bareActivityObject) {
-      // bareActivityObject.verb = bareActivityObject.verb.replace("href=", "target='_blank' href=");
-      // bareActivityObject.directobject = bareActivityObject.directobject.replace("href=", "target='_blank' href=");
-      // bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
-      // bareActivityObject.context = bareActivityObject.context.replace("href=", "target='_blank' href=");
-      if (!bareActivityObject.timestamp) {
-        bareActivityObject.timestamp = Date.now();
-      }
-      // if (OPrime.debugMode) OPrime.debug("Saving activity: ", bareActivityObject);
-      // var backboneActivity = new Activity(bareActivityObject);
-
-      // var couchConnection = this.get("couchConnection");
-      // var activitydb = couchConnection.pouchname + "-activity_feed";
-      // if (bareActivityObject.teamOrPersonal != "team") {
-      //   activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
-      //   backboneActivity.attributes.user.gravatar = this.get("authentication").get("userPrivate").get("gravatar");
-      // }
-      Collection.prototype.add.apply(this, [new Activity(bareActivityObject)]);
-      // var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
-
-      // OPrime.makeCORSRequest({
-      //   type: 'POST',
-      //   url: couchurl,
-      //   data: backboneActivity.toJSON(),
-      //   success: function(resp) {
-      //     if (OPrime.debugMode) OPrime.debug("Successfully saved activity to your activity couch.", resp);
-      //   },
-      //   error: function(e, f, g) {
-      //     if (OPrime.debugMode) OPrime.debug("Error saving activity", e, f, g);
-      //     localStorage.setItem("activity" + Date.now(), backboneActivity.toJSON());
-      //   }
-      // });
-
-
-      //      if (bareActivityObject.get("teamOrPersonal") == "team") {
-      //        window.app.get("currentCorpusTeamActivityFeed").addActivity(bareActivityObject);
-      //      } else {
-      //        window.app.get("currentUserActivityFeed").addActivity(bareActivityObject);
-      //      }
+  user: {
+    get: function() {
+      return this._user;
     },
-  }
+    set: function(value) {
+      if (value === this._user) {
+        return;
+      }
+      if (this.dbname && this.teamOrPersonal === "personal" && this.dbname !== value.username + "-activity_feed") {
+        this.bug("Cannot change the user of " + this.dbname + " activity feed to " + value.username + "-activity_feed");
+        return;
+      }
+      if (value) {
+        this._user = value;
+      }
+    }
+  },
 
+  dbname: {
+    get: function() {
+      if (this._dbname) {
+        return this._dbname;
+      }
+      if (this.user && this.teamOrPersonal === "personal") {
+        return this.user.username + "-activity_feed";
+      }
+    },
+    set: function(value) {
+      if (value === this._dbname) {
+        return;
+      }
+      if (this.user && this.teamOrPersonal === "personal" && value !== this.user.username + "-activity_feed") {
+        this.bug("Cannot change the " + this.user.username + "-activity_feed" + " to " + value);
+        return;
+      }
+      if (value) {
+        this.dbname = value;
+      }
+    }
+  },
+
+  add: {
+    value: function(activity) {
+      if (activity.url && activity.url !== this.url) {
+        this.bug("Cannot add " + activity.url + " activity to " + this.url + " server, please report this. ");
+        return;
+      }
+      if (activity.dbname && activity.dbname !== this.dbname) {
+        this.bug("Cannot add " + activity.dbname + " activity to " + this.dbname + " activity feed, please report this. ");
+        return;
+      }
+      if (!activity.user) {
+        activity.user = this.user;
+      }
+      if (!activity._id) {
+        activity._id = Activity.uuidGenerator();
+      }
+      activity.url = this.url;
+      activity.dbname = this.dbname;
+      this.debug(activity);
+      activity = new Activity(activity);
+      return Collection.prototype.add.apply(this, [activity]);
+    }
+  },
+
+  save: {
+    value: function() {
+      var self = this;
+
+      this.map(function(activity) {
+        if (activity.dbname !== self.dbname) {
+          self.warn("This activity is not for this activity feed.");
+        } else {
+          activity.save();
+        }
+      });
+    }
+  }
 
 });
 exports.Activities = Activities;
