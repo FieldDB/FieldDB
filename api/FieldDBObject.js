@@ -106,6 +106,20 @@ FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v2.0.1";
 FieldDBObject.DEFAULT_DATE = 0;
 
+
+/**
+ * The uuid generator uses a "GUID" like generation to create a unique string.
+ *
+ * @returns {String} a string which is likely unique, in the format of a
+ *          Globally Unique ID (GUID)
+ */
+FieldDBObject.uuidGenerator = function() {
+  var S4 = function() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  };
+  return Date.now() + (S4() + S4()  + S4()  + S4()  + S4()  + S4() + S4() + S4());
+};
+
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
   constructor: {

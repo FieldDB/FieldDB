@@ -436,6 +436,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       this.debug('adding ' + dotNotationKey);
       this.set(dotNotationKey, value);
+      return this[dotNotationKey];
     }
   },
 

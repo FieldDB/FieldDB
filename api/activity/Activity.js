@@ -5,7 +5,6 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
  *        Dene Corpus" This is so that users can see their history and teams
  *        can view teammate's contributions.
  *
- *
  * @name  Activity
  * @extends FieldDBObject
  * @constructs
@@ -13,7 +12,14 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 var Activity = function Activity(options) {
   this.debug("Constructing Activity ", options);
   FieldDBObject.apply(this, arguments);
+  if (!this.timestamp) {
+    this.timestamp = Date.now();
+  }
+  if (!this.verbicon) {
+    this.verbicon = this.verbicon;
+  }
 };
+Activity.uuidGenerator = FieldDBObject.uuidGenerator;
 
 Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.prototype */ {
 
@@ -30,6 +36,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
       };
     }
   },
+
   api: {
     value: "/activities"
   },
@@ -40,7 +47,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         create: {
           verb: "added",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-plus",
           directobject: "something",
           directobjecturl: "",
@@ -54,7 +60,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         record: {
           verb: "recorded",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-microphone",
           directobject: "something",
           directobjecturl: "",
@@ -68,7 +73,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         video: {
           verb: "videoed",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-video-camera",
           directobject: "something",
           directobjecturl: "",
@@ -82,7 +86,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         photo: {
           verb: "photographed",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-camera",
           directobject: "something",
           directobjecturl: "",
@@ -96,7 +99,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         requestedRecognition: {
           verb: "used speech recognier",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-microphone",
           directobject: "something",
           directobjecturl: "",
@@ -110,7 +112,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         recievedRecognition: {
           verb: "recieved an ASR result",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-refresh",
           directobject: "something",
           directobjecturl: "",
@@ -124,8 +125,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         share: {
           verb: "added",
           verbmask: "added",
-          verburl: "",
-          verbicon: "icon-share",
+          verbicon: "icon-key",
           directobject: "someone",
           directobjecturl: "",
           directobjectmask: "someone",
@@ -138,7 +138,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         import: {
           verb: "imported",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-folder-open",
           directobject: "something",
           directobjecturl: "",
@@ -152,7 +151,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         view: {
           verb: "viewed",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-eye",
           directobject: "something",
           directobjecturl: "",
@@ -166,7 +164,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         download: {
           verb: "downloaded",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-download",
           directobject: "something",
           directobjecturl: "",
@@ -180,21 +177,21 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         modify: {
           verb: "modified",
           verbmask: "did something",
-          verburl: "#diff/oldrev/itemrevbefore/newrev/itemrevafter",
+          verbRevisionBefore: "itemrevbefore",
+          verbRevisionAfter: "itemrevafter",
           verbicon: "icon-pencil",
           directobject: "something",
-          directobjecturl: "",
+          directobjectId: "",
           directobjectmask: "to something",
           directobjecticon: "icon-circle-o",
           indirectobject: "in something",
-          indirectobjecturl: "",
+          indirectobjectId: "",
           indirectobjectmask: "in something",
           indirectobjecticon: "icon-square-o"
         },
         remove: {
           verb: "removed",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-times-circle",
           directobject: "something",
           directobjecturl: "",
@@ -208,7 +205,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         delete: {
           verb: "deleted",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-plus",
           directobject: "something",
           directobjecturl: "",
@@ -222,7 +218,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         login: {
           verb: "logged in",
           verbmask: "did something",
-          verburl: "",
           verbicon: "icon-check",
           directobject: "something",
           indirectobject: "to something",
@@ -248,6 +243,163 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
     }
   },
 
+  getDefaultForVerb: {
+    value: function(value) {
+      if (value.replace) {
+        value.replace(/ed$/, "");
+      }
+      if (this.defaults.verb[value]) {
+        return this.defaults.verb[value];
+
+      } else if (value.indexOf("log") > -1 && value.indexOf("in") > -1) {
+        return this.defaults.verb.login;
+
+      } else if (value.indexOf("dele") > -1) {
+        return this.defaults.verb.delete;
+
+      } else if (value.indexOf("remov") > -1) {
+        return this.defaults.verb.remove;
+
+      } else if (value.indexOf("modif") > -1) {
+        return this.defaults.verb.modify;
+
+      } else if (value.indexOf("downloa") > -1) {
+        return this.defaults.verb.download;
+
+      } else if (value.indexOf("view") > -1) {
+        return this.defaults.verb.view;
+
+      } else if (value.indexOf("import") > -1) {
+        return this.defaults.verb.import;
+
+      } else if (value.indexOf("shar") > -1) {
+        return this.defaults.verb.share;
+
+      } else if (value.indexOf("ASR result") > -1) {
+        return this.defaults.verb.recievedRecognition;
+
+      } else if (value.indexOf("used speech recognier") > -1) {
+        return this.defaults.verb.requestedRecognition;
+
+      } else if (value.indexOf("phot") > -1) {
+        return this.defaults.verb.photo;
+
+      } else if (value.indexOf("video") > -1) {
+        return this.defaults.verb.video;
+
+      } else if (value.indexOf("recor") > -1) {
+        return this.defaults.verb.record;
+
+      } else if (value.indexOf("add") > -1 && value.indexOf("creat") > -1) {
+        return this.defaults.verb.create;
+      } else {
+
+        return {
+          verb: "did something",
+          verbmask: "did something",
+          verbicon: "icon-bell",
+          directobject: "something",
+          directobjecturl: "",
+          directobjectmask: "to something",
+          directobjecticon: "icon-circle-o",
+          indirectobject: "in something",
+          indirectobjecturl: "",
+          indirectobjectmask: "in something",
+          indirectobjecticon: "icon-square-o"
+        };
+      }
+
+    }
+  },
+
+  verb: {
+    get: function() {
+      return this._verb;
+    },
+    set: function(value) {
+      if (value === this._verb) {
+        return;
+      }
+      value = this.makeLinksOpenNewWindows(value);
+      if (value) {
+        this._verb = value;
+      }
+    }
+  },
+
+  verbicon: {
+    get: function() {
+      if (this._verbicon) {
+        return this._verbicon;
+      } else {
+        return this.getDefaultForVerb(this.verb).verbicon;
+      }
+    },
+    set: function(value) {
+      if (value === this._verbicon) {
+        return;
+      }
+      value = this.makeLinksOpenNewWindows(value);
+      if (value) {
+        this._verbicon = value;
+      }
+    }
+  },
+
+  directobject: {
+    get: function() {
+      return this._directobject;
+    },
+    set: function(value) {
+      if (value === this._directobject) {
+        return;
+      }
+      value = this.makeLinksOpenNewWindows(value);
+      if (value) {
+        this._directobject = value;
+      }
+    }
+  },
+
+  indirectobject: {
+    get: function() {
+      return this._indirectobject;
+    },
+    set: function(value) {
+      if (value === this._indirectobject) {
+        return;
+      }
+      value = this.makeLinksOpenNewWindows(value);
+      if (value) {
+        this._indirectobject = value;
+      }
+    }
+  },
+
+  context: {
+    get: function() {
+      return this._context;
+    },
+    set: function(value) {
+      if (value === this._context) {
+        return;
+      }
+      value = this.makeLinksOpenNewWindows(value);
+      if (value) {
+        this._context = value;
+      }
+    }
+  },
+
+  makeLinksOpenNewWindows: {
+    value: function(value) {
+      if (value.replace) {
+        value = value.replace("href=", "target='_blank' href=");
+      }
+      return value;
+    }
+  },
+
   timestamp: {
     get: function() {
       return this._timestamp;
@@ -266,7 +418,31 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
 
       this._timestamp = value;
     }
+  },
+
+  save: {
+    value: function() {
+      this.debug("Customizing activity save ");
+
+      return FieldDBObject.prototype.save.apply(this, arguments);
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing activity toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      this.verb = this.verb;
+      this.directobject = this.directobject;
+      this.indirectobject = this.indirectobject;
+      this.context = this.context;
+
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      this.debug(json);
+      return json;
+    }
   }
+
 });
 
 exports.Activity = Activity;
