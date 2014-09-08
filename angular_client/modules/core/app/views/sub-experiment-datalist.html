@@ -1,0 +1,51 @@
+<button class="btn pull-right" ng-click="save()" ng-class="{'btn-default': datalist.saving, 'btn-success': !datalist.saving}">Save</button>
+<button class="btn pull-right" ng-click="undo()" ng-class="{'btn-default': datalist.saving, 'btn-inverse': !datalist.saving}">Undo</button>
+<h1 ng-model="datalist.label"></h1>
+<h3>Titles:</h3>
+<ul>
+  <li ng-repeat="context in datalist.title">{{context}}</li>
+</ul>
+Descriptions:
+<ul>
+  <li ng-repeat="context in datalist.description">{{context}}</li>
+</ul>
+Instructions:
+<ul>
+  <li ng-repeat="context in datalist.instructions">{{context}}</li>
+</ul>
+Reinforcement Cartoon:
+<div>
+  <img title="Before Start" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.firstImageSrc}}"/>
+  <img title="N. {{$index + 1}}"  class="gravatar-medium" ng-repeat="image in datalist.reinforcementAnimation.animationImages" ng-src="{{image.incompleteImageFile}}"/>
+  <img title="After Last" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.lastImageSrc}}"/>
+</div>
+<div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
+  <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a stimulus' number to re-order it</div>
+  <div class="well"
+  ng-class="{'col-md-12': datalist.showDocCheckboxes}"
+  ng-repeat="item in datalist.docs._collection track by $index"
+  drag-hover-class="drop-zone-instructions-can-reorder-here"
+  ui-on-Drop="onDrop($event, $data, $index, datalist.docs._collection)">
+    <div ng-class="{'col-md-1': datalist.showDocCheckboxes || datalist.showDocPosition}">
+      <span><input type="checkbox" ng-show="datalist.showDocCheckboxes"/></span>
+      <span
+        class="badge badge-info"
+        ng-show="datalist.showDocPosition"
+        title="Position in list"
+        ui-draggable="true"
+        drag="item"
+        on-drop-success="dropSuccessHandler($event, $index, datalist.docs._collection)">
+        N. {{$index +1}}
+      </span>
+      <span ng-click="removeItemFromList(item)"><i class="fa fa-times-circle"></i></span>
+    </div>
+    <div  ng-class="{'col-md-10': datalist.showDocCheckboxes}" data-fielddb-datum json="item" corpus="corpus">
+    </div>
+  </div>
+</div>
+<div ng-show="canAddNewItemsToDataList()"><i class="fa fa-plus-circle"></i> Add </div>
+
+<blockquote hidden ng-hide="true" class="status">
+  {{datalist.warnMessage}}
+  {{datalist.docs.warnMessage}}
+</blockquote>

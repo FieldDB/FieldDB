@@ -1,3 +1,4 @@
+<i class="fa pull-right" ng-class="{'fa-eye': !user.decryptedMode, 'fa-eye-slash': user.decryptedMode}" ng-click="toggleViewDecryptedDetails()"></i>
 <p class="text-center">
 	<img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" alt="{{user.name}}" class="img-polaroid">
 </p>
@@ -5,26 +6,3 @@
 	<h1> {{user.firstname}} {{user.lastname}}</h1>
 	<p>{{user.username}}</p>
 </div>
-<div class="well">
-	<dl>
-		<dt>
-			<i style="margin-top:3px" class="fa fa-folder-open"></i>
-			&nbsp;&nbsp;Interests: {{user.researchInterest}}
-		</dt>
-		<dd>
-		</dd>
-		<dt>
-			<i style="margin-top:3px" class="fa fa-user"></i>
-			&nbsp;&nbsp;Affiliation: {{user.affiliation}}
-		</dt>
-		<dd>
-		</dd>
-		<dt>
-			<i style="margin-top:3px" class="fa fa-comment"></i>
-			&nbsp;&nbsp;Description: {{user.description}}
-		</dt>
-		<dd>
-		</dd>
-	</dl>
-</div>
-

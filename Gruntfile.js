@@ -65,14 +65,14 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/corpus/CorpusMask.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/confidentiality_encryption/Confidential.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js', 'api/datum/DatumField.js', 'api/data_list/DataList.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/user/User.js', 'api/user/Speaker.js', 'api/user/Consultant.js', 'api/user/Participant.js', 'api/corpus/CorpusMask.js']
       },
       test: {
         options: {
           jshintrc: 'tests/.jshintrc',
           ignores: ['tests/libs/**/*js']
         },
-        src: ['tests/FieldDBTest.js', 'tests/FieldDBObjectTest.js', 'tests/import/ImportTest.js', 'tests/CollectionTest.js', 'tests/corpus/CorpusTest.js', 'tests/datum/DatumFieldsTest.js']
+        src: ['tests/FieldDBTest.js', 'tests/FieldDBObjectTest.js', 'tests/CollectionTest.js', 'tests/activity/*.js', 'tests/app/*.js', 'tests/audioVideo/*.js', 'tests/authentication/*.js', 'tests/comment/*.js', 'tests/confidentiality_encryption/*.js', 'tests/corpus/*.js', 'tests/data_list/*.js', 'tests/datum/*.js', 'tests/export/*.js', 'tests/glosser/*.js', 'tests/hotkey/*.js', 'tests/image/*.js', 'tests/import/*.js', 'tests/insert_unicode/*.js', 'tests/lexicon/*.js', 'tests/permission/*.js', 'tests/search/*.js', 'tests/user/*.js']
       },
     },
     jsdoc: {

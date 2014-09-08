@@ -17,7 +17,7 @@ describe("api/import/Import", function() {
   });
 
   it("should be able to use a corpus", function() {
-    var corpus = new Corpus(Corpus.defaults);
+    var corpus = new Corpus(Corpus.prototype.defaults);
     expect(corpus).toBeDefined();
     corpus.debug(corpus);
     expect(corpus.dbname).toBeDefined();
@@ -31,7 +31,7 @@ describe("api/import/Import", function() {
 
   it("should be able to ask the corpus to create a datum", function() {
     var dbname = "testingcorpusinimport-firstcorpus";
-    var corpus = new Corpus(Corpus.defaults);
+    var corpus = new Corpus(Corpus.prototype.defaults);
     corpus.dbname = dbname;
     var datum = corpus.newDatum();
     corpus.debug(datum);
@@ -69,7 +69,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
 
   beforeEach(function() {
     var dbname = "testingbatchimport-rawtext";
-    corpus = new Corpus(Corpus.defaults);
+    corpus = new Corpus(Corpus.prototype.defaults);
     corpus.dbname = dbname;
     corpus.language = {
       "ethnologueUrl": "",
@@ -233,7 +233,7 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
       }]);
 
       // Ensure that the files are truely read by counting the length and the number of commas
-      expect(importer.rawText.length).toEqual(926);
+      expect(importer.rawText.length).toEqual(1006);
       expect(importer.rawText.match(/,/g).length).toEqual(88);
 
     }, function(options) {
@@ -271,21 +271,60 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
   }, specIsRunningTooLong);
 
-  it("should process csv participants", function() {
+  it("should process csv participants", function(done) {
     var dbname = "testingcorpusinimport-firstcorpus";
-    var corpus = new Corpus(Corpus.defaults_psycholinguistics);
+    var corpus = new Corpus(Corpus.prototype.defaults_psycholinguistics);
     corpus.dbname = dbname;
 
     var importer = new Import({
       corpus: corpus,
-      rawText: fs.readFileSync('sample_data/students.csv', 'utf8')
+      rawText: fs.readFileSync('sample_data/students.csv', 'utf8'),
+      importType: "participants"
     });
 
+    // Step 1: import CSV
     importer.importCSV(importer.rawText, importer);
     expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
     expect(importer.asCSV.length).toEqual(17);
+    expect(importer.showImportSecondStep).toBeTruthy();
 
-  });
+    // Step 2: build participants
+    // importer.debugMode = true;
+    importer.convertTableIntoDataList().then(function(results) {
+      var headers = importer.discoveredHeaders;
+      expect(headers[0].id).toEqual("anonymousCode");
+      expect(headers[1].id).toEqual('courseNumber');
+      expect(headers[2].id).toEqual('firstname');
+      expect(headers[3].id).toEqual('lastname');
+      expect(headers[4].id).toEqual('dateOfBirth');
+
+      importer.documentCollection._collection[1].fields.decryptedMode = true;
+      expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual('Damiane');
+      expect(importer.documentCollection._collection[1].fields.firstname.mask).toEqual('xxxxxxx');
+
+      importer.documentCollection._collection[2].fields.decryptedMode = true;
+      expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual('Ariane');
+      expect(importer.documentCollection._collection[2].fields.firstname.mask).toEqual('xxxxxx');
+
+      importer.documentCollection._collection[3].fields.decryptedMode = true;
+      expect(importer.documentCollection._collection[3].fields.firstname.value).toEqual('Michel');
+      expect(importer.documentCollection._collection[3].fields.firstname.mask).toEqual('xxxxxx');
+
+      expect(importer.progress.total).toEqual(17);
+      expect(importer.progress.completed).toEqual(17);
+
+      expect(results.length).toEqual(16);
+
+      expect(importer.datalist).toBeDefined();
+      expect(importer.datalist.title).toEqual("Import Data");
+      expect(importer.datalist.description).toEqual("This is the data list which results from the import of the text typed/pasted in the import text area.");
+      expect(importer.datalist.docs.length).toEqual(16);
+      expect(importer.showImportThirdStep).toBeTruthy();
+
+    }).then(done, done);
+
+    // console.log(JSON.stringify(importer.importFields, null, 2));
+  }, specIsRunningTooLong);
 
 
   xit("should read a file when in a browser", function(done) {
@@ -315,7 +354,7 @@ describe("Import: as a morphologist I want to import my data from CSV", function
   var importer;
   beforeEach(function() {
     var dbname = "testingcorpusinimport-firstcorpus";
-    var corpus = new Corpus(Corpus.defaults);
+    var corpus = new Corpus(Corpus.prototype.defaults);
     corpus.dbname = dbname;
 
     importer = new Import({
@@ -375,14 +414,17 @@ describe("Import: as a morphologist I want to import my data from CSV", function
 
       // Build data
       expect(importer.extractedHeader).toEqual(['Date Elicited', 'utterance', 'morphemes', 'gloss', 'translation', 'comments', '', 'tags', 'CheckedWithConsultant', 'source/publication', 'a.field-with*dangerous characters (for import)']);
-      var headers = importer.convertTableIntoDataList();
-      console.log(JSON.stringify(headers));
-      expect(headers[0].id).toEqual("dateElicited");
-      expect(headers[8].id).toEqual('validationStatus');
-      expect(headers[9].id).toEqual('sourcePublication');
-      expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
+      importer.convertTableIntoDataList().then(function() {
+        var headers = importer.discoveredHeaders;
+        importer.debug(JSON.stringify(headers));
+        expect(headers[0].id).toEqual("dateElicited");
+        expect(headers[8].id).toEqual('validationStatus');
+        expect(headers[9].id).toEqual('sourcePublication');
+        expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
+        //TODO finish IGT import later
 
-      //TODO finish IGT import later
+      });
+
 
     }, function(options) {
       expect(options).toEqual('It should not error');
