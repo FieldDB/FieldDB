@@ -34,7 +34,7 @@ module.exports = function(grunt) {
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js', '<%= yeoman.app %>/bower_components/fielddb/{,*/}*.js'],
         // tasks: ['newer:jshint:all'],
-        tasks: ['newer:jshint:all', 'build'],
+        tasks: [ 'build'],
         options: {
           livereload: 35726
         }
