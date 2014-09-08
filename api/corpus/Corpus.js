@@ -289,26 +289,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-  comments: {
-    get: function() {
-      return this._comments || FieldDBObject.DEFAULT_COLLECTION;
-    },
-    set: function(value) {
-      if (value === this._comments) {
-        return;
-      }
-      if (!value) {
-        delete this._comments;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['comments'](value);
-        }
-      }
-      this._comments = value;
-    }
-  },
-
   validationStati: {
     get: function() {
       return this._validationStati || FieldDBObject.DEFAULT_COLLECTION;

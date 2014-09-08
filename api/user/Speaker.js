@@ -143,9 +143,21 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   encryptByCorpus: {
     value: true
   },
+
+  id: {
+    get: function() {
+      return this.anonymousCode;
+    },
+    set: function(value) {
+      if(value !== this.anonymousCode){
+        this.anonymousCode = value;
+      }
+    }
+  },
+
   anonymousCode: {
     get: function() {
-      if (this.fields) {
+      if (this.fields && this.fields.anonymousCode) {
         return this.fields.anonymousCode.value.toUpperCase();
       } else {
         return;

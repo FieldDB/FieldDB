@@ -20,7 +20,7 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
 
     DataList: '<div data-fielddb-datalist json="doc" corpus="corpus"></div>',
     LessonDataList: '<div data-fielddb-datalist json="doc" corpus="corpus" view="LessonDataList"></div>',
-    SubExperimentDataList: '<div data-fielddb-datalist json="doc" corpus="corpus" view="SubExperimentDataList"></div>',
+    SubExperimentDataList: '<div class="well" data-fielddb-datalist json="doc" corpus="corpus" view="SubExperimentDataList"></div>',
 
     Datum: '<div class="well" data-fielddb-datum json="doc" corpus="corpus"></div>',
     MultipleChoice: '<div data-fielddb-datum json="doc" corpus="corpus"></div>',
@@ -56,7 +56,7 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
               // scope.doc = new FieldDB[scope.doc.type](scope.doc);
             }
           } else {
-            element.html('{{doc.type}} Unable to display this document. {{doc._id}}');
+            element.html('{{doc.type}} Unable to display this document. {{doc | json}}');
             if (scope && scope.doc && scope.doc.fetch) {
               console.log('TODO fetch the doc details and refresh the render to the right template if necessary');
               // doc.fetch().then(function(){

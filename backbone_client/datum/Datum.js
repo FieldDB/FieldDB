@@ -702,6 +702,9 @@ define([
      * @return {String} The tokenized string
      */
     processQueryString : function(queryString) {
+      if (!queryString) {
+        queryString = "";
+      }
       // Split on spaces
       var queryArray = queryString.split(" ");
 
@@ -948,9 +951,11 @@ define([
       var fields = _.pluck(fieldsToExport, "mask");
     	var fieldLabels = _.pluck(fieldsToExport, "label");
     	//setting up for IGT case...
-    	var utteranceIndex = -1;
-    	var utterance = "";
-    	var morphemesIndex = -1;
+    	var orthographyIndex = -1;
+      var orthography = "";
+      var utteranceIndex = -1;
+      var utterance = "";
+      var morphemesIndex = -1;
     	var morphemes = "";
     	var glossIndex = -1;
     	var gloss = "";
@@ -966,12 +971,18 @@ define([
            fieldLabels.splice(judgementIndex,1);
            fields.splice(judgementIndex,1);
         }
-    	  utteranceIndex = fieldLabels.indexOf("utterance");
-    		if(utteranceIndex >= 0){
-    			 utterance = fields[utteranceIndex];
-    			 fieldLabels.splice(utteranceIndex,1);
-    			 fields.splice(utteranceIndex,1);
-    		}
+        orthographyIndex = fieldLabels.indexOf("orthography");
+        if(orthographyIndex >= 0){
+           orthography = fields[orthographyIndex];
+           fieldLabels.splice(orthographyIndex,1);
+           fields.splice(orthographyIndex,1);
+        }
+        utteranceIndex = fieldLabels.indexOf("utterance");
+        if(utteranceIndex >= 0){
+           utterance = fields[utteranceIndex];
+           fieldLabels.splice(utteranceIndex,1);
+           fields.splice(utteranceIndex,1);
+        }
     		morphemesIndex = fieldLabels.indexOf("morphemes");
     		if(morphemesIndex >= 0){
     			morphemes = fields[morphemesIndex];
@@ -993,18 +1004,25 @@ define([
     		//print the main IGT, escaping special latex chars
         var judgementClosingBracketIfAny = "";
         if (judgement) {
-          result = result + "\[" + this.escapeLatexChars(judgement) + "\] {";
+          result = result + "\[" + OPrime.escapeLatexChars(judgement) + "\] {";
           judgementClosingBracketIfAny = " } ";
         }
         if (translation) {
           translation = "`" + translation + "'";
         }
+        if (orthography) {
+          result = result
+          + " \\glll " + OPrime.escapeLatexChars(orthography) + "\\\\";
+          // + "\n\t" + OPrime.escapeLatexChars(utterance) + "\\\\";
+        } else {
+          result = result
+          + " \\glll " + OPrime.escapeLatexChars(utterance) + "\\\\";
+        }
     		result = result
-    			+ " \\glll " +  this.escapeLatexChars(utterance) + "\\\\"
-          + "\n\t" + this.escapeLatexChars(morphemes) + "\\\\"
-    			+ "\n\t" + this.escapeLatexChars(gloss) + " \\\\" + judgementClosingBracketIfAny
-    			+ "\n\n \\glt \\emph{" + this.escapeLatexChars(translation) + " \} "
-    			+ "\n\\label\{" +this.escapeLatexChars(utterance).toLowerCase().replace(/[^a-z0-9]/g,"") + "\}";
+          + "\n\t" + OPrime.escapeLatexChars(morphemes) + "\\\\"
+    			+ "\n\t" + OPrime.escapeLatexChars(gloss) + " \\\\" + judgementClosingBracketIfAny
+    			+ "\n\n \\glt \\emph{" + OPrime.escapeLatexChars(translation) + " \} "
+    			+ "\n\\label\{" +OPrime.escapeLatexChars(utterance).toLowerCase().replace(/[^a-z0-9]/g,"") + "\}";
 
           // This is maybe what gb4e actually looks like, the one we had before seemed off...
           // \begin{exe}
@@ -1045,8 +1063,8 @@ define([
     		for (var field in fields){
     			if(fields[field] && (frequentFields.indexOf(fieldLabels[field])>=0)){
     				result = result
-    				+ "\n\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+    				+ "\n\t \\item\[\\sc\{" + OPrime.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + OPrime.escapeLatexChars(fields[field]) ;
     			} else if(fields[field]){
             /* If as a field that is designed for LaTex dont excape the LaTeX characters */
             if (fieldLabels[field].toLowerCase().indexOf("latex") > -1) {
@@ -1062,8 +1080,8 @@ define([
               }
             } else {
                 result = result
-                + "\n%\t \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
-                + "\}\] " + this.escapeLatexChars(fields[field]) ;
+                + "\n%\t \\item\[\\sc\{" + OPrime.escapeLatexChars(fieldLabels[field])
+                + "\}\] " + OPrime.escapeLatexChars(fields[field]) ;
             }
     			}
     		}
@@ -1101,36 +1119,6 @@ define([
         }
         $("#export-text-area").val(result);
       }
-    	return result;
-    },
-
-    escapeLatexChars : function(input){
-    	var result = input;
-      if(!result.replace){
-        return "error parsing field, please report this."+JSON.stringify(input);
-      }
-      //curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
-      result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
-      result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
-      result = result.replace(/\~/g,"\\textasciitildeCURLYBRACES");
-      result = result.replace(/#/g,"\\#");
-      result = result.replace(/\$/g,"\\$");
-      result = result.replace(/%/g,"\\%");
-      result = result.replace(/&/g,"\\&");
-      result = result.replace(/_/g,"\\_");
-      result = result.replace(/{/g,"\\{");
-      result = result.replace(/}/g,"\\}");
-      result = result.replace(/</g,"\\textless");
-      result = result.replace(/>/g,"\\textgreater");
-
-      var tipas = app.get("authentication").get("userPrivate").get("prefs").get("unicodes").toJSON();
-      for (var t = 0; t < tipas.length; t++) {
-        if(tipas[t].tipa){
-          var symbolAsRegularExpession = new RegExp(tipas[t].symbol,"g");
-          result = result.replace(symbolAsRegularExpession,tipas[t].tipa);
-        }
-      }
-    	result = result.replace(/CURLYBRACES/g,"{}");
     	return result;
     },
 

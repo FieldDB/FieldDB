@@ -1,5 +1,6 @@
 /* globals window */
 var Diacritics = require('diacritic');
+var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 
 var regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
@@ -136,8 +137,15 @@ Collection.prototype = Object.create(Object.prototype, {
       }
     }
   },
+
   bug: {
     value: function(message) {
+      if (this.bugMessage) {
+        this.bugMessage += ";;; ";
+      } else {
+        this.bugMessage = "";
+      }
+      this.bugMessage = this.bugMessage + message;
       try {
         window.alert(message);
       } catch (e) {
@@ -163,6 +171,12 @@ Collection.prototype = Object.create(Object.prototype, {
   },
   warn: {
     value: function(message, message2, message3, message4) {
+      if (this.warnMessage) {
+        this.warnMessage += ";;; ";
+      } else {
+        this.warnMessage = "";
+      }
+      this.warnMessage = this.warnMessage + message;
       console.warn(this.type.toUpperCase() + ' WARN: ' + message);
       if (message2) {
         console.warn(message2);
@@ -205,16 +219,26 @@ Collection.prototype = Object.create(Object.prototype, {
         value = [];
       }
       for (var index in value) {
+        if (!value.hasOwnProperty(index)) {
+          continue;
+        }
         /* parse internal models as a model if specified */
         if (!value[index]) {
           this.warn(index + " is undefined on this member of the collection", value);
         }
-        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value[index] && value[index].constructor !== this.INTERNAL_MODELS.item) {
-          value[index] = new this.INTERNAL_MODELS.item(value[index]);
-        }
         this.add(value[index]);
       }
       return this._collection;
+    }
+  },
+
+  getKeys: {
+    value: function() {
+      var self = this;
+
+      return this.collection.map(function(item) {
+        return self.getSanitizedDotNotationKey(item);
+      });
     }
   },
 
@@ -243,7 +267,35 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || 'id';
-      this.debug('searchingFor', searchingFor);
+      this.debug('find is searchingFor', searchingFor);
+      if (!searchingFor) {
+        return results;
+      }
+
+      if (Object.prototype.toString.call(searchingFor) === '[object Array]') {
+        this.bug("User is using find on an array... ths is best re-coded to use search or something else.", searchingFor);
+        this.todo("User is using find on an array... ths is best re-coded to use search or something else. Instead running find only on the first item in the array.");
+        searchingFor = searchingFor[0];
+      }
+
+      if (typeof searchingFor === "object" && !(searchingFor instanceof RegExp)) {
+        // this.debug('find is searchingFor an object', searchingFor);
+        if (Object.keys(searchingFor).length === 0) {
+          return results;
+        }
+
+        var key = searchingFor[this.primaryKey];
+        if (!key && this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && typeof this.INTERNAL_MODELS.item === "function" && !(searchingFor instanceof this.INTERNAL_MODELS.item)) {
+          searchingFor = new this.INTERNAL_MODELS.item(searchingFor);
+        } else if (!key && !(searchingFor instanceof FieldDBObject)) {
+          searchingFor = new FieldDBObject(searchingFor);
+        } else if (!key) {
+          this.bug("This searchingFor is a object, and has no key. this is a problem. ", searchingFor);
+        }
+        key = searchingFor[this.primaryKey];
+        searchingFor = key;
+        // this.debug('find is searchingFor an object whose key is ', searchingFor);
+      }
 
       if (this[searchingFor]) {
         results.push(this[searchingFor]);
@@ -253,9 +305,10 @@ Collection.prototype = Object.create(Object.prototype, {
         sanitzedSearchingFor = new RegExp('.*' + this.sanitizeStringForPrimaryKey(searchingFor) + '.*', 'i');
         this.debug('fuzzy ', searchingFor, sanitzedSearchingFor);
       }
+      // this.debug("searching for somethign with indexOf", searchingFor);
       if (!searchingFor || !searchingFor.test || typeof searchingFor.test !== 'function') {
         /* if not a regex, the excape it */
-        if (searchingFor && searchingFor.indexOf('/') !== 0) {
+        if (searchingFor && searchingFor.indexOf && searchingFor.indexOf('/') !== 0) {
           searchingFor = regExpEscape(searchingFor);
         }
         searchingFor = new RegExp('^' + searchingFor + '$');
@@ -290,8 +343,14 @@ Collection.prototype = Object.create(Object.prototype, {
       if (optionalInverted === null || optionalInverted === undefined) {
         optionalInverted = this.inverted;
       }
-      if (this[searchingFor]) {
+
+      if (value && this[searchingFor] && (value === this[searchingFor] || (typeof this[searchingFor].equals === "function" && this[searchingFor].equals(value)))) {
+        this.warn("Not setting " + searchingFor + ", it already the same in the collection");
         return this[searchingFor];
+      }
+
+      if (value === null || value === undefined) {
+        this.remove(searchingFor, optionalKeyToIdentifyItem);
       }
 
       for (var index in this.collection) {
@@ -299,7 +358,10 @@ Collection.prototype = Object.create(Object.prototype, {
           continue;
         }
         if (this.collection[index][optionalKeyToIdentifyItem] === searchingFor) {
-          return this.collection[index] = value;
+          this.warn("Overwriting an existing collection member " + searchingFor + " (they have the same key but are not equal nor the same object) ");
+          this.debug("Overwriting ", this.collection[index], "->", value);
+          this.collection[index] = value;
+          return value;
         }
       }
       /* if not a reserved attribute, set on object for dot notation access */
@@ -310,14 +372,14 @@ Collection.prototype = Object.create(Object.prototype, {
           this[searchingFor.toLowerCase().replace(/_/g, '')] = value;
         }
 
-        if (optionalInverted) {
-          this.collection.unshift(value);
-        } else {
-          this.collection.push(value);
-        }
-
       } else {
-        console.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
+        this.warn('An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ', value);
+      }
+
+      if (optionalInverted) {
+        this.collection.unshift(value);
+      } else {
+        this.collection.push(value);
       }
       return value;
     }
@@ -352,9 +414,10 @@ Collection.prototype = Object.create(Object.prototype, {
         this.warn('This object is missing a value for the prmary key ' + this.primaryKey + '... it will be hard to find in the collection.', member);
         return;
       }
+      var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
       if (value !== member[this.primaryKey]) {
-        this.warn('using a modified the dot notation key of this object to be ' + value);
+        this.warn('The sanitized the dot notation key of this object is not the same as its primaryKey: ' + oldValue + " -> " + value);
       }
       return value;
     }
@@ -362,13 +425,18 @@ Collection.prototype = Object.create(Object.prototype, {
 
   add: {
     value: function(value) {
+      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
+        value = new this.INTERNAL_MODELS.item(value);
+        this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item);
+      }
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
-        this.warn('The primary key is undefined on this object, it cannot be added! ', value);
+        this.warn('The primary key ' + this.primaryKey + ' is undefined on this object, it cannot be added! ', value);
         throw 'The primary key is undefined on this object, it cannot be added! ' + value;
       }
       this.debug('adding ' + dotNotationKey);
       this.set(dotNotationKey, value);
+      return this[dotNotationKey];
     }
   },
 
@@ -387,8 +455,125 @@ Collection.prototype = Object.create(Object.prototype, {
   },
 
   remove: {
-    value: function(searchingFor, optionalKeyToIdentifyItem) {
-      return this.set(searchingFor, null, optionalKeyToIdentifyItem);
+    value: function(requestedRemoveFor, optionalKeyToIdentifyItem) {
+      if (optionalKeyToIdentifyItem) {
+        this.todo("remove optionalKeyToIdentifyItem " + optionalKeyToIdentifyItem);
+      }
+      var removed = [],
+        itemIndex,
+        key,
+        searchingFor = [],
+        self = this;
+
+      if (Object.prototype.toString.call(requestedRemoveFor) !== '[object Array]') {
+        requestedRemoveFor = [requestedRemoveFor];
+      }
+      // Look for the real item(s) in the collection
+      requestedRemoveFor.map(function(requestedRemoveItem) {
+        searchingFor = searchingFor.concat(self.find(requestedRemoveItem));
+      });
+
+      this.debug("requested remove of ", searchingFor);
+      if (searchingFor.length === 0) {
+        this.warn("Didn't remove object(s) which were not in the collection.", searchingFor);
+        return removed;
+      }
+      /*
+       * For every item, delete the dot reference to it
+       */
+      for (itemIndex = 0; itemIndex < searchingFor.length; itemIndex++) {
+        if (!searchingFor[itemIndex] || searchingFor[itemIndex] === {}) {
+          this.debug("skipping ", searchingFor[itemIndex]);
+          continue;
+        }
+        key = this.getSanitizedDotNotationKey(searchingFor[itemIndex]);
+        if (!key) {
+          this.warn("This item had no primary key, it will only be removed from the collection. ", searchingFor[itemIndex]);
+        }
+
+        if (this[key]) {
+          this.debug("removed dot notation for ", key);
+          delete this[key];
+        }
+
+        if (this[key.toLowerCase().replace(/_/g, '')]) {
+          this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ''));
+          delete this[key.toLowerCase().replace(/_/g, '')];
+        }
+
+      }
+
+      /*
+       * For every item in the collection, if it matches, remove it from the collection
+       */
+      for (itemIndex = this.collection.length - 1; itemIndex >= 0; itemIndex--) {
+        if (searchingFor.indexOf(this.collection[itemIndex]) > -1 && removed.indexOf(this.collection[itemIndex]) === -1) {
+          var thisremoved = this.collection.splice(itemIndex, 1);
+          removed = removed.concat(thisremoved);
+          // Find out if each removed item was requested
+          for (var removedIndex = 0; removedIndex < thisremoved.length; removedIndex++) {
+            if (typeof requestedRemoveFor[0] === "object" && typeof thisremoved[removedIndex].equals === "function") {
+              var itMatches = false;
+              for (var requestedIndex = 0; requestedIndex < requestedRemoveFor.length; requestedIndex++) {
+                if (thisremoved[removedIndex].equals(requestedRemoveFor[requestedIndex])) {
+                  itMatches = true;
+                }
+              }
+              if (!itMatches) {
+                this.warn("One of the requested removal items dont match what was removed ");
+                this.debug("One of the requested removal items dont match what was removed ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
+              }
+            }
+          }
+        }
+      }
+
+      if (removed.length === 0) {
+        this.warn("Didn't remove object(s) which were not in the collection.", searchingFor);
+      }
+      this.removedCollection = this.removedCollection || [];
+      this.removedCollection = this.removedCollection.concat(removed);
+      return removed;
+    }
+  },
+
+  indexOf: {
+    value: function(doc) {
+      if (!this._collection || this.collection.length === 0) {
+        return -1;
+      }
+      for (var docIndex = 0; docIndex < this._collection.length; docIndex++) {
+        var key = doc[this.primaryKey];
+        if (!key) {
+          doc = this.find(doc);
+          if (doc && doc.length > 0) {
+            doc = doc[0];
+          } else {
+            return -1;
+          }
+          key = doc[this.primaryKey];
+        }
+        if (this._collection[docIndex][this.primaryKey] === key) {
+          return docIndex;
+        }
+
+      }
+      return -1;
+    }
+  },
+
+  reorder: {
+    value: function(old_index, new_index) {
+      if (typeof old_index === "object") {
+        old_index = this.indexOf(old_index);
+      }
+      if (new_index >= this._collection.length) {
+        var k = new_index - this._collection.length;
+        while ((k--) + 1) {
+          this._collection.push(undefined);
+        }
+      }
+      this._collection.splice(new_index, 0, this._collection.splice(old_index, 1)[0]);
     }
   },
 
@@ -397,9 +582,11 @@ Collection.prototype = Object.create(Object.prototype, {
       if (removeEmptyAttributes) {
         this.todo('removeEmptyAttributes is not implemented: ' + removeEmptyAttributes);
       }
+      var self = this;
+
       var json = this._collection.map(function(item) {
-        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && typeof this.INTERNAL_MODELS.item === "function" && new this.INTERNAL_MODELS.item().toJSON === "function") {
-          this.debug("This item has a toJSON, which we will call instead");
+        if (typeof item.toJSON === "function") {
+          self.debug("This item has a toJSON, which we will call instead");
           return item.toJSON();
         } else {
           return item;
@@ -447,7 +634,7 @@ Collection.prototype = Object.create(Object.prototype, {
    */
   sanitizeStringForPrimaryKey: {
     value: function(value) {
-      this.debug('sanitizeStringForPrimaryKey');
+      this.debug('sanitizeStringForPrimaryKey ' + value);
       if (!value) {
         return null;
       }
@@ -525,7 +712,13 @@ Collection.prototype = Object.create(Object.prototype, {
         if (!resultItem && typeof anItem.constructor === "function") {
           var json = anItem.toJSON ? anItem.toJSON() : anItem;
           resultItem = new anItem.constructor(json);
-          resultCollection.add(resultItem);
+          var existingInCollection = resultCollection.find(resultItem);
+          if (existingInCollection.length === 0) {
+            resultCollection.add(resultItem);
+          } else {
+            resultItem = existingInCollection[0];
+            self.debug("resultItem was already in the resultCollection  ", existingInCollection, resultItem);
+          }
         }
 
         if (anItem !== aCollection[idToMatch]) {
@@ -575,7 +768,8 @@ Collection.prototype = Object.create(Object.prototype, {
                 overwrite = self.confirm("I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem));
               }
               if (overwrite) {
-                self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)", anItem, " ->", anotherItem);
+                self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
+                self.debug("Overwriting  ", anItem, " ->", anotherItem);
                 resultCollection[idToMatch] = anotherItem;
               } else {
                 resultCollection[idToMatch] = anItem;
@@ -596,7 +790,14 @@ Collection.prototype = Object.create(Object.prototype, {
 
         if (anItem === undefined) {
           self.debug(idToMatch + " was missing in target, adding it");
-          resultCollection.add(anotherItem);
+          var existingInCollection = resultCollection.find(anotherItem);
+          if (existingInCollection.length === 0) {
+            resultCollection.add(anotherItem);
+          } else {
+            anotherItem = existingInCollection[0];
+            self.debug("anotherItem was already in the resultCollection ", existingInCollection, anotherItem);
+          }
+
         } else if (anotherItem === undefined) {
           // no op, the new one isn't set
           self.debug(idToMatch + " was oddly undefined");
@@ -617,6 +818,7 @@ Collection.prototype = Object.create(Object.prototype, {
       return resultCollection;
     }
   },
+
   encrypted: {
     get: function() {
       return;

@@ -19,7 +19,7 @@
     "angular": "~1.2.21",
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
-    "fielddb":"*",
+    "fielddb": "*",
     "angular-resource": "1.2.21",
     "angular-cookies": "1.2.21",
     "angular-sanitize": "1.2.21",
@@ -28,7 +28,7 @@
     "angular-route": "1.2.21",
     "ng-file-upload": "~1.6.4",
     "angular-contenteditable": "~0.3.7",
-    "angular-dragdrop": "~1.0.7"
+    "angular-dragdrop": "https://github.com/ganarajpr/angular-dragdrop.git#~1.0.3"
   },
   "main": "dist/styles/vendor.css, dist/styles/main.css, dist/scripts/vendor.js, dist/scripts/scripts.js, dist/scripts/templates.js",
   "devDependencies": {

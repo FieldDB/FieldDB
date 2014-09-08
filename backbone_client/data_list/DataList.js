@@ -1,11 +1,11 @@
-define([ 
-    "backbone", 
+define([
+    "backbone",
     "audio_video/AudioVideos",
     "datum/Datum",
     "comment/Comment",
     "comment/Comments"
 ], function(
-    Backbone, 
+    Backbone,
     AudioVideos,
     Datum,
     Comment,
@@ -16,21 +16,21 @@ define([
   {
     /**
      * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
-     * 
-     * @description 
-     * 
+     *
+     * @description
+     *
      * @property {String} title The title of the Data List.
      * @property {String} dateCreated The date that this Data List was created.
      * @property {String} description The description of the Data List.
      * @property {Array<String>} datumIds An ordered list of the datum IDs of the
      *   Datums in the Data List.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("DATALIST init");
-      
+
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
@@ -44,7 +44,7 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      
+
       if (!this.get("dateCreated")) {
         this.set("dateCreated", (new Date()).toDateString());
       }
@@ -57,18 +57,18 @@ define([
     /**
      * backbone-couchdb adaptor set up
      */
-    
+
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/datalists",
-    
+
     defaults : {
       title : "Untitled Data List",
       description : "",
       datumIds : []
     },
-    
+
     // Internal models: used by the parse function
     internalModels : {
       comments: Comments,
@@ -80,10 +80,10 @@ define([
       var m = new Comment({
         "text" : commentstring,
      });
-      
+
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -94,7 +94,7 @@ define([
             teamOrPersonal : "team",
             context : " via Offline App."
           });
-      
+
       window.app.addActivity(
          {
             verb : "commented",
@@ -114,7 +114,7 @@ define([
         datumIdsToGetAudioVideo = this.get("datumIds");
       }
       var audioVideoFiles = [];
-      
+
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
@@ -127,7 +127,7 @@ define([
                 audioVideoFiles.push(audiovid.get("URL"));
                 audioVideoFiles = _.unique(audioVideoFiles);
               });
-              
+
               if(thisobjid == datumIdsToGetAudioVideo.length - 1){
                 if(typeof callback == "function"){
                   callback(audioVideoFiles);
@@ -135,7 +135,7 @@ define([
               }
             }
           });
-        
+
       }
     },
 
@@ -151,15 +151,15 @@ define([
       }
       if(!functionArguments){
       //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
-      }      
+      }
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " + JSON.stringify(datumIdsToApplyFunction));
       if (functionToApply === "latexitDataList") {
         $("#export-text-area").val(window.appView.exportView.model.exportLaTexPreamble());
-        $("#export-text-area").val($("#export-text-area").val() + "\n\\section{" + app.get("corpus").get("title") + "}\n\n");
+        $("#export-text-area").val($("#export-text-area").val() + "\n\\section{" + OPrime.escapeLatexChars(app.get("corpus").get("title")) + "}\n\n");
         if (this.get("title")) {
-          $("#export-text-area").val($("#export-text-area").val() + "\n\\subsection{" + this.get("title") + "}\n\n");
+          $("#export-text-area").val($("#export-text-area").val() + "\n\\subsection{" + OPrime.escapeLatexChars(this.get("title")) + "}\n\n");
         }
-        $("#export-text-area").val($("#export-text-area").val() + "\n" + this.get("description") + "\n\n");
+        $("#export-text-area").val($("#export-text-area").val() + "\n" + OPrime.escapeLatexChars(this.get("description")) + "\n\n");
       }
 
       var datumCollection = this.view.collection.models;
@@ -172,16 +172,16 @@ define([
         $("#export-text-area").val($("#export-text-area").val() + window.appView.exportView.model.exportLaTexPostamble());
       }
     },
-    
+
     /**
-     * Make the  model marked as Deleted, mapreduce function will 
-     * ignore the deleted models so that it does not show in the app, 
-     * but deleted model remains in the database until the admin empties 
+     * Make the  model marked as Deleted, mapreduce function will
+     * ignore the deleted models so that it does not show in the app,
+     * but deleted model remains in the database until the admin empties
      * the trash.
-     * 
+     *
      * Also remove it from the view so the user cant see it.
-     * 
-     */    
+     *
+     */
 
     putInTrash : function() {
       this.set("trashed", "deleted" + Date.now());
@@ -189,7 +189,7 @@ define([
       if (window.app.get("corpus").datalists.models[whichDatalistToUse].id == this.id) {
         whichDatalistToUse = 1;
       }
-      
+
       this.saveAndInterConnectInApp(function(){
 
         window.app.addActivity({
@@ -232,16 +232,16 @@ define([
         });
       });
     },
-    
+
     /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.
-     * 
+     *
      * - Adds the dataList to the corpus if it is in the right corpus, and wasnt already there
      * - Adds the dataList to the user if it wasn't already there
-     * - Adds an activity to the logged in user with diff in what the user changed. 
-     * 
+     * - Adds an activity to the logged in user with diff in what the user changed.
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -259,7 +259,7 @@ define([
       }else{
         this.set("dateCreated",JSON.stringify(new Date()));
       }
-      
+
       //protect against users moving dataLists from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
@@ -293,7 +293,7 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            
+
             window.app.addActivity(
                 {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
@@ -304,7 +304,7 @@ define([
                   teamOrPersonal : "team",
                   context : " via Offline App."
                 });
-            
+
             window.app.addActivity(
                 {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
@@ -315,7 +315,7 @@ define([
                   teamOrPersonal : "personal",
                   context : " via Offline App."
                 });
-            
+
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
 
             /*
@@ -328,7 +328,7 @@ define([
               window.app.get("corpus").datalists.remove(previousversionincorpus);
               window.app.get("corpus").datalists.unshift(model);
             }
-            
+
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
@@ -355,7 +355,7 @@ define([
      * the dataList isn't in the current corpus it will call the fail
      * callback or it will alert a bug to the user. Override the fail
      * callback if you don't want the alert.
-     * 
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -370,7 +370,7 @@ define([
       }
 
       if (window.app.get("currentDataList").id != this.id ) {
-        window.app.set("currentDataList", this); 
+        window.app.set("currentDataList", this);
       }
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
       window.app.get("authentication").saveAndInterConnectInApp();
