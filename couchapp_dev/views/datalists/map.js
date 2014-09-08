@@ -6,9 +6,20 @@ function(doc) {
       return;
     }
     if (doc.collection == "datalists" || doc.datumIds) {
-      var date = doc.dateModified ? doc.dateModified.replace(/["\\]/g, '') : "";
+      var dateModified = doc.dateModified;
+      if (dateModified) {
+        try {
+          dateModified = dateModified.replace(/["\\]/g, '');
+          dateModified = new Date(dateModified);
+          /* Use date modified as a timestamp if it isnt one already */
+          dateModified = dateModified.getTime();
+        } catch (e) {
+          //emit(error, null);
+        }
+      }
+      // var date = doc.dateModified ? doc.dateModified.replace(/["\\]/g, '') : "";
       doc.type = "DataList";
-      emit(date, doc);
+      emit(dateModified, doc);
     }
   } catch (e) {
     //emit(e, 1);

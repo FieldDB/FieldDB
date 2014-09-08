@@ -11,6 +11,35 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
   var fetchDatalistDocsExponentialDecay = 2000;
 
   var controller = function($scope, $timeout) {
+
+    // $scope.dropSuccessHandler = function($event, index, array) {
+    //   // array.splice(index, 1);
+    //   // $scope.orphanedItem =
+    //   console.log('removing ' + index);
+    // };
+
+    $scope.onDrop = function($event, $data, index) {
+      console.log('inserting at ' + index, $data);
+      if ($scope.datalist && $scope.datalist.docs) {
+        if ($scope.datalist.docs.find($data).length === 0) {
+          $scope.datalist.docs.add($data);
+        }
+        $scope.datalist.docs.reorder($data, index);
+      }
+    };
+
+    $scope.removeItemFromList = function(item) {
+      if ($scope.datalist && $scope.datalist.docs) {
+        $scope.datalist.docs.remove(item);
+      }
+    };
+
+    $scope.save = function() {
+      $scope.datalist.save().then(function() {
+        $scope.$digest();
+      });
+    };
+
     var fetchDatalistDocsIfEmpty = function() {
 
       if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
@@ -39,7 +68,9 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         whatToFetch = $scope.datalist.docIds;
       }
       if (!whatToFetch || whatToFetch === []) {
-        $scope.datalist.docs = [];
+        // $scope.datalist.docs = {
+        //   _collection: []
+        // };
         $scope.$digest();
         return;
       }
@@ -48,32 +79,12 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         fetchDatalistDocsExponentialDecay = 2000;
 
         console.log('downloaded docs', results);
-        $scope.datalist.docs = $scope.datalist.docs || [];
-        results.map(function(doc) {
-          if (doc.type && FieldDB[doc.type]) {
-            $scope.corpus.debug('Converting doc into type ' + doc.type);
-            doc.confidential = $scope.corpus.confidential;
-            doc = new FieldDB[doc.type](doc);
-          } else {
-            var guessedType = doc.jsonType || doc.collection || 'FieldDBObject';
-            if ($scope.datalist.api) {
-              guessedType = $scope.datalist.api[0].toUpperCase() + $scope.datalist.api.substring(1, $scope.datalist.api.length);
-            }
-            guessedType = guessedType.replace(/s$/, '');
-            if (guessedType === 'Datalist') {
-              guessedType = 'DataList';
-            }
-            if (FieldDB[guessedType]) {
-              $scope.corpus.warn('Converting doc into guessed type ' + guessedType);
-              doc.confidential = $scope.corpus.confidential;
-              doc = new FieldDB[guessedType](doc);
-            } else {
-              $scope.corpus.warn('This doc does not have a type, it might display oddly ', doc);
-            }
-          }
+        $scope.datalist.confidential = $scope.corpus.confidential;
+        $scope.datalist.populate(results.map(function(doc) {
+          doc.url = FieldDB.Database.prototype.BASE_DB_URL + '/' + $scope.corpus.dbname;
+          return doc;
+        }));
 
-          $scope.datalist.docs.add(doc);
-        });
         $scope.$digest();
 
       }, function(reason) {
@@ -97,6 +108,21 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     };
 
     fetchDatalistDocsIfEmpty();
+
+    $scope.undo = function() {
+      var type = $scope.datalist.type;
+      if (!type || !FieldDB[type]) {
+        type = 'DataList';
+      }
+      $scope.datalist = new FieldDB[type]({
+        id: $scope.datalist.id,
+        dbname: $scope.datalist.dbname,
+        url: $scope.datalist.url
+      });
+      $scope.datalist.fetch(FieldDB.Database.prototype.BASE_DB_URL).then(function() {
+        fetchDatalistDocsIfEmpty();
+      });
+    };
 
     $scope.canAddNewItemsToDataList = function() {
       return false;

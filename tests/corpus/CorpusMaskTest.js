@@ -3,7 +3,6 @@ var CorpusMask = require("../../api/corpus/CorpusMask").CorpusMask;
 describe("CorpusMask ", function() {
 
   it("should load", function() {
-    console.log(CorpusMask);
     expect(CorpusMask).toBeDefined();
   });
 
@@ -44,6 +43,7 @@ describe("CorpusMask ", function() {
       speakerFields: [],
       conversationFields: [],
       sessionFields: [],
+      pouchname: 'lingllama-communitycorpus',
       api: 'corpora'
     });
   });

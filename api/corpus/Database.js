@@ -150,7 +150,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         });
 
         Q.allSettled(promises).then(function(results) {
-          console.log(results);
+          self.debug(results);
           if (results.length) {
             deferred.resolve(results.map(function(result) {
               if (result.state === "fulfilled") {
@@ -190,7 +190,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   resumeAuthenticationSession: {
     value: function() {
       var deferred = Q.defer(),
-        baseUrl = this.url;
+        baseUrl = this.url,
+        self = this;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
@@ -201,7 +202,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         dataType: 'json',
         url: baseUrl + '/_session'
       }).then(function(sessionInfo) {
-        console.log(sessionInfo);
+        self.debug(sessionInfo);
         deferred.resolve(sessionInfo);
       }, function(reason) {
         deferred.reject(reason);

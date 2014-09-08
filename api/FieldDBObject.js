@@ -106,6 +106,20 @@ FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v2.0.1";
 FieldDBObject.DEFAULT_DATE = 0;
 
+
+/**
+ * The uuid generator uses a "GUID" like generation to create a unique string.
+ *
+ * @returns {String} a string which is likely unique, in the format of a
+ *          Globally Unique ID (GUID)
+ */
+FieldDBObject.uuidGenerator = function() {
+  var S4 = function() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  };
+  return Date.now() + (S4() + S4()  + S4()  + S4()  + S4()  + S4() + S4() + S4());
+};
+
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
   constructor: {
@@ -276,7 +290,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       if (this.saving) {
-        self.warn("Save is in process...");
+        self.warn("Save was already in process...");
         return;
       }
       this.saving = true;
@@ -312,23 +326,67 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         url: url,
         data: this.toJSON()
       }).then(function(result) {
-          this.debug(result);
+          self.debug("saved ", result);
           self.saving = false;
           if (result.id) {
             self.id = result.id;
             self.rev = result.rev;
             deferred.resolve(self);
           } else {
-            deferred.reject();
+            deferred.reject(result);
           }
         },
         function(reason) {
           self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
+        })
+        .catch(function(reason) {
+          self.debug(reason);
+          self.saving = false;
+          deferred.reject(reason);
         });
 
       return deferred.promise;
+    }
+  },
+
+  equals: {
+    value: function(anotherObject) {
+      for (var aproperty in this) {
+        if (!this.hasOwnProperty(aproperty)) {
+          continue;
+        }
+        if (typeof this[aproperty].equals === "function") {
+          if (!this[aproperty].equals(anotherObject[aproperty])) {
+            this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            return false;
+          }
+        } else if (this[aproperty] === anotherObject[aproperty]) {
+          this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
+          // return true;
+        } else if (anotherObject[aproperty] === undefined) {
+          this.debug(aproperty + ": " + this[aproperty] + " not equal " + anotherObject[aproperty]);
+          return false;
+        } else {
+          if (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode") {
+            this.debug(aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            return false;
+          }
+        }
+      }
+      if (typeof anotherObject.equals === "function") {
+        if (this.dontRecurse === undefined) {
+          this.dontRecurse = true;
+          anotherObject.dontRecurse = true;
+          if (!anotherObject.equals(this)) {
+            return false;
+          }
+        }
+      }
+      delete this.dontRecurse;
+      delete anotherObject.dontRecurse;
+      return true;
     }
   },
 
@@ -358,7 +416,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (anObject.dbname && anotherObject.dbname && anObject.dbname !== anotherObject.dbname) {
         if (optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
-          this.warn("Permitting a merge of objects from different databases: " + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
+          this.warn("Permitting a merge of objects from different databases: " + anObject.dbname + "  and " + anotherObject.dbname);
+          this.debug("Merging ", anObject, anotherObject);
         } else if (optionalOverwriteOrAsk.indexOf("changeDBname") === -1) {
           this.warn("Refusing to merge these objects, they come from different databases: " + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
           return null;
@@ -417,7 +476,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
                   // resultObject._dbname = this.dbname;
                   this.warn(" Keeping _dbname of " + resultObject.dbname);
                 } else {
-                  this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)", anObject[aproperty], " ->", anotherObject[aproperty]);
+                  this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+                  this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
+
                   resultObject[aproperty] = anotherObject[aproperty];
                 }
               } else {
@@ -645,6 +706,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!value) {
         delete this._comments;
         return;
+      } else {
+        if (typeof this.INTERNAL_MODELS['comments'] === "function" && Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['comments'](value);
+        }
       }
       this._comments = value;
     }
@@ -704,6 +769,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!json._rev) {
         delete json._rev;
       }
+      if (json.dbname) {
+        json.pouchname = json.dbname;
+        this.todo("Serializing pouchname for backward compatability until prototype can handle dbname");
+      }
+
       delete json.saving;
       delete json.decryptedMode;
       delete json.bugMessage;
