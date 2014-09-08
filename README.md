@@ -24,7 +24,7 @@ FieldDB beta was officially launched in English and Spanish on August 1st 2012 i
 
 # Funding
 
-We have some small funding TBA
+We would like to thank SSHRC Connection Grant (\#611-2012-0001) and SSHRC Standard Research Grant (\#410-2011-2401) which advocates open-source approaches to knowledge mobilization and partially funded the students who have doubled as fieldwork research assistants and interns on the project. We would like to thank numerous other granting agencies which have funded the RAs and TAs who have also contributed to the project as interns. If you have a student/RA who you would like to customize the project for your needs, contact us at support @ lingsync . org 
 
 # License 
 
