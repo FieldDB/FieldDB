@@ -1,0 +1,18 @@
+<div class="row">
+  <span class="col-md-2">
+    <img class="gravatar-medium" ng-repeat="image in datum.images._collection" ng-src="{{image.URL}}" title="{{image.caption}}"/>
+  </span>
+  <span class="col-md-1">
+    {{datum.datumFields.utterance.value}}
+  </span>
+  <span class="audio_video_ul col-md-6">
+    <audio  ng-repeat="audioVideo in datum.audioVideo._collection" title="{{audioVideo.description}} {{audioVideo.startTime}} - {{audioVideo.endTime}}" preload controls>
+      <source ng-src="{{audioVideo.URL}}" type="{{audioVideo.audioType}}"/>
+    </audio>
+    <span> {{datum.datumFields.tags.value}} </span>
+  </span>
+  <span class="hide datum_state col-md-1 border-left">
+    <span class="label label-{{datum.datumstatecolor}} datum-primary-validation-status-color "><i class = "fa fa-flag"></i><span class="datum-state-value">{{datum.datumstate}}</span></span><br/>
+  </span>
+  <span class="col-md-1"><i class="fa fa-comments">{{datum.comments.length}}</span>
+</div>

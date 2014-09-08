@@ -1,363 +1,329 @@
-define([ 
-    "backbone", 
-    "datum/Datum",
-    "comment/Comment",
-    "comment/Comments"
-], function(
-    Backbone, 
-    Datum,
-    Comment,
-    Comments
-) {
-  var DataList = Backbone.Model.extend(
-  /** @lends DataList.prototype */
-  {
-    /**
-     * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
-     * 
-     * @description The Data List widget is used for import search, to prepare handouts and to share data on the web.
-     * 
-     * @property {String} title The title of the Data List.
-     * @property {String} dateCreated The date that this Data List was created.
-     * @property {String} description The description of the Data List.
-     * @property {Array<String>} datumIds An ordered list of the datum IDs of the
-     *   Datums in the Data List.
-     * 
-     * @extends Backbone.Model
-     * @constructs
-     */
-    initialize : function() {
-      if (OPrime.debugMode) OPrime.debug("DATALIST init");
-      
-      if (!this.get("comments")) {
-        this.set("comments", new Comments());
-      }
-      if(this.get("filledWithDefaults")){
-        this.fillWithDefaults();
-        this.unset("filledWithDefaults");
-      }
-    },
-    fillWithDefaults : function(){
-      // If there are no comments, give it a new one
-      if (!this.get("comments")) {
-        this.set("comments", new Comments());
-      }
-      
-      if (!this.get("dateCreated")) {
-        this.set("dateCreated", (new Date()).toDateString());
-      }
-    },
-    /**
-     * backbone-couchdb adaptor set up
-     */
-    
-    // The couchdb-connector is capable of mapping the url scheme
-    // proposed by the authors of Backbone to documents in your database,
-    // so that you don't have to change existing apps when you switch the sync-strategy
-    url : "/datalists",
-    
-    defaults : {
-      title : "Untitled Data List",
-      description : "",
-      datumIds : []
-    },
-    
-    // Internal models: used by the parse function
-    internalModels : {
-      comments: Comments
-    },
+/* globals FieldDB */
+var Datum = require("./../FieldDBObject").FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Collection = require("./../Collection").Collection;
+var Comments = require("./../comment/Comments").Comments;
+var Q = require("q");
 
-  //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function(commentstring) {
-      var m = new Comment({
-        "text" : commentstring,
-     });
-      
-      this.get("comments").add(m);
-      window.appView.addUnsavedDoc(this.id);
-      
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
-            teamOrPersonal : "team",
-            context : " via Offline App."
-          });
-      
-      window.app.addActivity(
-         {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
-            teamOrPersonal : "personal",
-            context : " via Offline App."
-          });
-    },
-    getAllAudioAndVideoFiles : function(datumIdsToGetAudioVideo, callback){
-      if(!datumIdsToGetAudioVideo){
-        datumIdsToGetAudioVideo = this.get("datumIds");
-      }
-      if(datumIdsToGetAudioVideo.length == 0){
-        datumIdsToGetAudioVideo = this.get("datumIds");
-      }
-      var audioVideoFiles = [];
-      
-      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
-      for(var id in datumIdsToGetAudioVideo){
-        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
-        obj.id  = datumIdsToGetAudioVideo[id];
-        var thisobjid = id;
-          obj.fetch({
-            success : function(model, response) {
-              audioVideoFiles.push(model.get("audioVideo").get("URL"));
-              
-              if(thisobjid == datumIdsToGetAudioVideo.length - 1){
-                if(typeof callback == "function"){
-                  callback(audioVideoFiles);
-                }
-              }
-            }
-          });
-        
-      }
-    },
+/**
+ * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
+ *  @name  DataList
+ *
+ * @description The Data List widget is used for import search, to prepare handouts and to share data on the web.
+ *
+ * @property {String} title The title of the Data List.
+ * @property {String} description The description of the Data List.
+ * @property {Array<String>} datumIds Deprecated: An ordered list of the datum IDs of the
+ *   Datums in the Data List.
+ * @property {Array<String>} docIds An ordered list of the doc IDs of the
+ *   Datums in the Data List.
+ * @property {Array<String>} docs An ordered collection of the doc IDs of the
+ *   Datums in the Data List (not serialized in the DataList)
+ *
+ * @extends FieldDBObject
+ * @constructs
+ */
+var DataList = function DataList(options) {
+  this.debug("Constructing DataList ", options);
+  FieldDBObject.apply(this, arguments);
+};
 
-    applyFunctionToAllIds : function(datumIdsToApplyFunction, functionToApply, functionArguments){
-      if(!datumIdsToApplyFunction){
-        datumIdsToApplyFunction = this.get("datumIds");
+DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.prototype */ {
+  constructor: {
+    value: DataList
+  },
+
+  api: {
+    get: function() {
+      return this._api || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._api) {
+        return;
       }
-      if(datumIdsToApplyFunction.length == 0){
-        datumIdsToApplyFunction = this.get("datumIds");
+      if (!value) {
+        delete this._api;
+        return;
       }
-      if(!functionToApply){
-        functionToApply = "latexitDataList";
+      if (value.trim) {
+        value = value.trim();
       }
-      if(!functionArguments){
-//        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
+      this._api = value;
+    }
+  },
+
+  defaults: {
+    get: function() {
+      return {
+        title: "Untitled Data List",
+        description: "",
+        datumIds: FieldDBObject.DEFAULT_ARRAY,
+        docs: FieldDBObject.DEFAULT_COLLECTION
+      };
+    }
+  },
+
+  // Internal models: used by the parse function
+  INTERNAL_MODELS: {
+    value: {
+      comments: Comments,
+      docs: Collection
+    }
+  },
+
+  title: {
+    get: function() {
+      return this._title || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._title) {
+        return;
       }
-      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
-      var datumCollection = this.view.collection.models;
-      for(var datum in datumCollection){
-        if (datumIdsToApplyFunction.indexOf(datumCollection[datum].id > -1) ) {
-          continue;
-        } else{
-          model[functionToApply](functionArguments);
+      if (!value) {
+        delete this._title;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._title = value;
+    }
+  },
+
+  description: {
+    get: function() {
+      return this._description || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._description) {
+        return;
+      }
+      if (!value) {
+        delete this._description;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._description = value;
+    }
+  },
+
+  docs: {
+    get: function() {
+      return this._docs;
+    },
+    set: function(value) {
+      if (value === this._docs) {
+        return;
+      }
+      if (!value) {
+        delete this._docs;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['docs'] === 'function') {
+          value = new this.INTERNAL_MODELS['docs'](value);
         }
-        /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
-//        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
-//        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
-
-        
-        /* this code re-opens the datum, but if its already in the child views, ths is  unnecesary */
-        // var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
-        // obj.id  = datumIdsToApplyFunction[id];
-        //   obj.fetch({
-        //     success : function(model, response) {
-              
-        //     } 
-        // });
-        
       }
+      this._docs = value;
+    }
+  },
+
+  add: {
+    value: function(value) {
+      if (!this.docs) {
+        this.docs = [];
+      }
+      this.docs.add(value);
+    }
+  },
+
+  populate: {
+    value: function(results) {
+      var self = this;
+
+      this.docs = this.docs || [];
+      results.map(function(doc) {
+        try {
+          if (doc.type && FieldDB && FieldDB[doc.type]) {
+            self.debug('Converting doc into type ' + doc.type);
+            doc.confidential = self.confidential;
+            doc = new FieldDB[doc.type](doc);
+          } else {
+            var guessedType = doc.jsonType || doc.collection || 'FieldDBObject';
+            if (self.api) {
+              guessedType = self.api[0].toUpperCase() + self.api.substring(1, self.api.length);
+            }
+            guessedType = guessedType.replace(/s$/, '');
+            if (guessedType === 'Datalist') {
+              guessedType = 'DataList';
+            }
+
+            if (FieldDB[guessedType]) {
+              self.warn('Converting doc into guessed type ' + guessedType);
+              doc.confidential = self.confidential;
+              doc = new FieldDB[guessedType](doc);
+            } else {
+              self.warn('This doc does not have a type, it might display oddly ', doc);
+            }
+          }
+        } catch (e) {
+          self.warn("error converting this doc ", e);
+          doc = new FieldDBObject(doc);
+        }
+        self.docs.add(doc);
+        if (doc.type === 'Datum') {
+          self.showDocPosition = true;
+          self.showDocCheckboxes = true;
+          self.docsAreReorderable = true;
+        }
+      });
+    }
+  },
+
+  docIds: {
+    get: function() {
+      var self = this;
+
+      if ((!this._docIds || this._docIds.length === 0) && (this.docs && this.docs.length > 0)) {
+        this._docIds = this.docs.map(function(doc) {
+          self.debug('geting doc id of this doc ', doc);
+          return doc.id;
+        });
+      }
+      return this._docIds || FieldDBObject.DEFAULT_ARRAY;
     },
-    
-    /**
-     * Make the  model marked as Deleted, mapreduce function will 
-     * ignore the deleted models so that it does not show in the app, 
-     * but deleted model remains in the database until the admin empties 
-     * the trash.
-     * 
-     * Also remove it from the view so the user cant see it.
-     * 
-     */    
-
-    putInTrash : function() {
-      this.set("trashed", "deleted" + Date.now());
-      var whichDatalistToUse = 0;
-      if (window.app.get("corpus").datalists.models[whichDatalistToUse].id == this.id) {
-        whichDatalistToUse = 1;
+    set: function(value) {
+      if (value === this._docIds) {
+        return;
       }
-      
-      this.saveAndInterConnectInApp(function(){
-        window.app.get("corpus").datalists.models[whichDatalistToUse]
-        .setAsCurrentDataList(function() {
-          if (window.appView) {
-            /* TODO test this */
-            window.app.get("corpus").datalists = null;
-            window.appView.currentCorpusReadView.model
-            .makeSureCorpusHasADataList(function() {
-              window.appView.currentCorpusEditView
-              .changeViewsOfInternalModels();
-//              window.appView.currentCorpusReadView.render();
-              window.appView.currentCorpusReadView
-              .changeViewsOfInternalModels();
-//              window.appView.currentCorpusReadView.render();
-              window.app.router.navigate("render/true", {trigger: true});
+      if (!value) {
+        delete this._docIds;
+        return;
+      }
+      this._docIds = value;
+    }
+  },
 
+  datumIds: {
+    get: function() {
+      this.warn("datumIds is deprecated, please use docIds instead.");
+      return this.docIds;
+    },
+    set: function(value) {
+      this.warn("datumIds is deprecated, please use docIds instead.");
+      this.docIds = value;
+    }
+  },
+
+  decryptedMode: {
+    get: function() {
+      return this.decryptedMode;
+    },
+    set: function(value) {
+      this.decryptedMode = value;
+      this.docs.decryptedMode = value;
+    }
+  },
+
+  icon: {
+    get: function() {
+      return "thumb-tack";
+    }
+  },
+
+  getAllAudioAndVideoFiles: {
+    value: function(datumIdsToGetAudioVideo) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        if (!datumIdsToGetAudioVideo) {
+          datumIdsToGetAudioVideo = self.docIds;
+        }
+        if (datumIdsToGetAudioVideo.length === 0) {
+          datumIdsToGetAudioVideo = self.docIds;
+        }
+        var audioVideoFiles = [];
+        self.debug("DATA LIST datumIdsToGetAudioVideo " + JSON.stringify(datumIdsToGetAudioVideo));
+        datumIdsToGetAudioVideo.map(function(id) {
+          var doc = self.docs[id];
+          if (doc) {
+            if (doc.audioVideo) {
+              doc.audioVideo.map(function(audioVideoFile) {
+                audioVideoFiles.push(audioVideoFile.URL);
+              });
+            }
+          } else {
+            var obj = new Datum({
+              pouchname: self.dbname,
+              id: id
+            });
+            obj.fetch().then(function(results) {
+              this.debug("Fetched datum to get audio file", results);
+              if (doc.audioVideo) {
+
+                obj.audioVideo.map(function(audioVideoFile) {
+                  audioVideoFiles.push(audioVideoFile.URL);
+                });
+              }
             });
           }
         });
+        deferred.resolve(audioVideoFiles);
+
       });
-    },
-    
-    /**
-     * Accepts two functions to call back when save is successful or
-     * fails. If the fail callback is not overridden it will alert
-     * failure to the user.
-     * 
-     * - Adds the dataList to the corpus if it is in the right corpus, and wasnt already there
-     * - Adds the dataList to the user if it wasn't already there
-     * - Adds an activity to the logged in user with diff in what the user changed. 
-     * 
-     * @param successcallback
-     * @param failurecallback
-     */
-    saveAndInterConnectInApp : function(successcallback, failurecallback){
-      if (OPrime.debugMode) OPrime.debug("Saving the DataList");
-      var self = this;
-//      var idsInCollection = [];
-//      for(d in this.datumCollection.models){
-//        idsInCollection.push( this.datumCollection.models[d] );
-//      }
-//      this.set("datumIds", idsInCollection);
-      var newModel = true;
-      if(this.id){
-        newModel = false;
-      }else{
-        this.set("dateCreated",JSON.stringify(new Date()));
-      }
-      
-      //protect against users moving dataLists from one corpus to another on purpose or accidentially
-      if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
-        if(typeof failurecallback == "function"){
-          failurecallback();
-        }else{
-          alert('DataList save error. I cant save this dataList in this corpus, it belongs to another corpus. ' );
-        }
-        return;
-      }
-      var oldrev = this.get("_rev");
-      this.set("dateModified", JSON.stringify(new Date()));
-      this.set("timestamp", Date.now());
-
-        self.save(null, {
-          success : function(model, response) {
-            if (OPrime.debugMode) OPrime.debug('DataList save success');
-            var title = model.get("title");
-            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
-            //TODO add privacy for dataList in corpus
-//            if(window.app.get("corpus").get("keepDataListDetailsPrivate")){
-//              title = "";
-//              differences = "";
-//            }
-            if(window.appView){
-              window.appView.toastUser("Sucessfully saved data list: "+ title,"alert-success","Saved!");
-              window.appView.addSavedDoc(model.id);
-            }
-            var verb = "modified";
-            verbicon = "icon-pencil";
-            if(newModel){
-              verb = "added";
-              verbicon = "icon-plus";
-            }
-            
-            window.app.addActivity(
-                {
-                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
-                  verbicon : verbicon,
-                  directobjecticon : "icon-pushpin",
-                  directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
-                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
-                  teamOrPersonal : "team",
-                  context : " via Offline App."
-                });
-            
-            window.app.addActivity(
-                {
-                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
-                  verbicon : verbicon,
-                  directobjecticon : "icon-pushpin",
-                  directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
-                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
-                  teamOrPersonal : "personal",
-                  context : " via Offline App."
-                });
-            
-            window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
-
-            /*
-             * Make sure the data list is visible in this corpus
-             */
-            var previousversionincorpus = window.app.get("corpus").datalists.get(model.id);
-            if(previousversionincorpus == undefined ){
-              window.app.get("corpus").datalists.unshift(model);
-            }else{
-              window.app.get("corpus").datalists.remove(previousversionincorpus);
-              window.app.get("corpus").datalists.unshift(model);
-            }
-            
-            //make sure the dataList is in the history of the user
-            if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
-              window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-//              window.app.get("authentication").saveAndInterConnectInApp();
-            }
-
-            if(typeof successcallback == "function"){
-              successcallback();
-            }
-          },
-          error : function(e, f, g) {
-            if (OPrime.debugMode) OPrime.debug("DataList save error", e, f, g);
-            if(typeof failurecallback == "function"){
-              failurecallback();
-            }else{
-              alert('DataList save error: ' + f.reason);
-            }
-          }
-        });
-    },
-    /**
-     * Accepts two functions success will be called if successful,
-     * otherwise it will attempt to render the current dataList views. If
-     * the dataList isn't in the current corpus it will call the fail
-     * callback or it will alert a bug to the user. Override the fail
-     * callback if you don't want the alert.
-     * 
-     * @param successcallback
-     * @param failurecallback
-     */
-    setAsCurrentDataList : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
-        if (typeof failurecallback == "function") {
-          failurecallback();
-        }else{
-          alert("This is a bug, cannot load the dataList you asked for, it is not in this corpus.");
-        }
-        return;
-      }
-
-      if (window.app.get("currentDataList").id != this.id ) {
-        window.app.set("currentDataList", this); 
-      }
-      window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
-      window.app.get("authentication").saveAndInterConnectInApp();
-      if(window.appView) {
-        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
-          if (typeof successcallback == "function") {
-            successcallback();
-          }
-        });
-      }else{
-        if (typeof successcallback == "function") {
-          successcallback();
-        }
-      }
+      return deferred.promise;
     }
-  });
+  },
 
-  return DataList;
+  applyFunctionToAllIds: {
+    value: function(datumIdsToApplyFunction, functionToApply, functionArguments) {
+      if (!datumIdsToApplyFunction) {
+        datumIdsToApplyFunction = this.docIds;
+      }
+      if (datumIdsToApplyFunction.length === 0) {
+        datumIdsToApplyFunction = this.docIds;
+      }
+      if (!functionToApply) {
+        functionToApply = "latexitDataList";
+      }
+      if (!functionArguments) {
+        //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
+      }
+
+      var self = this;
+      this.debug("DATA LIST datumIdsToApplyFunction " + JSON.stringify(datumIdsToApplyFunction));
+      datumIdsToApplyFunction.map(function(id) {
+        var doc = self.docs[id];
+        if (doc) {
+          doc[functionToApply].apply(doc, functionArguments);
+          return id;
+        } else {
+          self.warn(" Doc has not been fetched, cant apply the function to it.");
+          return id;
+        }
+      });
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      // Force docIds to be set to current docs
+      this.docIds = null;
+      this.docIds = this.docIds;
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      delete json.docs;
+      this.todo("Adding datumIds for backward compatability until prototype can handle docIds");
+      json.datumIds = this.docIds;
+
+      this.debug(json);
+      return json;
+    }
+  }
+
 });
+
+exports.DataList = DataList;

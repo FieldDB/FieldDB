@@ -1,7 +1,7 @@
 /* globals window */
-var Q = require("q");
 var CORS = require("./CORS").CORS;
 var Diacritics = require('diacritic');
+var Q = require("q");
 
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
@@ -72,13 +72,17 @@ var Diacritics = require('diacritic');
  */
 var FieldDBObject = function FieldDBObject(json) {
   this.verbose("In parent an json", json);
+  // Set the confidential first, so the rest of the fields can be encrypted
+  if (json && json.confidential && this.INTERNAL_MODELS['confidential']) {
+    this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
+  }
   var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
-    this.verbose("JSON: " + member);
-    if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
+    this.debug("JSON: " + member, this.INTERNAL_MODELS);
+    if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
       this.debug("Parsing model: " + member);
       json[member] = new this.INTERNAL_MODELS[member](json[member]);
     } else {
@@ -96,16 +100,43 @@ var FieldDBObject = function FieldDBObject(json) {
 };
 
 FieldDBObject.DEFAULT_STRING = "";
-FieldDBObject.DEFAULT_OBJECT = "";
+FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v2.0.1";
 FieldDBObject.DEFAULT_DATE = 0;
 
+
+/**
+ * The uuid generator uses a "GUID" like generation to create a unique string.
+ *
+ * @returns {String} a string which is likely unique, in the format of a
+ *          Globally Unique ID (GUID)
+ */
+FieldDBObject.uuidGenerator = function() {
+  var S4 = function() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  };
+  return Date.now() + (S4() + S4()  + S4()  + S4()  + S4()  + S4() + S4() + S4());
+};
+
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
   constructor: {
     value: FieldDBObject
+  },
+
+  type: {
+    get: function() {
+      var funcNameRegex = /function (.{1,})\(/;
+      var results = (funcNameRegex).exec((this).constructor.toString());
+      return (results && results.length > 1) ? results[1] : "";
+    },
+    set: function(value) {
+      if (value !== this.type) {
+        this.warn('Using type ' + this.type + ' when the incoming object was ' + value);
+      }
+    }
   },
 
   /**
@@ -143,7 +174,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log('DEBUG: ' + message);
+        console.log(this.type.toUpperCase() + ' DEBUG: ' + message);
 
         if (message2) {
           console.log(message2);
@@ -185,16 +216,44 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   bug: {
     value: function(message) {
+      if (this.bugMessage) {
+        this.bugMessage += ";;; ";
+      } else {
+        this.bugMessage = "";
+      }
+      this.bugMessage = this.bugMessage + message;
       try {
         window.alert(message);
       } catch (e) {
-        console.warn('BUG: ' + message);
+        console.warn(this.type.toUpperCase() + ' BUG: ' + message);
+      }
+    }
+  },
+  confirm: {
+    value: function(message) {
+      if (this.confirmMessage) {
+        this.confirmMessage += "\n";
+      } else {
+        this.confirmMessage = "";
+      }
+      this.confirmMessage = this.confirmMessage + message;
+      try {
+        return window.confirm(message);
+      } catch (e) {
+        console.warn(this.type.toUpperCase() + ' ASKING USER: ' + message + ' pretending they said no.');
+        return false;
       }
     }
   },
   warn: {
     value: function(message, message2, message3, message4) {
-      console.warn('WARN: ' + message);
+      if (this.warnMessage) {
+        this.warnMessage += ";;; ";
+      } else {
+        this.warnMessage = "";
+      }
+      this.warnMessage = this.warnMessage + message;
+      console.warn(this.type.toUpperCase() + ' WARN: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -208,7 +267,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn('TODO: ' + message);
+      console.warn(this.type.toUpperCase() + ' TODO: ' + message);
       if (message2) {
         console.warn(message2);
       }
@@ -231,7 +290,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       if (this.saving) {
-        self.warn("Save is in process...");
+        self.warn("Save was already in process...");
         return;
       }
       this.saving = true;
@@ -239,16 +298,23 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       //update to this version
       this.version = FieldDBObject.DEFAULT_VERSION;
 
+      var browserVersion;
+      try {
+        browserVersion = window.navigator.appVersion;
+      } catch (e) {
+        browserVersion = 'PhantomJS unknown';
+      }
+
       this._dateModified = Date.now();
       if (!this.id) {
         this._dateCreated = Date.now();
         this.enteredByUser = {
-          browserVersion: window.navigator.appVersion
+          browserVersion: browserVersion
         };
       } else {
         this.modifiedByUsers = this.modifiedByUsers || [];
         this.modifiedByUsers.push({
-          browserVersion: window.navigator.appVersion
+          browserVersion: browserVersion
         });
       }
 
@@ -260,17 +326,22 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         url: url,
         data: this.toJSON()
       }).then(function(result) {
-          this.debug(result);
+          self.debug("saved ", result);
           self.saving = false;
           if (result.id) {
             self.id = result.id;
             self.rev = result.rev;
             deferred.resolve(self);
           } else {
-            deferred.reject();
+            deferred.reject(result);
           }
         },
         function(reason) {
+          self.debug(reason);
+          self.saving = false;
+          deferred.reject(reason);
+        })
+        .catch(function(reason) {
           self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
@@ -280,11 +351,160 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  equals: {
+    value: function(anotherObject) {
+      for (var aproperty in this) {
+        if (!this.hasOwnProperty(aproperty)) {
+          continue;
+        }
+        if (typeof this[aproperty].equals === "function") {
+          if (!this[aproperty].equals(anotherObject[aproperty])) {
+            this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            return false;
+          }
+        } else if (this[aproperty] === anotherObject[aproperty]) {
+          this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
+          // return true;
+        } else if (anotherObject[aproperty] === undefined) {
+          this.debug(aproperty + ": " + this[aproperty] + " not equal " + anotherObject[aproperty]);
+          return false;
+        } else {
+          if (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode") {
+            this.debug(aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            return false;
+          }
+        }
+      }
+      if (typeof anotherObject.equals === "function") {
+        if (this.dontRecurse === undefined) {
+          this.dontRecurse = true;
+          anotherObject.dontRecurse = true;
+          if (!anotherObject.equals(this)) {
+            return false;
+          }
+        }
+      }
+      delete this.dontRecurse;
+      delete anotherObject.dontRecurse;
+      return true;
+    }
+  },
+
+  merge: {
+    value: function(callOnSelf, anotherObject, optionalOverwriteOrAsk) {
+      var anObject,
+        resultObject,
+        aproperty,
+        targetPropertyIsEmpty,
+        overwrite,
+        localCallOnSelf;
+
+      if (callOnSelf === "self") {
+        this.debug("Merging properties into myself. ");
+        anObject = this;
+      } else {
+        anObject = callOnSelf;
+      }
+      resultObject = this;
+      if (!optionalOverwriteOrAsk) {
+        optionalOverwriteOrAsk = "";
+      }
+
+      if (anObject.id && anotherObject.id && anObject.id !== anotherObject.id) {
+        this.warn("Refusing to merge these objects, they have different ids: " + anObject.id + "  and " + anotherObject.id, anObject, anotherObject);
+        return null;
+      }
+      if (anObject.dbname && anotherObject.dbname && anObject.dbname !== anotherObject.dbname) {
+        if (optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
+          this.warn("Permitting a merge of objects from different databases: " + anObject.dbname + "  and " + anotherObject.dbname);
+          this.debug("Merging ", anObject, anotherObject);
+        } else if (optionalOverwriteOrAsk.indexOf("changeDBname") === -1) {
+          this.warn("Refusing to merge these objects, they come from different databases: " + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
+          return null;
+        }
+      }
+      for (aproperty in anotherObject) {
+        if (!anotherObject.hasOwnProperty(aproperty)) {
+          continue;
+        }
+
+        if (anotherObject[aproperty] === undefined) {
+          // no op, the new one isn't set
+          this.debug(aproperty + " was missing in new object");
+          resultObject[aproperty] = anObject[aproperty];
+        } else if (anObject[aproperty] === anotherObject[aproperty]) {
+          // no op, they are equal enough
+          this.debug(aproperty + " were equal.");
+          resultObject[aproperty] = anObject[aproperty];
+        } else if (!anObject[aproperty] || anObject[aproperty] === [] || anObject[aproperty].length === 0 || anObject[aproperty] === {}) {
+          targetPropertyIsEmpty = true;
+          this.debug(aproperty + " was previously empty, taking the new value");
+          resultObject[aproperty] = anotherObject[aproperty];
+        } else {
+          //  if two arrays: concat
+          if (Object.prototype.toString.call(anObject[aproperty]) === '[object Array]' && Object.prototype.toString.call(anotherObject[aproperty]) === '[object Array]') {
+            this.debug(aproperty + " was an array, concatinating with the new value", anObject[aproperty], " ->", anotherObject[aproperty]);
+            resultObject[aproperty] = anObject[aproperty].concat(anotherObject[aproperty]);
+
+            //TODO unique it?
+            this.debug("  ", resultObject[aproperty]);
+          } else {
+            // if the result is missing the property, clone it from anObject
+            if (!resultObject[aproperty] && typeof anObject[aproperty].constructor === "function") {
+              var json = anObject[aproperty].toJSON ? anObject[aproperty].toJSON() : anObject[aproperty];
+              resultObject[aproperty] = new anObject[aproperty].constructor(json);
+            }
+            // if two objects: recursively merge
+            if (resultObject[aproperty] && typeof resultObject[aproperty].merge === "function") {
+              if (callOnSelf === "self") {
+                localCallOnSelf = callOnSelf;
+              } else {
+                localCallOnSelf = anObject[aproperty];
+              }
+              this.debug("Requesting merge of internal property " + aproperty + " using method: " + localCallOnSelf);
+              var result = resultObject[aproperty].merge(localCallOnSelf, anotherObject[aproperty], optionalOverwriteOrAsk);
+              this.debug("after internal merge ", result);
+              this.debug("after internal merge ", resultObject[aproperty]);
+            } else {
+              overwrite = optionalOverwriteOrAsk;
+              this.debug("Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
+              if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
+                overwrite = this.confirm("I found a conflict for " + aproperty + ", Do you want to overwrite it from " + JSON.stringify(anObject[aproperty]) + " -> " + JSON.stringify(anotherObject[aproperty]));
+              }
+              if (overwrite) {
+                if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
+                  // resultObject._dbname = this.dbname;
+                  this.warn(" Keeping _dbname of " + resultObject.dbname);
+                } else {
+                  this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+                  this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
+
+                  resultObject[aproperty] = anotherObject[aproperty];
+                }
+              } else {
+                resultObject[aproperty] = anObject[aproperty];
+              }
+            }
+          }
+        }
+      }
+
+      // for (aproperty in anObject) {
+      //   if (!anObject.hasOwnProperty(aproperty)) {
+      //     continue;
+      //   }
+      //   this.debug("todo merge this property " + aproperty + " backwards too");
+      // }
+
+      return resultObject;
+    }
+  },
+
   fetch: {
     value: function(optionalBaseUrl) {
       var deferred = Q.defer(),
         id,
-        self;
+        self = this;
 
       id = this.id;
       if (!id) {
@@ -295,25 +515,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
         return deferred.promise;
       }
-      self = this;
 
       this.fetching = true;
       CORS.makeCORSRequest({
         type: 'GET',
         dataType: "json",
-        url: optionalBaseUrl + "/" + this.dbname + "/" + id
+        url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
           self.fetching = false;
-
-          for (var aproperty in result) {
-            if (!result.hasOwnProperty(aproperty)) {
-              continue;
-            }
-            if (self[aproperty] !== result[aproperty]) {
-              self.warn("Overwriting " + aproperty + " : ", self[aproperty], " ->", result[aproperty]);
-            }
-            self[aproperty] = result[aproperty];
-          }
+          self.merge("self", result, "overwrite");
           deferred.resolve(self);
         },
         function(reason) {
@@ -333,7 +543,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       dbname: FieldDBObject.DEFAULT_STRING,
       version: FieldDBObject.DEFAULT_STRING,
       dateCreated: FieldDBObject.DEFAULT_DATE,
-      dateModified: FieldDBObject.DEFAULT_DATE
+      dateModified: FieldDBObject.DEFAULT_DATE,
+      comments: FieldDBObject.DEFAULT_COLLECTION
     }
   },
 
@@ -405,10 +616,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   pouchname: {
     get: function() {
+      this.warn("pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
-    set: function() {
+    set: function(value) {
       this.warn("Pouchname is deprecated, please use dbname instead.");
+      this.dbname = value;
     }
   },
 
@@ -482,6 +695,26 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  comments: {
+    get: function() {
+      return this._comments || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._comments) {
+        return;
+      }
+      if (!value) {
+        delete this._comments;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS['comments'] === "function" && Object.prototype.toString.call(value) === '[object Array]') {
+          value = new this.INTERNAL_MODELS['comments'](value);
+        }
+      }
+      this._comments = value;
+    }
+  },
+
   isEmpty: {
     value: function(aproperty) {
       var empty = !this[aproperty] || this[aproperty] === FieldDBObject.DEFAULT_COLLECTION || this[aproperty] === FieldDBObject.DEFAULT_ARRAY || this[aproperty] === FieldDBObject.DEFAULT_OBJECT || this[aproperty] === FieldDBObject.DEFAULT_STRING || this[aproperty] === FieldDBObject.DEFAULT_DATE || (this[aproperty].length !== undefined && this[aproperty].length === 0) || this[aproperty] === {};
@@ -492,7 +725,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      var json = {},
+      var json = {
+          type: this.type
+        },
         aproperty,
         underscorelessProperty;
 
@@ -519,7 +754,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         for (aproperty in this.INTERNAL_MODELS) {
           if (!json[aproperty] && this.INTERNAL_MODELS) {
-            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
+            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
               json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
             } else {
               json[aproperty] = this.INTERNAL_MODELS[aproperty];
@@ -533,6 +768,24 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (!json._rev) {
         delete json._rev;
+      }
+      if (json.dbname) {
+        json.pouchname = json.dbname;
+        this.todo("Serializing pouchname for backward compatability until prototype can handle dbname");
+      }
+
+      delete json.saving;
+      delete json.decryptedMode;
+      delete json.bugMessage;
+      delete json.warnMessage;
+      if (this._collection !== "private_corpuses") {
+        delete json.confidential;
+        delete json.confidentialEncrypter;
+      } else {
+        this.warn("serializing confidential in this object " + this._collection);
+      }
+      if (this.api) {
+        json.api = this.api;
       }
 
       return json;
@@ -583,20 +836,42 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    * @param  String value the potential primary key to be cleaned
    * @return String       the value cleaned and safe as a primary key
    */
-  sanitizeStringForPrimaryKey: {
-    value: function(value) {
-      this.debug('sanitizeStringForPrimaryKey');
+  sanitizeStringForFileSystem: {
+    value: function(value, optionalReplacementCharacter) {
+      this.debug('sanitizeStringForPrimaryKey ' + value);
       if (!value) {
         return null;
       }
+      if (optionalReplacementCharacter === undefined || optionalReplacementCharacter === "-") {
+        optionalReplacementCharacter = '_';
+      }
       if (value.trim) {
         value = Diacritics.clean(value);
-        value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_/, '').replace(/_$/, '');
-        return this.camelCased(value);
+        this.debug('sanitizeStringForPrimaryKey ' + value);
+
+        value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, '').replace(/_$/, '');
+        this.debug('sanitizeStringForPrimaryKey ' + value);
+        return value;
       } else if (typeof value === 'number') {
         return parseInt(value, 10);
       } else {
         return null;
+      }
+    }
+  },
+
+  sanitizeStringForPrimaryKey: {
+    value: function(value, optionalReplacementCharacter) {
+      this.debug('sanitizeStringForPrimaryKey ' + value);
+      if (!value) {
+        return null;
+      }
+      if (value.replace) {
+        value = value.replace(/-/g, "_");
+      }
+      value = this.sanitizeStringForFileSystem(value, optionalReplacementCharacter);
+      if (value && typeof value !== 'number') {
+        return this.camelCased(value);
       }
     }
   },

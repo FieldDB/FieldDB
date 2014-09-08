@@ -1,0 +1,142 @@
+<div class="row Spreadsheet-selectedRow" ng-hide="datum.fetching==true">
+  <div ng-show="selected==$index">
+    <form ng-submit="markAsEdited(datum);">
+      <div class="col-md-5">
+        <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="col-md-5" type="text" ng-model="datum.datumFields[corpus.datumFields._collection[0].id].value" ng-hide="corpus.datumFields._collection[0].id==''" placeholder="{{corpus.datumFields._collection[0].help}}" title="{{corpus.datumFields._collection[0].help}}">
+        <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="col-md-5" type="text" ng-model="datum.datumFields[corpus.datumFields._collection[1].id].value"  value="{{datum.datumFields[corpus.datumFields._collection[1].id]}}" ng-hide="corpus.datumFields._collection[1].id==''" placeholder="{{corpus.datumFields._collection[1].help}}" title="{{corpus.datumFields._collection[1].help}}">
+        <input keypress-mark-as-edited class="col-md-5" type="text" ng-model="datum.datumFields[corpus.datumFields._collection[2].id].value" ng-hide="corpus.datumFields._collection[2].id==''" placeholder="{{corpus.datumFields._collection[2].help}}" title="{{corpus.datumFields._collection[2].help}}">
+      </div>
+      <div class="col-md-5">
+        <input keypress-mark-as-edited class="col-md-5" type="text" ng-model="datum.datumFields[corpus.datumFields._collection[3].id].value" ng-hide="corpus.datumFields._collection[3].id==''" placeholder="{{corpus.datumFields._collection[3].help}}" title="{{corpus.datumFields._collection[3].help}}">
+        <input keypress-mark-as-edited class="col-md-5" type="text" ng-model="datum.datumFields[corpus.datumFields._collection[4].id].value" ng-hide="corpus.datumFields._collection[4].id==''" placeholder="{{corpus.datumFields._collection[4].help}}" title="{{corpus.datumFields._collection[4].help}}">
+        <input keypress-mark-as-edited class="col-md-5" type="text" ng-model="datum.datumFields[corpus.datumFields._collection[5].id].value" ng-hide="corpus.datumFields._collection[5].id==''" placeholder="{{corpus.datumFields._collection[5].help}}" title="{{corpus.datumFields._collection[5].help}}">
+      </div>
+      <div class="col-md-2 entered_modified_info">
+        <span title="Date entered {{datum.dateEntered | fielddbPrettyDate}}">
+          <i class="fa whiteicon fa-clock-o">
+          </i> Entered: {{datum.dateEntered | fielddbPrettyDate}}
+        </span>
+        <br />
+        <span ng-hide="!datum.enteredByUser">
+          <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=30&d=identicon">
+          <br />
+        </span>
+        <br />
+        <span title="Date modified {{datum.dateModified | fielddbPrettyDate}}">
+          <i class="fa whiteicon fa-clock-o">
+          </i>Last edit: {{datum.dateModified | fielddbPrettyDate}}
+        </span>
+        <br />
+        <span ng-hide="!datum.modifiedByUser.users[0]">
+          <i class="fa whiteicon fa-group">
+          </i> Edited:
+          <br />
+        </span>
+        <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
+          <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=30&d=identicon" title="{{modifiedByUser.username}}" />&nbsp;
+        </span>
+        <div ng-click="toggleExpanded()">
+          <i ng-show="datum.audioVideo.length > 0" class="fa whiteicon fa-bullhorn"></i>
+          <i ng-show="datum.comments.length > 0" class="fa whiteicon fa-comment"></i>
+          <i class="fa whiteicon" ng-class="{'fa-list': !expanded, 'fa-th-list': expanded}" ></i>
+        </div>
+      </div>
+    </form>
+    <div class="row" ng-show="expanded==true && !datum.id">
+      <div class="col-md-10 offset1 pagination-centered">
+        <b>You must 'Save' your changes to have access to the audio, comment, and delete features of this record.
+        </b>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row" ng-show="expanded==true && datum.id!=undefined ">
+        <div class="col-md-10 Spreadsheet-expandedDataComments">
+          <div class="Spreadsheet-expandedDataInner">
+            <ul class="unstyled">
+              <li ng-hide="corpus.prefs.dontShowComments" ng-repeat="comment in datum.comments">
+                <a ng-click="removeComment(comment, datum)" class="floatLeft delete_button">
+                  <i class="fa fa-times-circle">
+                  </i>
+                </a>
+                <img title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=30&d=identicon">&nbsp;
+                <i class="fa fa-comment">
+                </i> {{comment.text}}
+                <i class="fa fa-clock-o">
+                </i> {{comment.timestamp | fielddbPrettyDate}}
+              </li>
+            </ul>
+            <button ng-show="commentPermissions==true" class="btn btn-primary" ng-click="addComment(datum);">
+              <i class="fa whiteicon fa-comment">
+              </i> Add Comment
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-show="expanded==true && datum.id!=undefined">
+        <div class="col-md-3 Spreadsheet-expandedData">
+          <div class="expandedDataInner">
+            <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(datum);" ng-show="audioCompatible==true">
+              <i class="fa {{recordingIcon}}">
+              </i>&nbsp;{{recordingStatus}}
+            </button>
+          </div>
+        </div>
+        <div class="col-md-7 Spreadsheet-expandedData">
+          <div class="expandedDataInner">
+            <form id='form_{{datum.id}}_audio-file'>
+              <i class="fa fa-bullhorn">
+              </i>&nbsp;
+              <input id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload'/>
+              <button class="btn btn-primary" ng-click="uploadFile(datum);">
+                <i class="fa whiteicon fa-file">
+                </i> Upload File(s)
+              </button>&nbsp;&nbsp;
+            </form>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <span ng-show="processingAudio==true">
+            <img ng-src="img/spinner-small.gif">
+          </span>
+        </div>
+      </div>
+      <div class="row" ng-show="expanded==true && datum.id!=undefined">
+        <div class="col-md-10">
+          <table>
+            <tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
+              <td>
+                <span class="form-horizontal">
+                  <a class="delete_button btn btn-danger floatLeft" ng-click="trashAudio(audioFile)">
+                    <i class="fa fa-trash-o whiteicon">
+                    </i>
+                  </a>
+                  <audio controls>
+                    <source ng-src="{{audioFile.URL}}" type="audio/wav"/>
+                  </audio>
+                </span>
+              </td>
+              <td>
+                <span class="form-horizontal">
+                  <input type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' > &nbsp;
+                  <button hidden  class="btn-small btn-primary" ng-click="saveAudio(audioFile)" ng-show="datum.id!=undefined">Save Description
+                  </button>
+                </span>
+              </td>
+              <td>
+                <a href="{{audioFile.URL}}" target="_blank">
+                  <i class="fa whiteicon fa-link">
+                  </i>
+                </a>
+              </td>
+            </tr>
+          </table>
+          <hr />
+          <button class="btn btn-inverse" type="button" ng-click="trashDatum(datum)">
+            <i class="fa fa-trash-o">
+            </i> Delete This Record
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
