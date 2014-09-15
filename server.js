@@ -174,8 +174,36 @@ app.get('/:user', function(req, res) {
  * Promise handlers
  */
 
+function sanitizeAgainstInjection(id) {
+  if (!id || !id.indexOf || !id.toLowerCase) {
+    return;
+  }
+
+  if (id.indexOf('.js') === id.length - 3 || id.indexOf('?') === id.length - 1 || id.indexOf('.txt') === id.length - 4 || id.indexOf('.php') === id.length - 4 || id.indexOf('html') === id.length - 4) {
+    console.log(new Date() + ' evil attempt on server to open ' + id + ' sending 404 instead');
+    return false;
+  }
+
+  id = id.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+
+  return id;
+}
+
+
 function getData(res, user, corpus) {
 
+  user = sanitizeAgainstInjection(user);
+  if(user === false){
+    res.status(404).send('Not found');
+    return;
+  }
+  corpus = sanitizeAgainstInjection(corpus);
+  if(corpus === false){ 
+    res.status(404).send('Not found');
+    return;
+  }
+
+ 
   var userdetails = {};
 
   getUser(user)
@@ -206,6 +234,11 @@ function getData(res, user, corpus) {
 }
 
 function getCorpusFromPouchname(pouchname) {
+  pouchname = sanitizeAgainstInjection(pouchname);
+  if(!pouchname){ 
+    res.status(404).send('Not found');
+    return;
+  }
 
   var df = Q.defer();
   var corpusdb = nano.db.use(pouchname);
@@ -251,6 +284,11 @@ function getCorpusFromPouchname(pouchname) {
 }
 
 function getUser(userId) {
+  userId = sanitizeAgainstInjection(userId);
+  if(!userId){ 
+    res.status(404).send('Not found');
+    return;
+  }
 
   var df = Q.defer();
   var usersdb = nano.db.use(node_config.usersDbConnection.dbname);
@@ -278,6 +316,22 @@ function getUser(userId) {
 }
 
 function getCorpus(pouchId, titleAsUrl, corpusid) {
+
+  pouchId = sanitizeAgainstInjection(pouchId);
+  if(!pouchId){ 
+    res.status(404).send('Not found');
+    return;
+  }
+  titleAsUrl = sanitizeAgainstInjection(titleAsUrl);
+  if(titleAsUrl  === false){ 
+    res.status(404).send('Not found');
+    return;
+  }
+  corpusid = sanitizeAgainstInjection(corpusid);
+  if(corpusid === false){ 
+    res.status(404).send('Not found');
+    return;
+  }
 
   var df = Q.defer();
   var corpusdb = nano.db.use(pouchId);
