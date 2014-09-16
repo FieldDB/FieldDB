@@ -47,6 +47,32 @@ describe("FieldDBObject", function() {
       expect(u.dateCreated).toBeDefined();
     });
 
+    it("should pass a reference to the application if it was specified", function() {
+      var applicationLess = new FieldDBObject();
+      expect(applicationLess.application).toBeUndefined();
+
+      FieldDBObject.application = new FieldDBObject({
+        context: 'Offline',
+        type: 'PsycholinguisticsApp'
+      });
+      var u = new FieldDBObject();
+      expect(u.application).toBeDefined();
+      expect(u.application.context).toEqual('Offline');
+      expect(applicationLess.application).toBe(u.application);
+
+      var t = new FieldDBObject();
+      expect(u.application).toBe(t.application);
+
+      FieldDBObject.application = new FieldDBObject({
+        context: 'Online',
+        type: 'PsycholinguisticsApp'
+      });
+      expect(u.application.context).toEqual('Online');
+      expect(u.application).toBe(t.application);
+
+      expect(u.toJSON().application).toBeUndefined();
+    });
+
   });
 
   describe("serialization", function() {
