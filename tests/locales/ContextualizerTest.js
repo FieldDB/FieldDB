@@ -1,4 +1,5 @@
 var Contextualizer = require('./../../api/locales/Contextualizer').Contextualizer;
+var specIsRunningTooLong = 5000;
 
 describe("Contextualizer", function() {
   describe("construction", function() {
@@ -14,6 +15,42 @@ describe("Contextualizer", function() {
       expect(contextualizer.currentLocale).toEqual("en");
       expect(contextualizer.currentContext).toEqual("default");
     });
+
+    it("should load the default locales ", function() {
+      var contextualizer = new Contextualizer();
+      expect(contextualizer).toBeDefined();
+      contextualizer.loadDefaults();
+      expect(contextualizer.contextualize("locale_Username")).toEqual("Username:");
+    });
+  });
+
+  describe("accept user contributions", function() {
+    it("should be able to save the messages.json to a corpus", function(done) {
+      var contextualizer = new Contextualizer();
+      contextualizer.addMessagesToContextualizedStrings("en", {
+        "localized_practice": {
+          "message": "Practice"
+        }
+      });
+      expect(contextualizer.save).toBeDefined();
+      contextualizer.save().then(function(results) {
+        contextualizer.debug(results);
+        expect(results[0].state).toEqual("rejected");
+        expect(results[1].state).toEqual("rejected");
+      })
+        .then(done, done);
+    }, specIsRunningTooLong);
+
+    it("should be able to save the messages.json to a git repository", function(done) {
+      var contextualizer = new Contextualizer();
+      contextualizer.email = "lingllama@lingsync.org";
+      contextualizer.save().then(function(results) {
+        contextualizer.debug(results);
+        expect(results[0].state).toEqual("fulfilled");
+        expect(results[1].state).toEqual("fulfilled");
+      })
+        .then(done, done);
+    }, specIsRunningTooLong);
   });
 
   describe("psycholinguistics", function() {
@@ -21,7 +58,7 @@ describe("Contextualizer", function() {
 
     beforeEach(function() {
       contextualizer = new Contextualizer();
-      contextualizer.addMessagesToContextualizedStrings({
+      contextualizer.addMessagesToContextualizedStrings("en", {
         "localized_practice": {
           "message": "Practice"
         },
@@ -37,8 +74,8 @@ describe("Contextualizer", function() {
         "localized_practice_instructions_for_teacher": {
           "message": "The child should touch or point to the image corresponding to what they hear."
         }
-      }, "en");
-      contextualizer.addMessagesToContextualizedStrings({
+      });
+      contextualizer.addMessagesToContextualizedStrings("fr", {
         "localized_practice": {
           "message": "Practique"
         },
@@ -57,7 +94,7 @@ describe("Contextualizer", function() {
         "localized_practice_instructions_for_teacher": {
           "message": "L'enfant appuie sur le image qui correspond au prononciation entendu."
         }
-      }, "fr");
+      });
     });
 
     it("should localize strings", function() {

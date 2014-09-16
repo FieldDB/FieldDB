@@ -117,7 +117,7 @@ FieldDBObject.uuidGenerator = function() {
   var S4 = function() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   };
-  return Date.now() + (S4() + S4()  + S4()  + S4()  + S4()  + S4() + S4() + S4());
+  return Date.now() + (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
 };
 
 /** @lends FieldDBObject.prototype */
@@ -347,6 +347,18 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           deferred.reject(reason);
         });
 
+      return deferred.promise;
+    }
+  },
+
+  saveToGit: {
+    value: function(commit) {
+      var deferred = Q.defer(),
+        self = this;
+      Q.nextTick(function() {
+        self.todo("If in nodejs, write to file and do a git commit with optional user's email who modified the file and push ot a branch with that user's username");
+        deferred.resolve(self);
+      });
       return deferred.promise;
     }
   },
@@ -744,7 +756,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.version = this.version;
 
       for (aproperty in this) {
-        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" ) {
+        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
           underscorelessProperty = aproperty.replace(/^_/, "");
           if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
             underscorelessProperty = "_" + underscorelessProperty;

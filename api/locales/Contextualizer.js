@@ -54,6 +54,22 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
+  loadDefaults: {
+    value: function() {
+      if (this.defaults.en) {
+        this.addMessagesToContextualizedStrings("en", this.defaults.en);
+      } else {
+        this.debug("English Locales did not load.");
+      }
+      if (this.defaults.es) {
+        this.addMessagesToContextualizedStrings("es", this.defaults.es);
+      } else {
+        this.debug("English Locales did not load.");
+      }
+      return this;
+    }
+  },
+
   contextualize: {
     value: function(message) {
       this.debug("Resolving localization in " + this.currentLocale);
@@ -158,7 +174,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
   },
 
   addMessagesToContextualizedStrings: {
-    value: function(localeData, localeCode) {
+    value: function(localeCode, localeData) {
       if (!localeData) {
         return;
       }
@@ -170,7 +186,33 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         }
       }
     }
+  },
+
+  save: {
+    value: function() {
+      var promises = [];
+      for (var locale in this.data) {
+        if (!this.data.hasOwnProperty(locale)) {
+          continue;
+        }
+        this.debug("Requsting save of " + locale);
+        var doc = new FieldDBObject(this.data[locale]);
+        this.debug(doc);
+        if (this.email) {
+          promises.push(FieldDBObject.prototype.saveToGit.apply(doc, [{
+            email: this.email,
+            message: "Updated locale messages"
+          }]));
+        } else {
+          doc.id = locale + "/messages.json";
+          promises.push(FieldDBObject.prototype.save.apply(doc));
+        }
+
+      }
+      return Q.allSettled(promises);
+    }
   }
+
 
 });
 
