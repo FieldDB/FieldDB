@@ -77,12 +77,6 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       }
 
       /*
-       * Start the pub sub hub
-       */
-      this.hub = {};
-      OPrime.makePublisher(this.hub);
-
-      /*
        * Load the user
        */
       if (!this.get("loadTheAppForTheFirstTime")) {
@@ -997,8 +991,91 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         }, failurecallback);
       }, failurecallback);
     }
-  }
+  },
 
+  subscribers: {
+    value: {
+      any: []
+    }
+  },
+
+  subscribe: {
+    value: function(type, fn, context) {
+      type = type || 'any';
+      fn = typeof fn === "function" ? fn : context[fn];
+
+      if (typeof this.subscribers[type] === "undefined") {
+        this.subscribers[type] = [];
+      }
+      this.subscribers[type].push({
+        fn: fn,
+        context: context || this
+      });
+    }
+  },
+
+  unsubscribe: {
+    value: function(type, fn, context) {
+      this.visitSubscribers('unsubscribe', type, fn, context);
+    }
+  },
+
+  publish: {
+    value: function(type, publication) {
+      this.visitSubscribers('publish', type, publication);
+    }
+  },
+
+  visitSubscribers: {
+    value: function(action, type, arg, context) {
+      var pubtype = type || 'any';
+      var subscribers = this.subscribers[pubtype];
+      if (!subscribers || subscribers.length == 0) {
+        if (OPrime.debugMode) OPrime.debug(pubtype + ": There were no subscribers.");
+        return;
+      }
+      var i;
+      var maxUnsubscribe = subscribers ? subscribers.length - 1 : 0;
+      var maxPublish = subscribers ? subscribers.length : 0;
+
+      if (action === 'publish') {
+        // count up so that older subscribers get the message first
+        for (i = 0; i < maxPublish; i++) {
+          if (subscribers[i]) {
+            // TODO there is a bug with the subscribers they are getting lost, and
+            // it is trying to call fn of undefiend. this is a workaround until we
+            // figure out why subscribers are getting lost. Update: i changed the
+            // loop to count down and remove subscribers from the ends, now the
+            // size of subscribers isnt changing such that the subscriber at index
+            // i doesnt exist.
+            subscribers[i].fn.call(subscribers[i].context, arg);
+          }
+        }
+        if (OPrime.debugMode) OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
+
+      } else {
+
+        // count down so that subscribers index exists when we remove them
+        for (i = maxUnsubscribe; i >= 0; i--) {
+          try {
+            if (!subscribers[i].context) {
+              OPrime
+                .debug("This subscriber has no context. should we remove it? " + i);
+            }
+            if (subscribers[i].context === context) {
+              var removed = subscribers.splice(i, 1);
+              if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
+            } else {
+              if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
+                subscribers[i].context);
+            }
+          } catch (e) {
+            if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
+          }
+        }
+      }
+    }
+  }
 
 });
 exports.App = App;
