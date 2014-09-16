@@ -97,6 +97,10 @@ var FieldDBObject = function FieldDBObject(json) {
   if (!this.id) {
     this.dateCreated = Date.now();
   }
+
+  this.render = this.render || function(options) {
+    this.warn('Rendering, but the render was not injected for this ' + this.type, options);
+  };
 };
 
 FieldDBObject.DEFAULT_STRING = "";
@@ -366,7 +370,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   equals: {
     value: function(anotherObject) {
       for (var aproperty in this) {
-        if (!this.hasOwnProperty(aproperty)) {
+        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function") {
+          this.debug("skipping equality of "+aproperty);
           continue;
         }
         if (typeof this[aproperty].equals === "function") {

@@ -192,6 +192,26 @@ describe("FieldDBObject", function() {
 
   });
 
+  describe("render", function() {
+    it("should not error if it has no render function", function() {
+      var app = new FieldDBObject();
+      expect(app.render).toBeDefined();
+      console.log(app.render);
+      app.render();
+      expect(app.warnMessage).toContain('but the render was not injected for this');
+    });
+
+    it("should accept a render function from the containing app or framework", function() {
+      var app = new FieldDBObject();
+      app.render = function() {
+        console.log("I rendered.")
+      };
+      expect(app.render).toBeDefined();
+      app.render();
+      expect(app.warnMessage).toBeUndefined();
+    });
+  });
+
   describe("debugging", function() {
     it("should be able to debug one object if we want", function() {
       var buggy = new FieldDBObject();

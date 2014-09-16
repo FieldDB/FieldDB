@@ -717,12 +717,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
-  render: {
-    value: function(options) {
-      this.warn('Rendering, but the render was not injected for this importer.', options);
-    }
-  },
-
   /**
    * Holds meta data about the imported data list and references to the datum ids
    *
