@@ -25,7 +25,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatum', function() {
           return false;
         }
         // Only values which would be interesting for this user
-        var prefs = $rootScope.getUserPreferences();
+        var prefs = $rootScope.application.prefs;
         // console.log(prefs);
         var userType = prefs.preferedDashboardType || 'experimenterNormalUser';
         if (!field.showToUserTypes) {
