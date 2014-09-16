@@ -231,7 +231,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._confidential;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
+        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS['confidential'] && typeof this.INTERNAL_MODELS['confidential'] === "function" && value.constructor !== this.INTERNAL_MODELS['confidential']) {
+          this.debug("Parsing model: " + value);
           value = new this.INTERNAL_MODELS['confidential'](value);
         }
       }
