@@ -62,9 +62,9 @@ describe("Contextualizer", function() {
 
     it("should localize strings", function() {
 
-      expect(contextualizer.localize("localized_practice")).toEqual("Practice");
+      expect(contextualizer.contextualize("localized_practice")).toEqual("Practice");
       contextualizer.currentLocale = "fr";
-      expect(contextualizer.localize("localized_practice")).toEqual("Practique");
+      expect(contextualizer.contextualize("localized_practice")).toEqual("Practique");
     });
 
     it("should contextualize complex objects", function() {
@@ -93,20 +93,20 @@ describe("Contextualizer", function() {
         }
       };
 
-      expect(contextualizer.localize(datalist.title)).toEqual("Practice");
-      expect(contextualizer.localize(datalist.description)).toEqual("This is a screening test for reading difficulties before children learn to read.");
-      expect(contextualizer.localize(datalist.instructions)).toEqual("The child should touch or point to the image corresponding to what they hear.");
+      expect(contextualizer.contextualize(datalist.title)).toEqual("Practice");
+      expect(contextualizer.contextualize(datalist.description)).toEqual("This is a screening test for reading difficulties before children learn to read.");
+      expect(contextualizer.contextualize(datalist.instructions)).toEqual("The child should touch or point to the image corresponding to what they hear.");
 
       contextualizer.currentContext = "child";
-      expect(contextualizer.localize(datalist.title)).toEqual("Practice");
-      expect(contextualizer.localize(datalist.description)).toEqual("In this game, you will help the mouse eat all the cheese!");
-      expect(contextualizer.localize(datalist.instructions)).toEqual("Choose the right picture to help the mouse eat the cheese.");
+      expect(contextualizer.contextualize(datalist.title)).toEqual("Practice");
+      expect(contextualizer.contextualize(datalist.description)).toEqual("In this game, you will help the mouse eat all the cheese!");
+      expect(contextualizer.contextualize(datalist.instructions)).toEqual("Choose the right picture to help the mouse eat the cheese.");
 
       contextualizer.currentLocale = "fr";
       // contextualizer.debugMode = true;
-      expect(contextualizer.localize(datalist.title)).toEqual("On prepare!");
-      expect(contextualizer.localize(datalist.description)).toEqual("Pour ce jeu, tu devras écouter des sons pour aider la souris à manger tous les morceaux de fromage!");
-      expect(contextualizer.localize(datalist.instructions)).toEqual("Choisi la bonne image pour aider la souris à manger tous les morceaux de fromage.");
+      expect(contextualizer.contextualize(datalist.title)).toEqual("On prepare!");
+      expect(contextualizer.contextualize(datalist.description)).toEqual("Pour ce jeu, tu devras écouter des sons pour aider la souris à manger tous les morceaux de fromage!");
+      expect(contextualizer.contextualize(datalist.instructions)).toEqual("Choisi la bonne image pour aider la souris à manger tous les morceaux de fromage.");
 
     });
   });
