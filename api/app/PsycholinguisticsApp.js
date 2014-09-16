@@ -1,21 +1,19 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var App = require('./App').App;
 
 /**
- * @class The PsycholinguisticsApp allows the user to label data with grammatical tags
- *        i.e. passive, causative. This is useful for searches.
+ * @class The PsycholinguisticsApp is a minimal extension of the App with the preferences
+ *  set to default to a psycholinguistics terminology and look and feel.
  *
  * @name  PsycholinguisticsApp
- * @description The initialize function brings up a field in which the user
- *              can enter tags.@class FieldDBObject of Datum validation states
- * @extends FieldDBObject
+ * @extends App
  * @constructs
  */
 var PsycholinguisticsApp = function PsycholinguisticsApp(options) {
   this.debug("Constructing PsycholinguisticsApp ", options);
-  FieldDBObject.apply(this, arguments);
+  App.apply(this, arguments);
 };
 
-PsycholinguisticsApp.prototype = Object.create(FieldDBObject.prototype, /** @lends PsycholinguisticsApp.prototype */ {
+PsycholinguisticsApp.prototype = Object.create(App.prototype, /** @lends PsycholinguisticsApp.prototype */ {
   constructor: {
     value: PsycholinguisticsApp
   },
