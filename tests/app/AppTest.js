@@ -40,6 +40,19 @@ describe("App", function() {
       })).toEqual('Username:');
 
     });
+
+    it("should be not error if asked to contextualize objects when no contextualizer exists", function() {
+      var app = new App({
+        debugMode: true
+      });
+
+      expect(app).toBeDefined();
+      expect(app.contextualizer).toBeUndefined();
+      expect(app.contextualize({
+        default: 'locale_Username'
+      })).toEqual('locale_Username');
+
+    });
   });
 
 });
