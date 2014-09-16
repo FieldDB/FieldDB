@@ -1,4 +1,4 @@
-/* globals window, localStorage, Android */
+/* globals window, localStorage, Android, navigator */
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 var Activity = require('./../activity/Activity').Activity;
 var Authentication = require('./../FieldDBObject').FieldDBObject;
@@ -6,7 +6,7 @@ var Corpus = require('./../corpus/Corpus').Corpus;
 var DataList = require('./../data_list/DataList').DataList;
 var DatumField = require('./../datum/DatumField').DatumField;
 var Search = require('./../search/Search').Search;
-var Session = require('./../datum/Session').Session;
+var Session = require('./../FieldDBObject').FieldDBObject;
 var Router = require('./../Router').Router;
 var User = require('./../user/User').User;
 var UserMask = require('./../user/UserMask').UserMask;
@@ -153,7 +153,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       //      self.bug("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
       FieldDBObject.couch.urlPrefix = this.getCouchUrl(this.couchConnection, "");
 
-      if (this.isChromeApp()) {
+      if (this.isChromeApp) {
         FieldDBObject.couch_connector.config.base_url = this.getCouchUrl(couchConnection, "");
         FieldDBObject.couch_connector.config.db_name = couchConnection.pouchname;
       } else {
@@ -350,7 +350,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
 
           /* if in chrome extension, or offline, turn on replication */
-          if (self.isChromeApp()) {
+          if (self.isChromeApp) {
             //TODO turn on pouch and start replicating and then redirect user to their user page(?)
             //            appself.replicateContinuouslyWithCouch();
           }
@@ -374,7 +374,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                       "alert-info", "Online Mode:");
                   }
                   /* if in chrome extension, or offline, turn on replication */
-                  if (self.isChromeApp()) {
+                  if (self.isChromeApp) {
                     //TODO turn on pouch and start replicating and then redirect user to their user page(?)
                     //                      appself.replicateContinuouslyWithCouch();
                   }
@@ -1050,7 +1050,97 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         }
       }
     }
+  },
+
+  isAndroidApp: {
+    get: function() {
+
+      // Development tablet navigator.userAgent:
+      // Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; gTablet Build/HRI66)
+      // AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13
+      // this.debug("The user agent is " + navigator.userAgent);
+      try {
+        return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
+      } catch (e) {
+        this.debug("Cant determine app type isAndroidApp, ", e);
+        return false;
+      }
+    }
+  },
+
+  isAndroid4: {
+    get: function() {
+      try {
+        return navigator.userAgent.indexOf("Android 4") > -1;
+      } catch (e) {
+        this.debug("Cant determine app type isAndroid4, ", e);
+        return false;
+      }
+    }
+  },
+
+  isChromeApp: {
+    get: function() {
+      try {
+        return window.location.href.indexOf("chrome-extension") > -1;
+      } catch (e) {
+        this.debug("Cant determine app type isChromeApp, ", e);
+        return false;
+      }
+    }
+  },
+
+  isCouchApp: {
+    get: function() {
+      try {
+        return window.location.href.indexOf("_design/pages") > -1;
+      } catch (e) {
+        this.debug("Cant determine app type isCouchApp, ", e);
+        return false;
+      }
+    }
+  },
+
+  isTouchDBApp: {
+    get: function() {
+      try {
+        return window.location.href.indexOf("localhost:8128") > -1;
+      } catch (e) {
+        this.debug("Cant determine app type isCouchApp, ", e);
+        return false;
+      }
+    }
+  },
+
+  isNodeJSApp: {
+    get: function() {
+      try {
+        return window.location.href !== undefined;
+      } catch (e) {
+        // this.debug("Cant access window, app type isNodeJSApp, ", e);
+        return true;
+      }
+    }
+  },
+
+  isBackboneCouchDBApp: {
+    get: function() {
+      return false;
+    }
+  },
+
+  /**
+   * If not running offline on an android or in a chrome extension, assume we are
+   * online.
+   *
+   * @returns {Boolean} true if not on offline Android or on a Chrome Extension
+   */
+  isOnlineOnly: {
+    get: function() {
+      return !this.isAndroidApp && !this.isChromeApp;
+    }
   }
+
 
 });
 exports.App = App;
