@@ -1,14 +1,13 @@
+/* globals window, localStorage, Android */
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 var Activity = require('./../activity/Activity').Activity;
 var Authentication = require('./../FieldDBObject').FieldDBObject;
 var Corpus = require('./../corpus/Corpus').Corpus;
 var DataList = require('./../data_list/DataList').DataList;
 var DatumField = require('./../datum/DatumField').DatumField;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
 var Search = require('./../search/Search').Search;
 var Session = require('./../datum/Session').Session;
 var Router = require('./../Router').Router;
-var Confidential = require('./../confidentiality_encryption/Confidential').Confidential;
 var User = require('./../user/User').User;
 var UserMask = require('./../user/UserMask').UserMask;
 var Contextualizer = require('./../locales/Contextualizer').Contextualizer;
@@ -58,7 +57,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var self = this;
 
       // If there's no authentication, create a new one
-      if (!this.get("authentication")) {
+      if (!this.authentication) {
         this.set("authentication", new Authentication({
           filledWithDefaults: true
         }));
@@ -85,7 +84,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         self.debug("Loading encrypted user");
         self.status = "Loading encrypted user...";
         var u = localStorage.getItem("encryptedUser");
-        self.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        self.authentication.loadEncryptedUser(u, function(success, errors) {
+          self.debug("loadEncryptedUser", success, errors);
 
           self.status = "Turning on continuous sync with your team server...";
           self.replicateContinuouslyWithCouch(function() {
@@ -94,7 +94,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
              */
             self.debug("Creating backbone objects");
             self.status = "Building dashboard objects...";
-            self.createAppBackboneObjects(self.get("couchConnection").pouchname, function() {
+            self.createAppFieldDBObjects(self.couchConnection.pouchname, function() {
 
               /*
                * If you know the user, load their most recent
@@ -102,15 +102,14 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                */
               self.debug("Loading the backbone objects");
               self.status = "Loading dashboard objects...";
-              self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
-                self.get("authentication").get(
-                  "userPrivate").get("mostRecentIds"), function() {
+              self.loadFieldDBObjectsByIdAndSetAsCurrentDashboard(
+                self.authentication.userPrivate.mostRecentIds, function() {
 
                   self.debug("Starting the app");
                   self.startApp(function() {
-                    window.app.showHelpOrNot();
+                    self.showHelpOrNot();
                     self.stopSpinner();
-                    window.app.router.renderDashboardOrNot(true);
+                    self.router.renderDashboardOrNot(true);
 
                   });
                 });
@@ -121,7 +120,11 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         });
       }
 
-      window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
+      try {
+        window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
+      } catch (e) {
+        this.warn("Cannot prevent the user from exiting if there are unsaved changes.");
+      }
     }
   },
 
@@ -141,18 +144,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   changePouch: {
     value: function(couchConnection, callback) {
       if (!couchConnection || couchConnection === undefined) {
-        self.debug("App.changePouch couchConnection must be supplied.");
+        this.debug("App.changePouch couchConnection must be supplied.");
         return;
       } else {
-        self.debug("App.changePouch setting couchConnection: ", couchConnection);
+        this.debug("App.changePouch setting couchConnection: ", couchConnection);
         this.set("couchConnection", couchConnection);
       }
-      //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
-      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"), "");
+      //      self.bug("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+      FieldDBObject.couch.urlPrefix = this.getCouchUrl(this.couchConnection, "");
 
-      if (OPrime.isChromeApp()) {
-        Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection, "");
-        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+      if (this.isChromeApp()) {
+        FieldDBObject.couch_connector.config.base_url = this.getCouchUrl(couchConnection, "");
+        FieldDBObject.couch_connector.config.db_name = couchConnection.pouchname;
       } else {
         /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
         try {
@@ -162,9 +165,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           if (pouchName === "corpus") {
             pouchName = pieces[1];
           }
-          Backbone.couch_connector.config.db_name = pouchName;
+          FieldDBObject.couch_connector.config.db_name = pouchName;
         } catch (e) {
-          OPrime.bug("Couldn't set the databse name off of the url, please report this.");
+          this.bug("Couldn't set the databse name off of the url, please report this.");
         }
       }
 
@@ -175,11 +178,11 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
 
 
-      // alert("TODO set/validate that the the pouch connection");
+      // self.bug("TODO set/validate that the the pouch connection");
       // if (this.pouch === undefined) {
-      //   // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+      //   // this.pouch = FieldDBObject.sync.pouch("https://localhost:6984/"
       //   // + couchConnection.pouchname);
-      //   this.pouch = Backbone.sync
+      //   this.pouch = FieldDBObject.sync
       //     .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + couchConnection.pouchname : OPrime.pouchUrl + couchConnection.pouchname);
       // }
       // if (typeof callback === "function") {
@@ -193,27 +196,27 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
    * app load, either by main, or by welcome new user. This function should
    * not be called at any later time as it will break the connection between
    * the views and the models. To load different models into the app after it
-   * has first loaded, use the loadBackboneObjectsById function below.
+   * has first loaded, use the loadFieldDBObjectsById function below.
    *
    * @param callback
    */
-  createAppBackboneObjects: {
+  createAppFieldDBObjects: {
     value: function(optionalpouchname, callback) {
       if (optionalpouchname === null) {
         optionalpouchname = "default";
       }
 
-      if (Backbone.couch_connector.config.db_name === "default") {
-        OPrime.bug("The app doesn't know which database its in. This is a problem.");
+      if (FieldDBObject.couch_connector.config.db_name === "default") {
+        this.bug("The app doesn't know which database its in. This is a problem.");
       }
 
-      if (this.get("authentication").get("userPublic") === undefined) {
-        this.get("authentication").set("userPublic", new UserMask({
+      if (this.authentication.userPublic === undefined) {
+        this.authentication.set("userPublic", new UserMask({
           pouchname: optionalpouchname
         }));
       }
-      if (this.get("authentication").get("userPrivate") === undefined) {
-        this.get("authentication").set("userPrivate", new User());
+      if (this.authentication.userPrivate === undefined) {
+        this.authentication.set("userPrivate", new User());
       }
       var c = new Corpus({
         pouchname: optionalpouchname
@@ -241,22 +244,17 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
   startApp: {
     value: function(callback) {
-      if (!window.appView) {
-        window.appView = new AppView({
-          model: this
-        });
-        /* Tell the app to render everything */
-        window.appView.render();
-      }
+      /* Tell the app to render everything */
+      this.render();
 
-      if (typeof window.app.router === "function") {
+      if (typeof this.router === "function") {
         /* Tell the router to render the home screen divs */
-        this.router = new AppRouter();
+        this.router = new Router();
         this.router.renderDashboardOrNot(true);
 
-        Backbone.history.start();
+        FieldDBObject.history.start();
         if (typeof callback === "function") {
-          self.debug("Calling back the startApps callback");
+          this.debug("Calling back the startApps callback");
           callback();
         }
       }
@@ -266,37 +264,29 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
   showSpinner: {
     value: function() {
-      $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
-      $('.spinner-image').css({
-        'width': function() {
-          return ($(document).width() * 0.1) + 'px';
-        },
-        'height': function() {
-          return ($(document).width() * 0.1) + 'px';
-        },
-        'padding-top': '10em'
-      });
+      this.status = "Loading dashboard";
+      this.loading = true;
     }
   },
   stopSpinner: {
     value: function() {
-      $('#dashboard_loading_spinner').html("");
+      this.loading = false;
     }
   },
   backUpUser: {
     value: function(callback) {
       var self = this;
       /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
-      if (self.get("authentication").get("userPrivate").get("username") === "public" || self.get("authentication").get("userPrivate").get("username") === "lingllama") {
+      if (self.authentication.userPrivate.username === "public" || self.authentication.userPrivate.username === "lingllama") {
         if (typeof callback === "function") {
           callback();
         }
       }
       this.saveAndInterConnectInApp(function() {
         //syncUserWithServer will prompt for password, then run the corpus replication.
-        self.get("authentication").syncUserWithServer(function() {
-          if (window.appView) {
-            window.appView.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.", "alert-info", "Backed-up:");
+        self.authentication.syncUserWithServer(function() {
+          if (self.view) {
+            self.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.", "alert-info", "Backed-up:");
           }
           if (typeof callback === "function") {
             callback();
@@ -318,22 +308,21 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
    * @param callback A function to call upon success, it receives the data back from the post request.
    */
   logUserIntoTheirCorpusServer: {
-    value: function(couchConnection, username,
-      password, succescallback, failurecallback) {
+    value: function(couchConnection, username, password, succescallback, failurecallback) {
+      var self = this;
+
       if (couchConnection === null || couchConnection === undefined) {
-        couchConnection = this.get("couchConnection");
+        couchConnection = this.couchConnection;
       }
       if (couchConnection === null || couchConnection === undefined) {
-        alert("Bug: i couldnt log you into your couch database.");
+        this.bug("Bug: i couldnt log you into your couch database.");
       }
 
       /* if on android, turn on replication and don't get a session token */
-      if (OPrime.isTouchDBApp()) {
+      if (this.isTouchDBApp()) {
         Android.setCredentialsAndReplicate(couchConnection.pouchname,
           username, password, couchConnection.domain);
-        OPrime
-          .debug("Not getting a session token from the users corpus server " +
-            "since this is touchdb on android which has no idea of tokens.");
+        this.debug("Not getting a session token from the users corpus server " + "since this is touchdb on android which has no idea of tokens.");
         if (typeof succescallback === "function") {
           succescallback();
         }
@@ -344,26 +333,24 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      self.debug("Contacting your corpus server ", couchConnection, couchurl);
+      this.debug("Contacting your corpus server ", couchConnection, couchurl);
 
-      var appself = this;
-      $.couch.login({
+      this.couch.login({
         name: username,
         password: password,
         success: function(serverResults) {
           if (!serverResults) {
-            OPrime.bug("There was a problem logging you into your backup database, please report this.");
+            self.bug("There was a problem logging you into your backup database, please report this.");
           }
-          if (window.appView) {
-            window.appView
-              .toastUser(
-                "I logged you into your team server automatically, your syncs will be successful.",
-                "alert-info", "Online Mode:");
+          if (self.view) {
+            self.toastUser(
+              "I logged you into your team server automatically, your syncs will be successful.",
+              "alert-info", "Online Mode:");
           }
 
 
           /* if in chrome extension, or offline, turn on replication */
-          if (OPrime.isChromeApp()) {
+          if (self.isChromeApp()) {
             //TODO turn on pouch and start replicating and then redirect user to their user page(?)
             //            appself.replicateContinuouslyWithCouch();
           }
@@ -373,47 +360,45 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }
         },
         error: function(serverResults) {
-          window
-            .setTimeout(
-              function() {
-                //try one more time 5 seconds later
-                $.couch.login({
-                  name: username,
-                  password: password,
-                  success: function(serverResults) {
-                    if (window.appView) {
-                      window.appView
-                        .toastUser(
-                          "I logged you into your team server automatically, your syncs will be successful.",
-                          "alert-info", "Online Mode:");
-                    }
-                    /* if in chrome extension, or offline, turn on replication */
-                    if (OPrime.isChromeApp()) {
-                      //TODO turn on pouch and start replicating and then redirect user to their user page(?)
-                      //                      appself.replicateContinuouslyWithCouch();
-                    }
-
-                    if (typeof succescallback === "function") {
-                      succescallback(serverResults);
-                    }
-                  },
-                  error: function(serverResults) {
-                    if (window.appView) {
-                      window.appView
-                        .toastUser(
-                          "I couldn't log you into your corpus. What does this mean? " + "This means you can't upload data to train an auto-glosser or visualize your morphemes. " + "You also can't share your data with team members. If your computer is online and you are" + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " + OPrime.contactUs + " If you're offline you can ignore this warning, and sync later when you're online. ",
-                          "alert-danger",
-                          "Offline Mode:");
-                    }
-                    if (typeof failurecallback === "function") {
-                      failurecallback("I couldn't log you into your corpus.");
-                    }
-                    self.debug(serverResults);
-                    window.app.get("authentication").set(
-                      "staleAuthentication", true);
+          self.debug("serverResults", serverResults);
+          self.timeout(
+            function() {
+              //try one more time 5 seconds later
+              FieldDBObject.couch.login({
+                name: username,
+                password: password,
+                success: function(serverResults) {
+                  if (self.view) {
+                    self.toastUser(
+                      "I logged you into your team server automatically, your syncs will be successful.",
+                      "alert-info", "Online Mode:");
                   }
-                });
-              }, 5000);
+                  /* if in chrome extension, or offline, turn on replication */
+                  if (self.isChromeApp()) {
+                    //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+                    //                      appself.replicateContinuouslyWithCouch();
+                  }
+
+                  if (typeof succescallback === "function") {
+                    succescallback(serverResults);
+                  }
+                },
+                error: function(serverResults) {
+                  if (self.view) {
+                    self.toastUser(
+                      "I couldn't log you into your corpus. What does this mean? " + "This means you can't upload data to train an auto-glosser or visualize your morphemes. " + "You also can't share your data with team members. If your computer is online and you are" + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " + self.contextualizer.contactUs + " If you're offline you can ignore this warning, and sync later when you're online. ",
+                      "alert-danger",
+                      "Offline Mode:");
+                  }
+                  if (typeof failurecallback === "function") {
+                    failurecallback("I couldn't log you into your corpus.");
+                  }
+                  self.debug(serverResults);
+                  self.authentication.set(
+                    "staleAuthentication", true);
+                }
+              });
+            }, 5000);
         }
       });
     }
@@ -421,15 +406,15 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   getCouchUrl: {
     value: function(couchConnection, couchdbcommand) {
       if (!couchConnection) {
-        couchConnection = this.get("couchConnection");
-        self.debug("Using the apps ccouchConnection", couchConnection);
+        couchConnection = this.couchConnection;
+        this.debug("Using the apps ccouchConnection", couchConnection);
       } else {
-        self.debug("Using the couchConnection passed in,", couchConnection, this.get("couchConnection"));
+        this.debug("Using the couchConnection passed in,", couchConnection, this.couchConnection);
       }
       if (!couchConnection) {
-        OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
+        this.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
       }
-      return OPrime.getCouchUrl(couchConnection, couchdbcommand);
+      return this.getCouchUrl(couchConnection, couchdbcommand);
     },
     /**
      * Synchronize to server and from database.
@@ -445,18 +430,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         return;
       }
       self.pouch(function(err, db) {
-        var couchurl = this.getCouchUrl();
+        var couchurl = self.getCouchUrl();
         if (err) {
           self.debug("Opening db error", err);
           if (typeof failurecallback === "function") {
             failurecallback();
           } else {
-            alert('Opening DB error' + JSON.stringify(err));
+            this.bug('Opening DB error' + JSON.stringify(err));
             self.debug('Opening DB error' + JSON.stringify(err));
           }
         } else {
           self.debug("Opening db success", db);
-          alert("TODO check to see if  needs a slash if replicating with pouch on " + couchurl);
+          self.bug("TODO check to see if  needs a slash if replicating with pouch on " + couchurl);
           self.replicateFromCorpus(db, couchurl, function() {
             //turn on to regardless of fail or succeed
             self.replicateToCorpus(db, couchurl);
@@ -496,7 +481,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           if (typeof failurecallback === "function") {
             failurecallback();
           } else {
-            alert('Opening DB error' + JSON.stringify(err));
+            self.bug('Opening DB error' + JSON.stringify(err));
             self.debug('Opening DB error' + JSON.stringify(err));
           }
         } else {
@@ -508,7 +493,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
               if (typeof failurecallback === "function") {
                 failurecallback();
               } else {
-                alert('Corpus replicate from error' + JSON.stringify(err));
+                self.bug('Corpus replicate from error' + JSON.stringify(err));
                 self.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             } else {
@@ -524,6 +509,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   },
   replicateToCorpus: {
     value: function(db, couchurl, success, failure) {
+      var self = this;
+
       db.replicate.to(couchurl, {
         continuous: true
       }, function(err, response) {
@@ -535,7 +522,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           if (typeof failure === "function") {
             failure();
           } else {
-            alert('Database replicate to error' + JSON.stringify(err));
+            self.bug('Database replicate to error' + JSON.stringify(err));
             self.debug('Database replicate to error' + JSON.stringify(err));
           }
         } else {
@@ -543,7 +530,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           if (typeof success === "function") {
             success();
           } else {
-            self.debug('Database replicating' + JSON.stringify(couchConnection));
+            self.debug('Database replicating' + JSON.stringify(self.couchConnection));
           }
 
         }
@@ -552,39 +539,42 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   },
   replicateFromCorpus: {
     value: function(db, couchurl, succes, fail) {
-      db.replicate
-        .from(couchurl, {
-            continuous: true
-          },
-          function(err, response) {
-            self.debug("Replicated from " + couchurl);
-            self.debug(response);
-            self.debug(err);
-            if (err) {
-              self.debug("replicate from db  error", err);
-              if (typeof fail === "function") {
-                fail();
-              } else {
-                alert('Database replicate from error' + JSON.stringify(err));
-                self.debug('Database replicate from error' + JSON.stringify(err));
-              }
-            } else {
-              self.debug("Database replicate from success",
-                response);
-              if (typeof succes === "function") {
-                succes();
-              } else {
-                self.debug('Database replicating' + JSON.stringify(couchConnection));
-              }
+      var self = this;
 
+      db.replicate.from(couchurl, {
+          continuous: true
+        },
+        function(err, response) {
+          self.debug("Replicated from " + couchurl);
+          self.debug(response);
+          self.debug(err);
+          if (err) {
+            self.debug("replicate from db  error", err);
+            if (typeof fail === "function") {
+              fail();
+            } else {
+              self.bug('Database replicate from error' + JSON.stringify(err));
+              self.debug('Database replicate from error' + JSON.stringify(err));
             }
-          });
+          } else {
+            self.debug("Database replicate from success",
+              response);
+            if (typeof succes === "function") {
+              succes();
+            } else {
+              self.debug('Database replicating' + JSON.stringify(self.couchConnection));
+            }
+
+          }
+        });
     }
   },
 
-  loadBackboneObjectsByIdAndSetAsCurrentDashboard: {
+  loadFieldDBObjectsByIdAndSetAsCurrentDashboard: {
     value: function(appids, callback) {
-      self.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+      var self = this;
+
+      this.debug("loadFieldDBObjectsByIdAndSetAsCurrentDashboard");
 
 
       /*
@@ -592,38 +582,38 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
        * backbone couch adaptor is saving to the corpus' database,
        * not where the user currently is.
        */
-      if (OPrime.isCouchApp()) {
+      if (this.isCouchApp()) {
         var corpusPouchName = appids.couchConnection.pouchname;
         if (window.location.href.indexOf(corpusPouchName) === -1) {
           if (corpusPouchName !== "public-firstcorpus") {
             var username = "";
             try {
-              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+              username = this.authentication.userPrivate.username || "";
             } catch (e) {
               //do nothing
             }
             if (username !== "public") {
-              OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+              this.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
             }
           }
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-          window.location.replace(optionalCouchAppPath + "user.html#login/" + corpusPouchName);
+          var optionalCouchAppPath = this.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+          this.router.navigate(optionalCouchAppPath + "user.html#login/" + corpusPouchName);
 
-          //        window.app.get("authentication").syncUserWithServer(function(){
+          //        self.authentication.syncUserWithServer(function(){
           //        window.location.replace(optionalCouchAppPath+"corpus.html");
           //        });
           return;
         }
       }
 
-      if (Backbone.couch_connector.config.db_name === "default") {
-        OPrime.bug("The app doesn't know which database its in. This is a problem.");
+      if (FieldDBObject.couch_connector.config.db_name === "default") {
+        this.bug("The app doesn't know which database its in. This is a problem.");
       }
 
       var couchConnection = appids.couchConnection;
       if (!couchConnection) {
-        OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
-        window.location.replace("user.html");
+        this.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
+        this.router.navigate("user.html");
         return;
       }
 
@@ -643,16 +633,15 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         "pouchname": couchConnection.pouchname,
         "couchConnection": couchConnection
       });
-      var selfapp = this;
       if (!corpusid) {
-        if (this.get("corpus").id) {
-          corpusid = this.get("corpus").id;
+        if (this.corpus.id) {
+          corpusid = this.corpus.id;
         } else {
-          self.status = "Opening/Creating Corpus...";
-          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function() {
+          this.status = "Opening/Creating Corpus...";
+          this.corpus.loadOrCreateCorpusByPouchName(couchConnection.pouchname, function() {
             /* if the corpusid is missing, make sure there are other objects in the dashboard */
-            selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
-            //          window.app.stopSpinner();
+            self.loadFieldDBObjectsByIdAndSetAsCurrentDashboard(appids, callback);
+            //          self.stopSpinner();
           });
           return;
         }
@@ -662,11 +651,11 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         success: function(corpusModel) {
           var tags;
 
-          //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-          self.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+          //            self.bug("Corpus fetched successfully in loadFieldDBObjectsByIdAndSetAsCurrentDashboard");
+          self.debug("Corpus fetched successfully in loadFieldDBObjectsByIdAndSetAsCurrentDashboard", corpusModel);
 
           /* Upgrade chrome app user corpora's to v1.38+ */
-          var oldCouchConnection = corpusModel.get("couchConnection");
+          var oldCouchConnection = corpusModel.couchConnection;
           if (oldCouchConnection) {
             if (oldCouchConnection.domain === "ifielddevs.iriscouch.com") {
               oldCouchConnection.domain = "corpusdev.lingsync.org";
@@ -676,18 +665,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }
 
           try {
-            tags = corpusModel.get("datumFields").where({
+            tags = corpusModel.datumFields.where({
               label: "tags"
             });
             if (tags.length === 0) {
               /* If its missing tags, add upgrade the corpus to version v1.38+ */
-              corpusModel.get("datumFields").add(new DatumField({
+              corpusModel.datumFields.add(new DatumField({
                 label: "tags",
                 shouldBeEncrypted: "",
                 userchooseable: "disabled",
                 help: "Tags for constructions or other info that you might want to use to categorize your data."
               }));
-              corpusModel.get("datumFields").add(new DatumField({
+              corpusModel.datumFields.add(new DatumField({
                 label: "validationStatus",
                 shouldBeEncrypted: "",
                 userchooseable: "disabled",
@@ -695,15 +684,15 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
               }));
             }
           } catch (e) {
-            OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
+            self.debug("Unable to add the tags and or validationStatus field to the corpus.");
           }
           try {
-            tags = corpusModel.get("datumFields").where({
+            tags = corpusModel.datumFields.where({
               label: "syntacticTreeLatex"
             });
             if (tags.length === 0) {
               /* If its missing syntacticTreeLatex, add upgrade the corpus to version v1.54+ */
-              corpusModel.get("datumFields").add(new DatumField({
+              corpusModel.datumFields.add(new DatumField({
                 label: "syntacticTreeLatex",
                 showToUserTypes: "machine",
                 shouldBeEncrypted: "",
@@ -713,7 +702,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
             }
           } catch (e) {
-            OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
+            self.debug("Unable to add the syntacticTreeLatex field to the corpus.");
           }
 
           self.status = "Opened Corpus...";
@@ -736,10 +725,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
               success: function(dataListModel) {
                 self.status = "Opened DataList...";
 
-                //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                //                    self.bug("Data list fetched successfully in loadFieldDBObjectsByIdAndSetAsCurrentDashboard");
                 self.debug("Data list fetched successfully", dataListModel);
                 dl.setAsCurrentDataList(function() {
-                  self.status = "Loading your most recent DataList, " + dataListModel.get("datumIds").length + " entries...";
+                  self.status = "Loading your most recent DataList, " + dataListModel.datumIds.length + " entries...";
 
                   var s = new Session({
                     "pouchname": couchConnection.pouchname
@@ -749,51 +738,54 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                     success: function(sessionModel) {
                       self.status = "Opened Elicitation Session...";
 
-                      //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                      //                            self.bug("Session fetched successfully in loadFieldDBObjectsByIdAndSetAsCurrentDashboard");
                       self.debug("Session fetched successfully", sessionModel);
                       s.setAsCurrentSession(function() {
 
                         self.status = "Loading Elicitation Session...";
 
-                        //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
+                        //                              self.bug("Entire dashboard fetched and loaded and linked up with views correctly.");
                         self.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
-                        if (window.appView) {
-                          window.appView.toastUser("Your dashboard has been loaded from where you left off last time.", "alert-success", "Dashboard loaded!");
+                        if (self.view) {
+                          self.toastUser("Your dashboard has been loaded from where you left off last time.", "alert-success", "Dashboard loaded!");
                         }
                         /*
                          * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods
                          */
                         self.status = "Rendering Dashboard...";
 
-                        window.app.stopSpinner();
+                        self.stopSpinner();
 
 
                         if (typeof callback === "function") {
                           callback();
                         }
                       }, function() {
-                        alert("Failure to set as current session in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                        self.bug("Failure to set as current session in loadFieldDBObjectsByIdAndSetAsCurrentDashboard");
                       });
                     },
                     error: function(model, error, options) {
-                      alert("There was an error fetching the session. " + error.reason);
+                      self.bug("There was an error fetching the session. " + error.reason);
+                      self.debug("options", options);
                       s.set(
-                        "sessionFields", window.app.get("corpus").get("sessionFields").clone()
+                        "sessionFields", self.corpus.sessionFields.clone()
                       );
                     }
                   }); //end session fetch
 
                 }, function() {
-                  alert("Failure to set as current data list in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                  self.bug("Failure to set as current data list in loadFieldDBObjectsByIdAndSetAsCurrentDashboard");
                 });
               },
               error: function(model, error, options) {
-                alert("There was an error fetching the data list. " + error.reason);
+                self.debug("options", options);
+
+                self.bug("There was an error fetching the data list. " + error.reason);
               }
             }); //end fetch data list
 
           }, function() {
-            alert("Failure to set as current corpus in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+            self.bug("Failure to set as current corpus in loadFieldDBObjectsByIdAndSetAsCurrentDashboard");
           }); //end setAsCurrentCorpus
         },
         error: function(model, error, options) {
@@ -805,18 +797,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }
           if (reason.indexOf("not authorized") >= 0 || reason.indexOf("nthorized") >= 0) {
             //Show quick authentication so the user can get their corpus token and get access to the data
-            var originalCallbackFromLoadBackboneApp = callback;
-            window.app.get("authentication").syncUserWithServer(function() {
+            var originalCallbackFromLoadFieldDBObjectApp = callback;
+            self.authentication.syncUserWithServer(function() {
               self.debug("Trying to reload the app after a session token has timed out");
-              self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
+              self.loadFieldDBObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadFieldDBObjectApp);
             }, couchConnection.pouchname);
             //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
             //            window.location.replace(optionalCouchAppPath+"corpus.html#login");
           } else {
             if (reason.indexOf("nexpected end of input") >= 0) {
-              OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only. We are waiting for an upgrade in the PouchDB library (this is what makes it possible to have an offline database).");
+              self.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only. We are waiting for an upgrade in the PouchDB library (this is what makes it possible to have an offline database).");
             } else {
-              OPrime.bug("You appear to be offline. If you are not offline, please report this.");
+              self.bug("You appear to be offline. If you are not offline, please report this.");
             }
           }
         }
@@ -825,20 +817,20 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   },
 
   router: {
-    value: AppRouter
+    value: Router
   },
 
   showHelpOrNot: {
     value: function() {
+      var self = this;
 
-      var username = this.get("authentication").get("userPrivate").get("username");
+      var username = this.authentication.userPrivate.username;
       if (username === "public") {
         //Dont show the help screen for the public user
         return;
       }
       var helpShownCount = localStorage.getItem(username + "helpShownCount") || 0;
-      var helpShownTimestamp = localStorage
-        .getItem(username + "helpShownTimestamp") || 0;
+      var helpShownTimestamp = localStorage.getItem(username + "helpShownTimestamp") || 0;
 
       /*
        * dont show the guide immediately if they are truely a new
@@ -846,13 +838,13 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
        * to use it. 60 seconds later, show the help.
        */
       if (helpShownTimestamp === 0) {
-        $(".help_count_reason").html("Just in case you were wondering what all those buttons are for, check out Gretchen's Illustrated Guide to your dashboard! ");
+        self.helpCountReason = "Just in case you were wondering what all those buttons are for, check out Gretchen's Illustrated Guide to your dashboard! ";
 
-        $(".help_count_left").html(3 - helpShownCount);
+        self.helpCount = 3 - helpShownCount;
         localStorage.setItem(username + "helpShownCount", ++helpShownCount);
         localStorage.setItem(username + "helpShownTimestamp", Date.now());
-        window.setTimeout(function() {
-          window.app.router.navigate("help/illustratedguide", {
+        self.timeout(function() {
+          self.router.navigate("help/illustratedguide", {
             trigger: true
           });
         }, 60000);
@@ -867,15 +859,15 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       /* if its been more than 5 days, reset the help shown count to trigger the illustrated guide */
       if (milisecondsSinceLastHelp > 432000000 && helpShownTimestamp !== 0) {
         helpShownCount = 0;
-        $(".help_count_reason").html("Welcome back! It's been more than 5 days since you opened the app. ");
+        self.helpCountReason = "Welcome back! It's been more than 5 days since you opened the app. ";
       }
       if (helpShownCount > 3) {
         // do nothing
       } else {
-        $(".help_count_left").html(3 - helpShownCount);
+        self.helpCount = 3 - helpShownCount;
         localStorage.setItem(username + "helpShownCount", ++helpShownCount);
         localStorage.setItem(username + "helpShownTimestamp", Date.now());
-        window.app.router.navigate("help/illustratedguide", {
+        self.router.navigate("help/illustratedguide", {
           trigger: true
         });
       }
@@ -892,12 +884,13 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
      */
   warnUserAboutSavedSyncedStateBeforeUserLeaves: {
     value: function(e) {
+      this.debug("warnUserAboutSavedSyncedStateBeforeUserLeaves", e);
       var returntext = "";
-      if (window.appView) {
-        if (window.appView.totalUnsaved.length >= 1) {
+      if (this.view) {
+        if (this.view.totalUnsaved.length >= 1) {
           returntext = "You have unsaved changes, click cancel to save them. \n\n";
         }
-        if (window.appView.totalUnsaved.length >= 1) {
+        if (this.view.totalUnsaved.length >= 1) {
           returntext = returntext + "You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
         }
       }
@@ -915,6 +908,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
    */
   addActivity: {
     value: function(bareActivityObject) {
+      var self = this;
+
       bareActivityObject.verb = bareActivityObject.verb.replace("href=", "target='_blank' href=");
       bareActivityObject.directobject = bareActivityObject.directobject.replace("href=", "target='_blank' href=");
       bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
@@ -923,33 +918,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       self.debug("Saving activity: ", bareActivityObject);
       var backboneActivity = new Activity(bareActivityObject);
 
-      var couchConnection = this.get("couchConnection");
+      var couchConnection = this.couchConnection;
       var activitydb = couchConnection.pouchname + "-activity_feed";
       if (bareActivityObject.teamOrPersonal !== "team") {
-        activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
-        backboneActivity.attributes.user.set("gravatar", this.get("authentication").get("userPrivate").get("gravatar"));
+        activitydb = this.authentication.userPrivate.username + "-activity_feed";
+        backboneActivity.attributes.user.set("gravatar", this.authentication.userPrivate.gravatar);
       }
-      var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
 
-      OPrime.makeCORSRequest({
-        type: 'POST',
-        url: couchurl,
-        data: backboneActivity.toJSON(),
-        success: function(resp) {
-          self.debug("Successfully saved activity to your activity couch.", resp);
-        },
-        error: function(e, f, g) {
-          self.debug("Error saving activity", e, f, g);
-          localStorage.setItem("activity" + Date.now(), backboneActivity.toJSON());
-        }
-      });
-
-
-      //      if (bareActivityObject.get("teamOrPersonal") === "team") {
-      //        window.app.get("currentCorpusTeamActivityFeed").addActivity(bareActivityObject);
-      //      } else {
-      //        window.app.get("currentUserActivityFeed").addActivity(bareActivityObject);
-      //      }
+      if (bareActivityObject.teamOrPersonal === "team") {
+        self.currentCorpusTeamActivityFeed.addActivity(bareActivityObject);
+      } else {
+        self.currentUserActivityFeed.addActivity(bareActivityObject);
+      }
     }
   },
 
@@ -960,21 +940,21 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
    */
   saveAndInterConnectInApp: {
     value: function(successcallback, failurecallback) {
+      var self = this;
       if (!failurecallback) {
         failurecallback = function() {
-          alert("There was a bug/problem in the saveAndInterConnectInApp in App.js, somewhere along the save call. The Session is saved first, if it succeeds, then the datalist, then the corpus. The failure is somewhere along there.");
+          self.bug("There was a bug/problem in the saveAndInterConnectInApp in App.js, somewhere along the save call. The Session is saved first, if it succeeds, then the datalist, then the corpus. The failure is somewhere along there.");
         };
       }
-      var appSelf = this;
-      appSelf.get("currentSession").saveAndInterConnectInApp(function() {
-        appSelf.get("currentDataList").saveAndInterConnectInApp(function() {
-          appSelf.get("corpus").saveAndInterConnectInApp(function() {
-            appSelf.get("authentication").saveAndInterConnectInApp(function() {
+      self.currentSession.saveAndInterConnectInApp(function() {
+        self.currentDataList.saveAndInterConnectInApp(function() {
+          self.corpus.saveAndInterConnectInApp(function() {
+            self.authentication.saveAndInterConnectInApp(function() {
 
-              appSelf.get("authentication").staleAuthentication = true;
-              //              localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
-              if (window.appView) {
-                window.appView.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.", "alert-success", "Exit at anytime:");
+              self.authentication.staleAuthentication = true;
+              //              localStorage.setItem("mostRecentDashboard", JSON.stringify(self.authentication.userPrivate.mostRecentIds));
+              if (self.view) {
+                self.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.", "alert-success", "Exit at anytime:");
               }
 
 
@@ -1028,7 +1008,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var pubtype = type || 'any';
       var subscribers = this.subscribers[pubtype];
       if (!subscribers || subscribers.length === 0) {
-        self.debug(pubtype + ": There were no subscribers.");
+        this.debug(pubtype + ": There were no subscribers.");
         return;
       }
       var i;
@@ -1048,7 +1028,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             subscribers[i].fn.call(subscribers[i].context, arg);
           }
         }
-        self.debug('Visited ' + subscribers.length + ' subscribers.');
+        this.debug('Visited ' + subscribers.length + ' subscribers.');
 
       } else {
 
@@ -1056,18 +1036,16 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         for (i = maxUnsubscribe; i >= 0; i--) {
           try {
             if (!subscribers[i].context) {
-              OPrime
-                .debug("This subscriber has no context. should we remove it? " + i);
+              this.debug("This subscriber has no context. should we remove it? " + i);
             }
             if (subscribers[i].context === context) {
               var removed = subscribers.splice(i, 1);
-              self.debug("Removed subscriber " + i + " from " + type, removed);
+              this.debug("Removed subscriber " + i + " from " + type, removed);
             } else {
-              self.debug(type + " keeping subscriber " + i,
-                subscribers[i].context);
+              this.debug(type + " keeping subscriber " + i, subscribers[i].context);
             }
           } catch (e) {
-            self.debug("problem visiting Subscriber " + i, subscribers);
+            this.debug("problem visiting Subscriber " + i, subscribers);
           }
         }
       }
