@@ -75,7 +75,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
   contextualizer: {
     get: function() {
-      return this._contextualizer || FieldDBObject.DEFAULT_OBJECT;
+      return this._contextualizer;
     },
     set: function(value) {
       if (value === this._contextualizer) {
@@ -88,16 +88,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS['contextualizer'] && typeof this.INTERNAL_MODELS['contextualizer'] === "function" && value.constructor !== this.INTERNAL_MODELS['contextualizer']) {
           this.debug("Parsing model: ", value);
           value = new this.INTERNAL_MODELS['contextualizer'](value);
-          if (EnglishContextMessages) {
-            value.addMessagesToContextualizedStrings(EnglishContextMessages, "en");
-          } else {
-            this.debug("English Locales did not load.");
-          }
-          if (SpanishContextMessages) {
-            value.addMessagesToContextualizedStrings(SpanishContextMessages, "es");
-          } else {
-            this.debug("English Locales did not load.");
-          }
+          value.loadDefaults();
         }
       }
       this._contextualizer = value;
@@ -109,6 +100,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       if (this._contextualizer) {
         return this._contextualizer.contextualize(value);
       } else {
+        if (typeof value === "object" || value.default) {
+          return value.default;
+        }
         return value;
       }
     }
