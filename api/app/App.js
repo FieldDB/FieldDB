@@ -11,8 +11,8 @@ var Router = require('./../Router').Router;
 var User = require('./../user/User').User;
 var UserMask = require('./../user/UserMask').UserMask;
 var Contextualizer = require('./../locales/Contextualizer').Contextualizer;
-var EnglishContextMessages = require('./../locales/en/messages.json').EnglishContextMessages;
-var SpanishContextMessages = require('./../locales/es/messages.json').SpanishContextMessages;
+var EnglishContextMessages = require('./../locales/en/messages.json');
+var SpanishContextMessages = require('./../locales/es/messages.json');
 
 /**
  * @class The App handles the reinitialization and loading of the app
@@ -52,30 +52,75 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     value: App
   },
 
-  fillWithDefaults: {
+  authentication: {
+    get: function() {
+      return this._authentication || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._authentication) {
+        return;
+      }
+      if (!value) {
+        delete this._authentication;
+        return;
+      } else {
+        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS['authentication'] && typeof this.INTERNAL_MODELS['authentication'] === "function" && value.constructor !== this.INTERNAL_MODELS['authentication']) {
+          this.debug("Parsing model: " + value);
+          value = new this.INTERNAL_MODELS['authentication'](value);
+        }
+      }
+      this._confidential = value;
+    }
+  },
+
+  contextualizer: {
+    get: function() {
+      return this._contextualizer || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._contextualizer) {
+        return;
+      }
+      if (!value) {
+        delete this._contextualizer;
+        return;
+      } else {
+        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS['contextualizer'] && typeof this.INTERNAL_MODELS['contextualizer'] === "function" && value.constructor !== this.INTERNAL_MODELS['contextualizer']) {
+          this.debug("Parsing model: ", value);
+          value = new this.INTERNAL_MODELS['contextualizer'](value);
+          if (EnglishContextMessages) {
+            value.addMessagesToContextualizedStrings(EnglishContextMessages, "en");
+          } else {
+            this.debug("English Locales did not load.");
+          }
+          if (SpanishContextMessages) {
+            value.addMessagesToContextualizedStrings(SpanishContextMessages, "es");
+          } else {
+            this.debug("English Locales did not load.");
+          }
+        }
+      }
+      this._contextualizer = value;
+    }
+  },
+
+  contextualize: {
+    value: function(value) {
+      if (this._contextualizer) {
+        return this._contextualizer.contextualize(value);
+      } else {
+        return value;
+      }
+    }
+  },
+
+  load: {
+    value: this.fetch
+  },
+
+  fetch: {
     value: function() {
       var self = this;
-
-      // If there's no authentication, create a new one
-      if (!this.authentication) {
-        this.set("authentication", new Authentication({
-          filledWithDefaults: true
-        }));
-      }
-      this.showSpinner();
-
-      this.contextualizer = new Contextualizer();
-
-      if (EnglishContextMessages) {
-        this.contextualizer.addMessagesToContextualizedStrings(JSON.parse(EnglishContextMessages), "en");
-      } else {
-        self.debug("English Locales did not load.");
-      }
-      if (SpanishContextMessages) {
-        this.contextualizer.addMessagesToContextualizedStrings(JSON.parse(SpanishContextMessages), "en");
-      } else {
-        this.debug("English Locales did not load.");
-      }
 
       /*
        * Load the user
@@ -132,6 +177,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   INTERNAL_MODELS: {
     value: {
       corpus: Corpus,
+      contextualizer: Contextualizer,
       authentication: Authentication,
       currentSession: Session,
       currentDataList: DataList,
@@ -262,12 +308,22 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     }
   },
 
-  showSpinner: {
-    value: function() {
-      this.status = "Loading dashboard";
-      this.loading = true;
+  loading: {
+    get: function() {
+      return this._loading || this.fetching || false;
+    },
+    set: function(value) {
+      if (value === this._loading) {
+        return;
+      }
+      value = !!value;
+      if (value === true) {
+        this.status = "Loading dashboard";
+      }
+      this.loading = value;
     }
   },
+
   stopSpinner: {
     value: function() {
       this.loading = false;
@@ -1062,7 +1118,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
       } catch (e) {
-        this.debug("Cant determine app type isAndroidApp, ", e);
+        this.warn("Cant determine app type isAndroidApp, " + e);
         return false;
       }
     }
@@ -1073,7 +1129,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return navigator.userAgent.indexOf("Android 4") > -1;
       } catch (e) {
-        this.debug("Cant determine app type isAndroid4, ", e);
+        this.warn("Cant determine app type isAndroid4, " + e);
         return false;
       }
     }
@@ -1084,7 +1140,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return window.location.href.indexOf("chrome-extension") > -1;
       } catch (e) {
-        this.debug("Cant determine app type isChromeApp, ", e);
+        this.warn("Cant determine app type isChromeApp, " + e);
         return false;
       }
     }
@@ -1095,7 +1151,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return window.location.href.indexOf("_design/pages") > -1;
       } catch (e) {
-        this.debug("Cant determine app type isCouchApp, ", e);
+        this.warn("Cant determine app type isCouchApp, " + e);
         return false;
       }
     }
@@ -1106,7 +1162,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return window.location.href.indexOf("localhost:8128") > -1;
       } catch (e) {
-        this.debug("Cant determine app type isCouchApp, ", e);
+        this.warn("Cant determine app type isTouchDBApp, " + e);
         return false;
       }
     }
