@@ -17,7 +17,7 @@ describe('Controller: FieldDBController', function() {
   }));
 
   it('should attach a server connection to the scope', function() {
-    expect(scope.connection.online).toBe(true);
+    expect(scope.application.online).toBe(true);
   });
 });
 

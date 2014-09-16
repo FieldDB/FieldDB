@@ -13,7 +13,7 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       username: '',
       password: ''
     };
-
+    console.log($rootScope.application);
     $rootScope.application.processRouteParams($routeParams);
     // FieldDB.FieldDBConnection.connect();
 
