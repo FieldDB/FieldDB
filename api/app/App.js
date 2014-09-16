@@ -1,5 +1,6 @@
 var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
 var Activity = require('./../activity/Activity').Activity;
+var Authentication = require('./../FieldDBObject').FieldDBObject;
 var Corpus = require('./../corpus/Corpus').Corpus;
 var DataList = require('./../data_list/DataList').DataList;
 var DatumField = require('./../datum/DatumField').DatumField;
@@ -11,6 +12,8 @@ var Confidential = require('./../confidentiality_encryption/Confidential').Confi
 var User = require('./../user/User').User;
 var UserMask = require('./../user/UserMask').UserMask;
 var Contextualizer = require('./../locales/Contextualizer').Contextualizer;
+var EnglishContextMessages = require('./../locales/en/messages.json').EnglishContextMessages;
+var SpanishContextMessages = require('./../locales/es/messages.json').SpanishContextMessages;
 
 /**
  * @class The App handles the reinitialization and loading of the app
@@ -60,24 +63,24 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       }
       this.showSpinner();
 
-      window.Locale = {};
-      window.Locale.get = function(message) {
-        return window.Locale.data[message].message;
-      };
-      if (LocaleData) {
-        window.Locale.data = JSON.parse(LocaleData);
+      this.contextualizer = new Contextualizer();
+
+      if (EnglishContextMessages) {
+        this.contextualizer.addMessagesToContextualizedStrings(JSON.parse(EnglishContextMessages), "en");
       } else {
-        console.log("Locales did not load.");
-        window.Locale.get = function(message) {
-          return "";
-        };
+        self.debug("English Locales did not load.");
+      }
+      if (SpanishContextMessages) {
+        this.contextualizer.addMessagesToContextualizedStrings(JSON.parse(SpanishContextMessages), "en");
+      } else {
+        this.debug("English Locales did not load.");
       }
 
       /*
        * Start the pub sub hub
        */
-      window.hub = {};
-      OPrime.makePublisher(window.hub);
+      this.hub = {};
+      OPrime.makePublisher(this.hub);
 
       /*
        * Load the user
@@ -85,7 +88,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       if (!this.get("loadTheAppForTheFirstTime")) {
         window.app = this;
         var appself = this;
-        if (OPrime.debugMode) OPrime.debug("Loading encrypted user");
+        self.debug("Loading encrypted user");
         $(".spinner-status").html("Loading encrypted user...");
         var u = localStorage.getItem("encryptedUser");
         appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
@@ -96,7 +99,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             /*
              * Load the backbone objects
              */
-            if (OPrime.debugMode) OPrime.debug("Creating backbone objects");
+            self.debug("Creating backbone objects");
             $(".spinner-status")
               .html("Building dashboard objects...");
             appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
@@ -105,14 +108,14 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                * If you know the user, load their most recent
                * dashboard
                */
-              if (OPrime.debugMode) OPrime.debug("Loading the backbone objects");
+              self.debug("Loading the backbone objects");
               $(".spinner-status").html(
                 "Loading dashboard objects...");
               appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
                 appself.get("authentication").get(
                   "userPrivate").get("mostRecentIds"), function() {
 
-                  if (OPrime.debugMode) OPrime.debug("Starting the app");
+                  self.debug("Starting the app");
                   appself.startApp(function() {
                     window.app.showHelpOrNot();
                     appself.stopSpinner();
@@ -147,10 +150,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   changePouch: {
     value: function(couchConnection, callback) {
       if (!couchConnection || couchConnection === undefined) {
-        console.log("App.changePouch couchConnection must be supplied.");
+        self.debug("App.changePouch couchConnection must be supplied.");
         return;
       } else {
-        console.log("App.changePouch setting couchConnection: ", couchConnection);
+        self.debug("App.changePouch setting couchConnection: ", couchConnection);
         this.set("couchConnection", couchConnection);
       }
       //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
@@ -181,16 +184,16 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
 
 
-      alert("TODO set/validate that the the pouch connection");
-      if (this.pouch === undefined) {
-        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.pouchname);
-        this.pouch = Backbone.sync
-          .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + couchConnection.pouchname : OPrime.pouchUrl + couchConnection.pouchname);
-      }
-      if (typeof callback === "function") {
-        callback();
-      }
+      // alert("TODO set/validate that the the pouch connection");
+      // if (this.pouch === undefined) {
+      //   // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+      //   // + couchConnection.pouchname);
+      //   this.pouch = Backbone.sync
+      //     .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + couchConnection.pouchname : OPrime.pouchUrl + couchConnection.pouchname);
+      // }
+      // if (typeof callback === "function") {
+      //   callback();
+      // }
     }
   },
   /**
@@ -206,7 +209,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   createAppBackboneObjects: {
     value: function(optionalpouchname, callback) {
       if (optionalpouchname === null) {
-        optionalpouchname === "default";
+        optionalpouchname = "default";
       }
 
       if (Backbone.couch_connector.config.db_name === "default") {
@@ -262,7 +265,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
         Backbone.history.start();
         if (typeof callback === "function") {
-          if (OPrime.debugMode) OPrime.debug("Calling back the startApps callback");
+          self.debug("Calling back the startApps callback");
           callback();
         }
       }
@@ -275,10 +278,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
       $('.spinner-image').css({
         'width': function() {
-          return ($(document).width() * .1) + 'px';
+          return ($(document).width() * 0.1) + 'px';
         },
         'height': function() {
-          return ($(document).width() * .1) + 'px';
+          return ($(document).width() * 0.1) + 'px';
         },
         'padding-top': '10em'
       });
@@ -350,7 +353,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+      self.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
       $.couch.login({
@@ -414,7 +417,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                     if (typeof failurecallback === "function") {
                       failurecallback("I couldn't log you into your corpus.");
                     }
-                    if (OPrime.debugMode) OPrime.debug(serverResults);
+                    self.debug(serverResults);
                     window.app.get("authentication").set(
                       "staleAuthentication", true);
                   }
@@ -428,9 +431,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     value: function(couchConnection, couchdbcommand) {
       if (!couchConnection) {
         couchConnection = this.get("couchConnection");
-        if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
+        self.debug("Using the apps ccouchConnection", couchConnection);
       } else {
-        if (OPrime.debugMode) OPrime.debug("Using the couchConnection passed in,", couchConnection, this.get("couchConnection"));
+        self.debug("Using the couchConnection passed in,", couchConnection, this.get("couchConnection"));
       }
       if (!couchConnection) {
         OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
@@ -444,7 +447,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       failurecallback) {
       var self = this;
       if (!self.pouch) {
-        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
+        self.debug("Not replicating, no pouch ready.");
         if (typeof successcallback === "function") {
           successcallback();
         }
@@ -453,15 +456,15 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       self.pouch(function(err, db) {
         var couchurl = this.getCouchUrl();
         if (err) {
-          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
+          self.debug("Opening db error", err);
           if (typeof failurecallback === "function") {
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            if (OPrime.debugMode) OPrime.debug('Opening DB error' + JSON.stringify(err));
+            self.debug('Opening DB error' + JSON.stringify(err));
           }
         } else {
-          if (OPrime.debugMode) OPrime.debug("Opening db success", db);
+          self.debug("Opening db success", db);
           alert("TODO check to see if  needs a slash if replicating with pouch on " + couchurl);
           self.replicateFromCorpus(db, couchurl, function() {
             //turn on to regardless of fail or succeed
@@ -488,7 +491,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var self = this;
 
       if (!self.pouch) {
-        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
+        self.debug("Not replicating, no pouch ready.");
         if (typeof successcallback === "function") {
           successcallback();
         }
@@ -498,27 +501,27 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       self.pouch(function(err, db) {
         var couchurl = self.getCouchUrl();
         if (err) {
-          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
+          self.debug("Opening db error", err);
           if (typeof failurecallback === "function") {
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            if (OPrime.debugMode) OPrime.debug('Opening DB error' + JSON.stringify(err));
+            self.debug('Opening DB error' + JSON.stringify(err));
           }
         } else {
           db.replicate.from(couchurl, {
             continuous: false
           }, function(err, response) {
-            if (OPrime.debugMode) OPrime.debug("Replicate from " + couchurl, response, err);
+            self.debug("Replicate from " + couchurl, response, err);
             if (err) {
               if (typeof failurecallback === "function") {
                 failurecallback();
               } else {
                 alert('Corpus replicate from error' + JSON.stringify(err));
-                if (OPrime.debugMode) OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
+                self.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             } else {
-              if (OPrime.debugMode) OPrime.debug("Corpus replicate from success", response);
+              self.debug("Corpus replicate from success", response);
               if (typeof successcallback === "function") {
                 successcallback();
               }
@@ -533,23 +536,23 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       db.replicate.to(couchurl, {
         continuous: true
       }, function(err, response) {
-        if (OPrime.debugMode) OPrime.debug("Replicated to " + couchurl);
-        if (OPrime.debugMode) OPrime.debug(response);
-        if (OPrime.debugMode) OPrime.debug(err);
+        self.debug("Replicated to " + couchurl);
+        self.debug(response);
+        self.debug(err);
         if (err) {
-          if (OPrime.debugMode) OPrime.debug("replicate to db  error", err);
+          self.debug("replicate to db  error", err);
           if (typeof failure === "function") {
             failure();
           } else {
             alert('Database replicate to error' + JSON.stringify(err));
-            if (OPrime.debugMode) OPrime.debug('Database replicate to error' + JSON.stringify(err));
+            self.debug('Database replicate to error' + JSON.stringify(err));
           }
         } else {
-          if (OPrime.debugMode) OPrime.debug("Database replicate to success", response);
+          self.debug("Database replicate to success", response);
           if (typeof success === "function") {
             success();
           } else {
-            if (OPrime.debugMode) OPrime.debug('Database replicating' + JSON.stringify(couchConnection));
+            self.debug('Database replicating' + JSON.stringify(couchConnection));
           }
 
         }
@@ -563,24 +566,24 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             continuous: true
           },
           function(err, response) {
-            if (OPrime.debugMode) OPrime.debug("Replicated from " + couchurl);
-            if (OPrime.debugMode) OPrime.debug(response);
-            if (OPrime.debugMode) OPrime.debug(err);
+            self.debug("Replicated from " + couchurl);
+            self.debug(response);
+            self.debug(err);
             if (err) {
-              if (OPrime.debugMode) OPrime.debug("replicate from db  error", err);
+              self.debug("replicate from db  error", err);
               if (typeof fail === "function") {
                 fail();
               } else {
                 alert('Database replicate from error' + JSON.stringify(err));
-                if (OPrime.debugMode) OPrime.debug('Database replicate from error' + JSON.stringify(err));
+                self.debug('Database replicate from error' + JSON.stringify(err));
               }
             } else {
-              if (OPrime.debugMode) OPrime.debug("Database replicate from success",
+              self.debug("Database replicate from success",
                 response);
               if (typeof succes === "function") {
                 succes();
               } else {
-                if (OPrime.debugMode) OPrime.debug('Database replicating' + JSON.stringify(couchConnection));
+                self.debug('Database replicating' + JSON.stringify(couchConnection));
               }
 
             }
@@ -590,7 +593,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
   loadBackboneObjectsByIdAndSetAsCurrentDashboard: {
     value: function(appids, callback) {
-      if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+      self.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
 
 
       /*
@@ -601,14 +604,14 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       if (OPrime.isCouchApp()) {
         var corpusPouchName = appids.couchConnection.pouchname;
         if (window.location.href.indexOf(corpusPouchName) === -1) {
-          if (corpusPouchName != "public-firstcorpus") {
+          if (corpusPouchName !== "public-firstcorpus") {
             var username = "";
             try {
               username = window.app.get("authentication").get("userPrivate").get("username") || "";
             } catch (e) {
               //do nothing
             }
-            if (username != "public") {
+            if (username !== "public") {
               OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
             }
           }
@@ -666,8 +669,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       c.id = corpusid; //tried setting both ids to match, and it worked!!
       c.fetch({
         success: function(corpusModel) {
+          var tags;
+
           //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-          if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+          self.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
 
           /* Upgrade chrome app user corpora's to v1.38+ */
           var oldCouchConnection = corpusModel.get("couchConnection");
@@ -680,7 +685,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }
 
           try {
-            var tags = corpusModel.get("datumFields").where({
+            tags = corpusModel.get("datumFields").where({
               label: "tags"
             });
             if (tags.length === 0) {
@@ -702,7 +707,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
           }
           try {
-            var tags = corpusModel.get("datumFields").where({
+            tags = corpusModel.get("datumFields").where({
               label: "syntacticTreeLatex"
             });
             if (tags.length === 0) {
@@ -712,7 +717,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                 showToUserTypes: "machine",
                 shouldBeEncrypted: "",
                 userchooseable: "disabled",
-                help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \Tree [.S NP VP ]"
+                help: "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
               }));
 
             }
@@ -741,7 +746,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                 $(".spinner-status").html("Opened DataList...");
 
                 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                if (OPrime.debugMode) OPrime.debug("Data list fetched successfully", dataListModel);
+                self.debug("Data list fetched successfully", dataListModel);
                 dl.setAsCurrentDataList(function() {
                   $(".spinner-status").html("Loading your most recent DataList, " + dataListModel.get("datumIds").length + " entries...");
 
@@ -754,13 +759,13 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                       $(".spinner-status").html("Opened Elicitation Session...");
 
                       //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                      if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
+                      self.debug("Session fetched successfully", sessionModel);
                       s.setAsCurrentSession(function() {
 
                         $(".spinner-status").html("Loading Elicitation Session...");
 
                         //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
-                        if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
+                        self.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                         if (window.appView) {
                           window.appView.toastUser("Your dashboard has been loaded from where you left off last time.", "alert-success", "Dashboard loaded!");
                         }
@@ -801,17 +806,17 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }); //end setAsCurrentCorpus
         },
         error: function(model, error, options) {
-          if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ", model, error, options);
+          self.debug("There was an error fetching corpus ", model, error, options);
 
           var reason = "";
           if (error.reason) {
             reason = error.reason.message || error.reason || "";
-          };
+          }
           if (reason.indexOf("not authorized") >= 0 || reason.indexOf("nthorized") >= 0) {
             //Show quick authentication so the user can get their corpus token and get access to the data
             var originalCallbackFromLoadBackboneApp = callback;
             window.app.get("authentication").syncUserWithServer(function() {
-              if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
+              self.debug("Trying to reload the app after a session token has timed out");
               self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
             }, couchConnection.pouchname);
             //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
@@ -869,7 +874,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var milisecondsSinceLastHelp = Date.now() - helpShownTimestamp;
 
       /* if its been more than 5 days, reset the help shown count to trigger the illustrated guide */
-      if (milisecondsSinceLastHelp > 432000000 && helpShownTimestamp != 0) {
+      if (milisecondsSinceLastHelp > 432000000 && helpShownTimestamp !== 0) {
         helpShownCount = 0;
         $(".help_count_reason").html("Welcome back! It's been more than 5 days since you opened the app. ");
       }
@@ -924,12 +929,12 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
       bareActivityObject.context = bareActivityObject.context.replace("href=", "target='_blank' href=");
 
-      if (OPrime.debugMode) OPrime.debug("Saving activity: ", bareActivityObject);
+      self.debug("Saving activity: ", bareActivityObject);
       var backboneActivity = new Activity(bareActivityObject);
 
       var couchConnection = this.get("couchConnection");
       var activitydb = couchConnection.pouchname + "-activity_feed";
-      if (bareActivityObject.teamOrPersonal != "team") {
+      if (bareActivityObject.teamOrPersonal !== "team") {
         activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
         backboneActivity.attributes.user.set("gravatar", this.get("authentication").get("userPrivate").get("gravatar"));
       }
@@ -940,10 +945,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         url: couchurl,
         data: backboneActivity.toJSON(),
         success: function(resp) {
-          if (OPrime.debugMode) OPrime.debug("Successfully saved activity to your activity couch.", resp);
+          self.debug("Successfully saved activity to your activity couch.", resp);
         },
         error: function(e, f, g) {
-          if (OPrime.debugMode) OPrime.debug("Error saving activity", e, f, g);
+          self.debug("Error saving activity", e, f, g);
           localStorage.setItem("activity" + Date.now(), backboneActivity.toJSON());
         }
       });
