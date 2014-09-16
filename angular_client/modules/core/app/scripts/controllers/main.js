@@ -17,6 +17,6 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
     $rootScope.application.processRouteParams($routeParams);
     // FieldDB.FieldDBConnection.connect();
 
-    console.log('In the FieldDBController', $scope.connection);
+    console.log('In the FieldDBController');
   }
 ]);
