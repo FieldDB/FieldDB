@@ -55,6 +55,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
   fillWithDefaults: {
     value: function() {
+      var self = this;
+
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
         this.set("authentication", new Authentication({
@@ -79,40 +81,35 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       /*
        * Load the user
        */
-      if (!this.get("loadTheAppForTheFirstTime")) {
-        window.app = this;
-        var appself = this;
+      if (!this.loadTheAppForTheFirstTime) {
         self.debug("Loading encrypted user");
-        $(".spinner-status").html("Loading encrypted user...");
+        self.status = "Loading encrypted user...";
         var u = localStorage.getItem("encryptedUser");
-        appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        self.get("authentication").loadEncryptedUser(u, function(success, errors) {
 
-          $(".spinner-status").html(
-            "Turning on continuous sync with your team server...");
-          appself.replicateContinuouslyWithCouch(function() {
+          self.status = "Turning on continuous sync with your team server...";
+          self.replicateContinuouslyWithCouch(function() {
             /*
              * Load the backbone objects
              */
             self.debug("Creating backbone objects");
-            $(".spinner-status")
-              .html("Building dashboard objects...");
-            appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
+            self.status = "Building dashboard objects...";
+            self.createAppBackboneObjects(self.get("couchConnection").pouchname, function() {
 
               /*
                * If you know the user, load their most recent
                * dashboard
                */
               self.debug("Loading the backbone objects");
-              $(".spinner-status").html(
-                "Loading dashboard objects...");
-              appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
-                appself.get("authentication").get(
+              self.status = "Loading dashboard objects...";
+              self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
+                self.get("authentication").get(
                   "userPrivate").get("mostRecentIds"), function() {
 
                   self.debug("Starting the app");
-                  appself.startApp(function() {
+                  self.startApp(function() {
                     window.app.showHelpOrNot();
-                    appself.stopSpinner();
+                    self.stopSpinner();
                     window.app.router.renderDashboardOrNot(true);
 
                   });
@@ -651,7 +648,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         if (this.get("corpus").id) {
           corpusid = this.get("corpus").id;
         } else {
-          $(".spinner-status").html("Opening/Creating Corpus...");
+          self.status = "Opening/Creating Corpus...";
           this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function() {
             /* if the corpusid is missing, make sure there are other objects in the dashboard */
             selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
@@ -719,10 +716,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             OPrime.debug("Unable to add the syntacticTreeLatex field to the corpus.");
           }
 
-          $(".spinner-status").html("Opened Corpus...");
+          self.status = "Opened Corpus...";
 
           c.setAsCurrentCorpus(function() {
-            $(".spinner-status").html("Loading Corpus...");
+            self.status = "Loading Corpus...";
 
             /*
              * Fetch sessions and datalists
@@ -737,12 +734,12 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             dl.id = appids.datalistid;
             dl.fetch({
               success: function(dataListModel) {
-                $(".spinner-status").html("Opened DataList...");
+                self.status = "Opened DataList...";
 
                 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                 self.debug("Data list fetched successfully", dataListModel);
                 dl.setAsCurrentDataList(function() {
-                  $(".spinner-status").html("Loading your most recent DataList, " + dataListModel.get("datumIds").length + " entries...");
+                  self.status = "Loading your most recent DataList, " + dataListModel.get("datumIds").length + " entries...";
 
                   var s = new Session({
                     "pouchname": couchConnection.pouchname
@@ -750,13 +747,13 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                   s.id = appids.sessionid;
                   s.fetch({
                     success: function(sessionModel) {
-                      $(".spinner-status").html("Opened Elicitation Session...");
+                      self.status = "Opened Elicitation Session...";
 
                       //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                       self.debug("Session fetched successfully", sessionModel);
                       s.setAsCurrentSession(function() {
 
-                        $(".spinner-status").html("Loading Elicitation Session...");
+                        self.status = "Loading Elicitation Session...";
 
                         //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
                         self.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
@@ -766,7 +763,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
                         /*
                          * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods
                          */
-                        $(".spinner-status").html("Rendering Dashboard...");
+                        self.status = "Rendering Dashboard...";
 
                         window.app.stopSpinner();
 
@@ -1030,8 +1027,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     value: function(action, type, arg, context) {
       var pubtype = type || 'any';
       var subscribers = this.subscribers[pubtype];
-      if (!subscribers || subscribers.length == 0) {
-        if (OPrime.debugMode) OPrime.debug(pubtype + ": There were no subscribers.");
+      if (!subscribers || subscribers.length === 0) {
+        self.debug(pubtype + ": There were no subscribers.");
         return;
       }
       var i;
@@ -1051,7 +1048,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             subscribers[i].fn.call(subscribers[i].context, arg);
           }
         }
-        if (OPrime.debugMode) OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
+        self.debug('Visited ' + subscribers.length + ' subscribers.');
 
       } else {
 
@@ -1064,13 +1061,13 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             }
             if (subscribers[i].context === context) {
               var removed = subscribers.splice(i, 1);
-              if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
+              self.debug("Removed subscriber " + i + " from " + type, removed);
             } else {
-              if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
+              self.debug(type + " keeping subscriber " + i,
                 subscribers[i].context);
             }
           } catch (e) {
-            if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
+            self.debug("problem visiting Subscriber " + i, subscribers);
           }
         }
       }
