@@ -48,6 +48,7 @@ describe("FieldDBObject", function() {
     });
 
     it("should pass a reference to the application if it was specified", function() {
+      delete FieldDBObject.application;
       var applicationLess = new FieldDBObject();
       expect(applicationLess.application).toBeUndefined();
 
