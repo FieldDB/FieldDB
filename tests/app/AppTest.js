@@ -1,4 +1,5 @@
 var App = App || require('../../api/app/App.js').App;
+var specIsRunningTooLong = 5000;
 
 describe("App", function() {
 
@@ -55,6 +56,89 @@ describe("App", function() {
     });
   });
 
+  describe("load", function() {
+
+    it("should begin with positions for data to be filled in", function() {
+      var app = new App();
+      expect(app.datumsList).toBeDefined();
+      expect(app.sessionsList).toBeDefined();
+      expect(app.datalistsList).toBeDefined();
+      expect(app.usersList).toBeDefined();
+    });
+
+    it("should be able to load a corpus dashboard based on routeParams", function(done) {
+      var app = new App({
+        // debugMode: true
+      });
+      app.processRouteParams();
+      expect(app.warnMessage).toContain('Route params are undefined, not loading anything');
+
+      app.processRouteParams({
+        team: "lingllama",
+        corpusid: "community-_corpus"
+      });
+      expect(app.currentCorpusDashboard).toEqual('lingllama/community-_corpus');
+      expect(app.currentCorpusDashboardDBname).toEqual('lingllama-community-_corpus');
+
+      setTimeout(function() {
+        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        done();
+      }, 500);
+    }, specIsRunningTooLong);
+
+    it("should be able to load an import dashboard based on routeParams", function(done) {
+      var app = new App({
+        debugMode: true
+      });
+      app.processRouteParams({
+        team: "lingllama",
+        corpusid: "community-_corpus",
+        importType: "participants"
+      });
+      expect(app.currentCorpusDashboard).toEqual('lingllama/community-_corpus');
+      expect(app.currentCorpusDashboardDBname).toEqual('lingllama-community-_corpus');
+
+      setTimeout(function() {
+        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        done();
+      }, 100);
+    }, specIsRunningTooLong);
+
+    it("should be able to load an search dashboard based on routeParams", function(done) {
+      var app = new App({
+        debugMode: true
+      });
+      app.processRouteParams({
+        team: "lingllama",
+        corpusid: "community-_corpus",
+        searchQuery: "morphemes:naya OR gloss:des OR gloss:IMP"
+      });
+      expect(app.currentCorpusDashboard).toEqual('lingllama/community-_corpus');
+      expect(app.currentCorpusDashboardDBname).toEqual('lingllama-community-_corpus');
+
+      setTimeout(function() {
+        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        done();
+      }, 100);
+    }, specIsRunningTooLong);
+
+    it("should be able to load an user/team dashboard based on routeParams", function(done) {
+      var app = new App({
+        debugMode: true
+      });
+      app.processRouteParams({
+        team: "lingllama"
+      });
+      expect(app.currentCorpusDashboard).toBeUndefined();
+      expect(app.currentCorpusDashboardDBname).toBeUndefined();
+
+      setTimeout(function() {
+        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        done();
+      }, 100);
+    }, specIsRunningTooLong);
+
+  });
 });
 
 
