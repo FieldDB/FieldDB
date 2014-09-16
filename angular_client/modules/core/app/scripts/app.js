@@ -26,8 +26,21 @@ angular.module('fielddbAngularApp', [
     // Allow same origin resource loads.
     'self',
     // Allow loading from outer domain.
-    'https://*.lingsync.org/**'
+    'https://*.example.org/**'
   ]);
+
+  FieldDB.FieldDBObject.application = new FieldDB.PsycholinguisticsApp({
+    authentication: {
+      user: {
+        authenticated: false
+      }
+    },
+    online: true,
+    apiURL: 'https://localhost:3181/v2/',
+    offlineCouchURL: 'https://localhost:6984',
+    brand: 'LingSync',
+    website: 'http://lingsync.org'
+  });
 
   FieldDB.Database.prototype.BASE_DB_URL = 'https://corpusdev.example.org';
   FieldDB.Database.prototype.BASE_AUTH_URL = 'https://authdev.example.org';
