@@ -54,7 +54,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
-  localize: {
+  contextualize: {
     value: function(message) {
       this.debug("Resolving localization in " + this.currentLocale);
       var result = message;
