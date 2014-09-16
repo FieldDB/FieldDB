@@ -13,8 +13,8 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
   var controller = function($scope, $location) {
     /* initialize or confirm scope is prepared */
     $scope.loginDetails = $scope.loginDetails || {};
-    $scope.authentication = $scope.authentication || {};
-    $scope.authentication.user = $scope.authentication.user || {};
+    $scope.application.authentication = $scope.application.authentication || {};
+    $scope.application.authentication.user = $scope.application.authentication.user || {};
     console.log('Scope authentication is ', $scope);
 
     var processUserDetails = function(user) {
@@ -28,7 +28,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
         return role;
       });
       try {
-        $scope.authentication.user = new FieldDB.User(user);
+        $scope.application.authentication.user = new FieldDB.User(user);
       } catch (e) {
         console.log('problem parsing user', e, user);
       }
@@ -38,7 +38,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       console.log($scope);
       if (window.location.pathname === '/welcome' || window.location.pathname === '/bienvenu') {
         $scope.$apply(function() {
-          $location.path('/' + $scope.authentication.user.accessibleDBS[0].replace('-', '/'));
+          $location.path('/' + $scope.application.authentication.user.accessibleDBS[0].replace('-', '/'));
         });
       }
       $scope.$digest();
@@ -49,13 +49,13 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
 
     $scope.login = function(loginDetails) {
       $scope.isContactingServer = true;
-      $scope.authentication.error = '';
+      $scope.application.authentication.error = '';
       FieldDB.Database.prototype.login(loginDetails).then(function(user) {
         console.log('User has been downloaded. ', user);
         processUserDetails(user);
         // $scope.isContactingServer = false;
       }, function(reason) {
-        $scope.authentication.error = reason;
+        $scope.application.authentication.error = reason;
         // $scope.isContactingServer = false;
       }).catch(function() {
         $scope.isContactingServer = false;
@@ -69,10 +69,10 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
     };
 
     $scope.logout = function() {
-      $scope.authentication.error = '';
+      $scope.application.authentication.error = '';
       FieldDB.Database.prototype.logout().then(function(serverReply) {
         console.log('User has been logged out. ', serverReply);
-        $scope.authentication = {
+        $scope.application.authentication = {
           user: {
             authenticated: false
           }
@@ -85,7 +85,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
         }
         $scope.$digest();
       }, function(reason) {
-        $scope.authentication.error = reason;
+        $scope.application.authentication.error = reason;
         $scope.$digest();
       }).done(function() {
         $scope.isContactingServer = false;
@@ -101,9 +101,9 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       FieldDB.Database.prototype.resumeAuthenticationSession().then(function(sessionInfo) {
         console.log(sessionInfo);
         if (sessionInfo.ok && sessionInfo.userCtx.name) {
-          $scope.authentication.user.username = sessionInfo.userCtx.name;
-          $scope.authentication.user.roles = sessionInfo.userCtx.roles;
-          processUserDetails($scope.authentication.user);
+          $scope.application.authentication.user.username = sessionInfo.userCtx.name;
+          $scope.application.authentication.user.roles = sessionInfo.userCtx.roles;
+          processUserDetails($scope.application.authentication.user);
         } else {
           $scope.$apply(function() {
             $location.path('/welcome');
