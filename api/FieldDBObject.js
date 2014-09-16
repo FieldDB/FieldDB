@@ -548,6 +548,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  application: {
+    get: function() {
+      return FieldDBObject.application;
+    },
+    set: function(value) {
+      // FieldDBObject.application = value;
+    }
+  },
+
   id: {
     get: function() {
       return this._id || FieldDBObject.DEFAULT_STRING;
@@ -735,7 +744,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.version = this.version;
 
       for (aproperty in this) {
-        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
+        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" ) {
           underscorelessProperty = aproperty.replace(/^_/, "");
           if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
             underscorelessProperty = "_" + underscorelessProperty;
