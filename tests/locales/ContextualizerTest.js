@@ -228,7 +228,7 @@ describe("Contextualizer", function() {
         // no INTERNAL_MODELS set as ContextualizableObject
         var containingObject = new FieldDBObject({
           title: "Import data",
-          debugMode: true
+          // debugMode: true
         });
         expect(containingObject.title).toEqual("Import data");
         expect(containingObject.toJSON().title).toEqual("Import data");
@@ -239,7 +239,7 @@ describe("Contextualizer", function() {
         // with INTERNAL_MODELS set as ContextualizableObject
         containingObject = new DataListMock({
           title: "Import data",
-          debugMode: true
+          // debugMode: true
         });
         expect(containingObject.title).toEqual("Import data");
         expect(containingObject.toJSON().title).toEqual("Import data");
@@ -254,6 +254,9 @@ describe("Contextualizer", function() {
         expect(onlyAString.data).toEqual({
           locale_Import_datalist: {
             message: "Import datalist"
+          },
+          default: {
+            message: "locale_Import_datalist"
           }
         });
         expect(contextualizer.alwaysConfirmOkay).toBeTruthy();
