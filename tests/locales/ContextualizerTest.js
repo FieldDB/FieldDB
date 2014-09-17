@@ -1,4 +1,5 @@
 var Contextualizer = require('./../../api/locales/Contextualizer').Contextualizer;
+var ContextualizableObject = require('./../../api/locales/ContextualizableObject').ContextualizableObject;
 var specIsRunningTooLong = 5000;
 
 describe("Contextualizer", function() {
@@ -146,5 +147,53 @@ describe("Contextualizer", function() {
       expect(contextualizer.contextualize(datalist.instructions)).toEqual("Choisi la bonne image pour aider la souris à manger tous les morceaux de fromage.");
 
     });
+
+
+    describe("transparent contextualizable objects", function() {
+      var obj;
+      beforeEach(function() {
+        // contextualizer.debugMode = true;
+        obj = new ContextualizableObject({
+          contextualizer: contextualizer,
+          "default": "localized_practice_description_for_teacher",
+          "for_child": "localized_practice_description_for_child",
+          "for_parent": "localized_practice_description_for_parent",
+          "for_experimentAdministrator": "localized_practice_description_for_teacher",
+          "for_school_records": "localized_practice_description_for_school_record",
+          "for_experimentAdministratorSpecialist": "localized_practice_description_for_slp"
+        });
+      });
+
+      it("should be able to turn objects in to contextualied objects where the strings are not strings but keys to the locales", function() {
+        expect(obj).toBeDefined();
+        expect(obj._for_child).toEqual('localized_practice_description_for_child');
+        expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual('In this game, you will help the mouse eat all the cheese!');
+      });
+
+      it("should be able to use dot notation to get contextualization", function() {
+        expect(obj.for_child).toEqual('In this game, you will help the mouse eat all the cheese!');
+      });
+
+      it("should be able to serialize back into the same object as it was when created", function() {
+        expect(obj.toJSON().contextualizer).toBeUndefined();
+        expect(obj.toJSON()._for_child).toBeUndefined();
+        expect(obj.toJSON().default).toEqual("localized_practice_description_for_teacher");
+        expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+        expect(obj.toJSON().for_parent).toEqual("localized_practice_description_for_parent");
+        expect(obj.toJSON().for_experimentAdministrator).toEqual("localized_practice_description_for_teacher");
+        expect(obj.toJSON().for_school_records).toEqual("localized_practice_description_for_school_record");
+        expect(obj.toJSON().for_experimentAdministratorSpecialist).toEqual("localized_practice_description_for_slp");
+      });
+
+      it("should be able to modify localization using dot notation", function() {
+        expect(obj.for_child).toEqual('In this game, you will help the mouse eat all the cheese!');
+        obj.for_child = "In this game the mouse will eat all the cheese with your help."
+        expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
+        expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
+        expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+      });
+
+    });
+
   });
 });

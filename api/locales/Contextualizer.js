@@ -125,6 +125,17 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
+  updateContextualization: {
+    value: function(key, value) {
+      if (this.data[this.currentLocale] && this.data[this.currentLocale][key]) {
+        if (this.data[this.currentLocale][key].message === value) {
+          return;
+        }
+        this.data[this.currentLocale][key].message = value;
+      }
+    }
+  },
+
   audio: {
     value: function(key) {
       this.debug("Resolving localization in " + this.currentLocale);
