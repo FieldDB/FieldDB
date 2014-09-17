@@ -10,13 +10,38 @@
  */
 var ContextualizableObject = function ContextualizableObject(json) {
   // console.log("Constructing ContextualizableObject ", json);
-
-  for (var member in json) {
-    if (!json.hasOwnProperty(member)) {
-      continue;
+  if (json && json.contextualizer) {
+    this.contextualizer = json.contextualizer;
+  }
+  if (json && typeof json === "string") {
+    if (!ContextualizableObject.updateAllToContextualizableObjects) {
+      // Dont localize this, return what you received to be backward compatible
+      console.warn("ContextualizableObject: should not converting this deprecated string in to a ContextualizableObject " + json);
+      // this.protoype = Object.create(String.prototype);
+      String.apply(this, arguments);
+      // String.call(json);
+      // this.prototype = String.prototype;
+      // this.__proto__ = String.call(json);
+      // json = new String(json);
+      console.warn("string should not be an object: " + this);
+      // this.toString = function() {
+      //   return json;
+      // }
+      return;
     }
-    if (member === "contextualizer") {
-      this.contextualizer = json.contextualizer;
+    var stringAsKey = "locale_" + json.replace(/[^a-zA-Z0-9-]/g, '_');
+    var value = json;
+    json = {
+      default: stringAsKey
+    };
+    this.originalString = value;
+    this.data = this.data || {};
+    this.data[stringAsKey] = {
+      "message": value
+    };
+  }
+  for (var member in json) {
+    if (!json.hasOwnProperty(member) || member === "contextualizer") {
       continue;
     }
     this.add(member, json[member]);
@@ -24,6 +49,7 @@ var ContextualizableObject = function ContextualizableObject(json) {
 
   Object.apply(this, arguments);
 };
+ContextualizableObject.updateAllToContextualizableObjects = false;
 
 ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends ContextualizableObject.prototype */ {
   constructor: {
@@ -32,8 +58,17 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
 
   contextualize: {
     value: function(locale_string) {
-      // console.log("requesting contextualization of " + locale_string);
-      var contextualizedString = this.contextualizer.contextualize(locale_string);
+      console.log("requesting contextualization of " + locale_string);
+      var contextualizedString;
+      if (this.contextualizer) {
+        contextualizedString = this.contextualizer.contextualize(locale_string);
+      } else {
+        if (this.data && this.data[locale_string]) {
+          contextualizedString = this.data[locale_string].message;
+        } else {
+          contextualizedString = locale_string;
+        }
+      }
       // console.log("::" + contextualizedString + "::");
       return contextualizedString;
     }
@@ -42,7 +77,23 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
   updateContextualization: {
     value: function(for_context, locale_string) {
       // console.log('updateContextualization' + for_context);
-      return this.contextualizer.updateContextualization(for_context, locale_string);
+      if (this.contextualizer) {
+        return this.contextualizer.updateContextualization(for_context, locale_string);
+      }
+      if (this.data) {
+        this.data[for_context] = this.data[for_context] || {
+          message: ""
+        };
+        this.data[for_context].message = locale_string;
+      }
+      // this.data = this.data || {};
+      // this.data[for_context] = {
+      //   message: locale_string
+      // };
+
+      if (this._default == for_context) {
+        this.originalString = locale_string;
+      }
     }
   },
 
@@ -58,6 +109,13 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         // console.log("overidding setter "+ underscoreNotation, value);
         this.updateContextualization(this[underscoreNotation], value);
       });
+      //if there is no contextualizer, add this to the local data
+      if (for_context.indexOf("locale_") === 0) {
+        this.data = this.data || {};
+        this.data[for_context] = {
+          "message": locale_string
+        };
+      }
     }
   },
 
@@ -66,6 +124,10 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
       var json = {},
         aproperty,
         underscorelessProperty;
+
+      if (ContextualizableObject.updateAllToContextualizableObjects && this.originalString) {
+        return this.originalString;
+      }
 
       for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && aproperty !== "contextualizer" && aproperty.indexOf("_") === 0) {
@@ -92,6 +154,12 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
           }
         }
       }
+      // Preseve the original string in this mini-contextualizer if it was originally a string
+      if (json.default && this.originalString) {
+        json[json.default] = this.originalString;
+        delete json.originalString;
+      }
+
       return json;
     }
   }

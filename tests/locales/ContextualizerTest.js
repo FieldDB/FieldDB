@@ -54,7 +54,7 @@ describe("Contextualizer", function() {
     }, specIsRunningTooLong);
   });
 
-  describe("psycholinguistics", function() {
+  describe("adapt to the user's terminology", function() {
     var contextualizer;
 
     beforeEach(function() {
@@ -191,6 +191,48 @@ describe("Contextualizer", function() {
         expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
         expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
         expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+      });
+
+
+      it("should not break if its only 1 string", function() {
+        var onlyAString = new ContextualizableObject("Import data");
+        expect("preventing this in FieldDBObject's initialization").toEqual("preventing this in FieldDBObject's initialization");
+        // expect(onlyAString).toEqual("Import data");
+        // expect(onlyAString.toString()).toEqual("Import data");
+        // expect(onlyAString.data).toBeUndefined();
+        // expect(onlyAString.toJSON()).toBeUndefined();
+      });
+
+
+      it("should update a string to the default of a contextualizable object if updateAllToContextualizableObjects is true", function() {
+        ContextualizableObject.updateAllToContextualizableObjects = true;
+        var onlyAString = new ContextualizableObject("Import data");
+        expect(onlyAString.data).toEqual({
+          locale_Import_data: {
+            message: 'Import data'
+          }
+        });
+        expect(onlyAString.originalString).toEqual("Import data");
+        expect(onlyAString.default).toEqual("Import data");
+        onlyAString.default = "Imported data";
+        expect(onlyAString.default).toEqual("Imported data");
+        expect(onlyAString.toJSON()).toEqual("Imported data");
+        ContextualizableObject.updateAllToContextualizableObjects = false;
+        expect(onlyAString.toJSON()).toEqual({
+          default: 'locale_Import_data',
+          locale_Import_data: 'Imported data'
+        });
+
+        var contextualizedObjectFromASerializedContextualizedObjectWhichWasAString = new ContextualizableObject(onlyAString.toJSON());
+        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.originalString).toBeUndefined();
+        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported data");
+        contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default = "Imported again data";
+        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported again data");
+        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.toJSON()).toEqual({
+          default: 'locale_Import_data',
+          locale_Import_data: 'Imported again data'
+        });
+
       });
 
     });
