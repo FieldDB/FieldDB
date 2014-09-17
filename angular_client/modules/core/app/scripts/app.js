@@ -29,7 +29,7 @@ angular.module('fielddbAngularApp', [
     'https://*.example.org/**'
   ]);
 
-  FieldDB.FieldDBObject.application = new FieldDB.PsycholinguisticsApp({
+  new FieldDB.PsycholinguisticsApp({
     authentication: {
       user: new FieldDB.User({
         authenticated: false
