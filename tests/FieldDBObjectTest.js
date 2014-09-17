@@ -235,6 +235,15 @@ describe("FieldDBObject", function() {
       expect(buggy.toJSON().todoMessage).toBeUndefined();
     });
 
+    it("should not bug about the same message if it has already been bugged and not cleared", function(){
+      var buggy = new FieldDBObject();
+      expect(buggy.bugMessage).toBeUndefined();
+      buggy.bug("This is a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
+      buggy.bug("This is a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
+      expect(buggy.warnMessage).toContain("Not repeating bug message: This is a problem, please report this");
+    });
   });
 
   describe("merging", function() {
