@@ -16,9 +16,10 @@ var spanish_texts = require("./es/messages.json");
  */
 var Contextualizer = function Contextualizer(options) {
   this.debug("Constructing Contextualizer ", options);
+  var localArguments = arguments;
   if (!options) {
     options = {};
-    arguments = [options];
+    localArguments = [options];
   }
   if (!options.defaultLocale) {
     options.defaultLocale = "en";
@@ -29,7 +30,7 @@ var Contextualizer = function Contextualizer(options) {
   if (!options.currentContext) {
     options.currentContext = "default";
   }
-  FieldDBObject.apply(this, arguments);
+  FieldDBObject.apply(this, localArguments);
 };
 
 Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Contextualizer.prototype */ {
@@ -73,7 +74,8 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
   contextualize: {
     value: function(message) {
       this.debug("Resolving localization in " + this.currentLocale);
-      var result = message;
+      var result = message,
+        aproperty;
 
       // Use the current context if the caller is requesting localization of an object
       if (typeof message === "object") {
@@ -141,6 +143,11 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       if (update) {
         this.data[this.currentLocale][key] = this.data[this.currentLocale][key] || {};
         this.data[this.currentLocale][key].message = value;
+        var newLocaleItem = {};
+        newLocaleItem[key] = {
+          message: value
+        };
+        this.addMessagesToContextualizedStrings(this.currentLocale, newLocaleItem);
       }
       return this.data[this.currentLocale][key].message;
     }
@@ -179,7 +186,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       var processJSON = function(localeCode) {
         promise.then(function(contents) {
           contents = JSON.parse(contents);
-          return self.addMessagesToContextualizedStrings(contents, localeCode);
+          return self.addMessagesToContextualizedStrings(localeCode, contents);
         });
       };
       for (var f = 0; f < files.length; f++) {
