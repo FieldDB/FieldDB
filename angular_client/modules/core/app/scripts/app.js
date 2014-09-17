@@ -20,7 +20,7 @@ angular.module('fielddbAngularApp', [
   'contenteditable',
   'ngDragDrop'
 ]).config(function($routeProvider, $sceDelegateProvider) {
-  console.log($routeProvider);
+  // console.log($routeProvider);
 
   $sceDelegateProvider.resourceUrlWhitelist([
     // Allow same origin resource loads.
@@ -31,15 +31,15 @@ angular.module('fielddbAngularApp', [
 
   FieldDB.FieldDBObject.application = new FieldDB.PsycholinguisticsApp({
     authentication: {
-      user: {
+      user: new FieldDB.User({
         authenticated: false
-      }
+      })
     },
     online: true,
     apiURL: 'https://localhost:3181/v2/',
     offlineCouchURL: 'https://localhost:6984',
     brand: 'LingSync',
-    website: 'http://lingsync.org'
+    website: 'http://example.org'
   });
 
   FieldDB.Database.prototype.BASE_DB_URL = 'https://corpusdev.example.org';
