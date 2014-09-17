@@ -15,7 +15,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
     $scope.loginDetails = $scope.loginDetails || {};
     // $scope.application.authentication = $scope.application.authentication || {};
     // $scope.application.authentication.user = $scope.application.authentication.user || {};
-    console.log('Scope authentication is ', $scope.application.authentication);
+    $scope.application.debug('Scope authentication is ', $scope.application.authentication);
 
     var processUserDetails = function(user) {
       user.authenticated = true;
@@ -100,7 +100,7 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       //   return;
       // }
       FieldDB.Database.prototype.resumeAuthenticationSession().then(function(sessionInfo) {
-        console.log(sessionInfo);
+        $scope.application.debug(sessionInfo);
         if (sessionInfo.ok && sessionInfo.userCtx.name) {
           $scope.application.authentication.user.username = sessionInfo.userCtx.name;
           $scope.application.authentication.user.roles = sessionInfo.userCtx.roles;
