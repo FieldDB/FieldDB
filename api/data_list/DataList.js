@@ -1,7 +1,7 @@
 /* globals FieldDB */
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Collection = require("./../Collection").Collection;
+var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
 var ContextualizableObject = require('./../locales/ContextualizableObject').ContextualizableObject;
 var Q = require("q");
@@ -68,7 +68,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
   INTERNAL_MODELS: {
     value: {
       comments: Comments,
-      docs: Collection,
+      docs: DocumentCollection,
       title: ContextualizableObject,
       description: ContextualizableObject
     }
