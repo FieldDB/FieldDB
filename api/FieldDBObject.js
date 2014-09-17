@@ -83,8 +83,20 @@ var FieldDBObject = function FieldDBObject(json) {
     }
     this.debug("JSON: " + member, this.INTERNAL_MODELS);
     if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      this.debug("Parsing model: " + member);
-      json[member] = new this.INTERNAL_MODELS[member](json[member]);
+      if (this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.type === 'ContextualizableObject') {
+        if (typeof json[member] === "string") {
+          this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
+          simpleModels.push(member);
+        } else {
+          if (FieldDBObject.application && FieldDBObject.application.contextualizer) {
+            json[member].contextualizer = FieldDBObject.application.contextualizer;
+          }
+        }
+      } else {
+        this.debug("Parsing model: " + member);
+        json[member] = new this.INTERNAL_MODELS[member](json[member]);
+      }
+
     } else {
       simpleModels.push(member);
     }
@@ -110,6 +122,9 @@ FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v2.0.1";
 FieldDBObject.DEFAULT_DATE = 0;
 
+
+/* set the application if you want global state (ie for checking if a user is authorized) */
+// FieldDBObject.application = {}
 
 /**
  * The uuid generator uses a "GUID" like generation to create a unique string.
@@ -233,6 +248,25 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
     }
   },
+  alwaysConfirmOkay: {
+    get: function() {
+      if (this.perObjectAlwaysConfirmOkay === undefined) {
+        return false;
+      } else {
+        return this.perObjectAlwaysConfirmOkay;
+      }
+    },
+    set: function(value) {
+      if (value === this.perObjectAlwaysConfirmOkay) {
+        return;
+      }
+      if (value === null || value === undefined) {
+        delete this.perObjectAlwaysConfirmOkay;
+        return;
+      }
+      this.perObjectAlwaysConfirmOkay = value;
+    }
+  },
   confirm: {
     value: function(message) {
       if (this.confirmMessage) {
@@ -241,11 +275,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.confirmMessage = "";
       }
       this.confirmMessage = this.confirmMessage + message;
+      if (this.alwaysConfirmOkay) {
+        console.warn(this.type.toUpperCase() + ' NOT ASKING USER: ' + message + ' \nThe code decided that they would probably yes and it wasnt worth asking.');
+        return this.alwaysConfirmOkay;
+      }
       try {
         return window.confirm(message);
       } catch (e) {
-        console.warn(this.type.toUpperCase() + ' ASKING USER: ' + message + ' pretending they said no.');
-        return false;
+        console.warn(this.type.toUpperCase() + ' ASKING USER: ' + message + ' pretending they said ' + this.alwaysConfirmOkay);
+        return this.alwaysConfirmOkay;
       }
     }
   },
@@ -361,6 +399,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         self = this;
       Q.nextTick(function() {
         self.todo("If in nodejs, write to file and do a git commit with optional user's email who modified the file and push ot a branch with that user's username");
+        self.debug("Commit to be used: ", commit);
         deferred.resolve(self);
       });
       return deferred.promise;
@@ -371,7 +410,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function(anotherObject) {
       for (var aproperty in this) {
         if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function") {
-          this.debug("skipping equality of "+aproperty);
+          this.debug("skipping equality of " + aproperty);
           continue;
         }
         if (typeof this[aproperty].equals === "function") {
@@ -568,9 +607,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   application: {
     get: function() {
       return FieldDBObject.application;
-    },
-    set: function(value) {
-      // FieldDBObject.application = value;
     }
   },
 
@@ -804,6 +840,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json.decryptedMode;
       delete json.bugMessage;
       delete json.warnMessage;
+      delete json.perObjectDebugMode;
+      delete json.perObjectAlwaysConfirmOkay;
+      delete json.application;
+      delete json.contextualizer;
       if (this._collection !== "private_corpuses") {
         delete json.confidential;
         delete json.confidentialEncrypter;
@@ -852,6 +892,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json._rev;
 
       return json;
+    }
+  },
+
+  contextualizer: {
+    get: function() {
+      if (this.application && this.application.contextualizer) {
+        return this.application.contextualizer;
+      }
     }
   },
 
