@@ -146,11 +146,12 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
 
   id: {
     get: function() {
+      // this._id = this.anonymousCode;
       return this.anonymousCode;
     },
     set: function(value) {
-      if(value !== this.anonymousCode){
-        this.anonymousCode = value;
+      if(value === this.anonymousCode){
+        this._id = value;
       }
     }
   },
