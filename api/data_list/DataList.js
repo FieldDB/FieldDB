@@ -171,7 +171,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             }
           }
         } catch (e) {
-          self.warn("error converting this doc ", e);
+          self.warn("error converting this doc: "+ e);
           doc = new FieldDBObject(doc);
         }
         self.docs.add(doc);
