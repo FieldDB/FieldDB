@@ -16,6 +16,7 @@
   var Export = require("./export/Export");
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
   var CORS = require("./CORS").CORS;
+  CORS.bug = FieldDBObject.prototype.bug;
   var DataList = require("./data_list/DataList").DataList;
   var SubExperimentDataList = require("./data_list/SubExperimentDataList").SubExperimentDataList;
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;

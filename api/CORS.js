@@ -3,15 +3,19 @@
 var Q = require("q");
 
 var CORS = {
+  type: "CORS",
   debugMode: false,
   debug: function(a, b, c) {
     if (this.debugMode) {
       console.log(a, b, c);
     }
   },
-  bug: function(message) {
-    console.warn(message);
+  warn: function(message) {
+    console.warn("CORS-WARN: " + message);
     // throw message;
+  },
+  bug: function(message) {
+    console.warn("CORS-BUG: " + message);
   }
 };
 
@@ -23,7 +27,7 @@ CORS.supportCORSandIE = function(method, url) {
   try {
     xhrCors = new XMLHttpRequest();
   } catch (e) {
-    console.warn("XMLHttpRequest is not defined, nothign will happen.", e);
+    this.warn("XMLHttpRequest is not defined, nothign will happen.", e);
     xhrCors = {};
   }
   if ("withCredentials" in xhrCors) {
