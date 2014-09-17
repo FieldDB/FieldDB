@@ -2,10 +2,10 @@
 /* globals FieldDB */
 
 angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '$routeParams', '$rootScope',
-  function($scope, $routeParams, $rootScope) {
+  function($scope, $routeParams) {
 
-    $rootScope.application = FieldDB.FieldDBObject.application;
-    $rootScope.application.render = function(){
+    $scope.application = FieldDB.FieldDBObject.application;
+    $scope.application.render = function(){
       $scope.$apply();
     };
 
@@ -13,8 +13,8 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       username: '',
       password: ''
     };
-    console.log($rootScope.application);
-    $rootScope.application.processRouteParams($routeParams);
+    console.log($scope.application);
+    $scope.application.processRouteParams($routeParams);
     // FieldDB.FieldDBConnection.connect();
 
     console.log('In the FieldDBController');
