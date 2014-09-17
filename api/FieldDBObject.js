@@ -345,7 +345,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       this._dateModified = Date.now();
-      if (!this.id) {
+      if (!this._rev) {
         this._dateCreated = Date.now();
         this.enteredByUser = {
           browserVersion: browserVersion
@@ -792,6 +792,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       /* this object has been updated to this version */
       this.version = this.version;
+      /* force id to be set if possible */
+      // this.id = this.id;
 
       for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
