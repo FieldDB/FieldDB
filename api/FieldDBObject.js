@@ -76,22 +76,19 @@ var FieldDBObject = function FieldDBObject(json) {
   if (json && json.confidential && this.INTERNAL_MODELS['confidential']) {
     this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
   }
+  if (this.INTERNAL_MODELS) {
+    this.debug("parsing with ", this.INTERNAL_MODELS);
+  }
   var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
-    this.debug("JSON: " + member, this.INTERNAL_MODELS);
+    this.debug("JSON: " + member);
     if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      if (this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.type === 'ContextualizableObject') {
-        if (typeof json[member] === "string") {
-          this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
-          simpleModels.push(member);
-        } else {
-          if (FieldDBObject.application && FieldDBObject.application.contextualizer) {
-            json[member].contextualizer = FieldDBObject.application.contextualizer;
-          }
-        }
+      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.type === 'ContextualizableObject') {
+        this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
+        simpleModels.push(member);
       } else {
         this.debug("Parsing model: " + member);
         json[member] = new this.INTERNAL_MODELS[member](json[member]);
