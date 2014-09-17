@@ -27,15 +27,15 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
         }
         return role;
       });
-      try {
-        $scope.application.authentication.user = new FieldDB.User(user);
-      } catch (e) {
-        console.log('problem parsing user', e, user);
-      }
+      // try {
+      //   // $scope.application.authentication.user = new FieldDB.User(user);
+      // } catch (e) {
+      //   console.log('problem parsing user', e, user);
+      // }
 
       // $scope.team = user;
       // $rootScope.authenticated = true;
-      console.log($scope);
+      // console.log($scope);
       if (window.location.pathname === '/welcome' || window.location.pathname === '/bienvenu') {
         $scope.$apply(function() {
           $location.path('/' + $scope.application.authentication.user.accessibleDBS[0].replace('-', '/'));
@@ -52,7 +52,8 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
       $scope.application.authentication.error = '';
       FieldDB.Database.prototype.login(loginDetails).then(function(user) {
         console.log('User has been downloaded. ', user);
-        processUserDetails(user);
+        $scope.application.authentication.user.merge(user);
+        processUserDetails($scope.application.authentication.user);
         // $scope.isContactingServer = false;
       }, function(reason) {
         $scope.application.authentication.error = reason;
