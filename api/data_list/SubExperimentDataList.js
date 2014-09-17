@@ -1,5 +1,5 @@
 var DataList = require('./DataList').DataList;
-var Collection = require("./../Collection").Collection;
+var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
 var ContextualizableObject = require('./../locales/ContextualizableObject').ContextualizableObject;
 
@@ -25,7 +25,7 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
   INTERNAL_MODELS: {
     value: {
       comments: Comments,
-      docs: Collection,
+      docs: DocumentCollection,
       title: ContextualizableObject,
       description: ContextualizableObject,
       instructions: ContextualizableObject
