@@ -1,3 +1,5 @@
+var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+
 /**
  * @class The ContextualizableObject allows the user to label data with grammatical tags
  *        i.e. passive, causative. This is useful for searches.
@@ -11,7 +13,7 @@
 var ContextualizableObject = function ContextualizableObject(json) {
   // console.log("Constructing ContextualizableObject ", json);
   if (json && json.contextualizer) {
-    this.contextualizer = json.contextualizer;
+    // this.contextualizer = json.contextualizer;
   }
   if (json && typeof json === "string") {
     if (!ContextualizableObject.updateAllToContextualizableObjects) {
@@ -39,6 +41,12 @@ var ContextualizableObject = function ContextualizableObject(json) {
     this.data[stringAsKey] = {
       "message": value
     };
+    this.add(stringAsKey, value);
+
+    // if (this.contextualizer && this.contextualizer.contextualize(for_context) === for_context) {
+    //   this.contextualizer.updateContextualization(for_context, locale_string)
+    //   console.log("added to contextualizer "+ this.contextualizer.contextualize(for_context));
+    // }
   }
   for (var member in json) {
     if (!json.hasOwnProperty(member) || member === "contextualizer") {
@@ -50,19 +58,29 @@ var ContextualizableObject = function ContextualizableObject(json) {
   Object.apply(this, arguments);
 };
 ContextualizableObject.updateAllToContextualizableObjects = false;
-
 ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends ContextualizableObject.prototype */ {
   constructor: {
     value: ContextualizableObject
   },
 
+  type: {
+    value: "ContextualizableObject"
+  },
+
+  contextualizer: {
+    get: function() {
+      return FieldDBObject.prototype.contextualizer
+    }
+  },
+
   contextualize: {
     value: function(locale_string) {
-      console.log("requesting contextualization of " + locale_string);
+      // console.log("requesting contextualization of " + locale_string);
       var contextualizedString;
       if (this.contextualizer) {
         contextualizedString = this.contextualizer.contextualize(locale_string);
-      } else {
+      }
+      if (contextualizedString === locale_string) {
         if (this.data && this.data[locale_string]) {
           contextualizedString = this.data[locale_string].message;
         } else {
@@ -77,10 +95,12 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
   updateContextualization: {
     value: function(for_context, locale_string) {
       // console.log('updateContextualization' + for_context);
+      var updated;
       if (this.contextualizer) {
-        return this.contextualizer.updateContextualization(for_context, locale_string);
+        // console.log(this.contextualizer.data);
+        updated = this.contextualizer.updateContextualization(for_context, locale_string);
       }
-      if (this.data) {
+      if (( !updated  || updated === for_context)&& this.data) {
         this.data[for_context] = this.data[for_context] || {
           message: ""
         };
@@ -94,6 +114,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
       if (this._default == for_context) {
         this.originalString = locale_string;
       }
+      return updated;
     }
   },
 
@@ -106,7 +127,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         return this.contextualize(this[underscoreNotation]);
       });
       this.__defineSetter__(for_context, function(value) {
-        // console.log("overidding setter "+ underscoreNotation, value);
+        console.log("overidding setter " + underscoreNotation, value);
         this.updateContextualization(this[underscoreNotation], value);
       });
       //if there is no contextualizer, add this to the local data
@@ -115,6 +136,14 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         this.data[for_context] = {
           "message": locale_string
         };
+        console.log(" for_context " + for_context);
+        console.log(" locale_string " + locale_string);
+        // If the contextualizer doesnt have a value for this string, add it to the contextualizations... (this could introduce a lot of data into the localizations)
+        if (this.contextualizer) {
+          console.log(" adding to contextualizer: " + for_context + " as " + locale_string);
+          this.contextualizer.updateContextualization(for_context, locale_string)
+          console.log("added to contextualizer " + this.contextualizer.contextualize(for_context));
+        }
       }
     }
   },

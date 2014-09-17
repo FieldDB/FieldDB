@@ -1,5 +1,7 @@
 var Contextualizer = require('./../../api/locales/Contextualizer').Contextualizer;
 var ContextualizableObject = require('./../../api/locales/ContextualizableObject').ContextualizableObject;
+var FieldDBObject = require('./../../api/FieldDBObject').FieldDBObject;
+
 var specIsRunningTooLong = 5000;
 
 describe("Contextualizer", function() {
@@ -58,7 +60,9 @@ describe("Contextualizer", function() {
     var contextualizer;
 
     beforeEach(function() {
-      contextualizer = new Contextualizer();
+      contextualizer = new Contextualizer({
+        alwaysConfirmOkay: true
+      });
       contextualizer.addMessagesToContextualizedStrings("en", {
         "localized_practice": {
           "message": "Practice"
@@ -153,8 +157,11 @@ describe("Contextualizer", function() {
       var obj;
       beforeEach(function() {
         // contextualizer.debugMode = true;
+        FieldDBObject.application = {
+          contextualizer: contextualizer
+        };
         obj = new ContextualizableObject({
-          contextualizer: contextualizer,
+          // contextualizer: contextualizer,
           "default": "localized_practice_description_for_teacher",
           "for_child": "localized_practice_description_for_child",
           "for_parent": "localized_practice_description_for_parent",
@@ -166,6 +173,10 @@ describe("Contextualizer", function() {
 
       it("should be able to turn objects in to contextualied objects where the strings are not strings but keys to the locales", function() {
         expect(obj).toBeDefined();
+        expect(FieldDBObject.application.contextualizer).toBeDefined();
+        expect(obj.contextualizer).toBeDefined();
+        expect(obj.contextualizer).toBe(FieldDBObject.application.contextualizer);
+
         expect(obj._for_child).toEqual('localized_practice_description_for_child');
         expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual('In this game, you will help the mouse eat all the cheese!');
       });
@@ -193,44 +204,83 @@ describe("Contextualizer", function() {
         expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
       });
 
-
       it("should not break if its only 1 string", function() {
-        var onlyAString = new ContextualizableObject("Import data");
         expect("preventing this in FieldDBObject's initialization").toEqual("preventing this in FieldDBObject's initialization");
-        // expect(onlyAString).toEqual("Import data");
-        // expect(onlyAString.toString()).toEqual("Import data");
-        // expect(onlyAString.data).toBeUndefined();
-        // expect(onlyAString.toJSON()).toBeUndefined();
-      });
+        // console.log("ContextualizableObject.constructor",  ContextualizableObject.constructor);
+        // console.log("ContextualizableObject.constructor.type",  ContextualizableObject.constructor.type);
+        var DataListMock = function DataListMock(options) {
+          this.debug("In DataListMock ", options);
+          FieldDBObject.apply(this, arguments);
+        };
 
+        DataListMock.prototype = Object.create(FieldDBObject.prototype, /** @lends Child.prototype */ {
+          constructor: {
+            value: DataListMock
+          },
+          INTERNAL_MODELS: {
+            value: {
+              title: ContextualizableObject,
+              description: ContextualizableObject
+            }
+          }
+        });
+
+        // no INTERNAL_MODELS set as ContextualizableObject
+        var containingObject = new FieldDBObject({
+          title: "Import data",
+          debugMode: true
+        });
+        expect(containingObject.title).toEqual("Import data");
+        expect(containingObject.toJSON().title).toEqual("Import data");
+        expect(containingObject.title.toString()).toEqual("Import data");
+        expect(containingObject.title.data).toBeUndefined();
+        expect(containingObject.title.toJSON).toBeUndefined();
+
+        // with INTERNAL_MODELS set as ContextualizableObject
+        containingObject = new DataListMock({
+          title: "Import data",
+          debugMode: true
+        });
+        expect(containingObject.title).toEqual("Import data");
+        expect(containingObject.toJSON().title).toEqual("Import data");
+        expect(containingObject.title.toString()).toEqual("Import data");
+        expect(containingObject.title.data).toBeUndefined();
+        expect(containingObject.title.toJSON).toBeUndefined();
+      });
 
       it("should update a string to the default of a contextualizable object if updateAllToContextualizableObjects is true", function() {
         ContextualizableObject.updateAllToContextualizableObjects = true;
-        var onlyAString = new ContextualizableObject("Import data");
+        var onlyAString = new ContextualizableObject("Import datalist");
         expect(onlyAString.data).toEqual({
-          locale_Import_data: {
-            message: 'Import data'
+          locale_Import_datalist: {
+            message: "Import datalist"
           }
         });
-        expect(onlyAString.originalString).toEqual("Import data");
-        expect(onlyAString.default).toEqual("Import data");
-        onlyAString.default = "Imported data";
-        expect(onlyAString.default).toEqual("Imported data");
-        expect(onlyAString.toJSON()).toEqual("Imported data");
+        expect(contextualizer.alwaysConfirmOkay).toBeTruthy();
+        expect(contextualizer.data.en.locale_Import_datalist).toBeDefined();
+        expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Import datalist");
+        expect(onlyAString.originalString).toEqual("Import datalist");
+        expect(onlyAString.default).toEqual("Import datalist");
+        onlyAString.default = "Imported datalist";
+        expect(onlyAString.default).toEqual("Imported datalist");
+        expect(contextualizer.contextualize("locale_Import_datalist")).toEqual("Imported datalist");
+        expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Imported datalist");
+
+        expect(onlyAString.toJSON()).toEqual("Imported datalist");
         ContextualizableObject.updateAllToContextualizableObjects = false;
         expect(onlyAString.toJSON()).toEqual({
-          default: 'locale_Import_data',
-          locale_Import_data: 'Imported data'
+          default: "locale_Import_datalist",
+          locale_Import_datalist: "Imported datalist"
         });
 
         var contextualizedObjectFromASerializedContextualizedObjectWhichWasAString = new ContextualizableObject(onlyAString.toJSON());
         expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.originalString).toBeUndefined();
-        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported data");
-        contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default = "Imported again data";
-        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported again data");
+        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported datalist");
+        contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default = "Imported again datalist";
+        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported again datalist");
         expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.toJSON()).toEqual({
-          default: 'locale_Import_data',
-          locale_Import_data: 'Imported again data'
+          default: "locale_Import_datalist",
+          locale_Import_datalist: "Imported again datalist"
         });
 
       });

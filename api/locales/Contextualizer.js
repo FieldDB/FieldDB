@@ -127,12 +127,22 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
   updateContextualization: {
     value: function(key, value) {
-      if (this.data[this.currentLocale] && this.data[this.currentLocale][key]) {
-        if (this.data[this.currentLocale][key].message === value) {
-          return;
-        }
+      this.data[this.currentLocale] = this.data[this.currentLocale] || {};
+      if (this.data[this.currentLocale][key] && this.data[this.currentLocale][key].message === value) {
+        return value; //no change
+      }
+      var previousMessage = "";
+      var verb = "create ";
+      if (this.data[this.currentLocale][key]) {
+        previousMessage = this.data[this.currentLocale][key].message;
+        verb = "update ";
+      }
+      var update = this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value);
+      if (update) {
+        this.data[this.currentLocale][key] = this.data[this.currentLocale][key] || {};
         this.data[this.currentLocale][key].message = value;
       }
+      return this.data[this.currentLocale][key].message;
     }
   },
 
