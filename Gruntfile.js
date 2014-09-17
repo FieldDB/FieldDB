@@ -18,6 +18,7 @@ module.exports = function(grunt) {
         dest: '<%= pkg.name %>.js',
         options: {
           banner: '<%= banner %>',
+          // transform: ['es6ify'], // http://dontkry.com/posts/code/browserify-and-the-universal-module-definition.html
           ignore: [],
           shim: {},
           basedir: './'
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: '.jshintrc'
         },
-        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js', 'api/confidentiality_encryption/Confidential.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js', 'api/datum/DatumField.js', 'api/data_list/DataList.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/user/User.js', 'api/user/Speaker.js', 'api/user/Consultant.js', 'api/user/Participant.js', 'api/corpus/CorpusMask.js']
+        src: ['api/fielddb.js', 'api/FieldDBObject.js', 'api/Collection.js', 'api/CORS.js', 'api/FieldDBConnection.js',  'api/app/App.js', 'api/confidentiality_encryption/Confidential.js', 'api/corpus/Corpus.js', 'api/corpus/PsycholinguisticsDatabase.js', 'api/datum/DatumTag.js', 'api/datum/DatumTags.js', 'api/datum/DatumField.js', 'api/data_list/DataList.js', 'api/corpus/Database.js', 'api/import/Import.js', 'api/user/UserMask.js', 'api/user/User.js', 'api/user/Speaker.js', 'api/user/Consultant.js', 'api/user/Participant.js', 'api/corpus/CorpusMask.js']
       },
       test: {
         options: {
