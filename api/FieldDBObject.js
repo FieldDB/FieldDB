@@ -233,10 +233,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   bug: {
     value: function(message) {
       if (this.bugMessage) {
+        if (this.bugMessage.indexOf(message) > -1) {
+          this.warn('Not repeating bug message: ' + message);
+          return;
+        }
         this.bugMessage += ";;; ";
       } else {
         this.bugMessage = "";
       }
+
       this.bugMessage = this.bugMessage + message;
       try {
         window.alert(message);
