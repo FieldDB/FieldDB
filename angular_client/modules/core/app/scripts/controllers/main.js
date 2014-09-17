@@ -4,8 +4,14 @@
 angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '$routeParams', '$rootScope',
   function($scope, $routeParams) {
 
-    $scope.application = FieldDB.FieldDBObject.application;
-    $scope.application.render = function(){
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+      $scope.application = FieldDB.FieldDBObject.application;
+    } else {
+      console.warn('The fielddb application was never created, are you sure you didn new FieldDB.APP() somewhere?');
+      window.alert('The app is broken, please report this. ');
+    }
+
+    $scope.application.render = function() {
       $scope.$apply();
     };
 
@@ -13,10 +19,10 @@ angular.module('fielddbAngularApp').controller('FieldDBController', ['$scope', '
       username: '',
       password: ''
     };
-    console.log($scope.application);
+    $scope.application.debug($scope.application);
     $scope.application.processRouteParams($routeParams);
     // FieldDB.FieldDBConnection.connect();
 
-    console.log('In the FieldDBController');
+    console.log('FieldDBController was loaded, this means almost everything in the corpus is available now');
   }
 ]);
