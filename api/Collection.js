@@ -640,7 +640,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       if (value.trim) {
         value = Diacritics.clean(value);
-        value = value.trim().replace(/[^a-zA-Z0-9-]+/g, '_').replace(/^_/, '').replace(/_$/, '');
+        value = value.trim().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_/, '').replace(/_$/, '');
         return this.camelCased(value);
       } else if (typeof value === 'number') {
         return parseInt(value, 10);
