@@ -1,3 +1,4 @@
+/* globals FieldDB */
 'use strict';
 var debug = false;
 
@@ -10,9 +11,12 @@ describe('Directive: fielddb-authentication', function() {
   beforeEach(inject(function($rootScope, $compile) {
     el = angular.element('<div data-fielddb-authentication json="authentication"></div>');
     scope = $rootScope.$new();
-    scope.authentication = {
-      user: {
-        authenticated: false
+    console.log('scope.application', scope.application);
+    scope.application = {
+      authentication: {
+        user: new FieldDB.User({
+          authenticated: false
+        })
       }
     };
     compileFunction = $compile(el);
@@ -31,7 +35,7 @@ describe('Directive: fielddb-authentication', function() {
       scope.$digest(); // <== digest to get the render to show the bound values
       if (debug) {
         console.log('post link', el.html());
-        console.log('scope authentication ', scope.authentication);
+        console.log('scope authentication ', scope.application.authentication);
       }
       expect(angular.element(el.find('button')[0]).text().trim()).toEqual('Login');
     });
@@ -40,12 +44,12 @@ describe('Directive: fielddb-authentication', function() {
   it('should show logout button if someone is logged in', function() {
 
     inject(function() {
-      scope.authentication.user.authenticated = true;
+      scope.application.authentication.user.authenticated = true;
       compileFunction(scope); // <== the html {{}} are bound
       scope.$digest(); // <== digest to get the render to show the bound values
       if (debug) {
         console.log('post link', el.html());
-        console.log('scope authentication ', scope.authentication);
+        console.log('scope authentication ', scope.application.authentication);
       }
       expect(angular.element(el.find('div')[0]).attr('class')).toContain('ng-hide');
     });
