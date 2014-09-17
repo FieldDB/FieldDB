@@ -4,7 +4,6 @@ var Activity = require('./../activity/Activity').Activity;
 var Authentication = require('./../FieldDBObject').FieldDBObject;
 var Corpus = require('./../corpus/Corpus').Corpus;
 var DataList = require('./../data_list/DataList').DataList;
-var DatumField = require('./../datum/DatumField').DatumField;
 var Import = require('./../import/Import').Import;
 var Search = require('./../search/Search').Search;
 var Session = require('./../FieldDBObject').FieldDBObject;
@@ -131,7 +130,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           value = new this.INTERNAL_MODELS['authentication'](value);
         }
       }
-      this._confidential = value;
+      this._authentication = value;
     }
   },
 
