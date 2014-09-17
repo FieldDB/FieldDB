@@ -204,7 +204,7 @@ describe("FieldDBObject", function() {
     it("should accept a render function from the containing app or framework", function() {
       var app = new FieldDBObject();
       app.render = function() {
-        console.log("I rendered.")
+        console.log("I rendered.");
       };
       expect(app.render).toBeDefined();
       app.render();
