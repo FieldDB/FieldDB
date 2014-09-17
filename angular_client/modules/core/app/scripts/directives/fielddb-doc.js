@@ -22,6 +22,7 @@ angular.module('fielddbAngularApp').directive('fielddbDoc', function($compile) {
     LessonDataList: '<div data-fielddb-datalist json="doc" corpus="corpus" view="LessonDataList"></div>',
     SubExperimentDataList: '<div class="well" data-fielddb-datalist json="doc" corpus="corpus" view="SubExperimentDataList"></div>',
 
+    Document: '<div class="well" data-fielddb-datum json="doc" corpus="corpus"></div>',
     Datum: '<div class="well" data-fielddb-datum json="doc" corpus="corpus"></div>',
     MultipleChoice: '<div data-fielddb-datum json="doc" corpus="corpus"></div>',
     Stimulus: '<div data-fielddb-datum json="doc" corpus="corpus"></div>',
