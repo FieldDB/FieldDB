@@ -206,6 +206,8 @@ describe("Data List", function() {
 
   describe("psycholinguistics", function() {
     it("should permit complex title objects", function() {
+
+      FieldDBObject.application = {};
       var dl = new SubExperimentDataList({
         // debugMode: true,
         "label": "practice",
