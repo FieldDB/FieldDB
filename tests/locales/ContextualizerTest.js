@@ -205,6 +205,8 @@ describe("Contextualizer", function() {
       });
 
       it("should not break if its only 1 string", function() {
+        ContextualizableObject.updateAllToContextualizableObjects = false;
+
         expect("preventing this in FieldDBObject's initialization").toEqual("preventing this in FieldDBObject's initialization");
         // console.log("ContextualizableObject.constructor",  ContextualizableObject.constructor);
         // console.log("ContextualizableObject.constructor.type",  ContextualizableObject.constructor.type);
