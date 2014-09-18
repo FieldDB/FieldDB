@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @ngdoc filter
@@ -8,13 +8,13 @@
  * # fielddbVisiblyEmpty
  * Filter in the fielddbAngularApp.
  */
-angular.module('fielddbAngularApp').filter('fielddbVisiblyEmpty', function() {
+angular.module("fielddbAngularApp").filter("fielddbVisiblyEmpty", function() {
   return function(input) {
     if (input.trim) {
       input = input.trim();
     }
-    if (input === '' || input === undefined || input === null) {
-      return '--';
+    if (input === "" || input === undefined || input === null) {
+      return "--";
     }
     return input;
   };

@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-xdescribe('Service: fielddbStorage', function () {
+xdescribe("Service: fielddbStorage", function () {
 
-  // load the service's module
-  beforeEach(module('fielddbAngularApp'));
+  // load the service"s module
+  beforeEach(module("fielddbAngularApp"));
 
   // instantiate service
   var fielddbStorage;
@@ -11,7 +11,7 @@ xdescribe('Service: fielddbStorage', function () {
     fielddbStorage = _fielddbStorage_;
   }));
 
-  it('should do something', function () {
+  it("should do something", function () {
     expect(!!fielddbStorage).toBe(true);
   });
 
