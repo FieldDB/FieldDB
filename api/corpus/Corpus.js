@@ -1,6 +1,6 @@
 /* global window, OPrime */
 var CorpusMask = require("./CorpusMask").CorpusMask;
-var Datum = require("./../FieldDBObject").FieldDBObject;
+var Datum = require("./../datum/Datum").Datum;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Session = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
