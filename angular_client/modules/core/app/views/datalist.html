@@ -6,17 +6,17 @@
 
 <div class="lead">Title(s):</div>
 <ul>
-  <li class="unstyled" ng-repeat="context in datalist.title" contenteditable ng-model="context"></li>
+  <li class="list-unstyled" ng-show="context" ng-repeat="context in datalist.title " contenteditable ng-model="context" title="$index {{datalist.title}}"></li>
 </ul>
 
 <div class="lead">Description(s):</div>
 <ul>
-  <li class="unstyled" ng-repeat="context in datalist.description" contenteditable ng-model="context"></li>
+  <li class="list-unstyled" ng-show="context" ng-repeat="context in datalist.description " contenteditable ng-model="context" title="$index {{datalist.description}}"></li>
 </ul>
 
 <div class="lead" ng-show="datalist.instructions">Instruction(s):</div>
 <ul ng-show="datalist.instructions">
-  <li class="unstyled" ng-repeat="context in datalist.instructions" contenteditable ng-model="context"></li>
+  <li class="list-unstyled" ng-show="context" ng-repeat="context in datalist.instructions " contenteditable ng-model="context" title="$index {{datalist.instructions}}"></li>
 </ul>
 
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
