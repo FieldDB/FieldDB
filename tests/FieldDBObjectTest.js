@@ -47,6 +47,33 @@ describe("FieldDBObject", function() {
       expect(u.dateCreated).toBeDefined();
     });
 
+    it("should pass a reference to the application if it was specified", function() {
+      delete FieldDBObject.application;
+      var applicationLess = new FieldDBObject();
+      expect(applicationLess.application).toBeUndefined();
+
+      FieldDBObject.application = new FieldDBObject({
+        context: "Offline",
+        type: "PsycholinguisticsApp"
+      });
+      var u = new FieldDBObject();
+      expect(u.application).toBeDefined();
+      expect(u.application.context).toEqual("Offline");
+      expect(applicationLess.application).toBe(u.application);
+
+      var t = new FieldDBObject();
+      expect(u.application).toBe(t.application);
+
+      FieldDBObject.application = new FieldDBObject({
+        context: "Online",
+        type: "PsycholinguisticsApp"
+      });
+      expect(u.application.context).toEqual("Online");
+      expect(u.application).toBe(t.application);
+
+      expect(u.toJSON().application).toBeUndefined();
+    });
+
   });
 
   describe("serialization", function() {
@@ -117,11 +144,11 @@ describe("FieldDBObject", function() {
         _id: "123"
       }).toJSON("complete");
       expect(resultingJSON).toEqual({
-        type: 'FieldDBObject',
+        type: "FieldDBObject",
         dateCreated: 1,
-        _id: '123',
-        version: 'v2.0.1',
-        dbname: '',
+        _id: "123",
+        version: "v2.0.1",
+        dbname: "",
         dateModified: 0,
         comments: []
       });
@@ -165,29 +192,58 @@ describe("FieldDBObject", function() {
 
   });
 
+  describe("render", function() {
+    it("should not error if it has no render function", function() {
+      var app = new FieldDBObject();
+      expect(app.render).toBeDefined();
+      console.log(app.render);
+      app.render();
+      expect(app.warnMessage).toContain("but the render was not injected for this");
+    });
+
+    it("should accept a render function from the containing app or framework", function() {
+      var app = new FieldDBObject();
+      app.render = function() {
+        console.log("I rendered.");
+      };
+      expect(app.render).toBeDefined();
+      app.render();
+      expect(app.warnMessage).toBeUndefined();
+    });
+  });
+
   describe("debugging", function() {
     it("should be able to debug one object if we want", function() {
       var buggy = new FieldDBObject();
       buggy.debugMode = true;
       expect(buggy.debugMode).toEqual(true);
-      buggy.debug('This is some debug output', buggy, FieldDBObject);
+      buggy.debug("This is some debug output", buggy, FieldDBObject);
       buggy.debugMode = false;
-      console.log('It should say \' Done debugMode testing\' after this: ');
-      buggy.debug('THERE WAS SOME OUTPUT', buggy, FieldDBObject);
+      console.log("It should say \" Done debugMode testing\" after this: ");
+      buggy.debug("THERE WAS SOME OUTPUT", buggy, FieldDBObject);
       if (buggy.debugMode) {
         buggy.debugMode = true;
-        buggy.debug('THIS IS SOME HEAVY STRINGIFICATION OUPUT THAT IS AVOIDED', JSON.stringify(buggy), JSON.stringify(FieldDBObject));
+        buggy.debug("THIS IS SOME HEAVY STRINGIFICATION OUPUT THAT IS AVOIDED", JSON.stringify(buggy), JSON.stringify(FieldDBObject));
       }
-      console.log(' Done debugMode testing');
+      console.log(" Done debugMode testing");
 
-      buggy.warn('This will print a warning', buggy);
-      buggy.bug('This will print an warning in Nodejs');
-      buggy.todo('This will print a todo', buggy);
+      buggy.warn("This will print a warning", buggy);
+      buggy.bug("This will print an warning in Nodejs");
+      buggy.todo("This will print a todo", buggy);
       expect(buggy.toJSON().warnMessage).toBeUndefined();
       expect(buggy.toJSON().bugMesssage).toBeUndefined();
       expect(buggy.toJSON().todoMessage).toBeUndefined();
     });
 
+    it("should not bug about the same message if it has already been bugged and not cleared", function(){
+      var buggy = new FieldDBObject();
+      expect(buggy.bugMessage).toBeUndefined();
+      buggy.bug("This is a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
+      buggy.bug("This is a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
+      expect(buggy.warnMessage).toContain("Not repeating bug message: This is a problem, please report this");
+    });
   });
 
   describe("merging", function() {
@@ -237,7 +293,7 @@ describe("FieldDBObject", function() {
       expect(resultObject).toBe(aBaseObject);
       expect(aBaseObject.externalString).toEqual("trivial model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
-      expect(aBaseObject.externalArray).toEqual(['four', 'one', 'two', 'three']);
+      expect(aBaseObject.externalArray).toEqual(["four", "one", "two", "three"]);
       expect(aBaseObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal overwrite");
@@ -253,7 +309,7 @@ describe("FieldDBObject", function() {
       expect(atriviallyDifferentObject).not.toEqual(aBaseObject);
       expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
       expect(atriviallyDifferentObject.externalEqualString).toEqual("merging");
-      expect(atriviallyDifferentObject.externalArray).toEqual(['one', 'two', 'three']);
+      expect(atriviallyDifferentObject.externalArray).toEqual(["one", "two", "three"]);
       expect(atriviallyDifferentObject.warnMessage).toBeUndefined();
 
       expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
@@ -276,7 +332,7 @@ describe("FieldDBObject", function() {
       expect(aThirdObject).not.toBe(aBaseObject);
       expect(aThirdObject.externalString).toEqual("trivial model");
       expect(aThirdObject.externalEqualString).toEqual("merging");
-      expect(aThirdObject.externalArray).toEqual(['four', 'one', 'two', 'three']);
+      expect(aThirdObject.externalArray).toEqual(["four", "one", "two", "three"]);
       expect(aThirdObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aThirdObject.externalObject.internalString).toEqual("internal overwrite");
@@ -291,7 +347,7 @@ describe("FieldDBObject", function() {
       // Make sure aBaseObject is as it was
       expect(aBaseObject.externalString).toEqual("easy model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
-      expect(aBaseObject.externalArray).toEqual(['four']);
+      expect(aBaseObject.externalArray).toEqual(["four"]);
       expect(aBaseObject.warnMessage).toBeUndefined();
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal");
@@ -308,7 +364,7 @@ describe("FieldDBObject", function() {
       expect(atriviallyDifferentObject).not.toBe(aBaseObject);
       expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
       expect(atriviallyDifferentObject.externalEqualString).toEqual("merging");
-      expect(atriviallyDifferentObject.externalArray).toEqual(['one', 'two', 'three']);
+      expect(atriviallyDifferentObject.externalArray).toEqual(["one", "two", "three"]);
       expect(atriviallyDifferentObject.warnMessage).toBeUndefined();
 
       expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
@@ -362,7 +418,7 @@ describe("FieldDBObject", function() {
   });
 
   describe("equality", function() {
-    it('should calculate equality', function() {
+    it("should calculate equality", function() {
       var item1 = new FieldDBObject({
         // debugMode: true,
         id: "123",

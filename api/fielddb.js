@@ -10,10 +10,14 @@
  * @requires        UserMask
  */
 (function(exports) {
-  'use strict';
+  "use strict";
+  var App = require("./app/App").App;
+  var PsycholinguisticsApp = require("./app/PsycholinguisticsApp").PsycholinguisticsApp;
   var Export = require("./export/Export");
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
+  var Document = require("./datum/Document").Document;
   var CORS = require("./CORS").CORS;
+  CORS.bug = FieldDBObject.prototype.bug;
   var DataList = require("./data_list/DataList").DataList;
   var SubExperimentDataList = require("./data_list/SubExperimentDataList").SubExperimentDataList;
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;
@@ -28,6 +32,7 @@
   var Speaker = require("./user/Speaker").Speaker;
   var Consultant = require("./user/Consultant").Consultant;
   var Participant = require("./user/Participant").Participant;
+  var Contextualizer = require("./locales/Contextualizer").Contextualizer;
   var Corpus = require("./corpus/Corpus").Corpus;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
@@ -36,8 +41,11 @@
 
   var FieldDB = {};
 
+  FieldDB.App = App;
+  FieldDB.PsycholinguisticsApp = PsycholinguisticsApp;
   FieldDB.Export = Export;
   FieldDB.FieldDBObject = FieldDBObject;
+  FieldDB.Document = Document;
   FieldDB.CORS = CORS;
   FieldDB.DataList = DataList;
   FieldDB.SubExperimentDataList = SubExperimentDataList;
@@ -52,6 +60,7 @@
   FieldDB.Speaker = Speaker;
   FieldDB.Consultant = Consultant;
   FieldDB.Participant = Participant;
+  FieldDB.Contextualizer = Contextualizer;
   FieldDB.Corpus = Corpus;
   FieldDB.CorpusMask = CorpusMask;
   FieldDB.Import = Import;
@@ -62,4 +71,4 @@
   exports.FieldDB = FieldDB;
   global.FieldDB = FieldDB;
 
-}(typeof exports === 'object' && exports || this));
+}(typeof exports === "object" && exports || this));

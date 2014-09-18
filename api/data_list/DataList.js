@@ -1,8 +1,10 @@
 /* globals FieldDB */
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Collection = require("./../Collection").Collection;
+var Document = require("./../datum/Document").Document;
+var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
+var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
 var Q = require("q");
 
 /**
@@ -25,6 +27,10 @@ var Q = require("q");
  */
 var DataList = function DataList(options) {
   this.debug("Constructing DataList ", options);
+  if (options && options.comments) {
+    // console.log("DataList comments", options.comments);
+    // console.log("DataList comments", options.comments);
+  }
   FieldDBObject.apply(this, arguments);
 };
 
@@ -67,7 +73,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
   INTERNAL_MODELS: {
     value: {
       comments: Comments,
-      docs: Collection
+      docs: DocumentCollection,
+      title: ContextualizableObject,
+      description: ContextualizableObject
     }
   },
 
@@ -121,8 +129,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         delete this._docs;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['docs'] === 'function') {
-          value = new this.INTERNAL_MODELS['docs'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["docs"] === "function") {
+          value = new this.INTERNAL_MODELS["docs"](value);
         }
       }
       this._docs = value;
@@ -145,34 +153,42 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.docs = this.docs || [];
       results.map(function(doc) {
         try {
-          if (doc.type && FieldDB && FieldDB[doc.type]) {
-            self.debug('Converting doc into type ' + doc.type);
-            doc.confidential = self.confidential;
-            doc = new FieldDB[doc.type](doc);
-          } else {
-            var guessedType = doc.jsonType || doc.collection || 'FieldDBObject';
-            if (self.api) {
-              guessedType = self.api[0].toUpperCase() + self.api.substring(1, self.api.length);
-            }
-            guessedType = guessedType.replace(/s$/, '');
-            if (guessedType === 'Datalist') {
-              guessedType = 'DataList';
-            }
-
-            if (FieldDB[guessedType]) {
-              self.warn('Converting doc into guessed type ' + guessedType);
-              doc.confidential = self.confidential;
-              doc = new FieldDB[guessedType](doc);
-            } else {
-              self.warn('This doc does not have a type, it might display oddly ', doc);
-            }
+          // prevent recursion a bit
+          if (self.api !== "datalists") {
+            doc.api = self.api;
           }
+          doc.confidential = self.confidential;
+          var guessedType = doc.type;
+          if (!guessedType) {
+            self.debug(" requesting guess type ");
+            guessedType = Document.prototype.guessType(doc);
+            self.debug("request complete");
+          }
+          self.debug("Converting doc into type " + guessedType);
+
+          if (guessedType === "Datum") {
+            doc = new Datum(doc);
+          } else if (guessedType === "Document") {
+            doc._type = guessedType;
+            doc = new Document(doc);
+          } else if (guessedType === "FieldDBObject") {
+            doc = new FieldDBObject(doc);
+          } else if (FieldDB[guessedType]) {
+            self.warn("Converting doc into guessed type " + guessedType);
+            doc = new FieldDB[guessedType](doc);
+          } else {
+            self.warn("This doc does not have a type than can be used, it might display oddly ", doc);
+            doc = new FieldDBObject(doc);
+          }
+
         } catch (e) {
-          self.warn("error converting this doc ", e);
+          self.warn("error converting this doc: " + JSON.stringify(doc) + e);
+          doc.confidential = self.confidential;
           doc = new FieldDBObject(doc);
         }
+        self.debug("adding doc", doc);
         self.docs.add(doc);
-        if (doc.type === 'Datum') {
+        if (doc.type === "Datum") {
           self.showDocPosition = true;
           self.showDocCheckboxes = true;
           self.docsAreReorderable = true;
@@ -187,7 +203,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
       if ((!this._docIds || this._docIds.length === 0) && (this.docs && this.docs.length > 0)) {
         this._docIds = this.docs.map(function(doc) {
-          self.debug('geting doc id of this doc ', doc);
+          self.debug("geting doc id of this doc ", doc);
           return doc.id;
         });
       }

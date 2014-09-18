@@ -1,9 +1,9 @@
-var Speaker = require('./Speaker').Speaker;
+var Speaker = require("./Speaker").Speaker;
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
 /**
  *
- * @class The Consultant (commonly refered to as a 'language consultant')
+ * @class The Consultant (commonly refered to as a "language consultant")
  * is a type of Speaker with any additional fields or metadata that a
  * team might use to to cluster consultants into dialects or variations.
  *

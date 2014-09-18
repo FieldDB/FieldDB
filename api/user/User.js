@@ -1,5 +1,5 @@
-var UserMask = require('./UserMask').UserMask;
-var UserPreference = require('./UserPreference').UserPreference;
+var UserMask = require("./UserMask").UserMask;
+var UserPreference = require("./UserPreference").UserPreference;
 var DEFAULT_USER_MODEL = require("./user.json");
 
 /**
@@ -50,9 +50,9 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     },
     set: function(value) {
       if (!this.prefs) {
-        this.prefs = new this.INTERNAL_MODELS['prefs']();
+        this.prefs = new this.INTERNAL_MODELS["prefs"]();
       }
-      if (Object.prototype.toString.call(value) !== '[object Array]') {
+      if (Object.prototype.toString.call(value) !== "[object Array]") {
         if (!value.firstKey && !value.secondKey && !value.description) {
           value = [];
         } else {
@@ -66,8 +66,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
   prefs: {
     get: function() {
-      if (!this._prefs && this.INTERNAL_MODELS['prefs'] && typeof this.INTERNAL_MODELS['prefs'] === 'function') {
-        this.prefs = new this.INTERNAL_MODELS['prefs'](this.defaults.prefs);
+      if (!this._prefs && this.INTERNAL_MODELS["prefs"] && typeof this.INTERNAL_MODELS["prefs"] === "function") {
+        this.prefs = new this.INTERNAL_MODELS["prefs"](this.defaults.prefs);
       }
       return this._prefs;
     },
@@ -79,8 +79,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         delete this._prefs;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['prefs'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["prefs"](value);
         }
       }
       this._prefs = value;
@@ -91,7 +91,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     get: function() {
       if (this.prefs && !this.prefs.preferedDashboardType) {
         if (this._appbrand === "phophlo") {
-          this.debug(' setting preferedDashboardType from user ' + this._appbrand);
+          this.debug(" setting preferedDashboardType from user " + this._appbrand);
 
           this.prefs.preferedDashboardType = "experimenter";
         }
@@ -104,18 +104,18 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       }
 
       if (this._appbrand) {
-        this.warn('appbrand cannot be modified by client side apps.');
+        this.warn("appbrand cannot be modified by client side apps.");
       } else {
         if (value.trim) {
           value = value.trim();
         }
         this._appbrand = value;
       }
-      this.debug(' setting preferedDashboardType from user ' + this._appbrand);
+      this.debug(" setting preferedDashboardType from user " + this._appbrand);
       if (this.prefs && !this.prefs.preferedDashboardType) {
         if (this._appbrand === "phophlo") {
           this.prefs._preferedDashboardType = "experimenter";
-          this.debug(' it is now ' + this.prefs.preferedDashboardType);
+          this.debug(" it is now " + this.prefs.preferedDashboardType);
 
         }
       }

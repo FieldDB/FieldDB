@@ -1,6 +1,6 @@
 /* globals window */
 var CORS = require("./CORS").CORS;
-var Diacritics = require('diacritic');
+var Diacritics = require("diacritic");
 var Q = require("q");
 
 // var FieldDBDate = function FieldDBDate(options) {
@@ -30,7 +30,7 @@ var Q = require("q");
 //       }
 //       if (value.replace) {
 //         try {
-//           value = value.replace(/["\\]/g, '');
+//           value = value.replace(/["\\]/g, "");
 //           value = new Date(value);
 //           /* Use date modified as a timestamp if it isnt one already */
 //           value = value.getTime();
@@ -73,18 +73,27 @@ var Q = require("q");
 var FieldDBObject = function FieldDBObject(json) {
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
-  if (json && json.confidential && this.INTERNAL_MODELS['confidential']) {
-    this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
+  if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
+    this.confidential = new this.INTERNAL_MODELS["confidential"](json.confidential);
+  }
+  if (this.INTERNAL_MODELS) {
+    this.debug("parsing with ", this.INTERNAL_MODELS);
   }
   var simpleModels = [];
   for (var member in json) {
     if (!json.hasOwnProperty(member)) {
       continue;
     }
-    this.debug("JSON: " + member, this.INTERNAL_MODELS);
+    this.debug("JSON: " + member);
     if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      this.debug("Parsing model: " + member);
-      json[member] = new this.INTERNAL_MODELS[member](json[member]);
+      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.type === "ContextualizableObject") {
+        this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
+        simpleModels.push(member);
+      } else {
+        this.debug("Parsing model: " + member);
+        json[member] = new this.INTERNAL_MODELS[member](json[member]);
+      }
+
     } else {
       simpleModels.push(member);
     }
@@ -97,6 +106,10 @@ var FieldDBObject = function FieldDBObject(json) {
   if (!this.id) {
     this.dateCreated = Date.now();
   }
+
+  this.render = this.render || function(options) {
+    this.warn("Rendering, but the render was not injected for this " + this.type, options);
+  };
 };
 
 FieldDBObject.DEFAULT_STRING = "";
@@ -106,6 +119,9 @@ FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v2.0.1";
 FieldDBObject.DEFAULT_DATE = 0;
 
+
+/* set the application if you want global state (ie for checking if a user is authorized) */
+// FieldDBObject.application = {}
 
 /**
  * The uuid generator uses a "GUID" like generation to create a unique string.
@@ -117,7 +133,7 @@ FieldDBObject.uuidGenerator = function() {
   var S4 = function() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   };
-  return Date.now() + (S4() + S4()  + S4()  + S4()  + S4()  + S4() + S4() + S4());
+  return Date.now() + (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
 };
 
 /** @lends FieldDBObject.prototype */
@@ -134,7 +150,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     },
     set: function(value) {
       if (value !== this.type) {
-        this.warn('Using type ' + this.type + ' when the incoming object was ' + value);
+        this.warn("Using type " + this.type + " when the incoming object was " + value);
       }
     }
   },
@@ -167,14 +183,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   debug: {
     value: function(message, message2, message3, message4) {
       try {
-        if (window.navigator && window.navigator.appName === 'Microsoft Internet Explorer') {
+        if (window.navigator && window.navigator.appName === "Microsoft Internet Explorer") {
           return;
         }
       } catch (e) {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log(this.type.toUpperCase() + ' DEBUG: ' + message);
+        console.log(this.type.toUpperCase() + " DEBUG: " + message);
 
         if (message2) {
           console.log(message2);
@@ -217,16 +233,40 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   bug: {
     value: function(message) {
       if (this.bugMessage) {
+        if (this.bugMessage.indexOf(message) > -1) {
+          this.warn("Not repeating bug message: " + message);
+          return;
+        }
         this.bugMessage += ";;; ";
       } else {
         this.bugMessage = "";
       }
+
       this.bugMessage = this.bugMessage + message;
       try {
         window.alert(message);
       } catch (e) {
-        console.warn(this.type.toUpperCase() + ' BUG: ' + message);
+        console.warn(this.type.toUpperCase() + " BUG: " + message);
       }
+    }
+  },
+  alwaysConfirmOkay: {
+    get: function() {
+      if (this.perObjectAlwaysConfirmOkay === undefined) {
+        return false;
+      } else {
+        return this.perObjectAlwaysConfirmOkay;
+      }
+    },
+    set: function(value) {
+      if (value === this.perObjectAlwaysConfirmOkay) {
+        return;
+      }
+      if (value === null || value === undefined) {
+        delete this.perObjectAlwaysConfirmOkay;
+        return;
+      }
+      this.perObjectAlwaysConfirmOkay = value;
     }
   },
   confirm: {
@@ -237,11 +277,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.confirmMessage = "";
       }
       this.confirmMessage = this.confirmMessage + message;
+      if (this.alwaysConfirmOkay) {
+        console.warn(this.type.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
+        return this.alwaysConfirmOkay;
+      }
       try {
         return window.confirm(message);
       } catch (e) {
-        console.warn(this.type.toUpperCase() + ' ASKING USER: ' + message + ' pretending they said no.');
-        return false;
+        console.warn(this.type.toUpperCase() + " ASKING USER: " + message + " pretending they said " + this.alwaysConfirmOkay);
+        return this.alwaysConfirmOkay;
       }
     }
   },
@@ -253,7 +297,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.warnMessage = "";
       }
       this.warnMessage = this.warnMessage + message;
-      console.warn(this.type.toUpperCase() + ' WARN: ' + message);
+      console.warn(this.type.toUpperCase() + " WARN: " + message);
       if (message2) {
         console.warn(message2);
       }
@@ -267,7 +311,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn(this.type.toUpperCase() + ' TODO: ' + message);
+      console.warn(this.type.toUpperCase() + " TODO: " + message);
       if (message2) {
         console.warn(message2);
       }
@@ -302,11 +346,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       try {
         browserVersion = window.navigator.appVersion;
       } catch (e) {
-        browserVersion = 'PhantomJS unknown';
+        browserVersion = "PhantomJS unknown";
       }
 
       this._dateModified = Date.now();
-      if (!this.id) {
+      if (!this._rev) {
         this._dateCreated = Date.now();
         this.enteredByUser = {
           browserVersion: browserVersion
@@ -318,10 +362,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
       }
 
-      var url = this.id ? '/' + this.id : '';
+      var url = this.id ? "/" + this.id : "";
       url = this.url + url;
       CORS.makeCORSRequest({
-        type: this.id ? 'PUT' : 'POST',
+        type: this.id ? "PUT" : "POST",
         dataType: "json",
         url: url,
         data: this.toJSON()
@@ -351,10 +395,24 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  saveToGit: {
+    value: function(commit) {
+      var deferred = Q.defer(),
+        self = this;
+      Q.nextTick(function() {
+        self.todo("If in nodejs, write to file and do a git commit with optional user's email who modified the file and push ot a branch with that user's username");
+        self.debug("Commit to be used: ", commit);
+        deferred.resolve(self);
+      });
+      return deferred.promise;
+    }
+  },
+
   equals: {
     value: function(anotherObject) {
       for (var aproperty in this) {
-        if (!this.hasOwnProperty(aproperty)) {
+        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function") {
+          this.debug("skipping equality of " + aproperty);
           continue;
         }
         if (typeof this[aproperty].equals === "function") {
@@ -442,7 +500,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           resultObject[aproperty] = anotherObject[aproperty];
         } else {
           //  if two arrays: concat
-          if (Object.prototype.toString.call(anObject[aproperty]) === '[object Array]' && Object.prototype.toString.call(anotherObject[aproperty]) === '[object Array]') {
+          if (Object.prototype.toString.call(anObject[aproperty]) === "[object Array]" && Object.prototype.toString.call(anotherObject[aproperty]) === "[object Array]") {
             this.debug(aproperty + " was an array, concatinating with the new value", anObject[aproperty], " ->", anotherObject[aproperty]);
             resultObject[aproperty] = anObject[aproperty].concat(anotherObject[aproperty]);
 
@@ -518,7 +576,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       this.fetching = true;
       CORS.makeCORSRequest({
-        type: 'GET',
+        type: "GET",
         dataType: "json",
         url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
@@ -548,6 +606,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  application: {
+    get: function() {
+      return FieldDBObject.application;
+    }
+  },
+
   id: {
     get: function() {
       return this._id || FieldDBObject.DEFAULT_STRING;
@@ -566,7 +630,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       // var originalValue = value + "";
       // value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
       // if (value === null) {
-      //   this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+      //   this.bug("Invalid id, not using " + originalValue + " id remains as " + this._id);
       //   return;
       // }
       this._id = value;
@@ -657,7 +721,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (value.replace) {
         try {
-          value = value.replace(/["\\]/g, '');
+          value = value.replace(/["\\]/g, "");
           value = new Date(value);
           /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
@@ -683,7 +747,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (value.replace) {
         try {
-          value = value.replace(/["\\]/g, '');
+          value = value.replace(/["\\]/g, "");
           value = new Date(value);
           /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
@@ -707,8 +771,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete this._comments;
         return;
       } else {
-        if (typeof this.INTERNAL_MODELS['comments'] === "function" && Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['comments'](value);
+        if (typeof this.INTERNAL_MODELS["comments"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["comments"](value);
         }
       }
       this._comments = value;
@@ -733,6 +797,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       /* this object has been updated to this version */
       this.version = this.version;
+      /* force id to be set if possible */
+      // this.id = this.id;
 
       for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
@@ -778,6 +844,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json.decryptedMode;
       delete json.bugMessage;
       delete json.warnMessage;
+      delete json.perObjectDebugMode;
+      delete json.perObjectAlwaysConfirmOkay;
+      delete json.application;
+      delete json.contextualizer;
       if (this._collection !== "private_corpuses") {
         delete json.confidential;
         delete json.confidentialEncrypter;
@@ -829,30 +899,38 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  contextualizer: {
+    get: function() {
+      if (this.application && this.application.contextualizer) {
+        return this.application.contextualizer;
+      }
+    }
+  },
+
   /**
    *  Cleans a value to become a primary key on an object (replaces punctuation and symbols with underscore)
-   *  formerly: item.replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, "")
+   *  formerly: item.replace(/[-\""+=?.*&^%,\/\[\]{}() ]/g, "")
    *
    * @param  String value the potential primary key to be cleaned
    * @return String       the value cleaned and safe as a primary key
    */
   sanitizeStringForFileSystem: {
     value: function(value, optionalReplacementCharacter) {
-      this.debug('sanitizeStringForPrimaryKey ' + value);
+      this.debug("sanitizeStringForPrimaryKey " + value);
       if (!value) {
         return null;
       }
       if (optionalReplacementCharacter === undefined || optionalReplacementCharacter === "-") {
-        optionalReplacementCharacter = '_';
+        optionalReplacementCharacter = "_";
       }
       if (value.trim) {
         value = Diacritics.clean(value);
-        this.debug('sanitizeStringForPrimaryKey ' + value);
+        this.debug("sanitizeStringForPrimaryKey " + value);
 
-        value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, '').replace(/_$/, '');
-        this.debug('sanitizeStringForPrimaryKey ' + value);
+        value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, "").replace(/_$/, "");
+        this.debug("sanitizeStringForPrimaryKey " + value);
         return value;
-      } else if (typeof value === 'number') {
+      } else if (typeof value === "number") {
         return parseInt(value, 10);
       } else {
         return null;
@@ -862,7 +940,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   sanitizeStringForPrimaryKey: {
     value: function(value, optionalReplacementCharacter) {
-      this.debug('sanitizeStringForPrimaryKey ' + value);
+      this.debug("sanitizeStringForPrimaryKey " + value);
       if (!value) {
         return null;
       }
@@ -870,7 +948,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         value = value.replace(/-/g, "_");
       }
       value = this.sanitizeStringForFileSystem(value, optionalReplacementCharacter);
-      if (value && typeof value !== 'number') {
+      if (value && typeof value !== "number") {
         return this.camelCased(value);
       }
     }

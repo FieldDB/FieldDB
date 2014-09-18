@@ -1,6 +1,6 @@
 
-var Collection = require('./../Collection').Collection;
-var Comment = require('./Comment').Comment;
+var Collection = require("./../Collection").Collection;
+var Comment = require("./Comment").Comment;
 
 /**
  * @class
@@ -23,7 +23,7 @@ Comments.prototype = Object.create(Collection.prototype, /** @lends Comments.pro
   },
 
   primaryKey: {
-    value: 'timestamp'
+    value: "timestamp"
   },
 
   INTERNAL_MODELS: {

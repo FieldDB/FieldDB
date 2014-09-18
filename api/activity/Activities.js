@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var Activity = require('./Activity').Activity;
+var Collection = require("./../Collection").Collection;
+var Activity = require("./Activity").Activity;
 
 /**
  * @class
@@ -22,7 +22,7 @@ Activities.prototype = Object.create(Collection.prototype, /** @lends Activities
   },
 
   // primaryKey: {
-  //   value: 'timestamp' //not unique enough
+  //   value: "timestamp" //not unique enough
   // },
 
   INTERNAL_MODELS: {

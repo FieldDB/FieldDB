@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class A HotKey is a keyboard shortcut that uses one key (or a
@@ -31,7 +31,7 @@ HotKey.prototype = Object.create(FieldDBObject.prototype, /** @lends HotKey.prot
   keySequence: {
     get: function() {
       var value = this.firstKey + "+" + this.secondKey;
-      this.debug('Getting keySequence ' + value);
+      this.debug("Getting keySequence " + value);
       return value;
     }
   }

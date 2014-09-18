@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class Comments allow users to collaborate between each other and take

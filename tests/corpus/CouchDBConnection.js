@@ -9,7 +9,7 @@ var CouchDBConnection = function(url, user) {
 
     var that = this;
     CORS.makeCORSRequest({
-      type: 'POST',
+      type: "POST",
       url: that.url,
       data: that.user,
       success: function(serverResults) {

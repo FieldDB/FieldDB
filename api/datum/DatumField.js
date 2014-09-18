@@ -88,7 +88,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       var originalValue = value + "";
       value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
       if (value === null) {
-        this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+        this.bug("Invalid id, not using " + originalValue + " id remains as " + this._id);
         return;
       }
       this._id = value;
@@ -393,7 +393,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
               if (value.indexOf("confidential:") === 0 && !this._encryptedValue) {
                 this._encryptedValue = value;
                 this._value = this.mask;
-                this.debug("This is probably a new field initialization from old data (the value has 'confidential:' in it, and yet the encryptedValue isn't set");
+                this.debug("This is probably a new field initialization from old data (the value has \"confidential:\" in it, and yet the encryptedValue isn't set");
               } else {
                 this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
               }
