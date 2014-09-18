@@ -1,9 +1,12 @@
 /* globals window */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var ELanguages = require("./ELanguages").ELanguages;
+var CORS = require("./../CORS").CORS;
 var Q = require("q");
 
 var english_texts = require("./en/messages.json");
 var spanish_texts = require("./es/messages.json");
+var elanguages = require("./elanguages.json");
 
 /**
  * @class The contextualizer can resolves strings depending on context and locale of the user
@@ -32,6 +35,9 @@ var Contextualizer = function Contextualizer(options) {
   if (!options.currentContext) {
     options.currentContext = "default";
   }
+  if (!options.elanguages) {
+    options.elanguages = elanguages;
+  }
   FieldDBObject.apply(this, localArguments);
   return this;
 };
@@ -41,12 +47,30 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     value: Contextualizer
   },
 
+  INTERNAL_MODELS: {
+    value: {
+      elanguages: ELanguages
+    }
+  },
+
   _require: {
     value: (typeof global !== "undefined") ? global.require : (typeof window !== "undefined") ? window.require : null
   },
 
   data: {
     value: {}
+  },
+
+  availableLanguages: {
+    get: function() {
+      var languageCodes = [];
+      for (var code in this.data) {
+        if (this.data.hasOwnProperty(code)) {
+          languageCodes.push(this.elanguages[code]);
+        }
+      }
+      return languageCodes;
+    }
   },
 
   defaults: {
@@ -105,11 +129,12 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         return result;
       }
 
+      var keepTrying = true;
       if (this.data[this.currentLocale] && this.data[this.currentLocale][result] && this.data[this.currentLocale][result].message !== undefined && this.data[this.currentLocale][result].message) {
         result = this.data[this.currentLocale][result].message;
         this.debug("Resolving localization using requested language: ", result);
+        keepTrying = false;
       } else {
-        var keepTrying = true;
         if (typeof message === "object" && message.default) {
           if (this.data[this.currentLocale] && this.data[this.currentLocale][message.default] && this.data[this.currentLocale][message.default].message !== undefined && this.data[this.currentLocale][message.default].message) {
             result = this.data[this.currentLocale][message.default].message;
@@ -125,6 +150,11 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           result = this.data[this.defaultLocale][result].message;
           this.warn("Resolving localization using default: ", result);
         }
+      }
+
+      if (keepTrying && !this.requestedCorpusSpecificLocalizations && FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.loaded) {
+        FieldDBObject.application.corpus.getCorpusSpecificLocalizations();
+        this.requestedCorpusSpecificLocalizations = true;
       }
       return result;
     }
@@ -177,45 +207,88 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       return result;
     }
   },
-  /*
-  TODO this doesnt work in a chrome app sandbox, so use the addMessagesToContextualizedStrings instead
-   */
-  addFiles: {
-    value: function(files) {
-      var allDone = [],
-        self = this,
-        promise;
 
-      var processJSON = function(localeCode) {
-        promise.then(function(contents) {
-          contents = JSON.parse(contents);
-          return self.addMessagesToContextualizedStrings(localeCode, contents);
-        });
-      };
-      for (var f = 0; f < files.length; f++) {
-        this.data[files[f].localeCode] = this.data[files[f].localeCode] || {};
+  addUrls: {
+    value: function(files, baseUrl) {
+      var promises = [],
+        f;
 
-        this.debug("Loading " + files[f].path);
-        promise = this._require.read(files[f].path);
-        processJSON(files[f].localeCode); //TODO test this
-        allDone.push(promise);
+      for (f = 0; f < files.length; f++) {
+        promises.push(this.addUrl(files[f], baseUrl));
       }
-      return Q.all(allDone);
+      return Q.all(promises);
+    }
+  },
+
+  addUrl: {
+    value: function(file, baseUrl) {
+      var deferred = Q.defer(),
+        localeCode,
+        self = this;
+
+      if (!baseUrl && FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.url) {
+        console.log("using corpus as base url");
+        baseUrl = FieldDBObject.application.corpus.url;
+      }
+
+      if (file.indexOf("/messages.json" > -1)) {
+        localeCode = file.replace("/messages.json", "");
+        if (localeCode.indexOf("/") > -1) {
+          localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
+        }
+      } else {
+        localeCode = "en";
+      }
+
+      CORS.makeCORSRequest({
+        method: "GET",
+        url: baseUrl + "/" + file,
+        dataType: "json"
+      }).then(function(localeMessages) {
+        self.originalDocs = self.originalDocs || [];
+        self.originalDocs.push(file);
+        self.addMessagesToContextualizedStrings(localeCode, localeMessages)
+          .then(deferred.resolve,
+            deferred.reject);
+      }, function(error) {
+        console.log("There werent any locales at this url" + baseUrl + " :( Maybe this database has no custom locale messages.", error);
+      });
+
+      return deferred.promise;
     }
   },
 
   addMessagesToContextualizedStrings: {
     value: function(localeCode, localeData) {
-      if (!localeData) {
-        return;
-      }
+      var deferred = Q.defer(),
+        self = this;
 
-      for (var message in localeData) {
-        if (localeData.hasOwnProperty(message)) {
-          this.data[localeCode] = this.data[localeCode] || {};
-          this.data[localeCode][message] = localeData[message];
+      Q.nextTick(function() {
+
+        if (!localeData) {
+          deferred.reject("The locales data was empty!");
         }
-      }
+
+        localeCode = localeData._id.replace("/messages.json", "");
+        if (localeCode.indexOf("/") > -1) {
+          localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
+        }
+        localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
+        if (!localeCode || localeCode.length < 2) {
+          localeCode = "default";
+        }
+
+
+        for (var message in localeData) {
+          if (localeData.hasOwnProperty(message) && message.indexOf("_") !== 0) {
+            self.data[localeCode] = self.data[localeCode] || {};
+            self.data[localeCode][message] = localeData[message];
+          }
+        }
+        deferred.resolve(self.data);
+
+      });
+      return deferred.promise;
     }
   },
 

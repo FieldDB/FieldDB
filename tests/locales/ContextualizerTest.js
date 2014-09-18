@@ -27,6 +27,18 @@ describe("Contextualizer", function() {
     });
   });
 
+  describe("elanguages", function() {
+    it("should have a list of elanguages with their details", function() {
+      var contextualizer = new Contextualizer({
+        debugMode: true
+      });
+      expect(contextualizer.elanguages).toBeDefined();
+      expect(contextualizer.elanguages["fr"].iso).toEqual("fr");
+      expect(contextualizer.elanguages["fr"].name).toEqual("French");
+      expect(contextualizer.elanguages["fr"].nativeName).toEqual("français");
+    });
+  });
+
   describe("accept user contributions", function() {
     it("should be able to save the messages.json to a corpus", function(done) {
       var contextualizer = new Contextualizer();
