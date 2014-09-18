@@ -1,6 +1,6 @@
 /* globals window */
 var CORS = require("./CORS").CORS;
-var Diacritics = require('diacritic');
+var Diacritics = require("diacritic");
 var Q = require("q");
 
 // var FieldDBDate = function FieldDBDate(options) {
@@ -30,7 +30,7 @@ var Q = require("q");
 //       }
 //       if (value.replace) {
 //         try {
-//           value = value.replace(/["\\]/g, '');
+//           value = value.replace(/["\\]/g, "");
 //           value = new Date(value);
 //           /* Use date modified as a timestamp if it isnt one already */
 //           value = value.getTime();
@@ -73,8 +73,8 @@ var Q = require("q");
 var FieldDBObject = function FieldDBObject(json) {
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
-  if (json && json.confidential && this.INTERNAL_MODELS['confidential']) {
-    this.confidential = new this.INTERNAL_MODELS['confidential'](json.confidential);
+  if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
+    this.confidential = new this.INTERNAL_MODELS["confidential"](json.confidential);
   }
   if (this.INTERNAL_MODELS) {
     this.debug("parsing with ", this.INTERNAL_MODELS);
@@ -86,7 +86,7 @@ var FieldDBObject = function FieldDBObject(json) {
     }
     this.debug("JSON: " + member);
     if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.type === 'ContextualizableObject') {
+      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.type === "ContextualizableObject") {
         this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
         simpleModels.push(member);
       } else {
@@ -108,7 +108,7 @@ var FieldDBObject = function FieldDBObject(json) {
   }
 
   this.render = this.render || function(options) {
-    this.warn('Rendering, but the render was not injected for this ' + this.type, options);
+    this.warn("Rendering, but the render was not injected for this " + this.type, options);
   };
 };
 
@@ -150,7 +150,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     },
     set: function(value) {
       if (value !== this.type) {
-        this.warn('Using type ' + this.type + ' when the incoming object was ' + value);
+        this.warn("Using type " + this.type + " when the incoming object was " + value);
       }
     }
   },
@@ -183,14 +183,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   debug: {
     value: function(message, message2, message3, message4) {
       try {
-        if (window.navigator && window.navigator.appName === 'Microsoft Internet Explorer') {
+        if (window.navigator && window.navigator.appName === "Microsoft Internet Explorer") {
           return;
         }
       } catch (e) {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log(this.type.toUpperCase() + ' DEBUG: ' + message);
+        console.log(this.type.toUpperCase() + " DEBUG: " + message);
 
         if (message2) {
           console.log(message2);
@@ -234,7 +234,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function(message) {
       if (this.bugMessage) {
         if (this.bugMessage.indexOf(message) > -1) {
-          this.warn('Not repeating bug message: ' + message);
+          this.warn("Not repeating bug message: " + message);
           return;
         }
         this.bugMessage += ";;; ";
@@ -246,7 +246,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       try {
         window.alert(message);
       } catch (e) {
-        console.warn(this.type.toUpperCase() + ' BUG: ' + message);
+        console.warn(this.type.toUpperCase() + " BUG: " + message);
       }
     }
   },
@@ -278,13 +278,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       this.confirmMessage = this.confirmMessage + message;
       if (this.alwaysConfirmOkay) {
-        console.warn(this.type.toUpperCase() + ' NOT ASKING USER: ' + message + ' \nThe code decided that they would probably yes and it wasnt worth asking.');
+        console.warn(this.type.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
         return this.alwaysConfirmOkay;
       }
       try {
         return window.confirm(message);
       } catch (e) {
-        console.warn(this.type.toUpperCase() + ' ASKING USER: ' + message + ' pretending they said ' + this.alwaysConfirmOkay);
+        console.warn(this.type.toUpperCase() + " ASKING USER: " + message + " pretending they said " + this.alwaysConfirmOkay);
         return this.alwaysConfirmOkay;
       }
     }
@@ -297,7 +297,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.warnMessage = "";
       }
       this.warnMessage = this.warnMessage + message;
-      console.warn(this.type.toUpperCase() + ' WARN: ' + message);
+      console.warn(this.type.toUpperCase() + " WARN: " + message);
       if (message2) {
         console.warn(message2);
       }
@@ -311,7 +311,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn(this.type.toUpperCase() + ' TODO: ' + message);
+      console.warn(this.type.toUpperCase() + " TODO: " + message);
       if (message2) {
         console.warn(message2);
       }
@@ -346,7 +346,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       try {
         browserVersion = window.navigator.appVersion;
       } catch (e) {
-        browserVersion = 'PhantomJS unknown';
+        browserVersion = "PhantomJS unknown";
       }
 
       this._dateModified = Date.now();
@@ -362,10 +362,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
       }
 
-      var url = this.id ? '/' + this.id : '';
+      var url = this.id ? "/" + this.id : "";
       url = this.url + url;
       CORS.makeCORSRequest({
-        type: this.id ? 'PUT' : 'POST',
+        type: this.id ? "PUT" : "POST",
         dataType: "json",
         url: url,
         data: this.toJSON()
@@ -500,7 +500,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           resultObject[aproperty] = anotherObject[aproperty];
         } else {
           //  if two arrays: concat
-          if (Object.prototype.toString.call(anObject[aproperty]) === '[object Array]' && Object.prototype.toString.call(anotherObject[aproperty]) === '[object Array]') {
+          if (Object.prototype.toString.call(anObject[aproperty]) === "[object Array]" && Object.prototype.toString.call(anotherObject[aproperty]) === "[object Array]") {
             this.debug(aproperty + " was an array, concatinating with the new value", anObject[aproperty], " ->", anotherObject[aproperty]);
             resultObject[aproperty] = anObject[aproperty].concat(anotherObject[aproperty]);
 
@@ -576,7 +576,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       this.fetching = true;
       CORS.makeCORSRequest({
-        type: 'GET',
+        type: "GET",
         dataType: "json",
         url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
@@ -630,7 +630,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       // var originalValue = value + "";
       // value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
       // if (value === null) {
-      //   this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+      //   this.bug("Invalid id, not using " + originalValue + " id remains as " + this._id);
       //   return;
       // }
       this._id = value;
@@ -721,7 +721,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (value.replace) {
         try {
-          value = value.replace(/["\\]/g, '');
+          value = value.replace(/["\\]/g, "");
           value = new Date(value);
           /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
@@ -747,7 +747,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (value.replace) {
         try {
-          value = value.replace(/["\\]/g, '');
+          value = value.replace(/["\\]/g, "");
           value = new Date(value);
           /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
@@ -771,8 +771,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete this._comments;
         return;
       } else {
-        if (typeof this.INTERNAL_MODELS['comments'] === "function" && Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['comments'](value);
+        if (typeof this.INTERNAL_MODELS["comments"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["comments"](value);
         }
       }
       this._comments = value;
@@ -909,28 +909,28 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   /**
    *  Cleans a value to become a primary key on an object (replaces punctuation and symbols with underscore)
-   *  formerly: item.replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, "")
+   *  formerly: item.replace(/[-\""+=?.*&^%,\/\[\]{}() ]/g, "")
    *
    * @param  String value the potential primary key to be cleaned
    * @return String       the value cleaned and safe as a primary key
    */
   sanitizeStringForFileSystem: {
     value: function(value, optionalReplacementCharacter) {
-      this.debug('sanitizeStringForPrimaryKey ' + value);
+      this.debug("sanitizeStringForPrimaryKey " + value);
       if (!value) {
         return null;
       }
       if (optionalReplacementCharacter === undefined || optionalReplacementCharacter === "-") {
-        optionalReplacementCharacter = '_';
+        optionalReplacementCharacter = "_";
       }
       if (value.trim) {
         value = Diacritics.clean(value);
-        this.debug('sanitizeStringForPrimaryKey ' + value);
+        this.debug("sanitizeStringForPrimaryKey " + value);
 
-        value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, '').replace(/_$/, '');
-        this.debug('sanitizeStringForPrimaryKey ' + value);
+        value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, "").replace(/_$/, "");
+        this.debug("sanitizeStringForPrimaryKey " + value);
         return value;
-      } else if (typeof value === 'number') {
+      } else if (typeof value === "number") {
         return parseInt(value, 10);
       } else {
         return null;
@@ -940,7 +940,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   sanitizeStringForPrimaryKey: {
     value: function(value, optionalReplacementCharacter) {
-      this.debug('sanitizeStringForPrimaryKey ' + value);
+      this.debug("sanitizeStringForPrimaryKey " + value);
       if (!value) {
         return null;
       }
@@ -948,7 +948,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         value = value.replace(/-/g, "_");
       }
       value = this.sanitizeStringForFileSystem(value, optionalReplacementCharacter);
-      if (value && typeof value !== 'number') {
+      if (value && typeof value !== "number") {
         return this.camelCased(value);
       }
     }

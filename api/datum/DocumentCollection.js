@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var Document = require('./Document').Document;
+var Collection = require("./../Collection").Collection;
+var Document = require("./Document").Document;
 
 /**
  * @class Collection of CouchDB docs
@@ -22,7 +22,7 @@ DocumentCollection.prototype = Object.create(Collection.prototype, /** @lends Do
   },
 
   primaryKey: {
-    value: 'id'
+    value: "id"
   },
 
   INTERNAL_MODELS: {

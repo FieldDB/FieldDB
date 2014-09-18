@@ -1,11 +1,11 @@
 /* global window, OPrime */
 var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
-var Session = require('./../FieldDBObject').FieldDBObject;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var Session = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Permissions = require('./../Collection').Collection;
-var Q = require('q');
+var Permissions = require("./../Collection").Collection;
+var Q = require("q");
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -107,8 +107,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._replicatedCorpusUrls;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._replicatedCorpusUrls = value;
@@ -127,8 +127,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._olacExportConnections;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._olacExportConnections = value;
@@ -198,8 +198,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this.unserializedSessions;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this.unserializedSessions = value;
@@ -231,9 +231,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._confidential;
         return;
       } else {
-        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS['confidential'] && typeof this.INTERNAL_MODELS['confidential'] === "function" && value.constructor !== this.INTERNAL_MODELS['confidential']) {
+        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS["confidential"] && typeof this.INTERNAL_MODELS["confidential"] === "function" && value.constructor !== this.INTERNAL_MODELS["confidential"]) {
           this.debug("Parsing model: " + value);
-          value = new this.INTERNAL_MODELS['confidential'](value);
+          value = new this.INTERNAL_MODELS["confidential"](value);
         }
       }
       this._confidential = value;
@@ -302,8 +302,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._validationStati;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['datumStates'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["datumStates"](value);
         }
       }
       this._validationStati = value;
@@ -322,8 +322,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._tags;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['tags'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["tags"](value);
         }
       }
       this._tags = value;
@@ -342,8 +342,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._datumFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['datumFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["datumFields"](value);
         }
       }
       this._datumFields = value;
@@ -353,7 +353,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   participantFields: {
     get: function() {
       if (!this._participantFields) {
-        this._participantFields = new this.INTERNAL_MODELS['participantFields'](Corpus.prototype.defaults_psycholinguistics.participantFields);
+        this._participantFields = new this.INTERNAL_MODELS["participantFields"](Corpus.prototype.defaults_psycholinguistics.participantFields);
       }
       return this._participantFields;
     },
@@ -365,8 +365,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._participantFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['participantFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["participantFields"](value);
         }
       }
       this._participantFields = value;
@@ -385,8 +385,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._conversationFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['conversationFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["conversationFields"](value);
         }
       }
       this._conversationFields = value;
@@ -405,8 +405,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._sessionFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._sessionFields = value;
@@ -448,7 +448,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             self.runningloadOrCreateCorpusByPouchName = false;
             self.id = corpora[0]._id;
             self.fetch(baseUrl).then(function(result) {
-              self.debug('Finished fetch of corpus ', result);
+              self.debug("Finished fetch of corpus ", result);
               deferred.resolve(result);
             }, function(reason) {
               deferred.reject(reason);
@@ -466,7 +466,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   fetchPublicSelf: {
     value: function() {
-      this.todo('test fetchPublicSelf');
+      this.todo("test fetchPublicSelf");
       if (!this.dbname) {
         throw "Cannot load corpus's public self, its dbname was undefined";
       }
@@ -505,7 +505,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   loadPermissions: {
     value: function() {
-      this.todo('test loadPermissions');
+      this.todo("test loadPermissions");
       var deferred = Q.defer(),
         self = this;
 
@@ -597,7 +597,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         verbicon: "icon-comment",
         directobjecticon: "",
         directobject: "'" + commentstring + "'",
-        indirectobject: "on <i class='icon-cloud'></i><a href='#corpus/" + this.id + "'>" + this.get('title') + "</a>",
+        indirectobject: "on <i class='icon-cloud'></i><a href='#corpus/" + this.id + "'>" + this.get("title") + "</a>",
         teamOrPersonal: "personal",
         context: " via Offline App."
       });
@@ -741,7 +741,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       var deferred = Q.defer();
 
       if (!uri) {
-        throw 'Uri must be specified ';
+        throw "Uri must be specified ";
       }
 
       Q.nextTick(function() {
@@ -775,10 +775,10 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
       var newModel = false;
       if (!this.id) {
-        self.debug('New corpus');
+        self.debug("New corpus");
         newModel = true;
       } else {
-        self.debug('Existing corpus');
+        self.debug("Existing corpus");
       }
       var oldrev = this.get("_rev");
 

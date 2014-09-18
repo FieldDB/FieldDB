@@ -1,4 +1,4 @@
-var Speaker = require('./Speaker').Speaker;
+var Speaker = require("./Speaker").Speaker;
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
 /**

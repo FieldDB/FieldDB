@@ -1,7 +1,7 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var UserMask = require('./UserMask').UserMask;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var UserMask = require("./UserMask").UserMask;
 
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
@@ -15,8 +15,8 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
  * Speakers can have any number of additional fields or metadata
  * that a team might use to help cluster or understand variation in data.
  *
- * As 'Informant' is not politically correct in many contexts, and 'consultant' is
- * ambigious word outside of field work, the word 'speaker' is used in communication with
+ * As "Informant" is not politically correct in many contexts, and "consultant" is
+ * ambigious word outside of field work, the word "speaker" is used in communication with
  * users and in the url of db queries/api.
  *
  * A speaker might also be associated to a user. In this case a speaker
@@ -94,14 +94,14 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       return this.buildGravatar();
     },
     set: function(value) {
-      this.warn('Cannot set the gravatar of a ' + this.type + ' (it must be anonymous).' + value);
+      this.warn("Cannot set the gravatar of a " + this.type + " (it must be anonymous)." + value);
     }
   },
 
   username: {
     get: function() {
       if (this.fields && this.fields.username && this.fields.username.value) {
-        // this.debug('this.fields.username.value :', this.fields.username.value + ":");
+        // this.debug("this.fields.username.value :", this.fields.username.value + ":");
 
         if (this.fields.confidentiality.value === "generalize") {
           this.fields.username.mask = "A native speaker";
@@ -172,7 +172,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
         this.fields.username.decryptedMode = false;
       }
       if (actualUsername && value.toLowerCase().indexOf(actualUsername) > -1) {
-        this.bug('Cannot set the anonymous code to contain any part of the user\'s actual username, this would potentially breach their confidentiality.');
+        this.bug("Cannot set the anonymous code to contain any part of the user's actual username, this would potentially breach their confidentiality.");
         return;
       }
       if (!this.fields) {
@@ -197,11 +197,11 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
         return;
       }
       if (typeof value.encrypt !== "function" && value.secretkey) {
-        value = new this.INTERNAL_MODELS['confidential'](value);
+        value = new this.INTERNAL_MODELS["confidential"](value);
       }
       this.confidentialEncrypter = value;
       if (this.fields) {
-        // this.debug('setting speaker fields confidential in the Speaker.confidential set function.');
+        // this.debug("setting speaker fields confidential in the Speaker.confidential set function.");
         this.fields.confidential = value;
       }
     }
@@ -309,7 +309,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   fields: {
     get: function() {
       if (this._fields) {
-        // this.debug('setting speaker fields confidential in the Speaker.fields get function.');
+        // this.debug("setting speaker fields confidential in the Speaker.fields get function.");
 
         // this._fields.encrypted = true;
         // this._fields.decryptedMode = true;
@@ -325,8 +325,8 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
         delete this._fields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['fields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["fields"](value);
         }
       }
       this._fields = value;
@@ -339,12 +339,12 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
 
         var self = this;
         if (this.public && this.username) {
-          this.userMask = new this.INTERNAL_MODELS['user']({});
+          this.userMask = new this.INTERNAL_MODELS["user"]({});
           this.userMask.username = this.username;
           this.userMask.fetch().then(function(result) {
-            self.debug('Fetched speaker\'s user mask', result);
+            self.debug("Fetched speaker\"s user mask", result);
           }, function(error) {
-            self.debug('Failed to fetch speaker\'s user mask', error);
+            self.debug("Failed to fetch speaker\"s user mask", error);
           });
 
         } else {

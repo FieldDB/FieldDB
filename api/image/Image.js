@@ -1,4 +1,4 @@
-var AudioVideo = require('./../audio_video/AudioVideo').AudioVideo;
+var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 
 /**
  * @class The Image is a type of AudioVideo with any additional fields or

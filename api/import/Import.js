@@ -1,28 +1,28 @@
 /* globals OPrime, window, escape, $, FileReader */
 var AudioVideo = require("./../FieldDBObject").FieldDBObject;
-var AudioVideos = require('./../Collection').Collection;
-var Collection = require('./../Collection').Collection;
-var CORS = require('./../CORS').CORS;
+var AudioVideos = require("./../Collection").Collection;
+var Collection = require("./../Collection").Collection;
+var CORS = require("./../CORS").CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
 var Participant = require("./../user/Participant").Participant;
 var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumField = require('./../datum/DatumField').DatumField;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
-var DataList = require('./../data_list/DataList').DataList;
+var DatumField = require("./../datum/DatumField").DatumField;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var DataList = require("./../data_list/DataList").DataList;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 // var FileReader = {};
 var Session = require("./../FieldDBObject").FieldDBObject;
-var TextGrid = require('textgrid').TextGrid;
+var TextGrid = require("textgrid").TextGrid;
 var X2JS = {};
-var Q = require('q');
-var _ = require('underscore');
+var Q = require("q");
+var _ = require("underscore");
 
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
  *
  * @property {FileList} files These are the file(s) that were dragged in.
- * @property {String} pouchname This is the corpusid where the data should be imported
+ * @property {String} pouchname This is the corpusid wherej the data should be imported
  * @property {DatumFields} fields The fields array contains titles of the data columns.
  * @property {DataList} datalist The datalist imported, to hold the data before it is saved.
  * @property {Event} event The drag/drop event.
@@ -109,10 +109,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self = this;
 
       if (!options) {
-        throw 'Options must be specified {}';
+        throw "Options must be specified {}";
       }
       if (!options.uri) {
-        throw 'Uri must be specified in the options in order to import it' + JSON.stringify(options);
+        throw "Uri must be specified in the options in order to import it" + JSON.stringify(options);
       }
 
       Q.nextTick(function() {
@@ -121,10 +121,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           .then(self.import)
           .then(function(result) {
             self.debug("Import is finished");
-            if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+            if (options && typeof options.next === "function" /* enable use as middleware */ ) {
               options.next();
             }
-            // self.debug('result.datum', result.datum);
+            // self.debug("result.datum", result.datum);
             self.documentCollection.add(result.datum);
             deferred.resolve(result);
           })
@@ -145,7 +145,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       Q.nextTick(function() {
         if (!options) {
-          throw 'Options must be specified {}';
+          throw "Options must be specified {}";
         }
 
         var pipeline = function(optionsWithADatum) {
@@ -159,10 +159,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               }
             });
           } else {
-            self.debug('TODO reading url in browser');
+            self.debug("TODO reading url in browser");
             CORS.makeCORSRequest({
-              type: 'GET',
-              dataType: 'json',
+              type: "GET",
+              dataType: "json",
               uri: optionsWithADatum.uri
             }).then(function(data) {
                 self.debug(data);
@@ -235,12 +235,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.session.setConsultants(self.consultants);
           /* put metadata in the session goals */
           self.session.goal = self.metadataLines.join("\n") + "\n" + self.session.goal;
-          self.render('session');
+          self.render("session");
         }
         self.datalist.description = descript;
 
         var headers = [];
-        if (self.importType === 'participants') {
+        if (self.importType === "participants") {
           self.importFields = new DatumFields(self.corpus.participantFields.clone());
         } else {
           self.importFields = new DatumFields(self.corpus.datumFields.clone());
@@ -252,18 +252,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           if (!correspondingDatumField || correspondingDatumField.length === 0) {
             correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
             correspondingDatumField[0].id = item;
-            if (self.importType === 'participants') {
+            if (self.importType === "participants") {
               correspondingDatumField[0].labelExperimenters = item;
             } else {
               correspondingDatumField[0].labelFieldLinguists = item;
             }
-            correspondingDatumField[0].help = 'This field came from file import';
+            correspondingDatumField[0].help = "This field came from file import";
             var lookAgain = self.importFields.find(correspondingDatumField[0].id);
             if (lookAgain.length) {
 
             }
           }
-          // console.log('correspondingDatumField ', correspondingDatumField);
+          // console.log("correspondingDatumField ", correspondingDatumField);
           if (headers.indexOf(correspondingDatumField) >= 0) {
             self.bug("You seem to have some column labels that are duplicated" +
               " (the same label on two columns). This will result in a strange " +
@@ -281,7 +281,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           if (headers[f].id === "" || headers[f].id === undefined) {
             //do nothing
           } else if (headers[f].id.toLowerCase().indexOf("checkedwith") > -1 || headers[f].id.toLowerCase().indexOf("checkedby") > -1 || headers[f].id.toLowerCase().indexOf("publishedin") > -1) {
-            fieldToGeneralize = self.importFields.find('validationStatus');
+            fieldToGeneralize = self.importFields.find("validationStatus");
             if (fieldToGeneralize.length > 0) {
               self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
               fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
@@ -289,7 +289,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               headers[f] = fieldToGeneralize[0];
             }
           } else if (headers[f].id.toLowerCase().indexOf("codepermanent") > -1) {
-            fieldToGeneralize = self.importFields.find('anonymouscode');
+            fieldToGeneralize = self.importFields.find("anonymouscode");
             if (fieldToGeneralize.length > 0) {
               self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
               fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
@@ -297,7 +297,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               headers[f] = fieldToGeneralize[0];
             }
           } else if (headers[f].id.toLowerCase().indexOf("nsection") > -1) {
-            fieldToGeneralize = self.importFields.find('coursenumber');
+            fieldToGeneralize = self.importFields.find("coursenumber");
             if (fieldToGeneralize.length > 0) {
               self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
               fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
@@ -305,7 +305,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               headers[f] = fieldToGeneralize[0];
             }
           } else if (headers[f].id.toLowerCase().indexOf("prenom") > -1) {
-            fieldToGeneralize = self.importFields.find('firstname');
+            fieldToGeneralize = self.importFields.find("firstname");
             if (fieldToGeneralize.length > 0) {
               self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
               fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
@@ -313,7 +313,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               headers[f] = fieldToGeneralize[0];
             }
           } else if (headers[f].id.toLowerCase().indexOf("nomdefamille") > -1) {
-            fieldToGeneralize = self.importFields.find('lastname');
+            fieldToGeneralize = self.importFields.find("lastname");
             if (fieldToGeneralize.length > 0) {
               self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
               fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
@@ -321,7 +321,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               headers[f] = fieldToGeneralize[0];
             }
           } else if (headers[f].id.toLowerCase().indexOf("datedenaissance") > -1) {
-            fieldToGeneralize = self.importFields.find('dateofbirth');
+            fieldToGeneralize = self.importFields.find("dateofbirth");
             if (fieldToGeneralize.length > 0) {
               self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
               fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
@@ -340,7 +340,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //Import from html table that the user might have edited.
         self.asCSV.map(function(row) {
           var docToSave;
-          if (self.importType === 'participants') {
+          if (self.importType === "participants") {
             docToSave = new Participant({
               confidential: self.corpus.confidential,
               fields: new DatumFields(JSON.parse(JSON.stringify(headers)))
@@ -366,12 +366,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
             //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
             //            }
-            if (self.importType === 'participants') {
+            if (self.importType === "participants") {
               docToSave.fields[headers[index].id].value = item.trim();
             } else {
               docToSave.datumFields[headers[index].id].value = item.trim();
             }
-            // console.log('new doc', docToSave);
+            // console.log("new doc", docToSave);
 
             testForEmptyness += item.trim();
           }
@@ -388,10 +388,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
         var savePromises = [];
         self.documentCollection._collection.map(function(builtDoc) {
-          if (self.importType === 'participants') {
+          if (self.importType === "participants") {
             builtDoc.id = builtDoc.anonymousCode || Date.now();
             builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
-            // console.log(' saving', builtDoc.id);
+            // console.log(" saving", builtDoc.id);
             self.progress.total++;
             self.datalist.docs.add(builtDoc);
 
@@ -593,7 +593,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //       filledWithDefaults: true,
         //       pouchname: self.dbname
         //     });
-        //     //copy the corpus's datum fields and empty them.
+        //     //copy the corpus"s datum fields and empty them.
         //     var datumfields = self.importFields.clone();
         //     for (var x in datumfields) {
         //       datumfields[x].mask = "";
@@ -650,7 +650,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         try {
 
           var failFunction = function(reason) {
-            if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+            if (options && typeof options.next === "function" /* enable use as middleware */ ) {
               options.next();
             }
             deferred.reject(reason);
@@ -658,7 +658,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
           var successFunction = function(optionsWithResults) {
             self.debug("Preprocesing success");
-            if (optionsWithResults && typeof optionsWithResults.next === 'function' /* enable use as middleware */ ) {
+            if (optionsWithResults && typeof optionsWithResults.next === "function" /* enable use as middleware */ ) {
               optionsWithResults.next();
             }
             deferred.resolve(optionsWithResults);
@@ -708,7 +708,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.todo("TODO in the import");
 
       Q.nextTick(function() {
-        if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        if (options && typeof options.next === "function" /* enable use as middleware */ ) {
           options.next();
         }
         deferred.resolve(options);
@@ -741,11 +741,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   documentCollection: {
     get: function() {
-      this.debug('Getting Datum collection');
+      this.debug("Getting Datum collection");
       if (!this._documentCollection) {
         this._documentCollection = new Collection({
           inverted: false,
-          key: '_id'
+          key: "_id"
         });
       }
       this.debug("Returning a collection");
@@ -767,7 +767,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   pause: {
     value: function(options) {
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+      if (options && typeof options.next === "function" /* enable use as middleware */ ) {
         options.next();
       }
       return this;
@@ -782,7 +782,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   resume: {
     value: function(options) {
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+      if (options && typeof options.next === "function" /* enable use as middleware */ ) {
         options.next();
       }
       return this;
@@ -805,8 +805,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   corpus: {
     get: function() {
       if (!this._corpus) {
-        // throw 'Import\'s corpus is undefined';
-        // this.warn('Import\'s corpus is undefined');
+        // throw "Import\"s corpus is undefined";
+        // this.warn("Import\"s corpus is undefined");
         return;
       }
       return this._corpus;
@@ -839,13 +839,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var firstrow = rows[0];
       var hasQuotes = false;
       //If it looks like it already has quotes:
-      if (rows[0].split('","').length > 2 && rows[5].split('","').length > 2) {
+      if (rows[0].split("","").length > 2 && rows[5].split("","").length > 2) {
         hasQuotes = true;
         self.status = self.status + " Detected text was already surrounded in quotes.";
       }
       for (var l in rows) {
         if (hasQuotes) {
-          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split('","');
+          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split("","");
           //          var withoutQuotes = [];
           //          _.each(rows[l],function(d){
           //            withoutQuotes.push(d.replace(/"/g,""));
@@ -863,7 +863,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows.length > 3) {
         firstrow = firstrow;
         if (hasQuotes) {
-          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split('","');
+          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("","");
         } else {
           header = self.parseLineCSV(firstrow);
         }
@@ -897,7 +897,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var CSV = [];
 
       // Insert space before character ",". This is to anticipate
-      // 'split' in IE
+      // "split" in IE
       // try this:
       //
       // var a=",,,a,,b,,c,,,,d";
@@ -910,7 +910,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       lineCSV = lineCSV.split(/,/g);
 
-      // This is continuing of 'split' issue in IE
+      // This is continuing of "split" issue in IE
       // remove all trailing space in each field
       var i,
         j;
@@ -944,7 +944,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           // space
           CSV[j] = CSV[j].replace(/^"|"$/g, ""); // remove " on the beginning
           // and end
-          CSV[j] = CSV[j].replace(/""/g, '"'); // replace "" with "
+          CSV[j] = CSV[j].replace(/""/g, "\""); // replace "" with "
           j++;
         }
       }
@@ -968,7 +968,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       //add the header to the session
       //    HEADER can be put in the session and in the datalist
-      var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g, "\n").replace(/[\[\]{}]/g, "").replace(/:/g, " : ").replace(/"/g, "").replace(/\\n/g, "").replace(/file : /g, "file:").replace(/ : \//g, ":/").trim();
+      var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g, "\n").replace(/[\[\]{}]/g, "").replace(/:/g, " : ").replace(/"/g, "").replace(/\n/g, "").replace(/file : /g, "file:").replace(/ : \//g, ":/").trim();
       //TODO turn these into session fields
       self.set("status", self.status + "\n" + annotationDetails);
 
@@ -1194,7 +1194,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             //If the line starts with \ its a column
             if (lines[l].match(/^\\/)) {
               var pieces = lines[l].split(/ +/);
-              columnhead = pieces[0].replace('\\', "");
+              columnhead = pieces[0].replace("\\", "");
               matrix[currentDatum][columnhead] = lines[l].replace(pieces[0], "");
               header.push(columnhead);
             } else {
@@ -1241,8 +1241,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var textridUrl = OPrime.audioUrl + "/" + this.get("pouchname") + "/" + fileDetails.fileBaseName + ".TextGrid";
       $.ajax({
         url: textridUrl,
-        type: 'get',
-        // dataType: 'text',
+        type: "get",
+        // dataType: "text",
         success: function(results) {
           if (results) {
             fileDetails.textgrid = results;
@@ -1475,10 +1475,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   importRawText: {
     value: function(text) {
       if (this.ignoreLineBreaksInRawText) {
-        text.replace(/\n+/g, ' ').replace(/\r+/g, ' ');
+        text.replace(/\n+/g, " ").replace(/\r+/g, " ");
       }
       this.documentCollection.add({
-        id: 'orthography',
+        id: "orthography",
         value: text
       });
       this.debug("added a datum to the collection");
@@ -1513,8 +1513,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
         self.progress.total = files.length;
         for (var i = 0, file; file = files[i]; i++) {
-          var details = [escape(file.name), file.type || 'n/a', '-', file.size, 'bytes, last modified:', file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a'].join(' ');
-          self.status = self.status + '; ' + details;
+          var details = [escape(file.name), file.type || "n/a", "-", file.size, "bytes, last modified:", file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : "n/a"].join(" ");
+          self.status = self.status + "; " + details;
           fileDetails.push(JSON.parse(JSON.stringify(file)));
           if (options.readOptions) {
             promisses.push(options.readOptions.readFileFunction.apply(self, [{
@@ -1539,10 +1539,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             return result.value;
           }));
         }, function(results) {
-          self.error = 'Error processing files';
+          self.error = "Error processing files";
           deferred.reject(results);
         }).catch(function(error) {
-          console.warn('There was an error when importing these options ', error, options);
+          console.warn("There was an error when importing these options ", error, options);
         });
 
       });
@@ -1559,17 +1559,17 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var deferred = Q.defer(),
         self = this;
 
-      this.debug('readFileIntoRawText', options);
+      this.debug("readFileIntoRawText", options);
       Q.nextTick(function() {
         if (!options) {
           options = {
-            error: 'Options must be defined for readFileIntoRawText'
+            error: "Options must be defined for readFileIntoRawText"
           };
           deferred.reject(options);
           return;
         }
         if (!options.file) {
-          options.error = 'Options: file must be defined for readFileIntoRawText';
+          options.error = "Options: file must be defined for readFileIntoRawText";
           deferred.reject(options);
           return;
         }
@@ -1587,7 +1587,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
         };
 
-        var blob = '';
+        var blob = "";
         if (options.file.slice) {
           blob = options.file.slice(options.start, options.stop + 1);
         } else if (options.file.mozSlice) {
@@ -1596,7 +1596,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           blob = options.file.webkitSlice(options.start, options.stop + 1);
         }
         // reader.readAsBinaryString(blob);
-        // reader.readAsText(blob, 'UTF-8');
+        // reader.readAsText(blob, "UTF-8");
         reader.readAsText(blob);
 
       });
@@ -1649,7 +1649,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       //if the user is just typing, try raw text
       if (this.files[fileIndex]) {
-        var fileExtension = this.files[fileIndex].name.split('.').pop().toLowerCase();
+        var fileExtension = this.files[fileIndex].name.split(".").pop().toLowerCase();
         if (fileExtension === "csv") {
           importType.csv.confidence++;
         } else if (fileExtension === "txt") {
@@ -1686,7 +1686,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
   readBlob: {
     value: function(file, callback, opt_startByte, opt_stopByte) {
-      console.warn('Read blob is deprecated', file, callback, opt_startByte, opt_stopByte);
+      console.warn("Read blob is deprecated", file, callback, opt_startByte, opt_stopByte);
     }
   }
 });

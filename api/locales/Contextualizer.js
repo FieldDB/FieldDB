@@ -9,7 +9,7 @@ var spanish_texts = require("./es/messages.json");
  *  @name  Contextualizer
  *
  * @property {String} defaultLocale The language/context to use if a translation/contextualization is missing.
- * @property {String} currentLocale The current locale to use (often the browsers default locale, or a corpus' default locale).
+ * @property {String} currentLocale The current locale to use (often the browsers default locale, or a corpus" default locale).
  *
  * @extends FieldDBObject
  * @constructs

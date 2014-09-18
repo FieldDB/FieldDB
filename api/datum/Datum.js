@@ -1,16 +1,16 @@
 /* globals window, $, _ , OPrime*/
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var AudioVideos = require('./../audio_video/AudioVideos').AudioVideos;
-var Comments = require('./../comment/Comments').Comments;
-var Datums = require('./../Collection').Collection;
-var DatumField = require('./DatumField').DatumField;
-var DatumFields = require('./DatumFields').DatumFields;
-// var DatumState = require('./../FieldDBObject').FieldDBObject;
-var DatumStates = require('./DatumStates').DatumStates;
-// var DatumTag = require('./../FieldDBObject').FieldDBObject;
-var DatumTags = require('./DatumTags').DatumTags;
-var Images = require('./../image/Images').Images;
-var Session = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
+var Comments = require("./../comment/Comments").Comments;
+var Datums = require("./../Collection").Collection;
+var DatumField = require("./DatumField").DatumField;
+var DatumFields = require("./DatumFields").DatumFields;
+// var DatumState = require("./../FieldDBObject").FieldDBObject;
+var DatumStates = require("./DatumStates").DatumStates;
+// var DatumTag = require("./../FieldDBObject").FieldDBObject;
+var DatumTags = require("./DatumTags").DatumTags;
+var Images = require("./../image/Images").Images;
+var Session = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class The Datum widget is the place where all linguistic data is
@@ -79,8 +79,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         delete this._datumFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['datumFields'] === 'function') {
-          value = new this.INTERNAL_MODELS['datumFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["datumFields"] === "function") {
+          value = new this.INTERNAL_MODELS["datumFields"](value);
         }
       }
       this._datumFields = value;
@@ -89,7 +89,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   audioVideo: {
     get: function() {
-      if (this._audioVideo && this._audioVideo.type === 'AudioVideos') {
+      if (this._audioVideo && this._audioVideo.type === "AudioVideos") {
         this._audioVideo.dbname = this.dbname;
       }
       return this._audioVideo || FieldDBObject.DEFAULT_COLLECTION;
@@ -102,8 +102,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         delete this._audioVideo;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['audioVideo'] === 'function') {
-          value = new this.INTERNAL_MODELS['audioVideo'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["audioVideo"] === "function") {
+          value = new this.INTERNAL_MODELS["audioVideo"](value);
         }
       }
       this._audioVideo = value;
@@ -112,7 +112,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   images: {
     get: function() {
-      if (this._images && this._images.type === 'Images') {
+      if (this._images && this._images.type === "Images") {
         this._images.dbname = this.dbname;
       }
       return this._images || FieldDBObject.DEFAULT_COLLECTION;
@@ -125,8 +125,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         delete this._images;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['images'] === 'function') {
-          value = new this.INTERNAL_MODELS['images'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["images"] === "function") {
+          value = new this.INTERNAL_MODELS["images"](value);
         }
       }
       this._images = value;
@@ -253,7 +253,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       var self = this;
       try {
         //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
-        window.pageTracker._trackPageview('/search_results.php?q=' + queryString);
+        window.pageTracker._trackPageview("/search_results.php?q=" + queryString);
       } catch (e) {
         self.debug("Search Analytics not working.");
       }
@@ -987,7 +987,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         if (typeof failurecallback === "function") {
           failurecallback();
         } else {
-          self.bug('Datum save error. I cant save this datum in this corpus, it belongs to another corpus. ');
+          self.bug("Datum save error. I cant save this datum in this corpus, it belongs to another corpus. ");
         }
         return;
       }
@@ -1032,7 +1032,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
       self.save(null, {
         success: function(model, response) {
-          self.debug('Datum save success');
+          self.debug("Datum save success");
           var utterance = model.get("datumFields").where({
             label: "utterance"
           })[0].get("mask");
@@ -1057,7 +1057,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
             verbicon: verbicon,
             directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
             directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get("title") + "</a>",
             teamOrPersonal: "team",
             context: " via Offline App."
           });
@@ -1067,7 +1067,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
             verbicon: verbicon,
             directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
             directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get("title") + "</a>",
             teamOrPersonal: "personal",
             context: " via Offline App."
           });
@@ -1156,7 +1156,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           if (typeof failurecallback === "function") {
             failurecallback();
           } else {
-            self.bug('Datum save error: ' + f.reason);
+            self.bug("Datum save error: " + f.reason);
           }
         }
       });
@@ -1200,8 +1200,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    */
   highlight: {
     value: function(text, stringToHighlight, className) {
-      className = className || 'highlight';
-      var re = new RegExp('(' + stringToHighlight + ')', "gi");
+      className = className || "highlight";
+      var re = new RegExp("(" + stringToHighlight + ")", "gi");
       return text.replace(re, "<span class='" + className + "'>$1</span>");
     }
   }

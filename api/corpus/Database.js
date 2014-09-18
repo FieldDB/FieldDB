@@ -1,13 +1,13 @@
-var Q = require('q');
-var CORS = require('../CORS').CORS;
-var FieldDBObject = require('../FieldDBObject').FieldDBObject;
+var Q = require("q");
+var CORS = require("../CORS").CORS;
+var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 
 var Database = function Database(options) {
   this.debug("In Database ", options);
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_COLLECTION_MAPREDUCE = '_design/pages/_view/COLLECTION?descending=true';
+var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true";
 var DEFAULT_BASE_AUTH_URL = "https://localhost:3181";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
@@ -97,7 +97,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   fetchCollection: {
     value: function(collectionType, start, end, limit, reduce) {
-      this.todo('Provide pagination ', start, end, limit, reduce);
+      this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
         self = this,
         baseUrl = this.url;
@@ -130,20 +130,20 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       };
 
       // CORS.makeCORSRequest({
-      //   type: 'POST',
+      //   type: "POST",
       //   dataType: "json",
       //   url: self.url + "/_session",
       //   data: {
       //     name: self.dbname.split("-")[0],
-      //     password: 'testtest'
+      //     password: "testtest"
       //   }
       // }).then(function(session) {
 
-      if (Object.prototype.toString.call(collectionType) === '[object Array]') {
+      if (Object.prototype.toString.call(collectionType) === "[object Array]") {
         var promises = [];
         collectionType.map(function(id) {
           promises.push(CORS.makeCORSRequest({
-            type: 'GET',
+            type: "GET",
             dataType: "json",
             url: baseUrl + "/" + self.dbname + "/" + id
           }));
@@ -166,7 +166,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
       } else {
         CORS.makeCORSRequest({
-          type: 'GET',
+          type: "GET",
           dataType: "json",
           url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
         }).then(function(result) {
@@ -198,9 +198,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
 
       CORS.makeCORSRequest({
-        type: 'GET',
-        dataType: 'json',
-        url: baseUrl + '/_session'
+        type: "GET",
+        dataType: "json",
+        url: baseUrl + "/_session"
       }).then(function(sessionInfo) {
         self.debug(sessionInfo);
         deferred.resolve(sessionInfo);
@@ -228,14 +228,14 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
 
       CORS.makeCORSRequest({
-        type: 'POST',
+        type: "POST",
         dataType: "json",
         url: authUrl + "/login",
         data: loginDetails
       }).then(function(result) {
           if (result.user) {
             CORS.makeCORSRequest({
-              type: 'POST',
+              type: "POST",
               dataType: "json",
               url: baseUrl + "/_session",
               data: {
@@ -275,7 +275,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
 
       CORS.makeCORSRequest({
-        type: 'DELETE',
+        type: "DELETE",
         dataType: "json",
         url: baseUrl + "/_session"
       }).then(function(result) {
@@ -305,22 +305,22 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
 
       CORS.makeCORSRequest({
-        type: 'POST',
+        type: "POST",
         dataType: "json",
         url: "https://localhost:3183/register",
         data: {
           username: this.dbname.split("-")[0],
-          password: 'testtest'
+          password: "testtest"
         }
       }).then(function(result) {
           if (result.user) {
             CORS.makeCORSRequest({
-              type: 'POST',
+              type: "POST",
               dataType: "json",
               url: baseUrl + "/_session",
               data: {
                 name: result.user.username,
-                password: 'testtest'
+                password: "testtest"
               }
             }).then(function(session) {
               self.debug(session);

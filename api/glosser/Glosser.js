@@ -7,7 +7,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
     glosserURL = couchurl + "/_design/pages/_view/precedence_rules?group=true";
   }
   OPrime.makeCORSRequest({
-    type : 'GET',
+    type : "GET",
     url : glosserURL,
     success : function(rules) {
       localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
@@ -17,7 +17,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
       var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
         return rule.key.x + "-" + rule.key.y;
       }).value();
-      
+
       // Save the reduced precedence rules in localStorage
       localStorage.setItem(pouchname+"reducedRules", JSON.stringify(reducedRules));
       Glosser.currentCorpusName = pouchname;
@@ -35,17 +35,17 @@ Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is
  * very conservative.
- * 
+ *
  * @param {String} unparsedUtterance The raw utterance line.
  *
- * @return {String} The guessed morphemes line. 
+ * @return {String} The guessed morphemes line.
  */
 Glosser.morphemefinder = function(unparsedUtterance) {
-  var potentialParse = '';
-  
+  var potentialParse = "";
+
   // Get the precedence rules from localStorage
   var rules = localStorage.getItem(Glosser.currentCorpusName+"reducedRules");
-  
+
   var parsedWords = [];
   if (rules) {
     // Parse the rules from JSON into an object
@@ -53,7 +53,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
 
     // Divide the utterance line into words
     var unparsedWords = unparsedUtterance.trim().split(/ +/);
-    
+
     for (var word in unparsedWords) {
       // Add the start/end-of-word character to the word
       unparsedWords[word] = "@" + unparsedWords[word] + "@";
@@ -112,7 +112,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
           }
         }
       }
-      
+
       // Combine prefix and suffix templates into one regular expression which
       // can be tested against the word to find a potential parse.
       // Regular expressions will look something like
@@ -123,7 +123,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
         template[slot] = "(" + template[slot] + ")";
       }
       var regex = new RegExp(template.join("(.*)"), "");
-    
+
       // Use the regular expression to find a guessed morphemes line
       potentialParse = unparsedWords[word]
           .replace(regex, "$1-$2-$3-$4-$5-$6-$7-$8-$9") // Use backreferences to parse into morphemes
@@ -134,11 +134,11 @@ Glosser.morphemefinder = function(unparsedUtterance) {
           .replace(/-$/, "");     // Remove "-" at the end of the word
       if (OPrime.debugMode) OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
           + " is " + potentialParse);
-          
+
       parsedWords.push(potentialParse);
     }
   }
-  
+
   return parsedWords.join(" ");
 };
 Glosser.toastedUserToSync = false;
@@ -171,16 +171,16 @@ Glosser.glossFinder = function(morphemesLine){
       // Take the first gloss for this morpheme
       var matchingNode = _.max(lexiconNodes.where({morpheme: morphemes[m]}), function(node) { return node.get("value"); });
 //      console.log(matchingNode);
-      var gloss = "?";   // If there's no matching gloss, use question marks
+      var gloss = "?";   // If there"s no matching gloss, use question marks
       if (matchingNode) {
         gloss = matchingNode.get("gloss");
       }
       glosses.push(gloss);
     }
-    
+
     glossGroups.push(glosses.join("-"));
   }
-  
+
   // Replace the gloss line with the guessed glosses
   return glossGroups.join(" ");
 };
@@ -233,7 +233,7 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
       });
     }
   }
-  
+
   /*
    * Build the morphemes into nodes and color them by their morpheme length, could be a good measure of outliers
    */
@@ -244,7 +244,7 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
       length : morphemes[m].length
     });
   }
-  
+
   /*
    * Create the JSON required by D3
    */
@@ -252,18 +252,18 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
   rulesGraph.links = morphemeLinks;
   rulesGraph.nodes = morphemenodes;
   Glosser.rulesGraph = rulesGraph;
-  
+
   return rulesGraph;
 }
 Glosser.saveAndInterConnectInApp = function(callback){
-  
+
   if(typeof callback == "function"){
     callback();
   }
 }
 /*
  * Some sample D3 from the force-html.html example
- * 
+ *
  */
 //Glosser.rulesGraph = Glosser.rulesGraph || {};
 Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, pouchname){
@@ -294,29 +294,29 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   height = 300;
 
   /*
-  Short morphemes will be blue, long will be red 
+  Short morphemes will be blue, long will be red
   */
   var color = d3.scale.linear()
-      .range(['darkblue', 'darkred']) // or use hex values
+      .range(["darkblue", "darkred"]) // or use hex values
       .domain([1, 8]);
 
   var x = d3.scale.linear()
      .range([0, width]);
-   
+
   var y = d3.scale.linear()
        .range([0, height - 40]);
-  
+
   var force = d3.layout.force()
     .charge(-120)
     .linkStrength(0.2)
     .linkDistance(30)
     .size([width, height]);
-  
+
   var svg = d3.select(divElement).append("svg")
     .attr("width", width)
-    .attr('title', "Morphology Visualization for "+ pouchname)
+    .attr("title", "Morphology Visualization for "+ pouchname)
     .attr("height", height);
-  
+
   var titletext = "Click to search morphemes in your corpus";
   if(rulesGraph.nodes.length < 3){
     titletext = "Your morpheme visualizer will appear here after you have synced.";
@@ -329,28 +329,28 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     .style("fill", "#cccccc")
 //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(titletext);
-  
+
   var tooltip = null;
-  
+
   //d3.json("./libs/rules.json", function(json) {
   force
       .nodes(json.nodes)
       .links(json.links)
       .start();
-  
+
   var link = svg.selectAll("line.link")
       .data(json.links)
     .enter().append("line")
       .attr("class", "link")
       .style("stroke-width", function(d) { return Math.sqrt(d.value); });
-  
+
   var node = svg.selectAll("circle.node")
       .data(json.nodes)
     .enter().append("circle")
       .attr("class", "node")
       .attr("r", 5)
-      .style("fill", function(d) { 
-        return color(d.length); 
+      .style("fill", function(d) {
+        return color(d.length);
       })
       .on("mouseover", function(d) {
         tooltip = d3.select("body")
@@ -369,22 +369,22 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
         if(window.app && window.app.router){
           // window.app.router.showEmbeddedSearch(pouchname, "morphemes:"+d.name);
           var url = "corpus/"+pouchname+"/search/"+"morphemes:"+d.name;
-          // window.location.replace(url);    
+          // window.location.replace(url);
           window.app.router.navigate(url, {trigger: true});
 
         }
       })
       .call(force.drag);
-  
+
   node.append("title")
       .text(function(d) { return d.name; });
-  
+
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
-  
+
     node.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
   });

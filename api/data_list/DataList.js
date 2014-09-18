@@ -4,7 +4,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Document = require("./../datum/Document").Document;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
-var ContextualizableObject = require('./../locales/ContextualizableObject').ContextualizableObject;
+var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
 var Q = require("q");
 
 /**
@@ -129,8 +129,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         delete this._docs;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['docs'] === 'function') {
-          value = new this.INTERNAL_MODELS['docs'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["docs"] === "function") {
+          value = new this.INTERNAL_MODELS["docs"](value);
         }
       }
       this._docs = value;
@@ -164,7 +164,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             guessedType = Document.prototype.guessType(doc);
             self.debug("request complete");
           }
-          self.debug('Converting doc into type ' + guessedType);
+          self.debug("Converting doc into type " + guessedType);
 
           if (guessedType === "Datum") {
             doc = new Datum(doc);
@@ -174,10 +174,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           } else if (guessedType === "FieldDBObject") {
             doc = new FieldDBObject(doc);
           } else if (FieldDB[guessedType]) {
-            self.warn('Converting doc into guessed type ' + guessedType);
+            self.warn("Converting doc into guessed type " + guessedType);
             doc = new FieldDB[guessedType](doc);
           } else {
-            self.warn('This doc does not have a type than can be used, it might display oddly ', doc);
+            self.warn("This doc does not have a type than can be used, it might display oddly ", doc);
             doc = new FieldDBObject(doc);
           }
 
@@ -188,7 +188,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         }
         self.debug("adding doc", doc);
         self.docs.add(doc);
-        if (doc.type === 'Datum') {
+        if (doc.type === "Datum") {
           self.showDocPosition = true;
           self.showDocCheckboxes = true;
           self.docsAreReorderable = true;
@@ -203,7 +203,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
       if ((!this._docIds || this._docIds.length === 0) && (this.docs && this.docs.length > 0)) {
         this._docIds = this.docs.map(function(doc) {
-          self.debug('geting doc id of this doc ', doc);
+          self.debug("geting doc id of this doc ", doc);
           return doc.id;
         });
       }

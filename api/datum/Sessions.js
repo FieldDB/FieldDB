@@ -2,7 +2,7 @@ define([
     "backbone",
     "datum/Session"
 ], function(
-    Backbone, 
+    Backbone,
     Session
 ) {
     var Sessions = Backbone.Collection.extend(
@@ -16,7 +16,7 @@ define([
         */
        initialize: function() {
        },
-       
+
        /**
         * backbone-couchdb adaptor set up
         */
@@ -33,11 +33,11 @@ define([
        comparator : function(doc){
          return doc.get("timestamp");
        },
-       
+
        internalModels : Session,
 
        model: Session,
-       
+
        fetchSessions : function(suces, fail){
          this.fetch({
            error : function(model, xhr, options) {
@@ -63,6 +63,6 @@ define([
          });
        }
     });
-    
+
     return Sessions;
 });
