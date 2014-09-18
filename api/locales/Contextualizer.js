@@ -1,3 +1,4 @@
+/* globals window */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Q = require("q");
 
@@ -16,6 +17,7 @@ var spanish_texts = require("./es/messages.json");
  */
 var Contextualizer = function Contextualizer(options) {
   this.debug("Constructing Contextualizer ", options);
+  // this.debugMode = true;
   var localArguments = arguments;
   if (!options) {
     options = {};
