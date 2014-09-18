@@ -263,21 +263,22 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       var deferred = Q.defer(),
         self = this;
 
-      Q.nextTick(function() {
+      // Q.nextTick(function() {
 
         if (!localeData) {
           deferred.reject("The locales data was empty!");
         }
 
-        localeCode = localeData._id.replace("/messages.json", "");
-        if (localeCode.indexOf("/") > -1) {
-          localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
+        if (!localeCode && localeData._id) {
+          localeCode = localeData._id.replace("/messages.json", "");
+          if (localeCode.indexOf("/") > -1) {
+            localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
+          }
+          localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
+          if (!localeCode || localeCode.length < 2) {
+            localeCode = "default";
+          }
         }
-        localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
-        if (!localeCode || localeCode.length < 2) {
-          localeCode = "default";
-        }
-
 
         for (var message in localeData) {
           if (localeData.hasOwnProperty(message) && message.indexOf("_") !== 0) {
@@ -287,7 +288,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         }
         deferred.resolve(self.data);
 
-      });
+      // });
       return deferred.promise;
     }
   },

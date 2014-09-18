@@ -23,6 +23,9 @@ describe("Contextualizer", function() {
       var contextualizer = new Contextualizer();
       expect(contextualizer).toBeDefined();
       contextualizer.loadDefaults();
+      expect(contextualizer.data).toBeDefined();
+      expect(contextualizer.data.en).toBeDefined();
+      expect(contextualizer.data.es).toBeDefined();
       expect(contextualizer.contextualize("locale_Username")).toEqual("Username:");
     });
   });
