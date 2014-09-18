@@ -2,6 +2,7 @@
 var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
+var package = require("./../package.json");
 
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
@@ -116,7 +117,7 @@ FieldDBObject.DEFAULT_STRING = "";
 FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
-FieldDBObject.DEFAULT_VERSION = "v2.0.1";
+FieldDBObject.DEFAULT_VERSION = "v" + package.version;
 FieldDBObject.DEFAULT_DATE = 0;
 
 

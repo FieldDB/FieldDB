@@ -147,7 +147,7 @@ describe("FieldDBObject", function() {
         type: "FieldDBObject",
         dateCreated: 1,
         _id: "123",
-        version: "v2.0.1",
+        version: FieldDBObject.DEFAULT_VERSION,
         dbname: "",
         dateModified: 0,
         comments: []

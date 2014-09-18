@@ -17,11 +17,14 @@ describe("CorpusMask ", function() {
 
   it("should have unknown defaults if not loaded from the server", function() {
     var corpus = new CorpusMask(CorpusMask.defaults);
+    var currentVersion = corpus.version;
     corpus.dbname = "lingllama-communitycorpus";
-    expect(corpus.toJSON("complete")).toEqual({
+    // delete corpus.prefs;
+    var corpusJson = corpus.toJSON("complete");
+    expect(corpusJson).toEqual({
       type: "CorpusMask",
       dbname: "lingllama-communitycorpus",
-      version: "v2.0.1",
+      version: currentVersion,
       dateCreated: 0,
       dateModified: 0,
       comments: [],
@@ -43,6 +46,7 @@ describe("CorpusMask ", function() {
       speakerFields: [],
       conversationFields: [],
       sessionFields: [],
+      prefs: corpusJson.prefs,
       pouchname: "lingllama-communitycorpus",
       api: "corpora"
     });
