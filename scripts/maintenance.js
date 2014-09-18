@@ -442,8 +442,8 @@ $.couch.allDbs({
         }
         if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
           console.log("deploying to a beta tester");
-          return;
-        } else if (dbname.indexOf("phophlo") > -1) {
+          // return;
+        } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
           console.log("deploying to a phophlo user");
         } else {
           return; /* deploy to only beta testers and/or phophlo users */
