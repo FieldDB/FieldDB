@@ -10,7 +10,7 @@
  * @requires        UserMask
  */
 (function(exports) {
-  'use strict';
+  "use strict";
   var App = require("./app/App").App;
   var PsycholinguisticsApp = require("./app/PsycholinguisticsApp").PsycholinguisticsApp;
   var Export = require("./export/Export");
@@ -69,4 +69,4 @@
   exports.FieldDB = FieldDB;
   global.FieldDB = FieldDB;
 
-}(typeof exports === 'object' && exports || this));
+}(typeof exports === "object" && exports || this));

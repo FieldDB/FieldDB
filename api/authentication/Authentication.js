@@ -1,11 +1,11 @@
 define([
-    "backbone", 
+    "backbone",
     "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
-    "OPrime" 
+    "OPrime"
 ], function(
-    Backbone, 
+    Backbone,
     Confidential,
     User,
     UserMask
@@ -16,7 +16,7 @@ define([
     /**
      * @class The Authentication Model handles login and logout and
      *        authentication locally or remotely. *
-     * 
+     *
      * @property {User} user The user is a User object (User, Bot or Consultant)
      *           which is logged in and viewing the app with that user's
      *           perspective. To check whether some data is
@@ -26,16 +26,16 @@ define([
      * @property {Boolean} staleAuthentication TODO Describe staleAuthentication.
      * @property {String} state The current state of the Authentication is either
      *           "renderLoggedIn" (if the user is not the public user) or "renderLoggedOut" (if the user is the public user).
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("AUTHENTICATION INIT");
-      this.bind('error', function(model, error) {
+      this.bind("error", function(model, error) {
         if (OPrime.debugMode) OPrime.debug("Error in Authentication  : " + error);
       });
-      
+
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -58,7 +58,7 @@ define([
       username : localStorage.getItem("username"),
       state : "loggedOut"
     },
-    
+
     // Internal models: used by the parse function
     internalModels : {
       userPrivate : User,
@@ -67,12 +67,12 @@ define([
     },
 
     staleAuthentication: true,
-    
+
     /**
      * Contacts local or remote server to verify the username and password
      * provided in the user object. Upon success, calls the callback with the
      * user.
-     * 
+     *
      * @param user A user object to verify against the authentication database
      * @param callback A callback to call upon sucess.
      */
@@ -96,7 +96,7 @@ define([
       var self= this;
       var authUrl = user.get("authUrl");
       OPrime.makeCORSRequest({
-        type : 'POST',
+        type : "POST",
         url : authUrl + "/login",
         data : dataToPost,
         success : function(serverResults) {
@@ -111,7 +111,7 @@ define([
               // authenticate
             }
           } else if (serverResults.user != null) {
-            
+
             this.staleAuthentication = false;
 
             if(OPrime.isTouchDBApp()){
@@ -123,8 +123,8 @@ define([
                 dbServer = serverResults.user.mostRecentIds.couchConnection.domain;
               }
               Android.setCredentialsAndReplicate(db, username, password, dbServer);
-            } 
-            
+            }
+
             self.saveServerResponseToUser(serverResults, successcallback);
           }
         },//end successful login
@@ -139,9 +139,9 @@ define([
           }
         },
         dataType : ""
-      });     
+      });
     },
-    
+
     logout : function(){
       localStorage.removeItem("username");
       localStorage.removeItem("mostRecentDashboard");
@@ -150,16 +150,16 @@ define([
       /* keep the user's help count*/
 //      localStorage.removeItem("helpShownCount");
 //      localStorage.removeItem("helpShownTimestamp");
-    
+
       //Destropy cookies, and load the public user
       OPrime.setCookie("username", undefined, -365);
       OPrime.setCookie("token", undefined, -365);
-      
+
       this.loadPublicUser();
     },
     /**
      * This function parses the server response and injects it into the authentication's user public and user private
-     * 
+     *
      */
     saveServerResponseToUser : function(serverResults, callbacksave){
       if (OPrime.debugMode) OPrime.debug("saveServerResponseToUser");
@@ -185,8 +185,8 @@ define([
         serverResults.user.publicSelf._id = serverResults.user._id; //this will end up as an attribute
 //        serverResults.user.publicSelf.pouchname = serverResults.user.corpuses[0].pouchname;
       }
-      
-      
+
+
       if (this.get("userPrivate") == undefined) {
         this.set("userPrivate", new User({filledWithDefaults: true}));
       }
@@ -198,7 +198,7 @@ define([
        */
       if(serverResults.user.newCorpusConnections){
         if(window.appView){
-          window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle='modal' href='#user-modal'> here </a> to see the list of corpora to which you have access.","alert-success","Added to corpus!");
+          window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle="modal" href="#user-modal"> here </a> to see the list of corpora to which you have access.","alert-success","Added to corpus!");
         }
         for(var x in serverResults.user.newCorpusConnections){
           if(_.pluck(serverResults.user.corpuses,"pouchname").indexOf(serverResults.user.newCorpusConnections[x].pouchname) == -1){
@@ -207,23 +207,23 @@ define([
         }
         delete serverResults.user.newCorpusConnections;
       }
-      
+
       u.set(u.parse(serverResults.user)); //might take internal elements that are supposed to be a backbone model, and override them
-      
+
       this.set("userPublic", this.get("userPrivate").get("publicSelf"));
       this.get("userPublic")._id = serverResults.user._id;
       this.get("userPublic").id = serverResults.user.id;
       this.get("userPublic").set("_id", serverResults.user._id);
-      
+
       if(window.appView){
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
       }
-      
+
       /* Set up the pouch with the user's most recent couchConnection if it has not already been set up */
       window.app.changePouch(serverResults.user.mostRecentIds.couchConnection);
 
-      this.get("userPublic").saveAndInterConnectInApp(); 
-      
+      this.get("userPublic").saveAndInterConnectInApp();
+
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
       this.get("confidential").set("secretkey", serverResults.user.hash);
@@ -242,7 +242,7 @@ define([
     },
     loadEncryptedUser : function(encryptedUserString, callbackload){
       if (OPrime.debugMode) OPrime.debug("loadEncryptedUser");
-      
+
 
       /*
        * If the encryptedUserString is not set, this triggers a
@@ -260,11 +260,11 @@ define([
         return;
       }
       var userString = this.get("confidential").decrypt(encryptedUserString);
-     
+
       /* Switch user to the new dev servers if they have the old ones */
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
       userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
-      
+
 
       /*
        * For debugging cors #838: Switch to use the corsproxy
@@ -272,11 +272,11 @@ define([
        */
 //      userString = userString.replace(/https/g,"http").replace(/6984/g,"3186");
 
-      
+
       var u = JSON.parse(userString);
       var data = {};
       data.user = u;
-      
+
       /* Upgrade chrome app user's to v1.38+ */
       if(OPrime.isChromeApp() && !localStorage.getItem(data.user.username+"lastUpdatedAtVersion") && data.user.username != "public" && data.user.username != "lingllama"){
         var week = data.user.appVersionWhenCreated.split(".")[1];
@@ -288,10 +288,10 @@ define([
           return;
         }
       }
-      
+
       this.saveServerResponseToUser(data, callbackload);
     },
-    
+
     loadPublicUser : function(callbackload){
       var mostRecentPublicUser = localStorage.getItem("mostRecentPublicUser") || OPrime.publicUserStaleDetails();
       mostRecentPublicUser = JSON.parse(mostRecentPublicUser);
@@ -300,7 +300,7 @@ define([
       }
       window.location.replace("index.html");
     },
-    
+
     savePublicUserForOfflineUse: function(){
       var mostRecentPublicUser =  {
         token : "",
@@ -312,17 +312,17 @@ define([
       }
       localStorage.setItem("mostRecentPublicUser", JSON.stringify(mostRecentPublicUser));
     },
-    
+
     saveAndEncryptUserToLocalStorage : function(callbacksaved){
       if (OPrime.debugMode) OPrime.debug("saveAndEncryptUserToLocalStorage");
-      
+
       /* TODO Switch user to the new dev servers if they have the old ones */
 //      userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
 //      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
-      
-      
+
+
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
-      localStorage.setItem("encryptedUser", u); 
+      localStorage.setItem("encryptedUser", u);
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
 //        window.appView.toastUser("Successfully saved user details.","alert-success","Saved!");
@@ -332,7 +332,7 @@ define([
       if(typeof callbacksaved == "function"){
         callbacksaved();
       }
-      
+
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       this.saveAndEncryptUserToLocalStorage(successcallback);
@@ -342,11 +342,11 @@ define([
      * password and authenticate them. The authenticate process brings down the
      * user from the server, and also gets their sesson token from couchdb
      * before calling the callback.
-     * 
+     *
      * If there is no quick authentication view it takes them either to the user
      * page (in the ChromeApp) or the public user page (in a couchapp) where
      * they dont have to have a corpus token to see the data, and log in
-     * 
+     *
      * @param callback
      *          a success callback which is called once the user has been backed
      *          up to the server, and their couchdb session token is ready to be
@@ -373,7 +373,7 @@ define([
         return;
       }
       window.appView.authView.showQuickAuthenticateView(null, null, function(){
-        //This happens after the user has been authenticated. 
+        //This happens after the user has been authenticated.
         if(typeof callback == "function"){
           callback();
         }
@@ -396,13 +396,13 @@ define([
       }
       var self= this;
       OPrime.makeCORSRequest({
-        type : 'POST',
+        type : "POST",
         url : authUrl + "/corpusteam",
         data : dataToPost,
         success : function(serverResults) {
           var userFriendlyErrors = serverResults.userFriendlyErrors || "";
           if (userFriendlyErrors) {
-            window.appView.toastUser(userFriendlyErrors.join("<br/>") 
+            window.appView.toastUser(userFriendlyErrors.join("<br/>")
                   , "alert-warning","Error connecting to populate corpus permissions:");
             if (typeof failcallback == "function") {
               failcallback(userFriendlyErrors.join("<br/>"));
@@ -411,7 +411,7 @@ define([
             if (typeof successcallback == "function") {
               serverResults.users.timestamp = Date.now();
               localStorage.setItem(dataToPost.pouchname+"Permissions", JSON.stringify(serverResults.users));
-              successcallback(serverResults.users); 
+              successcallback(serverResults.users);
             }
           }
         },//end successful fetch
@@ -423,7 +423,7 @@ define([
           }
         },
         dataType  : ""
-      }); 
+      });
     },
     addCorpusRoleToUser : function(role, userToAddToCorpus, successcallback, failcallback){
       var self = this;
@@ -432,7 +432,7 @@ define([
         $("#quick-authenticate-password").val("phoneme");
       }
       window.hub.subscribe("quickAuthenticationClose",function(){
-       
+
         //prepare data and send it
         var dataToPost = {};
         var authUrl = "";
@@ -447,13 +447,13 @@ define([
           }
           dataToPost.roles = [role];
           dataToPost.userToAddToRole = userToAddToCorpus.username;
-          
+
           authUrl = this.get("userPrivate").get("authUrl");
         }else{
           return;
         }
         OPrime.makeCORSRequest({
-          type : 'POST',
+          type : "POST",
           url : authUrl + "/addroletouser",
           data : dataToPost,
           success : function(serverResults) {
@@ -465,7 +465,7 @@ define([
             } else if (serverResults.roleadded != null) {
               if (OPrime.debugMode) OPrime.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
               if (typeof successcallback == "function") {
-                successcallback(userToAddToCorpus); 
+                successcallback(userToAddToCorpus);
               }
             }
           },//end successful fetch
@@ -477,16 +477,16 @@ define([
             }
           },
           dataType : ""
-        }); 
+        });
         //end send call
-        
+
         //Close the modal
         $("#quick-authenticate-modal").modal("hide");
         $("#quick-authenticate-password").val("");
-        window.hub.unsubscribe("quickAuthenticationClose", null, this); 
+        window.hub.unsubscribe("quickAuthenticationClose", null, this);
       }, self);
     }
-    
+
   });
 
   return Authentication;

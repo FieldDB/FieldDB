@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var Image = require('./Image').Image;
+var Collection = require("./../Collection").Collection;
+var Image = require("./Image").Image;
 
 /**
  * @class Images of Datum validation states
@@ -21,7 +21,7 @@ Images.prototype = Object.create(Collection.prototype, /** @lends Images.prototy
   },
 
   primaryKey: {
-    value: 'URL'
+    value: "URL"
   },
 
   INTERNAL_MODELS: {

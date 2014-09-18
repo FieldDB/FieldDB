@@ -1,4 +1,4 @@
-var App = require('./App').App;
+var App = require("./App").App;
 
 /**
  * @class The PsycholinguisticsApp is a minimal extension of the App with the preferences

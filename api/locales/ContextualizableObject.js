@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class The ContextualizableObject allows the user to label data with grammatical tags
@@ -28,7 +28,7 @@ var ContextualizableObject = function ContextualizableObject(json) {
       // }
       return;
     }
-    var stringAsKey = "locale_" + json.replace(/[^a-zA-Z0-9-]/g, '_');
+    var stringAsKey = "locale_" + json.replace(/[^a-zA-Z0-9-]/g, "_");
     var value = json;
     json = {
       default: stringAsKey
@@ -68,7 +68,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
 
   contextualizer: {
     get: function() {
-      return FieldDBObject.prototype.contextualizer
+      return FieldDBObject.prototype.contextualizer;
     }
   },
 
@@ -79,7 +79,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         return FieldDBObject.application.contextualizer.debug;
       } else {
         if (forcedebug) {
-          console.log(this.type.toUpperCase() + '-DEBUG FORCED: ' + message);
+          console.log(this.type.toUpperCase() + "-DEBUG FORCED: " + message);
 
           if (message2) {
             console.log(message2);
@@ -116,7 +116,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
 
   updateContextualization: {
     value: function(for_context, locale_string) {
-      this.debug('updateContextualization' + for_context);
+      this.debug("updateContextualization" + for_context);
       var updated;
       if (this.contextualizer) {
         this.debug(this.contextualizer.data);
@@ -133,7 +133,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
       //   message: locale_string
       // };
 
-      if (this._default == for_context) {
+      if (this._default === for_context) {
         this.originalString = locale_string;
       }
       return updated;
@@ -165,7 +165,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         // If the contextualizer doesnt have a value for this string, add it to the contextualizations... (this could introduce a lot of data into the localizations)
         if (this.contextualizer) {
           this.debug(" adding to contextualizer: " + for_context + " as " + locale_string);
-          this.contextualizer.updateContextualization(for_context, locale_string)
+          this.contextualizer.updateContextualization(for_context, locale_string);
           this.debug("added to contextualizer " + this.contextualizer.contextualize(for_context));
         }
       }

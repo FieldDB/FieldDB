@@ -1,4 +1,4 @@
-var UserMask = require('./UserMask').UserMask;
+var UserMask = require("./UserMask").UserMask;
 
 /**
  *
@@ -28,7 +28,7 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
         return;
       }
       if (value !== "team") {
-        this.warn("Cannot set team id to anything other than 'team.'");
+        this.warn("Cannot set team id to anything other than \"team.\"");
       }
       this._id = "team";
     }

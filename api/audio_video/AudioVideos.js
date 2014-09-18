@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var AudioVideo = require('./AudioVideo').AudioVideo;
+var Collection = require("./../Collection").Collection;
+var AudioVideo = require("./AudioVideo").AudioVideo;
 
 /**
  * @class AudioVideos is a minimal customization of the Collection
@@ -21,7 +21,7 @@ AudioVideos.prototype = Object.create(Collection.prototype, /** @lends AudioVide
   },
 
   primaryKey: {
-    value: 'URL'
+    value: "URL"
   },
 
   INTERNAL_MODELS: {

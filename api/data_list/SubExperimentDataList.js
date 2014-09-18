@@ -1,7 +1,7 @@
-var DataList = require('./DataList').DataList;
+var DataList = require("./DataList").DataList;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
-var ContextualizableObject = require('./../locales/ContextualizableObject').ContextualizableObject;
+var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
 
 /**
  * @class The SubExperimentDataList allows the user to add additional information

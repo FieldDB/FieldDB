@@ -1,4 +1,4 @@
-if ('undefined' === typeof window) {
+if ("undefined" === typeof window) {
   var window = {};
 }
 (function(exports) {
