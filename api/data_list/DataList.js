@@ -1,5 +1,5 @@
 /* globals FieldDB */
-var Datum = require("./../FieldDBObject").FieldDBObject;
+var Datum = require("./../datum/Datum").Datum;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Document = require("./../datum/Document").Document;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
