@@ -34,14 +34,14 @@ module.exports = function(grunt) {
       js: {
         files: ["<%= yeoman.app %>/scripts/{,*/}*.js", "<%= yeoman.app %>/bower_components/fielddb/{,*/}*.js"],
         // tasks: ["newer:jshint:all"],
-        tasks: ["newer:jshint:all", "build"],
+        tasks: ["default"],
         options: {
           livereload: 35726
         }
       },
       templates: {
         files: ["<%= yeoman.app %>/views/{,*/}*.html"],
-        tasks: ["ngtemplates", "copy:templates"],
+        tasks: ["default"],
         options: {
           livereload: 35726
         }
