@@ -581,6 +581,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
           self.fetching = false;
+          self.loaded = true;
           self.merge("self", result, "overwrite");
           deferred.resolve(self);
         },
@@ -795,6 +796,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         aproperty,
         underscorelessProperty;
 
+      if (this.fetching) {
+        throw "Cannot get json while object is fetching itself";
+      }
       /* this object has been updated to this version */
       this.version = this.version;
       /* force id to be set if possible */
@@ -841,6 +845,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       delete json.saving;
+      delete json.fetching;
+      delete json.loaded;
       delete json.decryptedMode;
       delete json.bugMessage;
       delete json.warnMessage;
