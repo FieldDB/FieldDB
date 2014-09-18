@@ -63,13 +63,30 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
   availableLanguages: {
     get: function() {
-      var languageCodes = [];
+      var availLanguages = new ELanguages(),
+        bestAvailabilityCount = 0;
+
       for (var code in this.data) {
         if (this.data.hasOwnProperty(code)) {
-          languageCodes.push(this.elanguages[code]);
+          this.elanguages[code].length = this.data[code].length;
+          if (this.elanguages[code].length > bestAvailabilityCount) {
+            availLanguages.unshift(this.elanguages[code]);
+            bestAvailabilityCount = this.elanguages[code].length
+          } else {
+            availLanguages.push(this.elanguages[code]);
+          }
         }
       }
-      return languageCodes;
+      if (bestAvailabilityCount === 0 || availLanguages.length === 0) {
+        this.todo("Ensuring that at least english is an available language, not sure if this is a good idea.");
+        availLanguages.unshift(this.elanguages.en)
+      } else {
+        availLanguages._collection.map(function(language) {
+          language.percentageOfAvailability = Math.round(language.length / bestAvailabilityCount * 100);
+          return language;
+        });
+      }
+      return availLanguages;
     }
   },
 
@@ -265,28 +282,31 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
       // Q.nextTick(function() {
 
-        if (!localeData) {
-          deferred.reject("The locales data was empty!");
-        }
+      if (!localeData) {
+        deferred.reject("The locales data was empty!");
+      }
 
-        if (!localeCode && localeData._id) {
-          localeCode = localeData._id.replace("/messages.json", "");
-          if (localeCode.indexOf("/") > -1) {
-            localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
-          }
-          localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
-          if (!localeCode || localeCode.length < 2) {
-            localeCode = "default";
-          }
+      if (!localeCode && localeData._id) {
+        localeCode = localeData._id.replace("/messages.json", "");
+        if (localeCode.indexOf("/") > -1) {
+          localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
         }
+        localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
+        if (!localeCode || localeCode.length < 2) {
+          localeCode = "default";
+        }
+      }
 
-        for (var message in localeData) {
-          if (localeData.hasOwnProperty(message) && message.indexOf("_") !== 0) {
-            self.data[localeCode] = self.data[localeCode] || {};
-            self.data[localeCode][message] = localeData[message];
-          }
+      for (var message in localeData) {
+        if (localeData.hasOwnProperty(message) && message.indexOf("_") !== 0) {
+          self.data[localeCode] = self.data[localeCode] || {
+            length: 0
+          };
+          self.data[localeCode][message] = localeData[message];
+          self.data[localeCode].length++;
         }
-        deferred.resolve(self.data);
+      }
+      deferred.resolve(self.data);
 
       // });
       return deferred.promise;
