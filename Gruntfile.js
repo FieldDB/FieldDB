@@ -123,10 +123,10 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask("docs", ["jsdoc"]);
-  grunt.registerTask("build", ["jshint", "browserify", "uglify"]);
-  grunt.registerTask("default", ["jshint", "jasmine_node", "browserify", "uglify"]);
-  grunt.registerTask("default", ["jasmine_node", "browserify", "uglify"]);
-  grunt.registerTask("travis", ["jasmine_node", "browserify", "uglify", "docs", "exec:buildFieldDBAngularCore"]);
+  grunt.registerTask("build", ["jshint", "browserify"]);
+  grunt.registerTask("dist", ["jshint", "jasmine_node", "browserify", "uglify"]);
+  grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
+  grunt.registerTask("travis", ["jshint", "jasmine_node", "browserify", "uglify", "docs", "fielddb-angular"]);
 
 };
