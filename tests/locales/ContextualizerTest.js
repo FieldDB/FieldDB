@@ -128,11 +128,11 @@ describe("Contextualizer", function() {
     it("should provide a list of available/supported locales ranked by their level of support", function() {
       var availableLanguages = contextualizer.availableLanguages;
       expect(availableLanguages.en.iso).toEqual("en");
-      expect(availableLanguages.en.length).toEqual(206);
+      expect(availableLanguages.en.length).toBeGreaterThan(206);
       expect(availableLanguages.en.percentageOfAvailability).toEqual(100);
       expect(availableLanguages.es.iso).toEqual("es");
-      expect(availableLanguages.es.length).toEqual(175);
-      expect(availableLanguages.es.percentageOfAvailability).toEqual(85);
+      expect(availableLanguages.es.length).toBeGreaterThan(175);
+      expect(availableLanguages.es.percentageOfAvailability).toEqual(Math.round(availableLanguages.es.length / availableLanguages.en.length * 100));
 
       expect(availableLanguages._collection[0].length > availableLanguages._collection[1].length);
       expect(availableLanguages._collection[0].percentageOfAvailability < availableLanguages._collection[1].percentageOfAvailability);
