@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var DatumField = require('./../datum/DatumField').DatumField;
+var Collection = require("./../Collection").Collection;
+var DatumField = require("./../datum/DatumField").DatumField;
 
 /**
  * @class Collection of Datum Field
@@ -21,13 +21,13 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
   },
 
   /**
-   *  The primary key < v2 was 'label' but we changed to use 'id' so that
-   *  'label' could be used only for a human friendly (and customizable)
+   *  The primary key < v2 was "label" but we changed to use "id" so that
+   *  "label" could be used only for a human friendly (and customizable)
    *  label while the id must remain unchanged for glossing and other automation.
    * @type {Object}
    */
   primaryKey: {
-    value: 'id'
+    value: "id"
   },
 
   INTERNAL_MODELS: {

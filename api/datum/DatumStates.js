@@ -1,5 +1,5 @@
-var DatumTags = require('./DatumTags').DatumTags;
-var DatumState = require('./DatumState').DatumState;
+var DatumTags = require("./DatumTags").DatumTags;
+var DatumState = require("./DatumState").DatumState;
 
 /**
  * @class DatumStates of Datum validation states
@@ -21,13 +21,13 @@ DatumStates.prototype = Object.create(DatumTags.prototype, /** @lends DatumState
   },
 
   /**
-   *  The primary key < v2 was 'label' but we changed to use 'id' so that
-   *  'label' could be used only for a human friendly (and customizable)
+   *  The primary key < v2 was "label" but we changed to use "id" so that
+   *  "label" could be used only for a human friendly (and customizable)
    *  label while the id must remain unchanged for glossing and other automation.
    * @type {Object}
    */
   primaryKey: {
-    value: 'validationStatus'
+    value: "validationStatus"
   },
 
   INTERNAL_MODELS: {

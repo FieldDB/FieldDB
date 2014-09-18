@@ -3,22 +3,24 @@
 <h1 ng-model="datalist.label"></h1>
 <h3>Titles:</h3>
 <ul>
-  <li ng-repeat="context in datalist.title">{{context}}</li>
+  <li ng-repeat="context in datalist.title" contenteditable ng-model="context"></li>
 </ul>
-Descriptions:
+<h3>Descriptions:</h3>
 <ul>
-  <li ng-repeat="context in datalist.description">{{context}}</li>
+  <li ng-repeat="context in datalist.description" contenteditable ng-model="context"></li>
 </ul>
-Instructions:
+<h3>Instructions:</h3>
 <ul>
-  <li ng-repeat="context in datalist.instructions">{{context}}</li>
+  <li ng-repeat="context in datalist.instructions" contenteditable ng-model="context"></li>
 </ul>
-Reinforcement Cartoon:
+<h3>Reinforcement Cartoon:</h3>
 <div>
   <img title="Before Start" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.firstImageSrc}}"/>
   <img title="N. {{$index + 1}}"  class="gravatar-medium" ng-repeat="image in datalist.reinforcementAnimation.animationImages" ng-src="{{image.incompleteImageFile}}"/>
   <img title="After Last" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.lastImageSrc}}"/>
 </div>
+
+<h3>Stimuli:</h3>
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
   <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a stimulus' number to re-order it</div>
   <div class="well"

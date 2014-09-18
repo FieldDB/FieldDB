@@ -1,3 +1,4 @@
+/* globals window */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Q = require("q");
 
@@ -9,16 +10,18 @@ var spanish_texts = require("./es/messages.json");
  *  @name  Contextualizer
  *
  * @property {String} defaultLocale The language/context to use if a translation/contextualization is missing.
- * @property {String} currentLocale The current locale to use (often the browsers default locale, or a corpus' default locale).
+ * @property {String} currentLocale The current locale to use (often the browsers default locale, or a corpus" default locale).
  *
  * @extends FieldDBObject
  * @constructs
  */
 var Contextualizer = function Contextualizer(options) {
   this.debug("Constructing Contextualizer ", options);
+  // this.debugMode = true;
+  var localArguments = arguments;
   if (!options) {
     options = {};
-    arguments = [options];
+    localArguments = [options];
   }
   if (!options.defaultLocale) {
     options.defaultLocale = "en";
@@ -29,7 +32,8 @@ var Contextualizer = function Contextualizer(options) {
   if (!options.currentContext) {
     options.currentContext = "default";
   }
-  FieldDBObject.apply(this, arguments);
+  FieldDBObject.apply(this, localArguments);
+  return this;
 };
 
 Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Contextualizer.prototype */ {
@@ -54,10 +58,27 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
-  localize: {
+  loadDefaults: {
+    value: function() {
+      if (this.defaults.en) {
+        this.addMessagesToContextualizedStrings("en", this.defaults.en);
+      } else {
+        this.debug("English Locales did not load.");
+      }
+      if (this.defaults.es) {
+        this.addMessagesToContextualizedStrings("es", this.defaults.es);
+      } else {
+        this.debug("English Locales did not load.");
+      }
+      return this;
+    }
+  },
+
+  contextualize: {
     value: function(message) {
       this.debug("Resolving localization in " + this.currentLocale);
-      var result = message;
+      var result = message,
+        aproperty;
 
       // Use the current context if the caller is requesting localization of an object
       if (typeof message === "object") {
@@ -109,6 +130,32 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
+  updateContextualization: {
+    value: function(key, value) {
+      this.data[this.currentLocale] = this.data[this.currentLocale] || {};
+      if (this.data[this.currentLocale][key] && this.data[this.currentLocale][key].message === value) {
+        return value; //no change
+      }
+      var previousMessage = "";
+      var verb = "create ";
+      if (this.data[this.currentLocale][key]) {
+        previousMessage = this.data[this.currentLocale][key].message;
+        verb = "update ";
+      }
+      var update = this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value);
+      if (update) {
+        this.data[this.currentLocale][key] = this.data[this.currentLocale][key] || {};
+        this.data[this.currentLocale][key].message = value;
+        var newLocaleItem = {};
+        newLocaleItem[key] = {
+          message: value
+        };
+        this.addMessagesToContextualizedStrings(this.currentLocale, newLocaleItem);
+      }
+      return this.data[this.currentLocale][key].message;
+    }
+  },
+
   audio: {
     value: function(key) {
       this.debug("Resolving localization in " + this.currentLocale);
@@ -142,7 +189,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       var processJSON = function(localeCode) {
         promise.then(function(contents) {
           contents = JSON.parse(contents);
-          return self.addMessagesToContextualizedStrings(contents, localeCode);
+          return self.addMessagesToContextualizedStrings(localeCode, contents);
         });
       };
       for (var f = 0; f < files.length; f++) {
@@ -158,7 +205,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
   },
 
   addMessagesToContextualizedStrings: {
-    value: function(localeData, localeCode) {
+    value: function(localeCode, localeData) {
       if (!localeData) {
         return;
       }
@@ -170,7 +217,33 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         }
       }
     }
+  },
+
+  save: {
+    value: function() {
+      var promises = [];
+      for (var locale in this.data) {
+        if (!this.data.hasOwnProperty(locale)) {
+          continue;
+        }
+        this.debug("Requsting save of " + locale);
+        var doc = new FieldDBObject(this.data[locale]);
+        this.debug(doc);
+        if (this.email) {
+          promises.push(FieldDBObject.prototype.saveToGit.apply(doc, [{
+            email: this.email,
+            message: "Updated locale messages"
+          }]));
+        } else {
+          doc.id = locale + "/messages.json";
+          promises.push(FieldDBObject.prototype.save.apply(doc));
+        }
+
+      }
+      return Q.allSettled(promises);
+    }
   }
+
 
 });
 

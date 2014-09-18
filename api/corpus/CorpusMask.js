@@ -1,12 +1,12 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var Database = require('./Database').Database;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
-var DatumStates = require('./../datum/DatumStates').DatumStates;
-var DatumTags = require('./../datum/DatumTags').DatumTags;
-var Comments = require('./../comment/Comments').Comments;
+var Database = require("./Database").Database;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var DatumStates = require("./../datum/DatumStates").DatumStates;
+var DatumTags = require("./../datum/DatumTags").DatumTags;
+var Comments = require("./../comment/Comments").Comments;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Sessions = require('./../Collection').Collection;
-var DataLists = require('./../Collection').Collection;
+var Sessions = require("./../Collection").Collection;
+var DataLists = require("./../Collection").Collection;
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -34,7 +34,7 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  *           for the image/logo of the license for easy recognition and
  *           title of the license.
  * @property {Object} copyright Who owns the copyright to the corpus,
- *           by default it is set to the corpus team's name but teams can customize
+ *           by default it is set to the corpus team"s name but teams can customize
  *           it for example to make the corpus copyright of the language community
  *           or speakers who contributed to the corpus.
  * @property {Object} location GPS location of the corpus (longitude, latitude and accuracy)
@@ -81,7 +81,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       if (value === this._id) {
         return;
       }
-      this.warn("CorpusMask id cannot be set, it is 'corpus' by default." + value);
+      this.warn("CorpusMask id cannot be set, it is \"corpus\" by default." + value);
       value = "corpus";
       this._id = value;
     }
@@ -202,7 +202,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
   titleAsUrl: {
     get: function() {
       if (!this._titleAsUrl && this.title) {
-        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, '_').toLowerCase();
+        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
       }
       return this._titleAsUrl;
     },
@@ -230,7 +230,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this._title = value.trim();
-      this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, '_').toLowerCase(); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
+      this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase(); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
     }
   },
 

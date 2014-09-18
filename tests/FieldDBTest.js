@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var FieldDB = require('../api/fielddb.js').FieldDB;
+var FieldDB = require("../api/fielddb.js").FieldDB;
 /**
  <pre>
   ======== A Handy Little Jasmine Reference ========
@@ -56,6 +56,15 @@ describe("api/FieldDB.js", function() {
     // console.log(FieldDB);
     expect(FieldDB.FieldDBObject).toBeDefined();
     expect(FieldDB.UserMask).toBeDefined();
+  });
+
+  it("should set CORS bug to be FieldDBObject bug handler", function() {
+    expect(FieldDB.CORS).toBeDefined();
+    expect(FieldDB.CORS.bug).toBe(FieldDB.FieldDBObject.prototype.bug);
+    FieldDB.CORS.bugMessage = "";
+    FieldDB.CORS.bug("testing bug");
+    FieldDB.CORS.bug("another bug");
+    expect(FieldDB.CORS.bugMessage).toEqual("testing bug;;; another bug");
   });
 
 });

@@ -1,4 +1,4 @@
-<div data-fielddb-user json="team"></div>
+<div data-fielddb-user json="application.team"></div>
 <div class="well">
   <dl>
     <dt>
@@ -6,26 +6,26 @@
       &nbsp;&nbsp;Interests:
     </dt>
     <dd>
-      {{team.researchInterest}}
+      {{application.team.researchInterest}}
     </dd>
     <dt>
       <i style="margin-top:3px" class="fa fa-team"></i>
       &nbsp;&nbsp;Affiliation:
     </dt>
     <dd>
-      {{team.affiliation}}
+      {{application.team.affiliation}}
     </dd>
     <dt>
       <i style="margin-top:3px" class="fa fa-comment"></i>
       &nbsp;&nbsp;Description:
     </dt>
     <dd>
-      {{team.description}}
+      {{application.team.description}}
     </dd>
   </dl>
 </div>
 
 <div ng-repeat="corpus in team.corpora">
-  <div data-fielddb-corpus json="corpus"></div>
+  <div data-fielddb-corpus json="application.corpus"></div>
 </div>
-{{team.status}}
+{{application.team.status}}

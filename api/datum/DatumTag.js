@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class The DatumTag allows the user to label data with grammatical tags

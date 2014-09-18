@@ -1,4 +1,7 @@
-var DataList = require('./DataList').DataList;
+var DataList = require("./DataList").DataList;
+var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
+var Comments = require("./../comment/Comments").Comments;
+var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
 
 /**
  * @class The SubExperimentDataList allows the user to add additional information
@@ -16,6 +19,17 @@ var SubExperimentDataList = function SubExperimentDataList(options) {
 SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends SubExperimentDataList.prototype */ {
   constructor: {
     value: SubExperimentDataList
+  },
+
+  // Internal models: used by the parse function
+  INTERNAL_MODELS: {
+    value: {
+      comments: Comments,
+      docs: DocumentCollection,
+      title: ContextualizableObject,
+      description: ContextualizableObject,
+      instructions: ContextualizableObject
+    }
   }
 
 });

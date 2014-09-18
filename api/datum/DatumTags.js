@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var DatumTag = require('./DatumTag').DatumTag;
+var Collection = require("./../Collection").Collection;
+var DatumTag = require("./DatumTag").DatumTag;
 
 /**
  * @class Collection of Datum validation states
@@ -22,13 +22,13 @@ DatumTags.prototype = Object.create(Collection.prototype, /** @lends DatumTags.p
   },
 
   /**
-   *  The primary key < v2 was 'label' but we changed to use 'id' so that
-   *  'label' could be used only for a human friendly (and customizable)
+   *  The primary key < v2 was "label" but we changed to use "id" so that
+   *  "label" could be used only for a human friendly (and customizable)
    *  label while the id must remain unchanged for glossing and other automation.
    * @type {Object}
    */
   primaryKey: {
-    value: 'tag'
+    value: "tag"
   },
 
   INTERNAL_MODELS: {

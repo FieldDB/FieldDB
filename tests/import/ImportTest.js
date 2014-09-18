@@ -1,7 +1,7 @@
-var Import = require('./../../api/import/Import').Import;
-var Corpus = require('./../../api/corpus/Corpus').Corpus;
-var Q = require('q');
-var fs = require('fs');
+var Import = require("./../../api/import/Import").Import;
+var Corpus = require("./../../api/corpus/Corpus").Corpus;
+var Q = require("q");
+var fs = require("fs");
 
 var specIsRunningTooLong = 5000;
 
@@ -44,19 +44,19 @@ describe("api/import/Import", function() {
 describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
   var corpus,
     importer,
-    localUri = './sample_data/orthography.txt',
-    remoteUri = 'https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/sample_data/orthography.txt';
+    localUri = "./sample_data/orthography.txt",
+    remoteUri = "https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/sample_data/orthography.txt";
 
   var defaultOptions = {
     uri: localUri,
     readOptions: {
       readFileFunction: function(callback) {
-        fs.readFile(localUri, 'utf8', callback);
+        fs.readFile(localUri, "utf8", callback);
       }
     },
     preprocessOptions: {
       writePreprocessedFileFunction: function(filename, body, callback) {
-        fs.writeFile(filename, body, 'utf8', callback);
+        fs.writeFile(filename, body, "utf8", callback);
       },
       transliterate: true,
       joinLines: true,
@@ -86,38 +86,38 @@ describe("Batch Import: as a morphologist I want to import directories of text f
     });
   });
 
-  it('should accept a read function and a read hook', function(done) {
+  it("should accept a read function and a read hook", function(done) {
     importer
       .readUri(defaultOptions)
       .then(function(result) {
-        importer.debug('after read file', result);
+        importer.debug("after read file", result);
         expect(result).toBeDefined();
-        expect(result.rawText.substring(0, 20)).toEqual('Noqata qan qaparinay');
+        expect(result.rawText.substring(0, 20)).toEqual("Noqata qan qaparinay");
       })
       .then(done, done);
   }, specIsRunningTooLong);
 
 
-  xit('should read a uri if no a read function is defined', function(done) {
+  xit("should read a uri if no a read function is defined", function(done) {
     importer
       .readUri({
         uri: remoteUri
       })
       .then(function(result) {
-        importer.debug('after read file', result);
+        importer.debug("after read file", result);
         expect(result.datum.datumFields.orthography).toBeDefined();
       }).then(done, done);
   }, specIsRunningTooLong);
 
-  it('should provide a preprocess hook', function(done) {
+  it("should provide a preprocess hook", function(done) {
     expect(importer.preprocess).toBeDefined();
     defaultOptions.rawText = "placeholder text ";
     importer
       .preprocess(defaultOptions)
       .then(function(result) {
-        importer.debug('after preprocess file');
+        importer.debug("after preprocess file");
         expect(result.datum.datumFields.utterance).toBeDefined();
-        expect(result.preprocessedUrl).toEqual('./sample_data/orthography_preprocessed.json');
+        expect(result.preprocessedUrl).toEqual("./sample_data/orthography_preprocessed.json");
 
         if (result.datum.datumFields.orthography.value !== result.rawText.trim()) {
           expect(result.datum.datumFields.originalText.value)
@@ -131,26 +131,26 @@ describe("Batch Import: as a morphologist I want to import directories of text f
 
   }, specIsRunningTooLong);
 
-  it('should provide a import hook', function() {
+  it("should provide a import hook", function() {
     expect(importer.import).toBeDefined();
   });
 
-  it('should process create a data list of imported documents', function() {
+  it("should process create a data list of imported documents", function() {
     expect(importer.datalist).toBeDefined();
   });
 
-  xit('should be able to import from a uri', function(done) {
+  xit("should be able to import from a uri", function(done) {
 
     importer.addFileUri({
       uri: localUri,
       readOptions: {
         readFileFunction: function(callback) {
-          fs.readFile(localUri, 'utf8', callback);
+          fs.readFile(localUri, "utf8", callback);
         }
       },
       preprocessOptions: {
         writePreprocessedFileFunction: function(filename, body, callback) {
-          fs.writeFile(filename, body, 'utf8', callback);
+          fs.writeFile(filename, body, "utf8", callback);
         },
         transliterate: true,
         joinLines: true,
@@ -160,23 +160,23 @@ describe("Batch Import: as a morphologist I want to import directories of text f
         fromPreprocessedFile: true
       },
       next: function() {
-        importer.debug('Next middle ware placeholder');
+        importer.debug("Next middle ware placeholder");
       }
     }).then(function(result) {
-      importer.debug('after add file', result);
+      importer.debug("after add file", result);
       expect(result.rawText).toBeDefined();
     }).then(done, done);
 
   }, specIsRunningTooLong);
 
-  xdescribe('lib/Import', function() {
+  xdescribe("lib/Import", function() {
 
-    it('should be able to pause an import', function() {
+    it("should be able to pause an import", function() {
       var importer = new Import();
       expect(importer.pause).toBeDefined();
     });
 
-    it('should be able to resume an import with minimal duplication of effort', function() {
+    it("should be able to resume an import with minimal duplication of effort", function() {
       var importer = new Import();
       expect(importer.resume).toBeDefined();
     });
@@ -189,9 +189,9 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
   beforeEach(function() {
     importer = new Import({
       files: [{
-        name: 'sample_data/students.csv'
+        name: "sample_data/students.csv"
       }, {
-        name: 'sample_data/students2.csv'
+        name: "sample_data/students2.csv"
       }],
       rawText: ""
     });
@@ -202,17 +202,17 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
     importer.readFiles({
       readOptions: {
         readFileFunction: function(options) {
-          importer.debug('Reading file', options);
+          importer.debug("Reading file", options);
           var thisFileDeferred = Q.defer();
           Q.nextTick(function() {
             fs.readFile(options.file, {
-              encoding: 'utf8'
+              encoding: "utf8"
             }, function(err, data) {
-              importer.debug('Finished reading this file', err, data);
+              importer.debug("Finished reading this file", err, data);
               if (err) {
                 thisFileDeferred.reject(err);
               } else {
-                importer.debug('options', options);
+                importer.debug("options", options);
                 options.rawText = data;
                 importer.rawText = importer.rawText + data;
                 thisFileDeferred.resolve(options);
@@ -223,13 +223,13 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
         }
       }
     }).then(function(success) {
-      importer.debug('success', success);
+      importer.debug("success", success);
 
-      expect(importer.status).toEqual('undefined; sample_data/students.csv n/a -  bytes, last modified: n/a; sample_data/students2.csv n/a -  bytes, last modified: n/a');
+      expect(importer.status).toEqual("undefined; sample_data/students.csv n/a -  bytes, last modified: n/a; sample_data/students2.csv n/a -  bytes, last modified: n/a");
       expect(importer.fileDetails).toEqual([{
-        name: 'sample_data/students.csv'
+        name: "sample_data/students.csv"
       }, {
-        name: 'sample_data/students2.csv'
+        name: "sample_data/students2.csv"
       }]);
 
       // Ensure that the files are truely read by counting the length and the number of commas
@@ -237,7 +237,7 @@ describe("Batch Import: as a Field Methods instructor or psycholinguistics exper
       expect(importer.rawText.match(/,/g).length).toEqual(88);
 
     }, function(options) {
-      expect(options).toEqual('It should not error');
+      expect(options).toEqual("It should not error");
     }).then(done, done);
   }, specIsRunningTooLong);
 
@@ -253,7 +253,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       expect(false).toBeTruthy();
     }, function(options) {
       importer.debug(options);
-      expect(options.error).toEqual('Options must be defined for readFileIntoRawText');
+      expect(options.error).toEqual("Options must be defined for readFileIntoRawText");
     }).then(done, done);
 
   }, specIsRunningTooLong);
@@ -266,7 +266,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       expect(false).toBeTruthy();
     }, function(options) {
       importer.debug(options);
-      expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
+      expect(options.error).toEqual("Options: file must be defined for readFileIntoRawText");
     }).then(done, done);
 
   }, specIsRunningTooLong);
@@ -278,13 +278,13 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
     var importer = new Import({
       corpus: corpus,
-      rawText: fs.readFileSync('sample_data/students.csv', 'utf8'),
+      rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
       importType: "participants"
     });
 
     // Step 1: import CSV
     importer.importCSV(importer.rawText, importer);
-    expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
+    expect(importer.extractedHeader).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
     expect(importer.asCSV.length).toEqual(17);
     expect(importer.showImportSecondStep).toBeTruthy();
 
@@ -293,22 +293,22 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     importer.convertTableIntoDataList().then(function(results) {
       var headers = importer.discoveredHeaders;
       expect(headers[0].id).toEqual("anonymousCode");
-      expect(headers[1].id).toEqual('courseNumber');
-      expect(headers[2].id).toEqual('firstname');
-      expect(headers[3].id).toEqual('lastname');
-      expect(headers[4].id).toEqual('dateOfBirth');
+      expect(headers[1].id).toEqual("courseNumber");
+      expect(headers[2].id).toEqual("firstname");
+      expect(headers[3].id).toEqual("lastname");
+      expect(headers[4].id).toEqual("dateOfBirth");
 
       importer.documentCollection._collection[1].fields.decryptedMode = true;
-      expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual('Damiane');
-      expect(importer.documentCollection._collection[1].fields.firstname.mask).toEqual('xxxxxxx');
+      expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual("Damiane");
+      expect(importer.documentCollection._collection[1].fields.firstname.mask).toEqual("xxxxxxx");
 
       importer.documentCollection._collection[2].fields.decryptedMode = true;
-      expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual('Ariane');
-      expect(importer.documentCollection._collection[2].fields.firstname.mask).toEqual('xxxxxx');
+      expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual("Ariane");
+      expect(importer.documentCollection._collection[2].fields.firstname.mask).toEqual("xxxxxx");
 
       importer.documentCollection._collection[3].fields.decryptedMode = true;
-      expect(importer.documentCollection._collection[3].fields.firstname.value).toEqual('Michel');
-      expect(importer.documentCollection._collection[3].fields.firstname.mask).toEqual('xxxxxx');
+      expect(importer.documentCollection._collection[3].fields.firstname.value).toEqual("Michel");
+      expect(importer.documentCollection._collection[3].fields.firstname.mask).toEqual("xxxxxx");
 
       expect(importer.progress.total).toEqual(17);
       expect(importer.progress.completed).toEqual(17);
@@ -343,7 +343,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       expect(false).toBeTruthy();
     }, function(options) {
       importer.debug(options);
-      expect(options.error).toEqual('Options: file must be defined for readFileIntoRawText');
+      expect(options.error).toEqual("Options: file must be defined for readFileIntoRawText");
     }).then(done, done);
 
   }, specIsRunningTooLong);
@@ -360,9 +360,9 @@ describe("Import: as a morphologist I want to import my data from CSV", function
     importer = new Import({
       corpus: corpus,
       files: [{
-        name: 'sample_data/sample_filemaker.csv'
+        name: "sample_data/sample_filemaker.csv"
       }, {
-        name: 'sample_data/sample_filemaker.csv'
+        name: "sample_data/sample_filemaker.csv"
       }],
       rawText: ""
     });
@@ -373,17 +373,17 @@ describe("Import: as a morphologist I want to import my data from CSV", function
     importer.readFiles({
       readOptions: {
         readFileFunction: function(options) {
-          importer.debug('Reading file', options);
+          importer.debug("Reading file", options);
           var thisFileDeferred = Q.defer();
           Q.nextTick(function() {
             fs.readFile(options.file, {
-              encoding: 'utf8'
+              encoding: "utf8"
             }, function(err, data) {
-              importer.debug('Finished reading this file', err, data);
+              importer.debug("Finished reading this file", err, data);
               if (err) {
                 thisFileDeferred.reject(err);
               } else {
-                importer.debug('options', options);
+                importer.debug("options", options);
                 options.rawText = data;
                 importer.rawText = importer.rawText + data;
                 thisFileDeferred.resolve(options);
@@ -394,13 +394,13 @@ describe("Import: as a morphologist I want to import my data from CSV", function
         }
       }
     }).then(function(success) {
-      importer.debug('success', success);
+      importer.debug("success", success);
 
-      expect(importer.status).toEqual('undefined; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a');
+      expect(importer.status).toEqual("undefined; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a");
       expect(importer.fileDetails).toEqual([{
-        name: 'sample_data/sample_filemaker.csv'
+        name: "sample_data/sample_filemaker.csv"
       }, {
-        name: 'sample_data/sample_filemaker.csv'
+        name: "sample_data/sample_filemaker.csv"
       }]);
 
       // Ensure that the files are truely read by counting the length and the number of commas
@@ -410,24 +410,24 @@ describe("Import: as a morphologist I want to import my data from CSV", function
       // Ensure the data is read into CSV format
       importer.guessFormatAndPreviewImport();
       expect(importer.asCSV.length).toEqual(147);
-      expect(importer.asCSV[4]).toEqual(['5/7/2010', '*Payta suwanayan monikita', 'Pay-ta suwa-naya-n moniki-ta', 'he-ACC steal.naya.3SG little animal-ACC', 'He feels like stealing the little animal', '', '', 'Impulsative', 'Seberina', 'Cusco Quechua']);
+      expect(importer.asCSV[4]).toEqual(["5/7/2010", "*Payta suwanayan monikita", "Pay-ta suwa-naya-n moniki-ta", "he-ACC steal.naya.3SG little animal-ACC", "He feels like stealing the little animal", "", "", "Impulsative", "Seberina", "Cusco Quechua"]);
 
       // Build data
-      expect(importer.extractedHeader).toEqual(['Date Elicited', 'utterance', 'morphemes', 'gloss', 'translation', 'comments', '', 'tags', 'CheckedWithConsultant', 'source/publication', 'a.field-with*dangerous characters (for import)']);
+      expect(importer.extractedHeader).toEqual(["Date Elicited", "utterance", "morphemes", "gloss", "translation", "comments", "", "tags", "CheckedWithConsultant", "source/publication", "a.field-with*dangerous characters (for import)"]);
       importer.convertTableIntoDataList().then(function() {
         var headers = importer.discoveredHeaders;
         importer.debug(JSON.stringify(headers));
         expect(headers[0].id).toEqual("dateElicited");
-        expect(headers[8].id).toEqual('validationStatus');
-        expect(headers[9].id).toEqual('sourcePublication');
-        expect(headers[10].id).toEqual('aFieldWithDangerousCharactersForImport');
+        expect(headers[8].id).toEqual("validationStatus");
+        expect(headers[9].id).toEqual("sourcePublication");
+        expect(headers[10].id).toEqual("aFieldWithDangerousCharactersForImport");
         //TODO finish IGT import later
 
       });
 
 
     }, function(options) {
-      expect(options).toEqual('It should not error');
+      expect(options).toEqual("It should not error");
     }).then(done, done);
   }, specIsRunningTooLong);
 

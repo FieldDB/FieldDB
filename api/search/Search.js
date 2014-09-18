@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class Search progressively searches a corpus and updates a search/data list

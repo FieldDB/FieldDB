@@ -22,17 +22,17 @@ describe("User ", function() {
     expect(u.description).toBeDefined();
 
     expect(u.toJSON()).toEqual({
-      type: 'User',
-      username: 'bill',
-      gravatar: '67890954367898765',
-      firstname: '',
-      lastname: '',
-      email: '',
-      affiliation: '',
-      researchInterest: '',
-      description: '',
+      type: "User",
+      username: "bill",
+      gravatar: "67890954367898765",
+      firstname: "",
+      lastname: "",
+      email: "",
+      affiliation: "",
+      researchInterest: "",
+      description: "",
       version: u.version,
-      api: 'users'
+      api: "users"
     });
   });
 
@@ -48,7 +48,7 @@ describe("User ", function() {
   it("should have a user preferences ", function() {
     var u = new User();
     expect(u.prefs).toBeDefined();
-    expect(u.prefs.preferedDashboardType).toEqual('');
+    expect(u.prefs.preferedDashboardType).toEqual("");
   });
 
   it("should guess an appropriate dashboard for a user", function() {
@@ -69,20 +69,20 @@ describe("User ", function() {
 
     var result = u.toJSON("complete");
     expect(result).toEqual( {
-      type: 'User',
-      username: '',
+      type: "User",
+      username: "",
       dateCreated: u.dateCreated,
-      firstname: 'Bill',
-      lastname: 'Smith',
+      firstname: "Bill",
+      lastname: "Smith",
       version: u.version,
       prefs: {
-        type: 'UserPreference',
+        type: "UserPreference",
         dateCreated: result.prefs.dateCreated,
         version: u.version,
         hotkeys: [],
         unicodes: []
       },
-      api: 'users'
+      api: "users"
     });
   });
 
