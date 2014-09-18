@@ -77,17 +77,17 @@ describe("Corpus", function() {
 
     xit("should clean v1.22.1 to a maximal json", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
-      expect(corpus.toJSON("complete")).toEqual('');
+      expect(corpus.toJSON("complete")).toEqual("");
     });
 
     xit("should clean v1.22.1 to a minimaljson", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
       expect(corpus.toJSON(null, "lightweight")).toEqual({
-        _id: '60B9B35A-A6E9-4488-BBF7-CB54B09E87C1',
-        _rev: '19-863850b93c42a90205017215a45b7668',
-        title: 'Sample Corpus',
-        titleAsUrl: 'sample_corpus',
-        description: 'This is a sample corpus which I made by importing one of my colleagues data files from FileMaker Pro.  It has some comments in it to explain what I did to make the corpus and search it.',
+        _id: "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1",
+        _rev: "19-863850b93c42a90205017215a45b7668",
+        title: "Sample Corpus",
+        titleAsUrl: "sample_corpus",
+        description: "This is a sample corpus which I made by importing one of my colleagues data files from FileMaker Pro.  It has some comments in it to explain what I did to make the corpus and search it.",
         datumFields: [{
           "label": "dateElicited",
           "value": "",
@@ -121,12 +121,12 @@ describe("Corpus", function() {
           "help": "This field came from file import ",
           "userchooseable": ""
         }],
-        dbname: 'sapir-firstcorpus',
+        dbname: "sapir-firstcorpus",
         confidential: {
-          secretkey: '8acfb0d3-9ce4-3c02-e7c1-f56b78b705dd'
+          secretkey: "8acfb0d3-9ce4-3c02-e7c1-f56b78b705dd"
         },
-        publicCorpus: 'Private',
-        version: 'v2.0.1'
+        publicCorpus: "Private",
+        version: "v2.0.1"
       });
     });
 

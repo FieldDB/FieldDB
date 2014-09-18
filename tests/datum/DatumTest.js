@@ -1,5 +1,5 @@
-var Datum = require('./../../api/datum/Datum').Datum;
-var sample_1_22_datum = require('./../../sample_data/datum_v1.22.1.json');
+var Datum = require("./../../api/datum/Datum").Datum;
+var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 
 describe("Test Datum", function() {
   it("should load", function() {
@@ -39,7 +39,7 @@ describe("Test Datum", function() {
 
 });
 
-describe('Backward compatability with v1.22', function() {
+describe("Backward compatability with v1.22", function() {
 
   it("should load v1.22 datum", function() {
     var datum = new Datum(sample_1_22_datum[0]);

@@ -1,20 +1,20 @@
-'use strict';
+"use strict";
 var Confidential = require("./../../api/confidentiality_encryption/Confidential").Confidential;
-var DatumField = require('./../../api/datum/DatumField').DatumField;
-var DatumFields = require('./../../api/datum/DatumFields').DatumFields;
+var DatumField = require("./../../api/datum/DatumField").DatumField;
+var DatumFields = require("./../../api/datum/DatumFields").DatumFields;
 var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
 
 var sampleDatumFields = function() {
   return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
 };
 
-describe('lib/DatumFields', function() {
+describe("lib/DatumFields", function() {
 
-  it('should load', function() {
+  it("should load", function() {
     expect(DatumFields).toBeDefined();
   });
 
-  describe('construction options', function() {
+  describe("construction options", function() {
     var collection;
 
     beforeEach(function() {
@@ -25,19 +25,19 @@ describe('lib/DatumFields', function() {
       });
     });
 
-    it('should construct using options', function() {
+    it("should construct using options", function() {
       expect(collection).toBeDefined();
     });
 
-    it('should accept a primary key', function() {
-      expect(collection.primaryKey).toEqual('id');
+    it("should accept a primary key", function() {
+      expect(collection.primaryKey).toEqual("id");
     });
 
-    it('should provide case insensitive lower and original case of a primary key', function() {
+    it("should provide case insensitive lower and original case of a primary key", function() {
 
       collection = new DatumFields({
         collection: [{
-          id: 'thisIsCamelCase'
+          id: "thisIsCamelCase"
         }]
       });
       // console.log(collection._collection);
@@ -46,15 +46,15 @@ describe('lib/DatumFields', function() {
       expect(collection._collection.length).toEqual(1);
     });
 
-    it('should use the primary key for find', function() {
-      expect(collection.find('utterance')[0].id).toEqual(sampleDatumFields()[2].id);
+    it("should use the primary key for find", function() {
+      expect(collection.find("utterance")[0].id).toEqual(sampleDatumFields()[2].id);
     });
 
-    it('should accept inverted', function() {
+    it("should accept inverted", function() {
       expect(collection.collection[0].id).toEqual(sampleDatumFields()[2].id);
     });
 
-    it('should accept model of items to be defined', function() {
+    it("should accept model of items to be defined", function() {
       // expect(collection.utterance.constructor).toEqual(Object);
       expect(collection.utterance.constructor).toEqual(DatumField);
     });
@@ -62,25 +62,25 @@ describe('lib/DatumFields', function() {
     it("should turn the id into a camelCased safe value for use as property of an object, if it wasn't already", function() {
       var u = new DatumField();
       u.id = "Date Elicited";
-      expect(u.id).toEqual('dateElicited');
+      expect(u.id).toEqual("dateElicited");
       u.id = "utterance";
-      expect(u.id).toEqual('utterance');
+      expect(u.id).toEqual("utterance");
       u.id = "CheckedWithConsultant";
-      expect(u.id).toEqual('checkedWithConsultant');
+      expect(u.id).toEqual("checkedWithConsultant");
       u.id = "source/publication";
-      expect(u.id).toEqual('sourcePublication');
+      expect(u.id).toEqual("sourcePublication");
       u.id = "a.field-with*dangerous characters (for import)";
-      expect(u.id).toEqual('aFieldWithDangerousCharactersForImport');
+      expect(u.id).toEqual("aFieldWithDangerousCharactersForImport");
       u.id = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ";
-      expect(u.id).toEqual('internationalization');
+      expect(u.id).toEqual("internationalization");
 
     });
 
   });
 
-  describe('array-like construction', function() {
+  describe("array-like construction", function() {
 
-    it('should permit construction with just an array', function() {
+    it("should permit construction with just an array", function() {
       var newcollection = new DatumFields([
         sampleDatumFields()[0],
         sampleDatumFields()[1]
@@ -90,7 +90,7 @@ describe('lib/DatumFields', function() {
 
   });
 
-  describe('filling', function() {
+  describe("filling", function() {
     var collection;
 
     beforeEach(function() {
@@ -102,23 +102,23 @@ describe('lib/DatumFields', function() {
       collection.add(sampleDatumFields()[2]);
     });
 
-    it('should be able to add items', function() {
+    it("should be able to add items", function() {
       expect(collection.length).toBe(2);
     });
 
-    it('should permit push to add to the bottom', function() {
+    it("should permit push to add to the bottom", function() {
       collection.push(sampleDatumFields()[3]);
       expect(collection.collection[2]).toEqual(sampleDatumFields()[3]);
     });
 
-    it('should permit unshift to add to the top', function() {
+    it("should permit unshift to add to the top", function() {
       collection.unshift(sampleDatumFields()[4]);
       expect(collection.collection[0]).toEqual(sampleDatumFields()[4]);
     });
 
   });
 
-  describe('acessing contents', function() {
+  describe("acessing contents", function() {
     var collection;
 
     beforeEach(function() {
@@ -130,36 +130,36 @@ describe('lib/DatumFields', function() {
       collection.translation.value = "I feel like dancing.";
     });
 
-    it('should seem like an object by providing dot notation for primaryKeys ', function() {
-      expect(collection.utterance.id).toEqual('utterance');
+    it("should seem like an object by providing dot notation for primaryKeys ", function() {
+      expect(collection.utterance.id).toEqual("utterance");
     });
 
-    it('should return undefined for items which are not in the collection', function() {
+    it("should return undefined for items which are not in the collection", function() {
       expect(collection.phonetic).toBeUndefined();
     });
 
-    it('should be able to find items by primary key', function() {
-      expect(collection.find('utterance')[0].labelFieldLinguists).toEqual('Utterance');
+    it("should be able to find items by primary key", function() {
+      expect(collection.find("utterance")[0].labelFieldLinguists).toEqual("Utterance");
     });
 
-    it('should be able to find items by any attribute', function() {
-      expect(collection.find('help', 'What was said/written using the alphabet/writing system of the language.')[0].id).toEqual(sampleDatumFields()[1].id);
+    it("should be able to find items by any attribute", function() {
+      expect(collection.find("help", "What was said/written using the alphabet/writing system of the language.")[0].id).toEqual(sampleDatumFields()[1].id);
     });
 
-    it('should accpet a RegExp to find items', function() {
-      expect(collection.find('type', /(tags|parallelText)/i).map(function(item) {
+    it("should accpet a RegExp to find items", function() {
+      expect(collection.find("type", /(tags|parallelText)/i).map(function(item) {
         return item.labelFieldLinguists;
-      })).toEqual(['Orthography', 'Utterance', 'Translation', 'Tags', 'Data validity/verification Status']);
+      })).toEqual(["Orthography", "Utterance", "Translation", "Tags", "Data validity/verification Status"]);
     });
 
-    it('should be able to fuzzy find items by any attribute', function() {
-      expect(collection.fuzzyFind('value', 'nay').map(function(item) {
+    it("should be able to fuzzy find items by any attribute", function() {
+      expect(collection.fuzzyFind("value", "nay").map(function(item) {
         return item.labelFieldLinguists;
-      })).toEqual(['Utterance', 'Morphemes']);
+      })).toEqual(["Utterance", "Morphemes"]);
     });
 
 
-    it('should be able to clone an existing collection', function() {
+    it("should be able to clone an existing collection", function() {
       var newbarecollection = collection.clone();
       // console.log(newbarecollection);
       // expect(newbarecollection).toEqual(sampleDatumFields());
@@ -179,42 +179,42 @@ describe('lib/DatumFields', function() {
 
   });
 
-  describe('non-lossy persistance', function() {
+  describe("non-lossy persistance", function() {
     var collection,
       collectionToLoad = [{
-        id: 'a',
-        type: 'tags'
+        id: "a",
+        type: "tags"
       }, {
-        id: 'z',
-        value: 'somethign\n with a line break',
-        type: 'wiki'
+        id: "z",
+        value: "somethign\n with a line break",
+        type: "wiki"
       }, {
-        id: 'c',
-        type: 'date'
+        id: "c",
+        type: "date"
       }];
 
     beforeEach(function() {
       collection = new DatumFields({
         collection: collectionToLoad,
         aHellperFunction: function() {
-          console.log('called');
+          console.log("called");
         }
       });
       collection.anotherHelperFunction = function() {
-        console.log('called');
+        console.log("called");
       };
     });
 
-    it('should seem like an array when serialized using both the canonical JSON.stringify', function() {
+    it("should seem like an array when serialized using both the canonical JSON.stringify", function() {
       var asStringified = JSON.stringify(collection);
       // console.log(asStringified);
-      expect(JSON.parse(asStringified)[2].type).toEqual('date');
+      expect(JSON.parse(asStringified)[2].type).toEqual("date");
       expect(JSON.parse(asStringified)[0].type).toEqual(collectionToLoad[0].type);
       expect(JSON.parse(asStringified)[1].value).toEqual(collectionToLoad[1].value);
       expect(JSON.parse(asStringified)[2].type).toEqual(collectionToLoad[2].type);
     });
 
-    it('should seem not loose information when serialized and reloaded', function() {
+    it("should seem not loose information when serialized and reloaded", function() {
       var collectionFromDB = JSON.stringify(collection);
       collection = new DatumFields({
         // debugMode: true,
@@ -229,9 +229,9 @@ describe('lib/DatumFields', function() {
       expect(collectionFromToJSON[1].encryptedValue).toEqual(collectionToLoad[1].value);
     });
 
-    it('should seem to not loose information when toJSONed and reloaded', function() {
+    it("should seem to not loose information when toJSONed and reloaded", function() {
       var collectionFromDB = collection.toJSON();
-      expect(collectionFromDB[2].id).toEqual('c');
+      expect(collectionFromDB[2].id).toEqual("c");
 
       var collectionReloaded = new DatumFields({
         collection: collectionFromDB
@@ -245,9 +245,9 @@ describe('lib/DatumFields', function() {
 
   });
 
-  describe('confidentiality', function() {
+  describe("confidentiality", function() {
 
-    it('should set parese legacy shouldBeEncrypted \"\" and change from false to true', function() {
+    it("should set parese legacy shouldBeEncrypted \"\" and change from false to true", function() {
       var field = new DatumField({
         encrypted: "checked",
         help: "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning.",
@@ -264,7 +264,7 @@ describe('lib/DatumFields', function() {
       expect(field.shouldBeEncrypted).toBe(true);
     });
 
-    it('should parse legacy shouldBeEncrypted checked', function() {
+    it("should parse legacy shouldBeEncrypted checked", function() {
       var field = new DatumField({
         alternates: ["noqata tusu-nay-wanmi", "noqata tusunaywanmi"],
         encrypted: "",
@@ -279,7 +279,7 @@ describe('lib/DatumFields', function() {
       expect(field.shouldBeEncrypted).toBe(true);
     });
 
-    it('should not permit to change shouldBeEncrypted from true to false', function() {
+    it("should not permit to change shouldBeEncrypted from true to false", function() {
       var field = new DatumField({
         alternates: ["noqata tusu-nay-wanmi", "noqata tusunaywanmi"],
         encrypted: "",
@@ -298,7 +298,7 @@ describe('lib/DatumFields', function() {
       expect(field.warnMessage).toContain("This field's shouldBeEncrypted cannot be undone. Only a corpus administrator can change shouldBeEncrypted to false if it has been true before.");
     });
 
-    it('should decript encrypted datum if in decryptedMode', function() {
+    it("should decript encrypted datum if in decryptedMode", function() {
       var field = new DatumField({
         alternates: ["noqata tusu-nay-wanmi", "noqata tusunaywanmi"],
         encrypted: "checked",
@@ -315,36 +315,36 @@ describe('lib/DatumFields', function() {
       field.confidential = new Confidential({
         secretkey: "5e65e603-8d4e-4aea-9d68-64da15b081d5"
       });
-      expect(field.value).toBe('xxxx-xx xxxx-xxx-xx-x-xx');
+      expect(field.value).toBe("xxxx-xx xxxx-xxx-xx-x-xx");
       field.decryptedMode = true;
-      expect(field.value).toBe('noqa-ta tusu-nay-wa-n-mi');
+      expect(field.value).toBe("noqa-ta tusu-nay-wa-n-mi");
 
       field.value = "noqa-ta tusu-nay-wan-mi ";
-      expect(field.value).toBe('noqa-ta tusu-nay-wan-mi');
+      expect(field.value).toBe("noqa-ta tusu-nay-wan-mi");
 
       field.decryptedMode = false;
       field.value = "noqa-ta tusu-nay-wan changed without access";
       expect(field.warnMessage).toContain("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
-      expect(field.value).toBe('xxxx-xx xxxx-xxx-xxx-xx');
+      expect(field.value).toBe("xxxx-xx xxxx-xxx-xxx-xx");
       expect(field.warnMessage).toContain("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
       // console.log(field.toJSON());
     });
 
   });
 
-  describe('confidentiality', function() {
+  describe("confidentiality", function() {
 
-    it('should be able to set an encrypter on any DatumField', function() {
+    it("should be able to set an encrypter on any DatumField", function() {
       var doc = new DatumField();
       doc.confidential = {
-        secretkey: 'secretkey'
+        secretkey: "secretkey"
       };
-      expect(doc.confidential.secretkey).toEqual('secretkey');
+      expect(doc.confidential.secretkey).toEqual("secretkey");
     });
   });
 
 
-  describe('confidentiality', function() {
+  describe("confidentiality", function() {
     var fields;
 
     beforeEach(function() {
@@ -354,27 +354,27 @@ describe('lib/DatumFields', function() {
       });
     });
 
-    it('should be able to set encrypted on members of  datumfields', function() {
+    it("should be able to set encrypted on members of  datumfields", function() {
       fields.encrypted = true;
       // console.log(fields);
       expect(fields.judgement.encrypted).toEqual(true);
     });
 
-    it('should be able to set confidential on members of a datumfields', function() {
+    it("should be able to set confidential on members of a datumfields", function() {
       fields.confidential = {
-        secretkey: 'secretkey'
+        secretkey: "secretkey"
       };
       fields.encrypted = true;
       fields.decryptedMode = true;
 
-      expect(fields.judgement.confidential.secretkey).toEqual('secretkey');
-      expect(fields.utterance.confidential.secretkey).toEqual('secretkey');
-      expect(typeof fields.judgement.confidential.encrypt).toEqual('function');
-      expect(typeof fields.utterance.confidential.encrypt).toEqual('function');
+      expect(fields.judgement.confidential.secretkey).toEqual("secretkey");
+      expect(fields.utterance.confidential.secretkey).toEqual("secretkey");
+      expect(typeof fields.judgement.confidential.encrypt).toEqual("function");
+      expect(typeof fields.utterance.confidential.encrypt).toEqual("function");
       fields.utterance.value = "hi";
-      expect(fields.utterance.mask).toEqual('xx');
+      expect(fields.utterance.mask).toEqual("xx");
       fields.judgement.value = "*";
-      expect(fields.judgement.mask).toEqual('*');
+      expect(fields.judgement.mask).toEqual("*");
     });
   });
 });
