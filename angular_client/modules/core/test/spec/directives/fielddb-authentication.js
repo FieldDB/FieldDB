@@ -1,17 +1,17 @@
 /* globals FieldDB */
-'use strict';
+"use strict";
 var debug = false;
 
-describe('Directive: fielddb-authentication', function() {
+describe("Directive: fielddb-authentication", function() {
 
   // load the directive's module and the template
-  beforeEach(module('fielddbAngularApp', 'views/authentication.html'));
+  beforeEach(module("fielddbAngularApp", "views/authentication.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    el = angular.element('<div data-fielddb-authentication json="authentication"></div>');
+    el = angular.element("<div data-fielddb-authentication json='authentication'></div>");
     scope = $rootScope.$new();
-    console.log('scope.application', scope.application);
+    console.log("scope.application", scope.application);
     scope.application = {
       authentication: {
         user: new FieldDB.User({
@@ -23,50 +23,50 @@ describe('Directive: fielddb-authentication', function() {
     // bring html from templateCache
     scope.$digest();
     if (debug) {
-      console.log('post compile', el.html()); // <== html here has {{}}
+      console.log("post compile", el.html()); // <== html here has {{}}
     }
   }));
 
   // http://stackoverflow.com/questions/17223850/how-to-test-directives-that-use-templateurl-and-controllers
-  it('should show login form if no one is logged in', function() {
+  it("should show login form if no one is logged in", function() {
 
     inject(function() {
       compileFunction(scope); // <== the html {{}} are bound
       scope.$digest(); // <== digest to get the render to show the bound values
       if (debug) {
-        console.log('post link', el.html());
-        console.log('scope authentication ', scope.application.authentication);
+        console.log("post link", el.html());
+        console.log("scope authentication ", scope.application.authentication);
       }
-      expect(angular.element(el.find('button')[0]).text().trim()).toEqual('Login');
+      expect(angular.element(el.find("button")[0]).text().trim()).toEqual("Login");
     });
   });
 
-  it('should show logout button if someone is logged in', function() {
+  it("should show logout button if someone is logged in", function() {
 
     inject(function() {
       scope.application.authentication.user.authenticated = true;
       compileFunction(scope); // <== the html {{}} are bound
       scope.$digest(); // <== digest to get the render to show the bound values
       if (debug) {
-        console.log('post link', el.html());
-        console.log('scope authentication ', scope.application.authentication);
+        console.log("post link", el.html());
+        console.log("scope authentication ", scope.application.authentication);
       }
-      expect(angular.element(el.find('div')[0]).attr('class')).toContain('ng-hide');
+      expect(angular.element(el.find("div")[0]).attr("class")).toContain("ng-hide");
     });
   });
 
-  it('should login users', function() {
+  it("should login users", function() {
     //https://egghead.io/lessons/angularjs-unit-testing-directive-scope
     compileFunction(scope); // <== the html {{}} are bound
     expect(el.scope().login).toBeDefined();
   });
 
-  it('should logout users', function() {
+  it("should logout users", function() {
     compileFunction(scope); // <== the html {{}} are bound
     expect(el.scope().logout).toBeDefined();
   });
 
-  it('should register users', function() {
+  it("should register users", function() {
     compileFunction(scope); // <== the html {{}} are bound
     expect(el.scope().register).toBeDefined();
   });
