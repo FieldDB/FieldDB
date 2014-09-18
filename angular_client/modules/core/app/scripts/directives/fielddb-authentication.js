@@ -15,8 +15,11 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
     $scope.loginDetails = $scope.loginDetails || {};
     // $scope.application.authentication = $scope.application.authentication || {};
     // $scope.application.authentication.user = $scope.application.authentication.user || {};
-    $scope.application.debug("Scope authentication is ", $scope.application.authentication);
-
+    if ($scope.application && typeof $scope.application.debug === "function") {
+      $scope.application.debug("Scope authentication is ", $scope.application.authentication);
+    } else {
+      console.warn("Somethign is wrong, there is no app defined. ");
+    }
     var processUserDetails = function(user) {
       user.authenticated = true;
       user.accessibleDBS = user.accessibleDBS || [];
