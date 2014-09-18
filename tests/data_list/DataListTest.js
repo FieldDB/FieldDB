@@ -36,13 +36,21 @@ describe("Data List", function() {
 
     it("should accept a docs collection", function() {
       var list = new DataList({
-        docs: [{
-          "_id": "docone"
-        }, {
-          "_id": "doctwo"
-        }, {
-          "_id": "docthree"
-        }]
+        docs: [
+          new FieldDBObject({
+            "_id": "docone",
+            "datumFields": [],
+            "session": {}
+          }), new FieldDBObject({
+            "_id": "doctwo",
+            "datumFields": [],
+            "session": {}
+          }), new FieldDBObject({
+            "_id": "docthree",
+            "datumFields": [],
+            "session": {}
+          })
+        ]
       });
       expect(list.docs.type).toEqual("DocumentCollection");
       expect(list.docs.docone.id).toEqual("docone");
@@ -56,13 +64,19 @@ describe("Data List", function() {
 
     it("should convert docs into datumIds", function() {
       var list = new DataList({
-        docs: [{
-          "_id": "docone"
-        }, {
-          "_id": "doctwo"
-        }, {
-          "_id": "docthree"
-        }]
+        docs: [new FieldDBObject({
+          "_id": "docone",
+          "datumFields": [],
+          "session": {}
+        }), new FieldDBObject({
+          "_id": "doctwo",
+          "datumFields": [],
+          "session": {}
+        }), new FieldDBObject({
+          "_id": "docthree",
+          "datumFields": [],
+          "session": {}
+        })]
       });
       expect(list).toBeDefined();
       var listToSave = list.toJSON();
@@ -72,7 +86,11 @@ describe("Data List", function() {
     });
 
     it("should serialize existing datalists without breaking prototype app", function() {
+      // SAMPLE_DATALIST_MODEL.debugMode = true;
       var list = new DataList(SAMPLE_DATALIST_MODEL);
+      expect(list.comments).toBeDefined();
+      expect(list.comments.collection[0].text).toContain("an example of how you can");
+
       var listToSave = list.toJSON();
       expect(listToSave._id).toEqual(list.id);
       expect(listToSave.title).toEqual(list.title);
@@ -83,6 +101,7 @@ describe("Data List", function() {
       expect(listToSave.dateCreated).toEqual(list.dateCreated);
       expect(listToSave.dateModified).toEqual(list.dateModified);
       expect(listToSave.comments).toBeDefined();
+      expect(listToSave.comments[0].text).toContain("an example of how you can");
       expect(listToSave.comments[0].type).toEqual("Comment");
       expect(listToSave.comments[0].text).toEqual(list.comments.collection[0].text);
       expect(listToSave.comments[0].username).toEqual(list.comments.collection[0].username);
@@ -93,7 +112,7 @@ describe("Data List", function() {
     it("should serialize datalists with docs into docIds without breaking the docids", function() {
       var list = new DataList(SAMPLE_DATALIST_MODEL);
       list.datumIds = [];
-
+      // list.debugMode = true;
       expect(list.datumIds).toEqual([]);
       list.populate([{
         _id: "5EB57D1E-5D97-428E-A9C7-377DEEC02A14"
@@ -146,8 +165,10 @@ describe("Data List", function() {
 
     it("should discover audio on datum", function(done) {
       var list = new DataList({
-        docs: [{
-          "id": "docone",
+        docs: [new FieldDBObject({
+          "_id": "docone",
+          "datumFields": [],
+          "session": {},
           "audioVideo": [{
             "URL": "http://youtube.com/iwoamoiemqo32"
           }, {
@@ -155,12 +176,16 @@ describe("Data List", function() {
           }, {
             "URL": "http://localhost:3184/example/oiemqo32"
           }]
-        }, {
-          "id": "doctwo"
-        }, {
-          "id": "docthree",
+        }), new FieldDBObject({
+          "_id": "doctwo",
+          "datumFields": [],
+          "session": {}
+        }), new FieldDBObject({
+          "_id": "docthree",
+          "datumFields": [],
+          "session": {},
           "audioVideo": []
-        }]
+        })]
       });
       // list.debugMode = true;
       list.getAllAudioAndVideoFiles().then(function(urls) {
@@ -176,22 +201,28 @@ describe("Data List", function() {
 
     it("should star datum", function() {
       var dl = new DataList({
-        docs: [{
-          "id": "docOne",
+        docs: [new FieldDBObject({
+          "_id": "docOne",
+          "datumFields": [],
+          "session": {},
           "star": function(value) {
             this._star = value;
           }
-        }, {
-          "id": "doctwo",
+        }), new FieldDBObject({
+          "_id": "doctwo",
+          "datumFields": [],
+          "session": {},
           "star": function(value) {
             this._star = value;
           }
-        }, {
-          "id": "docthree",
+        }), new FieldDBObject({
+          "_id": "docthree",
+          "datumFields": [],
+          "session": {},
           "star": function(value) {
             this._star = value;
           }
-        }]
+        })]
       });
 
       expect(dl.applyFunctionToAllIds).toBeDefined();
