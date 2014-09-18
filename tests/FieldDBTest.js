@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var FieldDB = require('../api/fielddb.js').FieldDB;
+var FieldDB = require("../api/fielddb.js").FieldDB;
 /**
  <pre>
   ======== A Handy Little Jasmine Reference ========

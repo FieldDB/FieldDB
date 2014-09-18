@@ -24,7 +24,7 @@ describe("App", function() {
       expect(app).toBeDefined();
       expect(app.contextualizer.currentLocale).toEqual('en');
       expect(app.contextualize('locale_Username')).toEqual('Username:');
-      app.contextualizer.currentLocale = 'es';
+      app.contextualizer.currentLocale = "es";
       expect(app.contextualize('locale_Username')).toEqual('Usuario:');
     });
 
@@ -37,8 +37,8 @@ describe("App", function() {
       expect(app).toBeDefined();
       expect(app.contextualizer).toBeDefined();
       expect(app.contextualize({
-        default: 'locale_Username'
-      })).toEqual('Username:');
+        default: "locale_Username"
+      })).toEqual("Username:");
 
     });
 
@@ -50,8 +50,8 @@ describe("App", function() {
       expect(app).toBeDefined();
       expect(app.contextualizer).toBeUndefined();
       expect(app.contextualize({
-        default: 'locale_Username'
-      })).toEqual('locale_Username');
+        default: "locale_Username"
+      })).toEqual("locale_Username");
 
     });
   });
@@ -71,17 +71,17 @@ describe("App", function() {
         // debugMode: true
       });
       app.processRouteParams();
-      expect(app.warnMessage).toContain('Route params are undefined, not loading anything');
+      expect(app.warnMessage).toContain("Route params are undefined, not loading anything");
 
       app.processRouteParams({
         team: "lingllama",
         corpusid: "community-_corpus"
       });
-      expect(app.currentCorpusDashboard).toEqual('lingllama/community-_corpus');
-      expect(app.currentCorpusDashboardDBname).toEqual('lingllama-community-_corpus');
+      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
 
       setTimeout(function() {
-        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
         done();
       }, 500);
     }, specIsRunningTooLong);
@@ -95,11 +95,11 @@ describe("App", function() {
         corpusid: "community-_corpus",
         importType: "participants"
       });
-      expect(app.currentCorpusDashboard).toEqual('lingllama/community-_corpus');
-      expect(app.currentCorpusDashboardDBname).toEqual('lingllama-community-_corpus');
+      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
 
       setTimeout(function() {
-        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
         done();
       }, 100);
     }, specIsRunningTooLong);
@@ -113,11 +113,11 @@ describe("App", function() {
         corpusid: "community-_corpus",
         searchQuery: "morphemes:naya OR gloss:des OR gloss:IMP"
       });
-      expect(app.currentCorpusDashboard).toEqual('lingllama/community-_corpus');
-      expect(app.currentCorpusDashboardDBname).toEqual('lingllama-community-_corpus');
+      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
 
       setTimeout(function() {
-        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
         done();
       }, 100);
     }, specIsRunningTooLong);
@@ -133,7 +133,7 @@ describe("App", function() {
       expect(app.currentCorpusDashboardDBname).toBeUndefined();
 
       setTimeout(function() {
-        expect(app.warnMessage).toContain('Rendering, but the render was not injected for this App');
+        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
         done();
       }, 100);
     }, specIsRunningTooLong);

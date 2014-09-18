@@ -14,7 +14,7 @@ var runCORSTests = function(whichServer) {
    * Declare an object and its functions which will be in scope
    */
 
-  it('should be able asyncronously using CORS to login user ', function() {
+  it("should be able asyncronously using CORS to login user ", function() {
 
     var serverResult = null;
     /*
@@ -25,12 +25,12 @@ var runCORSTests = function(whichServer) {
       FieldDBConnection.connection = {
         localCouch: {
           connected: false,
-          url: 'http://localhost:5984',
+          url: "http://localhost:5984",
           couchUser: null
         },
         centralAPI: {
           connected: false,
-          url: 'http://localhost:3181/v2',
+          url: "http://localhost:3181/v2",
           fieldDBUser: null
         }
       };
@@ -64,7 +64,7 @@ var runCORSTests = function(whichServer) {
 
   });
 
-  xit('should be able asyncronously using CORS to upload a doc', function() {
+  xit("should be able asyncronously using CORS to upload a doc", function() {
     /*
      * Declare an object and its functions which will be in scope
      */
@@ -98,7 +98,7 @@ var runCORSTests = function(whichServer) {
     });
 
   });
-  xit('should be able asyncronously using CORS to update a doc', function() {
+  xit("should be able asyncronously using CORS to update a doc", function() {
     /*
      * Declare an object and its functions which will be in scope
      */

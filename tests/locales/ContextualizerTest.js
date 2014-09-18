@@ -198,7 +198,7 @@ describe("Contextualizer", function() {
 
       it("should be able to modify localization using dot notation", function() {
         expect(obj.for_child).toEqual('In this game, you will help the mouse eat all the cheese!');
-        obj.for_child = "In this game the mouse will eat all the cheese with your help."
+        obj.for_child = "In this game the mouse will eat all the cheese with your help.";
         expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
         expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
         expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");

@@ -189,7 +189,7 @@ describe("Data List", function() {
       });
       // list.debugMode = true;
       list.getAllAudioAndVideoFiles().then(function(urls) {
-        expect(urls).toEqual(['http://youtube.com/iwoamoiemqo32', 'http://soundcloud.com/iwoa/moiemqo32', 'http://localhost:3184/example/oiemqo32']);
+        expect(urls).toEqual(["http://youtube.com/iwoamoiemqo32", "http://soundcloud.com/iwoa/moiemqo32", "http://localhost:3184/example/oiemqo32"]);
         // expect(dl.playDatum()).toBeTruthy();
       }).done(done);
     }, specIsRunningTooLong);
@@ -227,10 +227,10 @@ describe("Data List", function() {
 
       expect(dl.applyFunctionToAllIds).toBeDefined();
 
-      spyOn(dl.docs.doctwo, 'star');
-      expect(dl.docs.docOne.id).toEqual('docOne');
-      dl.applyFunctionToAllIds(['doctwo', 'docOne'], 'star', ['on']);
-      expect(dl.docs.doctwo.star).toHaveBeenCalledWith('on');
+      spyOn(dl.docs.doctwo, "star");
+      expect(dl.docs.docOne.id).toEqual("docOne");
+      dl.applyFunctionToAllIds(["doctwo", "docOne"], "star", ["on"]);
+      expect(dl.docs.doctwo.star).toHaveBeenCalledWith("on");
 
     });
   });

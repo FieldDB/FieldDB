@@ -7,7 +7,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
   beforeEach(function() {
     mockcorpus = {
       confidential: {
-        secretkey: 'keyfromcorpus'
+        secretkey: "keyfromcorpus"
       }
     };
   });
@@ -25,7 +25,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
         confidential: mockcorpus.confidential,
         fields: Consultant.prototype.defaults.fields
       });
-      expect(consultant.fields.anonymousCode.value).toEqual('');
+      expect(consultant.fields.anonymousCode.value).toEqual("");
     });
 
   });
@@ -81,7 +81,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
   beforeEach(function() {
     mockcorpus = {
       confidential: {
-        secretkey: 'keyfromcorpus'
+        secretkey: "keyfromcorpus"
       }
     };
   });
@@ -137,7 +137,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     expect(consultant.username).toEqual("xxxxxxxx");
 
     consultant = new Consultant(Consultant.prototype.defaults);
-    expect(consultant.fields.username.value).toEqual('');
+    expect(consultant.fields.username.value).toEqual("");
   });
 
   it("should show anonymous code if user is anonymous and their anonymous code has been set", function() {
@@ -149,7 +149,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     expect(consultant.username).toEqual("TH");
 
     consultant = new Consultant(Consultant.prototype.defaults);
-    expect(consultant.fields.username.value).toEqual('');
+    expect(consultant.fields.username.value).toEqual("");
   });
 
   it("should mask the consultant's username", function() {
