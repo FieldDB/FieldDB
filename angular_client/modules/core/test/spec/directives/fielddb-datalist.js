@@ -15,8 +15,12 @@ describe("Directive: fielddb-datalist", function() {
       el = angular.element("<div data-fielddb-datalist json='datalist0'></div>");
       scope = $rootScope.$new();
       scope.datalist0 = {
-        title: "Sample participants",
-        description: "This is a sample datalist of participants",
+        title: {
+          default: "Sample participants"
+        },
+        description: {
+          default: "This is a sample datalist of participants"
+        },
         docs: {
           _collection: [{
             firstname: "Anony",
@@ -60,8 +64,12 @@ describe("Directive: fielddb-datalist", function() {
       el = angular.element("<div data-fielddb-datalist json='datalist2'></div> <div data-fielddb-datalist json='datalist1'></div>");
       scope = $rootScope.$new();
       scope.datalist1 = {
-        title: "Sample users",
-        description: "This is a sample datalist of users",
+        title: {
+          default: "Sample users"
+        },
+        description: {
+          default: "This is a sample datalist of users"
+        },
         docs: {
           _collection: [{
             firstname: "Ling",
@@ -75,8 +83,12 @@ describe("Directive: fielddb-datalist", function() {
         }
       };
       scope.datalist2 = {
-        title: "Sample participants",
-        description: "This is a sample datalist of participants",
+        title: {
+          default: "Sample participants"
+        },
+        description: {
+          default: "This is a sample datalist of participants"
+        },
         docs: {
           _collection: [{
             firstname: "Anony",
@@ -173,8 +185,12 @@ describe("Directive: fielddb-datalist", function() {
 
       inject(function() {
         compileFunction(scope); // <== the html {{}} are bound
-        scope.participantsList.title = "Participant List";
-        scope.participantsList.description = "This is a list of all participants who are currently in this corpus.";
+        scope.participantsList.title = {
+          default: "Participant List"
+        };
+        scope.participantsList.description = {
+          default: "This is a list of all participants who are currently in this corpus."
+        };
         scope.$digest(); // <== digest to get the render to show the bound values
         if (debugMode) {
           console.log("post link", el.html());
