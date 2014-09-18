@@ -44,14 +44,14 @@ describe("App", function() {
 
     it("should be not error if asked to contextualize objects when no contextualizer exists", function() {
       var app = new App({
-        debugMode: true
+        // debugMode: true
       });
 
       expect(app).toBeDefined();
       expect(app.contextualizer).toBeUndefined();
       expect(app.contextualize({
-        default: "locale_Username"
-      })).toEqual("locale_Username");
+        default: "locale_doesnt_exist_yet"
+      })).toEqual("locale_doesnt_exist_yet");
 
     });
   });
@@ -88,7 +88,7 @@ describe("App", function() {
 
     it("should be able to load an import dashboard based on routeParams", function(done) {
       var app = new App({
-        debugMode: true
+        // debugMode: true
       });
       app.processRouteParams({
         team: "lingllama",
@@ -106,7 +106,7 @@ describe("App", function() {
 
     it("should be able to load an search dashboard based on routeParams", function(done) {
       var app = new App({
-        debugMode: true
+        // debugMode: true
       });
       app.processRouteParams({
         team: "lingllama",
@@ -124,7 +124,7 @@ describe("App", function() {
 
     it("should be able to load an user/team dashboard based on routeParams", function(done) {
       var app = new App({
-        debugMode: true
+        // debugMode: true
       });
       app.processRouteParams({
         team: "lingllama"
