@@ -153,14 +153,17 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.docs = this.docs || [];
       results.map(function(doc) {
         try {
+          // prevent recursion a bit
+          if (self.api !== "datalists") {
+            doc.api = self.api;
+          }
+          doc.confidential = self.confidential;
           var guessedType = doc.type;
           if (!guessedType) {
             self.debug(" requesting guess type ");
-            guessedType = Document.prototype.guessType(doc)
+            guessedType = Document.prototype.guessType(doc);
             self.debug("request complete");
           }
-          doc.confidential = self.confidential;
-          doc.api = self.api;
           self.debug('Converting doc into type ' + guessedType);
 
           if (guessedType === "Datum") {
@@ -180,7 +183,6 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
         } catch (e) {
           self.warn("error converting this doc: " + JSON.stringify(doc) + e);
-          var guessedType = "FieldDBObject";
           doc.confidential = self.confidential;
           doc = new FieldDBObject(doc);
         }

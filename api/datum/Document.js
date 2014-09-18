@@ -40,6 +40,7 @@ Document.prototype = Object.create(FieldDBObject.prototype, /** @lends Document.
         guessedType = doc.api[0].toUpperCase() + doc.api.substring(1, doc.api.length);
       }
       guessedType = guessedType.replace(/s$/, "");
+      guessedType = guessedType[0].toUpperCase() + guessedType.substring(1, guessedType.length);
       if (guessedType === "Datalist") {
         guessedType = "DataList";
       }
@@ -48,6 +49,8 @@ Document.prototype = Object.create(FieldDBObject.prototype, /** @lends Document.
           guessedType = "Datum";
         } else if (doc.datumFields && doc.sessionFields) {
           guessedType = "Corpus";
+        } else if (doc.collections === "sessions" && doc.sessionFields) {
+          guessedType = "Session";
         } else if (doc.text && doc.username && doc.timestamp && doc.gravatar) {
           guessedType = "Comment";
         }
