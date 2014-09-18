@@ -124,6 +124,20 @@ describe("Contextualizer", function() {
       expect(contextualizer.contextualize("localized_practice")).toEqual("Practique");
     });
 
+
+    it("should provide a list of available/supported locales ranked by their level of support", function() {
+      var availableLanguages = contextualizer.availableLanguages;
+      expect(availableLanguages.en.iso).toEqual("en");
+      expect(availableLanguages.en.length).toEqual(206);
+      expect(availableLanguages.en.percentageOfAvailability).toEqual(100);
+      expect(availableLanguages.es.iso).toEqual("es");
+      expect(availableLanguages.es.length).toEqual(175);
+      expect(availableLanguages.es.percentageOfAvailability).toEqual(85);
+
+      expect(availableLanguages._collection[0].length > availableLanguages._collection[1].length);
+      expect(availableLanguages._collection[0].percentageOfAvailability < availableLanguages._collection[1].percentageOfAvailability);
+    });
+
     it("should contextualize complex objects", function() {
 
       var datalist = {
