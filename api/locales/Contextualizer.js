@@ -71,7 +71,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           this.elanguages[code].length = this.data[code].length;
           if (this.elanguages[code].length > bestAvailabilityCount) {
             availLanguages.unshift(this.elanguages[code]);
-            bestAvailabilityCount = this.elanguages[code].length
+            bestAvailabilityCount = this.elanguages[code].length;
           } else {
             availLanguages.push(this.elanguages[code]);
           }
@@ -79,7 +79,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       }
       if (bestAvailabilityCount === 0 || availLanguages.length === 0) {
         this.todo("Ensuring that at least english is an available language, not sure if this is a good idea.");
-        availLanguages.unshift(this.elanguages.en)
+        availLanguages.unshift(this.elanguages.en);
       } else {
         availLanguages._collection.map(function(language) {
           language.percentageOfAvailability = Math.round(language.length / bestAvailabilityCount * 100);
