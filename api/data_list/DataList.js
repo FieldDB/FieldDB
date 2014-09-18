@@ -1,6 +1,7 @@
 /* globals FieldDB */
 var Datum = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Document = require("./../datum/Document").Document;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
 var ContextualizableObject = require('./../locales/ContextualizableObject').ContextualizableObject;
@@ -26,6 +27,10 @@ var Q = require("q");
  */
 var DataList = function DataList(options) {
   this.debug("Constructing DataList ", options);
+  if (options && options.comments) {
+    // console.log("DataList comments", options.comments);
+    // console.log("DataList comments", options.comments);
+  }
   FieldDBObject.apply(this, arguments);
 };
 
@@ -148,32 +153,38 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.docs = this.docs || [];
       results.map(function(doc) {
         try {
-          if (doc.type && FieldDB && FieldDB[doc.type]) {
-            self.debug('Converting doc into type ' + doc.type);
-            doc.confidential = self.confidential;
-            doc = new FieldDB[doc.type](doc);
-          } else {
-            var guessedType = doc.jsonType || doc.collection || 'FieldDBObject';
-            if (self.api) {
-              guessedType = self.api[0].toUpperCase() + self.api.substring(1, self.api.length);
-            }
-            guessedType = guessedType.replace(/s$/, '');
-            if (guessedType === 'Datalist') {
-              guessedType = 'DataList';
-            }
-
-            if (FieldDB[guessedType]) {
-              self.warn('Converting doc into guessed type ' + guessedType);
-              doc.confidential = self.confidential;
-              doc = new FieldDB[guessedType](doc);
-            } else {
-              self.warn('This doc does not have a type, it might display oddly ', doc);
-            }
+          var guessedType = doc.type;
+          if (!guessedType) {
+            self.debug(" requesting guess type ");
+            guessedType = Document.prototype.guessType(doc)
+            self.debug("request complete");
           }
+          doc.confidential = self.confidential;
+          doc.api = self.api;
+          self.debug('Converting doc into type ' + guessedType);
+
+          if (guessedType === "Datum") {
+            doc = new Datum(doc);
+          } else if (guessedType === "Document") {
+            doc._type = guessedType;
+            doc = new Document(doc);
+          } else if (guessedType === "FieldDBObject") {
+            doc = new FieldDBObject(doc);
+          } else if (FieldDB[guessedType]) {
+            self.warn('Converting doc into guessed type ' + guessedType);
+            doc = new FieldDB[guessedType](doc);
+          } else {
+            self.warn('This doc does not have a type than can be used, it might display oddly ', doc);
+            doc = new FieldDBObject(doc);
+          }
+
         } catch (e) {
-          self.warn("error converting this doc: "+ e);
+          self.warn("error converting this doc: " + JSON.stringify(doc) + e);
+          var guessedType = "FieldDBObject";
+          doc.confidential = self.confidential;
           doc = new FieldDBObject(doc);
         }
+        self.debug("adding doc", doc);
         self.docs.add(doc);
         if (doc.type === 'Datum') {
           self.showDocPosition = true;
