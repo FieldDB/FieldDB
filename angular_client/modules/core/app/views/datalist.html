@@ -1,23 +1,9 @@
 <button class="btn pull-right" ng-click="save()" ng-class="{'btn-default': datalist.saving, 'btn-success': !datalist.saving}">Save</button>
 <button class="btn pull-right" ng-click="undo()" ng-class="{'btn-default': datalist.saving, 'btn-inverse': !datalist.saving}">Undo</button>
-<h1>{{datalist.title.default}}</h1>
-<p>{{datalist.description.default}}</p>
-
-
-<div class="lead">Title(s):</div>
-<ul>
-  <li class="list-unstyled" ng-show="context" ng-repeat="context in datalist.title " contenteditable ng-model="context" title="$index {{datalist.title}}"></li>
-</ul>
-
-<div class="lead">Description(s):</div>
-<ul>
-  <li class="list-unstyled" ng-show="context" ng-repeat="context in datalist.description " contenteditable ng-model="context" title="$index {{datalist.description}}"></li>
-</ul>
-
-<div class="lead" ng-show="datalist.instructions">Instruction(s):</div>
-<ul ng-show="datalist.instructions">
-  <li class="list-unstyled" ng-show="context" ng-repeat="context in datalist.instructions " contenteditable ng-model="context" title="$index {{datalist.instructions}}"></li>
-</ul>
+<h1 ng-show="typeof (datalist.title == 'object')">{{datalist.title.default}}</h1>
+<!-- <h1 ng-show="typeof (datalist.title == 'string')">{{datalist.title}}</h1>
+ --><p ng-show="typeof (datalist.title == 'object')">{{datalist.description.default}}</p>
+<p ng-show="typeof (datalist.title == 'string')">{{datalist.description}}</p>
 
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
   <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a item's number to re-order it</div>
