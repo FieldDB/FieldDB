@@ -54,7 +54,7 @@
   "locale_Instructions_to_show_on_dashboard" : {
     "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=' icon-edit'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class='caret'></span> on the top right corner of the app.     To more information about what a 'Corpus' is, click <i class=' icon-cogs resize-full'></i>.     It will show the corpus settings, which contains explanations of each component of a 'Corpus.'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_new'>Contact us</a> </p>",
     "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=' icon-edit'></i>. To see what Corpus consists of, click <i class=' icon-cogs resize-full'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=' icon-edit'></i>. Click <i class=' icon icon-resize-full'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class='caret'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_new'>Contact us</a> </p>"
-    
+
   },
   "locale_elicitation_sessions_explanation" : {
     "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class='icons icon-edit'></i> icon in Dashboard view. For additional options, click on the <i class='icon-calendar'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"
@@ -159,7 +159,25 @@
     "message" : "Export Data"
   },
   "locale_All_Data" : {
-  	"message" : "All Data"
+    "message" : "All Data"
+  },
+  "locale_All_Speakers" : {
+    "message" : "All (Native/Heritage) Speakers"
+  },
+  "locale_All_Language_Consultants" : {
+    "message" : "All Language Consultants"
+  },
+  "locale_All_Participants" : {
+    "message" : "All Participants"
+  },
+  "locale_All_Users" : {
+    "message" : "All Users"
+  },
+  "locale_All_Elicitation_Sessions" : {
+    "message" : "All Elicitation Sessions"
+  },
+  "locale_All_Datalists" : {
+    "message" : "All Datalists"
   },
   "locale_Save" : {
     "message" : "Save"
@@ -321,9 +339,9 @@
     "message" : "% completed."
   },
   "locale_Import_Instructions" : {
-    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus's existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a 'datum' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", 
+    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus's existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a 'datum' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>",
     "message" : "Everyone's data is different. <a href='http://www.facebook.com/LingSyncApp'>You might know some fellow users who might be able to help you import yours: </a>"
-  }, 
+  },
   "locale_Import_First_Step" : {
     "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area, or select audio/video file(s) from your computer. Yes, you can edit the data inside the text area.</p>"
   },
