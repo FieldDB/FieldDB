@@ -22,6 +22,8 @@ var Q = require("q");
  * The App should be serializable to save state to local storage for the
  * next run.
  *
+ * @name App
+ *
  * @property {Authentication} authentication The auth member variable is an
  *           Authentication object permits access to the login and logout
  *           functions, and the database of users depending on whether the
@@ -40,6 +42,7 @@ var Q = require("q");
  *
  * @property {DataList} currentDataList The datalist that is currently open.
  * @extends FieldDBObject
+ * @tutorial tests/app/AppTest.js
  * @constructs
  */
 var App = function App(options) {

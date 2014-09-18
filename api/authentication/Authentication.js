@@ -198,7 +198,7 @@ define([
        */
       if(serverResults.user.newCorpusConnections){
         if(window.appView){
-          window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle="modal" href="#user-modal"> here </a> to see the list of corpora to which you have access.","alert-success","Added to corpus!");
+          window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle='modal' href='#user-modal'> here </a> to see the list of corpora to which you have access.","alert-success","Added to corpus!");
         }
         for(var x in serverResults.user.newCorpusConnections){
           if(_.pluck(serverResults.user.corpuses,"pouchname").indexOf(serverResults.user.newCorpusConnections[x].pouchname) == -1){
