@@ -52,7 +52,7 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
  *              the user's client.
  *
  * @extends CorpusMask
- * @tutorial tests/CorpusTest.js
+ * @tutorial tests/corpus/CorpusTest.js
  */
 
 
