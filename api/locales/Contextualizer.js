@@ -33,6 +33,7 @@ var Contextualizer = function Contextualizer(options) {
     options.currentContext = "default";
   }
   FieldDBObject.apply(this, localArguments);
+  return this;
 };
 
 Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Contextualizer.prototype */ {

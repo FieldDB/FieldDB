@@ -32,6 +32,7 @@
   var Speaker = require("./user/Speaker").Speaker;
   var Consultant = require("./user/Consultant").Consultant;
   var Participant = require("./user/Participant").Participant;
+  var Contextualizer = require("./locales/Contextualizer").Contextualizer;
   var Corpus = require("./corpus/Corpus").Corpus;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
@@ -59,6 +60,7 @@
   FieldDB.Speaker = Speaker;
   FieldDB.Consultant = Consultant;
   FieldDB.Participant = Participant;
+  FieldDB.Contextualizer = Contextualizer;
   FieldDB.Corpus = Corpus;
   FieldDB.CorpusMask = CorpusMask;
   FieldDB.Import = Import;

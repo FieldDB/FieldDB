@@ -35,6 +35,7 @@ angular.module("fielddbAngularApp", [
         authenticated: false
       })
     },
+    contextualizer: new FieldDB.Contextualizer().loadDefaults(),
     online: true,
     apiURL: "https://localhost:3181/v2/",
     offlineCouchURL: "https://localhost:6984",
