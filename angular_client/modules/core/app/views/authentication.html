@@ -9,8 +9,12 @@
     </button>
   </div>
   {{application.authentication.error}}
-  <button ng-show="application.authentication.user.authenticated" class="btn btn-default" ng-click="logout()" tabindex="3">
-    Logout
-  </button>
-  <span ng-show="application.authentication.user.authenticated" data-fielddb-locales></span>
+
+  <span class="form-group" ng-show="application.authentication.user.authenticated" >
+
+    <button class="btn btn-default" ng-click="logout()" tabindex="3">
+      Logout
+    </button>
+    <span data-fielddb-locales></span>
+  </span>
 </form>
