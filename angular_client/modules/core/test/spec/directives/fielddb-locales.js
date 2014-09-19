@@ -31,7 +31,7 @@ describe("Directive: fielddb-locales", function() {
         console.log("post link", el.html());
         console.log("scope locales ", scope.application.locales);
       }
-      expect(angular.element(el.find("select")[0]).attr("class")).toContain("btn");
+      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-pristine ng-valid");
     });
   });
 
@@ -44,7 +44,7 @@ describe("Directive: fielddb-locales", function() {
         console.log("post link", el.html());
         console.log("scope locales ", scope.application.locales);
       }
-      expect(angular.element(el.find("select")[0]).attr("class")).toContain("btn");
+      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-pristine ng-valid");
     });
   });
 

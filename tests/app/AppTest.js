@@ -22,9 +22,9 @@ describe("App", function() {
       app.contextualizer = {};
 
       expect(app).toBeDefined();
-      expect(app.contextualizer.currentLocale).toEqual('en');
+      expect(app.contextualizer.currentLocale.iso).toEqual('en');
       expect(app.contextualize('locale_Username')).toEqual('Username:');
-      app.contextualizer.currentLocale = "es";
+      app.contextualizer.currentLocale.iso = "es";
       expect(app.contextualize('locale_Username')).toEqual('Usuario:');
     });
 

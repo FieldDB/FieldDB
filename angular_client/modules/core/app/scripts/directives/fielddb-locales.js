@@ -10,14 +10,22 @@
  */
 angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
 
-  var controller = function($scope) {
-    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.contextualizer) {
-      $scope.locales = FieldDB.FieldDBObject.application.contextualizer;
-    }else{
-      console.warn("locales is not available on the scope. ");
-    }
+  var controller = function($scope, $timeout) {
+
+    /**
+     * Error: 10 $digest() iterations reached. Aborting!
+     * @type {[type]}
+     * http://stackoverflow.com/questions/14376879/error-10-digest-iterations-reached-aborting-with-dynamic-sortby-predicate
+     */
+    $timeout(function() {
+      if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.contextualizer) {
+        $scope.locales = FieldDB.FieldDBObject.application.contextualizer;
+      } else {
+        console.warn("locales is not available on the scope. ");
+      }
+    }, 1000);
   };
-  controller.$inject = ["$scope"];
+  controller.$inject = ["$scope", "$timeout"];
 
   /* Directive declaration */
   var directiveDefinitionObject = {

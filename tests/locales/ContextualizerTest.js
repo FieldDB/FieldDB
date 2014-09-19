@@ -14,8 +14,8 @@ describe("Contextualizer", function() {
     it("should load the Contextualizer", function() {
       var contextualizer = new Contextualizer();
       expect(contextualizer).toBeDefined();
-      expect(contextualizer.defaultLocale).toEqual("en");
-      expect(contextualizer.currentLocale).toEqual("en");
+      expect(contextualizer.defaultLocale.iso).toEqual("en");
+      expect(contextualizer.currentLocale.iso).toEqual("en");
       expect(contextualizer.currentContext).toEqual("default");
     });
 
@@ -120,7 +120,7 @@ describe("Contextualizer", function() {
     it("should localize strings", function() {
 
       expect(contextualizer.contextualize("localized_practice")).toEqual("Practice");
-      contextualizer.currentLocale = "fr";
+      contextualizer.currentLocale.iso = "fr";
       expect(contextualizer.contextualize("localized_practice")).toEqual("Practique");
     });
 
@@ -173,7 +173,7 @@ describe("Contextualizer", function() {
       expect(contextualizer.contextualize(datalist.description)).toEqual("In this game, you will help the mouse eat all the cheese!");
       expect(contextualizer.contextualize(datalist.instructions)).toEqual("Choose the right picture to help the mouse eat the cheese.");
 
-      contextualizer.currentLocale = "fr";
+      contextualizer.currentLocale.iso = "fr";
       // contextualizer.debugMode = true;
       expect(contextualizer.contextualize(datalist.title)).toEqual("On prepare!");
       expect(contextualizer.contextualize(datalist.description)).toEqual("Pour ce jeu, tu devras écouter des sons pour aider la souris à manger tous les morceaux de fromage!");
