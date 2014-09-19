@@ -1,4 +1,3 @@
-/* globals window */
 var Diacritics = require("diacritic");
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 
@@ -88,27 +87,8 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
   debug: {
-    value: function(message, message2, message3, message4) {
-      try {
-        if (window.navigator && window.navigator.appName === "Microsoft Internet Explorer") {
-          return;
-        }
-      } catch (e) {
-        //do nothing, we are in node or some non-friendly browser.
-      }
-      if (this.debugMode) {
-        console.log(this.type.toUpperCase() + " DEBUG:" + message);
-
-        if (message2) {
-          console.log(message2);
-        }
-        if (message3) {
-          console.log(message3);
-        }
-        if (message4) {
-          console.log(message4);
-        }
-      }
+    value: function() {
+      return FieldDBObject.prototype.debug.apply(this, arguments);
     }
   },
   verboseMode: {
@@ -131,76 +111,29 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
   verbose: {
-    value: function(message, message2, message3, message4) {
-      if (this.verboseMode) {
-        this.debug(message, message2, message3, message4);
-      }
+    value: function() {
+      return FieldDBObject.prototype.verbose.apply(this,arguments);
     }
   },
 
   bug: {
-    value: function(message) {
-      if (this.bugMessage) {
-        this.bugMessage += ";;; ";
-      } else {
-        this.bugMessage = "";
-      }
-      this.bugMessage = this.bugMessage + message;
-      try {
-        window.alert(message);
-      } catch (e) {
-        console.warn(this.type.toUpperCase() + " BUG: " + message);
-      }
+    value: function() {
+      return FieldDBObject.prototype.bug.apply(this, arguments);
     }
   },
   confirm: {
-    value: function(message) {
-      if (this.confirmMessage) {
-        this.confirmMessage += "\n";
-      } else {
-        this.confirmMessage = "";
-      }
-      this.confirmMessage = this.confirmMessage + message;
-      try {
-        return window.confirm(message);
-      } catch (e) {
-        console.warn(this.type.toUpperCase() + " ASKING USER: " + message + " pretending they said no.");
-        return false;
-      }
+    value: function() {
+      return FieldDBObject.prototype.confirm.apply(this, arguments);
     }
   },
   warn: {
-    value: function(message, message2, message3, message4) {
-      if (this.warnMessage) {
-        this.warnMessage += ";;; ";
-      } else {
-        this.warnMessage = "";
-      }
-      this.warnMessage = this.warnMessage + message;
-      console.warn(this.type.toUpperCase() + " WARN: " + message);
-      if (message2) {
-        console.warn(message2);
-      }
-      if (message3) {
-        console.warn(message3);
-      }
-      if (message4) {
-        console.warn(message4);
-      }
+    value: function() {
+      return FieldDBObject.prototype.warn.apply(this, arguments);
     }
   },
   todo: {
-    value: function(message, message2, message3, message4) {
-      console.warn(this.type.toUpperCase() + " TODO: " + message);
-      if (message2) {
-        console.warn(message2);
-      }
-      if (message3) {
-        console.warn(message3);
-      }
-      if (message4) {
-        console.warn(message4);
-      }
+    value: function() {
+      return FieldDBObject.prototype.todo.apply(this, arguments);
     }
   },
 
