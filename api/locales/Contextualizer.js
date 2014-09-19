@@ -12,8 +12,8 @@ var elanguages = require("./elanguages.json");
  * @class The contextualizer can resolves strings depending on context and locale of the user
  *  @name  Contextualizer
  *
- * @property {String} defaultLocale The language/context to use if a translation/contextualization is missing.
- * @property {String} currentLocale The current locale to use (often the browsers default locale, or a corpus" default locale).
+ * @property {ELanguage} defaultLocale The language/context to use if a translation/contextualization is missing.
+ * @property {ELanguage} currentLocale The current locale to use (often the browsers default locale, or a corpus" default locale).
  *
  * @extends FieldDBObject
  * @constructs
@@ -26,11 +26,15 @@ var Contextualizer = function Contextualizer(options) {
     options = {};
     localArguments = [options];
   }
-  if (!options.defaultLocale) {
-    options.defaultLocale = "en";
+  if (!options.defaultLocale || !options.defaultLocale.iso) {
+    options.defaultLocale = {
+      iso: "en"
+    };
   }
-  if (!options.currentLocale) {
-    options.currentLocale = options.defaultLocale;
+  if (!options.currentLocale || !options.currentLocale.iso) {
+    options.currentLocale = {
+      iso: "en"
+    };
   }
   if (!options.currentContext) {
     options.currentContext = "default";
@@ -63,6 +67,9 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
   availableLanguages: {
     get: function() {
+      if (this._availableLanguages &&this._availableLanguages._collection[0].length === this.data[this._availableLanguages._collection[0].iso].length) {
+        return this._availableLanguages;
+      }
       var availLanguages = new ELanguages(),
         bestAvailabilityCount = 0;
 
@@ -86,6 +93,9 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           return language;
         });
       }
+      this.todo("test whether setting the currentLocale to the most complete locale has adverse affects.");
+      this.currentLocale = availLanguages._collection[0];
+      this._availableLanguages = availLanguages;
       return availLanguages;
     }
   },
@@ -117,7 +127,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
   contextualize: {
     value: function(message) {
-      this.debug("Resolving localization in " + this.currentLocale);
+      this.debug("Resolving localization in " + this.currentLocale.iso);
       var result = message,
         aproperty;
 
@@ -147,24 +157,24 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       }
 
       var keepTrying = true;
-      if (this.data[this.currentLocale] && this.data[this.currentLocale][result] && this.data[this.currentLocale][result].message !== undefined && this.data[this.currentLocale][result].message) {
-        result = this.data[this.currentLocale][result].message;
+      if (this.data[this.currentLocale.iso] && this.data[this.currentLocale.iso][result] && this.data[this.currentLocale.iso][result].message !== undefined && this.data[this.currentLocale.iso][result].message) {
+        result = this.data[this.currentLocale.iso][result].message;
         this.debug("Resolving localization using requested language: ", result);
         keepTrying = false;
       } else {
         if (typeof message === "object" && message.default) {
-          if (this.data[this.currentLocale] && this.data[this.currentLocale][message.default] && this.data[this.currentLocale][message.default].message !== undefined && this.data[this.currentLocale][message.default].message) {
-            result = this.data[this.currentLocale][message.default].message;
+          if (this.data[this.currentLocale.iso] && this.data[this.currentLocale.iso][message.default] && this.data[this.currentLocale.iso][message.default].message !== undefined && this.data[this.currentLocale.iso][message.default].message) {
+            result = this.data[this.currentLocale.iso][message.default].message;
             this.warn("Resolving localization using default contextualization: ", message.default);
             keepTrying = false;
-          } else if (this.data[this.defaultLocale] && this.data[this.defaultLocale][message.default] && this.data[this.defaultLocale][message.default].message !== undefined && this.data[this.defaultLocale][message.default].message) {
-            result = this.data[this.defaultLocale][message.default].message;
+          } else if (this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][message.default] && this.data[this.defaultLocale.iso][message.default].message !== undefined && this.data[this.defaultLocale.iso][message.default].message) {
+            result = this.data[this.defaultLocale.iso][message.default].message;
             this.warn("Resolving localization using default contextualization and default locale: ", message.default);
             keepTrying = false;
           }
         }
-        if (keepTrying && this.data[this.defaultLocale] && this.data[this.defaultLocale][result] && this.data[this.defaultLocale][result].message !== undefined && this.data[this.defaultLocale][result].message) {
-          result = this.data[this.defaultLocale][result].message;
+        if (keepTrying && this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][result] && this.data[this.defaultLocale.iso][result].message !== undefined && this.data[this.defaultLocale.iso][result].message) {
+          result = this.data[this.defaultLocale.iso][result].message;
           this.warn("Resolving localization using default: ", result);
         }
       }
@@ -179,45 +189,45 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
   updateContextualization: {
     value: function(key, value) {
-      this.data[this.currentLocale] = this.data[this.currentLocale] || {};
-      if (this.data[this.currentLocale][key] && this.data[this.currentLocale][key].message === value) {
+      this.data[this.currentLocale.iso] = this.data[this.currentLocale.iso] || {};
+      if (this.data[this.currentLocale.iso][key] && this.data[this.currentLocale.iso][key].message === value) {
         return value; //no change
       }
       var previousMessage = "";
       var verb = "create ";
-      if (this.data[this.currentLocale][key]) {
-        previousMessage = this.data[this.currentLocale][key].message;
+      if (this.data[this.currentLocale.iso][key]) {
+        previousMessage = this.data[this.currentLocale.iso][key].message;
         verb = "update ";
       }
       var update = this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value);
       if (update) {
-        this.data[this.currentLocale][key] = this.data[this.currentLocale][key] || {};
-        this.data[this.currentLocale][key].message = value;
+        this.data[this.currentLocale.iso][key] = this.data[this.currentLocale.iso][key] || {};
+        this.data[this.currentLocale.iso][key].message = value;
         var newLocaleItem = {};
         newLocaleItem[key] = {
           message: value
         };
-        this.addMessagesToContextualizedStrings(this.currentLocale, newLocaleItem);
+        this.addMessagesToContextualizedStrings(this.currentLocale.iso, newLocaleItem);
       }
-      return this.data[this.currentLocale][key].message;
+      return this.data[this.currentLocale.iso][key].message;
     }
   },
 
   audio: {
     value: function(key) {
-      this.debug("Resolving localization in " + this.currentLocale);
+      this.debug("Resolving localization in " + this.currentLocale.iso);
       var result = {};
       if (!this.data) {
         this.warn("No localizations available, resolving empty audio details");
         return result;
       }
 
-      if (this.data[this.currentLocale] && this.data[this.currentLocale][key] && this.data[this.currentLocale][key].audio !== undefined && this.data[this.currentLocale][key].audio) {
-        result = this.data[this.currentLocale][key].audio;
+      if (this.data[this.currentLocale.iso] && this.data[this.currentLocale.iso][key] && this.data[this.currentLocale.iso][key].audio !== undefined && this.data[this.currentLocale.iso][key].audio) {
+        result = this.data[this.currentLocale.iso][key].audio;
         this.debug("Resolving localization audio using requested language: ", result);
       } else {
-        if (this.data[this.defaultLocale] && this.data[this.defaultLocale][key] && this.data[this.defaultLocale][key].audio !== undefined && this.data[this.defaultLocale][key].audio) {
-          result = this.data[this.defaultLocale][key].audio;
+        if (this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][key] && this.data[this.defaultLocale.iso][key].audio !== undefined && this.data[this.defaultLocale.iso][key].audio) {
+          result = this.data[this.defaultLocale.iso][key].audio;
           this.warn("Resolving localization audio using default: ", result);
         }
       }
