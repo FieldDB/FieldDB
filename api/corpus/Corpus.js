@@ -1077,7 +1077,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
               self.warn("the requested locale was empty.");
               continue;
             }
-            self.application.contextualizer.addMessagesToContextualizedStrings("null", locales[localeIndex]);
+            self.application.contextualizer.addMessagesToContextualizedStrings(null, locales[localeIndex]);
           }
         }, function(error) {
           self.warn("The locales didn't loaded");
