@@ -67,7 +67,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
   availableLanguages: {
     get: function() {
-      if (this._availableLanguages &&this._availableLanguages._collection[0].length === this.data[this._availableLanguages._collection[0].iso].length) {
+      if (this._availableLanguages && this._availableLanguages._collection[0].length === this.data[this._availableLanguages._collection[0].iso].length) {
         return this._availableLanguages;
       }
       var availLanguages = new ELanguages(),
@@ -125,9 +125,18 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
+  localize: {
+    value: function(message, optionalLocaleForThisCall) {
+      return this.contextualize(message, optionalLocaleForThisCall);
+    }
+  },
+
   contextualize: {
-    value: function(message) {
-      this.debug("Resolving localization in " + this.currentLocale.iso);
+    value: function(message, optionalLocaleForThisCall) {
+      if (!optionalLocaleForThisCall) {
+        optionalLocaleForThisCall = this.currentLocale.iso;
+      }
+      this.debug("Resolving localization in " + optionalLocaleForThisCall);
       var result = message,
         aproperty;
 
@@ -157,14 +166,14 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       }
 
       var keepTrying = true;
-      if (this.data[this.currentLocale.iso] && this.data[this.currentLocale.iso][result] && this.data[this.currentLocale.iso][result].message !== undefined && this.data[this.currentLocale.iso][result].message) {
-        result = this.data[this.currentLocale.iso][result].message;
+      if (this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][result] && this.data[optionalLocaleForThisCall][result].message !== undefined && this.data[optionalLocaleForThisCall][result].message) {
+        result = this.data[optionalLocaleForThisCall][result].message;
         this.debug("Resolving localization using requested language: ", result);
         keepTrying = false;
       } else {
         if (typeof message === "object" && message.default) {
-          if (this.data[this.currentLocale.iso] && this.data[this.currentLocale.iso][message.default] && this.data[this.currentLocale.iso][message.default].message !== undefined && this.data[this.currentLocale.iso][message.default].message) {
-            result = this.data[this.currentLocale.iso][message.default].message;
+          if (this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][message.default] && this.data[optionalLocaleForThisCall][message.default].message !== undefined && this.data[optionalLocaleForThisCall][message.default].message) {
+            result = this.data[optionalLocaleForThisCall][message.default].message;
             this.warn("Resolving localization using default contextualization: ", message.default);
             keepTrying = false;
           } else if (this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][message.default] && this.data[this.defaultLocale.iso][message.default].message !== undefined && this.data[this.defaultLocale.iso][message.default].message) {
