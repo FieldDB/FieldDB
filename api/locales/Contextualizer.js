@@ -253,6 +253,10 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         if (localeCode.indexOf("/") > -1) {
           localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
         }
+        localeCode = localeCode.replace(/[^a-zA-Z-]/g, "").toLowerCase();
+        if (!localeCode || localeCode.length < 2) {
+          localeCode = "default";
+        }
       } else {
         localeCode = "en";
       }
@@ -291,11 +295,13 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         if (localeCode.indexOf("/") > -1) {
           localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
         }
-        localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
+        localeCode = localeCode.replace(/[^a-zA-Z-]/g, "").toLowerCase();
         if (!localeCode || localeCode.length < 2) {
           localeCode = "default";
         }
       }
+      self.originalDocs = self.originalDocs || [];
+      self.originalDocs.push(localeData);
 
       for (var message in localeData) {
         if (localeData.hasOwnProperty(message) && message.indexOf("_") !== 0) {
