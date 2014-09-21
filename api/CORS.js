@@ -16,6 +16,9 @@ var CORS = {
   },
   bug: function(message) {
     console.warn("CORS-BUG: " + message);
+  },
+  render: function(){
+    console.warn("Render requested but this object has no render defined.");
   }
 };
 
