@@ -1,5 +1,5 @@
-<button class="btn pull-right" ng-click="save()" ng-class="{'btn-default': datalist.saving, 'btn-success': !datalist.saving}">Save</button>
-<button class="btn pull-right" ng-click="undo()" ng-class="{'btn-default': datalist.saving, 'btn-inverse': !datalist.saving}">Undo</button>
+<button class="hide btn pull-right" ng-click="save()" ng-class="{'btn-default': datalist.saving, 'btn-success': !datalist.saving}">Save</button>
+<button class="hide btn pull-right" ng-click="undo()" ng-class="{'btn-default': datalist.saving, 'btn-inverse': !datalist.saving}">Undo</button>
 <h1 ng-show="typeof (datalist.title == 'object')">{{datalist.title.default}}</h1>
 <!-- <h1 ng-show="typeof (datalist.title == 'string')">{{datalist.title}}</h1>
  --><p ng-show="typeof (datalist.title == 'object')">{{datalist.description.default}}</p>
