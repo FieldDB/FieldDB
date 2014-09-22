@@ -332,7 +332,7 @@ module.exports = function(grunt) {
           },
           // module: 'SpreadsheetStyleDataEntry',
           bootstrap: function(module, script) {
-            return 'define([], function() { return { init: function(thismodule){\n\t thismodule.run(["$templateCache", function($templateCache) {  \n ' + script + ' }]);\n }\n};\n });';
+            return 'define([], function() { return { init: function(thismodule){\n   thismodule.run(["$templateCache", function($templateCache) {  \n ' + script + ' }]);\n }\n};\n });';
           }
         },
         cwd: '',
@@ -374,7 +374,7 @@ module.exports = function(grunt) {
 
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
-      files: ['Gruntfile.js', 'js/**/*.js', 'test/**/*.js'],
+      files: ['Gruntfile.js', 'js/**/*.js'],
       options: {
         // options here to override JSHint defaults
         globals: {
@@ -385,7 +385,7 @@ module.exports = function(grunt) {
         },
         // Ignore functions inside of loops (to allow for closures)
         loopfunc: true
-      }
+      },
       // options: {
       //   jshintrc: '.jshintrc',
       //   reporter: require('jshint-stylish')
@@ -394,12 +394,12 @@ module.exports = function(grunt) {
       //   'Gruntfile.js',
       //   '<%= yeoman.app %>/scripts/{,*/}*.js'
       // ],
-      // test: {
-      //   options: {
-      //     jshintrc: 'test/.jshintrc'
-      //   },
-      //   src: ['test/spec/{,*/}*.js']
-      // }
+      test: {
+        options: {
+          jshintrc: 'test/.jshintrc'
+        },
+        src: ['test/spec/{,*/}*.js']
+      }
     },
     jasmine: {
       src: [
