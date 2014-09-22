@@ -6,6 +6,7 @@ require.config({
   		/* AngularJS */
 		"angular": "libs/angular/angular",
 		"angular-resource": "libs/angular/angular-resource",
+    /* if you modify/add to these modules, please add them to the tests by putting them in karma.conf.js */
 		"bootstrap": "libs/angular/ui-bootstrap.min",
 		"_": "bower_components/underscore/underscore",
 		"Glosser": "bower_components/fielddb-glosser/fielddb-glosser",
