@@ -328,7 +328,7 @@
         "description": "warning if user's browser isn't chrome"
     },
     "locale_other_browser_message": {
-        "message": "TODO translate It may not work as expected if you are using another browser: {{not_chrome}}",
+        "message": "TODO translate It may not work as expected if you are using another browser: {{notChrome}}",
         "description": "warning if user's browser isn't chrome"
     },
     "locale_get_chrome_button": {
