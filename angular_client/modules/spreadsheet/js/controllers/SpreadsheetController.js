@@ -1485,6 +1485,11 @@ define(
               $scope.selected = scopeIndex + 1;
               $scope.createRecord($scope.newFieldData);
             }
+            // if(scopeIndex === "newEntry"){
+            //   $scope.setFocusOn("firstFieldOfNewEntry");
+            // }else{
+            //   $scope.setFocusOn("firstFieldOfEditingEntry");
+            // }
           }
         };
 
@@ -2478,8 +2483,15 @@ define(
 
         $scope.setFocusOn = function(elementId){
           $timeout(function(){
-            document.getElementById(elementId).focus();
-          },100);
+            if(document.getElementById(elementId)){
+              // console.log("old focus" , document.activeElement);
+              // document.getElementById(elementId).focus();
+              // console.log("new focus" , document.activeElement);
+
+            }else{
+              console.warn("requesting focus on an element that doesnt exist.");
+            }
+          },500);
         };
 
         // Use this function to show objects on loading without displacing other elements

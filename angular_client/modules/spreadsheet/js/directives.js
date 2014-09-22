@@ -193,11 +193,16 @@ define(
         'spreadsheetCatchFocusOnArrowPress',
         function($timeout) {
           return function(scope, element) {
+            var selfElement = element;
             scope.$watch('selected', function() {
               if (scope.selected === 'newEntry' ||  scope.selected === scope.$index) {
                 $timeout(function() {
-                  console.log("spreadsheetCatchFocusOnArrowPress" , element[0]);
-                  element[0].focus();
+                  console.log("arrow old focus" , document.activeElement);
+                  // element[0].focus();
+                  selfElement.find("input")[1].focus();
+                  // document.getElementById("firstFieldOfEditingEntry").focus();
+                  console.log("arrow new focus" , document.activeElement);
+
                 }, 0);
               }
             });
