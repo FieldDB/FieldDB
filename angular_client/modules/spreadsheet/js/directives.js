@@ -185,13 +185,13 @@ define(
             });
           };
         }).directive(
-        'spreadsheetFocusNextInput',
+        'spreadsheetCatchFocusOnArrowPress',
         function($timeout) {
           return function(scope, element) {
             scope.$watch('selected', function() {
               if (scope.selected === 'newEntry' || (scope.$index && scope.selected === scope.$index) ) {
                 $timeout(function() {
-                  console.log("spreadsheetFocusNextInput" , element[0]);
+                  console.log("spreadsheetCatchFocusOnArrowPress" , element[0]);
                   element[0].focus();
                 }, 0);
               }
