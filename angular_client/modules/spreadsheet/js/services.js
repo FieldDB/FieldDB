@@ -20,7 +20,7 @@ define(
             }
             var promise;
 
-            if (UUID != undefined) {
+            if (UUID !== undefined) {
               var config = {
                 method: "GET",
                 url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,

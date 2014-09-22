@@ -1,3 +1,4 @@
+/* globals define */
 console.log("Loading the SpreadsheetDatum.");
 
 define([], function() {
@@ -90,11 +91,11 @@ define([], function() {
       console.log("Upgrading datumTags to a datumField", fieldDBDatum.datumTags);
       fieldDBDatum.datumTags.map(function(datumTag) {
         if (datumTag.tag) {
-          upgradedTags.push(datumTag.tag.trim())
+          upgradedTags.push(datumTag.tag.trim());
         } else {
           console.warn("This datum had datumTags but they were missing a tag inside", fieldDBDatum);
         }
-      })
+      });
     }
     if (upgradedTags && upgradedTags.length > 0) {
       spreadsheetDatum.tags = [];
@@ -148,7 +149,7 @@ define([], function() {
             fieldDBDatum.datumFields[i].readonly = true;
           } else if (key === "comments") {
             //dont put the comments into the comments datum field if their corpus has one...
-            if (typeof fieldDBDatum.datumFields[i].value != "string") {
+            if (typeof fieldDBDatum.datumFields[i].value !== "string") {
               fieldDBDatum.datumFields[i].value = "";
               fieldDBDatum.datumFields[i].mask = "";
             }
