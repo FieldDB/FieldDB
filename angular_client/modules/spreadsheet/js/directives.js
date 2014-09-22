@@ -134,8 +134,10 @@ define(
                 }
 
                 if (e.keyCode === 40 && scope.$index === undefined) {
-                  // Select first record if arrowing down from new record
-                  scope.selectRow(0);
+                  // Select first record on next page if arrowing down from new record
+                  // $rootScope.currentPage = $rootScope.currentPage + 1;
+                  // scope.selectRow(0);
+                  //do nothing if it was the newEntry
                 } else if (e.keyCode === 40 && currentRecordIsLastRecord === true) {
                   // Do not go past very last record
                   scope.selectRow('newEntry');
