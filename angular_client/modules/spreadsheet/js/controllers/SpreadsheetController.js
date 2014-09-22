@@ -615,7 +615,7 @@ define(
           } else {
             $rootScope.clickSuccess = true;
             $rootScope.loginInfo = {
-              "username": auth.user.toLowerCase(),
+              "username": auth.user.trim().toLowerCase().replace(/[^0-9a-z]/g, ""),
               "password": auth.password
             };
 
