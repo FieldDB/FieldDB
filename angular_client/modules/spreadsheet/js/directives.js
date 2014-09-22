@@ -117,8 +117,12 @@ define(
                 var lastPage = scope.numberOfResultPages(scope.allData.length);
                 var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
                 var currentRecordIsLastRecord = false;
+                var currentRecordIsFirstRecordOnNonFirstPage = false;
                 if ($rootScope.currentPage === (lastPage - 1) && scopeIndexOfLastRecordOnLastPage === scope.$index) {
                   currentRecordIsLastRecord = true;
+                }
+                if ($rootScope.currentPage > 0 && 0 === scope.$index) {
+                  currentRecordIsFirstRecordOnNonFirstPage = true;
                 }
 
                 if (e.keyCode === 40) {
@@ -134,6 +138,7 @@ define(
                   scope.selectRow(0);
                 } else if (e.keyCode === 40 && currentRecordIsLastRecord === true) {
                   // Do not go past very last record
+                  scope.selectRow('newEntry');
                   return;
                 } else if (e.keyCode === 40) {
                   if (scope.$index + 2 > scope.scopePreferences.resultSize) {
@@ -145,7 +150,7 @@ define(
                   }
                 } else if (e.keyCode === 38 && $rootScope.currentPage === 0 && (scope.$index === 0 || scope.$index === undefined)) {
                   // Select new entry if coming from most recent record
-                  scope.selectRow('newEntry');
+                  // scope.selectRow('newEntry');
                 } else if (e.keyCode === 38 && scope.$index === 0) {
                   // Go back one page and select last record
                   $rootScope.currentPage = $rootScope.currentPage - 1;
@@ -189,7 +194,7 @@ define(
         function($timeout) {
           return function(scope, element) {
             scope.$watch('selected', function() {
-              if (scope.selected === 'newEntry' || (scope.$index && scope.selected === scope.$index) ) {
+              if (scope.selected === 'newEntry' ||  scope.selected === scope.$index) {
                 $timeout(function() {
                   console.log("spreadsheetCatchFocusOnArrowPress" , element[0]);
                   element[0].focus();
