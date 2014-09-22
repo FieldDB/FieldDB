@@ -1,3 +1,4 @@
+/* globals Glosser, LexiconFactory, define */
 console.log("Loading the SpreadsheetStyleDataEntryDirectives.");
 
 define(
@@ -5,7 +6,7 @@ define(
   function(angular) {
 
     'use strict';
-
+    var lexiconFactory = LexiconFactory;
     var corpusSpecificGlosser;
     /**
      * If the glosser & lexicon have not been created, this function makes it possible for users to specify any glosser url or lexicon url to use for downloading the precedece rules.
@@ -25,7 +26,7 @@ define(
       }
       if (!corpusSpecificGlosser.lexicon) {
         corpusSpecificGlosser.downloadPrecedenceRules(pouchname, optionalUrl, function(precedenceRelations) {
-          corpusSpecificGlosser.lexicon = LexiconFactory({
+          corpusSpecificGlosser.lexicon = lexiconFactory({
             precedenceRelations: precedenceRelations,
             dbname: pouchname,
             element: document.getElementById(pouchname+"-lexicon-viz"),
@@ -63,7 +64,7 @@ define(
       .module('spreadsheet_directives', [])
       .directive('moduleVersion', ['version',
         function(version) {
-          return function(scope, element, attrs) {
+          return function(scope, element) {
             element.text(version);
           };
         }
@@ -73,7 +74,7 @@ define(
         function() {
           return function(scope, element, attrs) {
             var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-            if (scope.field.label == Preferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
+            if (scope.field.label === Preferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
               element[0].selected = true;
             }
           };
@@ -83,7 +84,7 @@ define(
         function() {
           return function(scope, element, attrs) {
             var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-            if (scope.field.label == Preferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
+            if (scope.field.label === Preferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
               element[0].selected = true;
             }
           };
@@ -93,15 +94,15 @@ define(
         function() {
           return function(scope, element, attrs) {
             var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-            if (scope.field.label == Preferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
+            if (scope.field.label === Preferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
               element[0].selected = true;
             }
           };
         })
       .directive('selectDropdownSession', function() {
-        return function(scope, element, attrs) {
+        return function(scope, element) {
           scope.$watch('activeSession', function() {
-            if (scope.session._id == scope.activeSession) {
+            if (scope.session._id === scope.activeSession) {
               element[0].selected = true;
             }
           });
@@ -109,14 +110,14 @@ define(
       }).directive(
         'arrowKey',
         function($rootScope) {
-          return function(scope, element, attrs) {
+          return function(scope, element) {
             element.bind('keyup', function(e) {
               scope.$apply(function() {
                 // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
                 var lastPage = scope.numberOfResultPages(scope.allData.length);
                 var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
                 var currentRecordIsLastRecord = false;
-                if ($rootScope.currentPage == (lastPage - 1) && scopeIndexOfLastRecordOnLastPage == scope.$index) {
+                if ($rootScope.currentPage === (lastPage - 1) && scopeIndexOfLastRecordOnLastPage === scope.$index) {
                   currentRecordIsLastRecord = true;
                 }
 
@@ -160,10 +161,10 @@ define(
         }).directive(
         'keypressMarkAsEdited',
         function($rootScope) {
-          return function(scope, element, attrs) {
+          return function(scope, element) {
             element.bind('blur', function(e) {
               var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
-              if (keycodesToIgnore.indexOf(e.keyCode) == -1) {
+              if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
                 $rootScope.markAsEdited(scope.fieldData, scope.datum);
               } else {
                 return;
@@ -173,10 +174,10 @@ define(
         }).directive(
         'keypressMarkAsNew',
         function($rootScope) {
-          return function(scope, element, attrs) {
+          return function(scope, element) {
             element.bind('keyup', function(e) {
               var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
-              if (keycodesToIgnore.indexOf(e.keyCode) == -1) {
+              if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
                 $rootScope.newRecordHasBeenEdited = true;
               } else {
                 return;
@@ -188,7 +189,7 @@ define(
         function($timeout) {
           return function(scope, element) {
             scope.$watch('selected', function() {
-              if (scope.selected == scope.$index || scope.selected == 'newEntry') {
+              if (scope.selected === scope.$index || scope.selected === 'newEntry') {
                 $timeout(function() {
                   element[0].focus();
                 }, 0);
@@ -201,7 +202,7 @@ define(
           return function(scope, element, attrs) {
             element.bind('blur', function(e) {
               var justCopyDontGuessIGT = false;
-              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
                 justCopyDontGuessIGT = true;
               }
               // Ignore arrows
@@ -225,7 +226,7 @@ define(
           return function(scope, element, attrs) {
             element.bind('blur', function(e) {
               var justCopyDontGuessIGT = false;
-              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
                 justCopyDontGuessIGT = true;
               }
               // Ignore arrows
@@ -250,7 +251,7 @@ define(
           return function(scope, element, attrs) {
             element.bind('blur', function(e) {
               var justCopyDontGuessIGT = false;
-              if (!attrs.autoGlosserOn || attrs.autoGlosserOn == "false") {
+              if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
                 justCopyDontGuessIGT = true;
               }
               // Ignore arrows
@@ -270,8 +271,8 @@ define(
           };
         }).directive(
         'loadPaginatedDataOnPageChange',
-        function($timeout, $rootScope) {
-          return function(scope, element) {
+        function() {
+          return function(scope) {
             scope.$watch('currentPage', function() {
               scope.loadPaginatedData();
             });
