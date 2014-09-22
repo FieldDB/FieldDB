@@ -539,7 +539,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['jshint', 'jasmine']);
   grunt.registerTask('partials', ['ngtemplates']);
 
-  grunt.registerTask('default', ['ngtemplates', 'requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only', 'cssmin']);
+  grunt.registerTask('default', ['jshint', 'ngtemplates', 'requirejs', 'copy:spreadsheet', 'copy:spreadsheet_build_only', 'cssmin']);
 
   grunt.registerTask('all', ['jshint', 'jasmine', 'ngtemplates', 'requirejs', 'uglify', 'copy:spreadsheet', 'cssmin']);
 
