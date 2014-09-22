@@ -6,7 +6,7 @@
   <div class="row">
   <form ng-submit="createRecord(newFieldData);newFieldData=''">
     <div class="focus_box_div">
-      <input ng-disabled="writePermissions==false" spreadsheet-focus-next-input/>
+      <input ng-disabled="writePermissions==false" spreadsheet-catch-focus-on-arrow-press/>
     </div>
     <div class="span3">
       <input
@@ -98,7 +98,7 @@
   <div ng-show="selected==$index">
     <form ng-submit="markAsEdited(fieldData, datum);">
       <div class="span3">
-        <div class="focus_box_div"><input ng-disabled="writePermissions==false" spreadsheet-focus-next-input /></div>
+        <div class="focus_box_div"><input ng-disabled="writePermissions==false" spreadsheet-catch-focus-on-arrow-press /></div>
         <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field1"
           ng-init="fieldData.field1=datum[fields.field1.label]"
           value={{datum[fields.field1.label]}}
