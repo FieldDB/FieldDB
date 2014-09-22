@@ -5,7 +5,9 @@
   ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || readPermissions == false || currentPage!=0">
   <div class="row">
   <form ng-submit="createRecord(newFieldData);newFieldData=''">
-    <div class="focus_box_div"><input ng-disabled="writePermissions==false" focus /></div>
+    <div class="focus_box_div">
+      <input ng-disabled="writePermissions==false" spreadsheet-focus-next-input/>
+    </div>
     <div class="span3">
       <input
             guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-new class="span3" type="text" ng-model="newFieldData.field1"
@@ -96,7 +98,7 @@
   <div ng-show="selected==$index">
     <form ng-submit="markAsEdited(fieldData, datum);">
       <div class="span3">
-        <div class="focus_box_div"><input ng-disabled="writePermissions==false" focus /></div>
+        <div class="focus_box_div"><input ng-disabled="writePermissions==false" spreadsheet-focus-next-input /></div>
         <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field1"
           ng-init="fieldData.field1=datum[fields.field1.label]"
           value={{datum[fields.field1.label]}}
