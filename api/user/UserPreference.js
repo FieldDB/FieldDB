@@ -16,6 +16,8 @@ var InsertUnicodes = require("./../unicode/UnicodeSymbols").InsertUnicodes;
 var UserPreference = function UserPreference(options) {
   this.debug("Constructing UserPreference length: ", options);
   FieldDBObject.apply(this, arguments);
+  this.alwaysConfirmOkay = true;
+  this.todo("setting prefs to auto confirm overwrite to avoid popups in the demo");
 };
 
 UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends UserPreference.prototype */ {

@@ -5,7 +5,7 @@ var debug = false;
 describe("Directive: fielddb-authentication", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/authentication.html"));
+  beforeEach(module("fielddbAngularApp", "views/authentication.html", "views/locales.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
