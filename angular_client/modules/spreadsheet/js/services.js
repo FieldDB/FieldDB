@@ -2,8 +2,8 @@
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
 
 define(
-  ["angular", "js/SpreadsheetDatum"],
-  function(angular, SpreadsheetDatum) {
+  ["angular", "js/SpreadsheetDatum", "Q"],
+  function(angular, SpreadsheetDatum, forcingQtoload) {
 
     'use strict';
 
