@@ -1,4 +1,4 @@
-<div arrow-key
+<div spreadsheet-catch-arrow-key
   ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
   class="relativePosition"
   ng-click="selectRow('newEntry')"
@@ -89,7 +89,7 @@
   </div>
 </div>
 
-<div arrow-key class="row relativePosition"
+<div spreadsheet-catch-arrow-key class="row relativePosition"
   ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}"
   ng-repeat="datum in data | orderBy:orderProp"
   ng-click="selectRow($index)" ng-hide="loading==true || (writePermissions==true && readPermissions==false)">

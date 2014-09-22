@@ -66,7 +66,7 @@
     <img src="img/icon16_dev.png" border="0" /> above and log in.
   </div>
 </div>
-<div arrow-key class="row relativePosition" ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}" ng-repeat="datum in data | orderBy:orderProp" ng-click="selectRow($index)" ng-hide="loading==true || writePermissions==true && readPermissions==false">
+<div spreadsheet-catch-arrow-key class="row relativePosition" ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}" ng-repeat="datum in data | orderBy:orderProp" ng-click="selectRow($index)" ng-hide="loading==true || writePermissions==true && readPermissions==false">
   <!-- Show when editing -->
   <div ng-show="selected==$index">
     <form ng-submit="markAsEdited(fieldData, datum);" ng-click="setFocusOn('fullTemplateFirstFieldOfEditingEntry')">
@@ -331,7 +331,7 @@
   </div>
 </div>
 <!-- create a new entry -->
-<div arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || writePermissions==false">
+<div spreadsheet-catch-arrow-key ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || writePermissions==false">
   <div class="row">
     <form ng-submit="createRecord(newFieldData, 'fullTemplateFirstFieldOfNewEntry')" ng-click="setFocusOn('fullTemplateFirstFieldOfNewEntry')">
       <div class="span5">
