@@ -17,7 +17,7 @@ define(
        * @returns {SpreadsheetStyleDataEntryController}
        */
 
-      function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5) {
+      function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout) {
 
         $rootScope.appVersion = "2.2.2ss";
         /* Modal controller TODO could move somewhere where the search is? */
@@ -1154,7 +1154,8 @@ define(
         //   "field1": "hi does this call createRecord"
         // }
 
-        $scope.createRecord = function(fieldData) {
+        $scope.createRecord = function(fieldData, focusOnFieldAfter) {
+          $scope.setFocusOn(focusOnFieldAfter);
 
           // // Reset new datum form data and enable upload button; only reset audio field if present
           if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
@@ -2475,6 +2476,12 @@ define(
           window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
         };
 
+        $scope.setFocusOn = function(elementId){
+          $timeout(function(){
+            document.getElementById(elementId).focus();
+          },100);
+        };
+
         // Use this function to show objects on loading without displacing other elements
         $scope.hiddenOnLoading = function() {
           if ($rootScope.loading !== true) {
@@ -2598,7 +2605,7 @@ define(
 
       };
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
-      '$resource', '$filter', '$document', 'Data', 'Servers', 'md5'
+      '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout'
     ];
     return SpreadsheetStyleDataEntryController;
   });
