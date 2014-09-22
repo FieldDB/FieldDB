@@ -62,8 +62,8 @@ define(
               var serverCodeMappings = [];
               for (var server in servers) {
                 serverCodeMappings.push({
-                  label: servers[server].serverCode,
-                  value: servers[server].userFriendlyServerName
+                  serverCode: servers[server].serverCode,
+                  userFriendlyServerName: servers[server].userFriendlyServerName
                 });
               }
               return serverCodeMappings;

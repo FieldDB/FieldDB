@@ -77,7 +77,7 @@ define(
         Create an array of servers which the user may use
          */
         $rootScope.servers = Servers.getAvailable();
-        $scope.selectedServer = $rootScope.servers[0];
+        $rootScope.selectedServer = $rootScope.servers[0];
 
         // Set/get/update user preferences
         var defaultPreferences = {
@@ -1667,9 +1667,9 @@ define(
           }
         };
 
-        $scope.registerNewUser = function(newLoginInfo) {
+        $scope.registerNewUser = function(newLoginInfo, serverCode) {
           if (!newLoginInfo.serverCode) {
-            newLoginInfo.serverCode = $scope.selectedServer.label;
+            newLoginInfo.serverCode = serverCode;
           }
           if (!newLoginInfo || !newLoginInfo.serverCode) {
             $rootScope.notificationMessage = "Please select a server.";
@@ -1683,7 +1683,7 @@ define(
           if (safeUsernameForCouchDB !== newLoginInfo.username) {
             $rootScope.loading = false;
             newLoginInfo.username = safeUsernameForCouchDB;
-            $rootScope.notificationMessage = "We have automatically changed your requested username to '" + safeUsernameForCouchDB + "' instead \n(the username you have chosen isn't very safe for urls, which means your corpora would be potentially inaccessible in old browsers)";
+            $rootScope.notificationMessage = "We have automatically changed your requested username to '" + safeUsernameForCouchDB + "' instead. \n\n(The username you have chosen isn't very safe for urls, which means your corpora would be potentially inaccessible in old browsers)";
             $rootScope.openNotification();
             return;
           }
