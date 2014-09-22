@@ -391,8 +391,8 @@
 			</div>
 		</div>
 		<!-- Export Search Results Modal -->
-		<div modal="shouldBeOpen" close="close()" id="searchModal"
-			class="modal hide fade" tabindex="-1" role="dialog"
+		<div class="nevershowSlidingAnimation" modal="shouldBeOpen" close="close()" id="searchModal"
+			 tabindex="-1" role="dialog"
 			aria-labelledby="searchModalLabel" aria-hidden="true">
 			<div class="modal-header">
 				<button type="button" ng-click="close()" class="close"
@@ -415,7 +415,7 @@
 		</div>
 
 		<!-- Audio Warning Modal-->
-		<div modal="audioWarningShouldBeOpen" close="stopRecording(datumForAudio)" options="opts">
+		<div class="nevershowSlidingAnimation" modal="audioWarningShouldBeOpen" close="stopRecording(datumForAudio)" options="opts">
         <div class="modal-header">
             <h3> <i class="fa fa-microphone"></i> Recording Audio</h3>
         </div>
@@ -431,7 +431,7 @@
     </div>
 
     <!-- Generic Notification Modal-->
-	<div modal="notificationShouldBeOpen" close="closeNotification()" options="opts">
+	<div class="nevershowSlidingAnimation" modal="notificationShouldBeOpen" close="closeNotification()" options="opts">
         <div class="modal-header">
             <h3>Notification</h3>
         </div>
@@ -445,7 +445,7 @@
 
 
     <!-- Error logging in-->
-	<div modal="errorLoggingInNotificationShouldBeOpen" close="closeNotification()" options="opts">
+	<div class="nevershowSlidingAnimation" modal="errorLoggingInNotificationShouldBeOpen" close="closeNotification()" options="opts">
         <div class="modal-header">
             <h3>Notification</h3>
         </div>
@@ -458,7 +458,7 @@
     </div>
 
     <!-- Confirm password Notification Modal-->
-	<div modal="passwordNotificationShouldBeOpen" close="closePasswordNotification()" options="opts">
+	<div class="nevershowSlidingAnimation" modal="passwordNotificationShouldBeOpen" close="closePasswordNotification()" options="opts">
         <div class="modal-header">
             <h3>We need to make sure its you...</h3>
         </div>
@@ -475,7 +475,7 @@
     </div>
 
     <!-- Welcome Notification Modal; loaded on absence of saved state in preferences-->
-	<div modal="welcomeNotificationShouldBeOpen" close="closeWelcomeNotification()" options="opts">
+	<div class="nevershowSlidingAnimation" modal="welcomeNotificationShouldBeOpen" close="closeWelcomeNotification()" options="opts">
         <div class="modal-header">
             <h3> <i class="fa whiteicon fa-cloud"></i> Welcome to LingSync!</h3>
         </div>

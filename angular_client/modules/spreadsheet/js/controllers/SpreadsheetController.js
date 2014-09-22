@@ -45,7 +45,7 @@ define(
 
         // Functions to open/close welcome notification modal
         $rootScope.openWelcomeNotification = function() {
-          $scope.welcomeNotificationShouldBeOpen = true;
+          $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
         };
 
         $rootScope.closeWelcomeNotification = function() {

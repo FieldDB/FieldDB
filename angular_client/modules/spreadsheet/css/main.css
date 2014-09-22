@@ -82,7 +82,7 @@ body {
 	background-color: #102E37;
 	border: 1px solid #102E37;
 	background: #102E37;
-	position: fixed; 
+	position: fixed;
 	left: 0;
 	right: 0;
 	margin-left: 0;
@@ -435,7 +435,7 @@ input:focus {
   to { background-color: #C20495; -webkit-box-shadow: 0 0 9px #333; }
 }
 
-.pulsing 
+.pulsing
 {
 	border-radius: 4px;
 	padding-left: 10px;
@@ -458,4 +458,20 @@ input:focus {
 .answer {
 	padding: 15px;
 	margin-left: 15px;
+}
+
+/*http://stackoverflow.com/questions/18873428/turn-off-animation-modal-angular-ui*/
+.modal.fade {
+  opacity: 1 !important;
+}
+
+.modal.fade .modal-dialog, .modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0) !important;
+  -ms-transform: translate(0, 0) !important;
+  transform: translate(0, 0) !important;
+}
+.nevershowSlidingAnimation{
+  -webkit-transform: translate(0, 0) !important;
+  -ms-transform: translate(0, 0) !important;
+  transform: translate(0, 0) !important;
 }
