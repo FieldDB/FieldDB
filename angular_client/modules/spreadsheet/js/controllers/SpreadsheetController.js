@@ -488,8 +488,8 @@ define(
               }, function(error) {
                 $scope.documentReady = true;
                 console.log("Error loading sessions.", error);
-                $rootScope.notificationMessage = "Error loading corpus, please log in.";
-                $rootScope.errorLoggingInNotificationShouldBeOpen = true;
+                $rootScope.notificationMessage = "Error loading corpus, please try again.";
+                $rootScope.notificationShouldBeOpen = true;
                 $rootScope.loading = false;
               });
         };
@@ -607,7 +607,7 @@ define(
         };
 
         $scope.loginUser = function(auth, chosenServer) {
-          auth.server = chosenServer;
+          auth.server = auth.server || chosenServer;
 
           if (!auth || !auth.server) {
             $rootScope.notificationMessage = "Please choose a server.";
@@ -1441,7 +1441,7 @@ define(
               doSomethingElse($scope.allData[index]);
             }
           }
-          Q.allSettled(saveDatumPromises)
+          Q.all(saveDatumPromises)
             .done(function(success, reason) {
               if (reason) {
                 console.log(reason);
