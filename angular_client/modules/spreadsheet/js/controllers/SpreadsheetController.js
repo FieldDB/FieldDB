@@ -77,7 +77,7 @@ define(
         Create an array of servers which the user may use
          */
         $rootScope.servers = Servers.getAvailable();
-        $rootScope.servers[0].selected = "selected";
+        $rootScope.selectedServer = $rootScope.servers[0];
 
         // Set/get/update user preferences
         var defaultPreferences = {
@@ -608,7 +608,7 @@ define(
 
         $scope.loginUser = function(auth) {
           if (!auth.server) {
-            auth.server = $rootScope.servers[0].label;
+            auth.server = $rootScope.selectedServer.label;
           }
           if (!auth || !auth.server) {
             $rootScope.notificationMessage = "Please choose a server.";
@@ -1670,7 +1670,7 @@ define(
 
         $scope.registerNewUser = function(newLoginInfo) {
           if (!newLoginInfo.serverCode) {
-            newLoginInfo.serverCode = $rootScope.servers[0].label;
+            newLoginInfo.serverCode = $rootScope.selectedServer.label;
           }
           if (!newLoginInfo || !newLoginInfo.serverCode) {
             $rootScope.notificationMessage = "Please select a server.";

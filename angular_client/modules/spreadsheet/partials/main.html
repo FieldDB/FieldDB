@@ -1,14 +1,14 @@
 
-<br /> 
-<br /> 
-<div id="login_screen" ng-show="documentReady==true">  
-  <div ng-show="notChrome">  
+<br />
+<br />
+<div id="login_screen" ng-show="documentReady==true">
+  <div ng-show="notChrome">
     <h3>THIS SITE WAS DEVELOPED FOR CHROME.
-    </h3>  
+    </h3>
     <p>
       It may not work as expected if you are using another browser:
       {{notChrome}}
-      <br /> 
+      <br />
       <a  href="http://chrome.google.com">
         <button class="btn btn-info">Get  Chrome
         </button>
@@ -16,131 +16,129 @@
       <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
         <button class="btn btn-success">This browser works fine
         </button>
-      </a>  
+      </a>
     </p>
-  </div>  
-  <img src="img/logo.png"> 
+  </div>
+  <img src="img/logo.png">
   <br />
-  <br />  
-  <div ng-show="sessions!=undefined" class="mainPageDiv">  
+  <br />
+  <div ng-show="sessions!=undefined" class="mainPageDiv">
     <span ng-show="DB.title!=undefined">
       <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" > {{DB.title}} loaded.
       <br />
       <i class="fa fa-calendar">
-      </i> Select  a session and click Go, or create a new session.  
+      </i> Select  a session and click Go, or create a new session.
     </span>
-    <br>  
-    <div class="form-horizontal">  
-      <form ng-submit="selectSession(activeSessionToView)">  
-        <select ng-model='activeSessionToView'>  
+    <br>
+    <div class="form-horizontal">
+      <form ng-submit="selectSession(activeSessionToView)">
+        <select ng-model='activeSessionToView'>
           <option value="" disabled selected>Choose existing session...
-          </option>  
+          </option>
           <option value='none'>View all sessions
-          </option>  
+          </option>
           <option ng-repeat="session in sessions | orderBy:'dateCreated'"  value={{session._id}}>{{session.dateCreated | shortDate}} {{session.title}}
-          </option>  
-        </select>  
+          </option>
+        </select>
         <button class="btn btn-primary">Go
         </button>&nbsp;
         <button class="btn btn-info" type='button'  ng-click="showCreateSessionDiv=!showCreateSessionDiv">
           <i class="fa whiteicon fa-plus">
           </i> New Session...
-        </button>   
-      </form>  
-    </div>   
-    <div class="newSessionDiv">  
-      <div ng-show="showCreateSessionDiv==true">  
-        <br />  
-        <h3>  
+        </button>
+      </form>
+    </div>
+    <div class="newSessionDiv">
+      <div ng-show="showCreateSessionDiv==true">
+        <br />
+        <h3>
           <i class="fa fa-calendar">
-          </i> New Session for 
+          </i> New Session for
           <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
           <i>{{DB.title}}
-          </i>  
-        </h3>  
-        <form ng-model="newSession">  
-          <table class="newSessionTable" align='center'>  
-            <tr>  
+          </i>
+        </h3>
+        <form ng-model="newSession">
+          <table class="newSessionTable" align='center'>
+            <tr>
               <td>Goal:
-              </td>  
+              </td>
               <td>
                 <input type="text" placeholder="Collecting examples of animacy agreement" ng-model='newSession.goal'>
-              </td>  
-            </tr>  
-            <tr>  
+              </td>
+            </tr>
+            <tr>
               <td>Consultants:
-              </td>  
+              </td>
               <td>
                 <input type="text" placeholder="ME,EV,FE" ng-model='newSession.consultants'>
-              </td>  
-            </tr>  
-            <tr>  
+              </td>
+            </tr>
+            <tr>
               <td>Language:
-              </td>  
+              </td>
               <td>
                 <input type="text" placeholder="Language" ng-model='newSession.language'>
-              </td>  
-            </tr>  
-            <tr>  
+              </td>
+            </tr>
+            <tr>
               <td>Dialect:
-              </td>  
+              </td>
               <td>
                 <input type="text" placeholder="Dialect" ng-model='newSession.dialect'>
-              </td>  
-            </tr>  
-            <tr>  
+              </td>
+            </tr>
+            <tr>
               <td>Date Elicited:
-              </td>  
+              </td>
               <td>
                 <input type="date" placeholder="Weds 2012-08-01" ng-model='newSession.dateElicited'>
-              </td>  
-            </tr>  
-            <tr>  
+              </td>
+            </tr>
+            <tr>
               <td>User:
-              </td>  
+              </td>
               <td>{{user.name}}
-              </td>  
-            </tr>  
-            <tr>  
+              </td>
+            </tr>
+            <tr>
               <td>Date Entered:
-              </td>  
-              <td>{{currentDate | shortDate}}  
-              </tr>  
-            </table>  
+              </td>
+              <td>{{currentDate | shortDate}}
+              </tr>
+            </table>
             <button class="btn btn-success"  ng-click="createNewSession(newSession);showCreateSessionDiv=false">
               <i class="fa whiteicon fa-save">
               </i> Create  and Access New Session
-            </button>  
-          </form>  
-        </div>  
-      </div>  
-    </div>  
-    <br />  
-    <div class="mainPageDiv">  
-      <div ng-hide="authenticated==true">  Select Server and Log in 
-        <br /> 
-        <br />  
-        <form ng-submit='loginUser(auth)'>  
-          <select ng-model='auth.server' ng-disabled="loading==true">  
-            <option ng-repeat="server in servers" selected={{server.selected}} value="{{server.label}}" >{{server.value}}
-            </option>  
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="mainPageDiv">
+      <div ng-hide="authenticated==true"> Log in
+        <br />
+        <br />
+        <form ng-submit='loginUser(auth)'>
+          <select hidden ng-model='selectedServer' ng-disabled="loading==true" ng-options="server.value for server in servers">
           </select>
-          <br> 
-          <br> 
+          <br>
+          <br>
           <input type="text" ng-model='auth.user'  placeholder="username" ng-disabled="loading==true">
-          <br> 
+          <br>
           <input type="password"  ng-model='auth.password' placeholder="password" ng-disabled="loading==true">
-          <br>  
+          <br>
           <button class="btn btn-primary" ng-disabled="loading==true">Log In
           </button>&nbsp;
-          <img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">  
-        </form>  
-      </div>  
-      <div ng-show="authenticated==true && DBselected==false" >  
+          <img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+        </form>
+      </div>
+      <div ng-show="authenticated==true && DBselected==false" >
         <i class="fa fa-cloud">
         </i> Corpora:
-        <br />  
-        <table class="table">  
+        <br />
+        <table class="table">
           <tbody>
           <tr ng-repeat="item in corpora" ng-click="selectDB(item);DBselected=true;" ng-disabled="loading==true" >
             <td>
@@ -148,7 +146,7 @@
             </td>
             <td class="text-left"> Access {{item.title}}
             </td>
-          </tr>  
+          </tr>
           <tr ng-click="selectDB({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});DBselected=true;" ng-disabled="loading==true" >
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
@@ -158,50 +156,50 @@
               <small>(You can browse this corpus to see what the app looks like with sample data)
               </small>
             </td>
-          </tr>  
+          </tr>
         </tbody>
         </table>  &nbsp;
-        <img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">  
-      </div>  
+        <img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+      </div>
       <div ng-show="DBselected==true">  Logged in as {{user.name}}
         <br />
         <i class="fa fa-cloud">
         </i> Selected corpus: {{DB.title}}
-        <br />  
-        <button class="btn btn-primary" ng-click="DBselected=false">  Select a Different Corpus...  
-        </button>  
-      </div>    
-    </div>  
-    <br />   
-    <div class="row-fluid pagination-centered">  
+        <br />
+        <button class="btn btn-primary" ng-click="DBselected=false">  Select a Different Corpus...
+        </button>
+      </div>
+    </div>
+    <br />
+    <div class="row-fluid pagination-centered">
       <br />
-      <br />  
+      <br />
       <button class="btn btn-info" ng-click="contactUs()">
         <i class="fa whiteicon fa-envelope-o">
         </i> Contact Us
-      </button>  
+      </button>
       <button class="btn btn-info" ng-show="authenticated==true" ng-click="showResetPassword=!showResetPassword">Reset Password...
-      </button>    
-    </div>  
-    <br />  
-    <div class="mainPageDiv" ng-show="showResetPassword==true"> Password Reset:  
-      <br />  
-      <form ng-submit='changePasswordSubmit()'>  
+      </button>
+    </div>
+    <br />
+    <div class="mainPageDiv" ng-show="showResetPassword==true"> Password Reset:
+      <br />
+      <form ng-submit='changePasswordSubmit()'>
         <label>Old Password:
         </label>
-        <input type="password" ng-model="resetPasswordInfo.password"/> 
-        <br/>  
+        <input type="password" ng-model="resetPasswordInfo.password"/>
+        <br/>
         <label>New Password:
         </label>
         <input type="password" ng-model="resetPasswordInfo.newpassword"/>
-        <br/>  
+        <br/>
         <label>Confirm new password:
         </label>
         <input type="password" ng-model="resetPasswordInfo.confirmpassword"/>
-        <br/>   
+        <br/>
         <button class="btn btn-primary" ng-disabled="loading==true">Reset Password
         </button>&nbsp;
-        <img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">  
-      </form>  
-    </div> 
-  </div>   
+        <img src="img/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+      </form>
+    </div>
+  </div>
