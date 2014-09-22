@@ -45,7 +45,7 @@ module.exports = function(grunt) {
     // Project settings
     yeoman: {
       // configurable paths
-      app: require('./bower.json').appPath || 'app',
+      app: require('./bower.json').appPath || '.',
       dist: 'dist'
     },
 
@@ -54,8 +54,15 @@ module.exports = function(grunt) {
       // files: ['<%= jshint.files %>'],
       // tasks: ['jshint', 'qunit'],
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-        tasks: ['newer:jshint:all'],
+        files: ['<%= yeoman.app %>/js/{,*/}*.js'],
+        tasks: ['jshint'],
+        options: {
+          livereload: true
+        }
+      },
+      templates: {
+        files: ["<%= yeoman.app %>/partials/{,*/}*.html"],
+        tasks: ["ngtemplates"],
         options: {
           livereload: true
         }
