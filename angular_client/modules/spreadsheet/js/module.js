@@ -1,3 +1,4 @@
+/* globals define */
 console.log("Loading the Spreadsheet module.");
 
 define(
@@ -10,6 +11,7 @@ define(
     SpreadsheetStyleDataEntrySettingsController,
     SpreadsheetStyleDataEntryDirectives, SpreadsheetStyleDataEntryFilters, SpreadsheetStyleDataEntryPartials,
     SpreadsheetStyleDataEntryServices, SpreadsheetPrivateServices) {
+
     /**
      * The main Spreadsheet Angular UI module.
      *
@@ -17,6 +19,7 @@ define(
      */
 
     'use strict';
+    console.log("loading ", SpreadsheetPrivateServices, SpreadsheetStyleDataEntryServices);
 
     var SpreadsheetStyleDataEntry = angular
       .module(
@@ -56,6 +59,6 @@ define(
           }
         ]);
 
-    SpreadsheetStyleDataEntryPartials.init(SpreadsheetStyleDataEntry)
+    SpreadsheetStyleDataEntryPartials.init(SpreadsheetStyleDataEntry);
     return SpreadsheetStyleDataEntry;
   });

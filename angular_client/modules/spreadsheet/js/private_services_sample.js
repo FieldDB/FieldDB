@@ -1,6 +1,7 @@
+/* globals define */
+'use strict';
 console.log("Loading the SpreadsheetPrivateServices.");
 
-'use strict';
 define(
   ["angular"],
   function(angular) {
@@ -8,7 +9,7 @@ define(
       .module('spreadsheet_private_services', [])
       .factory(
         'Servers',
-        function($http, $rootScope) {
+        function() {
 
           var localhost = false;
           if (window.location.host.indexOf("example.org") === -1) {
@@ -16,14 +17,15 @@ define(
           }
           var servers = {};
 
-          if (localhost) {
-            servers.localhost = {
-              auth: "https://localhost:3183",
-              corpus: "https://localhost:6984",
-              serverCode: "localhost",
-              userFriendlyServerName: "Localhost"
-            };
-          }
+          // if (localhost) {
+          //   servers.localhost = {
+          //     auth: "https://localhost:3183",
+          //     corpus: "https://localhost:6984",
+          //     serverCode: "localhost",
+          //     userFriendlyServerName: "Localhost"
+          //   };
+          // }
+
           servers.production = {
             auth: "https://auth.example.org",
             corpus: "https://corpus.example.org",
@@ -36,7 +38,6 @@ define(
             serverCode: "testing",
             userFriendlyServerName: "Example Beta"
           };
-
 
           return {
             'getServiceUrl': function(label, serviceType) {
@@ -57,7 +58,7 @@ define(
 
             'getAvailable': function() {
               var serverCodeMappings = [];
-              for (server in servers) {
+              for (var server in servers) {
                 serverCodeMappings.push({
                   label: servers[server].serverCode,
                   value: servers[server].userFriendlyServerName
@@ -68,8 +69,8 @@ define(
 
             'getHumanFriendlyLabels': function() {
               var serverCodeMappings = [];
-              for (server in servers) {
-                serverCodeMappings[servers[server].serverCode] = servers[server].userFriendlyServerName
+              for (var server in servers) {
+                serverCodeMappings[servers[server].serverCode] = servers[server].userFriendlyServerName;
               }
               return serverCodeMappings;
             }

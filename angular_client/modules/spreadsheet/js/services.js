@@ -1,3 +1,4 @@
+/* globals define, Q */
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
 
 define(
@@ -18,10 +19,11 @@ define(
               window.location.assign("#/corpora_list");
               return;
             }
-            var promise;
+            var promise,
+            config;
 
             if (UUID !== undefined) {
-              var config = {
+               config = {
                 method: "GET",
                 url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,
                 withCredentials: true
@@ -63,7 +65,7 @@ define(
 
             if (newRecord._rev) {
               config.method = "PUT";
-              config.url = config.url + "/" + newRecord._id + "?rev=" + newRecord._rev
+              config.url = config.url + "/" + newRecord._id + "?rev=" + newRecord._rev;
             }
 
             console.log("Contacting the DB to save record. " + config.url);
@@ -217,17 +219,18 @@ define(
                   user.gravatar = md5.createHash(user.email);
                 }
                 $rootScope.user = user;
-                var promiseCorpus = $http(corpusConfig).then(
+                $http(corpusConfig).then(
                   function(corpusResponse) {
                     console.log("Logging in to corpus server.");
                     deferred.resolve(corpusResponse);
                   },
                   function(err) {
+                    console.warn(err);
                     deferred.reject("Please report this.");
                   });
-              }
+              };
 
-              var promise = $http(authConfig).then(
+              $http(authConfig).then(
                 function(response) {
                   if(response.data.userFriendlyErrors){
                     deferred.reject(response.data.userFriendlyErrors.join(" "));
@@ -237,11 +240,11 @@ define(
 
                 },
                 function(err) {
-                  console.log(err);
+                  console.warn(err);
                   var message = "please report this.";
-                  if(err.status == 0){
+                  if(err.status === 0){
                     message = "are you offline?";
-                    if($rootScope.serverCode == "mcgill"|| $rootScope.serverCode == "concordia"){
+                    if($rootScope.serverCode === "mcgill"|| $rootScope.serverCode === "concordia"){
                       message = "have you accepted the server's security certificate? (please refer to your registration email)";
                     }
                   }
@@ -279,7 +282,7 @@ define(
                   $rootScope.loading = false;
                   window.setTimeout(function(){
                     window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
-                  }, 1500)
+                  }, 1500);
 
                 });
               return promise;
@@ -365,8 +368,9 @@ define(
                 // spreadsheetDatumToBeSaved.timestamp = Date.now();
                 // spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date())); //These were done in the edit functions because the data might get saved an hour after it was modified... or more...
                 var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
+                  var fieldDBDatum;
                   try {
-                    var fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
+                    fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
                   } catch (e) {
                     deferred.reject("Error saving datum: " + JSON.stringify(e));
                     return;
@@ -398,7 +402,7 @@ define(
                   getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
                     var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
                     if (e.data && e.data.reason) {
-                      if (e.data.reason == "missing") {
+                      if (e.data.reason === "missing") {
                         e.data.reason = e.data.reason + " Please report this.";
                       }
                       reason = e.data.reason;
@@ -437,19 +441,20 @@ define(
                 window.location.assign("#/corpora_list");
                 return;
               }
-              console.log("You cannot delete items from the corpus.");
+              console.log("You cannot delete items from the corpus.", rev);
               return;
-              var config = {
-                method: "DELETE",
-                url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID + "?rev=" + rev,
-                withCredentials: true
-              };
 
-              console.log("Contacting the DB to delete record. " + config.url);
-              var promise = $http(config).then(function(response) {
-                return response;
-              });
-              return promise;
+              // var config = {
+              //   method: "DELETE",
+              //   url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID + "?rev=" + rev,
+              //   withCredentials: true
+              // };
+
+              // console.log("Contacting the DB to delete record. " + config.url);
+              // var promise = $http(config).then(function(response) {
+              //   return response;
+              // });
+              // return promise;
             },
             'changePassword': function(changePasswordInfo) {
               if (!$rootScope.serverCode) {
