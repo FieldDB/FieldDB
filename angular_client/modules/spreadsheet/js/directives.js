@@ -150,6 +150,9 @@ define(
                   } else {
                     scope.selectRow(scope.$index + 1);
                   }
+                } else if (e.keyCode === 38 && scope.$index === undefined) {
+                  // Select new entry if coming from most recent record
+                  // scope.selectRow(scopeIndexOfLastRecordOnLastPage);
                 } else if (e.keyCode === 38 && $rootScope.currentPage === 0 && (scope.$index === 0 || scope.$index === undefined)) {
                   // Select new entry if coming from most recent record
                   // scope.selectRow('newEntry');
