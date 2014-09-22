@@ -2,8 +2,8 @@
 console.log("Loading the SpreadsheetStyleDataEntryDirectives.");
 
 define(
-  ["angular"],
-  function(angular) {
+  ["angular", "Glosser"],
+  function(angular, forcingloadofglosser) {
 
     'use strict';
     var lexiconFactory = LexiconFactory;
