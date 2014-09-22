@@ -4,8 +4,13 @@ console.log("Loading the Spreadsheet main");
 require.config({
   paths: {
   		/* AngularJS */
-		"angular": "libs/angular/angular",
-		"angular-resource": "libs/angular/angular-resource",
+		"angular": "bower_components/angular/angular",
+    "angular-resource": "bower_components/angular-resource/angular-resource",
+    "angular-cookies": "bower_components/angular-cookies/angular-cookies",
+    "angular-sanitize": "bower_components/angular-sanitize/angular-sanitize",
+    "angular-animate": "bower_components/angular-animate/angular-animate",
+    "angular-touch": "bower_components/angular-touch/angular-touch",
+    "angular-route": "bower_components/angular-route/angular-route",
     /* if you modify/add to these modules, please add them to the tests by putting them in karma.conf.js */
 		"bootstrap": "libs/angular/ui-bootstrap.min",
 		"_": "bower_components/underscore/underscore",
