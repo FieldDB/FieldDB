@@ -108,7 +108,7 @@ define(
           });
         };
       }).directive(
-        'arrowKey',
+        'spreadsheetCatchArrowKey',
         function($rootScope) {
           return function(scope, element) {
             element.bind('keyup', function(e) {
