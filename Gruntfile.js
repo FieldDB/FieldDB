@@ -69,7 +69,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: ".jshintrc"
         },
-        src: ["api/fielddb.js", "api/FieldDBObject.js", "api/Collection.js", "api/CORS.js", "api/FieldDBConnection.js",  "api/app/App.js", "api/confidentiality_encryption/Confidential.js", "api/corpus/Corpus.js", "api/corpus/PsycholinguisticsDatabase.js", "api/datum/DatumTag.js", "api/datum/DatumTags.js", "api/datum/DatumField.js", "api/datum/Document.js",  "api/datum/DocumentCollection.js",  "api/data_list/DataList.js", "api/corpus/Database.js", "api/import/Import.js", "api/locales/ContextualizableObject.js", "api/locales/Contextualizer.js", "api/user/UserMask.js", "api/user/User.js", "api/user/Speaker.js", "api/user/Consultant.js", "api/user/Participant.js", "api/corpus/CorpusMask.js"]
+        src: ["api/fielddb.js", "api/FieldDBObject.js", "api/Collection.js", "api/CORS.js", "api/FieldDBConnection.js", "api/app/App.js", "api/confidentiality_encryption/Confidential.js", "api/corpus/Corpus.js", "api/corpus/PsycholinguisticsDatabase.js", "api/datum/DatumTag.js", "api/datum/DatumTags.js", "api/datum/DatumField.js", "api/datum/Document.js", "api/datum/DocumentCollection.js", "api/data_list/DataList.js", "api/corpus/Database.js", "api/import/Import.js", "api/locales/ContextualizableObject.js", "api/locales/Contextualizer.js", "api/user/UserMask.js", "api/user/User.js", "api/user/UserPreference.js", "api/user/Speaker.js", "api/user/Consultant.js", "api/user/Participant.js", "api/corpus/CorpusMask.js"]
       },
       test: {
         options: {
@@ -108,6 +108,11 @@ module.exports = function(grunt) {
         cmd: function() {
           return "bash scripts/build_fielddb_angular_core.sh";
         }
+      },
+      updateFieldDBVersion: {
+        cmd: function() {
+          return "echo y | bash scripts/set_fielddb_version.sh";
+        }
       }
     }
   });
@@ -123,10 +128,10 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask("docs", ["jsdoc"]);
-  grunt.registerTask("build", ["jshint", "browserify", "uglify"]);
-  grunt.registerTask("default", ["jshint", "jasmine_node", "browserify", "uglify"]);
-  grunt.registerTask("default", ["jasmine_node", "browserify", "uglify"]);
-  grunt.registerTask("travis", ["jasmine_node", "browserify", "uglify", "docs", "exec:buildFieldDBAngularCore"]);
+  grunt.registerTask("build", ["jshint", "browserify"]);
+  grunt.registerTask("dist", ["jshint", "jasmine_node", "exec:updateFieldDBVersion", "browserify", "uglify"]);
+  grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
+  grunt.registerTask("travis", ["jshint", "jasmine_node", "browserify", "uglify", "docs", "fielddb-angular"]);
 
 };

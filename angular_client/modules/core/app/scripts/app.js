@@ -9,7 +9,7 @@
 //       return FieldDB[modelName];
 //     });
 // }
-angular.module("fielddbAngularApp", [
+var app = angular.module("fielddbAngularApp", [
   "ngAnimate",
   "ngCookies",
   "ngResource",
@@ -48,3 +48,19 @@ angular.module("fielddbAngularApp", [
   FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.lingsync.org";
 
 });
+console.log(app);
+// app.run(["$route", "$rootScope", "$location",
+//   function($route, $rootScope, $location) {
+//     var original = $location.path;
+//     $location.path = function(path, reload) {
+//       if (reload === false) {
+//         var lastRoute = $route.current;
+//         var un = $rootScope.$on("$locationChangeSuccess", function() {
+//           $route.current = lastRoute;
+//           un();
+//         });
+//       }
+//       return original.apply($location, [path]);
+//     };
+//   }
+// ]);

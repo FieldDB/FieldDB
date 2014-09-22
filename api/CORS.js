@@ -16,6 +16,9 @@ var CORS = {
   },
   bug: function(message) {
     console.warn("CORS-BUG: " + message);
+  },
+  render: function(){
+    console.warn("Render requested but this object has no render defined.");
   }
 };
 
@@ -33,6 +36,8 @@ CORS.supportCORSandIE = function(method, url) {
   if ("withCredentials" in xhrCors) {
     // XHR for Chrome/Firefox/Opera/Safari.
     xhrCors.open(method, url, true);
+    // https://mathiasbynens.be/notes/xhr-responsetype-json
+    // xhrCors.responseType = "json";
   } else if (typeof XDomainRequest !== "undefined") {
     // XDomainRequest for IE.
     xhrCors = new XDomainRequest();
@@ -83,29 +88,27 @@ CORS.makeCORSRequest = function(options) {
   //  }
 
   xhr.onload = function(e, f, g) {
-    var response = xhr.response || xhr.responseText;
+    var response = xhr.responseJSON || xhr.responseText || xhr.response;
     if (self.debugMode) {
       self.debug("Response from CORS request to " + options.url + ": " + response);
+    }
+    if (xhr.status >= 400) {
+      console.log("The request was unsuccesful " + xhr.statusText);
+      deferred.reject(response);
+      return;
     }
     if (response) {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        console.log("Response was not json.");
+        console.warn("Response was already json.", e);
       }
       deferred.resolve(response);
     } else {
       self.bug("There was no content in the server's response text. Please report this.");
       console.log(e, f, g);
-      // deferred.reject(e);
+      deferred.reject(e);
     }
-    if (xhr.status >= 400) {
-      console.log("The request was unsuccesful " + xhr.statusText);
-      deferred.reject(response);
-    } else {
-      deferred.resolve(response);
-    }
-
     // self.debugMode = false;
   };
 

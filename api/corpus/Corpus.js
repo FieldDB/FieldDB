@@ -1,6 +1,6 @@
 /* global window, OPrime */
 var CorpusMask = require("./CorpusMask").CorpusMask;
-var Datum = require("./../FieldDBObject").FieldDBObject;
+var Datum = require("./../datum/Datum").Datum;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Session = require("./../FieldDBObject").FieldDBObject;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -1051,6 +1051,41 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   getFrequentDatumValidationStates: {
     value: function() {
       return this.getFrequentValues("validationStatus", ["Checked", "Deleted", "ToBeCheckedByAnna", "ToBeCheckedByBill", "ToBeCheckedByClaude"]);
+    }
+  },
+
+  getCorpusSpecificLocalizations: {
+    value: function(optionalLocaleCode) {
+      var self = this;
+
+      if (optionalLocaleCode) {
+        this.todo("Test the loading of an optionalLocaleCode");
+        this.get(optionalLocaleCode + "/messages.json").then(function(locale) {
+          if (!locale) {
+            self.warn("the requested locale was empty.");
+            return;
+          }
+          self.application.contextualizer.addMessagesToContextualizedStrings("null", locale);
+        }, function(error) {
+          self.warn("The requested locale wasn't loaded");
+          self.debug("locale loading error", error);
+        });
+      } else {
+        this.fetchCollection("locales").then(function(locales) {
+          for (var localeIndex = 0; localeIndex < locales.length; localeIndex++) {
+            if (!locales[localeIndex]) {
+              self.warn("the requested locale was empty.");
+              continue;
+            }
+            self.application.contextualizer.addMessagesToContextualizedStrings(null, locales[localeIndex]);
+          }
+        }, function(error) {
+          self.warn("The locales didn't loaded");
+          self.debug("locale loading error", error);
+        });
+      }
+
+      return this;
     }
   },
 

@@ -43,6 +43,24 @@ describe("Corpus", function() {
 
   });
 
+  describe("prefs", function() {
+    it("should be possible to set team preferences for a view", function() {
+      var corpus = new Corpus();
+      expect(corpus.prefs).toBeUndefined();
+      corpus.preferredDashboardLayout = "layoutEverythingAtOnce";
+      corpus.preferredDatumTemplate = "yalefieldmethodsspring2014template";
+      corpus.preferredLocale = "fr";
+
+      var serialized = corpus.toJSON();
+      expect(serialized.prefs.type).toEqual("UserPreference");
+      expect(serialized.prefs.preferredDashboardLayout).toEqual("layoutEverythingAtOnce");
+      expect(serialized.prefs.preferredDatumTemplate).toEqual("yalefieldmethodsspring2014template");
+      expect(serialized.prefs.preferredLocale).toEqual("fr");
+
+      corpus.preferredDatumTemplate = "default";
+      expect(corpus.preferredDatumTemplate).toBeUndefined();
+    });
+  });
 
   describe("datum creation", function() {
     var corpus;

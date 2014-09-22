@@ -12,6 +12,8 @@ var InsertUnicode = require("./UnicodeSymbol").InsertUnicode;
 var InsertUnicodes = function InsertUnicodes(options) {
   this.debug("Constructing InsertUnicodes length: ", options);
   Collection.apply(this, arguments);
+  this.alwaysConfirmOkay = true;
+  this.todo("setting unicodes to auto confirm overwrite to avoid popups in the demo");
 };
 
 InsertUnicodes.prototype = Object.create(Collection.prototype, /** @lends InsertUnicodes.prototype */ {

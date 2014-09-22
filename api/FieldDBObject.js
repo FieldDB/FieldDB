@@ -2,6 +2,7 @@
 var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
+var package = require("./../package.json");
 
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
@@ -103,22 +104,32 @@ var FieldDBObject = function FieldDBObject(json) {
     this.debug("simpleModels", simpleModels.join(", "));
   }
   Object.apply(this, arguments);
+  // if (!this._rev) {
   if (!this.id) {
     this.dateCreated = Date.now();
   }
 
-  this.render = this.render || function(options) {
-    this.warn("Rendering, but the render was not injected for this " + this.type, options);
-  };
+  if (!this.render) {
+    this.render = function(options) {
+      this.warn("Rendering, but the render was not injected for this " + this.type, options);
+    };
+  }
 };
 
 FieldDBObject.DEFAULT_STRING = "";
 FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
-FieldDBObject.DEFAULT_VERSION = "v2.0.1";
+FieldDBObject.DEFAULT_VERSION = "v" + package.version;
 FieldDBObject.DEFAULT_DATE = 0;
 
+FieldDBObject.bug = function(message) {
+  try {
+    window.alert(message);
+  } catch (e) {
+    console.warn(this.type.toUpperCase() + " BUG: " + message);
+  }
+};
 
 /* set the application if you want global state (ie for checking if a user is authorized) */
 // FieldDBObject.application = {}
@@ -243,11 +254,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       this.bugMessage = this.bugMessage + message;
-      try {
-        window.alert(message);
-      } catch (e) {
-        console.warn(this.type.toUpperCase() + " BUG: " + message);
-      }
+      FieldDBObject.bug.apply(this, arguments);
     }
   },
   alwaysConfirmOkay: {
@@ -581,6 +588,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         url: optionalBaseUrl + "/" + self.dbname + "/" + id
       }).then(function(result) {
           self.fetching = false;
+          self.loaded = true;
           self.merge("self", result, "overwrite");
           deferred.resolve(self);
         },
@@ -795,6 +803,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         aproperty,
         underscorelessProperty;
 
+      if (this.fetching) {
+        throw "Cannot get json while object is fetching itself";
+      }
       /* this object has been updated to this version */
       this.version = this.version;
       /* force id to be set if possible */
@@ -841,6 +852,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       delete json.saving;
+      delete json.fetching;
+      delete json.loaded;
       delete json.decryptedMode;
       delete json.bugMessage;
       delete json.warnMessage;

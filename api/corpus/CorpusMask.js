@@ -7,6 +7,7 @@ var Comments = require("./../comment/Comments").Comments;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Sessions = require("./../Collection").Collection;
 var DataLists = require("./../Collection").Collection;
+var TeamPreference = require("./../user/UserPreference").UserPreference;
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -196,6 +197,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       participantFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
+
+      prefs: TeamPreference
     }
   },
 
@@ -247,6 +250,100 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this._description = value.trim();
+    }
+  },
+
+  prefs: {
+    get: function() {
+      return this._prefs;
+    },
+    set: function(value) {
+      if (value === this._prefs) {
+        return;
+      }
+      if (!value) {
+        delete this._prefs;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === "[object Object]") {
+          value = new this.INTERNAL_MODELS["prefs"](value);
+        }
+      }
+      this._prefs = value;
+    }
+  },
+
+  preferredDatumTemplate: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredDatumTemplate) {
+        return this.prefs.preferredDatumTemplate;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredDatumTemplate && value === this.prefs.preferredDatumTemplate) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredDatumTemplate) {
+          delete this.prefs.preferredDatumTemplate;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredDatumTemplate = value.trim();
+    }
+  },
+
+  preferredLocale: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredLocale) {
+        return this.prefs.preferredLocale;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredLocale && value === this.prefs.preferredLocale) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredLocale) {
+          delete this.prefs.preferredLocale;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredLocale = value.trim();
+    }
+  },
+
+  preferredDashboardLayout: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredDashboardLayout) {
+        return this.prefs.preferredDashboardLayout;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredDashboardLayout && value === this.prefs.preferredDashboardLayout) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredDashboardLayout) {
+          delete this.prefs.preferredDashboardLayout;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredDashboardLayout = value.trim();
+    }
+  },
+
+  preferredTemplate: {
+    get: function() {
+      this.warn("preferredTemplate is deprecated, use dbname instead.");
+      return this.preferredDatumTemplate;
+    },
+    set: function(value) {
+      this.warn("preferredTemplate is deprecated, please use dbname instead.");
+      this.preferredDatumTemplate = value;
     }
   }
 
