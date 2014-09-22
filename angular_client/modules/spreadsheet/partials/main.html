@@ -120,8 +120,8 @@
       <div ng-hide="authenticated==true"> Log in
         <br />
         <br />
-        <form ng-submit='loginUser(auth)'>
-          <select hidden ng-model='selectedServer' ng-disabled="loading==true" ng-options="server.value for server in servers">
+        <form ng-submit='loginUser(auth, selectedServer.label)'>
+          <select ng-show="servers.length > 1" ng-model="selectedServer" ng-disabled="loading==true" ng-options="server.value for server in servers">
           </select>
           <br>
           <br>
