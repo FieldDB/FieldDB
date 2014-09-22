@@ -1,10 +1,11 @@
-/* globals define, window  */
+/* globals define, window */
+
 console.log("Loading the SpreadsheetPrivateServices.");
 
 define(
   ["angular"],
   function(angular) {
-    'use strict';
+  'use strict';
 
     var SpreadsheetPrivateServices = angular
       .module('spreadsheet_private_services', [])
@@ -18,14 +19,14 @@ define(
           }
           var servers = {};
 
-          // if (localhost) {
-          //   servers.localhost = {
-          //     auth: "https://localhost:3183",
-          //     corpus: "https://localhost:6984",
-          //     serverCode: "localhost",
-          //     userFriendlyServerName: "Localhost"
-          //   };
-          // }
+          if (localhost) {
+            servers.localhost = {
+              auth: "https://localhost:3183",
+              corpus: "https://localhost:6984",
+              serverCode: "localhost",
+              userFriendlyServerName: "Localhost"
+            };
+          }
 
           servers.production = {
             auth: "https://auth.example.org",
@@ -33,12 +34,12 @@ define(
             serverCode: "production",
             userFriendlyServerName: "Example"
           };
-          servers.testing = {
-            auth: "https://authdev.example.org",
-            corpus: "https://corpusdev.example.org",
-            serverCode: "testing",
-            userFriendlyServerName: "Example Beta"
-          };
+          // servers.testing = {
+          //   auth: "https://authdev.example.org",
+          //   corpus: "https://corpusdev.example.org",
+          //   serverCode: "testing",
+          //   userFriendlyServerName: "Example Beta"
+          // };
 
           return {
             'getServiceUrl': function(label, serviceType) {
