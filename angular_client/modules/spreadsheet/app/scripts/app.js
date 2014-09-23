@@ -22,24 +22,24 @@ angular
   .config(function($routeProvider) {
 
     $routeProvider.when('/corpora_list', {
-      templateUrl: 'partials/main.html'
+      templateUrl: 'views/main.html'
     }).when('/settings', {
-      templateUrl: 'partials/settings.html',
+      templateUrl: 'views/settings.html',
       controller: 'SpreadsheetStyleDataEntrySettingsController'
     }).when('/corpussettings', {
-      templateUrl: 'partials/corpussettings.html'
+      templateUrl: 'views/corpussettings.html'
     }).when('/register', {
-      templateUrl: 'partials/register.html'
+      templateUrl: 'views/register.html'
     }).when('/faq', {
-      templateUrl: 'partials/faq.html'
+      templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
-      templateUrl: 'partials/compacttemplate.html'
+      templateUrl: 'views/compacttemplate.html'
     }).when('/spreadsheet/fulltemplate', {
-      templateUrl: 'partials/fulltemplate.html'
+      templateUrl: 'views/fulltemplate.html'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
-      templateUrl: 'partials/yalefieldmethodsspring2014template.html'
+      templateUrl: 'views/yalefieldmethodsspring2014template.html'
     }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
-      templateUrl: 'partials/mcgillfieldmethodsspring2014template.html'
+      templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
     }).otherwise({
       redirectTo: '/corpora_list'
     });
