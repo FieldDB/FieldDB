@@ -24,13 +24,13 @@ xdescribe('Controller: SpreadsheetExportController', function() {
           return {
             resultsMessageFromExternalController: $rootScope.resultsMessage,
             resultsFromExternalController: $rootScope.results,
-          }
+          };
         }
       }
     });
 
     modalInstance.result.then(function(any, stuff) {
-      // $scope.selectedItem = selectedItem;
+      console.warn('Some parameters were passed by the modal closing, ', any, stuff);
     }, function() {
       console.log('Export Modal dismissed at: ' + new Date());
     });
@@ -39,8 +39,6 @@ xdescribe('Controller: SpreadsheetExportController', function() {
     SpreadsheetExportController = $controller('SpreadsheetExportController', {
       $scope: scope
     });
-
-
 
   }));
 
