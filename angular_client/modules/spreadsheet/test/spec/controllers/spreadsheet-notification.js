@@ -11,7 +11,9 @@ xdescribe('Controller: SpreadsheetNotificationController', function() {
   // Initialize the controller and a mock scope
   beforeEach(inject(function($controller, $rootScope, $modal) {
 
-    $rootScope.notificationMessage = "Please save changes before continuing.";
+
+    $rootScope.results = [{}, {}];
+    $rootScope.resultsMessage = $rootScope.results.length + ' Record(s):';
 
     var modalInstance = $modal.open({
       templateUrl: 'views/export-modal.html',
@@ -26,7 +28,7 @@ xdescribe('Controller: SpreadsheetNotificationController', function() {
     });
 
     modalInstance.result.then(function(any, stuff) {
-      // $scope.selectedItem = selectedItem;
+      console.warn('Some parameters were passed by the modal closing, ', any, stuff);
     }, function() {
       console.log('Notification Modal dismissed at: ' + new Date());
     });
@@ -35,8 +37,6 @@ xdescribe('Controller: SpreadsheetNotificationController', function() {
     SpreadsheetNotificationController = $controller('SpreadsheetNotificationController', {
       $scope: scope
     });
-
-
 
   }));
 
