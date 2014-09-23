@@ -56,44 +56,31 @@ var convertFieldsIntoDatum = function(fieldLabelHolder, dataHolder) {
   return datum;
 };
 
-var SpreadsheetStyleDataEntryDirectives = angular.module('spreadsheet_directives', [])
-  .directive('moduleVersion', ['version',
-    function(version) {
-      return function(scope, element) {
-        element.text(version);
-      };
-    }
-  ])
-  .directive(
-    'selectFieldFromDefaultCompactTemplate',
-    function() {
-      return function(scope, element, attrs) {
-        var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-        if (scope.field.label === Preferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
-          element[0].selected = true;
-        }
-      };
-    })
-  .directive(
-    'selectFieldFromDefaultFullTemplate',
-    function() {
-      return function(scope, element, attrs) {
-        var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-        if (scope.field.label === Preferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
-          element[0].selected = true;
-        }
-      };
-    })
-  .directive(
-    'selectFieldFromYaleFieldMethodsSpring2014Template',
-    function() {
-      return function(scope, element, attrs) {
-        var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-        if (scope.field.label === Preferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
-          element[0].selected = true;
-        }
-      };
-    })
+angular.module('spreadsheetApp')
+  .directive('selectFieldFromDefaultCompactTemplate', function() {
+    return function(scope, element, attrs) {
+      var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+      if (scope.field.label === Preferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
+        element[0].selected = true;
+      }
+    };
+  })
+  .directive('selectFieldFromDefaultFullTemplate', function() {
+    return function(scope, element, attrs) {
+      var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+      if (scope.field.label === Preferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
+        element[0].selected = true;
+      }
+    };
+  })
+  .directive('selectFieldFromYaleFieldMethodsSpring2014Template', function() {
+    return function(scope, element, attrs) {
+      var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+      if (scope.field.label === Preferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
+        element[0].selected = true;
+      }
+    };
+  })
   .directive('selectDropdownSession', function() {
     return function(scope, element) {
       scope.$watch('activeSession', function() {
@@ -102,192 +89,182 @@ var SpreadsheetStyleDataEntryDirectives = angular.module('spreadsheet_directives
         }
       });
     };
-  }).directive(
-    'spreadsheetCatchArrowKey',
-    function($rootScope) {
-      return function(scope, element) {
-        element.bind('keyup', function(e) {
-          scope.$apply(function() {
-            // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
-            var lastPage = scope.numberOfResultPages(scope.allData.length);
-            var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
-            var currentRecordIsLastRecord = false;
-            var currentRecordIsFirstRecordOnNonFirstPage = false;
-            if ($rootScope.currentPage === (lastPage - 1) && scopeIndexOfLastRecordOnLastPage === scope.$index) {
-              currentRecordIsLastRecord = true;
-            }
-            if ($rootScope.currentPage > 0 && 0 === scope.$index) {
-              currentRecordIsFirstRecordOnNonFirstPage = true;
-            }
+  })
+  .directive('spreadsheetCatchArrowKey', function($rootScope) {
+    return function(scope, element) {
+      element.bind('keyup', function(e) {
+        scope.$apply(function() {
+          // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
+          var lastPage = scope.numberOfResultPages(scope.allData.length);
+          var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
+          var currentRecordIsLastRecord = false;
+          var currentRecordIsFirstRecordOnNonFirstPage = false;
+          if ($rootScope.currentPage === (lastPage - 1) && scopeIndexOfLastRecordOnLastPage === scope.$index) {
+            currentRecordIsLastRecord = true;
+          }
+          if ($rootScope.currentPage > 0 && 0 === scope.$index) {
+            currentRecordIsFirstRecordOnNonFirstPage = true;
+          }
 
-            if (e.keyCode === 40) {
-              element[0].scrollIntoView(true);
-            }
+          if (e.keyCode === 40) {
+            element[0].scrollIntoView(true);
+          }
 
-            if (e.keyCode === 38) {
-              element[0].scrollIntoView(false);
-            }
+          if (e.keyCode === 38) {
+            element[0].scrollIntoView(false);
+          }
 
-            if (e.keyCode === 40 && scope.$index === undefined) {
-              // Select first record on next page if arrowing down from new record
-              // $rootScope.currentPage = $rootScope.currentPage + 1;
-              // scope.selectRow(0);
-              //do nothing if it was the newEntry
-            } else if (e.keyCode === 40 && currentRecordIsLastRecord === true) {
-              // Do not go past very last record
-              scope.selectRow('newEntry');
-              return;
-            } else if (e.keyCode === 40) {
-              if (scope.$index + 2 > scope.scopePreferences.resultSize) {
-                // If the next record down is on another page, change to that page and select the first record
-                $rootScope.currentPage = $rootScope.currentPage + 1;
-                scope.selectRow(0);
-              } else {
-                scope.selectRow(scope.$index + 1);
-              }
-            } else if (e.keyCode === 38 && scope.$index === undefined) {
-              // Select new entry if coming from most recent record
-              // scope.selectRow(scopeIndexOfLastRecordOnLastPage);
-            } else if (e.keyCode === 38 && $rootScope.currentPage === 0 && (scope.$index === 0 || scope.$index === undefined)) {
-              // Select new entry if coming from most recent record
-              // scope.selectRow('newEntry');
-            } else if (e.keyCode === 38 && scope.$index === 0) {
-              // Go back one page and select last record
-              $rootScope.currentPage = $rootScope.currentPage - 1;
-              scope.selectRow(scope.scopePreferences.resultSize - 1);
-            } else if (e.keyCode === 38) {
-              scope.selectRow(scope.$index - 1);
+          if (e.keyCode === 40 && scope.$index === undefined) {
+            // Select first record on next page if arrowing down from new record
+            // $rootScope.currentPage = $rootScope.currentPage + 1;
+            // scope.selectRow(0);
+            //do nothing if it was the newEntry
+          } else if (e.keyCode === 40 && currentRecordIsLastRecord === true) {
+            // Do not go past very last record
+            scope.selectRow('newEntry');
+            return;
+          } else if (e.keyCode === 40) {
+            if (scope.$index + 2 > scope.scopePreferences.resultSize) {
+              // If the next record down is on another page, change to that page and select the first record
+              $rootScope.currentPage = $rootScope.currentPage + 1;
+              scope.selectRow(0);
             } else {
-              return;
+              scope.selectRow(scope.$index + 1);
             }
-          });
-        });
-      };
-    }).directive(
-    'keypressMarkAsEdited',
-    function($rootScope) {
-      return function(scope, element) {
-        element.bind('blur', function(e) {
-          var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
-          if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
-            $rootScope.markAsEdited(scope.fieldData, scope.datum);
+          } else if (e.keyCode === 38 && scope.$index === undefined) {
+            // Select new entry if coming from most recent record
+            // scope.selectRow(scopeIndexOfLastRecordOnLastPage);
+          } else if (e.keyCode === 38 && $rootScope.currentPage === 0 && (scope.$index === 0 || scope.$index === undefined)) {
+            // Select new entry if coming from most recent record
+            // scope.selectRow('newEntry');
+          } else if (e.keyCode === 38 && scope.$index === 0) {
+            // Go back one page and select last record
+            $rootScope.currentPage = $rootScope.currentPage - 1;
+            scope.selectRow(scope.scopePreferences.resultSize - 1);
+          } else if (e.keyCode === 38) {
+            scope.selectRow(scope.$index - 1);
           } else {
             return;
           }
         });
-      };
-    }).directive(
-    'keypressMarkAsNew',
-    function($rootScope) {
-      return function(scope, element) {
-        element.bind('keyup', function(e) {
-          var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
-          if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
-            $rootScope.newRecordHasBeenEdited = true;
-          } else {
-            return;
-          }
-        });
-      };
-    }).directive(
-    'spreadsheetCatchFocusOnArrowPress',
-    function($timeout) {
-      return function(scope, element) {
-        var selfElement = element;
-        scope.$watch('selected', function() {
-          if (scope.selected === 'newEntry' || scope.selected === scope.$index) {
-            $timeout(function() {
-              console.log("arrow old focus", document.activeElement);
-              // element[0].focus();
-              selfElement.find("input")[1].focus();
-              // document.getElementById("firstFieldOfEditingEntry").focus();
-              console.log("arrow new focus", document.activeElement);
+      });
+    };
+  })
+  .directive('keypressMarkAsEdited', function($rootScope) {
+    return function(scope, element) {
+      element.bind('blur', function(e) {
+        var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
+        if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
+          $rootScope.markAsEdited(scope.fieldData, scope.datum);
+        } else {
+          return;
+        }
+      });
+    };
+  })
+  .directive('keypressMarkAsNew', function($rootScope) {
+    return function(scope, element) {
+      element.bind('keyup', function(e) {
+        var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
+        if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
+          $rootScope.newRecordHasBeenEdited = true;
+        } else {
+          return;
+        }
+      });
+    };
+  })
+  .directive('spreadsheetCatchFocusOnArrowPress', function($timeout) {
+    return function(scope, element) {
+      var selfElement = element;
+      scope.$watch('selected', function() {
+        if (scope.selected === 'newEntry' || scope.selected === scope.$index) {
+          $timeout(function() {
+            console.log("arrow old focus", document.activeElement);
+            // element[0].focus();
+            selfElement.find("input")[1].focus();
+            // document.getElementById("firstFieldOfEditingEntry").focus();
+            console.log("arrow new focus", document.activeElement);
 
-            }, 0);
-          }
+          }, 0);
+        }
+      });
+    };
+  })
+  .directive('guessUtteranceFromMorphemes', function() {
+    return function(scope, element, attrs) {
+      element.bind('blur', function(e) {
+        var justCopyDontGuessIGT = false;
+        if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
+          justCopyDontGuessIGT = true;
+        }
+        // Ignore arrows
+        var keycodesToIgnore = [40, 38, 39, 37];
+        if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+          return;
+        }
+        var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+        var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+        datum.pouchname = scope.DB.pouchname;
+        // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
+        datum = Glosser.guessUtteranceFromMorphemes(datum, justCopyDontGuessIGT);
+        scope.$apply(function() {
+          dataHolder[datum.utterancefield] = datum.utterance;
         });
-      };
-    }).directive(
-    'guessUtteranceFromMorphemes',
-    function() {
-      return function(scope, element, attrs) {
-        element.bind('blur', function(e) {
-          var justCopyDontGuessIGT = false;
-          if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
-            justCopyDontGuessIGT = true;
-          }
-          // Ignore arrows
-          var keycodesToIgnore = [40, 38, 39, 37];
-          if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
-            return;
-          }
-          var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
-          var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
-          datum.pouchname = scope.DB.pouchname;
-          // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
-          datum = Glosser.guessUtteranceFromMorphemes(datum, justCopyDontGuessIGT);
-          scope.$apply(function() {
-            dataHolder[datum.utterancefield] = datum.utterance;
-          });
+      });
+    };
+  })
+  .directive('guessMorphemesFromUtterance', function() {
+    return function(scope, element, attrs) {
+      element.bind('blur', function(e) {
+        var justCopyDontGuessIGT = false;
+        if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
+          justCopyDontGuessIGT = true;
+        }
+        // Ignore arrows
+        var keycodesToIgnore = [40, 38, 39, 37];
+        if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+          return;
+        }
+        var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+        var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+        datum.pouchname = scope.DB.pouchname;
+        // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
+        datum = Glosser.guessMorphemesFromUtterance(datum, justCopyDontGuessIGT);
+        scope.$apply(function() {
+          dataHolder[datum.morphemesfield] = datum.morphemes;
+          dataHolder[datum.glossfield] = datum.gloss;
         });
-      };
-    }).directive(
-    'guessMorphemesFromUtterance',
-    function() {
-      return function(scope, element, attrs) {
-        element.bind('blur', function(e) {
-          var justCopyDontGuessIGT = false;
-          if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
-            justCopyDontGuessIGT = true;
-          }
-          // Ignore arrows
-          var keycodesToIgnore = [40, 38, 39, 37];
-          if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
-            return;
-          }
-          var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
-          var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
-          datum.pouchname = scope.DB.pouchname;
-          // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
-          datum = Glosser.guessMorphemesFromUtterance(datum, justCopyDontGuessIGT);
-          scope.$apply(function() {
-            dataHolder[datum.morphemesfield] = datum.morphemes;
-            dataHolder[datum.glossfield] = datum.gloss;
-          });
+      });
+    };
+  })
+  .directive('guessGlossFromMorphemes', function() {
+    return function(scope, element, attrs) {
+      element.bind('blur', function(e) {
+        var justCopyDontGuessIGT = false;
+        if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
+          justCopyDontGuessIGT = true;
+        }
+        // Ignore arrows
+        var keycodesToIgnore = [40, 38, 39, 37];
+        if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
+          return;
+        }
+        var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
+        var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
+        datum.pouchname = scope.DB.pouchname;
+        // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
+        datum = Glosser.guessGlossFromMorphemes(datum, justCopyDontGuessIGT);
+        scope.$apply(function() {
+          dataHolder[datum.glossfield] = datum.gloss;
         });
-      };
-    }).directive(
-    'guessGlossFromMorphemes',
-    function() {
-      return function(scope, element, attrs) {
-        element.bind('blur', function(e) {
-          var justCopyDontGuessIGT = false;
-          if (!attrs.autoGlosserOn || attrs.autoGlosserOn === "false") {
-            justCopyDontGuessIGT = true;
-          }
-          // Ignore arrows
-          var keycodesToIgnore = [40, 38, 39, 37];
-          if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
-            return;
-          }
-          var dataHolder = scope.fieldData ? scope.fieldData : scope.newFieldData;
-          var datum = convertFieldsIntoDatum(scope.fields, dataHolder);
-          datum.pouchname = scope.DB.pouchname;
-          // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
-          datum = Glosser.guessGlossFromMorphemes(datum, justCopyDontGuessIGT);
-          scope.$apply(function() {
-            dataHolder[datum.glossfield] = datum.gloss;
-          });
-        });
-      };
-    }).directive(
-    'loadPaginatedDataOnPageChange',
-    function() {
-      return function(scope) {
-        scope.$watch('currentPage', function() {
-          scope.loadPaginatedData();
-        });
-      };
-    });
-
-console.log("SpreadsheetStyleDataEntryDirectives", SpreadsheetStyleDataEntryDirectives);
+      });
+    };
+  })
+  .directive('loadPaginatedDataOnPageChange', function() {
+    return function(scope) {
+      scope.$watch('currentPage', function() {
+        // scope.loadPaginatedData();
+      });
+    };
+  });
