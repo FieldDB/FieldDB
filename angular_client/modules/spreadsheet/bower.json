@@ -39,7 +39,7 @@
     "underscore": "~1.6.0",
     "q": "1.0.1",
     "font-awesome": "~4.2.0",
-    "angular-bootstrap": "~0.11.0",
+    "angular-bootstrap": "0.8.0",
     "sjcl": "~1.0.0"
   },
   "devDependencies": {
