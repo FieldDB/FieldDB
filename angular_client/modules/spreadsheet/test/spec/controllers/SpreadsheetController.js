@@ -27,8 +27,9 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
       // expect(typeof scope.opts).toBe('object');
       expect(typeof scope.openNotification).toBe('function');
       // expect(typeof scope.closeNotification).toBe('function');
-      expect(typeof scope.openWelcomeNotification).toBe('function');
-      expect(typeof scope.closeWelcomeNotification).toBe('function');
+      expect(scope.openWelcomeNotification).toBeUndefined();
+      expect(typeof scope.openWelcomeNotificationDeprecated).toBe('function');
+      // expect(typeof scope.closeWelcomeNotification).toBe('function');
     });
 
     it('should have all the old things for loading in scope that it had before', function() {
