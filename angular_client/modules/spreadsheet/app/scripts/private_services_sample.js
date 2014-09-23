@@ -1,7 +1,6 @@
 /* globals  window */
 'use strict';
-console.log("Loading the SpreadsheetPrivateServices.");
-
+console.log("Declaring the SpreadsheetPrivateServices.");
 
 angular.module('spreadsheetApp')
   .factory('Servers', function() {
