@@ -1,0 +1,288 @@
+{
+  "type": "Datum",
+  "datumFields": [
+    {
+      "type": "",
+      "labelFieldLinguists": "Gramaticality Judgement",
+      "labelExperimenters": "Naturalness",
+      "labelNonLinguists": "Not-a-normal-thing-to-say",
+      "labelTranslators": "Grammatical/How-normal-Is-This-Example",
+      "size": "3",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "linguist",
+      "defaultfield": true,
+      "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
+      "helpLinguists": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning.",
+      "version": "v2.22.0",
+      "id": "judgement"
+    },
+    {
+      "type": "IGT, parallelText",
+      "labelFieldLinguists": "Orthography",
+      "labelNonLinguists": "Written",
+      "labelTranslators": "Orthography",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "writingSystem": {
+          "id": "",
+          "referenceLink": ""
+        }
+      },
+      "help": "What was said/written using the alphabet/writing system of the language.",
+      "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas",
+      "version": "v2.22.0",
+      "encryptedValue": "placeholder text",
+      "mask": "placeholder text",
+      "value": "placeholder text",
+      "id": "orthography"
+    },
+    {
+      "type": "IGT, parallelText",
+      "labelFieldLinguists": "Utterance",
+      "labelNonLinguists": "International Phonetic Alphabet (IPA)",
+      "labelTranslators": "Transliteration",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "writingSystem": {
+          "id": "",
+          "referenceLink": ""
+        }
+      },
+      "help": "What was said/written in an alphabet the team is comfortable using.",
+      "helpLinguists": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas",
+      "version": "v2.22.0",
+      "encryptedValue": "placeholder text",
+      "mask": "placeholder text",
+      "value": "placeholder text",
+      "id": "utterance"
+    },
+    {
+      "type": "IGT",
+      "labelFieldLinguists": "Allomorphs",
+      "labelTranslators": "Prefixe-s-root-suffixe-s",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "linguist",
+      "defaultfield": true,
+      "json": {
+        "alternates": []
+      },
+      "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
+      "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s",
+      "version": "v2.22.0",
+      "id": "allomorphs"
+    },
+    {
+      "type": "IGT",
+      "labelFieldLinguists": "Morphemes",
+      "labelNonLinguists": "Segmentation",
+      "labelTranslators": "Prefix-z-root-suffix-z",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "linguist",
+      "defaultfield": true,
+      "json": {
+        "alternates": []
+      },
+      "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
+      "helpLinguists": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+      "version": "v2.22.0",
+      "id": "morphemes"
+    },
+    {
+      "type": "IGT",
+      "labelFieldLinguists": "Gloss",
+      "labelNonLinguists": "Word-for-word Translation",
+      "labelTranslators": "Word-for-word Translation",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "linguist",
+      "defaultfield": true,
+      "json": {
+        "language": "",
+        "alternates": [],
+        "conventions": {
+          "id": "",
+          "tagSet": [],
+          "referenceLink": ""
+        }
+      },
+      "help": "Translation for each prefix, root and suffix in the words",
+      "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl",
+      "version": "v2.22.0",
+      "id": "gloss"
+    },
+    {
+      "type": "IGT",
+      "labelFieldLinguists": "Morpho-Syntactic Category",
+      "labelTranslators": "Part of Speech",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "machine, linguist",
+      "defaultfield": true,
+      "json": {
+        "alternates": [],
+        "conventions": {
+          "id": "",
+          "tagSet": [],
+          "referenceLink": ""
+        }
+      },
+      "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+      "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+      "version": "v2.22.0",
+      "id": "syntacticCategory"
+    },
+    {
+      "type": "IGT, parallelText",
+      "labelFieldLinguists": "Translation",
+      "labelNonLinguists": "English",
+      "labelTranslators": "English",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
+      "language": "",
+      "helpLinguists": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields.",
+      "version": "v2.22.0",
+      "id": "translation"
+    },
+    {
+      "type": "wiki",
+      "labelFieldLinguists": "Context",
+      "labelNonLinguists": "Context",
+      "labelTranslators": "Context",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "tags": []
+      },
+      "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+      "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data.",
+      "version": "v2.22.0",
+      "id": "context"
+    },
+    {
+      "type": "wiki, LaTeX",
+      "labelFieldLinguists": "Discussion for Handouts",
+      "labelNonLinguists": "Additional Documentation",
+      "labelTranslators": "Documentation",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "wiki": "",
+        "latex": ""
+      },
+      "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
+      "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
+      "version": "v2.22.0",
+      "id": "documentation"
+    },
+    {
+      "type": "relatedData",
+      "labelFieldLinguists": "Related Data",
+      "labelNonLinguists": "Linked to",
+      "labelTranslators": "Linked to",
+      "labelComputationalLinguists": "Linked Data",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "relatedData": []
+      },
+      "help": "Related data in the database, or at any web url.",
+      "helpLinguists": "Related data in the database, or at any web url.",
+      "helpDevelopers": "Related data in the database, or at any web url.",
+      "version": "v2.22.0",
+      "id": "relatedData"
+    },
+    {
+      "type": "tags",
+      "labelFieldLinguists": "Tags",
+      "labelNonLinguists": "Tags",
+      "labelTranslators": "Tags",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "tags": []
+      },
+      "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+      "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data.",
+      "version": "v2.22.0",
+      "id": "tags"
+    },
+    {
+      "type": "tags",
+      "labelFieldLinguists": "Data validity/verification Status",
+      "labelNonLinguists": "Data validity/verification Status",
+      "labelTranslators": "Data validity/verification Status",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "tags": []
+      },
+      "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+      "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+      "version": "v2.22.0",
+      "id": "validationStatus"
+    },
+    {
+      "type": "users",
+      "labelFieldLinguists": "Imported/Entered By",
+      "labelNonLinguists": "Entered By",
+      "labelTranslators": "Imported/Entered By",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "all",
+      "readonly": true,
+      "defaultfield": true,
+      "json": {
+        "user": {},
+        "hardware": {},
+        "software": {}
+      },
+      "help": "The user who originally entered the datum",
+      "helpLinguists": "The user who originally entered the datum",
+      "version": "v2.22.0",
+      "id": "enteredByUser"
+    },
+    {
+      "type": "users",
+      "labelFieldLinguists": "Modified By",
+      "labelNonLinguists": "Modified By",
+      "labelTranslators": "Modified By",
+      "shouldBeEncrypted": false,
+      "showToUserTypes": "all",
+      "readonly": true,
+      "defaultfield": true,
+      "json": {
+        "users": []
+      },
+      "help": "An array of users who modified the datum",
+      "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses.",
+      "version": "v2.22.0",
+      "id": "modifiedByUser"
+    },
+    {
+      "type": "LaTeX",
+      "labelFieldLinguists": "Syntactic Tree/Constituency (LaTeX)",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "machine",
+      "defaultfield": true,
+      "json": {
+        "alternates": []
+      },
+      "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+      "helpLinguists": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+      "version": "v2.22.0",
+      "id": "syntacticTreeLatex"
+    }
+  ],
+  "dateCreated": 1411422318694,
+  "_id": "./sample_data/orthography.txt",
+  "version": "v2.22.0",
+  "api": "datums"
+}
