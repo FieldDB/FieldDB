@@ -1,8 +1,6 @@
+'use strict';
 console.log("Loading the SpreadsheetStyleDataEntryFilters.");
 
-define(["angular"], function(angular) {
-
-  'use strict';
 
   var SpreadsheetStyleDataEntryFilters = angular.module(
     'spreadsheet_filters', []).filter('startFrom', function() {
@@ -18,7 +16,7 @@ define(["angular"], function(angular) {
     return function(input) {
       if (!input) {
         return "--";
-      } else if (input == "2000-09-06T16:31:30.988Z") {
+      } else if (input === "2000-09-06T16:31:30.988Z") {
         return "N/A";
       } else {
         var newDate = input.replace(/\"/g, "");
@@ -35,7 +33,7 @@ define(["angular"], function(angular) {
     return function(input) {
       if (!input) {
         return "--";
-      } else if (input == "2000-09-06T16:31:30.988Z") {
+      } else if (input === "2000-09-06T16:31:30.988Z") {
         return "N/A";
       } else {
         var newDate = input;
@@ -52,7 +50,7 @@ define(["angular"], function(angular) {
     return function(input) {
       if (!input) {
         return "--";
-      } else if (input == "2000-09-06T16:31:30.988Z") {
+      } else if (input === "2000-09-06T16:31:30.988Z") {
         return "N/A";
       } else {
         var newDate = input.replace(/\"/g, "");
@@ -62,7 +60,7 @@ define(["angular"], function(angular) {
     };
   }).filter('neverEmpty', function() {
     return function(input) {
-      if (input === "" || input === undefined || input == " ") {
+      if (input === "" || input === undefined || input === " ") {
         return "--";
       } else {
         return input;
@@ -70,12 +68,11 @@ define(["angular"], function(angular) {
     };
   }).filter('checkDatumTags', function() {
     return function(input) {
-      if (input == "Tags") {
+      if (input === "Tags") {
         return "--";
       } else {
         return input;
       }
     };
   });
-  return SpreadsheetStyleDataEntryFilters;
-});
+    console.log("SpreadsheetStyleDataEntryFilters", SpreadsheetStyleDataEntryFilters);

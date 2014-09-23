@@ -1,11 +1,6 @@
-/* globals define, Q */
+/* globals  Q, SpreadsheetDatum */
+'use strict';
 console.log("Loading the SpreadsheetStyleDataEntryServices.");
-
-define(
-  ["angular", "js/SpreadsheetDatum", "Q"],
-  function(angular, SpreadsheetDatum, forcingQtoload) {
-
-    'use strict';
 
     var SpreadsheetStyleDataEntryServices = angular
       .module('spreadsheet_services', ['ngResource'])
@@ -477,5 +472,4 @@ define(
             }
           };
         });
-    return SpreadsheetStyleDataEntryServices;
-  });
+    console.log("SpreadsheetStyleDataEntryServices", SpreadsheetStyleDataEntryServices);
