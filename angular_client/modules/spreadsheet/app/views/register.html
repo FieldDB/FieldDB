@@ -1,0 +1,21 @@
+<br />
+<br />
+<div class="mainPageDiv">
+  <form>
+    Server<sup>*</sup>:<br />
+    <select ng-model="selectedServer" ng-disabled="loading==true" ng-options="server.userFriendlyServerName for server in servers">
+    </select>
+    <br />
+    <font size="1"><i>*Data may be shared between users on any server.</i></font> <br />
+    <input type="text" placeholder="username"
+      ng-model="newLoginInfo.username"><br /> <font size="1"><i>*username must contain only lowercase letters (a-z) and numbers.</i></font> <br /> <input
+      type="password" placeholder="password"
+      ng-model="newLoginInfo.password"><br /> <input
+      type="password" placeholder="confirm password"
+      ng-model="newLoginInfo.confirmPassword"><br /> <input
+      placeholder="e-mail (optional)" ng-model="newLoginInfo.email" type="email"><br />
+    <button class="btn btn-primary"
+      ng-click="registerNewUser(newLoginInfo, selectedServer.serverCode)" ng-disabled="loading==true">Register</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading==true">
+  </form>
+
+</div>
