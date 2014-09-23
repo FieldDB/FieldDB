@@ -23,8 +23,14 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <ng-include src="'views/index.html'" scope="" onload=""></ng-include>
-
+    <ng-include src="'views/menu.html'" scope="" onload=""></ng-include>
+    <ng-include src="'views/modals.html'" scope="" onload=""></ng-include>
+    <div ng-class="mainBodyClass()" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
+      <ng-view></ng-view>
+    </div>
+    <div class="loading_trouble_message" ng-hide="clickSuccess==true" class="clearCacheMessage">
+      If you are having trouble viewing the page, you may need to empty your browser's cache.
+    </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
