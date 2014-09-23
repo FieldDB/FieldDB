@@ -18,14 +18,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/jquery/jquery.js',
       'bower_components/d3/d3.js',
       'bower_components/underscore/underscore.js',
       'bower_components/fielddb-glosser/fielddb-glosser.js',
       'bower_components/q/q.js',
       'bower_components/sjcl/sjcl.js',
-      'bower_components/angular/angular.js',
-      'bower_components/angular/angular.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-animate/angular-animate.js',
@@ -36,6 +33,7 @@ module.exports = function(config) {
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/angular-md5/angular-md5.js',
       'bower_components/angular-bootstrap/ui-bootstrap.js',
+      'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js'
