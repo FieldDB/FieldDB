@@ -1,5 +1,5 @@
 'use strict';
-console.log("Loading the SpreadsheetDatum.");
+console.log("Declaring the SpreadsheetDatum.");
 
 var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDBDatum, guessedAudioUrl) {
   var j;

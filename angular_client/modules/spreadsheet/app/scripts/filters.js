@@ -1,6 +1,5 @@
 'use strict';
-console.log("Loading the SpreadsheetStyleDataEntryFilters.");
-
+console.log("Declaring the SpreadsheetStyleDataEntryFilters.");
 
 angular.module('spreadsheetApp')
   .filter('startFrom', function() {

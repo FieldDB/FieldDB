@@ -1,5 +1,6 @@
 /* globals  Q, sjcl, Recorder, AudioContext, stopRecording, SpreadsheetDatum, _, confirm, alert, prompt */
 'use strict';
+console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
 /**
  * @ngdoc function
@@ -10,7 +11,8 @@
  */
 
 var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout) {
-  var debugging = false;
+ console.log(" Loading the SpreadsheetStyleDataEntryController.");
+ var debugging = false;
   if (debugging) {
     console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout);
   }
@@ -2640,8 +2642,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 };
-SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
-  '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout'
-];
-angular.module('spreadsheetApp')
-  .controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);
+SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout'];
+angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);
