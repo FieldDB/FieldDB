@@ -1988,9 +1988,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   //TODO whats wrong with ng-cloak? woudlnt that solve this?
-  if (document.getElementById("hideOnLoad")) {
-    document.getElementById("hideOnLoad").style.visibility = "visible";
-  }
+  $timeout(function() {
+    if (document.getElementById("hideOnLoad")) {
+      document.getElementById("hideOnLoad").style.visibility = "visible";
+    }
+  }, 100);
 
 
 
