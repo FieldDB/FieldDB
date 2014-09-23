@@ -1,18 +1,34 @@
 /* globals confirm */
 'use strict';
-console.log("Loading the SpreadsheetStyleDataEntrySettingsController.");
+console.log("Declaring the SpreadsheetStyleDataEntry SettingsController.");
 
+/**
+ * @ngdoc function
+ * @name spreadsheetApp.controller:SpreadsheetStyleDataEntrySettingsController
+ * @description
+ * # SpreadsheetStyleDataEntrySettingsController
+ * Controller of the spreadsheetApp
+ */
 
-var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
-  $resource, Data) {
+var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $resource, Data) {
 
-  $scope.scopePreferences = JSON.parse(localStorage
-    .getItem('SpreadsheetPreferences'));
+  console.log(" Loading the SpreadsheetStyleDataEntry SettingsController.");
+  var debugging = true;
+  var todo = function(message) {
+    console.warn("TODO SETTINGS CONTROLLER: " + message);
+  };
+  if (debugging) {
+    console.log($scope, $rootScope, $resource, Data);
+  }
+
+  $scope.scopePreferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
 
   if ($scope.appReloaded !== true) {
+    todo("$scope.appReloaded is not true, sending to url # and not loading the SettingsController completely");
     window.location.assign("#/");
     return;
   }
+  todo("$scope.appReloaded is true, loading the SettingsController completely");
 
   // $scope.availableFields = $scope.scopePreferences.availableFields;
   // console.log($scope.availableFields );
@@ -21,19 +37,19 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
   };
 
   $scope.changeFieldToEdit = function(field) {
+    todo("what is changeFieldToEdit for");
     $scope.fieldToEdit = field;
   };
 
+
   $scope.editFieldTitle = function(field, newFieldTitle) {
-    var Preferences = JSON.parse(localStorage
-      .getItem('SpreadsheetPreferences'));
+    var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
     for (var key in Preferences.availableFields) {
       if (key === field.label) {
         Preferences.availableFields[key].title = newFieldTitle;
       }
     }
-    localStorage.setItem('SpreadsheetPreferences', JSON
-      .stringify(Preferences));
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     $scope.scopePreferences = Preferences;
     $scope.availableFields = Preferences.availableFields;
   };
@@ -51,8 +67,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
         }
         if (changeThisRecord === true) {
           $rootScope.loading = true;
-          Data
-            .async($rootScope.DB.pouchname, UUID)
+          Data.async($rootScope.DB.pouchname, UUID)
             .then(
               function(editedRecord) {
                 // Edit record with updated tag data
@@ -65,9 +80,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
                   editRecordWithUpdatedTagData(k);
                 }
                 // Save edited record
-                Data
-                  .saveEditedCouchDoc($rootScope.DB.pouchname, UUID,
-                    editedRecord, editedRecord._rev)
+                Data.saveEditedCouchDoc($rootScope.DB.pouchname, UUID, editedRecord, editedRecord._rev)
                   .then(
                     function() {
                       console.log("Changed " + oldTag + " to " + newTag + " in " + UUID);
@@ -120,8 +133,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
 
   // Get all tags
   $scope.getTags = function() {
-    Data
-      .async($rootScope.DB.pouchname)
+    Data.async($rootScope.DB.pouchname)
       .then(
         function(dataFromServer) {
           var tags = {};
@@ -145,6 +157,8 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
         });
   };
   // $scope.getTags();
+
+
 
   $scope.saveNewPreferences = function(template, newFieldPreferences) {
     if ($rootScope.DB && $rootScope.DB.preferredTemplate && $rootScope.DB.preferredTemplate !== template) {
@@ -174,26 +188,23 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
     $scope.scopePreferences = Preferences;
     $rootScope.template = Preferences.userTemplate;
     $rootScope.fields = Preferences[Preferences.userTemplate];
-    localStorage.setItem('SpreadsheetPreferences', JSON
-      .stringify(Preferences));
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     window.alert("Settings saved.");
   };
 
   $scope.saveNumberOfRecordsToDisplay = function(numberOfRecordsToDisplay) {
-    var Preferences = JSON.parse(localStorage
-      .getItem('SpreadsheetPreferences'));
+    var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
     if (numberOfRecordsToDisplay) {
       Preferences.resultSize = numberOfRecordsToDisplay;
-      localStorage.setItem('SpreadsheetPreferences', JSON
-        .stringify(Preferences));
+      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
       $rootScope.resultSize = numberOfRecordsToDisplay;
       window.alert("Settings saved.\nYou may need to reload for the new settings to take effect.");
     } else {
       window.alert("Please select a value from the dropdown.");
     }
   };
+
 };
 
-SpreadsheetStyleDataEntrySettingsController.$inject = ['$scope', '$rootScope',
-  '$resource', 'Data'
-];
+SpreadsheetStyleDataEntrySettingsController.$inject = ['$scope', '$rootScope', '$resource', 'Data'];
+angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntrySettingsController', SpreadsheetStyleDataEntrySettingsController);
