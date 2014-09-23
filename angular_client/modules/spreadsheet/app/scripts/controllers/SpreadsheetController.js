@@ -10,27 +10,16 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
  * Controller of the spreadsheetApp
  */
 
-var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout) {
+var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
-  var debugging = false;
+  var debugging = true;
   if (debugging) {
-    console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout);
+    console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log);
   }
+
 
   $rootScope.appVersion = "2.2.2ss";
   /* Modal controller TODO could move somewhere where the search is? */
-  $scope.open = function() {
-    $scope.shouldBeOpen = true;
-  };
-
-  $scope.close = function() {
-    $scope.shouldBeOpen = false;
-  };
-
-  $scope.opts = {
-    backdropFade: true,
-    dialogFade: true
-  };
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function() {
@@ -1566,8 +1555,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $scope.exportResults = function() {
-    $scope.open();
+  $scope.exportResults = function(size) {
+
     var results = $filter('filter')($scope.allData, {
       checked: true
     });
@@ -1577,6 +1566,27 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       $scope.resultsMessage = "Please select records to export.";
     }
+    console.log(results);
+
+    var modalInstance = $modal.open({
+      templateUrl: 'views/export-modal.html',
+      controller: 'SpreadsheetExportController',
+      size: size,
+      resolve: {
+        details: function() {
+          return {
+            resultsMessageFromExternalController: $scope.resultsMessage,
+            resultsFromExternalController: $scope.results,
+          }
+        }
+      }
+    });
+
+    modalInstance.result.then(function(any, stuff) {
+      // $scope.selectedItem = selectedItem;
+    }, function() {
+      $log.info('Export Modal dismissed at: ' + new Date());
+    });
   };
 
 
@@ -2616,5 +2626,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 };
-SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout'];
+SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log'];
 angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);
