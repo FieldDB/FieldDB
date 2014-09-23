@@ -21,8 +21,7 @@ xdescribe('Controller: SpreadsheetNotificationController', function() {
       size: 'lg',
       resolve: {
         details: function() {
-          return {
-          }
+          return {};
         }
       }
     });

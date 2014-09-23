@@ -13,7 +13,7 @@ xdescribe('Controller: SpreadsheetExportController', function() {
 
 
     $rootScope.results = [{}, {}];
-    $rootScope.resultsMessage = $rootScope.results.length + " Record(s):";
+    $rootScope.resultsMessage = $rootScope.results.length + ' Record(s):';
 
     var modalInstance = $modal.open({
       templateUrl: 'views/export-modal.html',
