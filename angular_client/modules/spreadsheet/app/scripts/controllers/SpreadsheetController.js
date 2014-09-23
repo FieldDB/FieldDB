@@ -11,8 +11,8 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
  */
 
 var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout) {
- console.log(" Loading the SpreadsheetStyleDataEntryController.");
- var debugging = false;
+  console.log(" Loading the SpreadsheetStyleDataEntryController.");
+  var debugging = false;
   if (debugging) {
     console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout);
   }
@@ -464,103 +464,97 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Get sessions for pouchname; select specific session on saved state load
   $scope.loadSessions = function(sessionID) {
     var scopeSessions = [];
-    Data
-      .sessions($rootScope.DB.pouchname)
-      .then(
-        function(response) {
-          for (var k in response) {
-            scopeSessions.push(response[k].value);
-          }
+    Data.sessions($rootScope.DB.pouchname)
+      .then(function(response) {
+        for (var k in response) {
+          scopeSessions.push(response[k].value);
+        }
 
-          for (var i in scopeSessions) {
-            for (var j in scopeSessions[i].sessionFields) {
-              if (scopeSessions[i].sessionFields[j].label === "goal") {
-                if (scopeSessions[i].sessionFields[j].mask) {
-                  scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask
-                    .substr(0, 20);
-                }
+        for (var i in scopeSessions) {
+          for (var j in scopeSessions[i].sessionFields) {
+            if (scopeSessions[i].sessionFields[j].label === "goal") {
+              if (scopeSessions[i].sessionFields[j].mask) {
+                scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask.substr(0, 20);
               }
             }
           }
-          $scope.sessions = scopeSessions;
-          if (sessionID) {
-            $scope.selectSession(sessionID);
-          }
-          $scope.documentReady = true;
-        }, function(error) {
-          $scope.documentReady = true;
-          console.log("Error loading sessions.", error);
-          $rootScope.notificationMessage = "Error loading corpus, please try again.";
-          $rootScope.notificationShouldBeOpen = true;
-          $rootScope.loading = false;
-        });
+        }
+        $scope.sessions = scopeSessions;
+        if (sessionID) {
+          $scope.selectSession(sessionID);
+        }
+        $scope.documentReady = true;
+      }, function(error) {
+        $scope.documentReady = true;
+        console.log("Error loading sessions.", error);
+        $rootScope.notificationMessage = "Error loading corpus, please try again.";
+        $rootScope.notificationShouldBeOpen = true;
+        $rootScope.loading = false;
+      });
   };
 
   // Fetch data from server and put into template scope
   $scope.loadData = function(sessionID) {
     $scope.appReloaded = true;
     $rootScope.loading = true;
-    Data
-      .async($rootScope.DB.pouchname)
-      .then(
-        function(dataFromServer) {
-          var scopeData = [];
-          for (var i = 0; i < dataFromServer.length; i++) {
-            if (dataFromServer[i].value.datumFields) {
-              var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.DB.pouchname + "/");
+    Data.async($rootScope.DB.pouchname)
+      .then(function(dataFromServer) {
+        var scopeData = [];
+        for (var i = 0; i < dataFromServer.length; i++) {
+          if (dataFromServer[i].value.datumFields) {
+            var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.DB.pouchname + "/");
 
-              // Load data from current session into scope
-              if (!sessionID || sessionID === "none") {
-                scopeData.push(newDatumFromServer);
-              } else if (newDatumFromServer.sessionID === sessionID) {
-                scopeData.push(newDatumFromServer);
-              }
+            // Load data from current session into scope
+            if (!sessionID || sessionID === "none") {
+              scopeData.push(newDatumFromServer);
+            } else if (newDatumFromServer.sessionID === sessionID) {
+              scopeData.push(newDatumFromServer);
             }
           }
+        }
 
-          // TODO dont sort the data here, its being sorted by the templates too...?
-          // scopeData.sort(function(a, b) {
-          //   // return a[$scope.orderProp] - b[$scope.orderProp];
+        // TODO dont sort the data here, its being sorted by the templates too...?
+        // scopeData.sort(function(a, b) {
+        //   // return a[$scope.orderProp] - b[$scope.orderProp];
 
-          //   if (a[$scope.orderProp] > b[$scope.orderProp])
-          //     return -1;
-          //   if (a[$scope.orderProp] < b[$scope.orderProp])
-          //     return 1;
-          //   return 0;
-          // });
+        //   if (a[$scope.orderProp] > b[$scope.orderProp])
+        //     return -1;
+        //   if (a[$scope.orderProp] < b[$scope.orderProp])
+        //     return 1;
+        //   return 0;
+        // });
 
-          $scope.allData = scopeData;
-          $scope.data = scopeData.slice(0, $rootScope.resultSize);
-          $rootScope.currentPage = 0;
+        $scope.allData = scopeData;
+        $scope.data = scopeData.slice(0, $rootScope.resultSize);
+        $rootScope.currentPage = 0;
 
-          $scope.loadAutoGlosserRules();
-          $scope.loadUsersAndRoles();
+        $scope.loadAutoGlosserRules();
+        $scope.loadUsersAndRoles();
 
-          $scope.saved = "yes";
-          $rootScope.loading = false;
+        $scope.saved = "yes";
+        $rootScope.loading = false;
 
-          $scope.selected = "newEntry";
+        $scope.selected = "newEntry";
 
 
-        }, function(error) {
-          console.log("error loading the data", error);
-          // On error loading data, reset saved state
-          // Update saved state in Preferences
-          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-          Preferences.savedState = {};
-          localStorage.setItem('SpreadsheetPreferences', JSON
-            .stringify(Preferences));
-          $scope.documentReady = true;
-          $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
-          $rootScope.errorLoggingInNotificationShouldBeOpen = true;
-          $rootScope.loading = false;
-        });
+      }, function(error) {
+        console.log("error loading the data", error);
+        // On error loading data, reset saved state
+        // Update saved state in Preferences
+        Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+        Preferences.savedState = {};
+        localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+        $scope.documentReady = true;
+        $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
+        $rootScope.errorLoggingInNotificationShouldBeOpen = true;
+        $rootScope.loading = false;
+      });
   };
 
   $scope.loadAutoGlosserRules = function() {
     // Get precedence rules for Glosser
-    Data.glosser($rootScope.DB.pouchname).then(
-      function(rules) {
+    Data.glosser($rootScope.DB.pouchname)
+      .then(function(rules) {
         localStorage.setItem($rootScope.DB.pouchname + "precedenceRules", JSON.stringify(rules));
 
         // Reduce the rules such that rules which are found in multiple
@@ -577,8 +571,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       });
 
     // Get lexicon for Glosser and organize based on frequency
-    Data.lexicon($rootScope.DB.pouchname).then(
-      function(lexicon) {
+    Data.lexicon($rootScope.DB.pouchname)
+      .then(function(lexicon) {
         var sortedLexicon = {};
         for (var i in lexicon) {
           if (sortedLexicon[lexicon[i].key.morpheme]) {
@@ -601,8 +595,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           sortedLexicon[key].sort(sorter);
         }
         localStorage.setItem(
-          $rootScope.DB.pouchname + "lexiconResults", JSON
-          .stringify(sortedLexicon));
+          $rootScope.DB.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
       }, function(error) {
         console.log("Error retrieving lexicon.", error);
       });
@@ -634,8 +627,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.server = Servers.getServiceUrl(auth.server, "corpus");
 
 
-      Data.login(auth.user.toLowerCase(), auth.password).then(
-        function(response) {
+      Data.login(auth.user.toLowerCase(), auth.password)
+        .then(function(response) {
           if (response === undefined) {
             return;
           }
@@ -654,8 +647,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           Preferences.savedState.server = $rootScope.serverCode;
           Preferences.savedState.username = $rootScope.user.username;
           Preferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
-          localStorage.setItem('SpreadsheetPreferences', JSON
-            .stringify(Preferences));
+          localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
 
           $rootScope.authenticated = true;
           var userRoles = response.data.roles;
@@ -686,8 +678,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           var processCorpora = function(index) {
             // Use map-reduce to get corpus title
 
-            Data.async(scopeDBs[index], "_design/pages/_view/private_corpuses").then(
-              function(response) {
+            Data.async(scopeDBs[index], "_design/pages/_view/private_corpuses")
+              .then(function(response) {
                 var corpus = {};
                 if (response.rows[0]) {
                   corpus = response.rows[0].value;
@@ -734,8 +726,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.logOut = function() {
     Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
     Preferences.savedState = {};
-    localStorage.setItem('SpreadsheetPreferences', JSON
-      .stringify(Preferences));
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     $scope.reloadPage();
   };
 
@@ -756,8 +747,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       // Update saved state in Preferences
       Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
       Preferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
-      localStorage.setItem('SpreadsheetPreferences', JSON
-        .stringify(Preferences));
+      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
 
       // If the currently choosen corpus has a default template, overwrite the user's preferences
       if (selectedDB.preferredTemplate) {
@@ -814,8 +804,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Update saved state in Preferences
     Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
     Preferences.savedState.sessionID = activeSessionID;
-    localStorage.setItem('SpreadsheetPreferences', JSON
-      .stringify(Preferences));
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     $scope.loadData(activeSessionID);
     $scope.loadUsersAndRoles();
     window.location.assign("#/spreadsheet/" + $rootScope.template);
@@ -845,8 +834,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
     Preferences.savedState.sessionID = $scope.activeSession;
     Preferences.savedState.sessionTitle = $scope.currentSessionName;
-    localStorage.setItem('SpreadsheetPreferences', JSON
-      .stringify(Preferences));
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
   };
 
   $scope.getCurrentSessionName = function() {
@@ -892,56 +880,50 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
       }
       // Save session record
-      Data
-        .saveCouchDoc($rootScope.DB.pouchname, newSession)
-        .then(
-          function() {
-            var directobject = $scope.currentSessionName || "an elicitation session";
-            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-            $scope.addActivity([{
-              verb: "modified",
-              verbicon: "icon-pencil",
-              directobjecticon: "icon-calendar",
-              directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
-              indirectobject: indirectObjectString,
-              teamOrPersonal: "personal"
-            }, {
-              verb: "modified",
-              verbicon: "icon-pencil",
-              directobjecticon: "icon-calendar",
-              directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
-              indirectobject: indirectObjectString,
-              teamOrPersonal: "team"
-            }], "uploadnow");
+      Data.saveCouchDoc($rootScope.DB.pouchname, newSession)
+        .then(function() {
+          var directobject = $scope.currentSessionName || "an elicitation session";
+          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+          $scope.addActivity([{
+            verb: "modified",
+            verbicon: "icon-pencil",
+            directobjecticon: "icon-calendar",
+            directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "personal"
+          }, {
+            verb: "modified",
+            verbicon: "icon-pencil",
+            directobjecticon: "icon-calendar",
+            directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "team"
+          }], "uploadnow");
 
-            var doSomething = function(index) {
-              if (scopeDataToEdit[index].sessionID === newSession._id) {
-                Data
-                  .async($rootScope.DB.pouchname,
-                    scopeDataToEdit[index].id)
-                  .then(
-                    function(editedRecord) {
-                      // Edit record with updated session info
-                      // and save
-
-                      editedRecord.session = newSession;
-                      Data.saveCouchDoc($rootScope.DB.pouchname, editedRecord).then(function() {
+          var doSomething = function(index) {
+            if (scopeDataToEdit[index].sessionID === newSession._id) {
+              Data.async($rootScope.DB.pouchname, scopeDataToEdit[index].id)
+                .then(function(editedRecord) {
+                    // Edit record with updated session info
+                    // and save
+                    editedRecord.session = newSession;
+                    Data.saveCouchDoc($rootScope.DB.pouchname, editedRecord)
+                      .then(function() {
                         $rootScope.loading = false;
                       });
-                    },
-                    function() {
-                      window
-                        .alert("There was an error accessing the record.\nTry refreshing the page");
-                    });
-              }
-            };
-            // Update all records tied to this session
-            for (var i in scopeDataToEdit) {
-              $rootScope.loading = true;
-              doSomething(i);
+                  },
+                  function() {
+                    window.alert("There was an error accessing the record.\nTry refreshing the page");
+                  });
             }
-            $scope.loadData($scope.activeSessionID);
-          });
+          };
+          // Update all records tied to this session
+          for (var i in scopeDataToEdit) {
+            $rootScope.loading = true;
+            doSomething(i);
+          }
+          $scope.loadData($scope.activeSessionID);
+        });
     }
 
   };
@@ -954,14 +936,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       var r = confirm("Are you sure you want to put this session in the trash?");
       if (r === true) {
         Data.async($rootScope.DB.pouchname, activeSessionID)
-          .then(
-            function(sessionToMarkAsDeleted) {
-              sessionToMarkAsDeleted.trashed = "deleted";
-              var rev = sessionToMarkAsDeleted._rev;
-              if (debugging) {
-                console.log(rev);
-              }
-              Data.saveCouchDoc($rootScope.DB.pouchname, sessionToMarkAsDeleted).then(function(response) {
+          .then(function(sessionToMarkAsDeleted) {
+            sessionToMarkAsDeleted.trashed = "deleted";
+            var rev = sessionToMarkAsDeleted._rev;
+            if (debugging) {
+              console.log(rev);
+            }
+            Data.saveCouchDoc($rootScope.DB.pouchname, sessionToMarkAsDeleted)
+              .then(function(response) {
 
                 if (debugging) {
                   console.log(response);
@@ -993,10 +975,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 $scope.activeSession = undefined;
               }, function(error) {
                 console.warn("there was an error deleting a session", error);
-                window
-                  .alert("Error deleting session.\nTry refreshing the page.");
+                window.alert("Error deleting session.\nTry refreshing the page.");
               });
-            });
+          });
       }
     }
   };
@@ -1004,73 +985,64 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.createNewSession = function(newSession) {
     $rootScope.loading = true;
     // Get blank template to build new record
-    Data
-      .blankSessionTemplate()
-      .then(
-        function(newSessionRecord) {
-          newSessionRecord.pouchname = $rootScope.DB.pouchname;
-          newSessionRecord.dateCreated = JSON.parse(JSON
-            .stringify(new Date()));
-          newSessionRecord.dateModified = JSON.parse(JSON
-            .stringify(new Date()));
-          newSessionRecord.lastModifiedBy = $rootScope.user.username;
-          for (var key in newSession) {
-            for (var i in newSessionRecord.sessionFields) {
-              if (newSessionRecord.sessionFields[i].label === "user") {
-                newSessionRecord.sessionFields[i].value = $rootScope.user.username;
-                newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
-              }
-              if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
-                newSessionRecord.sessionFields[i].value = new Date()
-                  .toString();
-                newSessionRecord.sessionFields[i].mask = new Date()
-                  .toString();
-              }
-              if (key === newSessionRecord.sessionFields[i].label) {
-                newSessionRecord.sessionFields[i].value = newSession[key];
-                newSessionRecord.sessionFields[i].mask = newSession[key];
-              }
+    Data.blankSessionTemplate()
+      .then(function(newSessionRecord) {
+        newSessionRecord.pouchname = $rootScope.DB.pouchname;
+        newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
+        newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
+        newSessionRecord.lastModifiedBy = $rootScope.user.username;
+        for (var key in newSession) {
+          for (var i in newSessionRecord.sessionFields) {
+            if (newSessionRecord.sessionFields[i].label === "user") {
+              newSessionRecord.sessionFields[i].value = $rootScope.user.username;
+              newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
+            }
+            if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
+              newSessionRecord.sessionFields[i].value = new Date().toString();
+              newSessionRecord.sessionFields[i].mask = new Date().toString();
+            }
+            if (key === newSessionRecord.sessionFields[i].label) {
+              newSessionRecord.sessionFields[i].value = newSession[key];
+              newSessionRecord.sessionFields[i].mask = newSession[key];
             }
           }
-          Data
-            .saveCouchDoc($rootScope.DB.pouchname, newSessionRecord)
-            .then(
-              function(savedRecord) {
+        }
+        Data.saveCouchDoc($rootScope.DB.pouchname, newSessionRecord)
+          .then(function(savedRecord) {
 
 
-                newSessionRecord._id = savedRecord.data.id;
-                newSessionRecord._rev = savedRecord.data.rev;
-                for (var i in newSessionRecord.sessionFields) {
-                  if (newSessionRecord.sessionFields[i].label === "goal") {
-                    newSessionRecord.title = newSessionRecord.sessionFields[i].mask
-                      .substr(0, 20);
-                  }
-                }
-                var directobject = newSessionRecord.title || "an elicitation session";
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-                $scope.addActivity([{
-                  verb: "added",
-                  verbicon: "icon-pencil",
-                  directobjecticon: "icon-calendar",
-                  directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "personal"
-                }, {
-                  verb: "added",
-                  verbicon: "icon-pencil",
-                  directobjecticon: "icon-calendar",
-                  directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "team"
-                }], "uploadnow");
+            newSessionRecord._id = savedRecord.data.id;
+            newSessionRecord._rev = savedRecord.data.rev;
+            for (var i in newSessionRecord.sessionFields) {
+              if (newSessionRecord.sessionFields[i].label === "goal") {
+                newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0, 20);
+              }
+            }
+            var directobject = newSessionRecord.title || "an elicitation session";
+            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+            $scope.addActivity([{
+              verb: "added",
+              verbicon: "icon-pencil",
+              directobjecticon: "icon-calendar",
+              directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "personal"
+            }, {
+              verb: "added",
+              verbicon: "icon-pencil",
+              directobjecticon: "icon-calendar",
+              directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "team"
+            }], "uploadnow");
 
-                $scope.sessions.push(newSessionRecord);
-                $scope.dataentry = true;
-                $scope.selectSession(savedRecord.data.id);
-                window.location.assign("#/spreadsheet/" + $rootScope.template);
-              });
-          $rootScope.loading = false;
-        });
+            $scope.sessions.push(newSessionRecord);
+            $scope.dataentry = true;
+            $scope.selectSession(savedRecord.data.id);
+            window.location.assign("#/spreadsheet/" + $rootScope.template);
+          });
+        $rootScope.loading = false;
+      });
 
   };
 
@@ -1102,18 +1074,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       var r = confirm("Are you sure you want to put this datum in the trash?");
       if (r === true) {
 
-        Data
-          .async($rootScope.DB.pouchname, datum.id)
-          .then(
-            function(recordToMarkAsDeleted) {
-              recordToMarkAsDeleted.trashed = "deleted";
-              var rev = recordToMarkAsDeleted._rev;
-              console.log(rev);
-              //Upgrade to v1.90
-              if (recordToMarkAsDeleted.attachmentInfo) {
-                delete recordToMarkAsDeleted.attachmentInfo;
-              }
-              Data.saveCouchDoc($rootScope.DB.pouchname, recordToMarkAsDeleted).then(function(response) {
+        Data.async($rootScope.DB.pouchname, datum.id)
+          .then(function(recordToMarkAsDeleted) {
+            recordToMarkAsDeleted.trashed = "deleted";
+            var rev = recordToMarkAsDeleted._rev;
+            console.log(rev);
+            //Upgrade to v1.90
+            if (recordToMarkAsDeleted.attachmentInfo) {
+              delete recordToMarkAsDeleted.attachmentInfo;
+            }
+            Data.saveCouchDoc($rootScope.DB.pouchname, recordToMarkAsDeleted)
+              .then(function(response) {
                 // Remove record from scope
                 if (debugging) {
                   console.log(response);
@@ -1144,10 +1115,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 $scope.selected = null;
               }, function(error) {
                 console.warn(error);
-                window
-                  .alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
               });
-            });
+          });
       }
     }
   };
@@ -1429,19 +1399,20 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
       saveDatumPromises.push(promiseToSaveThisDatum);
 
-      promiseToSaveThisDatum.then(function(spreadSheetDatum) {
-        spreadSheetDatum.saved = "yes";
-        activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
-        $scope.addActivity(activities, "uploadnow");
-      }, function(reason) {
-        console.log(reason);
-        $scope.saved = "no";
-        window.alert("There was an error saving a record. " + reason);
-        // wish this would work:
-        // $rootScope.notificationMessage = "There was an error saving a record. " + reason;
-        // $rootScope.openNotification();
-        // return;
-      });
+      promiseToSaveThisDatum
+        .then(function(spreadSheetDatum) {
+          spreadSheetDatum.saved = "yes";
+          activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
+          $scope.addActivity(activities, "uploadnow");
+        }, function(reason) {
+          console.log(reason);
+          $scope.saved = "no";
+          window.alert("There was an error saving a record. " + reason);
+          // wish this would work:
+          // $rootScope.notificationMessage = "There was an error saving a record. " + reason;
+          // $rootScope.openNotification();
+          // return;
+        });
 
     };
     for (var index in $scope.allData) {
@@ -1450,34 +1421,32 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         doSomethingElse($scope.allData[index]);
       }
     }
-    Q.all(saveDatumPromises)
-      .done(function(success, reason) {
-        if (reason) {
-          console.log(reason);
-          $scope.saved = "no";
-          window.alert("There was an error saving one or more records. Please try again.");
-        } else {
-          if ($scope.saved === "saving") {
-            $scope.saved = "yes";
-          }
+    Q.all(saveDatumPromises).done(function(success, reason) {
+      if (reason) {
+        console.log(reason);
+        $scope.saved = "no";
+        window.alert("There was an error saving one or more records. Please try again.");
+      } else {
+        if ($scope.saved === "saving") {
+          $scope.saved = "yes";
         }
-      });
+      }
+    });
   };
 
 
   // Set auto-save interval for 5 minutes
-  var autoSave = window.setInterval(
-    function() {
-      if ($scope.saved === "no") {
-        $scope.saveChanges();
-      } else {
-        // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
-        // if ($rootScope.loginInfo) {
-        //   Data.login($rootScope.user.username,
-        //     $rootScope.loginInfo.password);
-        // }
-      }
-    }, 300000);
+  var autoSave = window.setInterval(function() {
+    if ($scope.saved === "no") {
+      $scope.saveChanges();
+    } else {
+      // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
+      // if ($rootScope.loginInfo) {
+      //   Data.login($rootScope.user.username,
+      //     $rootScope.loginInfo.password);
+      // }
+    }
+  }, 300000);
   if (debugging) {
     console.log("autoSave was defined but not used", autoSave);
   }
@@ -1559,16 +1528,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               } else if (fieldkey === "comments") {
                 for (var j in $scope.allData[i].comments) {
                   for (var commentKey in $scope.allData[i].comments[j]) {
-                    if ($scope.allData[i].comments[j][commentKey].toString()
-                      .indexOf(searchTerm) > -1) {
+                    if ($scope.allData[i].comments[j][commentKey].toString().indexOf(searchTerm) > -1) {
                       newScopeData.push($scope.allData[i]);
                       break;
                     }
                   }
                 }
               } else {
-                var dataString = $scope.allData[i][fieldkey].toString()
-                  .toLowerCase();
+                var dataString = $scope.allData[i][fieldkey].toString().toLowerCase();
                 if (dataString.indexOf(searchTerm) > -1) {
                   newScopeData.push($scope.allData[i]);
                   break;
@@ -1615,8 +1582,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // Add activities to scope object, to be uploaded when 'SAVE' is clicked
   $scope.addActivity = function(activityArray, uploadnow) {
-    Data.blankActivityTemplate().then(
-      function(sourceTemplate) {
+    Data.blankActivityTemplate()
+      .then(function(sourceTemplate) {
 
         for (var index = 0; index < activityArray.length; index++) {
           var template = JSON.parse(JSON.stringify(sourceTemplate));
@@ -1661,10 +1628,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             activitydb = $rootScope.user.username + "-activity_feed";
           }
 
-          Data
-            .saveCouchDoc(activitydb, $scope.activities[index])
-            .then(
-              function(response) {
+          Data.saveCouchDoc(activitydb, $scope.activities[index])
+            .then(function(response) {
                 if (debugging) {
                   console.log("Saved new activity", response);
                 }
@@ -1672,8 +1637,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 delete $scope.activities[index];
               },
               function(reason) {
-                window
-                  .alert("There was an error saving the activity. " + reason);
+                window.alert("There was an error saving the activity. " + reason);
                 $scope.saved = "no";
               });
         }
@@ -1716,15 +1680,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (dataToPost.username !== "" && (dataToPost.password === newLoginInfo.confirmPassword.trim())) {
       // Create user
-      Data.register(dataToPost).then(function(response) {
-        if (debugging) {
-          console.log(response);
-        }
-        $rootScope.loading = false;
-      }, function(error) {
-        console.warn(error);
-        $rootScope.loading = false;
-      });
+      Data.register(dataToPost)
+        .then(function(response) {
+          if (debugging) {
+            console.log(response);
+          }
+          $rootScope.loading = false;
+        }, function(error) {
+          console.warn(error);
+          $rootScope.loading = false;
+        });
     } else {
       $rootScope.loading = false;
       $rootScope.notificationMessage = "Please verify user information.";
@@ -1751,26 +1716,27 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (dataToPost.newCorpusName !== "") {
       // Create new corpus
-      Data.createcorpus(dataToPost).then(function(response) {
+      Data.createcorpus(dataToPost)
+        .then(function(response) {
 
-        // Add new corpus to scope
-        var newCorpus = {};
-        newCorpus.pouchname = response.corpus.pouchname;
-        newCorpus.title = response.corpus.title;
-        var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
-        $scope.addActivity([{
-          verb: "added",
-          verbicon: "icon-plus",
-          directobjecticon: "icon-cloud",
-          directobject: directObjectString,
-          indirectobject: "",
-          teamOrPersonal: "personal"
-        }], "uploadnow");
+          // Add new corpus to scope
+          var newCorpus = {};
+          newCorpus.pouchname = response.corpus.pouchname;
+          newCorpus.title = response.corpus.title;
+          var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
+          $scope.addActivity([{
+            verb: "added",
+            verbicon: "icon-plus",
+            directobjecticon: "icon-cloud",
+            directobject: directObjectString,
+            indirectobject: "",
+            teamOrPersonal: "personal"
+          }], "uploadnow");
 
-        $scope.corpora.push(newCorpus);
-        $rootScope.loading = false;
-        window.location.assign("#/");
-      });
+          $scope.corpora.push(newCorpus);
+          $rootScope.loading = false;
+          window.location.assign("#/");
+        });
     } else {
       $rootScope.notificationMessage = "Please verify corpus name.";
       $rootScope.openNotification();
@@ -1790,25 +1756,25 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.pouchname = $rootScope.DB.pouchname;
 
 
-    Data.getallusers(dataToPost).then(function(users) {
-      if (!users) {
-        console.log("User doesn't have access to roles.");
-        users = {
-          allusers: []
-        };
-      }
-      // for (var i in users.allusers) {
-      //   if (users.allusers[i].username === $rootScope.loginInfo.username) {
-      //     $rootScope.user.gravatar = users.allusers[i].gravatar;
-      //   }
-      // }
+    Data.getallusers(dataToPost)
+      .then(function(users) {
+        if (!users) {
+          console.log("User doesn't have access to roles.");
+          users = {
+            allusers: []
+          };
+        }
+        // for (var i in users.allusers) {
+        //   if (users.allusers[i].username === $rootScope.loginInfo.username) {
+        //     $rootScope.user.gravatar = users.allusers[i].gravatar;
+        //   }
+        // }
 
-      $scope.users = users;
+        $scope.users = users;
 
-      // Get privileges for logged in user
-      Data.async("_users", "org.couchdb.user:" + $rootScope.loginInfo.username)
-        .then(
-          function(response) {
+        // Get privileges for logged in user
+        Data.async("_users", "org.couchdb.user:" + $rootScope.loginInfo.username)
+          .then(function(response) {
             $rootScope.admin = false;
             $rootScope.readPermissions = false;
             $rootScope.writePermissions = false;
@@ -1827,7 +1793,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               $rootScope.commentPermissions = true;
             }
           });
-    });
+      });
   };
 
   $scope.updateUserRoles = function(newUserRoles) {
@@ -1905,34 +1871,35 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     dataToPost.userRoleInfo = newUserRoles;
 
-    Data.updateroles(dataToPost).then(function(response) {
-      if (debugging) {
-        console.log(response);
-      }
-      var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a> as " + rolesString;
-      $scope.addActivity([{
-        verb: "modified",
-        verbicon: "icon-pencil",
-        directobjecticon: "icon-user",
-        directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
-        indirectobject: indirectObjectString,
-        teamOrPersonal: "personal"
-      }, {
-        verb: "modified",
-        verbicon: "icon-pencil",
-        directobjecticon: "icon-user",
-        directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
-        indirectobject: indirectObjectString,
-        teamOrPersonal: "team"
-      }], "uploadnow");
+    Data.updateroles(dataToPost)
+      .then(function(response) {
+        if (debugging) {
+          console.log(response);
+        }
+        var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a> as " + rolesString;
+        $scope.addActivity([{
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-user",
+          directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "personal"
+        }, {
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-user",
+          directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "team"
+        }], "uploadnow");
 
-      document.getElementById("userToModifyInput").value = "";
-      $rootScope.loading = false;
-      $scope.loadUsersAndRoles();
-    }, function(error) {
-      console.warn(error);
-      $rootScope.loading = false;
-    });
+        document.getElementById("userToModifyInput").value = "";
+        $rootScope.loading = false;
+        $scope.loadUsersAndRoles();
+      }, function(error) {
+        console.warn(error);
+        $rootScope.loading = false;
+      });
   };
 
   $scope.removeUserFromCorpus = function(userid) {
@@ -1940,8 +1907,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // helps to avoid a situation in which there is no admin for a
     // corpus
     if (userid === $rootScope.user.username) {
-      window
-        .alert("You cannot remove yourself from a corpus.\nOnly another Admin can remove you.");
+      window.alert("You cannot remove yourself from a corpus.\nOnly another Admin can remove you.");
       return;
     }
 
@@ -1959,28 +1925,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       dataToPost.userRoleInfo.pouchname = $rootScope.DB.pouchname;
       dataToPost.userRoleInfo.removeUser = true;
 
-      Data.updateroles(dataToPost).then(function(response) {
-        if (debugging) {
-          console.log(response);
-        }
-        var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-        $scope.addActivity([{
-          verb: "removed",
-          verbicon: "icon-remove-sign",
-          directobjecticon: "icon-user",
-          directobject: dataToPost.userRoleInfo.usernameToModify,
-          indirectobject: indirectObjectString,
-          teamOrPersonal: "personal"
-        }, {
-          verb: "removed",
-          verbicon: "icon-remove-sign",
-          directobjecticon: "icon-user",
-          directobject: dataToPost.userRoleInfo.usernameToModify,
-          indirectobject: indirectObjectString,
-          teamOrPersonal: "team"
-        }], "uploadnow");
+      Data.updateroles(dataToPost)
+        .then(function(response) {
+          if (debugging) {
+            console.log(response);
+          }
+          var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+          $scope.addActivity([{
+            verb: "removed",
+            verbicon: "icon-remove-sign",
+            directobjecticon: "icon-user",
+            directobject: dataToPost.userRoleInfo.usernameToModify,
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "personal"
+          }, {
+            verb: "removed",
+            verbicon: "icon-remove-sign",
+            directobjecticon: "icon-user",
+            directobject: dataToPost.userRoleInfo.usernameToModify,
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "team"
+          }], "uploadnow");
 
-      });
+        });
     }
   };
 
@@ -2007,8 +1974,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Paginate data tables
 
   $scope.numberOfResultPages = function(numberOfRecords) {
-    var numberOfPages = Math
-      .ceil(numberOfRecords / $rootScope.resultSize);
+    var numberOfPages = Math.ceil(numberOfRecords / $rootScope.resultSize);
     return numberOfPages;
   };
 
@@ -2317,85 +2283,87 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     // Save new attachments for existing record
-    Data.async($rootScope.DB.pouchname, datum.id).then(function(originalDoc) {
-      var rev = originalDoc._rev;
-      console.log(rev);
-      var key;
-      if (originalDoc._attachments === undefined) {
-        originalDoc._attachments = {};
-      }
+    Data.async($rootScope.DB.pouchname, datum.id)
+      .then(function(originalDoc) {
+        var rev = originalDoc._rev;
+        console.log(rev);
+        var key;
+        if (originalDoc._attachments === undefined) {
+          originalDoc._attachments = {};
+        }
 
-      for (key in newAttachments) {
-        originalDoc._attachments[key] = newAttachments[key];
-      }
-      // Update scope attachments
-      if (!datum.audioVideo) {
-        datum.audioVideo = [];
-      }
-      if (!Array.isArray(datum.audioVideo)) {
-        console.log("Upgrading audioVideo to a collection", datum.audioVideo);
-        var audioVideoArray = [];
-        for (var audioVideoItem in datum.audioVideo) {
-          if (datum.audioVideo.hasOwnProperty(audioVideoItem) && datum.audioVideo.audioVideoItem.URL) {
-            var audioVideoURL = datum.audioVideo.audioVideoItem.URL;
-            var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
-            audioVideoArray.push({
-              "filename": fileFromUrl,
-              "description": fileFromUrl,
-              "URL": audioVideoURL,
-              "type": "audio"
-            });
+        for (key in newAttachments) {
+          originalDoc._attachments[key] = newAttachments[key];
+        }
+        // Update scope attachments
+        if (!datum.audioVideo) {
+          datum.audioVideo = [];
+        }
+        if (!Array.isArray(datum.audioVideo)) {
+          console.log("Upgrading audioVideo to a collection", datum.audioVideo);
+          var audioVideoArray = [];
+          for (var audioVideoItem in datum.audioVideo) {
+            if (datum.audioVideo.hasOwnProperty(audioVideoItem) && datum.audioVideo.audioVideoItem.URL) {
+              var audioVideoURL = datum.audioVideo.audioVideoItem.URL;
+              var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+              audioVideoArray.push({
+                "filename": fileFromUrl,
+                "description": fileFromUrl,
+                "URL": audioVideoURL,
+                "type": "audio"
+              });
+            }
           }
+          datum.audioVideo = audioVideoArray;
         }
-        datum.audioVideo = audioVideoArray;
-      }
-      for (key in newAttachments) {
-        var newScopeAttachment = {
-          "filename": key,
-          "description": newAttachments[key].description,
-          "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + key,
-          "type": "audio"
-        };
+        for (key in newAttachments) {
+          var newScopeAttachment = {
+            "filename": key,
+            "description": newAttachments[key].description,
+            "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + key,
+            "type": "audio"
+          };
 
-        datum.audioVideo.push(newScopeAttachment);
+          datum.audioVideo.push(newScopeAttachment);
 
-        var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-        $scope.addActivity([{
-          verb: "recorded",
-          verbicon: "icon-plus",
-          directobjecticon: "icon-list",
-          directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
-          indirectobject: indirectObjectString,
-          teamOrPersonal: "personal"
-        }, {
-          verb: "recorded",
-          verbicon: "icon-plus",
-          directobjecticon: "icon-list",
-          directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
-          indirectobject: indirectObjectString,
-          teamOrPersonal: "team"
-        }], "uploadnow");
-      }
-      datum.hasAudio = true;
-      originalDoc.audioVideo = datum.audioVideo;
-      //Upgrade to v1.90
-      if (originalDoc.attachmentInfo) {
-        delete originalDoc.attachmentInfo;
-      }
-      // console.log(originalDoc.audioVideo);
-      Data.saveCouchDoc($rootScope.DB.pouchname, originalDoc).then(function(response) {
-        console.log("Successfully uploaded attachment.");
-        if (debugging) {
-          console.log(response);
+          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+          $scope.addActivity([{
+            verb: "recorded",
+            verbicon: "icon-plus",
+            directobjecticon: "icon-list",
+            directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "personal"
+          }, {
+            verb: "recorded",
+            verbicon: "icon-plus",
+            directobjecticon: "icon-list",
+            directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "team"
+          }], "uploadnow");
         }
+        datum.hasAudio = true;
+        originalDoc.audioVideo = datum.audioVideo;
+        //Upgrade to v1.90
+        if (originalDoc.attachmentInfo) {
+          delete originalDoc.attachmentInfo;
+        }
+        // console.log(originalDoc.audioVideo);
+        Data.saveCouchDoc($rootScope.DB.pouchname, originalDoc)
+          .then(function(response) {
+            console.log("Successfully uploaded attachment.");
+            if (debugging) {
+              console.log(response);
+            }
 
 
-        // Reset file input field
-        document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
+            // Reset file input field
+            document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
 
-        $scope.processingAudio = false;
+            $scope.processingAudio = false;
+          });
       });
-    });
   };
 
   $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
@@ -2408,70 +2376,74 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (r === true) {
       var record = datum.id + "/" + filename;
       console.log(record);
-      Data.async($rootScope.DB.pouchname, datum.id).then(function(originalRecord) {
-        // mark as trashed in scope
-        var inDatumAudioFiles = false;
-        for (var i in datum.audioVideo) {
-          if (datum.audioVideo[i].filename === filename) {
-            datum.audioVideo[i].description = datum.audioVideo[i].description + ":::Trashed " + Date.now() + " by " + $rootScope.user.username;
-            datum.audioVideo[i].trashed = "deleted";
-            inDatumAudioFiles = true;
-            // mark as trashed in database record
-            for (var k in originalRecord.audioVideo) {
-              if (originalRecord.audioVideo[k].filename === filename) {
-                originalRecord.audioVideo[k] = datum.audioVideo[i];
+      Data.async($rootScope.DB.pouchname, datum.id)
+        .then(function(originalRecord) {
+          // mark as trashed in scope
+          var inDatumAudioFiles = false;
+          for (var i in datum.audioVideo) {
+            if (datum.audioVideo[i].filename === filename) {
+              datum.audioVideo[i].description = datum.audioVideo[i].description + ":::Trashed " + Date.now() + " by " + $rootScope.user.username;
+              datum.audioVideo[i].trashed = "deleted";
+              inDatumAudioFiles = true;
+              // mark as trashed in database record
+              for (var k in originalRecord.audioVideo) {
+                if (originalRecord.audioVideo[k].filename === filename) {
+                  originalRecord.audioVideo[k] = datum.audioVideo[i];
+                }
               }
             }
           }
-        }
-        if (datum.audioVideo.length === 0) {
-          datum.hasAudio = false;
-        }
-        originalRecord.audioVideo = datum.audioVideo;
-        //Upgrade to v1.90
-        if (originalRecord.attachmentInfo) {
-          delete originalRecord.attachmentInfo;
-        }
-        // console.log(originalRecord);
-        Data.saveCouchDoc($rootScope.DB.pouchname, originalRecord).then(function(response) {
-          console.log("Saved attachment as trashed.");
-          if (debugging) {
-            console.log(response);
+          if (datum.audioVideo.length === 0) {
+            datum.hasAudio = false;
           }
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-          $scope.addActivity([{
-            verb: "deleted",
-            verbicon: "icon-trash",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#data/" + datum.id + "/" + filename + "'>the audio file " + description + " (" + filename + ") on " + datum.utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "personal"
-          }, {
-            verb: "deleted",
-            verbicon: "icon-trash",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#data/" + datum.id + "/" + filename + "'>an audio file on " + datum.utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
-          }], "uploadnow");
+          originalRecord.audioVideo = datum.audioVideo;
+          //Upgrade to v1.90
+          if (originalRecord.attachmentInfo) {
+            delete originalRecord.attachmentInfo;
+          }
+          // console.log(originalRecord);
+          Data.saveCouchDoc($rootScope.DB.pouchname, originalRecord)
+            .then(function(response) {
+              console.log("Saved attachment as trashed.");
+              if (debugging) {
+                console.log(response);
+              }
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+              $scope.addActivity([{
+                verb: "deleted",
+                verbicon: "icon-trash",
+                directobjecticon: "icon-list",
+                directobject: "<a href='#data/" + datum.id + "/" + filename + "'>the audio file " + description + " (" + filename + ") on " + datum.utterance + "</a> ",
+                indirectobject: indirectObjectString,
+                teamOrPersonal: "personal"
+              }, {
+                verb: "deleted",
+                verbicon: "icon-trash",
+                directobjecticon: "icon-list",
+                directobject: "<a href='#data/" + datum.id + "/" + filename + "'>an audio file on " + datum.utterance + "</a> ",
+                indirectobject: indirectObjectString,
+                teamOrPersonal: "team"
+              }], "uploadnow");
 
-          // Dont actually let users delete data...
-          // Data.async($rootScope.DB.pouchname, datum.id).then(function(record) {
-          //   // Delete attachment info for deleted record
-          //   for (var key in record.attachmentInfo) {
-          //     if (key === filename) {
-          //       delete record.attachmentInfo[key];
-          //     }
-          //   }
-          //   Data.saveCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev).then(function(response) {
-          //     if (datum.audioVideo.length === 0) {
-          //       datum.hasAudio = false;
-          //     }
-          //     console.log("File successfully deleted.");
-          //   });
-          // });
+              // Dont actually let users delete data...
+              // Data.async($rootScope.DB.pouchname, datum.id)
+              // .then(function(record) {
+              //   // Delete attachment info for deleted record
+              //   for (var key in record.attachmentInfo) {
+              //     if (key === filename) {
+              //       delete record.attachmentInfo[key];
+              //     }
+              //   }
+              //   Data.saveCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev)
+              // .then(function(response) {
+              //     if (datum.audioVideo.length === 0) {
+              //       datum.hasAudio = false;
+              //     }
+              //     console.log("File successfully deleted.");
+              //   });
+              // });
+            });
         });
-      });
     }
   };
 
@@ -2535,8 +2507,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       if (!Preferences.savedState) {
         Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
         Preferences.savedState = {};
-        localStorage.setItem('SpreadsheetPreferences', JSON
-          .stringify(Preferences));
+        localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
         $scope.documentReady = true;
       } else if (Preferences.savedState && Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
         $rootScope.serverCode = Preferences.savedState.server;
@@ -2586,32 +2557,33 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     $scope.resetPasswordInfo.username = $rootScope.user.username;
-    Data.changePassword($scope.resetPasswordInfo).then(function(response) {
-      if (debugging) {
-        console.log(response);
-      }
-      Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
+    Data.changePassword($scope.resetPasswordInfo)
+      .then(function(response) {
+        if (debugging) {
+          console.log(response);
+        }
+        Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
 
-      Preferences.savedState.password = sjcl.encrypt("password", $scope.resetPasswordInfo.confirmpassword);
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+        Preferences.savedState.password = sjcl.encrypt("password", $scope.resetPasswordInfo.confirmpassword);
+        localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
 
-      $scope.resetPasswordInfo = {};
-      $scope.showResetPassword = false;
-      $rootScope.notificationMessage = "Successfully updated password";
-      $rootScope.openNotification();
+        $scope.resetPasswordInfo = {};
+        $scope.showResetPassword = false;
+        $rootScope.notificationMessage = "Successfully updated password";
+        $rootScope.openNotification();
 
 
-    }, function(reason) {
-      console.log(reason);
-      var message = "Please report this.";
-      if (reason.status === 0) {
-        message = "Are you offline?";
-      } else {
-        message = reason.data.userFriendlyErrors.join(" ");
-      }
-      $rootScope.notificationMessage = "Error updating password. " + message;
-      $rootScope.openNotification();
-    });
+      }, function(reason) {
+        console.log(reason);
+        var message = "Please report this.";
+        if (reason.status === 0) {
+          message = "Are you offline?";
+        } else {
+          message = reason.data.userFriendlyErrors.join(" ");
+        }
+        $rootScope.notificationMessage = "Error updating password. " + message;
+        $rootScope.openNotification();
+      });
   };
 
 
