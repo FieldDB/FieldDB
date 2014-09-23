@@ -1,11 +1,7 @@
-/* globals Glosser, LexiconFactory, define */
+/* globals Glosser */
+'use strict';
 console.log("Loading the SpreadsheetStyleDataEntryDirectives.");
 
-define(
-  ["angular", "Glosser"],
-  function(angular, forcingloadofglosser) {
-
-    'use strict';
     // var lexiconFactory = LexiconFactory;
     // var corpusSpecificGlosser;
     // /**
@@ -295,5 +291,4 @@ define(
           };
         });
 
-    return SpreadsheetStyleDataEntryDirectives;
-  });
+    console.log("SpreadsheetStyleDataEntryDirectives", SpreadsheetStyleDataEntryDirectives);
