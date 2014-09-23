@@ -28,7 +28,7 @@
   </div>
   <div class="span1">
     <span ng-show="processingAudio==true">
-      <img src="img/spinner-small.gif">
+      <img src="images/spinner-small.gif">
     </span>
   </div>
 </div>
@@ -58,12 +58,12 @@
 
 <div class="row" ng-show="loading==true">
   <div class="span12 pagination-centered">
-    <img src="img/loading-spinner.gif" width="100px">
+    <img src="images/loading-spinner.gif" width="100px">
   </div>
 </div>
 <div class="row" ng-show="data==undefined && loading!=true">
   <div class="span12 pagination-centered"> No data to display. Please click on
-    <img src="img/icon16_dev.png" border="0" /> above and log in.
+    <img src="images/icon16_dev.png" border="0" /> above and log in.
   </div>
 </div>
 <div spreadsheet-catch-arrow-key class="row relativePosition" ng-class="{selectedRow: selected==$index, unselectedRow: selected!=$index}" ng-repeat="datum in data | orderBy:orderProp" ng-click="selectRow($index)" ng-hide="loading==true || writePermissions==true && readPermissions==false">
@@ -175,7 +175,7 @@
       </div>
       <div class="span1">
         <span ng-show="processingAudio==true">
-          <img src="img/spinner-small.gif">
+          <img src="images/spinner-small.gif">
         </span>
       </div>
     </div>
