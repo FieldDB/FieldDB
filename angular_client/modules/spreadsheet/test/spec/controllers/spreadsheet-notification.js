@@ -1,29 +1,25 @@
 'use strict';
 
-xdescribe('Controller: SpreadsheetExportController', function() {
+xdescribe('Controller: SpreadsheetNotificationController', function() {
 
   // load the controller's module
   beforeEach(module('spreadsheetApp'));
 
-  var SpreadsheetExportController,
+  var SpreadsheetNotificationController,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function($controller, $rootScope, $modal) {
 
-
-    $rootScope.results = [{}, {}];
-    $rootScope.resultsMessage = $rootScope.results.length + " Record(s):";
+    $rootScope.notificationMessage = "Please save changes before continuing.";
 
     var modalInstance = $modal.open({
       templateUrl: 'views/export-modal.html',
-      controller: 'SpreadsheetExportController',
+      controller: 'SpreadsheetNotificationController',
       size: 'lg',
       resolve: {
         details: function() {
           return {
-            resultsMessageFromExternalController: $rootScope.resultsMessage,
-            resultsFromExternalController: $rootScope.results,
           }
         }
       }
@@ -32,11 +28,11 @@ xdescribe('Controller: SpreadsheetExportController', function() {
     modalInstance.result.then(function(any, stuff) {
       // $scope.selectedItem = selectedItem;
     }, function() {
-      console.log('Export Modal dismissed at: ' + new Date());
+      console.log('Notification Modal dismissed at: ' + new Date());
     });
 
     scope = $rootScope.$new();
-    SpreadsheetExportController = $controller('SpreadsheetExportController', {
+    SpreadsheetNotificationController = $controller('SpreadsheetNotificationController', {
       $scope: scope
     });
 
@@ -45,9 +41,8 @@ xdescribe('Controller: SpreadsheetExportController', function() {
   }));
 
   it('should recieve results from caller', function() {
-    expect(scope.results).toBeDefined();
-    expect(scope.results.length).toBe(3);
-    expect(scope.resultsMessage).toEqual(' ');
+    expect(scope.notificationMessage).toBeDefined();
+    expect(scope.notificationMessage).toEqual(' ');
   });
 
 });

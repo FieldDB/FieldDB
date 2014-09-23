@@ -12,33 +12,41 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
 var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
-  var debugging = true;
+  var debugging = false;
   if (debugging) {
     console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log);
   }
 
 
   $rootScope.appVersion = "2.2.2ss";
-  /* Modal controller TODO could move somewhere where the search is? */
 
   // Functions to open/close generic notification modal
-  $rootScope.openNotification = function() {
-    $scope.notificationShouldBeOpen = true;
-  };
+  $rootScope.openNotification = function(size) {
 
-  $rootScope.closeNotification = function() {
-    $scope.notificationShouldBeOpen = false;
+    var modalInstance = $modal.open({
+      templateUrl: 'views/notification-modal.html',
+      controller: 'SpreadsheetNotificationController',
+      size: size,
+      resolve: {
+        details: function() {
+          return {};
+        }
+      }
+    });
+
+    modalInstance.result.then(function(any, stuff) {
+      if (any || stuff) {
+        console.warn("Some parameters were passed by the modal closing, ", any, stuff);
+      }
+    }, function() {
+      $log.info('Export Modal dismissed at: ' + new Date());
+    });
   };
 
   // Functions to open/close welcome notification modal
-  $rootScope.openWelcomeNotification = function() {
-    $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
+  $rootScope.openWelcomeNotificationDeprecated = function() {
+    // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
   };
-
-  $rootScope.closeWelcomeNotification = function() {
-    $scope.welcomeNotificationShouldBeOpen = false;
-  };
-
 
 
   // TEST FOR CHROME BROWSER
@@ -477,7 +485,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.documentReady = true;
         console.log("Error loading sessions.", error);
         $rootScope.notificationMessage = "Error loading corpus, please try again.";
-        $rootScope.notificationShouldBeOpen = true;
+        $rootScope.openNotification();
         $rootScope.loading = false;
       });
   };
@@ -535,7 +543,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
         $scope.documentReady = true;
         $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
-        $rootScope.errorLoggingInNotificationShouldBeOpen = true;
+        $rootScope.openNotification();
         $rootScope.loading = false;
       });
   };
@@ -706,7 +714,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.loading = false;
         }, /* login failure */ function(reason) {
           $rootScope.notificationMessage = "Error logging in.\n" + reason;
-          $rootScope.errorLoggingInNotificationShouldBeOpen = true;
+          $rootScope.openNotification();
           $rootScope.loading = false;
         });
     }
@@ -1577,13 +1585,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           return {
             resultsMessageFromExternalController: $scope.resultsMessage,
             resultsFromExternalController: $scope.results,
-          }
+          };
         }
       }
     });
 
     modalInstance.result.then(function(any, stuff) {
-      // $scope.selectedItem = selectedItem;
+      if (any || stuff) {
+        console.warn("Some parameters were passed by the modal closing, ", any, stuff);
+      }
     }, function() {
       $log.info('Export Modal dismissed at: ' + new Date());
     });
@@ -2553,7 +2563,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $scope.documentReady = true;
         }
       } else {
-        $rootScope.openWelcomeNotification();
+        $rootScope.openWelcomeNotificationDeprecated();
         $scope.documentReady = true;
       }
     }
@@ -2566,6 +2576,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($scope.resetPasswordInfo.confirmpassword !== $scope.resetPasswordInfo.newpassword) {
       $rootScope.notificationMessage = "New passwords don't match.";
       $rootScope.openNotification();
+      return;
     }
 
     $scope.resetPasswordInfo.username = $rootScope.user.username;
