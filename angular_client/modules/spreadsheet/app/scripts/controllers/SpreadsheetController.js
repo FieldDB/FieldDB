@@ -1130,7 +1130,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.createRecord = function(fieldData, focusOnFieldAfter) {
     // $scope.setFocusOn(focusOnFieldAfter);
-    document.getElementById(focusOnFieldAfter).focus();
+    if (document.getElementById(focusOnFieldAfter)) {
+      document.getElementById(focusOnFieldAfter).focus();
+    }
 
     // // Reset new datum form data and enable upload button; only reset audio field if present
     if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
