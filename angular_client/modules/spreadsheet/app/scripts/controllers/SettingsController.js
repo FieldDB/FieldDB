@@ -1,10 +1,7 @@
+/* globals confirm */
+'use strict';
 console.log("Loading the SpreadsheetStyleDataEntrySettingsController.");
 
-define(
-  ["angular"],
-  function(angular) {
-
-    'use strict';
 
     var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope,
       $resource, Data) {
@@ -31,7 +28,7 @@ define(
         var Preferences = JSON.parse(localStorage
           .getItem('SpreadsheetPreferences'));
         for (var key in Preferences.availableFields) {
-          if (key == field.label) {
+          if (key === field.label) {
             Preferences.availableFields[key].title = newFieldTitle;
           }
         }
@@ -45,12 +42,10 @@ define(
         var r = confirm("Are you sure you want to change all '" + oldTag + "' to '" + newTag + "'?\nThis may take a while.");
         if (r === true) {
           var changeThisRecord;
-          for (var i = 0; i < $scope.dataCopy.length; i++) {
-            changeThisRecord = false;
-            (function(indexi) {
+          var doSomethingToSomething = function(indexi) {
               var UUID = $scope.dataCopy[indexi].id;
               for (var j = 0; j < $scope.dataCopy[indexi].value.datumTags.length; j++) {
-                if ($scope.dataCopy[indexi].value.datumTags[j].tag == oldTag) {
+                if ($scope.dataCopy[indexi].value.datumTags[j].tag === oldTag) {
                   changeThisRecord = true;
                 }
               }
@@ -61,12 +56,13 @@ define(
                   .then(
                     function(editedRecord) {
                       // Edit record with updated tag data
-                      for (var k = 0; k < editedRecord.datumTags.length; k++) {
-                        (function(indexk) {
-                          if (editedRecord.datumTags[indexk].tag == oldTag) {
+                      var editRecordWithUpdatedTagData = function(indexk) {
+                          if (editedRecord.datumTags[indexk].tag === oldTag) {
                             editedRecord.datumTags[indexk].tag = newTag;
                           }
-                        })(k);
+                        };
+                      for (var k = 0; k < editedRecord.datumTags.length; k++) {
+                        editRecordWithUpdatedTagData(k);
                       }
                       // Save edited record
                       Data
@@ -87,10 +83,13 @@ define(
                         .alert("There was an error retrieving the record. Please try again.");
                     });
               }
-            })(i);
+            };
+          for (var i = 0; i < $scope.dataCopy.length; i++) {
+            changeThisRecord = false;
+            doSomethingToSomething(i);
           }
           for (var j in $scope.tags) {
-            if ($scope.tags[j] == oldTag) {
+            if ($scope.tags[j] === oldTag) {
               $scope.tags[j] = newTag;
             }
           }
@@ -100,21 +99,22 @@ define(
       $scope.deleteDuplicateTags = function() {
         window.alert("Coming soon.");
         var changeThisRecord;
-        for (var i = 0; i < $scope.dataCopy.length; i++) {
-          changeThisRecord = false;
-          (function(indexi) {
+        var doSomethingLIkeDeletingDuplicateTags = function(indexi) {
             var tagsArray = $scope.dataCopy[indexi].value.datumTags;
             if (tagsArray.length > 1) {
               for (var j = 0; j < tagsArray.length; j++) {
                 for (var k = 0; k < tagsArray.length; k++) {
-                  if (tagsArray[j].tag == tagsArray[k].tag) {
+                  if (tagsArray[j].tag === tagsArray[k].tag) {
                     console.log(tagsArray[j].tag + " = " + tagsArray[k].tag);
                   }
                 }
               }
               console.log(JSON.stringify(tagsArray));
             }
-          })(i);
+          };
+        for (var i = 0; i < $scope.dataCopy.length; i++) {
+          changeThisRecord = false;
+          doSomethingLIkeDeletingDuplicateTags(i);
         }
       };
 
@@ -159,7 +159,7 @@ define(
             if (newFieldPreferences[newField] === "") {
               Preferences[template][newField].title = "";
               Preferences[template][newField].label = "";
-            } else if ($scope.availableFields[availableField].label == newFieldPreferences[newField]) {
+            } else if ($scope.availableFields[availableField].label === newFieldPreferences[newField]) {
               if(!Preferences[template]){
                 //hack for #1290 until we refactor the app into something more MVC
                 Preferences[template] = window.defaultPreferences[template];
@@ -180,7 +180,7 @@ define(
       };
 
       $scope.saveNumberOfRecordsToDisplay = function(numberOfRecordsToDisplay) {
-        Preferences = JSON.parse(localStorage
+        var Preferences = JSON.parse(localStorage
           .getItem('SpreadsheetPreferences'));
         if (numberOfRecordsToDisplay) {
           Preferences.resultSize = numberOfRecordsToDisplay;
@@ -197,5 +197,3 @@ define(
     SpreadsheetStyleDataEntrySettingsController.$inject = ['$scope', '$rootScope',
       '$resource', 'Data'
     ];
-    return SpreadsheetStyleDataEntrySettingsController;
-  });
