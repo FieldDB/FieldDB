@@ -1,11 +1,7 @@
-/* globals define, Q, sjcl, Recorder, AudioContext, stopRecording, _, confirm, alert, prompt */
+/* globals  Q, sjcl, Recorder, AudioContext, stopRecording, SpreadsheetDatum, _, confirm, alert, prompt */
+    'use strict';
 console.log("Loading the SpreadsheetStyleDataEntryController.");
 
-define(
-  ["angular", "js/SpreadsheetDatum"],
-  function(angular, SpreadsheetDatum) {
-
-    'use strict';
     var debugging = false;
     var SpreadsheetStyleDataEntryController =
       /**
@@ -2620,5 +2616,3 @@ define(
     SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope',
       '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout'
     ];
-    return SpreadsheetStyleDataEntryController;
-  });

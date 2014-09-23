@@ -1,11 +1,8 @@
-/* globals define, window */
+/* globals  window */
 
+  'use strict';
 console.log("Loading the SpreadsheetPrivateServices.");
 
-define(
-  ["angular"],
-  function(angular) {
-  'use strict';
 
     var SpreadsheetPrivateServices = angular
       .module('spreadsheet_private_services', [])
@@ -79,5 +76,4 @@ define(
 
           };
         });
-    return SpreadsheetPrivateServices;
-  });
+console.log("SpreadsheetPrivateServices", SpreadsheetPrivateServices);

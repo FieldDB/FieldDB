@@ -1,8 +1,5 @@
-/* globals define */
-console.log("Loading the SpreadsheetDatum.");
-
-define([], function() {
   'use strict';
+console.log("Loading the SpreadsheetDatum.");
 
   var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDBDatum, guessedAudioUrl) {
     var j;
@@ -229,8 +226,8 @@ define([], function() {
   };
   console.log("Loaded the SpreadsheetDatum.");
 
-  return {
+ var SpreadsheetDatum = {
     convertSpreadSheetDatumIntoFieldDBDatum: convertSpreadSheetDatumIntoFieldDBDatum,
     convertFieldDBDatumIntoSpreadSheetDatum: convertFieldDBDatumIntoSpreadSheetDatum
   };
-});
+  console.log("SpreadsheetDatum",SpreadsheetDatum);
