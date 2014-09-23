@@ -1,6 +1,6 @@
 /* globals  Q, SpreadsheetDatum */
 'use strict';
-console.log("Loading the SpreadsheetStyleDataEntryServices.");
+console.log("Declaring the SpreadsheetStyleDataEntryServices.");
 
 angular.module('spreadsheetApp')
   .factory('Data', function($http, $rootScope, $q, Servers, md5) {

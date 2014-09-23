@@ -1,6 +1,6 @@
 /* globals Glosser */
 'use strict';
-console.log("Loading the SpreadsheetStyleDataEntryDirectives.");
+console.log("Declaring the SpreadsheetStyleDataEntryDirectives.");
 
 // var lexiconFactory = LexiconFactory;
 // var corpusSpecificGlosser;
