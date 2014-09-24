@@ -101,6 +101,7 @@ angular.module('spreadsheetApp')
             return;
           }
           // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
+          console.log("calculating arrows and requesting numberOfResultPages");
           var lastPage = scope.numberOfResultPages(scope.allData.length);
           var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
           var currentRecordIsLastRecord = false;
