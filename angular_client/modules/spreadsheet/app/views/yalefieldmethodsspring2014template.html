@@ -69,11 +69,11 @@
   <!-- Show when editing -->
   <div ng-show="activeDatumIndex==$index">
     <form ng-submit="markAsEdited(fieldData, datum);">
-      <div class="span5">
+      <div class="span5" spreadsheet-catch-focus-on-arrow-press>
         <div class="focus_box_div">
-          <input ng-disabled="writePermissions==false" spreadsheet-catch-focus-on-arrow-press/>
+          <input ng-disabled="writePermissions==false" />
         </div>
-        <input ng-disabled="writePermissions==false" keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field1" ng-init="fieldData.field1=datum[fields.field1.label]" value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" title="{{fields.field1.title}}"  >
+        <input id="firstFieldOfEditingEntry"  ng-disabled="writePermissions==false" keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field1" ng-init="fieldData.field1=datum[fields.field1.label]" value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" title="{{fields.field1.title}}"  >
         <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2" ng-init="fieldData.field2=datum[fields.field2.label]" value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" title="{{fields.field2.title}}"  >
         <input ng-disabled="writePermissions==false" guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3" ng-init="fieldData.field3=datum[fields.field3.label]" value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" title="{{fields.field3.title}}"  >
         <input ng-disabled="writePermissions==false" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field4" ng-init="fieldData.field4=datum[fields.field4.label]" value="{{datum[fields.field4.label]}}" ng-hide="fields.field4.label==''" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" title="{{fields.field4.title}}"  >
@@ -333,11 +333,11 @@
 <div spreadsheet-catch-arrow-key ng-class="{selectedRow: activeDatumIndex=='newEntry', unselectedNewRow: activeDatumIndex!='newEntry'}" class="relativePosition" ng-click="selectRow('newEntry')" ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || writePermissions == false ">
   <div class="row">
     <form ng-submit="createRecord(newFieldData)" >
-      <div class="span5">
+      <div class="span5" spreadsheet-catch-focus-on-arrow-press>
         <div class="focus_box_div">
-          <input ng-disabled="writePermissions==false" spreadsheet-catch-focus-on-arrow-press/>
+          <input ng-disabled="writePermissions==false" />
         </div>
-        <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">
+        <input id="firstFieldOfNewEntry" ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">
         <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''" >
         <input ng-disabled="writePermissions==false" guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''" >
         <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">
