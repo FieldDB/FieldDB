@@ -30,6 +30,34 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
       description: ContextualizableObject,
       instructions: ContextualizableObject
     }
+  },
+
+  subexperiments: {
+    get: function() {
+      if (this.docs && this.docs.length > 0) {
+        return this.docs;
+      }
+      return this.docIds;
+    },
+    set: function(value) {
+      if ((value && value[0] && typeof value[0] === "object") || value.constructor === DocumentCollection) {
+        this.docs = value;
+      } else {
+        this.docIds = value;
+      }
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      // Force docIds to be set to current docs
+      this.docIds = null;
+      this._subexperiments = this.docIds;
+      var json = DataList.prototype.toJSON.apply(this, arguments);
+      this.debug(json);
+      return json;
+    }
   }
 
 });
