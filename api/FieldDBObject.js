@@ -131,6 +131,18 @@ FieldDBObject.bug = function(message) {
   }
 };
 
+FieldDBObject.warn = function(message, message2, message3, message4) {
+  console.warn(this.type.toUpperCase() + " WARN: " + message);
+  if (message2) {
+    console.warn(message2);
+  }
+  if (message3) {
+    console.warn(message3);
+  }
+  if (message4) {
+    console.warn(message4);
+  }
+};
 /* set the application if you want global state (ie for checking if a user is authorized) */
 // FieldDBObject.application = {}
 
@@ -297,23 +309,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
   warn: {
-    value: function(message, message2, message3, message4) {
+    value: function(message) {
       if (this.warnMessage) {
         this.warnMessage += ";;; ";
       } else {
         this.warnMessage = "";
       }
       this.warnMessage = this.warnMessage + message;
-      console.warn(this.type.toUpperCase() + " WARN: " + message);
-      if (message2) {
-        console.warn(message2);
-      }
-      if (message3) {
-        console.warn(message3);
-      }
-      if (message4) {
-        console.warn(message4);
-      }
+      FieldDBObject.warn.apply(this, arguments);
     }
   },
   todo: {
