@@ -4,7 +4,7 @@ var debugMode = false;
 xdescribe('Directive: spreadsheet-no-data-to-display', function() {
 
   // load the directive's module and the template
-  beforeEach(module('spreadsheetApp', 'views/yalefieldmethodsspring2014template-edit.html'));
+  beforeEach(module('spreadsheetApp', 'views/spreadsheet-no-data-to-display.html'));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

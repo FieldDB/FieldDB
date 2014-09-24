@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc directive
- * @name spreadsheetApp.directive:spreadsheetYale2014TemplateRead
+ * @name spreadsheetApp.directive:spreadsheetAdaptingColumnarTemplateNew
  * @description
- * # spreadsheetYale2014TemplateRead
+ * # spreadsheetAdaptingColumnarTemplateNew
  */
-angular.module('spreadsheetApp').directive('spreadsheetYale2014TemplateRead', function() {
+angular.module('spreadsheetApp').directive('spreadsheetAdaptingColumnarTemplateNew', function() {
   return {
-    templateUrl: 'views/yalefieldmethodsspring2014template-read.html',
+    templateUrl: 'views/adapting-columnar-template-new.html',
     restrict: 'A',
     transclude: false,
     // replace: true,
