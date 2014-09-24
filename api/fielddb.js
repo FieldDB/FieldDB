@@ -22,6 +22,8 @@
   var SubExperimentDataList = require("./data_list/SubExperimentDataList").SubExperimentDataList;
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;
   var Datum = require("./datum/Datum").Datum;
+  var Stimulus = require("./datum/Stimulus").Stimulus;
+  var Response = require("./datum/Response").Response;
   var Database = require("./corpus/Database").Database;
   var PsycholinguisticsDatabase = require("./corpus/PsycholinguisticsDatabase").PsycholinguisticsDatabase;
   var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
@@ -51,6 +53,8 @@
   FieldDB.SubExperimentDataList = SubExperimentDataList;
   FieldDB.AudioVideo = AudioVideo;
   FieldDB.Datum = Datum;
+  FieldDB.Stimulus = Stimulus;
+  FieldDB.Response = Response;
   FieldDB.Database = Database;
   FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
