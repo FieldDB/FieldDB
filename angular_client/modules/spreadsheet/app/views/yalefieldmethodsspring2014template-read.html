@@ -1,5 +1,5 @@
 <div class="span1 search_checkbox" ng-show="searching==true">
-  <input ng-disabled="writePermissions==false" type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
+  <input  type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
   <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">
@@ -101,7 +101,9 @@
         </td>
         <td>
           <span class="form-horizontal">
-            <input ng-disabled="writePermissions==false" type="text" ng-model='audioFile.description'>
+            <p>
+              {{audioFile.description}}
+            </p>
           </span>
         </td>
         <td>
