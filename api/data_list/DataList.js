@@ -173,7 +173,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             doc = new Document(doc);
           } else if (guessedType === "FieldDBObject") {
             doc = new FieldDBObject(doc);
-          } else if (FieldDB[guessedType]) {
+          } else if (FieldDB && FieldDB[guessedType]) {
             self.warn("Converting doc into guessed type " + guessedType);
             doc = new FieldDB[guessedType](doc);
           } else {
