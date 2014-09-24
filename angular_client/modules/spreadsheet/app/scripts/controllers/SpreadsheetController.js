@@ -350,7 +350,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
   $scope.reverse = true;
-  // $scope.selected = 'newEntry';
+  // $scope.activeDatumIndex = 'newEntry';
   $rootScope.authenticated = false;
   $rootScope.developer = false;
   $scope.dataentry = false;
@@ -432,7 +432,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         case "searchMenu":
           $scope.changeActiveSubMenu(itemToDisplay);
           $scope.searching = true;
-          $scope.selected = null;
+          $scope.activeDatumIndex = null;
           window.location.assign("#/spreadsheet/" + $rootScope.template);
           break;
         case "faq":
@@ -531,7 +531,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.saved = "yes";
         $rootScope.loading = false;
 
-        $scope.selected = "newEntry";
+        $scope.activeDatumIndex = "newEntry";
 
 
       }, function(error) {
@@ -1062,11 +1062,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!datum.id) {
       $rootScope.notificationMessage = "Please save changes before continuing.";
       $rootScope.openNotification();
-      $scope.selected = datum;
+      $scope.activeDatumIndex = datum;
       // } else if (datum.audioVideo && datum.audioVideo[0]) {
       //   $rootScope.notificationMessage = "You must delete all recordings from this record first.";
       //   $rootScope.openNotification();
-      //   $scope.selected = datum;
+      //   $scope.activeDatumIndex = datum;
     } else {
       var r = confirm("Are you sure you want to put this datum in the trash?");
       if (r === true) {
@@ -1109,7 +1109,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 $scope.loadPaginatedData();
 
                 $scope.saved = "yes";
-                $scope.selected = null;
+                $scope.activeDatumIndex = null;
               }, function(error) {
                 console.warn(error);
                 window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
@@ -1453,14 +1453,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.selectRow = function(scopeIndex) {
     // Do nothing if clicked row is currently selected
-    if ($scope.selected === scopeIndex) {
+    if ($scope.activeDatumIndex === scopeIndex) {
       return;
     }
     if ($scope.searching !== true) {
       if ($rootScope.newRecordHasBeenEdited !== true) {
-        $scope.selected = scopeIndex;
+        $scope.activeDatumIndex = scopeIndex;
       } else {
-        $scope.selected = scopeIndex + 1;
+        $scope.activeDatumIndex = scopeIndex + 1;
         $scope.createRecord($scope.newFieldData);
       }
       // if(scopeIndex === "newEntry"){
@@ -1472,11 +1472,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.editSearchResults = function(scopeIndex) {
-    $scope.selected = scopeIndex;
+    $scope.activeDatumIndex = scopeIndex;
   };
 
   $scope.selectNone = function() {
-    $scope.selected = undefined;
+    $scope.activeDatumIndex = undefined;
   };
 
   $scope.runSearch = function(searchTerm) {
@@ -2023,12 +2023,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // };
 
   $scope.pageForward = function() {
-    $scope.selected = null;
+    $scope.activeDatumIndex = null;
     $rootScope.currentPage = $rootScope.currentPage + 1;
   };
 
   $scope.pageBackward = function() {
-    $scope.selected = null;
+    $scope.activeDatumIndex = null;
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
   // Audio recording

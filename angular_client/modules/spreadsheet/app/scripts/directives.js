@@ -177,8 +177,8 @@ angular.module('spreadsheetApp')
   .directive('spreadsheetCatchFocusOnArrowPress', function($timeout) {
     return function(scope, element) {
       var selfElement = element;
-      scope.$watch('selected', function() {
-        if (scope.selected === 'newEntry' || scope.selected === scope.$index) {
+      scope.$watch('activeDatumIndex', function() {
+        if (scope.activeDatumIndex === 'newEntry' || scope.activeDatumIndex === scope.$index) {
           $timeout(function() {
             console.log("arrow old focus", document.activeElement);
             // element[0].focus();
