@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @ngdoc directive
  * @name spreadsheetApp.directive:spreadsheetYale2014TemplateRead
