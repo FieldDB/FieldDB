@@ -373,6 +373,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         }
       }
       var encryptedValue;
+      if (!value.trim) {
+        value = value + "";
+      }
       value = value.trim();
       if (!this._shouldBeEncrypted) {
         this._encryptedValue = value;
