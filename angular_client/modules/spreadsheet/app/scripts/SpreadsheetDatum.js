@@ -109,10 +109,10 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   spreadsheetDatum.hasAudio = false;
   if (spreadsheetDatum.audioVideo.length > 0) {
     spreadsheetDatum.audioVideo.map(function() {
-      if (!spreadsheetDatum.audioVideo.trashed === "deleted") {
+      if (spreadsheetDatum.audioVideo.trashed !== "deleted") {
         spreadsheetDatum.hasAudio = true;
       }
-    })
+    });
   }
 
   return spreadsheetDatum;
