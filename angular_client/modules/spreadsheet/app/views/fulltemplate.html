@@ -366,17 +366,4 @@
   </form>
 </div>
 <br />
-<div class="pagination-centered page_navigation" ng-hide="loading==true || data==undefined || numberOfResultPages(allData.length)==1 || numberOfResultPages(allData.length)==0 ">
-  <button class="btn btn-inverse btn-mini" ng-disabled="currentPage == 0" ng-click="pageBackward();">
-    <font size="4">
-      <b>&larr;
-      </b>
-    </font>
-  </button> &nbsp;{{currentPage+1}} of {{numberOfResultPages(allData.length)}}&nbsp;
-  <button class="btn btn-inverse btn-mini" ng-disabled="currentPage >= (allData | filter: filterTerm).length/resultSize - 1" ng-click="pageForward()">
-    <font size="4">
-      <b>&rarr;
-      </b>
-    </font>
-  </button>
-</div>
+<div data-spreadsheet-pagination > </div>
