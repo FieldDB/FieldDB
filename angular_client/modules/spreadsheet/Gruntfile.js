@@ -207,8 +207,8 @@ module.exports = function(grunt) {
         flow: {
           html: {
             steps: {
-              js: ['concat', 'uglifyjs'],
-              css: ['cssmin']
+              js: ['concat'],
+              // js: ['concat', 'uglifyjs'],
             },
             post: {}
           }
@@ -282,7 +282,7 @@ module.exports = function(grunt) {
             removeCommentsFromCDATA: true,
             removeOptionalTags: true
           },
-          module: 'adminDashboardApp',
+          module: 'spreadsheetApp',
         },
         cwd: 'app',
         src: 'views/**.html',
@@ -290,14 +290,15 @@ module.exports = function(grunt) {
       }
     },
 
-    // ng-annotate tries to make the code safe for minification automatically
-    // by using the Angular long form for dependency injection.
-    ngAnnotate: {
+    // ngmin tries to make the code safe for minification automatically by
+    // using the Angular long form for dependency injection. It doesn't work on
+    // things like resolve or inject so those have to be done manually.
+    ngmin: {
       dist: {
         files: [{
           expand: true,
           cwd: '.tmp/concat/scripts',
-          src: ['*.js', '!oldieshim.js'],
+          src: '*.js',
           dest: '.tmp/concat/scripts'
         }]
       }
@@ -322,10 +323,13 @@ module.exports = function(grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'data/*/**',
-            'views/{,*/}*.html',
-            'images/{,*/}*.{webp}',
-            'fonts/*'
+            'styles/*.css',
+            'data/*.json',
+            'locales/*/*.json',
+            // 'views/{,*/}*.html',
+            'images/*.png',
+            'images/*.gif',
+            // 'fonts/*'
           ]
         }, {
           expand: true,
@@ -425,15 +429,15 @@ module.exports = function(grunt) {
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngAnnotate',
-    'copy:dist',
+    'ngmin',
     'cdnify',
-    'cssmin',
+    // 'cssmin',
     'ngtemplates',
     'copy:templates',
     // 'uglify',
     // 'filerev',
     'usemin',
+    'copy:dist',
     // 'htmlmin',
     'compress'
   ]);
