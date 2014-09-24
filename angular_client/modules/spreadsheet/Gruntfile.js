@@ -43,7 +43,7 @@ module.exports = function(grunt) {
       },
       templates: {
         files: ['index.html','<%= yeoman.app %>/views/{,*/}*.html'],
-        tasks: ['ngtemplates','copy:templates'],
+        tasks: ['ngtemplates'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -209,6 +209,7 @@ module.exports = function(grunt) {
             steps: {
               js: ['concat'],
               // js: ['concat', 'uglifyjs'],
+              css: ['cssmin']
             },
             post: {}
           }
@@ -323,7 +324,7 @@ module.exports = function(grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'styles/*.css',
+            // 'styles/*.css',
             'data/*.json',
             'locales/*/*.json',
             // 'views/{,*/}*.html',
@@ -342,10 +343,6 @@ module.exports = function(grunt) {
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
-      },
-      templates: {
-        src:['<%= yeoman.dist %>/scripts/templates.js'],
-        dest: '<%= yeoman.app %>/scripts/templates.js'
       },
       styles: {
         expand: true,
@@ -428,16 +425,16 @@ module.exports = function(grunt) {
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
+    'copy:dist',
     'concat',
     'ngmin',
-    'cdnify',
-    // 'cssmin',
+    // 'cdnify',
+    'cssmin',
     'ngtemplates',
-    'copy:templates',
+    // 'copy:templates',
     // 'uglify',
     // 'filerev',
     'usemin',
-    'copy:dist',
     // 'htmlmin',
     'compress'
   ]);
