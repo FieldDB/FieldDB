@@ -30,6 +30,11 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   }
   todo("$scope.appReloaded is true, loading the SettingsController completely");
 
+
+  $scope.removeFieldFromCorpus=function(field){
+    console.log("TODO remove the field.");
+  };
+
   // $scope.availableFields = $scope.scopePreferences.availableFields;
   // console.log($scope.availableFields );
   $scope.changeTagToEdit = function(tag) {
@@ -188,6 +193,8 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
     $scope.scopePreferences = Preferences;
     $rootScope.template = Preferences.userTemplate;
     $rootScope.fields = Preferences[Preferences.userTemplate];
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userTemplate]);
+
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     window.alert("Settings saved.");
   };

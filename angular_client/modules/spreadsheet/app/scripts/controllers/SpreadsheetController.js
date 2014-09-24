@@ -134,18 +134,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "label": "language",
         "title": "language"
       },
-      "dateElicited": {
-        "label": "dateElicited",
-        "title": "Date Elicited"
-      },
-      "user": {
-        "label": "user",
-        "title": "User"
-      },
-      "dateSEntered": {
-        "label": "dateSEntered",
-        "title": "Date entered"
-      },
+      // "dateElicited": {
+      //   "label": "dateElicited",
+      //   "title": "Date Elicited"
+      // },
+      // "user": {
+      //   "label": "user",
+      //   "title": "User"
+      // },
+      // "dateSEntered": {
+      //   "label": "dateSEntered",
+      //   "title": "Date entered"
+      // },
       "tags": {
         "label": "tags",
         "title": "Tags"
@@ -215,20 +215,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "title": "Translation"
       },
       "field5": {
-        "label": "comments",
-        "title": "Comments"
+        "label": "validationStatus",
+        "title": "Status"
       },
       "field6": {
-        "label": "judgement",
-        "title": "Grammaticality Judgement"
-      },
-      "field7": {
         "label": "tags",
         "title": "Tags"
-      },
-      "field8": {
-        "label": "",
-        "title": ""
       }
     },
     "mcgillfieldmethodsspring2014template": {
@@ -249,16 +241,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "title": "Translation"
       },
       "field5": {
-        "label": "judgement",
-        "title": "Grammaticality Judgement"
+        "label": "phonetic",
+        "title": "IPA"
       },
       "field6": {
-        "label": "tags",
-        "title": "Tags"
-      },
-      "field8": {
-        "label": "",
-        "title": ""
+        "label": "notes",
+        "title": "Notes"
       }
     },
     "yalefieldmethodsspring2014template": {
@@ -324,29 +312,56 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
   // Always get the most recent available fields
   Preferences.availableFields = defaultPreferences.availableFields;
-  /* upgrade to v1.923ss */
-  if (!Preferences.fulltemplate.field7.label) {
-    Preferences.fulltemplate.field7 = {
-      "label": "tags",
-      "title": "Tags"
-    };
+  /* upgrade to v1.923ss instead update to 2.22 */
+  if (Preferences.fulltemplate.field7) {
+    Preferences.fulltemplate = defaultPreferences.fulltemplate;
   }
   if (Preferences.fulltemplate.field6.label === "judgement") {
-    Preferences.fulltemplate.field6 = {
-      "label": "judgement",
-      "title": "Grammaticality Judgement"
-    };
+    Preferences.fulltemplate = defaultPreferences.fulltemplate;
   }
+  if(!Preferences.fullTemplateDefaultNumberOfColumns){
+    Preferences.fullTemplateDefaultNumberOfColumns = 2;
+  }
+  $rootScope.fullTemplateDefaultNumberOfColumns = Preferences.fullTemplateDefaultNumberOfColumns;
   localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+  $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
+    if (!numberOfColumns) {
+      numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
+    }
+    var fields = [];
+    if (typeof incomingFields.splice != "function") {
+      for (var field in incomingFields) {
+        if (incomingFields.hasOwnProperty(field)) {
+          fields.push(incomingFields[field]);
+        }
+      }
+    } else {
+      fields = incomingFields;
+    }
+    var columnHeight = Math.ceil(fields.length / numberOfColumns);
+    var columns = {};
 
+    if (numberOfColumns === 1) {
+      columns.first = fields;
+    } else if (numberOfColumns === 2) {
+      columns.first = fields.slice(0, columnHeight);
+      columns.second = fields.slice(columnHeight, fields.length);
+    } else if (numberOfColumns === 3) {
+      columns.first = fields.slice(0, columnHeight);
+      columns.second = fields.slice(columnHeight, columnHeight * 2);
+      columns.third = fields.slice(columnHeight * 2, fields.length);
+    }
+    return columns;
+  };
 
   // console.log(Preferences.availableFields);
   // Set scope variables
   $scope.documentReady = false;
   $rootScope.template = Preferences.userTemplate;
   $rootScope.fields = Preferences[Preferences.userTemplate];
+  $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userTemplate]);
   $scope.scopePreferences = Preferences;
-  $scope.availableFields = defaultPreferences.availableFields;
+  $rootScope.availableFields = defaultPreferences.availableFields;
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
   $scope.reverse = true;
@@ -739,7 +754,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log("must have been an object...", e, selectedDB);
       }
       $rootScope.DB = selectedDB;
-
+      $rootScope.availableFieldsInCurrentCorpus = selectedDB.datumFields;
+      if (!$rootScope.availableFieldsInCurrentCorpus) {
+        $rootScope.availableFieldsInCurrentCorpus = [];
+      }
 
       // Update saved state in Preferences
       Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
@@ -767,6 +785,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.overrideTemplateSetting = function(template, newFieldPreferences, notUserInitited) {
     $rootScope.template = template;
     $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(newFieldPreferences);
+
     console.log("notUserInitited", notUserInitited);
   };
 
@@ -2047,7 +2067,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.$watch('currentPage', function(newValue, oldValue) {
     if (newValue !== oldValue) {
       $scope.loadPaginatedData();
-    }else{
+    } else {
       console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
     }
   });

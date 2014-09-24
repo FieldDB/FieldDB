@@ -1,41 +1,20 @@
 <div class="span1 search_checkbox" ng-show="searching==true">
-  <input  type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
+  <input type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
+</div>
+<div class="span1" >
+  <span title="Grammaticality Judgement">
+    {{datum['judgement']}}
+  </span>
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">
-    {{datum[fields.field1.label] | neverEmpty}}
+  <span ng-repeat="corpusField in fieldsInColumns.first" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.title}}">
+    {{datum[corpusField.label] | neverEmpty}}
   </span>
-  <br />
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">
-    {{datum[fields.field2.label] | neverEmpty}}
-  </span>
-  <br />
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">
-    {{datum[fields.field3.label] | neverEmpty}}
-  </span>
-  <br />
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">
-    {{datum[fields.field4.label] | neverEmpty}}
-  </span>
-  <br />
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field5.title}}" ng-hide="fields.field5.label==''">
-    {{datum[fields.field5.label] | neverEmpty}}
+  <span ng-repeat="corpusField in fieldsInColumns.second" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.title}}">
+    {{datum[corpusField.label] | neverEmpty}}
   </span>
-  <br />
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">
-    {{datum[fields.field6.label] | neverEmpty}}
-  </span>
-  <br />
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">
-    {{datum[fields.field7.label] | neverEmpty}}
-  </span>
-  <br />
-  <span ng-class="{span5: searching!=true, span4: searching==true}" title="{{fields.field8.title}}" ng-hide="fields.field8.label==''">
-    {{datum[fields.field8.label] | neverEmpty}}
-  </span>
-  <br />
 </div>
 <div class="span2 entered_modified_info">
   <span ng-show="searching==true">

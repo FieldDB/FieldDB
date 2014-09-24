@@ -97,4 +97,20 @@
       </div>
     </div>
 	</div>
+
+  <div>
+    <div class="settings_section_header">
+      <h2>
+        Fields in <b>{{DB.title}}</b>
+      </h2>
+    </div>
+    <div class="clearDiv">&nbsp;</div>
+    <div class="settingsItems row">
+      <div ng-repeat="field in availableFieldsInCurrentCorpus">
+        <a class="delete_button" ng-click="removeFieldFromCorpus(field)">ⓧ</a>
+        {{field.label}}
+      </div>
+    </div>
+
+  </div>
 </div>

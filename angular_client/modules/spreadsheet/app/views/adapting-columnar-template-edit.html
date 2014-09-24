@@ -1,18 +1,42 @@
 <form ng-submit="markAsEdited(fieldData, datum);">
+  <div class="span1" >
+    <input
+    keypress-mark-as-edited
+    class="span5"
+    type="text"
+    ng-model="datum['judgement']"
+    placeholder=""
+    title=" *#? Grammaticality Judgement"  />
+  </div>
   <div class="span5" spreadsheet-catch-focus-on-arrow-press>
-    <div class="focus_box_div">
-      <input  />
-    </div>
-    <input id="firstFieldOfEditingEntry"  keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field1" ng-init="fieldData.field1=datum[fields.field1.label]" value="{{datum[fields.field1.label]}}" ng-hide="fields.field1.label==''" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" title="{{fields.field1.title}}" >
-    <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field2" ng-init="fieldData.field2=datum[fields.field2.label]" value="{{datum[fields.field2.label]}}" ng-hide="fields.field2.label==''" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" title="{{fields.field2.title}}" >
-    <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field3" ng-init="fieldData.field3=datum[fields.field3.label]" value="{{datum[fields.field3.label]}}" ng-hide="fields.field3.label==''" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" title="{{fields.field3.title}}" >
-    <input  keypress-mark-as-edited class="span5" type="text" ng-model="fieldData.field4" ng-init="fieldData.field4=datum[fields.field4.label]" value="{{datum[fields.field4.label]}}" ng-hide="fields.field4.label==''" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" title="{{fields.field4.title}}" >
+    <input
+    ng-repeat="corpusField in fieldsInColumns.first"
+    keypress-mark-as-edited
+    class="span5"
+    type="text"
+    ng-model="datum[corpusField.label]"
+    placeholder="{{corpusField.title}}"
+    title="{{corpusField.title}}"
+    guess-morphemes-from-utterance
+    guess-gloss-from-morphemes
+    guess-utterance-from-morphemes
+    auto-glosser-on="{{useAutoGlosser}}"
+    field-label="{{corpusField.label}}" />
   </div>
   <div class="span5">
-    <input  keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field5" ng-init="fieldData.field5=datum[fields.field5.label]" value="{{datum[fields.field5.label]}}" placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}" title="{{fields.field5.title}}" >
-    <input  keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field6" ng-init="fieldData.field6=datum[fields.field6.label]" value="{{datum[fields.field6.label]}}" ng-hide="fields.field6.label==''" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}" title="{{fields.field6.title}}" >
-    <input  keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field7" ng-init="fieldData.field7=datum[fields.field7.label]" value="{{datum[fields.field7.label]}}" ng-hide="fields.field7.label==''" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}" title="{{fields.field7.title}}" >
-    <input  keypress-mark-as-edited class="span5 " type="text" ng-model="fieldData.field8" ng-init="fieldData.field8=datum[fields.field8.label]" value="{{datum[fields.field8.label]}}" ng-hide="fields.field8.label==''" placeholder="{{fields.field8.title}}" title="{{fields.field8.title}}" title="{{fields.field8.title}}" >
+    <input
+    ng-repeat="corpusField in fieldsInColumns.second"
+    keypress-mark-as-edited
+    class="span5"
+    type="text"
+    ng-model="datum[corpusField.label]"
+    placeholder="{{corpusField.title}}"
+    title="{{corpusField.title}}"
+    guess-morphemes-from-utterance
+    guess-gloss-from-morphemes
+    guess-utterance-from-morphemes
+    auto-glosser-on="{{useAutoGlosser}}"
+    field-label="{{corpusField.label}}" />
   </div>
   <div class="span2 entered_modified_info">
     <span ng-show="searching==true">
