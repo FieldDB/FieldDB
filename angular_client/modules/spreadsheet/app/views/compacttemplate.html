@@ -4,9 +4,9 @@
   ng-click="selectRow('newEntry')"
   ng-hide="data==undefined || loading==true || activeSession==undefined || searching==true || readPermissions == false || currentPage!=0">
   <div class="row">
-  <form ng-submit="createRecord(newFieldData);newFieldData=''">
+  <form ng-submit="createRecord(newFieldData);newFieldData=''"  spreadsheet-catch-focus-on-arrow-press>
     <div class="focus_box_div">
-      <input ng-disabled="writePermissions==false" spreadsheet-catch-focus-on-arrow-press/>
+      <input ng-disabled="writePermissions==false"/>
     </div>
     <div class="span3">
       <input
@@ -96,8 +96,8 @@
 
   <!-- Show when editing -->
   <div ng-show="activeDatumIndex==$index">
-    <form ng-submit="markAsEdited(fieldData, datum);">
-      <div class="span3">
+    <form ng-submit="markAsEdited(fieldData, datum);"  spreadsheet-catch-focus-on-arrow-press>
+      <div class="span3" >
         <div class="focus_box_div"><input ng-disabled="writePermissions==false" spreadsheet-catch-focus-on-arrow-press /></div>
         <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on={{useAutoGlosser}} keypress-mark-as-edited class="span3" type="text" ng-model="fieldData.field1"
           ng-init="fieldData.field1=datum[fields.field1.label]"
@@ -133,12 +133,14 @@
   </div>
   <!-- Show when not editing -->
   <div ng-show="activeDatumIndex!=$index" class="container-fluid">
-    <div class="row">
-    <div class="span3">
+    <div class="row"  spreadsheet-catch-focus-on-arrow-press>
+    <div class="span3" >
       <span class="span3" title="{{fields.field1.title}}">
         <input ng-disabled="writePermissions==false" type="checkbox" value="{{datum.id}}"
         ng-checked="datum.checked" ng-model="datum.checked"
-        ng-show="searching==true"> {{datum[fields.field1.label]
+        ng-show="searching==true">
+      <input hidden />
+        {{datum[fields.field1.label]
         | neverEmpty}}</span>
     </div>
     <div class="span3">
