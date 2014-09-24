@@ -94,6 +94,9 @@ angular.module('spreadsheetApp')
     return function(scope, element) {
       element.bind('keyup', function(e) {
         scope.$apply(function() {
+          if(!scope.allData){
+            return;
+          }
           // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
           var lastPage = scope.numberOfResultPages(scope.allData.length);
           var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
@@ -177,14 +180,23 @@ angular.module('spreadsheetApp')
   .directive('spreadsheetCatchFocusOnArrowPress', function($timeout) {
     return function(scope, element) {
       var selfElement = element;
-      scope.$watch('activeDatumIndex', function() {
+      scope.$watch('activeDatumIndex', function(newIndex, oldIndex) {
+
+        if (newIndex === oldIndex) {
+          console.log('spreadsheetCatchFocusOnArrowPress hasnt changed');
+          return;
+        }
+
         if (scope.activeDatumIndex === 'newEntry' || scope.activeDatumIndex === scope.$index) {
           $timeout(function() {
-            console.log("arrow old focus", document.activeElement);
-            // element[0].focus();
-            selfElement.find("input")[1].focus();
-            // document.getElementById("firstFieldOfEditingEntry").focus();
-            console.log("arrow new focus", document.activeElement);
+
+            if (document.activeElement !== selfElement.find("input")[1]) {
+              console.log("arrow old focus", document.activeElement);
+              // element[0].focus();
+              selfElement.find("input")[1].focus();
+              // document.getElementById("firstFieldOfEditingEntry").focus();
+              console.log("arrow new focus", document.activeElement);
+            }
 
           }, 0);
         }
