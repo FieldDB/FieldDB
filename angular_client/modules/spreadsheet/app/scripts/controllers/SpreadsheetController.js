@@ -1135,10 +1135,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     // // Reset new datum form data and enable upload button; only reset audio field if present
-    if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
-      document.getElementById("form_new_datum_audio-file").reset();
-      $scope.newDatumHasAudioToUpload = false;
-    }
+    // if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
+    //   document.getElementById("form_new_datum_audio-file").reset();
+    //   $scope.newDatumHasAudioToUpload = false;
+    // }
     $rootScope.newRecordHasBeenEdited = false;
     $scope.newFieldData = {};
 
