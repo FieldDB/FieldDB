@@ -329,7 +329,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
     }
     var fields = [];
-    if (typeof incomingFields.splice != "function") {
+    if (typeof incomingFields.splice !== "function") {
       for (var field in incomingFields) {
         if (incomingFields.hasOwnProperty(field)) {
           fields.push(incomingFields[field]);

@@ -32,7 +32,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
 
   $scope.removeFieldFromCorpus=function(field){
-    console.log("TODO remove the field.");
+    console.log("TODO remove the field.", field);
   };
 
   // $scope.availableFields = $scope.scopePreferences.availableFields;
