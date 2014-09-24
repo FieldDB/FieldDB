@@ -174,6 +174,12 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     expect(typeof scope.pageBackward).toBe('function');
   });
 
+  it('should change the pageForward ', function() {
+    expect(scope.currentPage).toEqual(0);
+    scope.pageForward();
+    expect(scope.currentPage).toEqual(1);
+  });
+
   it('should set some view control variables', function() {
     expect(scope.authenticated).toBeFalsy();
     expect(scope.developer).toBeFalsy();
