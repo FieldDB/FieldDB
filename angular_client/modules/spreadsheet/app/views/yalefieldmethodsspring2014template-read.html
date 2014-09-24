@@ -95,7 +95,7 @@
         <td>
           <span class="form-horizontal">
             <audio controls>
-              <source ng-src="{{server}}/{{DB.pouchname}}/{{datum.id}}/{{audioFile.filename}}" type="audio/wav"/>
+              <source ng-src="{{audioFile.filename}}" type="audio/wav"/>
             </audio>
           </span>
         </td>
@@ -107,7 +107,7 @@
           </span>
         </td>
         <td>
-          <a href="{{server}}/{{DB.pouchname}}/{{datum.id}}/{{audioFile.filename}}" target="_blank">
+          <a href="{{audioFile.filename}}" target="_blank">
             <i class="fa whiteicon fa-link">
             </i>
           </a>
