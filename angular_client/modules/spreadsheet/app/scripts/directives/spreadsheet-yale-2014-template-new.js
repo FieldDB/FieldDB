@@ -1,4 +1,3 @@
-
 /**
  * @ngdoc directive
  * @name spreadsheetApp.directive:spreadsheetYale2014TemplateNew
@@ -10,11 +9,11 @@ angular.module('spreadsheetApp').directive('spreadsheetYale2014TemplateNew', fun
     templateUrl: 'views/yalefieldmethodsspring2014template-new.html',
     restrict: 'A',
     transclude: false,
+    // replace: true,
     // scope: {
     //   corpus: '=json'
     // },
     // controller: function($scope, $element, $attrs, $transclude) {},
-    link: function postLink() {
-    }
+    link: function postLink() {}
   };
 });
