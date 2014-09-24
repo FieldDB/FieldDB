@@ -2000,7 +2000,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return 0;
     }
     var numberOfPages = Math.ceil(numberOfRecords / $rootScope.resultSize);
-    console.log("requesting numberOfResultPages" + numberOfPages);
+    // console.log("requesting numberOfResultPages" + numberOfPages);
     return numberOfPages;
   };
 
@@ -2026,17 +2026,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   //   console.log($rootScope.currentPage);
   // };
 
+  /**
+   *  changes the current page, which is watched in a directive, which in turn calls loadPaginatedData above
+   * @return {[type]} [description]
+   */
   $scope.pageForward = function() {
     $scope.activeDatumIndex = null;
     $rootScope.currentPage = $rootScope.currentPage + 1;
   };
 
+  /**
+   *  changes the current page, which is watched in a directive, which in turn calls loadPaginatedData above
+   * @return {[type]} [description]
+   */
   $scope.pageBackward = function() {
     $scope.activeDatumIndex = null;
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
-  // Audio recording
 
+  $scope.$watch('currentPage', function() {
+    $scope.loadPaginatedData();
+  });
+
+  // Audio recording
   var hasGetUserMedia = function() {
     return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia || navigator.msGetUserMedia);
