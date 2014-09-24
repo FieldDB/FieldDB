@@ -93,6 +93,9 @@ angular.module('spreadsheetApp')
   .directive('spreadsheetCatchArrowKey', function($rootScope) {
     return function(scope, element) {
       element.bind('keyup', function(e) {
+        if(e.keyCode !== 40 && e.keyCode !== 38){
+          return;
+        }
         scope.$apply(function() {
           if(!scope.allData){
             return;
