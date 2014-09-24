@@ -504,7 +504,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    *
    * @return The clone of the current Datum.
    */
-  clone: {
+  cloneDeprecated: {
     value: function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
