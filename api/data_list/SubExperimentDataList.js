@@ -44,6 +44,7 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
         this.docs = value;
       } else {
         this.docIds = value;
+        this._subexperiments = value;
       }
     }
   },
@@ -60,6 +61,7 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
         this.docs = value;
       } else {
         this.docIds = value;
+        this._trials = value;
       }
     }
   },
@@ -68,9 +70,8 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       // Force docIds to be set to current docs
-      this.docIds = null;
-      this._subexperiments = this.docIds;
-      this._trials = this.docIds;
+      // this._subexperiments = this.docIds;
+      // this._trials = this.docIds;
       var json = DataList.prototype.toJSON.apply(this, arguments);
       this.debug(json);
       return json;
