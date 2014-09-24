@@ -1,86 +1,25 @@
-  <form ng-submit="createRecord(newFieldData)" >
-    <div class="span5" spreadsheet-catch-focus-on-arrow-press>
-      <div class="focus_box_div">
-        <input ng-disabled="writePermissions==false" />
-      </div>
-      <input id="firstFieldOfNewEntry" ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">
-      <input ng-disabled="writePermissions==false" guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''" >
-      <input ng-disabled="writePermissions==false" guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''" >
-      <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">
+<form ng-submit="createRecord(newFieldData)" >
+  <div class="span5" spreadsheet-catch-focus-on-arrow-press>
+    <div class="focus_box_div">
+      <input />
     </div>
-    <div class="span5">
-      <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field5" placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}" title="{{fields.field5.title}}" ng-hide="fields.field5.label==''">
-      <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">
-      <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field7" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">
-      <input ng-disabled="writePermissions==false" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field8" placeholder="{{fields.field8.title}}" title="{{fields.field8.title}}" title="{{fields.field8.title}}" ng-hide="fields.field8.label==''">
-    </div>
-    <div class="span2">
-      <button ng-show="activeDatumIndex=='newEntry'" ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false">
-        <i class="fa whiteicon fa-plus">
-        </i>
-        Create New
-      </button>
-      &nbsp; <div class="expandCollapseButton">
-      <i class="fa whiteicon" ng-class="{'fa-list': !expandCollapse, 'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()" ng-show="activeDatumIndex=='newEntry'">
-      </i>
-    </div>
-    <br />
-    <span ng-show="newFieldDatahasAudio==true">
-      <i class="fa {{recordingIcon}}">
-      </i>
-    </span>
+    <input id="firstFieldOfNewEntry"  keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field1" placeholder="{{fields.field1.title}}" title="{{fields.field1.title}}" title="{{fields.field1.title}}" ng-hide="fields.field1.label==''">
+    <input guess-morphemes-from-utterance auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field2" placeholder="{{fields.field2.title}}" title="{{fields.field2.title}}" title="{{fields.field2.title}}" ng-hide="fields.field2.label==''" >
+    <input guess-gloss-from-morphemes guess-utterance-from-morphemes auto-glosser-on="{{useAutoGlosser}}" keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field3" placeholder="{{fields.field3.title}}" title="{{fields.field3.title}}" title="{{fields.field3.title}}" ng-hide="fields.field3.label==''" >
+    <input keypress-mark-as-new class="span5 " type="text" ng-model="newFieldData.field4" placeholder="{{fields.field4.title}}" title="{{fields.field4.title}}" title="{{fields.field4.title}}" ng-hide="fields.field4.label==''">
   </div>
+  <div class="span5">
+    <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field5" placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}" title="{{fields.field5.title}}" ng-hide="fields.field5.label==''">
+    <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field6" placeholder="{{fields.field6.title}}" title="{{fields.field6.title}}" title="{{fields.field6.title}}" ng-hide="fields.field6.label==''">
+    <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field7" placeholder="{{fields.field7.title}}" title="{{fields.field7.title}}" title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">
+    <input keypress-mark-as-new class="span5" type="text" ng-model="newFieldData.field8" placeholder="{{fields.field8.title}}" title="{{fields.field8.title}}" title="{{fields.field8.title}}" ng-hide="fields.field8.label==''">
+  </div>
+  <div class="span2">
+    <button ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false">
+      <i class="fa whiteicon fa-plus">
+      </i>
+      Create New
+    </button>
+  </span>
 </form>
-<div hidden class="row" ng-show="activeDatumIndex=='newEntry' && expandCollapse==true">
-  <div class="span10">
-    <input ng-disabled="writePermissions==false" keypress-mark-as-new type="text" class="span10" ng-model="newFieldData.field5" placeholder="{{fields.field5.title}}" title="{{fields.field5.title}}" title="{{fields.field5.title}}" >
-  </div>
-</div>
-<div hidden class="row" ng-show="activeDatumIndex=='newEntry' && expandCollapse==true">
-  <div class="span3 offset1 expandedData">
-    <div class="expandedDataInner">
-      <button ng-hide="writePermissions==false" ng-class="recordingButtonClass" ng-click="startRecording(newFieldData)" ng-show="audioCompatible==true && activeDatumIndex=='newEntry'">
-        <i class="fa {{recordingIcon}}">
-        </i>
-        &nbsp;{{recordingStatus}}
-      </button>
-      &nbsp;&nbsp;
-    </div>
-  </div>
-  <div class="span6 expandedData">
-    <div class="expandedDataInner">
-      <form id="form_new_datum_audio-file">
-        <i class="fa fa-bullhorn">
-        </i>
-        &nbsp;
-        <input ng-disabled="writePermissions==false" id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' />
-        <button class="btn btn-primary" ng-click="uploadFile(newFieldData)" ng-disabled="newDatumHasAudioToUpload==true">
-          <i class="fa whiteicon fa-file">
-          </i>
-          Add File(s)
-        </button>
-      </form>
-    </div>
-  </div>
-  <div class="span1">
-    <span ng-show="processingAudio==true">
-      <img src="images/spinner-small.gif">
-    </span>
-  </div>
-</div>
-<div class="row" ng-show="activeDatumIndex=='newEntry' && expandCollapse==true && newFieldData.audioVideo[0]!=undefined">
-  <div class="span8 offset1">
-    <b>
-      Click 'Create New' then 'Save' to have access to the following:
-    </b>
-    <br />
-    <span ng-repeat="audioFile in newFieldData.audioVideo">
-      <i>
-        New Audio File:
-      </i>
-      <i class="fa whiteicon fa-bullhorn">
-      </i>
-      {{audioFile.description}} <br />
-    </span>
-  </div>
-</div>
+
