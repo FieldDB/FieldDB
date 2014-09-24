@@ -1996,6 +1996,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Paginate data tables
 
   $scope.numberOfResultPages = function(numberOfRecords) {
+    if(!numberOfRecords){
+      return 0;
+    }
     var numberOfPages = Math.ceil(numberOfRecords / $rootScope.resultSize);
     return numberOfPages;
   };
