@@ -18,7 +18,8 @@ module.exports = function(grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
+    dist: 'dist',
+    version: require('./bower.json').version
   };
 
   // Define the configuration for all the tasks
@@ -34,8 +35,15 @@ module.exports = function(grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
+        options: {
+          livereload: '<%= connect.options.livereload %>'
+        }
+      },
+      templates: {
+        files: ['index.html','<%= yeoman.app %>/views/{,*/}*.html'],
+        tasks: ['ngtemplates','copy:templates'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -45,7 +53,7 @@ module.exports = function(grunt) {
         tasks: ['newer:jshint:test', 'karma']
       },
       styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
+        files: ['<%= yeoman.app %>/styles/{,*/}*.css', 'bower_components/fielddb-angular/dist/styles/main.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },
       gruntfile: {
@@ -56,9 +64,9 @@ module.exports = function(grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
+          '<%= yeoman.dist %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -114,12 +122,18 @@ module.exports = function(grunt) {
     jshint: {
       options: {
         jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        reporter: require('jshint-stylish'),
+        ignores: [
+        '<%= yeoman.app %>/scripts/templates.js'
+        ]
       },
       all: {
         src: [
           'Gruntfile.js',
           '<%= yeoman.app %>/scripts/{,*/}*.js'
+        ],
+        ignores: [
+        '<%= yeoman.app %>/scripts/templates.js'
         ]
       },
       test: {
@@ -237,16 +251,16 @@ module.exports = function(grunt) {
     //   dist: {}
     // },
 
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
+    // imagemin: {
+    //   dist: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.app %>/images',
+    //       src: '{,*/}*.{png,jpg,jpeg,gif}',
+    //       dest: '<%= yeoman.dist %>/images'
+    //     }]
+    //   }
+    // },
 
     svgmin: {
       dist: {
@@ -259,21 +273,20 @@ module.exports = function(grunt) {
       }
     },
 
-    htmlmin: {
-      dist: {
-        options: {
-          collapseWhitespace: true,
-          conservativeCollapse: true,
-          collapseBooleanAttributes: true,
-          removeCommentsFromCDATA: true,
-          removeOptionalTags: true
+    ngtemplates: {
+      app: {
+        options : {
+          htmlmin: {
+            collapseWhitespace: true,
+            collapseBooleanAttributes: true,
+            removeCommentsFromCDATA: true,
+            removeOptionalTags: true
+          },
+          module: 'adminDashboardApp',
         },
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
-          dest: '<%= yeoman.dist %>'
-        }]
+        cwd: 'app',
+        src: 'views/**.html',
+        dest: '<%= yeoman.dist %>/scripts/templates.js'
       }
     },
 
@@ -309,6 +322,7 @@ module.exports = function(grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
+            'data/*/**',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
             'fonts/*'
@@ -324,6 +338,10 @@ module.exports = function(grunt) {
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
+      },
+      templates: {
+        src:['<%= yeoman.dist %>/scripts/templates.js'],
+        dest: '<%= yeoman.app %>/scripts/templates.js'
       },
       styles: {
         expand: true,
@@ -343,7 +361,7 @@ module.exports = function(grunt) {
       ],
       dist: [
         'copy:styles',
-        'imagemin',
+        // 'imagemin',
         'svgmin'
       ]
     },
@@ -353,6 +371,20 @@ module.exports = function(grunt) {
       unit: {
         configFile: 'test/karma.conf.js',
         singleRun: true
+      }
+    },
+
+    compress: {
+      dist: {
+        options: {
+          archive: '../../../../Releases/spreadsheet_app_v<%= yeoman.version %>.zip'
+        },
+        files: [{
+          expand: true,
+          cwd: 'dist/',
+          src: ['**'],
+          dest: ''
+        }]
       }
     }
   });
@@ -379,7 +411,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('test', [
-    'jshint',
     'clean:server',
     'concurrent:test',
     'autoprefixer',
@@ -398,10 +429,13 @@ module.exports = function(grunt) {
     'copy:dist',
     'cdnify',
     'cssmin',
-    'uglify',
-    'filerev',
+    'ngtemplates',
+    'copy:templates',
+    // 'uglify',
+    // 'filerev',
     'usemin',
-    'htmlmin'
+    // 'htmlmin',
+    'compress'
   ]);
 
   grunt.registerTask('default', [
