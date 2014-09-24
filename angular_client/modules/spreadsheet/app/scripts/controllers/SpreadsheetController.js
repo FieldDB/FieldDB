@@ -2044,8 +2044,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
 
-  $scope.$watch('currentPage', function() {
-    $scope.loadPaginatedData();
+  $rootScope.$watch('currentPage', function(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      $scope.loadPaginatedData();
+    }else{
+      console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
+    }
   });
 
   // Audio recording
