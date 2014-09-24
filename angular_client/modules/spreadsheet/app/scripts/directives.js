@@ -188,7 +188,7 @@ angular.module('spreadsheetApp')
 
         if (newIndex === oldIndex) {
           console.log('spreadsheetCatchFocusOnArrowPress hasnt changed');
-          return;
+          // return; //cant return, it makes it so you cant go to the next page
         }
 
         if (scope.activeDatumIndex === 'newEntry' || scope.activeDatumIndex === scope.$index) {
@@ -276,11 +276,11 @@ angular.module('spreadsheetApp')
         });
       });
     };
-  })
-  .directive('loadPaginatedDataOnPageChange', function() {
-    return function(scope) {
-      scope.$watch('currentPage', function() {
-        // scope.loadPaginatedData();
-      });
-    };
   });
+  // .directive('loadPaginatedDataOnPageChange', function() {
+  //   return function(scope) {
+  //     scope.$watch('currentPage', function() {
+  //       scope.loadPaginatedData();
+  //     });
+  //   };
+  // });
