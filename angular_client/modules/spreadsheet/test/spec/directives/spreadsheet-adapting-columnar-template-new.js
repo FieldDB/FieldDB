@@ -1,14 +1,14 @@
 'use strict';
 var debugMode = false;
 
-xdescribe('Directive: spreadsheet-yale-2014-template-edit', function() {
+xdescribe('Directive: spreadsheet-adapting-columnar-template-new', function() {
 
   // load the directive's module and the template
-  beforeEach(module('spreadsheetApp', 'views/yalefieldmethodsspring2014template-edit.html'));
+  beforeEach(module('spreadsheetApp', 'views/adapting-columnar-template-new.html'));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    el = angular.element('<div data-spreadsheet-yale-2014-template-edit ></div>');
+    el = angular.element('<div data-spreadsheet-adapting-columnar-template-new ></div>');
     scope = $rootScope.$new();
     scope.data = [];
     compileFunction = $compile(el);
