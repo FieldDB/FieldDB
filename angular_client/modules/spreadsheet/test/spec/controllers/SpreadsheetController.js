@@ -13,6 +13,29 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   beforeEach(inject(function($controller, $rootScope) {
     rootScope = $rootScope;
     scope = $rootScope.$new();
+    scope.allData = [{
+      utterance: 'one'
+    }, {
+      utterance: 'two'
+    }, {
+      utterance: 'three'
+    }, {
+      utterance: 'four'
+    }, {
+      utterance: 'five'
+    }, {
+      utterance: 'six'
+    }, {
+      utterance: 'seven'
+    }, {
+      utterance: 'eight'
+    }, {
+      utterance: 'nine'
+    }, {
+      utterance: 'ten'
+    }, {
+      utterance: 'eleven'
+    }];
 
     localStorage.setItem('useAutoGlosser', 'false');
     localStorage.setItem('SpreadsheetPreferences', '{\"userTemplate\":\"mcgillfieldmethodsspring2014template\",\"resultSize\":3,\"savedState\":{\"server\":\"production\",\"username\":\"lingllama\",\"password\":\"{\\"iv\\":\\"Rd2lDH+nzH/3PIfUeaNXxw\\",\\"v\\":1,\\"iter\\":1000,\\"ks\\":128,\\"ts\\":64,\\"mode\\":\\"ccm\\",\\"adata\\":\\"\\",\\"cipher\\":\\"aes\\",\\"salt\\":\\"2M2W9iOA+Mg\\",\\"ct\\":\\"3u9s5yAX3zL19rxPWGG+QQ\\"}\",\"mostRecentCorpusPouchname\":\"lingllama-communitycorpus\",\"sessionID\":\"723a8b707e579087aa36c2e33869680a\",\"sessionTitle\":\"All Sessions\"},\"availableFields\":{\"judgement\":{\"label\":\"judgement\",\"title\":\"Grammaticality Judgement\"},\"utterance\":{\"label\":\"utterance\",\"title\":\"Utterance\"},\"morphemes\":{\"label\":\"morphemes\",\"title\":\"Morphemes\"},\"gloss\":{\"label\":\"gloss\",\"title\":\"Gloss\"},\"translation\":{\"label\":\"translation\",\"title\":\"Translation\"},\"refs\":{\"label\":\"refs\",\"title\":\"References\"},\"goal\":{\"label\":\"goal\",\"title\":\"Goal\"},\"consultants\":{\"label\":\"consultants\",\"title\":\"Consultants\"},\"dialect\":{\"label\":\"dialect\",\"title\":\"Dialect\"},\"language\":{\"label\":\"language\",\"title\":\"language\"},\"dateElicited\":{\"label\":\"dateElicited\",\"title\":\"Date Elicited\"},\"user\":{\"label\":\"user\",\"title\":\"User\"},\"dateSEntered\":{\"label\":\"dateSEntered\",\"title\":\"Date entered\"},\"tags\":{\"label\":\"tags\",\"title\":\"Tags\"},\"validationStatus\":{\"label\":\"validationStatus\",\"title\":\"validationStatus\"},\"syntacticCategory\":{\"label\":\"syntacticCategory\",\"title\":\"syntacticCategory\"},\"allomorphs\":{\"label\":\"allomorphs\",\"title\":\"Allomorphs\"},\"phonetic\":{\"label\":\"phonetic\",\"title\":\"Phonetic\"},\"housekeeping\":{\"label\":\"housekeeping\",\"title\":\"Housekeeping\"},\"spanish\":{\"label\":\"spanish\",\"title\":\"Spanish\"},\"orthography\":{\"label\":\"orthography\",\"title\":\"Orthography\"}},\"compacttemplate\":{\"field1\":{\"label\":\"utterance\",\"title\":\"Utterance\"},\"field2\":{\"label\":\"morphemes\",\"title\":\"Morphemes\"},\"field3\":{\"label\":\"gloss\",\"title\":\"Gloss\"},\"field4\":{\"label\":\"translation\",\"title\":\"Translation\"}},\"fulltemplate\":{\"field1\":{\"label\":\"phonetic\",\"title\":\"Phonetic\"},\"field2\":{\"label\":\"morphemes\",\"title\":\"Morphemes\"},\"field3\":{\"label\":\"gloss\",\"title\":\"Gloss\"},\"field4\":{\"label\":\"translation\",\"title\":\"Translation\"},\"field5\":{\"label\":\"comments\",\"title\":\"Comments\"},\"field6\":{\"label\":\"validationStatus\",\"title\":\"validationStatus\"},\"field7\":{\"label\":\"tags\",\"title\":\"Tags\"},\"field8\":{\"label\":\"\",\"title\":\"\"}},\"mcgillfieldmethodsspring2014template\":{\"field1\":{\"label\":\"utterance\",\"title\":\"Utterance\"},\"field2\":{\"label\":\"morphemes\",\"title\":\"Morphemes\"},\"field3\":{\"label\":\"gloss\",\"title\":\"Gloss\"},\"field4\":{\"label\":\"translation\",\"title\":\"Translation\"},\"field5\":{\"label\":\"judgement\",\"title\":\"Grammaticality Judgement\"},\"field6\":{\"label\":\"tags\",\"title\":\"Tags\"},\"field8\":{\"label\":\"\",\"title\":\"\"}},\"yalefieldmethodsspring2014template\":{\"field1\":{\"label\":\"orthography\",\"title\":\"Orthography\"},\"field2\":{\"label\":\"utterance\",\"title\":\"Utterance\"},\"field3\":{\"label\":\"morphemes\",\"title\":\"Morphemes\"},\"field4\":{\"label\":\"gloss\",\"title\":\"Gloss\"},\"field5\":{\"label\":\"translation\",\"title\":\"Translation\"},\"field6\":{\"label\":\"spanish\",\"title\":\"Spanish\"},\"field7\":{\"label\":\"housekeeping\",\"title\":\"Housekeeping\"},\"field8\":{\"label\":\"tags\",\"title\":\"Tags\"}}}');
@@ -55,6 +78,22 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
 
       rootScope.resultSize = 5;
       expect(scope.numberOfResultPages(13)).toBe(3);
+    });
+
+    it('should monitor currenPage to trigger pagination of the data', function() {
+      scope.loadPaginatedData();
+      expect(scope.data).toBeDefined();
+      expect(scope.data[1]).toEqual({
+        utterance: 'two'
+      });
+      expect(scope.data.length).toEqual(rootScope.resultSize);
+
+      rootScope.currentPage +=1;
+      console.warn('TODO the watch on currentPage isnt getting triggered in the tests, triggering it manuall');
+      scope.loadPaginatedData();
+      expect(scope.data[1]).toEqual({
+        utterance: 'five'
+      });
     });
 
     it('should have all the old things for authentication in scope that it had before', function() {
