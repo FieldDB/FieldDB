@@ -57,7 +57,7 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
     var audioVideoArray = [];
     if (spreadsheetDatum.audioVideo.URL) {
       var audioVideoURL = spreadsheetDatum.audioVideo.URL;
-      var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+      var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
       audioVideoArray.push({
         "filename": fileFromUrl,
         "description": fileFromUrl,
