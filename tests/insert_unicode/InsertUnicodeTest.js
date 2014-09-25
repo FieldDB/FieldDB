@@ -24,6 +24,29 @@ describe("InsertUnicode: as a User I want to use my favourite symbols", function
     expect(unicodes.length).toEqual(22);
   });
 
+  it("should permit unicode characters as primary keys", function() {
+    var unicodes = new InsertUnicodes();
+    unicodes.add({
+      tipa: "",
+      symbol: "ɦ"
+    });
+    expect(unicodes.length).toEqual(1);
+    expect(unicodes.warnMessage).toBeUndefined();
+    expect(unicodes["ɦ"].symbol).toEqual("ɦ");
+    expect(unicodes.ɦ.symbol).toEqual("ɦ");
+  });
+
+  it("should not permit fishy characters in primary keys", function() {
+    var unicodes = new InsertUnicodes();
+    unicodes.add({
+      tipa: "",
+      symbol: "cd /root"
+    });
+    expect(unicodes.length).toEqual(1);
+    expect(unicodes.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: cd /root -> cdroot");
+    expect(unicodes.cdroot.symbol).toEqual("cd /root");
+  });
+
   it("should show Unicode palette", function() {
     expect(true).toBeTruthy();
   });
