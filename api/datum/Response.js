@@ -31,11 +31,10 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
     }
   },
 
-  responses: {
-    value: null,
-    configurable: true
-
-  },
+  // responses: {
+  //   value: null,
+  //   configurable: true
+  // },
 
   pauseAudioWhenConfirmingResponse: {
     value: null,
