@@ -143,6 +143,43 @@ FieldDBObject.warn = function(message, message2, message3, message4) {
     console.warn(message4);
   }
 };
+
+FieldDBObject.confirm = function(message, optionalLocale) {
+  var deferred = Q.defer(),
+    self = this;
+
+  Q.nextTick(function() {
+    var response;
+
+    if (self.alwaysConfirmOkay) {
+      console.warn(self.type.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
+      response = self.alwaysConfirmOkay;
+    }
+
+    try {
+      response = window.confirm(message);
+    } catch (e) {
+      console.warn(self.type.toUpperCase() + " ASKING USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
+      response = self.alwaysConfirmOkay;
+    }
+
+    if (response) {
+      deferred.resolve({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: response
+      });
+    } else {
+      deferred.reject({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: response
+      });
+    }
+
+  });
+  return deferred.promise;
+};
 /* set the application if you want global state (ie for checking if a user is authorized) */
 // FieldDBObject.application = {}
 
@@ -296,16 +333,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.confirmMessage = "";
       }
       this.confirmMessage = this.confirmMessage + message;
-      if (this.alwaysConfirmOkay) {
-        console.warn(this.type.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
-        return this.alwaysConfirmOkay;
-      }
-      try {
-        return window.confirm(message);
-      } catch (e) {
-        console.warn(this.type.toUpperCase() + " ASKING USER: " + message + " pretending they said " + this.alwaysConfirmOkay);
-        return this.alwaysConfirmOkay;
-      }
+
+      return FieldDBObject.confirm.apply(this, arguments);
     }
   },
   warn: {
@@ -491,8 +520,27 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           return null;
         }
       }
+
+      var handleAsyncConfirmMerge = function(self, apropertylocal) {
+        self.confirm("I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + JSON.stringify(anotherObject[apropertylocal]))
+          .then(function() {
+            if (apropertylocal === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
+              // resultObject._dbname = self.dbname;
+              self.warn(" Keeping _dbname of " + resultObject.dbname);
+            } else {
+              self.warn("Async Overwriting contents of " + apropertylocal + " (this may cause disconnection in listeners)");
+              self.debug("Async Overwriting  ", anObject[apropertylocal], " ->", anotherObject[apropertylocal]);
+
+              resultObject[apropertylocal] = anotherObject[apropertylocal];
+            }
+          }, function() {
+            resultObject[apropertylocal] = anObject[apropertylocal];
+          });
+      };
+
       for (aproperty in anotherObject) {
-        if (!anotherObject.hasOwnProperty(aproperty)) {
+        if (!anotherObject.hasOwnProperty(aproperty) || typeof anObject[aproperty] === "function") {
+          this.debug("  merge: ignoring " + aproperty);
           continue;
         }
 
@@ -537,7 +585,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               overwrite = optionalOverwriteOrAsk;
               this.debug("Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
               if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
-                overwrite = this.confirm("I found a conflict for " + aproperty + ", Do you want to overwrite it from " + JSON.stringify(anObject[aproperty]) + " -> " + JSON.stringify(anotherObject[aproperty]));
+                handleAsyncConfirmMerge(this, aproperty);
               }
               if (overwrite) {
                 if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
