@@ -103,7 +103,7 @@ CORS.makeCORSRequest = function(options) {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        console.warn("Response was already json.", e);
+        self.debug("Response was already json.", e);
       }
       deferred.resolve(response);
     } else {
