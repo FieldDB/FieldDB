@@ -19,6 +19,19 @@ describe("Contextualizer", function() {
       expect(contextualizer.currentContext).toEqual("default");
     });
 
+
+    it("should let users update locale strings without confirmation", function() {
+      var contextualizer = new Contextualizer();
+      expect(contextualizer.alwaysConfirmOkay).toBeTruthy();
+    });
+
+    it("should let callers specify that users must confirm each update locale strings", function() {
+      var contextualizer = new Contextualizer({
+        alwaysConfirmOkay: false
+      });
+      expect(contextualizer.alwaysConfirmOkay).toBeFalsy();
+    });
+
     it("should load the default locales ", function() {
       var contextualizer = new Contextualizer();
       expect(contextualizer).toBeDefined();
@@ -118,7 +131,6 @@ describe("Contextualizer", function() {
     });
 
     it("should localize strings", function() {
-
       expect(contextualizer.contextualize("localized_practice")).toEqual("Practice");
       contextualizer.currentLocale.iso = "fr";
       expect(contextualizer.contextualize("localized_practice")).toEqual("Practique");
@@ -230,13 +242,49 @@ describe("Contextualizer", function() {
         expect(obj.toJSON().for_experimentAdministratorSpecialist).toEqual("localized_practice_description_for_slp");
       });
 
-      it("should be able to modify localization using dot notation", function() {
+      it("should be able to modify localization using dot notation", function(done) {
         expect(obj.for_child).toEqual('In this game, you will help the mouse eat all the cheese!');
         obj.for_child = "In this game the mouse will eat all the cheese with your help.";
-        expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
-        expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
-        expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
-      });
+        setTimeout(function() {
+          expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+          done();
+        }, 10);
+      }, specIsRunningTooLong);
+
+      it("should be able to modify localization using dot notation asynchonously true case", function(done) {
+        expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
+        expect(contextualizer.alwaysConfirmOkay).toBeTruthy();
+        contextualizer.testingAsyncConfirm = true;
+        obj.for_child = "In this game the mouse will eat all the cheese with your help.";
+
+        setTimeout(function() {
+          expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.contextualizer.contextualize("localized_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+          done();
+        }, 100);
+
+        expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
+      }, specIsRunningTooLong);
+
+      xit("should be able to modify localization using dot notation asynchonously false case", function(done) {
+        expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
+        contextualizer.alwaysConfirmOkay = undefined;
+        expect(contextualizer.alwaysConfirmOkay).toBeFalsy();
+        obj.for_child = "In this game the mouse will eat all the cheese with your help.";
+
+        setTimeout(function() {
+          expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.contextualizer.contextualize("localized_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+          done();
+        }, 10);
+
+        expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
+      }, specIsRunningTooLong);
+
 
       it("should not break if its only 1 string", function() {
         ContextualizableObject.updateAllToContextualizableObjects = false;
@@ -284,7 +332,7 @@ describe("Contextualizer", function() {
         expect(containingObject.title.toJSON).toBeUndefined();
       });
 
-      it("should update a string to the default of a contextualizable object if updateAllToContextualizableObjects is true", function() {
+      it("should update a string to the default of a contextualizable object if updateAllToContextualizableObjects is true", function(done) {
         ContextualizableObject.updateAllToContextualizableObjects = true;
         var onlyAString = new ContextualizableObject("Import datalist");
         expect(onlyAString.data).toEqual({
@@ -296,33 +344,45 @@ describe("Contextualizer", function() {
           }
         });
         expect(contextualizer.alwaysConfirmOkay).toBeTruthy();
-        expect(contextualizer.data.en.locale_Import_datalist).toBeDefined();
-        expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Import datalist");
-        expect(onlyAString.originalString).toEqual("Import datalist");
-        expect(onlyAString.default).toEqual("Import datalist");
-        onlyAString.default = "Imported datalist";
-        expect(onlyAString.default).toEqual("Imported datalist");
-        expect(contextualizer.contextualize("locale_Import_datalist")).toEqual("Imported datalist");
-        expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Imported datalist");
 
-        expect(onlyAString.toJSON()).toEqual("Imported datalist");
-        ContextualizableObject.updateAllToContextualizableObjects = false;
-        expect(onlyAString.toJSON()).toEqual({
-          default: "locale_Import_datalist",
-          locale_Import_datalist: "Imported datalist"
-        });
+        setTimeout(function() {
+          expect(contextualizer.data.en.locale_Import_datalist).toBeDefined();
+          expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Import datalist");
+          expect(onlyAString.originalString).toEqual("Import datalist");
+          expect(onlyAString.default).toEqual("Import datalist");
+          onlyAString.default = "Imported datalist";
 
-        var contextualizedObjectFromASerializedContextualizedObjectWhichWasAString = new ContextualizableObject(onlyAString.toJSON());
-        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.originalString).toBeUndefined();
-        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported datalist");
-        contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default = "Imported again datalist";
-        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported again datalist");
-        expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.toJSON()).toEqual({
-          default: "locale_Import_datalist",
-          locale_Import_datalist: "Imported again datalist"
-        });
+          setTimeout(function() {
+            expect(onlyAString.default).toEqual("Imported datalist");
+            expect(contextualizer.contextualize("locale_Import_datalist")).toEqual("Imported datalist");
+            expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Imported datalist");
+            expect(onlyAString.toJSON()).toEqual("Imported datalist");
+            ContextualizableObject.updateAllToContextualizableObjects = false;
+            expect(onlyAString.toJSON()).toEqual({
+              default: "locale_Import_datalist",
+              locale_Import_datalist: "Imported datalist"
+            });
 
-      });
+            var contextualizedObjectFromASerializedContextualizedObjectWhichWasAString = new ContextualizableObject(onlyAString.toJSON());
+            expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.originalString).toBeUndefined();
+            expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported datalist");
+            contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default = "Imported again datalist";
+
+            setTimeout(function() {
+              expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported again datalist");
+              expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.toJSON()).toEqual({
+                default: "locale_Import_datalist",
+                locale_Import_datalist: "Imported again datalist"
+              });
+              done();
+            }, 100);
+
+          }, 100);
+        }, 100);
+
+
+
+      }, specIsRunningTooLong);
 
     });
 

@@ -1,4 +1,5 @@
-var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject,
+  Q = require("q");
 
 /**
  * @class The ContextualizableObject allows the user to label data with grammatical tags
@@ -95,6 +96,12 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
     }
   },
 
+  todo: {
+    value: function() {
+      return FieldDBObject.prototype.todo.apply(this, arguments);
+    }
+  },
+
   contextualize: {
     value: function(locale_string) {
       this.debug("requesting contextualization of " + locale_string);
@@ -117,16 +124,25 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
   updateContextualization: {
     value: function(for_context, locale_string) {
       this.debug("updateContextualization" + for_context);
-      var updated;
+      var updatePromiseOrSyncrhonousConfirmed,
+        self = this;
+
       if (this.contextualizer) {
         this.debug(this.contextualizer.data);
-        updated = this.contextualizer.updateContextualization(for_context, locale_string);
-      }
-      if ((!updated || updated === for_context) && this.data) {
-        this.data[for_context] = this.data[for_context] || {
-          message: ""
-        };
-        this.data[for_context].message = locale_string;
+
+        updatePromiseOrSyncrhonousConfirmed = this.contextualizer.updateContextualization(for_context, locale_string);
+        if (updatePromiseOrSyncrhonousConfirmed !== true) {
+          self.todo("Test async updatePromiseOrSyncrhonousConfirmed");
+          Q.nextTick(function() {
+            var updated = self.contextualizer.contextualize(for_context);
+            if ((!updated || updated === for_context) && self.data) {
+              self.data[for_context] = self.data[for_context] || {
+                message: ""
+              };
+              self.data[for_context].message = locale_string;
+            }
+          });
+        }
       }
       // this.data = this.data || {};
       // this.data[for_context] = {
@@ -136,7 +152,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
       if (this._default === for_context) {
         this.originalString = locale_string;
       }
-      return updated;
+      return updatePromiseOrSyncrhonousConfirmed;
     }
   },
 
