@@ -43,6 +43,10 @@ var Contextualizer = function Contextualizer(options) {
     options.elanguages = elanguages;
   }
   FieldDBObject.apply(this, localArguments);
+  if (!options || options.alwaysConfirmOkay === undefined) {
+    this.warn("By default it will be okay for users to modify global locale strings. IF they are saved this will affect other users.");
+    this.alwaysConfirmOkay = true;
+  }
   return this;
 };
 
@@ -196,6 +200,12 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
+  /**
+   *
+   * @param  {String} key   A locale to save the message to
+   * @param  {String} value a message which should replace the existing localization
+   * @return {Promise}       A promise for whether or not the update was confirmed and executed
+   */
   updateContextualization: {
     value: function(key, value) {
       this.data[this.currentLocale.iso] = this.data[this.currentLocale.iso] || {};
@@ -208,8 +218,8 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         previousMessage = this.data[this.currentLocale.iso][key].message;
         verb = "update ";
       }
-      var update = this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value);
-      if (update) {
+      var self = this;
+      if (!this.testingAsyncConfirm && this.alwaysConfirmOkay /* run synchonosuly whenever possible */ ) {
         this.data[this.currentLocale.iso][key] = this.data[this.currentLocale.iso][key] || {};
         this.data[this.currentLocale.iso][key].message = value;
         var newLocaleItem = {};
@@ -217,8 +227,22 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           message: value
         };
         this.addMessagesToContextualizedStrings(this.currentLocale.iso, newLocaleItem);
+      } else {
+        this.todo("Test async updateContextualization");
+
+        return this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value).then(function() {
+          self.data[self.currentLocale.iso][key] = self.data[self.currentLocale.iso][key] || {};
+          self.data[self.currentLocale.iso][key].message = value;
+          var newLocaleItem = {};
+          newLocaleItem[key] = {
+            message: value
+          };
+          self.addMessagesToContextualizedStrings(self.currentLocale.iso, newLocaleItem);
+        }, function() {
+          self.debug("Not updating ");
+        });
       }
-      return this.data[this.currentLocale.iso][key].message;
+
     }
   },
 
