@@ -2,8 +2,15 @@
 var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
-var package = require("./../package.json");
-
+var package;
+try {
+  package = require("./../package.json");
+} catch (e) {
+  console.log("failed to load package.json", e);
+  package = {
+    version: "2.2.0"
+  }
+}
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
 //   Object.apply(this, arguments);
