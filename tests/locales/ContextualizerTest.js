@@ -52,7 +52,7 @@ describe("Contextualizer", function() {
     it("should use the user specified locale", function() {
       var appWithFrenchPrefered = new Contextualizer();
       appWithFrenchPrefered.addMessagesToContextualizedStrings("ka", {
-        "localized_practice": {
+        "locale_practice": {
           "message": "პრაკთიკა"
         }
       });
@@ -69,10 +69,53 @@ describe("Contextualizer", function() {
 
   });
 
+
+
+  describe("localizing", function() {
+    var contextualizer;
+    beforeEach(function() {
+      contextualizer = new Contextualizer({});
+      contextualizer.addMessagesToContextualizedStrings("ka", {
+        "locale_practice": {
+          "message": "პრაკთიკა"
+        }
+      });
+      contextualizer.addMessagesToContextualizedStrings("en", {
+        "locale_practice": {
+          "message": "Practice"
+        }
+      });
+    });
+
+    it("should localize strings using the current locale", function() {
+      expect(contextualizer.localize("locale_practice")).toEqual("Practice");
+    });
+    it("should contextualize strings using the current locale", function() {
+      expect(contextualizer.contextualize("locale_practice")).toEqual("Practice");
+    });
+    it("should localize strings using a specific local", function() {
+      expect(contextualizer.localize("locale_practice", "ka")).toEqual("პრაკთიკა");
+    });
+    it("should contextualize strings using a specific local", function() {
+      expect(contextualizer.contextualize("locale_practice", "ka")).toEqual("პრაკთიკა");
+    });
+    it("should localize strings using a specific local", function() {
+      expect(contextualizer.localize("locale_practice", {
+        iso: "ka"
+      })).toEqual("პრაკთიკა");
+    });
+    it("should contextualize strings using a specific local", function() {
+      expect(contextualizer.contextualize("locale_practice", {
+        iso: "ka"
+      })).toEqual("პრაკთიკა");
+    });
+  });
+
+
   describe("elanguages", function() {
     it("should have a list of elanguages with their details", function() {
       var contextualizer = new Contextualizer({
-        debugMode: true
+        // debugMode: true
       });
       expect(contextualizer.elanguages).toBeDefined();
       expect(contextualizer.elanguages["fr"].iso).toEqual("fr");
@@ -97,7 +140,7 @@ describe("Contextualizer", function() {
     it("should be able to save the messages.json to a corpus", function(done) {
       var contextualizer = new Contextualizer();
       contextualizer.addMessagesToContextualizedStrings("en", {
-        "localized_practice": {
+        "locale_practice": {
           "message": "Practice"
         }
       });
@@ -112,7 +155,7 @@ describe("Contextualizer", function() {
     it("should be able to save the messages.json to a git repository", function(done) {
       var contextualizer = new Contextualizer();
       contextualizer.addMessagesToContextualizedStrings("en", {
-        "localized_practice": {
+        "locale_practice": {
           "message": "Practice"
         }
       });
@@ -133,68 +176,68 @@ describe("Contextualizer", function() {
         alwaysConfirmOkay: true
       });
       contextualizer.addMessagesToContextualizedStrings("en", {
-        "localized_practice": {
+        "locale_practice": {
           "message": "Practice"
         },
-        "localized_practice_description_for_child": {
+        "locale_practice_description_for_child": {
           "message": "In this game, you will help the mouse eat all the cheese!"
         },
-        "localized_practice_description_for_teacher": {
+        "locale_practice_description_for_teacher": {
           "message": "This is a screening test for reading difficulties before children learn to read."
         },
-        "localized_practice_instructions_for_child": {
+        "locale_practice_instructions_for_child": {
           "message": "Choose the right picture to help the mouse eat the cheese."
         },
-        "localized_practice_instructions_for_teacher": {
+        "locale_practice_instructions_for_teacher": {
           "message": "The child should touch or point to the image corresponding to what they hear."
         }
       });
       contextualizer.addMessagesToContextualizedStrings("fr", {
-        "localized_practice": {
+        "locale_practice": {
           "message": "Practique"
         },
-        "localized_gamified_practice": {
+        "locale_gamified_practice": {
           "message": "On prepare!"
         },
-        "localized_practice_description_for_child": {
+        "locale_practice_description_for_child": {
           "message": "Pour ce jeu, tu devras écouter des sons pour aider la souris à manger tous les morceaux de fromage!"
         },
-        "localized_practice_description_for_teacher": {
+        "locale_practice_description_for_teacher": {
           "message": "Ce-ci est un test de dépistage visant à détecter les difficultés d'orthographe chez les enfants avant qu'ils apprennent à écrire."
         },
-        "localized_practice_instructions_for_child": {
+        "locale_practice_instructions_for_child": {
           "message": "Choisi la bonne image pour aider la souris à manger tous les morceaux de fromage."
         },
-        "localized_practice_instructions_for_teacher": {
+        "locale_practice_instructions_for_teacher": {
           "message": "L'enfant appuie sur le image qui correspond au prononciation entendu."
         }
       });
     });
 
     it("should localize strings", function() {
-      expect(contextualizer.contextualize("localized_practice")).toEqual("Practice");
+      expect(contextualizer.contextualize("locale_practice")).toEqual("Practice");
       contextualizer.currentLocale.iso = "fr";
-      expect(contextualizer.contextualize("localized_practice")).toEqual("Practique");
+      expect(contextualizer.contextualize("locale_practice")).toEqual("Practique");
     });
 
 
     it("should let caller specify locale per localize call", function() {
-      expect(contextualizer.contextualize("localized_practice", "en")).toEqual("Practice");
-      expect(contextualizer.contextualize("localized_practice", "fr")).toEqual("Practique");
+      expect(contextualizer.contextualize("locale_practice", "en")).toEqual("Practice");
+      expect(contextualizer.contextualize("locale_practice", "fr")).toEqual("Practique");
     });
 
     it("should use the most available locale if none are specified", function() {
       var georgianApp = new Contextualizer();
       georgianApp.data = {};
       georgianApp.addMessagesToContextualizedStrings("ka", {
-        "localized_practice": {
+        "locale_practice": {
           "message": "პრაკთიკა"
         }
       });
       expect(georgianApp.data).toEqual({
         ka: {
           length: 1,
-          localized_practice: {
+          locale_practice: {
             message: "პრაკთიკა"
           }
         }
@@ -221,24 +264,24 @@ describe("Contextualizer", function() {
       var datalist = {
         "label": "practice",
         "title": {
-          "default": "localized_practice",
-          "gamified_title": "localized_gamified_practice"
+          "default": "locale_practice",
+          "gamified_title": "locale_gamified_practice"
         },
         "description": {
-          "default": "localized_practice_description_for_teacher",
-          "for_child": "localized_practice_description_for_child",
-          "for_parent": "localized_practice_description_for_parent",
-          "for_experimentAdministrator": "localized_practice_description_for_teacher",
-          "for_school_records": "localized_practice_description_for_school_record",
-          "for_experimentAdministratorSpecialist": "localized_practice_description_for_slp"
+          "default": "locale_practice_description_for_teacher",
+          "for_child": "locale_practice_description_for_child",
+          "for_parent": "locale_practice_description_for_parent",
+          "for_experimentAdministrator": "locale_practice_description_for_teacher",
+          "for_school_records": "locale_practice_description_for_school_record",
+          "for_experimentAdministratorSpecialist": "locale_practice_description_for_slp"
         },
         "instructions": {
-          "default": "localized_practice_instructions_for_teacher",
-          "for_child": "localized_practice_instructions_for_child",
-          "for_parent": "localized_practice_instructions_for_parent",
-          "for_experimentAdministrator": "localized_practice_instructions_for_teacher",
-          "for_school_records": "localized_practice_instructions_for_school_record",
-          "for_experimentAdministratorSpecialist": "localized_practice_instructions_for_slp"
+          "default": "locale_practice_instructions_for_teacher",
+          "for_child": "locale_practice_instructions_for_child",
+          "for_parent": "locale_practice_instructions_for_parent",
+          "for_experimentAdministrator": "locale_practice_instructions_for_teacher",
+          "for_school_records": "locale_practice_instructions_for_school_record",
+          "for_experimentAdministratorSpecialist": "locale_practice_instructions_for_slp"
         }
       };
 
@@ -269,12 +312,12 @@ describe("Contextualizer", function() {
         };
         obj = new ContextualizableObject({
           // contextualizer: contextualizer,
-          "default": "localized_practice_description_for_teacher",
-          "for_child": "localized_practice_description_for_child",
-          "for_parent": "localized_practice_description_for_parent",
-          "for_experimentAdministrator": "localized_practice_description_for_teacher",
-          "for_school_records": "localized_practice_description_for_school_record",
-          "for_experimentAdministratorSpecialist": "localized_practice_description_for_slp"
+          "default": "locale_practice_description_for_teacher",
+          "for_child": "locale_practice_description_for_child",
+          "for_parent": "locale_practice_description_for_parent",
+          "for_experimentAdministrator": "locale_practice_description_for_teacher",
+          "for_school_records": "locale_practice_description_for_school_record",
+          "for_experimentAdministratorSpecialist": "locale_practice_description_for_slp"
         });
       });
 
@@ -284,8 +327,8 @@ describe("Contextualizer", function() {
         expect(obj.contextualizer).toBeDefined();
         expect(obj.contextualizer).toBe(FieldDBObject.application.contextualizer);
 
-        expect(obj._for_child).toEqual('localized_practice_description_for_child');
-        expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual('In this game, you will help the mouse eat all the cheese!');
+        expect(obj._for_child).toEqual('locale_practice_description_for_child');
+        expect(obj.contextualizer.contextualize('locale_practice_description_for_child')).toEqual('In this game, you will help the mouse eat all the cheese!');
       });
 
       it("should be able to use dot notation to get contextualization", function() {
@@ -295,12 +338,12 @@ describe("Contextualizer", function() {
       it("should be able to serialize back into the same object as it was when created", function() {
         expect(obj.toJSON().contextualizer).toBeUndefined();
         expect(obj.toJSON()._for_child).toBeUndefined();
-        expect(obj.toJSON().default).toEqual("localized_practice_description_for_teacher");
-        expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
-        expect(obj.toJSON().for_parent).toEqual("localized_practice_description_for_parent");
-        expect(obj.toJSON().for_experimentAdministrator).toEqual("localized_practice_description_for_teacher");
-        expect(obj.toJSON().for_school_records).toEqual("localized_practice_description_for_school_record");
-        expect(obj.toJSON().for_experimentAdministratorSpecialist).toEqual("localized_practice_description_for_slp");
+        expect(obj.toJSON().default).toEqual("locale_practice_description_for_teacher");
+        expect(obj.toJSON().for_child).toEqual("locale_practice_description_for_child");
+        expect(obj.toJSON().for_parent).toEqual("locale_practice_description_for_parent");
+        expect(obj.toJSON().for_experimentAdministrator).toEqual("locale_practice_description_for_teacher");
+        expect(obj.toJSON().for_school_records).toEqual("locale_practice_description_for_school_record");
+        expect(obj.toJSON().for_experimentAdministratorSpecialist).toEqual("locale_practice_description_for_slp");
       });
 
       it("should be able to modify localization using dot notation", function(done) {
@@ -308,8 +351,8 @@ describe("Contextualizer", function() {
         obj.for_child = "In this game the mouse will eat all the cheese with your help.";
         setTimeout(function() {
           expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.contextualizer.contextualize('localized_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+          expect(obj.contextualizer.contextualize('locale_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.toJSON().for_child).toEqual("locale_practice_description_for_child");
           done();
         }, 10);
       }, specIsRunningTooLong);
@@ -322,8 +365,8 @@ describe("Contextualizer", function() {
 
         setTimeout(function() {
           expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.contextualizer.contextualize("localized_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+          expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.toJSON().for_child).toEqual("locale_practice_description_for_child");
           done();
         }, 100);
 
@@ -338,8 +381,8 @@ describe("Contextualizer", function() {
 
         setTimeout(function() {
           expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.contextualizer.contextualize("localized_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.toJSON().for_child).toEqual("localized_practice_description_for_child");
+          expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.toJSON().for_child).toEqual("locale_practice_description_for_child");
           done();
         }, 10);
 
