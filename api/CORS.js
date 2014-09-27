@@ -84,7 +84,9 @@ CORS.makeCORSRequest = function(options) {
   //  if(options.method === "POST"){
   //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
   xhr.setRequestHeader("Content-type", "application/json");
-  xhr.withCredentials = true;
+  if(options.withCredentials !== false){
+    xhr.withCredentials = true;
+  }
   //  }
 
   xhr.onload = function(e, f, g) {
@@ -101,7 +103,7 @@ CORS.makeCORSRequest = function(options) {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        console.warn("Response was already json.", e);
+        self.debug("Response was already json.", e);
       }
       deferred.resolve(response);
     } else {
