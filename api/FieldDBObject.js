@@ -461,7 +461,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
-        if (typeof this[aproperty].equals === "function") {
+        if (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
             return false;
