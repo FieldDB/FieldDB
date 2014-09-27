@@ -177,6 +177,9 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       if (!optionalLocaleForThisCall) {
         optionalLocaleForThisCall = this.currentLocale.iso;
       }
+      if (optionalLocaleForThisCall && optionalLocaleForThisCall.iso) {
+        optionalLocaleForThisCall = optionalLocaleForThisCall.iso;
+      }
       this.debug("Resolving localization in " + optionalLocaleForThisCall);
       var result = message,
         aproperty;
