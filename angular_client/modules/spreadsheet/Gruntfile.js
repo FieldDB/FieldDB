@@ -18,7 +18,8 @@ module.exports = function(grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
+    dist: 'dist',
+    version: require('./bower.json').version
   };
 
   // Define the configuration for all the tasks
@@ -34,8 +35,15 @@ module.exports = function(grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
+        options: {
+          livereload: '<%= connect.options.livereload %>'
+        }
+      },
+      templates: {
+        files: ['index.html','<%= yeoman.app %>/views/{,*/}*.html'],
+        tasks: ['ngtemplates'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -45,7 +53,7 @@ module.exports = function(grunt) {
         tasks: ['newer:jshint:test', 'karma']
       },
       styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
+        files: ['<%= yeoman.app %>/styles/{,*/}*.css', 'bower_components/fielddb-angular/dist/styles/main.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },
       gruntfile: {
@@ -56,9 +64,9 @@ module.exports = function(grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
+          '<%= yeoman.dist %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -114,12 +122,18 @@ module.exports = function(grunt) {
     jshint: {
       options: {
         jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        reporter: require('jshint-stylish'),
+        ignores: [
+        '<%= yeoman.app %>/scripts/templates.js'
+        ]
       },
       all: {
         src: [
           'Gruntfile.js',
           '<%= yeoman.app %>/scripts/{,*/}*.js'
+        ],
+        ignores: [
+        '<%= yeoman.app %>/scripts/templates.js'
         ]
       },
       test: {
@@ -193,7 +207,8 @@ module.exports = function(grunt) {
         flow: {
           html: {
             steps: {
-              js: ['concat', 'uglifyjs'],
+              js: ['concat'],
+              // js: ['concat', 'uglifyjs'],
               css: ['cssmin']
             },
             post: {}
@@ -237,16 +252,16 @@ module.exports = function(grunt) {
     //   dist: {}
     // },
 
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
+    // imagemin: {
+    //   dist: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.app %>/images',
+    //       src: '{,*/}*.{png,jpg,jpeg,gif}',
+    //       dest: '<%= yeoman.dist %>/images'
+    //     }]
+    //   }
+    // },
 
     svgmin: {
       dist: {
@@ -259,32 +274,32 @@ module.exports = function(grunt) {
       }
     },
 
-    htmlmin: {
-      dist: {
-        options: {
-          collapseWhitespace: true,
-          conservativeCollapse: true,
-          collapseBooleanAttributes: true,
-          removeCommentsFromCDATA: true,
-          removeOptionalTags: true
+    ngtemplates: {
+      app: {
+        options : {
+          htmlmin: {
+            collapseWhitespace: true,
+            collapseBooleanAttributes: true,
+            removeCommentsFromCDATA: true,
+            removeOptionalTags: true
+          },
+          module: 'spreadsheetApp',
         },
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
-          dest: '<%= yeoman.dist %>'
-        }]
+        cwd: 'app',
+        src: 'views/**.html',
+        dest: '<%= yeoman.dist %>/scripts/templates.js'
       }
     },
 
-    // ng-annotate tries to make the code safe for minification automatically
-    // by using the Angular long form for dependency injection.
-    ngAnnotate: {
+    // ngmin tries to make the code safe for minification automatically by
+    // using the Angular long form for dependency injection. It doesn't work on
+    // things like resolve or inject so those have to be done manually.
+    ngmin: {
       dist: {
         files: [{
           expand: true,
           cwd: '.tmp/concat/scripts',
-          src: ['*.js', '!oldieshim.js'],
+          src: '*.js',
           dest: '.tmp/concat/scripts'
         }]
       }
@@ -309,9 +324,13 @@ module.exports = function(grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/{,*/}*.html',
-            'images/{,*/}*.{webp}',
-            'fonts/*'
+            // 'styles/*.css',
+            'data/*.json',
+            'locales/*/*.json',
+            // 'views/{,*/}*.html',
+            'images/*.png',
+            'images/*.gif',
+            // 'fonts/*'
           ]
         }, {
           expand: true,
@@ -343,7 +362,7 @@ module.exports = function(grunt) {
       ],
       dist: [
         'copy:styles',
-        'imagemin',
+        // 'imagemin',
         'svgmin'
       ]
     },
@@ -353,6 +372,20 @@ module.exports = function(grunt) {
       unit: {
         configFile: 'test/karma.conf.js',
         singleRun: true
+      }
+    },
+
+    compress: {
+      dist: {
+        options: {
+          archive: '../../../../Releases/spreadsheet_app_v<%= yeoman.version %>.zip'
+        },
+        files: [{
+          expand: true,
+          cwd: 'dist/',
+          src: ['**'],
+          dest: ''
+        }]
       }
     }
   });
@@ -379,7 +412,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('test', [
-    'jshint',
     'clean:server',
     'concurrent:test',
     'autoprefixer',
@@ -393,15 +425,18 @@ module.exports = function(grunt) {
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
-    'concat',
-    'ngAnnotate',
     'copy:dist',
-    'cdnify',
+    'concat',
+    'ngmin',
+    // 'cdnify',
     'cssmin',
-    'uglify',
-    'filerev',
+    'ngtemplates',
+    // 'copy:templates',
+    // 'uglify',
+    // 'filerev',
     'usemin',
-    'htmlmin'
+    // 'htmlmin',
+    'compress'
   ]);
 
   grunt.registerTask('default', [

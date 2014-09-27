@@ -105,11 +105,14 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   }
   spreadsheetDatum.datumTags = [];
 
-  //TODO do we really need this flag?
+  //TODO do we really need this flag?, yes we need it because the audio might be flagged as deleted
+  spreadsheetDatum.hasAudio = false;
   if (spreadsheetDatum.audioVideo.length > 0) {
-    spreadsheetDatum.hasAudio = true;
-  } else {
-    spreadsheetDatum.hasAudio = false;
+    spreadsheetDatum.audioVideo.map(function() {
+      if (spreadsheetDatum.audioVideo.trashed !== "deleted") {
+        spreadsheetDatum.hasAudio = true;
+      }
+    });
   }
 
   return spreadsheetDatum;

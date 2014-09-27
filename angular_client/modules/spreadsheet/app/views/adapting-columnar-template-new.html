@@ -1,0 +1,50 @@
+<form ng-submit="createRecord(newFieldData)" >
+  <div class="span1" >
+    <input
+    keypress-mark-as-new
+    class="span2"
+    type="text"
+    ng-model="newFieldData['judgement']"
+    placeholder="*#?"
+    title="Grammaticality Judgement" />
+  </div>
+  <div class="span5" spreadsheet-catch-focus-on-arrow-press>
+    <input
+    ng-repeat="corpusField in fieldsInColumns.first"
+    keypress-mark-as-new
+    class="span5"
+    type="text"
+    ng-model="newFieldData[corpusField.label]"
+    placeholder="{{corpusField.title}}"
+    title="{{corpusField.title}}"
+    guess-morphemes-from-utterance
+    guess-gloss-from-morphemes
+    guess-utterance-from-morphemes
+    auto-glosser-on="{{useAutoGlosser}}"
+    field-label="{{corpusField.label}}"
+    />
+  </div>
+  <div class="span5">
+    <input
+    ng-repeat="corpusField in fieldsInColumns.second"
+    keypress-mark-as-new
+    class="span5"
+    type="text"
+    ng-model="newFieldData[corpusField.label]"
+    placeholder="{{corpusField.title}}"
+    title="{{corpusField.title}}"
+    guess-morphemes-from-utterance
+    guess-gloss-from-morphemes
+    guess-utterance-from-morphemes
+    auto-glosser-on="{{useAutoGlosser}}"
+    field-label="{{corpusField.label}}" />
+  </div>
+  <div class="span2">
+    <button ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false">
+      <i class="fa whiteicon fa-plus">
+      </i>
+      Create New
+    </button>
+  </span>
+</form>
+

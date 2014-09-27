@@ -30,57 +30,51 @@
 	</div>
 	<div class="clearDiv">&nbsp;</div>
 	<div class="settingsItems">
-
+    <div class="hide">
 		<!-- Full TEMPLATE -->
 		<h3>
 			<span ng-show="template=='fulltemplate'"><b>✓</b></span> Full Template
 			<small ng-show="DB.preferredTemplate == 'fulltemplate'">Default template for {{DB.title}}</small>
 		</h3>
 		<div class="row settingsTemplate">
-			<div class="span5">
-				<select class="span5" ng-model="newFieldPreferences2.field1">
-					<option value="">Empty</option>
-					<option select-field-from-default-full-template="field1"
-						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-				</select>
-				<select class="span5" ng-model="newFieldPreferences2.field2">
-					<option value="">Empty</option>
-					<option select-field-from-default-full-template="field2"
-						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-				</select>
-				<select class="span5" ng-model="newFieldPreferences2.field3">
-					<option value="">Empty</option>
-					<option select-field-from-default-full-template="field3"
-						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-				</select>
-			</div>
-			<div class="span5">
-				<select class="span5" ng-model="newFieldPreferences2.field4">
-					<option value="">Empty</option>
-					<option select-field-from-default-full-template="field4"
-						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-				</select>
-				<select class="span5" ng-model="newFieldPreferences2.field6">
-					<option value="">Empty</option>
-					<option select-field-from-default-full-template="field6"
-						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-				</select>
-				<select class="span5" ng-model="newFieldPreferences2.field7">
-					<option value="">Empty</option>
-					<option select-field-from-default-full-template="field7"
-						ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-				</select>
+
+
+      <div class="span1" title="Grammaticality Judgement">
+        *#?
+      </div>
+      <div class="span5">
+        <div ng-repeat="corpusField in fieldsInColumns.first">
+          {{corpusField.title}}
+        </div>
+      </div>
+
+      <div class="span5" ng-show="fieldsInColumns.second">
+        <div ng-repeat="corpusField in fieldsInColumns.second">
+          {{corpusField.title}}
+        </div>
+      </div>
+
+      <div class="span5" ng-show="fieldsInColumns.third">
+        <div ng-repeat="corpusField in fieldsInColumns.third">
+          {{corpusField.title}}
+        </div>
+      </div>
+
 				<!-- <input class="span5" type="text" disabled="disabled"
 					placeholder="Tags"></textarea> -->
 				<!-- <span class="span4" rows="3">Comments</span> -->
-
-			</div>
 			<div class="span1">
 				Audio &amp; Comments
 			</div>
 
 		</div>
 		<br />
+    Number of Columns:
+    <select ng-model="fullTemplateDefaultNumberOfColumns">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+    </select>
 		<button class="btn btn-primary"
 			ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2)">Save/Activate
 			Full Template</button>
@@ -209,7 +203,7 @@
 			<hr width="80%">
 		</center>
 		<!-- End Yale Field Methods TEMPLATE -->
-
+</div>
 		<!-- McGill TEMPLATE -->
 		<h3>
 			<span ng-show="template=='mcgillfieldmethodsspring2014template'"><b>✓</b></span> McGill Field Methods Template
@@ -232,14 +226,11 @@
 					<option value="">Translation</option>
 				</select>
 				<select class="span5" disabled="disabled">
-					<option value="">Grammaticality Judgement</option>
+					<option value="">IPA</option>
 				</select>
 				<select class="span5" disabled="disabled">
-					<option value="">Tags</option>
+					<option value="">Notes</option>
 				</select>
-				<!-- <input class="span5" type="text" disabled="disabled"
-					placeholder="Tags"></textarea> -->
-				<!-- <span class="span4" rows="3">Comments</span> -->
 
 			</div>
 			<div class="span1">
