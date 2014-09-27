@@ -9,7 +9,7 @@ try {
   console.log("failed to load package.json", e);
   package = {
     version: "2.2.0"
-  }
+  };
 }
 // var FieldDBDate = function FieldDBDate(options) {
 //   // this.debug("In FieldDBDate ", options);
