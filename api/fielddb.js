@@ -75,4 +75,16 @@
   exports.FieldDB = FieldDB;
   global.FieldDB = FieldDB;
 
+console.log("------------------");
+console.log("------------------");
+console.log("------------------");
+console.log("------------------");
+console.log("------------------");
+console.log("-------loaded-----------");
+console.log("--------fielddb----------");
+console.log("------------------",FieldDB);
+// FieldDB["Response"] = Response;
+console.log("------------------");
+console.log("------------------");
+console.log("------------------");
 }(typeof exports === "object" && exports || this));
