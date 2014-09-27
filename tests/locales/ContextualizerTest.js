@@ -41,6 +41,32 @@ describe("Contextualizer", function() {
       expect(contextualizer.data.es).toBeDefined();
       expect(contextualizer.contextualize("locale_Username")).toEqual("Username:");
     });
+
+    it("should use the default locale if none are specified", function() {
+      var defaultApp = new Contextualizer();
+      expect(defaultApp.currentLocale).toEqual({
+        iso: "en"
+      });
+    });
+
+    it("should use the user specified locale", function() {
+      var appWithFrenchPrefered = new Contextualizer();
+      appWithFrenchPrefered.addMessagesToContextualizedStrings("ka", {
+        "localized_practice": {
+          "message": "პრაკთიკა"
+        }
+      });
+      expect(appWithFrenchPrefered.data.length).toEqual();
+      appWithFrenchPrefered.currentLocale = {
+        iso: "fr",
+        name: "French"
+      };
+      expect(appWithFrenchPrefered.currentLocale).toEqual({
+        iso: "fr",
+        name: "French"
+      });
+    });
+
   });
 
   describe("elanguages", function() {
@@ -52,6 +78,18 @@ describe("Contextualizer", function() {
       expect(contextualizer.elanguages["fr"].iso).toEqual("fr");
       expect(contextualizer.elanguages["fr"].name).toEqual("French");
       expect(contextualizer.elanguages["fr"].nativeName).toEqual("français");
+    });
+
+    it("should be possible to set the locale with just a iso", function() {
+      var oldAppOrBasicAppWithIsoCodesOnly = new Contextualizer();
+      oldAppOrBasicAppWithIsoCodesOnly.currentLocale = "fr-QC";
+      expect(oldAppOrBasicAppWithIsoCodesOnly.currentLocale).toEqual({
+        iso: "fr-qc"
+      });
+      oldAppOrBasicAppWithIsoCodesOnly.currentLocale = "KA";
+      expect(oldAppOrBasicAppWithIsoCodesOnly.currentLocale.iso).toEqual("ka");
+      expect(oldAppOrBasicAppWithIsoCodesOnly.currentLocale.name).toEqual("Georgian");
+      expect(oldAppOrBasicAppWithIsoCodesOnly.currentLocale.nativeName).toEqual("ქართული");
     });
   });
 
@@ -65,20 +103,23 @@ describe("Contextualizer", function() {
       });
       expect(contextualizer.save).toBeDefined();
       contextualizer.save().then(function(results) {
-        contextualizer.debug(results);
+        contextualizer.debug(" save user contribution results", results);
         expect(results[0].state).toEqual("rejected");
-        expect(results[1].state).toEqual("rejected");
       })
         .then(done, done);
     }, specIsRunningTooLong);
 
     it("should be able to save the messages.json to a git repository", function(done) {
       var contextualizer = new Contextualizer();
+      contextualizer.addMessagesToContextualizedStrings("en", {
+        "localized_practice": {
+          "message": "Practice"
+        }
+      });
       contextualizer.email = "lingllama@lingsync.org";
       contextualizer.save().then(function(results) {
         contextualizer.debug(results);
         expect(results[0].state).toEqual("fulfilled");
-        expect(results[1].state).toEqual("fulfilled");
       })
         .then(done, done);
     }, specIsRunningTooLong);
@@ -142,14 +183,34 @@ describe("Contextualizer", function() {
       expect(contextualizer.contextualize("localized_practice", "fr")).toEqual("Practique");
     });
 
+    it("should use the most available locale if none are specified", function() {
+      var georgianApp = new Contextualizer();
+      georgianApp.data = {};
+      georgianApp.addMessagesToContextualizedStrings("ka", {
+        "localized_practice": {
+          "message": "პრაკთიკა"
+        }
+      });
+      expect(georgianApp.data).toEqual({
+        ka: {
+          length: 1,
+          localized_practice: {
+            message: "პრაკთიკა"
+          }
+        }
+      });
+      expect(georgianApp.availableLanguages.length).toEqual(1);
+      expect(georgianApp.currentLocale.nativeName).toEqual("ქართული");
+    });
+
     it("should provide a list of available/supported locales ranked by their level of support", function() {
       var availableLanguages = contextualizer.availableLanguages;
       expect(availableLanguages.en.iso).toEqual("en");
-      expect(availableLanguages.en.length).toBeGreaterThan(206);
-      expect(availableLanguages.en.percentageOfAvailability).toEqual(100);
-      expect(availableLanguages.es.iso).toEqual("es");
-      expect(availableLanguages.es.length).toBeGreaterThan(174);
-      expect(availableLanguages.es.percentageOfAvailability).toEqual(Math.round(availableLanguages.es.length / availableLanguages.en.length * 100));
+      expect(availableLanguages.en.length).toEqual(5);
+      expect(availableLanguages.en.percentageOfAvailability).toEqual(83);
+      expect(availableLanguages.fr.iso).toEqual("fr");
+      expect(availableLanguages.fr.length).toEqual(6);
+      expect(availableLanguages.en.percentageOfAvailability).toEqual(Math.round(availableLanguages.en.length / availableLanguages.fr.length * 100));
 
       expect(availableLanguages._collection[0].length > availableLanguages._collection[1].length);
       expect(availableLanguages._collection[0].percentageOfAvailability < availableLanguages._collection[1].percentageOfAvailability);
