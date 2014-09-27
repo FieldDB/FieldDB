@@ -31,11 +31,11 @@ var Contextualizer = function Contextualizer(options) {
       iso: "en"
     };
   }
-  if (!options.currentLocale || !options.currentLocale.iso) {
-    options.currentLocale = {
-      iso: "en"
-    };
-  }
+  // if (!options.currentLocale || !options.currentLocale.iso) {
+  //   options.currentLocale = {
+  //     iso: "en"
+  //   };
+  // }
   if (!options.currentContext) {
     options.currentContext = "default";
   }
@@ -43,6 +43,10 @@ var Contextualizer = function Contextualizer(options) {
     options.elanguages = elanguages;
   }
   FieldDBObject.apply(this, localArguments);
+  if (!options || options.alwaysConfirmOkay === undefined) {
+    this.warn("By default it will be okay for users to modify global locale strings. IF they are saved this will affect other users.");
+    this.alwaysConfirmOkay = true;
+  }
   return this;
 };
 
@@ -62,12 +66,49 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
   },
 
   data: {
-    value: {}
+    get: function() {
+      return this._data;
+    },
+    set: function(value) {
+      this._data = value;
+    }
+  },
+
+  currentLocale: {
+    get: function() {
+      if (this._currentLocale) {
+        return this._currentLocale;
+      }
+      if (this._mostAvailableLanguage) {
+        return this._mostAvailableLanguage;
+      }
+      return this.defaultLocale;
+    },
+    set: function(value) {
+      if (value === this._currentLocale) {
+        return;
+      }
+
+      if (value && value.toLowerCase && typeof value === "string") {
+        value = value.toLowerCase().replace(/[^a-z-]/g, "");
+        if (this.elanguages && this.elanguages[value]) {
+          value = this.elanguages[value];
+        } else {
+          value = {
+            iso: value
+          };
+        }
+      }
+
+      this.warn("SETTING LOCALE FROM " + this._currentLocale + " to " + value, this.data);
+      this._currentLocale = value;
+    }
   },
 
   availableLanguages: {
     get: function() {
-      if (this._availableLanguages && this._availableLanguages._collection[0].length === this.data[this._availableLanguages._collection[0].iso].length) {
+      this.data = this.data || {};
+      if (this._availableLanguages && this.data[this._availableLanguages._collection[0].iso] && this._availableLanguages._collection[0].length === this.data[this._availableLanguages._collection[0].iso].length) {
         return this._availableLanguages;
       }
       var availLanguages = new ELanguages(),
@@ -94,7 +135,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         });
       }
       this.todo("test whether setting the currentLocale to the most complete locale has adverse affects.");
-      this.currentLocale = availLanguages._collection[0];
+      this._mostAvailableLanguage = availLanguages._collection[0];
       this._availableLanguages = availLanguages;
       return availLanguages;
     }
@@ -135,6 +176,9 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     value: function(message, optionalLocaleForThisCall) {
       if (!optionalLocaleForThisCall) {
         optionalLocaleForThisCall = this.currentLocale.iso;
+      }
+      if (optionalLocaleForThisCall && optionalLocaleForThisCall.iso) {
+        optionalLocaleForThisCall = optionalLocaleForThisCall.iso;
       }
       this.debug("Resolving localization in " + optionalLocaleForThisCall);
       var result = message,
@@ -196,6 +240,12 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
     }
   },
 
+  /**
+   *
+   * @param  {String} key   A locale to save the message to
+   * @param  {String} value a message which should replace the existing localization
+   * @return {Promise}       A promise for whether or not the update was confirmed and executed
+   */
   updateContextualization: {
     value: function(key, value) {
       this.data[this.currentLocale.iso] = this.data[this.currentLocale.iso] || {};
@@ -208,8 +258,8 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         previousMessage = this.data[this.currentLocale.iso][key].message;
         verb = "update ";
       }
-      var update = this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value);
-      if (update) {
+      var self = this;
+      if (!this.testingAsyncConfirm && this.alwaysConfirmOkay /* run synchonosuly whenever possible */ ) {
         this.data[this.currentLocale.iso][key] = this.data[this.currentLocale.iso][key] || {};
         this.data[this.currentLocale.iso][key].message = value;
         var newLocaleItem = {};
@@ -217,8 +267,22 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           message: value
         };
         this.addMessagesToContextualizedStrings(this.currentLocale.iso, newLocaleItem);
+      } else {
+        this.todo("Test async updateContextualization");
+
+        return this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value).then(function() {
+          self.data[self.currentLocale.iso][key] = self.data[self.currentLocale.iso][key] || {};
+          self.data[self.currentLocale.iso][key].message = value;
+          var newLocaleItem = {};
+          newLocaleItem[key] = {
+            message: value
+          };
+          self.addMessagesToContextualizedStrings(self.currentLocale.iso, newLocaleItem);
+        }, function() {
+          self.debug("Not updating ");
+        });
       }
-      return this.data[this.currentLocale.iso][key].message;
+
     }
   },
 
@@ -307,6 +371,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
       if (!localeData) {
         deferred.reject("The locales data was empty!");
+        return;
       }
 
       if (!localeCode && localeData._id) {
@@ -322,6 +387,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       self.originalDocs = self.originalDocs || [];
       self.originalDocs.push(localeData);
 
+      self.data = self.data || {};
       for (var message in localeData) {
         if (localeData.hasOwnProperty(message) && message.indexOf("_") !== 0) {
           self.data[localeCode] = self.data[localeCode] || {

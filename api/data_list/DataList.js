@@ -173,7 +173,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             doc = new Document(doc);
           } else if (guessedType === "FieldDBObject") {
             doc = new FieldDBObject(doc);
-          } else if (FieldDB[guessedType]) {
+          } else if (FieldDB && FieldDB[guessedType]) {
             self.warn("Converting doc into guessed type " + guessedType);
             doc = new FieldDB[guessedType](doc);
           } else {
@@ -328,8 +328,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       // Force docIds to be set to current docs
-      this.docIds = null;
-      this.docIds = this.docIds;
+      if (this.docs && this.docs.length > 0) {
+        this.docIds = null;
+        this.docIds = this.docIds;
+      }
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
       delete json.docs;
       this.todo("Adding datumIds for backward compatability until prototype can handle docIds");

@@ -293,14 +293,11 @@ InsertUnicodes.prototype = Object.create(Collection.prototype, /** @lends Insert
       if (!value) {
         return null;
       }
-      if (value.trim) {
-        value = value.trim().replace(/[-\""+=?.*&^%,\/\[\]{}() ]/g, "_").replace(/^_/, "").replace(/_$/, "");
-        return this.camelCased(value);
-      } else if (typeof value === "number") {
-        return parseInt(value, 10);
-      } else {
-        return null;
+      if (typeof value.replace !== "function") {
+        value = value + "";
       }
+      value = value.replace(/[-""+=?./\[\]{}() ]/g,"");
+      return value;
     }
   }
 

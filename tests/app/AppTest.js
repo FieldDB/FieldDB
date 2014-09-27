@@ -36,6 +36,7 @@ describe("App", function() {
 
       expect(app).toBeDefined();
       expect(app.contextualizer).toBeDefined();
+      app.contextualizer.loadDefaults();
       expect(app.contextualize({
         default: "locale_Username"
       })).toEqual("Username:");

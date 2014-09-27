@@ -218,6 +218,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   name: {
+    configurable: true,
     get: function() {
       this.firstname = this.firstname || "";
       this.lastname = this.lastname || "";

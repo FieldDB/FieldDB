@@ -1,4 +1,5 @@
 var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
+var specIsRunningTooLong = 5000;
 
 
 describe("FieldDBObject", function() {
@@ -259,6 +260,49 @@ describe("FieldDBObject", function() {
     });
   });
 
+  describe("confirming", function() {
+    it("should be able to show a confirm UI and wait asyncronously false case", function(done) {
+
+      var riskyObject = new FieldDBObject();
+      riskyObject.alwaysConfirmOkay = true;
+      expect(riskyObject.alwaysConfirmOkay).toBeTruthy();
+      riskyObject.alwaysConfirmOkay = false;
+      expect(riskyObject.alwaysConfirmOkay).toBeFalsy();
+
+      riskyObject.confirm("Do you want to do this, are you really sure?").then(function(results) {
+        expect(results.message).toEqual(" ");
+        expect(riskyObject.confirmMessage).toEqual("Do you want to do this, are you really sure?");
+        expect(results.response).toEqual(false);
+        expect(true).toBeFalsy();
+      }, function(results) {
+        expect(results.message).toEqual("Do you want to do this, are you really sure?");
+        expect(results.response).toEqual(false);
+        expect(riskyObject.confirmMessage).toEqual("Do you want to do this, are you really sure?");
+        expect(false).toBeFalsy();
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should be able to show a confirm UI and wait asyncronously true case", function(done) {
+
+      var lessRiskyObject = new FieldDBObject();
+      lessRiskyObject.alwaysConfirmOkay = true;
+      expect(lessRiskyObject.alwaysConfirmOkay).toBeTruthy();
+      lessRiskyObject.confirm("Do you want to do this?").then(function(results) {
+        expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");
+        expect(results.response).toEqual(true);
+        expect(true).toBeTruthy();
+      }, function(results) {
+        expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");
+        expect(results.response).toEqual(true);
+        expect(false).toBeTruthy();
+      }).done(done);
+      expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");
+
+    }, specIsRunningTooLong);
+  });
+
+
   describe("merging", function() {
     var aBaseObject;
     var atriviallyDifferentObject;
@@ -390,8 +434,36 @@ describe("FieldDBObject", function() {
       expect(atriviallyDifferentObject.externalObject.warnMessage).toBeUndefined();
     });
 
-    it("should be able to ask the user what to do if overwrite is not specified", function() {
+    it("should be able to ask the user asynchronously what to do if overwrite is not specified false case", function(done) {
       aBaseObject.merge("self", atriviallyDifferentObject);
+
+      setTimeout(function() {
+        expect(aBaseObject.externalString).toEqual("easy model");
+        expect(aBaseObject.externalObject.internalString).toEqual("internal");
+
+        expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
+        expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
+        done();
+      }, 10);
+      expect(aBaseObject.confirmMessage).toContain("I found a conflict for externalString, Do you want to overwrite it from \"easy model\" -> \"trivial model\"");
+      expect(aBaseObject.externalObject.confirmMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> \"internal overwrite\"");
+    });
+
+
+    it("should be able to ask the user asynchronously what to do if overwrite is not specified  true case", function(done) {
+      aBaseObject.alwaysConfirmOkay = true;
+      aBaseObject.externalObject.alwaysConfirmOkay = true;
+      aBaseObject.merge("self", atriviallyDifferentObject);
+
+      setTimeout(function() {
+        expect(aBaseObject.externalString).toEqual("trivial model");
+        expect(aBaseObject.externalObject.internalString).toEqual("internal overwrite");
+
+        expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
+        expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
+        done();
+      }, 10);
+
       expect(aBaseObject.confirmMessage).toContain("I found a conflict for externalString, Do you want to overwrite it from \"easy model\" -> \"trivial model\"");
       expect(aBaseObject.externalObject.confirmMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> \"internal overwrite\"");
     });

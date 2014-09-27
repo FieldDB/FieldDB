@@ -2311,7 +2311,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               var audioVideoArray = [];
               if (datum.audioVideo.URL) {
                 var audioVideoURL = datum.audioVideo.URL;
-                var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+                var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
                 audioVideoArray.push({
                   "filename": fileFromUrl,
                   "description": fileFromUrl,
@@ -2369,7 +2369,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           for (var audioVideoItem in datum.audioVideo) {
             if (datum.audioVideo.hasOwnProperty(audioVideoItem) && datum.audioVideo.audioVideoItem.URL) {
               var audioVideoURL = datum.audioVideo.audioVideoItem.URL;
-              var fileFromUrl = audioVideoURL.subset(audioVideoURL.lastIndexOf("/"));
+              var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
               audioVideoArray.push({
                 "filename": fileFromUrl,
                 "description": fileFromUrl,

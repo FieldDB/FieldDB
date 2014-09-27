@@ -112,7 +112,7 @@ Collection.prototype = Object.create(Object.prototype, {
   },
   verbose: {
     value: function() {
-      return FieldDBObject.prototype.verbose.apply(this,arguments);
+      return FieldDBObject.prototype.verbose.apply(this, arguments);
     }
   },
 
@@ -349,7 +349,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
-      if (value !== member[this.primaryKey]) {
+      if (value !== oldValue) {
         this.warn("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
       }
       return value;
@@ -708,15 +708,20 @@ Collection.prototype = Object.create(Object.prototype, {
               overwrite = optionalOverwriteOrAsk;
               if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
                 // overwrite = self.confirm("Do you want to overwrite " + idToMatch);
-                overwrite = self.confirm("I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem));
-              }
-              if (overwrite) {
+                self.confirm("I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem))
+                  .then(function() {
+                    self.warn("IM HERE HERE");
+                    self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
+                    self.debug("Overwriting  ", anItem, " ->", anotherItem);
+                    resultCollection[idToMatch] = anotherItem;
+                  }, function() {
+                    self.debug("Not Overwriting  ", anItem, " ->", anotherItem);
+                    resultCollection[idToMatch] = anItem;
+                  });
+              } else {
                 self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
                 self.debug("Overwriting  ", anItem, " ->", anotherItem);
                 resultCollection[idToMatch] = anotherItem;
-              } else {
-                resultCollection[idToMatch] = anItem;
-
               }
             }
           }
