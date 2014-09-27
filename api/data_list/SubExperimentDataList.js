@@ -74,6 +74,9 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
       // this._trials = this.docIds;
       var json = DataList.prototype.toJSON.apply(this, arguments);
       this.debug(json);
+      if (this.trials && this.trials.toJSON) {
+        json.trialsResults = this.trials.toJSON();
+      }
       return json;
     }
   }
