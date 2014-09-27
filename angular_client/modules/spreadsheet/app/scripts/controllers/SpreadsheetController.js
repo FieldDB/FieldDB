@@ -134,18 +134,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "label": "language",
         "title": "language"
       },
-      "dateElicited": {
-        "label": "dateElicited",
-        "title": "Date Elicited"
-      },
-      "user": {
-        "label": "user",
-        "title": "User"
-      },
-      "dateSEntered": {
-        "label": "dateSEntered",
-        "title": "Date entered"
-      },
+      // "dateElicited": {
+      //   "label": "dateElicited",
+      //   "title": "Date Elicited"
+      // },
+      // "user": {
+      //   "label": "user",
+      //   "title": "User"
+      // },
+      // "dateSEntered": {
+      //   "label": "dateSEntered",
+      //   "title": "Date entered"
+      // },
       "tags": {
         "label": "tags",
         "title": "Tags"
@@ -215,20 +215,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "title": "Translation"
       },
       "field5": {
-        "label": "comments",
-        "title": "Comments"
+        "label": "validationStatus",
+        "title": "Status"
       },
       "field6": {
-        "label": "judgement",
-        "title": "Grammaticality Judgement"
-      },
-      "field7": {
         "label": "tags",
         "title": "Tags"
-      },
-      "field8": {
-        "label": "",
-        "title": ""
       }
     },
     "mcgillfieldmethodsspring2014template": {
@@ -249,16 +241,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "title": "Translation"
       },
       "field5": {
-        "label": "judgement",
-        "title": "Grammaticality Judgement"
+        "label": "phonetic",
+        "title": "IPA"
       },
       "field6": {
-        "label": "tags",
-        "title": "Tags"
-      },
-      "field8": {
-        "label": "",
-        "title": ""
+        "label": "notes",
+        "title": "Notes"
       }
     },
     "yalefieldmethodsspring2014template": {
@@ -324,33 +312,60 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
   // Always get the most recent available fields
   Preferences.availableFields = defaultPreferences.availableFields;
-  /* upgrade to v1.923ss */
-  if (!Preferences.fulltemplate.field7.label) {
-    Preferences.fulltemplate.field7 = {
-      "label": "tags",
-      "title": "Tags"
-    };
+  /* upgrade to v1.923ss instead update to 2.22 */
+  if (Preferences.fulltemplate.field7) {
+    Preferences.fulltemplate = defaultPreferences.fulltemplate;
   }
   if (Preferences.fulltemplate.field6.label === "judgement") {
-    Preferences.fulltemplate.field6 = {
-      "label": "judgement",
-      "title": "Grammaticality Judgement"
-    };
+    Preferences.fulltemplate = defaultPreferences.fulltemplate;
   }
+  if(!Preferences.fullTemplateDefaultNumberOfColumns){
+    Preferences.fullTemplateDefaultNumberOfColumns = 2;
+  }
+  $rootScope.fullTemplateDefaultNumberOfColumns = Preferences.fullTemplateDefaultNumberOfColumns;
   localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+  $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
+    if (!numberOfColumns) {
+      numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
+    }
+    var fields = [];
+    if (typeof incomingFields.splice !== "function") {
+      for (var field in incomingFields) {
+        if (incomingFields.hasOwnProperty(field)) {
+          fields.push(incomingFields[field]);
+        }
+      }
+    } else {
+      fields = incomingFields;
+    }
+    var columnHeight = Math.ceil(fields.length / numberOfColumns);
+    var columns = {};
 
+    if (numberOfColumns === 1) {
+      columns.first = fields;
+    } else if (numberOfColumns === 2) {
+      columns.first = fields.slice(0, columnHeight);
+      columns.second = fields.slice(columnHeight, fields.length);
+    } else if (numberOfColumns === 3) {
+      columns.first = fields.slice(0, columnHeight);
+      columns.second = fields.slice(columnHeight, columnHeight * 2);
+      columns.third = fields.slice(columnHeight * 2, fields.length);
+    }
+    return columns;
+  };
 
   // console.log(Preferences.availableFields);
   // Set scope variables
   $scope.documentReady = false;
   $rootScope.template = Preferences.userTemplate;
   $rootScope.fields = Preferences[Preferences.userTemplate];
+  $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userTemplate]);
   $scope.scopePreferences = Preferences;
-  $scope.availableFields = defaultPreferences.availableFields;
+  $rootScope.availableFields = defaultPreferences.availableFields;
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
   $scope.reverse = true;
-  // $scope.selected = 'newEntry';
+  // $scope.activeDatumIndex = 'newEntry';
   $rootScope.authenticated = false;
   $rootScope.developer = false;
   $scope.dataentry = false;
@@ -432,7 +447,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         case "searchMenu":
           $scope.changeActiveSubMenu(itemToDisplay);
           $scope.searching = true;
-          $scope.selected = null;
+          $scope.activeDatumIndex = null;
           window.location.assign("#/spreadsheet/" + $rootScope.template);
           break;
         case "faq":
@@ -531,7 +546,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.saved = "yes";
         $rootScope.loading = false;
 
-        $scope.selected = "newEntry";
+        $scope.activeDatumIndex = "newEntry";
 
 
       }, function(error) {
@@ -739,7 +754,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log("must have been an object...", e, selectedDB);
       }
       $rootScope.DB = selectedDB;
-
+      $rootScope.availableFieldsInCurrentCorpus = selectedDB.datumFields;
+      if (!$rootScope.availableFieldsInCurrentCorpus) {
+        $rootScope.availableFieldsInCurrentCorpus = [];
+      }
 
       // Update saved state in Preferences
       Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
@@ -767,6 +785,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.overrideTemplateSetting = function(template, newFieldPreferences, notUserInitited) {
     $rootScope.template = template;
     $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(newFieldPreferences);
+
     console.log("notUserInitited", notUserInitited);
   };
 
@@ -1062,11 +1082,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!datum.id) {
       $rootScope.notificationMessage = "Please save changes before continuing.";
       $rootScope.openNotification();
-      $scope.selected = datum;
+      $scope.activeDatumIndex = datum;
       // } else if (datum.audioVideo && datum.audioVideo[0]) {
       //   $rootScope.notificationMessage = "You must delete all recordings from this record first.";
       //   $rootScope.openNotification();
-      //   $scope.selected = datum;
+      //   $scope.activeDatumIndex = datum;
     } else {
       var r = confirm("Are you sure you want to put this datum in the trash?");
       if (r === true) {
@@ -1109,7 +1129,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 $scope.loadPaginatedData();
 
                 $scope.saved = "yes";
-                $scope.selected = null;
+                $scope.activeDatumIndex = null;
               }, function(error) {
                 console.warn(error);
                 window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
@@ -1130,13 +1150,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.createRecord = function(fieldData, focusOnFieldAfter) {
     // $scope.setFocusOn(focusOnFieldAfter);
-    document.getElementById(focusOnFieldAfter).focus();
+    if (document.getElementById(focusOnFieldAfter)) {
+      document.getElementById(focusOnFieldAfter).focus();
+    }
 
     // // Reset new datum form data and enable upload button; only reset audio field if present
-    if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
-      document.getElementById("form_new_datum_audio-file").reset();
-      $scope.newDatumHasAudioToUpload = false;
-    }
+    // if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
+    //   document.getElementById("form_new_datum_audio-file").reset();
+    //   $scope.newDatumHasAudioToUpload = false;
+    // }
     $rootScope.newRecordHasBeenEdited = false;
     $scope.newFieldData = {};
 
@@ -1451,14 +1473,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.selectRow = function(scopeIndex) {
     // Do nothing if clicked row is currently selected
-    if ($scope.selected === scopeIndex) {
+    if ($scope.activeDatumIndex === scopeIndex) {
       return;
     }
     if ($scope.searching !== true) {
       if ($rootScope.newRecordHasBeenEdited !== true) {
-        $scope.selected = scopeIndex;
+        $scope.activeDatumIndex = scopeIndex;
       } else {
-        $scope.selected = scopeIndex + 1;
+        $scope.activeDatumIndex = scopeIndex + 1;
         $scope.createRecord($scope.newFieldData);
       }
       // if(scopeIndex === "newEntry"){
@@ -1470,11 +1492,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.editSearchResults = function(scopeIndex) {
-    $scope.selected = scopeIndex;
+    $scope.activeDatumIndex = scopeIndex;
   };
 
   $scope.selectNone = function() {
-    $scope.selected = undefined;
+    $scope.activeDatumIndex = undefined;
   };
 
   $scope.runSearch = function(searchTerm) {
@@ -1994,7 +2016,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Paginate data tables
 
   $scope.numberOfResultPages = function(numberOfRecords) {
+    if (!numberOfRecords) {
+      return 0;
+    }
     var numberOfPages = Math.ceil(numberOfRecords / $rootScope.resultSize);
+    // console.log("requesting numberOfResultPages" + numberOfPages);
     return numberOfPages;
   };
 
@@ -2020,17 +2046,33 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   //   console.log($rootScope.currentPage);
   // };
 
+  /**
+   *  changes the current page, which is watched in a directive, which in turn calls loadPaginatedData above
+   * @return {[type]} [description]
+   */
   $scope.pageForward = function() {
-    $scope.selected = null;
+    $scope.activeDatumIndex = null;
     $rootScope.currentPage = $rootScope.currentPage + 1;
   };
 
+  /**
+   *  changes the current page, which is watched in a directive, which in turn calls loadPaginatedData above
+   * @return {[type]} [description]
+   */
   $scope.pageBackward = function() {
-    $scope.selected = null;
+    $scope.activeDatumIndex = null;
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
-  // Audio recording
 
+  $rootScope.$watch('currentPage', function(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      $scope.loadPaginatedData();
+    } else {
+      console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
+    }
+  });
+
+  // Audio recording
   var hasGetUserMedia = function() {
     return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia || navigator.msGetUserMedia);
