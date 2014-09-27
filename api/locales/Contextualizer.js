@@ -99,6 +99,8 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           };
         }
       }
+
+      this.warn("SETTING LOCALE FROM " + this._currentLocale + " to " + value, this.data);
       this._currentLocale = value;
     }
   },
