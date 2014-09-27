@@ -349,7 +349,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
-      if (value !== member[this.primaryKey]) {
+      if (value !== oldValue) {
         this.warn("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
       }
       return value;
