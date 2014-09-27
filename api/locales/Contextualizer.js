@@ -31,11 +31,11 @@ var Contextualizer = function Contextualizer(options) {
       iso: "en"
     };
   }
-  if (!options.currentLocale || !options.currentLocale.iso) {
-    options.currentLocale = {
-      iso: "en"
-    };
-  }
+  // if (!options.currentLocale || !options.currentLocale.iso) {
+  //   options.currentLocale = {
+  //     iso: "en"
+  //   };
+  // }
   if (!options.currentContext) {
     options.currentContext = "default";
   }
@@ -66,12 +66,47 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
   },
 
   data: {
-    value: {}
+    get: function() {
+      return this._data;
+    },
+    set: function(value) {
+      this._data = value;
+    }
+  },
+
+  currentLocale: {
+    get: function() {
+      if (this._currentLocale) {
+        return this._currentLocale;
+      }
+      if (this._mostAvailableLanguage) {
+        return this._mostAvailableLanguage;
+      }
+      return this.defaultLocale;
+    },
+    set: function(value) {
+      if (value === this._currentLocale) {
+        return;
+      }
+
+      if (value && value.toLowerCase && typeof value === "string") {
+        value = value.toLowerCase().replace(/[^a-z-]/g, "");
+        if (this.elanguages && this.elanguages[value]) {
+          value = this.elanguages[value];
+        } else {
+          value = {
+            iso: value
+          };
+        }
+      }
+      this._currentLocale = value;
+    }
   },
 
   availableLanguages: {
     get: function() {
-      if (this._availableLanguages && this._availableLanguages._collection[0].length === this.data[this._availableLanguages._collection[0].iso].length) {
+      this.data = this.data || {};
+      if (this._availableLanguages && this.data[this._availableLanguages._collection[0].iso] && this._availableLanguages._collection[0].length === this.data[this._availableLanguages._collection[0].iso].length) {
         return this._availableLanguages;
       }
       var availLanguages = new ELanguages(),
@@ -98,7 +133,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         });
       }
       this.todo("test whether setting the currentLocale to the most complete locale has adverse affects.");
-      this.currentLocale = availLanguages._collection[0];
+      this._mostAvailableLanguage = availLanguages._collection[0];
       this._availableLanguages = availLanguages;
       return availLanguages;
     }
@@ -331,6 +366,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
       if (!localeData) {
         deferred.reject("The locales data was empty!");
+        return;
       }
 
       if (!localeCode && localeData._id) {
@@ -346,6 +382,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       self.originalDocs = self.originalDocs || [];
       self.originalDocs.push(localeData);
 
+      self.data = self.data || {};
       for (var message in localeData) {
         if (localeData.hasOwnProperty(message) && message.indexOf("_") !== 0) {
           self.data[localeCode] = self.data[localeCode] || {
