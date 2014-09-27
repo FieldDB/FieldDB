@@ -75,6 +75,7 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
       var json = DataList.prototype.toJSON.apply(this, arguments);
       this.debug(json);
       if (this.trials && this.trials.toJSON) {
+        this.todo("only save trials if there are responses in the trials, or if the experiment started or somethign. ");
         json.trialsResults = this.trials.toJSON();
       }
       return json;
