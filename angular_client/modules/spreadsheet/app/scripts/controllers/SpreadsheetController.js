@@ -92,23 +92,28 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     "availableFields": {
       "judgement": {
         "label": "judgement",
-        "title": "Grammaticality Judgement"
+        "title": "Grammaticality Judgement",
+        "hint": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
       },
       "utterance": {
         "label": "utterance",
-        "title": "Utterance"
+        "title": "Utterance",
+        "hint": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
       },
       "morphemes": {
         "label": "morphemes",
-        "title": "Morphemes"
+        "title": "Morphemes",
+        "hint": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
       },
       "gloss": {
         "label": "gloss",
-        "title": "Gloss"
+        "title": "Gloss",
+        "hint": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
       },
       "translation": {
         "label": "translation",
-        "title": "Translation"
+        "title": "Translation",
+        "hint": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
       },
       // "comments": {
       //   "label": "comments",
@@ -156,7 +161,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       },
       "syntacticCategory": {
         "label": "syntacticCategory",
-        "title": "syntacticCategory"
+        "title": "syntacticCategory",
+        "hint": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
       },
       "allomorphs": {
         "label": "allomorphs",
@@ -176,7 +182,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       },
       "orthography": {
         "label": "orthography",
-        "title": "Orthography"
+        "title": "Orthography",
+        "hint": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography which speakers can read. If there are more than one orthography an additional orthography field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
       }
     },
     "compacttemplate": {
@@ -241,6 +248,32 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "title": "Translation"
       },
       "field5": {
+        "label": "judgement",
+        "title": "Grammaticality Judgement"
+      },
+      "field6": {
+        "label": "tags",
+        "title": "Tags"
+      }
+    },
+    "mcgillfieldmethodsfall2014template": {
+      "field1": {
+        "label": "utterance",
+        "title": "Utterance"
+      },
+      "field2": {
+        "label": "morphemes",
+        "title": "Morphemes"
+      },
+      "field3": {
+        "label": "gloss",
+        "title": "Gloss"
+      },
+      "field4": {
+        "label": "translation",
+        "title": "Translation"
+      },
+      "field5": {
         "label": "phonetic",
         "title": "IPA"
       },
@@ -287,43 +320,57 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   //TODO move the default preferences somewher the SettingsController can access them. for now here is a hack for #1290
   window.defaultPreferences = defaultPreferences;
+  $rootScope.mcgillOnly = true;
+  var overwiteAndUpdatePreferencesToCurrentVersion = function() {
 
-  var Preferences = localStorage.getItem('SpreadsheetPreferences');
+    var existingPreferences = localStorage.getItem('SpreadsheetPreferences');
+    if (!existingPreferences) {
+      console.log("No preferences. Setting default preferences in localStorage.");
+      // localStorage.clear(); //why?? left over from debugging?
+      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
+      return defaultPreferences;
+    }
 
-  if (Preferences === null) {
-    Preferences = defaultPreferences;
-    console.log("No preferences. Setting default preferences in localStorage.");
-    // localStorage.clear(); //why?? left over from debugging?
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
-  } else {
-    console.log("Loading Preferences from localStorage.");
-    Preferences = JSON.parse(Preferences);
-    Preferences.mcgillfieldmethodsspring2014template = defaultPreferences.mcgillfieldmethodsspring2014template;
-    Preferences.yalefieldmethodsspring2014template = defaultPreferences.yalefieldmethodsspring2014template;
-  }
+    console.log("Loaded Preferences from localStorage. TODO test this");
+    existingPreferences = JSON.parse(existingPreferences);
 
-  if ((Preferences.template1 !== undefined) || (Preferences.availableFields && Preferences.availableFields.notes)) {
-    // Update to v1.3
-    Preferences = defaultPreferences;
-    console.log("Preferences need to be upgraded. Clearing and setting defaults.");
-    // localStorage.clear(); //why?? left over from debugging?
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
-    Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-  }
-  // Always get the most recent available fields
-  Preferences.availableFields = defaultPreferences.availableFields;
-  /* upgrade to v1.923ss instead update to 2.22 */
-  if (Preferences.fulltemplate.field7) {
-    Preferences.fulltemplate = defaultPreferences.fulltemplate;
-  }
-  if (Preferences.fulltemplate.field6.label === "judgement") {
-    Preferences.fulltemplate = defaultPreferences.fulltemplate;
-  }
-  if(!Preferences.fullTemplateDefaultNumberOfColumns){
-    Preferences.fullTemplateDefaultNumberOfColumns = 2;
-  }
-  $rootScope.fullTemplateDefaultNumberOfColumns = Preferences.fullTemplateDefaultNumberOfColumns;
-  localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+    /** Prior to 1.3 wipe personalization and use current defaults */
+    if ((existingPreferences.template1 !== undefined) || (existingPreferences.availableFields && existingPreferences.availableFields.notes)) {
+      // Update to v1.3
+      console.log("Preferences need to be upgraded. Clearing all and setting defaults.");
+      // localStorage.clear(); //why?? left over from debugging?
+      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
+      return defaultPreferences;
+    }
+
+    var updatedPreferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+    /* Always get the most recent fields for field methods groups */
+    updatedPreferences.mcgillfieldmethodsspring2014template = defaultPreferences.mcgillfieldmethodsspring2014template;
+    updatedPreferences.mcgillfieldmethodsfall2014template = defaultPreferences.mcgillfieldmethodsfall2014template;
+    updatedPreferences.yalefieldmethodsspring2014template = defaultPreferences.yalefieldmethodsspring2014template;
+
+    /* Always get the most recent available fields */
+    updatedPreferences.availableFields = defaultPreferences.availableFields;
+
+    /* upgrade fulltemplate to v1.923ss instead update to 2.22 */
+    if (existingPreferences.fulltemplate.field7) {
+      updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
+    }
+    if (existingPreferences.fulltemplate.field6.label === "judgement") {
+      updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
+    }
+
+    /* sett the number of columns to use  to 2.23 */
+    if (!existingPreferences.fullTemplateDefaultNumberOfColumns) {
+      updatedPreferences.fullTemplateDefaultNumberOfColumns = 2;
+    }
+    $rootScope.fullTemplateDefaultNumberOfColumns = updatedPreferences.fullTemplateDefaultNumberOfColumns;
+
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(updatedPreferences));
+    return updatedPreferences;
+  };
+  var Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
+
   $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
     if (!numberOfColumns) {
       numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
@@ -499,7 +546,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }, function(error) {
         $scope.documentReady = true;
         console.log("Error loading sessions.", error);
-        $rootScope.notificationMessage = "Error loading corpus, please try again.";
+        $rootScope.notificationMessage = "Error loading corpus, please try loading page again.";
         $rootScope.openNotification();
         $rootScope.loading = false;
       });
@@ -553,7 +600,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log("error loading the data", error);
         // On error loading data, reset saved state
         // Update saved state in Preferences
-        Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+        Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
         Preferences.savedState = {};
         localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
         $scope.documentReady = true;
@@ -655,7 +702,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }], "uploadnow");
 
           // Update saved state in Preferences
-          Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+          Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
           Preferences.savedState.server = $rootScope.serverCode;
           Preferences.savedState.username = $rootScope.user.username;
           Preferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
@@ -736,7 +783,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.logOut = function() {
-    Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+    Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
     Preferences.savedState = {};
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     $scope.reloadPage();
@@ -760,7 +807,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
 
       // Update saved state in Preferences
-      Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+      Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
       Preferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
       localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
 
@@ -819,7 +866,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.dataentry = true;
 
     // Update saved state in Preferences
-    Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+    Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
     Preferences.savedState.sessionID = activeSessionID;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     $scope.loadData(activeSessionID);
@@ -848,7 +895,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
     }
     // Update saved state in Preferences
-    Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+    Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
     Preferences.savedState.sessionID = $scope.activeSession;
     Preferences.savedState.sessionTitle = $scope.currentSessionName;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
@@ -1506,10 +1553,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     for (var key in $scope.fields) {
       fieldsInScope[$scope.fields[key].label] = true;
     }
-    if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
-      fieldsInScope.datumTags = true;
-      fieldsInScope.comments = true;
-    }
+
+    /* make the datumtags and comments always true since its only the compact view that doesnt show them? */
+    // if ($rootScope.template === "fulltemplate" || $rootScope.template === "mcgillfieldmethodsspring2014template" || $rootScope.template === "yalefieldmethodsspring2014template") {
+    fieldsInScope.datumTags = true;
+    fieldsInScope.comments = true;
+    // }
 
     fieldsInScope.dateModified = true;
     fieldsInScope.lastModifiedBy = true;
@@ -2566,10 +2615,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.$on('$viewContentLoaded', function() {
     // Return user to saved state, if it exists; only recover saved state on reload, not menu navigate
     if ($scope.appReloaded !== true) {
-      Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+      Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
       // Update users to new saved state preferences if they were absent
       if (!Preferences.savedState) {
-        Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
         Preferences.savedState = {};
         localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
         $scope.documentReady = true;
