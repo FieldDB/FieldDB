@@ -40,6 +40,8 @@ angular
       templateUrl: 'views/yalefieldmethodsspring2014template.html'
     }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
       templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
+    }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
+      templateUrl: 'views/mcgillfieldmethodsfall2014template.html'
     }).otherwise({
       redirectTo: '/corpora_list'
     });

@@ -91,7 +91,7 @@
     "showToUserTypes": "linguist",
     "defaultfield": true,
     "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
-    "helpLinguists": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
+    "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
   }, {
     "id": "orthography",
     "labelFieldLinguists": "Orthography",
