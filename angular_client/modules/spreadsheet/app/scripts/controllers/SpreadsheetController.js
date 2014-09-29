@@ -1196,7 +1196,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   teamOrPersonal: "team"
                 }], "uploadnow");
 
-                // Delete record from all scope data and update
+                // Remove record from all scope data and update
                 var index = $scope.allData.indexOf(datum);
                 $scope.allData.splice(index, 1);
                 $scope.loadPaginatedData();
@@ -1296,8 +1296,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     // Add record to all scope data and update
-    $scope.allData.unshift(fieldData);
-    $scope.loadPaginatedData();
+    $scope.allData.push(fieldData); //inserts new data at the bottom for future pagination.
+    $scope.data.push(fieldData);
+    // $scope.loadPaginatedData("newDatum"); //dont change pagination, just show it on this screen.
 
     $scope.newFieldDatahasAudio = false;
     $scope.saved = "no";
@@ -2099,7 +2100,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     return numberOfPages;
   };
 
-  $scope.loadPaginatedData = function() {
+  $scope.loadPaginatedData = function(why) {
+    console.log("Loading paginated data ", why);
     var lastRecordOnPage = (($rootScope.currentPage + 1) * $rootScope.resultSize);
     var firstRecordOnPage = lastRecordOnPage - $rootScope.resultSize;
 
