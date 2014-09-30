@@ -33,12 +33,19 @@ angular
     }).when('/faq', {
       templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
-      templateUrl: 'views/compacttemplate.html'
+      // templateUrl: 'views/compacttemplate.html'
+      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
     }).when('/spreadsheet/fulltemplate', {
-      templateUrl: 'views/fulltemplate.html'
+      // templateUrl: 'views/fulltemplate.html' //FOR mcgillOnly deployment
+      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
-      templateUrl: 'views/yalefieldmethodsspring2014template.html'
+      // templateUrl: 'views/yalefieldmethodsspring2014template.html'
+      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
     }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
+      // templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
+      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
+
+    }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
       templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
     }).otherwise({
       redirectTo: '/corpora_list'

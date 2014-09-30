@@ -243,24 +243,24 @@ describe("Data List", function() {
         // debugMode: true,
         "label": "practice",
         "title": {
-          "default": "localized_practice",
-          "gamified_title": "localized_gamified_practice"
+          "default": "locale_practice",
+          "gamified_title": "locale_gamified_practice"
         },
         "description": {
-          "default": "localized_practice_description_for_teacher",
-          "for_child": "localized_practice_description_for_child",
-          "for_parent": "localized_practice_description_for_parent",
-          "for_experimentAdministrator": "localized_practice_description_for_teacher",
-          "for_school_records": "localized_practice_description_for_school_record",
-          "for_experimentAdministratorSpecialist": "localized_practice_description_for_slp"
+          "default": "locale_practice_description_for_teacher",
+          "for_child": "locale_practice_description_for_child",
+          "for_parent": "locale_practice_description_for_parent",
+          "for_experimentAdministrator": "locale_practice_description_for_teacher",
+          "for_school_records": "locale_practice_description_for_school_record",
+          "for_experimentAdministratorSpecialist": "locale_practice_description_for_slp"
         },
         "instructions": {
-          "default": "localized_practice_instructions_for_teacher",
-          "for_child": "localized_practice_instructions_for_child",
-          "for_parent": "localized_practice_instructions_for_parent",
-          "for_experimentAdministrator": "localized_practice_instructions_for_teacher",
-          "for_school_records": "localized_practice_instructions_for_school_record",
-          "for_experimentAdministratorSpecialist": "localized_practice_instructions_for_slp"
+          "default": "locale_practice_instructions_for_teacher",
+          "for_child": "locale_practice_instructions_for_child",
+          "for_parent": "locale_practice_instructions_for_parent",
+          "for_experimentAdministrator": "locale_practice_instructions_for_teacher",
+          "for_school_records": "locale_practice_instructions_for_school_record",
+          "for_experimentAdministratorSpecialist": "locale_practice_instructions_for_slp"
         }
       });
 
@@ -269,40 +269,71 @@ describe("Data List", function() {
       expect(dl.title.type).toEqual("ContextualizableObject");
       expect(dl.title.data).toEqual({
         default: {
-          message: "localized_practice"
+          message: "locale_practice"
         },
         gamified_title: {
-          message: "localized_gamified_practice"
+          message: "locale_gamified_practice"
         }
       });
-      expect(dl.title.default).toEqual("localized_practice");
-      expect(dl.title.gamified_title).toEqual("localized_gamified_practice");
-      expect(dl.description.default).toEqual("localized_practice_description_for_teacher");
-      expect(dl.instructions.default).toEqual("localized_practice_instructions_for_teacher");
+      expect(dl.title.default).toEqual("locale_practice");
+      expect(dl.title.gamified_title).toEqual("locale_gamified_practice");
+      expect(dl.description.default).toEqual("locale_practice_description_for_teacher");
+      expect(dl.instructions.default).toEqual("locale_practice_instructions_for_teacher");
 
       var contextualizer = new Contextualizer({
         // debugMode: true
       });
       contextualizer.addMessagesToContextualizedStrings("en", {
-        "localized_practice": {
+        "locale_practice": {
           "message": "Practice"
         },
-        "localized_practice_description_for_teacher": {
+        "locale_practice_description_for_teacher": {
           "message": "This is a screening test for reading difficulties before children learn to read."
         },
-        "localized_practice_instructions_for_teacher": {
+        "locale_practice_instructions_for_teacher": {
           "message": "Make sure the head phones are plugged in before you begin."
         }
       });
       FieldDBObject.application = {
         contextualizer: contextualizer
       };
-      expect(contextualizer.contextualize("localized_practice_description_for_teacher")).toEqual("This is a screening test for reading difficulties before children learn to read.");
+      expect(contextualizer.contextualize("locale_practice_description_for_teacher")).toEqual("This is a screening test for reading difficulties before children learn to read.");
       expect(contextualizer.contextualize(dl.description.for_experimentAdministrator)).toEqual("This is a screening test for reading difficulties before children learn to read.");
       expect(dl.contextualizer.type).toEqual("Contextualizer");
       expect(dl.description.type).toEqual("ContextualizableObject");
       expect(dl.description.for_experimentAdministrator).toEqual("This is a screening test for reading difficulties before children learn to read.");
 
     });
+
+    it("should serialize results", function() {
+      var experiment = new SubExperimentDataList({
+        trials: ["idoftrialafromdatabase", "idoftrialbfromdatabase"]
+      });
+      expect(experiment.trials).toBeDefined();
+      experiment.populate([{
+        id: "idoftrialafromdatabase",
+        type: "Datum",
+        responses: [{
+          x: 200,
+          y: 200,
+          score: 1
+        }, {
+          x: 300,
+          y: 300,
+          score: 0.4
+        }]
+      }, {
+        id: "idoftrialbfromdatabase",
+        type: "Datum"
+      }]);
+      expect(experiment.trials.length).toEqual(2);
+      expect(experiment.trials.idoftrialafromdatabase.responses[0].x).toEqual(200);
+
+      var toSave = experiment.toJSON();
+      expect(toSave.trials).toEqual(["idoftrialafromdatabase", "idoftrialbfromdatabase"]);
+      expect(toSave.trialsResults[0].responses[0].x).toEqual(200);
+
+    });
+
   });
 });

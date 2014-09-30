@@ -185,6 +185,7 @@ angular.module('spreadsheetApp')
     return function(scope, element) {
       var selfElement = element;
       scope.$watch('activeDatumIndex', function(newIndex, oldIndex) {
+        // element.bind('blur', function(e) {
 
         if (newIndex === oldIndex) {
           console.log('spreadsheetCatchFocusOnArrowPress hasnt changed');

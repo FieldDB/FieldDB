@@ -6,7 +6,7 @@
     type="text"
     ng-model="datum['judgement']"
     placeholder=""
-    title=" *#? Grammaticality Judgement"  />
+    title="Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you team can choose any symbol for this meaning." />
   </div>
   <div class="span5" spreadsheet-catch-focus-on-arrow-press>
     <input
@@ -16,7 +16,7 @@
     type="text"
     ng-model="datum[corpusField.label]"
     placeholder="{{corpusField.title}}"
-    title="{{corpusField.title}}"
+    title="{{corpusField.hint}}"
     guess-morphemes-from-utterance
     guess-gloss-from-morphemes
     guess-utterance-from-morphemes
@@ -31,7 +31,7 @@
     type="text"
     ng-model="datum[corpusField.label]"
     placeholder="{{corpusField.title}}"
-    title="{{corpusField.title}}"
+    title="{{corpusField.hint}}"
     guess-morphemes-from-utterance
     guess-gloss-from-morphemes
     guess-utterance-from-morphemes
