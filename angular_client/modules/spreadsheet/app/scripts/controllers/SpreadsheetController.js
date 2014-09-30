@@ -607,6 +607,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // Fetch data from server and put into template scope
   $scope.loadData = function(sessionID) {
+    console.warn("Clearing search terms");
+    $scope.searchHistory = "";
+
     $scope.appReloaded = true;
     $rootScope.loading = true;
     Data.async($rootScope.DB.pouchname)
@@ -1598,6 +1601,38 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Converting searchTerm to string to allow for integer searching
     searchTerm = searchTerm.toString().toLowerCase();
     var newScopeData = [];
+
+    var thisDatumIsIN = function(spreadsheetDatum) {
+      for (var fieldkey in spreadsheetDatum) {
+        if (spreadsheetDatum[fieldkey]) {
+          // Limit search to visible data
+          if (fieldsInScope[fieldkey] === true) {
+            if (fieldkey === "datumTags") {
+              var tagString = JSON.stringify(spreadsheetDatum.datumTags);
+              tagString = tagString.toString().toLowerCase();
+              if (tagString.indexOf(searchTerm) > -1) {
+                return true;
+              }
+            } else if (fieldkey === "comments") {
+              for (var j in spreadsheetDatum.comments) {
+                for (var commentKey in spreadsheetDatum.comments[j]) {
+                  if (spreadsheetDatum.comments[j][commentKey].toString().indexOf(searchTerm) > -1) {
+                    return true;
+                  }
+                }
+              }
+            } else {
+              var dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
+              if (dataString.indexOf(searchTerm) > -1) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+      return false;
+    };
+
     // if (!$scope.activeSession) {
     // Search allData in scope
     for (var i in $scope.allData) {
@@ -1609,35 +1644,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         searchTarget = true;
       }
       if (searchTarget === true) {
-        for (var fieldkey in $scope.allData[i]) {
-          if ($scope.allData[i][fieldkey]) {
-            // Limit search to visible data
-            if (fieldsInScope[fieldkey] === true) {
-              if (fieldkey === "datumTags") {
-                var tagString = JSON.stringify($scope.allData[i].datumTags);
-                tagString = tagString.toString().toLowerCase();
-                if (tagString.indexOf(searchTerm) > -1) {
-                  newScopeData.push($scope.allData[i]);
-                  break;
-                }
-              } else if (fieldkey === "comments") {
-                for (var j in $scope.allData[i].comments) {
-                  for (var commentKey in $scope.allData[i].comments[j]) {
-                    if ($scope.allData[i].comments[j][commentKey].toString().indexOf(searchTerm) > -1) {
-                      newScopeData.push($scope.allData[i]);
-                      break;
-                    }
-                  }
-                }
-              } else {
-                var dataString = $scope.allData[i][fieldkey].toString().toLowerCase();
-                if (dataString.indexOf(searchTerm) > -1) {
-                  newScopeData.push($scope.allData[i]);
-                  break;
-                }
-              }
-            }
-          }
+        if (thisDatumIsIN($scope.allData[i])) {
+          newScopeData.push($scope.allData[i]);
         }
       }
     }
