@@ -221,7 +221,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     expect(scope.scopePreferences.fulltemplate).not.toEqual(window.defaultPreferences.fulltemplate);
   });
 
-  it('should use the mcgill template for any data entry', function() {
+  xit('should use the mcgill template for any data entry', function() {
     if (rootScope.mcgillOnly) {
       expect(scope.scopePreferences.userChosenTemplateId).toEqual('mcgillfieldmethodsfall2014template');
     }else{
