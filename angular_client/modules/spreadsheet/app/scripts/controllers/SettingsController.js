@@ -165,8 +165,8 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
 
 
-  $scope.saveNewPreferences = function(template, newFieldPreferences) {
-    if ($rootScope.DB && $rootScope.DB.preferredTemplate && $rootScope.DB.preferredTemplate !== template) {
+  $scope.saveNewPreferences = function(templateId, newFieldPreferences) {
+    if ($rootScope.DB && $rootScope.DB.preferredTemplate && $rootScope.DB.preferredTemplate !== templateId) {
       window.alert("Sorry, you can't use a different template. Your team has decided to use the " + $rootScope.DB.preferredTemplate + " for " + $rootScope.DB.title);
       return;
     }
@@ -176,24 +176,24 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
     for (var availableField in $scope.availableFields) {
       for (var newField in newFieldPreferences) {
         if (newFieldPreferences[newField] === "") {
-          Preferences[template][newField].title = "";
-          Preferences[template][newField].label = "";
+          Preferences[templateId][newField].title = "";
+          Preferences[templateId][newField].label = "";
         } else if ($scope.availableFields[availableField].label === newFieldPreferences[newField]) {
-          if (!Preferences[template]) {
+          if (!Preferences[templateId]) {
             //hack for #1290 until we refactor the app into something more MVC
-            Preferences[template] = window.defaultPreferences[template];
+            Preferences[templateId] = window.defaultPreferences[templateId];
           }
-          Preferences[template][newField].title = $scope.availableFields[availableField].title;
-          Preferences[template][newField].label = $scope.availableFields[availableField].label;
+          Preferences[templateId][newField].title = $scope.availableFields[availableField].title;
+          Preferences[templateId][newField].label = $scope.availableFields[availableField].label;
         }
       }
     }
 
-    Preferences.userTemplate = template;
+    Preferences.userChosenTemplateId = templateId;
     $scope.scopePreferences = Preferences;
-    $rootScope.template = Preferences.userTemplate;
-    $rootScope.fields = Preferences[Preferences.userTemplate];
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userTemplate]);
+    $rootScope.templateId = Preferences.userChosenTemplateId;
+    $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
 
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     window.alert("Settings saved.");

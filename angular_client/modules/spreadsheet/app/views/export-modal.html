@@ -5,28 +5,21 @@
     <p>
         {{resultsMessageFromExternalController}}
     </p>
-    <div ng-repeat="result in resultsFromExternalController">
-        <span>
-            {{result.judgement}} {{result.utterance}}
-        </span>
-        <br />
-        <span>
-            {{result.morphemes}}
-        </span>
-        <br />
-        <span>
-            {{result.gloss}}
-        </span>
-        <br />
-        <span>
-            {{result.translation}}
-        </span>
-        <br />
-        <span>
+    <ul class="unstyled" ng-repeat="result in resultsFromExternalController">
+        <li ng-repeat="corpusField in fieldsInColumns.first">
+          {{result[corpusField.label]}}
+        </li>
+        <li ng-repeat="corpusField in fieldsInColumns.second">
+          {{result[corpusField.label]}}
+        </li>
+        <li ng-repeat="corpusField in fieldsInColumns.third">
+          {{result[corpusField.label]}}
+        </li>
+        <li>
             Tags: {{commaList(result.datumTags)}}
-        </span>
-        <hr/>
-    </div>
+        </li>
+    </ul>
+    <hr/>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="ok()">Close</button>
