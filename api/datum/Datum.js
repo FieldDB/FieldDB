@@ -67,23 +67,34 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: Datum
   },
 
-  datumFields: {
+  fields: {
     get: function() {
-      return this._datumFields || FieldDBObject.DEFAULT_COLLECTION;
+      return this._fields || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._datumFields) {
+      if (value === this._fields) {
         return;
       }
       if (!value) {
-        delete this._datumFields;
+        delete this._fields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["datumFields"] === "function") {
-          value = new this.INTERNAL_MODELS["datumFields"](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["fields"] === "function") {
+          value = new this.INTERNAL_MODELS["fields"](value);
         }
       }
-      this._datumFields = value;
+      this._fields = value;
+    }
+  },
+
+  datumFields: {
+    get: function() {
+      this.warn("datumFields is depreacted, just use fields instead");
+      return this.fields;
+    },
+    set: function(value) {
+      this.warn("datumFields is depreacted, just use fields instead");
+      return this.fields = value;
     }
   },
 
@@ -143,7 +154,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   // Internal models: used by the parse function
   INTERNAL_MODELS: {
     value: {
-      datumFields: DatumFields,
+      fields: DatumFields,
       audioVideo: AudioVideos,
       session: Session,
       comments: Comments,
@@ -231,19 +242,19 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   },
   fillWithCorpusFieldsIfMissing: {
     value: function() {
-      if (!this.get("datumFields")) {
+      if (!this.get("fields")) {
         return;
       }
       /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
-      var corpusFields = window.app.get("corpus").get("datumFields").models;
+      var corpusFields = window.app.get("corpus").get("fields").models;
       for (var field in corpusFields) {
         var label = corpusFields[field].get("label");
         this.debug("Label " + label);
-        var correspondingFieldInThisDatum = this.get("datumFields").where({
+        var correspondingFieldInThisDatum = this.get("fields").where({
           label: label
         });
         if (correspondingFieldInThisDatum.length === 0) {
-          this.get("datumFields").push(corpusFields[field]);
+          this.get("fields").push(corpusFields[field]);
         }
       }
     }
@@ -273,7 +284,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         //          if(doc.collection !== "datums"){
         //            return;
         //          }
-        //          var fields  = doc.datumFields;
+        //          var fields  = doc.fields;
         //          var result = {};
         //          for(var f in fields){
         //            if(fields[f].label === "gloss"){
@@ -493,7 +504,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   },
   getDisplayableFieldForActivitiesEtc: {
     value: function() {
-      return this.model.get("datumFields").where({
+      return this.model.get("fields").where({
         label: "utterance"
       })[0].get("mask");
     }
@@ -516,7 +527,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         }),
         dateEntered: this.get("dateEntered"),
         dateModified: this.get("dateModified"),
-        datumFields: new DatumFields(this.get("datumFields").toJSON(), {
+        fields: new DatumFields(this.get("fields").toJSON(), {
           parse: true
         }),
         datumStates: new DatumStates(this.get("datumStates").toJSON(), {
@@ -543,7 +554,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   getValidationStatus: {
     value: function() {
       var validationStatus = "";
-      var stati = this.get("datumFields").where({
+      var stati = this.get("fields").where({
         "label": "validationStatus"
       });
       if (stati.length > 0) {
@@ -633,7 +644,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
 
       /* prepend this state to the new validationStates as of v1.46.2 */
-      var n = this.get("datumFields").where({
+      var n = this.get("fields").where({
         label: "validationStatus"
       })[0];
       if (n === [] || !n) {
@@ -644,7 +655,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           userchooseable: "disabled",
           help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
         });
-        this.get("datumFields").add(n);
+        this.get("fields").add(n);
       }
       var validationStatus = n.get("mask") || "";
       validationStatus = selectedValue + " " + validationStatus;
@@ -697,8 +708,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       //corpus's most frequent fields
       var frequentFields = window.app.get("corpus").frequentFields;
       //this datum/datalist's datumfields and their names
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
-      var fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+      var fields = _.pluck(this.get("fields").toJSON(), "mask");
+      var fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
       //setting up for IGT case...
       var judgementIndex = -1;
       var judgement = "";
@@ -857,7 +868,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   datumIsInterlinearGlossText: {
     value: function(fieldLabels) {
       if (!fieldLabels) {
-        fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+        fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
       }
       var utteranceOrMorphemes = false;
       var gloss = false;
@@ -887,8 +898,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    */
   exportAsPlainText: {
     value: function(showInExportModal) {
-      // var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
+      // var header = _.pluck(this.get("fields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("fields").toJSON(), "mask") || [];
       var result = fields.join("\n");
       if (showInExportModal !== null) {
         $("#export-type-description").html(" as text (Word)");
@@ -906,18 +917,18 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   exportAsCSV: {
     value: function(showInExportModal, orderedFields, printheaderonly) {
 
-      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
+      var header = _.pluck(this.get("fields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("fields").toJSON(), "mask") || [];
       var result = fields.join(",") + "\n";
 
       //      if (orderedFields === null) {
       //        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
       //      }
-      //      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
-      //      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-      //      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      //      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      //      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
+      //      judgement = this.get("fields").where({label: "judgement"})[0].get("mask");
+      //      morphemes = this.get("fields").where({label: "morphemes"})[0].get("mask");
+      //      utterance= this.get("fields").where({label: "utterance"})[0].get("mask");
+      //      gloss = this.get("fields").where({label: "gloss"})[0].get("mask");
+      //      translation= this.get("fields").where({label: "translation"})[0].get("mask");
       //      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
       //      var result = '"' + resultarray.join('","') + '"\n';
       if (printheaderonly) {
@@ -940,7 +951,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   encrypt: {
     value: function() {
       this.set("confidential", true);
-      this.get("datumFields").each(function(dIndex) {
+      this.get("fields").each(function(dIndex) {
         dIndex.set("encrypted", "checked");
       });
       //TODO scrub version history to get rid of all unencrypted versions.
@@ -955,7 +966,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: function() {
       this.set("confidential", false);
 
-      this.get("datumFields").each(function(dIndex) {
+      this.get("fields").each(function(dIndex) {
         dIndex.set("encrypted", "");
       });
     }
@@ -993,7 +1004,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
       //If it was decrypted, this will save the changes before we go into encryptedMode
 
-      this.get("datumFields").each(function(dIndex) {
+      this.get("fields").each(function(dIndex) {
         //Anything can be done here, it is the set function which does all the work.
         dIndex.set("value", dIndex.get("mask"));
       });
@@ -1033,7 +1044,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       self.save(null, {
         success: function(model, response) {
           self.debug("Datum save success");
-          var utterance = model.get("datumFields").where({
+          var utterance = model.get("fields").where({
             label: "utterance"
           })[0].get("mask");
           var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
@@ -1108,7 +1119,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
            */
           if ($("#search_box").val() !== "") {
             //TODO check this
-            var datumJson = model.get("datumFields").toJSON();
+            var datumJson = model.get("fields").toJSON();
             var datumAsDBResponseRow = {};
             for (var x in datumJson) {
               datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
@@ -1204,6 +1215,23 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       var re = new RegExp("(" + stringToHighlight + ")", "gi");
       return text.replace(re, "<span class='" + className + "'>$1</span>");
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+
+      this.todo("saving fields as the deprecated datumFields");
+      json.datumFields = json.fields;
+      delete json.fields;
+
+      this.debug(json);
+      return json;
+    }
   }
+
+
 });
 exports.Datum = Datum;
