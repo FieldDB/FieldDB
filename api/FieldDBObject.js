@@ -202,6 +202,29 @@ FieldDBObject.uuidGenerator = function() {
   };
   return Date.now() + (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
 };
+FieldDBObject.getHumanReadableTimestamp = function() {
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() +1;
+  var day = today.getDate();
+  var hour = today.getHours();
+  var minute = today.getMinutes();
+
+  if (month < 10) {
+    month = "0" + month;
+  }
+  if (day < 10) {
+    day = "0" + day;
+  }
+  if (hour < 10) {
+    hour = "0" + hour;
+  }
+  if (minute < 10) {
+    minute = "0" + minute;
+  }
+
+  return year + "-" + month + "-" + day + "_" + hour + "." + minute;
+};
 
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
