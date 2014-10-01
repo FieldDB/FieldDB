@@ -3,6 +3,7 @@ var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../datum/Datum").Datum;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Session = require("./../FieldDBObject").FieldDBObject;
+var Speaker = require("./../user/Speaker").Speaker;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Permissions = require("./../Collection").Collection;
 var Q = require("q");
@@ -654,6 +655,60 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         deferred.resolve(datum);
       });
       return deferred.promise;
+    }
+  },
+
+  newSpeaker: {
+    value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        self.debug("Creating a datum for this corpus");
+        if (!self.speakerFields || !self.speakerFields.clone) {
+          throw "This corpus has no default datum fields... It is unable to create a datum.";
+        }
+        var datum = new Speaker({
+          speakerFields: new DatumFields(self.speakerFields.clone()),
+        });
+        for (var field in options) {
+          if (!options.hasOwnProperty(field)) {
+            continue;
+          }
+          if (datum.speakerFields[field]) {
+            self.debug("  this option appears to be a datumField " + field);
+            datum.speakerFields[field].value = options[field];
+          } else {
+            datum[field] = options[field];
+          }
+        }
+        deferred.resolve(datum);
+      });
+      return deferred.promise;
+    }
+  },
+
+  updateDatumToCorpusFields: {
+    value: function(datum) {
+      datum.fields = this.datumFields.merge(this.datumFields, datum.fields);
+      return datum;
+    }
+  },
+
+  updateSpeakerToCorpusFields: {
+    value: function(speaker) {
+      this.todo(" add code for updating fields");
+      speaker.fields = this.speakerFields.merge(this.speakerFields, speaker.fields);
+      return speaker;
+    }
+  },
+
+  updateParticipantToCorpusFields: {
+    value: function(participant) {
+      this.todo(" add code for updating fields");
+      participant.fields = this.participantFields.merge(this.participantFields, participant.fields);
+      return participant;
     }
   },
   /**
