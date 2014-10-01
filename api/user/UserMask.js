@@ -20,7 +20,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
     value: UserMask
   },
 
-  url: {
+  api: {
     value: "/users"
   },
 
@@ -222,7 +222,11 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
     get: function() {
       this.firstname = this.firstname || "";
       this.lastname = this.lastname || "";
-      return (this.firstname + " " + this.lastname).trim();
+      var name = (this.firstname + " " + this.lastname).trim();
+      if (name) {
+        return name;
+      }
+      return this.anonymousCode || this.username;
     },
     set: function(value) {
       if (!value) {

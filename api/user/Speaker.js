@@ -227,6 +227,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   },
 
   firstname: {
+    configurable: true,
     get: function() {
       if (this.fields && this.fields.firstname) {
         return this.fields.firstname.value;
