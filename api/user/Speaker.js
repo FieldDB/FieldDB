@@ -32,6 +32,10 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
  */
 var Speaker = function Speaker(options) {
   this.debug("Constructing Speaker: ", options);
+  if (!options || (!options._rev && !options.fields)) {
+    //If its a new participant with out a revision and without fields use the defaults
+    this.fields = this.defaults.fields;
+  }
   UserMask.apply(this, arguments);
 };
 
@@ -150,7 +154,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       return this.anonymousCode;
     },
     set: function(value) {
-      if(value === this.anonymousCode){
+      if (value === this.anonymousCode) {
         this._id = value;
       }
     }
@@ -208,6 +212,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   },
 
   dateOfBirth: {
+    configurable: true,
     get: function() {
       if (this.fields) {
         return this.fields.dateOfBirth.value;
@@ -249,6 +254,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   },
 
   lastname: {
+    configurable: true,
     get: function() {
       if (this.fields && this.fields.lastname) {
         return this.fields.lastname.value;
