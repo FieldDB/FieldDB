@@ -49,7 +49,8 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
     var consultant = new Consultant({
       confidential: mockcorpus.confidential
     });
-    expect(consultant.dateOfBirth).toEqual(undefined);
+    expect(consultant.fields).toBeDefined();
+    expect(consultant.dateOfBirth).toBeDefined();
     consultant.dateOfBirth = "January 1, 1900";
     expect(consultant.dateOfBirth).toEqual("xxxxxxx x, xxxx");
   });
@@ -58,7 +59,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
     var consultant = new Consultant({
       confidential: mockcorpus.confidential
     });
-    expect(consultant.languages).toEqual(undefined);
+    expect(consultant.languages).toBeDefined();
     consultant.languages = "Cat";
     expect(consultant.languages).toEqual("Cat");
   });
