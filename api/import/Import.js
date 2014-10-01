@@ -297,7 +297,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               headers[f] = fieldToGeneralize[0];
             }
           } else if (headers[f].id.toLowerCase().indexOf("nsection") > -1) {
-            fieldToGeneralize = self.importFields.find("coursenumber");
+            fieldToGeneralize = self.importFields.find("courseNumber");
             if (fieldToGeneralize.length > 0) {
               self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
               fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
