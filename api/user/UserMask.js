@@ -89,6 +89,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   firstname: {
+    configurable: true,
     get: function() {
       if (!this._firstname) {
         this._firstname = "";
@@ -107,6 +108,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   lastname: {
+    configurable: true,
     get: function() {
       if (!this._lastname) {
         this._lastname = "";
