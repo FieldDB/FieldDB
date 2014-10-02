@@ -306,7 +306,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
             nativeName: languageName.trim()
           }
         });
-      }else{
+      } else {
         objectvalue = value;
       }
 
