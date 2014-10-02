@@ -277,6 +277,97 @@ describe("FieldDBObject", function() {
 
     }, specIsRunningTooLong);
 
+    it("should be able set entered by user using database connection info", function(done) {
+      FieldDBObject.application = {
+        corpus: {
+          connectionInfo: {
+            "ok": true,
+            "userCtx": {
+              "name": "teammatetiger",
+              "roles": ["computationalfieldworkshop-group_data_entry_tutorial_reader", "fielddbuser", "jessepollak-spring_2013_field_methods_reader", "lingllama-cherokee_admin", "lingllama-cherokee_commenter", "lingllama-cherokee_reader", "lingllama-cherokee_writer", "lingllama-communitycorpus_admin", "lingllama-firstcorpus_admin", "lingllama-firstcorpus_commenter", "lingllama-firstcorpus_reader", "lingllama-firstcorpus_writer", "lingllama-test_corpus_admin", "lingllama-test_corpus_commenter", "lingllama-test_corpus_reader", "lingllama-test_corpus_writer", "teammatetiger-firstcorpus_commenter", "teammatetiger-firstcorpus_reader", "teammatetiger-firstcorpus_writer", "lingllama-communitycorpus_commenter", "lingllama-communitycorpus_reader", "lingllama-communitycorpus_writer"]
+            },
+            "info": {
+              "authentication_db": "_users",
+              "authentication_handlers": ["oauth", "cookie", "default"],
+              "authenticated": "cookie"
+            }
+          }
+        }
+      };
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else"
+      });
+
+      object.save().then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.id).toBeDefined();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+
+      expect(object.enteredByUser.value).toEqual("teammatetiger");
+
+    }, specIsRunningTooLong);
+
+
+    it("should be able set location of the data", function(done) {
+      FieldDBObject.software = {
+        location: {
+          "speed": null,
+          "heading": null,
+          "altitudeAccuracy": null,
+          "accuracy": 57,
+          "altitude": null,
+          "longitude": -73.5537868,
+          "latitude": 45.5169767
+        }
+      };
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else",
+        location: {
+          "id": "location",
+          "type": "location",
+          "labelFieldLinguists": "Location",
+          "labelNonLinguists": "Location",
+          "labelTranslators": "Location",
+          "shouldBeEncrypted": true,
+          "encrypted": true,
+          "defaultfield": true,
+          "value": "41,21",
+          "json": {
+            "location": {
+              "latitude": 21,
+              "longitude": 41,
+              "accuracy": 20
+            }
+          },
+          "help": "This is the GPS location of where the document exists/was created (if available)",
+          "helpLinguists": "This is the GPS location of where the document exists/was created (if available)"
+        }
+      });
+      expect(object.location.value).toEqual("41,21");
+
+      object.save().then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.id).toBeDefined();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+
+      expect(object.location.value).toEqual("45.5169767,-73.5537868");
+      expect(object.location.json.previousLocations).toEqual([{
+        "latitude": 21,
+        "longitude": 41,
+        "accuracy": 20
+      }]);
+      expect(object.location.json.location.latitude).toEqual(45.5169767);
+
+    }, specIsRunningTooLong);
+
     it("should flag an item as deleted", function(done) {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
