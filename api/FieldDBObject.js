@@ -1,4 +1,4 @@
-/* globals window */
+/* globals alert, confirm, navigator, FieldDB, Android */
 var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
@@ -132,7 +132,7 @@ FieldDBObject.DEFAULT_DATE = 0;
 
 FieldDBObject.bug = function(message) {
   try {
-    window.alert(message);
+    alert(message);
   } catch (e) {
     console.warn(this.type.toUpperCase() + " BUG: " + message);
   }
@@ -164,7 +164,7 @@ FieldDBObject.confirm = function(message, optionalLocale) {
     }
 
     try {
-      response = window.confirm(message);
+      response = confirm(message);
     } catch (e) {
       console.warn(self.type.toUpperCase() + " ASKING USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
       response = self.alwaysConfirmOkay;
@@ -273,7 +273,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   debug: {
     value: function(message, message2, message3, message4) {
       try {
-        if (window.navigator && window.navigator.appName === "Microsoft Internet Explorer") {
+        if (navigator && navigator.appName === "Microsoft Internet Explorer") {
           return;
         }
       } catch (e) {
@@ -414,13 +414,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var software;
       var hardware;
       try {
-        software = window.navigator;
+        software = navigator;
       } catch (e) {
         software = {
           version: process.version,
           appVersion: "PhantomJS unknown"
         };
-        var os = require('os');
+        var os = require("os");
         hardware = {
           endianness: os.endianness(),
           platform: os.platform(),
@@ -430,7 +430,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           release: os.release(),
           totalmem: os.totalmem(),
           cpus: os.cpus().length
-        }
+        };
       }
       if (!optionalUserWhoSaved) {
         optionalUserWhoSaved = {
