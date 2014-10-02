@@ -1228,3 +1228,4 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 });
 
 exports.Corpus = Corpus;
+exports.FieldDatabase = Corpus;
