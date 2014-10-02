@@ -1,4 +1,4 @@
-var App = App || require('../../api/app/App.js').App;
+var App = App || require("../../api/app/App.js").App;
 var specIsRunningTooLong = 5000;
 
 describe("App", function() {
@@ -22,10 +22,10 @@ describe("App", function() {
       app.contextualizer = {};
 
       expect(app).toBeDefined();
-      expect(app.contextualizer.currentLocale.iso).toEqual('en');
-      expect(app.contextualize('locale_Username')).toEqual('Username:');
+      expect(app.contextualizer.currentLocale.iso).toEqual("en");
+      expect(app.contextualize("locale_Username")).toEqual("Username:");
       app.contextualizer.currentLocale.iso = "es";
-      expect(app.contextualize('locale_Username')).toEqual('Usuario:');
+      expect(app.contextualize("locale_Username")).toEqual("Usuario:");
     });
 
     it("should be able to contextualize objects", function() {

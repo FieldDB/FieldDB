@@ -58,8 +58,8 @@ describe("User ", function() {
     });
 
     // u.appbrand = "phophlo";
-    expect(u.prefs.type).toEqual('UserPreference');
-    expect(u.prefs.preferedDashboardType).toEqual('experimenter');
+    expect(u.prefs.type).toEqual("UserPreference");
+    expect(u.prefs.preferedDashboardType).toEqual("experimenter");
   });
 
   it("should have a complete serialization if the user requests ", function() {
