@@ -331,7 +331,7 @@ describe("Data List", function() {
 
       var toSave = experiment.toJSON();
       expect(toSave.trials).toEqual(["idoftrialafromdatabase", "idoftrialbfromdatabase"]);
-      expect(toSave.trialsResults[0].responses[0].x).toEqual(200);
+      expect(toSave.results[0].responses[0].x).toEqual(200);
 
     });
 
