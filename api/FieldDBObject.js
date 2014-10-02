@@ -205,7 +205,7 @@ FieldDBObject.uuidGenerator = function() {
 FieldDBObject.getHumanReadableTimestamp = function() {
   var today = new Date();
   var year = today.getFullYear();
-  var month = today.getMonth() +1;
+  var month = today.getMonth() + 1;
   var day = today.getDate();
   var hour = today.getHours();
   var minute = today.getMinutes();
@@ -394,7 +394,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   save: {
-    value: function() {
+    value: function(optionalUserWhoSaved) {
       var deferred = Q.defer(),
         self = this;
 
@@ -411,25 +411,92 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       //update to this version
       this.version = FieldDBObject.DEFAULT_VERSION;
 
-      var browserVersion;
+      var software;
+      var hardware;
       try {
-        browserVersion = window.navigator.appVersion;
+        software = window.navigator;
       } catch (e) {
-        browserVersion = "PhantomJS unknown";
+        software = {
+          version: process.version,
+          appVersion: "PhantomJS unknown"
+        };
+        var os = require('os');
+        hardware = {
+          endianness: os.endianness(),
+          platform: os.platform(),
+          hostname: os.hostname(),
+          type: os.type(),
+          arch: os.arch(),
+          release: os.release(),
+          totalmem: os.totalmem(),
+          cpus: os.cpus().length
+        }
       }
+      if (!optionalUserWhoSaved) {
+        optionalUserWhoSaved = {
+          name: "",
+          username: "unknown"
+        };
+        try {
+          if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.corpus && FieldDB.FieldDBObject.application.connectionInfo) {
+            var connectionInfo = FieldDB.FieldDBObject.application.corpus.connectionInfo;
+            optionalUserWhoSaved.username = connectionInfo.userCtx.name;
+          }
+        } catch (e) {
+          console.log("Can't get the corpus connection info", e);
+        }
+      }
+      // optionalUserWhoSaved._name = optionalUserWhoSaved.name || optionalUserWhoSaved.username || optionalUserWhoSaved.browserVersion;
+      if (typeof optionalUserWhoSaved.toJSON === "function") {
+        var asJson = optionalUserWhoSaved.toJSON();
+        asJson.name = optionalUserWhoSaved.name;
+        optionalUserWhoSaved = asJson;
+      } else {
+        optionalUserWhoSaved.name = optionalUserWhoSaved.name;
+      }
+      // optionalUserWhoSaved.browser = browser;
 
-      this._dateModified = Date.now();
       if (!this._rev) {
         this._dateCreated = Date.now();
-        this.enteredByUser = {
-          browserVersion: browserVersion
-        };
+        var enteredByUser = this.enteredByUser || {};
+        if (this.fields && this.fields.enteredbyuser) {
+          enteredByUser = this.fields.enteredbyuser;
+        } else if (!this.enteredByUser) {
+          this.enteredByUser = enteredByUser;
+        }
+        enteredByUser.value = optionalUserWhoSaved.name || optionalUserWhoSaved.username;
+        enteredByUser.json = enteredByUser.json || {};
+        enteredByUser.json.user = optionalUserWhoSaved;
+        enteredByUser.json.software = software;
+        try {
+          enteredByUser.json.hardware = Android ? Android.deviceDetails : hardware;
+        } catch (e) {
+          console.warn("Cannot detect the hardware used for this save.");
+          enteredByUser.json.hardware = hardware;
+        }
+
       } else {
-        this.modifiedByUsers = this.modifiedByUsers || [];
-        this.modifiedByUsers.push({
-          browserVersion: browserVersion
-        });
+        this._dateModified = Date.now();
+
+        var modifiedByUser = this.modifiedByUser || {};
+        if (this.fields && this.fields.modifiedbyusers) {
+          modifiedByUser = this.fields.modifiedbyusers;
+        } else if (!this.modifiedByUser) {
+          this.modifiedByUser = modifiedByUser;
+        }
+        modifiedByUser.value = modifiedByUser.value ? modifiedByUser.value + ", " : "";
+        modifiedByUser.value += optionalUserWhoSaved.name || optionalUserWhoSaved.username;
+        modifiedByUser.json = modifiedByUser.json || {};
+        if (modifiedByUser.users) {
+          modifiedByUser.json.users = modifiedByUser.users;
+          delete modifiedByUser.users;
+        }
+        modifiedByUser.json.users = modifiedByUser.json.users || [];
+        optionalUserWhoSaved.software = software;
+        optionalUserWhoSaved.hardware = hardware;
+        modifiedByUser.json.users.push(optionalUserWhoSaved);
       }
+      console.log("saving   ", this);
 
       var url = this.id ? "/" + this.id : "";
       url = this.url + url;
@@ -461,6 +528,34 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
 
       return deferred.promise;
+    }
+  },
+
+  delete: {
+    value: function(reason) {
+      return this.trash(reason);
+    }
+  },
+
+  trash: {
+    value: function(reason) {
+      this.trashed = "deleted";
+      if (reason) {
+        this.trashedReason = reason;
+      }
+      this.todo("consider using a confirm to ask for a reason for deleting the item");
+      return this.save();
+    }
+  },
+
+  undelete: {
+    value: function(reason) {
+      this.trashed = "restored";
+      if (reason) {
+        this.untrashedReason = reason;
+      }
+      this.todo("consider using a confirm to ask for a reason for undeleting the item");
+      return this.save();
     }
   },
 
