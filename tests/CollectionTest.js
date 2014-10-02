@@ -763,6 +763,40 @@ describe("lib/Collection", function() {
       expect(aThirdCollection.willbeoverwritten).toBeDefined();
     });
 
+    xit("should be able to merge two collections in into a third collection", function() {
+      expect(aBaseCollection.type).toEqual("Collection");
+      expect(aBaseCollection.robin.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.onlyintarget).toBeDefined();
+      expect(aBaseCollection._collection.length).toEqual(7);
+
+      expect(atriviallyDifferentCollection.type).toEqual("Collection");
+      expect(atriviallyDifferentCollection.robin.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection._collection.length).toEqual(7);
+
+      var aThirdCollection = aBaseCollection.merge(aBaseCollection, atriviallyDifferentCollection, "overwrite");
+      expect(aThirdCollection._collection.length).toEqual(8);
+      expect(aBaseCollection._collection.length).toEqual(7);
+      expect(atriviallyDifferentCollection._collection.length).toEqual(7);
+
+      expect(aThirdCollection).not.toEqual(aBaseCollection);
+      expect(aThirdCollection).not.toEqual(atriviallyDifferentCollection);
+
+      expect(aThirdCollection.penguin.missingInNew).toEqual("hi");
+      expect(aThirdCollection.cuckoo.missingInOriginal).toEqual("hi there");
+      expect(aThirdCollection.robin.externalObject.internalString).toEqual("internal is different");
+      expect(aThirdCollection.robin.externalObject.internalTrue).toEqual(true);
+      expect(aThirdCollection.robin.externalObject.internalEmptyString).toEqual("");
+      expect(aThirdCollection.robin.externalObject.internalFalse).toEqual(false);
+      expect(aThirdCollection.robin.externalObject.internalNumber).toEqual(2);
+      expect(aThirdCollection.robin.externalObject.internalEqualString).toEqual("i'm a old property");
+
+      expect(aThirdCollection.cardinal).toBeDefined();
+
+      expect(aThirdCollection.onlyintarget).toBeDefined();
+      expect(aThirdCollection.onlyinnew).toBeDefined();
+      expect(aThirdCollection.willbeoverwritten).toBeDefined();
+    });
+
     it("should be able to request confirmation for merging two collections into a third collection", function(done) {
       var result = aBaseCollection.merge("self", atriviallyDifferentCollection);
       expect(aBaseCollection.alwaysConfirmOkay).toBeFalsy();

@@ -419,7 +419,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
-      var deferred = Q.defer(),
+      var deferred = this.loadOrCreateCorpusByPouchNameDeferred || Q.defer(),
         self = this,
         baseUrl = this.url;
 
@@ -438,6 +438,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             return;
           }
           self.runningloadOrCreateCorpusByPouchName = true;
+          self.loadOrCreateCorpusByPouchNameDeferred = deferred;
           window.setTimeout(function() {
             self.loadOrCreateCorpusByPouchName(dbname);
           }, 1000);
@@ -447,6 +448,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           self.debug(corpora);
           if (corpora.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
+            delete self.loadOrCreateCorpusByPouchNameDeferred;
             self.id = corpora[0]._id;
             self.fetch(baseUrl).then(function(result) {
               self.debug("Finished fetch of corpus ", result);
@@ -457,7 +459,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           } else {
             tryAgainInCaseThereWasALag(corpora);
           }
-        }, tryAgainInCaseThereWasALag);
+        }, function(reason) {
+          tryAgainInCaseThereWasALag(reason);
+          // deferred.reject(reason);
+
+        });
 
       });
 
@@ -691,23 +697,42 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   updateDatumToCorpusFields: {
     value: function(datum) {
-      datum.fields = this.datumFields.merge(this.datumFields, datum.fields);
+      if (!this.datumFields) {
+        return datum;
+      }
+      if (!datum.fields) {
+        datum.fields = this.datumFields.clone();
+        return datum;
+      }
+      datum.fields = new DatumFields().merge(this.datumFields, datum.fields);
       return datum;
     }
   },
 
   updateSpeakerToCorpusFields: {
     value: function(speaker) {
-      this.todo(" add code for updating fields");
-      speaker.fields = this.speakerFields.merge(this.speakerFields, speaker.fields);
+      if (!this.speakerFields) {
+        return speaker;
+      }
+      if (!speaker.fields) {
+        speaker.fields = this.speakerFields.clone();
+        return speaker;
+      }
+      speaker.fields = new DatumFields().merge(this.speakerFields, speaker.fields);
       return speaker;
     }
   },
 
   updateParticipantToCorpusFields: {
     value: function(participant) {
-      this.todo(" add code for updating fields");
-      participant.fields = this.participantFields.merge(this.participantFields, participant.fields);
+      if (!this.participantFields) {
+        return participant;
+      }
+      if (!participant.fields) {
+        participant.fields = this.participantFields.clone();
+        return participant;
+      }
+      participant.fields = new DatumFields().merge(this.participantFields, participant.fields, "overwrite");
       return participant;
     }
   },
