@@ -89,11 +89,11 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   datumFields: {
     get: function() {
-      this.warn("datumFields is depreacted, just use fields instead");
+      this.debug("datumFields is depreacted, just use fields instead");
       return this.fields;
     },
     set: function(value) {
-      this.warn("datumFields is depreacted, just use fields instead");
+      this.debug("datumFields is depreacted, just use fields instead");
       return this.fields = value;
     }
   },
