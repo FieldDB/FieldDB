@@ -313,6 +313,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     value: true
   },
   value: {
+    configurable: true,
     get: function() {
       if (!this._value) {
         return FieldDBObject.DEFAULT_STRING;
@@ -493,6 +494,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   },
 
   help: {
+    configurable: true,
     get: function() {
       return this._help || "Put your team's data entry conventions here (if any)...";
     },

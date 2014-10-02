@@ -314,6 +314,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   },
 
   fields: {
+    configurable: true,
     get: function() {
       if (this._fields) {
         // this.debug("setting speaker fields confidential in the Speaker.fields get function.");
