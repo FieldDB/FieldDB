@@ -385,7 +385,7 @@ module.exports = function(grunt) {
           cwd: 'dist/',
           src: ['**'],
           dest: ''
-        }]
+      }]
       }
     }
   });
