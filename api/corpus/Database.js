@@ -223,7 +223,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         url: baseUrl + "/_session"
       }).then(function(sessionInfo) {
         self.debug(sessionInfo);
-        self.session = sessionInfo;
+        self.connectionInfo = sessionInfo;
         deferred.resolve(sessionInfo);
       }, function(reason) {
         deferred.reject(reason);
@@ -233,46 +233,46 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
-  session: {
+  connectionInfo: {
     get: function() {
-      var session;
+      var connectionInfo;
       try {
-        session = localStorage.getItem("_session");
+        connectionInfo = localStorage.getItem("_connectionInfo");
       } catch (e) {
-        console.log("Localstorage is not available, using the object there will be no persistance across loads", e);
-        session = this._session;
+        console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+        connectionInfo = this._connectionInfo;
       }
-      if (!session) {
+      if (!connectionInfo) {
         return;
       }
       try {
-        session = new Confidential({
-          secretkey: "sessionInfo"
-        }).decrypt(session);
+        connectionInfo = new Confidential({
+          secretkey: "connectionInfo"
+        }).decrypt(connectionInfo);
       } catch (e) {
-        console.warn("unable to read the session info, ", e);
-        session = undefined;
+        console.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
+        connectionInfo = undefined;
       }
-      return session;
+      return connectionInfo;
     },
     set: function(value) {
       if (value) {
         try {
-          localStorage.setItem("_session", new Confidential({
-            secretkey: "sessionInfo"
+          localStorage.setItem("_connectionInfo", new Confidential({
+            secretkey: "connectionInfo"
           }).encrypt(value));
         } catch (e) {
-          console.log("Localstorage is not available, using the object there will be no persistance across loads", e);
-          this._session = new Confidential({
-            secretkey: "sessionInfo"
+          this._connectionInfo = new Confidential({
+            secretkey: "connectionInfo"
           }).encrypt(value);
+          console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
         }
       } else {
         try {
-          localStorage.removeItem("_session");
+          localStorage.removeItem("_connectionInfo");
         } catch (e) {
-          console.log("Localstorage is not available, using the object there will be no persistance across loads", e);
-          delete this._session;
+          console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+          delete this._connectionInfo;
         }
       }
     }
@@ -347,7 +347,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         url: baseUrl + "/_session"
       }).then(function(result) {
           if (result.ok) {
-            self.session = null;
+            self.connectionInfo = null;
             deferred.resolve(result);
           } else {
             deferred.reject(result);
