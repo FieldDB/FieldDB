@@ -38,7 +38,7 @@ describe("Corpus", function() {
       corpus.dbname = "testingdefaultcorpuscreation-kartuli";
       expect(function() {
         corpus.dbname = "adiffernetuser-kartuli";
-      }).toThrow('This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of a corpus, you must create a new object first.');
+      }).toThrow("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of a corpus, you must create a new object first.");
     });
 
   });
@@ -296,9 +296,9 @@ describe("Corpus: as a user I want to be able to merge two corpora", function() 
   it("should be able to ask the user what to do if the corpus details conflict", function() {
     oneCorpus.merge("self", anotherCorpus, "changeDBname");
     expect(oneCorpus).toBeDefined();
-    expect(oneCorpus.confirmMessage).toContain('I found a conflict for _dbname, Do you want to overwrite it from "teammatetiger-quechua" -> "lingllama-quechua"');
-    expect(oneCorpus.confirmMessage).toContain('I found a conflict for _title, Do you want to overwrite it from "Quechua Corpus" -> "Quechua"');
-    expect(oneCorpus.confirmMessage).toContain('I found a conflict for _titleAsUrl, Do you want to overwrite it from "quechua_corpus" -> "quechua"');
+    expect(oneCorpus.confirmMessage).toContain("I found a conflict for _dbname, Do you want to overwrite it from \"teammatetiger-quechua\" -> \"lingllama-quechua\"");
+    expect(oneCorpus.confirmMessage).toContain("I found a conflict for _title, Do you want to overwrite it from \"Quechua Corpus\" -> \"Quechua\"");
+    expect(oneCorpus.confirmMessage).toContain("I found a conflict for _titleAsUrl, Do you want to overwrite it from \"quechua_corpus\" -> \"quechua\"");
   });
 
   it("should merge the corpus details into a third corpus without affecting the other corpora", function() {
