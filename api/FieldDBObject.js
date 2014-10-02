@@ -1,4 +1,4 @@
-/* globals alert, confirm, navigator, FieldDB, Android */
+/* globals alert, confirm, navigator, Android */
 var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
@@ -123,8 +123,8 @@ var FieldDBObject = function FieldDBObject(json) {
   }
 };
 
-FieldDBObject.software;
-FieldDBObject.hardware;
+FieldDBObject.software = {};
+FieldDBObject.hardware = {};
 
 FieldDBObject.DEFAULT_STRING = "";
 FieldDBObject.DEFAULT_OBJECT = {};
@@ -508,7 +508,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             json: {
               users: this.modifiedByUsers
             }
-          }
+          };
           delete this.modifiedByUsers;
         }
 
