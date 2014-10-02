@@ -1,7 +1,6 @@
 var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
 var specIsRunningTooLong = 5000;
 
-
 describe("FieldDBObject", function() {
 
   describe("construction", function() {
@@ -41,7 +40,6 @@ describe("FieldDBObject", function() {
       expect(u2.type).toEqual("Child");
 
     });
-
 
     it("should add dateCreated if it was missing", function() {
       var u = new FieldDBObject();
@@ -190,6 +188,151 @@ describe("FieldDBObject", function() {
         relation: "clonedFrom"
       }]);
     });
+
+  });
+
+  describe("persisance", function() {
+    it("should be able to return a promise for an item from the database", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        id: "D093j2ae-akmoi3m-2a3wkjen"
+      });
+
+      object.fetch().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should be able to set the revision number and other housekeeping after a save of a new item", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else",
+        // debugMode: true
+      });
+
+      object.save().then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.id).toBeDefined();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+
+      expect(object.enteredByUser.value).toEqual("unknown");
+      expect(object.enteredByUser.json.user).toEqual({
+        name: "",
+        username: "unknown"
+      });
+      expect(object.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
+      console.log("hardware", object.enteredByUser.json.hardware);
+      expect(object.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
+
+    }, specIsRunningTooLong);
+
+    it("should be able to set the revision number and other housekeeping after a save of an existing item", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else",
+        _rev: "2-ioewmraoimwa",
+        _id: "weomaoi23o",
+        modifiedByUser: {
+          "label": "modifiedByUser",
+          "value": "inuktitutcleaningbot",
+          "mask": "inuktitutcleaningbot",
+          "encrypted": "",
+          "shouldBeEncrypted": "",
+          "help": "An array of users who modified the datum",
+          "showToUserTypes": "all",
+          "readonly": true,
+          "users": [{
+            "gravatar": "968b8e7fb72b5ffe2915256c28a9414c",
+            "username": "inuktitutcleaningbot",
+            "collection": "users",
+            "firstname": "Cleaner",
+            "lastname": "Bot"
+          }],
+          "userchooseable": "disabled"
+        },
+        debugMode: true
+      });
+      expect(object.modifiedByUser.users).toBeDefined();
+
+      object.save().then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.id).toBeDefined();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+
+      expect(object.modifiedByUser.value).toEqual("inuktitutcleaningbot, unknown");
+      expect(object.modifiedByUser.users).toBeUndefined();
+      expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
+      expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
+      expect(object.modifiedByUser.json.users[1].software.appVersion).toEqual("PhantomJS unknown");
+      // console.log("hardware", object.modifiedByUser.json.hardware);
+      expect(object.modifiedByUser.json.users[1].hardware.cpus).toBeGreaterThan(1);
+
+    }, specIsRunningTooLong);
+
+    it("should flag an item as deleted", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else"
+      });
+      object.delete("I entered this by mistake").then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.id).toBeDefined();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+
+      expect(object.trashed).toEqual("deleted");
+      expect(object.trashedReason).toEqual("I entered this by mistake");
+
+    }, specIsRunningTooLong);
+
+    it("should be able to put items in the trash", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else"
+      });
+      object.trash("I entered this by mistake").then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.id).toBeDefined();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+
+      expect(object.trashed).toEqual("deleted");
+      expect(object.trashedReason).toEqual("I entered this by mistake");
+
+    }, specIsRunningTooLong);
+
+    it("should undelete items", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else",
+        trashed: "deleted",
+        trashedReason: "I imported this by mistake"
+      });
+      object.undelete("I deleted this by mistake").then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.id).toBeDefined();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+      }).done(done);
+
+      expect(object.trashed).toEqual("restored");
+      expect(object.trashedReason).toEqual("I imported this by mistake");
+      expect(object.untrashedReason).toEqual("I deleted this by mistake");
+
+    }, specIsRunningTooLong);
 
   });
 
