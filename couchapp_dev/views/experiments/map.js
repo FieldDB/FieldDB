@@ -62,14 +62,16 @@ function(doc) {
         }
         if (true || subexperiment.label.indexOf("practice") === -1) {
           totalScore = totalScore + subexperiment.scoreSubTotal;
+          subexperiment.stimuliSubTotal = trials.length || 0.001;
           totalStimuli = totalStimuli + trials.length;
         }
         // emit("subexperiment", subexperiment.scoreSubTotal);
         subexperiment.results = results;
         results = [];
       }
+      totalStimuli = totalStimuli || 0.001;
       emit("sails", {
-        totalScore: totalScore,
+        totalScore: (totalScore / totalStimuli * 100) + "%",
         totalAnswered: totalAnswered,
         totalStimuli: totalStimuli,
         participant: doc.participant,
@@ -81,7 +83,7 @@ function(doc) {
         endTime: doc.endTimestamp,
         subexperiments: subexperiments.map(function(subexperiment) {
           return {
-            score: subexperiment.scoreSubTotal,
+            score: (subexperiment.scoreSubTotal / subexperiment.stimuliSubTotal * 100) + "%",
             results: subexperiment.results
           }
         })
