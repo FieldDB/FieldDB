@@ -137,7 +137,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         return deferred.promise;
       }
       if (key) {
-        key = "&key=" + key;
+        key = "&key=\"" + key + "\"";
       } else {
         key = "";
       }
