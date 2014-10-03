@@ -116,7 +116,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   fetchCollection: {
-    value: function(collectionType, start, end, limit, reduce) {
+    value: function(collectionType, start, end, limit, reduce, key) {
       this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
         self = this,
@@ -135,6 +135,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           deferred.reject("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
         });
         return deferred.promise;
+      }
+      if (key) {
+        key = "&key=" + key;
+      } else {
+        key = "";
       }
 
       var cantLogIn = function(reason) {
@@ -188,7 +193,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "GET",
           dataType: "json",
-          url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
+          url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType) + key
         }).then(function(result) {
           if (result.rows && result.rows.length) {
             deferred.resolve(result.rows.map(function(doc) {
