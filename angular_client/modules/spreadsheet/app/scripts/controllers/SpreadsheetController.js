@@ -838,7 +838,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.reloadPage();
   };
 
-  $scope.setTemplateUsingCorpusPreferedTemplate = function(corpus){
+  $scope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
     // If the currently choosen corpus has a default template, overwrite the user's preferences
     if ($rootScope.mcgillOnly) {
       console.warn("not using the databases' preferredTemplate, this is the mcgill dashboard");
@@ -1573,8 +1573,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.activeDatumIndex = undefined;
   };
 
-  $scope.loadDataEntryScreen =function(){
-    $scope.dataentry=true;
+  $scope.loadDataEntryScreen = function() {
+    $scope.dataentry = true;
     $scope.navigateVerifySaved('none');
     $scope.loadData($scope.activeSession);
   };
@@ -1613,28 +1613,32 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     var thisDatumIsIN = function(spreadsheetDatum) {
       for (var fieldkey in spreadsheetDatum) {
-        if (spreadsheetDatum[fieldkey]) {
-          // Limit search to visible data
-          if (fieldsInScope[fieldkey] === true) {
-            if (fieldkey === "datumTags") {
-              var tagString = JSON.stringify(spreadsheetDatum.datumTags);
-              tagString = tagString.toString().toLowerCase();
-              if (tagString.indexOf(searchTerm) > -1) {
-                return true;
-              }
-            } else if (fieldkey === "comments") {
-              for (var j in spreadsheetDatum.comments) {
-                for (var commentKey in spreadsheetDatum.comments[j]) {
-                  if (spreadsheetDatum.comments[j][commentKey].toString().indexOf(searchTerm) > -1) {
-                    return true;
-                  }
+        // Limit search to visible data
+        if (spreadsheetDatum[fieldkey] && fieldsInScope[fieldkey] === true) {
+          if (fieldkey === "datumTags") {
+            var tagString = JSON.stringify(spreadsheetDatum.datumTags);
+            tagString = tagString.toString().toLowerCase();
+            if (tagString.indexOf(searchTerm) > -1) {
+              return true;
+            }
+          } else if (fieldkey === "comments") {
+            for (var j in spreadsheetDatum.comments) {
+              for (var commentKey in spreadsheetDatum.comments[j]) {
+                if (spreadsheetDatum.comments[j][commentKey].toString().indexOf(searchTerm) > -1) {
+                  return true;
                 }
               }
-            } else {
-              var dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
-              if (dataString.indexOf(searchTerm) > -1) {
-                return true;
-              }
+            }
+          } else if (fieldkey === "dateModified") {
+            //remove alpha characters from the date so users can search dates too, but not show everysearch result if the user is looking for "t" #1657
+            var dataString = spreadsheetDatum[fieldkey].toString().toLowerCase().replace(/[a-z]/g, " ");
+            if (dataString.indexOf(searchTerm) > -1) {
+              return true;
+            }
+          } else {
+            var dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
+            if (dataString.indexOf(searchTerm) > -1) {
+              return true;
             }
           }
         }
