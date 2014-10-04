@@ -18,13 +18,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
 
-  $rootScope.appVersion = "2.2.2ss";
-
-  if (debugging) {
-    console.warn("TESTING UPGRADE OF FORMER MCGILL SPREASHEET STUDENTS");
-    // localStorage.clear();
-
-  }
+  $rootScope.appVersion = "2.24.0ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size) {
@@ -341,7 +335,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           if (defaultPreferences.availableFields[incomingFields[field].label]) {
             incomingFields[field].hint = defaultPreferences.availableFields[incomingFields[field].label].hint;
           }
-          fields.push(incomingFields[field]);
+          // add only unique fields
+          if (fields.indexOf() === -1) {
+            fields.push(incomingFields[field]);
+          }
         }
       }
     } else {
@@ -423,6 +420,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     /* Always get the most recent available fields */
     updatedPreferences.availableFields = defaultPreferences.availableFields;
 
+    /* update the variable for user choosen template to 2.23+ */
+    if (!updatedPreferences.userChosenTemplateId && updatedPreferences.userTemplate) {
+      updatedPreferences.userChosenTemplateId = updatedPreferences.userTemplate;
+      delete updatedPreferences.userTemplate;
+    }
+
     /* upgrade fulltemplate to v1.923ss instead update to 2.22+ */
     if (existingPreferences.fulltemplate.field7) {
       updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
@@ -431,36 +434,32 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
     }
 
-    /* sett the number of columns to use  to 2.23+ */
+    /* set the number of columns to use  to 2.23+ */
     if (!existingPreferences.fullTemplateDefaultNumberOfColumns) {
       updatedPreferences.fullTemplateDefaultNumberOfColumns = 2;
     }
     $rootScope.fullTemplateDefaultNumberOfColumns = updatedPreferences.fullTemplateDefaultNumberOfColumns;
 
-    /* update the variable for user choosen template to 2.23+ */
-    if (!updatedPreferences.userChosenTemplateId && updatedPreferences.userTemplate) {
-      updatedPreferences.userChosenTemplateId = updatedPreferences.userTemplate;
-      delete updatedPreferences.userTemplate;
-    }
-
     // If this is the mcgillOnly deploy, overwrite the user's data entry view
     if ($rootScope.mcgillOnly) {
+      updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
+      updatedPreferences.userChosenTemplateId = 'mcgillfieldmethodsfall2014template';
+      defaultPreferences.userChosenTemplateId = 'mcgillfieldmethodsfall2014template';
       $rootScope.overrideTemplateSetting('mcgillfieldmethodsfall2014template', defaultPreferences.mcgillfieldmethodsfall2014template, true);
     }
 
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(updatedPreferences));
     return updatedPreferences;
   };
-  var Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
+  $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
 
 
   // console.log(Preferences.availableFields);
   // Set scope variables
   $scope.documentReady = false;
-  $rootScope.templateId = Preferences.userChosenTemplateId;
-  $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
-  $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
-  $scope.scopePreferences = Preferences;
+  $rootScope.templateId = $scope.scopePreferences.userChosenTemplateId;
+  $rootScope.fields = $scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
+  $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId]);
   $rootScope.availableFields = defaultPreferences.availableFields;
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
@@ -489,8 +488,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.serverLabels = Servers.getHumanFriendlyLabels();
 
   // Set data size for pagination
-  $rootScope.resultSize = Preferences.resultSize;
-
+  $rootScope.resultSize = $scope.scopePreferences.resultSize;
 
 
   $scope.changeActiveSubMenu = function(subMenu) {
@@ -656,9 +654,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log("error loading the data", error);
         // On error loading data, reset saved state
         // Update saved state in Preferences
-        Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
-        Preferences.savedState = {};
-        localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+        $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+        $scope.scopePreferences.savedState = {};
+        localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
         $scope.documentReady = true;
         $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
         $rootScope.openNotification();
@@ -760,11 +758,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }], "uploadnow");
 
           // Update saved state in Preferences
-          Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
-          Preferences.savedState.server = $rootScope.serverCode;
-          Preferences.savedState.username = $rootScope.user.username;
-          Preferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
-          localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+          $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+          $scope.scopePreferences.savedState.server = $rootScope.serverCode;
+          $scope.scopePreferences.savedState.username = $rootScope.user.username;
+          $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
+          localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
           $rootScope.authenticated = true;
           var userRoles = response.data.roles;
@@ -808,14 +806,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
                 if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
                   $rootScope.DB = corpus;
-                  // If the currently choosen corpus has a default template, overwrite the user's preferences
-                  if (corpus.preferredTemplate) {
-                    var fieldsForTemplate = {};
-                    if (window.defaultPreferences[corpus.preferredTemplate]) {
-                      fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
-                    }
-                    $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
-                  }
+                  $scope.setTemplateUsingCorpusPreferedTemplate(corpus);
                 }
                 corpus.gravatar = md5.createHash(corpus.pouchname);
                 $scope.corpora.push(corpus);
@@ -841,12 +832,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.logOut = function() {
-    Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    Preferences.savedState = {};
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState = {};
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
     $scope.reloadPage();
   };
 
+  $scope.setTemplateUsingCorpusPreferedTemplate = function(corpus){
+    // If the currently choosen corpus has a default template, overwrite the user's preferences
+    if ($rootScope.mcgillOnly) {
+      console.warn("not using the databases' preferredTemplate, this is the mcgill dashboard");
+      //$rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
+
+    } else if (corpus.preferredTemplate) {
+      var fieldsForTemplate = {};
+      if (window.defaultPreferences[corpus.preferredTemplate]) {
+        fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
+      }
+      $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
+    }
+  };
 
   $scope.selectDB = function(selectedDB) {
     if (!selectedDB) {
@@ -865,19 +870,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
 
       // Update saved state in Preferences
-      Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
-      Preferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+      $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
+      localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
-      // If the currently choosen corpus has a default template, overwrite the user's preferences
-      if (selectedDB.preferredTemplate) {
-        var fieldsForTemplate = {};
-        if (window.defaultPreferences[selectedDB.preferredTemplate]) {
-          fieldsForTemplate = window.defaultPreferences[selectedDB.preferredTemplate];
-        }
-        $rootScope.overrideTemplateSetting(selectedDB.preferredTemplate, fieldsForTemplate, true);
-      }
-
+      $scope.setTemplateUsingCorpusPreferedTemplate(selectedDB);
 
       $scope.loadSessions();
       $scope.loadUsersAndRoles();
@@ -895,9 +892,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.dataentry = true;
 
     // Update saved state in Preferences
-    Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    Preferences.savedState.sessionID = activeSessionID;
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState.sessionID = activeSessionID;
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
     $scope.loadData(activeSessionID);
     $scope.loadUsersAndRoles();
     window.location.assign("#/spreadsheet/" + $rootScope.templateId);
@@ -924,10 +921,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
     }
     // Update saved state in Preferences
-    Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    Preferences.savedState.sessionID = $scope.activeSession;
-    Preferences.savedState.sessionTitle = $scope.currentSessionName;
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState.sessionID = $scope.activeSession;
+    $scope.scopePreferences.savedState.sessionTitle = $scope.currentSessionName;
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
   };
 
   $scope.getCurrentSessionName = function() {
@@ -1576,6 +1573,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.activeDatumIndex = undefined;
   };
 
+  $scope.loadDataEntryScreen =function(){
+    $scope.dataentry=true;
+    $scope.navigateVerifySaved('none');
+    $scope.loadData($scope.activeSession);
+  };
+
+  $scope.clearSearch = function() {
+    $scope.searchTerm = '';
+    $scope.searchHistory = null;
+    $scope.loadData($scope.activeSession);
+  };
+
   $scope.runSearch = function(searchTerm) {
     // Create object from fields displayed in scope to later be able to
     // notify user if search result is from a hidden field
@@ -1586,12 +1595,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     /* make the datumtags and comments always true since its only the compact view that doesnt show them? */
     // if ($rootScope.templateId === "fulltemplate" || $rootScope.templateId === "mcgillfieldmethodsspring2014template" || $rootScope.templateId === "yalefieldmethodsspring2014template") {
-    fieldsInScope.datumTags = true;
+    // fieldsInScope.datumTags = true;
     fieldsInScope.comments = true;
     // }
 
     fieldsInScope.dateModified = true;
-    fieldsInScope.lastModifiedBy = true;
+    // fieldsInScope.lastModifiedBy = true;
 
     if ($scope.searchHistory) {
       $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
@@ -2651,36 +2660,36 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.$on('$viewContentLoaded', function() {
     // Return user to saved state, if it exists; only recover saved state on reload, not menu navigate
     if ($scope.appReloaded !== true) {
-      Preferences = overwiteAndUpdatePreferencesToCurrentVersion();
+      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
       // Update users to new saved state preferences if they were absent
-      if (!Preferences.savedState) {
-        Preferences.savedState = {};
-        localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+      if (!$scope.scopePreferences.savedState) {
+        $scope.scopePreferences.savedState = {};
+        localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
         $scope.documentReady = true;
-      } else if (Preferences.savedState && Preferences.savedState.server && Preferences.savedState.username && Preferences.savedState.password) {
-        $rootScope.serverCode = Preferences.savedState.server;
+      } else if ($scope.scopePreferences.savedState && $scope.scopePreferences.savedState.server && $scope.scopePreferences.savedState.username && $scope.scopePreferences.savedState.password) {
+        $rootScope.serverCode = $scope.scopePreferences.savedState.server;
         var auth = {};
-        auth.server = Preferences.savedState.server;
-        auth.user = Preferences.savedState.username;
+        auth.server = $scope.scopePreferences.savedState.server;
+        auth.user = $scope.scopePreferences.savedState.username;
         try {
-          auth.password = sjcl.decrypt("password", Preferences.savedState.password);
+          auth.password = sjcl.decrypt("password", $scope.scopePreferences.savedState.password);
         } catch (err) {
           // User's password has not yet been encrypted; encryption will be updated on login.
-          auth.password = Preferences.savedState.password;
+          auth.password = $scope.scopePreferences.savedState.password;
         }
         $scope.loginUser(auth);
         // Upgrade to v92 where corpus info is not saved in the prefs, only the pouchbame
-        if (Preferences.savedState.DB) {
-          Preferences.savedState.mostRecentCorpusPouchname = Preferences.savedState.DB.pouchname;
-          delete Preferences.savedState.DB;
+        if ($scope.scopePreferences.savedState.DB) {
+          $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $scope.scopePreferences.savedState.DB.pouchname;
+          delete $scope.scopePreferences.savedState.DB;
         }
-        if (Preferences.savedState.mostRecentCorpusPouchname) {
+        if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
           $rootScope.DB = {
-            pouchname: Preferences.savedState.mostRecentCorpusPouchname
+            pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
           };
-          if (Preferences.savedState.sessionID) {
+          if ($scope.scopePreferences.savedState.sessionID) {
             // Load all sessions and go to current session
-            $scope.loadSessions(Preferences.savedState.sessionID);
+            $scope.loadSessions($scope.scopePreferences.savedState.sessionID);
             $scope.navigateVerifySaved('none');
           } else {
             $scope.loadSessions();
@@ -2713,8 +2722,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
         Data.login($scope.resetPasswordInfo.username, $scope.resetPasswordInfo.confirmpassword);
 
-        Preferences.savedState.password = sjcl.encrypt("password", $scope.resetPasswordInfo.confirmpassword);
-        localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
+
+        $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $scope.resetPasswordInfo.confirmpassword);
+        localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
         $scope.resetPasswordInfo = {};
         $scope.showResetPassword = false;
