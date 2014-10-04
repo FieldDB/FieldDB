@@ -2373,7 +2373,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             fileExt = document.getElementById(datum.id + "_audio-file").files[index].type.split("\/").pop();
           }
           if (fileExt !== ("mp3" || "mpeg" || "wav" || "ogg")) {
-            $rootScope.notificationMessage = "You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.";
+            $rootScope.notificationMessage = "Upload is turned off for this release."; //You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.";
             $rootScope.openNotification();
             return;
           }
