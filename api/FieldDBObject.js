@@ -1,4 +1,4 @@
-/* globals window */
+/* globals alert, confirm, navigator, Android */
 var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
@@ -123,6 +123,9 @@ var FieldDBObject = function FieldDBObject(json) {
   }
 };
 
+FieldDBObject.software = {};
+FieldDBObject.hardware = {};
+
 FieldDBObject.DEFAULT_STRING = "";
 FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
@@ -132,7 +135,7 @@ FieldDBObject.DEFAULT_DATE = 0;
 
 FieldDBObject.bug = function(message) {
   try {
-    window.alert(message);
+    alert(message);
   } catch (e) {
     console.warn(this.type.toUpperCase() + " BUG: " + message);
   }
@@ -164,7 +167,7 @@ FieldDBObject.confirm = function(message, optionalLocale) {
     }
 
     try {
-      response = window.confirm(message);
+      response = confirm(message);
     } catch (e) {
       console.warn(self.type.toUpperCase() + " ASKING USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
       response = self.alwaysConfirmOkay;
@@ -201,6 +204,29 @@ FieldDBObject.uuidGenerator = function() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   };
   return Date.now() + (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
+};
+FieldDBObject.getHumanReadableTimestamp = function() {
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() + 1;
+  var day = today.getDate();
+  var hour = today.getHours();
+  var minute = today.getMinutes();
+
+  if (month < 10) {
+    month = "0" + month;
+  }
+  if (day < 10) {
+    day = "0" + day;
+  }
+  if (hour < 10) {
+    hour = "0" + hour;
+  }
+  if (minute < 10) {
+    minute = "0" + minute;
+  }
+
+  return year + "-" + month + "-" + day + "_" + hour + "." + minute;
 };
 
 /** @lends FieldDBObject.prototype */
@@ -250,7 +276,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   debug: {
     value: function(message, message2, message3, message4) {
       try {
-        if (window.navigator && window.navigator.appName === "Microsoft Internet Explorer") {
+        if (navigator && navigator.appName === "Microsoft Internet Explorer") {
           return;
         }
       } catch (e) {
@@ -371,7 +397,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   save: {
-    value: function() {
+    value: function(optionalUserWhoSaved) {
       var deferred = Q.defer(),
         self = this;
 
@@ -388,33 +414,146 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       //update to this version
       this.version = FieldDBObject.DEFAULT_VERSION;
 
-      var browserVersion;
       try {
-        browserVersion = window.navigator.appVersion;
+        FieldDBObject.software = FieldDBObject.software || {};
+        FieldDBObject.software.appCodeName = navigator.appCodeName;
+        FieldDBObject.software.appName = navigator.appName;
+        FieldDBObject.software.appVersion = navigator.appVersion;
+        FieldDBObject.software.cookieEnabled = navigator.cookieEnabled;
+        FieldDBObject.software.doNotTrack = navigator.doNotTrack;
+        FieldDBObject.software.hardwareConcurrency = navigator.hardwareConcurrency;
+        FieldDBObject.software.language = navigator.language;
+        FieldDBObject.software.languages = navigator.languages;
+        FieldDBObject.software.maxTouchPoints = navigator.maxTouchPoints;
+        FieldDBObject.software.onLine = navigator.onLine;
+        FieldDBObject.software.platform = navigator.platform;
+        FieldDBObject.software.product = navigator.product;
+        FieldDBObject.software.productSub = navigator.productSub;
+        FieldDBObject.software.userAgent = navigator.userAgent;
+        FieldDBObject.software.vendor = navigator.vendor;
+        FieldDBObject.software.vendorSub = navigator.vendorSub;
+        navigator.geolocation.getCurrentPosition(function(position) {
+          console.warn("recieved position information");
+          FieldDBObject.software.location = position.coords;
+        });
       } catch (e) {
-        browserVersion = "PhantomJS unknown";
+        FieldDBObject.software = FieldDBObject.software || {};
+        FieldDBObject.software.version = process.version;
+        FieldDBObject.software.appVersion = "PhantomJS unknown";
+        var os = require("os");
+        FieldDBObject.hardware = FieldDBObject.hardware || {};
+        FieldDBObject.hardware.endianness = os.endianness();
+        FieldDBObject.hardware.platform = os.platform();
+        FieldDBObject.hardware.hostname = os.hostname();
+        FieldDBObject.hardware.type = os.type();
+        FieldDBObject.hardware.arch = os.arch();
+        FieldDBObject.hardware.release = os.release();
+        FieldDBObject.hardware.totalmem = os.totalmem();
+        FieldDBObject.hardware.cpus = os.cpus().length;
       }
+      if (!optionalUserWhoSaved) {
+        optionalUserWhoSaved = {
+          name: "",
+          username: "unknown"
+        };
+        try {
+          if (FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.connectionInfo) {
+            var connectionInfo = FieldDBObject.application.corpus.connectionInfo;
+            optionalUserWhoSaved.username = connectionInfo.userCtx.name;
+          }
+        } catch (e) {
+          console.log("Can't get the corpus connection info", e);
+        }
+      }
+      // optionalUserWhoSaved._name = optionalUserWhoSaved.name || optionalUserWhoSaved.username || optionalUserWhoSaved.browserVersion;
+      if (typeof optionalUserWhoSaved.toJSON === "function") {
+        var asJson = optionalUserWhoSaved.toJSON();
+        asJson.name = optionalUserWhoSaved.name;
+        optionalUserWhoSaved = asJson;
+      } else {
+        optionalUserWhoSaved.name = optionalUserWhoSaved.name;
+      }
+      // optionalUserWhoSaved.browser = browser;
 
-      this._dateModified = Date.now();
       if (!this._rev) {
         this._dateCreated = Date.now();
-        this.enteredByUser = {
-          browserVersion: browserVersion
-        };
+        var enteredByUser = this.enteredByUser || {};
+        if (this.fields && this.fields.enteredbyuser) {
+          enteredByUser = this.fields.enteredbyuser;
+        } else if (!this.enteredByUser) {
+          this.enteredByUser = enteredByUser;
+        }
+        enteredByUser.value = optionalUserWhoSaved.name || optionalUserWhoSaved.username;
+        enteredByUser.json = enteredByUser.json || {};
+        enteredByUser.json.user = optionalUserWhoSaved;
+        enteredByUser.json.software = FieldDBObject.software;
+        try {
+          enteredByUser.json.hardware = Android ? Android.deviceDetails : FieldDBObject.hardware;
+        } catch (e) {
+          console.warn("Cannot detect the hardware used for this save.");
+          enteredByUser.json.hardware = FieldDBObject.hardware;
+        }
+
       } else {
-        this.modifiedByUsers = this.modifiedByUsers || [];
-        this.modifiedByUsers.push({
-          browserVersion: browserVersion
-        });
+        this._dateModified = Date.now();
+
+        var modifiedByUser = this.modifiedByUser || {};
+        if (this.fields && this.fields.modifiedbyuser) {
+          modifiedByUser = this.fields.modifiedbyuser;
+        } else if (!this.modifiedByUser) {
+          this.modifiedByUser = modifiedByUser;
+        }
+        if (this.modifiedByUsers) {
+          modifiedByUser = {
+            json: {
+              users: this.modifiedByUsers
+            }
+          };
+          delete this.modifiedByUsers;
+        }
+
+        modifiedByUser.value = modifiedByUser.value ? modifiedByUser.value + ", " : "";
+        modifiedByUser.value += optionalUserWhoSaved.name || optionalUserWhoSaved.username;
+        modifiedByUser.json = modifiedByUser.json || {};
+        if (modifiedByUser.users) {
+          modifiedByUser.json.users = modifiedByUser.users;
+          delete modifiedByUser.users;
+        }
+        modifiedByUser.json.users = modifiedByUser.json.users || [];
+        optionalUserWhoSaved.software = FieldDBObject.software;
+        optionalUserWhoSaved.hardware = FieldDBObject.hardware;
+        modifiedByUser.json.users.push(optionalUserWhoSaved);
       }
+
+      if (FieldDBObject.software && FieldDBObject.software.location) {
+        var location;
+        if (this.location) {
+          location = this.location;
+        } else if (this.fields && this.fields.location) {
+          location = this.fields.location;
+        }
+        if (location) {
+          location.json = location.json || {};
+          location.json.previousLocations = location.json.previousLocations || [];
+          if (location.json && location.json.location && location.json.location.latitude) {
+            location.json.previousLocations.push(location.json.location);
+          }
+          console.log("overwriting location ", location);
+          location.json.location = FieldDBObject.software.location;
+          location.value = location.json.location.latitude + "," + location.json.location.longitude;
+        }
+      }
+
+      console.log("saving   ", this);
 
       var url = this.id ? "/" + this.id : "";
       url = this.url + url;
+      var data = this.toJSON();
       CORS.makeCORSRequest({
         type: this.id ? "PUT" : "POST",
         dataType: "json",
         url: url,
-        data: this.toJSON()
+        data: data
       }).then(function(result) {
           self.debug("saved ", result);
           self.saving = false;
@@ -438,6 +577,34 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
 
       return deferred.promise;
+    }
+  },
+
+  delete: {
+    value: function(reason) {
+      return this.trash(reason);
+    }
+  },
+
+  trash: {
+    value: function(reason) {
+      this.trashed = "deleted";
+      if (reason) {
+        this.trashedReason = reason;
+      }
+      this.todo("consider using a confirm to ask for a reason for deleting the item");
+      return this.save();
+    }
+  },
+
+  undelete: {
+    value: function(reason) {
+      this.trashed = "restored";
+      if (reason) {
+        this.untrashedReason = reason;
+      }
+      this.todo("consider using a confirm to ask for a reason for undeleting the item");
+      return this.save();
     }
   },
 

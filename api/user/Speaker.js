@@ -32,6 +32,10 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
  */
 var Speaker = function Speaker(options) {
   this.debug("Constructing Speaker: ", options);
+  if (!options || (!options._rev && !options.fields)) {
+    //If its a new participant with out a revision and without fields use the defaults
+    this.fields = this.defaults.fields;
+  }
   UserMask.apply(this, arguments);
 };
 
@@ -150,7 +154,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       return this.anonymousCode;
     },
     set: function(value) {
-      if(value === this.anonymousCode){
+      if (value === this.anonymousCode) {
         this._id = value;
       }
     }
@@ -208,6 +212,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   },
 
   dateOfBirth: {
+    configurable: true,
     get: function() {
       if (this.fields) {
         return this.fields.dateOfBirth.value;
@@ -227,6 +232,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   },
 
   firstname: {
+    configurable: true,
     get: function() {
       if (this.fields && this.fields.firstname) {
         return this.fields.firstname.value;
@@ -248,6 +254,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   },
 
   lastname: {
+    configurable: true,
     get: function() {
       if (this.fields && this.fields.lastname) {
         return this.fields.lastname.value;
@@ -277,36 +284,61 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       }
     },
     set: function(value) {
-      if (this.fields) {
-        // this.fields.debugMode = true;
-        this.fields.languages.value = value;
+      var stringvalue;
+      var objectvalue;
+      if (typeof value === "string") {
+        console.log("User set the languages with a string");
+        if (this.fields.languages && this.fields.languages && this.fields.languages.json) {
+          this.confirm("Do you want to set the languages from " + JSON.stringify(this.fields.languages.json) + " to " + value);
+        }
+        stringvalue = value;
+        objectvalue = {
+          value: value,
+          label: "languages",
+          json: {
+            languages: value.split(",")
+          }
+        };
+        objectvalue.json.languages = objectvalue.json.languages.map(function(languageName) {
+          return {
+            iso: languageName.toLowerCase().trim(),
+            name: languageName.trim(),
+            nativeName: languageName.trim()
+          };
+        });
       } else {
+        objectvalue = value;
+      }
+
+      if (!this.fields) {
         this.fields = new DatumFields(this.defaults.fields);
-        this.fields.languages.value = value;
+      }
+      if (stringvalue) {
+        this.fields.languages.value = stringvalue;
+      }
+      console.log("setting language ", objectvalue);
+
+      for (var property in objectvalue) {
+        if (!objectvalue.hasOwnProperty(property)) {
+          continue;
+        }
+        console.log("looking at " + property);
+        this.fields.languages[property] = objectvalue[property];
       }
     }
   },
 
   dialects: {
     get: function() {
-      if (this.fields) {
-        return this.fields.languages.value;
-      } else {
-        return;
-      }
+      return this.languages;
     },
     set: function(value) {
-      if (this.fields) {
-        // this.fields.debugMode = true;
-        this.fields.languages.value = value;
-      } else {
-        this.fields = new DatumFields(this.defaults.fields);
-        this.fields.languages.value = value;
-      }
+      return this.languages = value;
     }
   },
 
   fields: {
+    configurable: true,
     get: function() {
       if (this._fields) {
         // this.debug("setting speaker fields confidential in the Speaker.fields get function.");
@@ -377,6 +409,96 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       if (this._fields) {
         this._fields.decryptedMode = value;
       }
+    }
+  },
+
+  languageOne: {
+    get: function() {
+      return this.getLanguageNumber(0);
+    },
+    set: function(value) {
+      return this.setLanguageNumber(0, value);
+    }
+  },
+
+  languageTwo: {
+    get: function() {
+      return this.getLanguageNumber(1);
+    },
+    set: function(value) {
+      return this.setLanguageNumber(1, value);
+    }
+  },
+
+  languageThree: {
+    get: function() {
+      return this.getLanguageNumber(2);
+    },
+    set: function(value) {
+      return this.setLanguageNumber(2, value);
+    }
+  },
+
+  languageFour: {
+    get: function() {
+      return this.getLanguageNumber(3);
+    },
+    set: function(value) {
+      return this.setLanguageNumber(3, value);
+    }
+  },
+
+  languageFive: {
+    get: function() {
+      return this.getLanguageNumber(4);
+    },
+    set: function(value) {
+      return this.setLanguageNumber(4, value);
+    }
+  },
+
+  getLanguageNumber: {
+    value: function(number) {
+      if (!this.fields || !this.fields.languages || !this.fields.languages.json || !this.fields.languages.json.languages || !this.fields.languages.json.languages[number]) {
+        return;
+      }
+      return this.fields.languages.json.languages[number];
+    }
+  },
+
+  setLanguageNumber: {
+    value: function(number, value) {
+      if (!this.fields || !this.fields.languages) {
+        return;
+      }
+      this.fields.languages.json = this.fields.languages.json || {
+        languages: []
+      };
+
+      if (value === this.fields.languages.json.languages[number]) {
+        return;
+      }
+
+      if (value.iso) {
+        value = {
+          language: value,
+          fluency: {
+            "comprehensionFluency": "native",
+            "speakingFluency": "native"
+          },
+          dates: {
+            start: "",
+            end: "",
+            proportionOfUse: ""
+          }
+        };
+      }
+      value.fluency = value.fluency || {};
+      value.dates = value.dates || {};
+      value.language = value.language || {};
+
+      this.fields.languages.json.languages[number] = value;
+      return this.fields.languages.json.languages[number];
     }
   }
 

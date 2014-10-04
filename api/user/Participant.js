@@ -1,3 +1,4 @@
+/* globals FieldDB */
 var Speaker = require("./Speaker").Speaker;
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
@@ -26,8 +27,24 @@ Participant.prototype = Object.create(Speaker.prototype, /** @lends Participant.
   defaults: {
     get: function() {
       var doc = {
-        fields: DEFAULT_CORPUS_MODEL.participantFields || DEFAULT_CORPUS_MODEL.speakerFields
+        fields: []
       };
+      try {
+        if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.corpus) {
+          if (FieldDB.FieldDBObject.application.corpus.participantFields) {
+            doc.fields = FieldDB.FieldDBObject.application.corpus.participantFields.clone();
+          } else if (FieldDB.FieldDBObject.application.corpus.speakerFields) {
+            doc.fields = FieldDB.FieldDBObject.application.corpus.speakerFields.clone();
+          }
+        }
+      } catch (e) {
+        console.warn("Cant get participatn fields from the current corpus, instead using defaults.");
+        doc.fields = DEFAULT_CORPUS_MODEL.participantFields || DEFAULT_CORPUS_MODEL.speakerFields;
+      }
+      if (!doc.fields || doc.fields.length === 0) {
+        console.warn("There were no corpus specific speaker or participant fiels, instead using defaults");
+        doc.fields = DEFAULT_CORPUS_MODEL.participantFields || DEFAULT_CORPUS_MODEL.speakerFields;
+      }
       return JSON.parse(JSON.stringify(doc));
     }
   }

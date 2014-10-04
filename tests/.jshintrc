@@ -8,6 +8,7 @@
   "sub": true,
   "undef": true,
   "unused": true,
+  "quotmark": "double",
   "boss": true,
   "eqnull": true,
   "node": true,

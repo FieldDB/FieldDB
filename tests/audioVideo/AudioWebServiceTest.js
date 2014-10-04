@@ -2,7 +2,7 @@
 
 var AudioService = AudioService || require("./AudioService");
 var CouchDBConnection =  CouchDBConnection || require("../corpus/CouchDBConnection");
-var OPrime =  OPrime || require('../../backbone_client/libs/OPrime.js');
+var OPrime =  OPrime || require("../../backbone_client/libs/OPrime.js");
 
 var runCORSTests = function(whichServer) {
 
