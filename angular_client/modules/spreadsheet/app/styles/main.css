@@ -50,17 +50,17 @@ body {
     display: inline;
   }
   .menubar {
-    height: 100px;
+    height: 60px;
   }
   .subMenubar {
-    top: 100px;
+    top: 60px;
   }
   .mainBody {
-    top: 100px;
+    top: 60px;
     padding-bottom: 25px;
   }
   .mainBodySearching {
-    top: 175px;
+    top: 125px;
   }
 }
 
@@ -226,6 +226,34 @@ span ul {
 .dropdown_nav li:hover ul {
   left: auto;
 }
+
+
+.small_dropdown_nav,.small_dropdown_nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  z-index: 1000;
+}
+
+.small_dropdown_nav a {
+  display: block;
+}
+
+.small_dropdown_nav li {
+  float: left;
+  width: 2em;
+}
+
+.small_dropdown_nav li ul {
+  position: absolute;
+  width: 2em;
+  left: -999em;
+}
+
+.small_dropdown_nav li:hover ul {
+  left: auto;
+}
+
 
 .mainBody {
   margin-bottom: 10px;
