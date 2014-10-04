@@ -1612,31 +1612,34 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var newScopeData = [];
 
     var thisDatumIsIN = function(spreadsheetDatum) {
+      var dataString;
+
       for (var fieldkey in spreadsheetDatum) {
         // Limit search to visible data
         if (spreadsheetDatum[fieldkey] && fieldsInScope[fieldkey] === true) {
           if (fieldkey === "datumTags") {
-            var tagString = JSON.stringify(spreadsheetDatum.datumTags);
-            tagString = tagString.toString().toLowerCase();
-            if (tagString.indexOf(searchTerm) > -1) {
+            dataString = JSON.stringify(spreadsheetDatum.datumTags);
+            dataString = dataString.toString().toLowerCase();
+            if (dataString.indexOf(searchTerm) > -1) {
               return true;
             }
           } else if (fieldkey === "comments") {
             for (var j in spreadsheetDatum.comments) {
               for (var commentKey in spreadsheetDatum.comments[j]) {
-                if (spreadsheetDatum.comments[j][commentKey].toString().indexOf(searchTerm) > -1) {
+                dataString = spreadsheetDatum.comments[j][commentKey].toString();
+                if (dataString.indexOf(searchTerm) > -1) {
                   return true;
                 }
               }
             }
           } else if (fieldkey === "dateModified") {
             //remove alpha characters from the date so users can search dates too, but not show everysearch result if the user is looking for "t" #1657
-            var dataString = spreadsheetDatum[fieldkey].toString().toLowerCase().replace(/[a-z]/g, " ");
+            dataString = spreadsheetDatum[fieldkey].toString().toLowerCase().replace(/[a-z]/g, " ");
             if (dataString.indexOf(searchTerm) > -1) {
               return true;
             }
           } else {
-            var dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
+            dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
             if (dataString.indexOf(searchTerm) > -1) {
               return true;
             }
@@ -2092,22 +2095,22 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   // $scope.commaList = function(tags) {
-  //   var tagString = "";
+  //   var dataString = "";
   //   for (var i = 0; i < tags.length; i++) {
   //     if (i < (tags.length - 1)) {
   //       if (tags[i].tag) {
-  //         tagString = tagString + tags[i].tag + ", ";
+  //         dataString = dataString + tags[i].tag + ", ";
   //       }
   //     } else {
   //       if (tags[i].tag) {
-  //         tagString = tagString + tags[i].tag;
+  //         dataString = dataString + tags[i].tag;
   //       }
   //     }
   //   }
-  //   if (tagString === "") {
+  //   if (dataString === "") {
   //     return "Tags";
   //   }
-  //   return tagString;
+  //   return dataString;
   // };
 
   // Paginate data tables
