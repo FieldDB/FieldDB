@@ -41,12 +41,9 @@ angular
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
       // templateUrl: 'views/yalefieldmethodsspring2014template.html'
       redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
-    }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
-      // templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
-      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
 
     }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
-      templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
+      templateUrl: 'views/mcgillfieldmethodsfall2014template.html'
     }).otherwise({
       redirectTo: '/corpora_list'
     });

@@ -66,6 +66,11 @@ echo "... setting version on fielddb-spreadsheet npm"
 sed 's/"version": "[^,]*"/"version": "'$version'"/' angular_client/modules/spreadsheet/package.json  > output
 mv output angular_client/modules/spreadsheet/package.json
 
+echo "... setting version on fielddb-spreadsheet npm"
+sed 's/appVersion = "[^,]*ss"/appVersion = "'$version'ss"/' angular_client/modules/spreadsheet/app/scripts/controllers/SpreadsheetController.js  > output
+mv output angular_client/modules/spreadsheet/app/scripts/controllers/SpreadsheetController.js
+
+
 echo "... setting version on fielddb-prototype chrome manifest"
 sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/manifest.json  > output
 mv output backbone_client/manifest.json
