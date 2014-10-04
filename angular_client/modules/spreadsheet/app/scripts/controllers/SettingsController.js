@@ -13,7 +13,7 @@ console.log("Declaring the SpreadsheetStyleDataEntry SettingsController.");
 var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $resource, Data) {
 
   console.log(" Loading the SpreadsheetStyleDataEntry SettingsController.");
-  var debugging = true;
+  var debugging = false;
   var todo = function(message) {
     console.warn("TODO SETTINGS CONTROLLER: " + message);
   };
