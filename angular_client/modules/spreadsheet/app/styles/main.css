@@ -53,14 +53,14 @@ body {
     height: 60px;
   }
   .subMenubar {
-    top: 100px;
+    top: 60px;
   }
   .mainBody {
     top: 60px;
     padding-bottom: 25px;
   }
   .mainBodySearching {
-    top: 175px;
+    top: 125px;
   }
 }
 
