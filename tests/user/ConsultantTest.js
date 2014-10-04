@@ -49,27 +49,143 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
     var consultant = new Consultant({
       confidential: mockcorpus.confidential
     });
-    expect(consultant.dateOfBirth).toEqual(undefined);
+    expect(consultant.fields).toBeDefined();
+    expect(consultant.dateOfBirth).toBeDefined();
     consultant.dateOfBirth = "January 1, 1900";
     expect(consultant.dateOfBirth).toEqual("xxxxxxx x, xxxx");
   });
 
-  it("should set consultant's language", function() {
-    var consultant = new Consultant({
-      confidential: mockcorpus.confidential
-    });
-    expect(consultant.languages).toEqual(undefined);
-    consultant.languages = "Cat";
-    expect(consultant.languages).toEqual("Cat");
+});
+
+describe("langauges", function() {
+  it("should set consultant's language using a string", function() {
+    var consultant = new Consultant({});
+    expect(consultant.languages).toEqual("");
+    consultant.languages = "English, French, Urdu";
+    expect(consultant.languages).toEqual("English, French, Urdu");
+
+    expect(consultant.fields.languages.json.languages).toEqual([{
+      iso: "english",
+      name: "English",
+      nativeName: "English"
+    }, {
+      iso: "french",
+      name: "French",
+      nativeName: "French"
+    }, {
+      iso: "urdu",
+      name: "Urdu",
+      nativeName: "Urdu"
+    }]);
   });
 
-  it("should set consultant's dialect", function() {
-    var consultant = new Consultant({
-      confidential: mockcorpus.confidential
-    });
-    expect(consultant.dialect).toEqual(undefined);
-    consultant.dialect = "Cat";
-    expect(consultant.dialect).toEqual("Cat");
+  it("should set consultant's language using a full object", function() {
+    var consultant = new Consultant({});
+    expect(consultant.languages).toEqual("");
+    consultant.languages = {
+      "value": "English, French, Urdu",
+      "json": {
+        "languages": [{
+          "language": {
+            "ethnologueUrl": "",
+            "wikipediaUrl": "",
+            "iso": "en",
+            "locale": "en",
+            "dialect": "en-mtl",
+            "englishName": "English",
+            "nativeName": "English",
+            "alternateNames": ""
+          },
+          "fluency": {
+            "comprehensionFluency": "native",
+            "speakingFluency": "native",
+            "readingFluency": "native",
+            "writingFluency": "native"
+          },
+          "dates": {
+            "start": "birth",
+            "end": "present",
+            "proportionOfUse": "50%"
+          }
+        },{
+          "language": {
+            "ethnologueUrl": "",
+            "wikipediaUrl": "",
+            "iso": "fr",
+            "locale": "fr",
+            "dialect": "fr-mtl",
+            "englishName": "French",
+            "nativeName": "français",
+            "alternateNames": ""
+          },
+          "fluency": {
+            "comprehensionFluency": "immersion",
+            "speakingFluency": "immersion",
+            "readingFluency": "immersion, coursework",
+            "writingFluency": "immersion, coursework"
+          },
+          "dates": {
+            "start": 332035200000,
+            "end": "present",
+            "proportionOfUse": "40%"
+          }
+        },{
+          "language": {
+            "ethnologueUrl": "",
+            "wikipediaUrl": "",
+            "iso": "ur",
+            "locale": "ur",
+            "dialect": "en-lh",
+            "englishName": "Urdu",
+            "nativeName": "اردو",
+            "alternateNames": "Hindi"
+          },
+          "fluency": {
+            "comprehensionFluency": "immersion",
+            "speakingFluency": "immersion",
+            "readingFluency": "none",
+            "writingFluency": "none"
+          },
+          "dates": {
+            "start": "948326400000",
+            "end": "1121817600000",
+            "proportionOfUse": "02%"
+          }
+        }]
+      }
+    };
+    expect(consultant.languages).toEqual("English, French, Urdu");
+
+    expect(consultant.languageOne.language.iso).toEqual("en");
+    expect(consultant.languageOne.fluency.comprehensionFluency).toEqual("native");
+
+    expect(consultant.languageTwo.language.iso).toEqual("fr");
+    expect(consultant.languageTwo.fluency.comprehensionFluency).toEqual("immersion");
+
+    expect(consultant.languageThree.language.iso).toEqual("ur");
+    expect(consultant.languageThree.fluency.comprehensionFluency).toEqual("immersion");
+
+  });
+
+
+  it("should set consultant's dialects", function() {
+    var consultant = new Consultant({});
+    expect(consultant.dialects).toEqual("");
+    consultant.dialects = "en-ca, fr-qc, ur-lh";
+    expect(consultant.dialects).toEqual("en-ca, fr-qc, ur-lh");
+    expect(consultant.fields.languages.json.languages).toEqual([{
+      iso: "en-ca",
+      name: "en-ca",
+      nativeName: "en-ca"
+    }, {
+      iso: "fr-qc",
+      name: "fr-qc",
+      nativeName: "fr-qc"
+    }, {
+      iso: "ur-lh",
+      name: "ur-lh",
+      nativeName: "ur-lh"
+    }]);
   });
 
 });
@@ -170,7 +286,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     var doc = {
       _id: "migm740610ea",
       _rev: "1-66d7dcf2ec5756f96705e4c190efbf7b",
-      fields: [ {
+      fields: [{
         _id: "firstname",
         labelExperimenters: "Prénom",
         shouldBeEncrypted: true,

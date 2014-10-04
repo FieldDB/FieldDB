@@ -1,5 +1,5 @@
-var AudioVideo = require('./../../api/audio_video/AudioVideo').AudioVideo;
-var AudioVideos = require('./../../api/audio_video/AudioVideos').AudioVideos;
+var AudioVideo = require("./../../api/audio_video/AudioVideo").AudioVideo;
+var AudioVideos = require("./../../api/audio_video/AudioVideos").AudioVideos;
 
 describe("Test AudioVideos", function() {
   it("should load", function() {

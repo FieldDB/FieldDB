@@ -36,6 +36,7 @@
   var Participant = require("./user/Participant").Participant;
   var Contextualizer = require("./locales/Contextualizer").Contextualizer;
   var Corpus = require("./corpus/Corpus").Corpus;
+  var FieldDatabase = require("./corpus/Corpus").FieldDatabase;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
   var Search = require("./search/Search").Search;
@@ -56,6 +57,7 @@
   FieldDB.Stimulus = Stimulus;
   FieldDB.Response = Response;
   FieldDB.Database = Database;
+  FieldDB.FieldDatabase = FieldDatabase;
   FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
   FieldDB.User = User;

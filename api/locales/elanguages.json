@@ -1,4 +1,8 @@
 [{
+  "iso": "Non applicable",
+  "name": "NA",
+  "nativeName": "Non applicable"
+}, {
   "iso": "ab",
   "name": "Abkhaz",
   "nativeName": "аҧсуа"
@@ -254,7 +258,7 @@
 }, {
   "iso": "ie",
   "name": "Interlingue",
-  "nativeName": "Originally called Occidental; then Interlingue after WWII"
+  "nativeName": "Occidental"
 }, {
   "iso": "ga",
   "name": "Irish",
@@ -473,7 +477,8 @@
   "nativeName": "ᐊᓂᔑᓈᐯᒧᐎᓐ"
 }, {
   "iso": "cu",
-  "name": "Old Church Slavonic, Church Slavic, Church Slavonic, Old Bulgarian, Old Slavonic",
+  "name": "Old Church Slavonic",
+  "alternateNames": "Old Church Slavonic, Church Slavic, Church Slavonic, Old Bulgarian, Old Slavonic",
   "nativeName": "ѩзыкъ словѣньскъ"
 }, {
   "iso": "om",
@@ -629,7 +634,8 @@
   "nativeName": "ትግርኛ"
 }, {
   "iso": "bo",
-  "name": "Tibetan Standard, Tibetan, Central",
+  "name": "Tibetan Standard",
+  "alternateNames": "Tibetan Standard, Tibetan, Central",
   "nativeName": "བོད་ཡིག"
 }, {
   "iso": "tk",
@@ -638,7 +644,8 @@
 }, {
   "iso": "tl",
   "name": "Tagalog",
-  "nativeName": "Wikang Tagalog, ᜏᜒᜃᜅ᜔ ᜆᜄᜎᜓᜄ᜔"
+  "alternateNames": "Wikang Tagalog, ᜏᜒᜃᜅ᜔ ᜆᜄᜎᜓᜄ᜔",
+  "nativeName": "Wikang Tagalog"
 }, {
   "iso": "tn",
   "name": "Tswana",

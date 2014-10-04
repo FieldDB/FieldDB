@@ -1,4 +1,4 @@
-var CORS = require('./../../api/CORS.js');
+var CORS = require("./../../api/CORS.js");
 
 var CouchDBConnection = function(url, user) {
   this.url = url;

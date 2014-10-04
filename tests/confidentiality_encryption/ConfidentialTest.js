@@ -1,6 +1,6 @@
 var Confidential = require("./../../api/confidentiality_encryption/Confidential").Confidential;
-var atob = atob || require('atob');
-var btoa = btoa || require('btoa');
+var atob = atob || require("atob");
+var btoa = btoa || require("btoa");
 var SAMPLE_COMPLEX_OBJECT = require("./../../api/corpus/corpus.json");
 
 describe("Confidential: as a language consultant I want to be able to give data and have my data remain confidential", function() {

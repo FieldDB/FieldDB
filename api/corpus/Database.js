@@ -1,6 +1,9 @@
+/* globals localStorage */
+
 var Q = require("q");
 var CORS = require("../CORS").CORS;
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 
 var Database = function Database(options) {
   this.debug("In Database ", options);
@@ -60,7 +63,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         this.bug("Cannot get something if the dbname is not defined ", arg1, arg2);
         throw "Cannot get something if the dbname is not defined ";
       }
-      var baseUrl = this.url,
+      var deferred = Q.defer(),
+        baseUrl = this.url,
         key,
         value;
 
@@ -74,15 +78,31 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
       }
-      return CORS.makeCORSRequest({
+      CORS.makeCORSRequest({
         method: "POST",
         data: value,
         url: baseUrl + "/" + this.dbname
+      }).then(function(result) {
+        if (result._rev) {
+          value._rev = result._rev;
+          value.rev = result._rev;
+        }
+        deferred.resolve(value);
+      }, function(error) {
+        console.warn("error saving " + error);
+        deferred.reject(error);
       });
+      return deferred.promise;
     }
   },
 
   delete: {
+    value: function(options) {
+      return this.remove(options);
+    }
+  },
+
+  remove: {
     value: function(options) {
       this.bug("Deleting data is not permitted.", options);
       throw "Deleting data is not permitted.";
@@ -96,7 +116,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   fetchCollection: {
-    value: function(collectionType, start, end, limit, reduce) {
+    value: function(collectionType, start, end, limit, reduce, key) {
       this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
         self = this,
@@ -115,6 +135,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           deferred.reject("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
         });
         return deferred.promise;
+      }
+      if (key) {
+        key = "&key=\"" + key + "\"";
+      } else {
+        key = "";
       }
 
       var cantLogIn = function(reason) {
@@ -168,7 +193,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "GET",
           dataType: "json",
-          url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType)
+          url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType) + key
         }).then(function(result) {
           if (result.rows && result.rows.length) {
             deferred.resolve(result.rows.map(function(doc) {
@@ -203,12 +228,58 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         url: baseUrl + "/_session"
       }).then(function(sessionInfo) {
         self.debug(sessionInfo);
+        self.connectionInfo = sessionInfo;
         deferred.resolve(sessionInfo);
       }, function(reason) {
         deferred.reject(reason);
       });
 
       return deferred.promise;
+    }
+  },
+
+  connectionInfo: {
+    get: function() {
+      var connectionInfo;
+      try {
+        connectionInfo = localStorage.getItem("_connectionInfo");
+      } catch (e) {
+        console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+        connectionInfo = this._connectionInfo;
+      }
+      if (!connectionInfo) {
+        return;
+      }
+      try {
+        connectionInfo = new Confidential({
+          secretkey: "connectionInfo"
+        }).decrypt(connectionInfo);
+      } catch (e) {
+        console.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
+        connectionInfo = undefined;
+      }
+      return connectionInfo;
+    },
+    set: function(value) {
+      if (value) {
+        try {
+          localStorage.setItem("_connectionInfo", new Confidential({
+            secretkey: "connectionInfo"
+          }).encrypt(value));
+        } catch (e) {
+          this._connectionInfo = new Confidential({
+            secretkey: "connectionInfo"
+          }).encrypt(value);
+          console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+        }
+      } else {
+        try {
+          localStorage.removeItem("_connectionInfo");
+        } catch (e) {
+          console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+          delete this._connectionInfo;
+        }
+      }
     }
   },
 
@@ -268,7 +339,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   logout: {
     value: function() {
       var deferred = Q.defer(),
-        baseUrl = this.url;
+        baseUrl = this.url,
+        self = this;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
@@ -280,6 +352,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         url: baseUrl + "/_session"
       }).then(function(result) {
           if (result.ok) {
+            self.connectionInfo = null;
             deferred.resolve(result);
           } else {
             deferred.reject(result);
@@ -295,23 +368,32 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   register: {
-    value: function() {
+    value: function(registerDetails) {
       var deferred = Q.defer(),
         self = this,
-        baseUrl = this.url;
+        baseUrl = this.url,
+        authUrl = this.authUrl;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
       }
 
+      if (!authUrl) {
+        authUrl = this.BASE_AUTH_URL;
+      }
+
+      if (!registerDetails) {
+        registerDetails = {
+          username: this.dbname.split("-")[0],
+          password: "testtest"
+        };
+      }
+
       CORS.makeCORSRequest({
         type: "POST",
         dataType: "json",
-        url: "https://localhost:3183/register",
-        data: {
-          username: this.dbname.split("-")[0],
-          password: "testtest"
-        }
+        url: authUrl + "/register",
+        data: registerDetails
       }).then(function(result) {
           if (result.user) {
             CORS.makeCORSRequest({
@@ -320,7 +402,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               url: baseUrl + "/_session",
               data: {
                 name: result.user.username,
-                password: "testtest"
+                password: registerDetails.password
               }
             }).then(function(session) {
               self.debug(session);
