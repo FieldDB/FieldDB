@@ -240,10 +240,10 @@
 
   </div>
   <br />
-  <button class="btn btn-primary"
+  <button  ng-hide="mcgillOnly" class="btn btn-primary"
   ng-click="saveNewPreferences('mcgillfieldmethodsfall2014template', newFieldPreferences2)">Save/Activate
   McGill Template</button>
-  <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
+  <button  ng-hide="mcgillOnly" ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
   ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">Set as default template for {{DB.title}}</button>
   <!-- End McGill TEMPLATE -->
   <div ng-hide="mcgillOnly">
