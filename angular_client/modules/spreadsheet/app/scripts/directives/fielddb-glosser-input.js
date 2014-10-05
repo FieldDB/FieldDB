@@ -39,6 +39,7 @@
 //   }
 // };
 
+var debuggingMode = false;
 angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
 
   var controller = function($scope, $rootScope) {
@@ -53,7 +54,9 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
 
     $scope.runGlosserUsingThisField = function(label, originalvalue, datumornewdatum) {
       var currentValue = datumornewdatum[label];
-      // console.log('requesting semi-automatic glosser: ' + originalvalue + '->' + currentValue);
+      if (debuggingMode) {
+        console.log('requesting semi-automatic glosser: ' + originalvalue + '->' + currentValue);
+      }
 
       if (datumornewdatum.rev) {
         $rootScope.markAsEdited($scope.fieldData, datumornewdatum);
@@ -85,7 +88,7 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         'ng-model="' + attrs.datumornewdatum + '[corpusField.label]"' +
         'placeholder="{{corpusField.title}}"' +
         'title="{{corpusField.hint}}"' +
-        'ng-blur="runGlosserUsingThisField(corpusField.label, ' + attrs.datumornewdatum + '[corpusField.label], ' + attrs.datumornewdatum + ', $event)" />'
+        'ng-blur="runGlosserUsingThisField(corpusField.label, ' + attrs.datumornewdatum + '[corpusField.label], ' + attrs.datumornewdatum + ', $event)" />';
 
       return templateString;
     },
