@@ -51,22 +51,25 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
       }
     };
 
-    $scope.runGlosserUsingThisField = function(label, originalvalue) {
-      var currentValue = $scope.datum[label];
-      console.log('requesting semi-automatic glosser: ' + originalvalue + '->' + currentValue);
+    $scope.runGlosserUsingThisField = function(label, originalvalue, datumornewdatum) {
+      var currentValue = datumornewdatum[label];
+      // console.log('requesting semi-automatic glosser: ' + originalvalue + '->' + currentValue);
 
-      if ($scope.datum.rev) {
-        $rootScope.markAsEdited($scope.fieldData, $scope.datum);
+      if (datumornewdatum.rev) {
+        $rootScope.markAsEdited($scope.fieldData, datumornewdatum);
       } else {
+        if (JSON.stringify(datumornewdatum) === "{}") {
+          return;
+        }
         $rootScope.newRecordHasBeenEdited = true;
       }
 
-      // $scope.datum.pouchname = $scope.DB.pouchname;
+      // datumornewdatum.pouchname = $scope.DB.pouchname;
       if (label === 'utterance') {
-        $scope.datum = Glosser.guessMorphemesFromUtterance($scope.datum, $scope.useAutoGlosser);
+        datumornewdatum = Glosser.guessMorphemesFromUtterance(datumornewdatum, $scope.useAutoGlosser);
       } else if (label === 'morphemes') {
-        $scope.datum = Glosser.guessUtteranceFromMorphemes($scope.datum, $scope.useAutoGlosser);
-        $scope.datum = Glosser.guessGlossFromMorphemes($scope.datum, $scope.useAutoGlosser);
+        datumornewdatum = Glosser.guessUtteranceFromMorphemes(datumornewdatum, $scope.useAutoGlosser);
+        datumornewdatum = Glosser.guessGlossFromMorphemes(datumornewdatum, $scope.useAutoGlosser);
       }
     };
 
@@ -79,10 +82,10 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         'ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + '"' +
         'class="span5"' +
         'type="text"' +
-        'ng-model="datum[corpusField.label]"' +
+        'ng-model="' + attrs.datumornewdatum + '[corpusField.label]"' +
         'placeholder="{{corpusField.title}}"' +
         'title="{{corpusField.hint}}"' +
-        'ng-blur="runGlosserUsingThisField(corpusField.label, datum[corpusField.label], $event)" />'
+        'ng-blur="runGlosserUsingThisField(corpusField.label, ' + attrs.datumornewdatum + '[corpusField.label], ' + attrs.datumornewdatum + ', $event)" />'
 
       return templateString;
     },
