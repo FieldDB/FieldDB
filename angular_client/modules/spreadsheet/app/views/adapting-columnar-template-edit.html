@@ -8,35 +8,9 @@
     placeholder=""
     title="Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you team can choose any symbol for this meaning." />
   </div>
-  <div class="span5" spreadsheet-catch-focus-on-arrow-press>
-    <input
-    ng-repeat="corpusField in fieldsInColumns.first"
-    keypress-mark-as-edited
-    class="span5"
-    type="text"
-    ng-model="datum[corpusField.label]"
-    placeholder="{{corpusField.title}}"
-    title="{{corpusField.hint}}"
-    guess-morphemes-from-utterance
-    guess-gloss-from-morphemes
-    guess-utterance-from-morphemes
-    auto-glosser-on="{{useAutoGlosser}}"
-    field-label="{{corpusField.label}}" />
+  <div class="span5" fielddb-glosser-input columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
   </div>
-  <div class="span5">
-    <input
-    ng-repeat="corpusField in fieldsInColumns.second"
-    keypress-mark-as-edited
-    class="span5"
-    type="text"
-    ng-model="datum[corpusField.label]"
-    placeholder="{{corpusField.title}}"
-    title="{{corpusField.hint}}"
-    guess-morphemes-from-utterance
-    guess-gloss-from-morphemes
-    guess-utterance-from-morphemes
-    auto-glosser-on="{{useAutoGlosser}}"
-    field-label="{{corpusField.label}}" />
+  <div class="span5" fielddb-glosser-input columnlabel="second">
   </div>
   <div class="span2 entered_modified_info">
     <span ng-show="searching==true">

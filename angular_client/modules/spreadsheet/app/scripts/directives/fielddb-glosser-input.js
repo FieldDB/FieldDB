@@ -39,96 +39,57 @@
 //   }
 // };
 
-angular.module('spreadsheetApp')
-  .directive('keypressMarkAsEdited', function($rootScope) {
-    return function(scope, element) {
-      element.bind('blur', function(e) {
-        var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
-        if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
-          $rootScope.markAsEdited(scope.fieldData, scope.datum);
-        } else {
-          return;
-        }
-      });
-    };
-  })
-  .directive('keypressMarkAsNew', function($rootScope) {
-    return function(scope, element) {
-      element.bind('keyup', function(e) {
-        var keycodesToIgnore = [40, 38, 13, 39, 37, 9];
-        if (keycodesToIgnore.indexOf(e.keyCode) === -1) {
-          $rootScope.newRecordHasBeenEdited = true;
-        } else {
-          return;
-        }
-      });
-    };
-  })
-  .directive('guessUtteranceFromMorphemes', function() {
-    return function(scope, element, attrs) {
-      var datum = attrs.datum;
-      if (typeof datum === "string") {
-        datum = JSON.parse(attrs.datum);
+angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
+
+  var controller = function($scope, $rootScope) {
+    console.log('loading controller for fielddbGlosserInput');
+
+    $scope.keyListener = function($event) {
+      var arrowkeys = [40, 38, 39, 37];
+      if (arrowkeys.indexOf($event.keyCode) > -1) {
+        return;
       }
-      element.bind('blur', function(e) {
-        console.log("which field is this", attrs.fieldLabel);
-        if (datum && attrs.fieldLabel === "morphemes") {
-          // Ignore arrows
-          var keycodesToIgnore = [40, 38, 39, 37];
-          if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
-            return;
-          }
-
-          datum.pouchname = scope.DB.pouchname;
-          // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
-          datum = Glosser.guessUtteranceFromMorphemes(datum, scope.useAutoGlosser);
-        }
-
-      });
     };
-  })
-  .directive('guessMorphemesFromUtterance', function() {
-    return function(scope, element, attrs) {
-      var datum = scope.datum;
-      element.bind('blur', function(e) {
-        console.log("which field is this", attrs.fieldLabel);
-        if (!datum || attrs.fieldLabel !== "utterance") {
-          return;
-        }
-        // Ignore arrows
-        var keycodesToIgnore = [40, 38, 39, 37];
-        if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
-          return;
-        }
-        if (!datum.pouchname) {
-          datum.pouchname = scope.DB.pouchname;
-        }
-        // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
-        scope.$apply(function() {
-          datum = Glosser.guessMorphemesFromUtterance(datum, scope.useAutoGlosser);
-        });
-      });
-    };
-  })
-  .directive('guessGlossFromMorphemes', function() {
-    return function(scope, element, attrs) {
-      var datum = attrs.datum;
-      if (typeof datum === "string") {
-        datum = JSON.parse(attrs.datum);
+
+    $scope.runGlosserUsingThisField = function(label, originalvalue) {
+      var currentValue = $scope.datum[label];
+      console.log('requesting semi-automatic glosser: ' + originalvalue + '->' + currentValue);
+
+      if ($scope.datum.rev) {
+        $rootScope.markAsEdited($scope.fieldData, $scope.datum);
+      } else {
+        $rootScope.newRecordHasBeenEdited = true;
       }
-      element.bind('blur', function(e) {
-        console.log("which field is this", attrs.fieldLabel);
-        if (datum && attrs.fieldLabel === "morphemes") {
-          // Ignore arrows
-          var keycodesToIgnore = [40, 38, 39, 37];
-          if (keycodesToIgnore.indexOf(e.keyCode) > -1) {
-            return;
-          }
-          datum.pouchname = scope.DB.pouchname;
-          // initGlosserAndLexiconIfNecessary(scope.DB.pouchname);
-          datum = Glosser.guessGlossFromMorphemes(datum, scope.useAutoGlosser);
-        }
 
-      });
+      // $scope.datum.pouchname = $scope.DB.pouchname;
+      if (label === 'utterance') {
+        $scope.datum = Glosser.guessMorphemesFromUtterance($scope.datum, $scope.useAutoGlosser);
+      } else if (label === 'morphemes') {
+        $scope.datum = Glosser.guessUtteranceFromMorphemes($scope.datum, $scope.useAutoGlosser);
+        $scope.datum = Glosser.guessGlossFromMorphemes($scope.datum, $scope.useAutoGlosser);
+      }
     };
-  });
+
+  };
+
+  return {
+    template: function(element, attrs) {
+      console.log('loading template for fielddbGlosserInput', attrs);
+      var templateString = '<input ' +
+        'ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + '"' +
+        'class="span5"' +
+        'type="text"' +
+        'ng-model="datum[corpusField.label]"' +
+        'placeholder="{{corpusField.title}}"' +
+        'title="{{corpusField.hint}}"' +
+        'ng-blur="runGlosserUsingThisField(corpusField.label, datum[corpusField.label], $event)" />'
+
+      return templateString;
+    },
+    restrict: 'A',
+    controller: controller,
+    link: function postLink() {
+      // console.log('fielddbGlosserInput ', element.find('input'));
+    }
+  };
+});
