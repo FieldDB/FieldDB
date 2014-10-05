@@ -1304,6 +1304,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.saved = "no";
   };
 
+  $rootScope.markNewAsEdited = function(){
+    $rootScope.newRecordHasBeenEdited = true;
+  };
+
   // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
   $rootScope.markAsEdited = function(fieldData, datum) {
     var utterance = "Datum";
