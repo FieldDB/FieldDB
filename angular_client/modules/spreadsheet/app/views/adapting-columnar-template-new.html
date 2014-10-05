@@ -1,7 +1,7 @@
 <form ng-submit="createRecord(newFieldData)" >
   <div class="span1" >
     <input
-    keypress-mark-as-new
+    ng-blur="markNewAsEdited()"
     class="span2"
     type="text"
     ng-model="newFieldData['judgement']"
