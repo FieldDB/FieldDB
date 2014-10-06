@@ -3,7 +3,7 @@
 var Q = require("q");
 
 var CORS = {
-  type: "CORS",
+  fieldDBtype: "CORS",
   debugMode: false,
   debug: function(a, b, c) {
     if (this.debugMode) {

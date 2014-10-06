@@ -395,7 +395,7 @@ describe("Contextualizer", function() {
 
         expect("preventing this in FieldDBObject's initialization").toEqual("preventing this in FieldDBObject's initialization");
         // console.log("ContextualizableObject.constructor",  ContextualizableObject.constructor);
-        // console.log("ContextualizableObject.constructor.type",  ContextualizableObject.constructor.type);
+        // console.log("ContextualizableObject.constructor.fieldDBtype",  ContextualizableObject.constructor.fieldDBtype);
         var DataListMock = function DataListMock(options) {
           this.debug("In DataListMock ", options);
           FieldDBObject.apply(this, arguments);

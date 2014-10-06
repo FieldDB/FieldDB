@@ -5,25 +5,25 @@ var Document = function Document(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-Document.type = "Document";
+Document.fieldDBtype = "Document";
 Document.prototype = Object.create(FieldDBObject.prototype, /** @lends Document.prototype */ {
   constructor: {
     value: Document
   },
 
-  type: {
+  fieldDBtype: {
     get: function() {
-      // console.log("getting type");
-      if (!this._type) {
-        // this._type = this.guessType(this);
+      // console.log("getting fieldDBtype");
+      if (!this._fieldDBtype) {
+        // this._fieldDBtype = this.guessType(this);
       }
-      return this._type || "";
+      return this._fieldDBtype || "";
     },
     set: function(value) {
-      // console.log("setting type");
-      if (value !== this._type) {
-        this.warn("Overriding type " + this._type + " to the incoming " + value);
-        this._type = value;
+      // console.log("setting fieldDBtype");
+      if (value !== this._fieldDBtype) {
+        this.warn("Overriding fieldDBtype " + this._fieldDBtype + " to the incoming " + value);
+        this._fieldDBtype = value;
       }
     }
   },
