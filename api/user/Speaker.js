@@ -37,6 +37,7 @@ var Speaker = function Speaker(options) {
     this.fields = this.defaults.fields;
   }
   UserMask.apply(this, arguments);
+  this._fieldDBtype = "Speaker";
 };
 
 Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototype */ {
@@ -98,7 +99,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       return this.buildGravatar();
     },
     set: function(value) {
-      this.warn("Cannot set the gravatar of a " + this.type + " (it must be anonymous)." + value);
+      this.warn("Cannot set the gravatar of a " + this.fieldDBtype + " (it must be anonymous)." + value);
     }
   },
 

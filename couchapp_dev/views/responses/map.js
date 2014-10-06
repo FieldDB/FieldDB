@@ -5,7 +5,7 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
       return;
     }
-    if (doc.type === "SubExperimentDataList" && doc.results) {
+    if (doc.fieldDBtype === "SubExperimentDataList" && doc.results) {
       var date = doc.dateModified || doc.dateCreated;
 
       var experimentLabel = doc._id;

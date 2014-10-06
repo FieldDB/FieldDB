@@ -18,7 +18,7 @@ function(doc) {
           //emit(error, null);
         }
       }
-      doc.type = "Datum";
+      doc.fieldDBtype = "Datum";
       emit(dateModified, doc);
     }
   } catch (e) {

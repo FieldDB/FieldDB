@@ -5,7 +5,7 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
 
     if (doc.collection == "private_corpuses" || (doc.confidential && doc.confidential.secretkey)) {
-      doc.type = "Corpus";
+      doc.fieldDBtype = "Corpus";
       emit(doc.timestamp, doc);
     }
   } catch (e) {

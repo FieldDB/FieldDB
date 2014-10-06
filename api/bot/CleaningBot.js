@@ -3,6 +3,8 @@ var $ = require("jquery.couch.js");
 
 
 var Bot = function(pouchname, corpusid, corpustitle) {
+    this._fieldDBtype = "Bot";
+
   if (!pouchname || !corpusid || !corpustitle) {
     throw ("You must create this bot with a database name, a corpus id and a corpus title. ");
   }

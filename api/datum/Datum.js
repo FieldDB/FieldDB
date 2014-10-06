@@ -60,6 +60,7 @@ var Session = require("./../FieldDBObject").FieldDBObject;
 var Datum = function Datum(options) {
   this.debug("Constructing Datum: ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "Datum";
 };
 
 Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.prototype */ {
@@ -100,7 +101,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   audioVideo: {
     get: function() {
-      if (this._audioVideo && this._audioVideo.type === "AudioVideos") {
+      if (this._audioVideo && this._audioVideo.fieldDBtype === "AudioVideos") {
         this._audioVideo.dbname = this.dbname;
       }
       return this._audioVideo || FieldDBObject.DEFAULT_COLLECTION;
@@ -123,7 +124,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   images: {
     get: function() {
-      if (this._images && this._images.type === "Images") {
+      if (this._images && this._images.fieldDBtype === "Images") {
         this._images.dbname = this.dbname;
       }
       return this._images || FieldDBObject.DEFAULT_COLLECTION;

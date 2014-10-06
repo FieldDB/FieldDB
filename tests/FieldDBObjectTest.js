@@ -21,6 +21,7 @@ describe("FieldDBObject", function() {
       var Child = function Child(options) {
         this.debug("In Child ", options);
         FieldDBObject.apply(this, arguments);
+        this._fieldDBtype = "Child";
       };
 
       Child.prototype = Object.create(FieldDBObject.prototype, /** @lends Child.prototype */ {
@@ -37,7 +38,7 @@ describe("FieldDBObject", function() {
         aproperty: "adifferentvalue"
       });
       expect(u2.aproperty).toEqual("adifferentvalue");
-      expect(u2.type).toEqual("Child");
+      expect(u2.fieldDBtype).toEqual("Child");
 
     });
 
@@ -53,7 +54,7 @@ describe("FieldDBObject", function() {
 
       FieldDBObject.application = new FieldDBObject({
         context: "Offline",
-        type: "PsycholinguisticsApp"
+        fieldDBtype: "PsycholinguisticsApp"
       });
       var u = new FieldDBObject();
       expect(u.application).toBeDefined();
@@ -65,7 +66,7 @@ describe("FieldDBObject", function() {
 
       FieldDBObject.application = new FieldDBObject({
         context: "Online",
-        type: "PsycholinguisticsApp"
+        fieldDBtype: "PsycholinguisticsApp"
       });
       expect(u.application.context).toEqual("Online");
       expect(u.application).toBe(t.application);
@@ -110,7 +111,7 @@ describe("FieldDBObject", function() {
         _id: "firstPenguin",
         _rev: "2-123",
         version: FieldDBObject.DEFAULT_VERSION,
-        type: "FieldDBObject"
+        fieldDBtype: "FieldDBObject"
       });
 
       var accessingAttributeShouldNotCauseItToExist = penguin.dbname;
@@ -133,7 +134,7 @@ describe("FieldDBObject", function() {
       expect(resultingJSON).toEqual({
         _id: "firstPenguin",
         version: FieldDBObject.DEFAULT_VERSION,
-        type: "FieldDBObject"
+        fieldDBtype: "FieldDBObject"
       });
     });
 
@@ -143,7 +144,7 @@ describe("FieldDBObject", function() {
         _id: "123"
       }).toJSON("complete");
       expect(resultingJSON).toEqual({
-        type: "FieldDBObject",
+        fieldDBtype: "FieldDBObject",
         dateCreated: 1,
         _id: "123",
         version: FieldDBObject.DEFAULT_VERSION,
@@ -557,7 +558,7 @@ describe("FieldDBObject", function() {
         }),
         // debugMode: true
       });
-      expect(aBaseObject.type).toEqual("FieldDBObject");
+      expect(aBaseObject.fieldDBtype).toEqual("FieldDBObject");
 
       atriviallyDifferentObject = new FieldDBObject({
         externalString: "trivial model",
@@ -577,7 +578,7 @@ describe("FieldDBObject", function() {
     });
 
     it("should be able to merge one object into another without affecting the second object", function() {
-      expect(atriviallyDifferentObject.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentObject.fieldDBtype).toEqual("FieldDBObject");
       expect(aBaseObject.externalString).toEqual("easy model");
 
       var resultObject = aBaseObject.merge("self", atriviallyDifferentObject, "overwrite");
@@ -615,7 +616,7 @@ describe("FieldDBObject", function() {
     });
 
     it("should be able to merge two objects into a third", function() {
-      expect(atriviallyDifferentObject.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentObject.fieldDBtype).toEqual("FieldDBObject");
       expect(aBaseObject.externalString).toEqual("easy model");
 
       var aThirdObject = new FieldDBObject();
@@ -711,7 +712,7 @@ describe("FieldDBObject", function() {
         }),
         // debugMode: true
       });
-      expect(aBaseObjectWithDifferentId.type).toEqual("FieldDBObject");
+      expect(aBaseObjectWithDifferentId.fieldDBtype).toEqual("FieldDBObject");
 
       var atriviallyDifferentObjectWithADifferentInternalObject = new FieldDBObject({
         externalString: "new string",
@@ -722,7 +723,7 @@ describe("FieldDBObject", function() {
         }),
         // debugMode: true
       });
-      expect(atriviallyDifferentObjectWithADifferentInternalObject.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentObjectWithADifferentInternalObject.fieldDBtype).toEqual("FieldDBObject");
       expect(aBaseObjectWithDifferentId.externalString).toEqual("old string");
 
       var resultObject = aBaseObjectWithDifferentId.merge("self", atriviallyDifferentObjectWithADifferentInternalObject, "overwrite");

@@ -14,6 +14,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var ELanguages = function ELanguages(options) {
   this.debug("Constructing ELanguages ", options);
   Collection.apply(this, arguments);
+  this._fieldDBtype = "ELanguages";
 };
 
 ELanguages.prototype = Object.create(Collection.prototype, /** @lends ELanguages.prototype */ {

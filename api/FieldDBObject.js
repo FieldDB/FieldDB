@@ -79,6 +79,7 @@ try {
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
+  this._fieldDBtype = "FieldDBObject";
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
@@ -94,7 +95,7 @@ var FieldDBObject = function FieldDBObject(json) {
     }
     this.debug("JSON: " + member);
     if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.type === "ContextualizableObject") {
+      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.fieldDBtype === "ContextualizableObject") {
         this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
         simpleModels.push(member);
       } else {
@@ -118,7 +119,7 @@ var FieldDBObject = function FieldDBObject(json) {
 
   if (!this.render) {
     this.render = function(options) {
-      this.warn("Rendering, but the render was not injected for this " + this.type, options);
+      this.warn("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
     };
   }
 };
@@ -137,12 +138,12 @@ FieldDBObject.bug = function(message) {
   try {
     alert(message);
   } catch (e) {
-    console.warn(this.type.toUpperCase() + " BUG: " + message);
+    console.warn(this.fieldDBtype.toUpperCase() + " BUG: " + message);
   }
 };
 
 FieldDBObject.warn = function(message, message2, message3, message4) {
-  console.warn(this.type.toUpperCase() + " WARN: " + message);
+  console.warn(this.fieldDBtype.toUpperCase() + " WARN: " + message);
   if (message2) {
     console.warn(message2);
   }
@@ -162,14 +163,14 @@ FieldDBObject.confirm = function(message, optionalLocale) {
     var response;
 
     if (self.alwaysConfirmOkay) {
-      console.warn(self.type.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
+      console.warn(self.fieldDBtype.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
       response = self.alwaysConfirmOkay;
     }
 
     try {
       response = confirm(message);
     } catch (e) {
-      console.warn(self.type.toUpperCase() + " ASKING USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
+      console.warn(self.fieldDBtype.toUpperCase() + " ASKING USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
       response = self.alwaysConfirmOkay;
     }
 
@@ -235,15 +236,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: FieldDBObject
   },
 
-  type: {
+  fieldDBtype: {
+    configurable: true,
     get: function() {
-      var funcNameRegex = /function (.{1,})\(/;
-      var results = (funcNameRegex).exec((this).constructor.toString());
-      return (results && results.length > 1) ? results[1] : "";
+      return this._fieldDBtype;
     },
     set: function(value) {
-      if (value !== this.type) {
-        this.warn("Using type " + this.type + " when the incoming object was " + value);
+      if (value !== this.fieldDBtype) {
+        this.warn("Using type " + this.fieldDBtype + " when the incoming object was " + value);
       }
     }
   },
@@ -283,7 +283,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         //do nothing, we are in node or some non-friendly browser.
       }
       if (this.debugMode) {
-        console.log(this.type.toUpperCase() + " DEBUG: " + message);
+        console.log(this.fieldDBtype.toUpperCase() + " DEBUG: " + message);
 
         if (message2) {
           console.log(message2);
@@ -383,7 +383,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
   todo: {
     value: function(message, message2, message3, message4) {
-      console.warn(this.type.toUpperCase() + " TODO: " + message);
+      console.warn(this.fieldDBtype.toUpperCase() + " TODO: " + message);
       if (message2) {
         console.warn(message2);
       }
@@ -432,24 +432,35 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         FieldDBObject.software.userAgent = navigator.userAgent;
         FieldDBObject.software.vendor = navigator.vendor;
         FieldDBObject.software.vendorSub = navigator.vendorSub;
-        navigator.geolocation.getCurrentPosition(function(position) {
-          console.warn("recieved position information");
-          FieldDBObject.software.location = position.coords;
-        });
+        if (navigator && navigator.geolocation && typeof navigator.geolocation.getCurrentPosition === "function") {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            console.warn("recieved position information");
+            FieldDBObject.software.location = position.coords;
+          });
+        }
       } catch (e) {
+        console.warn("Error loading software ", e);
         FieldDBObject.software = FieldDBObject.software || {};
         FieldDBObject.software.version = process.version;
         FieldDBObject.software.appVersion = "PhantomJS unknown";
-        var os = require("os");
-        FieldDBObject.hardware = FieldDBObject.hardware || {};
-        FieldDBObject.hardware.endianness = os.endianness();
-        FieldDBObject.hardware.platform = os.platform();
-        FieldDBObject.hardware.hostname = os.hostname();
-        FieldDBObject.hardware.type = os.type();
-        FieldDBObject.hardware.arch = os.arch();
-        FieldDBObject.hardware.release = os.release();
-        FieldDBObject.hardware.totalmem = os.totalmem();
-        FieldDBObject.hardware.cpus = os.cpus().length;
+
+        try {
+          var avoidmontagerequire = require;
+          var os = avoidmontagerequire("os");
+          FieldDBObject.hardware = FieldDBObject.hardware || {};
+          FieldDBObject.hardware.endianness = os.endianness();
+          FieldDBObject.hardware.platform = os.platform();
+          FieldDBObject.hardware.hostname = os.hostname();
+          FieldDBObject.hardware.type = os.type();
+          FieldDBObject.hardware.arch = os.arch();
+          FieldDBObject.hardware.release = os.release();
+          FieldDBObject.hardware.totalmem = os.totalmem();
+          FieldDBObject.hardware.cpus = os.cpus().length;
+        } catch (e) {
+          console.warn(" hardware is unknown.", e);
+          FieldDBObject.hardware = FieldDBObject.hardware || {};
+          FieldDBObject.software.appVersion = "Device unknown";
+        }
       }
       if (!optionalUserWhoSaved) {
         optionalUserWhoSaved = {
@@ -1023,7 +1034,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       var json = {
-          type: this.type
+          fieldDBtype: this.fieldDBtype
         },
         aproperty,
         underscorelessProperty;

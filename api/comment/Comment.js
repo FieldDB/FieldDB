@@ -17,6 +17,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Comment = function Comment(options) {
   this.debug("Constructing Comment ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "Comment";
 };
 
 Comment.prototype = Object.create(FieldDBObject.prototype, /** @lends Comment.prototype */ {

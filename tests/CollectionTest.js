@@ -463,7 +463,7 @@ describe("lib/Collection", function() {
     it("should be possible to remove a simple object", function() {
       // collection.debugMode = true;
       var duck = collection.collection[3].toJSON();
-      expect(duck.type).toEqual("FieldDBObject");
+      expect(duck.fieldDBtype).toEqual("FieldDBObject");
       expect(duck.name).toEqual("duck");
       expect(collection.length).toEqual(6);
 
@@ -566,7 +566,7 @@ describe("lib/Collection", function() {
 
 
     it("should have a type of Collection", function() {
-      expect(collection.type).toEqual("Collection");
+      expect(collection.fieldDBtype).toEqual("Collection");
     });
 
     it("should seem like an array when serialized", function() {
@@ -686,16 +686,16 @@ describe("lib/Collection", function() {
     });
 
     it("should be able to merge items in collections using their primary key", function() {
-      expect(aBaseCollection.type).toEqual("Collection");
-      expect(aBaseCollection.robin.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.fieldDBtype).toEqual("Collection");
+      expect(aBaseCollection.robin.fieldDBtype).toEqual("FieldDBObject");
       expect(aBaseCollection.onlyintarget).toBeDefined();
       expect(aBaseCollection._collection.length).toEqual(7);
       expect(aBaseCollection._collection.map(function(item) {
         return item.id;
       })).toEqual(["penguin", "cuckoo", "robin", "cardinal", "onlyinTarget", "willBeOverwritten", "conflictingContents"]);
 
-      expect(atriviallyDifferentCollection.type).toEqual("Collection");
-      expect(atriviallyDifferentCollection.robin.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection.fieldDBtype).toEqual("Collection");
+      expect(atriviallyDifferentCollection.robin.fieldDBtype).toEqual("FieldDBObject");
       expect(atriviallyDifferentCollection._collection.length).toEqual(7);
       expect(atriviallyDifferentCollection._collection.map(function(item) {
         return item.id;
@@ -728,13 +728,13 @@ describe("lib/Collection", function() {
     });
 
     it("should be able to merge two collections in into a third collection", function() {
-      expect(aBaseCollection.type).toEqual("Collection");
-      expect(aBaseCollection.robin.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.fieldDBtype).toEqual("Collection");
+      expect(aBaseCollection.robin.fieldDBtype).toEqual("FieldDBObject");
       expect(aBaseCollection.onlyintarget).toBeDefined();
       expect(aBaseCollection._collection.length).toEqual(7);
 
-      expect(atriviallyDifferentCollection.type).toEqual("Collection");
-      expect(atriviallyDifferentCollection.robin.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection.fieldDBtype).toEqual("Collection");
+      expect(atriviallyDifferentCollection.robin.fieldDBtype).toEqual("FieldDBObject");
       expect(atriviallyDifferentCollection._collection.length).toEqual(7);
 
       var aThirdCollection = new Collection();
@@ -764,13 +764,13 @@ describe("lib/Collection", function() {
     });
 
     xit("should be able to merge two collections in into a third collection", function() {
-      expect(aBaseCollection.type).toEqual("Collection");
-      expect(aBaseCollection.robin.type).toEqual("FieldDBObject");
+      expect(aBaseCollection.fieldDBtype).toEqual("Collection");
+      expect(aBaseCollection.robin.fieldDBtype).toEqual("FieldDBObject");
       expect(aBaseCollection.onlyintarget).toBeDefined();
       expect(aBaseCollection._collection.length).toEqual(7);
 
-      expect(atriviallyDifferentCollection.type).toEqual("Collection");
-      expect(atriviallyDifferentCollection.robin.type).toEqual("FieldDBObject");
+      expect(atriviallyDifferentCollection.fieldDBtype).toEqual("Collection");
+      expect(atriviallyDifferentCollection.robin.fieldDBtype).toEqual("FieldDBObject");
       expect(atriviallyDifferentCollection._collection.length).toEqual(7);
 
       var aThirdCollection = aBaseCollection.merge(aBaseCollection, atriviallyDifferentCollection, "overwrite");

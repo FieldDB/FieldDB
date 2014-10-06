@@ -15,6 +15,7 @@ var Comment = require("./Comment").Comment;
 var Comments = function Comments(options) {
   this.debug("Constructing Comments ", options);
   Collection.apply(this, arguments);
+  this._fieldDBtype = "Comments";
 };
 
 Comments.prototype = Object.create(Collection.prototype, /** @lends Comments.prototype */ {

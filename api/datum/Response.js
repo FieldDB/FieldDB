@@ -12,6 +12,7 @@ var Stimulus = require("./Stimulus").Stimulus,
 var Response = function Response(options) {
   this.debug("Constructing Response ", options);
   Stimulus.apply(this, arguments);
+  this._fieldDBtype = "Response";
 };
 
 Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.prototype */ {
@@ -21,13 +22,13 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
 
   jsonType: {
     get: function() {
-      return this.type;
+      return this.fieldDBtype;
     }
   },
 
   collection: {
     get: function() {
-      return this.type;
+      return this.fieldDBtype;
     }
   },
 

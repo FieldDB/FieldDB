@@ -13,6 +13,7 @@ var Image = require("./Image").Image;
 var Images = function Images(options) {
   this.debug("Constructing Images length: ", options);
   Collection.apply(this, arguments);
+  this._fieldDBtype = "Images";
 };
 
 Images.prototype = Object.create(Collection.prototype, /** @lends Images.prototype */ {

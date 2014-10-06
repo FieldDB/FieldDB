@@ -18,7 +18,7 @@ function(doc) {
         }
       }
       // var date = doc.dateModified ? doc.dateModified.replace(/["\\]/g, '') : "";
-      doc.type = "DataList";
+      doc.fieldDBtype = "DataList";
       emit(dateModified, doc);
     }
   } catch (e) {

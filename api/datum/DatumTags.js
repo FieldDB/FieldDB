@@ -14,6 +14,7 @@ var DatumTag = require("./DatumTag").DatumTag;
 var DatumTags = function DatumTags(options) {
   this.debug("Constructing DatumTags ", options);
   Collection.apply(this, arguments);
+  this._fieldDBtype = "DatumTags";
 };
 
 DatumTags.prototype = Object.create(Collection.prototype, /** @lends DatumTags.prototype */ {

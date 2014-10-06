@@ -13,6 +13,7 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 var Participant = function Participant(options) {
   this.debug("Constructing Participant length: ", options);
   Speaker.apply(this, arguments);
+  this._fieldDBtype = "Participant";
 };
 
 Participant.prototype = Object.create(Speaker.prototype, /** @lends Participant.prototype */ {
