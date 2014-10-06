@@ -34,7 +34,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
     var consultant = new Consultant({
       confidential: mockcorpus.confidential
     });
-    expect(consultant.type).toEqual("Consultant");
+    expect(consultant.fieldDBtype).toEqual("Consultant");
   });
 
   it("should set an consultant code", function() {

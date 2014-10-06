@@ -158,7 +158,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             doc.api = self.api;
           }
           doc.confidential = self.confidential;
-          var guessedType = doc.type;
+          var guessedType = doc.fieldDBtype;
           if (!guessedType) {
             self.debug(" requesting guess type ");
             guessedType = Document.prototype.guessType(doc);
@@ -188,7 +188,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         }
         self.debug("adding doc", doc);
         self.docs.add(doc);
-        if (doc.type === "Datum") {
+        if (doc.fieldDBtype === "Datum") {
           self.showDocPosition = true;
           self.showDocCheckboxes = true;
           self.docsAreReorderable = true;

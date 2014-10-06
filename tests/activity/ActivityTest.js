@@ -32,7 +32,7 @@ describe(
           teamOrPersonal: "personal"
         });
         expect(activites).toBeDefined();
-        expect(activites.type).toEqual("Activities");
+        expect(activites.fieldDBtype).toEqual("Activities");
       });
 
       it("should accept bare activities to add to the feed", function() {
@@ -50,7 +50,7 @@ describe(
           verb: "modified"
         });
         expect(activites.length).toEqual(1);
-        expect(activites.collection[0].type).toEqual("Activity");
+        expect(activites.collection[0].fieldDBtype).toEqual("Activity");
       });
 
       it("should validate activites' dbname & user information when adding to the feed", function() {

@@ -818,7 +818,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       json.id = json._id;
       delete json._id;
 
-      json.type = this.type;
+      json.fieldDBtype = this.fieldDBtype;
       delete json._type;
 
       this.debug(json);

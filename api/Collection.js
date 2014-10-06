@@ -53,7 +53,7 @@ Collection.prototype = Object.create(Object.prototype, {
     value: Collection
   },
 
-  type: {
+  fieldDBtype: {
     get: function() {
       var funcNameRegex = /function (.{1,})\(/;
       var results = (funcNameRegex).exec((this).constructor.toString());
@@ -360,7 +360,7 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(value) {
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
         // console.log("adding a internamodel ", value);
-        if (!this.INTERNAL_MODELS.item.type || this.INTERNAL_MODELS.item.type !== "Document") {
+        if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
           this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
           value = new this.INTERNAL_MODELS.item(value);
         } else {
@@ -368,7 +368,7 @@ Collection.prototype = Object.create(Object.prototype, {
             this.warn("this is going to be a FieldDBObject, even though its supposed to be a Document.", value);
             value = new FieldDBObject(value);
           } else {
-            this.debug("this is " + value[this.primaryKey] + " already some sort of an object.", value.type);
+            this.debug("this is " + value[this.primaryKey] + " already some sort of an object.", value.fieldDBtype);
           }
         }
       }

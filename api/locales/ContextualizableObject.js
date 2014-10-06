@@ -63,7 +63,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
     value: ContextualizableObject
   },
 
-  type: {
+  fieldDBtype: {
     value: "ContextualizableObject"
   },
 
@@ -80,7 +80,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         return FieldDBObject.application.contextualizer.debug;
       } else {
         if (forcedebug) {
-          console.log(this.type.toUpperCase() + "-DEBUG FORCED: " + message);
+          console.log(this.fieldDBtype.toUpperCase() + "-DEBUG FORCED: " + message);
 
           if (message2) {
             console.log(message2);

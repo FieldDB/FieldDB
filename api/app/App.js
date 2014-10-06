@@ -53,7 +53,7 @@ var App = function App(options) {
     this.debug("previous app", FieldDBObject.application);
   }
   FieldDBObject.application = this;
-  console.warn("An app of type " + this.type + " has become automagically available to all fielddb objects");
+  console.warn("An app of type " + this.fieldDBtype + " has become automagically available to all fielddb objects");
 
   this.speakersList = this.speakersList || new DataList({
     title: {
@@ -795,7 +795,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         });
       } else if (routeParams.reportType) {
         this.reportsList.filter = function(report) {
-          if (routeParams.reportType.match(report.type.toLowerCase())) {
+          if (routeParams.reportType.match(report.fieldDBtype.toLowerCase())) {
             return true;
           } else {
             return false;
@@ -803,7 +803,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         };
       } else if (routeParams.speakerType) {
         this.speakersList.filter = function(speaker) {
-          if (routeParams.speakerType.match(speaker.type.toLowerCase())) {
+          if (routeParams.speakerType.match(speaker.fieldDBtype.toLowerCase())) {
             return true;
           } else {
             return false;

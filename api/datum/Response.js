@@ -21,13 +21,13 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
 
   jsonType: {
     get: function() {
-      return this.type;
+      return this.fieldDBtype;
     }
   },
 
   collection: {
     get: function() {
-      return this.type;
+      return this.fieldDBtype;
     }
   },
 

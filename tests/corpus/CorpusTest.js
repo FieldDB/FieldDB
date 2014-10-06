@@ -52,7 +52,7 @@ describe("Corpus", function() {
       corpus.preferredLocale = "fr";
 
       var serialized = corpus.toJSON();
-      expect(serialized.prefs.type).toEqual("UserPreference");
+      expect(serialized.prefs.fieldDBtype).toEqual("UserPreference");
       expect(serialized.prefs.preferredDashboardLayout).toEqual("layoutEverythingAtOnce");
       expect(serialized.prefs.preferredDatumTemplate).toEqual("yalefieldmethodsspring2014template");
       expect(serialized.prefs.preferredLocale).toEqual("fr");
