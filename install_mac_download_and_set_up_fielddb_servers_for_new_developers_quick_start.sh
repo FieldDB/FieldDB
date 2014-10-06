@@ -123,6 +123,8 @@ echo "Preparing to compiling the Prototype's handlebars html templates so you ca
 cd backbone_client
 echo " Installing client side dependancies (managed by Bower)"
 bower install
+echo " Installing build dependancies (managed by NPM)"
+npm install
 
 echo 'The handlebars templates have to be compiled and turned into javascript before you can run the Chrome App (as of Chrome manifest v2 you cant use any sort of Eval in your code, and templates generally require eval. So this means that before you can use the app, we now have "build step" ie, run this script if you have changed anything in the .handlebars files)'
 cd $FIELDDB_HOME/FieldDB
