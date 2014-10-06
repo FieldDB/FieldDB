@@ -52,7 +52,7 @@ describe("Data List", function() {
           })
         ]
       });
-      expect(list.docs.type).toEqual("DocumentCollection");
+      expect(list.docs.fieldDBtype).toEqual("DocumentCollection");
       expect(list.docs.docone.id).toEqual("docone");
       expect(list.docs.length).toEqual(3);
       expect(list.docIds).toEqual(["docone", "doctwo", "docthree"]);
@@ -102,7 +102,7 @@ describe("Data List", function() {
       expect(listToSave.dateModified).toEqual(list.dateModified);
       expect(listToSave.comments).toBeDefined();
       expect(listToSave.comments[0].text).toContain("an example of how you can");
-      expect(listToSave.comments[0].type).toEqual("Comment");
+      expect(listToSave.comments[0].fieldDBtype).toEqual("Comment");
       expect(listToSave.comments[0].text).toEqual(list.comments.collection[0].text);
       expect(listToSave.comments[0].username).toEqual(list.comments.collection[0].username);
       expect(listToSave.comments[0].gravatar).toEqual(list.comments.collection[0].gravatar);
@@ -266,7 +266,7 @@ describe("Data List", function() {
 
       expect(dl).toBeDefined();
       expect(dl.title).toBeDefined();
-      expect(dl.title.type).toEqual("ContextualizableObject");
+      expect(dl.title.fieldDBtype).toEqual("ContextualizableObject");
       expect(dl.title.data).toEqual({
         default: {
           message: "locale_practice"
@@ -299,8 +299,8 @@ describe("Data List", function() {
       };
       expect(contextualizer.contextualize("locale_practice_description_for_teacher")).toEqual("This is a screening test for reading difficulties before children learn to read.");
       expect(contextualizer.contextualize(dl.description.for_experimentAdministrator)).toEqual("This is a screening test for reading difficulties before children learn to read.");
-      expect(dl.contextualizer.type).toEqual("Contextualizer");
-      expect(dl.description.type).toEqual("ContextualizableObject");
+      expect(dl.contextualizer.fieldDBtype).toEqual("Contextualizer");
+      expect(dl.description.fieldDBtype).toEqual("ContextualizableObject");
       expect(dl.description.for_experimentAdministrator).toEqual("This is a screening test for reading difficulties before children learn to read.");
 
     });

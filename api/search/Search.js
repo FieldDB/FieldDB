@@ -15,6 +15,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Search = function Search(options) {
   this.debug("Constructing Search length: ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "Search";
 };
 
 Search.prototype = Object.create(FieldDBObject.prototype, /** @lends Search.prototype */ {

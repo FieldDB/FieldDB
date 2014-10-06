@@ -22,7 +22,7 @@ describe("User ", function() {
     expect(u.description).toBeDefined();
 
     expect(u.toJSON()).toEqual({
-      type: "User",
+      fieldDBtype: "User",
       username: "bill",
       gravatar: "67890954367898765",
       firstname: "",
@@ -58,7 +58,7 @@ describe("User ", function() {
     });
 
     // u.appbrand = "phophlo";
-    expect(u.prefs.type).toEqual("UserPreference");
+    expect(u.prefs.fieldDBtype).toEqual("UserPreference");
     expect(u.prefs.preferedDashboardType).toEqual("experimenter");
   });
 
@@ -69,14 +69,14 @@ describe("User ", function() {
 
     var result = u.toJSON("complete");
     expect(result).toEqual( {
-      type: "User",
+      fieldDBtype: "User",
       username: "",
       dateCreated: u.dateCreated,
       firstname: "Bill",
       lastname: "Smith",
       version: u.version,
       prefs: {
-        type: "UserPreference",
+        fieldDBtype: "UserPreference",
         dateCreated: result.prefs.dateCreated,
         version: u.version,
         hotkeys: [],

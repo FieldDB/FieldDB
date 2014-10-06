@@ -22,7 +22,7 @@ describe("CorpusMask ", function() {
     // delete corpus.prefs;
     var corpusJson = corpus.toJSON("complete");
     expect(corpusJson).toEqual({
-      type: "CorpusMask",
+      fieldDBtype: "CorpusMask",
       dbname: "lingllama-communitycorpus",
       version: currentVersion,
       dateCreated: 0,

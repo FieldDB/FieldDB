@@ -1,7 +1,7 @@
 function(doc) {
 
   try {
-    if (doc.type === "SubExperimentDataList" && doc.results) {
+    if (doc.fieldDBtype === "SubExperimentDataList" && doc.results) {
 
       var totalScore = 0;
       var totalStimuli = 0;

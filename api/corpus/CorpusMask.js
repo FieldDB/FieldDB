@@ -67,6 +67,7 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
 var CorpusMask = function CorpusMask(options) {
   this.debug(options);
   Database.apply(this, arguments);
+  this._fieldDBtype = "CorpusMask";
 };
 
 CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.prototype */ {

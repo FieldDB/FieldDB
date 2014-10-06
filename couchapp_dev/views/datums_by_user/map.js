@@ -20,7 +20,7 @@ function(doc) {
           }
         }
       }
-      doc.type = "Datum";
+      doc.fieldDBtype = "Datum";
       emit(datum.user, datum);
     }
   } catch (e) {

@@ -53,6 +53,7 @@ var getUnique = function(arrayObj) {
 var Import = function Import(options) {
   this.debug(" new import ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "Import";
 };
 
 Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prototype */ {

@@ -60,6 +60,7 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
 var Corpus = function Corpus(options) {
   this.debug("Constructing corpus", options);
   CorpusMask.apply(this, arguments);
+  this._fieldDBtype = "Corpus";
 };
 
 Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototype */ {

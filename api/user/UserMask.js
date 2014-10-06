@@ -13,6 +13,7 @@ var MD5 = require("MD5");
 var UserMask = function UserMask(options) {
   this.debug("Constructing a UserMask " + options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "UserMask";
 };
 
 UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.prototype */ {

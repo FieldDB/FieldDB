@@ -45,11 +45,11 @@ describe("Backward compatability with v1.22", function() {
     var datum = new Datum(sample_1_22_datum[0]);
     expect(datum).toBeDefined();
     expect(datum.datumFields.length).toEqual(9);
-    expect(datum.datumFields.type).toEqual("DatumFields");
+    expect(datum.datumFields.fieldDBtype).toEqual("DatumFields");
     expect(datum.datumStates.length).toEqual(3);
-    expect(datum.datumStates.type).toEqual("DatumStates");
+    expect(datum.datumStates.fieldDBtype).toEqual("DatumStates");
     expect(datum.datumTags.length).toEqual(2);
-    expect(datum.datumTags.type).toEqual("DatumTags");
+    expect(datum.datumTags.fieldDBtype).toEqual("DatumTags");
     expect(datum.datumFields.utterance.value).toEqual("Jaunpa much'asqami kani.");
   });
 

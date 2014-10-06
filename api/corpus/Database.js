@@ -8,6 +8,7 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var Database = function Database(options) {
   this.debug("In Database ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "Database";
 };
 
 var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true";

@@ -18,6 +18,7 @@ var Activity = function Activity(options) {
   if (!this.verbicon) {
     this.verbicon = this.verbicon;
   }
+  this._fieldDBtype = "Activity";
 };
 Activity.uuidGenerator = FieldDBObject.uuidGenerator;
 

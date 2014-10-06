@@ -13,6 +13,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DatumTag = function DatumTag(options) {
   this.debug("Constructing DatumTag ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "DatumTag";
 };
 
 DatumTag.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumTag.prototype */ {

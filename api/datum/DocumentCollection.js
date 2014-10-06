@@ -14,6 +14,7 @@ var Document = require("./Document").Document;
 var DocumentCollection = function DocumentCollection(options) {
   this.debug("Constructing DocumentCollection ", options);
   Collection.apply(this, arguments);
+  this._fieldDBtype = "DocumentCollection";
 };
 
 DocumentCollection.prototype = Object.create(Collection.prototype, /** @lends DocumentCollection.prototype */ {
