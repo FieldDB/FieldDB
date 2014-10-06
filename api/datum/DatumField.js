@@ -30,6 +30,7 @@ var DatumField = function DatumField(options) {
     options._value = options.value;
   }
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "DatumField";
 };
 
 DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumField.prototype */ {

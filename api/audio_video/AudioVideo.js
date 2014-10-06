@@ -13,6 +13,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var AudioVideo = function AudioVideo(options) {
   this.debug("Constructing AudioVideo length: ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "AudioVideo";
 };
 
 var DEFAULT_BASE_SPEECH_URL = "https://localhost:6984";

@@ -47,6 +47,7 @@ var Confidential = function Confidential(options) {
     delete options.filledWithDefaults;
   }
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "Confidential";
 };
 
 /**

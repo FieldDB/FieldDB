@@ -11,6 +11,7 @@ var App = require("./App").App;
 var PsycholinguisticsApp = function PsycholinguisticsApp(options) {
   this.debug("Constructing PsycholinguisticsApp ", options);
   App.apply(this, arguments);
+  this._fieldDBtype = "PsycholinguisticsApp";
 };
 
 PsycholinguisticsApp.prototype = Object.create(App.prototype, /** @lends PsycholinguisticsApp.prototype */ {

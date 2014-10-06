@@ -23,6 +23,7 @@ var HotKeys = function HotKeys(options) {
   }
   this.debug("Constructing HotKeys ", options);
   Collection.apply(this, arguments);
+  this._fieldDBtype = "HotKeys";
 };
 
 HotKeys.prototype = Object.create(Collection.prototype, /** @lends HotKeys.prototype */ {

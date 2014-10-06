@@ -14,6 +14,7 @@ var InsertUnicodes = function InsertUnicodes(options) {
   Collection.apply(this, arguments);
   this.alwaysConfirmOkay = true;
   this.todo("setting unicodes to auto confirm overwrite to avoid popups in the demo");
+  this._fieldDBtype = "InsertUnicodes";
 };
 
 InsertUnicodes.prototype = Object.create(Collection.prototype, /** @lends InsertUnicodes.prototype */ {

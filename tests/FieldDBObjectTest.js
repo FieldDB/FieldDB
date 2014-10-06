@@ -21,6 +21,7 @@ describe("FieldDBObject", function() {
       var Child = function Child(options) {
         this.debug("In Child ", options);
         FieldDBObject.apply(this, arguments);
+        this._fieldDBtype = "Child";
       };
 
       Child.prototype = Object.create(FieldDBObject.prototype, /** @lends Child.prototype */ {

@@ -22,6 +22,7 @@ var UserMask = require("./../user/UserMask").UserMask;
 var DatumState = function DatumState(options) {
   this.debug("Constructing DatumState ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "DatumState";
 };
 
 DatumState.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumState.prototype */ {

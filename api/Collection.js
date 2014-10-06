@@ -18,6 +18,7 @@ var regExpEscape = function(s) {
  * @tutorial tests/CollectionTest.js
  */
 var Collection = function Collection(json) {
+  this._fieldDBtype = "Collection";
   this.debug("Constructing a collection");
   if (!json) {
     json = {};
@@ -55,9 +56,12 @@ Collection.prototype = Object.create(Object.prototype, {
 
   fieldDBtype: {
     get: function() {
-      var funcNameRegex = /function (.{1,})\(/;
-      var results = (funcNameRegex).exec((this).constructor.toString());
-      return (results && results.length > 1) ? results[1] : "";
+      return this._fieldDBtype;
+    },
+    set: function(value) {
+      if (value !== this.fieldDBtype) {
+        this.warn("Using type " + this.fieldDBtype + " when the incoming object was " + value);
+      }
     }
   },
 

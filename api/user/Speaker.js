@@ -37,6 +37,7 @@ var Speaker = function Speaker(options) {
     this.fields = this.defaults.fields;
   }
   UserMask.apply(this, arguments);
+  this._fieldDBtype = "Speaker";
 };
 
 Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototype */ {

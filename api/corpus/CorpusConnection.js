@@ -14,6 +14,8 @@
  *                                          connection for this client/server, if not provded, a default will be used
  */
 var CorpusConnection = function(appVersion, defaultCorpusConnection, Diacritics) {
+  this._fieldDBtype = "CorpusConnection";
+
 	if (!appVersion) {
 		throw new Error("You must supply an appVersion and a defaultCorpusConnection which will be used to create new users");
 	}
