@@ -165,6 +165,7 @@ var App = function App(options) {
   this.corpus = this.corpus || null;
   this.thisyear = (new Date()).getFullYear();
 
+  this._fieldDBtype = "App";
 };
 
 App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype */ {

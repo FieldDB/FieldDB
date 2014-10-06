@@ -79,6 +79,7 @@ try {
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
+  this._fieldDBtype = "FieldDBObject";
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
@@ -238,9 +239,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   fieldDBtype: {
     configurable: true,
     get: function() {
-      var funcNameRegex = /function (.{1,})\(/;
-      var results = (funcNameRegex).exec((this).constructor.toString());
-      return (results && results.length > 1) ? results[1] : "";
+      return this._fieldDBtype;
     },
     set: function(value) {
       if (value !== this.fieldDBtype) {

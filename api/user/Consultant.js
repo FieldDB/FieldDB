@@ -22,6 +22,7 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 var Consultant = function Consultant(options) {
   this.debug("Constructing Consultant: ", options);
   Speaker.apply(this, arguments);
+  this._fieldDBtype = "Consultant";
 };
 
 Consultant.prototype = Object.create(Speaker.prototype, /** @lends Consultant.prototype */ {

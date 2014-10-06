@@ -60,6 +60,7 @@ var Session = require("./../FieldDBObject").FieldDBObject;
 var Datum = function Datum(options) {
   this.debug("Constructing Datum: ", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "Datum";
 };
 
 Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.prototype */ {

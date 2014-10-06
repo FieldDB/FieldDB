@@ -32,6 +32,7 @@ var DataList = function DataList(options) {
     // console.log("DataList comments", options.comments);
   }
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "DataList";
 };
 
 DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.prototype */ {

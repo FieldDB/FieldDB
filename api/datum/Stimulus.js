@@ -11,6 +11,7 @@ var Datum = require("./Datum").Datum;
 var Stimulus = function Stimulus(options) {
   this.debug("Constructing Stimulus ", options);
   Datum.apply(this, arguments);
+  this._fieldDBtype = "Stimulus";
 };
 
 Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototype */ {

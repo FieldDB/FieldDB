@@ -13,6 +13,7 @@ var DatumState = require("./DatumState").DatumState;
 var DatumStates = function DatumStates(options) {
   this.debug("Constructing DatumStates length: ", options);
   DatumTags.apply(this, arguments);
+  this._fieldDBtype = "DatumStates";
 };
 
 DatumStates.prototype = Object.create(DatumTags.prototype, /** @lends DatumStates.prototype */ {

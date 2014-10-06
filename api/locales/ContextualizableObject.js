@@ -54,6 +54,7 @@ var ContextualizableObject = function ContextualizableObject(json) {
   }
 
   Object.apply(this, arguments);
+  // this._fieldDBtype = "ContextualizableObject";
 };
 var forcedebug = false;
 

@@ -12,6 +12,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var HotKey = function HotKey(options) {
   this.debug("Constructing HotKey", options);
   FieldDBObject.apply(this, arguments);
+  this._fieldDBtype = "HotKey";
 };
 
 HotKey.prototype = Object.create(FieldDBObject.prototype, /** @lends HotKey.prototype */ {

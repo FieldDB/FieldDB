@@ -14,6 +14,7 @@ var Activity = require("./Activity").Activity;
 var Activities = function Activities(options) {
   this.debug("Constructing Activities ", options);
   Collection.apply(this, arguments);
+  this._fieldDBtype = "Activities";
 };
 
 Activities.prototype = Object.create(Collection.prototype, /** @lends Activities.prototype */ {
