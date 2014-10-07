@@ -100,7 +100,7 @@ describe("Corpus", function() {
 
     it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
       corpus.newSpeaker().then(function(speaker) {
-        console.log(speaker);
+        // console.log(speaker);
         expect(speaker.fields.length).toEqual(8);
         expect(speaker.fields.indexOf("lastname")).toEqual(2);
         speaker.fields = [];
@@ -150,7 +150,7 @@ describe("Corpus", function() {
 
 it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
   corpus.newSpeaker().then(function(speaker) {
-    console.log(speaker);
+    // console.log(speaker);
     expect(speaker.fields.length).toEqual(8);
     expect(speaker.fields.indexOf("lastname")).toEqual(2);
     speaker.fields = [];
