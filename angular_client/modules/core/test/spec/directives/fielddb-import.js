@@ -11,13 +11,13 @@ xdescribe("Directive: fielddb-import", function() {
     el = angular.element("<div data-fielddb-import json='import'></div>");
     scope = $rootScope.$new();
     scope.importDetails = {
-      type: "participants"
+      importType: "participants"
     };
     scope.importDetails = {
-      type: "fieldmethodsstudents"
+      importType: "fieldmethodsstudents"
     };
     scope.importDetails = {
-      type: "datum"
+      importType: "datum"
     };
     compileFunction = $compile(el);
     // bring html from templateCache
