@@ -729,7 +729,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       };
 
       for (aproperty in anotherObject) {
-        if (!anotherObject.hasOwnProperty(aproperty) || typeof anObject[aproperty] === "function") {
+        if (!anotherObject.hasOwnProperty(aproperty) || typeof anObject[aproperty] === "function" || aproperty === "dateCreated") {
           this.debug("  merge: ignoring " + aproperty);
           continue;
         }
