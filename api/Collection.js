@@ -282,7 +282,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       if (value && this[searchingFor] && (value === this[searchingFor] || (typeof this[searchingFor].equals === "function" && this[searchingFor].equals(value)))) {
-        this.warn("Not setting " + searchingFor + ", it already the same in the collection");
+        this.debug("Not setting " + searchingFor + ", it  was already the same in the collection");
         return this[searchingFor];
       }
 
@@ -295,9 +295,16 @@ Collection.prototype = Object.create(Object.prototype, {
           continue;
         }
         if (this.collection[index][optionalKeyToIdentifyItem] === searchingFor) {
-          this.warn("Overwriting an existing collection member " + searchingFor + " (they have the same key but are not equal nor the same object) ");
-          this.debug("Overwriting ", this.collection[index], "->", value);
-          this.collection[index] = value;
+          this.debug("found a match in the _collection, " , this.collection[index].equals);
+          // this.collection[index].debugMode = true;
+          // value.debugMode = true;
+          if (this.collection[index] !== value ||
+            (typeof this.collection[index].equals === "function" && !this.collection[index].equals(value))
+          ) {
+            this.warn("Overwriting an existing _collection member " + searchingFor + " at index " + index + " (they have the same key but are not equal, nor the same object) ");
+            this.warn("Overwriting ", this.collection[index], "->", value);
+            this.collection[index] = value;
+          }
           return value;
         }
       }
@@ -677,7 +684,7 @@ Collection.prototype = Object.create(Object.prototype, {
           self.debug(idToMatch + " was missing in new collection");
           resultCollection[idToMatch] = anItem;
 
-        } else if (anItem === anotherItem) {
+        } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
           // no op, they are equal enough
           self.debug(idToMatch + " were equal.", anItem, anotherItem);
           if (resultItem !== anItem) {
@@ -754,7 +761,7 @@ Collection.prototype = Object.create(Object.prototype, {
           // no op, the new one isn't set
           self.debug(idToMatch + " was oddly undefined");
           resultCollection[idToMatch] = anItem;
-        } else if (anItem === anotherItem) {
+        } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
           // no op, they are equal enough
           // self.debug(idToMatch + " were equal.", anItem, anotherItem);
           resultCollection[idToMatch] = anItem;
