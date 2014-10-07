@@ -53,7 +53,6 @@ var App = function App(options) {
     this.debug("previous app", FieldDBObject.application);
   }
   FieldDBObject.application = this;
-  console.warn("An app of type " + this.fieldDBtype + " has become automagically available to all fielddb objects");
 
   this.speakersList = this.speakersList || new DataList({
     title: {
@@ -166,6 +165,11 @@ var App = function App(options) {
   this.thisyear = (new Date()).getFullYear();
 
   this._fieldDBtype = "App";
+  var self = this;
+  setTimeout(function() {
+    self.warn("An app of type " + self.fieldDBtype + " has become automagically available to all fielddb objects");
+  }, 500);
+
 };
 
 App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype */ {
@@ -789,7 +793,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
        * Handle precise routes
        */
       if (routeParams.importType) {
-        console.log("Creating an importer");
+        self.debug("Creating an importer");
         this.importer = this.importer || new Import({
           importType: routeParams.importType
           // corpus: this.corpus
@@ -866,11 +870,11 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       if (this.team && !this.team.gravatar) {
         this.team.status = "Loading team details.";
         this.team.fetch(Corpus.prototype.BASE_DB_URL).then(function(result) {
-          console.log("Suceeded to download team\"s public details.", result);
+          self.debug("Suceeded to download team\"s public details.", result);
           self.status = self.team.status = "Loaded team details.";
           self.render();
         }, function(result) {
-          console.log("Failed to download team details.", result);
+          self.debug("Failed to download team details.", result);
           self.status = self.team.status = "Failed to download team details.";
           self.render();
         });
@@ -879,20 +883,20 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       if (this.corpus && !this.corpus.title) {
         this.corpus.status = "Loading corpus details.";
         this.corpus.loadOrCreateCorpusByPouchName(this.corpus.dbname).then(function(result) {
-          console.log("Suceeded to download corpus details.", result);
+          self.debug("Suceeded to download corpus details.", result);
           self.status = self.corpus.status = "Loaded corpus details.";
           if (self.application.importer) {
             self.application.importer.corpus = self.corpus;
           }
           self.render();
         }, function(result) {
-          console.log("Failed to download corpus details.", result);
+          self.debug("Failed to download corpus details.", result);
 
           self.status = self.corpus.status = "Failed to download corpus details. Are you sure this is the corpus you wanted to see: " + self.corpus.dbname;
           self.loginDetails.username = self.team.username;
           self.render();
         }).catch(function(error) {
-          console.log(error);
+          self.warn("catch error", error);
         });
       }
     }

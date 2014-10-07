@@ -288,7 +288,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       var stringvalue;
       var objectvalue;
       if (typeof value === "string") {
-        console.log("User set the languages with a string");
+        this.debug("User set the languages with a string");
         if (this.fields.languages && this.fields.languages && this.fields.languages.json) {
           this.confirm("Do you want to set the languages from " + JSON.stringify(this.fields.languages.json) + " to " + value);
         }
@@ -317,13 +317,13 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       if (stringvalue) {
         this.fields.languages.value = stringvalue;
       }
-      console.log("setting language ", objectvalue);
+      this.debug("setting language ", objectvalue);
 
       for (var property in objectvalue) {
         if (!objectvalue.hasOwnProperty(property)) {
           continue;
         }
-        console.log("looking at " + property);
+        this.debug("looking at " + property);
         this.fields.languages[property] = objectvalue[property];
       }
     }
