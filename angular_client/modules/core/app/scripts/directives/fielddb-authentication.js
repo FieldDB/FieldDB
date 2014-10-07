@@ -71,10 +71,8 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
       $scope.application.authentication.error = "";
       FieldDB.Database.prototype.login(loginDetails).then(function(user) {
         console.log("User has been downloaded. ", user);
-        $scope.application.authentication.user.alwaysConfirmOkay = true;
-        $scope.application.authentication.user.prefs.alwaysConfirmOkay = true;
-        $scope.application.authentication.user.prefs.unicodes.alwaysConfirmOkay = true;
-        $scope.application.authentication.user.merge("self", user);
+        user = new FieldDB.User(user);
+        $scope.application.authentication.user.merge("self", user, "overwrite");
         processUserDetails($scope.application.authentication.user);
         // $scope.isContactingServer = false;
       }, function(reason) {
@@ -103,7 +101,7 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
         if (window.location.pathname !== "/welcome" && window.location.pathname !== "/bienvenu") {
           $scope.$apply(function() {
             // $location.path("/welcome/", false);
-            window.location.replace("/#/welcome");
+            window.location.replace("/welcome");
           });
         }
         $scope.$digest();
@@ -128,9 +126,12 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
           $scope.application.authentication.user.roles = sessionInfo.userCtx.roles;
           processUserDetails($scope.application.authentication.user);
         } else {
-          $scope.$apply(function() {
-            $location.path("/welcome");
-          });
+          if (window.location.pathname !== "/welcome" && window.location.pathname !== "/bienvenu") {
+            $scope.$apply(function() {
+              // $location.path("/welcome/", false);
+              window.location.replace("/welcome");
+            });
+          }
         }
       }, function(reason) {
         console.log("Unable to login ", reason);
