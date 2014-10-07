@@ -53,7 +53,6 @@ var App = function App(options) {
     this.debug("previous app", FieldDBObject.application);
   }
   FieldDBObject.application = this;
-  this.warn("An app of type " + this.fieldDBtype + " has become automagically available to all fielddb objects");
 
   this.speakersList = this.speakersList || new DataList({
     title: {
@@ -166,6 +165,11 @@ var App = function App(options) {
   this.thisyear = (new Date()).getFullYear();
 
   this._fieldDBtype = "App";
+  var self = this;
+  setTimeout(function() {
+    self.warn("An app of type " + self.fieldDBtype + " has become automagically available to all fielddb objects");
+  }, 500);
+
 };
 
 App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype */ {
@@ -892,7 +896,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           self.loginDetails.username = self.team.username;
           self.render();
         }).catch(function(error) {
-          self.warn("catch error" , error);
+          self.warn("catch error", error);
         });
       }
     }
