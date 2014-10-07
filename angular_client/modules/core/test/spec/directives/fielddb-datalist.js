@@ -25,7 +25,7 @@ describe("Directive: fielddb-datalist", function() {
           _collection: [{
             firstname: "Anony",
             lastname: "Mouse",
-            type: "Participant"
+            fieldDBtype: "Participant"
           }]
         }
       };
@@ -74,11 +74,11 @@ describe("Directive: fielddb-datalist", function() {
           _collection: [{
             firstname: "Ling",
             lastname: "Llama",
-            type: "UserMask"
+            fieldDBtype: "UserMask"
           }, {
             firstname: "Teammate",
             lastname: "Tiger",
-            type: "UserMask"
+            fieldDBtype: "UserMask"
           }]
         }
       };
@@ -93,7 +93,7 @@ describe("Directive: fielddb-datalist", function() {
           _collection: [{
             firstname: "Anony",
             lastname: "Mouse",
-            type: "Participant"
+            fieldDBtype: "Participant"
           }]
         }
       };
@@ -149,15 +149,15 @@ describe("Directive: fielddb-datalist", function() {
       httpBackend.when("GET", FieldDB.BASE_DB_URL + "/" + scope.corpus.dbname + "/_design/psycholinguistics/_view/" + scope.participantsList.api + "?descending=true").respond([{
         firstname: "Ling",
         lastname: "Llama",
-        type: "Participant"
+        fieldDBtype: "Participant"
       }, {
         firstname: "Anony",
         lastname: "Mouse",
-        type: "Participant"
+        fieldDBtype: "Participant"
       }, {
         firstname: "Teammate",
         lastname: "Tiger",
-        type: "Participant"
+        fieldDBtype: "Participant"
       }]);
 
       el = angular.element("<div data-fielddb-datalist json='participantsList' corpus='corpus'></div>");
@@ -277,15 +277,15 @@ describe("Directive: fielddb-datalist", function() {
                 deferred.resolve([{
                   firstname: "Ling",
                   lastname: "Llama",
-                  type: "Participant"
+                  fieldDBtype: "Participant"
                 }, {
                   firstname: "Anony",
                   lastname: "Mouse",
-                  type: "Participant"
+                  fieldDBtype: "Participant"
                 }, {
                   firstname: "Teammate",
                   lastname: "Tiger",
-                  type: "Participant"
+                  fieldDBtype: "Participant"
                 }]);
               }, 100);
             });

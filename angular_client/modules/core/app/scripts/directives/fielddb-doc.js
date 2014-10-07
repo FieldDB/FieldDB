@@ -30,7 +30,7 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
     Response: "<div data-fielddb-datum json='doc' corpus='corpus'></div>"
   };
   return {
-    template: "{{doc.type}} Unable to display this document. {{doc._id}}",
+    template: "{{doc.fieldDBtype}} Unable to display this document. {{doc._id}}",
     restrict: "A",
     transclude: false,
     scope: {
@@ -49,15 +49,15 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
           // console.log("Scope value changed", value);
           // when the "compile" expression changes
           // assign it into the current DOM
-          console.log("doc type is ", scope.doc.type);
-          if (templates[scope.doc.type]) {
-            element.html(templates[scope.doc.type]);
+          console.log("doc type is ", scope.doc.fieldDBtype);
+          if (templates[scope.doc.fieldDBtype]) {
+            element.html(templates[scope.doc.fieldDBtype]);
             if (scope && scope.doc && !scope.doc.fetch) {
-              console.warn("This doc doesnt have the FieldDBObject methods to it, cant turn it into a " + scope.doc.type + " without loosing its references. Please pass it as a complex object if you need its functionality.");
-              // scope.doc = new FieldDB[scope.doc.type](scope.doc);
+              console.warn("This doc doesnt have the FieldDBObject methods to it, cant turn it into a " + scope.doc.fieldDBtype + " without loosing its references. Please pass it as a complex object if you need its functionality.");
+              // scope.doc = new FieldDB[scope.doc.fieldDBtype](scope.doc);
             }
           } else {
-            element.html("{{doc.type}} Unable to display this document. {{doc | json}}");
+            element.html("{{doc.fieldDBtype}} Unable to display this document. {{doc | json}}");
             if (scope && scope.doc && scope.doc.fetch) {
               console.log("TODO fetch the doc details and refresh the render to the right template if necessary");
               // doc.fetch().then(function(){
