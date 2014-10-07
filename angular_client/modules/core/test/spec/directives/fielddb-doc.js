@@ -14,13 +14,13 @@ describe("Directive: fielddb-doc", function() {
       firstname: "Ling",
       lastname: "Llama",
       description: "I like memes.",
-      type: "UserMask"
+      fieldDBtype: "UserMask"
     };
     scope.team = {
       firstname: "Awesome",
       lastname: "Phonologists",
       description: "We love phonology.",
-      type: "Team"
+      fieldDBtype: "Team"
     };
     compileFunction = $compile(el);
     // bring html from templateCache
