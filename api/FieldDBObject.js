@@ -434,12 +434,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         FieldDBObject.software.vendorSub = navigator.vendorSub;
         if (navigator && navigator.geolocation && typeof navigator.geolocation.getCurrentPosition === "function") {
           navigator.geolocation.getCurrentPosition(function(position) {
-            console.warn("recieved position information");
+            self.debug("recieved position information");
             FieldDBObject.software.location = position.coords;
           });
         }
       } catch (e) {
-        console.warn("Error loading software ", e);
+        this.debug("Error loading software ", e);
         FieldDBObject.software = FieldDBObject.software || {};
         FieldDBObject.software.version = process.version;
         FieldDBObject.software.appVersion = "PhantomJS unknown";
@@ -457,7 +457,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           FieldDBObject.hardware.totalmem = os.totalmem();
           FieldDBObject.hardware.cpus = os.cpus().length;
         } catch (e) {
-          console.warn(" hardware is unknown.", e);
+          this.debug(" hardware is unknown.", e);
           FieldDBObject.hardware = FieldDBObject.hardware || {};
           FieldDBObject.software.appVersion = "Device unknown";
         }
@@ -473,7 +473,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             optionalUserWhoSaved.username = connectionInfo.userCtx.name;
           }
         } catch (e) {
-          console.log("Can't get the corpus connection info", e);
+          this.warn("Can't get the corpus connection info to guess who saved this.", e);
         }
       }
       // optionalUserWhoSaved._name = optionalUserWhoSaved.name || optionalUserWhoSaved.username || optionalUserWhoSaved.browserVersion;
@@ -501,7 +501,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           enteredByUser.json.hardware = Android ? Android.deviceDetails : FieldDBObject.hardware;
         } catch (e) {
-          console.warn("Cannot detect the hardware used for this save.");
+          this.debug("Cannot detect the hardware used for this save.", e);
           enteredByUser.json.hardware = FieldDBObject.hardware;
         }
 
@@ -549,13 +549,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           if (location.json && location.json.location && location.json.location.latitude) {
             location.json.previousLocations.push(location.json.location);
           }
-          console.log("overwriting location ", location);
+          this.debug("overwriting location ", location);
           location.json.location = FieldDBObject.software.location;
           location.value = location.json.location.latitude + "," + location.json.location.longitude;
         }
       }
 
-      console.log("saving   ", this);
+      this.debug("saving   ", this);
 
       var url = this.id ? "/" + this.id : "";
       url = this.url + url;
