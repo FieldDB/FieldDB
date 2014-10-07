@@ -20,6 +20,10 @@
   <img title="After Last" class="gravatar-medium" ng-src="{{datalist.reinforcementAnimation.lastImageSrc}}"/>
 </div>
 
+<h3>Passing Score:</h3>
+<div contenteditable ng-model="datalist.passingScore">
+</div>
+
 <h3>Stimuli:</h3>
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
   <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a stimulus' number to re-order it</div>
