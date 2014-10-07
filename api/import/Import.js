@@ -264,7 +264,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
             }
           }
-          // console.log("correspondingDatumField ", correspondingDatumField);
+          self.debug("correspondingDatumField ", correspondingDatumField);
           if (headers.indexOf(correspondingDatumField) >= 0) {
             self.bug("You seem to have some column labels that are duplicated" +
               " (the same label on two columns). This will result in a strange " +
@@ -372,7 +372,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             } else {
               docToSave.datumFields[headers[index].id].value = item.trim();
             }
-            // console.log("new doc", docToSave);
+            self.debug("new doc", docToSave);
 
             testForEmptyness += item.trim();
           }
@@ -392,7 +392,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           if (self.importType === "participants") {
             builtDoc.id = builtDoc.anonymousCode || Date.now();
             builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
-            // console.log(" saving", builtDoc.id);
+            self.debug(" saving", builtDoc.id);
             self.progress.total++;
             self.datalist.docs.add(builtDoc);
 
@@ -1543,7 +1543,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.error = "Error processing files";
           deferred.reject(results);
         }).catch(function(error) {
-          console.warn("There was an error when importing these options ", error, options);
+          self.warn("There was an error when importing these options ", error, options);
         });
 
       });
@@ -1687,7 +1687,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
   readBlob: {
     value: function(file, callback, opt_startByte, opt_stopByte) {
-      console.warn("Read blob is deprecated", file, callback, opt_startByte, opt_stopByte);
+      this.warn("Read blob is deprecated", file, callback, opt_startByte, opt_stopByte);
     }
   }
 });

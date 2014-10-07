@@ -17,8 +17,8 @@ var CORS = {
   bug: function(message) {
     console.warn("CORS-BUG: " + message);
   },
-  render: function(){
-    console.warn("Render requested but this object has no render defined.");
+  render: function() {
+    this.debug("Render requested but this object has no render defined.");
   }
 };
 
@@ -84,18 +84,16 @@ CORS.makeCORSRequest = function(options) {
   //  if(options.method === "POST"){
   //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
   xhr.setRequestHeader("Content-type", "application/json");
-  if(options.withCredentials !== false){
+  if (options.withCredentials !== false) {
     xhr.withCredentials = true;
   }
   //  }
 
   xhr.onload = function(e, f, g) {
     var response = xhr.responseJSON || xhr.responseText || xhr.response;
-    if (self.debugMode) {
-      self.debug("Response from CORS request to " + options.url + ": " + response);
-    }
+    self.debug("Response from CORS request to " + options.url + ": " + response);
     if (xhr.status >= 400) {
-      console.log("The request was unsuccesful " + xhr.statusText);
+      self.warn("The request was unsuccesful " + xhr.statusText);
       deferred.reject(response);
       return;
     }
@@ -108,16 +106,14 @@ CORS.makeCORSRequest = function(options) {
       deferred.resolve(response);
     } else {
       self.bug("There was no content in the server's response text. Please report this.");
-      console.log(e, f, g);
+      self.warn(e, f, g);
       deferred.reject(e);
     }
     // self.debugMode = false;
   };
 
   xhr.onerror = function(e, f, g) {
-    if (self.debugMode) {
-      self.debug(e, f, g);
-    }
+    self.debug(e, f, g);
     self.bug("There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
     deferred.reject(e);
   };
