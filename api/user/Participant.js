@@ -39,11 +39,11 @@ Participant.prototype = Object.create(Speaker.prototype, /** @lends Participant.
           }
         }
       } catch (e) {
-        console.warn("Cant get participatn fields from the current corpus, instead using defaults.");
+        this.warn("Cant get participant fields from the current corpus, instead using defaults.");
         doc.fields = DEFAULT_CORPUS_MODEL.participantFields || DEFAULT_CORPUS_MODEL.speakerFields;
       }
       if (!doc.fields || doc.fields.length === 0) {
-        console.warn("There were no corpus specific speaker or participant fiels, instead using defaults");
+        this.warn("There were no corpus specific speaker or participant fiels, instead using defaults");
         doc.fields = DEFAULT_CORPUS_MODEL.participantFields || DEFAULT_CORPUS_MODEL.speakerFields;
       }
       return JSON.parse(JSON.stringify(doc));
