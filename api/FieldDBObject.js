@@ -243,7 +243,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     },
     set: function(value) {
       if (value !== this.fieldDBtype) {
-        this.warn("Using type " + this.fieldDBtype + " when the incoming object was " + value);
+        this.debug("Using type " + this.fieldDBtype + " when the incoming object was " + value);
       }
     }
   },
@@ -434,12 +434,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         FieldDBObject.software.vendorSub = navigator.vendorSub;
         if (navigator && navigator.geolocation && typeof navigator.geolocation.getCurrentPosition === "function") {
           navigator.geolocation.getCurrentPosition(function(position) {
-            console.warn("recieved position information");
+            self.debug("recieved position information");
             FieldDBObject.software.location = position.coords;
           });
         }
       } catch (e) {
-        console.warn("Error loading software ", e);
+        this.debug("Error loading software ", e);
         FieldDBObject.software = FieldDBObject.software || {};
         FieldDBObject.software.version = process.version;
         FieldDBObject.software.appVersion = "PhantomJS unknown";
@@ -457,7 +457,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           FieldDBObject.hardware.totalmem = os.totalmem();
           FieldDBObject.hardware.cpus = os.cpus().length;
         } catch (e) {
-          console.warn(" hardware is unknown.", e);
+          this.debug(" hardware is unknown.", e);
           FieldDBObject.hardware = FieldDBObject.hardware || {};
           FieldDBObject.software.appVersion = "Device unknown";
         }
@@ -473,7 +473,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             optionalUserWhoSaved.username = connectionInfo.userCtx.name;
           }
         } catch (e) {
-          console.log("Can't get the corpus connection info", e);
+          this.warn("Can't get the corpus connection info to guess who saved this.", e);
         }
       }
       // optionalUserWhoSaved._name = optionalUserWhoSaved.name || optionalUserWhoSaved.username || optionalUserWhoSaved.browserVersion;
@@ -501,7 +501,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           enteredByUser.json.hardware = Android ? Android.deviceDetails : FieldDBObject.hardware;
         } catch (e) {
-          console.warn("Cannot detect the hardware used for this save.");
+          this.debug("Cannot detect the hardware used for this save.", e);
           enteredByUser.json.hardware = FieldDBObject.hardware;
         }
 
@@ -549,13 +549,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           if (location.json && location.json.location && location.json.location.latitude) {
             location.json.previousLocations.push(location.json.location);
           }
-          console.log("overwriting location ", location);
+          this.debug("overwriting location ", location);
           location.json.location = FieldDBObject.software.location;
           location.value = location.json.location.latitude + "," + location.json.location.longitude;
         }
       }
 
-      console.log("saving   ", this);
+      this.debug("saving   ", this);
 
       var url = this.id ? "/" + this.id : "";
       url = this.url + url;
@@ -639,12 +639,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
-        if (this[aproperty] && typeof this[aproperty].equals === "function") {
+        if /* use fielddb equality function first */ (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
             return false;
           }
-        } else if (this[aproperty] === anotherObject[aproperty]) {
+        } /* then try normal equality */ else if (this[aproperty] === anotherObject[aproperty]) {
+          this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
+          // return true;
+        } /* then try stringification */ else if (JSON.stringify(this[aproperty]) === JSON.stringify(anotherObject[aproperty])) {
           this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
           // return true;
         } else if (anotherObject[aproperty] === undefined) {
@@ -693,7 +696,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       if (anObject.id && anotherObject.id && anObject.id !== anotherObject.id) {
-        this.warn("Refusing to merge these objects, they have different ids: " + anObject.id + "  and " + anotherObject.id, anObject, anotherObject);
+        this.warn("Refusing to merge these objects, they have different ids: " + anObject.id + "  and " + anotherObject.id);
+        this.debug("Refusing to merge" + anObject.id + "  and " + anotherObject.id, anObject, anotherObject);
         return null;
       }
       if (anObject.dbname && anotherObject.dbname && anObject.dbname !== anotherObject.dbname) {
@@ -701,7 +705,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.warn("Permitting a merge of objects from different databases: " + anObject.dbname + "  and " + anotherObject.dbname);
           this.debug("Merging ", anObject, anotherObject);
         } else if (optionalOverwriteOrAsk.indexOf("changeDBname") === -1) {
-          this.warn("Refusing to merge these objects, they come from different databases: " + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
+          this.warn("Refusing to merge these objects, they come from different databases: " + anObject.dbname + "  and " + anotherObject.dbname);
+          this.debug("Refusing to merge" + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
           return null;
         }
       }
@@ -1084,7 +1089,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (json.dbname) {
         json.pouchname = json.dbname;
-        this.todo("Serializing pouchname for backward compatability until prototype can handle dbname");
+        this.debug("Serializing pouchname for backward compatability until prototype can handle dbname");
       }
 
       delete json.saving;

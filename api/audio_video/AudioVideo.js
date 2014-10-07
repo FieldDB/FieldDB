@@ -88,7 +88,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
       if (value === this._type) {
         return;
       }
-      console.warn("type cannot be set, it is automatically determined from the filename. Not using: " + value);
+      this.warn("type cannot be set, it is automatically determined from the filename. Not using: " + value);
       if (this.filename) {
         value = "audio/" + this.filename.split(".").pop();
         this._type = value;

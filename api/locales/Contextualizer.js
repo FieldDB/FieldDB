@@ -328,7 +328,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         self = this;
 
       if (!baseUrl && FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.url) {
-        console.log("using corpus as base url");
+        this.debug("using corpus as base url");
         baseUrl = FieldDBObject.application.corpus.url;
       }
 
@@ -356,7 +356,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           .then(deferred.resolve,
             deferred.reject);
       }, function(error) {
-        console.log("There werent any locales at this url" + baseUrl + " :( Maybe this database has no custom locale messages.", error);
+        self.warn("There werent any locales at this url" + baseUrl + " :( Maybe this database has no custom locale messages.", error);
       });
 
       return deferred.promise;
