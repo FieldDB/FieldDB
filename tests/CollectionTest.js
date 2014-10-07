@@ -286,7 +286,7 @@ describe("lib/Collection", function() {
         name: "duck",
       }));
       expect(collection.duck).toEqual(duck);
-      expect(collection.warnMessage).not.toContain("Overwriting an existing collection member duck (they have the same key but are not equal nor the same object)");
+      expect(collection.warnMessage).not.toContain("Overwriting an existing _collection member duck ");
 
     });
 
@@ -301,7 +301,7 @@ describe("lib/Collection", function() {
         feet: "yellow"
       }));
       expect(collection.duck).toEqual(duck);
-      expect(collection.warnMessage).toContain("Overwriting an existing collection member duck (they have the same key but are not equal nor the same object)");
+      expect(collection.warnMessage).toContain("Overwriting an existing _collection member duck at index 3 (they have the same key but are not equal, nor the same object)");
 
     });
 
@@ -309,7 +309,7 @@ describe("lib/Collection", function() {
     it("should work for collections with primary key clashes", function() {
       expect(collection).toBeDefined();
       expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: chicken -> Chicken");
-      expect(collection.warnMessage).toContain("Not setting Chicken, it already the same in the collection");
+      expect(collection.warnMessage).not.toContain("Not setting Chicken, it already the same in the collection");
       expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: _chicken_ -> Chicken");
       expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: duck -> Duck");
       expect(collection.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: pigeon -> Pigeon");
