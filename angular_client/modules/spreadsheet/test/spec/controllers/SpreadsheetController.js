@@ -260,7 +260,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     expect(scope.searching).toBeFalsy();
 
     expect(typeof scope.triggerExpandCollapse).toBe('function');
-    expect(typeof scope.setFocusOn).toBe('function');
+    expect(typeof scope.setDataEntryFocusOn).toBe('function');
     expect(typeof scope.hiddenOnLoading).toBe('function');
 
 

@@ -1221,10 +1221,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   //   "field1": "hi does this call createRecord"
   // }
 
-  $scope.createRecord = function(fieldData, focusOnFieldAfter) {
-    // $scope.setFocusOn(focusOnFieldAfter);
-    if (document.getElementById(focusOnFieldAfter)) {
-      document.getElementById(focusOnFieldAfter).focus();
+  $scope.createRecord = function(fieldData, $event) {
+    if ($event && $event.type && $event.type === "submit" && $event.target) {
+      $scope.setDataEntryFocusOn($event.target);
     }
 
     // // Reset new datum form data and enable upload button; only reset audio field if present
@@ -1304,12 +1303,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.saved = "no";
   };
 
-  $rootScope.markNewAsEdited = function(){
+  $rootScope.markNewAsEdited = function() {
     $rootScope.newRecordHasBeenEdited = true;
   };
 
   // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
-  $rootScope.markAsEdited = function(fieldData, datum) {
+  $rootScope.markAsEdited = function(fieldData, datum, $event) {
     var utterance = "Datum";
     for (var key in fieldData) {
       if (key === "datumTags" && typeof fieldData.datumTags === 'string') {
@@ -1378,6 +1377,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }]);
     } else {
       datum.saved = "no";
+    }
+
+    if ($event && $event.type && $event.type === "submit") {
+      $scope.selectRow($scope.activeDatumIndex + 1);
     }
   };
 
@@ -1549,7 +1552,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
 
-  $scope.selectRow = function(scopeIndex) {
+  $scope.selectRow = function(scopeIndex, targetDatumEntryDomElement) {
     // Do nothing if clicked row is currently selected
     if ($scope.activeDatumIndex === scopeIndex) {
       return;
@@ -1561,11 +1564,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.activeDatumIndex = scopeIndex + 1;
         $scope.createRecord($scope.newFieldData);
       }
-      // if(scopeIndex === "newEntry"){
-      //   $scope.setFocusOn("firstFieldOfNewEntry");
-      // }else{
-      //   $scope.setFocusOn("firstFieldOfEditingEntry");
-      // }
+      if (targetDatumEntryDomElement) {
+        $scope.setDataEntryFocusOn(targetDatumEntryDomElement);
+      }
     }
   };
 
@@ -2643,13 +2644,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
   };
 
-  $scope.setFocusOn = function(elementId) {
+  $scope.setDataEntryFocusOn = function(targetDatumEntryDomElement) {
     $timeout(function() {
-      if (document.getElementById(elementId)) {
-        // console.log("old focus" , document.activeElement);
-        // document.getElementById(elementId).focus();
-        // console.log("new focus" , document.activeElement);
-
+      if (targetDatumEntryDomElement && targetDatumEntryDomElement[1]) {
+        console.log("old focus", document.activeElement);
+        targetDatumEntryDomElement[1].focus();
+        console.log("new focus", document.activeElement);
       } else {
         console.warn("requesting focus on an element that doesnt exist.");
       }

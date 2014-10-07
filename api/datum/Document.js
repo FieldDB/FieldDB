@@ -14,14 +14,14 @@ Document.prototype = Object.create(FieldDBObject.prototype, /** @lends Document.
 
   fieldDBtype: {
     get: function() {
-      // console.log("getting fieldDBtype");
+      this.debug("getting fieldDBtype");
       if (!this._fieldDBtype) {
         // this._fieldDBtype = this.guessType(this);
       }
       return this._fieldDBtype || "";
     },
     set: function(value) {
-      // console.log("setting fieldDBtype");
+      this.debug("setting fieldDBtype");
       if (value !== this._fieldDBtype) {
         this.warn("Overriding fieldDBtype " + this._fieldDBtype + " to the incoming " + value);
         this._fieldDBtype = value;
@@ -34,10 +34,10 @@ Document.prototype = Object.create(FieldDBObject.prototype, /** @lends Document.
       if (!doc || JSON.stringify(doc) === {}) {
         return "FieldDBObject";
       }
-      // console.log("Guessing type " + doc._id);
+      this.debug("Guessing type " + doc._id);
       var guessedType = doc.jsonType || doc.collection || "FieldDBObject";
       if (doc.api && doc.api.length > 0) {
-        // console.log("using api" + doc.api);
+        this.debug("using api" + doc.api);
         guessedType = doc.api[0].toUpperCase() + doc.api.substring(1, doc.api.length);
       }
       guessedType = guessedType.replace(/s$/, "");

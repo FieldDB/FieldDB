@@ -256,7 +256,7 @@ describe("FieldDBObject", function() {
           }],
           "userchooseable": "disabled"
         },
-        debugMode: true
+        // debugMode: true
       });
       expect(object.modifiedByUser.users).toBeDefined();
 

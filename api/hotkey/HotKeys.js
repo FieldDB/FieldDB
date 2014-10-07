@@ -19,7 +19,7 @@ var HotKey = require("./HotKey").HotKey;
 var HotKeys = function HotKeys(options) {
   if (options && options.firstkey === "" && options.secondKey === "" && options.description === "") {
     options = null;
-    console.warn("Upgrading pre v2 hotkeys");
+    this.debug("Upgrading pre v2 hotkeys");
   }
   this.debug("Constructing HotKeys ", options);
   Collection.apply(this, arguments);
