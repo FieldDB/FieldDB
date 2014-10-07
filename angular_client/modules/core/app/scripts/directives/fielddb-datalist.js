@@ -118,7 +118,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
     fetchDatalistDocsIfEmpty();
 
     $scope.undo = function() {
-      var type = $scope.datalist.type;
+      var type = $scope.datalist.fieldDBtype;
       if (!type || !FieldDB[type]) {
         type = "DataList";
       }
