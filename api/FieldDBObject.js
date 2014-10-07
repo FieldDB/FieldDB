@@ -243,7 +243,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     },
     set: function(value) {
       if (value !== this.fieldDBtype) {
-        this.warn("Using type " + this.fieldDBtype + " when the incoming object was " + value);
+        this.debug("Using type " + this.fieldDBtype + " when the incoming object was " + value);
       }
     }
   },
@@ -639,12 +639,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
-        if (this[aproperty] && typeof this[aproperty].equals === "function") {
+        if /* use fielddb equality function first */ (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
             return false;
           }
-        } else if (this[aproperty] === anotherObject[aproperty]) {
+        } /* then try normal equality */ else if (this[aproperty] === anotherObject[aproperty]) {
+          this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
+          // return true;
+        } /* then try stringification */ else if (JSON.stringify(this[aproperty]) === JSON.stringify(anotherObject[aproperty])) {
           this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
           // return true;
         } else if (anotherObject[aproperty] === undefined) {
@@ -693,7 +696,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       if (anObject.id && anotherObject.id && anObject.id !== anotherObject.id) {
-        this.warn("Refusing to merge these objects, they have different ids: " + anObject.id + "  and " + anotherObject.id, anObject, anotherObject);
+        this.warn("Refusing to merge these objects, they have different ids: " + anObject.id + "  and " + anotherObject.id);
+        this.debug("Refusing to merge" + anObject.id + "  and " + anotherObject.id, anObject, anotherObject);
         return null;
       }
       if (anObject.dbname && anotherObject.dbname && anObject.dbname !== anotherObject.dbname) {
@@ -701,7 +705,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.warn("Permitting a merge of objects from different databases: " + anObject.dbname + "  and " + anotherObject.dbname);
           this.debug("Merging ", anObject, anotherObject);
         } else if (optionalOverwriteOrAsk.indexOf("changeDBname") === -1) {
-          this.warn("Refusing to merge these objects, they come from different databases: " + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
+          this.warn("Refusing to merge these objects, they come from different databases: " + anObject.dbname + "  and " + anotherObject.dbname);
+          this.debug("Refusing to merge" + anObject.dbname + "  and " + anotherObject.dbname, anObject, anotherObject);
           return null;
         }
       }
@@ -1084,7 +1089,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (json.dbname) {
         json.pouchname = json.dbname;
-        this.todo("Serializing pouchname for backward compatability until prototype can handle dbname");
+        this.debug("Serializing pouchname for backward compatability until prototype can handle dbname");
       }
 
       delete json.saving;
