@@ -66,6 +66,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
       var deferred = Q.defer(),
         baseUrl = this.url,
+        self = this,
         key,
         value;
 
@@ -90,7 +91,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
         deferred.resolve(value);
       }, function(error) {
-        console.warn("error saving " + error);
+        self.warn("error saving " + error);
         deferred.reject(error);
       });
       return deferred.promise;
@@ -245,7 +246,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       try {
         connectionInfo = localStorage.getItem("_connectionInfo");
       } catch (e) {
-        console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+        this.warn("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
         connectionInfo = this._connectionInfo;
       }
       if (!connectionInfo) {
@@ -256,7 +257,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           secretkey: "connectionInfo"
         }).decrypt(connectionInfo);
       } catch (e) {
-        console.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
+        this.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
         connectionInfo = undefined;
       }
       return connectionInfo;
@@ -271,13 +272,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           this._connectionInfo = new Confidential({
             secretkey: "connectionInfo"
           }).encrypt(value);
-          console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+          this.debug("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
         }
       } else {
         try {
           localStorage.removeItem("_connectionInfo");
         } catch (e) {
-          console.log("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+          this.debug("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
           delete this._connectionInfo;
         }
       }
