@@ -166,9 +166,9 @@ var App = function App(options) {
 
   this._fieldDBtype = "App";
   var self = this;
-  setTimeout(function() {
+  Q.nextTick(function() {
     self.warn("An app of type " + self.fieldDBtype + " has become automagically available to all fielddb objects");
-  }, 500);
+  });
 
 };
 
