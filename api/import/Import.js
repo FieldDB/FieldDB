@@ -1459,9 +1459,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       var macLineEndings = false;
       if (rows.length < 3) {
-        rows = text.split("\r\r");
-        macLineEndings = true;
-        this.status = "Detected a MAC line ending.";
+        var macrows = text.split("\r\r");
+        if(macrows.length > rows.length){
+          this.status = this.status + " Detected a MAC line ending.";
+          macLineEndings = true;
+          rows = macrows;
+        }
       }
       for (l in rows) {
         if (macLineEndings) {
@@ -1471,6 +1474,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
       }
       this.asCSV = rows;
+      this.extractedHeader = rows[0];
       if (typeof callback === "function") {
         callback();
       }
@@ -1628,6 +1632,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
 
       var importType = {
+        handout: {
+          confidence: 0,
+          importFunction: this.importTextIGT
+        },
         csv: {
           confidence: 0,
           importFunction: this.importCSV
@@ -1655,11 +1663,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         latex: {
           confidence: 0,
           importFunction: this.importLatex
-        },
-        handout: {
-          confidence: 0,
-          importFunction: this.importTextIGT
         }
+
       };
 
       //if the user is just typing, try raw text

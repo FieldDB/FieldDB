@@ -14,13 +14,14 @@
         href="https://twitter.com/lingsync" target="_blank"><i
         class="icons icon-twitter"></i></a>
       </h5>
-      <blockquote hidden ng-hide="true" class="status">
-        {{application.importer.status}}
-        {{application.importer.bugMessage}}
-        {{application.importer.warnMessage}}
-        {{application.importer.corpus.bugMessage}}
-        {{application.importer.corpus.warnMessage}}
-      </blockquote>
+      <pre hidden ng-hide="true" class="status">
+        status: {{application.importer.status}}
+         bugMessage:  {{application.importer.bugMessage}}
+         warnMessage:  {{application.importer.warnMessage}}
+
+         corpus bugMessage: {{application.importer.corpus.bugMessage}}
+         corpus warnMessage: {{application.importer.corpus.warnMessage}}
+      </pre>
 
     </div>
   </div>
@@ -53,14 +54,31 @@
         <span>Import from</span> <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" ng-model="whichFormatToImport">
-        <li><a tabindex="-1" ng-click="application.importer.importCSV(application.importer.rawText, application.importer)">CSV</a></li>
-        <li><a tabindex="-1" ng-click="application.importer.importTabbed(application.importer.rawText, application.importer)">Tabbed</a></li>
-        <li><a tabindex="-1" ng-click="application.importer.importXML(application.importer.rawText, application.importer)">XML</a></li>
-        <li><a tabindex="-1" ng-click="application.importer.importElanXML(application.importer.rawText, application.importer)">ElanXML</a></li>
-        <li><a tabindex="-1" ng-click="application.importer.importToolbox(application.importer.rawText, application.importer)">Toolbox</a></li>
-        <li><a tabindex="-1" ng-click="application.importer.importTextGrid(application.importer.rawText, application.importer)">Praat Text Grid</a></li>
-        <li><a tabindex="-1" ng-click="application.importer.importLatex(application.importer.rawText, application.importer)">LaTex</a></li>
-        <li><a tabindex="-1" ng-click="application.importer.importText(application.importer.rawText, application.importer)">Handout/Doc</a></li>
+        <li ng-click="application.importer.importTextIGT(application.importer.rawText)">
+          <a tabindex="-1">Handout/Doc</a>
+        </li>
+        <li ng-click="application.importer.importCSV(application.importer.rawText)">
+          <a tabindex="-1">CSV</a>
+        </li>
+        <li ng-click="application.importer.importTabbed(application.importer.rawText)">
+          <a tabindex="-1">Tabbed</a>
+        </li>
+        <li ng-click="application.importer.importXML(application.importer.rawText)">
+          <a tabindex="-1">XML</a>
+        </li>
+        <li ng-click="application.importer.importElanXML(application.importer.rawText)">
+          <a tabindex="-1">ElanXML</a>
+        </li>
+        <li ng-click="application.importer.importToolbox(application.importer.rawText)">
+          <a tabindex="-1">Toolbox</a>
+        </li>
+        <li ng-click="application.importer.importTextGrid(application.importer.rawText)">
+          <a tabindex="-1">Praat Text Grid</a>
+        </li>
+        <li ng-click="application.importer.importLatex(application.importer.rawText)">
+          <a tabindex="-1">LaTex</a>
+        </li>
+
       </ul>
     </div>
     <span class="pull-right">Did the app guess the wrong format?</span>
