@@ -15,11 +15,11 @@
         class="icons icon-twitter"></i></a>
       </h5>
       <blockquote hidden ng-hide="true" class="status">
-        {{importer.status}}
-        {{importer.bugMessage}}
-        {{importer.warnMessage}}
-        {{importer.corpus.bugMessage}}
-        {{importer.corpus.warnMessage}}
+        {{application.importer.status}}
+        {{application.importer.bugMessage}}
+        {{application.importer.warnMessage}}
+        {{application.importer.corpus.bugMessage}}
+        {{application.importer.corpus.warnMessage}}
       </blockquote>
 
     </div>
@@ -46,62 +46,62 @@
       <input class="hidden" type="text" name="returnTextGrid" ng-model="uploadInfo.returnTextGrid"/>
     </form>
 
-    <textarea class="fielddb-large-textarea drop-zone" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="drop-zone-can-drop-now" ng-file-drag-over-delay="200" ng-model="importer.rawText"></textarea>
+    <textarea class="fielddb-large-textarea drop-zone" ng-blur="application.importer.guessFormatAndPreviewImport()" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="drop-zone-can-drop-now" ng-file-drag-over-delay="200" ng-model="application.importer.rawText"></textarea>
 
     <div class="btn-group pull-right">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
         <span>Import from</span> <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" ng-model="whichFormatToImport">
-        <li><a class="import-format" tabindex="-1">CSV</a></li>
-        <li><a class="import-format" tabindex="-1">Tabbed</a></li>
-        <li><a class="import-format" tabindex="-1">XML</a></li>
-        <li><a class="import-format" tabindex="-1">ElanXML</a></li>
-        <li><a class="import-format" tabindex="-1">Toolbox</a></li>
-        <li><a class="import-format" tabindex="-1">Praat Text Grid</a></li>
-        <li><a class="import-format" tabindex="-1">LaTex</a></li>
-        <li><a class="import-format" tabindex="-1">Handout</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importCSV(application.importer.rawText, application.importer)">CSV</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importTabbed(application.importer.rawText, application.importer)">Tabbed</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importXML(application.importer.rawText, application.importer)">XML</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importElanXML(application.importer.rawText, application.importer)">ElanXML</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importToolbox(application.importer.rawText, application.importer)">Toolbox</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importTextGrid(application.importer.rawText, application.importer)">Praat Text Grid</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importLatex(application.importer.rawText, application.importer)">LaTex</a></li>
+        <li><a tabindex="-1" ng-click="application.importer.importText(application.importer.rawText, application.importer)">Handout/Doc</a></li>
       </ul>
     </div>
     <span class="pull-right">Did the app guess the wrong format?</span>
   </div>
 
-  <div class="well" ng-show="importer.showImportSecondStep">
+  <div class="well" ng-show="application.importer.showImportSecondStep">
     <span>{{locale.locale_Import_Second_Step}}</span>
 
     <button class="btn btn-info add-column pull-right hide">{{locale.locale_Add_Extra_Columns}}</button>
     <div class=" container span11">
 
       <div id="import-datum-field-labels" class="row-fluid">
-        <span class="pull-left label label-info" ui-draggable="true" ng-repeat="participantField in importer.corpus.participantFields" drag="participantField.labelExperimenter" on-drop-success="dropSuccessHandler(participantField)" ng-model="participantField.labelExperimenter">{{participantField.labelExperimenter}}</span>
+        <span class="pull-left label label-info" ui-draggable="true" ng-repeat="participantField in application.importer.corpus.participantFields" drag="participantField.labelExperimenter" on-drop-success="dropSuccessHandler(participantField)" ng-model="participantField.labelExperimenter">{{participantField.labelExperimenter}}</span>
       </div>
     </div>
 
     <div class="scrollable">
       <table id="csv-table-area" class="table table-striped table-bordered table-condensed "> <tr>
         <th></th>
-        <th class="drop-zone" ng-repeat="headerCell in importer.extractedHeader" >
-          <input ng-model="headerCell" drag-hover-class="drop-zone-can-drop-now" ui-on-Drop="onDropRecieved($data, importer.extractedHeader, $index)"/>
+        <th class="drop-zone" ng-repeat="headerCell in application.importer.extractedHeader" >
+          <input ng-model="headerCell" drag-hover-class="drop-zone-can-drop-now" ui-on-Drop="onDropRecieved($data, application.importer.extractedHeader, $index)"/>
         </th>
       </tr>
-      <tr ng-repeat="row in importer.asCSV">
+      <tr ng-repeat="row in application.importer.asCSV">
         <td ng-click="removeRow($index)"><i class="fa fa-times-circle"></i></td>
         <td ng-repeat="cell in row" contenteditable ng-model="cell"></td>
       </tr>
     </table>
   </div>
 
-  <button class="btn btn-success approve-import" ng-show="importer.asCSV.length > 0" ng-click="runImport()">{{locale.locale_Attempt_Import}}</button>
+  <button class="btn btn-success approve-import" ng-show="application.importer.asCSV.length > 0" ng-click="runImport()">{{locale.locale_Attempt_Import}}</button>
 </div>
 
-<progress  class="import-progress" max="{{importer.progress.total}}" value="{{importer.progress.completed}}">
+<progress  class="import-progress" max="{{application.importer.progress.total}}" value="{{application.importer.progress.completed}}">
   <strong>{{locale.locale_percent_completed}}</strong>
 </progress>
 
-<div class="well container-fluid" ng-show="importer.showImportThirdStep">
+<div class="well container-fluid" ng-show="application.importer.showImportThirdStep">
   <span>{{locale.locale_Import_Third_Step}}</span>
 
-  <div class="row-fluid" data-fielddb-datalist json="importer.datalist" corpus="importer.corpus" >
+  <div class="row-fluid" data-fielddb-datalist json="application.importer.datalist" corpus="application.importer.corpus" >
 
   <div id="import-session" class="well"></div>
 
