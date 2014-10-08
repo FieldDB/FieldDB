@@ -434,20 +434,116 @@ describe("Import: as a morphologist I want to import my data from CSV", function
 
 });
 
-xdescribe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
 
-  it("should detect drag and drop", function() {
+describe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
+
+  var importer;
+  beforeEach(function() {
+    importer = new Import();
+    importer.rawText =
+      "Noqata qan qaparinaywanki.\n" +
+      "Noqa-ta qan qapari-nay-wanki\n" +
+      "me-ACC you-NOM yell-DES-2SG.1OM\n" +
+      "`I feel like yelling at you, I feel like yelling at all of you.’\n" +
+    importer.guessFormatAndPreviewImport()
+  });
+
+  it("should detect handout style data", function() {
+    expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("handout");
+  });
+
+});
+
+describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
+
+  var importer;
+  beforeEach(function() {
+    importer = new Import();
+    importer.rawText =
+      "<ANNOTATION_DOCUMENT AUTHOR=\"\" DATE=\"2012-05-13T20:23:00-08:00\" FORMAT=\"2.7\" VERSION=\"2.7\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://www.mpi.nl/tools/elan/EAFv2.7.xsd\">\n"+
+      "<ANNOTATION>\n" +
+      "      <ALIGNABLE_ANNOTATION ANNOTATION_ID=\"a48\" TIME_SLOT_REF1=\"ts49\" TIME_SLOT_REF2=\"ts50\">\n" +
+      "          <ANNOTATION_VALUE></ANNOTATION_VALUE>\n" +
+      "      </ALIGNABLE_ANNOTATION>\n" +
+      "  </ANNOTATION>\n" +
+      "  <ANNOTATION>\n" +
+      "      <ALIGNABLE_ANNOTATION ANNOTATION_ID=\"a49\" TIME_SLOT_REF1=\"ts51\" TIME_SLOT_REF2=\"ts52\">\n" +
+      "          <ANNOTATION_VALUE></ANNOTATION_VALUE>\n" +
+      "      </ALIGNABLE_ANNOTATION>\n" +
+      "  </ANNOTATION>";
+    importer.guessFormatAndPreviewImport()
+  });
+
+  it("should detect elan style data", function() {
+    expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("elanXML");
+  });
+});
+
+describe("Import: as a documentry linguist I want to import my data from SIL Toolbox", function() {
+  var importer;
+  beforeEach(function() {
+    importer = new Import();
+    importer.rawText =
+      "\\ge appear before him/her; apparent\n" +
+      "to him/her\n" +
+      "\\egads_uid x002176\n" +
+      "\\status done sent 3-4-09\n" +
+      "\\Root tee1";
+    importer.guessFormatAndPreviewImport()
+  });
+
+  //http://search.cpan.org/~sburke/Text-Shoebox-1.02/lib/Text/Shoebox/Entry.pm
+  it("should detect toolbox style data", function() {
+    expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("toolbox");
+  });
+
+});
+
+xdescribe("Import: as a child language investigator I want to import my data from CHILDES chat format", function() {
+
+  it("should detect chat style data", function() {
     expect(true).toBeTruthy();
   });
 
 });
 
-xdescribe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
-
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
+describe("Import: as a phonetican I want to import my data in Praat TextGrid ", function() {
+  var importer;
+  beforeEach(function() {
+    importer = new Import();
+    importer.rawText =
+      "File type = \"ooTextFile\"\n"+
+      "Object class = \"TextGrid\"\n"+
+      "\n"+
+      "xmin = 0 \n"+
+      "xmax = 2.2413151927437642 \n"+
+      "tiers? <exists> \n"+
+      "size = 6 \n"+
+      "item []: \n"+
+      "    item [1]:\n"+
+      "        class = \"IntervalTier\" \n"+
+      "        name = \"phones\" \n"+
+      "        xmin = 0 \n"+
+      "        xmax = 2.2413151927437642 \n"+
+      "        intervals: size = 19 \n"+
+      "         intervals [112]\n"+
+      "                xmin = 185.0\n"+
+      "                xmax = 186.23\n"+
+      "                text = \"maxtyota' añ  kartera che'\"\n"+
+      "            intervals [113]\n"+
+      "                xmin = 186.23\n"+
+      "                xmax = 186.58\n"+
+      "                text = \"\"\n"+
+      "            intervals [114]\n"+
+      "                xmin = 186.58\n"+
+      "                xmax = 188.3\n"+
+      "                text = \"puru tyi bijta' mi xiñob che'\"";
+    importer.guessFormatAndPreviewImport()
   });
 
+  it("should detect praat textgrid data", function() {
+    expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("praatTextgrid");
+  });
 });
 
 xdescribe("Import Template", function() {

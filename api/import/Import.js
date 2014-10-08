@@ -967,6 +967,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (!text) {
         return;
       }
+      this.todo("import xml parsers to turn xml import back on");
+      if (true) {
+        return;
+      }
       //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var xmlParser = new X2JS();
       window.text = text;
@@ -1325,7 +1329,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var textgrid = TextGrid.textgridToIGT(text);
-      var audioFileName = this.files[0] ? this.files[0].name : "copypastedtextgrid_unknownaudio";
+      var audioFileName = "copypastedtextgrid_unknownaudio";
+      if (this.files && this.files[0] && this.files[0].name) {
+        audioFileName = this.files[0].name;
+      }
       audioFileName = audioFileName.replace(/\.textgrid/i, "");
       if (!textgrid || !textgrid.intervalsByXmin) {
         if (typeof callback === "function") {
@@ -1460,7 +1467,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var macLineEndings = false;
       if (rows.length < 3) {
         var macrows = text.split("\r\r");
-        if(macrows.length > rows.length){
+        if (macrows.length > rows.length) {
           this.status = this.status + " Detected a MAC line ending.";
           macLineEndings = true;
           rows = macrows;
@@ -1631,37 +1638,45 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         fileIndex = 0;
       }
 
-      var importType = {
+      var importTypeConfidenceMeasures = {
         handout: {
           confidence: 0,
+          id: "handout",
           importFunction: this.importTextIGT
         },
         csv: {
           confidence: 0,
+          id: "csv",
           importFunction: this.importCSV
         },
         tabbed: {
           confidence: 0,
+          id: "tabbed",
           importFunction: this.importTabbed
         },
         xml: {
           confidence: 0,
+          id: "xml",
           importFunction: this.importXML
         },
         toolbox: {
           confidence: 0,
+          id: "toolbox",
           importFunction: this.importToolbox
         },
         elanXML: {
           confidence: 0,
+          id: "elanXML",
           importFunction: this.importElanXML
         },
         praatTextgrid: {
           confidence: 0,
+          id: "praatTextgrid",
           importFunction: this.importTextGrid
         },
         latex: {
           confidence: 0,
+          id: "latex",
           importFunction: this.importLatex
         }
 
@@ -1671,35 +1686,55 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (this.files && this.files[fileIndex]) {
         var fileExtension = this.files[fileIndex].name.split(".").pop().toLowerCase();
         if (fileExtension === "csv") {
-          importType.csv.confidence++;
+          importTypeConfidenceMeasures.csv.confidence++;
         } else if (fileExtension === "txt") {
           //If there are more than 20 tabs in the file, try tabbed.
           if (this.rawText.split("\t").length > 20) {
-            importType.tabbed.confidence++;
+            importTypeConfidenceMeasures.tabbed.confidence++;
           } else {
-            importType.handout.confidence++;
+            importTypeConfidenceMeasures.handout.confidence++;
           }
         } else if (fileExtension === "eaf") {
-          importType.elanXML.confidence++;
+          importTypeConfidenceMeasures.elanXML.confidence++;
         } else if (fileExtension === "xml") {
-          importType.xml.confidence++;
+          importTypeConfidenceMeasures.xml.confidence++;
         } else if (fileExtension === "sf") {
-          importType.toolbox.confidence++;
+          importTypeConfidenceMeasures.toolbox.confidence++;
         } else if (fileExtension === "tex") {
-          importType.latex.confidence++;
+          importTypeConfidenceMeasures.latex.confidence++;
         } else if (fileExtension === "textgrid") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
         } else if (fileExtension === "mov") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
         } else if (fileExtension === "wav") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
         } else if (fileExtension === "mp3") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
+        }
+      } else {
+        if (this.rawText && this.rawText.length) {
+          var textLength = this.rawText.length;
+          if (this.rawText.indexOf("\\gll") > -1 || this.rawText.indexOf("\\begin{") > -1 || this.rawText.indexOf("\\ex") > -1) {
+            importTypeConfidenceMeasures.latex.confidence = 100;
+          } else if (this.rawText.indexOf("mpi.nl/tools/elan/EAF") > -1) {
+            importTypeConfidenceMeasures.elanXML.confidence = 100;
+          } else if (this.rawText.indexOf("<?xml") > -1) {
+            importTypeConfidenceMeasures.xml.confidence = 100;
+          } else {
+            importTypeConfidenceMeasures.csv.confidence = this.rawText.split(",").length / textLength;
+            importTypeConfidenceMeasures.tabbed.confidence = this.rawText.split("\t").length / textLength;
+            importTypeConfidenceMeasures.handout.confidence = this.rawText.split(/\n\n+/).length / textLength;
+            importTypeConfidenceMeasures.toolbox.confidence = this.rawText.split(/\n\\/).length / textLength;
+            importTypeConfidenceMeasures.praatTextgrid.confidence = this.rawText.split("intervals").length / textLength;
+          }
         }
       }
-      var mostLikelyImport = _.max(importType, function(obj) {
+      this.importTypeConfidenceMeasures = importTypeConfidenceMeasures;
+
+      var mostLikelyImport = _.max(importTypeConfidenceMeasures, function(obj) {
         return obj.confidence;
       });
+      this.importTypeConfidenceMeasures.mostLikely = mostLikelyImport;
       this.status = "";
       mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
     }
