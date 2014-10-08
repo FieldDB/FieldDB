@@ -26,13 +26,15 @@ var Q = require("q");
  * @constructs
  */
 var DataList = function DataList(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "DataList";
+  }
   this.debug("Constructing DataList ", options);
   if (options && options.comments) {
     // console.log("DataList comments", options.comments);
     // console.log("DataList comments", options.comments);
   }
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "DataList";
 };
 
 DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.prototype */ {

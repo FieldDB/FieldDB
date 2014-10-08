@@ -19,6 +19,9 @@ var elanguages = require("./elanguages.json");
  * @constructs
  */
 var Contextualizer = function Contextualizer(options) {
+  if(!this._fieldDBtype){
+		this._fieldDBtype = "Contextualizer";
+	}
   this.debug("Constructing Contextualizer ", options);
   // this.debugMode = true;
   var localArguments = arguments;
@@ -47,7 +50,6 @@ var Contextualizer = function Contextualizer(options) {
     this.warn("By default it will be okay for users to modify global locale strings. IF they are saved this will affect other users.");
     this.alwaysConfirmOkay = true;
   }
-  this._fieldDBtype = "Contextualizer";
   return this;
 };
 

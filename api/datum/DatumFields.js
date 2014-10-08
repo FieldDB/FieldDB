@@ -11,9 +11,11 @@ var DatumField = require("./../datum/DatumField").DatumField;
  * @constructs
  */
 var DatumFields = function DatumFields(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "DatumFields";
+  }
   this.debug("Constructing DatumFields length: ", options);
   Collection.apply(this, arguments);
-  this._fieldDBtype = "DatumFields";
 };
 
 DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFields.prototype */ {

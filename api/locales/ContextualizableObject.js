@@ -12,6 +12,9 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject,
  * @constructs
  */
 var ContextualizableObject = function ContextualizableObject(json) {
+  // if (!this._fieldDBtype) {
+  //   this._fieldDBtype = "Activities";
+  // }
   this.debug("Constructing ContextualizableObject ", json);
   if (json && typeof json === "string") {
     if (!ContextualizableObject.updateAllToContextualizableObjects) {
@@ -54,8 +57,8 @@ var ContextualizableObject = function ContextualizableObject(json) {
   }
 
   Object.apply(this, arguments);
-  // this._fieldDBtype = "ContextualizableObject";
 };
+
 var forcedebug = false;
 
 ContextualizableObject.updateAllToContextualizableObjects = false;

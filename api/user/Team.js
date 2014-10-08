@@ -10,9 +10,11 @@ var UserMask = require("./UserMask").UserMask;
  * @constructs
  */
 var Team = function Team(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Team";
+  }
   this.debug("Constructing Team: ", options);
   UserMask.apply(this, arguments);
-  this._fieldDBtype = "Team";
 };
 
 Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ {

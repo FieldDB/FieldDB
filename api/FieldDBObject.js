@@ -79,7 +79,9 @@ try {
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
-  this._fieldDBtype = "FieldDBObject";
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "FieldDBObject";
+  }
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
@@ -644,10 +646,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
             return false;
           }
-        } /* then try normal equality */ else if (this[aproperty] === anotherObject[aproperty]) {
+        } /* then try normal equality */
+        else if (this[aproperty] === anotherObject[aproperty]) {
           this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
           // return true;
-        } /* then try stringification */ else if (JSON.stringify(this[aproperty]) === JSON.stringify(anotherObject[aproperty])) {
+        } /* then try stringification */
+        else if (JSON.stringify(this[aproperty]) === JSON.stringify(anotherObject[aproperty])) {
           this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
           // return true;
         } else if (anotherObject[aproperty] === undefined) {
@@ -929,11 +933,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   pouchname: {
     get: function() {
-      this.warn("pouchname is deprecated, use dbname instead.");
+      this.debug("pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
     set: function(value) {
-      this.warn("Pouchname is deprecated, please use dbname instead.");
+      this.debug("Pouchname is deprecated, please use dbname instead.");
       this.dbname = value;
     }
   },

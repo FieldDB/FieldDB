@@ -11,9 +11,11 @@ var DatumState = require("./DatumState").DatumState;
  * @constructs
  */
 var DatumStates = function DatumStates(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "DatumStates";
+  }
   this.debug("Constructing DatumStates length: ", options);
   DatumTags.apply(this, arguments);
-  this._fieldDBtype = "DatumStates";
 };
 
 DatumStates.prototype = Object.create(DatumTags.prototype, /** @lends DatumStates.prototype */ {

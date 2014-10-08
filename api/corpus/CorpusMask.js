@@ -65,9 +65,11 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  * @tutorial tests/CorpusMaskTest.js
  */
 var CorpusMask = function CorpusMask(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "CorpusMask";
+  }
   this.debug(options);
   Database.apply(this, arguments);
-  this._fieldDBtype = "CorpusMask";
 };
 
 CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.prototype */ {

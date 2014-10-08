@@ -11,9 +11,11 @@ var AudioVideo = require("./AudioVideo").AudioVideo;
  * @constructs
  */
 var AudioVideos = function AudioVideos(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "AudioVideos";
+  }
   this.debug("Constructing AudioVideos length: ", options);
   Collection.apply(this, arguments);
-  this._fieldDBtype = "AudioVideos";
 };
 
 AudioVideos.prototype = Object.create(Collection.prototype, /** @lends AudioVideos.prototype */ {

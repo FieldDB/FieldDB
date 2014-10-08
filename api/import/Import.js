@@ -51,9 +51,11 @@ var getUnique = function(arrayObj) {
 
 
 var Import = function Import(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Import";
+  }
   this.debug(" new import ", options);
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "Import";
 };
 
 Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prototype */ {
@@ -93,13 +95,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
 
   showImportSecondStep: {
-    get: function(){
+    get: function() {
       return this.asCSV && this.asCSV.length > 0;
     }
   },
 
   showImportThirdStep: {
-    get: function(){
+    get: function() {
       return this.datalist && this.datalist.docs && this.datalist.docs.length > 0;
     }
   },
@@ -413,7 +415,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.debug(results);
           deferred.resolve(results);
           self.progress.completed++;
-        },function(results) {
+        }, function(results) {
           self.debug(results);
           deferred.resolve(results);
           self.progress.completed++;
@@ -840,13 +842,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var firstrow = rows[0];
       var hasQuotes = false;
       //If it looks like it already has quotes:
-      if (rows[0].split("","").length > 2 && rows[5].split("","").length > 2) {
+      if (rows[0].split("", "").length > 2 && rows[5].split("", "").length > 2) {
         hasQuotes = true;
         self.status = self.status + " Detected text was already surrounded in quotes.";
       }
       for (var l in rows) {
         if (hasQuotes) {
-          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split("","");
+          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split("", "");
           //          var withoutQuotes = [];
           //          _.each(rows[l],function(d){
           //            withoutQuotes.push(d.replace(/"/g,""));
@@ -864,7 +866,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows.length > 3) {
         firstrow = firstrow;
         if (hasQuotes) {
-          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("","");
+          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("", "");
         } else {
           header = self.parseLineCSV(firstrow);
         }

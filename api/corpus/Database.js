@@ -6,9 +6,11 @@ var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 
 var Database = function Database(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Database";
+  }
   this.debug("In Database ", options);
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "Database";
 };
 
 var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true";

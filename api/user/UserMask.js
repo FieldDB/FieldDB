@@ -11,9 +11,11 @@ var MD5 = require("MD5");
  * @tutorial tests/UserTest.js
  */
 var UserMask = function UserMask(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "UserMask";
+  }
   this.debug("Constructing a UserMask " + options);
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "UserMask";
 };
 
 UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.prototype */ {

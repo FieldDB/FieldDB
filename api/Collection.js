@@ -18,7 +18,9 @@ var regExpEscape = function(s) {
  * @tutorial tests/CollectionTest.js
  */
 var Collection = function Collection(json) {
-  this._fieldDBtype = "Collection";
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Collection";
+  }
   this.debug("Constructing a collection");
   if (!json) {
     json = {};
