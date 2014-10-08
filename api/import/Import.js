@@ -834,6 +834,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   importCSV: {
     value: function(text, self, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split("\n");
       if (rows.length < 3) {
         rows = text.split("\r");
@@ -961,6 +964,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
   importElanXML: {
     value: function(text, self, callback) {
+      if (!text) {
+        return;
+      }
       //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var xmlParser = new X2JS();
       window.text = text;
@@ -1125,6 +1131,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   importTabbed: {
     value: function(text, self, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split("\n"),
         l;
       if (rows.length < 3) {
@@ -1159,6 +1168,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   importToolbox: {
     value: function(text, self, callback) {
+      if (!text) {
+        return;
+      }
       var lines = text.split("\n");
       var macLineEndings = false;
       if (lines.length < 3) {
@@ -1314,6 +1326,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   importTextGrid: {
     value: function(text, self, callback) {
+      if (!text) {
+        return;
+      }
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var textgrid = TextGrid.textgridToIGT(text);
       var audioFileName = self.files[0] ? self.files[0].name : "copypastedtextgrid_unknownaudio";
@@ -1442,6 +1457,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   importTextIGT: {
     value: function(text, self, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split(/\n\n+/),
         l;
 
@@ -1651,7 +1669,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       };
 
       //if the user is just typing, try raw text
-      if (this.files[fileIndex]) {
+      if (this.files && this.files[fileIndex]) {
         var fileExtension = this.files[fileIndex].name.split(".").pop().toLowerCase();
         if (fileExtension === "csv") {
           importType.csv.confidence++;
