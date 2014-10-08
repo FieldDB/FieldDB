@@ -117,6 +117,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       locale_Drag_and_Drop_Placeholder: "Drag and drop files, copy-paste or type your data here. (Or use the Choose file(s) button)"
     };
   };
+
   controller.$inject = ["$scope", "$upload"];
 
   var directiveDefinitionObject = {
