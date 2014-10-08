@@ -1,9 +1,11 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 var Document = function Document(options) {
+  // if(!this._fieldDBtype){
+  // 	this._fieldDBtype = "Document";
+  // }
   this.debug("In Document ", options);
   FieldDBObject.apply(this, arguments);
-  // this._fieldDBtype = "Document";
 };
 
 Document.fieldDBtype = "Document";

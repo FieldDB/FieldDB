@@ -58,9 +58,11 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
 
 
 var Corpus = function Corpus(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Corpus";
+  }
   this.debug("Constructing corpus", options);
   CorpusMask.apply(this, arguments);
-  this._fieldDBtype = "Corpus";
 };
 
 Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototype */ {
@@ -87,13 +89,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-
   couchConnection: {
     get: function() {
-      this.warn("couchConnection is deprecated");
+      this.debug("couchConnection is deprecated");
     },
     set: function() {
-      this.warn("couchConnection is deprecated");
+      this.debug("couchConnection is deprecated");
     }
   },
 

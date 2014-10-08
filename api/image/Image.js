@@ -9,9 +9,11 @@ var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
  * @constructs
  */
 var Image = function Image(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Image";
+  }
   this.debug("Constructing Image length: ", options);
   AudioVideo.apply(this, arguments);
-  this._fieldDBtype = "Image";
 };
 
 Image.prototype = Object.create(AudioVideo.prototype, /** @lends Image.prototype */ {

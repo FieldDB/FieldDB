@@ -10,9 +10,11 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var InsertUnicode = function InsertUnicode(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "InsertUnicode";
+  }
   this.debug("Constructing InsertUnicode length: ", options);
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "InsertUnicode";
 };
 
 InsertUnicode.prototype = Object.create(FieldDBObject.prototype, /** @lends InsertUnicode.prototype */ {

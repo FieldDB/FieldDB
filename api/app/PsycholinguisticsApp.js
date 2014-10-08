@@ -9,9 +9,11 @@ var App = require("./App").App;
  * @constructs
  */
 var PsycholinguisticsApp = function PsycholinguisticsApp(options) {
+  if(!this._fieldDBtype){
+		this._fieldDBtype = "PsycholinguisticsApp";
+	}
   this.debug("Constructing PsycholinguisticsApp ", options);
   App.apply(this, arguments);
-  this._fieldDBtype = "PsycholinguisticsApp";
 };
 
 PsycholinguisticsApp.prototype = Object.create(App.prototype, /** @lends PsycholinguisticsApp.prototype */ {

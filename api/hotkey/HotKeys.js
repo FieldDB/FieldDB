@@ -17,13 +17,15 @@ var HotKey = require("./HotKey").HotKey;
  * @constructs
  */
 var HotKeys = function HotKeys(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "HotKeys";
+  }
   if (options && options.firstkey === "" && options.secondKey === "" && options.description === "") {
     options = null;
     this.debug("Upgrading pre v2 hotkeys");
   }
   this.debug("Constructing HotKeys ", options);
   Collection.apply(this, arguments);
-  this._fieldDBtype = "HotKeys";
 };
 
 HotKeys.prototype = Object.create(Collection.prototype, /** @lends HotKeys.prototype */ {

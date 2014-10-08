@@ -21,6 +21,10 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
  * @constructs
  */
 var DatumField = function DatumField(options) {
+  if(!this._fieldDBtype){
+		this._fieldDBtype = "DatumField";
+	}
+
   this.debug("Constructing DatumField ", options);
   // Let encryptedValue and value from serialization be set
   if (options && options.encryptedValue) {
@@ -30,7 +34,6 @@ var DatumField = function DatumField(options) {
     options._value = options.value;
   }
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "DatumField";
 };
 
 DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumField.prototype */ {
@@ -98,11 +101,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   label: {
     get: function() {
-      this.todo("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
       return this._labelFieldLinguists || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      this.todo("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
       this.labelFieldLinguists = value;
       this.id = value;
     }
