@@ -113,11 +113,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   userchooseable: {
     get: function() {
-      this.warn("userchooseable is deprecated, instead use defaultfield");
+      this.debug("userchooseable is deprecated, instead use defaultfield");
       return this.defaultfield;
     },
     set: function(value) {
-      this.warn("userchooseable is deprecated, instead use defaultfield");
+      this.debug("userchooseable is deprecated, instead use defaultfield");
       if (value === "disabled") {
         value = true;
       }
