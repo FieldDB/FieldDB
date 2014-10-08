@@ -28,12 +28,13 @@ describe("InsertUnicode: as a User I want to use my favourite symbols", function
     var unicodes = new InsertUnicodes();
     unicodes.add({
       tipa: "",
-      symbol: "ɦ"
+      symbol: " ɦ"
     });
     expect(unicodes.length).toEqual(1);
     expect(unicodes.warnMessage).toBeUndefined();
     expect(unicodes["ɦ"].symbol).toEqual("ɦ");
     expect(unicodes.ɦ.symbol).toEqual("ɦ");
+    expect(unicodes.warnMessage).toBeUndefined();
   });
 
   it("should not permit fishy characters in primary keys", function() {

@@ -26,6 +26,24 @@ InsertUnicode.prototype = Object.create(FieldDBObject.prototype, /** @lends Inse
       tipa: "",
       useCount: 0
     }
+  },
+  symbol: {
+    get: function() {
+      return this._symbol;
+    },
+    set: function(value) {
+      if (value === this._symbol) {
+        return;
+      }
+      if (!value) {
+        delete this._symbol;
+        return;
+      }
+      if (typeof value.trim === "function") {
+        value = value.trim();
+      }
+      this._symbol = value.trim();
+    }
   }
 
 });
