@@ -79,6 +79,12 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
     }
   },
 
+  play: {
+    value: function(optionalStartTime, optionalEndTime, optionalDuration) {
+      console.log("playing", this, optionalStartTime, optionalEndTime, optionalDuration);
+    }
+  },
+
   type: {
     get: function() {
       if (!this._type && this.filename) {
