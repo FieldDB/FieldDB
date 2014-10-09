@@ -445,7 +445,7 @@ describe("Import: as a synctactician I want to import my data from Word/text exa
       "Noqa-ta qan qapari-nay-wanki\n" +
       "me-ACC you-NOM yell-DES-2SG.1OM\n" +
       "`I feel like yelling at you, I feel like yelling at all of you.’\n" +
-    importer.guessFormatAndPreviewImport()
+    importer.guessFormatAndPreviewImport();
   });
 
   it("should detect handout style data", function() {
@@ -471,7 +471,7 @@ describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import 
       "          <ANNOTATION_VALUE></ANNOTATION_VALUE>\n" +
       "      </ALIGNABLE_ANNOTATION>\n" +
       "  </ANNOTATION>";
-    importer.guessFormatAndPreviewImport()
+    importer.guessFormatAndPreviewImport();
   });
 
   it("should detect elan style data", function() {
@@ -489,7 +489,7 @@ describe("Import: as a documentry linguist I want to import my data from SIL Too
       "\\egads_uid x002176\n" +
       "\\status done sent 3-4-09\n" +
       "\\Root tee1";
-    importer.guessFormatAndPreviewImport()
+    importer.guessFormatAndPreviewImport();
   });
 
   //http://search.cpan.org/~sburke/Text-Shoebox-1.02/lib/Text/Shoebox/Entry.pm
@@ -538,7 +538,7 @@ describe("Import: as a phonetican I want to import my data in Praat TextGrid ", 
       "                xmin = 186.58\n"+
       "                xmax = 188.3\n"+
       "                text = \"puru tyi bijta' mi xiñob che'\"";
-    importer.guessFormatAndPreviewImport()
+    importer.guessFormatAndPreviewImport();
   });
 
   it("should detect praat textgrid data", function() {
