@@ -124,6 +124,15 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
+  play: {
+    value: function(optionalIndex) {
+      this.debug("optionalIndex", optionalIndex);
+      if (this._audioVideo && typeof this._audioVideo.play === "function") {
+        this._audioVideo.play(0);
+      }
+    }
+  },
+
   images: {
     get: function() {
       if (this._images && this._images.fieldDBtype === "Images") {
