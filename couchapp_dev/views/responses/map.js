@@ -21,12 +21,12 @@ function(doc) {
       var itemNumberInExperiment = 0;
 
       var results = doc.results.map(function(subexperiment) {
-        subexperimentLabel = subexperiment.label;
         var responses = subexperiment.results.map(function(stimulus) {
           if (!stimulus || !stimulus.responses || !stimulus.responses.length || !stimulus.responses[stimulus.responses.length - 1]) {
             return;
           }
-          itemNumberInExperiment = itemNumberInExperiment + 1;
+          subexperimentLabel = stimulus.subexperimentLabel;
+          itemNumberInExperiment = stimulus.itemNumberInExperiment;
           prime = stimulus.prime;
           target = stimulus.target;
           response = stimulus.responses[stimulus.responses.length - 1];
