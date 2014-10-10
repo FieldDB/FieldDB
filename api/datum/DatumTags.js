@@ -12,9 +12,11 @@ var DatumTag = require("./DatumTag").DatumTag;
  * @constructs
  */
 var DatumTags = function DatumTags(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "DatumTags";
+  }
   this.debug("Constructing DatumTags ", options);
   Collection.apply(this, arguments);
-  this._fieldDBtype = "DatumTags";
 };
 
 DatumTags.prototype = Object.create(Collection.prototype, /** @lends DatumTags.prototype */ {

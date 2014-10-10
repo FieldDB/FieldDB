@@ -12,9 +12,11 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var ELanguages = function ELanguages(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "ELanguages";
+  }
   this.debug("Constructing ELanguages ", options);
   Collection.apply(this, arguments);
-  this._fieldDBtype = "ELanguages";
 };
 
 ELanguages.prototype = Object.create(Collection.prototype, /** @lends ELanguages.prototype */ {

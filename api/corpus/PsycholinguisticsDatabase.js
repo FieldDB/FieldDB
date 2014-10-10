@@ -1,9 +1,11 @@
 var FieldDBDatabase = require("./Database").Database;
 
 var PsycholinguisticsDatabase = function PsycholinguisticsDatabase(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "PsycholinguisticsDatabase";
+  }
   this.debug("In PsycholinguisticsDatabase ", options);
   FieldDBDatabase.apply(this, arguments);
-  this._fieldDBtype = "PsycholinguisticsDatabase";
 };
 var DEFAULT_COLLECTION_MAPREDUCE = "_design/psycholinguistics/_view/COLLECTION?descending=true";
 

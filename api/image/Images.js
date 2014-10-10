@@ -11,9 +11,11 @@ var Image = require("./Image").Image;
  * @constructs
  */
 var Images = function Images(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Images";
+  }
   this.debug("Constructing Images length: ", options);
   Collection.apply(this, arguments);
-  this._fieldDBtype = "Images";
 };
 
 Images.prototype = Object.create(Collection.prototype, /** @lends Images.prototype */ {

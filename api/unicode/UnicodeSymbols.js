@@ -10,9 +10,11 @@ var InsertUnicode = require("./UnicodeSymbol").InsertUnicode;
  * @constructs
  */
 var InsertUnicodes = function InsertUnicodes(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "InsertUnicodes";
+  }
   this.debug("Constructing InsertUnicodes length: ", options);
   Collection.apply(this, arguments);
-  this._fieldDBtype = "InsertUnicodes";
 };
 
 InsertUnicodes.prototype = Object.create(Collection.prototype, /** @lends InsertUnicodes.prototype */ {
@@ -295,7 +297,7 @@ InsertUnicodes.prototype = Object.create(Collection.prototype, /** @lends Insert
       if (typeof value.replace !== "function") {
         value = value + "";
       }
-      value = value.replace(/[-""+=?./\[\]{}() ]/g,"");
+      value = value.replace(/[-""+=?./\[\]{}() ]/g, "");
       return value;
     }
   }

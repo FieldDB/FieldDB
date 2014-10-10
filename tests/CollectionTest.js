@@ -108,6 +108,23 @@ describe("lib/Collection", function() {
       expect(newcollection.length).toEqual(3);
     });
 
+
+    it("should sanitize primary keys", function() {
+      var newcollection = new Collection();
+      newcollection.add({
+        id: " A",
+        tipa: "llamda"
+      });
+      expect(newcollection.primaryKey).toEqual("id");
+      expect(newcollection.length).toEqual(1);
+      expect(newcollection.warnMessage).toBeUndefined();
+      expect(newcollection.A).toEqual({
+        id: " A",
+        tipa: "llamda"
+      });
+    });
+
+
   });
 
   describe("acessing contents", function() {

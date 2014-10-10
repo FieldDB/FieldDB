@@ -10,6 +10,9 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var Activity = function Activity(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Activity";
+  }
   this.debug("Constructing Activity ", options);
   FieldDBObject.apply(this, arguments);
   if (!this.timestamp) {
@@ -18,7 +21,6 @@ var Activity = function Activity(options) {
   if (!this.verbicon) {
     this.verbicon = this.verbicon;
   }
-  this._fieldDBtype = "Activity";
 };
 Activity.uuidGenerator = FieldDBObject.uuidGenerator;
 
