@@ -18,7 +18,9 @@ var regExpEscape = function(s) {
  * @tutorial tests/CollectionTest.js
  */
 var Collection = function Collection(json) {
-  this._fieldDBtype = "Collection";
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Collection";
+  }
   this.debug("Constructing a collection");
   if (!json) {
     json = {};
@@ -295,7 +297,7 @@ Collection.prototype = Object.create(Object.prototype, {
           continue;
         }
         if (this.collection[index][optionalKeyToIdentifyItem] === searchingFor) {
-          this.debug("found a match in the _collection, " , this.collection[index].equals);
+          this.debug("found a match in the _collection, ", this.collection[index].equals);
           // this.collection[index].debugMode = true;
           // value.debugMode = true;
           if (this.collection[index] !== value ||
@@ -357,6 +359,9 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!value) {
         this.warn("This object is missing a value for the prmary key " + this.primaryKey + "... it will be hard to find in the collection.", member);
         return;
+      }
+      if (typeof value.trim === "function") {
+        value = value.trim();
       }
       var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);

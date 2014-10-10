@@ -14,9 +14,11 @@ var InsertUnicodes = require("./../unicode/UnicodeSymbols").InsertUnicodes;
  * @constructs
  */
 var UserPreference = function UserPreference(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "UserPreference";
+  }
   this.debug("Constructing UserPreference length: ", options);
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "UserPreference";
 };
 
 UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends UserPreference.prototype */ {

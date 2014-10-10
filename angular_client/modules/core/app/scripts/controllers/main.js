@@ -12,7 +12,9 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
     }
 
     $scope.application.render = function() {
-      $scope.$apply();
+      if (!$scope.$$phase) {
+        $scope.$apply(); //$digest or $apply
+      }
     };
 
     $scope.loginDetails = $scope.loginDetails || {

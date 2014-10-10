@@ -10,9 +10,11 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @constructs
  */
 var InsertUnicode = function InsertUnicode(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "InsertUnicode";
+  }
   this.debug("Constructing InsertUnicode length: ", options);
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "InsertUnicode";
 };
 
 InsertUnicode.prototype = Object.create(FieldDBObject.prototype, /** @lends InsertUnicode.prototype */ {
@@ -25,6 +27,24 @@ InsertUnicode.prototype = Object.create(FieldDBObject.prototype, /** @lends Inse
       symbol: "",
       tipa: "",
       useCount: 0
+    }
+  },
+  symbol: {
+    get: function() {
+      return this._symbol;
+    },
+    set: function(value) {
+      if (value === this._symbol) {
+        return;
+      }
+      if (!value) {
+        delete this._symbol;
+        return;
+      }
+      if (typeof value.trim === "function") {
+        value = value.trim();
+      }
+      this._symbol = value.trim();
     }
   }
 

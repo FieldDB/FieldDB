@@ -10,9 +10,11 @@ var Stimulus = require("./Stimulus").Stimulus,
  * @constructs
  */
 var Response = function Response(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Response";
+  }
   this.debug("Constructing Response ", options);
   Stimulus.apply(this, arguments);
-  this._fieldDBtype = "Response";
 };
 
 Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.prototype */ {
@@ -82,7 +84,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
         self.stopAudio();
         self.ownerComponent.nextStimulus();
       }, function(reason) {
-        console.log("Not continuing to next stimulus",reason);
+        console.log("Not continuing to next stimulus", reason);
         if (this.pauseAudioWhenConfirmingResponse) {
           self.playAudio();
         }

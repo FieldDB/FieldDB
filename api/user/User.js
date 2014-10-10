@@ -17,9 +17,11 @@ var DEFAULT_USER_MODEL = require("./user.json");
  * @constructs
  */
 var User = function User(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "User";
+  }
   this.debug("Constructing User length: ", options);
   UserMask.apply(this, arguments);
-  this._fieldDBtype = "User";
 };
 
 User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ {

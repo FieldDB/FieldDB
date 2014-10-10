@@ -41,13 +41,15 @@ try {
  *
  */
 var Confidential = function Confidential(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Confidential";
+  }
   this.debug("Constructing Confidential: ", options);
   if (options && options.filledWithDefaults) {
     this.fillWithDefaults();
     delete options.filledWithDefaults;
   }
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "Confidential";
 };
 
 /**
@@ -127,7 +129,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
         this.verbose("Decrypting " + encrypted, this.secretkey);
         result = AES.decrypt(encrypted, this.secretkey).toString(CryptoEncoding);
         try {
-          if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]") ) {
+          if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]")) {
             result = JSON.parse(result);
             this.debug("Decrypting an object");
           }

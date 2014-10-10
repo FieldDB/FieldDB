@@ -46,6 +46,10 @@ var Q = require("q");
  * @constructs
  */
 var App = function App(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "App";
+  }
+
   this.debug("Constructing App ", options);
   FieldDBObject.apply(this, arguments);
   if (FieldDBObject.application) {
@@ -164,11 +168,10 @@ var App = function App(options) {
   this.corpus = this.corpus || null;
   this.thisyear = (new Date()).getFullYear();
 
-  this._fieldDBtype = "App";
   var self = this;
-  setTimeout(function() {
+  Q.nextTick(function() {
     self.warn("An app of type " + self.fieldDBtype + " has become automagically available to all fielddb objects");
-  }, 500);
+  });
 
 };
 

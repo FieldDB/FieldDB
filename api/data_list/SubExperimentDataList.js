@@ -12,9 +12,11 @@ var ContextualizableObject = require("./../locales/ContextualizableObject").Cont
  * @constructs
  */
 var SubExperimentDataList = function SubExperimentDataList(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "SubExperimentDataList";
+  }
   this.debug("Constructing SubExperimentDataList ", options);
   DataList.apply(this, arguments);
-  this._fieldDBtype = "SubExperimentDataList";
 };
 
 SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends SubExperimentDataList.prototype */ {

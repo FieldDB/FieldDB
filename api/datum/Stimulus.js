@@ -9,9 +9,11 @@ var Datum = require("./Datum").Datum;
  * @constructs
  */
 var Stimulus = function Stimulus(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Stimulus";
+  }
   this.debug("Constructing Stimulus ", options);
   Datum.apply(this, arguments);
-  this._fieldDBtype = "Stimulus";
 };
 
 Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototype */ {
@@ -22,7 +24,7 @@ Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototyp
   prime: {
     get: function() {
       // if (this._prime) {
-        return this._prime;
+      return this._prime;
       // }
       // return {
       //   "imageFile": "x.png",
@@ -39,7 +41,7 @@ Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototyp
   target: {
     get: function() {
       // if (this._target) {
-        return this._target;
+      return this._target;
       // }
       // return {
       //   "imageFile": "x.png",
@@ -56,7 +58,7 @@ Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototyp
   distractors: {
     get: function() {
       // if (this._distractors) {
-        return this._distractors;
+      return this._distractors;
       // }
       // return [{
       //   "imageFile": "placeholder.jpg",
@@ -73,7 +75,7 @@ Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototyp
   layout: {
     get: function() {
       // if (this._layout) {
-        return this._layout;
+      return this._layout;
       // }
       // return {
       //   randomize: false,

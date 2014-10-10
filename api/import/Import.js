@@ -51,9 +51,11 @@ var getUnique = function(arrayObj) {
 
 
 var Import = function Import(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Import";
+  }
   this.debug(" new import ", options);
   FieldDBObject.apply(this, arguments);
-  this._fieldDBtype = "Import";
 };
 
 Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prototype */ {
@@ -93,13 +95,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
 
   showImportSecondStep: {
-    get: function(){
+    get: function() {
       return this.asCSV && this.asCSV.length > 0;
     }
   },
 
   showImportThirdStep: {
-    get: function(){
+    get: function() {
       return this.datalist && this.datalist.docs && this.datalist.docs.length > 0;
     }
   },
@@ -226,7 +228,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           filename = self.files.map(function(file) {
             return file.name;
           }).join(", ");
-          descript = "This is the data list which results from the import of these file(s). " + self.get("fileDetails");
+          descript = "This is the data list which results from the import of these file(s). " + self.fileDetails;
         } catch (e) {
           //do nothing
         }
@@ -413,7 +415,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.debug(results);
           deferred.resolve(results);
           self.progress.completed++;
-        },function(results) {
+        }, function(results) {
           self.debug(results);
           deferred.resolve(results);
           self.progress.completed++;
@@ -563,7 +565,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //       }
         //       audioVideo.set("filename", value);
         //       audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
-        //       audioVideo.set("URL", self.audioUrl + "/" + window.app.get("corpus").get("pouchname") + "/" + value);
+        //       audioVideo.set("URL", self.audioUrl + "/" + window.app.get("corpus").pouchname + "/" + value);
         //       audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
         //       audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
         //     } else if (index === "startTime") {
@@ -610,7 +612,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //     $.each(array[a], forEachRow);
         //     d.set("datumFields", fields);
         //     if (audioVideo) {
-        //       d.get("audioVideo").add(audioVideo);
+        //       d.audioVideo.add(audioVideo);
         //       if (self.debugMode) {
         //         self.debug(JSON.stringify(audioVideo.toJSON()) + JSON.stringify(fields.toJSON()));
         //       }
@@ -828,35 +830,38 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * OpenOffice Spreadsheets, and could be a good format to export
    * from these sources and import into FieldDB.
    *
-   * @param text
+   * @param text to be imported
    */
   importCSV: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split("\n");
       if (rows.length < 3) {
         rows = text.split("\r");
-        self.status = self.status + " Detected a \r line ending.";
+        this.status = this.status + " Detected a \r line ending.";
       }
       var firstrow = rows[0];
       var hasQuotes = false;
       //If it looks like it already has quotes:
-      if (rows[0].split("","").length > 2 && rows[5].split("","").length > 2) {
+      if (rows[0].split("", "").length > 2 && rows[5].split("", "").length > 2) {
         hasQuotes = true;
-        self.status = self.status + " Detected text was already surrounded in quotes.";
+        this.status = this.status + " Detected text was already surrounded in quotes.";
       }
       for (var l in rows) {
         if (hasQuotes) {
-          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split("","");
+          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split("", "");
           //          var withoutQuotes = [];
           //          _.each(rows[l],function(d){
           //            withoutQuotes.push(d.replace(/"/g,""));
           //          });
           //          rows[l] = withoutQuotes;
         } else {
-          rows[l] = self.parseLineCSV(rows[l]);
+          rows[l] = this.parseLineCSV(rows[l]);
           /* This was a fix for alan's data but it breaks other data. */
           //          var rowWithoutQuotes = rows[l].replace(/"/g,"");
-          //          rows[l] = self.parseLineCSV(rowWithoutQuotes);
+          //          rows[l] = this.parseLineCSV(rowWithoutQuotes);
         }
       }
       /* get the first line and set it to be the header by default */
@@ -864,14 +869,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows.length > 3) {
         firstrow = firstrow;
         if (hasQuotes) {
-          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("","");
+          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("", "");
         } else {
-          header = self.parseLineCSV(firstrow);
+          header = this.parseLineCSV(firstrow);
         }
       }
-      self.extractedHeader = header;
+      this.extractedHeader = header;
 
-      self.asCSV = rows;
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -958,20 +963,22 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
   importElanXML: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var xmlParser = new X2JS();
       window.text = text;
       var jsonObj = xmlParser.xml_str2json(text);
-      if (self.debugMode) {
-        self.debug(jsonObj);
-      }
+
+      this.debug(jsonObj);
 
       //add the header to the session
       //    HEADER can be put in the session and in the datalist
       var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g, "\n").replace(/[\[\]{}]/g, "").replace(/:/g, " : ").replace(/"/g, "").replace(/\n/g, "").replace(/file : /g, "file:").replace(/ : \//g, ":/").trim();
       //TODO turn these into session fields
-      self.set("status", self.status + "\n" + annotationDetails);
+      this.status = this.status + "\n" + annotationDetails;
 
 
       var header = [];
@@ -1069,9 +1076,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               matrix[annotation][annotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];
             }
           } catch (e) {
-            if (self.debugMode) {
-              self.debug("TIER " + l + " doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
-            }
+            this.debug("TIER " + l + " doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
 
           try {
@@ -1079,9 +1084,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               matrix[annotation][refannotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];
             }
           } catch (e) {
-            if (self.debugMode) {
-              self.debug("TIER " + l + " doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
-            }
+            this.debug("TIER " + l + " doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
 
         }
@@ -1104,8 +1107,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows === []) {
         rows.push("");
       }
-      self.set("extractedHeader", header);
-      self.set("asCSV", rows);
+      this.extractedHeader = header;
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -1119,21 +1122,24 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * your file has more than 100 tabs in it, FieldDB guesses that it
    * should try this function.
    *
-   * @param tabbed
+   * @param text to be imported
    */
   importTabbed: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split("\n"),
         l;
       if (rows.length < 3) {
         rows = text.split("\r");
-        self.set("status", self.get("status", "Detected a \n line ending."));
+        this.status = this.status + " Detected a \n line ending.";
       }
       for (l in rows) {
         rows[l] = rows[l].split("\t");
       }
 
-      self.set("asCSV", rows);
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -1152,17 +1158,19 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * stops and another starts. It doesn't appear to be double spaces...
    *
    * @param text
-   * @param self
    * @param callback
    */
   importToolbox: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var lines = text.split("\n");
       var macLineEndings = false;
       if (lines.length < 3) {
         lines = text.split("\r");
         macLineEndings = true;
-        self.set("status", self.get("status", "Detected a \r line ending."));
+        this.status = this.status + " Detected a \r line ending.";
       }
 
       var matrix = [];
@@ -1227,8 +1235,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows === []) {
         rows.push("");
       }
-      self.set("extractedHeader", header);
-      self.set("asCSV", rows);
+      this.extractedHeader = header;
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -1239,7 +1247,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   downloadTextGrid: {
     value: function(fileDetails) {
       var self = this;
-      var textridUrl = OPrime.audioUrl + "/" + this.get("pouchname") + "/" + fileDetails.fileBaseName + ".TextGrid";
+      var textridUrl = OPrime.audioUrl + "/" + this.pouchname + "/" + fileDetails.fileBaseName + ".TextGrid";
       $.ajax({
         url: textridUrl,
         type: "get",
@@ -1261,11 +1269,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             }
             var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
             fileDetails.description = message;
-            self.set("status", self.status + "<br/>" + message);
-            self.set("fileDetails", self.status + message);
+            self.status = self.status + "<br/>" + message;
+            self.fileDetails = self.status + message;
             window.appView.toastUser(message, "alert-info", "Import:");
-            self.set("rawText", self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results);
-            self.importTextGrid(self.rawText, self, null);
+            self.rawText = self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results;
+            self.importTextGrid(self.rawText, null);
           } else {
             self.debug(results);
             fileDetails.textgrid = "Error result was empty. " + results;
@@ -1289,7 +1297,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
           self.debug(reason);
           if (reason && reason.userFriendlyErrors) {
-            self.set("status", fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" "));
+            self.status = fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" ");
             window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
           }
         }
@@ -1299,10 +1307,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   addAudioVideoFile: {
     value: function(url) {
-      if (!this.get("audioVideo")) {
-        this.set("audioVideo", new AudioVideos());
+      if (!this.audioVideo) {
+        this.audioVideo = new AudioVideos();
       }
-      this.get("audioVideo").add(new AudioVideo({
+      this.audioVideo.add(new AudioVideo({
         filename: url.substring(url.lastIndexOf("/") + 1),
         URL: url,
         description: "File from import"
@@ -1311,10 +1319,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
 
   importTextGrid: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var textgrid = TextGrid.textgridToIGT(text);
-      var audioFileName = self.files[0] ? self.files[0].name : "copypastedtextgrid_unknownaudio";
+      var audioFileName = this.files[0] ? this.files[0].name : "copypastedtextgrid_unknownaudio";
       audioFileName = audioFileName.replace(/\.textgrid/i, "");
       if (!textgrid || !textgrid.intervalsByXmin) {
         if (typeof callback === "function") {
@@ -1381,9 +1392,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       header = getUnique(header);
       consultants = getUnique(consultants);
       if (consultants.length > 0) {
-        self.set("consultants", consultants.join(","));
+        this.consultants = consultants.join(",");
       } else {
-        self.set("consultants", "Unknown");
+        this.consultants = "Unknown";
       }
       header = header.concat(["utterance", "tier", "speakers", "CheckedWithConsultant", "startTime", "endTime", "modality", "audioFileName"]);
       var rows = [];
@@ -1404,15 +1415,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           // cells.push(audioFileName);
           rows.push(cells);
         } else {
-          self.debug("This row has only the default columns, not text or anything interesting.");
+          this.debug("This row has only the default columns, not text or anything interesting.", cells);
         }
       }
       if (rows === []) {
         rows.push("");
       }
       // header.push("audioFileName");
-      self.set("extractedHeader", header);
-      self.set("asCSV", rows);
+      this.extractedHeader = header;
+      this.asCSV = rows;
 
       if (typeof callback === "function") {
         callback();
@@ -1439,15 +1450,21 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * @param text
    */
   importTextIGT: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split(/\n\n+/),
         l;
 
       var macLineEndings = false;
       if (rows.length < 3) {
-        rows = text.split("\r\r");
-        macLineEndings = true;
-        self.set("status", self.get("status", "Detected a MAC line ending."));
+        var macrows = text.split("\r\r");
+        if(macrows.length > rows.length){
+          this.status = this.status + " Detected a MAC line ending.";
+          macLineEndings = true;
+          rows = macrows;
+        }
       }
       for (l in rows) {
         if (macLineEndings) {
@@ -1456,7 +1473,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           rows[l] = rows[l].replace(/  +/g, " ").split("\n");
         }
       }
-      self.set("asCSV", rows);
+      this.asCSV = rows;
+      this.extractedHeader = rows[0];
       if (typeof callback === "function") {
         callback();
       }
@@ -1614,6 +1632,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
 
       var importType = {
+        handout: {
+          confidence: 0,
+          importFunction: this.importTextIGT
+        },
         csv: {
           confidence: 0,
           importFunction: this.importCSV
@@ -1641,15 +1663,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         latex: {
           confidence: 0,
           importFunction: this.importLatex
-        },
-        handout: {
-          confidence: 0,
-          importFunction: this.importTextIGT
         }
+
       };
 
       //if the user is just typing, try raw text
-      if (this.files[fileIndex]) {
+      if (this.files && this.files[fileIndex]) {
         var fileExtension = this.files[fileIndex].name.split(".").pop().toLowerCase();
         if (fileExtension === "csv") {
           importType.csv.confidence++;
@@ -1682,7 +1701,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return obj.confidence;
       });
       this.status = "";
-      mostLikelyImport.importFunction.apply(this, [this.rawText, this, null]); //no callback
+      mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
     }
   },
   readBlob: {

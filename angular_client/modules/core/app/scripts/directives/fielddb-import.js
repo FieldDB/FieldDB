@@ -23,38 +23,42 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
     $scope.removeRow = function(row) {
       console.log("remove ", row);
-      var removed = $scope.importer.asCSV.splice(row, 1);
+      var removed = $scope.application.importer.asCSV.splice(row, 1);
       console.log(removed);
     };
 
-    $scope.dropSuccessHandler = function(participantFieldLabel){
-      $scope.importer.debug("dropSuccessHandler", participantFieldLabel);
-      $scope.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
-      $scope.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
+    $scope.dropSuccessHandler = function(participantFieldLabel) {
+      $scope.application.importer.debug("dropSuccessHandler", participantFieldLabel);
+      $scope.application.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
+      $scope.application.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
     };
-    $scope.onDropRecieved = function(data, extractedHeader, headerCellIndex){
-      $scope.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
+    $scope.onDropRecieved = function(data, extractedHeader, headerCellIndex) {
+      $scope.application.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
       extractedHeader[headerCellIndex] = data;
-      $scope.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
+      $scope.application.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
     };
 
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
       if (processOffline) {
-        $scope.importer = $scope.importer || new FieldDB.Import();
-        $scope.importer.status = "";
-        $scope.importer.error = "";
-        $scope.importer.rawText = "";
-        $scope.importer.importType = $scope.importer.importType || "data";
-        $scope.importer.corpus = $scope.corpus;
-        $scope.importer.dbname = $scope.corpus.dbname || "default";
-        $scope.importer.files = $files;
+        if (!$scope.application || !$scope.application.corpus) {
+          $scope.application.importer.bug("The corpus is not loaded yet. Please report this.");
+          return;
+        }
+        $scope.application.importer = $scope.application.importer || new FieldDB.Import();
+        $scope.application.importer.status = "";
+        $scope.application.importer.error = "";
+        $scope.application.importer.rawText = "";
+        $scope.application.importer.importType = $scope.application.importer.importType || "data";
+        $scope.application.importer.corpus = $scope.application.corpus;
+        $scope.application.importer.dbname = $scope.application.corpus.dbname || "default";
+        $scope.application.importer.files = $files;
 
-        console.log($scope.importer);
-        $scope.importer.readFiles({}).then(function(sucessfullOptions) {
+        console.log($scope.application.importer);
+        $scope.application.importer.readFiles({}).then(function(sucessfullOptions) {
           console.log("Finished reading files ", sucessfullOptions);
           $scope.$digest();
-          $scope.importer.guessFormatAndPreviewImport();
+          $scope.application.importer.guessFormatAndPreviewImport();
           $scope.$digest();
 
         }, function(failedOptions) {
@@ -93,12 +97,12 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
 
     $scope.runImport = function() {
-      if (!$scope.importer) {
+      if (!$scope.application.importer) {
         return;
       }
-      $scope.importer.convertTableIntoDataList().then(function(results) {
+      $scope.application.importer.convertTableIntoDataList().then(function(results) {
         console.log("Import is completed. ", results);
-        console.log(" Progress ",$scope.importer.progress);
+        console.log(" Progress ", $scope.application.importer.progress);
         // $scope.$digest();
       });
     };
@@ -113,6 +117,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       locale_Drag_and_Drop_Placeholder: "Drag and drop files, copy-paste or type your data here. (Or use the Choose file(s) button)"
     };
   };
+
   controller.$inject = ["$scope", "$upload"];
 
   var directiveDefinitionObject = {

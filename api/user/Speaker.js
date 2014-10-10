@@ -31,13 +31,15 @@ var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
  * @constructs
  */
 var Speaker = function Speaker(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Speaker";
+  }
   this.debug("Constructing Speaker: ", options);
   if (!options || (!options._rev && !options.fields)) {
     //If its a new participant with out a revision and without fields use the defaults
     this.fields = this.defaults.fields;
   }
   UserMask.apply(this, arguments);
-  this._fieldDBtype = "Speaker";
 };
 
 Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototype */ {
