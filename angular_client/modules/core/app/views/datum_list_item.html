@@ -6,7 +6,7 @@
     {{datum.datumFields.utterance.value}}
   </span>
   <span class="audio_video_ul col-md-6">
-    <audio  ng-repeat="audioVideo in datum.audioVideo._collection" title="{{audioVideo.description}} {{audioVideo.startTime}} - {{audioVideo.endTime}}" preload controls>
+    <audio  id="{{audioVideo.URL}}"  ng-repeat="audioVideo in datum.audioVideo._collection" title="{{audioVideo.description}} {{audioVideo.startTime}} - {{audioVideo.endTime}}" preload controls>
       <source ng-src="{{audioVideo.URL}}" type="{{audioVideo.audioType}}"/>
     </audio>
     <span> {{datum.datumFields.tags.value}} </span>
