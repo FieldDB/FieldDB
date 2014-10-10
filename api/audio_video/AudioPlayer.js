@@ -31,18 +31,21 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   isPlaying: {
+    configurable: true,
     get: function() {
       return this.mediaController.isPlaying;
     }
   },
 
   isPaused: {
+    configurable: true,
     get: function() {
       return this.mediaController.isPaused;
     }
   },
 
   audioPlayStartTime: {
+    configurable: true,
     get: function() {
       if (this.mediaController.audioPlayStarted) {
         return this.mediaController.audioPlayStarted;
@@ -53,6 +56,7 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   isCordova: {
+    configurable: true,
     get: function() {
       // return false;
       try {
@@ -68,6 +72,7 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   getDuration: {
+    configurable: true,
     value: function(src) {
       if (src && this.src.indexOf(src) > -1 && this.mediaController.src.indexOf(src) > -1) {
         return this.mediaController.duration || 0;
@@ -79,6 +84,7 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   src: {
+    configurable: true,
     get: function() {
       return this._src;
     },
@@ -116,6 +122,7 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   play: {
+    configurable: true,
     value: function(optionalSource, optionalDelay) {
       if (optionalSource) {
         this.src = optionalSource;
@@ -130,6 +137,8 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   pause: {
+    configurable: true,
+
     value: function() {
       if (this.mediaController) {
         this.mediaController.pause();
@@ -138,6 +147,7 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   togglePause: {
+    configurable: true,
     value: function() {
       console.log("togglePause");
       if (this.mediaController) {
@@ -153,6 +163,7 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   stop: {
+    configurable: true,
     value: function() {
       if (this.mediaController) {
         this.mediaController.stop();
@@ -161,6 +172,7 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
   },
 
   addEvent: {
+    configurable: true,
     value: function(message, startTime, endTime) {
       if (this.mediaController) {
         this.mediaController.addAudioEventAtTimePeriod(message, startTime, endTime);

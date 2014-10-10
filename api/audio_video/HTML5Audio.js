@@ -30,6 +30,7 @@ HTML5Audio.prototype = Object.create(Object.prototype, /** @lends HTML5Audio.pro
    * @default null
    */
   src: {
+    configurable: true,
     get: function() {
       return this._src;
     },
@@ -57,6 +58,7 @@ HTML5Audio.prototype = Object.create(Object.prototype, /** @lends HTML5Audio.pro
   },
 
   duration: {
+    configurable: true,
     get: function() {
       if (this._audioElement && this._audioElement.duration) {
         return this._audioElement.duration;
@@ -176,13 +178,16 @@ HTML5Audio.prototype = Object.create(Object.prototype, /** @lends HTML5Audio.pro
   },
 
   audioEvents: {
+    configurable: true,
     value: []
   },
   endAudioEvents: {
+    configurable: true,
     value: []
   },
 
   audioTimeUpdateFunction: {
+    configurable: true,
     value: function() {
       console.log(this.currentTime);
       if (!this.audioEvents) {
