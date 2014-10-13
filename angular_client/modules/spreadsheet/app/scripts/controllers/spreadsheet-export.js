@@ -17,6 +17,7 @@ angular.module('spreadsheetApp')
 
     $scope.resultsMessageFromExternalController = details.resultsMessageFromExternalController;
     $scope.resultsFromExternalController = details.resultsFromExternalController;
+    $scope.useWordpressIGTFormat = true;
 
     $scope.ok = function() {
       $modalInstance.close($scope.results, $scope.resultsMessage);
