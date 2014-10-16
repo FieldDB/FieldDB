@@ -18,7 +18,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
 
-  $rootScope.appVersion = "2.24.0ss";
+  $rootScope.appVersion = "2.24.1ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size) {
