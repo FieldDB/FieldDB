@@ -287,7 +287,7 @@ module.exports = function(grunt) {
             removeCommentsFromCDATA: true,
             removeOptionalTags: true
           },
-          module: 'adminDashboardApp',
+          module: 'corpuspagesApp',
         },
         cwd: 'app',
         src: 'views/**.html',
