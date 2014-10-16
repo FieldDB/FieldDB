@@ -31,6 +31,18 @@ AudioVideos.prototype = Object.create(Collection.prototype, /** @lends AudioVide
     value: {
       item: AudioVideo
     }
+  },
+
+  play: {
+    value: function(optionalIndexToPlay) {
+      console.log("playing");
+      if (!optionalIndexToPlay) {
+        optionalIndexToPlay = 0;
+      }
+      if (this._collection && this._collection[optionalIndexToPlay]) {
+        this._collection[optionalIndexToPlay].play();
+      }
+    }
   }
 
 });

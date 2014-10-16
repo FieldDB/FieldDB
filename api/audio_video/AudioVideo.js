@@ -1,5 +1,5 @@
-/* globals FieldDB */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var AudioPlayer = require("./AudioPlayer").AudioPlayer;
 
 /**
  * @class The AudioVideo is a type of FieldDBObject with any additional fields or
@@ -76,6 +76,17 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
         value = value.trim();
       }
       this._URL = value;
+      if (this.audioPlayer) {
+        this.audioPlayer.src = value;
+      }
+    }
+  },
+
+  play: {
+    value: function(optionalStartTime, optionalEndTime, optionalDuration) {
+      console.log("playing", this, optionalStartTime, optionalEndTime, optionalDuration);
+      this.audioPlayer = this.audioPlayer || new AudioPlayer();
+      this.audioPlayer.play(this.URL);
     }
   },
 
@@ -95,6 +106,16 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
         value = "audio/" + this.filename.split(".").pop();
         this._type = value;
       }
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      delete json.audioPlayer;
+
+      return json;
     }
   }
 
