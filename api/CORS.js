@@ -117,10 +117,15 @@ CORS.makeCORSRequest = function(options) {
     self.bug("There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
     deferred.reject(e);
   };
-  if (options.data) {
-    xhr.send(JSON.stringify(options.data));
-  } else {
-    xhr.send();
+  try {
+    if (options.data) {
+      xhr.send(JSON.stringify(options.data));
+    } else {
+      xhr.send();
+    }
+  } catch (e) {
+    console.warn("Caught an exception when calling send on xhr", e);
+    deferred.reject(e);
   }
 
   return deferred.promise;
