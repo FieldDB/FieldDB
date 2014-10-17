@@ -287,7 +287,7 @@ module.exports = function(grunt) {
             removeCommentsFromCDATA: true,
             removeOptionalTags: true
           },
-          module: 'corpuspagesApp',
+          module: 'fielddbAngularApp',
         },
         cwd: 'app',
         src: 'views/**.html',
