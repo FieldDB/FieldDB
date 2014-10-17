@@ -89,11 +89,7 @@
   <div class="row" >
     <div class="span3 expandedData">
       <div class="expandedDataInner">
-        <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true" >
-          <i class="fa {{recordingIcon}}">
-          </i>
-          &nbsp;{{recordingStatus}}
-        </button>
+        <div fielddb-audio-video-recorder ></div>
       </div>
     </div>
     <div class="span7 expandedData">
