@@ -17,6 +17,7 @@ angular
     'ngSanitize',
     'ngTouch',
     'angular-md5',
+    'fielddbAngularApp',
     'ui.bootstrap'
   ])
   .config(function($routeProvider) {
