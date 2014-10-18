@@ -1,9 +1,30 @@
-<button ng-class="recordingButtonClass" ng-click="startRecording()" ng-show="true==true" >
-  <i class="fa {{recordingIcon}}">
-  </i>
-  &nbsp;{{status}}
-</button>
+<form class="btn-toolbar">
+  <div class="btn-group">
+    <button class="btn" ng-disabled="recordability.isProcessing" ng-click="toogleRecording('audio')" ng-show="recordability.canRecordAudio" >
+      <i class="fa" ng-class="{'fa-microphone': recordability.canRecordAudio, 'fa-microphone-slash': recordability.cantRecordAudio, 'fa-stop': recordability.isRecordingAudio }">
+      </i>
+    </button>
+    <button class="btn" ng-click="toogleRecording('video')" ng-show="recordability.canRecordVideo" ng-hide="recordability.cantRecordVideo" >
+      <i class="fa" ng-class="{'fa-video-camera': recordability.canRecordVideo, 'fa-microphone-slash ': recordability.cantRecordVideo, 'fa-stop': recordability.isRecordingVideo }">
+      </i>
+    </button>
+    <button class="btn btn-warning" ng-click="pause()" ng-show="recordability.isRecordingAudio || recordability.isRecordingVideo" >
+      <i class="fa fa-pause">
+      </i>
+    </button>
+    <button class="btn btn-primary" ng-click="uploadFile(datum);" >
+      <i class="fa whiteicon fa-file">
+      </i>
+      Upload File(s)
+    </button>
+    <i class="fa fa-bullhorn">
+    </i>
+    &nbsp; <input  id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' />
+  </div>
+</form>
+<textarea ng-model="description"></textarea>
 
-<video hidden autoplay controls> </video>
-<canvas hidden> </canvas>
-<img hidden> </img>
+<img src="images/spinner-small.gif" ng-show="processingAudio" />
+<video hidden class="hide" autoplay controls> </video>
+<canvas hidden class="hide" ng-hide="true===true"> </canvas>
+<img hidden class="hide" />

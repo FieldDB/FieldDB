@@ -86,35 +86,13 @@
       </div>
     </div>
   </div>
-  <div class="row" >
-    <div class="span3 expandedData">
-      <div class="expandedDataInner">
-        <div fielddb-audio-video-recorder ></div>
-      </div>
-    </div>
-    <div class="span7 expandedData">
-      <div class="expandedDataInner">
-        <form id='form_{{datum.id}}_audio-file'>
-          <i class="fa fa-bullhorn">
-          </i>
-          &nbsp; <input  id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' />
-          <button class="btn btn-primary" ng-click="uploadFile(datum);" >
-            <i class="fa whiteicon fa-file">
-            </i>
-            Upload File(s)
-          </button>
-          &nbsp;&nbsp;
-        </form>
-      </div>
-    </div>
-    <div class="span1">
-      <span ng-show="processingAudio==true">
-        <img src="images/spinner-small.gif">
-      </span>
+  <div class="row expandedData">
+    <div class=" expandedDataInner">
+      <div fielddb-audio-video-recorder ></div>
     </div>
   </div>
   <div class="row" >
-    <div class="span10">
+    <div class="span11">
       <table>
         <tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
           <td>
