@@ -7,6 +7,7 @@
  * # fielddbAudioVideoRecorder
  */
 angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", function() {
+
   return {
     templateUrl: "views/audio-video-recorder.html",
     restrict: "A",
@@ -78,9 +79,9 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
           $scope.audioRecorder = new FieldDB.AudioVideoRecorder();
         }
         $scope.audioRecorder.periphialsCheck(true, {
-          image: angular.element("img")[0],
-          video: angular.element("video")[0],
-          canvas: angular.element("canvas")[0]
+          image: $scope.element.find("img")[0],
+          video: $scope.element.find("video")[0],
+          canvas: $scope.element.find("canvas")[0]
         }).then(onAudioSuccess, onAudioFail);
       };
 
@@ -128,6 +129,9 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         });
       };
     },
-    link: function postLink() {}
+    link: function postLink(scope, el) {
+      console.log("keeping a reference to this element");
+      scope.element = el;
+    }
   };
 });
