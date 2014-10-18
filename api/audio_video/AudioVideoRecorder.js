@@ -1,4 +1,5 @@
 /* globals document, window, alert, navigator, FieldDB, Media */
+var Q = require("q");
 
 /**
  * @class AudioVideoRecorder is a minimal customization of the HTML5 media controller
@@ -83,96 +84,110 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
     }
   },
   periphialsCheck: {
-    value: function(withVideo) {
-      var application = {};
-      if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-        application = FieldDB.FieldDBObject.application;
-      }
-      var waitUntilVideoElementIsRendered = function() {
+    value: function(withVideo, optionalElements) {
+      var application = {},
+        deferred = Q.defer();
 
-        /* access camera and microphone
-                    http://www.html5rocks.com/en/tutorials/getusermedia/intro/
-                 */
-        navigator.getUserMedia = navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia ||
-          navigator.msGetUserMedia;
+      Q.nextTick(function() {
 
-        if (navigator.getUserMedia) {
-          console.log("hasGetUserMedia");
-
-          var video = document.getElementById("video-preview");
-          var canvas = document.getElementById("video-snapshot-canvas");
-          var snapshotImage = document.getElementById("video-snapshot");
-          if (!canvas) {
-            console.warn("video-snapshot-canvas is not present, cant verify periphialsCheck");
-            return;
-          }
-          canvas.width = 640;
-          canvas.height = 360;
-          var ctx = canvas.getContext("2d");
-
-
-          var errorCallback = function(e) {
-            console.log("User refused access to camera and microphone!", e);
-          };
-
-          navigator.getUserMedia({
-              video: {
-                mandatory: {
-                  maxWidth: canvas.width,
-                  maxHeight: canvas.height
-                }
-              },
-              audio: true,
-              geolocation: true
-            },
-            function(localMediaStream) {
-              if (withVideo) {
-                video.removeAttribute("hidden");
-                snapshotImage.removeAttribute("hidden");
-              }
-              video.src = window.URL.createObjectURL(localMediaStream);
-
-              var takeSnapshot = function takeSnapshot() {
-                if (localMediaStream) {
-                  ctx.drawImage(video, 0, 0);
-                  // "image/webp" works in Chrome.
-                  // Other browsers will fall back to image/png.
-                  snapshotImage.src = canvas.toDataURL("image/webp");
-                }
-              };
-              video.addEventListener("click", takeSnapshot, false);
-
-
-              // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
-              // See crbug.com/110938.
-              video.onloadedmetadata = function(e) {
-                // Ready to go. Do some stuff.
-                console.log("Video preview is working, take note of this in application so user can continue to the game.", e);
-                application.videoRecordingVerified = true;
-
-                navigator.geolocation.getCurrentPosition(function(position) {
-                  console.warn("recieved position information");
-                  if (FieldDB && FieldDB.FieldDBObject) {
-                    FieldDB.FieldDBObject.software = FieldDB.FieldDBObject.software || {};
-                    FieldDB.FieldDBObject.software.location = position.coords;
-                  }
-                });
-              };
-            },
-            errorCallback
-          );
-
-        } else {
-          alert("The Microphone is not supported in your browser");
+        if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+          application = FieldDB.FieldDBObject.application;
         }
-      };
-      if (!document.getElementById("video-preview")) {
-        window.setTimeout(waitUntilVideoElementIsRendered, 2000);
-      } else {
-        waitUntilVideoElementIsRendered();
-      }
+        var waitUntilVideoElementIsRendered = function() {
+
+          /* access camera and microphone
+              http://www.html5rocks.com/en/tutorials/getusermedia/intro/
+           */
+          navigator.getUserMedia = navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia;
+
+          if (navigator.getUserMedia) {
+            console.log("hasGetUserMedia");
+            if (!optionalElements) {
+              optionalElements = {
+                image: document.getElementById("video-snapshot"),
+                video: document.getElementById("video-preview"),
+                canvas: document.getElementById("video-snapshot-canvas"),
+              };
+            }
+            if (!optionalElements.canvas) {
+              console.warn("video-snapshot-canvas is not present, cant verify periphialsCheck");
+              return;
+            }
+            optionalElements.canvas.width = 640;
+            optionalElements.canvas.height = 360;
+            var ctx = optionalElements.canvas.getContext("2d");
+
+
+            var errorCallback = function(e) {
+              console.log("User refused access to camera and microphone!", e);
+              deferred.reject(e);
+            };
+
+            navigator.getUserMedia({
+                video: {
+                  mandatory: {
+                    maxWidth: optionalElements.canvas.width,
+                    maxHeight: optionalElements.canvas.height
+                  }
+                },
+                audio: true,
+                geolocation: true
+              },
+              function(localMediaStream) {
+                if (withVideo) {
+                  optionalElements.video.removeAttribute("hidden");
+                  optionalElements.image.removeAttribute("hidden");
+                }
+                optionalElements.video.src = window.URL.createObjectURL(localMediaStream);
+
+                var takeSnapshot = function takeSnapshot() {
+                  if (localMediaStream) {
+                    ctx.drawImage(optionalElements.video, 0, 0);
+                    // "image/webp" works in Chrome.
+                    // Other browsers will fall back to image/png.
+                    optionalElements.image.src = optionalElements.canvas.toDataURL("image/webp");
+                  }
+                };
+                optionalElements.video.addEventListener("click", takeSnapshot, false);
+
+
+                // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
+                // See crbug.com/110938.
+                optionalElements.video.onloadedmetadata = function(e) {
+                  // Ready to go. Do some stuff.
+                  console.log("Video preview is working, take note of this in application so user can continue to the game.", e);
+                  application.videoRecordingVerified = true;
+
+                  navigator.geolocation.getCurrentPosition(function(position) {
+                    console.warn("recieved position information");
+                    if (FieldDB && FieldDB.FieldDBObject) {
+                      FieldDB.FieldDBObject.software = FieldDB.FieldDBObject.software || {};
+                      FieldDB.FieldDBObject.software.location = position.coords;
+                    }
+                  });
+
+                  deferred.resolve("user clicked okay");
+                };
+              },
+              errorCallback
+            );
+
+          } else {
+            alert("The Microphone is not supported in your browser");
+            deferred.reject("The microphone is not supported in your browser. " + navigator.userAgent);
+          }
+        };
+        if (!optionalElements.video) {
+          console.warn("waiting for the video preview to get rendered, did you forget to declare it somewhere? ");
+          window.setTimeout(waitUntilVideoElementIsRendered, 2000);
+        } else {
+          waitUntilVideoElementIsRendered();
+        }
+      });
+      return deferred.promise;
     }
   },
   record: {
@@ -201,7 +216,30 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
     value: function() {
       console.log("todo stop recording");
     }
+  },
+
+  exportRecording: {
+    configurable: true,
+    value: function(optionalFormat) {
+      var deferred = Q.defer();
+      Q.nextTick(function() {
+        console.log("todo export recording", optionalFormat);
+      });
+      return deferred.promise;
+    }
+  },
+
+  uploadFile: {
+    configurable: true,
+    value: function() {
+      var deferred = Q.defer();
+      Q.nextTick(function() {
+        console.log("todo upload recording");
+      });
+      return deferred.promise;
+    }
   }
+
 });
 
 exports.AudioVideoRecorder = AudioVideoRecorder;
