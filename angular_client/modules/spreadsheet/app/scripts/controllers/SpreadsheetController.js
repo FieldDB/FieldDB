@@ -1,4 +1,4 @@
-/* globals  Q, sjcl, Recorder, AudioContext, stopRecording, SpreadsheetDatum, _, confirm, alert, prompt */
+/* globals  Q, sjcl, SpreadsheetDatum, _, confirm, alert, prompt */
 'use strict';
 console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
@@ -18,7 +18,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
 
-  $rootScope.appVersion = "2.24.1ss";
+  $rootScope.appVersion = "2.26.0ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size) {
@@ -2173,6 +2173,87 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
     }
   });
+
+  $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
+    if ($rootScope.writePermissions === false) {
+      $rootScope.notificationMessage = "You do not have permission to delete attachments.";
+      $rootScope.openNotification();
+      return;
+    }
+    var r = confirm("Are you sure you want to put the file " + description + " (" + filename + ") in the trash?");
+    if (r === true) {
+      var record = datum.id + "/" + filename;
+      console.log(record);
+      Data.async($rootScope.DB.pouchname, datum.id)
+        .then(function(originalRecord) {
+          // mark as trashed in scope
+          var inDatumAudioFiles = false;
+          for (var i in datum.audioVideo) {
+            if (datum.audioVideo[i].filename === filename) {
+              datum.audioVideo[i].description = datum.audioVideo[i].description + ":::Trashed " + Date.now() + " by " + $rootScope.user.username;
+              datum.audioVideo[i].trashed = "deleted";
+              inDatumAudioFiles = true;
+              // mark as trashed in database record
+              for (var k in originalRecord.audioVideo) {
+                if (originalRecord.audioVideo[k].filename === filename) {
+                  originalRecord.audioVideo[k] = datum.audioVideo[i];
+                }
+              }
+            }
+          }
+          if (datum.audioVideo.length === 0) {
+            datum.hasAudio = false;
+          }
+          originalRecord.audioVideo = datum.audioVideo;
+          //Upgrade to v1.90
+          if (originalRecord.attachmentInfo) {
+            delete originalRecord.attachmentInfo;
+          }
+          // console.log(originalRecord);
+          Data.saveCouchDoc($rootScope.DB.pouchname, originalRecord)
+            .then(function(response) {
+              console.log("Saved attachment as trashed.");
+              if (debugging) {
+                console.log(response);
+              }
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+              $scope.addActivity([{
+                verb: "deleted",
+                verbicon: "icon-trash",
+                directobjecticon: "icon-list",
+                directobject: "<a href='#data/" + datum.id + "/" + filename + "'>the audio file " + description + " (" + filename + ") on " + datum.utterance + "</a> ",
+                indirectobject: indirectObjectString,
+                teamOrPersonal: "personal"
+              }, {
+                verb: "deleted",
+                verbicon: "icon-trash",
+                directobjecticon: "icon-list",
+                directobject: "<a href='#data/" + datum.id + "/" + filename + "'>an audio file on " + datum.utterance + "</a> ",
+                indirectobject: indirectObjectString,
+                teamOrPersonal: "team"
+              }], "uploadnow");
+
+              // Dont actually let users delete data...
+              // Data.async($rootScope.DB.pouchname, datum.id)
+              // .then(function(record) {
+              //   // Delete attachment info for deleted record
+              //   for (var key in record.attachmentInfo) {
+              //     if (key === filename) {
+              //       delete record.attachmentInfo[key];
+              //     }
+              //   }
+              //   Data.saveCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev)
+              // .then(function(response) {
+              //     if (datum.audioVideo.length === 0) {
+              //       datum.hasAudio = false;
+              //     }
+              //     console.log("File successfully deleted.");
+              //   });
+              // });
+            });
+        });
+    }
+  };
 
   $scope.triggerExpandCollapse = function() {
     if ($scope.expandCollapse === true) {
