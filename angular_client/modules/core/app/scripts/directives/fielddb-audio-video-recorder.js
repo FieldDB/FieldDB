@@ -20,19 +20,38 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
       if (debugging) {
         console.log("loading fielddbAudioVideoRecorder", $scope.datum);
       }
-      $scope.status = "Record";
-      $scope.recordingButtonClass = "btn btn-success";
-      $scope.recordingIcon = "fa-microphone";
-      $scope.showAudioFeatures = false;
+      $scope.recordability = {
+        canRecordVideo: true,
+        canRecordAudio: true,
+        cantRecordVideo: false,
+        cantRecordAudio: false,
+        isRecordingAudio: false,
+        isRecordingVideo: false,
+        isPausedAudio: false,
+        isPausedVideo: false,
+        isProcessing: false
+      };
+      $scope.canRecord = true;
       $scope.description = "Recorded using online app";
 
       var onAudioFail = function(e) {
-        $scope.status = "Record";
-        $scope.recordingButtonClass = "btn btn-success";
-        $scope.recordingIcon = "fa-microphone";
+        $scope.recordability = {
+          canRecordVideo: false,
+          canRecordAudio: false,
+          cantRecordVideo: true,
+          cantRecordAudio: true,
+          isRecordingAudio: false,
+          isRecordingVideo: false,
+          isPausedAudio: false,
+          isPausedVideo: false,
+          isProcessing: false
+        };
+
         console.log("Audio Rejected!", e);
         $scope.errorMessage = "Unable to record audio.";
-        $scope.openNotification();
+        if (!$scope.$$phase) {
+          $scope.$digest(); //$digest or $apply
+        }
       };
       var audioRecordingInterval;
 
@@ -69,51 +88,127 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
       var onAudioSuccess = function(s) {
         console.log("On audio sucess ", s);
         monitorAudioLength();
-        $scope.recordingButtonClass = "btn btn-success disabled";
-        $scope.status = "Recording";
-        $scope.recordingIcon = "fa fa-rss";
+        $scope.recordability = {
+          canRecordVideo: true,
+          canRecordAudio: true,
+          cantRecordVideo: false,
+          cantRecordAudio: false,
+          isRecordingAudio: $scope.audioRecorder.type === "audio",
+          isRecordingVideo: $scope.audioRecorder.type === "video",
+          isPausedAudio: false,
+          isPausedVideo: false,
+          isProcessing: false
+        };
+        if (!$scope.$$phase) {
+          $scope.$digest(); //$digest or $apply
+        }
       };
 
-      $scope.startRecording = function() {
+      $scope.startRecording = function(type) {
         if (!$scope.audioRecorder && FieldDB) {
           $scope.audioRecorder = new FieldDB.AudioVideoRecorder();
         }
-        $scope.audioRecorder.periphialsCheck(true, {
-          image: $scope.element.find("img")[0],
+        if (type === "video") {
+          type = true;
+        } else {
+          type = false;
+        }
+        $scope.audioRecorder.periphialsCheck(type, {
+          image: $scope.element.find("img")[1],
           video: $scope.element.find("video")[0],
           canvas: $scope.element.find("canvas")[0]
         }).then(onAudioSuccess, onAudioFail);
       };
 
       $scope.stopRecording = function() {
+        $scope.recordability = {
+          canRecordVideo: true,
+          canRecordAudio: true,
+          cantRecordVideo: true,
+          cantRecordAudio: true,
+          isRecordingAudio: false,
+          isRecordingVideo: false,
+          isPausedAudio: false,
+          isPausedVideo: false,
+          isProcessing: true
+        };
+
         $scope.audioRecorder.stop().then(function() {
-          $scope.status = "Record";
-          $scope.recordingButtonClass = "btn btn-success";
-          $scope.recordingIcon = "fa-microphone";
-          if ($scope.processingAudio) {
-            return; //avoid double events which were leading to double audio.
-          }
-          $scope.processingAudio = true;
+          $scope.recordability = {
+            canRecordVideo: true,
+            canRecordAudio: true,
+            cantRecordVideo: false,
+            cantRecordAudio: false,
+            isRecordingAudio: false,
+            isRecordingVideo: false,
+            isPausedAudio: false,
+            isPausedVideo: false,
+            isProcessing: false
+          };
 
           $scope.audioRecorder.exportRecording("mp3")
             .then(function(s) {
               $scope.uploadFile(s);
             }, function(error) {
               console.warn("export audio failed", error);
+              if (!$scope.$$phase) {
+                $scope.$digest(); //$digest or $apply
+              }
             });
+
         }, function() {
           $scope.status = "Record doesn't appear to be working currently in your browser";
-          $scope.recordingButtonClass = "btn";
-          $scope.recordingIcon = "fa-microphone-slash";
+          $scope.recordability = {
+            canRecordVideo: true,
+            canRecordAudio: true,
+            cantRecordVideo: false,
+            cantRecordAudio: false,
+            isRecordingAudio: false,
+            isRecordingVideo: false,
+            isPausedAudio: false,
+            isPausedVideo: false,
+            isProcessing: false
+          };
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
         });
         clearInterval(audioRecordingInterval);
       };
 
+      $scope.toogleRecording = function(type) {
+        if ($scope.isRecording) {
+          $scope.stopRecording(type);
+        } else {
+          $scope.startRecording(type);
+        }
+      };
+
       $scope.uploadFile = function() {
-        $scope.processingAudio = true;
+        $scope.recordability = {
+          canRecordVideo: true,
+          canRecordAudio: true,
+          cantRecordVideo: true,
+          cantRecordAudio: true,
+          isRecordingAudio: false,
+          isRecordingVideo: false,
+          isPausedAudio: false,
+          isPausedVideo: false,
+          isProcessing: true
+        };
 
         $scope.audioRecorder.uploadFile(function(resultingFile) {
-          $scope.processingAudio = false;
+          $scope.recordability = {
+            canRecordVideo: true,
+            canRecordAudio: true,
+            cantRecordVideo: false,
+            cantRecordAudio: false,
+            isRecordingAudio: false,
+            isRecordingVideo: false,
+            isPausedAudio: false,
+            isPausedVideo: false,
+            isProcessing: false
+          };
           // document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
           $scope.datum.audioVideo = $scope.datum.audioVideo || [];
           var newAudioFile = {
@@ -123,9 +218,26 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
             "type": "audio"
           };
           $scope.datum.audioVideo.push(newAudioFile);
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+
         }, function(error) {
-          $scope.processingAudio = false;
+          $scope.recordability = {
+            canRecordVideo: true,
+            canRecordAudio: true,
+            cantRecordVideo: false,
+            cantRecordAudio: false,
+            isRecordingAudio: false,
+            isRecordingVideo: false,
+            isPausedAudio: false,
+            isPausedVideo: false,
+            isProcessing: false
+          };
           console.log("error uploading file ", error);
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
         });
       };
     },

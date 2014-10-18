@@ -86,7 +86,8 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
   periphialsCheck: {
     value: function(withVideo, optionalElements) {
       var application = {},
-        deferred = Q.defer();
+        deferred = Q.defer(),
+        self = this;
 
       Q.nextTick(function() {
 
@@ -140,6 +141,11 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
                 if (withVideo) {
                   optionalElements.video.removeAttribute("hidden");
                   optionalElements.image.removeAttribute("hidden");
+                  optionalElements.video.removeAttribute("class");
+                  optionalElements.image.removeAttribute("class");
+                  self.type = "video";
+                } else {
+                  self.type = "audio";
                 }
                 optionalElements.video.src = window.URL.createObjectURL(localMediaStream);
 
@@ -213,8 +219,12 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
   stop: {
     configurable: true,
-    value: function() {
-      console.log("todo stop recording");
+    value: function(optionalFormat) {
+      var deferred = Q.defer();
+      Q.nextTick(function() {
+        console.log("todo stop recording", optionalFormat);
+      });
+      return deferred.promise;
     }
   },
 
