@@ -1,11 +1,11 @@
 <form class="btn-toolbar">
   <div class="btn-group">
-    <button class="btn" ng-disabled="recordability.isProcessing" ng-click="toogleRecording('audio')" ng-show="recordability.canRecordAudio" >
-      <i class="fa" ng-class="{'fa-microphone': recordability.canRecordAudio, 'fa-microphone-slash': recordability.cantRecordAudio, 'fa-stop': recordability.isRecordingAudio }">
+    <button class="btn" ng-disabled="recordability.isProcessing || recordability.isRecordingVideo" ng-click="toogleRecording('audio')" ng-show="recordability.canRecordAudio" ng-class="{'btn-danger': recordability.isRecordingAudio, 'btn-primary': recordability.canRecordAudio, 'btn-inverse': recordability.cantRecordAudio}" >
+      <i class="fa" ng-class="{'fa-stop': recordability.isRecordingAudio, 'fa-microphone': recordability.canRecordAudio, 'fa-microphone-slash': recordability.cantRecordAudio }">
       </i>
     </button>
-    <button class="btn" ng-click="toogleRecording('video')" ng-show="recordability.canRecordVideo" ng-hide="recordability.cantRecordVideo" >
-      <i class="fa" ng-class="{'fa-video-camera': recordability.canRecordVideo, 'fa-microphone-slash ': recordability.cantRecordVideo, 'fa-stop': recordability.isRecordingVideo }">
+    <button class="btn" ng-click="toogleRecording('video')" ng-disabled="recordability.isProcessing || recordability.isRecordingAudio" ng-show="recordability.canRecordVideo" ng-hide="recordability.cantRecordVideo" ng-class="{'btn-danger': recordability.isRecordingVideo, 'btn-primary': recordability.canRecordVideo, 'btn-inverse': recordability.cantRecordVideo }" >
+      <i class="fa" ng-class="{'fa-stop': recordability.isRecordingVideo, 'fa-video-camera': recordability.canRecordVideo, 'fa-microphone-slash ': recordability.cantRecordVideo }">
       </i>
     </button>
     <button class="btn btn-warning" ng-click="pause()" ng-show="recordability.isRecordingAudio || recordability.isRecordingVideo" >
