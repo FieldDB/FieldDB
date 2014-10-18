@@ -1,5 +1,9 @@
-<button ng-class="recordingButtonClass" ng-show="true==true" >
+<button ng-class="recordingButtonClass" ng-click="startRecording()" ng-show="true==true" >
   <i class="fa {{recordingIcon}}">
   </i>
-  &nbsp;{{recordingStatus}}
+  &nbsp;{{status}}
 </button>
+
+<video hidden autoplay controls> </video>
+<canvas hidden> </canvas>
+<img hidden> </img>
