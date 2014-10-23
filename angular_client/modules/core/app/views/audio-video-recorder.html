@@ -1,4 +1,4 @@
-<form class="btn-toolbar">
+<form class="btn-toolbar span6">
   <div class="btn-group">
     <button class="btn" ng-disabled="recordability.isProcessing || recordability.isRecordingVideo" ng-click="toogleRecording('audio')" ng-show="recordability.canRecordAudio" ng-class="{'btn-danger': recordability.isRecordingAudio, 'btn-primary': recordability.canRecordAudio, 'btn-inverse': recordability.cantRecordAudio}" >
       <i class="fa" ng-class="{'fa-stop': recordability.isRecordingAudio, 'fa-microphone': recordability.canRecordAudio, 'fa-microphone-slash': recordability.cantRecordAudio }">
@@ -12,19 +12,12 @@
       <i class="fa fa-pause">
       </i>
     </button>
-    <button class="btn btn-primary" ng-click="uploadFile(datum);" >
-      <i class="fa whiteicon fa-file">
-      </i>
-      Upload File(s)
-    </button>
-    <i class="fa fa-bullhorn">
-    </i>
-    &nbsp; <input  id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' />
   </div>
+  <img src="images/spinner-small.gif" ng-show="processingAudio" />
 </form>
-<textarea ng-model="description"></textarea>
 
-<img src="images/spinner-small.gif" ng-show="processingAudio" />
 <video hidden class="hide" autoplay controls> </video>
 <canvas hidden class="hide" ng-hide="true===true"> </canvas>
 <img hidden class="hide" />
+
+<div class="span6" data-fielddb-import></div>
