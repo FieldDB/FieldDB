@@ -803,6 +803,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
                   $rootScope.DB = corpus;
                   $scope.setTemplateUsingCorpusPreferedTemplate(corpus);
+                  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+                    if (!FieldDB.FieldDBObject.application.corpus) {
+                      FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(corpus);
+                    } else {
+                      if (FieldDB.FieldDBObject.application.corpus.dbname != corpus.pouchname) {
+                        console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + corpus.pouchname);
+                        FieldDB.FieldDBObject.application.corpus = corpus;
+                      }
+                    }
+                  }
                 }
                 corpus.gravatar = md5.createHash(corpus.pouchname);
                 $scope.corpora.push(corpus);

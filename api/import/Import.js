@@ -56,6 +56,10 @@ var Import = function Import(options) {
   }
   this.debug(" new import ", options);
   FieldDBObject.apply(this, arguments);
+  this.progress = {
+    total: 0,
+    completed: 0
+  };
 };
 
 Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prototype */ {
@@ -245,6 +249,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         var headers = [];
         if (self.importType === "participants") {
           self.importFields = new DatumFields(self.corpus.participantFields.clone());
+        } else if (self.importType === "audioVideo") {
+          self.importFields = new DatumFields();
         } else {
           self.importFields = new DatumFields(self.corpus.datumFields.clone());
         }
@@ -257,6 +263,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             correspondingDatumField[0].id = item;
             if (self.importType === "participants") {
               correspondingDatumField[0].labelExperimenters = item;
+            } else if (self.importType === "audioVideo") {
+              console.log("this is an audioVideo import but we aren doing anything with the csv");
+              // correspondingDatumField[0].labelFieldLinguists = item;
             } else {
               correspondingDatumField[0].labelFieldLinguists = item;
             }
@@ -348,11 +357,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               confidential: self.corpus.confidential,
               fields: new DatumFields(JSON.parse(JSON.stringify(headers)))
             });
+          } else if (self.importType === "audioVideo") {
+            docToSave = new AudioVideo();
+            docToSave.description = self.rawText; //TODO look into the textgrid import
           } else {
             docToSave = new Datum({
               datumFields: new DatumFields(JSON.parse(JSON.stringify(headers)))
             });
-
           }
           var testForEmptyness = "";
           for (var index = 0; index < row.length; index++) {
@@ -371,6 +382,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             //            }
             if (self.importType === "participants") {
               docToSave.fields[headers[index].id].value = item.trim();
+            } else if (self.importType === "audioVideo") {
+              console.log("this is an audioVideo but we arent doing anything with the headers");
+              // docToSave.datumFields[headers[index].id].value = item.trim();
             } else {
               docToSave.datumFields[headers[index].id].value = item.trim();
             }
@@ -408,6 +422,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               self.progress.completed++;
             });
             savePromises.push(promise);
+          } else if (self.importType === "audioVideo") {
+            console.log("not doing anything for an audio video import");
+          } else {
+            console.log("not doing anything for a datum import");
           }
         });
 
@@ -1510,6 +1528,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.debug("added a datum to the collection");
     }
   },
+
   /**
    * Reads the import's array of files using a supplied readOptions or using
    * the readFileIntoRawText function which uses the browsers FileReader API.
