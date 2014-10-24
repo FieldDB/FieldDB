@@ -1,6 +1,6 @@
-/* globals OPrime, window, escape, $, FileReader */
-var AudioVideo = require("./../FieldDBObject").FieldDBObject;
-var AudioVideos = require("./../Collection").Collection;
+/* globals OPrime, window, escape, $, FileReader, FormData */
+var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
+var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
 var CORS = require("./../CORS").CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
@@ -1265,6 +1265,104 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
+  uploadFiles: {
+    value: function(files) {
+      var deferred = Q.defer(),
+        self = this;
+
+      self.error = "";
+      self.status = "";
+
+      Q.nextTick(function() {
+        var actionurl = new AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances";
+        var data = new FormData();
+        // for (var ?fileIndex = 0; fileIndex > files.length; fileIndex++) {
+          // data.append("file" + fileIndex, files[fileIndex]);
+        // }
+        // data.files = files;
+        data.append("files", files);
+        data.append("token", self.testinguploadtoken);
+        data.append("pouchname", self.dbname);
+        data.append("username", self.username);
+        data.append("returnTextGrid", self.returnTextGrid);
+        self.audioVideo = null;
+        // this.model.audioVideo.reset();
+        $.ajax({
+          url: actionurl,
+          type: "post",
+          // dataType: 'json',
+          cache: false,
+          contentType: false,
+          processData: false,
+          data: data,
+          success: function(results) {
+            if (results && results.status === 200) {
+              self.uploadDetails = results;
+              self.files = results.files;
+              self.status = "File(s) uploaded and utterances were extracted.";
+              var messages = [];
+              self.rawText = "";
+              /* Check for any textgrids which failed */
+              for (var fileIndex = 0; fileIndex < results.files.length; fileIndex++) {
+                if (results.files[fileIndex].textGridStatus >= 400) {
+                  console.log(results.files[fileIndex]);
+                  var instructions = results.files[fileIndex].textGridInfo;
+                  if (results.files[fileIndex].textGridStatus >= 500) {
+                    instructions = " Please report this error to us at support@lingsync.org ";
+                  }
+                  messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. " + instructions);
+                } else {
+                  self.addAudioVideoFile(OPrime.audioUrl + "/" + self.get("pouchname") + "/" + results.files[fileIndex].fileBaseName + ".mp3");
+                  self.downloadTextGrid(results.files[fileIndex]);
+                }
+              }
+              if (messages.length > 0) {
+                self.status = messages.join(", ");
+                // $(self.el).find(".status").html(self.get("status"));
+                // window.appView.toastUser(messages.join(", "), "alert-danger", "Import:");
+              }
+            } else {
+              console.log(results);
+              var message = "Upload might have failed to complete processing on your file(s). Please report this error to us at support@lingsync.org ";
+              self.status = message + ": " + JSON.stringify(results);
+              // window.appView.toastUser(message, "alert-danger", "Import:");
+            }
+            // $(self.el).find(".status").html(self.get("status"));
+          },
+          error: function(response) {
+            var reason = {};
+            if (response && response.responseJSON) {
+              reason = response.responseJSON;
+            } else {
+              var message = "Error contacting the server. ";
+              if (response.status >= 500) {
+                message = message + " Please report this error to us at support@lingsync.org ";
+              } else if (response.status === 413) {
+                message = message + " Your file is too big for upload, please try using FFMpeg to convert it to an mp3 for upload (you can still use your original video/audio in the app when the utterance chunking is done on an mp3.) ";
+              } else {
+                message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
+              }
+              reason = {
+                status: response.status,
+                userFriendlyErrors: [message + response.status]
+              };
+            }
+            console.log(reason);
+            if (reason && reason.userFriendlyErrors) {
+              self.status = "";
+              self.error = "Upload error: " + reason.userFriendlyErrors.join(" ");
+              // window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
+              // $(self.el).find(".status").html(self.get("status"));
+            }
+          }
+        });
+        self.status = "Contacting server...";
+        // $(this.el).find(".status").html(this.model.get("status"));
+
+      });
+      return deferred.promise;
+    }
+  },
 
   downloadTextGrid: {
     value: function(fileDetails) {
@@ -1555,13 +1653,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
         var fileDetails = [];
         var files = self.files;
+        var filesToUpload = [];
 
         self.progress.total = files.length;
         for (var i = 0, file; file = files[i]; i++) {
           var details = [escape(file.name), file.type || "n/a", "-", file.size, "bytes, last modified:", file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : "n/a"].join(" ");
           self.status = self.status + "; " + details;
           fileDetails.push(JSON.parse(JSON.stringify(file)));
-          if (options.readOptions) {
+          if (file.type && (file.type.indexOf("audio") > -1 || file.type.indexOf("video") > -1 || file.type.indexOf("image") > -1)) {
+            filesToUpload.push(file);
+          } else if (options.readOptions) {
             promisses.push(options.readOptions.readFileFunction.apply(self, [{
               file: file.name,
               start: options.start,
@@ -1576,6 +1677,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
         }
 
+        if (filesToUpload.length > 0) {
+          promisses.push(self.uploadFiles(filesToUpload));
+        }
         self.fileDetails = fileDetails;
 
         Q.allSettled(promisses).then(function(results) {
