@@ -102,9 +102,9 @@
           <input ng-model="headerCell" drag-hover-class="drop-zone-can-drop-now" ui-on-Drop="onDropRecieved($data, application.importer.extractedHeader, $index)"/>
         </th>
       </tr>
-      <tr ng-repeat="row in application.importer.asCSV">
+      <tr ng-repeat="row in application.importer.asCSV track by $index">
         <td ng-click="removeRow($index)"><i class="fa fa-times-circle"></i></td>
-        <td ng-repeat="cell in row" contenteditable ng-model="cell"></td>
+        <td ng-repeat="cell in row track by $index" contenteditable ng-model="cell"></td>
       </tr>
     </table>
   </div>
