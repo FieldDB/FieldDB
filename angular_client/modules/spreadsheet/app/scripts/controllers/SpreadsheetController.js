@@ -1,4 +1,4 @@
-/* globals  Q, sjcl, SpreadsheetDatum, _, confirm, alert, prompt */
+/* globals  FieldDB, Q, sjcl, SpreadsheetDatum, _, confirm, alert, prompt */
 'use strict';
 console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
@@ -807,7 +807,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                     if (!FieldDB.FieldDBObject.application.corpus) {
                       FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(corpus);
                     } else {
-                      if (FieldDB.FieldDBObject.application.corpus.dbname != corpus.pouchname) {
+                      if (FieldDB.FieldDBObject.application.corpus.dbname !== corpus.pouchname) {
                         console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + corpus.pouchname);
                         FieldDB.FieldDBObject.application.corpus = corpus;
                       }

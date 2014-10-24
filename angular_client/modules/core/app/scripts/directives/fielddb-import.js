@@ -13,6 +13,11 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
 
   var controller = function($scope, $upload) {
     var processOffline = true;
+    $scope.uploadInfo = {
+      token: "uploading",
+      username: "testupload",
+      returnTextGrid: true
+    };
 
     var progress = function(evt) {
       console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
@@ -40,6 +45,10 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
 
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
+      $scope.application.importer.token = $scope.uploadInfo.token;
+      $scope.application.importer.username = $scope.uploadInfo.username;
+      $scope.application.importer.returnTextGrid = $scope.uploadInfo.returnTextGrid;
+
       if (processOffline) {
         if (!$scope.application || !$scope.application.corpus) {
           $scope.application.importer.bug("The corpus is not loaded yet. Please report this.");
@@ -66,6 +75,13 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
           $scope.$digest();
         });
       } else {
+        $scope.application.importer.uploadFiles($files).then(function(result) {
+          console.log(result);
+        }, function(reason) {
+          console.log(reason);
+        });
+
+
         for (var i = 0; i < $files.length; i++) {
           var file = $files[i];
 
