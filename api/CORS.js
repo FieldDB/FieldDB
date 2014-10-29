@@ -1,4 +1,4 @@
-/* globals window, XDomainRequest, XMLHttpRequest */
+/* globals window, XDomainRequest, XMLHttpRequest, FormData */
 
 var Q = require("q");
 
@@ -87,7 +87,32 @@ CORS.makeCORSRequest = function(options) {
   if (options.withCredentials !== false) {
     xhr.withCredentials = true;
   }
+
+  // If it contains files, make it into a mulitpart upload
+  if (options && options.data && options.data.files) {
+    console.log("converting to formdata ", options.data);
+
+    var data = new FormData();
+    for (var part in options.data) {
+      if (options.data.hasOwnProperty(part)) {
+        data.append(part, options.data[part]);
+      }
+    }
+    options.data = data;
+    xhr.setRequestHeader("Content-Type", "multipart/form-data");
+  } else {
+    if (options.data) {
+      options.data = JSON.stringify(options.data);
+    }
+  }
   //  }
+  var onProgress = function(e) {
+    if (e.lengthComputable) {
+      var percentComplete = (e.loaded/e.total)*100;
+      console.log("percentComplete", percentComplete);
+    }
+  };
+  xhr.addEventListener("progress", onProgress, false);
 
   xhr.onload = function(e, f, g) {
     var response = xhr.responseJSON || xhr.responseText || xhr.response;
@@ -119,7 +144,8 @@ CORS.makeCORSRequest = function(options) {
   };
   try {
     if (options.data) {
-      xhr.send(JSON.stringify(options.data));
+      console.log("sending ", options.data);
+      xhr.send(options.data);
     } else {
       xhr.send();
     }
