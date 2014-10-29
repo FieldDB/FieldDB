@@ -1,4 +1,4 @@
-/* globals OPrime, window, escape, $, FileReader, FormData */
+/* globals OPrime, window, escape, $, FileReader */
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
@@ -1274,26 +1274,25 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       self.status = "";
 
       Q.nextTick(function() {
-        var actionurl = new AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances";
-        var data = new FormData();
-        // for (var ?fileIndex = 0; fileIndex > files.length; fileIndex++) {
-          // data.append("file" + fileIndex, files[fileIndex]);
-        // }
-        // data.files = files;
-        data.append("files", files);
-        data.append("token", self.testinguploadtoken);
-        data.append("pouchname", self.dbname);
-        data.append("username", self.username);
-        data.append("returnTextGrid", self.returnTextGrid);
+        var uploadUrl = new AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances";
+        var data = {
+          files: files,
+          token: self.token,
+          dbname: self.dbname,
+          username: self.username,
+          returnTextGrid: self.returnTextGrid
+        };
+
         self.audioVideo = null;
         // this.model.audioVideo.reset();
-        $.ajax({
-          url: actionurl,
-          type: "post",
+        CORS.makeCORSRequest({
+          url: uploadUrl,
+          type: "POST",
           // dataType: 'json',
           cache: false,
-          contentType: false,
-          processData: false,
+          withCredentials: false,
+          // contentType: false,
+          // processData: false,
           data: data,
           success: function(results) {
             if (results && results.status === 200) {
@@ -1678,7 +1677,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
 
         if (filesToUpload.length > 0) {
-          promisses.push(self.uploadFiles(filesToUpload));
+          promisses.push(self.uploadFiles(self.files));
         }
         self.fileDetails = fileDetails;
 
