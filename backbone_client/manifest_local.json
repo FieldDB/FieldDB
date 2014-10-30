@@ -4,7 +4,7 @@
   "description" : "Local development version",
   "app" : {
     "launch" : {
-      "local_path" : "index.html"
+      "local_path" : "backup_pouches.html"
     }
   },
   "offline_enabled" : true,
