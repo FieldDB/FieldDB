@@ -1,8 +1,8 @@
 define([
-    "backbone", 
+    "backbone",
     "app/AppView",
     "activity/Activity",
-    "authentication/Authentication", 
+    "authentication/Authentication",
     "corpus/Corpus",
     "corpus/CorpusMask",
     "corpus/Corpuses",
@@ -18,10 +18,10 @@ define([
     "text!locales/en/messages.json",
     "OPrime"
 ], function(
-    Backbone, 
+    Backbone,
     AppView,
     Activity,
-    Authentication, 
+    Authentication,
     Corpus,
     CorpusMask,
     Corpuses,
@@ -43,34 +43,34 @@ define([
      * @class The App handles the reinitialization and loading of the app
      *        depending on which platform (Android, Chrome, web) the app is
      *        running, who is logged in etc.
-     * 
+     *
      * The App should be serializable to save state to local storage for the
      * next run.
-     * 
+     *
      * @property {Authentication} authentication The auth member variable is an
      *           Authentication object permits access to the login and logout
      *           functions, and the database of users depending on whether the
      *           app is online or not. The authentication is the primary way to access the current user.
-     * 
+     *
      * @property {Corpus} corpus The corpus is a Corpus object which will permit
      *           access to the datum, the data lists and the sessions. The corpus feeds the
      *           search object with indexes and fields for advanced search, the
      *           corpus has datalists, has teams with permissions, has a
      *           confidentiality_encryption key, it's datum have sessions, its
      *           datalists and datum have export.
-     * 
+     *
      * @property {Search} search The current search details.
-     * 
+     *
      * @property {Session} currentSession The session that is currently open.
-     * 
+     *
      * @property {DataList} currentDataList The datalist that is currently open.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("APP INIT");
-      
+
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -82,9 +82,12 @@ define([
         this.set("authentication", new Authentication({filledWithDefaults: true}));
       }
       this.showSpinner();
-      
+
       window.Locale = {};
       window.Locale.get = function(message) {
+        if(!window.Locale.data[message]){
+          return message;
+        }
         return window.Locale.data[message].message;
       };
       if (LocaleData) {
@@ -95,13 +98,13 @@ define([
           return "";
         };
       }
-      
+
       /*
        * Start the pub sub hub
        */
       window.hub = {};
       OPrime.makePublisher(window.hub);
-      
+
       /*
        * Load the user
        */
@@ -112,7 +115,7 @@ define([
         $(".spinner-status").html("Loading encrypted user...");
         var u = localStorage.getItem("encryptedUser");
         appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
-          
+
           $(".spinner-status").html(
           "Turning on continuous sync with your team server...");
           appself.replicateContinuouslyWithCouch(function() {
@@ -123,7 +126,7 @@ define([
             $(".spinner-status")
             .html("Building dashboard objects...");
             appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
-              
+
               /*
                * If you know the user, load their most recent
                * dashboard
@@ -134,7 +137,7 @@ define([
               appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
                   appself.get("authentication").get(
                   "userPrivate").get("mostRecentIds"), function() {
-                
+
                 if (OPrime.debugMode) OPrime.debug("Starting the app");
                 appself.startApp(function() {
                   window.app.showHelpOrNot();
@@ -144,15 +147,15 @@ define([
                 });
               });
             });
-            
+
           });
-          
+
         });
       }
-      
+
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
     },
-    
+
     // Internal models: used by the parse function
     internalModels : {
       corpus : Corpus,
@@ -192,15 +195,15 @@ define([
           OPrime.bug("Couldn't set the databse name off of the url, please report this.");
         }
       }
-      
+
       if(typeof callback == "function"){
         callback();
       }
       return;
-      
-      
-      
-      
+
+
+
+
       alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
@@ -221,7 +224,7 @@ define([
      * not be called at any later time as it will break the connection between
      * the views and the models. To load different models into the app after it
      * has first loaded, use the loadBackboneObjectsById function below.
-     * 
+     *
      * @param callback
      */
     createAppBackboneObjects : function(optionalpouchname, callback){
@@ -232,7 +235,7 @@ define([
       if (Backbone.couch_connector.config.db_name == "default") {
         OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
-      
+
       if (this.get("authentication").get("userPublic") == undefined) {
         this.get("authentication").set("userPublic", new UserMask({
           pouchname : optionalpouchname
@@ -263,7 +266,7 @@ define([
         callback();
       }
     },
-    
+
     startApp : function(callback) {
       if(!window.appView){
         window.appView = new AppView({
@@ -277,7 +280,7 @@ define([
         /* Tell the router to render the home screen divs */
         this.router = new AppRouter();
         this.router.renderDashboardOrNot(true);
-        
+
         Backbone.history.start();
         if (typeof callback == "function") {
           if (OPrime.debugMode) OPrime.debug("Calling back the startApps callback");
@@ -286,7 +289,7 @@ define([
       }
 
     },
-    
+
     showSpinner : function(){
         $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
         $('.spinner-image').css({
@@ -326,10 +329,10 @@ define([
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
-     * 
+     *
      * References:
      * http://guide.couchdb.org/draft/security.html
-     * 
+     *
      * @param username this can come from a username field in a login, or from the User model.
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
@@ -355,7 +358,7 @@ define([
         }
         return;
       }
-      
+
       var couchurl = this.getCouchUrl(couchConnection, "/_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
@@ -397,21 +400,21 @@ define([
           }
           window.app.set("corpusesUserHasAccessTo", corpuses);
           localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
-          
+
           if (window.appView) {
             window.appView
             .toastUser(
                 "I logged you into your team server automatically, your syncs will be successful.",
                 "alert-info", "Online Mode:");
           }
-          
+
 
           /* if in chrome extension, or offline, turn on replication */
           if(OPrime.isChromeApp()){
             //TODO turn on pouch and start replicating and then redirect user to their user page(?)
 //            appself.replicateContinuouslyWithCouch();
           }
-          
+
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }
@@ -420,7 +423,7 @@ define([
           window
           .setTimeout(
               function() {
-                //try one more time 5 seconds later 
+                //try one more time 5 seconds later
                 $.couch.login({
                   name: username,
                   password: password,
@@ -436,7 +439,7 @@ define([
                       //TODO turn on pouch and start replicating and then redirect user to their user page(?)
 //                      appself.replicateContinuouslyWithCouch();
                     }
-                    
+
                     if (typeof succescallback == "function") {
                       succescallback(serverResults);
                     }
@@ -626,10 +629,10 @@ define([
         }
       });
     },
-    
+
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function( appids, callback) {
       if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-      
+
 
       /*
        * Verify that the user is in their database, and that the
@@ -659,13 +662,13 @@ define([
           return;
         }
       }
-      
+
       if (Backbone.couch_connector.config.db_name == "default") {
         OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
       var couchConnection = appids.couchConnection;
       this.set("couchConnection", couchConnection);
-      
+
       var corpusid = appids.corpusid;
       if(!corpusid){
         corpusid = couchConnection.corpusid;
@@ -706,23 +709,23 @@ define([
               }
               corpusModel.set("couchConnection", oldCouchConnection);
             }
-            
+
             $(".spinner-status").html("Opened Corpus...");
-            
+
             c.setAsCurrentCorpus(function(){
               $(".spinner-status").html("Loading Corpus...");
-              
+
               /*
                * Fetch sessions and datalists
                */
               c.datalists.fetchDatalists();
               c.sessions.fetchSessions();
               c.fetchPublicSelf();
-             
+
               var dl = new DataList({
                 "pouchname" : couchConnection.pouchname
               });
-              dl.id = appids.datalistid; 
+              dl.id = appids.datalistid;
                 dl.fetch({
                   success : function(dataListModel) {
                     $(".spinner-status").html("Opened DataList...");
@@ -735,7 +738,7 @@ define([
                       var s = new Session({
                         "pouchname" : couchConnection.pouchname
                       });
-                      s.id = appids.sessionid; 
+                      s.id = appids.sessionid;
                       var afterLoadingSession = function(loadedSession){
                         loadedSession.setAsCurrentSession(function(){
                               $(".spinner-status").html("Loading Elicitation Session...");
@@ -751,7 +754,7 @@ define([
                                 console.log("Couldn't load the list of corpora which the user has access to.");
                               }
                               /*
-                               * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
+                               * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods
                                */
                               $(".spinner-status").html("Rendering Dashboard...");
 
@@ -803,7 +806,7 @@ define([
           },
           error : function(model, error, options) {
             if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
-            
+
             var reason = "";
             if(error.reason){
               reason = error.reason.message || error.reason || "";
@@ -832,13 +835,13 @@ define([
           }
         }); //end corpus fetch
     },
-    
+
     router : AppRouter,
 
     showHelpOrNot : function() {
       //Dont show help
       return;
-      
+
       var username = this.get("authentication").get("userPrivate").get("username");
       if(username == "public"){
         //Dont show the help screen for the public user
@@ -852,7 +855,7 @@ define([
        * dont show the guide immediately if they are truely a new
        * user, let them see the dashboard before they wonder how
        * to use it. 60 seconds later, show the help.
-       */ 
+       */
       if(helpShownTimestamp == 0){
         $(".help_count_reason").html("Just in case you were wondering what all those buttons are for, check out Gretchen's Illustrated Guide to your dashboard! ");
 
@@ -864,12 +867,12 @@ define([
         },60000);
         return;
       }
-      
+
       /*
        * If this is not a brand new user:
        */
       var milisecondsSinceLastHelp = Date.now() - helpShownTimestamp;
-      
+
       /* if its been more than 5 days, reset the help shown count to trigger the illustrated guide */
       if (milisecondsSinceLastHelp > 432000000 && helpShownTimestamp != 0) {
         helpShownCount = 0;
@@ -884,11 +887,11 @@ define([
         window.app.router.navigate("help/illustratedguide", {trigger: true});
       }
     },
-    
+
     /**
      * This function is used to save the entire app state that is needed to load when the app is re-opened.
      * http://stackoverflow.com/questions/7794301/window-onunload-is-not-working-properly-in-chrome-browser-can-any-one-help-me
-     * 
+     *
      * $(window).on('beforeunload', function() {
         return 'Your own message goes here...';
       });
@@ -911,7 +914,7 @@ define([
     },
     /**
      * Saves a json file via REST to a couchdb, must be online.
-     * 
+     *
      * @param bareActivityObject
      */
     addActivity : function(bareActivityObject) {
@@ -922,7 +925,7 @@ define([
 
       if (OPrime.debugMode) OPrime.debug("Saving activity: ", bareActivityObject);
       var backboneActivity = new Activity(bareActivityObject);
-      
+
       var couchConnection = this.get("couchConnection");
       var activitydb = couchConnection.pouchname + "-activity_feed";
       if (bareActivityObject.teamOrPersonal != "team") {
@@ -930,7 +933,7 @@ define([
         backboneActivity.attributes.user.gravatar= this.get("authentication").get("userPrivate").get("gravatar");
       }
       var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
-      
+
       OPrime.makeCORSRequest({
         type : 'POST',
         url : couchurl,
@@ -943,17 +946,17 @@ define([
           localStorage.setItem("activity"+Date.now(), backboneActivity.toJSON());
         }
         });
-      
-      
+
+
 //      if (bareActivityObject.get("teamOrPersonal") == "team") {
 //        window.app.get("currentCorpusTeamActivityFeed").addActivity(bareActivityObject);
 //      } else {
 //        window.app.get("currentUserActivityFeed").addActivity(bareActivityObject);
 //      }
     },
-    
+
     /**
-     * This function sequentially saves first the session, datalist and then corpus. Its success callback is called if all saves succeed, its fail is called if any fail. 
+     * This function sequentially saves first the session, datalist and then corpus. Its success callback is called if all saves succeed, its fail is called if any fail.
      * @param successcallback
      * @param failurecallback
      */
@@ -968,14 +971,14 @@ define([
         appSelf.get("currentDataList").saveAndInterConnectInApp(function(){
           appSelf.get("corpus").saveAndInterConnectInApp(function(){
             appSelf.get("authentication").saveAndInterConnectInApp(function(){
-              
+
               appSelf.get("authentication").staleAuthentication = true;
 //              localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
               if(window.appView){
                 window.appView.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.","alert-success","Exit at anytime:");
               }
-              
-              
+
+
               //appSelf.router.showDashboard();
               if(typeof successcallback == "function"){
                 successcallback();
@@ -987,7 +990,7 @@ define([
       }, failurecallback);
     }
 
-   
+
   });
 
   return App;
