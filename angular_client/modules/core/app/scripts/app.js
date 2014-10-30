@@ -45,7 +45,7 @@ var app = angular.module("fielddbAngularApp", [
 
   FieldDB.Database.prototype.BASE_DB_URL = "https://corpusdev.lingsync.org";
   FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.lingsync.org";
-  FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.lingsync.org";
+  // FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.lingsync.org";
 
 });
 console.log(app);
