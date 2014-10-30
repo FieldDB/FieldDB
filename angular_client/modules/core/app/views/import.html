@@ -33,7 +33,7 @@
       <i class="fa fa-gift"></i>
       <span>New! Import long audio/video stimuli(s)</span>
     </label>
-    <form class="form-inline button-group btn-mini" role="form">
+    <form class="form-inline button-group btn-mini" role="form" enctype="multipart/form-data" >
       <span class="btn btn-file btn-info">
         <span>
           <i class="fa fa-file"></i>
@@ -41,7 +41,7 @@
         </span>
         <input type="file" multiple="true" name="files" ng-file-select="onFileSelect($files)" data-multiple="true" value="Audio/Video/Image/Text files to be imported"/>
       </span>
-      <input class="hidden hide" hidden type="text" name="uptoken" ng-model="uploadInfo.token"/>
+      <input class="hidden hide" hidden type="text" name="token" ng-model="uploadInfo.token"/>
       <input class="hidden hide" hidden type="text" name="username" ng-model="uploadInfo.username" />
       <input class="hidden hide" hidden type="text" name="dbname" ng-model="uploadInfo.dbname"/>
       <input class="hidden hide" hidden type="text" name="returnTextGrid" ng-model="uploadInfo.returnTextGrid"/>
