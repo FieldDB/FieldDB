@@ -308,7 +308,7 @@
     "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"
   },
   "locale_Consultants" : {
-    "message" : "Consultant(s):"
+    "message" : "Speaker(s):"
   },
   "locale_Goal" : {
     "message" : "Goal:"
