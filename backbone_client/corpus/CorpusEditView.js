@@ -153,6 +153,7 @@ define([
 
       //Add button inserts new Datum Field
       "click .add-datum-field" : 'insertNewDatumField',
+      "click .add-session-field" : 'insertNewSessionField',
       "click .icon-resize-small" : 'resizeSmall',
       "click .resize-full" : "resizeFullscreen",
 
@@ -255,6 +256,7 @@ define([
       jsonToRender.locale_Terms_explanation = Locale.get("locale_Terms_explanation");
       jsonToRender.locale_Add = Locale.get("locale_Add");
       jsonToRender.locale_Add_New_Datum_Field_Tooltip = Locale.get("locale_Add_New_Datum_Field_Tooltip");
+      jsonToRender.locale_Add_New_Session_Field_Tooltip = Locale.get("locale_Add_New_Session_Field_Tooltip");
       jsonToRender.locale_Add_New_Datum_State_Tooltip = Locale.get("locale_Add_New_Datum_State_Tooltip");
       jsonToRender.locale_Add_Placeholder = Locale.get("locale_Add_Placeholder");
       jsonToRender.locale_All_Data = Locale.get("locale_All_Data");
@@ -266,6 +268,7 @@ define([
       jsonToRender.locale_Data_menu = Locale.get("locale_Data_menu");
       jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
       jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
+      jsonToRender.locale_Session_field_settings = Locale.get("locale_Session_field_settings");
       jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
       jsonToRender.locale_Default = Locale.get("locale_Default");
       jsonToRender.locale_Description = Locale.get("locale_Description");
@@ -345,6 +348,10 @@ define([
           // Display the DatumFieldsView
           this.datumFieldsView.el = this.$('.datum_field_settings');
           this.datumFieldsView.render();
+
+           // Display the SessionFieldsView
+          this.sessionFieldsView.el = this.$('.session_field_settings');
+          this.sessionFieldsView.render();
 
           // Display the ConversationFieldsView
           this.conversationFieldsView.el = this.$('.conversation_field_settings');
@@ -455,6 +462,15 @@ define([
       //Create a DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus",
+        childViewClass       : "breadcrumb"
+      });
+
+      //Create a SessionFieldsView
+      this.sessionFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li',
         childViewFormat      : "corpus",
@@ -650,6 +666,37 @@ define([
       this.model.newCorpus();
     },
 
+
+    // This the function called by the add button, it adds a new session field both to the
+    // collection and the model
+    insertNewSessionField : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      //don't add blank fields
+      if(this.$el.find(".choose_add_session_field").val().toLowerCase().replace(/ /g,"_") == ""){
+        return;
+      }
+      // Remember if the encryption check box was checked
+      var checked = this.$el.find(".add_session_shouldBeEncrypted").is(':checked') ? "checked" : "";
+
+      // Create the new DatumField based on what the user entered
+      var m = new DatumField({
+        "label" : this.$el.find(".choose_add_session_field").val().toLowerCase().replace(/ /g,"_"),
+        "shouldBeEncrypted" : checked,
+        "help" : this.$el.find(".add_session_help").val()
+      });
+
+      // Add the new SessionField to the Corpus' list for sessionFields
+      this.model.get("sessionFields").add(m);
+
+      // Reset the line with the add button
+      this.$el.find(".choose_add_session_field").val("");//.children("option:eq(0)").attr("selected", true);
+      this.$el.find(".add_session_help").val("");
+      window.appView.addUnsavedDoc(this.model.id);
+
+    },
 
     // This the function called by the add button, it adds a new datum field both to the
     // collection and the model
