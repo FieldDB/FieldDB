@@ -161,25 +161,27 @@ define([
       }
       OPrime.debug("Edit this function to update session to the latest schema.");
 
-      /* Add any new corpus fields to this session so they can be edited */
-      var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
-      window.corpusfieldsforSessionParse = window.corpusfieldsforSessionParse || window.app.get("corpus").get("sessionFields").toJSON()
-      var corpusFields = window.corpusfieldsforSessionParse;
-      if(corpusFields.length > originalFieldLabels.length){
-        for(var field in corpusFields){
-          if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
-            var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
-            OPrime.debug("Adding field to this session: " + corpusFieldClone.label);
-            corpusFieldClone.mask = "";
-            corpusFieldClone.value = "";
-            delete corpusFieldClone.user;
-            delete corpusFieldClone.users;
-            originalModel.sessionFields.push(corpusFieldClone);
+      if(window.app.get("corpus")){
+        /* Add any new corpus fields to this session so they can be edited */
+        var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
+        window.corpusfieldsforSessionParse = window.corpusfieldsforSessionParse || window.app.get("corpus").get("sessionFields").toJSON()
+        var corpusFields = window.corpusfieldsforSessionParse;
+        if(corpusFields.length > originalFieldLabels.length){
+          for(var field in corpusFields){
+            if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+              var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
+              OPrime.debug("Adding field to this session: " + corpusFieldClone.label);
+              corpusFieldClone.mask = "";
+              corpusFieldClone.value = "";
+              delete corpusFieldClone.user;
+              delete corpusFieldClone.users;
+              originalModel.sessionFields.push(corpusFieldClone);
+            }
           }
         }
       }
-      return this.originalParse(originalModel);
 
+      return this.originalParse(originalModel);
     },
 
 
