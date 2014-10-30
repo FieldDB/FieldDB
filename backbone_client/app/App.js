@@ -374,32 +374,33 @@ define([
           if(!serverResults){
             OPrime.bug("There was a problem logging you into your backup database, please report this.");
           }
-          var corpuses =  window.app.get("corpusesUserHasAccessTo")  || new Corpuses();
-          var roles = serverResults.roles;
-          for (var role in roles) {
-            var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
-            thisCouchConnection.corpusid = "";
-            thisCouchConnection.pouchname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
-            thisCouchConnection.title = thisCouchConnection.pouchname;
-            if (thisCouchConnection.title.length > 30) {
-              thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
-            }
-            if (thisCouchConnection.title.length > 30) {
-              thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
-            }
-            thisCouchConnection.id = thisCouchConnection.pouchname;
-            if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
-              if (corpuses.where({
-                "pouchname": thisCouchConnection.pouchname
-              }).length === 0) {
-                corpuses.push(new CorpusMask(thisCouchConnection));
-              } else {
-                console.log(thisCouchConnection.pouchname + " Already known");
-              }
-            }
-          }
-          window.app.set("corpusesUserHasAccessTo", corpuses);
-          localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
+          appself.get("authentication").get("userPrivate").updateListOfCorpora(serverResults.roles);
+          // var corpuses =  window.app.get("corpusesUserHasAccessTo")  || new Corpuses();
+          // var roles = serverResults.roles;
+          // for (var role in roles) {
+          //   var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
+          //   thisCouchConnection.corpusid = "";
+          //   thisCouchConnection.pouchname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+          //   thisCouchConnection.title = thisCouchConnection.pouchname;
+          //   if (thisCouchConnection.title.length > 30) {
+          //     thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
+          //   }
+          //   if (thisCouchConnection.title.length > 30) {
+          //     thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
+          //   }
+          //   thisCouchConnection.id = thisCouchConnection.pouchname;
+          //   if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
+          //     if (corpuses.where({
+          //       "pouchname": thisCouchConnection.pouchname
+          //     }).length === 0) {
+          //       corpuses.push(new CorpusMask(thisCouchConnection));
+          //     } else {
+          //       console.log(thisCouchConnection.pouchname + " Already known");
+          //     }
+          //   }
+          // }
+          // window.app.set("corpusesUserHasAccessTo", corpuses);
+          // localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
 
           if (window.appView) {
             window.appView

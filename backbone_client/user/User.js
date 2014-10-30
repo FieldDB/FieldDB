@@ -1,11 +1,15 @@
 define([
     "backbone",
+    "corpus/CorpusMask",
+    "corpus/Corpuses",
     "hotkey/HotKey",
     "user/UserGeneric",
     "user/UserPreference",
     "OPrime"
 ], function(
-    Backbone, 
+    Backbone,
+    CorpusMask,
+    Corpuses,
     HotKey,
     UserGeneric,
     UserPreference
@@ -14,24 +18,24 @@ define([
   /** @lends User.prototype */
   {
     /**
-     * @class User extends from UserGeneric. It inherits the same attributes as UserGeneric but can 
-     * login. 
-     * 
-     * @property {String} firstname The user's first name. 
-     * @property {String} lastname The user's last name.
-     * @property {Array} teams This is a list of teams a user belongs to. 
-     * @property {Array} sessionHistory 
-     * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)   
+     * @class User extends from UserGeneric. It inherits the same attributes as UserGeneric but can
+     * login.
      *
-     * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 
-     * 
+     * @property {String} firstname The user's first name.
+     * @property {String} lastname The user's last name.
+     * @property {Array} teams This is a list of teams a user belongs to.
+     * @property {Array} sessionHistory
+     * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)
+     *
+     * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new.
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize: function(attributes) {
       if (OPrime.debugMode) OPrime.debug("USER init");
       User.__super__.initialize.call(this, attributes);
-      
+
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -43,7 +47,7 @@ define([
       if (!this.get("prefs")) {
         this.set("prefs", new UserPreference({filledWithDefaults : true }));
       }
-      
+
       // If there is no hotkeys, create a new one
       if (!this.get("hotkeys")) {
         this.set("hotkeys", new HotKey({filledWithDefaults : true }));//TODO this needs to become plural when hotkeys get implemented
@@ -88,7 +92,7 @@ define([
         window.location.replace("user.html");
         return;
       }
-      
+
       /* Upgrade chrome app user corpora's to v1.38+ */
       if(couchConnection.domain == "ifielddevs.iriscouch.com"){
         couchConnection.domain  = "corpus.lingsync.org";
@@ -122,17 +126,17 @@ define([
     },
 
     /**
-     * The subtitle function returns user's first and last names. 
+     * The subtitle function returns user's first and last names.
      */
     subtitle: function () {
     	if (this.get("firstname") == undefined) {
         this.set("firstname","");
       }
-      
+
       if (this.get("lastname") == undefined) {
         this.set("lastname","");
       }
-      
+
       return this.get("firstname") + " " + this.get("lastname");
     },
     checkPrefsChanged : function(){
@@ -140,15 +144,51 @@ define([
         window.appView.userPreferenceView.model = this.get("prefs");
         window.appView.userPreferenceView.render();
       }catch(e){
-        
+
       }
     },
     saveAndInterConnectInApp : function(callback){
-      
+
       if(typeof callback == "function"){
         callback();
       }
+    },
+
+    updateListOfCorpora: function(roles, couchConnectionInscope){
+      var corpuses =  new Corpuses();
+      var username = this.get("username");
+      if(username == "public"){
+        return;
+      }
+      if(!couchConnectionInscope){
+        couchConnectionInscope = window.app.get("couchConnection");
+      }
+      for (var role in roles) {
+        var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
+        thisCouchConnection.corpusid = "";
+        thisCouchConnection.pouchname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+        thisCouchConnection.title = thisCouchConnection.pouchname;
+        if (thisCouchConnection.title.length > 30) {
+          thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
+        }
+        if (thisCouchConnection.title.length > 30) {
+          thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
+        }
+        thisCouchConnection.id = thisCouchConnection.pouchname;
+        if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
+          if (corpuses.where({
+            "pouchname": thisCouchConnection.pouchname
+          }).length === 0) {
+            corpuses.push(new CorpusMask(thisCouchConnection));
+          } else {
+            console.log(thisCouchConnection.pouchname + " Already known");
+          }
+        }
+      }
+      window.app.set("corpusesUserHasAccessTo", corpuses);
+      localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
     }
+
   });
 
   return User;
