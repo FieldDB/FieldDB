@@ -18,7 +18,7 @@ var app = angular.module("fielddbAngularApp", [
   "ngTouch",
   "angularFileUpload",
   "contenteditable",
-  "ngDragDrop"
+  "ang-drag-drop"
 ]).config(function($routeProvider, $sceDelegateProvider) {
   // console.log($routeProvider);
 
