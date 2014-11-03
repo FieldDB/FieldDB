@@ -1,6 +1,6 @@
-define([ 
-    "backbone", 
-    "handlebars", 
+define([
+    "backbone",
+    "handlebars",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -21,8 +21,8 @@ define([
     "app/UpdatingCollectionView",
     "OPrime"
 ], function(
-    Backbone, 
-    Handlebars, 
+    Backbone,
+    Handlebars,
     Corpus,
     Comment,
     Comments,
@@ -32,7 +32,7 @@ define([
     DataLists,
     DataListReadView,
     DatumFieldReadView,
-    DatumStateReadView, 
+    DatumStateReadView,
     LexiconView,
     Permission,
     Permissions,
@@ -53,22 +53,22 @@ define([
      * @property {String} format Must be set when the CorpusEditView is
      * initialized. Valid values are "centreWell" ,
      * "fullscreen", "link" and "leftSide"
-     * 
+     *
      * @description Starts the Corpus and initializes all its children.
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("CORPUS READ init: " );
       this.changeViewsOfInternalModels();
-      
+
    // If the model's pouchname changes, chances are its a new corpus, re-render its internal models.
       this.model.bind('change:pouchname', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
-      
+
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
 //        if (OPrime.debugMode) OPrime.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
@@ -83,7 +83,7 @@ define([
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .resize-full" : "resizeFullscreen",
-      
+
       //Add button inserts new Comment
       "click .add-comment-button" : function(e) {
         if(e){
@@ -99,7 +99,7 @@ define([
         /* save the state of the datum when the comment is added, and render it*/
         this.updatePouch();
         this.commentReadView.render();
-      }, 
+      },
       //Delete button remove a comment
       "click .remove-comment-button" : function(e) {
         if(e){
@@ -107,8 +107,8 @@ define([
           e.preventDefault();
         }
         this.model.get("comments").remove(this.commentEditView.model);
-      }, 
-      
+      },
+
       "click .reload-corpus-team-permissions" :function(e){
         if(e){
           e.preventDefault();
@@ -121,19 +121,19 @@ define([
             childViewTagName     : 'li',
             childViewClass       : "breadcrumb row span12"
           });
-          
+
           corpusviewself.permissionsView.el = corpusviewself.$('.permissions-updating-collection');
           corpusviewself.permissionsView.render();
         });
-        
+
       },
-      
-      //help text around text areas 
+
+      //help text around text areas
       "click .explain_terms_of_use" : "toggleExplainTermsOfUse",
       "click .explain_license" : "toggleExplainLicense",
 
       "click .icon-edit": "showEditable",
-      
+
       //corpus menu buttons
       "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
@@ -141,10 +141,10 @@ define([
       "click .new-corpus" : "newCorpus",
 
     },
-    
+
     /**
      * The underlying model of the CorpusReadView is a Corpus.
-     */    
+     */
     model : Corpus,
 
     // TODO Should LexiconView really be here?
@@ -154,22 +154,22 @@ define([
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
     templateFullscreen : Handlebars.templates.corpus_read_embedded,
-    
+
     /**
      * The Handlebars template rendered as the CorpusWellView.
      */
     templateCentreWell : Handlebars.templates.corpus_read_embedded,
-    
+
     /**
      * The Handlebars template rendered as the Summary
      */
     templateSummary : Handlebars.templates.corpus_summary_read_embedded,
-    
+
     /**
      * The Handlebars template rendered as the CorpusReadLinkView.
      */
     templateLink: Handlebars.templates.corpus_read_link,
-    
+
     /**
      * Renders the CorpusReadView and all of its child Views.
      */
@@ -182,10 +182,10 @@ define([
 
       // Build the lexicon
       this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
-      
+
       // Get the corpus' current precedence rules
       this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("pouchname"));
-     
+
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
         return this;
@@ -199,7 +199,7 @@ define([
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       // jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
       jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/lexicon_create_tuples?group=true";
-      
+
       jsonToRender.locale_License_explanation = Locale.get("locale_License_explanation");
       jsonToRender.locale_Terms_explanation = Locale.get("locale_Terms_explanation");
       jsonToRender.locale_All_Data = Locale.get("locale_All_Data");
@@ -207,6 +207,7 @@ define([
       jsonToRender.locale_Data_menu = Locale.get("locale_Data_menu");
       jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
       jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
+      jsonToRender.locale_Session_field_settings = Locale.get("locale_Session_field_settings");
       jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
       jsonToRender.locale_Edit_corpus = Locale.get("locale_Edit_corpus");
       jsonToRender.locale_Export_Data = Locale.get("locale_Export_Data");
@@ -225,10 +226,11 @@ define([
       jsonToRender.locale_Terms_of_use = Locale.get("locale_Terms_of_use");
       jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
       jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
+      jsonToRender.locale_session_fields_explanation = Locale.get("locale_session_fields_explanation");
       jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
       jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
       jsonToRender.locale_permissions_explanation = Locale.get("locale_permissions_explanation");
-    
+
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
@@ -249,12 +251,12 @@ define([
 
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(jsonToRender));
-        
+
       } else if (this.format == "fullscreen" || this.format == "centreWell"){
         if (OPrime.debugMode) OPrime.debug("CORPUS READ FULLSCREEN/EMBEDDED render: " );
-        
+
         if(this.format == "fullscreen"){
-          this.setElement($("#corpus-fullscreen")); 
+          this.setElement($("#corpus-fullscreen"));
           $(this.el).html(this.templateFullscreen(jsonToRender));
         }else{
           this.setElement($("#corpus-embedded"));
@@ -264,31 +266,35 @@ define([
         // Display the CommentReadView
         this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
- 
+
         // Display the CommentEditView
-        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.el = $(this.el).find('.new-comment-area');
         this.commentEditView.render();
-        
+
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
-        
+
+        // Display the DatumFieldsView
+        this.sessionFieldsView.el = this.$('.session_field_settings');
+        this.sessionFieldsView.render();
+
         // Display the DatumStatesView
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
         // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists-updating-collection'); 
+        this.dataListsView.el = this.$('.datalists-updating-collection');
         this.dataListsView.render();
-        
+
         // Display the SessionsView
         this.sessionsView.el = this.$('.sessions-updating-collection');
         this.sessionsView.render();
-        
+
 //        // Display the PermissionsView
 //        this.permissionsView.el = this.$('.permissions-updating-collection');
-//        this.permissionsView.render();        
-        
+//        this.permissionsView.render();
+
         try{
           Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
         }catch(e){
@@ -303,12 +309,12 @@ define([
           OPrime.debug("Formatting as wiki text didnt work");
         }
 
-      } 
-      
+      }
+
       return this;
     },
     /**
-     * 
+     *
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
@@ -317,24 +323,24 @@ define([
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
-      $(this.el).removeData().unbind(); 
+      $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//    this.remove();  
+//    this.remove();
 //    Backbone.View.prototype.remove.call(this);
     },
     changeViewsOfInternalModels : function(){
-      //Create a CommentReadView     
+      //Create a CommentReadView
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
-      
+
       this.commentEditView = new CommentEditView({
         model : new Comment(),
       });
-      
+
       // Create a list of DataLists
       this.dataListsView = new UpdatingCollectionView({
         collection : this.model.datalists,
@@ -342,8 +348,8 @@ define([
         childViewTagName     : 'li',
         childViewFormat      : "link"
       });
-      
-      //Create a list of DatumFields     
+
+      //Create a list of DatumFields
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldReadView,
@@ -351,8 +357,17 @@ define([
         childViewFormat      : "corpus",
         childViewClass       : "breadcrumb"
       });
-      
-      // Create a list of DatumStates    
+
+      //Create a list of DatumFields
+      this.sessionFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("sessionFields"),
+        childViewConstructor : DatumFieldReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus",
+        childViewClass       : "breadcrumb"
+      });
+
+      // Create a list of DatumStates
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
         childViewConstructor : DatumStateReadView,
@@ -368,18 +383,18 @@ define([
 //        childViewTagName     : 'li',
 //        childViewClass       : "breadcrumb"
 //      });
-      
-      //Create a Sessions List 
+
+      //Create a Sessions List
        this.sessionsView = new UpdatingCollectionView({
          collection : this.model.sessions,
          childViewConstructor : SessionReadView,
          childViewTagName     : 'li',
-         childViewFormat      : "link"  
+         childViewFormat      : "link"
        });
-      
+
     },
 
-    //toggle Terms of Use explanation in popover 
+    //toggle Terms of Use explanation in popover
     toggleExplainTermsOfUse : function(e) {
       if(e){
         // e.preventDefault();
@@ -395,7 +410,7 @@ define([
       return false;
     },
 
-    //toggle License explanation in popover 
+    //toggle License explanation in popover
     toggleExplainLicense : function(e) {
       if(e){
         // e.preventDefault();
@@ -420,7 +435,7 @@ define([
         if($(e.target).parent().parent().hasClass("dropdown-menu")){
           $(e.target).parent().parent().hide();
         }
-      } 
+      }
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
@@ -439,7 +454,7 @@ define([
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
       app.router.showEmbeddedSearch();
     },
-    
+
     newSession : function(e) {
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
@@ -451,7 +466,7 @@ define([
       }
       this.model.newSession();
     },
-    
+
     newCorpus : function(e){
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
@@ -463,7 +478,7 @@ define([
       }
       this.model.newCorpus();
     },
-    
+
      resizeSmall : function(e){
        if(e){
          e.stopPropagation();
@@ -471,7 +486,7 @@ define([
        }
        window.location.href = "#render/true";
     },
-    
+
     resizeFullscreen : function(e){
       if (OPrime.debugMode) OPrime.debug("CORPUS READ starts to render fullscreen. " );
       if(e){
@@ -482,7 +497,7 @@ define([
       this.render();
       window.app.router.showFullscreenCorpus();
     },
-   
+
     //This is bound to the little pencil function
     showEditable :function(e){
       if(e){
@@ -494,10 +509,10 @@ define([
         window.appView.currentCorpusEditView.render();
       }
     },
-    
+
     /* ReadView is supposed to save no change but we want the comments to
-     * be saved. This function saves the change/addition/deletion of the comments. 
-     * Changes in other parts of Corpus is taken care of the server according to 
+     * be saved. This function saves the change/addition/deletion of the comments.
+     * Changes in other parts of Corpus is taken care of the server according to
      * users' permissions. */
     updatePouch : function(e) {
       if(e){
@@ -514,8 +529,8 @@ define([
         self.render();
       });
     }
-    
-    
+
+
   });
 
   return CorpusReadView;

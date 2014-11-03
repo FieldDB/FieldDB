@@ -41,7 +41,7 @@
 				<span>{{locale_Save}}</span></button>
 		<!-- Issue #797 -->
       <button class="btn btn-danger trash-button">
-       <i class="icon-trash "></i> </button>	
+       <i class="icon-trash "></i> </button>
 	</div>
 </div>
 
@@ -56,7 +56,7 @@
 	target="_blank"><i class=" icon-link"></i></a>
 <small>Shareable URL:
 	http://lingsync.org/{{username}}/{{titleAsUrl}}</small>
-	
+
 <label ><span>{{locale_Description}}</span>
 <a tabindex="-1" data-toggle="modal" href="#wiki-syntax-modal"><i class="icon-question-sign"></i> </a>
 </label>
@@ -79,18 +79,18 @@
 <a class="explain_license" data-html="true" rel="popover"  data-placement="right" data-content="{{{locale_License_explanation}}}" title="Why have a License for your corpus" tabindex="-1">
   <i class="icon-question-sign"></i>
 </a></label>
-<textarea class="corpus-license-title-input" placeholder="title">{{license.title}}</textarea> 
-<textarea class="corpus-license-link-input" placeholder="link to full license information">{{license.link}}</textarea> 
+<textarea class="corpus-license-title-input" placeholder="title">{{license.title}}</textarea>
+<textarea class="corpus-license-link-input" placeholder="link to full license information">{{license.link}}</textarea>
 
 
 <label>{{locale_Copyright}}</label>
 
-<textarea class="corpus-license-humanreadable-input" placeholder="human readable version">{{license.humanReadable}}</textarea> 
+<textarea class="corpus-license-humanreadable-input" placeholder="human readable version">{{license.humanReadable}}</textarea>
 <label>Preview:</label>
 <div class="corpus-license-humanreadable-wiki-preview wiki-preview"></div>
 <hr/>
 
-<textarea class="corpus-copyright-input">{{copyright}}</textarea> 
+<textarea class="corpus-copyright-input">{{copyright}}</textarea>
 
 
 <div class="accordion" id="accordion-edit-embedded">
@@ -188,6 +188,35 @@
 			</div>
 		</div>
 	</div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse"
+        data-parent="#accordion-edit-embedded"
+        href="#collapseSessionFieldSettingsEE"> <i class="icon-calendar"></i>
+        <strong>{{locale_Session_field_settings}}</strong>
+      </a>
+    </div>
+    <div class="accordion-body collapse" id="collapseSessionFieldSettingsEE">
+      <div class="accordion-inner">
+        <span>{{{locale_session_fields_explanation}}}</span>
+        <ul class="session_field_settings unstyled"></ul>
+        <div class="breadcrumb">
+          <span class="pull-right"> <span
+             >{{locale_Encrypt_if_confidential}}</span> <input
+            type="checkbox" class="add_session_shouldBeEncrypted"{{shouldBeEncrypted}}></input>
+          </span> <input type="text" class="span3 choose_add_session_field"
+            data-provide="typeahead" data-items="4"
+            data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
+          <label>{{locale_Help_Text}}</label>
+          <textarea class="add_session_help" title="{{locale_Help_Text_Placeholder}}"></textarea>
+          <a href="#"
+            class="btn btn-primary add-session-field" title="{{locale_Add_New_Session_Field_Tooltip}}"
+            rel="tooltip">{{locale_Add}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
@@ -275,4 +304,4 @@
 
 <!-- Corpus comments -->
 <ul class="comments unstyled"></ul>
-<div class="new-comment-area "></div> 
+<div class="new-comment-area "></div>
