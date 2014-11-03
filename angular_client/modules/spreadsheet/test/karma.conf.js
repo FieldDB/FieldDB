@@ -7,6 +7,7 @@ module.exports = function(config) {
   'use strict';
 
   config.set({
+
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
@@ -35,8 +36,16 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'app/scripts/**/*.js',
       // 'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      'test/spec/**/*.js',
+
+      //location of templates
+      'app/views/**/*.html'
     ],
+
+    preprocessors: {
+        //location of templates
+        'app/views/**/*.html': 'html2js'
+    },
 
     // list of files / patterns to exclude
     exclude: [],
@@ -58,8 +67,11 @@ module.exports = function(config) {
 
     // Which plugins to enable
     plugins: [
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
       'karma-phantomjs-launcher',
-      'karma-jasmine'
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
     ],
 
     // Continuous Integration mode
