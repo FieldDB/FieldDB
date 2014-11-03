@@ -63,6 +63,7 @@
     "test",
     "tests"
   ],
+  "main":"fielddb.js",
   "dependencies": {},
   "devDependencies": {}
 }
