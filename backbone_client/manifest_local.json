@@ -1,19 +1,19 @@
 {
-  "name" : "FieldDB Localhost",
-  "version" : "2.22.0",
-  "description" : "Local development version",
-  "app" : {
-    "launch" : {
-      "local_path" : "index.html"
+  "name": "FieldDB Localhost",
+  "version": "2.27.0",
+  "description": "Local development version",
+  "app": {
+    "launch": {
+      "local_path": "backup_pouches.html"
     }
   },
-  "offline_enabled" : true,
-  "permissions" : [ "debugger","unlimitedStorage"],
-  "icons" : {
-    "16" : "images/icon16_local.png",
-    "48" : "images/icon48_local.png",
-    "128" : "images/icon128_local.png"
+  "offline_enabled": true,
+  "permissions": ["debugger", "unlimitedStorage"],
+  "icons": {
+    "16": "images/icon16_local.png",
+    "48": "images/icon48_local.png",
+    "128": "images/icon128_local.png"
   },
-  "manifest_version" : 2,
-  "content_security_policy" : "media-src *; default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com "
+  "manifest_version": 2,
+  "content_security_policy": "media-src *; default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com "
 }
