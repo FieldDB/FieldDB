@@ -2,7 +2,7 @@
 <button class="hide btn pull-right" ng-click="undo()" ng-class="{'btn-default': datalist.saving, 'btn-inverse': !datalist.saving}">Undo</button>
 <h1 >{{datalist.title.default}}</h1>
 <!-- <h1 ng-show="typeof (datalist.title == 'string')">{{datalist.title}}</h1>
- --><p >{{datalist.description.default | unsafeHtml}}</p>
+ --><p >{{datalist.description.default}}</p>
 <p ng-show="typeof (datalist.title == 'string')">{{datalist.description}}</p>
 
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
