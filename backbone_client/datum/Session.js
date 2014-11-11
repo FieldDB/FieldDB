@@ -234,13 +234,13 @@ define([
       if (window.app.get("corpus").sessions.models[whichSessionToUse].id == this.id) {
         whichSessionToUse = 1;
       }
-
+      var self = this;
       this.saveAndInterConnectInApp(function(){
         window.app.addActivity({
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + this.id + "'>a session</a> ",
+          directobject: "<a href='#session/" + self.id + "'>a session</a> ",
           indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
           teamOrPersonal: "team",
           context: " via Offline App."
@@ -250,7 +250,7 @@ define([
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + this.id + "'>a session</a> ",
+          directobject: "<a href='#session/" + self.id + "'>a session</a> ",
           indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
           teamOrPersonal: "personal",
           context: " via Offline App."
