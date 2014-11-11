@@ -189,14 +189,14 @@ define([
       if (window.app.get("corpus").datalists.models[whichDatalistToUse].id == this.id) {
         whichDatalistToUse = 1;
       }
-
+      var self = this;
       this.saveAndInterConnectInApp(function(){
 
         window.app.addActivity({
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-pushpin",
-          directobject: "<a href='#data/" + model.id + "'>a data list</a> ",
+          directobject: "<a href='#data/" + self.id + "'>a data list</a> ",
           indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
           teamOrPersonal: "team",
           context: " via Offline App."
@@ -206,7 +206,7 @@ define([
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-pushpin",
-          directobject: "<a href='#data/" + model.id + "'>a data list</a> ",
+          directobject: "<a href='#data/" + self.id + "'>a data list</a> ",
           indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
           teamOrPersonal: "personal",
           context: " via Offline App."
