@@ -157,7 +157,7 @@ define([
     parse : function(originalModel){
       /* if this is just a couchdb save result, dont process it */
       if (originalModel.ok) {
-        return this.originalParse(originalModel);
+        return this.originalParse.apply(this, [originalModel]);
       }
       OPrime.debug("Edit this function to update session to the latest schema.");
 
@@ -181,7 +181,7 @@ define([
         }
       }
 
-      return this.originalParse(originalModel);
+      return this.originalParse.apply(this, [originalModel]);
     },
 
 
