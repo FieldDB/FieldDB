@@ -1,4 +1,4 @@
-define([ 
+define([
     "backbone",
     "activity/Activity",
     "comment/Comment",
@@ -14,19 +14,17 @@ define([
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
-    "datum/Session",
-    "datum/Sessions",
     "user/User",
     "glosser/Glosser",
     "OPrime"
 ], function(
-    Backbone, 
+    Backbone,
     Activity,
-    Comment, 
+    Comment,
     Comments,
     Confidential,
     DatumField,
-    DatumFields, 
+    DatumFields,
     DatumState,
     DatumStates,
     DataList,
@@ -35,8 +33,6 @@ define([
     Lexicon,
     Permission,
     Permissions,
-    Session,
-    Sessions,
     User
 ) {
   var CorpusMask = Backbone.Model.extend(
@@ -44,8 +40,8 @@ define([
   {
     /**
      * @class The CorpusMask is saved as corpusmask in the Couch repository, it is the publicly visible version of a corpus. By default it just says private but lets users see the data lists and sessions.
-     * 
-     * 
+     *
+     *
      * @property {String} title This is used to refer to the corpus, and
      *           what appears in the url on the main website eg
      *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
@@ -53,33 +49,33 @@ define([
      *           appears on the corpus details page
      * @property {String} remote The git url of the remote eg:
      *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
-     *           
+     *
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
-     * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
+     * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
      * @property {Sessions} sessions Collection of sessions that belong to the corpus
      * @property {DataLists} datalists Collection of data lists created under the corpus
-     * @property {Permissions} permissions Collection of permissions groups associated to the corpus 
-     * 
-     *           
+     * @property {Permissions} permissions Collection of permissions groups associated to the corpus
+     *
+     *
      * @property {Glosser} glosser The glosser listens to
      *           orthography/utterence lines and attempts to guess the
      *           gloss.
      * @property {Lexicon} lexicon The lexicon is a list of morphemes,
      *           allomorphs and glosses which are used to index datum, and
      *           also to gloss datum.
-     * 
+     *
      * @description The initialize function probably checks to see if
      *              the corpus is new or existing and brings it down to
      *              the user's client.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
 
-      this.datalists =  new DataLists();
-      this.sessions =  new Sessions();
+      // this.datalists =  new DataLists();
+      // this.sessions =  new Sessions();
 
       //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
       this.set("id", "corpus");
@@ -99,11 +95,11 @@ define([
       if(!this.get("datumStates")){
         this.set("datumStates", new DatumStates());
       }//end if to set datumStates
-      
-      //Keeping all items since this seems okay for public viewing/searching if the user wants to let the public see it. 
+
+      //Keeping all items since this seems okay for public viewing/searching if the user wants to let the public see it.
       if(!this.get("datumFields")){
         this.set("datumFields", new DatumFields(
-            [ 
+            [
                                                new DatumField({
                                                  label : "judgement",
                                                  size : "3",
@@ -138,10 +134,10 @@ define([
                                                ]
             ));
       }//end if to set datumFields
-      
+
       //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
       if(!this.get("sessionFields")){
-        this.set("sessionFields", new DatumFields([ 
+        this.set("sessionFields", new DatumFields([
                                                    new DatumField({
                                                      label : "dialect",
                                                      shouldBeEncrypted: "",
@@ -172,15 +168,15 @@ define([
                                                      help: "This is the date in which the session was entered."
                                                    }),
                                                    ]));
-        
+
       }//end if to set sessionFields
-      
-      
+
+
       // If there are no comments, create models
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-     
+
       if (!this.permissions) {
         this.permissions = new Permissions();
       }
@@ -188,19 +184,19 @@ define([
     /**
      * backbone-couchdb adaptor set up
      */
-    
+
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/corpuses",
-    
+
     defaults : {
       title : "Private Corpus",
       titleAsUrl :"PrivateCorpus",
       description : "The details of this corpus are not public.",
 //      consultants : Consultants,
 //      datumStates : DatumStates,
-//      datumFields : DatumFields, 
+//      datumFields : DatumFields,
 //      sessionFields : DatumFields,
 //      searchFields : DatumFields,
 //      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
@@ -210,7 +206,7 @@ define([
     },
     /**
      * this resets the titleAsUrl to match the title, this means if the usr changes the title, their corpu has high chances of not being unique.
-     * 
+     *
      * @param key
      * @param value
      * @param options
@@ -233,18 +229,18 @@ define([
       if(attributes.title){
         attributes.titleAsUrl = attributes.title.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");//this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
       }
-      return Backbone.Model.prototype.set.call( this, attributes, options ); 
+      return Backbone.Model.prototype.set.call( this, attributes, options );
     },
     // Internal models: used by the parse function
     internalModels : {
       //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
       consultants : Consultants,
       datumStates : DatumStates,
-      datumFields : DatumFields, 
+      datumFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
-//      sessions : Sessions, 
-//      dataLists : DataLists, 
+//      sessions : Sessions,
+//      dataLists : DataLists,
       permissions : Permissions,
       comments: Comments
     },
@@ -253,7 +249,7 @@ define([
     /**
      * this function makes it possible to save the CorpusMask with a
      * hardcoded id, it uses pouch's API directly
-     * 
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -272,7 +268,7 @@ define([
       if(window.app && window.app.get("corpus") && window.app.get("corpus").get("copyright")){
         this.set("copyright", window.app.get("corpus").get("copyright"));
       }
-      
+
         if(OPrime.isBackboneCouchDBApp()){
           self.save();
           if(typeof successcallback == "function"){
@@ -336,7 +332,7 @@ define([
               }
             }
           });
-      });      
+      });
     },
     /**
      * this function makes it possible to save the CorpusMask with a
@@ -344,13 +340,13 @@ define([
      */
     updateToPouch : function(){
       alert("Bug: the corpusmask updatetopouch method is deprecated please report this!");
-      
+
     },
     /**
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
-     * 
+     *
      * @param pouchname
      * @param callback
      */
@@ -367,7 +363,7 @@ define([
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
-     * 
+     *
      * @param pouchname
      * @param callback
      */
@@ -381,6 +377,6 @@ define([
       this.lexicon.buildLexiconFromCouch(pouchname,callback);
     }
   });
-    
+
   return CorpusMask;
 });
