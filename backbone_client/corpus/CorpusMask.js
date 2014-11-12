@@ -3,18 +3,14 @@ define([
     "activity/Activity",
     "comment/Comment",
     "comment/Comments",
-    "confidentiality_encryption/Confidential",
     "datum/DatumField",
     "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
-    "data_list/DataList",
-    "data_list/DataLists",
     "user/Consultants",
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
-    "user/User",
     "glosser/Glosser",
     "OPrime"
 ], function(
@@ -22,18 +18,14 @@ define([
     Activity,
     Comment,
     Comments,
-    Confidential,
     DatumField,
     DatumFields,
     DatumState,
     DatumStates,
-    DataList,
-    DataLists,
     Consultants,
     Lexicon,
     Permission,
-    Permissions,
-    User
+    Permissions
 ) {
   var CorpusMask = Backbone.Model.extend(
   /** @lends CorpusMask.prototype */
@@ -74,7 +66,7 @@ define([
      */
     initialize : function() {
 
-      // this.datalists =  new DataLists();
+        // this.datalists =  new DataLists();
       // this.sessions =  new Sessions();
 
       //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
