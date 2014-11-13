@@ -327,6 +327,40 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
   }, specIsRunningTooLong);
 
 
+  it("should process csv participants which were created in a French edition of Microsoft Excel", function(done) {
+    var dbname = "testingcorpusinimport-firstcorpus";
+    var corpus = new Corpus(Corpus.prototype.defaults_psycholinguistics);
+    corpus.dbname = dbname;
+
+    var importer = new Import({
+      corpus: corpus,
+      rawText: fs.readFileSync("sample_data/students_point_vergule_msexcelfr.csv", "utf8"),
+      importType: "participants"
+    });
+
+    // Step 1: import CSV
+    importer.importCSV(importer.rawText, importer);
+    expect(importer.extractedHeader).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
+    expect(importer.asCSV.length).toEqual(7);
+    expect(importer.showImportSecondStep).toBeTruthy();
+
+    // Step 2: build participants
+    // importer.debugMode = true;
+    importer.convertTableIntoDataList().then(function(results) {
+      importer.discoveredHeaders;
+
+      importer.documentCollection._collection[2].fields.decryptedMode = true;
+      expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual("Amelie");
+      expect(importer.documentCollection._collection[2].fields.firstname.mask).toEqual("xxxxxx");
+
+      expect(results.length).toEqual(6);
+
+    }).then(done, done);
+
+    // console.log(JSON.stringify(importer.importFields, null, 2));
+  }, specIsRunningTooLong);
+
+
   xit("should read a file when in a browser", function(done) {
     var importer = new Import();
 
