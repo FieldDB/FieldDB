@@ -902,7 +902,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       // parse csv line by line into array
       var CSV = [];
       var csvCharacter = ",";
-      console.log(lineCSV, typeof lineCSV);
+      this.debug(lineCSV, typeof lineCSV);
       var matches = lineCSV.split(csvCharacter);
       if (matches.length < 2) {
         csvCharacter = ";";

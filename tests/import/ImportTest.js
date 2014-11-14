@@ -347,7 +347,6 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     // Step 2: build participants
     // importer.debugMode = true;
     importer.convertTableIntoDataList().then(function(results) {
-      importer.discoveredHeaders;
 
       importer.documentCollection._collection[2].fields.decryptedMode = true;
       expect(importer.documentCollection._collection[2].fields.firstname.value).toEqual("Amelie");
