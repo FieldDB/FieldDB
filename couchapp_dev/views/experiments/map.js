@@ -12,6 +12,7 @@ function(doc) {
 
     var experimentId = doc.relatedData[0].URI.split("?rev=")[0];
     var experimentRev = doc.relatedData[0].URI.split("?rev=")[1];
+    var stimulusId = "";
 
     if (doc && doc.results && doc.results) {
       subexperiments = JSON.parse(JSON.stringify(doc.results));
@@ -45,6 +46,11 @@ function(doc) {
             appropriateImage = "X";
           }
           calculatedResult.appropriateImage = appropriateImage;
+        }
+
+        if (stimulusToScore && stimulusToScore.relatedData && stimulusToScore.relatedData.length > 0) {
+          stimulusId = stimulusToScore.relatedData[0].URI.split("?rev=")[0];
+          calculatedResult.stimulusId = stimulusId;
         }
 
         if (stimulusToScore && stimulusToScore.responses && stimulusToScore.responses[stimulusToScore.responses.length - 1] && stimulusToScore.responses[stimulusToScore.responses.length - 1].score !== undefined) {
