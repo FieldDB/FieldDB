@@ -76,7 +76,7 @@ describe("App", function() {
 
       app.processRouteParams({
         team: "lingllama",
-        corpusid: "community-_corpus"
+        corpusidentifier: "community-_corpus"
       });
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
       expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
@@ -93,7 +93,7 @@ describe("App", function() {
       });
       app.processRouteParams({
         team: "lingllama",
-        corpusid: "community-_corpus",
+        corpusidentifier: "community-_corpus",
         importType: "participants"
       });
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
@@ -111,7 +111,7 @@ describe("App", function() {
       });
       app.processRouteParams({
         team: "lingllama",
-        corpusid: "community-_corpus",
+        corpusidentifier: "community-_corpus",
         searchQuery: "morphemes:naya OR gloss:des OR gloss:IMP"
       });
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
