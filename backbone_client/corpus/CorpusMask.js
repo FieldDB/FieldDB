@@ -366,7 +366,7 @@ define([
       if(!callback){
         callback = null;
       }
-      this.lexicon.buildLexiconFromCouch(pouchname,callback);
+      // this.lexicon.buildLexiconFromCouch(pouchname,callback);
     }
   });
 
