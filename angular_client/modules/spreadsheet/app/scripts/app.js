@@ -50,7 +50,7 @@ angular
 
     console.warn("removing old lexicons to reduce storage use, and force fresh");
     for (var i = 0; i < localStorage.length; i++) {
-      var localStorageKey = localStorage.key(i)
+      var localStorageKey = localStorage.key(i);
       if (localStorageKey.indexOf("lexiconResults") > -1 || localStorageKey.indexOf("precendenceRules") > -1 || localStorageKey.indexOf("reducedRules") > -1) {
         localStorage.removeItem(localStorageKey);
         console.log("cleaned " + localStorageKey);
