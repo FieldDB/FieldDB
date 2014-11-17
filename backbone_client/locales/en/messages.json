@@ -575,6 +575,12 @@
   "locale_CSV_Tooltip" : {
     "message" : "Export datum as CSV"
   },
+  "locale_XML_Tooltip" : {
+    "message" : "Export datum as XML"
+  },
+  "locale_JSON_Tooltip" : {
+    "message" : "Export datum as JSON"
+  },
   "locale_of" : {
     "message" : "of"
   },
