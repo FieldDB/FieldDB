@@ -16,7 +16,7 @@ define([
     "image/ImagesView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "glosser/Glosser",
+    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -124,6 +124,14 @@ define([
       },
       "click .CSV" : function(){
         this.model.exportAsCSV(true, null);
+        $("#export-modal").modal("show");
+      },
+      "click .XML" : function(){
+        this.model.exportAsIGTXML(true, null);
+        $("#export-modal").modal("show");
+      },
+      "click .JSON" : function(){
+        this.model.exportAsIGTJSON(true, null);
         $("#export-modal").modal("show");
       },
       "click .icon-th-list" : "hideRareFields",
@@ -253,6 +261,8 @@ define([
 
 //    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip);
       jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
+      jsonToRender.locale_XML_Tooltip = Locale.get("locale_XML_Tooltip");
+      jsonToRender.locale_JSON_Tooltip = Locale.get("locale_JSON_Tooltip");
       jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get("locale_Drag_and_Drop_Audio_Tooltip");
       jsonToRender.locale_Duplicate = Locale.get("locale_Duplicate");
       jsonToRender.locale_Insert_New_Datum = Locale.get("locale_Insert_New_Datum");
@@ -557,10 +567,6 @@ define([
       this.reloadIGTPreview();
     },
     morphemesBlur : function(e){
-      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
-        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
-      }
       var morphemesLine = $(e.currentTarget).val();
       // var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
       // if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
@@ -576,62 +582,70 @@ define([
     previousUtterance : null,
     previousMorphemes : null,
     previousGloss : null,
-    guessMorphemes : function(utteranceLine){
-      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
-        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
-      }
-      if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine ) )) {
+    guessMorphemes: function(utteranceLine) {
+      if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine))) {
         this.previousUtterance = utteranceLine;
-        var morphemesLine = Glosser.morphemefinder(utteranceLine);
+        var asIGT = this.model.exportAsIGTJSON();
+        asIGT.utterance = utteranceLine;
+        asIGT.morphemes = ""; // force glosser to guess becaus the app handles if it matches previous guesses
+        var morphemesLine = Glosser.guessMorphemesFromUtterance(asIGT).morphemes;
 
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
         this.previousMorphemesGuess.push(morphemesLine);
 
-        var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
+        var morphemesField = this.model.get("datumFields").where({
+          label: "morphemes"
+        })[0];
         var alternates = morphemesField.get("alternates") || [];
         alternates.push(utteranceLine);
 
         // If the guessed morphemes is different than the unparsed utterance, and different than the previous morphemes line we guessed on
-        if (morphemesLine != utteranceLine && morphemesLine != "" &&  (!this.previousMorphemes || (this.previousMorphemes != morphemesLine )) ){
+        if (morphemesLine != utteranceLine && morphemesLine != "" && (!this.previousMorphemes || (this.previousMorphemes != morphemesLine))) {
           this.previousMorphemes = morphemesLine;
           //hey we have a new idea, so trigger the gloss guessing too
-          this.guessGlosses(morphemesLine);
+          this.guessGlosses(morphemesLine, asIGT);
           alternates.unshift(morphemesLine);
         }
         morphemesField.set("alternates", _.unique(alternates));
         this.needsSave = true;
-        if (this.$el.find(".morphemes .datum_field_input").val() == "" || this.previousMorphemesGuess.indexOf(this.$el.find(".morphemes .datum_field_input").val()) > -1 ) {
+        if (this.$el.find(".morphemes .datum_field_input").val() == "" || this.previousMorphemesGuess.indexOf(this.$el.find(".morphemes .datum_field_input").val()) > -1) {
           // If the morphemes line is empty, or its from a previous guess, put this guess in.
           morphemesField.set("mask", morphemesLine);
-//          this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+          //          this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
           this.needsSave = true;
         }
       }
     },
 
-    guessGlosses : function(morphemesLine) {
-      var glossField =  this.model.get("datumFields").where({label: "gloss"})[0];
+    guessGlosses: function(morphemesLine, asIGT) {
+      var glossField = this.model.get("datumFields").where({
+        label: "gloss"
+      })[0];
       var currentGloss = glossField.get("mask") || "";
-      if (morphemesLine && (!currentGloss || !this.previousMorphemes || (this.previousMorphemes != morphemesLine ))) {
+      if (morphemesLine && (!currentGloss || !this.previousMorphemes || (this.previousMorphemes != morphemesLine))) {
         this.previousMorphemes = morphemesLine;
-
-        var glossLine = Glosser.glossFinder(morphemesLine);
+        var forceGuess = !!asIGT;
+        var asIGT = asIGT || this.model.exportAsIGTJSON();
+        if (forceGuess) {
+          asIGT.gloss = "";
+        }
+        asIGT.morphemes = morphemesLine;
+        var glossLine = Glosser.guessGlossFromMorphemes(asIGT).gloss;
 
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
 
         this.previousGlossGuess = this.previousGlossGuess || [];
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
-        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
+        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g, "") != "") {
           this.previousGlossGuess.push(glossLine);
           alternates.unshift(glossLine);
         }
         glossField.set("alternates", _.unique(alternates));
         this.needsSave = true;
-        if (this.$el.find(".gloss .datum_field_input").val() == "" || this.previousGlossGuess.indexOf(this.$el.find(".gloss .datum_field_input").val()) > -1 ) {
+        if (this.$el.find(".gloss .datum_field_input").val() == "" || this.previousGlossGuess.indexOf(this.$el.find(".gloss .datum_field_input").val()) > -1) {
           // If the gloss line is empty, or its from a previous guess, put our new guess there
-//          this.$el.find(".gloss .datum_field_input").val(glossLine);
+          //          this.$el.find(".gloss .datum_field_input").val(glossLine);
           glossField.set("mask", glossLine);
           this.needsSave = true;
         }
@@ -661,9 +675,10 @@ define([
       if (morphemesLine) {
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
         if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
-          var utteranceLine = morphemesLine.replace(/-/g,"");
+          var asIGT = this.model.exportAsIGTJSON();
+          var utteranceLine = Glosser.guessUtteranceFromMorphemes(asIGT).utterance;
           /* uppercase the first letter of the line */
-          utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
+          // utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
 
           this.$el.find(".utterance").find(".datum_field_input").val(utteranceLine);
           this.needsSave = true;

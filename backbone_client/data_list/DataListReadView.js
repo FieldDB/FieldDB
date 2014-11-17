@@ -133,6 +133,26 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
         return false;
       },
+      "click .XML": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsIGTXML", true);
+        return false;
+      },
+      "click .JSON": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsIGTJSON", true);
+        return false;
+      },
       "click .icon-bullhorn": function(e){
         if(e){
           e.stopPropagation();
@@ -259,6 +279,8 @@ define( [
       jsonToRender.locale_Edit_Datalist = Locale.get("locale_Edit_Datalist");
       jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked");
       jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV");
+      jsonToRender.locale_Export_checked_as_XML = Locale.get("locale_Export_checked_as_XML");
+      jsonToRender.locale_Export_checked_as_JSON = Locale.get("locale_Export_checked_as_JSON");
       jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX");
       jsonToRender.locale_Hide_Datalist = Locale.get("locale_Hide_Datalist");
       jsonToRender.locale_Plain_Text_Export_Tooltip_checked = Locale.get("locale_Plain_Text_Export_Tooltip_checked");

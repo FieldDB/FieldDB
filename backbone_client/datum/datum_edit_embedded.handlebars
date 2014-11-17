@@ -1,6 +1,6 @@
 <div class="pull-right">
 	 <!-- Issue #797 -->
-	
+
 	<button class="btn btn-{{buttonColor}} save-datum"
 		value="Save">{{locale_Save}}</button>
 </div>
@@ -27,14 +27,14 @@
 	    <a href="#corpus/{{pouchname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale_Insert_New_Datum}}" rel="tooltip">
 	      <i class=" icon-plus"></i></a>
 	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Duplicate}}" rel="tooltip">
-	      <i class=" icon-copy"></i></a>  
+	      <i class=" icon-copy"></i></a>
 	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Encrypt}}" rel="tooltip">
-	      <i class=" {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a> 
+	      <i class=" {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>
 	    <a href="#" class="btn btn-mini btn-primary" title="{{locale_Show_confidential_items_Tooltip}}" rel="tooltip">
 	      <i class=" {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
 	    </a>
 	    <a  href="#" class="btn btn-mini btn-primary play-audio" title="{{locale_Play_Audio}}" rel="tooltip">
-	      <i class=" icon-bullhorn"></i></a>  
+	      <i class=" icon-bullhorn"></i></a>
 	    <a  href="#" class="btn btn-mini btn-info" title="{{locale_Plain_Text_Export_Tooltip}}" rel="tooltip" >
 	      <i class=" icon-paste"></i></a>
 	    <a href="#" class="LaTeX btn btn-mini btn-info" title="{{locale_LaTeX}}" rel="tooltip">
@@ -43,6 +43,12 @@
 	    <a href="#" class="CSV btn btn-mini btn-info" title="{{locale_CSV_Tooltip}}" rel="tooltip">
 	      <i>CSV</i>
 	    </a>
+      <a href="#" class="XML btn btn-mini btn-info" title="{{locale_XML_Tooltip}}" rel="tooltip">
+        <i>XML</i>
+      </a>
+      <a href="#" class="JSON btn btn-mini btn-info" title="{{locale_JSON_Tooltip}}" rel="tooltip">
+        <i>JSON</i>
+      </a>
 	    <a href="#" class="btn btn-mini  btn-danger trash-button" title="Put datum in the trash" rel="tooltip">
 			<i class="icon-trash "></i>
 		</a>
@@ -57,11 +63,11 @@
 		<div class="controls  no-margin-left">
 			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->
 			<div class="input-append ">
-			  <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4" 
-	            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]" 
+			  <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4"
+	            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]"
 	      /><button class=" btn btn-small btn-primary add_datum_tag" type="button">
 	        <i class=" icon-tag"></i>
-	        <span>{{locale_Add}}</span> 
+	        <span>{{locale_Add}}</span>
 	      </button>
 	    </div>
 		</div>
@@ -71,7 +77,7 @@
 	</div>
 </div>
 
-<ul class="comments unstyled"></ul> 
+<ul class="comments unstyled"></ul>
 <div class="extra-datum-info-which-can-be-hidden">
 	<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
 	<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
@@ -79,6 +85,6 @@
 	<span class="session-link"></span>
 
 	<!-- Datum comments -->
-	<div class="new-comment-area"></div>  
+	<div class="new-comment-area"></div>
 
 </div>
