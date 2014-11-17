@@ -261,6 +261,8 @@ define([
 
 //    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip);
       jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
+      jsonToRender.locale_XML_Tooltip = Locale.get("locale_XML_Tooltip");
+      jsonToRender.locale_JSON_Tooltip = Locale.get("locale_JSON_Tooltip");
       jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get("locale_Drag_and_Drop_Audio_Tooltip");
       jsonToRender.locale_Duplicate = Locale.get("locale_Duplicate");
       jsonToRender.locale_Insert_New_Datum = Locale.get("locale_Insert_New_Datum");

@@ -536,6 +536,12 @@
   "locale_Export_checked_as_CSV" : {
     "message" : "Export checked as CSV"
   },
+  "locale_Export_checked_as_XML" : {
+    "message" : "Export checked as XML"
+  },
+  "locale_Export_checked_as_JSON" : {
+    "message" : "Export checked as JSON"
+  },
   "locale_Hide_Datalist" : {
     "message" : "Hide datalist"
   },
