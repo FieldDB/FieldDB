@@ -28,8 +28,8 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
         var dbname = role.substring(0, role.lastIndexOf("_"));
         if (role.indexOf("-") > -1 && role.indexOf("_reader") > -1 && user.accessibleDBS.indexOf(dbname) === -1 && dbname.indexOf("lingllama-communitycorpus") === -1 && dbname.indexOf("public-firstcorpus") === -1) {
           dbname = dbname.replace("-", "/");
-          user.accessibleDBS.push(dbname);
           if (dbname.indexOf("public") === -1 && dbname.indexOf("lingllama") === -1) {
+            user.accessibleDBS.push(dbname);
             user.mostrecentdb = dbname;
           }
         }
