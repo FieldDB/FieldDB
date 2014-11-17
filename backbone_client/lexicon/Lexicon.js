@@ -3,28 +3,28 @@ define([
 		"lexicon/LexiconNode",
 		"lexicon/LexiconNodes"
 ], function(
-    Backbone, 
-    LexiconNode, 
+    Backbone,
+    LexiconNode,
     LexiconNodes
-) {	
-	var Lexicon = Backbone.Model.extend(	
+) {
+	var Lexicon = Backbone.Model.extend(
 	/** @lends Lexicon.prototype */
 	{
 		/**
 		 * @class Lexicon is directed graph (triple store) between morphemes and
 		 *        their allomorphs and glosses. It allows the search to index
 		 *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
-		 * 
+		 *
 		 * @description
-		 * 
+		 *
 		 * @extends Backbone.Model
-		 * 
+		 *
 		 * @constructs
-		 * 
+		 *
 		 */
 		initialize : function(){
 		},
-		
+
 		// Internal models: used by the parse function
     internalModels : {
       lexiconNodes : LexiconNodes
@@ -32,7 +32,7 @@ define([
     /**
      * Overwrite/build the lexicon from the corpus server if it is there, saves
      * the results to local storage so they can be reused offline.
-     * 
+     *
      * @param pouchname
      * @param callback
      */
@@ -66,35 +66,37 @@ define([
       });
     },
     /**
+     * Deprecated
+     *
      * Overwrite/build the lexicon from local storage if it is there.
-     * 
+     *
      * @param pouchname
      * @param callback
      */
     buildLexiconFromLocalStorage  : function(pouchname, callback){
-      var results = localStorage.getItem(pouchname+"lexiconResults");
-      if(!results){
-        return;
-      }
-      if (! this.get("lexiconNodes")){
-        this.set("lexiconNodes", new LexiconNodes());
-      }
-      var lexiconTriples = JSON.parse(results).rows;
-      for(triple in lexiconTriples){
-        this.get("lexiconNodes").add(new LexiconNode({morpheme: lexiconTriples[triple].key.morpheme , allomorphs: [lexiconTriples[triple].key.morpheme], gloss: lexiconTriples[triple].key.gloss, value: lexiconTriples[triple].value}));
-      }
+      // var results = localStorage.getItem(pouchname+"lexiconResults");
+      // if(!results){
+      //   return;
+      // }
+      // if (! this.get("lexiconNodes")){
+      //   this.set("lexiconNodes", new LexiconNodes());
+      // }
+      // var lexiconTriples = JSON.parse(results).rows;
+      // for(triple in lexiconTriples){
+      //   this.get("lexiconNodes").add(new LexiconNode({morpheme: lexiconTriples[triple].key.morpheme , allomorphs: [lexiconTriples[triple].key.morpheme], gloss: lexiconTriples[triple].key.gloss, value: lexiconTriples[triple].value}));
+      // }
       if (typeof callback == "function"){
         callback();
       }
     },
     saveAndInterConnectInApp : function(callback){
-      
+
       if(typeof callback == "function"){
         callback();
       }
     }
-    
-	}); 
-	
+
+	});
+
 	return Lexicon;
-}); 
+});

@@ -16,7 +16,7 @@ define([
     "image/ImagesView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "glosser/Glosser",
+    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -124,6 +124,14 @@ define([
       },
       "click .CSV" : function(){
         this.model.exportAsCSV(true, null);
+        $("#export-modal").modal("show");
+      },
+      "click .XML" : function(){
+        this.model.exportAsIGTXML(true, null);
+        $("#export-modal").modal("show");
+      },
+      "click .JSON" : function(){
+        this.model.exportAsIGTJSON(true, null);
         $("#export-modal").modal("show");
       },
       "click .icon-th-list" : "hideRareFields",
@@ -583,7 +591,9 @@ define([
       }
       if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine ) )) {
         this.previousUtterance = utteranceLine;
-        var morphemesLine = Glosser.morphemefinder(utteranceLine);
+        var asIGT = this.model.exportAsIGTJSON();
+        asIGT.utterance = utteranceLine;
+        var morphemesLine = Glosser.guessMorphemesFromUtterance(asIGT).morphemes;
 
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
         this.previousMorphemesGuess.push(morphemesLine);
@@ -615,8 +625,9 @@ define([
       var currentGloss = glossField.get("mask") || "";
       if (morphemesLine && (!currentGloss || !this.previousMorphemes || (this.previousMorphemes != morphemesLine ))) {
         this.previousMorphemes = morphemesLine;
-
-        var glossLine = Glosser.glossFinder(morphemesLine);
+        var asIGT = this.model.exportAsIGTJSON();
+        asIGT.morphemes = morphemesLine;
+        var glossLine = Glosser.guessGlossFromMorphemes(asIGT).gloss;
 
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
@@ -661,9 +672,10 @@ define([
       if (morphemesLine) {
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
         if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
-          var utteranceLine = morphemesLine.replace(/-/g,"");
+          var asIGT = this.model.exportAsIGTJSON();
+          var utteranceLine = Glosser.guessUtteranceFromMorphemes(asIGT).utterance;
           /* uppercase the first letter of the line */
-          utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
+          // utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
 
           this.$el.find(".utterance").find(".datum_field_input").val(utteranceLine);
           this.needsSave = true;

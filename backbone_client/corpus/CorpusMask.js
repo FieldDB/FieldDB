@@ -11,7 +11,7 @@ define([
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
-    "glosser/Glosser",
+    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -349,7 +349,7 @@ define([
       if(!callback){
         callback = null;
       }
-      Glosser.downloadPrecedenceRules(pouchname, callback);
+      // Glosser.downloadPrecedenceRules(pouchname, callback);
     },
     /**
      * This function takes in a pouchname, which could be different
