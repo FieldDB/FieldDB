@@ -1291,47 +1291,91 @@ define([
         return result;
       },
 
-      exportAsIGTJSON: function(showInExportModal, orderedFields, printheader) {
+      exportAsIGTWithHelpConventions : function(xmlEncode){
         var asIGTJSON = {
-          // pouchname: this.get("pouchname")
+          _id: this.get("_id"),
+          _rev: this.get("_rev"),
+          comments: _.pluck(this.get("comments").toJSON(), "text"),
+          audioVideo: _.pluck(this.get("audioVideo").toJSON(), "URL"),
+          images: _.pluck(this.get("images").toJSON(), "URL")
+          // dbname: this.get("pouchname")
         };
         var helpConventions = {};
-        var asDatumFields = this.get("datumFields").toJSON();
+        var asDatumFields = this.get("datumFields").toJSON().concat(this.get("session").get("sessionFields").toJSON());
         for (var fieldIndex = 0; fieldIndex < asDatumFields.length; fieldIndex++) {
           if (asDatumFields[fieldIndex].mask && asDatumFields[fieldIndex].mask.length > 0) {
             asIGTJSON[asDatumFields[fieldIndex].label] = asDatumFields[fieldIndex].mask;
           }
           helpConventions[asDatumFields[fieldIndex].label] = asDatumFields[fieldIndex].help;
+          if(xmlEncode){
+            asIGTJSON[asDatumFields[fieldIndex].label] =  _.escape(asIGTJSON[asDatumFields[fieldIndex].label]);
+            helpConventions[asDatumFields[fieldIndex].label] =  _.escape(helpConventions[asDatumFields[fieldIndex].label]);
+          }
         }
+        return {
+          igt: asIGTJSON,
+          helpConventions: helpConventions
+        };
+      },
 
-        var result = JSON.stringify(asIGTJSON);
+      exportAsIGTJSON: function(showInExportModal, orderedFields, printheader) {
+        var igtAndHelp = this.exportAsIGTWithHelpConventions();
+        var result = JSON.stringify(igtAndHelp.igt, null, 2);
 
         // Ignore the print header, print it if there is nothing in the export box
         if (printheader || !$("#export-text-area").val()) {
-          result = JSON.stringify(helpConventions) + "," + result;
+          result = JSON.stringify(igtAndHelp.helpConventions, null, 2) + "," + result;
         }
         if (showInExportModal != null) {
           if ($("#export-text-area").val()) {
-            $("#export-text-area").val($("#export-text-area").val().replace(/^[/,"").replace(/]$/, "") + ",")
+            var newExportModalText = $("#export-text-area").val().replace(/^\[/, "").replace(/\]$/, "");
+            if (newExportModalText.indexOf("<") !== 0) {
+              newExportModalText = newExportModalText + ",";
+            }
+            $("#export-text-area").val(newExportModalText)
           }
-          $("#export-type-description").html(" as IGT JSON (Object Notation for Python, Java, PHP, MatLab scripts)");
+          $("#export-type-description").html(" as IGT JSON (Object Notation for consumption by Python, Java, PHP, MatLab scripts)");
           $("#export-text-area").val(
             "[" + $("#export-text-area").val() + result + "]");
           return $("#export-text-area").val();
         } else {
-          return asIGTJSON;
+          return igtAndHelp.igt;
         }
       },
 
       exportAsIGTXML: function(showInExportModal, orderedFields, printheader) {
+        var igtAndHelp = this.exportAsIGTWithHelpConventions("excapeForXMLplease");
 
-        var asIGTJSON = this.exportAsIGTJSON(showInExportModal, orderedFields, printheader);
         var xmlParser = new X2JS();
-        var xmlString = xmlParser.xml_json2string(asIGTJSON);
+        var result = xmlParser.json2xml_str({
+          datum: igtAndHelp.igt
+        });
 
-        return xmlString;
+        // Ignore the print header, print it if there is nothing in the export box
+        if (printheader || !$("#export-text-area").val()) {
+          result =
+            xmlParser.json2xml_str({
+              fieldConventions: igtAndHelp.helpConventions
+            }) +
+            "\n" +
+            result;
+        }
+        if (showInExportModal != null) {
+          if ($("#export-text-area").val()) {
+            var newExportModalText = $("#export-text-area").val().replace('<?xml version="1.0" encoding="UTF-8"?><datalist>',"").replace("</datalist>","");
+            if (newExportModalText) {
+              newExportModalText = newExportModalText + "\n";
+            }
+            $("#export-text-area").val(newExportModalText)
+          }
+          $("#export-type-description").html(" as IGT <a href='http://www.freeformatter.com/xml-formatter.html' target='_blank'>XML</a> (XML markup for Java processing etc)");
+          $("#export-text-area").val( '<?xml version="1.0" encoding="UTF-8"?><datalist>'+ $("#export-text-area").val() + result+ "</datalist>");
+          return $("#export-text-area").val();
+        } else {
+          return result;
+        }
+
       },
-
       /**
        * Encrypts the datum if it is confidential
        *
