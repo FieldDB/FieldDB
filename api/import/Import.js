@@ -901,7 +901,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(lineCSV) {
       // parse csv line by line into array
       var CSV = [];
-
+      var csvCharacter = ",";
+      this.debug(lineCSV, typeof lineCSV);
+      var matches = lineCSV.split(csvCharacter);
+      if (matches.length < 2) {
+        csvCharacter = ";";
+      }
       // Insert space before character ",". This is to anticipate
       // "split" in IE
       // try this:
@@ -912,9 +917,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       //
       // You will see unexpected result!
       //
-      lineCSV = lineCSV.replace(/,/g, " ,");
+      lineCSV = lineCSV.replace(new RegExp(csvCharacter, "g"), " " + csvCharacter);
 
-      lineCSV = lineCSV.split(/,/g);
+      lineCSV = lineCSV.split(new RegExp(csvCharacter, "g"));
 
       // This is continuing of "split" issue in IE
       // remove all trailing space in each field
@@ -932,7 +937,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         if (lineCSV[i].match(/"$/)) {
           if (fstart >= 0) {
             for (j = fstart + 1; j <= i; j++) {
-              lineCSV[fstart] = lineCSV[fstart] + "," + lineCSV[j];
+              lineCSV[fstart] = lineCSV[fstart] + csvCharacter + lineCSV[j];
               lineCSV[j] = "-DELETED-";
             }
             fstart = -1;
