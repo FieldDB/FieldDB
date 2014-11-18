@@ -24,6 +24,6 @@ function(doc) {
       emit(enteredByUser, datum);
     }
   } catch (e) {
-    emit(e, 1);
+    //emit(e, 1);
   }
 }
