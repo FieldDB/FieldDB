@@ -133,6 +133,16 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
         return false;
       },
+      "click .WordPress": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsWordPress", true);
+        return false;
+      },
       "click .XML": function(e){
         if(e){
           e.stopPropagation();
@@ -279,6 +289,7 @@ define( [
       jsonToRender.locale_Edit_Datalist = Locale.get("locale_Edit_Datalist");
       jsonToRender.locale_Encrypt_checked = Locale.get("locale_Encrypt_checked");
       jsonToRender.locale_Export_checked_as_CSV = Locale.get("locale_Export_checked_as_CSV");
+      jsonToRender.locale_Export_checked_as_WordPress = Locale.get("locale_Export_checked_as_WordPress");
       jsonToRender.locale_Export_checked_as_XML = Locale.get("locale_Export_checked_as_XML");
       jsonToRender.locale_Export_checked_as_JSON = Locale.get("locale_Export_checked_as_JSON");
       jsonToRender.locale_Export_checked_as_LaTeX = Locale.get("locale_Export_checked_as_LaTeX");

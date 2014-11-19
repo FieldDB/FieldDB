@@ -1291,6 +1291,27 @@ define([
         return result;
       },
 
+      /**
+       * This function simply takes the utterance gloss and translation and puts
+       * them out as wordpress gloss plugin text so the user can use in their blog (although they
+       * really should use a dynamic widget instead so it gets updated if the database is updated.)
+       */
+      exportAsWordPress: function(showInExportModal) {
+        var asIGT = this.exportAsIGTWithHelpConventions().igt;
+        var result = "[gloss] " + (asIGT.utterance ? asIGT.utterance : "") + "\n" + (asIGT.morphemes ? asIGT.morphemes : "") + "\n" + (asIGT.gloss ? asIGT.gloss : "") + "" + " [/gloss]\n" + (asIGT.translation ? asIGT.translation : "") + "\n";
+
+        if (showInExportModal != null) {
+          if ($("#export-text-area").val()) {
+            var newExportModalText = $("#export-text-area").val();
+            newExportModalText = newExportModalText + "\n";
+            $("#export-text-area").val(newExportModalText)
+          }
+          $("#export-type-description").html(' as  <a href="https://wordpress.org/plugins/simple-interlinear-glosses/screenshots/" target="_blank">WordPress Gloss</a> (IGT Notation for WordPress Gloss Plugin)');
+          $("#export-text-area").val($("#export-text-area").val() + result);
+        }
+        return result;
+      },
+
       exportAsIGTWithHelpConventions : function(xmlEncode){
         var asIGTJSON = {
           _id: this.get("_id"),
