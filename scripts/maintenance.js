@@ -426,7 +426,6 @@ $.couch.allDbs({
   }
 });
 
-
 /*
 Deploy to all users
  */
@@ -446,6 +445,10 @@ $.couch.allDbs({
         } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
           console.log("deploying to a phophlo user");
         } else {
+          if (dbname.indexOf("anonymous") > -1) {
+            return;
+          } else {
+          }
           return; /* deploy to only beta testers and/or phophlo users */
         }
         var sourceDB = "";
