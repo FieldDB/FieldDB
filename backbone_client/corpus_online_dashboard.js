@@ -31,7 +31,7 @@ require.config({
     "CryptoJS": "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "$": "bower_components/jquery/dist/jquery.min",
+    "jquery": "bower_components/jquery/dist/jquery.min",
     "wikitext": "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
@@ -41,9 +41,8 @@ require.config({
     /* Backbone Model View Controller framework and its plugins and dependencies */
     "_": "bower_components/underscore/underscore",
     "underscore": "bower_components/underscore/underscore",
-    "backbonejs": "bower_components/backbone/backbone",
-    "jquery-couch": "libs/backbone_couchdb/jquery.couch",
-    "backbone": "libs/backbone_couchdb/backbone-couchdb",
+    "backbone": "bower_components/backbone/backbone",
+    "jquerycouch": "libs/backbone_couchdb/jquery.couch",
 
     "terminal": "libs/terminal/terminal",
 
@@ -57,13 +56,13 @@ require.config({
   shim: {
 
     "xml2json": {
-      deps: ["$"],
+      deps: ["jquery"],
       exports: "X2JS"
     },
 
     "wikitext": {
-      deps: ["$"],
-      exports: "$"
+      deps: ["jquery"],
+      exports: "jquery"
     },
 
     "OPrime": {
@@ -71,35 +70,35 @@ require.config({
       exports: "OPrime"
     },
 
-    "jquery-couch": {
+    "jquerycouch": {
       deps: ["wikitext"],
-      exports: "$"
+      exports: "jquery"
     },
 
     "bootstrap": {
-      deps: ["jquery-couch"],
+      deps: ["jquerycouch"],
       exports: "bootstrap"
     },
 
-    "backbonejs": {
-      deps: ["underscore", "bootstrap"],
-      exports: "Backbone"
-    },
+    // "backbonejs": {
+    //   deps: ["underscore", "bootstrap"],
+    //   exports: "Backbone"
+    // },
     "handlebarsjs": {
-      deps: ["backbonejs", "$"],
+      deps: ["backbone", "jquery"],
       exports: "Handlebars"
     },
     "handlebars": {
       deps: ["handlebarsjs"],
       exports: "Handlebars"
     },
-    "backbone": {
-      deps: ["backbonejs", "jquery-couch", "handlebars"],
-      exports: "Backbone"
-    },
+    // "backbone": {
+    //   deps: ["_", "jquerycouch", "handlebars"],
+    //   exports: "Backbone"
+    // },
 
     "terminal": {
-      deps: ["bootstrap", "$"],
+      deps: ["bootstrap", "jquery"],
       exports: "Terminal"
     }
 
@@ -107,8 +106,7 @@ require.config({
 });
 
 // Initialization
-require(["app/App", "backbone", "OPrime"], function(App,
-  forcingpouchtoloadearly) {
+require(["app/App", "OPrime"], function(App) {
 
   console.warn("removing old lexicons to reduce storage use, and force fresh");
   for (var i = 0; i < localStorage.length; i++) {
