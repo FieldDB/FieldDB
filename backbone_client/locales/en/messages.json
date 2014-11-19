@@ -536,6 +536,9 @@
   "locale_Export_checked_as_CSV" : {
     "message" : "Export checked as CSV"
   },
+  "locale_Export_checked_as_WordPress" : {
+    "message" : "Export checked as WordPress Gloss format"
+  },
   "locale_Export_checked_as_XML" : {
     "message" : "Export checked as XML"
   },
@@ -580,6 +583,9 @@
   },
   "locale_CSV_Tooltip" : {
     "message" : "Export datum as CSV"
+  },
+  "locale_WordPress_Tooltip" : {
+    "message" : "Export datum as WordPress Gloss format"
   },
   "locale_XML_Tooltip" : {
     "message" : "Export datum as XML"

@@ -126,6 +126,10 @@ define([
         this.model.exportAsCSV(true, null);
         $("#export-modal").modal("show");
       },
+      "click .WordPress" : function(){
+        this.model.exportAsWordPress(true, null);
+        $("#export-modal").modal("show");
+      },
       "click .XML" : function(){
         this.model.exportAsIGTXML(true, null);
         $("#export-modal").modal("show");
@@ -261,6 +265,7 @@ define([
 
 //    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip);
       jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
+      jsonToRender.locale_WordPress_Tooltip = Locale.get("locale_WordPress_Tooltip");
       jsonToRender.locale_XML_Tooltip = Locale.get("locale_XML_Tooltip");
       jsonToRender.locale_JSON_Tooltip = Locale.get("locale_JSON_Tooltip");
       jsonToRender.locale_Drag_and_Drop_Audio_Tooltip = Locale.get("locale_Drag_and_Drop_Audio_Tooltip");
