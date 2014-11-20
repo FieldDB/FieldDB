@@ -436,7 +436,7 @@ module.exports = function(grunt) {
     // 'filerev',
     'usemin',
     // 'htmlmin',
-    'compress'
+    // 'compress'
   ]);
 
   grunt.registerTask('default', [
@@ -444,4 +444,10 @@ module.exports = function(grunt) {
     'test',
     'build'
   ]);
+
+  grunt.registerTask('dist', [
+    'jshint', 
+    'test', 
+    'build', 
+    'compress']);
 };
