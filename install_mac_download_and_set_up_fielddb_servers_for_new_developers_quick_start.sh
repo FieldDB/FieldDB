@@ -149,7 +149,7 @@ echo " Installing client side dependancies (managed by Bower)"
 bower install
 
 echo " Creating a private services file which you can use to change the servers the spreadsheet app contacts"
-cp js/private_services_sample.js js/private_services.js
+cp app/scripts/private_services_sample.js app/scripts/private_services.js
 grunt
 
 echo "Building the Core angular components, they are written in Angular.js and need you to bower install its dependancies before you can open the other components which depend on them. It also uses sym links for local files in this project instead of bower "
