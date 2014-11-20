@@ -42,7 +42,7 @@ module.exports = function(grunt) {
         }
       },
       templates: {
-        files: ['index.html','<%= yeoman.app %>/views/{,*/}*.html'],
+        files: ['index.html', '<%= yeoman.app %>/views/{,*/}*.html'],
         tasks: ['ngtemplates'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -124,7 +124,7 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc',
         reporter: require('jshint-stylish'),
         ignores: [
-        '<%= yeoman.app %>/scripts/templates.js'
+          '<%= yeoman.app %>/scripts/templates.js'
         ]
       },
       all: {
@@ -133,7 +133,7 @@ module.exports = function(grunt) {
           '<%= yeoman.app %>/scripts/{,*/}*.js'
         ],
         ignores: [
-        '<%= yeoman.app %>/scripts/templates.js'
+          '<%= yeoman.app %>/scripts/templates.js'
         ]
       },
       test: {
@@ -276,7 +276,7 @@ module.exports = function(grunt) {
 
     ngtemplates: {
       app: {
-        options : {
+        options: {
           htmlmin: {
             collapseWhitespace: true,
             collapseBooleanAttributes: true,
@@ -385,7 +385,7 @@ module.exports = function(grunt) {
           cwd: 'dist/',
           src: ['**'],
           dest: ''
-      }]
+        }]
       }
     }
   });
@@ -446,8 +446,9 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('dist', [
-    'jshint', 
-    'test', 
-    'build', 
-    'compress']);
+    'jshint',
+    'test',
+    'build',
+    'compress'
+  ]);
 };
