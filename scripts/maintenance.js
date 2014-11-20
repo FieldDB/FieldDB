@@ -426,7 +426,6 @@ $.couch.allDbs({
   }
 });
 
-
 /*
 Deploy to all users
  */
@@ -445,8 +444,13 @@ $.couch.allDbs({
           // return;
         } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
           console.log("deploying to a phophlo user");
+          // return;
         } else {
-          return; /* deploy to only beta testers and/or phophlo users */
+          if (dbname.indexOf("anonymous") > -1) {
+            return;
+          } else {
+          }
+          return;  //deploy to only beta testers and/or phophlo users
         }
         var sourceDB = "";
         if (dbname.indexOf("activity_feed") > -1) {
