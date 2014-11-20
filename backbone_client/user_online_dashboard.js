@@ -30,91 +30,100 @@ if (window.location.origin.indexOf("localhost") == -1) {
 // Set the RequireJS configuration
 require.config({
   paths : {
-    /* Bootstrap user interface javascript files */
-    "bootstrap" : "libs/bootstrap/js/bootstrap.min",
+   /* Bootstrap user interface javascript files */
+    "bootstrap": "libs/bootstrap/js/bootstrap.min",
 
-    "CryptoJS" : "libs/Crypto_AES",
+    "CryptoJS": "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "$" : "bower_components/jquery/dist/jquery.min",
-    "wikitext" : "libs/jquery-wikitext",
+    "jquery": "bower_components/jquery/dist/jquery",
+    "wikitext": "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
-    "handlebars" : "libs/compiled_handlebars",
-    "handlebarsjs" : "bower_components/handlebars/handlebars.runtime",
+    "handlebars": "libs/compiled_handlebars",
+    "handlebarsjs": "bower_components/handlebars/handlebars.runtime",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
-    "_" : "bower_components/underscore/underscore",
-    "underscore" : "bower_components/underscore/underscore",
-    "backbonejs" : "bower_components/backbone/backbone",
-    "jquery-couch" : "libs/backbone_couchdb/jquery.couch",
-    "backbone" : "libs/backbone_couchdb/backbone-couchdb",
+    "_": "bower_components/underscore/underscore",
+    "underscore": "bower_components/underscore/underscore",
+    "backbone": "bower_components/backbone/backbone",
+    "jquerycouch": "libs/backbone_couchdb/jquery.couch",
 
-    "terminal" : "libs/terminal/terminal",
+    "terminal": "libs/terminal/terminal",
 
-    "text" : "libs/text",
+    "text": "libs/text",
 
-    "xml2json" : "libs/xml2json",
+    "xml2json": "libs/xml2json",
 
-    "oprime" : "libs/OPrime",
-    "OPrime" : "libs/webservicesconfig_devserver"
+    "oprime": "libs/OPrime",
+    "OPrime": "libs/webservicesconfig_devserver"
   },
   shim : {
 
-    "xml2json" : {
-      deps : [ "$" ],
-      exports : "X2JS"
+    "xml2json": {
+      deps: ["jquery"],
+      exports: "X2JS"
     },
 
-    "wikitext" : {
-      deps : [ "$" ],
-      exports : "$"
+    "wikitext": {
+      deps: ["jquery"],
+      exports: "jquery"
     },
 
-    "OPrime" : {
-      deps : [ "oprime" ],
-      exports : "OPrime"
+    "OPrime": {
+      deps: ["oprime"],
+      exports: "OPrime"
     },
 
-    "jquery-couch" : {
-      deps : [ "wikitext" ],
-      exports : "$"
+    "jquerycouch": {
+      deps: ["wikitext"],
+      exports: "jquery"
     },
 
-    "bootstrap" : {
-      deps : [ "jquery-couch" ],
-      exports : "bootstrap"
+    "bootstrap": {
+      deps: ["jquerycouch"],
+      exports: "bootstrap"
     },
 
-    "backbonejs" : {
-      deps : [ "_", "bootstrap" ],
-      exports : "Backbone"
+    // "backbonejs": {
+    //   deps: ["underscore", "bootstrap"],
+    //   exports: "Backbone"
+    // },
+    "handlebarsjs": {
+      deps: ["backbone", "jquery"],
+      exports: "Handlebars"
     },
-    "handlebarsjs" : {
-      deps : [ "backbonejs", "$" ],
-      exports : "Handlebars"
+    "handlebars": {
+      deps: ["handlebarsjs"],
+      exports: "Handlebars"
     },
-    "handlebars" : {
-      deps : [ "handlebarsjs" ],
-      exports : "Handlebars"
-    },
-    "backbone" : {
-      deps : [ "backbonejs", "jquery-couch", "handlebars" ],
-      exports : "Backbone"
-    },
+    // "backbone": {
+    //   deps: ["_", "jquerycouch", "handlebars"],
+    //   exports: "Backbone"
+    // },
 
-    "terminal" : {
-      deps : [ "bootstrap", "$" ],
-      exports : "Terminal"
+    "terminal": {
+      deps: ["bootstrap", "jquery"],
+      exports: "Terminal"
     }
 
   }
 });
 
 // Initialization
-require([ "user/UserApp", "backbone", "OPrime" ], function(App,
-    forcingpouchtoloadearly) {
-
+require([
+    "backbone",
+    "jquerycouch",
+    "libs/backbone_couchdb/backbone-couchdb",
+    "handlebars",
+    "user/UserApp",
+    "OPrime"
+  ], function(
+    Backbone,
+    jquerycouch,
+    backbonecouch,
+    Handlebars,
+    App) {
   try {
     var pieces = window.location.pathname.replace(/^\//, "").split("/");
     var pouchName = pieces[0];
