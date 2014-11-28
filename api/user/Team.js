@@ -1,104 +1,80 @@
-define([
-    "backbone",
-    "hotkey/HotKey",
-    "user/UserGeneric",
-    "permission/Permission",
-    "user/UserPreference",
-    "OPrime"
-], function(
-    Backbone, 
-    HotKey,
-    UserGeneric,
-    Permission,
-    UserPreference
-) {
-  var Team = UserGeneric.extend(
-  /** @lends Team.prototype */
-  {
-    /**
-     * @class Team extends from UserGeneric. It inherits the same attributes as UserGeneric but can 
-     * login. 
-     * 
-     * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 
-     * 
-     * @extends Backbone.Model
-     * @constructs
-     */
-    initialize: function(attributes) {
-      UserGeneric.__super__.initialize.call(this, attributes);
-      
-      
-      if(this.get("filledWithDefaults")){
-        this.fillWithDefaults();
-        this.unset("filledWithDefaults");
-      }
-      this.bind("change", this.checkPrefsChanged, this);
-    },
-    fillWithDefaults : function(){
-      // If there is no prefs, create a new one
-      if (!this.get("prefs")) {
-        this.set("prefs", new UserPreference());
-      }
-      
-      // If there is no permissions, create a new one
-      if (!this.permissions) {
-        this.permissions = new Permissions();
-      }
-      
-      // If there is no hotkeys, create a new one
-      if (!this.get("hotkeys")) {
-        this.set("hotkeys", new HotKey());//TODO this needs to become plural
-      }
-    },
-    defaults : {
-      // Defaults from UserGeneric
-      username : "",
-      password : "",
-      email : "",
-      gravatar : "user/user_gravatar.png",
-      researchInterest : "",
-      affiliation : "",
-      description : "",
-      subtitle : "",
-      corpuses : [],
-      dataLists : [],
-      mostRecentIds : {},
-      // Defaults from User
-      firstname : "",
-      lastname : "",
-      teams : [],
-      sessionHistory : []
-    },
+var UserMask = require("./UserMask").UserMask;
 
-    /**
-     * The subtitle function returns user's first and last names. 
-     */
-    subtitle: function () {
-      if (this.get("firstname") == undefined) {
-        this.set("firstname","");
-      }
-      
-      if (this.get("lastname") == undefined) {
-        this.set("lastname","");
-      }
-      
-      return this.get("firstname") + " " + this.get("lastname");
+/**
+ *
+ * @class Team extends from UserMask. It inherits the same attributes as UserMask but can
+ * login.
+ *
+ * @name  Team
+ * @extends UserMask
+ * @constructs
+ */
+var Team = function Team(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Team";
+  }
+  this.debug("Constructing Team: ", options);
+  UserMask.apply(this, arguments);
+};
+
+Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ {
+  constructor: {
+    value: Team
+  },
+
+  id: {
+    get: function() {
+      return "team";
     },
-    checkPrefsChanged : function(){
-      try{
-        window.appView.userPreferenceView.model = this.get("prefs");
-        window.appView.userPreferenceView.render();
-      }catch(e){
-        
+    set: function(value) {
+      if (value === this._id) {
+        return;
       }
-    },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
+      if (value !== "team") {
+        this.warn("Cannot set team id to anything other than \"team.\"");
       }
+      this._id = "team";
     }
-  });
+  },
 
-  return Team;
+  defaults: {
+    value: {
+      // Defaults from UserMask
+      username: "",
+      password: "",
+      email: "",
+      gravatar: "user/user_gravatar.png",
+      researchInterest: "",
+      affiliation: "",
+      description: "",
+      subtitle: "",
+      corpuses: [],
+      dataLists: [],
+      mostRecentIds: {},
+      // Defaults from User
+      firstname: "",
+      lastname: "",
+      teams: [],
+      sessionHistory: []
+    }
+  },
+
+  /**
+   * The subtitle function returns user's first and last names.
+   */
+  subtitle: {
+    get: function() {
+      return this.name;
+    },
+    set: function(value) {
+      if (value === this.name) {
+        return;
+      }
+      this.warn("subtitle is deprecated, use name instead.");
+      this.name = value;
+    }
+  }
+
 });
+
+exports.Team = Team;

@@ -53,7 +53,7 @@
   },
   "locale_Instructions_to_show_on_dashboard" : {
     "comment" : "<p>Welcome! This is your Corpus dashboard. On the left side, there are Corpus and Elicitation Session quick-views, both of which you    can make full screen by clicking the icon on the top right corner. Full    screen shows you details of the Corpus and Elicitation Session. If this   is your first time seeing this message, you should change your corpus   title and description by clicking <i class=' icon-edit'></i>. You can hover over any    icon to see what the icon does. You should also change your session goals     and date for your first elicitation session.</p>    <p>For more help text, videos and userguide, click the <span class='caret'></span> on the top right corner of the app.     To more information about what a 'Corpus' is, click <i class=' icon-cogs resize-full'></i>.     It will show the corpus settings, which contains explanations of each component of a 'Corpus.'</p>    <p>This is the first draft of these instructions. Please help us make this better. <a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_new'>Contact us</a> </p>",
-    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=' icon-edit'></i>. To see what Corpus consists of, click <i class=' icon-cogs resize-full'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=' icon-edit'></i>. Click <i class=' icon icon-resize-full'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class='caret'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_new'>Contact us</a> </p>"    
+    "message" : "<p>Welcome! This is your Corpus dashboard. If this is your first time seeing this message, please do the following: </p> <p><b>Corpus</b> On the left side, there is Corpus quick-view. Edit your corpus title and description by clicking <i class=' icon-edit'></i>. To see what Corpus consists of, click <i class=' icon-cogs resize-full'></i>. </p> <p><b>Elicitation Session</b> Below the Corpus quick-view, there is Elicitation Session quick-view. Edit the goal and date for your first elicitation session by clicking <i class=' icon-edit'></i>. Click <i class=' icon icon-resize-full'></i> to see more details of Elicitation Session. </p> <p> You can hover over any icon to see what the icon does. For more help text, videos and userguide, click the <span class='caret'></span> on the top right corner of the app. </p> <p>This is the first draft of these instructions. Please help us make this better. <a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_new'>Contact us</a> </p>"
   },
   "locale_elicitation_sessions_explanation" : {
     "message" : "<p>Like in the real world, an Elicitation Session can have a variety of forms. For example: a 1 hour session with a language consultant, a 3 hour field methods class with several speakers, an extended conversation or narrative, or data from a file import. </p> <p>You can describe various aspects of an Elicitation Session such as date, goal/topic, consultant(s), etc. by clicking the <i class='icons icon-edit'></i> icon in Dashboard view. For additional options, click on the <i class='icon-calendar'></i> icon beside the session name in the list below.</p> <p>Any description you enter will be displayed in the list of Elicitation Sessions below to help you identify them. This information will also be automatically copied into every Datum that is associated with the Session, so that you can search for individual Datum by date, consultant, dialect, etc. </p>"
@@ -66,6 +66,9 @@
   },
   "locale_datum_fields_explanation" : {
     "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class='icon-list-alt'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class='icon-question-sign'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class='icons icon-edit'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
+  },
+  "locale_session_fields_explanation" : {
+    "message" : "<p>Session Fields are fields where you can add information about your data which is shared across all the data in an elicitaiton session or in a published broadcast or other document which was the source of the data. There fields are usually things like who the speaker was, who published the audio, what device the audio was recorded on etc. If you have the transcript already in digital form, you should try importing it rather than re-typing all the data. </p> <p>By default, the app comes with a few default fields which are common for elicitation sessions. If your data comes from other sources (such as published documents, a storybook or a radio broadcast etc) you can add more fields here.  You can add any number of fields (we have tested using over 400 fields). </p> <p>If you add fields here, you will see them in the Session Edit next time you want to edit a session.</p><p>These fields (shown below) are also automatically available in search. You can choose to encrypt particular fields (e.g. consultants). If you mark an Elicitation Session as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a publisher field or a date elicted field, as these are usually purely a metadata and may not transmit any personal information which your consultants would like to keep confidential. </p><p> Each field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class='icon-question-sign'></i> next to the  field label in the Session Edit view. </p><p>You can edit the help text by clicking <i class='icons icon-edit'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
   },
     "locale_conversation_fields_explanation" : {
     "message" : "<p>Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a 'location' field, but instead choose to encrypt a 'world knowledge' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class='icon-question-sign'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
@@ -196,6 +199,9 @@
   "locale_Datum_field_settings" : {
     "message" : "Datum Field Settings"
   },
+   "locale_Session_field_settings" : {
+    "message" : "Elicitation Session/Source Field Settings"
+  },
   "locale_Conversation_field_settings" : {
     "message" : "Conversation Field Settings"
   },
@@ -302,7 +308,7 @@
     "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"
   },
   "locale_Consultants" : {
-    "message" : "Consultant(s):"
+    "message" : "Speaker(s):"
   },
   "locale_Goal" : {
     "message" : "Goal:"
@@ -320,9 +326,9 @@
     "message" : "% completed."
   },
   "locale_Import_Instructions" : {
-    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus's existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a 'datum' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>", 
+    "comment" : " <ol> <li>Type, or Drag and drop a file/text (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus's existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a 'datum' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li><li>(Click on the home button to do something else while it imports your data in the background.)</li> </ol>",
     "message" : "Everyone's data is different. You might know some <a href='http://www.facebook.com/LingSyncApp'>fellow users</a> who could suggest how to import yours: "
-  }, 
+  },
   "locale_Import_First_Step" : {
     "message" : "<p>Step 1: Drag & drop, copy-paste or type your data into the text area, or select audio/video file(s) from your computer. Yes, you can edit the data inside the text area.</p>"
   },
@@ -464,6 +470,9 @@
   "locale_Add_New_Datum_Field_Tooltip" : {
     "message" : "Add new datum field"
   },
+  "locale_Add_New_Session_Field_Tooltip" : {
+    "message" : "Add new elicitation session field"
+  },
   "locale_Add_New_Conversation_Field_Tooltip" : {
     "message" : "Add new conversation field"
   },
@@ -527,6 +536,15 @@
   "locale_Export_checked_as_CSV" : {
     "message" : "Export checked as CSV"
   },
+  "locale_Export_checked_as_WordPress" : {
+    "message" : "Export checked as WordPress Gloss format"
+  },
+  "locale_Export_checked_as_XML" : {
+    "message" : "Export checked as XML"
+  },
+  "locale_Export_checked_as_JSON" : {
+    "message" : "Export checked as JSON"
+  },
   "locale_Hide_Datalist" : {
     "message" : "Hide datalist"
   },
@@ -565,6 +583,15 @@
   },
   "locale_CSV_Tooltip" : {
     "message" : "Export datum as CSV"
+  },
+  "locale_WordPress_Tooltip" : {
+    "message" : "Export datum as WordPress Gloss format"
+  },
+  "locale_XML_Tooltip" : {
+    "message" : "Export datum as XML"
+  },
+  "locale_JSON_Tooltip" : {
+    "message" : "Export datum as JSON"
   },
   "locale_of" : {
     "message" : "of"

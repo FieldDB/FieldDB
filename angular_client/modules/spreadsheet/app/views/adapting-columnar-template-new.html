@@ -1,0 +1,23 @@
+<form ng-submit="createRecord(newFieldData, $event)" >
+  <div class="span1" >
+    <input
+    ng-blur="markNewAsEdited()"
+    class="span2"
+    type="text"
+    ng-model="newFieldData['judgement']"
+    placeholder="*#?"
+    title="Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you team can choose any symbol for this meaning." />
+  </div>
+  <div class="span5" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
+  </div>
+  <div class="span5" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="second">
+  </div>
+  <div class="span2">
+    <button ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false">
+      <i class="fa whiteicon fa-plus">
+      </i>
+      Create New
+    </button>
+  </span>
+</form>
+

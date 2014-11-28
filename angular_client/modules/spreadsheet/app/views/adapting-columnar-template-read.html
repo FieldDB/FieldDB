@@ -1,0 +1,97 @@
+<div class="span1 search_checkbox" ng-show="searching==true">
+  <input type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
+</div>
+<div class="span1" >
+  <span title="Grammaticality Judgement">
+    {{datum['judgement']}}
+  </span>
+</div>
+<div ng-class="{span5: searching!=true, span4: searching==true}">
+  <span ng-repeat="corpusField in fieldsInColumns.first" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
+    {{datum[corpusField.label] | neverEmpty}}
+  </span>
+</div>
+<div ng-class="{span5: searching!=true, span4: searching==true}">
+  <span ng-repeat="corpusField in fieldsInColumns.second" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
+    {{datum[corpusField.label] | neverEmpty}}
+  </span>
+</div>
+<div class="span2 entered_modified_info">
+  <span ng-show="searching==true">
+    <button ng-hide="writePermissions==false" class="btn btn-primary" ng-click="editSearchResults($index)">
+      <i class="fa whiteicon fa-pencil">
+      </i>
+      Edit
+    </button>
+    <br />
+    <br />
+  </span>
+  <span title="Date entered">
+    <i class="fa fa-clock-o">
+    </i>
+    {{datum.dateEntered | standardDate}} <span ng-hide="!datum.enteredByUser">
+    <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=15&d=identicon">
+    <br />
+  </span>
+  <br />
+  <span title="Date modified">
+    <i class="fa fa-save">
+    </i>
+    {{datum.dateModified | standardDate}}
+  </span>
+  <!-- <span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa fa-group"> </i> </span> -->
+  <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
+    <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}}" />
+  </span>
+  <span>
+    <br />
+    <i ng-show="datum.hasAudio==true" class="fa {{recordingIcon}}">
+    </i>
+    <!-- <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i> -->
+  </span>
+</div>
+<div class="row" ng-show="datum.comments[0]!=undefined">
+  <div class="span5 ">
+    <ul class="unstyled">
+      <li ng-repeat="comment in datum.comments">
+        <p>
+          <!-- <a ng-click="deleteComment(comment, datum)" class=" delete_button" > <i class="fa fa-times-circle"> </i> </a> -->
+          <img class="" title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=15&d=identicon">
+          &nbsp;
+          <!-- <i class="fa fa-clock-o"> </i> {{comment.timestamp | standardDateFromTimestamp}} -->
+          <i class=" fa fa-comment">
+          </i>
+          {{comment.text}}
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row" ng-show="searching==true">
+  <div class="span9 offset1">
+    <table>
+      <tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
+        <td>
+          <span class="form-horizontal">
+            <audio controls>
+              <source ng-src="{{audioFile.filename}}" type="audio/wav"/>
+            </audio>
+          </span>
+        </td>
+        <td>
+          <span class="form-horizontal">
+            <p>
+              {{audioFile.description}}
+            </p>
+          </span>
+        </td>
+        <td>
+          <a href="{{audioFile.filename}}" target="_blank">
+            <i class="fa whiteicon fa-link">
+            </i>
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

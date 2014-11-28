@@ -426,7 +426,6 @@ $.couch.allDbs({
   }
 });
 
-
 /*
 Deploy to all users
  */
@@ -440,10 +439,18 @@ $.couch.allDbs({
           console.log(dbname + "  is not a corpus or activity feed ");
           return;
         }
-        if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
+        if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
           console.log("deploying to a beta tester");
+          // return;
+        } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
+          console.log("deploying to a phophlo user");
+          // return;
         } else {
-          //return; /* deploy to only beta testers */
+          if (dbname.indexOf("anonymous") > -1) {
+            return;
+          } else {
+          }
+          return;  //deploy to only beta testers and/or phophlo users
         }
         var sourceDB = "";
         if (dbname.indexOf("activity_feed") > -1) {
@@ -490,7 +497,7 @@ $.couch.allDbs({
           console.log(dbname + "  is not a corpus or activity feed ");
           return;
         }
-        if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
+        if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("anonymous") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
           console.log("ignoring a beta tester");
           return;
         } else {}
@@ -952,7 +959,8 @@ database.allDocs({
 Add lingllama-communitycorpus to all users who have access to lingllama and prevent anyone from editing the user study data
  */
 Array.prototype.getUnique = function() {
-  var u = {}, a = [];
+  var u = {},
+    a = [];
   for (var i = 0, l = this.length; i < l; ++i) {
     if (u.hasOwnProperty(this[i])) {
       continue;
@@ -1041,7 +1049,8 @@ database.allDocs({
 Merge users roles
  */
 Array.prototype.getUnique = function() {
-  var u = {}, a = [];
+  var u = {},
+    a = [];
   for (var i = 0, l = this.length; i < l; ++i) {
     if (u.hasOwnProperty(this[i])) {
       continue;
@@ -1415,9 +1424,9 @@ $.couch.allDbs({
 Convert ACRA activities into fielddb activies
  */
 // var lastPosition = 1403805265615; // 1403792172786 // 1402818525880 // 1403792172786
-var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1402818226441", "anonymous1400736954477", "anonymous1400736954477", "anonymous1399110330026", "anonymous1399110330026", "anonymous1399110330026", "anonymous1400736954477", "anonymous1399110330026", "anonymous1400736954477", "anonymous1398813694591", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398684166784", "anonymous1398813694591", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398684166784", "anonymous1398352584238", "anonymous1398352584238", "testinganonymous1397397203061", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1398067003561", "anonymous1398067003561", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397669513717", "anonymous1398352584238", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1397669513717", "testinganonymous1397397203061", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397886261314", "anonymous1397770209950", "anonymous1397770209950", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "anonymous1397933228605", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397886261314", "testinganonymous1397397203061", "anonymous1397770209950", "anonymous1397770209950", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1397397203061", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397038853807", "anonymous1397045636195", "anonymous1397045636195", "testinganonymous1396545191821", "testinganonymous1396545191821", "testinganonymous1396545191821", "anonymous1397330457860", "anonymous1397380321265", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397038853807", "anonymous1397045636195", "anonymous1397045636195", "anonymous1396806997435", "anonymous1396806997435"];
+var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1400736954477", "anonymous1399110330026", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397770209950", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397045636195", "anonymous1396806997435", "anonymous1401873037326", "anonymous1406914718135", "anonymous1406763577954", "anonymous1406297431603", "anonymous1406234565430", "anonymous1402474075836", "anonymous1405713207104", "anonymous1405713402347", "anonymous1404380629344", "anonymous1404965136766", "anonymous1404797396604", "anonymous1404357779017", "anonymous1407418050247", "anonymouskartulispeechrecognition1407415600066", "anonymouskartulispeechrecognition1407340889235", "anonymous1406189989271", "anonymous1406137962123", "anonymous1402771637598", "anonymous1404546617895", "anonymous1404543172048", "anonymous1404510294987", "anonymous1404477292397", "anonymous1404379286889", "anonymouskartulispeechrecognition1404251000382", "anonymous1403954098791", "anonymous1403820277996", "anonymous1403770114403", "anonymous1403695449072", "anonymous1403614517620", "anonymous1403215176702", "anonymous1401396176832", "anonymous1397372490908", "anonymous1396791663422", "anonymous1396717008518", "anonymous1409178041951", "anonymous1409083978482", "anonymous1409076300415", "anonymous1409059894468", "anonymous1408790883646", "anonymous1408786327026", "anonymous1408521814189", "anonymous1408491280401", "anonymous1407738363221", "anonymous1408093521792", "anonymous1407980250076", "anonymous1405161268203", "anonymous1403293874554", "anonymous1406620532197"];
 var database = $.couch.db("acra-learnx");
-var limit = 1000;
+var limit = 4000;
 var saved = 0;
 database.view("fielddb/activities?limit=" + limit, {
   // database.view("fielddb/activities", {
@@ -1436,36 +1445,64 @@ database.view("fielddb/activities?limit=" + limit, {
       // console.log(pouchname);
       delete activity.pouchname;
       // console.log(pouchname);
+      // if (!pouchname) {
+      //   console.log(row);
+      // }
+      // return;
       var activityDB = $.couch.db(pouchname);
+      activity.originalId = activity._id + '';
+      activity.originalRev = activity._rev + '';
+
+      //remove old activities, instead go through each activity feed since we cant find all all the versions here
+      if (false && activity._rev.indexOf("3-") === 0) {
+        activityDB.openDoc(activity._id, {
+          success: function(serverResults) {
+            console.log("found duplicate activity for " + serverResults._id + ' rev: ' + serverResults._rev);
+          },
+          error: function(serverResults) {
+            // console.log("There was a problem removing the activity." + activity._id);
+          }
+        });
+        activityDB.openDoc(activity._id + activity._rev, {
+          success: function(serverResults) {
+            console.log("found duplicate activity for " + serverResults._id + ' rev: ' + serverResults._rev);
+          },
+          error: function(serverResults) {
+            // console.log("There was a problem removing the activity." + activity._id);
+          }
+        });
+      }
+
+      activity._id = activity._id + '_rev_' + activity._rev;
+      delete activity._rev;
       activityDB.saveDoc(activity, {
         success: function(serverResults) {
           console.log("saved activity for " + pouchname, JSON.stringify(serverResults));
-          database.removeDoc(activity, {
-            success: function(serverResults) {
-              console.log("removed activity for " + activity._id);
-            },
-            error: function(serverResults) {
-              console.log("There was a problem removing the activity." + activity._id);
-            }
-          });
-        },
-        error: function(serverResults) {
-          console.log("There was a problem saving the activity.", serverResults);
-          if (serverResults !== 409) {
-            console.log(activity);
-          } else {
+          if (activity.teamOrPersonal === "personal") {
+            activity._id = activity.originalId;
+            activity._rev = activity.originalRev;
             database.removeDoc(activity, {
               success: function(serverResults) {
-                console.log("removed activity for " + activity._id);
+                console.log("removed activity for " + activity.originalId + ' rev: ' + activity.originalRev);
               },
               error: function(serverResults) {
                 console.log("There was a problem removing the activity." + activity._id);
               }
             });
           }
+        },
+        error: function(serverResults) {
+          console.log("There was a problem saving the activity.", serverResults);
+          if (serverResults !== 409) {
+            console.log(activity);
+          } else {
+            console.log("Conflict saving", serverResults);
+          }
 
           if (serverResults === 404) {
-            userswhoarentregisteredyet.push(activity.user.username);
+            if (userswhoarentregisteredyet.indexOf(activity.user.username) < 0) {
+              userswhoarentregisteredyet.push(activity.user.username);
+            }
           }
         }
       });
@@ -1473,9 +1510,191 @@ database.view("fielddb/activities?limit=" + limit, {
 
   },
   error: function(error) {
-    console.log("There was no activities view ", +JSON.stringify(error));
+    console.log("Couldnt open the activities view ", +JSON.stringify(error));
   }
 });
+
+/*
+Move activites that are in communtiy georgian but should be in speech recognition
+
+"debugging/activities_which_are_suposedt_to_be_inspeechrec":
+
+function(doc) {
+  try {
+    if (doc.collection == "activities" || doc.teamOrPersonal) {
+      if (doc.appVersion === "2.4.1" || doc.appVersion === "2.4.0") {
+        var usersactivitydb = doc.user.username + "-firstcorpus-activity_feed"
+        emit(usersactivitydb, doc);
+      }
+    }
+  } catch (e) {
+    emit(doc, e);
+  }
+};
+
+
+*/
+var database = $.couch.db("community-georgian-activity_feed");
+var activityDB = $.couch.db("speechrecognition-kartuli-activity_feed");
+var limit = 400;
+database.view("debugging/activities_which_are_suposedt_to_be_inspeechrec?limit=" + limit, {
+  // database.view("fielddb/activities", {
+  success: function(actvities) {
+    // console.log(actvities.rows);
+    actvities.rows.map(function(row) {
+
+      var usersactivitydb = row.key;
+      var activity = row.value;
+      $.ajax({
+        url: "/" + usersactivitydb + "/" + activity._id,
+        dataType: "json",
+        success: function(doc) {
+          console.log("The users activity was fine.");
+
+          $.ajax({
+            url: "/speechrecognition-kartuli-activity_feed/" + activity._id,
+            dataType: "json",
+            success: function(doc) {
+              console.log("The team activity was fine.");
+            },
+            error: function(error) {
+              console.log("The team activity was missing, saving it. ", activity._id);
+              delete activity._rev;
+              activityDB.saveDoc(activity, {
+                success: function(serverResults) {
+                  console.log("saved activity  ", JSON.stringify(serverResults));
+                  database.removeDoc(activity, {
+                    success: function(serverResults) {
+                      console.log("removed activity  ");
+                    },
+                    error: function(serverResults) {
+                      console.log("There was a problem removing the activity." + activity._id);
+                    }
+                  });
+                },
+                error: function(serverResults) {
+                  console.log("There was a problem saving the activity.", serverResults);
+                  if (serverResults !== 409) {
+                    console.log(activity);
+                  } else {
+                    console.log("Conflict saving", serverResults);
+                  }
+                }
+              });
+
+            }
+          });
+
+        },
+        error: function(error) {
+          console.log("The users activity was missing", error);
+        }
+      });
+
+    });
+  },
+  error: function(error) {
+    console.log("Couldnt open the activities view ", +JSON.stringify(error));
+  }
+});
+
+/*
+  Recover all deleted ACRA activities
+  http://garmoncheg.blogspot.ca/2013/11/couchdb-restoring-deletedupdated.html
+  http://stackoverflow.com/questions/4273140/couchdb-changes-notifications-jquery-couch-js-couch-app-db-changes-usage
+ */
+var database = $.couch.db("acra-learnx");
+var limit = 2000;
+var saved = 0;
+$.ajax({
+  url: "/acra-learnx/_changes",
+  dataType: "json",
+  success: function(docs) {
+    console.log("All docs ", docs);
+    docs.results.map(function(details) {
+      if (!details.deleted) {
+        return;
+      }
+      if (details.id.indexOf("design") > -1) {
+        return;
+      }
+      if (saved > limit) {
+        return;
+      }
+      saved += 1;
+      var id = details.id;
+      // console.log("Found a deleted document. Getting its revisions", id);
+      $.ajax({
+        url: "/acra-learnx/" + id + "?revs=true&open_revs=all",
+        success: function(revs) {
+          var json = revs.replace(/^[^{]*{/, "{").replace(/\}\}[^}]*$/, "}}");
+          try {
+            json = JSON.parse(json);
+          } catch (e) {
+            console.log("unexpected reply from server " + revs, e);
+            return;
+          }
+          if (json._revisions.length > 2) {
+            console.warn("This id is strange, it has many revisions.  Not undeleting it.", json);
+            return;
+          }
+          var rev = "1-" + json._revisions.ids[1];
+          console.log("All revs ", json, " recovering rev " + rev);
+          $.ajax({
+            url: "/acra-learnx/" + id + "?rev=" + rev,
+            dataType: "json",
+            success: function(doc) {
+              // console.log("Recovered doc", doc);
+              doc._rev = json._rev;
+              database.saveDoc(doc, {
+                success: function(serverResults) {
+                  console.log("Undeleted doc  ", JSON.stringify(serverResults));
+                },
+                error: function(serverResults) {
+                  console.log("There was a problem undeleting the doc.", json, serverResults);
+                }
+              });
+
+            },
+            error: function(error) {
+              console.log("Couldnt get doc ", error);
+            }
+          });
+        },
+        error: function(error) {
+          console.log("Couldnt get doc's revision ", error);
+        }
+      });
+    });
+  },
+  error: function(error) {
+    console.log("Couldnt open all docs ", JSON.stringify(error));
+  }
+});
+
+/* Remove duplicates from Acra activity conversion */
+var database = $.couch.db("community-georgian-activity_feed");
+var limit = 4;
+database.view("debugging/remove-duplicates?limit=" + limit, {
+  success: function(actvities) {
+    // console.log(actvities.rows);
+    actvities.rows.map(function(row) {
+      console.log("Would remove ", row.value);
+      database.removeDoc(row.value, {
+        success: function(serverResults) {
+          console.log("removed duplicate activity ", serverResults);
+        },
+        error: function(serverResults) {
+          console.log("There was a problem removing the duplicate activity." + row);
+        }
+      });
+    })
+  },
+  error: function(error) {
+    console.log("Couldnt open all duplicates ", JSON.stringify(error));
+  }
+});
+
 
 /*
 Make sure all speech rec activities are in the central activities too

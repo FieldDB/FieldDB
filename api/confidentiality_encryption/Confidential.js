@@ -1,167 +1,182 @@
-if ('undefined' === typeof window) {
-  var window = {};
+/* globals window */
+var AES = require("crypto-js/aes");
+var CryptoEncoding = require("crypto-js/enc-utf8");
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+
+try {
+  if (!window.atob) {
+    console.log("ATOB is not defined, loading from npm");
+  }
+} catch (e) {
+  console.log(e);
+  /*jshint -W020 */
+  window = {};
+  window.atob = require("atob");
+  window.btoa = require("btoa");
 }
-(function(exports) {
-    var CryptoJS = exports.CryptoJS || CryptoJS || require("../../backbone_client/libs/Crypto_AES");
-    var OPrime = exports.OPrime || OPrime || require("../../backbone_client/libs/OPrime");
 
+/**
+ * @class Confidential
+ * @name Confidential
+ *
+ * @description makes it possible to generate pass phrases (one per
+ *        corpus) to encrypt and decrypt confidential data points. The
+ *        confidential data is stored encrypted, and can only be decrypted
+ *        if one has the corpus" secret key, or if one is logged into the
+ *        system with their user name and password. This allows the corpus
+ *        to be shared with anyone, with out worrying about confidential
+ *        data or consultant stories being publically accessible. We are
+ *        using the AES cipher algorithm.
+ *
+ * The Advanced Encryption Standard (AES) is a U.S. Federal Information
+ * Processing Standard (FIPS). It was selected after a 5-year process where
+ * 15 competing designs were evaluated.
+ *
+ * <a href="http://code.google.com/p/crypto-js/">More information on
+ * CryptoJS</a>
+ *
+ * @extends Object
+ *
+ * @constructs
+ *
+ */
+var Confidential = function Confidential(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Confidential";
+  }
+  this.debug("Constructing Confidential: ", options);
+  if (options && options.filledWithDefaults) {
+    this.fillWithDefaults();
+    delete options.filledWithDefaults;
+  }
+  FieldDBObject.apply(this, arguments);
+};
 
+/**
+ * The secretkeygenerator uses a "GUID" like generation to create a string
+ * for the secret key.
+ *
+ * @returns {String} a string which is likely unique, in the format of a
+ *          Globally Unique ID (GUID)
+ */
+Confidential.secretKeyGenerator = FieldDBObject.uuidGenerator;
 
-    
-      /**
-       * @class Confidential 
-       * @name Confidential 
-       *
-       * @description makes it possible to generate pass phrases (one per
-       *        corpus) to encrypt and decrypt confidential data points. The
-       *        confidential data is stored encrypted, and can only be decrypted
-       *        if one has the corpus' secret key, or if one is logged into the
-       *        system with their user name and password. This allows the corpus
-       *        to be shared with anyone, with out worrying about confidential
-       *        data or consultant stories being publically accessible. We are
-       *        using the AES cipher algorithm.
-       *
-       * The Advanced Encryption Standard (AES) is a U.S. Federal Information
-       * Processing Standard (FIPS). It was selected after a 5-year process where
-       * 15 competing designs were evaluated.
-       *
-       * <a href="http://code.google.com/p/crypto-js/">More information on
-       * CryptoJS</a>
-       * 
-       * @extends Object
-       *
-       * @constructs
-       *
-       */
-    function Confidential() {
-      Object.call(this);
+Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confidential.prototype */ {
+  constructor: {
+    value: Confidential
+  },
+
+  decryptedMode: {
+    value: false
+  },
+
+  /**
+   * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
+   * encoding so that it looks like a string, and can be saved as a string in
+   * the corpus.
+   *
+   * @param message
+   *          A UTF8 string
+   * @returns Returns a base64 string prefixed with "confidential" so that the
+   *          views can choose to not display the entire string for the user.
+   */
+  encrypt: {
+    value: function(value) {
+      if (typeof value === "object") {
+        value = JSON.stringify(value);
+        this.debug("Converted object to string before encryption");
+      }
+      var result = AES.encrypt(value, this.secretkey);
+      this.verbose(this.secretkey, result.toString(), window.btoa(result.toString()));
+      // return the base64 version to save it as a string in the corpus
+      return "confidential:" + window.btoa(result.toString());
     }
+  },
 
-    Confidential.prototype = Object.create(Object.prototype);
-
-
-      Confidential.prototype.initialize = function() {
-        if (OPrime.debugMode) OPrime.debug("Initializing confidentiality module");
-
-        //      var encryptedMessage = this.encrypt("hi this is a longer message.");
-        //      console.log("encrypted" + encryptedMessage);
-        //
-        //      var decryptedMessage = this.decrypt(encryptedMessage);
-        ////      console.log("decrypted:" + decryptedMessage);
-        if (this.filledWithDefaults) {
-          this.fillWithDefaults();
-          delete this.filledWithDefaults;
-        }
-
-      };
-
-      Confidential.prototype.fillWithDefaults = function() {
-        if (this.secretkey == "This should be a top secret pass phrase.") {
-          this.secretkey = this.secretKeyGenerator();
-        }
-      };
-
-      Confidential.prototype.defaults = {
-        secretkey: "This should be a top secret pass phrase."
-      };
-
-      Confidential.prototype.decryptedMode = false;
-
-      Confidential.prototype.turnOnDecryptedMode = function(callback) {
-        this.decryptedMode = false;
-        if (typeof callback == "function") {
-          callback();
-        }
-      };
-
-      Confidential.prototype.turnOnDecryptedMode = function(callback) {
+  /**
+   * Decrypt uses this object's secret key to decode its parameter using the
+   * AES algorithm.
+   *
+   * @param encrypted
+   *          A base64 string prefixed (or not) with the word "confidential"
+   * @returns Returns the encrypted result as a UTF8 string.
+   */
+  decrypt: {
+    value: function(encrypted) {
+      var result = encrypted;
+      if (this.decryptedMode === undefined) {
         var self = this;
-        if (!this.decryptedMode) {
-          if (window.appView) {
-            window.appView.authView.showQuickAuthenticateView(function() {
-              //This happens after the user has been authenticated. 
-              self.decryptedMode = true;
-              if (typeof callback == "function") {
-                callback();
-              }
-            });
-          }
-        }
-      };
-
-      // Internal models: used by the parse function
-      Confidential.prototype.internalModels = {
-        // There are no nested models
-      };
-
-      Confidential.prototype.saveAndInterConnectInApp = function(callback) {
-
-        if (typeof callback == "function") {
-          callback();
-        }
-      };
-      /**
-       * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
-       * encoding so that it looks like a string, and can be saved as a string in
-       * the corpus.
-       *
-       * @param message
-       *          A UTF8 string
-       * @returns Returns a base64 string prefixed with "confidential" so that the
-       *          views can choose to not display the entire string for the user.
-       */
-      Confidential.prototype.encrypt = function(message) {
-        var result = CryptoJS.AES.encrypt(message, this.secretkey);
-        // return the base64 version to save it as a string in the corpus
-        return "confidential:" + btoa(result);
-
-      };
-
-      /**
-       * Decrypt uses this object's secret key to decode its parameter using the
-       * AES algorithm.
-       *
-       * @param encrypted
-       *          A base64 string prefixed (or not) with the word "confidential"
-       * @returns Returns the encrypted result as a UTF8 string.
-       */
-      Confidential.prototype.decrypt = function(encrypted) {
-        var resultpromise = encrypted;
-        if (!this.decryptedMode) {
-          var confid = this;
-          this.turnOnDecryptedMode(function() {
-            encrypted = encrypted.replace("confidential:", "");
-            // decode base64
-            encrypted = atob(encrypted);
-            resultpromise = CryptoJS.AES.decrypt(encrypted, confid.secretkey).toString(CryptoJS.enc.Utf8);
-            return resultpromise;
-          });
-        } else {
+        this.turnOnDecryptedMode(function() {
           encrypted = encrypted.replace("confidential:", "");
           // decode base64
-          encrypted = atob(encrypted);
-          resultpromise = CryptoJS.AES.decrypt(encrypted, this.secretkey).toString(CryptoJS.enc.Utf8);
-          return resultpromise;
+          encrypted = window.atob(encrypted);
+          self.verbose("Decrypting after turning on decrypted mode " + encrypted, self.secretkey);
+          result = AES.decrypt(encrypted, self.secretkey).toString(CryptoEncoding);
+          try {
+            if ((result.indexOf("{") === 0 && result.indexOf("}") === result.length - 1) || (result.indexOf("[") === 0 && result.indexOf("]") === result.length - 1)) {
+              result = JSON.parse(result);
+              self.debug("Decrypting an object");
+            }
+          } catch (e) {
+            self.verbose("Decrypting a non-object");
+          }
+          return result;
+        });
+      } else {
+        encrypted = encrypted.replace("confidential:", "");
+        // decode base64
+        encrypted = window.atob(encrypted);
+        this.verbose("Decrypting " + encrypted, this.secretkey);
+        result = AES.decrypt(encrypted, this.secretkey).toString(CryptoEncoding);
+        try {
+          if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]")) {
+            result = JSON.parse(result);
+            this.debug("Decrypting an object");
+          }
+        } catch (e) {
+          this.verbose("Decrypting a non-object");
         }
-      };
+        return result;
+      }
+    }
+  },
 
-      /**
-       * The secretkeygenerator uses a "GUID" like generation to create a string
-       * for the secret key.
-       *
-       * @returns {String} a string which is likely unique, in the format of a
-       *          Globally Unique ID (GUID)
-       */
-      Confidential.prototype.secretKeyGenerator = function() {
-        var S4 = function() {
-          return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-        };
-        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
-      };
+  secretkey: {
+    get: function() {
+      if (!this._secretkey) {
+        this._secretkey = "";
+      }
+      return this._secretkey;
+    },
+    set: function(value) {
+      if (value === this._secretkey) {
+        return;
+      }
+      if (!value) {
+        value = "";
+      }
+      this._secretkey = value.trim();
+    }
+  },
+
+  fillWithDefaults: {
+    value: function() {
+      if (this.secretkey === "This should be replaced with a top secret pass phrase.") {
+        this.secretkey = this.secretKeyGenerator();
+      }
+    }
+  },
+
+  turnOnDecryptedMode: {
+    value: function(callback) {
+      this.decryptedMode = false;
+      if (callback) {
+        callback();
+      }
+    }
+  }
 
 
-      Confidential.prototype.constructor = Confidential;
+});
 
-      exports.Confidential = Confidential;
-
-    })(window || exports)
+exports.Confidential = Confidential;

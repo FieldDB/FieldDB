@@ -1,0 +1,54 @@
+<div class="row">
+
+  <a class="datum_id" name="{{datum._id}}"></a>
+
+
+  <div class="col-md-6 images-area">
+    <div ng-repeat="image in datum.images._collection">
+      <img class="gravatar-large" ng-src="{{image.URL}}" title="{{image.caption}}"/>
+      <dl>
+        <dt>Image File: </dt>
+        <dd>{{image.filename}}</dd>
+        <dt>Image Caption: </dt>
+        <dd contenteditable ng-model="image.caption"></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class=" col-md-6 audio_video_ul">
+    <div ng-repeat="audioVideo in datum.audioVideo._collection">
+      <audio id="{{audioVideo.URL}}" title="{{audioVideo.description}} {{audioVideo.startTime}} - {{audioVideo.endTime}}" preload controls>
+        <source ng-src="{{audioVideo.URL}}" type="{{audioVideo.audioType}}"/>
+      </audio>
+      <br/>
+      <dl>
+        <dt>Audio File: </dt>
+        <dd>{{audioVideo.filename}}</dd>
+        <dt>Audio Description: </dt>
+        <dd contenteditable ng-model="audioVideo.description"></dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- list for the fields -->
+  <dl class="col-md-6 datum_fields_ul">
+    <dt>Orthography: </dt>
+    <dd title="datum.datumFields.orthography.help" contenteditable ng-model="datum.datumFields.orthography.value"></dd>
+    <dt>International Phonetic Alphabet:</dt>
+    <dd title="datum.datumFields.utterance.help" contenteditable ng-model="datum.datumFields.utterance.value"></dd>
+    <dt>Tags: </dt>
+    <dd title="datum.datumFields.tags.help" contenteditable ng-model="datum.datumFields.tags.value"></dd>
+  </dl>
+
+  <div  class="col-md-6">
+    <ul class="comments unstyled" >
+      <li ng-repeat="comment in datum.comments">comment.text</li>
+    </ul>
+
+    <div class="extra-datum-info-which-can-be-hidden">
+      <i class="fa fa-save "></i> <span class="last-modified" title="{{datum.dateModified | fielddbPrettyDate}}">{{datum.dateModified | fielddbAgoDate}}</span><br/>
+      <i class="fa fa-time "></i> <span class="date-created" title="{{datum.dateEntered | fielddbPrettyDate}}">{{datum.dateEntered | fielddbPrettyDate}}</span><br/>
+    </div>
+  </div>
+
+</div>

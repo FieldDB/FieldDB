@@ -2,7 +2,7 @@ define([
     "backbone",
     "datum/Datum"
 ], function(
-    Backbone, 
+    Backbone,
     Datum
 ) {
     var Datums = Backbone.Collection.extend(
@@ -33,7 +33,7 @@ define([
 //       comparator : function(doc){
 //         return doc.get("timestamp");
 //       },
-       
+
        internalModels : Datum,
 
        model: Datum,
@@ -60,6 +60,6 @@ define([
          });
        }
     });
-    
+
     return Datums;
 });

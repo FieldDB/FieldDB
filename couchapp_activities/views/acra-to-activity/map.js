@@ -100,7 +100,7 @@ function(doc) {
             teamActivity.context = " via Kartuli Speech Recognizer";
           }
         }
-        if (androidCustomData.urlString) {
+        if (userdbname === "default" && androidCustomData.urlString) {
           if (androidCustomData.urlString.indexOf("speechrec.kartuli") > -1 || androidCustomData.urlString.indexOf("speechrecognition.kartuli") > -1) {
             userdbname = username + "-firstcorpus";
             teamdbname = "speechrecognition-kartuli";
@@ -136,74 +136,123 @@ function(doc) {
           teamActivity.directobject = "<a target='_blank' href='#corpus/" + teamdbname + "/datum/" + docid + "'>a datum</a>";
         }
 
-        if (androidCustomData.action && androidCustomData.action.indexOf("register") > -1 || androidCustomData.downloadDatums) {
-          personalCorpusActivity.verb = "logged in";
-          teamActivity.verb = "logged in";
-          personalCorpusActivity.verbicon = "icon-check";
-          teamActivity.verbicon = "icon-check";
-          personalCorpusActivity.directobjecticon = "icon-user";
-          teamActivity.directobjecticon = "icon-user";
-          personalCorpusActivity.directobject = "";
-          teamActivity.directobject = "";
-        } else if (androidCustomData.action && androidCustomData.action.indexOf("download") > -1) {
-          directobject = androidCustomData.action.split(":::");
-          personalCorpusActivity.verb = "downloaded ";
-          teamActivity.verb = "downloaded";
-          personalCorpusActivity.verbicon = "icon-download";
-          teamActivity.verbicon = "icon-download";
-          personalCorpusActivity.directobjecticon = "icon-file";
-          teamActivity.directobjecticon = "icon-file";
-          if (directobject === "SampleData") {
-            personalCorpusActivity.directobjecticon = "icon-flag";
-            teamActivity.directobjecticon = "icon-flag";
+        if (androidCustomData && androidCustomData.action) {
+          if ((androidCustomData.action.indexOf("register") > -1 || androidCustomData.action.indexOf("login") > -1) || androidCustomData.downloadDatums) {
+            personalCorpusActivity.verb = "logged in";
+            teamActivity.verb = "logged in";
+            personalCorpusActivity.verbicon = "icon-check";
+            teamActivity.verbicon = "icon-check";
+            personalCorpusActivity.directobjecticon = "icon-user";
+            teamActivity.directobjecticon = "icon-user";
+            personalCorpusActivity.directobject = "";
+            teamActivity.directobject = "";
+          } else if (androidCustomData.action.indexOf("download") > -1) {
+            directobject = androidCustomData.action.split(":::");
+            personalCorpusActivity.verb = "downloaded ";
+            teamActivity.verb = "downloaded";
+            personalCorpusActivity.verbicon = "icon-download";
+            teamActivity.verbicon = "icon-download";
+            personalCorpusActivity.directobjecticon = "icon-file";
+            teamActivity.directobjecticon = "icon-file";
+            if (directobject === "SampleData") {
+              personalCorpusActivity.directobjecticon = "icon-flag";
+              teamActivity.directobjecticon = "icon-flag";
+            }
+            personalCorpusActivity.directobject = directobject[1];
+            teamActivity.directobject = directobject[1];
+          } else if (androidCustomData.action.indexOf("capture") > -1) {
+            directobject = androidCustomData.action;
+            try {
+              directobject = androidCustomData.action.replace("}", "");
+              directobject = directobject.substring(directobject.lastIndexOf("/") + 1);
+            } catch (e) {
+              //couldnt figure out the image
+            }
+            personalCorpusActivity.verb = "photographed";
+            teamActivity.verb = "photographed";
+            personalCorpusActivity.verbicon = "icon-plus";
+            teamActivity.verbicon = "icon-plus";
+            personalCorpusActivity.directobjecticon = "icon-camera";
+            teamActivity.directobjecticon = "icon-camera";
+            if (androidCustomData.action.indexOf("Audio") > -1) {
+              personalCorpusActivity.verb = "recorded";
+              teamActivity.verb = "recorded";
+              personalCorpusActivity.directobjecticon = "icon-audio";
+              teamActivity.directobjecticon = "icon-audio";
+            }
+
+            if (androidCustomData.action.indexOf("Video") > -1) {
+              personalCorpusActivity.verb = "videoed";
+              teamActivity.verb = "videoed";
+              personalCorpusActivity.directobjecticon = "icon-video";
+              teamActivity.directobjecticon = "icon-video";
+            }
+            personalCorpusActivity.directobject = directobject;
+            teamActivity.directobject = directobject;
+            // } else if (androidCustomData.action.indexOf("recognizedAudio") > -1) {
+            //   personalCorpusActivity.verb = "recorded";
+            //   teamActivity.verb = "recorded";
+            //   personalCorpusActivity.verbicon = "icon-plus";
+            //   teamActivity.verbicon = "icon-plus";
+            //   personalCorpusActivity.directobjecticon = "icon-microphone";
+            //   teamActivity.directobjecticon = "icon-microphone";
+            // }
+          } else if (androidCustomData.action.indexOf("openedTrainer") > -1) {
+            personalCorpusActivity.verb = "trained";
+            teamActivity.verb = "trained";
+            personalCorpusActivity.verbicon = "icon-bar-chart";
+            teamActivity.verbicon = "icon-bar-chart";
+            personalCorpusActivity.directobjecticon = "icon-microphone";
+            teamActivity.directobjecticon = "icon-microphone";
+            personalCorpusActivity.directobject = androidCustomData.action;
+            teamActivity.directobject = androidCustomData.action;
+          } else if (androidCustomData.action.indexOf("recognizedHypotheses") > -1 || androidCustomData.action.indexOf("receivedFinalHypotheses") > -1) {
+            personalCorpusActivity.verb = "received an ASR result";
+            teamActivity.verb = "received an ASR result";
+            personalCorpusActivity.verbicon = "icon-refresh";
+            teamActivity.verbicon = "icon-refresh";
+            personalCorpusActivity.directobjecticon = "icon-microphone";
+            teamActivity.directobjecticon = "icon-microphone";
+            personalCorpusActivity.directobject = androidCustomData.action;
+            teamActivity.directobject = androidCustomData.action;
+          } else if (androidCustomData.action.indexOf("recognizedPartialHypotheses") > -1) {
+            personalCorpusActivity.verb = "received a partial ASR result";
+            teamActivity.verb = "received a partial ASR result";
+            personalCorpusActivity.verbicon = "icon-refresh";
+            teamActivity.verbicon = "icon-refresh";
+            personalCorpusActivity.directobjecticon = "icon-microphone";
+            teamActivity.directobjecticon = "icon-microphone";
+            personalCorpusActivity.directobject = androidCustomData.action;
+            teamActivity.directobject = androidCustomData.action;
+          } else if (androidCustomData.action.indexOf("recognizeSpeech") > -1 || androidCustomData.action.indexOf("requestedRecognizeSpeech") > -1) {
+            personalCorpusActivity.verb = "used Speech Recognizer";
+            teamActivity.verb = "used Speech Recognizer";
+            personalCorpusActivity.verbicon = "icon-plus";
+            teamActivity.verbicon = "icon-plus";
+            personalCorpusActivity.directobjecticon = "icon-microphone";
+            teamActivity.directobjecticon = "icon-microphone";
+            personalCorpusActivity.directobject = androidCustomData.action;
+            teamActivity.directobject = androidCustomData.action;
+          } else if (androidCustomData.action.indexOf("loadDatum") > -1) {
+            docid = androidCustomData.action;
+            try {
+              docid = androidCustomData.action.replace("{loadDatum : ", "").replace("}", "");
+            } catch (e) {
+              //couldnt figure out the image
+            }
+            personalCorpusActivity.verb = "viewed";
+            teamActivity.verb = "viewed";
+            personalCorpusActivity.verbicon = "icon-eye";
+            teamActivity.verbicon = "icon-eye";
+            personalCorpusActivity.directobjecticon = "icon-list";
+            teamActivity.directobjecticon = "icon-list";
+            personalCorpusActivity.directobject = "<a target='_blank' href='#corpus/" + userdbname + "/datum/" + docid + "'>a datum</a>";
+            teamActivity.directobject = "<a target='_blank' href='#corpus/" + teamdbname + "/datum/" + docid + "'>a datum</a>";
           }
-          personalCorpusActivity.directobject = directobject[1];
-          teamActivity.directobject = directobject[1];
-        } else if (androidCustomData.action && androidCustomData.action.indexOf("capture") > -1) {
-          directobject = androidCustomData.action;
-          try {
-            directobject = androidCustomData.action.replace("}", "");
-            directobject = directobject.substring(directobject.lastIndexOf("/") + 1);
-          } catch (e) {
-            //couldnt figure out the image
-          }
-          personalCorpusActivity.verb = "photographed";
-          teamActivity.verb = "photographed";
-          personalCorpusActivity.verbicon = "icon-plus";
-          teamActivity.verbicon = "icon-plus";
-          personalCorpusActivity.directobjecticon = "icon-camera";
-          teamActivity.directobjecticon = "icon-camera";
-          if (androidCustomData.action.indexOf("Audio") > -1) {
-            personalCorpusActivity.verb = "recorded";
-            teamActivity.verb = "recorded";
-            personalCorpusActivity.directobjecticon = "icon-audio";
-            teamActivity.directobjecticon = "icon-audio";
-          }
-          if (androidCustomData.action.indexOf("Video") > -1) {
-            personalCorpusActivity.verb = "videoed";
-            teamActivity.verb = "videoed";
-            personalCorpusActivity.directobjecticon = "icon-video";
-            teamActivity.directobjecticon = "icon-video";
-          }
-          personalCorpusActivity.directobject = directobject;
-          teamActivity.directobject = directobject;
-        } else if (androidCustomData.action && androidCustomData.action.indexOf("loadDatum") > -1) {
-          docid = androidCustomData.action;
-          try {
-            docid = androidCustomData.action.replace("{loadDatum : ", "").replace("}", "");
-          } catch (e) {
-            //couldnt figure out the image
-          }
-          personalCorpusActivity.verb = "viewed";
-          teamActivity.verb = "viewed";
-          personalCorpusActivity.verbicon = "icon-eye";
-          teamActivity.verbicon = "icon-eye";
-          personalCorpusActivity.directobjecticon = "icon-list";
-          teamActivity.directobjecticon = "icon-list";
-          personalCorpusActivity.directobject = "<a target='_blank' href='#corpus/" + userdbname + "/datum/" + docid + "'>a datum</a>";
-          teamActivity.directobject = "<a target='_blank' href='#corpus/" + teamdbname + "/datum/" + docid + "'>a datum</a>";
-        }
-        if (androidCustomData.androidTimestamp) {
+
+        } //end if (androidCustomData && androidCustomData.action)
+
+        if (androidCustomData && androidCustomData.androidTimestamp) {
           personalCorpusActivity.timestamp = androidCustomData.androidTimestamp;
           teamActivity.timestamp = androidCustomData.androidTimestamp;
         } else {
@@ -293,9 +342,12 @@ function(doc) {
 
     if (doc.APP_VERSION_NAME) {
       var activities = utils.digestCustomData(doc);
-      if (!activities) {
+      if (!activities || !activities.teamActivity || !activities.teamActivity.pouchname) {
         return;
       }
+      // if (activities.teamActivity.pouchname !== "speechrecognition-kartuli-activity_feed") {
+      //   return;
+      // }
       var now = Date.now();
       // var lastPosition = 1403805265615;
       // if (activities.teamActivity.timestamp < lastPosition) {
@@ -308,6 +360,6 @@ function(doc) {
     }
 
   } catch (e) {
-    emit(e, doc);
+    emit(doc, e);
   }
 }

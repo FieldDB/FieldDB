@@ -20,7 +20,8 @@ function(doc) {
           }
         }
       }
-      emit(datum.user, datum);
+      var enteredByUser = datum.enteredByUser || datum.user;
+      emit(enteredByUser, datum);
     }
   } catch (e) {
     //emit(e, 1);

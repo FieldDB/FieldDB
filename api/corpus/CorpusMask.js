@@ -1,5 +1,16 @@
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
+var Database = require("./Database").Database;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var DatumStates = require("./../datum/DatumStates").DatumStates;
+var DatumTags = require("./../datum/DatumTags").DatumTags;
+var Comments = require("./../comment/Comments").Comments;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Sessions = require("./../Collection").Collection;
+var DataLists = require("./../Collection").Collection;
+var TeamPreference = require("./../user/UserPreference").UserPreference;
 
+
+var DEFAULT_CORPUS_MODEL = require("./corpus.json");
 /**
  * @class The CorpusMask is saved as corpus in the Couch repository,
  *        it is the publicly visible version of a corpus. By default it just says "This
@@ -24,7 +35,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  *           for the image/logo of the license for easy recognition and
  *           title of the license.
  * @property {Object} copyright Who owns the copyright to the corpus,
- *           by default it is set to the corpus team's name but teams can customize
+ *           by default it is set to the corpus team"s name but teams can customize
  *           it for example to make the corpus copyright of the language community
  *           or speakers who contributed to the corpus.
  * @property {Object} location GPS location of the corpus (longitude, latitude and accuracy)
@@ -50,297 +61,294 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
  * @property {Array} datalists Collection of public browsable/search engine
  *           discoverable data lists created under the corpus
  *
- * @extends FieldDBObject
- * @tutorial tests/CorpusTest.js
+ * @extends Database
+ * @tutorial tests/CorpusMaskTest.js
  */
 var CorpusMask = function CorpusMask(options) {
-  console.log(options);
-  FieldDBObject.apply(this, arguments);
-
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "CorpusMask";
+  }
+  this.debug(options);
+  Database.apply(this, arguments);
 };
 
-CorpusMask.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusMask.prototype */ {
+CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.prototype */ {
   constructor: {
     value: CorpusMask
   },
 
-  _id: {
-    value: "corpus"
-  },
-
   id: {
     get: function() {
-      return this._id;
+      return "corpus";
     },
-    set: function() {
-      console.warn("CorpusMask id cannot be set.");
-      return;
+    set: function(value) {
+      if (value === this._id) {
+        return;
+      }
+      this.warn("CorpusMask id cannot be set, it is \"corpus\" by default." + value);
+      value = "corpus";
+      this._id = value;
     }
   },
 
-  url: {
-    value: "/corpora"
-  },
-
-  fillWithDefaults: {
-    value: function() {
-      this.title = "Private Corpus";
-      this.titleAsUrl = "PrivateCorpus";
-      this.description = "The details of this corpus are not public.";
-      this.location = {
-        "latitude": 0,
-        "longitude": 0,
-        "accuracy": 0
-      };
-      this.couchConnections = [];
-      this.olacConnections = [];
-      this.termsOfUse = {
-        "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-      };
-      this.license = {
-        "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
-        "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-        "imageUrl": "",
-        "link": "http://creativecommons.org/licenses/by-sa/3.0/"
-      };
-      this.copyright = "Default: Add names of the copyright holders of the corpus.";
-
-      /* By default all data is limited to Checked and Published validation status */
-      if (!this.datumStates) {
-        this.datumStates = [{
-          state: "Checked*",
-          color: "green"
-        }, {
-          state: "Published*",
-          color: "blue"
-        }];
-      }
-
-      /* These fields are visible to public if the team makes the corpus public */
-      if (!this.datumFields) {
-        this.datumFields = [{
-          label: "judgement",
-          labelMachine: "judgement",
-          size: "3",
-          help: "Acceptablity judgement (*,#,?  mean this sentence is strange)",
-          helpLinguist: "Gramaticality/acceptablity judgement (Ungrammatical:*, Nonfelicitous:#, Unknown:?)"
-        }, {
-          label: "utterance",
-          labelMachine: "utterance",
-          help: "What was said/written",
-          helpLinguist: "Line 1 in examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
-        }, {
-          label: "morphemes",
-          labelMachine: "morphemes",
-          help: "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-          helpLinguist: "Morpheme segmentation"
-        }, {
-          label: "gloss",
-          labelMachine: "gloss",
-          help: "Translation for each prefix, root and suffix in the words",
-          helpLinguist: "Glosses for morphemes"
-        }, {
-          label: "translation",
-          labelMachine: "translation",
-          help: "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
-          helpLinguist: "The team's primary translation. It might not be English, just a language the team is comfortable with. There may also be additional languages in the other fields."
-        }];
-      } //end if to set datumFields
-
-      //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
-      if (!this.sessionFields) {
-        this.sessionFields = [{
-          label: "dialect",
-          labelMachine: "dialect",
-          help: "Dialect of this example (city, village, region etc)",
-          helpLinguist: "This dialect may be as precise as the team chooses (province, region, city, village or any other measure of dialect)"
-        }, {
-          label: "register",
-          labelMachine: "register",
-          help: "Social register of this example (friends, children speaking with children, formal, religious, ceremonial etc)",
-          helpLinguist: "This is an optional field which indicates the social register of the example (friends, children speaking with children, formal, religious, ceremonial etc)"
-        }, {
-          label: "language",
-          labelMachine: "language",
-          language: {
-              ethnologueUrl: "",
-              wikipediaUrl: "",
-              iso: "",
-              locale: "",
-              englishName: "",
-              nativeName: "",
-              alternateNames: ""
-            },
-          help: "This is the langauge (or language family)",
-          helpLinguist: "This is the langauge (or language family)"
-        }, {
-          label: "source",
-          labelMachine: "consultant",
-          help: "This is the source of the data (publication, document, person)",
-        }, {
-          label: "location",
-          labelMachine: "location",
-          location: {
-              latitude: 0,
-              longitude: 0,
-              accuracy: 0
-          },
-          help: "This is the gps location of the elicitation session (if available)",
-        }, {
-          label: "dateElicited",
-          labelMachine: "dateElicited",
-          help: "This is the date in which the session took place.",
-          timestamp: null,
-          timestampAccuracy: ""
-        }];
-      } //end if to set sessionFields
-
-      // If there are no comments, create models
-      if (!this.comments) {
-        this.comments = [];
-      }
-
-      if (!this.members) {
-        this.members = [];
-      }
-      if (!this.datalists) {
-        this.datalists = [];
-      }
-      if (!this.sessions) {
-        this.sessions = [];
-      }
-    }
+  api: {
+    value: "corpora"
   },
 
   defaults: {
-    value: {
-      title: "Unknown",
-      titleAsUrl: "Unknown",
-      description: "The details of this corpus are not available.",
-      location: {
-        "latitude": 0,
-        "longitude": 0,
-        "accuracy": 0
-      },
-      members: [],
-      datumStates: [],
-      datumFields: [],
-      sessionFields: [],
-      datalists: [],
-      sessions: [],
-      couchConnections: [],
-      olacConnections: []
-    }
-  },
+    get: function() {
+      var filteredCorpus = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
+      filteredCorpus.title = "Private Corpus";
+      filteredCorpus.description = "The details of this corpus are not public.";
+      filteredCorpus.location = {
+        latitude: 0,
+        longitude: 0,
+        accuracy: 0
+      };
 
-  internalModels: {
-    value: {
-      members: "UserMask",
-      datumStates: "DatumState",
-      datumFields: "DatumField",
-      sessionFields: "DatumField",
-      searchFields: "DatumField",
-      sessions: "Session",
-      dataLists: "DataList",
-      permissions: "Permission",
-      comments: "Comment"
-    }
-  },
-
-  save: {
-    value: function(successcallback, failurecallback) {
-      var self = this;
-      self._id = "corpus";
-      this.timestamp = Date.now();
-
-      self.pouch(function(err, db) {
-        var modelwithhardcodedid = self.toJSON();
-        modelwithhardcodedid._id = "corpus";
-        db.put(modelwithhardcodedid, function(err, response) {
-          if (err) {
-            if (err.status === "409") {
-              //find out what the rev is in the database by fetching
-              self.fetch({
-                success: function(model, response) {
-                  console.log(response);
-                  modelwithhardcodedid._rev = self._rev;
-
-                  db.put(modelwithhardcodedid, function(err, response) {
-                    if (err) {
-                      if (typeof failurecallback === "function") {
-                        failurecallback();
-                      }
-                    } else {
-                      console.log(response);
-                      //this happens on subsequent save into pouch of this CorpusMask's id
-                      if (typeof successcallback === "function") {
-                        successcallback();
-                      }
-                    }
-                  });
-
-                },
-                //fetch error
-                error: function(e) {
-                  console.log(e);
-                  if (typeof failurecallback === "function") {
-                    failurecallback();
-                  }
-                }
-              });
-            } else {
-              //this is a real error, not a conflict error
-              if (typeof failurecallback === "function") {
-                failurecallback();
-              }
-            }
-          } else {
-            console.log(response);
-            if (typeof successcallback === "function") {
-              successcallback();
-            }
-          }
-        });
+      var publicStates = [];
+      filteredCorpus.validationStati.map(function(state) {
+        if (state.validationStatus === "Checked*") {
+          publicStates.push(state);
+        } else if (state.validationStatus === "Published*") {
+          publicStates.push(state);
+        } else if (state.validationStatus === "ApprovedLanguageLearningContent*") {
+          publicStates.push(state);
+        }
       });
+      filteredCorpus.validationStati = publicStates;
+
+      var publicableTags = [];
+      filteredCorpus.tags.map(function() {
+        // none
+      });
+      filteredCorpus.tags = publicableTags;
+
+      var publicableDatumFields = [];
+      filteredCorpus.datumFields.map(function(field) {
+        if (field.id === "judgement") {
+          publicableDatumFields.push(field);
+        } else if (field.id === "orthography") {
+          publicableDatumFields.push(field);
+        } else if (field.id === "utterance") {
+          publicableDatumFields.push(field);
+        } else if (field.id === "morphemes") {
+          publicableDatumFields.push(field);
+        } else if (field.id === "gloss") {
+          publicableDatumFields.push(field);
+        } else if (field.id === "translation") {
+          publicableDatumFields.push(field);
+        }
+      });
+      filteredCorpus.datumFields = publicableDatumFields;
+
+      var publicableSessionFields = [];
+      filteredCorpus.sessionFields.map(function(field) {
+        if (field.id === "dialect") {
+          publicableSessionFields.push(field);
+        } else if (field.id === "register") {
+          publicableSessionFields.push(field);
+        } else if (field.id === "language") {
+          publicableSessionFields.push(field);
+        } else if (field.id === "location") {
+          publicableSessionFields.push(field);
+        }
+      });
+      filteredCorpus.sessionFields = publicableSessionFields;
+
+      var publicableSpeakerFields = [];
+      filteredCorpus.speakerFields.map(function(field) {
+        if (field.id === "anonymousCode") {
+          publicableSpeakerFields.push(field);
+        }
+      });
+      filteredCorpus.speakerFields = publicableSpeakerFields;
+
+
+      return filteredCorpus;
+    }
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      _id: FieldDBObject.DEFAULT_STRING,
+      _rev: FieldDBObject.DEFAULT_STRING,
+      dbname: FieldDBObject.DEFAULT_STRING,
+      version: FieldDBObject.DEFAULT_STRING,
+      dateCreated: FieldDBObject.DEFAULT_DATE,
+      dateModified: FieldDBObject.DEFAULT_DATE,
+      comments: Comments,
+      sessions: Sessions,
+      datalists: DataLists,
+
+      title: FieldDBObject.DEFAULT_STRING,
+      titleAsUrl: FieldDBObject.DEFAULT_STRING,
+      description: FieldDBObject.DEFAULT_STRING,
+      termsOfUse: FieldDBObject.DEFAULT_OBJECT,
+      license: FieldDBObject.DEFAULT_OBJECT,
+      copyright: FieldDBObject.DEFAULT_STRING,
+      replicatedCorpusUrls: FieldDBObject.DEFAULT_ARRAY,
+      olacExportConnections: FieldDBObject.DEFAULT_ARRAY,
+      publicCorpus: FieldDBObject.DEFAULT_STRING,
+      confidential: Confidential,
+
+      validationStati: DatumStates,
+      tags: DatumTags,
+
+      datumFields: DatumFields,
+      speakerFields: DatumFields,
+      participantFields: DatumFields,
+      conversationFields: DatumFields,
+      sessionFields: DatumFields,
+
+      prefs: TeamPreference
+    }
+  },
+
+  titleAsUrl: {
+    get: function() {
+      if (!this._titleAsUrl && this.title) {
+        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
+      }
+      return this._titleAsUrl;
+    },
+    set: function(value) {
+      if (value === this._titleAsUrl) {
+        return;
+      }
+      // If an app is explicity trying to overwrite a titleAsUrl, complain.
+      if (this._titleAsUrl) {
+        this.warn("titleAsUrl cannot be set directly, setting the title will cause it to be set.");
+      }
     }
   },
 
   title: {
     get: function() {
-      if (!this._title) {
-        this._title = "";
-      }
-      return this._title;
+      return this._title || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       if (value === this._title) {
         return;
       }
       if (!value) {
-        value = "";
+        delete this._title;
+        return;
       }
       this._title = value.trim();
-      this._titleAsUrl = this._title.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_"); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
-
+      this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase(); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
     }
   },
 
   description: {
     get: function() {
-      if (!this._description) {
-        this._description = "";
-      }
-      return this._description;
+      return this._description || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       if (value === this._description) {
         return;
       }
       if (!value) {
-        value = "";
+        delete this._description;
+        return;
       }
       this._description = value.trim();
     }
+  },
+
+  prefs: {
+    get: function() {
+      return this._prefs;
+    },
+    set: function(value) {
+      if (value === this._prefs) {
+        return;
+      }
+      if (!value) {
+        delete this._prefs;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === "[object Object]") {
+          value = new this.INTERNAL_MODELS["prefs"](value);
+        }
+      }
+      this._prefs = value;
+    }
+  },
+
+  preferredDatumTemplate: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredDatumTemplate) {
+        return this.prefs.preferredDatumTemplate;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredDatumTemplate && value === this.prefs.preferredDatumTemplate) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredDatumTemplate) {
+          delete this.prefs.preferredDatumTemplate;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredDatumTemplate = value.trim();
+    }
+  },
+
+  preferredLocale: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredLocale) {
+        return this.prefs.preferredLocale;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredLocale && value === this.prefs.preferredLocale) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredLocale) {
+          delete this.prefs.preferredLocale;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredLocale = value.trim();
+    }
+  },
+
+  preferredDashboardLayout: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredDashboardLayout) {
+        return this.prefs.preferredDashboardLayout;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredDashboardLayout && value === this.prefs.preferredDashboardLayout) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredDashboardLayout) {
+          delete this.prefs.preferredDashboardLayout;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredDashboardLayout = value.trim();
+    }
+  },
+
+  preferredTemplate: {
+    get: function() {
+      this.warn("preferredTemplate is deprecated, use dbname instead.");
+      return this.preferredDatumTemplate;
+    },
+    set: function(value) {
+      this.warn("preferredTemplate is deprecated, please use dbname instead.");
+      this.preferredDatumTemplate = value;
+    }
   }
+
 });
 exports.CorpusMask = CorpusMask;

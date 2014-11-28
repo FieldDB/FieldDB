@@ -19,6 +19,9 @@ In your app load the `script.js` and optionally:
 * `templates.js` if you want to use use some or all of the default tempaltes, or you can declare your own in your own project as long as they have the same name (eg, a custom `user.html`):
 
 ```html
+<link rel="stylesheet" href="/bower_components/fielddb-angular/dist/styles/vendor.css" />
+<link rel="stylesheet" href="/bower_components/fielddb-angular/dist/styles/main.css" />
+
 <script src="bower_components/fielddb-angular/dist/scripts/vendor.js"></script>
 <script src="bower_components/fielddb-angular/dist/scripts/scripts.js"></script>
 <script src="bower_components/fielddb-angular/dist/scripts/templates.js"></script>
@@ -27,14 +30,25 @@ In your app load the `script.js` and optionally:
 ```javascript
   angular
   .module('myAppWhichUsesFieldDB', [
+    'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngSanitize',
     'ngRoute',
+    'ngSanitize',
+    'ngTouch',
     'fielddbAngularApp'
   ])
   .config(function($routeProvider, $locationProvider) {
     // $locationProvider.html5Mode(true);
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+      // Allow same origin resource loads.
+      'self',
+      // Allow loading from outer domain.
+      'https://*.example.org/**',
+      'http://*.yourdomain.ca/**'
+    ]);
+
     if (FieldDB && FieldDB.Router) {
       for (var when in FieldDB.Router.routes) {
         FieldDB.Router.routes[when].angularRoute.controller = 'FieldDBCorpusPagesController';
@@ -90,6 +104,17 @@ To show an import widget:
 <div data-fielddb-import json="{type: 'datum'}"></div>
 ```
 
+To show a document of any type (it will autoguess)
+
+```html
+<div data-fielddb-doc json="doc"></div>
+```
+
+
+[More directives....](https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular_client/modules/core/app/scripts/directives)
+
+[More sample use of directives....](https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular_client/modules/core/app/views)
+
 
 ## Contributing
 
@@ -101,7 +126,8 @@ _Also, please don't edit files in the "dist" subdirectory as they are generated 
 
 ## Release History
 
-* v2.14.0 second iteration of psycho linguistics dashboard (example at https://github.com/ProjetDeRechercheSurLecriture/DyslexDisorthGame/tree/master/angular_client)
+* v2.14.0 iteration 2 of psycholinguistics dashboard (example at https://github.com/ProjetDeRechercheSurLecriture/DyslexDisorthGame/tree/master/angular_client)
+* v2.24.0 iteration 11 of psycholinguistics dashboard (example at https://github.com/ProjetDeRechercheSurLecriture/DyslexDisorthGame/tree/master/angular_client)
 
 ## License
 Copyright (c) 2013-2014 FieldDB Contributors

@@ -1,0 +1,101 @@
+<div class="row">
+  <div class="pull-right">
+   <!-- Issue #797 -->
+   <button class="hide btn btn-{{datum.buttonColor}} save-datum"
+   value="Save">{{locale.locale_Save}}</button>
+ </div>
+
+ <a class="datum_id" name="{{datum._id}}"></a>
+
+ <!-- image area -->
+ <div class="col-md-6 images-area" ng-repeat="image in datum.images._collection">
+  <img ng-src="{{image.URL}}" title="{{image.caption}}"/>
+  <p>{{image.caption}}</p>
+</div>
+
+<!-- datum IGT preview area to see what you're doing -->
+<div class="col-md-6 preview_IGT_area"> </div>
+
+<!-- list for the fields -->
+<dl class="col-md-6 datum_fields_ul unstyled" ng-repeat="field in datum.datumFields._collection">
+  <dt ng-show="showThisFieldForThisUserType(field)">{{field.label}}: </dt>
+  <dd ng-show="showThisFieldForThisUserType(field)" title="field.help" contenteditable ng-model="field.value"></dd>
+</dl>
+
+<button class="hide" title="{{locale.locale_See_Fields}}" rel="tooltip">
+  <i class="icons fa fa-list-alt pull-right"> </i>
+</button>
+<!-- Datum Edit view specialized fields and menu area -->
+<div class="row-fluid ">
+  <div class="col-md-6">
+    <!-- Buttons for various actions -->
+    <div  class="hide btn-group" >
+      <a href="#corpus/{{datum.pouchname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale.locale_Insert_New_Datum}}" rel="tooltip">
+        <i class="fa fa-plus"></i></a>
+        <button class="btn btn-mini btn-primary" title="{{locale.locale_Duplicate}}" rel="tooltip">
+          <i class="fa fa-copy"></i></button>
+          <button class="btn btn-mini btn-primary" title="{{locale.locale_Encrypt}}" rel="tooltip">
+            <i class="fa" ng-class="{'fa-lock': !datum.encrypted, 'fa-unlock': datum.encrypted}"></i>
+          </button>
+          <button class="btn btn-mini btn-primary" title="{{locale.locale_Show_confidential_items_Tooltip}}" rel="tooltip">
+            <i class="fa" ng-class="{'fa-eye': !datum.decryptedMode, 'fa-eye-slash': datum.decryptedMode}"></i>
+          </button>
+          <button class="btn btn-mini btn-primary play-audio" title="{{locale.locale_Play_Audio}}" rel="tooltip">
+            <i class="fa fa-bullhorn"></i>
+          </button>
+          <button class="btn btn-mini btn-info" title="{{locale.locale_Plain_Text_Export_Tooltip}}" rel="tooltip">
+            <i class="fa fa-paste"></i>
+          </button>
+          <button class="LaTeX btn btn-mini btn-info" title="{{locale.locale_LaTeX}}" rel="tooltip">
+            <i>LaTeX</i>
+          </button>
+          <button class="CSV btn btn-mini btn-info" title="{{locale.locale_CSV_Tooltip}}" rel="tooltip">
+            <i>CSV</i>
+          </button>
+          <button class="btn btn-mini  btn-danger trash-button" title="Put datum in the trash" rel="tooltip">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+        <br/>
+        <button class="hide audio_video" title="{{locale.locale_Drag_and_Drop_Audio_Tooltip}}" rel="tooltip"></button>
+
+        <ul class="audio_video_ul unstyled" ng-repeat="audioVideo in datum.audioVideo._collection">
+          <audio id="{{audioVideo.URL}}" title="{{audioVideo.description}}" preload controls>
+            <source ng-src="{{audioVideo.URL}}" type="{{audioVideo.audioType}}"/>
+          </audio>
+          {{audioVideo.startTime}} - {{audioVideo.endTime}}
+        </ul>
+
+      </div>
+      <div  class="hide col-md-3 border-left">
+        <!-- list for the tags -->
+        <ul class="datum_tags_ul unstyled"></ul>
+        <div class="controls  no-margin-left">
+          <!-- TODO go through the corpus to find tags, and put them in this autocomplete -->
+          <div class="input-append ">
+            <input class="add_tag col-md-6" type="text" data-provide="typeahead" data-items="4"
+            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]"
+            /><button class="btn btn-small btn-primary add_datum_tag" type="button">
+            <i class="fa fa-tag"></i>
+            <span>{{locale.locale_Add}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="hide datum_state col-md-3 border-left">
+      <span class="label label-{{datum.datumstatecolor}} datum-primary-validation-status-color "><i class = "fa fa-flag"></i><span class="datum-state-value">{{datum.datumstate}}</span></span><br/>
+    </div>
+  </div>
+
+  <ul class="comments unstyled" ng-repeat="comment in datum.comments"></ul>
+  <div class="extra-datum-info-which-can-be-hidden">
+    <span class="last-modified">{{datum.dateModified}}</span><i class="fa fa-save "></i><br/>
+    <span class="date-created">{{datum.dateEntered}}</span><i class="fa fa-time"></i><br/>
+
+    <span class="session-link" data-fielddb-session json="datum.session"></span>
+
+    <!-- Datum comments -->
+    <div class="new-comment-area"></div>
+
+  </div>
+</div>

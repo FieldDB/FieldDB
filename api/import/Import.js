@@ -1,26 +1,28 @@
 /* globals OPrime, window, escape, $, FileReader */
 var AudioVideo = require("./../FieldDBObject").FieldDBObject;
-var AudioVideos = require('./../Collection').Collection;
-var Collection = require('./../Collection').Collection;
-var CORS = require('./../CORS').CORS;
+var AudioVideos = require("./../Collection").Collection;
+var Collection = require("./../Collection").Collection;
+var CORS = require("./../CORS").CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../FieldDBObject").FieldDBObject;
-// var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumField = require('./../datum/DatumField').DatumField;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
+var Participant = require("./../user/Participant").Participant;
+var Datum = require("./../datum/Datum").Datum;
+var DatumField = require("./../datum/DatumField").DatumField;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var DataList = require("./../data_list/DataList").DataList;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 // var FileReader = {};
 var Session = require("./../FieldDBObject").FieldDBObject;
-var TextGrid = require('textgrid').TextGrid;
+var TextGrid = require("textgrid").TextGrid;
 var X2JS = {};
-var Q = require('q');
-var _ = require('underscore');
+var Q = require("q");
+var _ = require("underscore");
 
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
  *
  * @property {FileList} files These are the file(s) that were dragged in.
- * @property {String} pouchname This is the corpusid where the data should be imported
+ * @property {String} pouchname This is the corpusid wherej the data should be imported
  * @property {DatumFields} fields The fields array contains titles of the data columns.
  * @property {DataList} datalist The datalist imported, to hold the data before it is saved.
  * @property {Event} event The drag/drop event.
@@ -49,6 +51,9 @@ var getUnique = function(arrayObj) {
 
 
 var Import = function Import(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Import";
+  }
   this.debug(" new import ", options);
   FieldDBObject.apply(this, arguments);
 };
@@ -89,6 +94,17 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
+  showImportSecondStep: {
+    get: function() {
+      return this.asCSV && this.asCSV.length > 0;
+    }
+  },
+
+  showImportThirdStep: {
+    get: function() {
+      return this.datalist && this.datalist.docs && this.datalist.docs.length > 0;
+    }
+  },
 
   addFileUri: {
     value: function(options) {
@@ -96,10 +112,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self = this;
 
       if (!options) {
-        throw 'Options must be specified {}';
+        throw "Options must be specified {}";
       }
       if (!options.uri) {
-        throw 'Uri must be specified in the options in order to import it' + JSON.stringify(options);
+        throw "Uri must be specified in the options in order to import it" + JSON.stringify(options);
       }
 
       Q.nextTick(function() {
@@ -108,11 +124,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           .then(self.import)
           .then(function(result) {
             self.debug("Import is finished");
-            if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+            if (options && typeof options.next === "function" /* enable use as middleware */ ) {
               options.next();
             }
-            // self.debug('result.datum', result.datum);
-            self.datumCollection.add(result.datum);
+            // self.debug("result.datum", result.datum);
+            self.documentCollection.add(result.datum);
             deferred.resolve(result);
           })
           .fail(function(reason) {
@@ -132,7 +148,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       Q.nextTick(function() {
         if (!options) {
-          throw 'Options must be specified {}';
+          throw "Options must be specified {}";
         }
 
         var pipeline = function(optionsWithADatum) {
@@ -146,10 +162,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               }
             });
           } else {
-            self.debug('TODO reading url in browser');
+            self.debug("TODO reading url in browser");
             CORS.makeCORSRequest({
-              type: 'GET',
-              dataType: 'json',
+              type: "GET",
+              dataType: "json",
               uri: optionsWithADatum.uri
             }).then(function(data) {
                 self.debug(data);
@@ -188,115 +204,156 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
   convertTableIntoDataList: {
     value: function() {
-      var self = this;
+      var self = this,
+        deferred = Q.defer();
 
-      this.progress.total = this.progress.total + 1;
-      this.datumArray = [];
-      this.consultants = [];
-
-      var filename = " typing/copy paste into text area";
-      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
-      try {
-        filename = this.files.map(function(file) {
-          return file.name;
-        }).join(", ");
-        descript = "This is the data list which results from the import of these file(s). " + this.get("fileDetails");
-      } catch (e) {
-        //do nothing
-      }
-      this.render();
-
-      if (this.session !== undefined) {
-        this.session.setConsultants(this.consultants);
-        /* put metadata in the session goals */
-        this.session.goal = this.metadataLines.join("\n") + "\n" + this.session.goal;
-        this.render('session');
-      }
-
-      var headers = [];
-      if (this.importType === 'participants') {
-        this.importFields = new DatumFields(this.corpus.participantFields);
-      } else {
-        this.importFields = new DatumFields(this.corpus.datumFields.clone());
-      }
-      this.extractedHeader.map(function(item) {
-        /* TODO look up the header instead) */
-        self.importFields.debugMode = true;
-        var correspondingDatumField = self.importFields.find(self.importFields.primaryKey, item, true);
-        if (!correspondingDatumField || correspondingDatumField.length === 0) {
-          correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
-          correspondingDatumField[0].id = item;
-          correspondingDatumField[0].labelLinguists = item;
-          correspondingDatumField[0].help = 'This field came from file import';
-          var lookAgain = self.importFields.find(correspondingDatumField[0].id);
-          if (lookAgain.length) {
-
-          }
+      Q.nextTick(function() {
+        if (!self.progress) {
+          self.progress = {
+            total: 0,
+            completed: 0
+          };
         }
-        console.log('correspondingDatumField ', correspondingDatumField);
-        if (headers.indexOf(correspondingDatumField) >= 0) {
-          self.bug("You seem to have some column labels that are duplicated" +
-            " (the same label on two columns). This will result in a strange " +
-            "import where only the second of the two will be used in the import. " +
-            "Is this really what you want?.");
-        }
-        headers.push(correspondingDatumField[0]);
-        return item;
-      });
-      /*
-       * Convert new datum fields into a category, if types of a category
-       */
-      var fieldToGeneralize;
-      for (var f in headers) {
-        if (headers[f].id === "" || headers[f].id === undefined) {
+        self.progress.total = self.progress.total + 1;
+        self.datumArray = [];
+        self.consultants = [];
+        self.datalist = new DataList({
+          title: "Import Data",
+          docs: []
+        });
+
+        var filename = " typing/copy paste into text area";
+        var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
+        try {
+          filename = self.files.map(function(file) {
+            return file.name;
+          }).join(", ");
+          descript = "This is the data list which results from the import of these file(s). " + self.fileDetails;
+        } catch (e) {
           //do nothing
-        } else if (headers[f].id.toLowerCase().indexOf("checkedwith") > -1 || headers[f].id.toLowerCase().indexOf("checkedby") > -1 || headers[f].id.toLowerCase().indexOf("publishedin") > -1) {
-          fieldToGeneralize = self.importFields.find('validationStatus');
-          if (fieldToGeneralize.length > 0) {
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
-            headers[f] = fieldToGeneralize[0];
+        }
+        self.render();
+
+        if (self.session !== undefined) {
+          self.session.setConsultants(self.consultants);
+          /* put metadata in the session goals */
+          self.session.goal = self.metadataLines.join("\n") + "\n" + self.session.goal;
+          self.render("session");
+        }
+        self.datalist.description = descript;
+
+        var headers = [];
+        if (self.importType === "participants") {
+          self.importFields = new DatumFields(self.corpus.participantFields.clone());
+        } else {
+          self.importFields = new DatumFields(self.corpus.datumFields.clone());
+        }
+        self.extractedHeader.map(function(item) {
+          /* TODO look up the header instead) */
+          // self.importFields.debugMode = true;
+          var correspondingDatumField = self.importFields.find(self.importFields.primaryKey, item, true);
+          if (!correspondingDatumField || correspondingDatumField.length === 0) {
+            correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
+            correspondingDatumField[0].id = item;
+            if (self.importType === "participants") {
+              correspondingDatumField[0].labelExperimenters = item;
+            } else {
+              correspondingDatumField[0].labelFieldLinguists = item;
+            }
+            correspondingDatumField[0].help = "This field came from file import";
+            var lookAgain = self.importFields.find(correspondingDatumField[0].id);
+            if (lookAgain.length) {
+
+            }
           }
-        } else if (headers[f].id.toLowerCase().indexOf("codepermanent") > -1) {
-          fieldToGeneralize = self.importFields.find('participantcode');
-          if (fieldToGeneralize.length > 0) {
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
-            headers[f] = fieldToGeneralize[0];
+          self.debug("correspondingDatumField ", correspondingDatumField);
+          if (headers.indexOf(correspondingDatumField) >= 0) {
+            self.bug("You seem to have some column labels that are duplicated" +
+              " (the same label on two columns). This will result in a strange " +
+              "import where only the second of the two will be used in the import. " +
+              "Is self really what you want?.");
           }
-        } else if (headers[f].id.toLowerCase().indexOf("nsection") > -1) {
-          fieldToGeneralize = self.importFields.find('coursenumber');
-          if (fieldToGeneralize.length > 0) {
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
-            headers[f] = fieldToGeneralize[0];
-          }
-        } else if (headers[f].id.toLowerCase().indexOf("prenom") > -1) {
-          fieldToGeneralize = self.importFields.find('firstname');
-          if (fieldToGeneralize.length > 0) {
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
-            headers[f] = fieldToGeneralize[0];
-          }
-        } else if (headers[f].id.toLowerCase().indexOf("nomdefamille") > -1) {
-          fieldToGeneralize = self.importFields.find('lastname');
-          if (fieldToGeneralize.length > 0) {
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
-            headers[f] = fieldToGeneralize[0];
-          }
-        } else if (headers[f].id.toLowerCase().indexOf("datedenaissance") > -1) {
-          fieldToGeneralize = self.importFields.find('dateofbirth');
-          if (fieldToGeneralize.length > 0) {
-            fieldToGeneralize[0].labelLinguists = headers[f].labelLinguists;
-            headers[f] = fieldToGeneralize[0];
+          headers.push(correspondingDatumField[0]);
+          return item;
+        });
+        /*
+         * Convert new datum fields into a category, if types of a category
+         */
+        var fieldToGeneralize;
+        for (var f in headers) {
+          if (headers[f].id === "" || headers[f].id === undefined) {
+            //do nothing
+          } else if (headers[f].id.toLowerCase().indexOf("checkedwith") > -1 || headers[f].id.toLowerCase().indexOf("checkedby") > -1 || headers[f].id.toLowerCase().indexOf("publishedin") > -1) {
+            fieldToGeneralize = self.importFields.find("validationStatus");
+            if (fieldToGeneralize.length > 0) {
+              self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
+              fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+              fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
+              headers[f] = fieldToGeneralize[0];
+            }
+          } else if (headers[f].id.toLowerCase().indexOf("codepermanent") > -1) {
+            fieldToGeneralize = self.importFields.find("anonymouscode");
+            if (fieldToGeneralize.length > 0) {
+              self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
+              fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+              fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
+              headers[f] = fieldToGeneralize[0];
+            }
+          } else if (headers[f].id.toLowerCase().indexOf("nsection") > -1) {
+            fieldToGeneralize = self.importFields.find("courseNumber");
+            if (fieldToGeneralize.length > 0) {
+              self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
+              fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+              fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
+              headers[f] = fieldToGeneralize[0];
+            }
+          } else if (headers[f].id.toLowerCase().indexOf("prenom") > -1) {
+            fieldToGeneralize = self.importFields.find("firstname");
+            if (fieldToGeneralize.length > 0) {
+              self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
+              fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+              fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
+              headers[f] = fieldToGeneralize[0];
+            }
+          } else if (headers[f].id.toLowerCase().indexOf("nomdefamille") > -1) {
+            fieldToGeneralize = self.importFields.find("lastname");
+            if (fieldToGeneralize.length > 0) {
+              self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
+              fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+              fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
+              headers[f] = fieldToGeneralize[0];
+            }
+          } else if (headers[f].id.toLowerCase().indexOf("datedenaissance") > -1) {
+            fieldToGeneralize = self.importFields.find("dateofbirth");
+            if (fieldToGeneralize.length > 0) {
+              self.debug("This header matches an existing corpus field. ", fieldToGeneralize);
+              fieldToGeneralize[0].labelFieldLinguists = headers[f].labelFieldLinguists;
+              fieldToGeneralize[0].labelExperimenters = headers[f].labelExperimenters;
+              headers[f] = fieldToGeneralize[0];
+            }
           }
         }
-      }
 
-      /*
-       * Cycle through all the rows in table and create a datum with the matching fields.
-       */
-      var array = [];
-      try {
+        /*
+         * Cycle through all the rows in table and create a datum with the matching fields.
+         */
+        self.documentCollection = new Collection({
+          primaryKey: "dateCreated"
+        });
         //Import from html table that the user might have edited.
-        this.asCSV.map(function(row) {
-          var datumObject = {};
+        self.asCSV.map(function(row) {
+          var docToSave;
+          if (self.importType === "participants") {
+            docToSave = new Participant({
+              confidential: self.corpus.confidential,
+              fields: new DatumFields(JSON.parse(JSON.stringify(headers)))
+            });
+          } else {
+            docToSave = new Datum({
+              datumFields: new DatumFields(JSON.parse(JSON.stringify(headers)))
+            });
+
+          }
           var testForEmptyness = "";
           for (var index = 0; index < row.length; index++) {
             var item = row[index];
@@ -305,19 +362,25 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
              * the import sometimes inserts &nbsp into the data,
              * often when the csv detection didnt work. This might
              * slow import down significantly. i tested it, it looks
-             * like this isnt happening to the data anymore so i
-             * turned this off, but if we notice &nbsp in the
+             * like self isnt happening to the data anymore so i
+             * turned self off, but if we notice &nbsp in the
              * datagain we can turn it back on . for #855
              */
             //            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
             //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
             //            }
-            datumObject[headers[index].id] = item.trim();
+            if (self.importType === "participants") {
+              docToSave.fields[headers[index].id].value = item.trim();
+            } else {
+              docToSave.datumFields[headers[index].id].value = item.trim();
+            }
+            self.debug("new doc", docToSave);
+
             testForEmptyness += item.trim();
           }
           //if the table row has more than 2 non-white space characters, enter it as data
           if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
-            array.push(datumObject);
+            self.documentCollection.add(docToSave);
           } else {
             //dont add blank datum
             if (self.debugMode) {
@@ -325,243 +388,252 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             }
           }
         });
-      } catch (e) {
-        //Import from the array instead of using jquery and html
-        self.bug(JSON.stringify(e));
-        var rows = this.asCSV;
-        for (var r in rows) {
-          var datumObject = {};
-          var testForEmptyness = "";
-          for (var c in headers) {
-            datumObject[headers[c]] = rows[r][c];
-            testForEmptyness += rows[r][c];
+
+        var savePromises = [];
+        self.documentCollection._collection.map(function(builtDoc) {
+          if (self.importType === "participants") {
+            builtDoc.id = builtDoc.anonymousCode || Date.now();
+            builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
+            self.debug(" saving", builtDoc.id);
+            self.progress.total++;
+            self.datalist.docs.add(builtDoc);
+
+            var promise = builtDoc.save();
+
+            promise.then(function(success) {
+              self.debug(success);
+              self.progress.completed++;
+            }, function(error) {
+              self.debug(error);
+              self.progress.completed++;
+            });
+            savePromises.push(promise);
           }
-          //if the table row has more than 2 non-white space characters, enter it as data
-          if (testForEmptyness.replace(/\W/g, "").length >= 2) {
-            array.push(datumObject);
-          } else {
-            //dont add blank datum
-            if (self.debugMode) {
-              self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
-            }
-          }
-        }
-      }
-      // for (var datumObject in array) {
-      //   var datum = new Datum(array[datumObject]);
-      //   datum.url = "https://corpusdev.lingsync.org/" + this.corpus.debname;
-      //   datum.save();
-      // }
+        });
 
-      return headers;
+        Q.allSettled(savePromises).then(function(results) {
+          self.debug(results);
+          deferred.resolve(results);
+          self.progress.completed++;
+        }, function(results) {
+          self.debug(results);
+          deferred.resolve(results);
+          self.progress.completed++;
+        });
 
-      //   /*
-      //    * after building an array of datumobjects, turn them into backbone objects
-      //    */
-      //   var eachFileDetails = function(fileDetails) {
-      //     var details = JSON.parse(JSON.stringify(fileDetails));
-      //     delete details.textgrid;
-      //     audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".mp3"] = details;
-      //   };
+        self.discoveredHeaders = headers;
+        // return headers;
 
-      //   var forEachRow = function(index, value) {
-      //     if (index === "" || index === undefined) {
-      //       //do nothing
-      //     }
-      //     /* TODO removing old tag code for */
-      //     //          else if (index === "datumTags") {
-      //     //            var tags = value.split(" ");
-      //     //            for(g in tags){
-      //     //              var t = new DatumTag({
-      //     //                "tag" : tags[g]
-      //     //              });
-      //     //              d.get("datumTags").add(t);
-      //     //            }
-      //     //          }
-      //     /* turn the CheckedWithConsultant and ToBeCheckedWithConsultantinto columns into a status, with that string as the person */
-      //     else if (index.toLowerCase().indexOf("checkedwithconsultant") > -1) {
-      //       var consultants = [];
-      //       if (value.indexOf(",") > -1) {
-      //         consultants = value.split(",");
-      //       } else if (value.indexOf(";") > -1) {
-      //         consultants = value.split(";");
-      //       } else {
-      //         consultants = value.split(" ");
-      //       }
-      //       var validationStati = [];
-      //       for (var g in consultants) {
-      //         var consultantusername = consultants[g].toLowerCase();
-      //         this.consultants.push(consultantusername);
-      //         if (!consultantusername) {
-      //           continue;
-      //         }
-      //         var validationType = "CheckedWith";
-      //         var validationColor = "success";
-      //         if (index.toLowerCase().indexOf("ToBeChecked") > -1) {
-      //           validationType = "ToBeCheckedWith";
-      //           validationColor = "warning";
-      //         }
+        //   /*
+        //    * after building an array of datumobjects, turn them into backbone objects
+        //    */
+        //   var eachFileDetails = function(fileDetails) {
+        //     var details = JSON.parse(JSON.stringify(fileDetails));
+        //     delete details.textgrid;
+        //     audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".mp3"] = details;
+        //   };
 
-      //         var validationString = validationType + consultants[g].replace(/[- _.]/g, "");
-      //         validationStati.push(validationString);
-      //         var n = fields.where({
-      //           label: "validationStatus"
-      //         })[0];
-      //         /* add to any exisitng validation states */
-      //         var validationStatus = n.get("mask") || "";
-      //         validationStatus = validationStatus + " ";
-      //         validationStatus = validationStatus + validationStati.join(" ");
-      //         var uniqueStati = _.unique(validationStatus.trim().split(" "));
-      //         n.set("mask", uniqueStati.join(" "));
+        //   var forEachRow = function(index, value) {
+        //     if (index === "" || index === undefined) {
+        //       //do nothing
+        //     }
+        //     /* TODO removing old tag code for */
+        //     //          else if (index === "datumTags") {
+        //     //            var tags = value.split(" ");
+        //     //            for(g in tags){
+        //     //              var t = new DatumTag({
+        //     //                "tag" : tags[g]
+        //     //              });
+        //     //              d.get("datumTags").add(t);
+        //     //            }
+        //     //          }
+        //     /* turn the CheckedWithConsultant and ToBeCheckedWithConsultantinto columns into a status, with that string as the person */
+        //     else if (index.toLowerCase().indexOf("checkedwithconsultant") > -1) {
+        //       var consultants = [];
+        //       if (value.indexOf(",") > -1) {
+        //         consultants = value.split(",");
+        //       } else if (value.indexOf(";") > -1) {
+        //         consultants = value.split(";");
+        //       } else {
+        //         consultants = value.split(" ");
+        //       }
+        //       var validationStati = [];
+        //       for (var g in consultants) {
+        //         var consultantusername = consultants[g].toLowerCase();
+        //         self.consultants.push(consultantusername);
+        //         if (!consultantusername) {
+        //           continue;
+        //         }
+        //         var validationType = "CheckedWith";
+        //         var validationColor = "success";
+        //         if (index.toLowerCase().indexOf("ToBeChecked") > -1) {
+        //           validationType = "ToBeCheckedWith";
+        //           validationColor = "warning";
+        //         }
 
-      //         //              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
-      //         //              /* get the initials from the data */
-      //         //              var consultantCode = consultants[g].replace(/[a-z -]/g,"");
-      //         //              if(consultantusername.length === 2){
-      //         //                consultantCode = consultantusername;
-      //         //              }
-      //         //              if(consultantCode.length < 2){
-      //         //                consultantCode = consultantCode+"C";
-      //         //              }
-      //         //              var c = new Consultant("username", consultantCode);
-      //         //              /* use the value in the cell for the checked with state, but don't keep the spaces */
-      //         //              var validationType = "CheckedWith";
-      //         //              if(index.toLowerCase().indexOf("ToBeChecked") > -1){
-      //         //                validationType = "ToBeCheckedWith";
-      //         //              }
-      //         //              /*
-      //         //               * This function uses the consultant code to create a new validation status
-      //         //               */
-      //         //              var onceWeGetTheConsultant = function(){
-      //         //                var validationString = validationType+consultants[g].replace(/ /g,"");
-      //         //                validationStati.push(validationString);
-      //         //                var n = fields.where({label: "validationStatus"})[0];
-      //         //                if(n !== undefined){
-      //         //                  /* add to any exisitng validation states */
-      //         //                  var validationStatus = n.get("mask") || "";
-      //         //                  validationStatus = validationStatus + " ";
-      //         //                  validationStatus = validationStatus + validationStati.join(" ");
-      //         //                  var uniqueStati = _.unique(validationStatus.trim().split(" "));
-      //         //                  n.set("mask", uniqueStati.join(" "));
-      //         //                }
-      //         //              };
-      //         //              /*
-      //         //               * This function creates a consultant code and then calls
-      //         //               * onceWeGetTheConsultant to create a new validation status
-      //         //               */
-      //         //              var callIfItsANewConsultant = function(){
-      //         //                var dialect =  "";
-      //         //                var language =  "";
-      //         //                try{
-      //         //                  dialect = fields.where({label: "dialect"})[0] || "";
-      //         //                  language = fields.where({label: "language"})[0] || "";
-      //         //                }catch(e){
-      //         //                  self.debug("Couldn't get this consultant's dialect or language");
-      //         //                }
-      //         //                c = new Consultant({filledWithDefaults: true});
-      //         //                c.set("username", Date.now());
-      //         //                if(dialect)
-      //         //                  c.set("dialect", dialect);
-      //         //                if(dialect)
-      //         //                  c.set("language", language);
-      //         //
-      //         //                onceWeGetTheConsultant();
-      //         //              };
-      //         //              c.fetch({
-      //         //                success : function(model, response, options) {
-      //         //                  onceWeGetTheConsultant();
-      //         //                },
-      //         //                error : function(model, xhr, options) {
-      //         //                  callIfItsANewConsultant();
-      //         //                }
-      //         //              });
+        //         var validationString = validationType + consultants[g].replace(/[- _.]/g, "");
+        //         validationStati.push(validationString);
+        //         var n = fields.where({
+        //           label: "validationStatus"
+        //         })[0];
+        //         /* add to any exisitng validation states */
+        //         var validationStatus = n.get("mask") || "";
+        //         validationStatus = validationStatus + " ";
+        //         validationStatus = validationStatus + validationStati.join(" ");
+        //         var uniqueStati = _.unique(validationStatus.trim().split(" "));
+        //         n.set("mask", uniqueStati.join(" "));
+
+        //         //              ROUGH DRAFT of adding CONSULTANTS logic TODO do self in the angular app, dont bother with the backbone app
+        //         //              /* get the initials from the data */
+        //         //              var consultantCode = consultants[g].replace(/[a-z -]/g,"");
+        //         //              if(consultantusername.length === 2){
+        //         //                consultantCode = consultantusername;
+        //         //              }
+        //         //              if(consultantCode.length < 2){
+        //         //                consultantCode = consultantCode+"C";
+        //         //              }
+        //         //              var c = new Consultant("username", consultantCode);
+        //         //              /* use the value in the cell for the checked with state, but don't keep the spaces */
+        //         //              var validationType = "CheckedWith";
+        //         //              if(index.toLowerCase().indexOf("ToBeChecked") > -1){
+        //         //                validationType = "ToBeCheckedWith";
+        //         //              }
+        //         //              /*
+        //         //               * This function uses the consultant code to create a new validation status
+        //         //               */
+        //         //              var onceWeGetTheConsultant = function(){
+        //         //                var validationString = validationType+consultants[g].replace(/ /g,"");
+        //         //                validationStati.push(validationString);
+        //         //                var n = fields.where({label: "validationStatus"})[0];
+        //         //                if(n !== undefined){
+        //         //                  /* add to any exisitng validation states */
+        //         //                  var validationStatus = n.get("mask") || "";
+        //         //                  validationStatus = validationStatus + " ";
+        //         //                  validationStatus = validationStatus + validationStati.join(" ");
+        //         //                  var uniqueStati = _.unique(validationStatus.trim().split(" "));
+        //         //                  n.set("mask", uniqueStati.join(" "));
+        //         //                }
+        //         //              };
+        //         //              /*
+        //         //               * This function creates a consultant code and then calls
+        //         //               * onceWeGetTheConsultant to create a new validation status
+        //         //               */
+        //         //              var callIfItsANewConsultant = function(){
+        //         //                var dialect =  "";
+        //         //                var language =  "";
+        //         //                try{
+        //         //                  dialect = fields.where({label: "dialect"})[0] || "";
+        //         //                  language = fields.where({label: "language"})[0] || "";
+        //         //                }catch(e){
+        //         //                  self.debug("Couldn't get self consultant's dialect or language");
+        //         //                }
+        //         //                c = new Consultant({filledWithDefaults: true});
+        //         //                c.set("username", Date.now());
+        //         //                if(dialect)
+        //         //                  c.set("dialect", dialect);
+        //         //                if(dialect)
+        //         //                  c.set("language", language);
+        //         //
+        //         //                onceWeGetTheConsultant();
+        //         //              };
+        //         //              c.fetch({
+        //         //                success : function(model, response, options) {
+        //         //                  onceWeGetTheConsultant();
+        //         //                },
+        //         //                error : function(model, xhr, options) {
+        //         //                  callIfItsANewConsultant();
+        //         //                }
+        //         //              });
 
 
-      //       }
-      //     } else if (index === "validationStatus") {
-      //       var eachValidationStatus = fields.where({
-      //         label: index
-      //       })[0];
-      //       if (eachValidationStatus !== undefined) {
-      //         /* add to any exisitng validation states */
-      //         var thisValidationStatus = eachValidationStatus.get("mask") || "";
-      //         thisValidationStatus = thisValidationStatus + " ";
-      //         thisValidationStatus = thisValidationStatus + value;
-      //         var thisUniqueStati = _.unique(thisValidationStatus.trim().split(" "));
-      //         eachValidationStatus.set("mask", thisUniqueStati.join(" "));
-      //       }
-      //     } else if (index === "audioFileName") {
-      //       if (!audioVideo) {
-      //         audioVideo = new AudioVideo();
-      //       }
-      //       audioVideo.set("filename", value);
-      //       audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
-      //       audioVideo.set("URL", self.audioUrl + "/" + window.app.get("corpus").get("pouchname") + "/" + value);
-      //       audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
-      //       audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
-      //     } else if (index === "startTime") {
-      //       if (!audioVideo) {
-      //         audioVideo = new AudioVideo();
-      //       }
-      //       audioVideo.set("startTime", value);
-      //     } else if (index === "endTime") {
-      //       if (!audioVideo) {
-      //         audioVideo = new AudioVideo();
-      //       }
-      //       audioVideo.set("endTime", value);
-      //     } else {
-      //       var knownlowercasefields = "utterance,gloss,morphemes,translation".split();
-      //       if (knownlowercasefields.indexOf(index.toLowerCase()) > -1) {
-      //         index = index.toLowerCase();
-      //       }
-      //       var igtField = fields.where({
-      //         label: index
-      //       })[0];
-      //       if (igtField !== undefined) {
-      //         igtField.set("mask", value);
-      //       }
-      //     }
-      //   };
-      //   for (var a in array) {
-      //     var d = new Datum({
-      //       filledWithDefaults: true,
-      //       pouchname: self.dbname
-      //     });
-      //     //copy the corpus's datum fields and empty them.
-      //     var datumfields = self.importFields.clone();
-      //     for (var x in datumfields) {
-      //       datumfields[x].mask = "";
-      //       datumfields[x].value = "";
-      //     }
-      //     var fields = new DatumFields(datumfields);
-      //     var audioVideo = null;
-      //     var audioFileDescriptionsKeyedByFilename = {};
-      //     if (this.files && this.files.map) {
-      //       this.files.map(eachFileDetails);
-      //     }
+        //       }
+        //     } else if (index === "validationStatus") {
+        //       var eachValidationStatus = fields.where({
+        //         label: index
+        //       })[0];
+        //       if (eachValidationStatus !== undefined) {
+        //         /* add to any exisitng validation states */
+        //         var selfValidationStatus = eachValidationStatus.get("mask") || "";
+        //         selfValidationStatus = selfValidationStatus + " ";
+        //         selfValidationStatus = selfValidationStatus + value;
+        //         var selfUniqueStati = _.unique(selfValidationStatus.trim().split(" "));
+        //         eachValidationStatus.set("mask", selfUniqueStati.join(" "));
+        //       }
+        //     } else if (index === "audioFileName") {
+        //       if (!audioVideo) {
+        //         audioVideo = new AudioVideo();
+        //       }
+        //       audioVideo.set("filename", value);
+        //       audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
+        //       audioVideo.set("URL", self.audioUrl + "/" + window.app.get("corpus").pouchname + "/" + value);
+        //       audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
+        //       audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
+        //     } else if (index === "startTime") {
+        //       if (!audioVideo) {
+        //         audioVideo = new AudioVideo();
+        //       }
+        //       audioVideo.set("startTime", value);
+        //     } else if (index === "endTime") {
+        //       if (!audioVideo) {
+        //         audioVideo = new AudioVideo();
+        //       }
+        //       audioVideo.set("endTime", value);
+        //     } else {
+        //       var knownlowercasefields = "utterance,gloss,morphemes,translation".split();
+        //       if (knownlowercasefields.indexOf(index.toLowerCase()) > -1) {
+        //         index = index.toLowerCase();
+        //       }
+        //       var igtField = fields.where({
+        //         label: index
+        //       })[0];
+        //       if (igtField !== undefined) {
+        //         igtField.set("mask", value);
+        //       }
+        //     }
+        //   };
+        //   for (var a in array) {
+        //     var d = new Datum({
+        //       filledWithDefaults: true,
+        //       pouchname: self.dbname
+        //     });
+        //     //copy the corpus"s datum fields and empty them.
+        //     var datumfields = self.importFields.clone();
+        //     for (var x in datumfields) {
+        //       datumfields[x].mask = "";
+        //       datumfields[x].value = "";
+        //     }
+        //     var fields = new DatumFields(datumfields);
+        //     var audioVideo = null;
+        //     var audioFileDescriptionsKeyedByFilename = {};
+        //     if (self.files && self.files.map) {
+        //       self.files.map(eachFileDetails);
+        //     }
 
-      //     $.each(array[a], forEachRow);
-      //     d.set("datumFields", fields);
-      //     if (audioVideo) {
-      //       d.get("audioVideo").add(audioVideo);
-      //       if (self.debugMode) {
-      //         self.debug(JSON.stringify(audioVideo.toJSON()) + JSON.stringify(fields.toJSON()));
-      //       }
-      //     }
-      //     // var states = window.app.get("corpus").get("datumStates").clone();
-      //     // d.set("datumStates", states);
-      //     d.set("session", this.get("session"));
-      //     //these are temp datums, dont save them until the user saves the data list
-      //     this.importPaginatedDataListDatumsView.collection.add(d);
-      //     //        this.dataListView.model.get("datumIds").push(d.id); the datum has no id, cannot put in datumIds
-      //     d.lookForSimilarDatum();
-      //     this.get("datumArray").push(d);
-      //   }
-      //   this.set("consultants", _.unique(this.consultants).join(","));
-      //   this.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
+        //     $.each(array[a], forEachRow);
+        //     d.set("datumFields", fields);
+        //     if (audioVideo) {
+        //       d.audioVideo.add(audioVideo);
+        //       if (self.debugMode) {
+        //         self.debug(JSON.stringify(audioVideo.toJSON()) + JSON.stringify(fields.toJSON()));
+        //       }
+        //     }
+        //     // var states = window.app.get("corpus").get("datumStates").clone();
+        //     // d.set("datumStates", states);
+        //     d.set("session", self.get("session"));
+        //     //these are temp datums, dont save them until the user saves the data list
+        //     self.importPaginatedDataListDatumsView.collection.add(d);
+        //     //        self.dataListView.model.get("datumIds").push(d.id); the datum has no id, cannot put in datumIds
+        //     d.lookForSimilarDatum();
+        //     self.get("datumArray").push(d);
+        //   }
+        //   self.set("consultants", _.unique(self.consultants).join(","));
+        //   self.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
 
-      //   $(".approve-save").removeAttr("disabled");
-      //   $(".approve-save").removeClass("disabled");
+        //   $(".approve-save").removeAttr("disabled");
+        //   $(".approve-save").removeClass("disabled");
+
+      });
+      return deferred.promise;
     }
   },
   // savedcount : 0,
@@ -581,7 +653,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         try {
 
           var failFunction = function(reason) {
-            if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+            if (options && typeof options.next === "function" /* enable use as middleware */ ) {
               options.next();
             }
             deferred.reject(reason);
@@ -589,7 +661,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
           var successFunction = function(optionsWithResults) {
             self.debug("Preprocesing success");
-            if (optionsWithResults && typeof optionsWithResults.next === 'function' /* enable use as middleware */ ) {
+            if (optionsWithResults && typeof optionsWithResults.next === "function" /* enable use as middleware */ ) {
               optionsWithResults.next();
             }
             deferred.resolve(optionsWithResults);
@@ -639,18 +711,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.todo("TODO in the import");
 
       Q.nextTick(function() {
-        if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+        if (options && typeof options.next === "function" /* enable use as middleware */ ) {
           options.next();
         }
         deferred.resolve(options);
       });
       return deferred.promise;
-    }
-  },
-
-  render: {
-    value: function(options) {
-      this.warn('Rendering, but the render was not injected for this importer.', options);
     }
   },
 
@@ -661,10 +727,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   datalist: {
     get: function() {
-      if (!this._datalist) {
-        this._datalist = new FieldDBObject();
-      }
-      return this._datalist;
+      return this._datalist || FieldDBObject.DEFAULT_OBJECT;
     },
     set: function(value) {
       if (value === this._datalist) {
@@ -679,23 +742,23 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    *
    * @type {Object}
    */
-  datumCollection: {
+  documentCollection: {
     get: function() {
-      this.debug('Getting Datum collection');
-      if (!this._datumCollection) {
-        this._datumCollection = new Collection({
+      this.debug("Getting Datum collection");
+      if (!this._documentCollection) {
+        this._documentCollection = new Collection({
           inverted: false,
-          key: '_id'
+          key: "_id"
         });
       }
       this.debug("Returning a collection");
-      return this._datumCollection;
+      return this._documentCollection;
     },
     set: function(value) {
-      if (value === this._datumCollection) {
+      if (value === this._documentCollection) {
         return;
       }
-      this._datumCollection = value;
+      this._documentCollection = value;
     }
   },
 
@@ -707,7 +770,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   pause: {
     value: function(options) {
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+      if (options && typeof options.next === "function" /* enable use as middleware */ ) {
         options.next();
       }
       return this;
@@ -722,7 +785,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   resume: {
     value: function(options) {
 
-      if (options && typeof options.next === 'function' /* enable use as middleware */ ) {
+      if (options && typeof options.next === "function" /* enable use as middleware */ ) {
         options.next();
       }
       return this;
@@ -745,7 +808,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   corpus: {
     get: function() {
       if (!this._corpus) {
-        throw 'Import\'s corpus is undefined';
+        // throw "Import\"s corpus is undefined";
+        // this.warn("Import\"s corpus is undefined");
+        return;
       }
       return this._corpus;
     },
@@ -765,35 +830,38 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * OpenOffice Spreadsheets, and could be a good format to export
    * from these sources and import into FieldDB.
    *
-   * @param text
+   * @param text to be imported
    */
   importCSV: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split("\n");
       if (rows.length < 3) {
         rows = text.split("\r");
-        self.status = self.status + " Detected a \r line ending.";
+        this.status = this.status + " Detected a \r line ending.";
       }
       var firstrow = rows[0];
       var hasQuotes = false;
       //If it looks like it already has quotes:
-      if (rows[0].split('","').length > 2 && rows[5].split('","').length > 2) {
+      if (rows[0].split("", "").length > 2 && rows[5].split("", "").length > 2) {
         hasQuotes = true;
-        self.status = self.status + " Detected text was already surrounded in quotes.";
+        this.status = this.status + " Detected text was already surrounded in quotes.";
       }
       for (var l in rows) {
         if (hasQuotes) {
-          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split('","');
+          rows[l] = rows[l].trim().replace(/^"/, "").replace(/"$/, "").split("", "");
           //          var withoutQuotes = [];
           //          _.each(rows[l],function(d){
           //            withoutQuotes.push(d.replace(/"/g,""));
           //          });
           //          rows[l] = withoutQuotes;
         } else {
-          rows[l] = self.parseLineCSV(rows[l]);
+          rows[l] = this.parseLineCSV(rows[l]);
           /* This was a fix for alan's data but it breaks other data. */
           //          var rowWithoutQuotes = rows[l].replace(/"/g,"");
-          //          rows[l] = self.parseLineCSV(rowWithoutQuotes);
+          //          rows[l] = this.parseLineCSV(rowWithoutQuotes);
         }
       }
       /* get the first line and set it to be the header by default */
@@ -801,14 +869,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows.length > 3) {
         firstrow = firstrow;
         if (hasQuotes) {
-          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split('","');
+          header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("", "");
         } else {
-          header = self.parseLineCSV(firstrow);
+          header = this.parseLineCSV(firstrow);
         }
       }
-      self.extractedHeader = header;
+      this.extractedHeader = header;
 
-      self.asCSV = rows;
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -833,9 +901,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(lineCSV) {
       // parse csv line by line into array
       var CSV = [];
-
+      var csvCharacter = ",";
+      this.debug(lineCSV, typeof lineCSV);
+      var matches = lineCSV.split(csvCharacter);
+      if (matches.length < 2) {
+        csvCharacter = ";";
+      }
       // Insert space before character ",". This is to anticipate
-      // 'split' in IE
+      // "split" in IE
       // try this:
       //
       // var a=",,,a,,b,,c,,,,d";
@@ -844,11 +917,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       //
       // You will see unexpected result!
       //
-      lineCSV = lineCSV.replace(/,/g, " ,");
+      lineCSV = lineCSV.replace(new RegExp(csvCharacter, "g"), " " + csvCharacter);
 
-      lineCSV = lineCSV.split(/,/g);
+      lineCSV = lineCSV.split(new RegExp(csvCharacter, "g"));
 
-      // This is continuing of 'split' issue in IE
+      // This is continuing of "split" issue in IE
       // remove all trailing space in each field
       var i,
         j;
@@ -864,7 +937,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         if (lineCSV[i].match(/"$/)) {
           if (fstart >= 0) {
             for (j = fstart + 1; j <= i; j++) {
-              lineCSV[fstart] = lineCSV[fstart] + "," + lineCSV[j];
+              lineCSV[fstart] = lineCSV[fstart] + csvCharacter + lineCSV[j];
               lineCSV[j] = "-DELETED-";
             }
             fstart = -1;
@@ -882,7 +955,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           // space
           CSV[j] = CSV[j].replace(/^"|"$/g, ""); // remove " on the beginning
           // and end
-          CSV[j] = CSV[j].replace(/""/g, '"'); // replace "" with "
+          CSV[j] = CSV[j].replace(/""/g, "\""); // replace "" with "
           j++;
         }
       }
@@ -895,20 +968,26 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
   importElanXML: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
+      this.todo("import xml parsers to turn xml import back on");
+      if (true) {
+        return;
+      }
       //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var xmlParser = new X2JS();
       window.text = text;
       var jsonObj = xmlParser.xml_str2json(text);
-      if (self.debugMode) {
-        self.debug(jsonObj);
-      }
+
+      this.debug(jsonObj);
 
       //add the header to the session
       //    HEADER can be put in the session and in the datalist
-      var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g, "\n").replace(/[\[\]{}]/g, "").replace(/:/g, " : ").replace(/"/g, "").replace(/\\n/g, "").replace(/file : /g, "file:").replace(/ : \//g, ":/").trim();
+      var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g, "\n").replace(/[\[\]{}]/g, "").replace(/:/g, " : ").replace(/"/g, "").replace(/\n/g, "").replace(/file : /g, "file:").replace(/ : \//g, ":/").trim();
       //TODO turn these into session fields
-      self.set("status", self.status + "\n" + annotationDetails);
+      this.status = this.status + "\n" + annotationDetails;
 
 
       var header = [];
@@ -1006,9 +1085,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               matrix[annotation][annotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];
             }
           } catch (e) {
-            if (self.debugMode) {
-              self.debug("TIER " + l + " doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
-            }
+            this.debug("TIER " + l + " doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
 
           try {
@@ -1016,9 +1093,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               matrix[annotation][refannotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];
             }
           } catch (e) {
-            if (self.debugMode) {
-              self.debug("TIER " + l + " doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
-            }
+            this.debug("TIER " + l + " doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
 
         }
@@ -1041,8 +1116,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows === []) {
         rows.push("");
       }
-      self.set("extractedHeader", header);
-      self.set("asCSV", rows);
+      this.extractedHeader = header;
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -1056,21 +1131,24 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * your file has more than 100 tabs in it, FieldDB guesses that it
    * should try this function.
    *
-   * @param tabbed
+   * @param text to be imported
    */
   importTabbed: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split("\n"),
         l;
       if (rows.length < 3) {
         rows = text.split("\r");
-        self.set("status", self.get("status", "Detected a \n line ending."));
+        this.status = this.status + " Detected a \n line ending.";
       }
       for (l in rows) {
         rows[l] = rows[l].split("\t");
       }
 
-      self.set("asCSV", rows);
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -1089,17 +1167,19 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * stops and another starts. It doesn't appear to be double spaces...
    *
    * @param text
-   * @param self
    * @param callback
    */
   importToolbox: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var lines = text.split("\n");
       var macLineEndings = false;
       if (lines.length < 3) {
         lines = text.split("\r");
         macLineEndings = true;
-        self.set("status", self.get("status", "Detected a \r line ending."));
+        this.status = this.status + " Detected a \r line ending.";
       }
 
       var matrix = [];
@@ -1132,7 +1212,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             //If the line starts with \ its a column
             if (lines[l].match(/^\\/)) {
               var pieces = lines[l].split(/ +/);
-              columnhead = pieces[0].replace('\\', "");
+              columnhead = pieces[0].replace("\\", "");
               matrix[currentDatum][columnhead] = lines[l].replace(pieces[0], "");
               header.push(columnhead);
             } else {
@@ -1164,8 +1244,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (rows === []) {
         rows.push("");
       }
-      self.set("extractedHeader", header);
-      self.set("asCSV", rows);
+      this.extractedHeader = header;
+      this.asCSV = rows;
       if (typeof callback === "function") {
         callback();
       }
@@ -1176,11 +1256,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   downloadTextGrid: {
     value: function(fileDetails) {
       var self = this;
-      var textridUrl = OPrime.audioUrl + "/" + this.get("pouchname") + "/" + fileDetails.fileBaseName + ".TextGrid";
+      var textridUrl = OPrime.audioUrl + "/" + this.pouchname + "/" + fileDetails.fileBaseName + ".TextGrid";
       $.ajax({
         url: textridUrl,
-        type: 'get',
-        // dataType: 'text',
+        type: "get",
+        // dataType: "text",
         success: function(results) {
           if (results) {
             fileDetails.textgrid = results;
@@ -1198,11 +1278,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             }
             var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
             fileDetails.description = message;
-            self.set("status", self.status + "<br/>" + message);
-            self.set("fileDetails", self.status + message);
+            self.status = self.status + "<br/>" + message;
+            self.fileDetails = self.status + message;
             window.appView.toastUser(message, "alert-info", "Import:");
-            self.set("rawText", self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results);
-            self.importTextGrid(self.rawText, self, null);
+            self.rawText = self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results;
+            self.importTextGrid(self.rawText, null);
           } else {
             self.debug(results);
             fileDetails.textgrid = "Error result was empty. " + results;
@@ -1226,7 +1306,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
           self.debug(reason);
           if (reason && reason.userFriendlyErrors) {
-            self.set("status", fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" "));
+            self.status = fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" ");
             window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
           }
         }
@@ -1236,10 +1316,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   addAudioVideoFile: {
     value: function(url) {
-      if (!this.get("audioVideo")) {
-        this.set("audioVideo", new AudioVideos());
+      if (!this.audioVideo) {
+        this.audioVideo = new AudioVideos();
       }
-      this.get("audioVideo").add(new AudioVideo({
+      this.audioVideo.add(new AudioVideo({
         filename: url.substring(url.lastIndexOf("/") + 1),
         URL: url,
         description: "File from import"
@@ -1248,10 +1328,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
 
   importTextGrid: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
       var textgrid = TextGrid.textgridToIGT(text);
-      var audioFileName = self.files[0] ? self.files[0].name : "copypastedtextgrid_unknownaudio";
+      var audioFileName = "copypastedtextgrid_unknownaudio";
+      if (this.files && this.files[0] && this.files[0].name) {
+        audioFileName = this.files[0].name;
+      }
       audioFileName = audioFileName.replace(/\.textgrid/i, "");
       if (!textgrid || !textgrid.intervalsByXmin) {
         if (typeof callback === "function") {
@@ -1318,9 +1404,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       header = getUnique(header);
       consultants = getUnique(consultants);
       if (consultants.length > 0) {
-        self.set("consultants", consultants.join(","));
+        this.consultants = consultants.join(",");
       } else {
-        self.set("consultants", "Unknown");
+        this.consultants = "Unknown";
       }
       header = header.concat(["utterance", "tier", "speakers", "CheckedWithConsultant", "startTime", "endTime", "modality", "audioFileName"]);
       var rows = [];
@@ -1341,15 +1427,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           // cells.push(audioFileName);
           rows.push(cells);
         } else {
-          self.debug("This row has only the default columns, not text or anything interesting.");
+          this.debug("This row has only the default columns, not text or anything interesting.", cells);
         }
       }
       if (rows === []) {
         rows.push("");
       }
       // header.push("audioFileName");
-      self.set("extractedHeader", header);
-      self.set("asCSV", rows);
+      this.extractedHeader = header;
+      this.asCSV = rows;
 
       if (typeof callback === "function") {
         callback();
@@ -1376,15 +1462,21 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * @param text
    */
   importTextIGT: {
-    value: function(text, self, callback) {
+    value: function(text, callback) {
+      if (!text) {
+        return;
+      }
       var rows = text.split(/\n\n+/),
         l;
 
       var macLineEndings = false;
       if (rows.length < 3) {
-        rows = text.split("\r\r");
-        macLineEndings = true;
-        self.set("status", self.get("status", "Detected a MAC line ending."));
+        var macrows = text.split("\r\r");
+        if (macrows.length > rows.length) {
+          this.status = this.status + " Detected a MAC line ending.";
+          macLineEndings = true;
+          rows = macrows;
+        }
       }
       for (l in rows) {
         if (macLineEndings) {
@@ -1393,7 +1485,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           rows[l] = rows[l].replace(/  +/g, " ").split("\n");
         }
       }
-      self.set("asCSV", rows);
+      this.asCSV = rows;
+      this.extractedHeader = rows[0];
       if (typeof callback === "function") {
         callback();
       }
@@ -1413,10 +1506,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   importRawText: {
     value: function(text) {
       if (this.ignoreLineBreaksInRawText) {
-        text.replace(/\n+/g, ' ').replace(/\r+/g, ' ');
+        text.replace(/\n+/g, " ").replace(/\r+/g, " ");
       }
-      this.datumCollection.add({
-        id: 'orthography',
+      this.documentCollection.add({
+        id: "orthography",
         value: text
       });
       this.debug("added a datum to the collection");
@@ -1442,7 +1535,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       options = options || {};
       this.progress = {
         total: 0,
-        current: 0
+        completed: 0
       };
       Q.nextTick(function() {
 
@@ -1451,8 +1544,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
         self.progress.total = files.length;
         for (var i = 0, file; file = files[i]; i++) {
-          var details = [escape(file.name), file.type || 'n/a', '-', file.size, 'bytes, last modified:', file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a'].join(' ');
-          self.status = self.status + '; ' + details;
+          var details = [escape(file.name), file.type || "n/a", "-", file.size, "bytes, last modified:", file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : "n/a"].join(" ");
+          self.status = self.status + "; " + details;
           fileDetails.push(JSON.parse(JSON.stringify(file)));
           if (options.readOptions) {
             promisses.push(options.readOptions.readFileFunction.apply(self, [{
@@ -1473,13 +1566,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
         Q.allSettled(promisses).then(function(results) {
           deferred.resolve(results.map(function(result) {
+            self.progress.completed += 1;
             return result.value;
           }));
         }, function(results) {
-          self.error = 'Error processing files';
+          self.error = "Error processing files";
           deferred.reject(results);
         }).catch(function(error) {
-          console.warn('There was an error when importing these options ', error, options);
+          self.warn("There was an error when importing these options ", error, options);
         });
 
       });
@@ -1496,17 +1590,17 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var deferred = Q.defer(),
         self = this;
 
-      this.debug('readFileIntoRawText', options);
+      this.debug("readFileIntoRawText", options);
       Q.nextTick(function() {
         if (!options) {
           options = {
-            error: 'Options must be defined for readFileIntoRawText'
+            error: "Options must be defined for readFileIntoRawText"
           };
           deferred.reject(options);
           return;
         }
         if (!options.file) {
-          options.error = 'Options: file must be defined for readFileIntoRawText';
+          options.error = "Options: file must be defined for readFileIntoRawText";
           deferred.reject(options);
           return;
         }
@@ -1519,12 +1613,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           if (evt.target.readyState === FileReader.DONE) { // DONE === 2
             options.rawText = evt.target.result;
             self.rawText = self.rawText + options.rawText;
-            self.importSecondStep = true;
+            // self.showImportSecondStep = true;
             deferred.resolve(options);
           }
         };
 
-        var blob = '';
+        var blob = "";
         if (options.file.slice) {
           blob = options.file.slice(options.start, options.stop + 1);
         } else if (options.file.mozSlice) {
@@ -1533,7 +1627,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           blob = options.file.webkitSlice(options.start, options.stop + 1);
         }
         // reader.readAsBinaryString(blob);
-        // reader.readAsText(blob, 'UTF-8');
+        // reader.readAsText(blob, "UTF-8");
         reader.readAsText(blob);
 
       });
@@ -1549,81 +1643,110 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         fileIndex = 0;
       }
 
-      var importType = {
+      var importTypeConfidenceMeasures = {
+        handout: {
+          confidence: 0,
+          id: "handout",
+          importFunction: this.importTextIGT
+        },
         csv: {
           confidence: 0,
+          id: "csv",
           importFunction: this.importCSV
         },
         tabbed: {
           confidence: 0,
+          id: "tabbed",
           importFunction: this.importTabbed
         },
         xml: {
           confidence: 0,
+          id: "xml",
           importFunction: this.importXML
         },
         toolbox: {
           confidence: 0,
+          id: "toolbox",
           importFunction: this.importToolbox
         },
         elanXML: {
           confidence: 0,
+          id: "elanXML",
           importFunction: this.importElanXML
         },
         praatTextgrid: {
           confidence: 0,
+          id: "praatTextgrid",
           importFunction: this.importTextGrid
         },
         latex: {
           confidence: 0,
+          id: "latex",
           importFunction: this.importLatex
-        },
-        handout: {
-          confidence: 0,
-          importFunction: this.importTextIGT
         }
+
       };
 
       //if the user is just typing, try raw text
-      if (this.files[fileIndex]) {
-        var fileExtension = this.files[fileIndex].name.split('.').pop().toLowerCase();
+      if (this.files && this.files[fileIndex]) {
+        var fileExtension = this.files[fileIndex].name.split(".").pop().toLowerCase();
         if (fileExtension === "csv") {
-          importType.csv.confidence++;
+          importTypeConfidenceMeasures.csv.confidence++;
         } else if (fileExtension === "txt") {
           //If there are more than 20 tabs in the file, try tabbed.
           if (this.rawText.split("\t").length > 20) {
-            importType.tabbed.confidence++;
+            importTypeConfidenceMeasures.tabbed.confidence++;
           } else {
-            importType.handout.confidence++;
+            importTypeConfidenceMeasures.handout.confidence++;
           }
         } else if (fileExtension === "eaf") {
-          importType.elanXML.confidence++;
+          importTypeConfidenceMeasures.elanXML.confidence++;
         } else if (fileExtension === "xml") {
-          importType.xml.confidence++;
+          importTypeConfidenceMeasures.xml.confidence++;
         } else if (fileExtension === "sf") {
-          importType.toolbox.confidence++;
+          importTypeConfidenceMeasures.toolbox.confidence++;
         } else if (fileExtension === "tex") {
-          importType.latex.confidence++;
+          importTypeConfidenceMeasures.latex.confidence++;
         } else if (fileExtension === "textgrid") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
         } else if (fileExtension === "mov") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
         } else if (fileExtension === "wav") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
         } else if (fileExtension === "mp3") {
-          importType.praatTextgrid.confidence++;
+          importTypeConfidenceMeasures.praatTextgrid.confidence++;
+        }
+      } else {
+        if (this.rawText && this.rawText.length) {
+          var textLength = this.rawText.length;
+          if (this.rawText.indexOf("\\gll") > -1 || this.rawText.indexOf("\\begin{") > -1 || this.rawText.indexOf("\\ex") > -1) {
+            importTypeConfidenceMeasures.latex.confidence = 100;
+          } else if (this.rawText.indexOf("mpi.nl/tools/elan/EAF") > -1) {
+            importTypeConfidenceMeasures.elanXML.confidence = 100;
+          } else if (this.rawText.indexOf("<?xml") > -1) {
+            importTypeConfidenceMeasures.xml.confidence = 100;
+          } else {
+            importTypeConfidenceMeasures.csv.confidence = this.rawText.split(",").length / textLength;
+            importTypeConfidenceMeasures.tabbed.confidence = this.rawText.split("\t").length / textLength;
+            importTypeConfidenceMeasures.handout.confidence = this.rawText.split(/\n\n+/).length / textLength;
+            importTypeConfidenceMeasures.toolbox.confidence = this.rawText.split(/\n\\/).length / textLength;
+            importTypeConfidenceMeasures.praatTextgrid.confidence = this.rawText.split("intervals").length / textLength;
+          }
         }
       }
-      var mostLikelyImport = _.max(importType, function(obj) {
+      this.importTypeConfidenceMeasures = importTypeConfidenceMeasures;
+
+      var mostLikelyImport = _.max(importTypeConfidenceMeasures, function(obj) {
         return obj.confidence;
       });
+      this.importTypeConfidenceMeasures.mostLikely = mostLikelyImport;
       this.status = "";
-      mostLikelyImport.importFunction.apply(this, [this.rawText, this, null]); //no callback
+      mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
     }
   },
   readBlob: {
     value: function(file, callback, opt_startByte, opt_stopByte) {
-      console.warn('Read blob is deprecated', file, callback, opt_startByte, opt_stopByte);
+      this.warn("Read blob is deprecated", file, callback, opt_startByte, opt_stopByte);
     }
   }
 });

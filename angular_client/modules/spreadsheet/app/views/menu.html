@@ -1,0 +1,613 @@
+<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady==true">
+  <div class="span4 offset4 pagination-centered">
+    <img src="images/loading-spinner.gif" width="75">
+  </div>
+</div>
+<div id="hideOnLoadDeprecated">
+  <div class="largeMenuBar">
+    <div class="menubar mainMenubar" ng-cloak>
+      <span class="menuTitle">
+        <a          ng-click="navigateVerifySaved('home')">
+          <img src="images/icon48_dev.png" border="0" />
+        </a>
+      </span>
+      <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}">
+        <a class="menuitem" ng-click="loadDataEntryScreen();">
+          <i class="fa whiteicon fa-list">
+          </i>
+          Data Entry
+        </a>
+      </span>
+      |
+      <span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}">
+        <a class="menuitem" ng-click="navigateVerifySaved('searchMenu');">
+          <i class="fa whiteicon fa-search">
+          </i>
+          Search
+        </a>
+      </span>
+      |
+      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+        <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
+          <i class="fa whiteicon fa-calendar">
+          </i>
+          Session
+        </a>
+      </span>
+      |
+      <span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
+        <ul class="dropdown_nav">
+          <li>
+            <a class="menuitem">
+              <i class="fa whiteicon fa-cogs">
+              </i>
+              Settings
+            </a>
+            <ul>
+              <li>
+                <a ng-click="navigateVerifySaved('corpusSettings')">
+                  <i class="fa whiteicon fa-cloud">
+                  </i>
+                  Corpus
+                </a>
+              </li>
+              <li ng-hide="DB.pouchname==undefined">
+                <a ng-click="navigateVerifySaved('settings');">
+                  <i class="fa whiteicon fa-cogs">
+                  </i>
+                  User Interface
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </span>
+      |
+      <span ng-class="{active_menu_class: activeMenu=='faq'}">
+        <a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;">
+          <i class="fa whiteicon fa-question-circle">
+          </i>
+          FAQ
+        </a>
+      </span>
+      |
+      <span ng-hide="data==undefined" ng-hide="dataentry==false">
+        <input type="checkbox" ng-model="useAutoGlosser">
+        <i class="fa whiteicon fa-bar-chart-o">
+        </i>
+        Semi-auto Glosser
+      </span>
+      <span class="rightMenuItems" ng-show="authenticated==true">
+        <div class="rightMenuItemsDiv">
+          <div ng-hide="DB==undefined">
+            <a class="floatLeft" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this {{DB.pouchname}}'s webpage">
+              <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+            </a>
+            <i class="fa whiteicon fa-calendar">
+            </i>
+            {{getCurrentSessionName()}}
+            <br />
+            <i class="fa whiteicon fa-cloud">
+            </i>
+            {{DB.title}}
+          </div>
+          <div>
+            &nbsp;
+            <button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">
+              {{getSavedState()}}
+            </button>
+            &nbsp;
+            <button class="btn btn-warning" ng-click="logOut()">
+              <i class="fa whiteicon fa-arrow-right">
+              </i>
+              Log out
+            </button>
+            <a href="http://lingsync.org/{{user.username}}" target="_blank" title="Visit your share page">
+              <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0">
+            </a>
+          </div>
+        </div>
+        <div class="clearDiv">
+        </div>
+      </span>
+      <span ng-hide="authenticated">
+        <div class="rightMenuItemsDiv">
+          <button ng-click="navigateVerifySaved('register');" class="btn btn-primary">
+            Register
+          </button>
+        </div>
+      </span>
+    </div>
+    <div class="subMenubar" ng-show="activeSubMenu=='editSession'" ng-cloak>
+      <div class="form-horizontal">
+        <span>
+          <i class="fa whiteicon fa-calendar">
+          </i>
+          Change Session:
+        </span>
+        <select class="span3" ng-model='activeSessionToSwitchTo'>
+          <option value="" disabled selected>
+            Choose session...
+          </option>
+          <option value='none'>
+            <i class="fa whiteicon fa-cogs">
+            </i>
+            All sessions
+          </option>
+          <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value={{session._id}}>
+            {{session.dateCreated | shortDate}} {{session.title}}
+          </option>
+        </select>
+        &nbsp;
+        <button class="btn btn-primary" ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">
+          Activate Session
+        </button>
+        &nbsp;&nbsp;
+        <span ng-hide="activeSession==undefined">
+          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
+            Edit Session Info
+          </button>
+          &nbsp;&nbsp;
+        </span>
+        <span ng-show="(data | filter: activeSession).length==0">
+          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">
+            <i class="fa whiteicon fa-trash-o">
+            </i>
+            Delete Session
+          </button>
+          &nbsp;&nbsp;
+        </span>
+        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+          <i class="fa whiteicon fa-plus">
+          </i>
+          Create New Elicitation Session
+        </button>
+      </div>
+      <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSession!=undefined"ng-cloak>
+        <form ng-model='editSessionInfo'>
+          <table cellpadding="5px">
+            <tr>
+              <td>
+                <i class="fa whiteicon fa-calendar">
+                </i>
+                Goal:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+              </td>
+              <td>
+                <i class="fa whiteicon fa-user">
+                </i>
+                Consultants:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
+              </td>
+              <td>
+                <i class="fa whiteicon fa-user">
+                </i>
+                User:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Language:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
+              </td>
+              <td>
+                Dialect:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
+              </td>
+              <td>
+                Date Elicited:
+              </td>
+              <td>
+                <input class="span3" type="date" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+              </td>
+            </tr>
+          </table>
+        </form>
+        <div>
+          <button class="btn" ng-click="editSession(editSessionInfo, data);">
+            <i class="fa whiteicon fa-save">
+            </i>
+            Save Changes
+          </button>
+          &nbsp;
+          <button class="btn" ng-click="editSessionDetails=false">
+            Cancel
+          </button>
+        </div>
+      </div>
+      <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
+        <form ng-model='newSessionInfo'>
+          <table cellpadding="5px">
+            <tr>
+              <td>
+                <i class="fa whiteicon fa-calendar">
+                </i>
+                Goal:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+              </td>
+              <td>
+                <i class="fa whiteicon fa-user">
+                </i>
+                Consultants:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
+              </td>
+              <td>
+                <i class="fa whiteicon fa-user">
+                </i>
+                User:
+              </td>
+              <td>
+                <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Language:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+              </td>
+              <td>
+                Dialect:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+              </td>
+              <td>
+                Date Elicited:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+              </td>
+            </tr>
+          </table>
+        </form>
+        <div>
+          <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+            <i class="fa whiteicon fa-save">
+            </i>
+            Create Session
+          </button>
+          &nbsp;
+          <button class="btn" ng-click="createNewSessionDropdown=false">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
+      <form class="form-horizontal">
+        <i class="fa whiteicon fa-search">
+        </i>
+        Search:&nbsp;
+        <input type="text" class="input-medium search-query" ng-model='searchTerm'>
+        &nbsp;
+        <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
+          Go
+        </button>
+        &nbsp;
+        <button class="btn btn-primary" ng-click="selectAll();">
+          Select All
+        </button>
+        &nbsp;
+        <button class="btn btn-primary" ng-click="exportResults();">
+          Export
+        </button>
+        &nbsp;
+        <button class="btn btn-warning" ng-click="clearSearch()">
+          Clear Results
+        </button>
+        &nbsp;
+        <span>
+          {{searchHistory}}
+        </span>
+      </form>
+    </div>
+  </div>
+
+
+
+
+  <div class="smallMenuBar">
+    <div class="menubar mainMenubar" ng-cloak>
+      <span class="menuTitle">
+        <a ng-click="navigateVerifySaved('home')">
+          <img src="images/icon48_dev.png" border="0" />
+        </a>
+      </span>
+      <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}">
+        <a class="menuitem" ng-click="loadDataEntryScreen()">
+          <i class="fa whiteicon fa-list">
+          </i>
+        </a>
+      </span>
+      |
+      <span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}">
+        <a class="menuitem" ng-click="navigateVerifySaved('searchMenu');">
+          <i class="fa whiteicon fa-search">
+          </i>
+        </a>
+      </span>
+      |
+      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+        <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
+          <i class="fa whiteicon fa-calendar">
+          </i>
+        </a>
+      </span>
+      |
+      <span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
+        <ul class="small_dropdown_nav navitem">
+          <li>
+            <a class="menuitem" href="#">
+              <i class="fa whiteicon fa-cogs">
+              </i>
+            </a>
+            <ul>
+              <li>
+                <a ng-click="navigateVerifySaved('corpusSettings')">
+                  <i class="fa whiteicon fa-cloud">
+                  </i>
+                </a>
+              </li>
+              <li ng-hide="DB.pouchname==undefined">
+                <a ng-click="navigateVerifySaved('settings');">
+                  <i class="fa whiteicon fa-cogs">
+                  </i>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </span>
+      |
+      <span ng-class="{active_menu_class: activeMenu=='faq'}">
+        <a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;">
+          <i class="fa whiteicon fa-question-circle">
+          </i>
+        </a>
+      </span>
+      |
+      <span ng-hide="data==undefined" ng-hide="dataentry==false">
+        <input type="checkbox" ng-model="useAutoGlosser">
+        <i class="fa whiteicon fa-bar-chart-o">
+        </i>
+      </span>
+      <span class="smallMenuBarInfo" ng-show="authenticated==true">
+        <span class=" smallMenuBarInfoItem" ng-hide="DB==undefined">
+          <a class="" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this corpus' webpage">
+            <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+          </a>
+        </span>
+        <span class="smallMenuBarInfoItem">
+          &nbsp;
+          <button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">
+            <i ng-class="{'fa whiteicon fa-folder': (getSavedState=='Saved'), 'fa whiteicon fa-folder-open': (getSavedState=='Saving'), 'fa whiteicon fa-save': (getSavedState=='Save')} ">
+            </i>
+            <i class="fa whiteicon fa-save">
+            </i>
+          </button>
+          &nbsp;
+          <button class="btn btn-warning" ng-click="logOut()">
+            <i class="fa whiteicon fa-arrow-right">
+            </i>
+          </button>
+          <a href="http://lingsync.org/{{user.username}}" target="_blank" title="Visit your share page">
+            <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0">
+          </a>
+        </span>
+      </span>
+      <span ng-hide="authenticated">
+        <span>
+          <button ng-click="navigateVerifySaved('register');" class="btn btn-primary">
+            Register
+          </button>
+        </span>
+      </span>
+    </div>
+    <div class="subMenubar" ng-show="activeSubMenu=='editSession'" ng-cloak>
+      <span>
+        Change Session:
+      </span>
+      <select class="span3" ng-model='activeSessionToSwitchTo'>
+        <option value='none'>
+          All sessions
+        </option>
+        <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value={{session._id}}>
+          {{session.dateCreated | shortDate}} {{session.title}}
+        </option>
+      </select>
+      <button class="btn btn-primary" ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">
+        <i class="fa whiteicon fa-calendar">
+        </i>
+        Activate Session
+      </button>
+      &nbsp;&nbsp;
+      <span ng-hide="activeSession==undefined">
+        <button class="btn btn-success" ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
+          <i class="fa whiteicon fa-pencil">
+          </i>
+          Edit Session Info
+        </button>
+        &nbsp;&nbsp;
+      </span>
+      <span ng-show="(data | filter: activeSession).length==0">
+        <button class="btn btn-danger" ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">
+          <i class="fa whiteicon fa-trash-o">
+          </i>
+          Delete Session
+        </button>
+        &nbsp;&nbsp;
+      </span>
+      <button class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+        <i class="fa whiteicon fa-plus">
+        </i>
+        Create New Session
+      </button>
+      <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSession!=undefined" ng-cloak>
+        <form ng-model='editSessionInfo'>
+          <table cellpadding="5px">
+            <tr>
+              <td>
+                Goal:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+              </td>
+              <td>
+                Consultants:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
+              </td>
+              <td>
+                User:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Language:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
+              </td>
+              <td>
+                Dialect:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
+              </td>
+              <td>
+                Date Elicited:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+              </td>
+            </tr>
+          </table>
+        </form>
+        <div>
+          <button class="btn" ng-click="editSession(editSessionInfo, data);">
+            <i class="fa whiteicon fa-save">
+            </i>
+            Save Changes
+          </button>
+          &nbsp;
+          <button class="btn" ng-click="editSessionDetails=false">
+            Cancel
+          </button>
+        </div>
+      </div>
+      <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
+        <form ng-model='newSessionInfo'>
+          <table cellpadding="5px">
+            <tr>
+              <td>
+                <i class="fa whiteicon fa-calendar">
+                </i>
+                Goal:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+              </td>
+              <td>
+                <i class="fa whiteicon fa-group">
+                </i>
+                Consultants:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
+              </td>
+              <td>
+                <i class="fa whiteicon fa-user">
+                </i>
+                User:
+              </td>
+              <td>
+                <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Language:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+              </td>
+              <td>
+                Dialect:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+              </td>
+              <td>
+                Date Elicited:
+              </td>
+              <td>
+                <input class="span3" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+              </td>
+            </tr>
+          </table>
+        </form>
+        <div>
+          <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+            <i class="fa whiteicon fa-save">
+            </i>
+            Create Session
+          </button>
+          &nbsp;
+          <button class="btn" ng-click="createNewSessionDropdown=false">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
+      <form class="form-search">
+        <span>
+          <i class="fa whiteicon fa-search">
+          </i>
+          Search:&nbsp;
+          <input type="text" class="input-medium search-query" ng-model='searchTerm'>
+          &nbsp;
+          <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
+            Go
+          </button>
+          &nbsp;
+          <button class="btn btn-primary" ng-click="selectAll();">
+            Select All
+          </button>
+          &nbsp;
+          <button class="btn btn-primary" ng-click="exportResults();">
+            Export
+          </button>
+        </span>
+        &nbsp;
+        <button class="btn btn-warning" ng-click="clearSearch()">
+          Clear Results
+        </button>
+        <span>
+          {{searchHistory}}
+        </span>
+      </form>
+    </span>
+  </div>
+</div>
