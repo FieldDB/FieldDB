@@ -21,7 +21,7 @@ define([
   /** @lends Session.prototype */
   {
     /**
-     * @class The Session widget is the place where information which is generally 
+     * @class The Session widget is the place where information which is generally
      * shared by many datum (due to being part of an elicitiation session)
      * @property {Number} sessionID The session ID is an automatically generated
      *           number which will uniquely identify the session.
@@ -40,7 +40,7 @@ define([
      * @property {String} date The date is the date that the data was elicited.
      * @property {String} goal The goal is the particular linguistic goal that
      *           the researcher was pursuing during that session.
-     * 
+     *
      *  new DatumField({
             label : "user",
             shouldBeEncrypted: "",
@@ -80,10 +80,10 @@ define([
             shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This describes the goals of the session."
-          }),  
-     * 
-     * 
-     * 
+          }),
+     *
+     *
+     *
      * @description The initialize function brings up a page in which the user
      *              can fill out the details corresponding to the session. These
      *              details will be linked to each datum submitted in the
@@ -93,11 +93,11 @@ define([
      */
     initialize: function() {
       if (OPrime.debugMode) OPrime.debug("SESSION init");
-      
+
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      
+
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -120,7 +120,7 @@ define([
       this.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
       this.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
       this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
-      
+
     },
     setConsultants: function(consultants){
       if(consultants == undefined || consultants == null){
@@ -142,29 +142,60 @@ define([
     /**
      * backbone-couchdb adaptor set up
      */
-    
+
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/sessions",
-    
+
     // Internal models: used by the parse function
     internalModels : {
       sessionFields : DatumFields,
       comments : Comments
     },
-    
+    originalParse : Backbone.Model.prototype.parse,
+    parse : function(originalModel){
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse.apply(this, [originalModel]);
+      }
+      OPrime.debug("Edit this function to update session to the latest schema.");
+
+      if(window.app.get("corpus")){
+        /* Add any new corpus fields to this session so they can be edited */
+        var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
+        window.corpusfieldsforSessionParse = window.corpusfieldsforSessionParse || window.app.get("corpus").get("sessionFields").toJSON()
+        var corpusFields = window.corpusfieldsforSessionParse;
+        if(corpusFields.length > originalFieldLabels.length){
+          for(var field in corpusFields){
+            if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+              var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
+              OPrime.debug("Adding field to this session: " + corpusFieldClone.label);
+              corpusFieldClone.mask = "";
+              corpusFieldClone.value = "";
+              delete corpusFieldClone.user;
+              delete corpusFieldClone.users;
+              originalModel.sessionFields.push(corpusFieldClone);
+            }
+          }
+        }
+      }
+
+      return this.originalParse.apply(this, [originalModel]);
+    },
+
+
   //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(commentstring) {
       var m = new Comment({
         "text" : commentstring,
      });
-      
+
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
-      
+
       var goal = this.get("sessionFields").where({label: "goal"})[0].get("mask");
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -175,7 +206,7 @@ define([
             teamOrPersonal : "team",
             context : " via Offline App."
           });
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -187,29 +218,29 @@ define([
             context : " via Offline App."
           });
     },
-    
+
     /**
-     * Make the  model marked as Deleted, mapreduce function will 
-     * ignore the deleted models so that it does not show in the app, 
-     * but deleted model remains in the database until the admin empties 
+     * Make the  model marked as Deleted, mapreduce function will
+     * ignore the deleted models so that it does not show in the app,
+     * but deleted model remains in the database until the admin empties
      * the trash.
-     * 
+     *
      * Also remove it from the view so the user cant see it.
-     * 
-     */    
+     *
+     */
     putInTrash : function() {
       this.set("trashed", "deleted" + Date.now());
       var whichSessionToUse = 0;
       if (window.app.get("corpus").sessions.models[whichSessionToUse].id == this.id) {
         whichSessionToUse = 1;
       }
-      
+      var self = this;
       this.saveAndInterConnectInApp(function(){
         window.app.addActivity({
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + model.id + "'>a session</a> ",
+          directobject: "<a href='#session/" + self.id + "'>a session</a> ",
           indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
           teamOrPersonal: "team",
           context: " via Offline App."
@@ -219,7 +250,7 @@ define([
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + model.id + "'>a session</a> ",
+          directobject: "<a href='#session/" + self.id + "'>a session</a> ",
           indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
           teamOrPersonal: "personal",
           context: " via Offline App."
@@ -249,11 +280,11 @@ define([
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.
-     * 
+     *
      * - Adds the session to the corpus if it is in the right corpus, and wasnt already there
      * - Adds the session to the user if it wasn't already there
-     * - Adds an activity to the logged in user with diff in what the user changed. 
-     * 
+     * - Adds an activity to the logged in user with diff in what the user changed.
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -308,7 +339,7 @@ define([
                   teamOrPersonal : "team",
                   context : " via Offline App."
                 });
-            
+
             window.app.addActivity(
                 {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
@@ -319,7 +350,7 @@ define([
                   teamOrPersonal : "personal",
                   context : " via Offline App."
                 });
-            
+
             /*
              * make sure the session is visible in this corpus
              */
@@ -358,7 +389,7 @@ define([
      * the session isn't in the current corpus it will call the fail
      * callback or it will alert a bug to the user. Override the fail
      * callback if you don't want the alert.
-     * 
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -371,7 +402,7 @@ define([
         }
         return;
       }
-      
+
       if (window.app.get("currentSession").id != this.id ) {
         window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
 //      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
@@ -401,17 +432,17 @@ define([
      * Validation functions will verify that the session ID is unique and
      * that the consultant,users, and teams are all correspond to people in
      * the system.
-     * 
+     *
      * @param {Object}
      *          attributes The set of attributes to validate.
-     * 
+     *
      * @returns {String} The validation error, if there is one. Otherwise,
      *          doesn't return anything.
      */
     validate: function(attributes) {
       // TODO Validation on the attributes. Returning a String counts as an error.
       // We do need to validate some of these attributes, but not sure how they would work. I think they need for loops.
-      
+
         //for (user not in users) {
       //    return "user must be in the system.";
       // }

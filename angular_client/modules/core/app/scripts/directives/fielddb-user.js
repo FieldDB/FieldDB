@@ -1,15 +1,18 @@
-'use strict';
+"use strict";
 
-angular.module('fielddbAngularApp').directive('fielddbUser', function() {
+angular.module("fielddbAngularApp").directive("fielddbUser", function() {
   return {
-    templateUrl: 'views/user.html',
-    restrict: 'A',
+    templateUrl: "views/user.html",
+    restrict: "A",
     transclude: false,
     scope: {
-      user: '=json'
+      user: "=json"
     },
-    // controller: function($scope, $element, $attrs, $transclude) {},
-    link: function postLink() {
-    }
+    controller: function($scope) {
+      $scope.toggleViewDecryptedDetails = function() {
+        $scope.user.decryptedMode = !$scope.user.decryptedMode;
+      };
+    },
+    link: function postLink() {}
   };
 });

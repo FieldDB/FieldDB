@@ -1,33 +1,36 @@
+/* globals runs, waitsFor */
+
 var CouchDBConnection = require("./CouchDBConnection");
-var FieldDBConnection = require('../../api/FieldDBConnection').FieldDBConnection;
+var FieldDBConnection = require("../../api/FieldDBConnection").FieldDBConnection;
 var CORS = require("../../api/CORSNode").CORS;
 
+var user = {
+  username: "lingllama",
+  password: "phoneme"
+};
 var runCORSTests = function(whichServer) {
+  console.log("Running on target " + whichServer);
   /*
    * Declare an object and its functions which will be in scope
    */
 
-  it('should be able asyncronously using CORS to login user ', function() {
+  it("should be able asyncronously using CORS to login user ", function() {
 
     var serverResult = null;
-    var user = {
-      username: "lingllama",
-      password: "phoneme"
-    };
     /*
      * Begin the async task
      */
     runs(function() {
-      FieldDBConnection.setXMLHttpRequestLocal(CORS)
+      FieldDBConnection.setXMLHttpRequestLocal(CORS);
       FieldDBConnection.connection = {
         localCouch: {
           connected: false,
-          url: 'http://localhost:5984',
+          url: "http://localhost:5984",
           couchUser: null
         },
         centralAPI: {
           connected: false,
-          url: 'http://localhost:3181/v2',
+          url: "http://localhost:3181/v2",
           fieldDBUser: null
         }
       };
@@ -61,10 +64,11 @@ var runCORSTests = function(whichServer) {
 
   });
 
-  xit('should be able asyncronously using CORS to upload a doc', function() {
+  xit("should be able asyncronously using CORS to upload a doc", function() {
     /*
      * Declare an object and its functions which will be in scope
      */
+    var serverURL;
 
     var serverResult = new CouchDBConnection(serverURL, user);
 
@@ -94,10 +98,11 @@ var runCORSTests = function(whichServer) {
     });
 
   });
-  xit('should be able asyncronously using CORS to update a doc', function() {
+  xit("should be able asyncronously using CORS to update a doc", function() {
     /*
      * Declare an object and its functions which will be in scope
      */
+    var serverURL;
 
     var serverResult = new CouchDBConnection(serverURL, user);
 

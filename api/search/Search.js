@@ -1,53 +1,62 @@
-define([ 
-    "backbone",
-    "OPrime" 
-], function(
-    Backbone
-) {
-  var Search = Backbone.Model.extend(
-  /** @lends Search.prototype  */
-  {
-    /** 
-     * @class Search progressively searches a corpus and updates a 
-     *        search/data list view as a user types keywords in the 
-     *        search box. Both intersection and union search is 
-     *        possible. It highlights search keywords in the list view.  
-     * 
-     * @property {String} searchKeywords 
-     * @property {DataList} 
-     * 
-     * @description The initialize function probably creates a link to 
-     *              a corpus, or checks if a link is established. 
-     * 
-     * @extends Backbone.Model
-     * @constructs
-     */
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
-    initialize : function() {
-      this.on('all', function(e) {
-        if (OPrime.debugMode) OPrime.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
-      });
-    },
-    
-    defaults : {
-      searchKeywords : ""
-    },
-    
-    // Internal models: used by the parse function
-    internalModels : {
-      // There are no nested models
-    },
-    
-    saveKeyword: function(){
-      this.set("searchKeywords","hihi");
-    },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
+/**
+ * @class Search progressively searches a corpus and updates a search/data list
+ *  view as a user types keywords in the search box. Both intersection and
+ *  union search is possible. It highlights search keywords in the list view.
+ *
+ * @property {String} searchQuery
+ * @property {DataList} A list of data which fulfill the search query
+ *
+ * @name  Search
+ * @extends FieldDBObject
+ * @constructs
+ */
+var Search = function Search(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Search";
+  }
+  this.debug("Constructing Search length: ", options);
+  FieldDBObject.apply(this, arguments);
+};
+
+Search.prototype = Object.create(FieldDBObject.prototype, /** @lends Search.prototype */ {
+  constructor: {
+    value: Search
+  },
+
+  defaults: {
+    value: {
+      searchQuery: ""
     }
-  });
+  },
 
-  return Search;
+  searchKeywords: {
+    get: function() {
+      this.warn("searchKeywords is deprecated, use searchQuery instead.");
+      return this.searchQuery;
+    },
+    set: function(value) {
+      this.warn("searchKeywords is deprecated, use searchQuery instead.");
+      this.searchQuery = value;
+    }
+  },
+
+  searchQuery: {
+    get: function() {
+      return this._searchQuery || this.defaults.searchQuery;
+    },
+    set: function(value) {
+      if (value === this._searchQuery) {
+        return;
+      }
+      if (!value) {
+        delete this._searchQuery;
+        return;
+      }
+      this._searchQuery = value.trim();
+    }
+  }
+
 });
+exports.Search = Search;

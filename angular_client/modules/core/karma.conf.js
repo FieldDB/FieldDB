@@ -18,8 +18,6 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'app/bower_components/ng-file-upload-shim/angular-file-upload-shim.js',
-      'app/bower_components/jquery/jquery.js',
-      'app/bower_components/jquery-ui/jquery-ui.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-animate/angular-animate.js',
@@ -31,7 +29,7 @@ module.exports = function(config) {
       'app/bower_components/angular-contenteditable/angular-contenteditable.js',
       'app/bower_components/fielddb/fielddb.js',
       'app/bower_components/ng-file-upload/angular-file-upload.js',
-      'app/bower_components/angular-dragdrop/src/angular-dragdrop.js',
+      'app/bower_components/angular-dragdrop/draganddrop.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',

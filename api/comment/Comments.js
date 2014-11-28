@@ -1,42 +1,46 @@
-define( [ "backbone",
-          "comment/Comment",
-          "OPrime"
-], function(Backbone, Comment) {
-  var Comments = Backbone.Collection.extend(
+var Collection = require("./../Collection").Collection;
+var Comment = require("./Comment").Comment;
 
-  /** @lends Comments.prototype  */
+/**
+ * @class
 
-  {
-    /**
-     * @class Comments is a collection of the model Comment. 
-     * 
-     * @extends Comment.Collection
-     * @constructs
-     * 
-     */
-    initialize : function() {
-    },
-    
-    internalModels : Comment,
-    model: Comment,
-    
-    
-//    clone : function() {
-//        var newCollection = new Comments();
-//        
-//        for (var i = 0; i < this.length; i++) {
-//          newCollection.push(new Comment(this.models[i].toJSON())); 
-//        }
-//        
-//        return newCollection;
-//      }
-    
-    insertNewCommentFromObject : function(commentObject){
-      commentObject.timestamp = Date.now();
-      this.unshift(new Comment(commentObject));
+ * @name  Comments
+ * @description The Comments is a minimal customization of the Collection
+ * to add an internal model of Comment.
+ *
+ * @extends Collection
+ * @constructs
+ */
+var Comments = function Comments(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Comments";
+  }
+  this.debug("Constructing Comments ", options);
+  Collection.apply(this, arguments);
+};
+
+Comments.prototype = Object.create(Collection.prototype, /** @lends Comments.prototype */ {
+  constructor: {
+    value: Comments
+  },
+
+  primaryKey: {
+    value: "timestamp"
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      item: Comment
     }
-    
-  });
+  },
 
-  return Comments;
+  insertNewCommentFromObject: {
+    value: function(commentObject) {
+      commentObject.timestamp = Date.now();
+      this.add(new Comment(commentObject));
+    }
+  }
+
+
 });
+exports.Comments = Comments;

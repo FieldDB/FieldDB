@@ -3,6 +3,10 @@ var $ = require("jquery.couch.js");
 
 
 var Bot = function(pouchname, corpusid, corpustitle) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Bot";
+  }
+
   if (!pouchname || !corpusid || !corpustitle) {
     throw ("You must create this bot with a database name, a corpus id and a corpus title. ");
   }
@@ -151,4 +155,3 @@ var Bot = function(pouchname, corpusid, corpustitle) {
     }
   };
 };
-

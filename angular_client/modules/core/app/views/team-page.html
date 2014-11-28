@@ -1,0 +1,31 @@
+<div data-fielddb-user json="application.team"></div>
+<div class="well">
+  <dl>
+    <dt>
+      <i style="margin-top:3px" class="fa fa-folder-open"></i>
+      &nbsp;&nbsp;Interests:
+    </dt>
+    <dd>
+      {{application.team.researchInterest}}
+    </dd>
+    <dt>
+      <i style="margin-top:3px" class="fa fa-team"></i>
+      &nbsp;&nbsp;Affiliation:
+    </dt>
+    <dd>
+      {{application.team.affiliation}}
+    </dd>
+    <dt>
+      <i style="margin-top:3px" class="fa fa-comment"></i>
+      &nbsp;&nbsp;Description:
+    </dt>
+    <dd>
+      {{application.team.description}}
+    </dd>
+  </dl>
+</div>
+
+<div ng-repeat="corpus in team.corpora">
+  <div data-fielddb-corpus json="application.corpus"></div>
+</div>
+{{application.team.status}}

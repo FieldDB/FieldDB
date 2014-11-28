@@ -7,6 +7,7 @@ function(doc) {
     }
     if (doc.collection == "sessions" || (doc.sessionFields && !doc.datumFields)) {
       var date = doc.dateModified ? doc.dateModified.replace(/["\\]/g, '') : "";
+      doc.fieldDBtype = "Session";
       emit(date, doc);
     }
   } catch (e) {

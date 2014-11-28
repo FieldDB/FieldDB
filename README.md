@@ -8,23 +8,24 @@ FieldDB beta was officially launched in English and Spanish on August 1st 2012 i
 
 # Interns and Development Team
 
-* [Louisa Bielig](https://github.com/louisa-bielig) (McGill)
+* [Louisa Bielig](https://www.lingsync.org/louisabielig) (McGill)
 * [M.E. Cathcart](http://udel.edu/~mdotedot/) (U Delaware)
 * [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab Ltd)
 * [Theresa Deering](http://trisapeace.angelfire.com/) (Visit Scotland)
-* [Josh Horner](https://github.com/jdhorner/) (iLanguage Lab Ltd)
+* [Joel Dunham](http://lingserver.arts.ubc.ca/linguistics/people/jdunham/) (Concordia, UBC)
+* [Josh Horner](http://www.jdhorner.com/) (Amilia)
 * [Yuliya Kondratenko](https://github.com/kondrann) (Concordia)
-* [Yuliya Manyakina](http://egg.auf.net/12/people/manyakinayuliya/) (Stony Brook)
+* [Yuliya Manyakina](http://ymanyakina.github.io/) (McGill)
 * [Elise McClay](https://github.com/Kedersha) (McGill)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
 * [Jesse Pollak](http://jessepollak.me/) (Pomona College)
-* [Tobin Skinner](http://tobinskinner.com) (iLanguage Lab Ltd, UQAM)
+* [Tobin Skinner](http://tobinskinner.com) (Acquisio, McGill)
 * [Xianli Sun](http://myaamiacenter.org/) (Miami University)
 
 
 # Funding
 
-We have some small funding TBA
+We would like to thank SSHRC Connection Grant (\#611-2012-0001) and SSHRC Standard Research Grant (\#410-2011-2401) which advocates open-source approaches to knowledge mobilization and partially funded the students who have doubled as fieldwork research assistants and interns on the project. We would like to thank numerous other granting agencies which have funded the RAs and TAs who have also contributed to the project as interns. If you have a student/RA who you would like to customize the project for your needs, contact us at support @ lingsync . org 
 
 # License 
 

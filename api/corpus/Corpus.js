@@ -1,22 +1,12 @@
-/* global window, OPrime, FieldDB */
-var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var CorpusMask = require("./CorpusMask");
-var Collection = require('./../Collection').Collection;
-// var Consultants = require('./../Collection').Collection;
-// var Datum = require('./../datum/Datum').Datum;
-var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
-var DatumStates = require('./../datum/DatumStates').DatumStates;
-var DatumTags = require('./../datum/DatumTags').DatumTags;
-var Comments = require('./../Collection').Collection;
-// var UserMask = require('./../Collection').Collection;
-var Session = require('./../FieldDBObject').FieldDBObject;
-var CORS = require('./../CORS').CORS;
+/* global window, OPrime */
+var CorpusMask = require("./CorpusMask").CorpusMask;
+var Datum = require("./../datum/Datum").Datum;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var Session = require("./../FieldDBObject").FieldDBObject;
+var Speaker = require("./../user/Speaker").Speaker;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Permissions = require('./../Collection').Collection;
-var Sessions = require('./../Collection').Collection;
-var DataLists = require('./../Collection').Collection;
-var Q = require('q');
+var Permissions = require("./../Collection").Collection;
+var Q = require("q");
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -62,85 +52,49 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
  *              the corpus is new or existing and brings it down to
  *              the user's client.
  *
- * @extends FieldDBObject
- * @tutorial tests/CorpusTest.js
+ * @extends CorpusMask
+ * @tutorial tests/corpus/CorpusTest.js
  */
 
 
 var Corpus = function Corpus(options) {
-  this.debug("Constructing corpus", options);
-  FieldDBObject.apply(this, arguments);
-};
-Corpus.defaults = DEFAULT_CORPUS_MODEL;
-if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
-  Corpus.defaults_psycholinguistics = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
-  for (var property in DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
-    if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.hasOwnProperty(property)) {
-      Corpus.defaults_psycholinguistics[property] = DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL[property];
-    }
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Corpus";
   }
-}
+  this.debug("Constructing corpus", options);
+  CorpusMask.apply(this, arguments);
+};
 
-Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prototype */ {
+Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototype */ {
   constructor: {
     value: Corpus
   },
 
-  title: {
+  id: {
     get: function() {
-      return this._title || FieldDBObject.DEFAULT_STRING;
+      return this._id || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._title) {
+      if (value === this._id) {
         return;
       }
       if (!value) {
-        delete this._title;
+        delete this._id;
         return;
       }
-      this._title = value.trim();
-      this._titleAsUrl = this._title;
-    }
-  },
-
-  titleAsUrl: {
-    get: function() {
-      return this._titleAsUrl || FieldDBObject.DEFAULT_STRING;
-    },
-    set: function(value) {
-      if (value === this._titleAsUrl) {
-        return;
+      if (value.trim) {
+        value = value.trim();
       }
-      if (!value) {
-        delete this._titleAsUrl;
-        return;
-      }
-      this._titleAsUrl = this._titleAsUrl.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_"); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
-    }
-  },
-
-  description: {
-    get: function() {
-      return this._description || FieldDBObject.DEFAULT_STRING;
-    },
-    set: function(value) {
-      if (value === this._description) {
-        return;
-      }
-      if (!value) {
-        delete this._description;
-        return;
-      }
-      this._description = value.trim();
+      this._id = value;
     }
   },
 
   couchConnection: {
     get: function() {
-      this.warn("couchConnection is deprecated");
+      this.debug("couchConnection is deprecated");
     },
     set: function() {
-      this.warn("couchConnection is deprecated");
+      this.debug("couchConnection is deprecated");
     }
   },
 
@@ -156,8 +110,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._replicatedCorpusUrls;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._replicatedCorpusUrls = value;
@@ -176,8 +130,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._olacExportConnections;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._olacExportConnections = value;
@@ -247,8 +201,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this.unserializedSessions;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this.unserializedSessions = value;
@@ -268,7 +222,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-
   confidential: {
     get: function() {
       return this._confidential || FieldDBObject.DEFAULT_OBJECT;
@@ -280,6 +233,11 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       if (!value) {
         delete this._confidential;
         return;
+      } else {
+        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS["confidential"] && typeof this.INTERNAL_MODELS["confidential"] === "function" && value.constructor !== this.INTERNAL_MODELS["confidential"]) {
+          this.debug("Parsing model: " + value);
+          value = new this.INTERNAL_MODELS["confidential"](value);
+        }
       }
       this._confidential = value;
     }
@@ -302,15 +260,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         value = "Private";
       }
       this._publicCorpus = value;
-    }
-  },
-
-  _collection: {
-    value: "private_corpuses"
-  },
-  collection: {
-    get: function() {
-      return this._collection;
     }
   },
 
@@ -344,26 +293,6 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-  comments: {
-    get: function() {
-      return this._comments || FieldDBObject.DEFAULT_COLLECTION;
-    },
-    set: function(value) {
-      if (value === this._comments) {
-        return;
-      }
-      if (!value) {
-        delete this._comments;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['comments'](value);
-        }
-      }
-      this._comments = value;
-    }
-  },
-
   validationStati: {
     get: function() {
       return this._validationStati || FieldDBObject.DEFAULT_COLLECTION;
@@ -376,8 +305,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._validationStati;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['datumStates'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["datumStates"](value);
         }
       }
       this._validationStati = value;
@@ -396,8 +325,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._tags;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['tags'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["tags"](value);
         }
       }
       this._tags = value;
@@ -416,8 +345,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._datumFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['datumFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["datumFields"](value);
         }
       }
       this._datumFields = value;
@@ -426,7 +355,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   participantFields: {
     get: function() {
-      return this._participantFields || DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.participantFields;
+      if (!this._participantFields) {
+        this._participantFields = new this.INTERNAL_MODELS["participantFields"](Corpus.prototype.defaults_psycholinguistics.participantFields);
+      }
+      return this._participantFields;
     },
     set: function(value) {
       if (value === this._participantFields) {
@@ -436,8 +368,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._participantFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['participantFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["participantFields"](value);
         }
       }
       this._participantFields = value;
@@ -456,8 +388,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._conversationFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['conversationFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["conversationFields"](value);
         }
       }
       this._conversationFields = value;
@@ -476,8 +408,8 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         delete this._sessionFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._sessionFields = value;
@@ -486,18 +418,21 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   loadOrCreateCorpusByPouchName: {
     value: function(dbname) {
-      this.todo('test loadOrCreateCorpusByPouchName');
       if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
-      var deferred = Q.defer(),
-        self = this;
+      var deferred = this.loadOrCreateCorpusByPouchNameDeferred || Q.defer(),
+        self = this,
+        baseUrl = this.url;
 
       dbname = dbname.trim();
       this.dbname = dbname;
 
       Q.nextTick(function() {
 
+        if (!baseUrl) {
+          baseUrl = self.BASE_DB_URL;
+        }
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
@@ -505,30 +440,32 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
             return;
           }
           self.runningloadOrCreateCorpusByPouchName = true;
+          self.loadOrCreateCorpusByPouchNameDeferred = deferred;
           window.setTimeout(function() {
             self.loadOrCreateCorpusByPouchName(dbname);
           }, 1000);
         };
 
-        CORS.makeCORSRequest({
-          type: 'GET',
-          dataType: 'json',
-          url: FieldDB.BASE_DB_URL + '/' + self.dbname + '/_design/pages/_view/' + self.url
-        }).then(function(data) {
-          self.debug(data);
-          if (data.rows && data.rows.length > 0) {
+        self.fetchCollection(self.api).then(function(corpora) {
+          self.debug(corpora);
+          if (corpora.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
-            self.id = data.rows[0].value._id;
-            self.fetch(FieldDB.BASE_DB_URL).then(function(result) {
-              self.debug('Finished fetch of corpus ', result);
+            delete self.loadOrCreateCorpusByPouchNameDeferred;
+            self.id = corpora[0]._id;
+            self.fetch(baseUrl).then(function(result) {
+              self.debug("Finished fetch of corpus ", result);
               deferred.resolve(result);
             }, function(reason) {
               deferred.reject(reason);
             });
           } else {
-            tryAgainInCaseThereWasALag(data);
+            tryAgainInCaseThereWasALag(corpora);
           }
-        }, tryAgainInCaseThereWasALag);
+        }, function(reason) {
+          tryAgainInCaseThereWasALag(reason);
+          // deferred.reject(reason);
+
+        });
 
       });
 
@@ -538,7 +475,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
   fetchPublicSelf: {
     value: function() {
-      this.todo('test fetchPublicSelf');
+      this.todo("test fetchPublicSelf");
       if (!this.dbname) {
         throw "Cannot load corpus's public self, its dbname was undefined";
       }
@@ -571,13 +508,13 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
   // The couchdb-connector is capable of mapping the url scheme
   // proposed by the authors of Backbone to documents in your database,
   // so that you don't have to change existing apps when you switch the sync-strategy
-  url: {
-    value: "/private_corpuses"
+  api: {
+    value: "private_corpuses"
   },
 
   loadPermissions: {
     value: function() {
-      this.todo('test loadPermissions');
+      this.todo("test loadPermissions");
       var deferred = Q.defer(),
         self = this;
 
@@ -597,53 +534,26 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
-  pouchname: {
-    get: function() {
-      this.warn("pouchname is deprecated, use dbname instead.");
-      return this.dbname;
-    },
-    set: function(value) {
-      this.warn("pouchname is deprecated, use dbname instead.");
-      this.dbname = value;
-    }
-  },
-
   defaults: {
     get: function() {
-      return DEFAULT_CORPUS_MODEL;
+      return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
     }
   },
 
-  INTERNAL_MODELS: {
-    value: {
-      _id: FieldDBObject.DEFAULT_STRING,
-      _rev: FieldDBObject.DEFAULT_STRING,
-      dbname: FieldDBObject.DEFAULT_STRING,
-      version: FieldDBObject.DEFAULT_STRING,
-      dateCreated: FieldDBObject.DEFAULT_DATE,
-      dateModified: FieldDBObject.DEFAULT_DATE,
-      comments: Comments,
-      sessions: Sessions,
-      datalists: DataLists,
+  defaults_psycholinguistics: {
+    get: function() {
+      var doc = this.defaults;
 
-      title: FieldDBObject.DEFAULT_STRING,
-      titleAsUrl: FieldDBObject.DEFAULT_STRING,
-      description: FieldDBObject.DEFAULT_STRING,
-      termsOfUse: FieldDBObject,
-      license: FieldDBObject,
-      copyright: FieldDBObject.DEFAULT_STRING,
-      replicatedCorpusUrls: Collection,
-      olacExportConnections: Collection,
-      publicCorpus: FieldDBObject.DEFAULT_STRING,
-      confidential: Confidential,
+      if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+        for (var property in DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL) {
+          if (DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.hasOwnProperty(property)) {
+            doc[property] = DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL[property];
+          }
+        }
+        doc.participantFields = this.defaults.speakerFields.concat(doc.participantFields);
+      }
 
-      validationStati: DatumStates,
-      tags: DatumTags,
-
-      datumFields: DatumFields,
-      participantFields: DatumFields,
-      conversationFields: DatumFields,
-      sessionFields: DatumFields,
+      return JSON.parse(JSON.stringify(doc));
     }
   },
 
@@ -696,7 +606,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         verbicon: "icon-comment",
         directobjecticon: "",
         directobject: "'" + commentstring + "'",
-        indirectobject: "on <i class='icon-cloud'></i><a href='#corpus/" + this.id + "'>" + this.get('title') + "</a>",
+        indirectobject: "on <i class='icon-cloud'></i><a href='#corpus/" + this.id + "'>" + this.get("title") + "</a>",
         teamOrPersonal: "personal",
         context: " via Offline App."
       });
@@ -753,6 +663,79 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         deferred.resolve(datum);
       });
       return deferred.promise;
+    }
+  },
+
+  newSpeaker: {
+    value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        self.debug("Creating a datum for this corpus");
+        if (!self.speakerFields || !self.speakerFields.clone) {
+          throw "This corpus has no default datum fields... It is unable to create a datum.";
+        }
+        var datum = new Speaker({
+          speakerFields: new DatumFields(self.speakerFields.clone()),
+        });
+        for (var field in options) {
+          if (!options.hasOwnProperty(field)) {
+            continue;
+          }
+          if (datum.speakerFields[field]) {
+            self.debug("  this option appears to be a datumField " + field);
+            datum.speakerFields[field].value = options[field];
+          } else {
+            datum[field] = options[field];
+          }
+        }
+        deferred.resolve(datum);
+      });
+      return deferred.promise;
+    }
+  },
+
+  updateDatumToCorpusFields: {
+    value: function(datum) {
+      if (!this.datumFields) {
+        return datum;
+      }
+      if (!datum.fields) {
+        datum.fields = this.datumFields.clone();
+        return datum;
+      }
+      datum.fields = new DatumFields().merge(this.datumFields, datum.fields);
+      return datum;
+    }
+  },
+
+  updateSpeakerToCorpusFields: {
+    value: function(speaker) {
+      if (!this.speakerFields) {
+        return speaker;
+      }
+      if (!speaker.fields) {
+        speaker.fields = this.speakerFields.clone();
+        return speaker;
+      }
+      speaker.fields = new DatumFields().merge(this.speakerFields, speaker.fields);
+      return speaker;
+    }
+  },
+
+  updateParticipantToCorpusFields: {
+    value: function(participant) {
+      if (!this.participantFields) {
+        return participant;
+      }
+      if (!participant.fields) {
+        participant.fields = this.participantFields.clone();
+        return participant;
+      }
+      participant.fields = new DatumFields().merge(this.participantFields, participant.fields, "overwrite");
+      return participant;
     }
   },
   /**
@@ -840,7 +823,7 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       var deferred = Q.defer();
 
       if (!uri) {
-        throw 'Uri must be specified ';
+        throw "Uri must be specified ";
       }
 
       Q.nextTick(function() {
@@ -874,10 +857,10 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 
       var newModel = false;
       if (!this.id) {
-        self.debug('New corpus');
+        self.debug("New corpus");
         newModel = true;
       } else {
-        self.debug('Existing corpus');
+        self.debug("Existing corpus");
       }
       var oldrev = this.get("_rev");
 
@@ -935,135 +918,135 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
       return {
         // activities: {
         //   url: "/_design/pages/_view/activities",
-        //   map: require("./../../couchapp_dev/views/activities/map")
+        //   map: requireoff("./../../couchapp_dev/views/activities/map")
         // },
         // add_synctactic_category: {
         //   url: "/_design/pages/_view/add_synctactic_category",
-        //   map: require("./../../couchapp_dev/views/add_synctactic_category/map")
+        //   map: requireoff("./../../couchapp_dev/views/add_synctactic_category/map")
         // },
         // audioIntervals: {
         //   url: "/_design/pages/_view/audioIntervals",
-        //   map: require("./../../couchapp_dev/views/audioIntervals/map")
+        //   map: requireoff("./../../couchapp_dev/views/audioIntervals/map")
         // },
         // byCollection: {
         //   url: "/_design/pages/_view/byCollection",
-        //   map: require("./../../couchapp_dev/views/byCollection/map")
+        //   map: requireoff("./../../couchapp_dev/views/byCollection/map")
         // },
         // by_date: {
         //   url: "/_design/pages/_view/by_date",
-        //   map: require("./../../couchapp_dev/views/by_date/map")
+        //   map: requireoff("./../../couchapp_dev/views/by_date/map")
         // },
         // by_rhyming: {
         //   url: "/_design/pages/_view/by_rhyming",
-        //   map: require("./../../couchapp_dev/views/by_rhyming/map"),
-        //   reduce: require("./../../couchapp_dev/views/by_rhyming/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/by_rhyming/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/by_rhyming/reduce")
         // },
         // cleaning_example: {
         //   url: "/_design/pages/_view/cleaning_example",
-        //   map: require("./../../couchapp_dev/views/cleaning_example/map")
+        //   map: requireoff("./../../couchapp_dev/views/cleaning_example/map")
         // },
         // corpuses: {
         //   url: "/_design/pages/_view/corpuses",
-        //   map: require("./../../couchapp_dev/views/corpuses/map")
+        //   map: requireoff("./../../couchapp_dev/views/corpuses/map")
         // },
         // datalists: {
         //   url: "/_design/pages/_view/datalists",
-        //   map: require("./../../couchapp_dev/views/datalists/map")
+        //   map: requireoff("./../../couchapp_dev/views/datalists/map")
         // },
         // datums: {
         //   url: "/_design/pages/_view/datums",
-        //   map: require("./../../couchapp_dev/views/datums/map")
+        //   map: requireoff("./../../couchapp_dev/views/datums/map")
         // },
         // datums_by_user: {
         //   url: "/_design/pages/_view/datums_by_user",
-        //   map: require("./../../couchapp_dev/views/datums_by_user/map"),
-        //   reduce: require("./../../couchapp_dev/views/datums_by_user/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/datums_by_user/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/datums_by_user/reduce")
         // },
         // datums_chronological: {
         //   url: "/_design/pages/_view/datums_chronological",
-        //   map: require("./../../couchapp_dev/views/datums_chronological/map")
+        //   map: requireoff("./../../couchapp_dev/views/datums_chronological/map")
         // },
         // deleted: {
         //   url: "/_design/pages/_view/deleted",
-        //   map: require("./../../couchapp_dev/views/deleted/map")
+        //   map: requireoff("./../../couchapp_dev/views/deleted/map")
         // },
         // export_eopas_xml: {
         //   url: "/_design/pages/_view/export_eopas_xml",
-        //   map: require("./../../couchapp_dev/views/export_eopas_xml/map"),
-        //   reduce: require("./../../couchapp_dev/views/export_eopas_xml/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/export_eopas_xml/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/export_eopas_xml/reduce")
         // },
         // get_corpus_datum_tags: {
         //   url: "/_design/pages/_view/get_corpus_datum_tags",
-        //   map: require("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
-        //   reduce: require("./../../couchapp_dev/views/get_corpus_datum_tags/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/get_corpus_datum_tags/reduce")
         // },
         // get_corpus_fields: {
         //   url: "/_design/pages/_view/get_corpus_fields",
-        //   map: require("./../../couchapp_dev/views/get_corpus_fields/map")
+        //   map: requireoff("./../../couchapp_dev/views/get_corpus_fields/map")
         // },
         // get_corpus_validationStati: {
         //   url: "/_design/pages/_view/get_corpus_validationStati",
-        //   map: require("./../../couchapp_dev/views/get_corpus_validationStati/map"),
-        //   reduce: require("./../../couchapp_dev/views/get_corpus_validationStati/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/get_corpus_validationStati/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/get_corpus_validationStati/reduce")
         // },
         // get_datum_fields: {
         //   url: "/_design/pages/_view/get_datum_fields",
-        //   map: require("./../../couchapp_dev/views/get_datum_fields/map")
+        //   map: requireoff("./../../couchapp_dev/views/get_datum_fields/map")
         // },
         // get_datums_by_session_id: {
         //   url: "/_design/pages/_view/get_datums_by_session_id",
-        //   map: require("./../../couchapp_dev/views/get_datums_by_session_id/map")
+        //   map: requireoff("./../../couchapp_dev/views/get_datums_by_session_id/map")
         // },
         // get_frequent_fields: {
         //   url: "/_design/pages/_view/get_frequent_fields",
-        //   map: require("./../../couchapp_dev/views/get_frequent_fields/map"),
-        //   reduce: require("./../../couchapp_dev/views/get_frequent_fields/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/get_frequent_fields/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/get_frequent_fields/reduce")
         // },
         // get_search_fields_chronological: {
         //   url: "/_design/pages/_view/get_search_fields_chronological",
-        //   map: require("./../../couchapp_dev/views/get_search_fields_chronological/map")
+        //   map: requireoff("./../../couchapp_dev/views/get_search_fields_chronological/map")
         // },
         // glosses_in_utterance: {
         //   url: "/_design/pages/_view/glosses_in_utterance",
-        //   map: require("./../../couchapp_dev/views/glosses_in_utterance/map"),
-        //   reduce: require("./../../couchapp_dev/views/glosses_in_utterance/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/glosses_in_utterance/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/glosses_in_utterance/reduce")
         // },
         // lexicon_create_tuples: {
         //   url: "/_design/pages/_view/lexicon_create_tuples",
-        //   map: require("./../../couchapp_dev/views/lexicon_create_tuples/map"),
-        //   reduce: require("./../../couchapp_dev/views/lexicon_create_tuples/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/lexicon_create_tuples/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/lexicon_create_tuples/reduce")
         // },
         // morpheme_neighbors: {
         //   url: "/_design/pages/_view/morpheme_neighbors",
-        //   map: require("./../../couchapp_dev/views/morpheme_neighbors/map"),
-        //   reduce: require("./../../couchapp_dev/views/morpheme_neighbors/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/morpheme_neighbors/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/morpheme_neighbors/reduce")
         // },
         // morphemes_in_gloss: {
         //   url: "/_design/pages/_view/morphemes_in_gloss",
-        //   map: require("./../../couchapp_dev/views/morphemes_in_gloss/map"),
-        //   reduce: require("./../../couchapp_dev/views/morphemes_in_gloss/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/morphemes_in_gloss/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/morphemes_in_gloss/reduce")
         // },
         // recent_comments: {
         //   url: "/_design/pages/_view/recent_comments",
-        //   map: require("./../../couchapp_dev/views/recent_comments/map")
+        //   map: requireoff("./../../couchapp_dev/views/recent_comments/map")
         // },
         // sessions: {
         //   url: "/_design/pages/_view/sessions",
-        //   map: require("./../../couchapp_dev/views/sessions/map")
+        //   map: requireoff("./../../couchapp_dev/views/sessions/map")
         // },
         // users: {
         //   url: "/_design/pages/_view/users",
-        //   map: require("./../../couchapp_dev/views/users/map")
+        //   map: requireoff("./../../couchapp_dev/views/users/map")
         // },
         // word_list: {
         //   url: "/_design/pages/_view/word_list",
-        //   map: require("./../../couchapp_dev/views/word_list/map"),
-        //   reduce: require("./../../couchapp_dev/views/word_list/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/word_list/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/word_list/reduce")
         // },
         // couchapp_dev_word_list_rdf: {
         //   url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
-        //   map: require("./../../couchapp_dev/views/word_list_rdf/map"),
-        //   reduce: require("./../../couchapp_dev/views/word_list_rdf/reduce")
+        //   map: requireoff("./../../couchapp_dev/views/word_list_rdf/map"),
+        //   reduce: requireoff("./../../couchapp_dev/views/word_list_rdf/reduce")
         // }
       };
     }
@@ -1153,6 +1136,41 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
     }
   },
 
+  getCorpusSpecificLocalizations: {
+    value: function(optionalLocaleCode) {
+      var self = this;
+
+      if (optionalLocaleCode) {
+        this.todo("Test the loading of an optionalLocaleCode");
+        this.get(optionalLocaleCode + "/messages.json").then(function(locale) {
+          if (!locale) {
+            self.warn("the requested locale was empty.");
+            return;
+          }
+          self.application.contextualizer.addMessagesToContextualizedStrings("null", locale);
+        }, function(error) {
+          self.warn("The requested locale wasn't loaded");
+          self.debug("locale loading error", error);
+        });
+      } else {
+        this.fetchCollection("locales").then(function(locales) {
+          for (var localeIndex = 0; localeIndex < locales.length; localeIndex++) {
+            if (!locales[localeIndex]) {
+              self.warn("the requested locale was empty.");
+              continue;
+            }
+            self.application.contextualizer.addMessagesToContextualizedStrings(null, locales[localeIndex]);
+          }
+        }, function(error) {
+          self.warn("The locales didn't loaded");
+          self.debug("locale loading error", error);
+        });
+      }
+
+      return this;
+    }
+  },
+
   getFrequentValues: {
     value: function(fieldname, defaults) {
       var deferred = Q.defer(),
@@ -1170,25 +1188,11 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
         return deferred.promise;
       }
 
-      var jsonUrl = self.validDBQueries["get_corpus_" + fieldname].url + "?group=true&limit=100";
-      OPrime.makeCORSRequest({
-        type: 'GET',
-        dataType: "json",
-        url: jsonUrl,
-      }).then(function(serverResults) {
-        var frequentValues;
-        if (serverResults && serverResults.rows && serverResults.row.length > 2) {
-          frequentValues = serverResults.rows.map(function(fieldvalue) {
-            return fieldvalue.key;
-          });
-        } else {
-          frequentValues = defaults;
-        }
-
+      // var jsonUrl = self.validDBQueries["get_corpus_" + fieldname].url + "?group=true&limit=100";
+      this.fetchCollection("frequentDatum" + fieldname, 0, 0, 100, true).then(function(frequentValues) {
         /*
          * TODO Hide optionally specified values
          */
-
         self["frequentDatum" + fieldname] = frequentValues;
         deferred.resolve(frequentValues);
       }, function(response) {
@@ -1226,3 +1230,4 @@ Corpus.prototype = Object.create(FieldDBObject.prototype, /** @lends Corpus.prot
 });
 
 exports.Corpus = Corpus;
+exports.FieldDatabase = Corpus;
