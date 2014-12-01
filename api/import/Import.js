@@ -857,8 +857,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       var rows = text.split("\n");
       if (rows.length < 3) {
-        rows = text.split("\r");
-        this.status = this.status + " Detected a \r line ending.";
+        var macrows = text.split("\r");
+        if (macrows.length  > rows.length) {
+          rows = macrows;
+          this.status = this.status + " Detected a \r line ending.";
+        }
       }
       var firstrow = rows[0];
       var hasQuotes = false;
@@ -884,13 +887,17 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       /* get the first line and set it to be the header by default */
       var header = [];
-      if (rows.length > 3) {
+      if (rows.length > 1) {
         firstrow = firstrow;
         if (hasQuotes) {
           header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("", "");
         } else {
           header = this.parseLineCSV(firstrow);
         }
+      } else if (rows.length === 1) {
+        header = rows[0].map(function(){
+          return "";
+        });
       }
       this.extractedHeader = header;
 
@@ -919,7 +926,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     value: function(lineCSV) {
       // parse csv line by line into array
       var CSV = [];
-
+      var csvCharacter = ",";
+      this.debug(lineCSV, typeof lineCSV);
+      var matches = lineCSV.split(csvCharacter);
+      if (matches.length < 2) {
+        csvCharacter = ";";
+      }
       // Insert space before character ",". This is to anticipate
       // "split" in IE
       // try this:
@@ -930,9 +942,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       //
       // You will see unexpected result!
       //
-      lineCSV = lineCSV.replace(/,/g, " ,");
+      lineCSV = lineCSV.replace(new RegExp(csvCharacter, "g"), " " + csvCharacter);
 
-      lineCSV = lineCSV.split(/,/g);
+      lineCSV = lineCSV.split(new RegExp(csvCharacter, "g"));
 
       // This is continuing of "split" issue in IE
       // remove all trailing space in each field
@@ -950,7 +962,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         if (lineCSV[i].match(/"$/)) {
           if (fstart >= 0) {
             for (j = fstart + 1; j <= i; j++) {
-              lineCSV[fstart] = lineCSV[fstart] + "," + lineCSV[j];
+              lineCSV[fstart] = lineCSV[fstart] + csvCharacter + lineCSV[j];
               lineCSV[j] = "-DELETED-";
             }
             fstart = -1;

@@ -1,6 +1,6 @@
 {
   "name": "fielddb-angular",
-  "version": "2.28.0",
+  "version": "2.30.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb-angular.git"
@@ -26,7 +26,7 @@
     "angular-route": "1.2.26",
     "ng-file-upload": "~1.6.4",
     "angular-contenteditable": "~0.3.7",
-    "angular-dragdrop": "https://github.com/cesine/angular-dragdrop.git#v1.0.5patch1"
+    "angular-dragdrop": "https://github.com/ganarajpr/angular-dragdrop.git#~1.0.3"
   },
   "main": "dist/styles/vendor.css, dist/styles/main.css, dist/scripts/vendor.js, dist/scripts/scripts.js, dist/scripts/templates.js",
   "devDependencies": {

@@ -6,9 +6,10 @@ v1.3
 backbone-couchdb.js is licensed under the MIT license.
 */
 
-
-(function() {
-  
+define([
+    "backbone",
+  ], function(
+    Backbone) {
 //parse models
   Backbone.Model.prototype.parse = function(response) {
     // parse internal models
@@ -45,12 +46,12 @@ backbone-couchdb.js is licensed under the MIT license.
 
   //parse collections if in a normal view, not a backbone-couchdb view
 //  Backbone.Collection.prototype.parse = function(response) {
-//    return response.rows && _.map(response.rows, function(row) { 
-//      return row.doc || row.value; 
+//    return response.rows && _.map(response.rows, function(row) {
+//      return row.doc || row.value;
 //    });
 //  };
   /**
-   * 
+   *
    * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
    */
 //  Backbone.View.prototype.destroy_view = function() {
@@ -64,8 +65,8 @@ backbone-couchdb.js is licensed under the MIT license.
 //    // this.remove();
 //    // Backbone.View.prototype.remove.call(this);
 //  };
-  
-  
+
+
   var con,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
@@ -470,4 +471,6 @@ backbone-couchdb.js is licensed under the MIT license.
 
   })(Backbone.Collection);
 
-}).call(this);
+  return Backbone;
+
+});

@@ -22,7 +22,7 @@ define([
     "user/User",
     "user/Users",
     "user/UserMask",
-    "glosser/Glosser",
+    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -1418,14 +1418,19 @@ define([
      * @param pouchname
      * @param callback
      */
-    buildMorphologicalAnalyzerFromTeamServer : function(pouchname, callback){
-      if(!pouchname){
+    buildMorphologicalAnalyzerFromTeamServer: function(pouchname, callback) {
+      if (!pouchname) {
         this.get("pouchname");
       }
-      if(!callback){
+      if (!callback) {
         callback = null;
       }
-      Glosser.downloadPrecedenceRules(pouchname, this.get("glosserURL"), callback);
+      var glosserURL = this.get("glosserURL");
+      if (!glosserURL) {
+        var couchurl = OPrime.getCouchUrl(this.get("couchConnection"));
+        glosserURL = couchurl + "/_design/pages/_view/precedence_rules?group=true";
+      }
+      Glosser.downloadPrecedenceRules(pouchname, glosserURL, callback);
     },
     /**
      * This function takes in a pouchname, which could be different

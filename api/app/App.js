@@ -844,9 +844,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         /*
          * Letting the url determine which corpus is loaded
          */
-        if (routeParams.corpusid) {
-          this.currentCorpusDashboard = this.team.validateUsername(routeParams.team).username + "/" + this.team.sanitizeStringForFileSystem(routeParams.corpusid).toLowerCase();
-          this.currentCorpusDashboardDBname = this.team.validateUsername(routeParams.team).username + "-" + this.team.sanitizeStringForFileSystem(routeParams.corpusid).toLowerCase();
+        if (routeParams.corpusidentifier) {
+          this.currentCorpusDashboard = this.team.validateUsername(routeParams.team).username + "/" + this.team.sanitizeStringForFileSystem(routeParams.corpusidentifier).toLowerCase();
+          this.currentCorpusDashboardDBname = this.team.validateUsername(routeParams.team).username + "-" + this.team.sanitizeStringForFileSystem(routeParams.corpusidentifier).toLowerCase();
           if (this.currentCorpusDashboardDBname.split("-").length < 2) {
             this.status = "Please try another url of the form teamname/corpusname " + this.currentCorpusDashboardDBname + " is not valid.";
             return;

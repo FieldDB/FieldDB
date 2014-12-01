@@ -26,10 +26,10 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
       user.mostrecentdb = "/";
       user.roles.map(function(role) {
         var dbname = role.substring(0, role.lastIndexOf("_"));
-        if (role.indexOf("-") > -1 && role.indexOf("_reader") > -1 && user.accessibleDBS.indexOf(dbname) === -1) {
+        if (role.indexOf("-") > -1 && role.indexOf("_reader") > -1 && user.accessibleDBS.indexOf(dbname) === -1 && dbname.indexOf("lingllama-communitycorpus") === -1 && dbname.indexOf("public-firstcorpus") === -1) {
           dbname = dbname.replace("-", "/");
-          user.accessibleDBS.push(dbname);
           if (dbname.indexOf("public") === -1 && dbname.indexOf("lingllama") === -1) {
+            user.accessibleDBS.push(dbname);
             user.mostrecentdb = dbname;
           }
         }
@@ -50,7 +50,7 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
         $scope.$apply(function() {
           $location.path("/sails/fr-ca/datalists", false);
         });
-      } else if ($location.path() === "/welcome" || $location.path() === "/bienvenu" || window.location.pathname === "/welcome" || window.location.pathname === "/bienvenu") {
+      } else if ($location.path() === "/welcome" || $location.path() === "/bienvenu" || window.location.pathname === "/welcome" || window.location.pathname === "/bienvenu" || (window.location.pathname === "/" && $scope.application.authentication.user.accessibleDBS.length === 1) ) {
         $scope.$apply(function() {
           //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
           $location.path("/" + $scope.application.authentication.user.mostrecentdb, false);

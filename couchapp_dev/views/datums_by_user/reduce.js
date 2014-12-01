@@ -1,3 +1,1 @@
-function(keys, values, rereduce) {
-  return values.length;
-}
+_count
