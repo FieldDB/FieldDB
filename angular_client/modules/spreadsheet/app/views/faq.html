@@ -91,36 +91,57 @@ How do I export data?
 <div class="answer">
   You can export your entire database as <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/get_datum_fields">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target="_blank" href="{{server}}/{{DB.pouchname}}/_design/pages/_view/get_datum_fields">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target="_blank" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target="_blank" href="https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa">Prototype app</a>.
   <p>You can also download a <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/word_list?group=true">word list</a>, <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/lexicon_create_tuples?group=true">glossed word list</a> and a <a href="{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>
-</div> 
+</div>
 
 </div>
 <div class="question">
-Can I share just a session, not a whole corpus?   
+Can I share just an elicitation session, not a whole corpus?
 </div>
 <div class="answer">
-  If you want to share a session with someone, you must <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">send us an email</a> to say which session you want to share. We will send you a widget that accesses only data in that session and lets the user log into that widget to read (if they are allowed) and/or edit (if they are allowed) data. You must put the widget in your own website and/or wordpress blog and provide the url to the user(s). If the user is not permitted to see other things in your corpus you need to provide us with their username(s) so we can add conditional permissions to their account.
-</div> 
-
-<div class"question">
-Can I have multiple object languages in one corpus? If I have multiple languages, what would happen to the semi-auto glosser?
-</div>
-
-<div class="answer">
-</div> 
-
-<div class="question">
-Can I combine corpora? 
-</div> 
-<div=class"answer"> 
-  If you want to combine corpora you must <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">send us an email</a> to tell us the names of the corpora to combine, and where to combine them to. We will verify that you have permission to do this, and do the combining and testing of the result.
+  If you want to share a elicitation session with someone, you should <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">send us an email</a> to say which session you want to share. We will send you a web widget that accesses only data in that session and lets the user log into that widget to read (if they are allowed) and/or edit (if they are allowed) data. You must put the widget in your own website and/or WordPress blog and provide the url to the user(s). If the user does not have read access on your corpus, you can to provide us with their username(s) so we can add conditional permissions to their account.
 </div>
 
 <div class="question">
-Can I combine glossers and use it for multiple corpora?
-</div> 
+Can I have multiple languages in one corpus?
+</div>
 <div class="answer">
-  By default, each corpus has its own glosser fed by the data in that corpus. If you have many corpora that you want to feed one glosser, you must <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">send us an email</a> and tell us which corpora should feed which glosser. 
-</div> 
+   LingSync supports multilingual corpora, as a user you can put anything you wish into a corpus (depending on what makes sense for your own research). Multilingual corpora are very useful, and very common for crosslinguistic studies of linguistic phenomen (for example a cross-linguistic study of applicatives).
+</div>
+
+<div class="question">
+If I have multiple languages in a corpus, what would happen to the semi-automatic glosser?
+</div>
+<div class="answer">
+  The semi-auto glosser learns from the context where a morpheme appears, so most often a corpus will rarely have a morpheme that appears in both languages in the same context. This means that a corpora can be multilingual, and still have a reasonaly usable semi-automatic glosser.
+</div>
+
+<div class="question">
+Can I combine corpora?
+</div>
+<div class="answer">
+  Yes, you can combine corpora. If you want to combine corpora you should <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">send us an email</a> to tell us the names of the corpora to combine, and where to combine them to. We will verify that you have permission to do this, and do the combining and testing of the result.
+</div>
+
+<div class="question">
+Can I combine glossers from multiple corpora?
+</div>
+<div class="answer">
+  By default, each corpus has its own glosser fed by the data in that corpus. If you have many corpora that you want to feed one glosser, (for example two or more Quechua corpora), or one master corpus with a few smaller corpora which can use the master's glosser, you can <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">send us an email</a> and tell us which corpora should feed which glosser and we will set up the glosser for you, provide you with more instructions.
+</div>
+
+<div class="question">
+I have my own glosser for the language I work on, can I use it?
+</div>
+<div class="answer">
+  Yes, you can use any glosser as long as it is wrapped in a "webservice." <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">Send us an email</a> and we will provide you with more instructions depending on the technology your glosser was implemented in.
+</div>
+
+<div class="question">
+I want to learn more about scripting/programming, can I help?
+</div>
+<div class="answer">
+  Sure, we accept new "interns" on the team every semester. We can usually train you in things you want to learn, and find you a task to take on. <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">Send us an email</a> to introduce yourself, or join us on <a target="_blank" href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues">GitHub</a> by commenting on, or adding an item in the issue tracker if you already have an account. If you have friends in Software Engineering or related disciplines who are looking for OpenSource projects to build their portfolio, we would be happy to welcome them as well.
+</div>
 
 <div class="question">
 Contact
