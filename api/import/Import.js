@@ -839,8 +839,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       var rows = text.split("\n");
       if (rows.length < 3) {
-        rows = text.split("\r");
-        this.status = this.status + " Detected a \r line ending.";
+        var macrows = text.split("\r");
+        if (macrows.length  > rows.length) {
+          rows = macrows;
+          this.status = this.status + " Detected a \r line ending.";
+        }
       }
       var firstrow = rows[0];
       var hasQuotes = false;
@@ -866,13 +869,17 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       /* get the first line and set it to be the header by default */
       var header = [];
-      if (rows.length > 3) {
+      if (rows.length > 1) {
         firstrow = firstrow;
         if (hasQuotes) {
           header = firstrow.trim().replace(/^"/, "").replace(/"$/, "").split("", "");
         } else {
           header = this.parseLineCSV(firstrow);
         }
+      } else if (rows.length === 1) {
+        header = rows[0].map(function(){
+          return "";
+        });
       }
       this.extractedHeader = header;
 
