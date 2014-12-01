@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "handlebars", 
+    "backbone",
+    "handlebars",
     "audio_video/AudioVideoEditView",
     "comment/Comment",
     "comment/Comments",
@@ -13,11 +13,11 @@ define([
     "datum/DatumTagReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "glosser/Glosser",
+    "bower_components/fielddb-glosser/fielddb-glosser",
     "libs/OPrime"
 ], function(
-    Backbone, 
-    Handlebars, 
+    Backbone,
+    Handlebars,
     AudioVideoEditView,
     Comment,
     Comments,
@@ -38,9 +38,9 @@ define([
      * @class The layout of a single editable Datum. It contains a datum
      *        state, datumFields, datumTags and a datum menu. This is where
      *        the user enters theirs data, the main task of our application.
-     * 
+     *
      * @property {String} format Valid values are "well"
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
@@ -49,13 +49,13 @@ define([
       this.audioVideoView = new AudioVideoEditView({
         model : this.model.get("audioVideo")
       });
-      
+
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
-      
+
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
@@ -71,12 +71,12 @@ define([
         childViewClass   : "datum-field",
         childViewFormat      : "datum"
       });
-      
+
       this.sessionView = new SessionReadView({
         model : this.model.get("session"),
         });
       this.sessionView.format = "link";
-      
+
       this.model.bind("change:audioVideo", this.playAudio, this);
       this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
     },
@@ -85,7 +85,7 @@ define([
      * The underlying model of the DatumEditView is a Datum.
      */
     model : Datum,
-    
+
     /**
      * Events that the DatumEditView is listening to and their handlers.
      */
@@ -111,7 +111,7 @@ define([
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
-      
+
       /* Edit Only Menu */
       "click .icon-unlock" : "encryptDatum",
       "click .icon-lock" : "decryptDatum",
@@ -142,7 +142,7 @@ define([
       "click .add_datum_tag" : "insertNewDatumTag",
       "keyup .add_tag" : function(e) {
         var code = e.keyCode || e.which;
-        
+
         // code == 13 is the enter key
         if (code == 13) {
           this.insertNewDatumTag();
@@ -150,7 +150,7 @@ define([
       },
       "change .datum_state_select" : "updateDatumStates",
       "click .add-comment-datum" : 'insertNewComment',
-      
+
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
       "click .save-datum" : "saveButton",
@@ -209,9 +209,9 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM render: " );
-      
-     
-      
+
+
+
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
@@ -232,37 +232,37 @@ define([
         if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
-      
+
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
-         
+
         // Display audioVideo View
         this.audioVideoView.el = this.$(".audio_video");
         this.audioVideoView.render();
-        
+
         // Display the DatumTagsView
         this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
-        
+
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
-        
+
         // Display the SessionView
-        this.sessionView.el = this.$('.session-link'); 
+        this.sessionView.el = this.$('.session-link');
         this.sessionView.render();
-        
+
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
-        
-        
+
+
         var self = this;
         this.getFrequentFields(function(){
           self.hideRareFields();
         });
-            
+
         //localization for edit well view
         $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
 //      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
@@ -280,16 +280,16 @@ define([
           $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Hide_confidential_items_Tooltip"));
         }else{
           $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Show_confidential_items_Tooltip"));
-        } 
+        }
         $(this.el).find(".locale_LaTeX").attr("title", Locale.get("locale_LaTeX"));
         $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
-        
+
         $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale.get("locale_Drag_and_Drop_Audio_Tooltip"));
       }
 
       return this;
     },
-    
+
     rareFields : [],
     frequentFields: null,
     getFrequentFields : function(whenfieldsareknown){
@@ -322,7 +322,7 @@ define([
       $(this.el).find(".comments-section").hide();
 
     },
-    
+
     showRareFields : function(e){
       if(e){
         e.stopPropagation();
@@ -337,8 +337,8 @@ define([
       $(this.el).find(".comments-section").show();
 
     },
-    
-  
+
+
     /**
      * Encrypts the datum if it is confidential
      */
@@ -366,7 +366,7 @@ define([
     },
 
     needsSave : false,
-    
+
     saveButton : function(e){
       if(e){
         e.stopPropagation();
@@ -374,7 +374,7 @@ define([
       }
       this.model.saveAndInterConnectInApp();
     },
-    
+
     /**
      * If the model needs to be saved, saves it.
      */
@@ -392,7 +392,7 @@ define([
         });
       }
     },
-    
+
     insertNewDatumTag : function(e) {
       if(e){
         e.stopPropagation();
@@ -402,16 +402,16 @@ define([
       var t = new DatumTag({
         "tag" : this.$el.find(".add_tag").val()
       });
-      
-      // Add the new DatumTag to the Datum's list for datumTags 
+
+      // Add the new DatumTag to the Datum's list for datumTags
       this.model.get("datumTags").add(t);
-      
+
       // Reset the "add" textbox
       this.$el.find(".add_tag").val("");
-      
+
       return false;
     },
-    
+
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
@@ -423,7 +423,7 @@ define([
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
-      
+
       var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
 
       window.app.addActivity(
@@ -436,7 +436,7 @@ define([
             teamOrPersonal : "team",
             context : " via Offline App."
           });
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -447,9 +447,9 @@ define([
             teamOrPersonal : "personal",
             context : " via Offline App."
           });
-      
+
     },
-    
+
     updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
       try{
@@ -458,7 +458,7 @@ define([
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
-      
+
       //update the view of the datum state to the new color and text without rendering the entire datum
       var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
       $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
@@ -467,7 +467,7 @@ define([
 
       this.needsSave = true;
     },
-    
+
     /**
      * Adds a new Datum to the current Corpus in the current Session. It is
      * placed at the top of the datumsView, pushing off the bottom Datum, if
@@ -481,12 +481,12 @@ define([
       // Add a new Datum to the top of the Datum stack
       appView.datumsEditView.newDatum();
     },
-    
-    /** 
+
+    /**
      * Adds a new Datum to the current Corpus in the current Session with the same
      * values as the Datum where the Copy button was clicked.
      */
-    duplicateDatum : function(e) { 
+    duplicateDatum : function(e) {
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -527,14 +527,14 @@ define([
           // If the morphemes line is empty, make it a copy of the utterance
           this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
           this.needsSave = true;
-          
+
 //          //autosize the morphemes field
 //          var datumself = this;
 //          window.setTimeout(function(){
 //            $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
 //          },500);
         }
-        // If the guessed morphemes is different than the unparsed utterance 
+        // If the guessed morphemes is different than the unparsed utterance
         if (morphemesLine != utteranceLine && morphemesLine != "") {
           //trigger the gloss guessing
           this.guessGlosses(morphemesLine);
@@ -545,7 +545,7 @@ define([
             this.needsSave = true;
             //redo the gloss guessing
             this.guessGlosses(morphemesLine);
-            
+
 //            //autosize the morphemes field
 //            var datumself = this;
 //            window.setTimeout(function(){
@@ -571,7 +571,7 @@ define([
         if (this.$el.find(".gloss .datum_field_input").val() == "") {
           // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
 //          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
-          
+
           this.needsSave = true;
         }
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks

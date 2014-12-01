@@ -18,7 +18,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
 
-  $rootScope.appVersion = "2.28.0ss";
+  $rootScope.appVersion = "2.30.0ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size) {
@@ -682,27 +682,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Get lexicon for Glosser and organize based on frequency
     Data.lexicon($rootScope.DB.pouchname)
       .then(function(lexicon) {
-        var sortedLexicon = {};
-        for (var i in lexicon) {
-          if (sortedLexicon[lexicon[i].key.morpheme]) {
-            sortedLexicon[lexicon[i].key.morpheme].push({
-              gloss: lexicon[i].key.gloss,
-              value: lexicon[i].value
-            });
-          } else {
-            sortedLexicon[lexicon[i].key.morpheme] = [{
-              gloss: lexicon[i].key.gloss,
-              value: lexicon[i].value
-            }];
-          }
-        }
-        var sorter = function(a, b) {
-          return b.value - a.value;
-        };
-        // Sort each morpheme array by descending value
-        for (var key in sortedLexicon) {
-          sortedLexicon[key].sort(sorter);
-        }
+       var sortedLexicon = {};
+       for (var i in lexicon) {
+         if(lexicon[i].key.gloss){
+           if (sortedLexicon[lexicon[i].key.morpheme]) {
+             sortedLexicon[lexicon[i].key.morpheme].push({
+               gloss: lexicon[i].key.gloss,
+               value: lexicon[i].value
+             });
+           } else {
+             sortedLexicon[lexicon[i].key.morpheme] = [{
+               gloss: lexicon[i].key.gloss,
+               value: lexicon[i].value
+             }];
+           }
+         }
+       }
+       var sorter = function(a, b) {
+         return b.value - a.value;
+       };
+       // Sort each morpheme array by descending value
+       for (var key in sortedLexicon) {
+         sortedLexicon[key].sort(sorter);
+       }
         localStorage.setItem(
           $rootScope.DB.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
       }, function(error) {

@@ -181,7 +181,7 @@ define([
           }).length === 0) {
             corpuses.push(new CorpusMask(thisCouchConnection));
           } else {
-            console.log(thisCouchConnection.pouchname + " Already known");
+            OPrime.debug(thisCouchConnection.pouchname + " Already known");
           }
         }
       }

@@ -1,5 +1,8 @@
 define([
     "backbone",
+    "jquerycouch",
+    "libs/backbone_couchdb/backbone-couchdb",
+    "handlebars",
     "app/AppView",
     "activity/Activity",
     "authentication/Authentication",
@@ -19,6 +22,9 @@ define([
     "OPrime"
 ], function(
     Backbone,
+    jquerycouch,
+    backbonecouch,
+    Handlebars,
     AppView,
     Activity,
     Authentication,
