@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var Image = require('./Image').Image;
+var Collection = require("./../Collection").Collection;
+var Image = require("./Image").Image;
 
 /**
  * @class Images of Datum validation states
@@ -11,6 +11,9 @@ var Image = require('./Image').Image;
  * @constructs
  */
 var Images = function Images(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Images";
+  }
   this.debug("Constructing Images length: ", options);
   Collection.apply(this, arguments);
 };
@@ -21,7 +24,7 @@ Images.prototype = Object.create(Collection.prototype, /** @lends Images.prototy
   },
 
   primaryKey: {
-    value: 'URL'
+    value: "URL"
   },
 
   INTERNAL_MODELS: {

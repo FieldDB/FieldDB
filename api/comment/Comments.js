@@ -1,6 +1,5 @@
-
-var Collection = require('./../Collection').Collection;
-var Comment = require('./Comment').Comment;
+var Collection = require("./../Collection").Collection;
+var Comment = require("./Comment").Comment;
 
 /**
  * @class
@@ -13,6 +12,9 @@ var Comment = require('./Comment').Comment;
  * @constructs
  */
 var Comments = function Comments(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Comments";
+  }
   this.debug("Constructing Comments ", options);
   Collection.apply(this, arguments);
 };
@@ -23,7 +25,7 @@ Comments.prototype = Object.create(Collection.prototype, /** @lends Comments.pro
   },
 
   primaryKey: {
-    value: 'timestamp'
+    value: "timestamp"
   },
 
   INTERNAL_MODELS: {
@@ -32,8 +34,8 @@ Comments.prototype = Object.create(Collection.prototype, /** @lends Comments.pro
     }
   },
 
-  insertNewCommentFromObject : {
-    value: function(commentObject){
+  insertNewCommentFromObject: {
+    value: function(commentObject) {
       commentObject.timestamp = Date.now();
       this.add(new Comment(commentObject));
     }

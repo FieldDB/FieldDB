@@ -1,12 +1,13 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var Database = require('./Database').Database;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
-var DatumStates = require('./../datum/DatumStates').DatumStates;
-var DatumTags = require('./../datum/DatumTags').DatumTags;
-var Comments = require('./../comment/Comments').Comments;
+var Database = require("./Database").Database;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var DatumStates = require("./../datum/DatumStates").DatumStates;
+var DatumTags = require("./../datum/DatumTags").DatumTags;
+var Comments = require("./../comment/Comments").Comments;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Sessions = require('./../Collection').Collection;
-var DataLists = require('./../Collection').Collection;
+var Sessions = require("./../Collection").Collection;
+var DataLists = require("./../Collection").Collection;
+var TeamPreference = require("./../user/UserPreference").UserPreference;
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -34,7 +35,7 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  *           for the image/logo of the license for easy recognition and
  *           title of the license.
  * @property {Object} copyright Who owns the copyright to the corpus,
- *           by default it is set to the corpus team's name but teams can customize
+ *           by default it is set to the corpus team"s name but teams can customize
  *           it for example to make the corpus copyright of the language community
  *           or speakers who contributed to the corpus.
  * @property {Object} location GPS location of the corpus (longitude, latitude and accuracy)
@@ -64,6 +65,9 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  * @tutorial tests/CorpusMaskTest.js
  */
 var CorpusMask = function CorpusMask(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "CorpusMask";
+  }
   this.debug(options);
   Database.apply(this, arguments);
 };
@@ -81,7 +85,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       if (value === this._id) {
         return;
       }
-      this.warn("CorpusMask id cannot be set, it is 'corpus' by default." + value);
+      this.warn("CorpusMask id cannot be set, it is \"corpus\" by default." + value);
       value = "corpus";
       this._id = value;
     }
@@ -196,13 +200,15 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       participantFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
+
+      prefs: TeamPreference
     }
   },
 
   titleAsUrl: {
     get: function() {
       if (!this._titleAsUrl && this.title) {
-        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, '_').toLowerCase();
+        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
       }
       return this._titleAsUrl;
     },
@@ -230,7 +236,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this._title = value.trim();
-      this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, '_').toLowerCase(); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
+      this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase(); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
     }
   },
 
@@ -247,6 +253,100 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this._description = value.trim();
+    }
+  },
+
+  prefs: {
+    get: function() {
+      return this._prefs;
+    },
+    set: function(value) {
+      if (value === this._prefs) {
+        return;
+      }
+      if (!value) {
+        delete this._prefs;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === "[object Object]") {
+          value = new this.INTERNAL_MODELS["prefs"](value);
+        }
+      }
+      this._prefs = value;
+    }
+  },
+
+  preferredDatumTemplate: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredDatumTemplate) {
+        return this.prefs.preferredDatumTemplate;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredDatumTemplate && value === this.prefs.preferredDatumTemplate) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredDatumTemplate) {
+          delete this.prefs.preferredDatumTemplate;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredDatumTemplate = value.trim();
+    }
+  },
+
+  preferredLocale: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredLocale) {
+        return this.prefs.preferredLocale;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredLocale && value === this.prefs.preferredLocale) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredLocale) {
+          delete this.prefs.preferredLocale;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredLocale = value.trim();
+    }
+  },
+
+  preferredDashboardLayout: {
+    get: function() {
+      if (this.prefs && this.prefs.preferredDashboardLayout) {
+        return this.prefs.preferredDashboardLayout;
+      }
+    },
+    set: function(value) {
+      if (this.prefs && this.prefs.preferredDashboardLayout && value === this.prefs.preferredDashboardLayout) {
+        return;
+      }
+      if (!value || value === "default") {
+        if (this.prefs && this.prefs.preferredDashboardLayout) {
+          delete this.prefs.preferredDashboardLayout;
+        }
+        return;
+      }
+      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs.preferredDashboardLayout = value.trim();
+    }
+  },
+
+  preferredTemplate: {
+    get: function() {
+      this.warn("preferredTemplate is deprecated, use dbname instead.");
+      return this.preferredDatumTemplate;
+    },
+    set: function(value) {
+      this.warn("preferredTemplate is deprecated, please use dbname instead.");
+      this.preferredDatumTemplate = value;
     }
   }
 

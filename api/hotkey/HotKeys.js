@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var HotKey = require('./HotKey').HotKey;
+var Collection = require("./../Collection").Collection;
+var HotKey = require("./HotKey").HotKey;
 
 /**
  * @class HotKeys is a set of HotKey. A user will be able to have multiple shortcuts.
@@ -17,9 +17,12 @@ var HotKey = require('./HotKey').HotKey;
  * @constructs
  */
 var HotKeys = function HotKeys(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "HotKeys";
+  }
   if (options && options.firstkey === "" && options.secondKey === "" && options.description === "") {
     options = null;
-    console.warn("Upgrading pre v2 hotkeys");
+    this.debug("Upgrading pre v2 hotkeys");
   }
   this.debug("Constructing HotKeys ", options);
   Collection.apply(this, arguments);
@@ -31,7 +34,7 @@ HotKeys.prototype = Object.create(Collection.prototype, /** @lends HotKeys.proto
   },
 
   primaryKey: {
-    value: 'keySequence'
+    value: "keySequence"
   },
 
   INTERNAL_MODELS: {

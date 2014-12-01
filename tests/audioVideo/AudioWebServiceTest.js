@@ -2,7 +2,7 @@
 
 var AudioService = AudioService || require("./AudioService");
 var CouchDBConnection =  CouchDBConnection || require("../corpus/CouchDBConnection");
-var OPrime =  OPrime || require('../../backbone_client/libs/OPrime.js');
+var OPrime =  OPrime || require("../../backbone_client/libs/OPrime.js");
 
 var runCORSTests = function(whichServer) {
 
@@ -36,7 +36,7 @@ var runCORSTests = function(whichServer) {
   };
 
   it(
-    'should be able asyncronously retrieve a TextGrid, given that all has been already cached', function() {
+    "should be able asyncronously retrieve a TextGrid, given that all has been already cached", function() {
       /*
        * Declare an object and its functions which will be in scope
        */
@@ -70,8 +70,8 @@ var runCORSTests = function(whichServer) {
     });
 
   // it(
-  // 'should be able asyncronously retrieve a TextGrid, if audio files have not
-  // yet been uploaded',
+  // "should be able asyncronously retrieve a TextGrid, if audio files have not
+  // yet been uploaded",
   // function() {
   // var corpus = new CouchDBConnection(corpusServerUrl, user);
   // corpus.pouchname = "lingllama-firstcorpus";

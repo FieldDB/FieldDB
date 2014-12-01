@@ -27,27 +27,27 @@ CORS.makeCORSRequest = function(options) {
   var urlObject = url.parse(options.url);
   if (options.dataType === "json") {
     urlObject.headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json'
+      "content-type": "application/json",
+      "accept": "application/json"
     };
   }
   urlObject.method = options.method;
 
   var httpOrHttps = http;
-  if (urlObject.protocol == 'https://') {
+  if (urlObject.protocol == "https://") {
     httpOrHttps = https;
   }
   delete urlObject.protocol;
 
   var req = httpOrHttps.request(urlObject, function(res) {
-    var output = '';
-    res.setEncoding('utf8');
+    var output = "";
+    res.setEncoding("utf8");
 
-    res.on('data', function(chunk) {
+    res.on("data", function(chunk) {
       output += chunk;
     });
 
-    res.on('end', function() {
+    res.on("end", function() {
       var response;
       // console.log("Server response ended." + output);
       try {
@@ -65,15 +65,15 @@ CORS.makeCORSRequest = function(options) {
     });
   });
 
-  req.on('error', function(err) {
-    console.log('Error requesting ' + JSON.stringify(urlObject));
+  req.on("error", function(err) {
+    console.log("Error requesting " + JSON.stringify(urlObject));
     console.log(err);
     deferred.reject(err);
   });
 
   if (data) {
     console.log("sending data to http connection", data);
-    req.write(data, 'utf8');
+    req.write(data, "utf8");
     req.end();
   } else {
     console.log("sending no data to http connection", urlObject);

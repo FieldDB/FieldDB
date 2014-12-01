@@ -60,7 +60,7 @@
         <button class="hide audio_video" title="{{locale.locale_Drag_and_Drop_Audio_Tooltip}}" rel="tooltip"></button>
 
         <ul class="audio_video_ul unstyled" ng-repeat="audioVideo in datum.audioVideo._collection">
-          <audio title="{{audioVideo.description}}" preload controls>
+          <audio id="{{audioVideo.URL}}" title="{{audioVideo.description}}" preload controls>
             <source ng-src="{{audioVideo.URL}}" type="{{audioVideo.audioType}}"/>
           </audio>
           {{audioVideo.startTime}} - {{audioVideo.endTime}}

@@ -9,33 +9,36 @@ describe("CorpusMask ", function() {
   it("should set the title as url", function() {
     var corpus = new CorpusMask();
     corpus.title = "Private corpus";
-    expect(corpus.titleAsUrl).toEqual('private_corpus');
+    expect(corpus.titleAsUrl).toEqual("private_corpus");
     corpus.title = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ";
-    expect(corpus.titleAsUrl).toEqual('internationalization');
+    expect(corpus.titleAsUrl).toEqual("internationalization");
 
   });
 
   it("should have unknown defaults if not loaded from the server", function() {
     var corpus = new CorpusMask(CorpusMask.defaults);
+    var currentVersion = corpus.version;
     corpus.dbname = "lingllama-communitycorpus";
-    expect(corpus.toJSON("complete")).toEqual({
-      type: 'CorpusMask',
-      dbname: 'lingllama-communitycorpus',
-      version: 'v2.0.1',
+    // delete corpus.prefs;
+    var corpusJson = corpus.toJSON("complete");
+    expect(corpusJson).toEqual({
+      fieldDBtype: "CorpusMask",
+      dbname: "lingllama-communitycorpus",
+      version: currentVersion,
       dateCreated: 0,
       dateModified: 0,
       comments: [],
       sessions: [],
       datalists: [],
-      title: '',
-      titleAsUrl: '',
-      description: '',
+      title: "",
+      titleAsUrl: "",
+      description: "",
       termsOfUse: {},
       license: {},
-      copyright: '',
+      copyright: "",
       replicatedCorpusUrls: [],
       olacExportConnections: [],
-      publicCorpus: '',
+      publicCorpus: "",
       validationStati: [],
       tags: [],
       datumFields: [],
@@ -43,8 +46,9 @@ describe("CorpusMask ", function() {
       speakerFields: [],
       conversationFields: [],
       sessionFields: [],
-      pouchname: 'lingllama-communitycorpus',
-      api: 'corpora'
+      prefs: corpusJson.prefs,
+      pouchname: "lingllama-communitycorpus",
+      api: "corpora"
     });
   });
 

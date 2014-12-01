@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class The DatumTag allows the user to label data with grammatical tags
@@ -11,6 +11,9 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var DatumTag = function DatumTag(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "DatumTag";
+  }
   this.debug("Constructing DatumTag ", options);
   FieldDBObject.apply(this, arguments);
 };

@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class Search progressively searches a corpus and updates a search/data list
@@ -13,6 +13,9 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var Search = function Search(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Search";
+  }
   this.debug("Constructing Search length: ", options);
   FieldDBObject.apply(this, arguments);
 };

@@ -21,6 +21,10 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
  * @constructs
  */
 var DatumField = function DatumField(options) {
+  if(!this._fieldDBtype){
+		this._fieldDBtype = "DatumField";
+	}
+
   this.debug("Constructing DatumField ", options);
   // Let encryptedValue and value from serialization be set
   if (options && options.encryptedValue) {
@@ -88,7 +92,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       var originalValue = value + "";
       value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
       if (value === null) {
-        this.bug('Invalid id, not using ' + originalValue + ' id remains as ' + this._id);
+        this.bug("Invalid id, not using " + originalValue + " id remains as " + this._id);
         return;
       }
       this._id = value;
@@ -97,11 +101,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   label: {
     get: function() {
-      this.todo("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
       return this._labelFieldLinguists || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      this.todo("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
+      this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
       this.labelFieldLinguists = value;
       this.id = value;
     }
@@ -109,11 +113,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   userchooseable: {
     get: function() {
-      this.warn("userchooseable is deprecated, instead use defaultfield");
+      this.debug("userchooseable is deprecated, instead use defaultfield");
       return this.defaultfield;
     },
     set: function(value) {
-      this.warn("userchooseable is deprecated, instead use defaultfield");
+      this.debug("userchooseable is deprecated, instead use defaultfield");
       if (value === "disabled") {
         value = true;
       }
@@ -313,6 +317,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     value: true
   },
   value: {
+    configurable: true,
     get: function() {
       if (!this._value) {
         return FieldDBObject.DEFAULT_STRING;
@@ -373,6 +378,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         }
       }
       var encryptedValue;
+      if (!value.trim) {
+        value = value + "";
+      }
       value = value.trim();
       if (!this._shouldBeEncrypted) {
         this._encryptedValue = value;
@@ -393,7 +401,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
               if (value.indexOf("confidential:") === 0 && !this._encryptedValue) {
                 this._encryptedValue = value;
                 this._value = this.mask;
-                this.debug("This is probably a new field initialization from old data (the value has 'confidential:' in it, and yet the encryptedValue isn't set");
+                this.debug("This is probably a new field initialization from old data (the value has \"confidential:\" in it, and yet the encryptedValue isn't set");
               } else {
                 this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
               }
@@ -490,6 +498,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   },
 
   help: {
+    configurable: true,
     get: function() {
       return this._help || "Put your team's data entry conventions here (if any)...";
     },
@@ -813,7 +822,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       json.id = json._id;
       delete json._id;
 
-      json.type = this.type;
+      json.fieldDBtype = this.fieldDBtype;
       delete json._type;
 
       this.debug(json);

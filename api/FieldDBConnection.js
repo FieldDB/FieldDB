@@ -11,12 +11,12 @@ FieldDBConnection.setXMLHttpRequestLocal = function(injectedCORS) {
 FieldDBConnection.connection = {
   localCouch: {
     connected: false,
-    url: 'https://localhost:6984',
+    url: "https://localhost:6984",
     couchUser: null
   },
   centralAPI: {
     connected: false,
-    url: 'https://localhost:3181/v2',
+    url: "https://localhost:3181/v2",
     fieldDBUser: null
   }
 };
@@ -39,9 +39,9 @@ FieldDBConnection.connect = function() {
 
   // Find out if this user is able to work offline with a couchdb
   FieldDBConnection.CORS.makeCORSRequest({
-    method: 'GET',
-    dataType: 'json',
-    url: self.connection.localCouch.url + '/_session'
+    method: "GET",
+    dataType: "json",
+    url: self.connection.localCouch.url + "/_session"
   }).then(function(response) {
     this.timestamp = Date.now();
     console.log(response);
@@ -50,7 +50,7 @@ FieldDBConnection.connect = function() {
       self.connection.localCouch.connected = false;
       self.connection.localCouch.timestamp = Date.now();
       deferredLocal.reject({
-        eror: 'Recieved an odd response from the local couch. Can\'t contact the local couchdb, it might be off or it might not be installed. This device can work online only.'
+        eror: "Recieved an odd response from the local couch. Can\"t contact the local couchdb, it might be off or it might not be installed. This device can work online only."
       });
       return;
     }
@@ -60,19 +60,19 @@ FieldDBConnection.connect = function() {
     self.connection.localCouch.couchUser = response.userCtx;
     if (!response.userCtx.name) {
       FieldDBConnection.CORS.makeCORSRequest({
-        method: 'POST',
-        dataType: 'json',
+        method: "POST",
+        dataType: "json",
         data: {
-          name: 'public',
-          password: 'none'
+          name: "public",
+          password: "none"
         },
-        url: self.connection.localCouch.url + '/_session'
+        url: self.connection.localCouch.url + "/_session"
       }).then(function() {
-        console.log('Logged the user in as the public user so they can only see public info.');
+        console.log("Logged the user in as the public user so they can only see public info.");
         deferredLocal.resolve(response);
 
       }).fail(function(reason) {
-        console.log('The public user doesnt exist on this couch...', reason);
+        console.log("The public user doesnt exist on this couch...", reason);
         deferredLocal.reject(reason);
       });
     }
@@ -87,9 +87,9 @@ FieldDBConnection.connect = function() {
 
   // Find out if this user is able to work online with the central api
   FieldDBConnection.CORS.makeCORSRequest({
-    method: 'GET',
-    dataType: 'json',
-    url: self.connection.centralAPI.url + '/users'
+    method: "GET",
+    dataType: "json",
+    url: self.connection.centralAPI.url + "/users"
   }).then(function(response) {
     this.timestamp = Date.now();
     console.log("FieldDBConnection", response);
@@ -98,7 +98,7 @@ FieldDBConnection.connect = function() {
       self.connection.centralAPI.connected = false;
       self.connection.centralAPI.timestamp = Date.now();
       deferredCentral.reject({
-        eror: 'Received an odd response from the api. Can\'t contact the api server. This is a bug which must be reported.'
+        eror: "Received an odd response from the api. Can\"t contact the api server. This is a bug which must be reported."
       });
       return;
     }
@@ -108,19 +108,19 @@ FieldDBConnection.connect = function() {
     self.connection.localCouch.user = response.user;
     if (!response.user.username) {
       FieldDBConnection.CORS.makeCORSRequest({
-        method: 'POST',
-        dataType: 'json',
+        method: "POST",
+        dataType: "json",
         data: {
-          username: 'public',
-          password: 'none'
+          username: "public",
+          password: "none"
         },
-        url: self.connection.centralAPI.url + '/users'
+        url: self.connection.centralAPI.url + "/users"
       }).then(function() {
-        console.log('Logged the user in as the public user so they can only see public info.');
+        console.log("Logged the user in as the public user so they can only see public info.");
         deferredCentral.resolve(response);
 
       }).fail(function(reason) {
-        console.log('The public user doesn\'t exist on this couch...', reason);
+        console.log("The public user doesn\"t exist on this couch...", reason);
         deferredCentral.reject(reason);
       });
     }

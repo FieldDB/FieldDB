@@ -5,11 +5,53 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
       return;
     }
-    if (doc.type == "Response") {
+    if (doc.fieldDBtype === "SubExperimentDataList" && doc.results) {
       var date = doc.dateModified || doc.dateCreated;
-      emit(date, doc);
+
+      var experimentLabel = doc._id;
+      experimentLabel = experimentLabel.replace(/[0-9]*/g, "");
+
+      var prime;
+      var target;
+      var participant = doc.participant;
+      var experimenter = doc.experimenter;
+      var response;
+      var score;
+      var subexperimentLabel;
+      var itemNumberInExperiment = 0;
+
+      var results = doc.results.map(function(subexperiment) {
+        var responses = subexperiment.results.map(function(stimulus) {
+          if (!stimulus || !stimulus.responses || !stimulus.responses.length || !stimulus.responses[stimulus.responses.length - 1]) {
+            return;
+          }
+          subexperimentLabel = stimulus.subexperimentLabel;
+          itemNumberInExperiment = stimulus.itemNumberInExperiment;
+          prime = stimulus.prime;
+          target = stimulus.target;
+          response = stimulus.responses[stimulus.responses.length - 1];
+          score = response.score;
+          stimulusId = stimulus.relatedData[0].URI.split("?rev=")[0];
+          stimulusRev = stimulus.relatedData[0].URI.split("?rev=")[1];
+          emit(stimulusId, [date, {
+            participant: participant,
+            experimenter: experimenter,
+            stimulusId: stimulusId,
+            stimulusRev: stimulusRev,
+            prime: prime,
+            target: target,
+            response: response,
+            score: score,
+            itemNumberInExperiment: itemNumberInExperiment,
+            subexperimentLabel: subexperimentLabel
+          }]);
+
+          return stimulus.responses;
+        });
+      });
+
     }
   } catch (e) {
     emit(e, 1);
   }
-};
+}

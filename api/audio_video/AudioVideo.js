@@ -1,5 +1,5 @@
-/* globals FieldDB */
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var AudioPlayer = require("./AudioPlayer").AudioPlayer;
 
 /**
  * @class The AudioVideo is a type of FieldDBObject with any additional fields or
@@ -11,6 +11,9 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var AudioVideo = function AudioVideo(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "AudioVideo";
+  }
   this.debug("Constructing AudioVideo length: ", options);
   FieldDBObject.apply(this, arguments);
 };
@@ -57,7 +60,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
     get: function() {
       if (!this._URL && this.filename) {
         var baseUrl = this.url ? this.url : this.BASE_SPEECH_URL;
-        return baseUrl + '/' + this.dbname + '/' + this.filename;
+        return baseUrl + "/" + this.dbname + "/" + this.filename;
       }
       return this._URL || FieldDBObject.DEFAULT_STRING;
     },
@@ -73,13 +76,24 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
         value = value.trim();
       }
       this._URL = value;
+      if (this.audioPlayer) {
+        this.audioPlayer.src = value;
+      }
+    }
+  },
+
+  play: {
+    value: function(optionalStartTime, optionalEndTime, optionalDuration) {
+      console.log("playing", this, optionalStartTime, optionalEndTime, optionalDuration);
+      this.audioPlayer = this.audioPlayer || new AudioPlayer();
+      this.audioPlayer.play(this.URL);
     }
   },
 
   type: {
     get: function() {
       if (!this._type && this.filename) {
-        this._type = "audio/" + this.filename.split('.').pop();
+        this._type = "audio/" + this.filename.split(".").pop();
       }
       return this._type || FieldDBObject.DEFAULT_STRING;
     },
@@ -87,11 +101,21 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
       if (value === this._type) {
         return;
       }
-      console.warn("type cannot be set, it is automatically determined from the filename. Not using: " + value);
+      this.warn("type cannot be set, it is automatically determined from the filename. Not using: " + value);
       if (this.filename) {
-        value = "audio/" + this.filename.split('.').pop();
+        value = "audio/" + this.filename.split(".").pop();
         this._type = value;
       }
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      delete json.audioPlayer;
+
+      return json;
     }
   }
 

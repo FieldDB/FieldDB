@@ -1,19 +1,22 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var HotKeys = require('./../hotkey/HotKeys').HotKeys;
-var InsertUnicodes = require('./../unicode/UnicodeSymbols').InsertUnicodes;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var HotKeys = require("./../hotkey/HotKeys").HotKeys;
+var InsertUnicodes = require("./../unicode/UnicodeSymbols").InsertUnicodes;
 
 /**
  * @class  Hold preferences for users like the skin of the app
  *
  * @property {int} skin This is user's preferred skin.
  * @property {int} numVisibleDatum The number of Datum visible at the time on
- * the Datum*View's.
+ * the Datum*View"s.
  *
  * @name  UserPreference
  * @extends FieldDBObject
  * @constructs
  */
 var UserPreference = function UserPreference(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "UserPreference";
+  }
   this.debug("Constructing UserPreference length: ", options);
   FieldDBObject.apply(this, arguments);
 };
@@ -110,8 +113,8 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
         if (value.firstKey) {
           value = [value];
         }
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['hotkeys'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["hotkeys"](value);
         }
       }
       this._hotkeys = value;
@@ -130,8 +133,8 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
         delete this._unicodes;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['unicodes'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["unicodes"](value);
         }
       }
       this._unicodes = value;

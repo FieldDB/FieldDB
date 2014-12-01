@@ -5,7 +5,7 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
       return;
     }
-    if (doc.type == "Consultant") {
+    if (doc.fieldDBtype == "Consultant") {
       var date = doc.dateModified || doc.dateCreated;
       emit(date, doc);
     }

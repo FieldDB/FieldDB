@@ -3,15 +3,22 @@
 var Q = require("q");
 
 var CORS = {
+  fieldDBtype: "CORS",
   debugMode: false,
   debug: function(a, b, c) {
     if (this.debugMode) {
       console.log(a, b, c);
     }
   },
-  bug: function(message) {
-    console.warn(message);
+  warn: function(message) {
+    console.warn("CORS-WARN: " + message);
     // throw message;
+  },
+  bug: function(message) {
+    console.warn("CORS-BUG: " + message);
+  },
+  render: function() {
+    this.debug("Render requested but this object has no render defined.");
   }
 };
 
@@ -23,12 +30,14 @@ CORS.supportCORSandIE = function(method, url) {
   try {
     xhrCors = new XMLHttpRequest();
   } catch (e) {
-    console.warn("XMLHttpRequest is not defined, nothign will happen.", e);
+    this.warn("XMLHttpRequest is not defined, nothign will happen.", e);
     xhrCors = {};
   }
   if ("withCredentials" in xhrCors) {
     // XHR for Chrome/Firefox/Opera/Safari.
     xhrCors.open(method, url, true);
+    // https://mathiasbynens.be/notes/xhr-responsetype-json
+    // xhrCors.responseType = "json";
   } else if (typeof XDomainRequest !== "undefined") {
     // XDomainRequest for IE.
     xhrCors = new XDomainRequest();
@@ -75,40 +84,36 @@ CORS.makeCORSRequest = function(options) {
   //  if(options.method === "POST"){
   //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
   xhr.setRequestHeader("Content-type", "application/json");
-  xhr.withCredentials = true;
+  if (options.withCredentials !== false) {
+    xhr.withCredentials = true;
+  }
   //  }
 
   xhr.onload = function(e, f, g) {
-    var response = xhr.response || xhr.responseText;
-    if (self.debugMode) {
-      self.debug("Response from CORS request to " + options.url + ": " + response);
+    var response = xhr.responseJSON || xhr.responseText || xhr.response;
+    self.debug("Response from CORS request to " + options.url + ": " + response);
+    if (xhr.status >= 400) {
+      self.warn("The request was unsuccesful " + xhr.statusText);
+      deferred.reject(response);
+      return;
     }
     if (response) {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        console.log("Response was not json.");
+        self.debug("Response was already json.", e);
       }
       deferred.resolve(response);
     } else {
       self.bug("There was no content in the server's response text. Please report this.");
-      console.log(e, f, g);
-      // deferred.reject(e);
+      self.warn(e, f, g);
+      deferred.reject(e);
     }
-    if (xhr.status >= 400) {
-      console.log("The request was unsuccesful " + xhr.statusText);
-      deferred.reject(response);
-    } else {
-      deferred.resolve(response);
-    }
-
     // self.debugMode = false;
   };
 
   xhr.onerror = function(e, f, g) {
-    if (self.debugMode) {
-      self.debug(e, f, g);
-    }
+    self.debug(e, f, g);
     self.bug("There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
     deferred.reject(e);
   };

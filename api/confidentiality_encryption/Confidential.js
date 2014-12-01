@@ -1,7 +1,7 @@
 /* globals window */
 var AES = require("crypto-js/aes");
 var CryptoEncoding = require("crypto-js/enc-utf8");
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 try {
   if (!window.atob) {
@@ -11,8 +11,8 @@ try {
   console.log(e);
   /*jshint -W020 */
   window = {};
-  window.atob = require('atob');
-  window.btoa = require('btoa');
+  window.atob = require("atob");
+  window.btoa = require("btoa");
 }
 
 /**
@@ -22,7 +22,7 @@ try {
  * @description makes it possible to generate pass phrases (one per
  *        corpus) to encrypt and decrypt confidential data points. The
  *        confidential data is stored encrypted, and can only be decrypted
- *        if one has the corpus' secret key, or if one is logged into the
+ *        if one has the corpus" secret key, or if one is logged into the
  *        system with their user name and password. This allows the corpus
  *        to be shared with anyone, with out worrying about confidential
  *        data or consultant stories being publically accessible. We are
@@ -41,6 +41,9 @@ try {
  *
  */
 var Confidential = function Confidential(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Confidential";
+  }
   this.debug("Constructing Confidential: ", options);
   if (options && options.filledWithDefaults) {
     this.fillWithDefaults();
@@ -79,7 +82,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
    */
   encrypt: {
     value: function(value) {
-      if (typeof value === 'object') {
+      if (typeof value === "object") {
         value = JSON.stringify(value);
         this.debug("Converted object to string before encryption");
       }
@@ -126,7 +129,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
         this.verbose("Decrypting " + encrypted, this.secretkey);
         result = AES.decrypt(encrypted, this.secretkey).toString(CryptoEncoding);
         try {
-          if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]") ) {
+          if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]")) {
             result = JSON.parse(result);
             this.debug("Decrypting an object");
           }

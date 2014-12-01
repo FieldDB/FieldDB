@@ -1,4 +1,4 @@
-var CORS = require('./../../api/CORS.js');
+var CORS = require("./../../api/CORS.js");
 
 var CouchDBConnection = function(url, user) {
   this.url = url;
@@ -9,7 +9,7 @@ var CouchDBConnection = function(url, user) {
 
     var that = this;
     CORS.makeCORSRequest({
-      type: 'POST',
+      type: "POST",
       url: that.url,
       data: that.user,
       success: function(serverResults) {

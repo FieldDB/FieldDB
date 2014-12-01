@@ -1,0 +1,60 @@
+{
+  "name": "fielddb",
+  "version": "2.24.0",
+  "description": "An offline/online field database which adapts to its user's terminology and I-Language",
+  "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/milestones?state=closed",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
+  },
+  "keywords": [
+    "fielddb",
+    "client"
+  ],
+  "contributors": [
+    "cesine <cesine@yahoo.com>",
+    "trisapeace <trisapeace@gmail.com>",
+    "hisakonog <hisakonog@gmail.com>",
+    "Emmy Cathcart <maryellencathcart@gmail.com>",
+    "Tobin Skinner <tobin.skinner@gmail.com>",
+    "Yuliya Manyakina <yulia.manyakina@gmail.com>",
+    "Elise <elise.mcclay@gmail.com>",
+    "Josh Horner <josh.horner@gmail.com>",
+    "gretchenmcc <gretchen.mcculloch@gmail.com>",
+    "jrwdunham <jrwdunham@gmail.com>",
+    "ghazan <gay.hazan@gmail.com>",
+    "Fieldlinguist <info@fieldlinguist.com>",
+    "zazoo <kimdan.ng@gmail.com>",
+    "louisa-bielig <louisa.bielig@gmail.com>",
+    "lingllama <lingllama@lingsync.org>",
+    "geekrax <rakshit@thetechtime.com>",
+    "Yogurt1206 <sunx4@miamioh.edu>",
+    "Pablo Duboue <pablo.duboue@gmail.com>",
+    "Oriana <oriana.kilbourn-ceron@mail.mcgill.ca>"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "handlebars": "1.3.0",
+    "requirejs": "2.1.11"
+  },
+  "main": "./../scripts/build_template_databases_using_fielddb.sh",
+  "bin": {
+    "fielddb": "./../scripts/build_template_databases_using_fielddb.sh"
+  },
+  "engines": {
+    "node": "~0.8 || ~0.10"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "license": "Apache 2.0",
+  "licenses": [
+    {
+      "type": "Apache 2.0"
+    }
+  ]
+}

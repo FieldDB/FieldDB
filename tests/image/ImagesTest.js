@@ -1,5 +1,5 @@
-var Image = require('./../../api/image/Image').Image;
-var Images = require('./../../api/image/Images').Images;
+var Image = require("./../../api/image/Image").Image;
+var Images = require("./../../api/image/Images").Images;
 
 describe("Test Images", function() {
   it("should load", function() {

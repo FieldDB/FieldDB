@@ -1,7 +1,7 @@
 function(doc) {
   try {
     if (doc.collection === "activities" || doc.directobject) {
-      doc.type = "Activity";
+      doc.fieldDBtype = "Activity";
       emit(doc._id, doc);
     }
   } catch (e) {

@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var AudioVideo = require('./AudioVideo').AudioVideo;
+var Collection = require("./../Collection").Collection;
+var AudioVideo = require("./AudioVideo").AudioVideo;
 
 /**
  * @class AudioVideos is a minimal customization of the Collection
@@ -11,6 +11,9 @@ var AudioVideo = require('./AudioVideo').AudioVideo;
  * @constructs
  */
 var AudioVideos = function AudioVideos(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "AudioVideos";
+  }
   this.debug("Constructing AudioVideos length: ", options);
   Collection.apply(this, arguments);
 };
@@ -21,12 +24,24 @@ AudioVideos.prototype = Object.create(Collection.prototype, /** @lends AudioVide
   },
 
   primaryKey: {
-    value: 'URL'
+    value: "URL"
   },
 
   INTERNAL_MODELS: {
     value: {
       item: AudioVideo
+    }
+  },
+
+  play: {
+    value: function(optionalIndexToPlay) {
+      console.log("playing");
+      if (!optionalIndexToPlay) {
+        optionalIndexToPlay = 0;
+      }
+      if (this._collection && this._collection[optionalIndexToPlay]) {
+        this._collection[optionalIndexToPlay].play();
+      }
     }
   }
 

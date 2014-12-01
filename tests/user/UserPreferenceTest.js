@@ -5,8 +5,8 @@ describe("Test UserPreference", function() {
   it("should initialize the UserPreferences", function() {
     expect(UserPreference).toBeDefined();
     var p = new UserPreference();
-    expect(p.preferedDashboardType).toEqual('');
-    expect(p.preferedDashboardLayout).toEqual('');
+    expect(p.preferedDashboardType).toEqual("");
+    expect(p.preferedDashboardLayout).toEqual("");
     expect(p.hotkeys.length).toEqual(0);
     expect(p.unicodes.length).toEqual(0);
   });

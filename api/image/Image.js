@@ -1,4 +1,4 @@
-var AudioVideo = require('./../audio_video/AudioVideo').AudioVideo;
+var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 
 /**
  * @class The Image is a type of AudioVideo with any additional fields or
@@ -9,6 +9,9 @@ var AudioVideo = require('./../audio_video/AudioVideo').AudioVideo;
  * @constructs
  */
 var Image = function Image(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Image";
+  }
   this.debug("Constructing Image length: ", options);
   AudioVideo.apply(this, arguments);
 };

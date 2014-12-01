@@ -1,0 +1,116 @@
+<br />
+<br />
+	<h3>Corpus Settings</h3>
+<br />
+<div ng-hide="loginInfo==undefined" class="form-horizontal">
+	<div class="settings_section_header">
+		<h2>Create a new corpus</h2>
+	</div>
+	<div class="clearDiv">&nbsp;</div>
+	<div class="settingsItems">
+		<input type="text" ng-model='newCorpusInfo.newCorpusName'
+			placeholder="New corpus name">
+		&nbsp;<button class="btn btn-primary"
+			ng-click="createNewCorpus(newCorpusInfo)" ng-disabled="loading==true">Create</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading==true">
+	</div>
+</div>
+
+<hr />
+
+<div class="settingsItems" ng-show="admin==false">
+	You are not an admin for <b>{{DB.title}}</b>. Please contact an
+	admin if you wish to alter user access to this corpus.
+</div>
+
+<div ng-hide="DB==undefined || admin==false">
+	<div>
+		<div class="settings_section_header">
+			<h2>
+				Add an existing user to <b>{{DB.title}}</b>
+			</h2>
+		</div>
+		<div class="clearDiv">&nbsp;</div>
+		<div class="settingsItems">
+			<i>*You may only add users already registered on the {{serverLabels[serverCode]}} server</i><br />
+			<input id="userToModifyInput" list="users" ng-model="newUserRoleInfo.usernameToModify">
+				<datalist id="users">
+  				<option ng-repeat="user in users.notonteam" value={{user.username}}>{{user.username}}</option>
+  			</datalist>
+			<br />
+			<div class="form-horizontal">
+				<font size="3">
+				<input type="radio" name="userroles" value="admin" ng-model="newUserRoleInfo.role">Admin&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="userroles" value="read_write"  ng-model="newUserRoleInfo.role">Read/Write&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="userroles" value="read_comment_only"  ng-model="newUserRoleInfo.role">Read/Comment-only&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="userroles" value="read_only"  ng-model="newUserRoleInfo.role">Read-only&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="userroles" value="write_only"  ng-model="newUserRoleInfo.role">Write-only<br />
+			</font>
+			</div>
+			<br />
+			<button class="btn btn-primary"
+				ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading==true">Add</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading==true">
+		</div>
+	</div>
+	<hr />
+
+	<div>
+		<div class="settings_section_header">
+			<h2>
+				Users with access to <b>{{DB.title}}</b>
+			</h2>
+		</div>
+		<div class="clearDiv">&nbsp;</div>
+		<div class="settingsItems row">
+				<h3>Admins</h3>
+			<div ng-repeat="user in users.admins" class="user_thumbnails">
+				<img
+					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+				{{user.username}}
+			</div>
+		</div>
+		<div class="settingsItems row">
+        <h3>Writers</h3>
+      <div ng-repeat="user in users.writers" class="user_thumbnails">
+        <img
+          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        {{user.username}}
+      </div>
+    </div>
+    <div class="settingsItems row">
+				<h3>Readers</h3>
+			<div ng-repeat="user in users.readers" class="user_thumbnails">
+				<img
+					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+				{{user.username}}
+			</div>
+		</div>
+    <div class="settingsItems row">
+        <h3>Commenters</h3>
+      <div ng-repeat="user in users.commenters" class="user_thumbnails">
+        <img
+          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        {{user.username}}
+      </div>
+    </div>
+	</div>
+
+  <div>
+    <div class="settings_section_header">
+      <h2>
+        Fields in <b>{{DB.title}}</b>
+      </h2>
+    </div>
+    <div class="clearDiv">&nbsp;</div>
+    <div class="settingsItems row">
+      <div ng-repeat="field in availableFieldsInCurrentCorpus">
+        <a class="delete_button" ng-click="removeFieldFromCorpus(field)">ⓧ</a>
+        {{field.label}}
+      </div>
+    </div>
+
+  </div>
+</div>

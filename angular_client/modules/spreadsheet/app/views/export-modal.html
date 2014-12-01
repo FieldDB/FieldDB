@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h3 class="modal-title">Search results</h3>
+    As <a href="https://wordpress.org/plugins/simple-interlinear-glosses/screenshots/" target="_blank">WordPress Gloss</a>: <input type="checkbox" ng-model="useWordpressIGTFormat"/>
+</div>
+<div class="modal-body">
+    <p>
+        {{resultsMessageFromExternalController}}
+    </p>
+
+    <ul ng-show="useWordpressIGTFormat" class="unstyled" ng-repeat="result in resultsFromExternalController">
+        <li>
+          [gloss] {{result.utterance}}
+        </li>
+        <li>
+          {{result.morphemes}}
+        </li>
+        <li>
+          {{result.gloss}}
+        </li>
+        <li>
+          [/gloss] {{result.translation}}
+        </li>
+    </ul>
+
+    <ul ng-hide="useWordpressIGTFormat" class="unstyled" ng-repeat="result in resultsFromExternalController">
+        <li ng-repeat="corpusField in fieldsInColumns.first">
+          {{result[corpusField.label]}}
+        </li>
+        <li ng-repeat="corpusField in fieldsInColumns.second">
+          {{result[corpusField.label]}}
+        </li>
+        <li ng-repeat="corpusField in fieldsInColumns.third">
+          {{result[corpusField.label]}}
+        </li>
+        <li>
+            Tags: {{commaList(result.datumTags)}}
+        </li>
+    </ul>
+    <hr/>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Close</button>
+</div>
