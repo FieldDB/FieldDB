@@ -1,5 +1,5 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var UserMask = require('./../user/UserMask').UserMask;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var UserMask = require("./../user/UserMask").UserMask;
 
 /**
  * @class The datum state lets the fieldlinguists assign their own state
@@ -11,7 +11,7 @@ var UserMask = require('./../user/UserMask').UserMask;
  *        to say who they want to check with in case they have mulitple
  *        consultants and the consultants have different grammaticality
  *        judgements. When users change the state of the datum, we will add
- *        a note in the datum's comments field so that the history of its
+ *        a note in the datum"s comments field so that the history of its
  *        state is kept in an annotated format.
  *
  * @name  DatumState
@@ -20,6 +20,9 @@ var UserMask = require('./../user/UserMask').UserMask;
  * @constructs
  */
 var DatumState = function DatumState(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "DatumState";
+  }
   this.debug("Constructing DatumState ", options);
   FieldDBObject.apply(this, arguments);
 };

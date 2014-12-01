@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @ngdoc directive
@@ -6,7 +6,7 @@
  * @description
  * # fielddbDatalist
  */
-angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
+angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
 
   var fetchDatalistDocsExponentialDecay = 2000;
 
@@ -15,11 +15,11 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     // $scope.dropSuccessHandler = function($event, index, array) {
     //   // array.splice(index, 1);
     //   // $scope.orphanedItem =
-    //   console.log('removing ' + index);
+    //   console.log("removing " + index);
     // };
 
     $scope.onDrop = function($event, $data, index) {
-      console.log('inserting at ' + index, $data);
+      console.log("inserting at " + index, $data);
       if ($scope.datalist && $scope.datalist.docs) {
         if ($scope.datalist.docs.find($data).length === 0) {
           $scope.datalist.docs.add($data);
@@ -36,7 +36,9 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
 
     $scope.save = function() {
       $scope.datalist.save().then(function() {
-        $scope.$digest();
+        if (!$scope.$$phase) {
+          $scope.$digest(); //$digest or $apply
+        }
       });
     };
 
@@ -51,7 +53,7 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
             fetchDatalistDocsIfEmpty();
           }
         }, fetchDatalistDocsExponentialDecay);
-        console.log(' No real corpus is available, waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
+        console.log(" No real corpus is available, waiting another " + fetchDatalistDocsExponentialDecay + " until trying to fetch docs again.");
         if ($scope.datalist) {
           $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
         }
@@ -61,8 +63,8 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
       $scope.corpus.authUrl = FieldDB.BASE_AUTH_URL;
       // $scope.corpus.debugMode = true;
 
-      // console.log('fetching docs for ', $scope.corpus.toJSON());
-      // $scope.datalist.title = '';
+      // console.log("fetching docs for ", $scope.corpus.toJSON());
+      // $scope.datalist.title = "";
       var whatToFetch = $scope.datalist.api;
       if ($scope.datalist.docIds && $scope.datalist.docIds.length && $scope.datalist.docIds.length >= 0) {
         whatToFetch = $scope.datalist.docIds;
@@ -71,29 +73,35 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
         // $scope.datalist.docs = {
         //   _collection: []
         // };
-        $scope.$digest();
+        if (!$scope.$$phase) {
+          $scope.$digest(); //$digest or $apply
+        }
         return;
       }
       $scope.corpus.fetchCollection(whatToFetch).then(function(results) {
         // Reset the exponential decay to normal for subsequent requests
         fetchDatalistDocsExponentialDecay = 2000;
 
-        console.log('downloaded docs', results);
+        console.log("downloaded docs", results);
         $scope.datalist.confidential = $scope.corpus.confidential;
         $scope.datalist.populate(results.map(function(doc) {
-          doc.url = FieldDB.Database.prototype.BASE_DB_URL + '/' + $scope.corpus.dbname;
+          doc.url = FieldDB.Database.prototype.BASE_DB_URL + "/" + $scope.corpus.dbname;
           return doc;
         }));
 
-        $scope.$digest();
+        if (!$scope.$$phase) {
+          $scope.$digest(); //$digest or $apply
+        }
 
       }, function(reason) {
 
-        console.log('No docs docs...', reason);
+        console.log("No docs docs...", reason);
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
-        console.log(' No connetion, Waiting another ' + fetchDatalistDocsExponentialDecay + ' until trying to fetch docs again.');
-        $scope.$digest();
+        console.log(" No connetion, Waiting another " + fetchDatalistDocsExponentialDecay + " until trying to fetch docs again.");
+        if (!$scope.$$phase) {
+          $scope.$digest(); //$digest or $apply
+        }
 
         $timeout(function() {
           if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
@@ -110,9 +118,9 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     fetchDatalistDocsIfEmpty();
 
     $scope.undo = function() {
-      var type = $scope.datalist.type;
+      var type = $scope.datalist.fieldDBtype;
       if (!type || !FieldDB[type]) {
-        type = 'DataList';
+        type = "DataList";
       }
       $scope.datalist = new FieldDB[type]({
         id: $scope.datalist.id,
@@ -129,29 +137,29 @@ angular.module('fielddbAngularApp').directive('fielddbDatalist', function() {
     };
 
   };
-  controller.$inject = ['$scope', '$timeout'];
+  controller.$inject = ["$scope", "$timeout"];
 
   var directiveDefinitionObject = {
     templateUrl: function(elem, attrs) {
-      if (attrs.view === 'SubExperimentDataList') {
-        return 'views/sub-experiment-datalist.html';
-      } else if (attrs.view === 'Lesson') {
-        return 'views/datalist.html';
+      if (attrs.view === "SubExperimentDataList") {
+        return "views/sub-experiment-datalist.html";
+      } else if (attrs.view === "Lesson") {
+        return "views/datalist.html";
       } else {
-        return 'views/datalist.html';
+        return "views/datalist.html";
       }
     },
-    restrict: 'A',
+    restrict: "A",
     transclude: false,
     scope: {
-      datalist: '=json',
-      corpus: '=corpus'
+      datalist: "=json",
+      corpus: "=corpus"
     },
     controller: controller,
     link: function postLink() {},
     priority: 0,
     replace: false,
-    controllerAs: 'stringAlias'
+    controllerAs: "stringAlias"
   };
   return directiveDefinitionObject;
 });

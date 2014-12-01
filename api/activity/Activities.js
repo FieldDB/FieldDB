@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var Activity = require('./Activity').Activity;
+var Collection = require("./../Collection").Collection;
+var Activity = require("./Activity").Activity;
 
 /**
  * @class
@@ -12,6 +12,9 @@ var Activity = require('./Activity').Activity;
  * @constructs
  */
 var Activities = function Activities(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Activities";
+  }
   this.debug("Constructing Activities ", options);
   Collection.apply(this, arguments);
 };
@@ -22,7 +25,7 @@ Activities.prototype = Object.create(Collection.prototype, /** @lends Activities
   },
 
   // primaryKey: {
-  //   value: 'timestamp' //not unique enough
+  //   value: "timestamp" //not unique enough
   // },
 
   INTERNAL_MODELS: {

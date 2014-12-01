@@ -1,5 +1,5 @@
 <form class="navbar-form navbar-right" role="login">
-  <div class="form-group" ng-hide="authentication.user.authenticated" >
+  <div class="form-group" ng-hide="application.authentication.user.authenticated" >
     <input type="text" placeholder="Username" class="form-control" ng-model="loginDetails.username" name="username" value="" tabindex="1"/>
     &nbsp;
     <input type="password" placeholder="Password" class="form-control" ng-model="loginDetails.password" name="password" tabindex="2"/>
@@ -8,18 +8,13 @@
       Login
     </button>
   </div>
-  {{authentication.error}}
-  <button ng-show="authentication.user.authenticated" class="btn btn-default" ng-click="logout()" tabindex="3">
-    Logout
-  </button>
-  <select ng-show="authentication.user.authenticated" class="btn btn-default" ng-model="authentication.user.prefs.preferedDashboardType" title="Which kind of dashboard defaults would you like to use view this corpus?">
-    <option value="experimenterNormalUser">Experiment Administrator (basic)</option>
-    <option value="psychoLinguistPowerUser">Psycho Linguist (advanced)</option>
-    <option value="fieldLinguistNormalUser">Field Linguist (basic)</option>
-    <option value="fieldLinguistPowerUser">Field Linguist/Translator (advanced)</option>
-    <option value="speaker">Language Speaker</option>
-    <option value="languageLearnerCourseUser">Language Learner (course work)</option>
-    <option value="languageLearnerImmersionUser">Language Learner (immersion)</option>
-    <option value="translatorNormalUser">Translator</option>
-  </select>
+  {{application.authentication.error}}
+
+  <span class="form-group" ng-show="application.authentication.user.authenticated" >
+
+    <button class="btn btn-default" ng-click="logout()" tabindex="3">
+      Logout
+    </button>
+    <span data-fielddb-locales></span>
+  </span>
 </form>

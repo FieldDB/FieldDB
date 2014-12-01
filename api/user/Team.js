@@ -1,4 +1,4 @@
-var UserMask = require('./UserMask').UserMask;
+var UserMask = require("./UserMask").UserMask;
 
 /**
  *
@@ -10,6 +10,9 @@ var UserMask = require('./UserMask').UserMask;
  * @constructs
  */
 var Team = function Team(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Team";
+  }
   this.debug("Constructing Team: ", options);
   UserMask.apply(this, arguments);
 };
@@ -28,7 +31,7 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
         return;
       }
       if (value !== "team") {
-        this.warn("Cannot set team id to anything other than 'team.'");
+        this.warn("Cannot set team id to anything other than \"team.\"");
       }
       this._id = "team";
     }

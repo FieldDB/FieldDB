@@ -1,19 +1,19 @@
 {
-  "name" : "LingSync Prototype",
-  "version" : "2.2.2",
-  "description" : "A bleeding edge version, with new features faster",
-  "app" : {
-    "launch" : {
-      "local_path" : "sorry.html"
+  "name": "LingSync Prototype",
+  "version": "2.30.1",
+  "description": "A bleeding edge version, with new features faster",
+  "app": {
+    "launch": {
+      "local_path": "backup_pouches.html"
     }
   },
-  "offline_enabled" : true,
-  "permissions" : [ "unlimitedStorage" ],
-  "icons" : {
-    "16" : "images/icon16_dev.png",
-    "48" : "images/icon48_dev.png",
-    "128" : "images/icon128_dev.png"
+  "offline_enabled": true,
+  "permissions": ["unlimitedStorage"],
+  "icons": {
+    "16": "images/icon16_dev.png",
+    "48": "images/icon48_dev.png",
+    "128": "images/icon128_dev.png"
   },
-  "manifest_version" : 2,
-  "content_security_policy" : "media-src *; default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://support.apple.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com "
+  "manifest_version": 2,
+  "content_security_policy": "media-src *; default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://support.apple.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com; style-src 'self' 'unsafe-inline' https://*.lingsync.org https://fonts.googleapis.com/ https://themes.googleusercontent.com/;"
 }

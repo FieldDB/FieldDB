@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "0.93.3",
+  "version": "2.30.0",
   "homepage": "http://opensourcefieldlinguistics.github.io/FieldDB/",
   "bugs": {
     "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
@@ -64,7 +64,5 @@
     "tests"
   ],
   "dependencies": {},
-  "devDependencies": {
-    "requirejs": "~2.1.10"
-  }
+  "devDependencies": {}
 }

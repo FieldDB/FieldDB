@@ -8,9 +8,9 @@
     }
   },
   "icons": {
-    "16": "img/icon16_dev.png",
-    "48": "img/icon48_dev.png",
-    "128": "img/icon128_dev.png"
+    "16": "images/icon16_dev.png",
+    "48": "images/icon48_dev.png",
+    "128": "images/icon128_dev.png"
   },
   "permissions": [
     "unlimitedStorage", "https://*.mcgill.ca/", "https://*.concordia.ca/", "https://localhost:*/"

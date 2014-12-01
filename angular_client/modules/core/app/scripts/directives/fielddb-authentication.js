@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /* globals FieldDB */
 
 
@@ -8,84 +8,105 @@
  * @description
  * # fielddbAuthentication
  */
-angular.module('fielddbAngularApp').directive('fielddbAuthentication', function() {
+angular.module("fielddbAngularApp").directive("fielddbAuthentication", function() {
 
-  var controller = function($scope, $location) {
+  var controller = function($scope, $location, $timeout) {
     /* initialize or confirm scope is prepared */
     $scope.loginDetails = $scope.loginDetails || {};
-    $scope.authentication = $scope.authentication || {};
-    $scope.authentication.user = $scope.authentication.user || {};
-    console.log('Scope authentication is ', $scope);
-
+    // $scope.application.authentication = $scope.application.authentication || {};
+    // $scope.application.authentication.user = $scope.application.authentication.user || {};
+    if ($scope.application && typeof $scope.application.debug === "function") {
+      $scope.application.debug("Scope authentication is ", $scope.application.authentication);
+    } else {
+      console.warn("Somethign is wrong, there is no app defined. ");
+    }
     var processUserDetails = function(user) {
       user.authenticated = true;
       user.accessibleDBS = user.accessibleDBS || [];
+      user.mostrecentdb = "/";
       user.roles.map(function(role) {
-        var dbname = role.substring(0, role.lastIndexOf('_'));
-        if (role.indexOf('-') > -1 && role.indexOf('_reader') > -1 && user.accessibleDBS.indexOf(dbname) === -1) {
-          user.accessibleDBS.push(dbname);
+        var dbname = role.substring(0, role.lastIndexOf("_"));
+        if (role.indexOf("-") > -1 && role.indexOf("_reader") > -1 && user.accessibleDBS.indexOf(dbname) === -1 && dbname.indexOf("lingllama-communitycorpus") === -1 && dbname.indexOf("public-firstcorpus") === -1) {
+          dbname = dbname.replace("-", "/");
+          if (dbname.indexOf("public") === -1 && dbname.indexOf("lingllama") === -1) {
+            user.accessibleDBS.push(dbname);
+            user.mostrecentdb = dbname;
+          }
         }
         return role;
       });
-      try {
-        $scope.authentication.user = new FieldDB.User(user);
-      } catch (e) {
-        console.log('problem parsing user', e, user);
-      }
+      // try {
+      //   // $scope.application.authentication.user = new FieldDB.User(user);
+      // } catch (e) {
+      //   console.log("problem parsing user", e, user);
+      // }
 
       // $scope.team = user;
       // $rootScope.authenticated = true;
-      console.log($scope);
-      if (window.location.pathname === '/welcome' || window.location.pathname === '/bienvenu') {
+      // console.log($scope);
+
+      if ($scope.application.authentication.user.accessibleDBS.indexOf("sails/fr-ca") > -1) {
+        console.log("Redirecting the user to the manage sails dashboard" + "/sails/fr-ca/datalists");
         $scope.$apply(function() {
-          $location.path('/' + $scope.authentication.user.accessibleDBS[0].replace('-', '/'));
+          $location.path("/sails/fr-ca/datalists", false);
+        });
+      } else if ($location.path() === "/welcome" || $location.path() === "/bienvenu" || window.location.pathname === "/welcome" || window.location.pathname === "/bienvenu" || (window.location.pathname === "/" && $scope.application.authentication.user.accessibleDBS.length === 1) ) {
+        $scope.$apply(function() {
+          //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
+          $location.path("/" + $scope.application.authentication.user.mostrecentdb, false);
         });
       }
-      $scope.$digest();
+      $timeout(function() {
+        if (!$scope.$$phase) {
+          $scope.$digest(); //$digest or $apply
+        }
+      }, 500);
     };
     $scope.register = function(registerDetails) {
-      console.warn('TODO use $scope.corpus.register', registerDetails);
+      console.warn("TODO use $scope.corpus.register", registerDetails);
     };
 
     $scope.login = function(loginDetails) {
       $scope.isContactingServer = true;
-      $scope.authentication.error = '';
+      $scope.application.authentication.error = "";
       FieldDB.Database.prototype.login(loginDetails).then(function(user) {
-        console.log('User has been downloaded. ', user);
-        processUserDetails(user);
+        console.log("User has been downloaded. ", user);
+        user = new FieldDB.User(user);
+        $scope.application.authentication.user.merge("self", user, "overwrite");
+        processUserDetails($scope.application.authentication.user);
         // $scope.isContactingServer = false;
       }, function(reason) {
-        $scope.authentication.error = reason;
+        $scope.application.authentication.error = reason;
         // $scope.isContactingServer = false;
       }).catch(function() {
         $scope.isContactingServer = false;
-        $scope.loginDetails.password = '';
+        $scope.loginDetails.password = "";
         $scope.$digest();
       }).done(function() {
         $scope.isContactingServer = false;
-        $scope.loginDetails.password = '';
+        $scope.loginDetails.password = "";
         $scope.$digest();
       });
     };
 
     $scope.logout = function() {
-      $scope.authentication.error = '';
+      $scope.application.authentication.error = "";
       FieldDB.Database.prototype.logout().then(function(serverReply) {
-        console.log('User has been logged out. ', serverReply);
-        $scope.authentication = {
-          user: {
+        console.log("User has been logged out. ", serverReply);
+        $scope.application.authentication = {
+          user: new FieldDB.User({
             authenticated: false
-          }
+          })
         };
-        if (window.location.pathname !== '/welcome' && window.location.pathname !== '/bienvenu') {
+        if (window.location.pathname !== "/welcome" && window.location.pathname !== "/bienvenu") {
           $scope.$apply(function() {
-            $location.path('/welcome/');
-            window.location.replace('/welcome');
+            // $location.path("/welcome/", false);
+            window.location.replace("/welcome");
           });
         }
         $scope.$digest();
       }, function(reason) {
-        $scope.authentication.error = reason;
+        $scope.application.authentication.error = reason;
         $scope.$digest();
       }).done(function() {
         $scope.isContactingServer = false;
@@ -95,26 +116,29 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
 
     $scope.resumeAuthenticationSession = function() {
       // if (!$scope.corpus) {
-      //   console.log('User cant resume authentication session, corpus is not defined ');
+      //   console.log("User cant resume authentication session, corpus is not defined ");
       //   return;
       // }
       FieldDB.Database.prototype.resumeAuthenticationSession().then(function(sessionInfo) {
-        console.log(sessionInfo);
+        $scope.application.debug(sessionInfo);
         if (sessionInfo.ok && sessionInfo.userCtx.name) {
-          $scope.authentication.user.username = sessionInfo.userCtx.name;
-          $scope.authentication.user.roles = sessionInfo.userCtx.roles;
-          processUserDetails($scope.authentication.user);
+          $scope.application.authentication.user.username = sessionInfo.userCtx.name;
+          $scope.application.authentication.user.roles = sessionInfo.userCtx.roles;
+          processUserDetails($scope.application.authentication.user);
         } else {
-          $scope.$apply(function() {
-            $location.path('/welcome');
-          });
+          if (window.location.pathname !== "/welcome" && window.location.pathname !== "/bienvenu") {
+            $scope.$apply(function() {
+              // $location.path("/welcome/", false);
+              window.location.replace("/welcome");
+            });
+          }
         }
       }, function(reason) {
-        console.log('Unable to login ', reason);
-        $scope.error = 'Unable to resume.';
+        console.log("Unable to login ", reason);
+        $scope.error = "Unable to resume.";
         $scope.$digest();
         // $scope.$apply(function() {
-        //   $location.path('/welcome');
+        //   $location.path("/welcome");
         // });
       });
     };
@@ -122,21 +146,21 @@ angular.module('fielddbAngularApp').directive('fielddbAuthentication', function(
 
 
   };
-  controller.$inject = ['$scope', '$location'];
+  controller.$inject = ["$scope", "$location", "$timeout"];
 
   /* Directive declaration */
   var directiveDefinitionObject = {
-    templateUrl: 'views/authentication.html', // or // function(tElement, tAttrs) { ... },
-    restrict: 'A',
+    templateUrl: "views/authentication.html", // or // function(tElement, tAttrs) { ... },
+    restrict: "A",
     transclude: false,
     // scope: {
-    //   authentication: '=json'
+    //   authentication: "=json"
     // },
     controller: controller,
     link: function postLink() {},
     priority: 0,
     replace: true,
-    controllerAs: 'stringAlias'
+    controllerAs: "stringAlias"
   };
   return directiveDefinitionObject;
 });

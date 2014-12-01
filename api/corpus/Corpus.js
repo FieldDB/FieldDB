@@ -1,11 +1,12 @@
 /* global window, OPrime */
 var CorpusMask = require("./CorpusMask").CorpusMask;
-var Datum = require("./../FieldDBObject").FieldDBObject;
-var DatumFields = require('./../datum/DatumFields').DatumFields;
-var Session = require('./../FieldDBObject').FieldDBObject;
+var Datum = require("./../datum/Datum").Datum;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var Session = require("./../FieldDBObject").FieldDBObject;
+var Speaker = require("./../user/Speaker").Speaker;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Permissions = require('./../Collection').Collection;
-var Q = require('q');
+var Permissions = require("./../Collection").Collection;
+var Q = require("q");
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -52,11 +53,14 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
  *              the user's client.
  *
  * @extends CorpusMask
- * @tutorial tests/CorpusTest.js
+ * @tutorial tests/corpus/CorpusTest.js
  */
 
 
 var Corpus = function Corpus(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Corpus";
+  }
   this.debug("Constructing corpus", options);
   CorpusMask.apply(this, arguments);
 };
@@ -85,13 +89,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-
   couchConnection: {
     get: function() {
-      this.warn("couchConnection is deprecated");
+      this.debug("couchConnection is deprecated");
     },
     set: function() {
-      this.warn("couchConnection is deprecated");
+      this.debug("couchConnection is deprecated");
     }
   },
 
@@ -107,8 +110,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._replicatedCorpusUrls;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._replicatedCorpusUrls = value;
@@ -127,8 +130,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._olacExportConnections;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._olacExportConnections = value;
@@ -198,8 +201,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this.unserializedSessions;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this.unserializedSessions = value;
@@ -231,8 +234,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._confidential;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['confidential'](value);
+        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS["confidential"] && typeof this.INTERNAL_MODELS["confidential"] === "function" && value.constructor !== this.INTERNAL_MODELS["confidential"]) {
+          this.debug("Parsing model: " + value);
+          value = new this.INTERNAL_MODELS["confidential"](value);
         }
       }
       this._confidential = value;
@@ -301,8 +305,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._validationStati;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['datumStates'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["datumStates"](value);
         }
       }
       this._validationStati = value;
@@ -321,8 +325,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._tags;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['tags'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["tags"](value);
         }
       }
       this._tags = value;
@@ -341,8 +345,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._datumFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['datumFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["datumFields"](value);
         }
       }
       this._datumFields = value;
@@ -352,7 +356,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   participantFields: {
     get: function() {
       if (!this._participantFields) {
-        this._participantFields = new this.INTERNAL_MODELS['participantFields'](Corpus.prototype.defaults_psycholinguistics.participantFields);
+        this._participantFields = new this.INTERNAL_MODELS["participantFields"](Corpus.prototype.defaults_psycholinguistics.participantFields);
       }
       return this._participantFields;
     },
@@ -364,8 +368,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._participantFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['participantFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["participantFields"](value);
         }
       }
       this._participantFields = value;
@@ -384,8 +388,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._conversationFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['conversationFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["conversationFields"](value);
         }
       }
       this._conversationFields = value;
@@ -404,8 +408,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         delete this._sessionFields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]') {
-          value = new this.INTERNAL_MODELS['sessionFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
       this._sessionFields = value;
@@ -417,7 +421,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       if (!dbname) {
         throw "Cannot load corpus, its dbname was undefined";
       }
-      var deferred = Q.defer(),
+      var deferred = this.loadOrCreateCorpusByPouchNameDeferred || Q.defer(),
         self = this,
         baseUrl = this.url;
 
@@ -436,6 +440,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             return;
           }
           self.runningloadOrCreateCorpusByPouchName = true;
+          self.loadOrCreateCorpusByPouchNameDeferred = deferred;
           window.setTimeout(function() {
             self.loadOrCreateCorpusByPouchName(dbname);
           }, 1000);
@@ -445,9 +450,10 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           self.debug(corpora);
           if (corpora.length > 0) {
             self.runningloadOrCreateCorpusByPouchName = false;
+            delete self.loadOrCreateCorpusByPouchNameDeferred;
             self.id = corpora[0]._id;
             self.fetch(baseUrl).then(function(result) {
-              self.debug('Finished fetch of corpus ', result);
+              self.debug("Finished fetch of corpus ", result);
               deferred.resolve(result);
             }, function(reason) {
               deferred.reject(reason);
@@ -455,7 +461,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           } else {
             tryAgainInCaseThereWasALag(corpora);
           }
-        }, tryAgainInCaseThereWasALag);
+        }, function(reason) {
+          tryAgainInCaseThereWasALag(reason);
+          // deferred.reject(reason);
+
+        });
 
       });
 
@@ -465,7 +475,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   fetchPublicSelf: {
     value: function() {
-      this.todo('test fetchPublicSelf');
+      this.todo("test fetchPublicSelf");
       if (!this.dbname) {
         throw "Cannot load corpus's public self, its dbname was undefined";
       }
@@ -504,7 +514,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   loadPermissions: {
     value: function() {
-      this.todo('test loadPermissions');
+      this.todo("test loadPermissions");
       var deferred = Q.defer(),
         self = this;
 
@@ -596,7 +606,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         verbicon: "icon-comment",
         directobjecticon: "",
         directobject: "'" + commentstring + "'",
-        indirectobject: "on <i class='icon-cloud'></i><a href='#corpus/" + this.id + "'>" + this.get('title') + "</a>",
+        indirectobject: "on <i class='icon-cloud'></i><a href='#corpus/" + this.id + "'>" + this.get("title") + "</a>",
         teamOrPersonal: "personal",
         context: " via Offline App."
       });
@@ -653,6 +663,79 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         deferred.resolve(datum);
       });
       return deferred.promise;
+    }
+  },
+
+  newSpeaker: {
+    value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        self.debug("Creating a datum for this corpus");
+        if (!self.speakerFields || !self.speakerFields.clone) {
+          throw "This corpus has no default datum fields... It is unable to create a datum.";
+        }
+        var datum = new Speaker({
+          speakerFields: new DatumFields(self.speakerFields.clone()),
+        });
+        for (var field in options) {
+          if (!options.hasOwnProperty(field)) {
+            continue;
+          }
+          if (datum.speakerFields[field]) {
+            self.debug("  this option appears to be a datumField " + field);
+            datum.speakerFields[field].value = options[field];
+          } else {
+            datum[field] = options[field];
+          }
+        }
+        deferred.resolve(datum);
+      });
+      return deferred.promise;
+    }
+  },
+
+  updateDatumToCorpusFields: {
+    value: function(datum) {
+      if (!this.datumFields) {
+        return datum;
+      }
+      if (!datum.fields) {
+        datum.fields = this.datumFields.clone();
+        return datum;
+      }
+      datum.fields = new DatumFields().merge(this.datumFields, datum.fields);
+      return datum;
+    }
+  },
+
+  updateSpeakerToCorpusFields: {
+    value: function(speaker) {
+      if (!this.speakerFields) {
+        return speaker;
+      }
+      if (!speaker.fields) {
+        speaker.fields = this.speakerFields.clone();
+        return speaker;
+      }
+      speaker.fields = new DatumFields().merge(this.speakerFields, speaker.fields);
+      return speaker;
+    }
+  },
+
+  updateParticipantToCorpusFields: {
+    value: function(participant) {
+      if (!this.participantFields) {
+        return participant;
+      }
+      if (!participant.fields) {
+        participant.fields = this.participantFields.clone();
+        return participant;
+      }
+      participant.fields = new DatumFields().merge(this.participantFields, participant.fields, "overwrite");
+      return participant;
     }
   },
   /**
@@ -740,7 +823,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       var deferred = Q.defer();
 
       if (!uri) {
-        throw 'Uri must be specified ';
+        throw "Uri must be specified ";
       }
 
       Q.nextTick(function() {
@@ -774,10 +857,10 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
       var newModel = false;
       if (!this.id) {
-        self.debug('New corpus');
+        self.debug("New corpus");
         newModel = true;
       } else {
-        self.debug('Existing corpus');
+        self.debug("Existing corpus");
       }
       var oldrev = this.get("_rev");
 
@@ -1053,6 +1136,41 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
+  getCorpusSpecificLocalizations: {
+    value: function(optionalLocaleCode) {
+      var self = this;
+
+      if (optionalLocaleCode) {
+        this.todo("Test the loading of an optionalLocaleCode");
+        this.get(optionalLocaleCode + "/messages.json").then(function(locale) {
+          if (!locale) {
+            self.warn("the requested locale was empty.");
+            return;
+          }
+          self.application.contextualizer.addMessagesToContextualizedStrings("null", locale);
+        }, function(error) {
+          self.warn("The requested locale wasn't loaded");
+          self.debug("locale loading error", error);
+        });
+      } else {
+        this.fetchCollection("locales").then(function(locales) {
+          for (var localeIndex = 0; localeIndex < locales.length; localeIndex++) {
+            if (!locales[localeIndex]) {
+              self.warn("the requested locale was empty.");
+              continue;
+            }
+            self.application.contextualizer.addMessagesToContextualizedStrings(null, locales[localeIndex]);
+          }
+        }, function(error) {
+          self.warn("The locales didn't loaded");
+          self.debug("locale loading error", error);
+        });
+      }
+
+      return this;
+    }
+  },
+
   getFrequentValues: {
     value: function(fieldname, defaults) {
       var deferred = Q.defer(),
@@ -1112,3 +1230,4 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 });
 
 exports.Corpus = Corpus;
+exports.FieldDatabase = Corpus;

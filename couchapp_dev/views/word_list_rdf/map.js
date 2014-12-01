@@ -108,27 +108,33 @@ function(doc) {
       // Build triples
       for (var j in context.words) {
         var w = context.words[j];
-        var morphItems = context.morphemes[j].split('-');
-        var glossItem = context.glosses[j].split('-');
+        var morphItems = [];
+        if (context.morphemes[j]) {
+          morphItems = context.morphemes[j].split('-');
+        }
+        var glossItem = [];
+        if (context.glosses[j]) {
+          glossItem = context.glosses[j].split('-');
+        }
         for (var i in morphItems) {
 
-          // <rdf:RDF xmlns:rdf="grandfather> 
-          //     <lego:concept rdf:about="grandfather"> 
+          // <rdf:RDF xmlns:rdf="grandfather>
+          //     <lego:concept rdf:about="grandfather">
           //         <lego:hasCounterpart>
-          //             <gold:LinguisticSign rdf:about="grandfather"> 
+          //             <gold:LinguisticSign rdf:about="grandfather">
           //                 <gold:inLanguage>
-          //                     <gold:Language rdf:about="grandfather"/> 
+          //                     <gold:Language rdf:about="grandfather"/>
           //                 </gold:inLanguage>
           //                 <gold:hasForm>
-          //                     <gold:formUnit> 
+          //                     <gold:formUnit>
           //                         <gold:stringRep>-ak</gold:stringRep>
-          //                     </gold:formUnit> 
-          //                     <gold:formUnit> 
+          //                     </gold:formUnit>
+          //                     <gold:formUnit>
           //                         <gold:stringRep>afak</gold:stringRep>
-          //                     </gold:formUnit> 
+          //                     </gold:formUnit>
           //                 </gold:hasForm>
-          //             </gold:LinguisticSign> 
-          //         </lego:hasCounterpart> 
+          //             </gold:LinguisticSign>
+          //         </lego:hasCounterpart>
           //     </lego:concept>
           // </rdf:RDF>
           var rdf = {

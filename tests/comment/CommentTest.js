@@ -14,18 +14,18 @@ describe("Comment: as a team we want to leave comments to eachother, on everthin
     it("should be defined", function() {
       var comments = new Comments();
       expect(comments).toBeDefined();
-      expect(comments.type).toEqual("Comments");
+      expect(comments.fieldDBtype).toEqual("Comments");
 
       comments.add({
         text: "Maybe the gloss should be acc instead of CAUSE?",
         timestamp: Date.now()
       });
       expect(comments.length).toEqual(1);
-      expect(comments.collection[0].type).toEqual("Comment");
+      expect(comments.collection[0].fieldDBtype).toEqual("Comment");
 
     });
 
-  })
+  });
 
   it("should allow users to take note of important things and " +
     "communicate between each other", function() {

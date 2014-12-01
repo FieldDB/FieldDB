@@ -1,5 +1,5 @@
-var Collection = require('./../Collection').Collection;
-var InsertUnicode = require('./UnicodeSymbol').InsertUnicode;
+var Collection = require("./../Collection").Collection;
+var InsertUnicode = require("./UnicodeSymbol").InsertUnicode;
 
 /**
  * @class  InsertUnicodes is a set of unicode symbols.
@@ -10,6 +10,9 @@ var InsertUnicode = require('./UnicodeSymbol').InsertUnicode;
  * @constructs
  */
 var InsertUnicodes = function InsertUnicodes(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "InsertUnicodes";
+  }
   this.debug("Constructing InsertUnicodes length: ", options);
   Collection.apply(this, arguments);
 };
@@ -20,7 +23,7 @@ InsertUnicodes.prototype = Object.create(Collection.prototype, /** @lends Insert
   },
 
   primaryKey: {
-    value: 'symbol'
+    value: "symbol"
   },
 
   INTERNAL_MODELS: {
@@ -287,18 +290,15 @@ InsertUnicodes.prototype = Object.create(Collection.prototype, /** @lends Insert
    */
   sanitizeStringForPrimaryKey: {
     value: function(value) {
-      this.debug('sanitizeStringForPrimaryKey');
+      this.debug("sanitizeStringForPrimaryKey");
       if (!value) {
         return null;
       }
-      if (value.trim) {
-        value = value.trim().replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g, '_').replace(/^_/, '').replace(/_$/, '');
-        return this.camelCased(value);
-      } else if (typeof value === 'number') {
-        return parseInt(value, 10);
-      } else {
-        return null;
+      if (typeof value.replace !== "function") {
+        value = value + "";
       }
+      value = value.replace(/[-""+=?./\[\]{}() ]/g, "");
+      return value;
     }
   }
 

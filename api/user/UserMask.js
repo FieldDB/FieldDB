@@ -11,6 +11,9 @@ var MD5 = require("MD5");
  * @tutorial tests/UserTest.js
  */
 var UserMask = function UserMask(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "UserMask";
+  }
   this.debug("Constructing a UserMask " + options);
   FieldDBObject.apply(this, arguments);
 };
@@ -20,7 +23,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
     value: UserMask
   },
 
-  url: {
+  api: {
     value: "/users"
   },
 
@@ -89,6 +92,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   firstname: {
+    configurable: true,
     get: function() {
       if (!this._firstname) {
         this._firstname = "";
@@ -107,6 +111,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   lastname: {
+    configurable: true,
     get: function() {
       if (!this._lastname) {
         this._lastname = "";
@@ -218,10 +223,15 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   name: {
+    configurable: true,
     get: function() {
       this.firstname = this.firstname || "";
       this.lastname = this.lastname || "";
-      return (this.firstname + " " + this.lastname).trim();
+      var name = (this.firstname + " " + this.lastname).trim();
+      if (name) {
+        return name;
+      }
+      return this.anonymousCode || this.username;
     },
     set: function(value) {
       if (!value) {
@@ -248,7 +258,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
           suggestion: null
         };
       }
-      var safeName = value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+      var safeName = value.toLowerCase().replace(/[^a-z0-9_]/g, "");
       var validation = {
         valid: true,
         username: value,

@@ -281,6 +281,7 @@ define([
                 "I logged you into your team server automatically, your syncs will be successful.",
                 "alert-info", "Online Mode:");
           }
+          // appself.get("authentication").get("userPrivate").updateListOfCorpora(serverResults.roles);
 
 
           /* if in chrome extension, or offline, turn on replication */

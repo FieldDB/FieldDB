@@ -51,7 +51,7 @@ var AudioService = function(url, user, corpusConnection, datumid) {
     };
     var that = this;
     OPrime.makeCORSRequest({
-      type: 'POST',
+      type: "POST",
       url: that.url + "/textgrids",
       data: dataToSend,
       success: function(serverResults) {
@@ -95,10 +95,10 @@ var AudioService = function(url, user, corpusConnection, datumid) {
     var self = this;
     var callbackIfAudioNeedsToBeSent = function() {
       var filesToBeSent = JSON.parse(JSON.stringify(dataToSend));
-      filesToBeSent.files = [new Blob(['hello world'], {
-        type: 'text/plain'
-      }), new Blob(['hello world2'], {
-        type: 'text/plain'
+      filesToBeSent.files = [new Blob(["hello world"], {
+        type: "text/plain"
+      }), new Blob(["hello world2"], {
+        type: "text/plain"
       })];
 
       // http://hacks.mozilla.org/2010/05/formdata-interface-coming-to-firefox/
@@ -106,13 +106,13 @@ var AudioService = function(url, user, corpusConnection, datumid) {
       formdata.append("filesToBeAligned", filesToBeSent.filesToBeAligned);
       formdata.append("user", filesToBeSent.user);
       formdata.append("dictionary", filesToBeSent.dictionary);
-      formdata.append("media", new Blob(['hello world'], {
-        type: 'text/plain'
+      formdata.append("media", new Blob(["hello world"], {
+        type: "text/plain"
       }));
       // xhr.send(formdata);
 
       OPrime.makeCORSRequest({
-        type: 'POST',
+        type: "POST",
         url: self.url + "/upload",
         // headers: {"Content-type": "multipart/form-data;
         // boundary=----WebKitFormBoundarypnqzcal9A5yjKaAb"},

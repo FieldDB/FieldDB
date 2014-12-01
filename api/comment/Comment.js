@@ -1,4 +1,4 @@
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class Comments allow users to collaborate between each other and take
@@ -15,6 +15,9 @@ var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var Comment = function Comment(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Comment";
+  }
   this.debug("Constructing Comment ", options);
   FieldDBObject.apply(this, arguments);
 };

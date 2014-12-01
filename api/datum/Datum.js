@@ -1,16 +1,16 @@
 /* globals window, $, _ , OPrime*/
-var FieldDBObject = require('./../FieldDBObject').FieldDBObject;
-var AudioVideos = require('./../audio_video/AudioVideos').AudioVideos;
-var Comments = require('./../comment/Comments').Comments;
-var Datums = require('./../Collection').Collection;
-var DatumField = require('./DatumField').DatumField;
-var DatumFields = require('./DatumFields').DatumFields;
-// var DatumState = require('./../FieldDBObject').FieldDBObject;
-var DatumStates = require('./DatumStates').DatumStates;
-// var DatumTag = require('./../FieldDBObject').FieldDBObject;
-var DatumTags = require('./DatumTags').DatumTags;
-var Images = require('./../image/Images').Images;
-var Session = require('./../FieldDBObject').FieldDBObject;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
+var Comments = require("./../comment/Comments").Comments;
+var Datums = require("./../Collection").Collection;
+var DatumField = require("./DatumField").DatumField;
+var DatumFields = require("./DatumFields").DatumFields;
+// var DatumState = require("./../FieldDBObject").FieldDBObject;
+var DatumStates = require("./DatumStates").DatumStates;
+// var DatumTag = require("./../FieldDBObject").FieldDBObject;
+var DatumTags = require("./DatumTags").DatumTags;
+var Images = require("./../image/Images").Images;
+var Session = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class The Datum widget is the place where all linguistic data is
@@ -58,6 +58,9 @@ var Session = require('./../FieldDBObject').FieldDBObject;
  * @constructs
  */
 var Datum = function Datum(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Datum";
+  }
   this.debug("Constructing Datum: ", options);
   FieldDBObject.apply(this, arguments);
 };
@@ -67,29 +70,40 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: Datum
   },
 
-  datumFields: {
+  fields: {
     get: function() {
-      return this._datumFields || FieldDBObject.DEFAULT_COLLECTION;
+      return this._fields || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._datumFields) {
+      if (value === this._fields) {
         return;
       }
       if (!value) {
-        delete this._datumFields;
+        delete this._fields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['datumFields'] === 'function') {
-          value = new this.INTERNAL_MODELS['datumFields'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["fields"] === "function") {
+          value = new this.INTERNAL_MODELS["fields"](value);
         }
       }
-      this._datumFields = value;
+      this._fields = value;
+    }
+  },
+
+  datumFields: {
+    get: function() {
+      this.debug("datumFields is depreacted, just use fields instead");
+      return this.fields;
+    },
+    set: function(value) {
+      this.debug("datumFields is depreacted, just use fields instead");
+      return this.fields = value;
     }
   },
 
   audioVideo: {
     get: function() {
-      if (this._audioVideo && this._audioVideo.type === 'AudioVideos') {
+      if (this._audioVideo && this._audioVideo.fieldDBtype === "AudioVideos") {
         this._audioVideo.dbname = this.dbname;
       }
       return this._audioVideo || FieldDBObject.DEFAULT_COLLECTION;
@@ -102,17 +116,26 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         delete this._audioVideo;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['audioVideo'] === 'function') {
-          value = new this.INTERNAL_MODELS['audioVideo'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["audioVideo"] === "function") {
+          value = new this.INTERNAL_MODELS["audioVideo"](value);
         }
       }
       this._audioVideo = value;
     }
   },
 
+  play: {
+    value: function(optionalIndex) {
+      this.debug("optionalIndex", optionalIndex);
+      if (this._audioVideo && typeof this._audioVideo.play === "function") {
+        this._audioVideo.play(0);
+      }
+    }
+  },
+
   images: {
     get: function() {
-      if (this._images && this._images.type === 'Images') {
+      if (this._images && this._images.fieldDBtype === "Images") {
         this._images.dbname = this.dbname;
       }
       return this._images || FieldDBObject.DEFAULT_COLLECTION;
@@ -125,8 +148,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         delete this._images;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === '[object Array]' && typeof this.INTERNAL_MODELS['images'] === 'function') {
-          value = new this.INTERNAL_MODELS['images'](value);
+        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["images"] === "function") {
+          value = new this.INTERNAL_MODELS["images"](value);
         }
       }
       this._images = value;
@@ -143,7 +166,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   // Internal models: used by the parse function
   INTERNAL_MODELS: {
     value: {
-      datumFields: DatumFields,
+      fields: DatumFields,
       audioVideo: AudioVideos,
       session: Session,
       comments: Comments,
@@ -231,19 +254,19 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   },
   fillWithCorpusFieldsIfMissing: {
     value: function() {
-      if (!this.get("datumFields")) {
+      if (!this.get("fields")) {
         return;
       }
       /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
-      var corpusFields = window.app.get("corpus").get("datumFields").models;
+      var corpusFields = window.app.get("corpus").get("fields").models;
       for (var field in corpusFields) {
         var label = corpusFields[field].get("label");
         this.debug("Label " + label);
-        var correspondingFieldInThisDatum = this.get("datumFields").where({
+        var correspondingFieldInThisDatum = this.get("fields").where({
           label: label
         });
         if (correspondingFieldInThisDatum.length === 0) {
-          this.get("datumFields").push(corpusFields[field]);
+          this.get("fields").push(corpusFields[field]);
         }
       }
     }
@@ -253,7 +276,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       var self = this;
       try {
         //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
-        window.pageTracker._trackPageview('/search_results.php?q=' + queryString);
+        window.pageTracker._trackPageview("/search_results.php?q=" + queryString);
       } catch (e) {
         self.debug("Search Analytics not working.");
       }
@@ -273,7 +296,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         //          if(doc.collection !== "datums"){
         //            return;
         //          }
-        //          var fields  = doc.datumFields;
+        //          var fields  = doc.fields;
         //          var result = {};
         //          for(var f in fields){
         //            if(fields[f].label === "gloss"){
@@ -493,7 +516,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   },
   getDisplayableFieldForActivitiesEtc: {
     value: function() {
-      return this.model.get("datumFields").where({
+      return this.model.get("fields").where({
         label: "utterance"
       })[0].get("mask");
     }
@@ -504,7 +527,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    *
    * @return The clone of the current Datum.
    */
-  clone: {
+  cloneDeprecated: {
     value: function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
@@ -516,7 +539,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         }),
         dateEntered: this.get("dateEntered"),
         dateModified: this.get("dateModified"),
-        datumFields: new DatumFields(this.get("datumFields").toJSON(), {
+        fields: new DatumFields(this.get("fields").toJSON(), {
           parse: true
         }),
         datumStates: new DatumStates(this.get("datumStates").toJSON(), {
@@ -543,7 +566,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   getValidationStatus: {
     value: function() {
       var validationStatus = "";
-      var stati = this.get("datumFields").where({
+      var stati = this.get("fields").where({
         "label": "validationStatus"
       });
       if (stati.length > 0) {
@@ -633,7 +656,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
 
       /* prepend this state to the new validationStates as of v1.46.2 */
-      var n = this.get("datumFields").where({
+      var n = this.get("fields").where({
         label: "validationStatus"
       })[0];
       if (n === [] || !n) {
@@ -644,7 +667,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           userchooseable: "disabled",
           help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
         });
-        this.get("datumFields").add(n);
+        this.get("fields").add(n);
       }
       var validationStatus = n.get("mask") || "";
       validationStatus = selectedValue + " " + validationStatus;
@@ -697,8 +720,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       //corpus's most frequent fields
       var frequentFields = window.app.get("corpus").frequentFields;
       //this datum/datalist's datumfields and their names
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
-      var fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+      var fields = _.pluck(this.get("fields").toJSON(), "mask");
+      var fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
       //setting up for IGT case...
       var judgementIndex = -1;
       var judgement = "";
@@ -857,7 +880,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   datumIsInterlinearGlossText: {
     value: function(fieldLabels) {
       if (!fieldLabels) {
-        fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+        fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
       }
       var utteranceOrMorphemes = false;
       var gloss = false;
@@ -887,8 +910,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    */
   exportAsPlainText: {
     value: function(showInExportModal) {
-      // var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
+      // var header = _.pluck(this.get("fields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("fields").toJSON(), "mask") || [];
       var result = fields.join("\n");
       if (showInExportModal !== null) {
         $("#export-type-description").html(" as text (Word)");
@@ -906,18 +929,18 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   exportAsCSV: {
     value: function(showInExportModal, orderedFields, printheaderonly) {
 
-      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
+      var header = _.pluck(this.get("fields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("fields").toJSON(), "mask") || [];
       var result = fields.join(",") + "\n";
 
       //      if (orderedFields === null) {
       //        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
       //      }
-      //      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
-      //      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-      //      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      //      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      //      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
+      //      judgement = this.get("fields").where({label: "judgement"})[0].get("mask");
+      //      morphemes = this.get("fields").where({label: "morphemes"})[0].get("mask");
+      //      utterance= this.get("fields").where({label: "utterance"})[0].get("mask");
+      //      gloss = this.get("fields").where({label: "gloss"})[0].get("mask");
+      //      translation= this.get("fields").where({label: "translation"})[0].get("mask");
       //      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
       //      var result = '"' + resultarray.join('","') + '"\n';
       if (printheaderonly) {
@@ -940,7 +963,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   encrypt: {
     value: function() {
       this.set("confidential", true);
-      this.get("datumFields").each(function(dIndex) {
+      this.get("fields").each(function(dIndex) {
         dIndex.set("encrypted", "checked");
       });
       //TODO scrub version history to get rid of all unencrypted versions.
@@ -955,7 +978,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: function() {
       this.set("confidential", false);
 
-      this.get("datumFields").each(function(dIndex) {
+      this.get("fields").each(function(dIndex) {
         dIndex.set("encrypted", "");
       });
     }
@@ -987,13 +1010,13 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         if (typeof failurecallback === "function") {
           failurecallback();
         } else {
-          self.bug('Datum save error. I cant save this datum in this corpus, it belongs to another corpus. ');
+          self.bug("Datum save error. I cant save this datum in this corpus, it belongs to another corpus. ");
         }
         return;
       }
       //If it was decrypted, this will save the changes before we go into encryptedMode
 
-      this.get("datumFields").each(function(dIndex) {
+      this.get("fields").each(function(dIndex) {
         //Anything can be done here, it is the set function which does all the work.
         dIndex.set("value", dIndex.get("mask"));
       });
@@ -1032,8 +1055,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
       self.save(null, {
         success: function(model, response) {
-          self.debug('Datum save success');
-          var utterance = model.get("datumFields").where({
+          self.debug("Datum save success");
+          var utterance = model.get("fields").where({
             label: "utterance"
           })[0].get("mask");
           var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
@@ -1057,7 +1080,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
             verbicon: verbicon,
             directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
             directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get("title") + "</a>",
             teamOrPersonal: "team",
             context: " via Offline App."
           });
@@ -1067,7 +1090,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
             verbicon: verbicon,
             directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
             directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get("title") + "</a>",
             teamOrPersonal: "personal",
             context: " via Offline App."
           });
@@ -1108,7 +1131,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
            */
           if ($("#search_box").val() !== "") {
             //TODO check this
-            var datumJson = model.get("datumFields").toJSON();
+            var datumJson = model.get("fields").toJSON();
             var datumAsDBResponseRow = {};
             for (var x in datumJson) {
               datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
@@ -1156,7 +1179,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           if (typeof failurecallback === "function") {
             failurecallback();
           } else {
-            self.bug('Datum save error: ' + f.reason);
+            self.bug("Datum save error: " + f.reason);
           }
         }
       });
@@ -1200,10 +1223,27 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    */
   highlight: {
     value: function(text, stringToHighlight, className) {
-      className = className || 'highlight';
-      var re = new RegExp('(' + stringToHighlight + ')', "gi");
+      className = className || "highlight";
+      var re = new RegExp("(" + stringToHighlight + ")", "gi");
       return text.replace(re, "<span class='" + className + "'>$1</span>");
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+
+      this.todo("saving fields as the deprecated datumFields");
+      json.datumFields = json.fields;
+      delete json.fields;
+
+      this.debug(json);
+      return json;
+    }
   }
+
+
 });
 exports.Datum = Datum;
