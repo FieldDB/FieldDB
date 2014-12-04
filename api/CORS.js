@@ -144,13 +144,13 @@ CORS.makeCORSRequest = function(options) {
   };
   try {
     if (options.data) {
-      console.log("sending ", options.data);
+      self.debug("sending ", options.data);
       xhr.send(options.data);
     } else {
       xhr.send();
     }
   } catch (e) {
-    console.warn("Caught an exception when calling send on xhr", e);
+    self.warn("Caught an exception when calling send on xhr", e);
     deferred.reject(e);
   }
 
