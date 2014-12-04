@@ -47,7 +47,7 @@
       <input class="hidden hide" hidden type="text" name="returnTextGrid" ng-model="uploadInfo.returnTextGrid"/>
     </form>
 
-    <textarea class="fielddb-large-textarea drop-zone" ng-blur="application.importer.guessFormatAndPreviewImport()" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="drop-zone-can-drop-now" ng-file-drag-over-delay="200" ng-model="application.importer.rawText"></textarea>
+    <textarea class="fielddb-large-textarea drop-zone" ng-blur="guessFormatAndPreviewImport()" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="drop-zone-can-drop-now" ng-file-drag-over-delay="200" ng-model="application.importer.rawText"></textarea>
 
     <div class="btn-group pull-right" ng-hide="application.importer.importType=='audioVideo'">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">

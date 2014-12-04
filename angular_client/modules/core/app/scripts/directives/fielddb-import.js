@@ -43,6 +43,15 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       $scope.application.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
     };
 
+    var verifyImporterIsSetup = function(){
+      $scope.application.importer = $scope.application.importer || new FieldDB.Import();
+      $scope.application.importer.status = "";
+      $scope.application.importer.error = "";
+      $scope.application.importer.importType = $scope.application.importer.importType || "data";
+      $scope.application.importer.corpus = $scope.application.corpus;
+      $scope.application.importer.dbname = $scope.application.corpus.dbname || "default";
+    };
+
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
       $scope.application.importer.token = $scope.uploadInfo.token;
@@ -54,13 +63,8 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
           $scope.application.importer.bug("The corpus is not loaded yet. Please report this.");
           return;
         }
-        $scope.application.importer = $scope.application.importer || new FieldDB.Import();
-        $scope.application.importer.status = "";
-        $scope.application.importer.error = "";
+        verifyImporterIsSetup();
         $scope.application.importer.rawText = "";
-        $scope.application.importer.importType = $scope.application.importer.importType || "data";
-        $scope.application.importer.corpus = $scope.application.corpus;
-        $scope.application.importer.dbname = $scope.application.corpus.dbname || "default";
         $scope.application.importer.files = $files;
 
         console.log($scope.application.importer);
@@ -112,8 +116,18 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       // $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
     };
 
+    $scope.guessFormatAndPreviewImport = function() {
+      if (!$scope.application.importer) {
+        console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
+        return;
+      }
+      verifyImporterIsSetup();
+      $scope.application.importer.guessFormatAndPreviewImport();
+    };
+
     $scope.runImport = function() {
       if (!$scope.application.importer) {
+        console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
         return;
       }
       $scope.application.importer.convertTableIntoDataList().then(function(results) {
