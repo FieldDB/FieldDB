@@ -118,7 +118,7 @@ CORS.makeCORSRequest = function(options) {
     var response = xhr.responseJSON || xhr.responseText || xhr.response;
     self.debug("Response from CORS request to " + options.url + ": " + response);
     if (xhr.status >= 400) {
-      self.warn("The request was unsuccesful " + xhr.statusText);
+      self.warn("The request to " + options.url + " was unsuccesful " + xhr.statusText);
       deferred.reject(response);
       return;
     }
