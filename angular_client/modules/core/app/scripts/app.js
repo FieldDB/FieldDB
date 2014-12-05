@@ -43,9 +43,12 @@ var app = angular.module("fielddbAngularApp", [
     website: "http://lingsync.org",
     basePathname: "/",
   });
-  if (window.location.pathname.indexOf("android_asset") > -1 ) {
+  if (window.location.pathname.indexOf("android_asset") > -1) {
     fieldDBApp.basePathname = window.location.pathname;
   }
+  // if (window.location.hash.indexOf("#") > -1) {
+  //   fieldDBApp.basePathname = window.location.pathname + "#";
+  // }
 
   FieldDB.Database.prototype.BASE_DB_URL = "https://corpusdev.lingsync.org";
   FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.lingsync.org";
