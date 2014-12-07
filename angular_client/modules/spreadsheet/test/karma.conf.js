@@ -24,6 +24,7 @@ module.exports = function(config) {
       'bower_components/fielddb-angular/dist/scripts/templates.js',
 
       'bower_components/d3/d3.js',
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/underscore/underscore.js',
       'bower_components/q/q.js',
       'bower_components/sjcl/sjcl.js',
