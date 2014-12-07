@@ -96,11 +96,11 @@ module.exports = function(grunt) {
       },
       lib: {
         files: "<%= jshint.lib.src %>",
-        tasks: ["jshint:lib", "jasmine_node", "browserify"]
+        tasks: ["newer:jshint:lib", "browserify"]
       },
       test: {
         files: "<%= jshint.test.src %>",
-        tasks: ["jshint:test", "jasmine_node"]
+        tasks: ["newer:jshint:test", "newer:jasmine_node"]
       },
     },
     exec: {
@@ -123,6 +123,7 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadNpmTasks("grunt-newer");
   grunt.loadNpmTasks("grunt-exec");
   grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-uglify");
