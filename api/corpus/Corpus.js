@@ -448,7 +448,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
         self.fetchCollection(self.api).then(function(corpora) {
           self.debug(corpora);
-          if (corpora.length > 0) {
+          if (corpora.length === 1) {
             self.runningloadOrCreateCorpusByPouchName = false;
             delete self.loadOrCreateCorpusByPouchNameDeferred;
             self.id = corpora[0]._id;
@@ -458,6 +458,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             }, function(reason) {
               deferred.reject(reason);
             });
+          } else if (corpora.length > 0) {
+            console.warn("Impossibel to have more than one corpus for this dbname");
           } else {
             tryAgainInCaseThereWasALag(corpora);
           }
