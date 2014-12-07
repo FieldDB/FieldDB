@@ -34,14 +34,14 @@ module.exports = function(grunt) {
       js: {
         files: ["<%= yeoman.app %>/scripts/{,*/}*.js", "<%= yeoman.app %>/bower_components/fielddb/{,*/}*.js"],
         // tasks: ["newer:jshint:all"],
-        tasks: ["default"],
+        tasks: ["newer:jshint", "build"],
         options: {
           livereload: 35726
         }
       },
       templates: {
         files: ["<%= yeoman.app %>/views/{,*/}*.html"],
-        tasks: ["default"],
+        tasks: ["build"],
         options: {
           livereload: 35726
         }
@@ -194,7 +194,7 @@ module.exports = function(grunt) {
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ["<%= yeoman.dist %>/{,*/}*.html"],
+      html: ["<%= yeoman.dist %>/*.html"],
       css: ["<%= yeoman.dist %>/styles/{,*/}*.css"],
       options: {
         assetsDirs: ["<%= yeoman.dist %>"]
@@ -406,4 +406,5 @@ module.exports = function(grunt) {
     "test",
     "build"
   ]);
+
 };
