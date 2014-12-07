@@ -680,36 +680,35 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       });
 
     // Get lexicon for Glosser and organize based on frequency
-    Data.lexicon($rootScope.DB.pouchname)
-      .then(function(lexicon) {
-       var sortedLexicon = {};
-       for (var i in lexicon) {
-         if(lexicon[i].key.gloss){
-           if (sortedLexicon[lexicon[i].key.morpheme]) {
-             sortedLexicon[lexicon[i].key.morpheme].push({
-               gloss: lexicon[i].key.gloss,
-               value: lexicon[i].value
-             });
-           } else {
-             sortedLexicon[lexicon[i].key.morpheme] = [{
-               gloss: lexicon[i].key.gloss,
-               value: lexicon[i].value
-             }];
-           }
-         }
-       }
-       var sorter = function(a, b) {
-         return b.value - a.value;
-       };
-       // Sort each morpheme array by descending value
-       for (var key in sortedLexicon) {
-         sortedLexicon[key].sort(sorter);
-       }
-        localStorage.setItem(
-          $rootScope.DB.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
-      }, function(error) {
-        console.log("Error retrieving lexicon.", error);
-      });
+    Data.lexicon($rootScope.DB.pouchname).then(function(lexicon) {
+      var sortedLexicon = {};
+      for (var i in lexicon) {
+        if (lexicon[i].key.gloss) {
+          if (sortedLexicon[lexicon[i].key.morpheme]) {
+            sortedLexicon[lexicon[i].key.morpheme].push({
+              gloss: lexicon[i].key.gloss,
+              value: lexicon[i].value
+            });
+          } else {
+            sortedLexicon[lexicon[i].key.morpheme] = [{
+              gloss: lexicon[i].key.gloss,
+              value: lexicon[i].value
+            }];
+          }
+        }
+      }
+      var sorter = function(a, b) {
+        return b.value - a.value;
+      };
+      // Sort each morpheme array by descending value
+      for (var key in sortedLexicon) {
+        sortedLexicon[key].sort(sorter);
+      }
+      localStorage.setItem(
+        $rootScope.DB.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
+    }, function(error) {
+      console.log("Error retrieving lexicon.", error);
+    });
   };
 
 
@@ -2343,9 +2342,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           delete $scope.scopePreferences.savedState.DB;
         }
         if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
-          $rootScope.DB = {
-            pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
-          };
+          /* load details for the most receent database */
+          if (FieldDB && FieldDB.Corpus) {
+            $rootScope.DB = new FieldDB.Corpus($scope.scopePreferences.savedState.mostRecentCorpusPouchname);
+            $rootScope.DB.loadOrCreateCorpusByPouchName($scope.scopePreferences.savedState.mostRecentCorpusPouchname).then(function(results) {
+              console.log("fetched corpus details: " + results.dbname);
+
+              if (FieldDB.FieldDBObject.application) {
+                if (!FieldDB.FieldDBObject.application.corpus) {
+                  FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
+                } else {
+                  if (FieldDB.FieldDBObject.application.corpus.dbname !== results.dbname) {
+                    console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + results.dbname);
+                    FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
+                  }
+                }
+              }
+
+            });
+          } else {
+            $rootScope.DB = {
+              pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
+            };
+          }
           if ($scope.scopePreferences.savedState.sessionID) {
             // Load all sessions and go to current session
             $scope.loadSessions($scope.scopePreferences.savedState.sessionID);
