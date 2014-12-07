@@ -14,7 +14,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
   var controller = function($scope, $upload) {
     var processOffline = true;
     $scope.uploadInfo = {
-      token: "uploading",
+      token: "uploadingfromspreadsheet",
       username: "testupload",
       returnTextGrid: true
     };
@@ -54,7 +54,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
 
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
-      $scope.application.importer.token = $scope.uploadInfo.token;
+      $scope.application.importer.uploadtoken = $scope.uploadInfo.token;
       $scope.application.importer.username = $scope.uploadInfo.username;
       $scope.application.importer.returnTextGrid = $scope.uploadInfo.returnTextGrid;
 

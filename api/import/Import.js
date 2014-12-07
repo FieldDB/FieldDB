@@ -1,4 +1,4 @@
-/* globals OPrime, window, escape, $, FileReader */
+/* globals OPrime, window, escape, $, FileReader, FormData */
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
@@ -858,7 +858,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var rows = text.split("\n");
       if (rows.length < 3) {
         var macrows = text.split("\r");
-        if (macrows.length  > rows.length) {
+        if (macrows.length > rows.length) {
           rows = macrows;
           this.status = this.status + " Detected a \r line ending.";
         }
@@ -895,7 +895,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           header = this.parseLineCSV(firstrow);
         }
       } else if (rows.length === 1) {
-        header = rows[0].map(function(){
+        header = rows[0].map(function() {
           return "";
         });
       }
@@ -1287,24 +1287,39 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       Q.nextTick(function() {
         var uploadUrl = new AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances";
-        var data = {
-          files: files,
-          token: self.token,
-          dbname: self.dbname,
-          username: self.username,
-          returnTextGrid: self.returnTextGrid
-        };
+        // var data = {
+        //   files: files,
+        //   token: self.token,
+        //   dbname: self.dbname,
+        //   username: self.username,
+        //   returnTextGrid: self.returnTextGrid
+        // };
+        //
+        var data = new FormData();
+        // for (var ?fileIndex = 0; fileIndex > files.length; fileIndex++) {
+        // data.append("file" + fileIndex, files[fileIndex]);
+        // }
+        // data.files = files;
+        self.todo("use the files passed instead of jquery ",files);
+        $.each(files, function(i, file) {
+          data.append(i, file);
+        });
+        // data.append("files", files);
+        data.append("token", self.uploadtoken);
+        data.append("pouchname", self.dbname);
+        data.append("username", self.username);
+        data.append("returnTextGrid", self.returnTextGrid);
 
         self.audioVideo = null;
         // this.model.audioVideo.reset();
-        CORS.makeCORSRequest({
+        $.ajax({
           url: uploadUrl,
-          type: "POST",
+          type: "post",
           // dataType: 'json',
           cache: false,
-          withCredentials: false,
-          // contentType: false,
-          // processData: false,
+          // withCredentials: false,
+          contentType: false,
+          processData: false,
           data: data,
           success: function(results) {
             if (results && results.status === 200) {
@@ -1362,6 +1377,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             if (reason && reason.userFriendlyErrors) {
               self.status = "";
               self.error = "Upload error: " + reason.userFriendlyErrors.join(" ");
+              self.bug(self.error);
               // window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
               // $(self.el).find(".status").html(self.get("status"));
             }
