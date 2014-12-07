@@ -18,7 +18,7 @@ var AudioVideo = function AudioVideo(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_BASE_SPEECH_URL = "http://localhost:3184";
+var DEFAULT_BASE_SPEECH_URL = "https://localhost:3184";
 AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVideo.prototype */ {
   constructor: {
     value: AudioVideo
