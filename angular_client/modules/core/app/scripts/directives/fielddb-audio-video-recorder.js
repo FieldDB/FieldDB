@@ -23,12 +23,14 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
 
       if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
         $scope.application = FieldDB.FieldDBObject.application;
-        if (!$scope.application.importer) {
-          $scope.application.importer = new FieldDB.Import({
-            importType: "audioVideo"
+        if (!$scope.importer) {
+          $scope.importer = new FieldDB.Import({
+            importType: "audioVideo",
+            parent: $scope.datum
             // corpus: this.corpus
           });
         }
+        // $scope.importer = $scope.application.importer;
         if ($scope.locale) {
           /*jshint camelcase: false */
           $scope.locale.locale_Import = "Import audio, video, images";

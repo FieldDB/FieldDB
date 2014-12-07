@@ -28,50 +28,50 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
     $scope.removeRow = function(row) {
       console.log("remove ", row);
-      var removed = $scope.application.importer.asCSV.splice(row, 1);
+      var removed = $scope.importer.asCSV.splice(row, 1);
       console.log(removed);
     };
 
     $scope.dropSuccessHandler = function(participantFieldLabel) {
-      $scope.application.importer.debug("dropSuccessHandler", participantFieldLabel);
-      $scope.application.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
-      $scope.application.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
+      $scope.importer.debug("dropSuccessHandler", participantFieldLabel);
+      $scope.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
+      $scope.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
     };
     $scope.onDropRecieved = function(data, extractedHeader, headerCellIndex) {
-      $scope.application.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
+      $scope.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
       extractedHeader[headerCellIndex] = data;
-      $scope.application.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
+      $scope.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
     };
 
     var verifyImporterIsSetup = function(){
-      $scope.application.importer = $scope.application.importer || new FieldDB.Import();
-      $scope.application.importer.status = "";
-      $scope.application.importer.error = "";
-      $scope.application.importer.importType = $scope.application.importer.importType || "data";
-      $scope.application.importer.corpus = $scope.application.corpus;
-      $scope.application.importer.dbname = $scope.application.corpus.dbname || "default";
+      $scope.importer = $scope.importer || new FieldDB.Import();
+      $scope.importer.status = "";
+      $scope.importer.error = "";
+      $scope.importer.importType = $scope.importer.importType || "data";
+      $scope.importer.corpus = $scope.application.corpus;
+      $scope.importer.dbname = $scope.application.corpus.dbname || "default";
     };
 
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
-      $scope.application.importer.uploadtoken = $scope.uploadInfo.token;
-      $scope.application.importer.username = $scope.uploadInfo.username;
-      $scope.application.importer.returnTextGrid = $scope.uploadInfo.returnTextGrid;
+      $scope.importer.uploadtoken = $scope.uploadInfo.token;
+      $scope.importer.username = $scope.uploadInfo.username;
+      $scope.importer.returnTextGrid = $scope.uploadInfo.returnTextGrid;
 
       if (processOffline) {
         if (!$scope.application || !$scope.application.corpus) {
-          $scope.application.importer.bug("The corpus is not loaded yet. Please report this.");
+          $scope.importer.bug("The corpus is not loaded yet. Please report this.");
           return;
         }
         verifyImporterIsSetup();
-        $scope.application.importer.rawText = "";
-        $scope.application.importer.files = $files;
+        $scope.importer.rawText = "";
+        $scope.importer.files = $files;
 
-        console.log($scope.application.importer);
-        $scope.application.importer.readFiles({}).then(function(sucessfullOptions) {
+        console.log($scope.importer);
+        $scope.importer.readFiles({}).then(function(sucessfullOptions) {
           console.log("Finished reading files ", sucessfullOptions);
           $scope.$digest();
-          $scope.application.importer.guessFormatAndPreviewImport();
+          $scope.importer.guessFormatAndPreviewImport();
           $scope.$digest();
 
         }, function(failedOptions) {
@@ -79,7 +79,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
           $scope.$digest();
         });
       } else {
-        $scope.application.importer.uploadFiles($files).then(function(result) {
+        $scope.importer.uploadFiles($files).then(function(result) {
           console.log(result);
         }, function(reason) {
           console.log(reason);
@@ -117,22 +117,22 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
 
     $scope.guessFormatAndPreviewImport = function() {
-      if (!$scope.application.importer) {
+      if (!$scope.importer) {
         console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
         return;
       }
       verifyImporterIsSetup();
-      $scope.application.importer.guessFormatAndPreviewImport();
+      $scope.importer.guessFormatAndPreviewImport();
     };
 
     $scope.runImport = function() {
-      if (!$scope.application.importer) {
+      if (!$scope.importer) {
         console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
         return;
       }
-      $scope.application.importer.convertTableIntoDataList().then(function(results) {
+      $scope.importer.convertTableIntoDataList().then(function(results) {
         console.log("Import is completed. ", results);
-        console.log(" Progress ", $scope.application.importer.progress);
+        console.log(" Progress ", $scope.importer.progress);
         // $scope.$digest();
       });
     };
@@ -154,9 +154,9 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     templateUrl: "views/import.html",
     restrict: "A",
     transclude: false,
-    // scope: {
-    //   importDetails: "=json"
-    // },
+    scope: {
+      importer: "=json"
+    },
     controller: controller,
     link: function postLink() {},
     priority: 0,
