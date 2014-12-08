@@ -12,6 +12,9 @@
 angular.module("fielddbAngularApp").directive("fielddbImport", function() {
 
   var controller = function($scope, $upload) {
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+      $scope.application = FieldDB.FieldDBObject.application;
+    }
     var processOffline = true;
     $scope.uploadInfo = {
       token: "uploadingfromspreadsheet",
@@ -43,7 +46,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       $scope.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
     };
 
-    var verifyImporterIsSetup = function(){
+    var verifyImporterIsSetup = function() {
       $scope.importer = $scope.importer || new FieldDB.Import();
       $scope.importer.status = "";
       $scope.importer.error = "";
@@ -155,7 +158,8 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     restrict: "A",
     transclude: false,
     scope: {
-      importer: "=json"
+      importer: "=json",
+      // application: "=application"
     },
     controller: controller,
     link: function postLink() {},
