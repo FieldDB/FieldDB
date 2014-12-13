@@ -13,12 +13,12 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
     restrict: "A",
     transclude: false,
     scope: {
-      datum: "=json"
+      parent: "=parent"
     },
     controller: function($scope) {
       var debugging = true;
       if (debugging) {
-        console.log("loading fielddbAudioVideoRecorder", $scope.datum);
+        console.log("loading fielddbAudioVideoRecorder", $scope.parent);
       }
 
       if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
@@ -26,7 +26,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         if (!$scope.importer) {
           $scope.importer = new FieldDB.Import({
             importType: "audioVideo",
-            parent: $scope.datum
+            parent: $scope.parent
             // corpus: this.corpus
           });
         }
@@ -228,14 +228,14 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
             isProcessing: false
           };
           // document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
-          $scope.datum.audioVideo = $scope.datum.audioVideo || [];
+          $scope.parent.audioVideo = $scope.parent.audioVideo || [];
           var newAudioFile = {
             "filename": resultingFile.filename,
             "description": $scope.description,
             "URL": resultingFile.filename,
             "type": "audio"
           };
-          $scope.datum.audioVideo.push(newAudioFile);
+          $scope.parent.audioVideo.push(newAudioFile);
           if (!$scope.$$phase) {
             $scope.$digest(); //$digest or $apply
           }
