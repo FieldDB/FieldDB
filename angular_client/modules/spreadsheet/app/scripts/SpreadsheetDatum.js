@@ -1,3 +1,4 @@
+/* globals FieldDB */
 'use strict';
 console.log("Declaring the SpreadsheetDatum.");
 
@@ -82,6 +83,15 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
       spreadsheetDatum.audioVideo.push(reconstructedAudioVideoItem);
     }
   }
+
+  // upgrade to 2.32+ use a fielddb audio video collection
+  if (FieldDB && FieldDB.AudioVideos && Object.prototype.toString.call(spreadsheetDatum.audioVideo) === "[object Array]") {
+    spreadsheetDatum.audioVideo = new FieldDB.AudioVideos(spreadsheetDatum.audioVideo);
+  }
+
+  // upgrade to v2.0+
+  spreadsheetDatum.images = fieldDBDatum.images || [];
+
   // upgrade to v1.92
   var upgradedTags = spreadsheetDatum.tags ? spreadsheetDatum.tags.split(",") : [];
   if (fieldDBDatum.datumTags && fieldDBDatum.datumTags.length > 0) {
@@ -108,8 +118,8 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   //TODO do we really need this flag?, yes we need it because the audio might be flagged as deleted
   spreadsheetDatum.hasAudio = false;
   if (spreadsheetDatum.audioVideo.length > 0) {
-    spreadsheetDatum.audioVideo.map(function() {
-      if (spreadsheetDatum.audioVideo.trashed !== "deleted") {
+    spreadsheetDatum.audioVideo.map(function(audioVideo) {
+      if (audioVideo.trashed !== "deleted") {
         spreadsheetDatum.hasAudio = true;
       }
     });
@@ -161,7 +171,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     }
 
     /* If the key wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
-    if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "saved" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
+    if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "saved" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
       fieldDBDatum.datumFields.push({
         "label": key,
@@ -213,7 +223,11 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   }
   // Save audioVideo TODO what if someone else modified it? need to merge the info...
   if (spreadsheetDatum.audioVideo && spreadsheetDatum.audioVideo.length > 0) {
-    fieldDBDatum.audioVideo = spreadsheetDatum.audioVideo;
+    fieldDBDatum.audioVideo = spreadsheetDatum.audioVideo.toJSON();
+  }
+  // Save audioVideo TODO what if someone else modified it? need to merge the info...
+  if (spreadsheetDatum.images && spreadsheetDatum.images.length > 0) {
+    fieldDBDatum.images = spreadsheetDatum.images;
   }
   // Save attachments TODO what if someone else modified it? need to merge the info...
   if (spreadsheetDatum._attachments && spreadsheetDatum._attachments !== {}) {

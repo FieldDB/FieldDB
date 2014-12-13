@@ -45,9 +45,9 @@
   </span>
   <span>
     <br />
-    <i ng-show="datum.hasAudio==true" class="fa {{recordingIcon}}">
+    <i ng-show="datum.hasAudio==true" class="fa fa-microphone">
     </i>
-    <!-- <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i> -->
+    <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i>
   </span>
 </div>
 <div class="row" ng-show="datum.comments[0]!=undefined">
@@ -70,11 +70,11 @@
 <div class="row" ng-show="searching==true">
   <div class="span9 offset1">
     <table>
-      <tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
+      <tr ng-repeat="audioFile in datum.audioVideo.collection track by $index" ng-hide="audioFile.trashed == 'deleted'">
         <td>
           <span class="form-horizontal">
             <audio controls>
-              <source ng-src="{{audioFile.filename}}" type="audio/wav"/>
+              <source ng-src="{{audioFile.URL}}"/>
             </audio>
           </span>
         </td>
@@ -86,7 +86,7 @@
           </span>
         </td>
         <td>
-          <a href="{{audioFile.filename}}" target="_blank">
+          <a href="{{audioFile.URL}}" target="_blank">
             <i class="fa whiteicon fa-link">
             </i>
           </a>
