@@ -83,6 +83,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
         });
       } else {
         $scope.importer.uploadFiles($files).then(function(result) {
+          $scope.importer.todo(" Got an upload result in the angular directive", result);
           $scope.$digest();
         }, function(reason) {
           console.log(reason);
