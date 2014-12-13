@@ -26,7 +26,9 @@ var app = angular.module("fielddbAngularApp", [
     // Allow same origin resource loads.
     "self",
     // Allow loading from outer domain.
-    "https://*.lingsync.org/**"
+    "https://*.lingsync.org/**",
+    "https://localhost:3184/**",
+    "https://localhost/**"
   ]);
 
   var fieldDBApp = new FieldDB.PsycholinguisticsApp({
