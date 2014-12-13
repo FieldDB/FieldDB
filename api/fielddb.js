@@ -21,6 +21,7 @@
   var DataList = require("./data_list/DataList").DataList;
   var SubExperimentDataList = require("./data_list/SubExperimentDataList").SubExperimentDataList;
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;
+  var AudioVideos = require("./audio_video/AudioVideos").AudioVideos;
   var AudioVideoRecorder = require("./audio_video/AudioVideoRecorder").AudioVideoRecorder;
   var Datum = require("./datum/Datum").Datum;
   var Stimulus = require("./datum/Stimulus").Stimulus;
@@ -54,6 +55,7 @@
   FieldDB.DataList = DataList;
   FieldDB.SubExperimentDataList = SubExperimentDataList;
   FieldDB.AudioVideo = AudioVideo;
+  FieldDB.AudioVideos = AudioVideos;
   FieldDB.AudioVideoRecorder = AudioVideoRecorder;
   FieldDB.Datum = Datum;
   FieldDB.Stimulus = Stimulus;
