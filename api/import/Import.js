@@ -1337,8 +1337,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                     instructions = " Please report this error to us at support@lingsync.org ";
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. " + instructions);
+                  results.files[fileIndex].filename = results.files[fileIndex].fileBaseName + ".mp3";
+                  results.files[fileIndex].URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].fileBaseName + ".mp3";
+                  results.files[fileIndex].description = results.files[fileIndex].description || "File from import";
+                  self.addAudioVideoFile(results.files[fileIndex]);
                 } else {
-                  self.addAudioVideoFile(new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].fileBaseName + ".mp3");
                   self.downloadTextGrid(results.files[fileIndex]);
                 }
               }
@@ -1422,7 +1425,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             window.appView.toastUser(message, "alert-info", "Import:");
           }
           self.rawText = self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results;
-          self.importTextGrid(self.rawText, null);
+          if (!self.parent) {
+            self.importTextGrid(self.rawText, null);
+          } else {
+            self.debug("Not showing second import step, this looks like its audio import only.");
+          }
+          fileDetails.filename = fileDetails.fileBaseName + ".mp3";
+          fileDetails.URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + fileDetails.fileBaseName + ".mp3";
+          self.addAudioVideoFile(fileDetails);
         } else {
           self.debug(results);
           fileDetails.textgrid = "Error result was empty. " + results;
@@ -1455,15 +1465,22 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
 
   addAudioVideoFile: {
-    value: function(url) {
+    value: function(details) {
       if (!this.audioVideo) {
         this.audioVideo = new AudioVideos();
       }
-      this.audioVideo.add(new AudioVideo({
-        filename: url.substring(url.lastIndexOf("/") + 1),
-        URL: url,
-        description: "File from import"
-      }));
+      var audioVideo = new AudioVideo(details);
+      this.audioVideo.add(audioVideo);
+      if (this.parent) {
+        if (!this.parent.audioVideo) {
+          this.parent.audioVideo = new AudioVideos();
+        } else if (Object.prototype.toString.call(this.parent.audioVideo) === "[object Array]") {
+          this.parent.audioVideo = new AudioVideos(this.parent.audioVideo);
+        }
+        this.parent.audioVideo.add(audioVideo);
+        this.parent.saved = "no";
+        // this.asCSV = [];
+      }
     }
   },
 

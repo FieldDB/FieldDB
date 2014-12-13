@@ -166,7 +166,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
 
           $scope.audioRecorder.exportRecording("mp3")
             .then(function(s) {
-              $scope.uploadFile(s);
+              $scope.audioRecorder.uploadFile(s);
             }, function(error) {
               console.warn("export audio failed", error);
               if (!$scope.$$phase) {
