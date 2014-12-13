@@ -1,4 +1,4 @@
-/* globals OPrime, window, escape, $, FileReader, FormData */
+/* globals window, escape, $, FileReader, FormData */
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
@@ -1300,7 +1300,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         // data.append("file" + fileIndex, files[fileIndex]);
         // }
         // data.files = files;
-        self.todo("use the files passed instead of jquery ",files);
+        self.todo("use the files passed instead of jquery ", files);
         $.each(files, function(i, file) {
           data.append(i, file);
         });
@@ -1338,20 +1338,20 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. " + instructions);
                 } else {
-                  self.addAudioVideoFile(OPrime.audioUrl + "/" + self.get("pouchname") + "/" + results.files[fileIndex].fileBaseName + ".mp3");
+                  self.addAudioVideoFile(new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].fileBaseName + ".mp3");
                   self.downloadTextGrid(results.files[fileIndex]);
                 }
               }
               if (messages.length > 0) {
                 self.status = messages.join(", ");
                 // $(self.el).find(".status").html(self.get("status"));
-                // window.appView.toastUser(messages.join(", "), "alert-danger", "Import:");
+                // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(messages.join(", "), "alert-danger", "Import:");
               }
             } else {
               console.log(results);
               var message = "Upload might have failed to complete processing on your file(s). Please report this error to us at support@lingsync.org ";
               self.status = message + ": " + JSON.stringify(results);
-              // window.appView.toastUser(message, "alert-danger", "Import:");
+              // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(message, "alert-danger", "Import:");
             }
             // $(self.el).find(".status").html(self.get("status"));
           },
@@ -1378,7 +1378,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               self.status = "";
               self.error = "Upload error: " + reason.userFriendlyErrors.join(" ");
               self.bug(self.error);
-              // window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
+              // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
               // $(self.el).find(".status").html(self.get("status"));
             }
           }
@@ -1394,57 +1394,59 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   downloadTextGrid: {
     value: function(fileDetails) {
       var self = this;
-      var textridUrl = OPrime.audioUrl + "/" + this.pouchname + "/" + fileDetails.fileBaseName + ".TextGrid";
-      $.ajax({
+      var textridUrl = new AudioVideo().BASE_SPEECH_URL + "/" + this.corpus.dbname + "/" + fileDetails.fileBaseName + ".TextGrid";
+      CORS.makeCORSRequest({
         url: textridUrl,
-        type: "get",
-        // dataType: "text",
-        success: function(results) {
-          if (results) {
-            fileDetails.textgrid = results;
-            var syllables = "unknown";
-            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.syllableCount) {
-              syllables = fileDetails.syllablesAndUtterances.syllableCount;
-            }
-            var pauses = "unknown";
-            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.pauseCount) {
-              pauses = parseInt(fileDetails.syllablesAndUtterances.pauseCount, 10);
-            }
-            var utteranceCount = 1;
-            if (pauses > 0) {
-              utteranceCount = pauses + 2;
-            }
-            var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
-            fileDetails.description = message;
-            self.status = self.status + "<br/>" + message;
-            self.fileDetails = self.status + message;
+        type: "GET",
+        withCredentials: false
+      }).then(function(results) {
+        if (results) {
+          fileDetails.textgrid = results;
+          var syllables = "unknown";
+          if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.syllableCount) {
+            syllables = fileDetails.syllablesAndUtterances.syllableCount;
+          }
+          var pauses = "unknown";
+          if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.pauseCount) {
+            pauses = parseInt(fileDetails.syllablesAndUtterances.pauseCount, 10);
+          }
+          var utteranceCount = 1;
+          if (pauses > 0) {
+            utteranceCount = pauses + 2;
+          }
+          var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
+          fileDetails.description = message;
+          self.status = self.status + "<br/>" + message;
+          self.fileDetails = self.status + message;
+          if (window && window.appView && typeof window.appView.toastUser === "function") {
             window.appView.toastUser(message, "alert-info", "Import:");
-            self.rawText = self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results;
-            self.importTextGrid(self.rawText, null);
-          } else {
-            self.debug(results);
-            fileDetails.textgrid = "Error result was empty. " + results;
           }
-        },
-        error: function(response) {
-          var reason = {};
-          if (response && response.responseJSON) {
-            reason = response.responseJSON;
+          self.rawText = self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results;
+          self.importTextGrid(self.rawText, null);
+        } else {
+          self.debug(results);
+          fileDetails.textgrid = "Error result was empty. " + results;
+        }
+      }, function(response) {
+        var reason = {};
+        if (response && response.responseJSON) {
+          reason = response.responseJSON;
+        } else {
+          var message = "Error contacting the server. ";
+          if (response.status >= 500) {
+            message = message + " Please report this error to us at support@lingsync.org ";
           } else {
-            var message = "Error contacting the server. ";
-            if (response.status >= 500) {
-              message = message + " Please report this error to us at support@lingsync.org ";
-            } else {
-              message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
-            }
-            reason = {
-              status: response.status,
-              userFriendlyErrors: [message + response.status]
-            };
+            message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
           }
-          self.debug(reason);
-          if (reason && reason.userFriendlyErrors) {
-            self.status = fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" ");
+          reason = {
+            status: response.status,
+            userFriendlyErrors: [message + response.status]
+          };
+        }
+        self.debug(reason);
+        if (reason && reason.userFriendlyErrors) {
+          self.status = fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" ");
+          if (window && window.appView && typeof window.appView.toastUser === "function") {
             window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
           }
         }
