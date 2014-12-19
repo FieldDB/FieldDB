@@ -43,7 +43,8 @@
     "diacritic": "0.0.2",
     "q": "1.0.1",
     "textgrid": "2.2.0",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "recordmp3js": "~0.2.0"
   },
   "devDependencies": {
     "browserify": "3.2.2",
