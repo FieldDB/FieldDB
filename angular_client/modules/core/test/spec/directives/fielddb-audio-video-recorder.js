@@ -10,7 +10,7 @@ describe("Directive: fielddb-audio-video-recorder", function() {
   beforeEach(inject(function($rootScope, $compile) {
     el = angular.element("<div data-fielddb-audio-video-recorder json='datum1'></div> <div data-fielddb-audio-video-recorder json='datum2'></div>");
     scope = $rootScope.$new();
-    scope.datum1= {
+    scope.datum1 = {
       utterance: "a first entry"
     };
     scope.datum2 = {
@@ -34,21 +34,42 @@ describe("Directive: fielddb-audio-video-recorder", function() {
         console.log("post link", el.html());
         console.log("scope datum1 ", scope.datum1);
       }
-      expect(true).toBe(true);
 
-    //    expect(scope.recordingStatus).toEqual('Record');
-    // expect(scope.recordingButtonClass).toEqual('btn btn-success');
-    // expect(scope.recordingIcon).toEqual('fa-microphone');
-    // expect(scope.showAudioFeatures).toBeFalsy();
-    // expect(scope.newRecordHasBeenEdited).toBeFalsy();
+      var firstAudioRecorder = angular.element(angular.element(el[0]).find("p")[0]);
+      expect(firstAudioRecorder.text().trim()).toEqual("Audio Recorder Element");
+      // expect(firstAudioRecorder.scope().audioRecorder).toEqual("Audio Recorder Element");
 
-    // expect(typeof scope.closeAudioWarning).toBe('function');
-    // expect(typeof scope.startRecording).toBe('function');
-    // expect(typeof scope.stopRecording).toBe('function');
-    // expect(typeof scope.uploadFile).toBe('function');
-    // expect(typeof scope.deleteAttachmentFromCorpus).toBe('function');
-      // expect(angular.element(el.find("h1")[0]).text().trim()).toEqual("Awesome Phonologists");
-      // expect(angular.element(el.find("h1")[1]).text().trim()).toEqual("Ling Llama");
+      // expect(firstAudioRecorder.scope().recordingButtonClass).toEqual("btn btn-success");
+      // expect(firstAudioRecorder.scope().recordingIcon).toEqual("fa-microphone");
+      expect(firstAudioRecorder.scope().showAudioFeatures).toBeFalsy();
+      expect(firstAudioRecorder.scope().newRecordHasBeenEdited).toBeFalsy();
+
+      // expect(typeof firstAudioRecorder.scope().closeAudioWarning).toBe("function");
+      expect(typeof firstAudioRecorder.scope().startRecording).toBe("function");
+      expect(typeof firstAudioRecorder.scope().stopRecording).toBe("function");
+      expect(typeof firstAudioRecorder.scope().uploadFile).toBe("function");
+      // expect(typeof firstAudioRecorder.scope().deleteAttachmentFromCorpus).toBe("function");
+
+      // var recorder = new FieldDB.AudioVideoRecorder({
+      //   element: firstAudioRecorder[0]
+      // });
+      // expect(recorder).toBeDefined();
+      // expect(recorder.element).toBeDefined();
+
+      firstAudioRecorder.scope().startRecording();
+      expect(firstAudioRecorder.scope().audioRecorder).toBeDefined();
+
     });
+  });
+
+  xit("should make attach recorders to every element marked RecordMP3js-recorder", function() {
+
+    inject(function() {
+
+      // FieldDB.AudioVideoRecorder.Recorder.initRecorder();
+      // var firstAudioRecorder = angular.element(angular.element(el[0]).find("p")[0]);
+      // expect(firstAudioRecorder.innerHTML).toEqual(" ");
+    });
+
   });
 });

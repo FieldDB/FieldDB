@@ -8,5 +8,15 @@ describe("Test AudioVideoRecorder", function() {
     expect(audioRecorder).toBeDefined();
 
   });
+  it("should have an element", function() {
+    expect(AudioVideoRecorder).toBeDefined();
 
+    var audioRecorder = new AudioVideoRecorder({
+      element: {}
+    });
+    // audioRecorder.element = {};
+    expect(audioRecorder).toBeDefined();
+    // expect(audioRecorder.recorder).toBeDefined();
+    // expect(audioRecorder.element).toBeDefined();
+  });
 });
