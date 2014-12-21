@@ -354,10 +354,10 @@ module.exports = function(grunt) {
       unit: {
         configFile: "karma.conf.js",
         // background: true,
-        singleRun: false,
-        // singleRun: true,
-        autoWatch: true,
-        browsers: ["Chrome"]
+        // singleRun: false,
+        singleRun: true
+        // autoWatch: true,
+        // browsers: ["Chrome"]
       }
     }
   });
