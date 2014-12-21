@@ -50,6 +50,10 @@ module.exports = function(grunt) {
         files: ["test/spec/{,*/}*.js"],
         tasks: ["newer:jshint:test", "karma"]
       },
+      karma: {
+        files: ["test/spec/{,*/}*.js"],
+        tasks: ["newer:jshint:test", "karma:unit:run"] //https://github.com/karma-runner/grunt-karma#karma-server-with-grunt-watch
+      },
       styles: {
         files: ["<%= yeoman.app %>/styles/{,*/}*.css"],
         tasks: ["build"]
@@ -345,10 +349,15 @@ module.exports = function(grunt) {
     // },
 
     // Test settings
+    // https://github.com/karma-runner/grunt-karma#karma-server-with-grunt-watch
     karma: {
       unit: {
         configFile: "karma.conf.js",
-        singleRun: true
+        // background: true,
+        singleRun: false,
+        // singleRun: true,
+        autoWatch: true,
+        browsers: ["Chrome"]
       }
     }
   });
