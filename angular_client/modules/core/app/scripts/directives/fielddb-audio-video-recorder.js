@@ -105,6 +105,8 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
 
       var onAudioSuccess = function(s) {
         console.log("On audio sucess ", s);
+        $scope.audioRecorder.element = $scope.audioRecorder.element || angular.element($scope.element.find("p")[0])[0];
+
         monitorAudioLength();
         $scope.recordability = {
           canRecordVideo: true,
@@ -124,7 +126,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
 
       $scope.startRecording = function(type) {
         if (!$scope.audioRecorder && FieldDB) {
-          $scope.audioRecorder = new FieldDB.AudioVideoRecorder();
+          $scope.audioRecorder = new FieldDB.AudioVideoRecorder({});
         }
         if (type === "video") {
           type = true;
@@ -262,6 +264,9 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
     link: function postLink(scope, el) {
       console.log("keeping a reference to this element");
       scope.element = el;
+      // if (FieldDB && FieldDB.AudioVideoRecorder && FieldDB.AudioVideoRecorder.Recorder) {
+      //   FieldDB.AudioVideoRecorder.Recorder.initRecorder();
+      // }
     }
   };
 });
