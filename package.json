@@ -44,7 +44,7 @@
     "diacritic": "0.0.2",
     "mime": "^1.2.11",
     "q": "1.0.1",
-    "recordmp3js": "~0.2.0",
+    "recordmp3js": "~0.3.0",
     "textgrid": "2.2.0",
     "underscore": "^1.6.0"
   },
