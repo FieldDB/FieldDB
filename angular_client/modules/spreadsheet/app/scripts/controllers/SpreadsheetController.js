@@ -1314,6 +1314,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.newRecordHasBeenEdited = true;
   };
 
+  $rootScope.markAsNotSaved = function(datum) {
+    datum.saved = "no";
+    $scope.saved = "no";
+  };
+
   // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
   $rootScope.markAsEdited = function(fieldData, datum, $event) {
     var utterance = "Datum";
@@ -2184,6 +2189,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
     }
   });
+
+  $scope.flagAsDeleted = function(json, datum) {
+    json.trashed = "deleted";
+    if (datum) {
+      $rootScope.markAsNotSaved(datum);
+    }
+  };
 
   $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
     if ($rootScope.writePermissions === false) {
