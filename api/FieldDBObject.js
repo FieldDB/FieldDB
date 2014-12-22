@@ -1121,6 +1121,22 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
 
+  addRelatedData: {
+    value: function(json) {
+      var relatedData;
+      if (this.datumFields && this.datumFields.relatedData) {
+        relatedData = this.datumFields.relatedData.json.relatedData || [];
+      } else if (this.relatedData) {
+        relatedData = this.relatedData;
+      } else {
+        this.relatedData = relatedData = [];
+      }
+
+      json.relation = "associated file";
+      relatedData.push(json);
+    }
+  },
+
   /**
    * Creates a deep copy of the object (not a reference)
    * @return {Object} a near-clone of the objcet

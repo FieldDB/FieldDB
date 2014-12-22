@@ -101,6 +101,21 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
+  addFile: {
+    value: function(newFileDetails) {
+      if (newFileDetails.type.indexOf("audio") === 0) {
+        this.audioVideo.add(newFileDetails);
+      } else if (newFileDetails.type.indexOf("video") === 0) {
+        this.audioVideo.add(newFileDetails);
+      } else if (newFileDetails.type.indexOf("image") === 0) {
+        this.images.add(newFileDetails);
+      } else {
+        var regularizedJSON = new AudioVido(newFileDetails).toJSON();
+        this.addRelatedData(regularizedJSON);
+      }
+    }
+  },
+
   audioVideo: {
     get: function() {
       if (this._audioVideo && this._audioVideo.fieldDBtype === "AudioVideos") {
