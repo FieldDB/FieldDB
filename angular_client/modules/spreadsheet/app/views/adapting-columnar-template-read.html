@@ -43,7 +43,7 @@
   <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
     <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}}" />
   </span>
-  <span>
+  <span class="expandCollapseButton">
     <br />
     <i ng-show="datum.hasAudio==true" class="fa fa-microphone">
     </i>
