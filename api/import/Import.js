@@ -1,4 +1,4 @@
-/* globals window, escape, $, FileReader, FormData */
+/* globals window, escape, $, FileReader, FormData, atob,  unescape, Blob */
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
@@ -32,6 +32,31 @@ var _ = require("underscore");
  * @extends FieldDBObject
  * @tutorial tests/CorpusTest.js
  */
+
+//http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
+var dataURItoBlob = function(dataURI) {
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  var byteString;
+  if (dataURI.split(",")[0].indexOf("base64") >= 0) {
+    byteString = atob(dataURI.split(",")[1]);
+  } else {
+    byteString = unescape(dataURI.split(",")[1]);
+  }
+
+  // separate out the mime component
+  var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+  // write the bytes of the string to a typed array
+  var ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([ia], {
+    type: mimeString
+  });
+};
+
 
 
 var getUnique = function(arrayObj) {
@@ -1301,9 +1326,30 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         // }
         // data.files = files;
         self.todo("use the files passed instead of jquery ", files);
+        // http://stackoverflow.com/questions/24626177/how-to-create-an-image-file-from-a-dataurl
+        if (files.indexOf("data") === 0) {
+          // data.append("data", files); //test new split
+
+
+          // var base64 = files.split("base64,")[1];
+          var blob = dataURItoBlob(files);
+          // blob.name = "file_" + Date.now() + "." + blob.type.split("/")[1];
+          // blob.lastModfied = Date.now();
+          // blob.lastModifiedDate = new Date(blob.lastModfied);
+          // fd.append("canvasImage", blob);
+
+          //http://www.nczonline.net/blog/2012/06/05/working-with-files-in-javascript-part-5-blobs/
+          // var reconstructedFile =  new File("file_" + Date.now() + ".mp3", blob, "audio/mpeg");
+
+          //http://stackoverflow.com/questions/8390855/how-to-instantiate-a-file-object-in-javascript
+          files = [blob];
+
+        }
+
         $.each(files, function(i, file) {
           data.append(i, file);
         });
+
         // data.append("files", files);
         data.append("token", self.uploadtoken);
         data.append("pouchname", self.dbname);

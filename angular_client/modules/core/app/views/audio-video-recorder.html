@@ -1,26 +1,35 @@
-<form class="btn-toolbar span6">
-  <div class="btn-group">
-    <button class="btn" ng-disabled="recordability.isProcessing || recordability.isRecordingVideo" ng-click="toogleRecording('audio')" ng-show="recordability.canRecordAudio" ng-class="{'btn-danger': recordability.isRecordingAudio, 'btn-primary': recordability.canRecordAudio, 'btn-inverse': recordability.cantRecordAudio}" >
-      <i class="fa" ng-class="{'fa-stop': recordability.isRecordingAudio, 'fa-microphone': recordability.canRecordAudio, 'fa-microphone-slash': recordability.cantRecordAudio }">
-      </i>
-    </button>
-    <button class="btn" ng-click="toogleRecording('video')" ng-disabled="recordability.isProcessing || recordability.isRecordingAudio" ng-show="recordability.canRecordVideo" ng-hide="recordability.cantRecordVideo" ng-class="{'btn-danger': recordability.isRecordingVideo, 'btn-primary': recordability.canRecordVideo, 'btn-inverse': recordability.cantRecordVideo }" >
-      <i class="fa" ng-class="{'fa-stop': recordability.isRecordingVideo, 'fa-video-camera': recordability.canRecordVideo, 'fa-microphone-slash ': recordability.cantRecordVideo }">
-      </i>
-    </button>
-    <button class="btn btn-warning" ng-click="pause()" ng-show="recordability.isRecordingAudio || recordability.isRecordingVideo" >
-      <i class="fa fa-pause">
-      </i>
-    </button>
-  </div>
-  <img src="images/spinner-small.gif" ng-show="processingAudio" />
-</form>
-<p class="RecordMP3js-recorder" data-format="mp3" data-callback="uploadAudio">Audio Recorder Element</p>
-<video hidden class="hide" autoplay controls> </video>
-<canvas hidden class="hide" ng-hide="true===true"> </canvas>
-<img hidden class="hide" />
+<div class="span6">
+  <form class="btn-toolbar">
+    <div class="btn-group">
+      <button class="btn" ng-click="peripheralsCheck('audio')">
+        <i class="fa" ng-class="{'fa-microphone': application.audioRecordingVerified==true, 'fa-microphone': application.audioRecordingVerified==null, 'fa-microphone-slash': application.audioRecordingVerified==false }">
+        </i>
+      </button>
+      <button class="btn" ng-click="peripheralsCheck('video')" ng-disabled="application.videoRecordingVerified==false" >
+        <i class="fa" ng-class="{'fa-video-camera': application.videoRecordingVerified==true, 'fa-video-camera': application.videoRecordingVerified==null, 'fa-microphone-slash ': application.videoRecordingVerified==false }">
+        </i>
+      </button>
+      <button class="btn" ng-click="peripheralsCheck('picture')" ng-disabled="application.videoRecordingVerified==false">
+        <i class="fa" ng-class="{'fa-camera': application.videoRecordingVerified==true, 'fa-camera': application.videoRecordingVerified==null, 'fa-eye-close': application.videoRecordingVerified==false }">
+        </i>
+      </button>
+    </div>
+    <img src="images/spinner-small.gif" ng-show="processingAudio" />
+  </form>
+
+  <p ng-hide="showPictureInstructions" class="span6 RecordMP3js-recorder" data-format="mp3" data-callback="showFile">Audio Recorder Element</p>
+
+  <p class="">
+    <span ng-show="showPictureInstructions">Click preview when ready to take a picture</span>
+    <h3 ng-show="application.audioRecordingVerified==true">Preview Audio/Video/Image</h3>
+    <small ng-show="mutedAudioInstructions">Note: audio/video is muted to reduce audio feedback noises. If you are using a headset, you can unmute them to listen to the audio as you record.</small>
+    <audio hidden class="hide" autoplay controls> </audio>
+    <video hidden class="hide" autoplay controls> </video>
+    <canvas hidden class="hide" ng-hide="true===true"> </canvas>
+    <img hidden class="hide" />
+  </p>
+</div>
 
 <div class="span6" data-fielddb-import json="importer" corpus="application.corpus"></div>
 
-
-<div ng-model="audioRecorder.status"></div>
+<div class="span12" ng-model="audioRecorder.status"></div>
