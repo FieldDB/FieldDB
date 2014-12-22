@@ -1,5 +1,6 @@
 /* globals window, $, _ , OPrime*/
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Comments = require("./../comment/Comments").Comments;
 var Datums = require("./../Collection").Collection;
@@ -110,7 +111,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       } else if (newFileDetails.type.indexOf("image") === 0) {
         this.images.add(newFileDetails);
       } else {
-        var regularizedJSON = new AudioVido(newFileDetails).toJSON();
+        var regularizedJSON = new AudioVideo(newFileDetails).toJSON();
         this.addRelatedData(regularizedJSON);
       }
     }
