@@ -4,14 +4,14 @@ node_js:
   - 0.10
 
 # Travis supports running a real browser (Firefox) with a virtual screen. Just update your .travis.yml to set up the virtual screen like this:
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+# before_script:
+#   - export DISPLAY=:99.0
+#   - sh -e /etc/init.d/xvfb start
 
 # whitelist
-#branches:
-#  only:
-#    - tests
+branches:
+ only:
+   - master
 
 notifications:
   email:
@@ -26,11 +26,26 @@ env:
 
 before_install:
   # Download and configure deps
-  npm install -g grunt-cli &&
-  npm install -g bower &&
-  npm install -g jasmine-node &&
-  npm install
+  - sudo apt-get install ncftp
+  - npm install -g grunt-cli
+  - npm install -g bower
+  - npm install -g jasmine-node
+  - npm install
+  - bower install
 before_script:
   # Make sure the emulator has started before running tests
 
 script: grunt travis
+
+env:
+  global:
+    - secure: sx0nyAy4yp4SACA05Q69CoUeeRuEu08rUqB448Ap1MVJgA5UAYlSht1g9nJdvCqBg8V3YEdIcGdov8vUmzwwU+mbdf7ssmrc9ecmq2j/iym6DCgrV5fJgRH4Fti0RGs9QcqgvpXejKWeHz/JIxlLqvcAKgZMcImMvF2gUfi6neQ=
+    - secure: RiN997luw/gns/SKnHXeJQlFv6RQoVqpwIGslImO9Eam3NmNjL6OvDMFkKsxIFvtnOwH8+sixcd854IvcvxH0nONDT+aGm3PEIN0hI6O+7jya8XHWfTMaHrLX3D+iPsyq69QBN43hnyoT6e3WUxokJVq1LZeU2Rdi6rw04uuV/0=
+    - secure: R7DYAAHx52YfRc2vJquODs/02U+D+TqcU9yYG67nvVzk5udWCjOdMFct8t3+1hFig+ITEy05cNr01r8rMnQmHbqILenmQgv9poiOncM8W4eeWi0x13exJT7BAJ8SCMyi4vWy+3qE0T1IPyI2XDdzLWBU8eocWRe9TtO0d/yseKw=
+
+after_success:
+  # on:
+  #   branch: master
+    - echo $TRAVIS_BRANCH
+    - touch "dist/deployed at `date`"
+    - "ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*"
