@@ -8,13 +8,15 @@ describe("Directive: fielddb-audio-video-recorder", function() {
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    el = angular.element("<div data-fielddb-audio-video-recorder json='datum1'></div> <div data-fielddb-audio-video-recorder json='datum2'></div>");
+    el = angular.element("<div data-fielddb-audio-video-recorder parent='datum1'></div> <div data-fielddb-audio-video-recorder parent='datum2'></div>");
     scope = $rootScope.$new();
     scope.datum1 = {
-      utterance: "a first entry"
+      utterance: "a first entry",
+      pouchname: "lingllama-firstcorpus"
     };
     scope.datum2 = {
-      utterance: "another entry"
+      utterance: "another entry",
+      pouchname: "lingllama-firstcorpus"
     };
     compileFunction = $compile(el);
     // bring html from templateCache
@@ -39,16 +41,8 @@ describe("Directive: fielddb-audio-video-recorder", function() {
       expect(firstAudioRecorder.text().trim()).toEqual("Audio Recorder Element");
       // expect(firstAudioRecorder.scope().audioRecorder).toEqual("Audio Recorder Element");
 
-      // expect(firstAudioRecorder.scope().recordingButtonClass).toEqual("btn btn-success");
-      // expect(firstAudioRecorder.scope().recordingIcon).toEqual("fa-microphone");
-      expect(firstAudioRecorder.scope().showAudioFeatures).toBeFalsy();
-      expect(firstAudioRecorder.scope().newRecordHasBeenEdited).toBeFalsy();
-
-      // expect(typeof firstAudioRecorder.scope().closeAudioWarning).toBe("function");
-      expect(typeof firstAudioRecorder.scope().startRecording).toBe("function");
-      expect(typeof firstAudioRecorder.scope().stopRecording).toBe("function");
-      expect(typeof firstAudioRecorder.scope().uploadFile).toBe("function");
-      // expect(typeof firstAudioRecorder.scope().deleteAttachmentFromCorpus).toBe("function");
+      expect(typeof firstAudioRecorder.scope().peripheralsCheck).toBe("function");
+      expect(typeof firstAudioRecorder.scope().addFile).toBe("function");
 
       // var recorder = new FieldDB.AudioVideoRecorder({
       //   element: firstAudioRecorder[0]
@@ -56,7 +50,7 @@ describe("Directive: fielddb-audio-video-recorder", function() {
       // expect(recorder).toBeDefined();
       // expect(recorder.element).toBeDefined();
 
-      firstAudioRecorder.scope().startRecording();
+      firstAudioRecorder.scope().peripheralsCheck("audio");
       expect(firstAudioRecorder.scope().audioRecorder).toBeDefined();
 
     });
