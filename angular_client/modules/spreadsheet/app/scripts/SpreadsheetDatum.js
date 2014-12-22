@@ -91,6 +91,12 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
 
   // upgrade to v2.0+
   spreadsheetDatum.images = fieldDBDatum.images || [];
+  fieldDBDatum.datumFields.map(function(datumField) {
+    if (datumField.label === "relatedData") {
+      spreadsheetDatum.relatedData = datumField.json;
+    }
+  });
+  spreadsheetDatum.relatedData = spreadsheetDatum.relatedData || [];
 
   // upgrade to v1.92
   var upgradedTags = spreadsheetDatum.tags ? spreadsheetDatum.tags.split(",") : [];
@@ -121,6 +127,22 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
     spreadsheetDatum.audioVideo.map(function(audioVideo) {
       if (audioVideo.trashed !== "deleted") {
         spreadsheetDatum.hasAudio = true;
+      }
+    });
+  }
+  spreadsheetDatum.hasImages = false;
+  if (spreadsheetDatum.images.length > 0) {
+    spreadsheetDatum.images.map(function(image) {
+      if (image.trashed !== "deleted") {
+        spreadsheetDatum.hasImages = true;
+      }
+    });
+  }
+  spreadsheetDatum.hasRelatedData = false;
+  if (spreadsheetDatum.relatedData.length > 0) {
+    spreadsheetDatum.relatedData.map(function(relatedItem) {
+      if (relatedItem.trashed !== "deleted") {
+        spreadsheetDatum.hasRelatedData = true;
       }
     });
   }
@@ -171,7 +193,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     }
 
     /* If the key wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
-    if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "saved" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
+    if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "saved" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
       fieldDBDatum.datumFields.push({
         "label": key,
@@ -225,9 +247,21 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   if (spreadsheetDatum.audioVideo && spreadsheetDatum.audioVideo.length > 0) {
     fieldDBDatum.audioVideo = spreadsheetDatum.audioVideo.toJSON();
   }
-  // Save audioVideo TODO what if someone else modified it? need to merge the info...
+  // Save images TODO what if someone else modified it? need to merge the info...
   if (spreadsheetDatum.images && spreadsheetDatum.images.length > 0) {
     fieldDBDatum.images = spreadsheetDatum.images;
+  }
+  // Save relatedData TODO what if someone else modified it? need to merge the info...
+  if (spreadsheetDatum.relatedData && spreadsheetDatum.relatedData.length > 0) {
+    fieldDBDatum.datumFields.map(function(datumField) {
+      if (datumField.label === "relatedData") {
+        datumField.json = spreadsheetDatum.relatedData;
+        datumField.value = spreadsheetDatum.relatedData.map(function(json) {
+          return json.filename;
+        });
+        datumField.mask = datumField.value;
+      }
+    });
   }
   // Save attachments TODO what if someone else modified it? need to merge the info...
   if (spreadsheetDatum._attachments && spreadsheetDatum._attachments !== {}) {

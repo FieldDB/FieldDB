@@ -1,5 +1,6 @@
 <form ng-submit="markAsEdited(fieldData, datum, $event);">
   <div class="span1" >
+    <!-- todo try ng-change to reduce edits which are not edits -->
     <input
     ng-blur="markAsEdited(fieldData, datum)"
     class="span2"
@@ -42,6 +43,10 @@
     </span>
     <div class="expandCollapseButton">
       <i ng-show="datum.hasAudio" class="fa whiteicon fa-microphone">
+      </i>
+      <i ng-show="datum.hasImages" class="fa whiteicon fa-camera">
+      </i>
+      <i ng-show="datum.hasRelatedData" class="fa whiteicon fa-link">
       </i>
       <i ng-show="datum.comments.length >
         0" class="fa whiteicon fa-comment">
@@ -94,10 +99,35 @@
   <div class="row" >
     <div class="span11">
       <table>
+        <tr ng-repeat="image in datum.images track by $index" ng-hide="image.trashed == 'deleted'">
+          <td>
+            <span class="form-horizontal">
+              <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(image, datum)">
+                <i class="fa fa-trash-o whiteicon">
+                </i>
+              </a>
+              <a href="{{image.URL}}" target="_blank">
+                <img class="span6" ng-src="{{image.URL}}"/>
+              </a>
+            </span>
+          </td>
+          <td>
+            <span class="form-horizontal">
+              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='image.description' ng-blur="markAsNotSaved(datum)" />
+              &nbsp;
+            </span>
+          </td>
+          <td>
+            <a href="{{image.URL}}" target="_blank">
+              <i class="fa whiteicon fa-link">
+              </i>
+            </a>
+          </td>
+        </tr>
         <tr ng-repeat="audioFile in datum.audioVideo.collection track by $index" ng-hide="audioFile.trashed == 'deleted'">
           <td>
             <span class="form-horizontal">
-              <a  class="delete_button btn btn-danger floatLeft" ng-click="deleteAttachmentFromCorpus(datum, audioFile.filename, audioFile.description)">
+              <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(audioFile, datum)">
                 <i class="fa fa-trash-o whiteicon">
                 </i>
               </a>
@@ -108,15 +138,36 @@
           </td>
           <td>
             <span class="form-horizontal">
-              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' />
+              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' ng-blur="markAsNotSaved(datum)" />
               &nbsp;
-              <button hidden class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)"  >
-                Save Description
-              </button>
             </span>
           </td>
           <td>
             <a href="{{audioFile.URL}}" target="_blank">
+              <i class="fa whiteicon fa-link">
+              </i>
+            </a>
+          </td>
+        </tr>
+        <tr ng-repeat="relatedFile in datum.relatedData track by $index" ng-hide="relatedFile.trashed == 'deleted'">
+          <td>
+            <span class="form-horizontal">
+              <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(relatedFile, datum)">
+                <i class="fa fa-trash-o whiteicon">
+                </i>
+              </a>
+              <a href="{{relatedFile.URL}}" target="_blank">
+              </a>
+            </span>
+          </td>
+          <td>
+            <span class="form-horizontal">
+              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='relatedFile.description' ng-blur="markAsNotSaved(datum)" />
+              &nbsp;
+            </span>
+          </td>
+          <td>
+            <a href="{{relatedFile.URL}}" target="_blank">
               <i class="fa whiteicon fa-link">
               </i>
             </a>
