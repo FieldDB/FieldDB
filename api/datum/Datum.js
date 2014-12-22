@@ -1,5 +1,6 @@
 /* globals window, $, _ , OPrime*/
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Comments = require("./../comment/Comments").Comments;
 var Datums = require("./../Collection").Collection;
@@ -98,6 +99,21 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     set: function(value) {
       this.debug("datumFields is depreacted, just use fields instead");
       return this.fields = value;
+    }
+  },
+
+  addFile: {
+    value: function(newFileDetails) {
+      if (newFileDetails.type.indexOf("audio") === 0) {
+        this.audioVideo.add(newFileDetails);
+      } else if (newFileDetails.type.indexOf("video") === 0) {
+        this.audioVideo.add(newFileDetails);
+      } else if (newFileDetails.type.indexOf("image") === 0) {
+        this.images.add(newFileDetails);
+      } else {
+        var regularizedJSON = new AudioVideo(newFileDetails).toJSON();
+        this.addRelatedData(regularizedJSON);
+      }
     }
   },
 

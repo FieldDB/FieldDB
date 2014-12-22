@@ -48,12 +48,12 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
       if ($scope.application.authentication.user.accessibleDBS.indexOf("sails/fr-ca") > -1) {
         console.log("Redirecting the user to the manage sails dashboard" + "/sails/fr-ca/datalists");
         $scope.$apply(function() {
-          $location.path("/sails/fr-ca/datalists", false);
+          $location.path($scope.application.basePathname + "/sails/fr-ca/datalists", false);
         });
-      } else if ($location.path() === "/welcome" || $location.path() === "/bienvenu" || window.location.pathname === "/welcome" || window.location.pathname === "/bienvenu" || (window.location.pathname === "/" && $scope.application.authentication.user.accessibleDBS.length === 1) ) {
+      } else if ($location.path().indexOf("welcome") > -1 || $location.path().indexOf("bienvenu") > -1 || window.location.pathname.indexOf("welcome") > -1 || window.location.pathname.indexOf("bienvenu") > -1 || (window.location.pathname === $scope.application.basePathname + "/" && $scope.application.authentication.user.accessibleDBS.length === 1)) {
         $scope.$apply(function() {
           //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
-          $location.path("/" + $scope.application.authentication.user.mostrecentdb, false);
+          $location.path($scope.application.basePathname + "/" + $scope.application.authentication.user.mostrecentdb, false);
         });
       }
       $timeout(function() {
@@ -98,10 +98,10 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
             authenticated: false
           })
         };
-        if (window.location.pathname !== "/welcome" && window.location.pathname !== "/bienvenu") {
+        if (window.location.pathname.indexOf("welcome") < 0 && window.location.pathname.indexOf("bienvenu") < 0) {
           $scope.$apply(function() {
-            // $location.path("/welcome/", false);
-            window.location.replace("/welcome");
+            // $location.path($scope.application.basePathname +  "/welcome/", false);
+            window.location.replace($scope.application.basePathname + "/welcome");
           });
         }
         $scope.$digest();
@@ -126,10 +126,10 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
           $scope.application.authentication.user.roles = sessionInfo.userCtx.roles;
           processUserDetails($scope.application.authentication.user);
         } else {
-          if (window.location.pathname !== "/welcome" && window.location.pathname !== "/bienvenu") {
+          if (window.location.pathname.indexOf("welcome") < 0 && window.location.pathname.indexOf("bienvenu") < 0) {
             $scope.$apply(function() {
-              // $location.path("/welcome/", false);
-              window.location.replace("/welcome");
+              // $location.path($scope.application.basePathname + "/welcome/", false);
+              window.location.replace($scope.application.basePathname + "/welcome");
             });
           }
         }
@@ -138,7 +138,7 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
         $scope.error = "Unable to resume.";
         $scope.$digest();
         // $scope.$apply(function() {
-        //   $location.path("/welcome");
+        //   $location.path($scope.application.basePathname + "/welcome");
         // });
       });
     };

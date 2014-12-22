@@ -1,4 +1,4 @@
-/* globals  Q, sjcl, Recorder, AudioContext, stopRecording, SpreadsheetDatum, _, confirm, alert, prompt */
+/* globals  FieldDB, Q, sjcl, SpreadsheetDatum, _, confirm, alert, prompt */
 'use strict';
 console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
@@ -18,7 +18,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
 
-  $rootScope.appVersion = "2.30.0ss";
+  $rootScope.appVersion = "2.32.0ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size) {
@@ -478,10 +478,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
   $scope.activities = [];
   $rootScope.DBselected = false;
-  $scope.recordingStatus = "Record";
-  $scope.recordingButtonClass = "btn btn-success";
-  $scope.recordingIcon = "fa-microphone";
-  $scope.showAudioFeatures = false;
   $scope.newFieldData = {};
   $rootScope.newRecordHasBeenEdited = false;
 
@@ -684,36 +680,35 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       });
 
     // Get lexicon for Glosser and organize based on frequency
-    Data.lexicon($rootScope.DB.pouchname)
-      .then(function(lexicon) {
-       var sortedLexicon = {};
-       for (var i in lexicon) {
-         if(lexicon[i].key.gloss){
-           if (sortedLexicon[lexicon[i].key.morpheme]) {
-             sortedLexicon[lexicon[i].key.morpheme].push({
-               gloss: lexicon[i].key.gloss,
-               value: lexicon[i].value
-             });
-           } else {
-             sortedLexicon[lexicon[i].key.morpheme] = [{
-               gloss: lexicon[i].key.gloss,
-               value: lexicon[i].value
-             }];
-           }
-         }
-       }
-       var sorter = function(a, b) {
-         return b.value - a.value;
-       };
-       // Sort each morpheme array by descending value
-       for (var key in sortedLexicon) {
-         sortedLexicon[key].sort(sorter);
-       }
-        localStorage.setItem(
-          $rootScope.DB.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
-      }, function(error) {
-        console.log("Error retrieving lexicon.", error);
-      });
+    Data.lexicon($rootScope.DB.pouchname).then(function(lexicon) {
+      var sortedLexicon = {};
+      for (var i in lexicon) {
+        if (lexicon[i].key.gloss) {
+          if (sortedLexicon[lexicon[i].key.morpheme]) {
+            sortedLexicon[lexicon[i].key.morpheme].push({
+              gloss: lexicon[i].key.gloss,
+              value: lexicon[i].value
+            });
+          } else {
+            sortedLexicon[lexicon[i].key.morpheme] = [{
+              gloss: lexicon[i].key.gloss,
+              value: lexicon[i].value
+            }];
+          }
+        }
+      }
+      var sorter = function(a, b) {
+        return b.value - a.value;
+      };
+      // Sort each morpheme array by descending value
+      for (var key in sortedLexicon) {
+        sortedLexicon[key].sort(sorter);
+      }
+      localStorage.setItem(
+        $rootScope.DB.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
+    }, function(error) {
+      console.log("Error retrieving lexicon.", error);
+    });
   };
 
 
@@ -809,6 +804,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
                   $rootScope.DB = corpus;
                   $scope.setTemplateUsingCorpusPreferedTemplate(corpus);
+                  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+                    if (!FieldDB.FieldDBObject.application.corpus) {
+                      FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(corpus);
+                    } else {
+                      if (FieldDB.FieldDBObject.application.corpus.dbname !== corpus.pouchname) {
+                        console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + corpus.pouchname);
+                        FieldDB.FieldDBObject.application.corpus = corpus;
+                      }
+                    }
+                  }
                 }
                 corpus.gravatar = md5.createHash(corpus.pouchname);
                 $scope.corpora.push(corpus);
@@ -1307,6 +1312,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $rootScope.markNewAsEdited = function() {
     $rootScope.newRecordHasBeenEdited = true;
+  };
+
+  $rootScope.markAsNotSaved = function(datum) {
+    datum.saved = "no";
+    $scope.saved = "no";
   };
 
   // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
@@ -2180,362 +2190,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   });
 
-  // Audio recording
-  var hasGetUserMedia = function() {
-    return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia || navigator.msGetUserMedia);
-  };
-
-  if (hasGetUserMedia()) {
-    $rootScope.audioCompatible = true;
-  } else {
-    $rootScope.audioCompatible = false;
-  }
-
-  var onAudioFail = function(e) {
-    $scope.recordingStatus = "Record";
-    $scope.recordingButtonClass = "btn btn-success";
-    $scope.recordingIcon = "fa-microphone";
-    console.log('Audio Rejected!', e);
-    $rootScope.notificationMessage = "Unable to record audio.";
-    $rootScope.openNotification();
-  };
-
-  var onAudioSuccess = function(s) {
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    var context = new AudioContext();
-    var mediaStreamSource = context.createMediaStreamSource(s);
-    try {
-      recorder = new Recorder(mediaStreamSource);
-      recorder.record();
-    } catch (error) {
-      onAudioFail(error);
+  $scope.flagAsDeleted = function(json, datum) {
+    json.trashed = "deleted";
+    if (datum) {
+      $rootScope.markAsNotSaved(datum);
     }
-  };
-
-  window.URL = window.URL || window.webkitURL;
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-  var recorder;
-
-  // Functions to open/close audio warning modal
-  var openAudioWarning = function() {
-    $scope.audioWarningShouldBeOpen = true;
-  };
-
-  $scope.closeAudioWarning = function() {
-    $scope.audioWarningShouldBeOpen = false;
-  };
-
-  var audioRecordingInterval;
-
-  $scope.startRecording = function(datum) {
-    if (navigator.getUserMedia) {
-      $scope.datumForAudio = datum;
-      openAudioWarning();
-      $scope.timeLeftForAudio = "5 minutes 0 seconds";
-      // Begin countdown
-      var minutes = 5;
-      var seconds = 0;
-      audioRecordingInterval = setInterval(function() {
-        if (seconds === 0) {
-          if (minutes === 0) {
-            clearInterval(audioRecordingInterval);
-            stopRecording(datum);
-            $scope.audioWarningShouldBeOpen = false;
-            return;
-          } else {
-            minutes--;
-            seconds = 59;
-          }
-        }
-        var minuteText;
-        if (minutes > 0) {
-          minuteText = minutes + (minutes > 1 ? ' minutes' : ' minute');
-        } else {
-          minuteText = '';
-        }
-        var secondText = seconds + (seconds > 1 ? ' seconds' : ' second');
-        seconds--;
-        $scope.$apply(function() {
-          $scope.timeLeftForAudio = minuteText + " " + secondText;
-        });
-      }, 1000);
-      $scope.recordingButtonClass = "btn btn-success disabled";
-      $scope.recordingStatus = "Recording";
-      $scope.recordingIcon = "fa fa-rss";
-      navigator.getUserMedia({
-        audio: true
-      }, onAudioSuccess, onAudioFail);
-    } else {
-      $scope.recordingStatus = "Record";
-      console.log('navigator.getUserMedia not present');
-    }
-  };
-
-  $scope.stopRecording = function(datum) {
-    if (recorder) {
-      recorder.stop();
-      $scope.closeAudioWarning();
-      clearInterval(audioRecordingInterval);
-      $scope.recordingStatus = "Record";
-      $scope.recordingButtonClass = "btn btn-success";
-      $scope.recordingIcon = "fa-microphone";
-      if ($scope.processingAudio) {
-        return; //avoid double events which were leading to double audio.
-      }
-      $scope.processingAudio = true;
-
-      recorder.exportWAV(function(s) {
-        $scope.uploadFile(datum, s);
-      });
-    } else {
-      $scope.closeAudioWarning();
-      $scope.recordingStatus = "Record doesn't appear to be working currently in your browser";
-      $scope.recordingButtonClass = "btn";
-      $scope.recordingIcon = "fa-microphone-slash";
-    }
-  };
-
-  $scope.uploadFile = function(datum, file) {
-    if (!datum || !datum.id) {
-      $rootScope.newRecordHasBeenEdited = true;
-    }
-
-    // if($scope.processingAudio){
-    //   return; //avoid double events which were leading to double audio.
-    // }
-    $scope.processingAudio = true;
-
-    var blobToBase64 = function(blob, cb) {
-      var reader = new FileReader();
-      reader.onload = function() {
-        var dataUrl = reader.result;
-        var base64 = dataUrl.split(',')[1];
-        cb(base64);
-      };
-      reader.readAsDataURL(blob);
-    };
-
-    var base64File;
-    var inputBoxPrefix;
-    // Test to see if this is a new datum
-    if (!datum || !datum.id) {
-      inputBoxPrefix = "new_datum";
-    } else {
-      inputBoxPrefix = datum.id;
-    }
-
-    // Create attachments
-
-    var newAttachments = {};
-
-    // // If a new file, set up attachments structure, to be saved later
-    if (!datum || !datum.id) {
-      if (!datum) {
-        datum = {};
-      }
-      datum._attachments = {};
-      datum.audioVideo = [];
-    }
-
-    var numberOfFiles;
-    if (file) {
-      numberOfFiles = 1;
-    } else {
-      numberOfFiles = document.getElementById(inputBoxPrefix + "_audio-file").files.length;
-      // Disable upload button after uploading file(s) once in new datum; cannot reset file input in non-async task
-      if (!datum || !datum.id) {
-        $scope.newDatumHasAudioToUpload = true;
-      }
-    }
-
-    // Check to see if user has clicked on upload without recording or uploading files
-    if (numberOfFiles === 0 || numberOfFiles === null) {
-      // $rootScope.editsHaveBeenMade = false;
-      $scope.processingAudio = false;
-      $scope.newDatumHasAudioToUpload = false;
-      document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
-      $rootScope.notificationMessage = "Please record or select audio to upload.";
-      $rootScope.openNotification();
-      return;
-    }
-    var doSomethingWithAudio = function(index) {
-      blobToBase64(file || document.getElementById(inputBoxPrefix + "_audio-file").files[index], function(x) {
-        base64File = x;
-        var filename;
-        var description;
-        var contentType;
-        if (file) {
-          filename = Date.now() + ".wav";
-          contentType = "audio\/wav";
-          description = "";
-        } else {
-          // Test to see if this is a new datum
-          var fileExt;
-          if (!datum || !datum.id) {
-            fileExt = document.getElementById("new_datum_audio-file").files[index].type.split("\/").pop();
-          } else {
-            fileExt = document.getElementById(datum.id + "_audio-file").files[index].type.split("\/").pop();
-          }
-          if (fileExt !== ("mp3" || "mpeg" || "wav" || "ogg")) {
-            $rootScope.notificationMessage = "Upload is turned off for this release."; //You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.";
-            $rootScope.openNotification();
-            return;
-          }
-          filename = Date.now() + "" + index + "." + fileExt; // appending index in case of super-rapid processing on multi-file upload, to avoid duplicate filenames
-          contentType = "audio\/" + fileExt;
-          description = document.getElementById(inputBoxPrefix + "_audio-file").files[index].name;
-        }
-
-        var newAttachment = {};
-        newAttachment = {
-          "contentType": contentType,
-          "data": base64File
-        };
-        // if(newAttachments[filename]){
-        //   return; //try to avoid double of the same file...
-        // }
-        newAttachments[filename] = newAttachment;
-        newAttachments[filename].description = description;
-
-        // Push attachment to scope if new record, to be saved later
-        if (!datum || !datum.id) {
-          var newScopeAttachment = {
-            "filename": filename,
-            "description": newAttachments[filename].description,
-            "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + filename,
-            "type": "audio"
-          };
-
-          $scope.$apply(function() {
-            if (datum._attachments[filename]) {
-              return; //try to avoid double of the same file...
-            }
-            datum._attachments[filename] = newAttachments[filename];
-            if (!Array.isArray(datum.audioVideo)) {
-              console.log("Upgrading audioVideo to a collection", datum.audioVideo);
-              var audioVideoArray = [];
-              if (datum.audioVideo.URL) {
-                var audioVideoURL = datum.audioVideo.URL;
-                var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
-                audioVideoArray.push({
-                  "filename": fileFromUrl,
-                  "description": fileFromUrl,
-                  "URL": audioVideoURL,
-                  "type": "audio"
-                });
-              }
-              datum.audioVideo = audioVideoArray;
-            }
-            datum.audioVideo.push(newScopeAttachment);
-          });
-        }
-      });
-    };
-    for (var i = 0; i < numberOfFiles; i++) {
-      doSomethingWithAudio(i);
-    }
-
-    // Stop here if new datum record (i.e. do not upload yet)
-    if (!datum || !datum.id) {
-
-      // Force digest after recording audio
-      if (file) {
-        $scope.$apply(function() {
-          $scope.newFieldDatahasAudio = true;
-          $scope.processingAudio = false;
-        });
-      } else {
-        $scope.newFieldDatahasAudio = true;
-        $scope.processingAudio = false;
-      }
-      return;
-    }
-
-    // Save new attachments for existing record
-    Data.async($rootScope.DB.pouchname, datum.id)
-      .then(function(originalDoc) {
-        var rev = originalDoc._rev;
-        console.log(rev);
-        var key;
-        if (originalDoc._attachments === undefined) {
-          originalDoc._attachments = {};
-        }
-
-        for (key in newAttachments) {
-          originalDoc._attachments[key] = newAttachments[key];
-        }
-        // Update scope attachments
-        if (!datum.audioVideo) {
-          datum.audioVideo = [];
-        }
-        if (!Array.isArray(datum.audioVideo)) {
-          console.log("Upgrading audioVideo to a collection", datum.audioVideo);
-          var audioVideoArray = [];
-          for (var audioVideoItem in datum.audioVideo) {
-            if (datum.audioVideo.hasOwnProperty(audioVideoItem) && datum.audioVideo.audioVideoItem.URL) {
-              var audioVideoURL = datum.audioVideo.audioVideoItem.URL;
-              var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
-              audioVideoArray.push({
-                "filename": fileFromUrl,
-                "description": fileFromUrl,
-                "URL": audioVideoURL,
-                "type": "audio"
-              });
-            }
-          }
-          datum.audioVideo = audioVideoArray;
-        }
-        for (key in newAttachments) {
-          var newScopeAttachment = {
-            "filename": key,
-            "description": newAttachments[key].description,
-            "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + key,
-            "type": "audio"
-          };
-
-          datum.audioVideo.push(newScopeAttachment);
-
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-          $scope.addActivity([{
-            verb: "recorded",
-            verbicon: "icon-plus",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "personal"
-          }, {
-            verb: "recorded",
-            verbicon: "icon-plus",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
-          }], "uploadnow");
-        }
-        datum.hasAudio = true;
-        originalDoc.audioVideo = datum.audioVideo;
-        //Upgrade to v1.90
-        if (originalDoc.attachmentInfo) {
-          delete originalDoc.attachmentInfo;
-        }
-        // console.log(originalDoc.audioVideo);
-        Data.saveCouchDoc($rootScope.DB.pouchname, originalDoc)
-          .then(function(response) {
-            console.log("Successfully uploaded attachment.");
-            if (debugging) {
-              console.log(response);
-            }
-
-
-            // Reset file input field
-            document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
-
-            $scope.processingAudio = false;
-          });
-      });
   };
 
   $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
@@ -2619,8 +2278,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-
-
   $scope.triggerExpandCollapse = function() {
     if ($scope.expandCollapse === true) {
       $scope.expandCollapse = false;
@@ -2697,9 +2354,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           delete $scope.scopePreferences.savedState.DB;
         }
         if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
-          $rootScope.DB = {
-            pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
-          };
+          /* load details for the most receent database */
+          if (FieldDB && FieldDB.Corpus) {
+            $rootScope.DB = new FieldDB.Corpus($scope.scopePreferences.savedState.mostRecentCorpusPouchname);
+            $rootScope.DB.loadOrCreateCorpusByPouchName($scope.scopePreferences.savedState.mostRecentCorpusPouchname).then(function(results) {
+              console.log("fetched corpus details: " + results.dbname);
+
+              if (FieldDB.FieldDBObject.application) {
+                if (!FieldDB.FieldDBObject.application.corpus) {
+                  FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
+                } else {
+                  if (FieldDB.FieldDBObject.application.corpus.dbname !== results.dbname) {
+                    console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + results.dbname);
+                    FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
+                  }
+                }
+              }
+
+            });
+          } else {
+            $rootScope.DB = {
+              pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
+            };
+          }
           if ($scope.scopePreferences.savedState.sessionID) {
             // Load all sessions and go to current session
             $scope.loadSessions($scope.scopePreferences.savedState.sessionID);

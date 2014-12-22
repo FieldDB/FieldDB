@@ -1,4 +1,4 @@
-/* globals window, XDomainRequest, XMLHttpRequest */
+/* globals window, XDomainRequest, XMLHttpRequest, FormData */
 
 var Q = require("q");
 
@@ -87,13 +87,38 @@ CORS.makeCORSRequest = function(options) {
   if (options.withCredentials !== false) {
     xhr.withCredentials = true;
   }
+
+  // If it contains files, make it into a mulitpart upload
+  if (options && options.data && options.data.files) {
+    console.log("converting to formdata ", options.data);
+
+    var data = new FormData();
+    for (var part in options.data) {
+      if (options.data.hasOwnProperty(part)) {
+        data.append(part, options.data[part]);
+      }
+    }
+    options.data = data;
+    xhr.setRequestHeader("Content-Type", "multipart/form-data");
+  } else {
+    if (options.data) {
+      options.data = JSON.stringify(options.data);
+    }
+  }
   //  }
+  var onProgress = function(e) {
+    if (e.lengthComputable) {
+      var percentComplete = (e.loaded/e.total)*100;
+      console.log("percentComplete", percentComplete);
+    }
+  };
+  xhr.addEventListener("progress", onProgress, false);
 
   xhr.onload = function(e, f, g) {
     var response = xhr.responseJSON || xhr.responseText || xhr.response;
     self.debug("Response from CORS request to " + options.url + ": " + response);
     if (xhr.status >= 400) {
-      self.warn("The request was unsuccesful " + xhr.statusText);
+      self.warn("The request to " + options.url + " was unsuccesful " + xhr.statusText);
       deferred.reject(response);
       return;
     }
@@ -117,10 +142,16 @@ CORS.makeCORSRequest = function(options) {
     self.bug("There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
     deferred.reject(e);
   };
-  if (options.data) {
-    xhr.send(JSON.stringify(options.data));
-  } else {
-    xhr.send();
+  try {
+    if (options.data) {
+      self.debug("sending ", options.data);
+      xhr.send(options.data);
+    } else {
+      xhr.send();
+    }
+  } catch (e) {
+    self.warn("Caught an exception when calling send on xhr", e);
+    deferred.reject(e);
   }
 
   return deferred.promise;

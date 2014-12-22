@@ -118,11 +118,11 @@ angular.module('spreadsheetApp')
           $timeout(function() {
 
             if (document.activeElement !== selfElement.find("input")[0]) {
-              console.log("arrow old focus", document.activeElement);
+              // console.log("arrow old focus", document.activeElement);
               // element[0].focus();
               selfElement.find("input")[0].focus();
               // document.getElementById("firstFieldOfEditingEntry").focus();
-              console.log("arrow new focus", document.activeElement);
+              // console.log("arrow new focus", document.activeElement);
             }
 
           }, 0);

@@ -34,8 +34,15 @@ module.exports = function(grunt) {
         files: ['bower.json'],
         tasks: ['wiredep']
       },
+      vendor: {
+        files: ['bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
+        tasks: ['build'],
+        options: {
+          livereload: '<%= connect.options.livereload %>'
+        }
+      },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'

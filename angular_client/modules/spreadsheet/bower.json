@@ -1,6 +1,6 @@
 {
   "name": "spreadsheet",
-  "version": "2.30.0",
+  "version": "2.32.0",
   "authors": [
     "info@fielddb.org"
   ],
@@ -24,27 +24,26 @@
     "package.json"
   ],
   "dependencies": {
+    "fielddb-angular": "*",
     "fielddb-glosser": "1.82.2",
     "angular-md5": "~0.0.5",
-    "angular": "~1.2.0",
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
     "bootstrap": "~2.3.2",
-    "angular-resource": "~1.2.0",
-    "angular-cookies": "~1.2.0",
-    "angular-sanitize": "~1.2.0",
-    "angular-animate": "~1.2.0",
-    "angular-touch": "~1.2.0",
-    "angular-route": "~1.2.0",
     "underscore": "~1.6.0",
     "q": "1.0.1",
     "font-awesome": "~4.2.0",
     "angular-bootstrap": "0.8.0",
+    "recordmp3js": "~0.3.0",
     "sjcl": "~1.0.0"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.0",
-    "angular-scenario": "~1.2.0"
+    "angular-mocks": "1.2.26",
+    "angular-scenario": "1.2.26"
   },
-  "appPath": "app"
+  "appPath": "app",
+  "resolutions": {
+    "bootstrap": "~2.3.2",
+    "jquery": "~2.1.1"
+  }
 }

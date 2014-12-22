@@ -8,7 +8,11 @@ describe("Filter: fielddbPrettyDate", function() {
   // initialize a new instance of the filter before each test
   var fielddbPrettyDate;
   var expectedDate = new Date("2014-07-14T14:39:10.916Z");
-  var expectedFormattedDate = expectedDate.toLocaleDateString() + " " + expectedDate.getHours() + ":" + expectedDate.getMinutes();
+  var expectedFormattedDate = expectedDate.toLocaleDateString() + " " + expectedDate.getHours() + ":";
+  if (expectedDate.getMinutes() < 10) {
+    expectedFormattedDate = expectedFormattedDate + "0";
+  }
+  expectedFormattedDate = expectedFormattedDate + expectedDate.getMinutes();
 
   beforeEach(inject(function($filter) {
     fielddbPrettyDate = $filter("fielddbPrettyDate");

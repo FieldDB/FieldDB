@@ -1,6 +1,6 @@
-/* globals OPrime, window, escape, $, FileReader */
-var AudioVideo = require("./../FieldDBObject").FieldDBObject;
-var AudioVideos = require("./../Collection").Collection;
+/* globals window, escape, $, FileReader, FormData, atob,  unescape, Blob */
+var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
+var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
 var CORS = require("./../CORS").CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
@@ -33,6 +33,31 @@ var _ = require("underscore");
  * @tutorial tests/CorpusTest.js
  */
 
+//http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
+var dataURItoBlob = function(dataURI) {
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  var byteString;
+  if (dataURI.split(",")[0].indexOf("base64") >= 0) {
+    byteString = atob(dataURI.split(",")[1]);
+  } else {
+    byteString = unescape(dataURI.split(",")[1]);
+  }
+
+  // separate out the mime component
+  var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+  // write the bytes of the string to a typed array
+  var ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([ia], {
+    type: mimeString
+  });
+};
+
+
 
 var getUnique = function(arrayObj) {
   var u = {},
@@ -56,6 +81,10 @@ var Import = function Import(options) {
   }
   this.debug(" new import ", options);
   FieldDBObject.apply(this, arguments);
+  this.progress = {
+    total: 0,
+    completed: 0
+  };
 };
 
 Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prototype */ {
@@ -245,6 +274,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         var headers = [];
         if (self.importType === "participants") {
           self.importFields = new DatumFields(self.corpus.participantFields.clone());
+        } else if (self.importType === "audioVideo") {
+          self.importFields = new DatumFields();
         } else {
           self.importFields = new DatumFields(self.corpus.datumFields.clone());
         }
@@ -257,6 +288,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             correspondingDatumField[0].id = item;
             if (self.importType === "participants") {
               correspondingDatumField[0].labelExperimenters = item;
+            } else if (self.importType === "audioVideo") {
+              console.log("this is an audioVideo import but we aren doing anything with the csv");
+              // correspondingDatumField[0].labelFieldLinguists = item;
             } else {
               correspondingDatumField[0].labelFieldLinguists = item;
             }
@@ -348,11 +382,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               confidential: self.corpus.confidential,
               fields: new DatumFields(JSON.parse(JSON.stringify(headers)))
             });
+          } else if (self.importType === "audioVideo") {
+            docToSave = new AudioVideo();
+            docToSave.description = self.rawText; //TODO look into the textgrid import
           } else {
             docToSave = new Datum({
               datumFields: new DatumFields(JSON.parse(JSON.stringify(headers)))
             });
-
           }
           var testForEmptyness = "";
           for (var index = 0; index < row.length; index++) {
@@ -371,6 +407,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             //            }
             if (self.importType === "participants") {
               docToSave.fields[headers[index].id].value = item.trim();
+            } else if (self.importType === "audioVideo") {
+              console.log("this is an audioVideo but we arent doing anything with the headers");
+              // docToSave.datumFields[headers[index].id].value = item.trim();
             } else {
               docToSave.datumFields[headers[index].id].value = item.trim();
             }
@@ -408,6 +447,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               self.progress.completed++;
             });
             savePromises.push(promise);
+          } else if (self.importType === "audioVideo") {
+            console.log("not doing anything for an audio video import");
+          } else {
+            console.log("not doing anything for a datum import");
           }
         });
 
@@ -840,7 +883,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var rows = text.split("\n");
       if (rows.length < 3) {
         var macrows = text.split("\r");
-        if (macrows.length  > rows.length) {
+        if (macrows.length > rows.length) {
           rows = macrows;
           this.status = this.status + " Detected a \r line ending.";
         }
@@ -877,7 +920,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           header = this.parseLineCSV(firstrow);
         }
       } else if (rows.length === 1) {
-        header = rows[0].map(function(){
+        header = rows[0].map(function() {
           return "";
         });
       }
@@ -1259,61 +1302,207 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
+  uploadFiles: {
+    value: function(files) {
+      var deferred = Q.defer(),
+        self = this;
+
+      self.error = "";
+      self.status = "";
+
+      Q.nextTick(function() {
+        var uploadUrl = new AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances";
+        // var data = {
+        //   files: files,
+        //   token: self.token,
+        //   dbname: self.dbname,
+        //   username: self.username,
+        //   returnTextGrid: self.returnTextGrid
+        // };
+        //
+        var data = new FormData();
+        // for (var ?fileIndex = 0; fileIndex > files.length; fileIndex++) {
+        // data.append("file" + fileIndex, files[fileIndex]);
+        // }
+        // data.files = files;
+        self.todo("use the files passed instead of jquery ", files);
+        // http://stackoverflow.com/questions/24626177/how-to-create-an-image-file-from-a-dataurl
+        if (files.indexOf("data") === 0) {
+          // data.append("data", files); //test new split
+
+
+          // var base64 = files.split("base64,")[1];
+          var blob = dataURItoBlob(files);
+          // blob.name = "file_" + Date.now() + "." + blob.type.split("/")[1];
+          // blob.lastModfied = Date.now();
+          // blob.lastModifiedDate = new Date(blob.lastModfied);
+          // fd.append("canvasImage", blob);
+
+          //http://www.nczonline.net/blog/2012/06/05/working-with-files-in-javascript-part-5-blobs/
+          // var reconstructedFile =  new File("file_" + Date.now() + ".mp3", blob, "audio/mpeg");
+
+          //http://stackoverflow.com/questions/8390855/how-to-instantiate-a-file-object-in-javascript
+          files = [blob];
+
+        }
+
+        $.each(files, function(i, file) {
+          data.append(i, file);
+        });
+
+        // data.append("files", files);
+        data.append("token", self.uploadtoken);
+        data.append("pouchname", self.dbname);
+        data.append("username", self.username);
+        data.append("returnTextGrid", self.returnTextGrid);
+
+        self.audioVideo = null;
+        // this.model.audioVideo.reset();
+        $.ajax({
+          url: uploadUrl,
+          type: "post",
+          // dataType: 'json',
+          cache: false,
+          // withCredentials: false,
+          contentType: false,
+          processData: false,
+          data: data,
+          success: function(results) {
+            if (results && results.status === 200) {
+              self.uploadDetails = results;
+              self.files = results.files;
+              self.status = "File(s) uploaded and utterances were extracted.";
+              var messages = [];
+              self.rawText = "";
+              /* Check for any textgrids which failed */
+              for (var fileIndex = 0; fileIndex < results.files.length; fileIndex++) {
+                if (results.files[fileIndex].textGridStatus >= 400) {
+                  console.log(results.files[fileIndex]);
+                  var instructions = results.files[fileIndex].textGridInfo;
+                  if (results.files[fileIndex].textGridStatus >= 500) {
+                    instructions = " Please report this error to us at support@lingsync.org ";
+                  }
+                  messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. " + instructions);
+                  results.files[fileIndex].filename = results.files[fileIndex].fileBaseName + ".mp3";
+                  results.files[fileIndex].URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].fileBaseName + ".mp3";
+                  results.files[fileIndex].description = results.files[fileIndex].description || "File from import";
+                  self.addAudioVideoFile(results.files[fileIndex]);
+                } else {
+                  self.downloadTextGrid(results.files[fileIndex]);
+                }
+              }
+              if (messages.length > 0) {
+                self.status = messages.join(", ");
+                // $(self.el).find(".status").html(self.get("status"));
+                // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(messages.join(", "), "alert-danger", "Import:");
+              }
+            } else {
+              console.log(results);
+              var message = "Upload might have failed to complete processing on your file(s). Please report this error to us at support@lingsync.org ";
+              self.status = message + ": " + JSON.stringify(results);
+              // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(message, "alert-danger", "Import:");
+            }
+            // $(self.el).find(".status").html(self.get("status"));
+          },
+          error: function(response) {
+            var reason = {};
+            if (response && response.responseJSON) {
+              reason = response.responseJSON;
+            } else {
+              var message = "Error contacting the server. ";
+              if (response.status >= 500) {
+                message = message + " Please report this error to us at support@lingsync.org ";
+              } else if (response.status === 413) {
+                message = message + " Your file is too big for upload, please try using FFMpeg to convert it to an mp3 for upload (you can still use your original video/audio in the app when the utterance chunking is done on an mp3.) ";
+              } else {
+                message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
+              }
+              reason = {
+                status: response.status,
+                userFriendlyErrors: [message + response.status]
+              };
+            }
+            console.log(reason);
+            if (reason && reason.userFriendlyErrors) {
+              self.status = "";
+              self.error = "Upload error: " + reason.userFriendlyErrors.join(" ");
+              self.bug(self.error);
+              // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
+              // $(self.el).find(".status").html(self.get("status"));
+            }
+          }
+        });
+        self.status = "Contacting server...";
+        // $(this.el).find(".status").html(this.model.get("status"));
+
+      });
+      return deferred.promise;
+    }
+  },
 
   downloadTextGrid: {
     value: function(fileDetails) {
       var self = this;
-      var textridUrl = OPrime.audioUrl + "/" + this.pouchname + "/" + fileDetails.fileBaseName + ".TextGrid";
-      $.ajax({
+      var textridUrl = new AudioVideo().BASE_SPEECH_URL + "/" + this.corpus.dbname + "/" + fileDetails.fileBaseName + ".TextGrid";
+      CORS.makeCORSRequest({
         url: textridUrl,
-        type: "get",
-        // dataType: "text",
-        success: function(results) {
-          if (results) {
-            fileDetails.textgrid = results;
-            var syllables = "unknown";
-            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.syllableCount) {
-              syllables = fileDetails.syllablesAndUtterances.syllableCount;
-            }
-            var pauses = "unknown";
-            if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.pauseCount) {
-              pauses = parseInt(fileDetails.syllablesAndUtterances.pauseCount, 10);
-            }
-            var utteranceCount = 1;
-            if (pauses > 0) {
-              utteranceCount = pauses + 2;
-            }
-            var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
-            fileDetails.description = message;
-            self.status = self.status + "<br/>" + message;
-            self.fileDetails = self.status + message;
+        type: "GET",
+        withCredentials: false
+      }).then(function(results) {
+        if (results) {
+          fileDetails.textgrid = results;
+          var syllables = "unknown";
+          if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.syllableCount) {
+            syllables = fileDetails.syllablesAndUtterances.syllableCount;
+          }
+          var pauses = "unknown";
+          if (fileDetails.syllablesAndUtterances && fileDetails.syllablesAndUtterances.pauseCount) {
+            pauses = parseInt(fileDetails.syllablesAndUtterances.pauseCount, 10);
+          }
+          var utteranceCount = 1;
+          if (pauses > 0) {
+            utteranceCount = pauses + 2;
+          }
+          var message = " Downloaded Praat TextGrid which contained a count of roughly " + syllables + " syllables and auto detected utterances for " + fileDetails.fileBaseName + " The utterances were not automatically transcribed for you, you can either save the textgrid and transcribe them using Praat, or continue to import them and transcribe them after.";
+          fileDetails.description = message;
+          self.status = self.status + "<br/>" + message;
+          self.fileDetails = self.status + message;
+          if (window && window.appView && typeof window.appView.toastUser === "function") {
             window.appView.toastUser(message, "alert-info", "Import:");
-            self.rawText = self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results;
+          }
+          self.rawText = self.rawText.trim() + "\n\n\nFile name = " + fileDetails.fileBaseName + ".mp3\n" + results;
+          if (!self.parent) {
             self.importTextGrid(self.rawText, null);
           } else {
-            self.debug(results);
-            fileDetails.textgrid = "Error result was empty. " + results;
+            self.debug("Not showing second import step, this looks like its audio import only.");
           }
-        },
-        error: function(response) {
-          var reason = {};
-          if (response && response.responseJSON) {
-            reason = response.responseJSON;
+          fileDetails.filename = fileDetails.fileBaseName + ".mp3";
+          fileDetails.URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + fileDetails.fileBaseName + ".mp3";
+          self.addAudioVideoFile(fileDetails);
+        } else {
+          self.debug(results);
+          fileDetails.textgrid = "Error result was empty. " + results;
+        }
+      }, function(response) {
+        var reason = {};
+        if (response && response.responseJSON) {
+          reason = response.responseJSON;
+        } else {
+          var message = "Error contacting the server. ";
+          if (response.status >= 500) {
+            message = message + " Please report this error to us at support@lingsync.org ";
           } else {
-            var message = "Error contacting the server. ";
-            if (response.status >= 500) {
-              message = message + " Please report this error to us at support@lingsync.org ";
-            } else {
-              message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
-            }
-            reason = {
-              status: response.status,
-              userFriendlyErrors: [message + response.status]
-            };
+            message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
           }
-          self.debug(reason);
-          if (reason && reason.userFriendlyErrors) {
-            self.status = fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" ");
+          reason = {
+            status: response.status,
+            userFriendlyErrors: [message + response.status]
+          };
+        }
+        self.debug(reason);
+        if (reason && reason.userFriendlyErrors) {
+          self.status = fileDetails.fileBaseName + "import error: " + reason.userFriendlyErrors.join(" ");
+          if (window && window.appView && typeof window.appView.toastUser === "function") {
             window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
           }
         }
@@ -1322,15 +1511,22 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
 
   addAudioVideoFile: {
-    value: function(url) {
+    value: function(details) {
       if (!this.audioVideo) {
         this.audioVideo = new AudioVideos();
       }
-      this.audioVideo.add(new AudioVideo({
-        filename: url.substring(url.lastIndexOf("/") + 1),
-        URL: url,
-        description: "File from import"
-      }));
+      var audioVideo = new AudioVideo(details);
+      this.audioVideo.add(audioVideo);
+      if (this.parent) {
+        if (!this.parent.audioVideo) {
+          this.parent.audioVideo = new AudioVideos();
+        } else if (Object.prototype.toString.call(this.parent.audioVideo) === "[object Array]") {
+          this.parent.audioVideo = new AudioVideos(this.parent.audioVideo);
+        }
+        this.parent.audioVideo.add(audioVideo);
+        this.parent.saved = "no";
+        // this.asCSV = [];
+      }
     }
   },
 
@@ -1522,6 +1718,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.debug("added a datum to the collection");
     }
   },
+
   /**
    * Reads the import's array of files using a supplied readOptions or using
    * the readFileIntoRawText function which uses the browsers FileReader API.
@@ -1548,13 +1745,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
         var fileDetails = [];
         var files = self.files;
+        var filesToUpload = [];
 
         self.progress.total = files.length;
         for (var i = 0, file; file = files[i]; i++) {
           var details = [escape(file.name), file.type || "n/a", "-", file.size, "bytes, last modified:", file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : "n/a"].join(" ");
           self.status = self.status + "; " + details;
           fileDetails.push(JSON.parse(JSON.stringify(file)));
-          if (options.readOptions) {
+          if (file.type && (file.type.indexOf("audio") > -1 || file.type.indexOf("video") > -1 || file.type.indexOf("image") > -1)) {
+            filesToUpload.push(file);
+          } else if (options.readOptions) {
             promisses.push(options.readOptions.readFileFunction.apply(self, [{
               file: file.name,
               start: options.start,
@@ -1569,6 +1769,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
         }
 
+        if (filesToUpload.length > 0) {
+          promisses.push(self.uploadFiles(self.files));
+        }
         self.fileDetails = fileDetails;
 
         Q.allSettled(promisses).then(function(results) {
