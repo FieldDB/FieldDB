@@ -117,11 +117,11 @@ describe("Test AudioVideo", function() {
       var unknownFile = new AudioVideo({
         filename: "test.html"
       });
-      expect(unknownFile.type).toEqual("text/html; charset=UTF-8");
+      expect(unknownFile.type).toEqual("text/html");
       unknownFile = new AudioVideo({
         filename: "test.csv"
       });
-      expect(unknownFile.type).toEqual("text/csv; charset=UTF-8");
+      expect(unknownFile.type).toEqual("text/csv");
       unknownFile = new AudioVideo({
         filename: "test.pdf"
       });
@@ -145,7 +145,7 @@ describe("Test AudioVideo", function() {
       unknownFile = new AudioVideo({
         filename: "test.txt"
       });
-      expect(unknownFile.type).toEqual("text/plain; charset=UTF-8");
+      expect(unknownFile.type).toEqual("text/plain");
       unknownFile = new AudioVideo({
         filename: "test.xml"
       });

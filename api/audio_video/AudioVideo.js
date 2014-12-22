@@ -1,6 +1,6 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var AudioPlayer = require("./AudioPlayer").AudioPlayer;
-var guessContentType = require("guess-content-type");
+var mime = require("browserify-mime");
 /**
  * @class The AudioVideo is a type of FieldDBObject with any additional fields or
  * metadata that a team might use to ground/tag their primary data.
@@ -92,7 +92,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
 
   guessType: {
     value: function(filename) {
-      var guessedType = guessContentType(filename);
+      var guessedType = mime.lookup(filename);
       return guessedType;
     }
   },
