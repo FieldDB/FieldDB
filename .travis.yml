@@ -47,5 +47,5 @@ after_success:
   # on:
   #   branch: master
     - echo $TRAVIS_BRANCH
-    - touch "dist/deployed at `date`"
+    - touch "angular_client/modules/spreadsheet/dist/deployed at `date`"
     - "ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*"
