@@ -1,35 +1,45 @@
-This was the backbone client, where most of the code base was prototyped. 
+This is the common js files which you can read to build new FieldDB clients and to help you test your clients to make sure they are contributing to high quality data using EMELD and DataOne best practices. This code comes from the backbone client, where most of the code base was prototyped. 
 
-It is now on its way to becomming common js files you can read to build new FieldDB clients and to help you test your clients to make sure they are contributing to high quality data using EMELD and DataOne best practices. 
+This code is like compilable documentation, and helps explain how different components of the system work together. For jsdocs, run `$ grunt docs` in the root of the FieldDB repo.
 
-This code is like compilable documentation, and helps explain how different components of the system work together.
 
 You can run this codebase in 3 (or more) ways:
 
-## Chrome Extension  
+## Bower
 
-If you want to load the javascript, put breakpoints and poke around, this is the best way to go. You can modify the source, refresh the browser and you have the new code. To install this app go to chrome://chrome/extensions, check
-'developer mode', then click on 'Load unpacked extensions...' and
-select the subfolder _attachments here.
+You can use the fielddb library in any framework or javascript codebase by running bower install.
 
-If you get a blank black screen, look at the developer console and if it says
+```bash
+$ bower install fielddb --save
+```
 
-Failed to load resource chrome-extension://chpphlmbdnlddgbhiplfpolgfhpadfip/libs/compiled_handlebars.js
+## Angular
 
-you will need to go to the top level folder (above this folder), do
+There are angular directives which were built to use provide UI bindings with this codebase in angular. You can use bower to install it. For usage examples see the readme in the [angular_client/modules/core/README.md](https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular_client/modules/core).
 
-    $ cd FieldDB
-    $ npm install handlebars
-    $ bash scripts/build_templates.sh
+```bash
+$ bower install fielddb-angular --save
+```
+## MontageJS
 
-(you need to do this only once when you first download the codebase, and run build_templates.sh every time you change the handlebars templates)
+You can also use these files indiviually in MontageJS, run bower install and then require only the files you need using require().
 
+```bash
+$ bower install fielddb --save
+```
 
-## CouchApp
+```js
+var FieldDBContextualizer = require("fielddb/api/locales/Contextualizer").Contextualizer;
+...
+```
 
-If you want to test bots or widgets which run in the database you can deploy the app in a couchapp so that it can run online on URL.
-You can use the couchapp_dev folder and the build_debug.sh script, or the couchapp_minified folder, and the build_fielddb_minified.sh script.
 
 ## Node.js
 
 Most of these models are built to be shared by FielDB webservices. details to come.
+
+To use this library in node, use npm
+
+```bash
+$ npm install fielddb
+```

@@ -282,20 +282,9 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     expect(scope.newFieldData).toBeDefined();
   });
 
-  it('should set some audio recording control variables and functions', function() {
-    expect(scope.recordingStatus).toEqual('Record');
-    expect(scope.recordingButtonClass).toEqual('btn btn-success');
-    expect(scope.recordingIcon).toEqual('fa-microphone');
-    expect(scope.showAudioFeatures).toBeFalsy();
-    expect(scope.newRecordHasBeenEdited).toBeFalsy();
-
-    expect(typeof scope.closeAudioWarning).toBe('function');
-    expect(typeof scope.startRecording).toBe('function');
-    expect(typeof scope.stopRecording).toBe('function');
-    expect(typeof scope.uploadFile).toBe('function');
-    expect(typeof scope.deleteAttachmentFromCorpus).toBe('function');
+  it('should not set some audio recording control variables and functions', function() {
+    expect(scope.recordingStatus).toBeUndefined();
   });
-
 
   it('should load preferences again when the $viewContentLoaded TODO try to manage prefs only once in the code', function() {
     expect(scope.scopePreferences.savedState).toBeDefined();
