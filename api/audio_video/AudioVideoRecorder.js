@@ -1,4 +1,4 @@
-/* globals document, window, alert, navigator, FieldDB, Media, FileReader, XMLHttpRequest, FormData */
+/* globals document, window, navigator, FieldDB, Media, FileReader */
 var Q = require("q");
 var RecordMP3 = require("recordmp3js/js/recordmp3");
 
@@ -60,6 +60,23 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
     }
   },
 
+  parent: {
+    get: function() {
+      if (this.recorder) {
+        return this.recorder.parent;
+      } else {
+        return null;
+      }
+    },
+    set: function(parent) {
+      if (!parent || !this.recorder) {
+        console.warn("Cannot set parent on a missing audio recorder, parent was not passed in.");
+        return;
+      }
+      this.recorder.parent = RecordMP3.parent = parent;
+    }
+  },
+
   isPaused: {
     configurable: true,
     get: function() {
@@ -103,35 +120,42 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
   microphoneCheck: {
     value: function() {
-      this.periphialsCheck(false);
+      this.peripheralsCheck(false);
     }
   },
   videoCheck: {
     value: function() {
-      this.periphialsCheck(true);
+      this.peripheralsCheck(true);
     }
   },
-  periphialsCheck: {
+  peripheralsCheck: {
     value: function(withVideo, optionalElements) {
       var application = {},
         deferred = Q.defer(),
         self = this;
 
+      if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+        application = FieldDB.FieldDBObject.application;
+      }
+      var errorInAudioVideoPeripheralsCheck = function(error) {
+        application.videoRecordingVerified = false;
+        application.audioRecordingVerified = false;
+        deferred.reject(error);
+      };
+
       Q.nextTick(function() {
 
-        if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-          application = FieldDB.FieldDBObject.application;
-        }
         var waitUntilVideoElementIsRendered = function() {
           if (!optionalElements) {
             optionalElements = {
               image: document.getElementById("video-snapshot"),
               video: document.getElementById("video-preview"),
+              audio: document.getElementById("audio-preview"),
               canvas: document.getElementById("video-snapshot-canvas"),
             };
           }
           if (!optionalElements.canvas) {
-            console.warn("video-snapshot-canvas is not present, cant verify periphialsCheck");
+            errorInAudioVideoPeripheralsCheck("video-snapshot-canvas is not present, cant verify peripheralsCheck");
             return;
           }
           optionalElements.canvas.width = 640;
@@ -152,6 +176,9 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
               optionalElements.video.src = window.URL.createObjectURL(localMediaStream);
             } else {
               self.type = "audio";
+              optionalElements.audio.removeAttribute("hidden");
+              optionalElements.audio.removeAttribute("class");
+              optionalElements.audio.src = window.URL.createObjectURL(localMediaStream);
             }
 
             var takeSnapshot = function takeSnapshot() {
@@ -167,14 +194,14 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
             // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
             // See crbug.com/110938.
-            optionalElements.video.onloadedmetadata = function(e) {
+            var onmedialoaded = function(e) {
               // Ready to go. Do some stuff.
               console.log("Video preview is working, take note of this in application so user can continue to the game.", e);
               application.videoRecordingVerified = true;
-              if (self.type === "audio") {
-                console.log("Turning of audio feedback since confirmed that the audio works.");
-                delete optionalElements.video.src;
-              }
+              application.audioRecordingVerified = true;
+              console.log("Turning of audio feedback since confirmed that the audio works.");
+              optionalElements.audio.muted = true;
+              optionalElements.video.muted = true;
               navigator.geolocation.getCurrentPosition(function(position) {
                 console.warn("recieved position information");
                 if (FieldDB && FieldDB.FieldDBObject) {
@@ -185,6 +212,11 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
               deferred.resolve("user clicked okay");
             };
+            optionalElements.audio.onloadeddata = onmedialoaded;
+            optionalElements.audio.onloadedmetadata = onmedialoaded;
+            optionalElements.video.onloadeddata = onmedialoaded;
+            optionalElements.video.onloadedmetadata = onmedialoaded;
+
           };
 
           if (application.videoRecordingVerified) {
@@ -202,14 +234,14 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
             navigator.msGetUserMedia;
 
           if (!navigator.getUserMedia) {
-            alert("The Microphone is not supported in your browser");
-            deferred.reject("The microphone is not supported in your browser. " + navigator.userAgent);
+            errorInAudioVideoPeripheralsCheck("The Microphone/Camera is not supported in your browser.");
             return;
           }
 
           var errorCallback = function(e) {
-            console.log("User refused access to camera and microphone!", e);
-            deferred.reject(e);
+            console.warn("Error in peripheralsCheck", e);
+            errorInAudioVideoPeripheralsCheck("User refused access to camera and microphone!", e);
+            return;
           };
 
           navigator.getUserMedia({
@@ -287,23 +319,23 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
    * @param  {DOMElement} element  [description]
    * @return {Promise}          [description]
    */
-  uploadFile: {
+  showFile: {
     configurable: true,
     value: function(recorder, mp3Data, element) {
-      var deferred = Q.defer();
-      // callingContext = this;
+      var deferred = Q.defer(),
+        callingContext = this;
+      console.log("showing file on ", element);
       Q.nextTick(function() {
-        console.log("todo upload recording");
-        // callingContext.status = "Uploading";
+        // callingContext. = "Uploading";
         var reader = new FileReader();
         reader.onload = function(event) {
-          var fd = new FormData();
+          // var fd = new FormData();
           var mp3Name = "audio_recording_" + new Date().getTime() + ".mp3";
-          var xhr = new XMLHttpRequest();
+          // var xhr = new XMLHttpRequest();
           var url = event.target.result;
 
           // Add audio element and download URL to page.
-          var li = document.createElement("li");
+          var showAudioArea = document.createElement("p");
           var au = document.createElement("audio");
           var hf = document.createElement("a");
 
@@ -312,22 +344,31 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
           hf.href = url;
           hf.download = mp3Name;
           hf.innerHTML = mp3Name;
-          li.appendChild(au);
-          li.appendChild(hf);
+          showAudioArea.appendChild(au);
+          showAudioArea.appendChild(hf);
           console.log("todo dont need to append this audio after upload");
-          element.appendChild(li);
 
+          element.appendChild(showAudioArea);
+          callingContext.parent.addFile({
+            filename: mp3Name,
+            description: "Recorded using spreadsheet app",
+            data: url
+          });
           // callingContext.status += "\nmp3name = " + mp3Name;
-          fd.append("fname", encodeURIComponent(mp3Name));
-          fd.append("data", url);
-          xhr.open("POST", "upload.php", true);
-          xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-              // callingContext.status += "\nMP3 uploaded.";
-              recorder.clear();
-            }
-          };
-          xhr.send(fd);
+          // fd.append("filename", encodeURIComponent(mp3Name));
+
+          // xhr.open("POST", new FieldDB.AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances", true);
+          // xhr.onreadystatechange = function(response) {
+          //   console.log(response);
+          //   if (xhr.readyState === 4) {
+          //     // callingContext.status += "\nMP3 uploaded.";
+          //     // recorder.clear();
+
+          //   }
+          //   console.warn("dont clear if upload fialed");
+          // };
+          // xhr.send(fd);
+            recorder.clear();
         };
         reader.readAsDataURL(mp3Data);
 
@@ -340,7 +381,7 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
 
 RecordMP3.workerPath = "bower_components/recordmp3js/";
-RecordMP3.uploadAudio = AudioVideoRecorder.prototype.uploadFile;
+RecordMP3.showFile = AudioVideoRecorder.prototype.showFile;
 try {
   RecordMP3.AudioContext = window.AudioContext;
   RecordMP3.URL = window.URL;

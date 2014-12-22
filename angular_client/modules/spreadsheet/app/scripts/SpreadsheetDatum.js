@@ -5,6 +5,7 @@ console.log("Declaring the SpreadsheetDatum.");
 var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDBDatum, guessedAudioUrl) {
   var j;
 
+  spreadsheetDatum.pouchname = fieldDBDatum.pouchname;
   spreadsheetDatum.id = fieldDBDatum._id;
   spreadsheetDatum.rev = fieldDBDatum._rev;
 
