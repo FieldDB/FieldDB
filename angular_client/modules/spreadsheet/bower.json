@@ -1,6 +1,6 @@
 {
   "name": "spreadsheet",
-  "version": "2.32.0",
+  "version": "2.35.0",
   "authors": [
     "info@fielddb.org"
   ],
@@ -44,6 +44,7 @@
   "appPath": "app",
   "resolutions": {
     "bootstrap": "~2.3.2",
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "font-awesome": "~4.2.0"
   }
 }
