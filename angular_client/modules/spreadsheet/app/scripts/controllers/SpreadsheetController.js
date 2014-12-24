@@ -713,8 +713,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   $scope.loginUser = function(auth, chosenServer) {
-    $scope.$broadcast("fieldAudiofillByBrowser:update");
-
     if (chosenServer) {
       auth.server = chosenServer;
     }
