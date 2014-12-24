@@ -35,7 +35,8 @@
     "font-awesome": "~4.2.0",
     "angular-bootstrap": "0.8.0",
     "recordmp3js": "~0.3.0",
-    "sjcl": "~1.0.0"
+    "sjcl": "~1.0.0",
+    "autofill-event": "~1.0.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.26",
