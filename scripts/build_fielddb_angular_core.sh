@@ -7,4 +7,5 @@ bower install || exit 1;
 echo "Using local fielddb commonjs";
 rm app/bower_components/fielddb/fielddb.js;
 ln -s $CURRENTDIR/fielddb.js $CURRENTDIR/angular_client/modules/core/app/bower_components/fielddb/fielddb.js;
+ls -al $CURRENTDIR/angular_client/modules/core/app/bower_components/fielddb/
 grunt

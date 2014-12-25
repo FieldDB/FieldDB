@@ -69,6 +69,10 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
     $scope.login = function(loginDetails) {
       $scope.isContactingServer = true;
       $scope.application.authentication.error = "";
+      if (!FieldDB || !FieldDB.Database) {
+        console.warn("Authentication is handled by FieldDB, whcih is not currently loaded");
+        return;
+      }
       FieldDB.Database.prototype.login(loginDetails).then(function(user) {
         console.log("User has been downloaded. ", user);
         user = new FieldDB.User(user);
@@ -91,6 +95,10 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
 
     $scope.logout = function() {
       $scope.application.authentication.error = "";
+      if (!FieldDB || !FieldDB.Database) {
+        console.warn("Authentication is handled by FieldDB, whcih is not currently loaded");
+        return;
+      }
       FieldDB.Database.prototype.logout().then(function(serverReply) {
         console.log("User has been logged out. ", serverReply);
         $scope.application.authentication = {
@@ -119,6 +127,10 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
       //   console.log("User cant resume authentication session, corpus is not defined ");
       //   return;
       // }
+      if (!FieldDB || !FieldDB.Database) {
+        console.warn("Authentication is handled by FieldDB, whcih is not currently loaded");
+        return;
+      }
       FieldDB.Database.prototype.resumeAuthenticationSession().then(function(sessionInfo) {
         $scope.application.debug(sessionInfo);
         if (sessionInfo.ok && sessionInfo.userCtx.name) {

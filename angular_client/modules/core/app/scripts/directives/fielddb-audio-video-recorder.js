@@ -1,3 +1,4 @@
+/* globals FieldDB */
 "use strict";
 
 /**
@@ -91,11 +92,14 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
           return;
         }
         newAudioFile.dbname = $scope.parent.pouchname;
-        var audioVideoImageOrOtherFile = new FieldDB.AudioVideo(newAudioFile).toJSON();
-        delete audioVideoImageOrOtherFile.data;
-
-        $scope.importer.corpus = FieldDB.FieldDBObject.application.corpus;
-        $scope.importer.uploadFiles(newAudioFile.data);
+        if (FieldDB && FieldDB.AudioVideo) {
+          var audioVideoImageOrOtherFile = new FieldDB.AudioVideo(newAudioFile).toJSON();
+          delete audioVideoImageOrOtherFile.data;
+        }
+        if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.corpus) {
+          $scope.importer.corpus = FieldDB.FieldDBObject.application.corpus;
+          $scope.importer.uploadFiles(newAudioFile.data);
+        }
 
         // if (audioVideoImageOrOtherFile.type.indexOf("audio") === 0) {
         //   $scope.parent.audioVideo.add(audioVideoImageOrOtherFile);
