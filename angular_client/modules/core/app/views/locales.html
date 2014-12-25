@@ -1,6 +1,8 @@
-<label hidden>Locale Chooser</label>
-{{locales.currentLocale.iso}}
-<select class=" btn btn-inverse" ng-model="locales.currentLocale" ng-options="locale.iso for locale in locales.availableLanguages._collection">
+<span ng-hide="showFullView">
+  {{locales.currentLocale.iso}}
+</span>
+<label ng-show="showFullView">Change the user interface language:</label>
+<select class=" btn btn-inverse" ng-model="locales.currentLocale" ng-options="locale[localeKeyToShow] for locale in locales.availableLanguages._collection">
 </select>
 <select class="hide btn btn-default" ng-model="application.authentication.user.prefs.preferedDashboardType" title="Which kind of dashboard defaults would you like to use view this corpus?">
   <option value="experimenterNormalUser">Experiment Administrator (basic)</option>
@@ -12,6 +14,9 @@
   <option value="languageLearnerImmersionUser">Language Learner (immersion)</option>
   <option value="translatorNormalUser">Translator</option>
 </select>
+<div ng-show="showFullView">
+  Current Locale: {{locales.currentLocale.nativeName}} - {{locales.currentLocale.name}}
+</div>
 <div hidden>
   Locale Settings Popup too
 </div>
