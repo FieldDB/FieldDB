@@ -1,9 +1,15 @@
-/* globals  window */
+/* globals  window, FieldDB */
 'use strict';
 console.log("Declaring the SpreadsheetPrivateServices.");
 
 angular.module('spreadsheetApp')
   .factory('Servers', function() {
+
+    if (FieldDB && FieldDB.Database) {
+      FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.example.org";
+      FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.example.org";
+      FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.example.org";
+    }
 
     var localhost = false;
     if (window.location.host.indexOf("example.org") === -1) {
@@ -62,8 +68,9 @@ angular.module('spreadsheetApp')
       },
 
       'getHumanFriendlyLabels': function() {
-        var serverCodeMappings = [];
+        var serverCodeMappings = {};
         for (var server in servers) {
+          console.log("Looking at ", server);
           serverCodeMappings[servers[server].serverCode] = servers[server].userFriendlyServerName;
         }
         return serverCodeMappings;
