@@ -5,11 +5,7 @@ console.log("Declaring the SpreadsheetPrivateServices.");
 angular.module('spreadsheetApp')
   .factory('Servers', function() {
 
-    if (FieldDB && FieldDB.Database) {
-      FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.example.org";
-      FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.example.org";
-      FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.example.org";
-    }
+
 
     var localhost = false;
     if (window.location.host.indexOf("example.org") === -1) {
@@ -46,6 +42,18 @@ angular.module('spreadsheetApp')
         serverInfo = servers[label];
         if (!serverInfo) {
           throw "Request for an invalid server: " + label;
+        }
+
+        if (FieldDB && FieldDB.Database) {
+          if ("localhost" === label) {
+            FieldDB.Database.prototype.BASE_DB_URL = "https://localhost:6984";
+            FieldDB.Database.prototype.BASE_AUTH_URL = "https://localhost:3181";
+            FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://localhost:3184";
+          } else {
+            FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.example.org";
+            FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.example.org";
+            FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.example.org";
+          }
         }
 
         if (serviceType === "auth" || "corpus") {
