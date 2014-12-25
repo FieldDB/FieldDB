@@ -10,13 +10,30 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
  * Controller of the spreadsheetApp
  */
 
-var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log) {
+var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
   var debugging = false;
   if (debugging) {
-    console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log);
+    console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http);
   }
 
+  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+    $scope.contextualize = FieldDB.FieldDBObject.application.contextualize;
+    if ($scope.contextualize("locale_faq") === "FAQ") {
+      console.log("Locales already loaded.");
+    } else {
+      $http.get("locales/en/messages.json").then(function(result) {
+        var locales = result.data;
+        console.log("Retrieving english localization", locales);
+        FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("en", locales);
+      });
+      $http.get("locales/es/messages.json").then(function(result) {
+        var locales = result.data;
+        console.log("Retrieving english localization", locales);
+        FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("es", locales);
+      });
+    }
+  }
 
   $rootScope.appVersion = "2.35.0ss";
 
@@ -2463,5 +2480,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 };
-SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log'];
+SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http'];
 angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);
