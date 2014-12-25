@@ -18,19 +18,41 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-    $scope.contextualize = FieldDB.FieldDBObject.application.contextualize;
-    if ($scope.contextualize("locale_faq") === "FAQ") {
+    $rootScope.contextualize = function(message) {
+      if (!FieldDB.FieldDBObject.application.contextualizer || !FieldDB.FieldDBObject.application.contextualizer.data) {
+        return message;
+      }
+      var result = FieldDB.FieldDBObject.application.contextualize(message);
+      // if (!$scope.$$phase) {
+      //   $scope.$digest(); //$digest or $apply
+      // }
+      return result;
+    };
+
+    $rootScope.locales = $rootScope.locales || {};
+    if ($rootScope.contextualize("locale_faq") === "FAQ") {
       console.log("Locales already loaded.");
     } else {
       $http.get("locales/en/messages.json").then(function(result) {
         var locales = result.data;
         console.log("Retrieving english localization", locales);
         FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("en", locales);
+        /* jshint camelcase: false */
+        // $rootScope.locales.locale_settings = $rootScope.contextualize("locale_settings");
       });
       $http.get("locales/es/messages.json").then(function(result) {
         var locales = result.data;
-        console.log("Retrieving english localization", locales);
+        console.log("Retrieving spanish localization", locales);
         FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("es", locales);
+        /* jshint camelcase: false */
+        // $rootScope.locales.locale_settings = $rootScope.contextualize("locale_settings");
+      });
+      $http.get("locales/fr/messages.json").then(function(result) {
+        var locales = result.data;
+        console.log("Retrieving french localization", locales);
+        FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("fr", locales);
+        /* jshint camelcase: false */
+        // $rootScope.locales.locale_settings = $rootScope.contextualize("locale_settings");
       });
     }
   }
