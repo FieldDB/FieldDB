@@ -367,7 +367,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   window.defaultPreferences = defaultPreferences;
 
   $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
-    if (!incomingFields) {
+    if (!incomingFields || !$rootScope.DB) {
       return {};
     }
     if (!numberOfColumns) {
@@ -389,7 +389,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       fields = incomingFields;
     }
-    var columnHeight = Math.ceil(fields.length / numberOfColumns);
+    var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || Math.ceil(fields.length / numberOfColumns);
     var columns = {};
 
     if (numberOfColumns === 1) {
@@ -487,7 +487,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       updatedPreferences.fullTemplateDefaultNumberOfColumns = 2;
     }
     $rootScope.fullTemplateDefaultNumberOfColumns = updatedPreferences.fullTemplateDefaultNumberOfColumns;
-
+    if (!existingPreferences.fullTemplateDefaultNumberOfFieldsPerColumn) {
+      updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn = 3;
+    }
+    $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn;
     // If this is the mcgillOnly deploy, overwrite the user's data entry view
     if ($rootScope.mcgillOnly) {
       updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
@@ -852,22 +855,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   corpus.pouchname = scopeDBs[index];
                   corpus.title = scopeDBs[index];
                 }
+                corpus.gravatar = md5.createHash(corpus.pouchname);
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
                 if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
-                  $rootScope.DB = corpus;
-                  $scope.setTemplateUsingCorpusPreferedTemplate(corpus);
-                  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-                    if (!FieldDB.FieldDBObject.application.corpus) {
-                      FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(corpus);
-                    } else {
-                      if (FieldDB.FieldDBObject.application.corpus.dbname !== corpus.pouchname) {
-                        console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + corpus.pouchname);
-                        FieldDB.FieldDBObject.application.corpus = corpus;
-                      }
-                    }
-                  }
+                  $scope.selectDB(corpus);
                 }
-                corpus.gravatar = md5.createHash(corpus.pouchname);
                 $scope.corpora.push(corpus);
               }, function(error) {
                 console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error);
@@ -904,40 +896,65 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       //$rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
 
     } else if (corpus.preferredTemplate) {
-      var fieldsForTemplate = {};
-      if (window.defaultPreferences[corpus.preferredTemplate]) {
+      var fieldsForTemplate = corpus.datumFields._collection;
+      if (corpus.preferredTemplate !== "fulltemplate" && window.defaultPreferences[corpus.preferredTemplate]) {
         fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
       }
       $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
     }
   };
 
-  $scope.selectDB = function(selectedDB) {
-    if (!selectedDB) {
+  $scope.selectDB = function(selectedCorpus) {
+    if (!selectedCorpus) {
       $rootScope.notificationMessage = "Please select a database.";
       $rootScope.openNotification();
-    } else {
-      try {
-        selectedDB = JSON.parse(selectedDB);
-      } catch (e) {
-        console.log("must have been an object...", e, selectedDB);
+      return;
+    }
+    if (FieldDB && FieldDB.Corpus) {
+      if (!(selectedCorpus instanceof FieldDB.Corpus)) {
+        try {
+          selectedCorpus = JSON.parse(selectedCorpus);
+        } catch (e) {
+          console.log("must have been an object...", e, selectedCorpus);
+        }
+        if (!selectedCorpus.datumFields) {
+          $rootScope.DB = new FieldDB.Corpus(selectedCorpus.pouchname);
+          $rootScope.DB.loadOrCreateCorpusByPouchName(selectedCorpus.pouchname).then(function(results) {
+            console.log("loaded the corpus", results);
+            $scope.selectDB($rootScope.DB);
+          });
+          return;
+        } else {
+          selectedCorpus = new FieldDB.Corpus(selectedCorpus);
+        }
       }
-      $rootScope.DB = selectedDB;
-      $rootScope.availableFieldsInCurrentCorpus = selectedDB.datumFields;
-      if (!$rootScope.availableFieldsInCurrentCorpus) {
-        $rootScope.availableFieldsInCurrentCorpus = [];
+    }
+    $rootScope.DB = selectedCorpus;
+    $rootScope.availableFieldsInCurrentCorpus = selectedCorpus.datumFields._collection;
+
+    // Update saved state in Preferences
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedCorpus.pouchname;
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+
+    $scope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
+
+    $scope.loadSessions();
+    $scope.loadUsersAndRoles();
+
+
+    console.log("setting current corpus details: " + $rootScope.DB);
+    $scope.availableFields = $rootScope.DB.datumFields._collection;
+
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+      if (!FieldDB.FieldDBObject.application.corpus) {
+        FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
+      } else {
+        if (FieldDB.FieldDBObject.application.corpus.dbname !== selectedCorpus.dbname) {
+          console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedCorpus.dbname);
+          FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
+        }
       }
-
-      // Update saved state in Preferences
-      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-      $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-
-      $scope.setTemplateUsingCorpusPreferedTemplate(selectedDB);
-
-      $scope.loadSessions();
-      $scope.loadUsersAndRoles();
-
     }
   };
 
@@ -2419,28 +2436,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
         if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
           /* load details for the most receent database */
-          if (FieldDB && FieldDB.Corpus) {
-            $rootScope.DB = new FieldDB.Corpus($scope.scopePreferences.savedState.mostRecentCorpusPouchname);
-            $rootScope.DB.loadOrCreateCorpusByPouchName($scope.scopePreferences.savedState.mostRecentCorpusPouchname).then(function(results) {
-              console.log("fetched corpus details: " + results.dbname);
+          $scope.selectDB({
+            pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
+          });
 
-              if (FieldDB.FieldDBObject.application) {
-                if (!FieldDB.FieldDBObject.application.corpus) {
-                  FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
-                } else {
-                  if (FieldDB.FieldDBObject.application.corpus.dbname !== results.dbname) {
-                    console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + results.dbname);
-                    FieldDB.FieldDBObject.application.corpus = $rootScope.DB;
-                  }
-                }
-              }
-
-            });
-          } else {
-            $rootScope.DB = {
-              pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
-            };
-          }
           if ($scope.scopePreferences.savedState.sessionID) {
             // Load all sessions and go to current session
             $scope.loadSessions($scope.scopePreferences.savedState.sessionID);
