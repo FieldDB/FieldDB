@@ -14,9 +14,11 @@
   <option value="languageLearnerImmersionUser">Language Learner (immersion)</option>
   <option value="translatorNormalUser">Translator</option>
 </select>
-<div ng-show="showFullView">
+<p ng-show="showFullView">
   Current Locale: {{locales.currentLocale.nativeName}} - {{locales.currentLocale.name}}
-</div>
+  <br/>
+  <button class="btn btn-primary" ng-click="clearLocalizerUserPreferences()">Reset to defaults</button>
+</p>
 <div hidden>
   Locale Settings Popup too
 </div>

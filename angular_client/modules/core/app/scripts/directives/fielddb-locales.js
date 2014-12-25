@@ -29,6 +29,10 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
       $scope.locales.userOverridenLocalePreference = currentLocale;
     };
 
+    $scope.clearLocalizerUserPreferences = function(){
+      $scope.locales.userOverridenLocalePreference = null;
+    };
+
   };
   controller.$inject = ["$scope", "$timeout"];
 
