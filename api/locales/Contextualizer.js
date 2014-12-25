@@ -1,4 +1,4 @@
-/* globals window, localStorage */
+/* globals window, localStorage, navigator */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var ELanguages = require("./ELanguages").ELanguages;
 var CORS = require("./../CORS").CORS;
@@ -52,6 +52,10 @@ var Contextualizer = function Contextualizer(options) {
   }
   if (this.userOverridenLocalePreference) {
     this.currentLocale = this.userOverridenLocalePreference;
+  } else {
+    if (navigator.languages[0].indexOf(this.currentLocale.iso) === -1) {
+      this.currentLocale = navigator.languages[0];
+    }
   }
   return this;
 };
