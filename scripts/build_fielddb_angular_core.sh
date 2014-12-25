@@ -1,5 +1,5 @@
 #!/bin/bash
-CURRENTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../"
+CURRENTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
 cd angular_client/modules/core &&
 npm install || exit 1;
