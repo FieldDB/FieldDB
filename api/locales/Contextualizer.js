@@ -53,8 +53,12 @@ var Contextualizer = function Contextualizer(options) {
   if (this.userOverridenLocalePreference) {
     this.currentLocale = this.userOverridenLocalePreference;
   } else {
-    if (navigator.languages[0].indexOf(this.currentLocale.iso) === -1) {
-      this.currentLocale = navigator.languages[0];
+    try {
+      if (navigator.languages[0].indexOf(this.currentLocale.iso) === -1) {
+        this.currentLocale = navigator.languages[0];
+      }
+    } catch (e) {
+      console.log("not using hte browser's language", e);
     }
   }
   return this;
