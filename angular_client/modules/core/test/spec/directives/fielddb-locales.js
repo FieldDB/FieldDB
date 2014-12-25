@@ -1,6 +1,6 @@
 /* globals FieldDB, localStorage */
 "use strict";
-var debugMode = true;
+var debugMode = false;
 localStorage.setItem("_userOverridenLocalePreference", JSON.stringify({
   iso: "ka"
 }));

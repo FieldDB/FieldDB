@@ -1,5 +1,5 @@
 "use strict";
-var debug = false;
+var debugMode = false;
 
 describe("Directive: fielddb-search", function() {
 
@@ -14,7 +14,7 @@ describe("Directive: fielddb-search", function() {
     compileFunction = $compile(el);
     // bring html from templateCache
     scope.$digest();
-    if (debug) {
+    if (debugMode) {
       console.log("post compile", el.html()); // <== html here has {{}}
     }
   }));
@@ -25,7 +25,7 @@ describe("Directive: fielddb-search", function() {
     inject(function() {
       compileFunction(scope); // <== the html {{}} are bound
       scope.$digest(); // <== digest to get the render to show the bound values
-      if (debug) {
+      if (debugMode) {
         console.log("post link", el.html());
         console.log("scope search ", scope.search);
       }
