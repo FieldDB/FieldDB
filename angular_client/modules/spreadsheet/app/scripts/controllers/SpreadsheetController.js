@@ -682,7 +682,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         // });
 
         $scope.allData = scopeData;
-        $scope.data = scopeData.slice(0, $rootScope.resultSize);
+        var resultSize = $rootScope.resultSize;
+        if (resultSize === "all") {
+          resultSize = $scope.allData.length;
+        }
+        $scope.data = scopeData.slice(0, resultSize);
         $rootScope.currentPage = 0;
 
         $scope.loadAutoGlosserRules();
@@ -1733,7 +1737,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (newScopeData.length > 0) {
       $scope.allData = newScopeData;
-      $scope.data = $scope.allData.slice(0, $rootScope.resultSize);
+      var resultSize = $rootScope.resultSize;
+      if (resultSize === "all") {
+        resultSize = $scope.allData.length;
+      }
+      $scope.data = $scope.allData.slice(0, resultSize);
     } else {
       $rootScope.notificationMessage = "No records matched your search.";
       $rootScope.openNotification();
@@ -2184,15 +2192,23 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!numberOfRecords) {
       return 0;
     }
-    var numberOfPages = Math.ceil(numberOfRecords / $rootScope.resultSize);
+    var resultSize = $rootScope.resultSize;
+    if (resultSize === "all") {
+      resultSize = $scope.allData.length;
+    }
+    var numberOfPages = Math.ceil(numberOfRecords / resultSize);
     // console.log("requesting numberOfResultPages" + numberOfPages);
     return numberOfPages;
   };
 
   $scope.loadPaginatedData = function(why) {
     console.log("Loading paginated data ", why);
-    var lastRecordOnPage = (($rootScope.currentPage + 1) * $rootScope.resultSize);
-    var firstRecordOnPage = lastRecordOnPage - $rootScope.resultSize;
+    var resultSize = $rootScope.resultSize;
+    if (resultSize === "all") {
+      resultSize = $scope.allData.length;
+    }
+    var lastRecordOnPage = (($rootScope.currentPage + 1) * resultSize);
+    var firstRecordOnPage = lastRecordOnPage - resultSize;
 
     if ($scope.allData) {
       $scope.data = $scope.allData.slice(firstRecordOnPage, lastRecordOnPage);
