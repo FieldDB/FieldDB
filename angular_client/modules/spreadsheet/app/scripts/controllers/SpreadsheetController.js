@@ -16,6 +16,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   if (debugging) {
     console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http);
   }
+  $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = null;
+
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $rootScope.contextualize = function(message) {
@@ -366,6 +368,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   //TODO move the default preferences somewher the SettingsController can access them. for now here is a hack for #1290
   window.defaultPreferences = defaultPreferences;
 
+
   $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
     if (!incomingFields || !$rootScope.DB) {
       return {};
@@ -393,14 +396,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var columns = {};
 
     if (numberOfColumns === 1) {
-      columns.first = fields;
+      columns.first = fields.slice(1, columnHeight + 1);
     } else if (numberOfColumns === 2) {
-      columns.first = fields.slice(0, columnHeight);
-      columns.second = fields.slice(columnHeight, fields.length);
+      columns.first = fields.slice(1, columnHeight + 1);
+      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
     } else if (numberOfColumns === 3) {
-      columns.first = fields.slice(0, columnHeight);
-      columns.second = fields.slice(columnHeight, columnHeight * 2);
-      columns.third = fields.slice(columnHeight * 2, fields.length);
+      columns.first = fields.slice(1, columnHeight + 1);
+      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
+      columns.third = fields.slice(columnHeight * 2 + 1, columnHeight * 3 + 1);
     }
     return columns;
   };
@@ -484,11 +487,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     /* set the number of columns to use  to 2.23+ */
     if (!existingPreferences.fullTemplateDefaultNumberOfColumns) {
-      updatedPreferences.fullTemplateDefaultNumberOfColumns = 2;
+      updatedPreferences.fullTemplateDefaultNumberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
     }
     $rootScope.fullTemplateDefaultNumberOfColumns = updatedPreferences.fullTemplateDefaultNumberOfColumns;
     if (!existingPreferences.fullTemplateDefaultNumberOfFieldsPerColumn) {
-      updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn = 3;
+      updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || 3;
     }
     $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn;
     // If this is the mcgillOnly deploy, overwrite the user's data entry view
@@ -509,9 +512,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Set scope variables
   $scope.documentReady = false;
   $rootScope.templateId = $scope.scopePreferences.userChosenTemplateId;
-  $rootScope.fields = $scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
-  $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId]);
-  $rootScope.availableFields = defaultPreferences.availableFields;
+  $rootScope.fields = []; //$scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
+  $rootScope.fieldsInColumns = {}; //$rootScope.getAvailableFieldsInColumns($scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId]);
+  $rootScope.availableFields = []; //defaultPreferences.availableFields;
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
   $scope.reverse = true;
@@ -889,14 +892,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.reloadPage();
   };
 
-  $scope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
+  $rootScope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
     // If the currently choosen corpus has a default template, overwrite the user's preferences
     if ($rootScope.mcgillOnly) {
       console.warn("not using the databases' preferredTemplate, this is the mcgill dashboard");
       //$rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
 
     } else if (corpus.preferredTemplate) {
-      var fieldsForTemplate = corpus.datumFields._collection;
+      var fieldsForTemplate = $rootScope.availableFieldsInCurrentCorpus;
       if (corpus.preferredTemplate !== "fulltemplate" && window.defaultPreferences[corpus.preferredTemplate]) {
         fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
       }
@@ -910,6 +913,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openNotification();
       return;
     }
+    if (typeof selectedCorpus === "string") {
+      selectedCorpus = {
+        pouchname: selectedCorpus
+      };
+    }
+
     if (FieldDB && FieldDB.Corpus) {
       if (!(selectedCorpus instanceof FieldDB.Corpus)) {
         try {
@@ -917,8 +926,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         } catch (e) {
           console.log("must have been an object...", e, selectedCorpus);
         }
+        if ($rootScope.DB instanceof FieldDB.Corpus && selectedCorpus.pouchname === $rootScope.DB.pouchname) {
+          console.log("requested load of a corpus which was already loaded.");
+          return;
+        }
+
         if (!selectedCorpus.datumFields) {
-          $rootScope.DB = new FieldDB.Corpus(selectedCorpus.pouchname);
+          $rootScope.DB = new FieldDB.Corpus();
           $rootScope.DB.loadOrCreateCorpusByPouchName(selectedCorpus.pouchname).then(function(results) {
             console.log("loaded the corpus", results);
             $scope.selectDB($rootScope.DB);
@@ -937,7 +951,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedCorpus.pouchname;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
-    $scope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
+    $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
 
     $scope.loadSessions();
     $scope.loadUsersAndRoles();

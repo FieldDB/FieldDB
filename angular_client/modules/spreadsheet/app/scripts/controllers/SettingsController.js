@@ -31,7 +31,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   todo("$scope.appReloaded is true, loading the SettingsController completely");
 
 
-  $scope.removeFieldFromCorpus=function(field){
+  $scope.removeFieldFromCorpus = function(field) {
     console.log("TODO remove the field.", field);
   };
 
@@ -165,7 +165,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
 
 
-  $scope.saveNewPreferences = function(templateId, newFieldPreferences) {
+  $scope.saveNewPreferences = function(templateId, newFieldPreferences, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn) {
     if ($rootScope.DB && $rootScope.DB.preferredTemplate && $rootScope.DB.preferredTemplate !== templateId) {
       window.alert("Sorry, you can't use a different template. Your team has decided to use the " + $rootScope.DB.preferredTemplate + " for " + $rootScope.DB.title);
       return;
@@ -188,12 +188,19 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
         }
       }
     }
-
+    if (fullTemplateDefaultNumberOfColumns) {
+      Preferences.fullTemplateDefaultNumberOfColumns = fullTemplateDefaultNumberOfColumns;
+    }
+    if (fullTemplateDefaultNumberOfFieldsPerColumn) {
+      Preferences.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
+      $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
+    }
     Preferences.userChosenTemplateId = templateId;
     $scope.scopePreferences = Preferences;
     $rootScope.templateId = Preferences.userChosenTemplateId;
-    $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
+    $rootScope.setTemplateUsingCorpusPreferedTemplate($rootScope.DB);
+    // $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
+    // $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
 
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     window.alert("Settings saved.");
