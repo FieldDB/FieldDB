@@ -67,6 +67,29 @@ describe("Contextualizer", function() {
       });
     });
 
+    it("should remember the user specified locale", function() {
+      var userChoseFrenchLocale = new Contextualizer();
+      userChoseFrenchLocale.currentLocale = {
+        iso: "fr",
+        name: "French"
+      };
+      userChoseFrenchLocale.userOverridenLocalePreference = userChoseFrenchLocale.currentLocale;
+      expect(userChoseFrenchLocale.currentLocale).toEqual({
+        iso: "fr",
+        name: "French"
+      });
+
+      // var nextLoadOfLocale = new Contextualizer();
+      // expect(nextLoadOfLocale.currentLocale).toEqual({
+      //   iso: "en"
+      // });
+      // nextLoadOfLocale.currentLocale = nextLoadOfLocale.userOverridenLocalePreference;
+      expect(userChoseFrenchLocale.currentLocale).toEqual({
+        iso: "fr",
+        name: "French"
+      });
+
+    });
   });
 
 

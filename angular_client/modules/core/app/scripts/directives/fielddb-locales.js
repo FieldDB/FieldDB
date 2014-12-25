@@ -24,6 +24,11 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
         console.warn("locales is not available on the scope. ");
       }
     }, 1000);
+
+    $scope.persistUsersChosenLocale = function(currentLocale) {
+      $scope.locales.userOverridenLocalePreference = currentLocale;
+    };
+
   };
   controller.$inject = ["$scope", "$timeout"];
 

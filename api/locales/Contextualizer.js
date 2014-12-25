@@ -1,4 +1,4 @@
-/* globals window */
+/* globals window, localStorage */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var ELanguages = require("./ELanguages").ELanguages;
 var CORS = require("./../CORS").CORS;
@@ -19,9 +19,9 @@ var elanguages = require("./elanguages.json");
  * @constructs
  */
 var Contextualizer = function Contextualizer(options) {
-  if(!this._fieldDBtype){
-		this._fieldDBtype = "Contextualizer";
-	}
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Contextualizer";
+  }
   this.debug("Constructing Contextualizer ", options);
   // this.debugMode = true;
   var localArguments = arguments;
@@ -49,6 +49,9 @@ var Contextualizer = function Contextualizer(options) {
   if (!options || options.alwaysConfirmOkay === undefined) {
     this.warn("By default it will be okay for users to modify global locale strings. IF they are saved this will affect other users.");
     this.alwaysConfirmOkay = true;
+  }
+  if (this.userOverridenLocalePreference) {
+    this.currentLocale = this.userOverridenLocalePreference;
   }
   return this;
 };
@@ -105,6 +108,39 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 
       this.warn("SETTING LOCALE FROM " + this._currentLocale + " to " + value, this.data);
       this._currentLocale = value;
+    }
+  },
+
+  userOverridenLocalePreference: {
+    get: function() {
+      var userOverridenLocalePreference;
+      try {
+        userOverridenLocalePreference = JSON.parse(localStorage.getItem("_userOverridenLocalePreference"));
+      } catch (e) {
+        this.warn("Localstorage is not available, using the object there will be no persistance across loads", e, this._userOverridenLocalePreference);
+        userOverridenLocalePreference = this._userOverridenLocalePreference;
+      }
+      if (!userOverridenLocalePreference) {
+        return;
+      }
+      return userOverridenLocalePreference;
+    },
+    set: function(value) {
+      if (value) {
+        try {
+          localStorage.setItem("_userOverridenLocalePreference", JSON.stringify(value));
+        } catch (e) {
+          this._userOverridenLocalePreference = value;
+          this.debug("Localstorage is not available, using the object there will be no persistance across loads", e, this._userOverridenLocalePreference);
+        }
+      } else {
+        try {
+          localStorage.removeItem("_userOverridenLocalePreference");
+        } catch (e) {
+          this.debug("Localstorage is not available, using the object there will be no persistance across loads", e, this._userOverridenLocalePreference);
+          delete this._userOverridenLocalePreference;
+        }
+      }
     }
   },
 
