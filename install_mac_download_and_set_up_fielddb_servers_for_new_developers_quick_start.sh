@@ -107,8 +107,8 @@ which bower || {
 }
 
 npm install
-echo " Running jshint, tests and building core"
-grunt
+echo " Running jshint, tests and building core and setting up symblic links"
+grunt travis
 
 echo " Generating js docs so you can browse the documentation "
 grunt docs
