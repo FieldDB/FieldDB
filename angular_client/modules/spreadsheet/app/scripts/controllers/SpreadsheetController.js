@@ -33,6 +33,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($rootScope.contextualize("locale_faq") === "FAQ") {
       console.log("Locales already loaded.");
     } else {
+      FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("ka", {
+        "locale_settings": {
+          "message": "პარამეტრები"
+        }
+      });
+
       $http.get("locales/en/messages.json").then(function(result) {
         var locales = result.data;
         console.log("Retrieving english localization", locales);
