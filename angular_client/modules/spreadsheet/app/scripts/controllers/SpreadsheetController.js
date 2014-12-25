@@ -405,7 +405,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $rootScope.mcgillOnly = true;
+  $rootScope.mcgillOnly = false;
+  if (window.location.origin.indexOf("mcgill") > -1) {
+    $rootScope.mcgillOnly = true;
+  }
   var overwiteAndUpdatePreferencesToCurrentVersion = function() {
 
     var existingPreferences = localStorage.getItem('SpreadsheetPreferences');
