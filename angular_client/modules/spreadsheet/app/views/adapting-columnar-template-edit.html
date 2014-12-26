@@ -15,7 +15,7 @@
   <div class="span2 entered_modified_info">
     <span ng-show="searching==true">
       <button class="btn btn-primary" ng-click="selectNone()">
-        Done
+        {{locale_done_button}}
       </button>
       <br />
       <br />
@@ -54,7 +54,7 @@
 <div class="row" ng-show="expandCollapse==true && !datum.id">
   <div class="span10 offset1 pagination-centered">
     <b>
-      You must 'Save' your changes to have access to the audio, comment, and delete features of this record.
+      {{locale_must_save_changes_message}}
     </b>
   </div>
 </div>
@@ -81,7 +81,7 @@
         <button ng-show="commentPermissions==true" class="btn btn-primary" ng-click="addComment(datum);" >
           <i class="fa whiteicon fa-comment">
           </i>
-          Add Comment
+          {{locale_add_comment_button}}
         </button>
       </div>
     </div>
@@ -105,7 +105,7 @@
           <button class="btn btn-primary" ng-click="uploadFile(datum);" >
             <i class="fa whiteicon fa-file">
             </i>
-            Upload File(s)
+            {{locale_upload_files_button}}
           </button>
           &nbsp;&nbsp;
         </form>
@@ -137,7 +137,7 @@
               <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' />
               &nbsp;
               <button hidden class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)"  >
-                Save Description
+                {{locale_save_description_button}}
               </button>
             </span>
           </td>
@@ -153,7 +153,7 @@
       <button  class="btn btn-inverse" type="button" ng-click="deleteRecord(datum)" >
         <i class="fa fa-trash-o">
         </i>
-        Delete This Record
+        {{locale_delete_this_record_button}}
       </button>
     </div>
   </div>

@@ -323,7 +323,7 @@
         "message": "Writers",
         "description": "title for the writer list"
     },
-    "locale_not_for_chrome_message": {
+    "locale_for_chrome_message": {
         "message": "THIS SITE WAS DEVELOPED FOR CHROME.",
         "description": "warning if user's browser isn't chrome"
     },
@@ -340,7 +340,7 @@
         "description": "button opens Contact Us/Bug Report form"
     },
     "locale_loaded": {
-        "message": "loaded",
+        "message": "loaded.",
         "description": "message indicating which corpus is loaded"
     },
     "locale_select_create_session": {
@@ -653,6 +653,26 @@
     },
     "locale_save_button": {
         "message": "Save",
+        "description": " "
+    },
+    "locale_commenters": {
+        "message": "Commenters",
+        "description": "Title for the commenter list "
+    },
+    "locale_fields_in": {
+        "message": "Fields in ",
+        "description": "corpus settings selection header "
+    },
+    "locale_wp_gloss": {
+        "message": "WordPress Gloss ",
+        "description": "searh result showing as wp gloss in export modal "
+    },
+    "locale_as": {
+        "message": "As ",
+        "description": "search resutl showing as ... in export modal "
+    },
+    "locale_new_session_for": {
+        "message": "New session for ",
         "description": " "
     }
 }

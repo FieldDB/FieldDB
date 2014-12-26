@@ -1,10 +1,7 @@
 <div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined && writePermissions==true">
   <div class="span12 pagination-centered">
     <h2>
-      Please select a
-      <i class="fa fa-calendar">
-      </i>
-      session before entering data.
+      {{locale_select_session_message}}
     </h2>
   </div>
 </div>
@@ -15,8 +12,6 @@
 </div>
 <div class="row" ng-show="data==undefined && loading!=true">
   <div class="span12 pagination-centered">
-    No data to display. Please click on
-    <img src="images/icon16_dev.png" border="0" />
-    above and log in.
+    {{locale_no_data_message}}
   </div>
 </div>
