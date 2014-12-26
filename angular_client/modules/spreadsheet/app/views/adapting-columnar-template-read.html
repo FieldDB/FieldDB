@@ -7,12 +7,12 @@
   </span>
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
-  <span ng-repeat="corpusField in fieldsInColumns.first" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
+  <span ng-repeat="corpusField in fieldsInColumns.first track by $index" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
     {{datum[corpusField.label] | neverEmpty}}
   </span>
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
-  <span ng-repeat="corpusField in fieldsInColumns.second" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
+  <span ng-repeat="corpusField in fieldsInColumns.second track by $index" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
     {{datum[corpusField.label] | neverEmpty}}
   </span>
 </div>

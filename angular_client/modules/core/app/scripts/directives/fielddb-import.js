@@ -47,6 +47,10 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
 
     var verifyImporterIsSetup = function() {
+      if (!FieldDB) {
+        console.warn("you catn import very much with out FieldDB, it is not loaded");
+        return;
+      }
       $scope.importer = $scope.importer || new FieldDB.Import();
       $scope.importer.status = "";
       $scope.importer.error = "";

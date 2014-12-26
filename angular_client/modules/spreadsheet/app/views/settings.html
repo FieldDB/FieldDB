@@ -17,10 +17,22 @@
       <option value="10">10</option>
       <option value="25" selected>25</option>
       <option value="50">50</option>
-      <option value={{data.length}}>All {{data.length}}</option>
+      <option value="all">All</option>
     </select>
     &nbsp;<button class="btn btn-primary"
     ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">Save</button>
+  </div>
+</div>
+<hr />
+
+<!-- Language of user interface -->
+<div class="form-horizontal">
+  <div class="settings_section_header">
+    <h2>Interface Language</h2>
+  </div>
+  <div class="clearDiv">&nbsp;</div>
+  <div class="settingsItems">
+    <span data-fielddb-locales fielddb-show-locale-key="nativeName" fielddb-full-view="true"></span>
   </div>
 </div>
 <hr />
@@ -43,20 +55,20 @@
         *#?
       </div>
       <div class="span5">
-        <div ng-repeat="corpusField in fieldsInColumns.first">
-          {{corpusField.title}}
+        <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.hint}}">
+          {{corpusField.label}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.second">
-        <div ng-repeat="corpusField in fieldsInColumns.second">
-          {{corpusField.title}}
+        <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.hint}}">
+          {{corpusField.label}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.third">
-        <div ng-repeat="corpusField in fieldsInColumns.third">
-          {{corpusField.title}}
+        <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.hint}}">
+          {{corpusField.label}}
         </div>
       </div>
 
@@ -73,10 +85,11 @@
       <select ng-model="fullTemplateDefaultNumberOfColumns">
         <option>1</option>
         <option>2</option>
-        <option>3</option>
       </select>
+      Number of Fields per column:
+      <input type="number" ng-model="fullTemplateDefaultNumberOfFieldsPerColumn"/>
       <button class="btn btn-primary"
-      ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2)">Save/Activate
+      ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn)">Save/Activate
       Full Template</button>
       <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'fulltemplate'}"
       ng-click="setAsDefaultCorpusTemplate('fulltemplate')">Set as default template for {{DB.title}}</button>
