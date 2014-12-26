@@ -33,7 +33,7 @@
     "angular-route": "1.2.26",
     "ng-file-upload": "~1.6.4",
     "angular-contenteditable": "~0.3.7",
-    "angular-dragdrop": "https://github.com/ganarajpr/angular-dragdrop.git#~1.0.3",
+    "angular-dragdrop": "https://github.com/cesine/angular-dragdrop.git#~1.0.6",
     "angular-mocks": "1.2.26",
     "angular-scenario": "1.2.26",
     "recordmp3js": "~0.3.0"

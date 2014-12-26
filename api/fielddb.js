@@ -92,7 +92,7 @@
   console.log("------------------------------------------------------------------------");
   console.log("-----------------------Welcome to the power user console! Type----------");
   console.log("--------------------------FieldDB.--------------------------------------");
-  // console.log("------------------",FieldDB);
+  console.log("------------------",new FieldDB.FieldDBObject().version);
   // FieldDB["Response"] = Response;
   console.log("---------------------------for available models/functionality-----------");
   console.log("------------------------------------------------------------------------");

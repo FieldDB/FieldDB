@@ -46,6 +46,10 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
 
       if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
+        if (fetchDatalistDocsExponentialDecay >= Infinity) {
+          console.log(" Giving up on getting a real corpus. Already at " + fetchDatalistDocsExponentialDecay + ".");
+          return;
+        }
         $timeout(function() {
           if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
             return;
@@ -59,8 +63,9 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         }
         return;
       }
-
-      $scope.corpus.authUrl = FieldDB.BASE_AUTH_URL;
+      if (FieldDB && FieldDB.Database) {
+        $scope.corpus.authUrl = FieldDB.Database.prototype.BASE_AUTH_URL;
+      }
       // $scope.corpus.debugMode = true;
 
       // console.log("fetching docs for ", $scope.corpus.toJSON());

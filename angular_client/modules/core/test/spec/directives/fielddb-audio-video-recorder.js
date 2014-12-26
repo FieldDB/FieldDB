@@ -1,5 +1,5 @@
 "use strict";
-var debugMode = true;
+var debugMode = false;
 
 describe("Directive: fielddb-audio-video-recorder", function() {
 

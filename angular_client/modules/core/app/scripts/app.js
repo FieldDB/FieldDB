@@ -30,23 +30,24 @@ var app = angular.module("fielddbAngularApp", [
     "https://localhost:3184/**",
     "https://localhost/**"
   ]);
-
-  var fieldDBApp = new FieldDB.PsycholinguisticsApp({
-    authentication: {
-      user: new FieldDB.User({
-        authenticated: false
-      })
-    },
-    contextualizer: new FieldDB.Contextualizer().loadDefaults(),
-    online: true,
-    apiURL: "https://localhost:3181/v2/",
-    offlineCouchURL: "https://localhost:6984",
-    brand: "LingSync",
-    website: "http://lingsync.org",
-    basePathname: "/",
-  });
-  if (window.location.pathname.indexOf("android_asset") > -1) {
-    fieldDBApp.basePathname = window.location.pathname;
+  if (FieldDB && FieldDB.PsycholinguisticsApp && FieldDB.Contextualizer && FieldDB.User) {
+    var fieldDBApp = new FieldDB.PsycholinguisticsApp({
+      authentication: {
+        user: new FieldDB.User({
+          authenticated: false
+        })
+      },
+      contextualizer: new FieldDB.Contextualizer().loadDefaults(),
+      online: true,
+      apiURL: "https://localhost:3181/v2/",
+      offlineCouchURL: "https://localhost:6984",
+      brand: "LingSync",
+      website: "http://lingsync.org",
+      basePathname: "/",
+    });
+    if (window.location.pathname.indexOf("android_asset") > -1) {
+      fieldDBApp.basePathname = window.location.pathname;
+    }
   }
   // if (window.location.hash.indexOf("#") > -1) {
   //   fieldDBApp.basePathname = window.location.pathname + "#";

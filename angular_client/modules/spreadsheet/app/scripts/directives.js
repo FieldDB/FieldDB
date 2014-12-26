@@ -48,7 +48,11 @@ angular.module('spreadsheetApp')
           // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
           console.log("calculating arrows and requesting numberOfResultPages");
           var lastPage = scope.numberOfResultPages(scope.allData.length);
-          var scopeIndexOfLastRecordOnLastPage = $rootScope.resultSize - (($rootScope.resultSize * lastPage) - scope.allData.length) - 1;
+          var resultSize = $rootScope.resultSize;
+          if (resultSize === "all") {
+            resultSize = scope.allData.length;
+          }
+          var scopeIndexOfLastRecordOnLastPage = resultSize - ((resultSize * lastPage) - scope.allData.length) - 1;
           var currentRecordIsLastRecord = false;
           var currentRecordIsFirstRecordOnNonFirstPage = false;
           if ($rootScope.currentPage === (lastPage - 1) && scopeIndexOfLastRecordOnLastPage === scope.$index) {
@@ -76,7 +80,7 @@ angular.module('spreadsheetApp')
             scope.selectRow('newEntry');
             return;
           } else if (e.keyCode === 40) {
-            if (scope.$index + 2 > scope.scopePreferences.resultSize) {
+            if (scope.$index + 2 > resultSize) {
               // If the next record down is on another page, change to that page and select the first record
               $rootScope.currentPage = $rootScope.currentPage + 1;
               scope.selectRow(0);
@@ -92,7 +96,7 @@ angular.module('spreadsheetApp')
           } else if (e.keyCode === 38 && scope.$index === 0) {
             // Go back one page and select last record
             $rootScope.currentPage = $rootScope.currentPage - 1;
-            scope.selectRow(scope.scopePreferences.resultSize - 1);
+            scope.selectRow(resultSize - 1);
           } else if (e.keyCode === 38) {
             scope.selectRow(scope.$index - 1);
           } else {
@@ -102,7 +106,6 @@ angular.module('spreadsheetApp')
       });
     };
   })
-
   .directive('spreadsheetCatchFocusOnArrowPress', function($timeout) {
     return function(scope, element) {
       var selfElement = element;

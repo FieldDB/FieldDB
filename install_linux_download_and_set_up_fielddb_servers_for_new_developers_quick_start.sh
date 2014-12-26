@@ -53,7 +53,7 @@ node --version || {
 }
 
 # We decided not to force interns to have XCode on their macs, linux devs need it
-gcc --version || { 
+gcc --version || {
 echo 'You dont have a C++ compiler installed, please install it' ;
  sudo apt-get build-dep
 }
@@ -114,8 +114,8 @@ which bower || {
 }
 
 npm install
-echo " Running jshint, tests and building core"
-grunt
+echo " Running jshint, tests and building core and setting up symblic links"
+grunt travis
 
 echo " Generating js docs so you can browse the documentation "
 grunt docs

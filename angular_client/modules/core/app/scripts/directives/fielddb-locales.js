@@ -24,6 +24,15 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
         console.warn("locales is not available on the scope. ");
       }
     }, 1000);
+
+    $scope.persistUsersChosenLocale = function(currentLocale) {
+      $scope.locales.userOverridenLocalePreference = currentLocale;
+    };
+
+    $scope.clearLocalizerUserPreferences = function(){
+      $scope.locales.userOverridenLocalePreference = null;
+    };
+
   };
   controller.$inject = ["$scope", "$timeout"];
 
@@ -36,7 +45,19 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
     //   locales: "=json"
     // },
     controller: controller,
-    link: function postLink() {},
+    link: function postLink(scope, element, attrs) {
+      console.log("linking locales directive", scope, element, attrs);
+      if (attrs.fielddbFullView) {
+        scope.showFullView = true;
+        scope.localeKeyToShow = "nativeName";
+      }
+      if (attrs.fielddbShowLocaleKey) {
+        scope.localeKeyToShow = attrs.fielddbShowLocaleKey;
+      } else {
+        scope.localeKeyToShow = "iso";
+      }
+
+    },
     priority: 0,
     // replace: true,
     controllerAs: "stringAlias"
