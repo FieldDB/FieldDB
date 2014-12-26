@@ -34,7 +34,7 @@
     </div>
     <div class="span1">
       <button ng-show="activeDatumIndex=='newEntry'" class="btn btn-primary"
-        type="submit"> <i class="fa whiteicon fa-plus"></i> Create</button>
+        type="submit"> <i class="fa whiteicon fa-plus"></i>{{locale_create_button}}</button>
     </div>
   </form>
   </div>
@@ -55,7 +55,7 @@
           <div class="expandedDataInner">
             <form id="form_new_datum_audio-file">
             <i class="fa fa-bullhorn"></i>&nbsp;
-            <input ng-disabled="writePermissions==false" id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)" ng-disabled="newDatumHasAudioToUpload==true"> <i class="fa whiteicon fa-file"></i> Add File(s)</button>
+            <input ng-disabled="writePermissions==false" id="new_datum_audio-file" type="file" multiple ng-model='fileToUpload' /><button class="btn btn-primary" ng-click="uploadFile(newFieldData)" ng-disabled="newDatumHasAudioToUpload==true"> <i class="fa whiteicon fa-file"></i>{{locale_add_file_button}}</button>
           </form>
         </div>
       </div>
@@ -65,15 +65,15 @@
       </div>
       <div class="row" ng-show="activeDatumIndex=='newEntry' && expandCollapse==true && newFieldData.audioVideo[0]!=undefined">
         <div class="span8 offset1">
-          <b>Click 'Create New' then  <i class="fa whiteicon fa-save"></i> 'Save' to have access to the following:</b><br />
-          <span ng-repeat="audioFile in newFieldData.audioVideo"><i> <i class="fa whiteicon fa-bullhorn"></i> New Audio File:</i> {{audioFile.description}}<br /></span>
+          <b>{{locale_create_then_save_compact}}</b><br />
+          <span ng-repeat="audioFile in newFieldData.audioVideo"><i> <i class="fa whiteicon fa-bullhorn"></i> {{locale_new_audio_file}}</i> {{audioFile.description}}<br /></span>
         </div>
       </div>
 </div>
 
 <div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined">
   <div class="span12 pagination-centered">
-    <h2>Please select a  <i class="fa fa-calendar"></i> session before entering data.</h2>
+    <h2>{{locale_select_session_message}}</h2>
   </div>
 </div>
 
@@ -84,8 +84,7 @@
 </div>
 <div class="row" ng-show="data==undefined && loading!=true">
   <div class="span12 pagination-centered">
-    No data to display. Please click on <img src="images/icon16_dev.png"
-      border="0" /> above and log in.
+    {{locale_no_data_message}}
   </div>
 </div>
 

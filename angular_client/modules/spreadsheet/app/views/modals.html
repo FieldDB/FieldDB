@@ -4,20 +4,12 @@
     <h3>
       <i class="fa fa-microphone">
       </i>
-      Recording Audio
+      {{locale_recording_audio_modal}}
     </h3>
   </div>
   <div class="modal-body">
-    <b>
-      Please make sure to click "Allow" above to begin recording audio.
-    </b>
-    <br />
-    Once clicked, your audio will begin recording.
-    <br />
-    <br />
-    Please note that recording will stop automatically after five minutes.
-    <br />
-    Time left:
+    {{locale_audio_warning_message}}
+    {{locale_time_left}}
     <i class="fa fa-microphone">
     </i>
     {{timeLeftForAudio}}
@@ -26,7 +18,7 @@
     <button class="btn btn-danger cancel" ng-click="stopRecording(datumForAudio)">
       <i class="fa whiteicon fa-stop">
       </i>
-      Stop Recording
+      {{locale_stop_recording_button}}
     </button>
   </div>
 </div>
@@ -35,7 +27,7 @@
 <div class="modal hide fade" modal="passwordNotificationShouldBeOpen" close="closePasswordNotification()" options="opts">
   <div class="modal-header">
     <h3>
-      We need to make sure its you...
+      {{locale_confirm_password_modal}}
     </h3>
   </div>
   <div class="modal-body">
@@ -43,13 +35,13 @@
       {{passwordNotificationMessage}}
     </p>
     <label>
-      Password:
+      {{locale_password_textbox}}
     </label>
     <input type="password" ng-model="confirmPassword"/>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary cancel" ng-click="closePasswordNotification()">
-      Continue
+      {{locale_continue_button}}
     </button>
   </div>
 </div>
@@ -59,38 +51,17 @@
     <h3>
       <i class="fa whiteicon fa-cloud">
       </i>
-      Welcome to LingSync!
+      {{locale_welcome_modal}}
     </h3>
   </div>
   <div class="modal-body">
     <p>
-      To get started, select a server* and log in with your username and password.
-      <br />
-      If you do not have an account yet, click on the Register button.
-      <br /> <br />
-      <b>
-        Tips:
-      </b>
-      <ul>
-        <li>
-          Save your work often.
-        </li>
-        <li>
-          To get your most up-to-date auto-glossing rules, refresh your browser window after you save your data.
-        </li>
-        <li>
-          Check out our FAQ for more!
-        </li>
-      </ul>
-      <br />
-      <span class="footnote">
-        *If you are unsure as to which server to select, chances are your account is located on the LingSync server.
-      </span>
+      {{locale_welcome_message}}
     </p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary cancel" ng-click="closeWelcomeNotification()">
-      OK
+      {{locale_OK_button}}
     </button>
   </div>
 </div>
