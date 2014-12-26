@@ -1405,6 +1405,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
   $rootScope.markAsEdited = function(fieldData, datum, $event) {
+    if (FieldDB && FieldDB.FieldDBObject) {
+      var previous = new FieldDB.FieldDBObject(datum.fossil);
+      var current = new FieldDB.FieldDBObject(datum);
+      delete current.fossil;
+      delete current.$$hashKey;
+      if (previous.equals(current)) {
+        console.log("The datum didnt actually change. Not marking as editied");
+        return;
+      }
+    }
+
     var utterance = "Datum";
     for (var key in fieldData) {
       if (key === "datumTags" && typeof fieldData.datumTags === 'string') {
