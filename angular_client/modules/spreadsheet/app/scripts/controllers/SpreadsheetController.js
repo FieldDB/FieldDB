@@ -1388,6 +1388,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.allData.push(fieldData); //inserts new data at the bottom for future pagination.
     $scope.data.push(fieldData);
     // $scope.loadPaginatedData("newDatum"); //dont change pagination, just show it on this screen.
+    $scope.activeDatumIndex = "newEntry";
 
     $scope.newFieldDatahasAudio = false;
     $scope.saved = "no";
