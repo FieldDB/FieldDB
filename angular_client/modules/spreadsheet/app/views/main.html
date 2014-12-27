@@ -23,8 +23,8 @@
   <br />
   <br />
   <div ng-show="sessions!=undefined" class="mainPageDiv">
-    <span ng-show="DB.title!=undefined">
-      <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" > {{DB.title}} loaded.
+    <span ng-show="corpus.title!=undefined">
+      <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" > {{corpus.title}} loaded.
       <br />
       <i class="fa fa-calendar">
       </i> Select  a session and click Go, or create a new session.
@@ -54,8 +54,8 @@
         <h3>
           <i class="fa fa-calendar">
           </i> New Session for
-          <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
-          <i>{{DB.title}}
+          <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
+          <i>{{corpus.title}}
           </i>
         </h3>
         <form ng-model="newSession">
@@ -134,20 +134,20 @@
           <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
         </form>
       </div>
-      <div ng-show="authenticated==true && DBselected==false" >
+      <div ng-show="authenticated==true && corpusSelected==false" >
         <i class="fa fa-cloud">
         </i> Corpora:
         <br />
         <table class="table">
           <tbody>
-          <tr ng-repeat="item in corpora" ng-click="selectDB(item);DBselected=true;" ng-disabled="loading==true" >
+          <tr ng-repeat="item in corpora" ng-click="selectCorpus(item);corpusSelected=true;" ng-disabled="loading==true" >
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" />
             </td>
-            <td class="text-left"> Access {{item.title}}
+            <td class="text-left" title="{{item.pouchname}} - {{item.description}}"> Access {{item.title}}
             </td>
           </tr>
-          <tr ng-click="selectDB({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});DBselected=true;" ng-disabled="loading==true" >
+          <tr ng-click="selectCorpus({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading==true" >
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
             </td>
@@ -161,12 +161,12 @@
         </table>  &nbsp;
         <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
       </div>
-      <div ng-show="DBselected==true">  Logged in as {{user.name}}
+      <div ng-show="corpusSelected==true">  Logged in as {{user.name}}
         <br />
         <i class="fa fa-cloud">
-        </i> Selected corpus: {{DB.title}}
+        </i> Selected corpus: {{corpus.title}}
         <br />
-        <button class="btn btn-primary" ng-click="DBselected=false">  Select a Different Corpus...
+        <button class="btn btn-primary" ng-click="corpusSelected=false">  Select a Different Corpus...
         </button>
       </div>
     </div>

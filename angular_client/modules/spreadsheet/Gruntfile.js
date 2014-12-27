@@ -337,6 +337,7 @@ module.exports = function(grunt) {
             // 'views/{,*/}*.html',
             'images/*.png',
             'images/*.gif',
+            'bower_components/recordmp3js/js/*.js'
             // 'fonts/*'
           ]
         }, {

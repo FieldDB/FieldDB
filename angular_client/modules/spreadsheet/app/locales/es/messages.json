@@ -276,11 +276,11 @@
         "description": "title for create new corpus div"
     },
     "locale_not_admin_message": {
-        "message": "TODO translate You are not an admin for <b>{{DB.title}}</b>. Please contact an admin if you wish to alter user access to this corpus.",
+        "message": "TODO translate You are not an admin for <b>{{COrPUS.title}}</b>. Please contact an admin if you wish to alter user access to this corpus.",
         "description": "warning message for non-admin users in corpus settings"
     },
     "locale_add_existing_user_message": {
-        "message": "TODO translate Add an existing user to <b>{{DB.title}}</b>",
+        "message": "TODO translate Add an existing user to <b>{{COrPUS.title}}</b>",
         "description": "title for adding existing user div"
     },
     "locale_only_add_registered_users_message": {
@@ -308,7 +308,7 @@
         "description": "add button"
     },
     "locale_users_with_access_message": {
-        "message": "TODO translate Users with access to <b>{{DB.title}}</b>",
+        "message": "TODO translate Users with access to <b>{{COrPUS.title}}</b>",
         "description": "over-arching title for lists of users with different access types"
     },
     "locale_admins": {
@@ -636,7 +636,7 @@
         "description": " "
     },
     "locale_export_answer": {
-        "message": "TODO tranalate You can export your entire database as <a target=\"_blank\" href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"{{server}}/{{DB.pouchname}}/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"http://lingsync.org/{{DB.pouchname.replace('-','/')}}\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+        "message": "TODO tranalate You can export your entire database as <a target=\"_blank\" href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"http://lingsync.org/{{COrPUS.pouchname.replace('-','/')}}\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
         "description": "links screw up the json format so i leave it empty for the moment"
     },
     "locale_contact_question": {

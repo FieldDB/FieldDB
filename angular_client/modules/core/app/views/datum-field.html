@@ -1,0 +1,14 @@
+<span class="pull-right {{datumField.label}}"> <span
+	 >{{contextualize('locale_Encrypt_if_confidential')}}</span> <input type="checkbox"
+	ng-class="{'shouldBeEncrypted': datumField.shouldBeEncrypted}"><!-- Issue #797 -->
+	<i class="remove-datum-field icon-remove-sign"></i></span>
+
+<label>{{contextualize('locale_Title')}}</label>
+
+<input class="{'choose-field: datumField.userchooseable}" value="{{datumField.labelFieldLinguists}}"
+	type="text" />
+
+
+
+<label>{{contextualize('locale_Help_Text')}}</label>
+<textarea class="help-text" placeholder="{{contextualize('locale_Help_Text_Placeholder')}}">{{datumField.helpLinguists}}</textarea>

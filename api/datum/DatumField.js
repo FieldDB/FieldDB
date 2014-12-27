@@ -21,9 +21,9 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
  * @constructs
  */
 var DatumField = function DatumField(options) {
-  if(!this._fieldDBtype){
-		this._fieldDBtype = "DatumField";
-	}
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "DatumField";
+  }
 
   this.debug("Constructing DatumField ", options);
   // Let encryptedValue and value from serialization be set
@@ -106,7 +106,13 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     },
     set: function(value) {
       this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      this.labelFieldLinguists = value;
+      if (!this.labelFieldLinguists) {
+        if (value && value.length > 2) {
+          this.labelFieldLinguists = value[0].toUpperCase() + value.substring(1, value.length);
+        } else {
+          this.labelFieldLinguists = value;
+        }
+      }
       this.id = value;
     }
   },
@@ -511,12 +517,15 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         return;
       }
       this._help = value.trim();
+      if (!this.helpLinguists) {
+        this.helpLinguists = this._help;
+      }
     }
   },
 
   helpLinguists: {
     get: function() {
-      return this._helpLinguists || "Put your team's data entry conventions here (if any)...";
+      return this._helpLinguists || this.help;
     },
     set: function(value) {
       if (value === this._helpLinguists) {
@@ -532,7 +541,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   helpNonLinguists: {
     get: function() {
-      return this._helpNonLinguists || "Put your team's data entry conventions here (if any)...";
+      return this._helpNonLinguists || this.help;
     },
     set: function(value) {
       if (value === this._helpNonLinguists) {
@@ -548,7 +557,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   helpTranslators: {
     get: function() {
-      return this._helpTranslators || "Put your team's data entry conventions here (if any)...";
+      return this._helpTranslators || this.help;
     },
     set: function(value) {
       if (value === this._helpTranslators) {
@@ -564,7 +573,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   helpComputationalLinguists: {
     get: function() {
-      return this._helpComputationalLinguists || "Put your team's data entry conventions here (if any)...";
+      return this._helpComputationalLinguists || this.help;
     },
     set: function(value) {
       if (value === this._helpComputationalLinguists) {
@@ -580,7 +589,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   helpDevelopers: {
     get: function() {
-      return this._helpDevelopers || "Put your team's data entry conventions here (if any)...";
+      return this._helpDevelopers || this.help;
     },
     set: function(value) {
       if (value === this._helpDevelopers) {
@@ -818,6 +827,10 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       delete json.dateModified;
       delete json.comments;
       delete json.dbname;
+
+      // TODO eventually dont include the label and hint but now include it for backward compaitibilty
+      json.label = this.label;
+      json.hint = this.hint;
 
       json.id = json._id;
       delete json._id;
