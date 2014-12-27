@@ -39,7 +39,7 @@ describe("Directive: fielddb-datum-field", function() {
   it("should make a datumField element with contents from scope", function() {
 
     inject(function() {
-      expect(el.find("label").text().trim()).toEqual("{{datumField.locale_Help_Text}}");
+      expect(el.find("label").text().trim()).toEqual("{{contextualize('locale_Title')}}{{contextualize('locale_Help_Text')}}");
       compileFunction(scope); // <== the html {{}} are bound
       scope.$digest(); // <== digest to get the render to show the bound values
       if (debugMode) {
