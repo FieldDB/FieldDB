@@ -162,7 +162,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     });
 
     it('should have all the old things for corpora in scope that it had before', function() {
-      expect(typeof scope.selectDB).toBe('function');
+      expect(typeof scope.selectCorpus).toBe('function');
 
       expect(typeof scope.createNewCorpus).toBe('function');
       expect(typeof scope.loadUsersAndRoles).toBe('function');
@@ -278,7 +278,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   it('should initialize some variables', function() {
     expect(scope.currentDate).toBeDefined();
     expect(scope.activities).toBeDefined();
-    expect(scope.DBselected).toBeFalsy();
+    expect(scope.corpusSelected).toBeFalsy();
     expect(scope.newFieldData).toBeDefined();
   });
 
