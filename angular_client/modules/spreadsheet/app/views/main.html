@@ -3,18 +3,18 @@
 <br />
 <div id="login_screen" ng-show="documentReady==true">
   <div ng-show="notChrome">
-    <h3>THIS SITE WAS DEVELOPED FOR CHROME.
+    <h3>{{contextualize('locale_for_chrome_message')}}
     </h3>
     <p>
-      It may not work as expected if you are using another browser:
+      {{contextualize('locale_other_browser_message')}}
       {{notChrome}}
       <br />
       <a  href="http://chrome.google.com">
-        <button class="btn btn-info">Get  Chrome
+        <button class="btn btn-info">{{contextualize('locale_get_chrome_button')}}
         </button>
       </a>
       <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
-        <button class="btn btn-success">This browser works fine
+        <button class="btn btn-success">{{contextualize('locale_browser_works_button')}}
         </button>
       </a>
     </p>
@@ -24,27 +24,27 @@
   <br />
   <div ng-show="sessions!=undefined" class="mainPageDiv">
     <span ng-show="corpus.title!=undefined">
-      <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" > {{corpus.title}} loaded.
+      <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" > {{corpus.title}} {{contextualize('locale_loaded')}}
       <br />
       <i class="fa fa-calendar">
-      </i> Select  a session and click Go, or create a new session.
+      </i>{{contextualize('locale_select_create_session')}}
     </span>
     <br>
     <div class="form-horizontal">
       <form ng-submit="selectSession(activeSessionToView)">
         <select ng-model='activeSessionToView'>
-          <option value="" disabled selected>Choose existing session...
+          <option value="" disabled selected>{{contextualize('locale_choose_existing_session_dropdown')}}
           </option>
-          <option value='none'>View all sessions
+          <option value='none'>{{contextualize('locale_view_all_sessions_dropdown')}}
           </option>
           <option ng-repeat="session in sessions | orderBy:'dateCreated'"  value={{session._id}}>{{session.dateCreated | shortDate}} {{session.title}}
           </option>
         </select>
-        <button class="btn btn-primary">Go
+        <button class="btn btn-primary">{{contextualize('locale_go_button')}}
         </button>&nbsp;
         <button class="btn btn-info" type='button'  ng-click="showCreateSessionDiv=!showCreateSessionDiv">
           <i class="fa whiteicon fa-plus">
-          </i> New Session...
+          </i> {{contextualize('locale_new_session_button')}}
         </button>
       </form>
     </div>
@@ -53,7 +53,7 @@
         <br />
         <h3>
           <i class="fa fa-calendar">
-          </i> New Session for
+          </i> {{contextualize('locale_new_session_for')}}
           <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
           <i>{{corpus.title}}
           </i>
@@ -61,55 +61,55 @@
         <form ng-model="newSession">
           <table class="newSessionTable" align='center'>
             <tr>
-              <td>Goal:
+              <td>{{contextualize('locale_goal_textbox')}}
               </td>
               <td>
                 <input type="text" placeholder="Collecting examples of animacy agreement" ng-model='newSession.goal'>
               </td>
             </tr>
             <tr>
-              <td>Consultants:
+              <td>{{contextualize('locale_consultants_textbox')}}
               </td>
               <td>
                 <input type="text" placeholder="ME,EV,FE" ng-model='newSession.consultants'>
               </td>
             </tr>
             <tr>
-              <td>Language:
+              <td>{{contextualize('locale_language_textbox')}}
               </td>
               <td>
                 <input type="text" placeholder="Language" ng-model='newSession.language'>
               </td>
             </tr>
             <tr>
-              <td>Dialect:
+              <td>{{contextualize('locale_dialect_textbox')}}
               </td>
               <td>
                 <input type="text" placeholder="Dialect" ng-model='newSession.dialect'>
               </td>
             </tr>
             <tr>
-              <td>Date Elicited:
+              <td>{{contextualize('locale_date_elicited_textbox')}}
               </td>
               <td>
                 <input type="date" placeholder="Weds 2012-08-01" ng-model='newSession.dateElicited'>
               </td>
             </tr>
             <tr>
-              <td>User:
+              <td>{{contextualize('locale_user_textbox')}}
               </td>
               <td>{{user.name}}
               </td>
             </tr>
             <tr>
-              <td>Date Entered:
+              <td>{{contextualize('locale_date_entered')}}
               </td>
               <td>{{currentDate | shortDate}}
               </tr>
             </table>
             <button class="btn btn-success"  ng-click="createNewSession(newSession);showCreateSessionDiv=false">
               <i class="fa whiteicon fa-save">
-              </i> Create  and Access New Session
+              </i> {{contextualize('locale_create_access_new_session_button')}}
             </button>
           </form>
         </div>
@@ -117,7 +117,7 @@
     </div>
     <br />
     <div class="mainPageDiv">
-      <div ng-hide="authenticated==true"> Log in
+      <div ng-hide="authenticated==true"> {{contextualize('locale_login_button')}}
         <br />
         <br />
         <form ng-submit='loginUser(auth, selectedServer.serverCode)'>
@@ -129,14 +129,14 @@
           <br>
           <input type="password"  ng-model='auth.password' placeholder="password" ng-disabled="loading==true">
           <br>
-          <button class="btn btn-primary" ng-disabled="loading==true">Log In
+          <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_login_button')}}
           </button>&nbsp;
           <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
         </form>
       </div>
       <div ng-show="authenticated==true && corpusSelected==false" >
         <i class="fa fa-cloud">
-        </i> Corpora:
+        </i> {{contextualize('locale_corpora')}}
         <br />
         <table class="table">
           <tbody>
@@ -144,16 +144,16 @@
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" />
             </td>
-            <td class="text-left" title="{{item.pouchname}} - {{item.description}}"> Access {{item.title}}
+            <td class="text-left" title="{{item.pouchname}} - {{item.description}}"> {{contextualize('locale_access')}} {{item.title}}
             </td>
           </tr>
           <tr ng-click="selectCorpus({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading==true" >
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" >
             </td>
-            <td class="text-left"> Access LingLlama's Community Corpus
+            <td class="text-left"> {{contextualize('locale_access_lingllama')}}
               <br/>
-              <small>(You can browse this corpus to see what the app looks like with sample data)
+              <small>{{contextualize('locale_access_lingllama_footnote')}}
               </small>
             </td>
           </tr>
@@ -161,12 +161,12 @@
         </table>  &nbsp;
         <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
       </div>
-      <div ng-show="corpusSelected==true">  Logged in as {{user.name}}
+      <div ng-show="corpusSelected==true"> {{contextualize('locale_logged_in_as')}} {{user.name}}
         <br />
         <i class="fa fa-cloud">
-        </i> Selected corpus: {{corpus.title}}
+        </i> {{contextualize('locale_selected_corpus')}} {{corpus.title}}
         <br />
-        <button class="btn btn-primary" ng-click="corpusSelected=false">  Select a Different Corpus...
+        <button class="btn btn-primary" ng-click="corpusSelected=false">  {{contextualize('locale_select_different_corpus_button')}}
         </button>
       </div>
     </div>
@@ -176,28 +176,28 @@
       <br />
       <button class="btn btn-info" ng-click="contactUs()">
         <i class="fa whiteicon fa-envelope-o">
-        </i> Contact Us
+        </i> {{contextualize('locale_contact_us_button')}}
       </button>
-      <button class="btn btn-info" ng-show="authenticated==true" ng-click="showResetPassword=!showResetPassword">Reset Password...
+      <button class="btn btn-info" ng-show="authenticated==true" ng-click="showResetPassword=!showResetPassword">{{contextualize('locale_reset_password_button_1')}}
       </button>
     </div>
     <br />
-    <div class="mainPageDiv" ng-show="showResetPassword==true"> Password Reset:
+    <div class="mainPageDiv" ng-show="showResetPassword==true"> {{contextualize('locale_password_reset')}}
       <br />
       <form ng-submit='changePasswordSubmit()'>
-        <label>Old Password:
+        <label>{{contextualize('locale_old_password')}}
         </label>
         <input type="password" ng-model="resetPasswordInfo.password"/>
         <br/>
-        <label>New Password:
+        <label>{{contextualize('locale_new_password')}}
         </label>
         <input type="password" ng-model="resetPasswordInfo.newpassword"/>
         <br/>
-        <label>Confirm new password:
+        <label>{{contextualize('locale_confirm_new_password')}}
         </label>
         <input type="password" ng-model="resetPasswordInfo.confirmpassword"/>
         <br/>
-        <button class="btn btn-primary" ng-disabled="loading==true">Reset Password
+        <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_reset_password_button_2')}}
         </button>&nbsp;
         <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
       </form>

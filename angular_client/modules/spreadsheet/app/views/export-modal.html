@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <h3 class="modal-title">Search results</h3>
-    As <a href="https://wordpress.org/plugins/simple-interlinear-glosses/screenshots/" target="_blank">WordPress Gloss</a>: <input type="checkbox" ng-model="useWordpressIGTFormat"/>
+    <h3 class="modal-title">{{contextualize('locale_search_result_modal')}}</h3>
+    {{contextualize('locale_as')}} <a href="https://wordpress.org/plugins/simple-interlinear-glosses/screenshots/" target="_blank">{{contextualize('locale_wp_gloss')}}</a>: <input type="checkbox" ng-model="useWordpressIGTFormat"/>
 </div>
 <div class="modal-body">
     <p>
@@ -33,11 +33,11 @@
           {{result[corpusField.label]}}
         </li>
         <li>
-            Tags: {{commaList(result.datumTags)}}
+            {{contextualize('locale_tags_modal')}} {{commaList(result.datumTags)}}
         </li>
     </ul>
     <hr/>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">Close</button>
+    <button class="btn btn-primary" ng-click="ok()">{{contextualize('locale_close_button')}}</button>
 </div>
