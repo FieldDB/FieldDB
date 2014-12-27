@@ -1701,6 +1701,39 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadData($scope.activeSession);
   };
 
+  $scope.updateCorpusDetails = function(corpus) {
+    console.log("Saving corpus details, corpus passed in", corpus);
+    Data.saveCouchDoc($rootScope.corpus.pouchname, $rootScope.corpus).then(function(result) {
+      if (result && result.data && result.data.ok) {
+        console.log("Saved corpus details ", result);
+        var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
+
+        $scope.addActivity([{
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-cloud",
+          directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "personal"
+        }, {
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-cloud",
+          directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "team"
+        }], "uploadnow");
+      } else {
+        console.log("Error saving corpus details.", result);
+        alert("Error saving corpus details.");
+      }
+
+    }, function(reason) {
+      console.log("Error saving corpus details.", reason);
+      alert("Error saving corpus details.");
+    });
+  };
+
   $scope.runSearch = function(searchTerm) {
     // Create object from fields displayed in scope to later be able to
     // notify user if search result is from a hidden field
