@@ -1,12 +1,12 @@
 <span class="pull-right {{datumField.label}}"> <span
-	 >{{datumField.locale_Encrypt_if_confidential}}</span> <input type="checkbox"
-	class="shouldBeEncrypted "{{datumField.shouldBeEncrypted}}></input> <!-- Issue #797 -->
+	 >{{contextualize('locale_Encrypt_if_confidential')}}</span> <input type="checkbox"
+	ng-class="{'shouldBeEncrypted': datumField.shouldBeEncrypted}"><!-- Issue #797 -->
 	<i class="remove-datum-field icon-remove-sign"></i></span>
 
-<input class="choose-field" {{datumField.userchooseable}} value="{{datumField.labelFieldLinguists}}"
+<input class="{'choose-field: datumField.userchooseable}" value="{{datumField.labelFieldLinguists}}"
 	type="text" />
 
 
 
-<label>{{datumField.locale_Help_Text}}</label>
-<textarea class="help-text" placeholder="{{datumField.locale_Help_Text_Placeholder}}">{{datumField.helpLinguists}}</textarea>
+<label>{{contextualize('locale_Help_Text')}}</label>
+<textarea class="help-text" placeholder="{{contextualize('locale_Help_Text_Placeholder')}}">{{datumField.helpLinguists}}</textarea>
