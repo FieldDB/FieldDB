@@ -108,7 +108,7 @@ describe('Directive: fielddbGlosserInput', function() {
         console.log('scope corpus ', scope.corpus);
         console.log(angular.element(el.find('input')[0]));
       }
-      expect(el.html()).toEqual('<!-- ngRepeat: corpusField in fieldsInColumns.first -->');
+      expect(el.html()).toEqual('<!-- ngRepeat: corpusField in fieldsInColumns.first track by $index -->');
       // console.log(el.html());
       // expect(angular.element(el.find('input')[0]).html('testing glosser'));
       // expect(angular.element(el.find('input')[0]).html().trim()).toEqual('Sample: The materials included in this corpus');

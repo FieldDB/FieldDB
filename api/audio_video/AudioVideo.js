@@ -1,6 +1,6 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var AudioPlayer = require("./AudioPlayer").AudioPlayer;
-
+var mime = require("browserify-mime");
 /**
  * @class The AudioVideo is a type of FieldDBObject with any additional fields or
  * metadata that a team might use to ground/tag their primary data.
@@ -18,7 +18,7 @@ var AudioVideo = function AudioVideo(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_BASE_SPEECH_URL = "https://localhost:6984";
+var DEFAULT_BASE_SPEECH_URL = "https://localhost:3184";
 AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVideo.prototype */ {
   constructor: {
     value: AudioVideo
@@ -90,10 +90,17 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
     }
   },
 
+  guessType: {
+    value: function(filename) {
+      var guessedType = mime.lookup(filename);
+      return guessedType;
+    }
+  },
+
   type: {
     get: function() {
       if (!this._type && this.filename) {
-        this._type = "audio/" + this.filename.split(".").pop();
+        this._type = this.guessType(this.filename);
       }
       return this._type || FieldDBObject.DEFAULT_STRING;
     },
@@ -103,7 +110,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
       }
       this.warn("type cannot be set, it is automatically determined from the filename. Not using: " + value);
       if (this.filename) {
-        value = "audio/" + this.filename.split(".").pop();
+        value = this.guessType(this.filename);
         this._type = value;
       }
     }
@@ -114,6 +121,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
       delete json.audioPlayer;
+      json.type = this.type;
 
       return json;
     }

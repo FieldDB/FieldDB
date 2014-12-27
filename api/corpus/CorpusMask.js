@@ -341,11 +341,11 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
   preferredTemplate: {
     get: function() {
-      this.warn("preferredTemplate is deprecated, use dbname instead.");
+      this.warn("preferredTemplate is deprecated, use preferredDatumTemplate instead.");
       return this.preferredDatumTemplate;
     },
     set: function(value) {
-      this.warn("preferredTemplate is deprecated, please use dbname instead.");
+      this.warn("preferredTemplate is deprecated, please use preferredDatumTemplate instead.");
       this.preferredDatumTemplate = value;
     }
   }

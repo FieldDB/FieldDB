@@ -7,7 +7,7 @@
   <div class="largeMenuBar">
     <div class="menubar mainMenubar" ng-cloak>
       <span class="menuTitle">
-        <a          ng-click="navigateVerifySaved('home')">
+        <a ng-click="navigateVerifySaved('home')">
           <img src="images/icon48_dev.png" border="0" />
         </a>
       </span>
@@ -41,7 +41,7 @@
             <a class="menuitem">
               <i class="fa whiteicon fa-cogs">
               </i>
-              Settings
+              {{contextualize("locale_settings")}}
             </a>
             <ul>
               <li>
@@ -51,7 +51,7 @@
                   {{locale_corpus}}
                 </a>
               </li>
-              <li ng-hide="DB.pouchname==undefined">
+              <li ng-hide="corpus.pouchname==undefined">
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -80,8 +80,8 @@
       <span class="rightMenuItems" ng-show="authenticated==true">
         <div class="rightMenuItemsDiv">
           <div ng-hide="DB==undefined">
-            <a class="floatLeft" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this {{DB.pouchname}}'s webpage">
-              <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+            <a class="floatLeft" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this {{corpus.pouchname}}'s webpage">
+              <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
             </a>
             <i class="fa whiteicon fa-calendar">
             </i>
@@ -89,7 +89,7 @@
             <br />
             <i class="fa whiteicon fa-cloud">
             </i>
-            {{DB.title}}
+            {{corpus.title}}
           </div>
           <div>
             &nbsp;
@@ -365,7 +365,7 @@
                   </i>
                 </a>
               </li>
-              <li ng-hide="DB.pouchname==undefined">
+              <li ng-hide="corpus.pouchname==undefined">
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -390,8 +390,8 @@
       </span>
       <span class="smallMenuBarInfo" ng-show="authenticated==true">
         <span class=" smallMenuBarInfoItem" ng-hide="DB==undefined">
-          <a class="" href="http://lingsync.org/{{DB.pouchname.replace('-','/')}}/{{DB.pouchname}}" target="_blank" title="Visit this corpus' webpage">
-            <img ng-src="https://secure.gravatar.com/avatar/{{DB.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+          <a class="" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this corpus' webpage">
+            <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
           </a>
         </span>
         <span class="smallMenuBarInfoItem">

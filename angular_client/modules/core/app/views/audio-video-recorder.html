@@ -1,0 +1,35 @@
+<div class="span6">
+  <form class="btn-toolbar">
+    <div class="btn-group">
+      <button class="btn" ng-click="peripheralsCheck('audio')">
+        <i class="fa" ng-class="{'fa-microphone': application.audioRecordingVerified==true, 'fa-microphone': application.audioRecordingVerified==null, 'fa-microphone-slash': application.audioRecordingVerified==false }">
+        </i>
+      </button>
+      <button class="btn" ng-click="peripheralsCheck('video')" ng-disabled="application.videoRecordingVerified==false" >
+        <i class="fa" ng-class="{'fa-video-camera': application.videoRecordingVerified==true, 'fa-video-camera': application.videoRecordingVerified==null, 'fa-microphone-slash ': application.videoRecordingVerified==false }">
+        </i>
+      </button>
+      <button class="btn" ng-click="peripheralsCheck('picture')" ng-disabled="application.videoRecordingVerified==false">
+        <i class="fa" ng-class="{'fa-camera': application.videoRecordingVerified==true, 'fa-camera': application.videoRecordingVerified==null, 'fa-eye-close': application.videoRecordingVerified==false }">
+        </i>
+      </button>
+    </div>
+    <img src="images/spinner-small.gif" ng-show="processingAudio" />
+  </form>
+
+  <p ng-hide="showPictureInstructions" class="span6 RecordMP3js-recorder" data-format="mp3" data-callback="showFile">Audio Recorder Element</p>
+
+  <p class="">
+    <span ng-show="showPictureInstructions">Click preview when ready to take a picture</span>
+    <h3 ng-show="application.audioRecordingVerified==true">Preview Audio/Video/Image</h3>
+    <small ng-show="mutedAudioInstructions">Note: audio/video is muted to reduce audio feedback noises. If you are using a headset, you can unmute them to listen to the audio as you record.</small>
+    <audio hidden class="hide" autoplay controls> </audio>
+    <video hidden class="hide" autoplay controls> </video>
+    <canvas hidden class="hide" ng-hide="true===true"> </canvas>
+    <img hidden class="hide" />
+  </p>
+</div>
+
+<div class="span6" data-fielddb-import json="importer" corpus="application.corpus"></div>
+
+<div class="span12" ng-model="audioRecorder.status"></div>

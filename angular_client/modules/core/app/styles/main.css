@@ -291,7 +291,7 @@ progress {
   background-color: #F0F5FF;
   min-height: 35px;
   border-radius: 15px;
-  text-align: center;
+  /*text-align: center;*/
 }
 
 .Spreadsheet-expandedDataInner {
@@ -329,4 +329,12 @@ progress {
  */
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
+}
+
+.description {
+  width: 100%;
+}
+
+.help-text {
+  width: 100%;
 }

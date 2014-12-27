@@ -2,16 +2,25 @@
 /* globals FieldDB */
 angular
   .module('corpuspagesApp', [
+    'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngSanitize',
     'ngRoute',
+    'ngSanitize',
+    'ngTouch',
     'fielddbActivityHeatmap',
-    'fielddbAngularApp',
-    'fielddbLexiconAngularApp'
+    'fielddbAngularApp'
+    // 'fielddbLexiconAngularApp'
   ])
-  .config(function($routeProvider, $locationProvider) {
+  .config(function($routeProvider, $locationProvider, $sceDelegateProvider) {
     $locationProvider.html5Mode(true);
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+      // Allow same origin resource loads.
+      'self',
+      // Allow loading from outer domain.
+      'https://*.lingsync.org/**'
+    ]);
 
     if (FieldDB && FieldDB.Router) {
       for (var when in FieldDB.Router.routes) {

@@ -1,28 +1,3 @@
-<!-- Audio Warning Modal-->
-<div class="modal hide fade" modal="audioWarningShouldBeOpen" close="stopRecording(datumForAudio)" options="opts">
-  <div class="modal-header">
-    <h3>
-      <i class="fa fa-microphone">
-      </i>
-      {{locale_recording_audio_modal}}
-    </h3>
-  </div>
-  <div class="modal-body">
-    {{locale_audio_warning_message}}
-    {{locale_time_left}}
-    <i class="fa fa-microphone">
-    </i>
-    {{timeLeftForAudio}}
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-danger cancel" ng-click="stopRecording(datumForAudio)">
-      <i class="fa whiteicon fa-stop">
-      </i>
-      {{locale_stop_recording_button}}
-    </button>
-  </div>
-</div>
-
 <!-- Confirm password Notification Modal-->
 <div class="modal hide fade" modal="passwordNotificationShouldBeOpen" close="closePasswordNotification()" options="opts">
   <div class="modal-header">

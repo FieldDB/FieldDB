@@ -17,6 +17,7 @@ angular
     'ngSanitize',
     'ngTouch',
     'angular-md5',
+    'fielddbAngularApp',
     'ui.bootstrap'
   ])
   .config(function($routeProvider) {
@@ -33,15 +34,11 @@ angular
     }).when('/faq', {
       templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
-      // templateUrl: 'views/compacttemplate.html'
-      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
+      templateUrl: 'views/compacttemplate.html'
     }).when('/spreadsheet/fulltemplate', {
-      // templateUrl: 'views/fulltemplate.html' //FOR mcgillOnly deployment
-      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
+      templateUrl: 'views/fulltemplate.html'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
-      // templateUrl: 'views/yalefieldmethodsspring2014template.html'
-      redirectTo: '/spreadsheet/mcgillfieldmethodsfall2014template'
-
+      templateUrl: 'views/yalefieldmethodsspring2014template.html'
     }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
       templateUrl: 'views/mcgillfieldmethodsfall2014template.html'
     }).otherwise({

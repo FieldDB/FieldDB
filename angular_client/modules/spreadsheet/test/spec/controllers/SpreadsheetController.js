@@ -162,7 +162,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     });
 
     it('should have all the old things for corpora in scope that it had before', function() {
-      expect(typeof scope.selectDB).toBe('function');
+      expect(typeof scope.selectCorpus).toBe('function');
 
       expect(typeof scope.createNewCorpus).toBe('function');
       expect(typeof scope.loadUsersAndRoles).toBe('function');
@@ -194,11 +194,11 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     expect(window.defaultPreferences).toBeDefined();
     expect(scope.scopePreferences).toBeDefined();
     expect(scope.templateId).toBe(scope.scopePreferences.userChosenTemplateId);
-    expect(scope.fields).toBe(scope.scopePreferences[scope.scopePreferences.userChosenTemplateId]);
+    // expect(scope.fields).toBe(scope.scopePreferences[scope.scopePreferences.userChosenTemplateId]);
     expect(scope.templateId).toBe(scope.scopePreferences.userChosenTemplateId);
 
-    expect(scope.availableFields).toBe(scope.scopePreferences.availableFields);
-    expect(scope.availableFields).toBe(window.defaultPreferences.availableFields);
+    // expect(scope.availableFields).toBe(scope.scopePreferences.availableFields);
+    // expect(scope.availableFields).toBe(window.defaultPreferences.availableFields);
 
     expect(scope.templateId).toBe(scope.scopePreferences.userChosenTemplateId);
     expect(scope.templateId).toBe(scope.scopePreferences.userChosenTemplateId);
@@ -278,24 +278,13 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   it('should initialize some variables', function() {
     expect(scope.currentDate).toBeDefined();
     expect(scope.activities).toBeDefined();
-    expect(scope.DBselected).toBeFalsy();
+    expect(scope.corpusSelected).toBeFalsy();
     expect(scope.newFieldData).toBeDefined();
   });
 
-  it('should set some audio recording control variables and functions', function() {
-    expect(scope.recordingStatus).toEqual('Record');
-    expect(scope.recordingButtonClass).toEqual('btn btn-success');
-    expect(scope.recordingIcon).toEqual('fa-microphone');
-    expect(scope.showAudioFeatures).toBeFalsy();
-    expect(scope.newRecordHasBeenEdited).toBeFalsy();
-
-    expect(typeof scope.closeAudioWarning).toBe('function');
-    expect(typeof scope.startRecording).toBe('function');
-    expect(typeof scope.stopRecording).toBe('function');
-    expect(typeof scope.uploadFile).toBe('function');
-    expect(typeof scope.deleteAttachmentFromCorpus).toBe('function');
+  it('should not set some audio recording control variables and functions', function() {
+    expect(scope.recordingStatus).toBeUndefined();
   });
-
 
   it('should load preferences again when the $viewContentLoaded TODO try to manage prefs only once in the code', function() {
     expect(scope.scopePreferences.savedState).toBeDefined();

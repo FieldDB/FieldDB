@@ -1,4 +1,4 @@
-/* globals  Q, sjcl, Recorder, AudioContext, stopRecording, SpreadsheetDatum, _, confirm, alert, prompt */
+/* globals  FieldDB, Q, sjcl, SpreadsheetDatum, _, confirm, alert, prompt */
 'use strict';
 console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
@@ -10,15 +10,50 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
  * Controller of the spreadsheetApp
  */
 
-var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log) {
+var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
   var debugging = false;
   if (debugging) {
-    console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log);
+    console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http);
+  }
+  $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = null;
+
+
+  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && $rootScope.contextualize) {
+    if ($rootScope.contextualize("locale_faq") === "FAQ") {
+      console.log("Locales already loaded.");
+    } else {
+      FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("ka", {
+        "locale_settings": {
+          "message": "პარამეტრები"
+        }
+      });
+
+      $http.get("locales/en/messages.json").then(function(result) {
+        var locales = result.data;
+        console.log("Retrieving english localization", locales);
+        FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("en", locales);
+        /* jshint camelcase: false */
+        // $rootScope.locales.locale_settings = $rootScope.contextualize("locale_settings");
+      });
+      $http.get("locales/es/messages.json").then(function(result) {
+        var locales = result.data;
+        console.log("Retrieving spanish localization", locales);
+        FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("es", locales);
+        /* jshint camelcase: false */
+        // $rootScope.locales.locale_settings = $rootScope.contextualize("locale_settings");
+      });
+      $http.get("locales/fr/messages.json").then(function(result) {
+        var locales = result.data;
+        console.log("Retrieving french localization", locales);
+        FieldDB.FieldDBObject.application.contextualizer.addMessagesToContextualizedStrings("fr", locales);
+        /* jshint camelcase: false */
+        // $rootScope.locales.locale_settings = $rootScope.contextualize("locale_settings");
+      });
+    }
   }
 
-
-  $rootScope.appVersion = "2.30.0ss";
+  $rootScope.appVersion = "2.35.0ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size) {
@@ -321,8 +356,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   //TODO move the default preferences somewher the SettingsController can access them. for now here is a hack for #1290
   window.defaultPreferences = defaultPreferences;
 
+
   $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
-    if (!incomingFields) {
+    if (!incomingFields || !$rootScope.corpus) {
       return {};
     }
     if (!numberOfColumns) {
@@ -332,7 +368,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (incomingFields && typeof incomingFields.splice !== "function") {
       for (var field in incomingFields) {
         if (incomingFields.hasOwnProperty(field)) {
-          if (defaultPreferences.availableFields[incomingFields[field].label]) {
+          if (!incomingFields[field].hint && defaultPreferences.availableFields[incomingFields[field].label]) {
             incomingFields[field].hint = defaultPreferences.availableFields[incomingFields[field].label].hint;
           }
           // add only unique fields
@@ -344,18 +380,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       fields = incomingFields;
     }
-    var columnHeight = Math.ceil(fields.length / numberOfColumns);
+    var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || Math.ceil(fields.length / numberOfColumns);
     var columns = {};
 
     if (numberOfColumns === 1) {
-      columns.first = fields;
+      columns.first = fields.slice(1, columnHeight + 1);
     } else if (numberOfColumns === 2) {
-      columns.first = fields.slice(0, columnHeight);
-      columns.second = fields.slice(columnHeight, fields.length);
+      columns.first = fields.slice(1, columnHeight + 1);
+      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
     } else if (numberOfColumns === 3) {
-      columns.first = fields.slice(0, columnHeight);
-      columns.second = fields.slice(columnHeight, columnHeight * 2);
-      columns.third = fields.slice(columnHeight * 2, fields.length);
+      columns.first = fields.slice(1, columnHeight + 1);
+      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
+      columns.third = fields.slice(columnHeight * 2 + 1, columnHeight * 3 + 1);
     }
     return columns;
   };
@@ -374,9 +410,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       alert("You're not an admin on this corpus, please ask an admin to set this template as default for you.");
       return;
     }
-    if ($rootScope.DB.description) {
-      $rootScope.DB.preferredTemplate = templateId;
-      Data.saveCouchDoc($rootScope.DB.pouchname, $rootScope.DB)
+    if ($rootScope.corpus.description) {
+      $rootScope.corpus.preferredTemplate = templateId;
+      Data.saveCouchDoc($rootScope.corpus.pouchname, $rootScope.corpus)
         .then(function(result) {
           console.log("Saved corpus template preferences ", result);
         }, function(reason) {
@@ -388,7 +424,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $rootScope.mcgillOnly = true;
+  $rootScope.mcgillOnly = false;
+  if (window.location.origin.indexOf("mcgill") > -1) {
+    $rootScope.mcgillOnly = true;
+  }
   var overwiteAndUpdatePreferencesToCurrentVersion = function() {
 
     var existingPreferences = localStorage.getItem('SpreadsheetPreferences');
@@ -436,10 +475,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     /* set the number of columns to use  to 2.23+ */
     if (!existingPreferences.fullTemplateDefaultNumberOfColumns) {
-      updatedPreferences.fullTemplateDefaultNumberOfColumns = 2;
+      updatedPreferences.fullTemplateDefaultNumberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
     }
     $rootScope.fullTemplateDefaultNumberOfColumns = updatedPreferences.fullTemplateDefaultNumberOfColumns;
-
+    if (!existingPreferences.fullTemplateDefaultNumberOfFieldsPerColumn) {
+      updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || 3;
+    }
+    $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn;
     // If this is the mcgillOnly deploy, overwrite the user's data entry view
     if ($rootScope.mcgillOnly) {
       updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
@@ -458,9 +500,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Set scope variables
   $scope.documentReady = false;
   $rootScope.templateId = $scope.scopePreferences.userChosenTemplateId;
-  $rootScope.fields = $scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
-  $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId]);
-  $rootScope.availableFields = defaultPreferences.availableFields;
+  $rootScope.fields = []; //$scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
+  $rootScope.fieldsInColumns = {}; //$rootScope.getAvailableFieldsInColumns($scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId]);
+  $rootScope.availableFields = []; //defaultPreferences.availableFields;
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
   $scope.reverse = true;
@@ -477,11 +519,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.createNewSessionDropdown = false;
   $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
   $scope.activities = [];
-  $rootScope.DBselected = false;
-  $scope.recordingStatus = "Record";
-  $scope.recordingButtonClass = "btn btn-success";
-  $scope.recordingIcon = "fa-microphone";
-  $scope.showAudioFeatures = false;
+  $rootScope.corpusSelected = false;
   $scope.newFieldData = {};
   $rootScope.newRecordHasBeenEdited = false;
 
@@ -515,8 +553,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
       $scope.appReloaded = true;
 
-      if ($rootScope.DB) {
-        $rootScope.DBselected = true;
+      if ($rootScope.corpus) {
+        $rootScope.corpusSelected = true;
       }
 
       $rootScope.loading = false;
@@ -574,7 +612,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Get sessions for pouchname; select specific session on saved state load
   $scope.loadSessions = function(sessionID) {
     var scopeSessions = [];
-    Data.sessions($rootScope.DB.pouchname)
+    Data.sessions($rootScope.corpus.pouchname)
       .then(function(response) {
         for (var k in response) {
           scopeSessions.push(response[k].value);
@@ -610,12 +648,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $scope.appReloaded = true;
     $rootScope.loading = true;
-    Data.async($rootScope.DB.pouchname)
+    Data.async($rootScope.corpus.pouchname)
       .then(function(dataFromServer) {
         var scopeData = [];
         for (var i = 0; i < dataFromServer.length; i++) {
           if (dataFromServer[i].value.datumFields) {
-            var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.DB.pouchname + "/");
+            var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.corpus.pouchname + "/");
 
             // Load data from current session into scope
             if (!sessionID || sessionID === "none") {
@@ -638,7 +676,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         // });
 
         $scope.allData = scopeData;
-        $scope.data = scopeData.slice(0, $rootScope.resultSize);
+        var resultSize = $rootScope.resultSize;
+        if (resultSize === "all") {
+          resultSize = $scope.allData.length;
+        }
+        $scope.data = scopeData.slice(0, resultSize);
         $rootScope.currentPage = 0;
 
         $scope.loadAutoGlosserRules();
@@ -666,9 +708,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.loadAutoGlosserRules = function() {
     // Get precedence rules for Glosser
-    Data.glosser($rootScope.DB.pouchname)
+    Data.glosser($rootScope.corpus.pouchname)
       .then(function(rules) {
-        localStorage.setItem($rootScope.DB.pouchname + "precedenceRules", JSON.stringify(rules));
+        localStorage.setItem($rootScope.corpus.pouchname + "precedenceRules", JSON.stringify(rules));
 
         // Reduce the rules such that rules which are found in multiple
         // source words are only used/included once.
@@ -677,43 +719,42 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }).value();
 
         // Save the reduced precedence rules in localStorage
-        localStorage.setItem($rootScope.DB.pouchname + "reducedRules",
+        localStorage.setItem($rootScope.corpus.pouchname + "reducedRules",
           JSON.stringify(reducedRules));
       }, function(error) {
         console.log("Error retrieving precedence rules.", error);
       });
 
     // Get lexicon for Glosser and organize based on frequency
-    Data.lexicon($rootScope.DB.pouchname)
-      .then(function(lexicon) {
-       var sortedLexicon = {};
-       for (var i in lexicon) {
-         if(lexicon[i].key.gloss){
-           if (sortedLexicon[lexicon[i].key.morpheme]) {
-             sortedLexicon[lexicon[i].key.morpheme].push({
-               gloss: lexicon[i].key.gloss,
-               value: lexicon[i].value
-             });
-           } else {
-             sortedLexicon[lexicon[i].key.morpheme] = [{
-               gloss: lexicon[i].key.gloss,
-               value: lexicon[i].value
-             }];
-           }
-         }
-       }
-       var sorter = function(a, b) {
-         return b.value - a.value;
-       };
-       // Sort each morpheme array by descending value
-       for (var key in sortedLexicon) {
-         sortedLexicon[key].sort(sorter);
-       }
-        localStorage.setItem(
-          $rootScope.DB.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
-      }, function(error) {
-        console.log("Error retrieving lexicon.", error);
-      });
+    Data.lexicon($rootScope.corpus.pouchname).then(function(lexicon) {
+      var sortedLexicon = {};
+      for (var i in lexicon) {
+        if (lexicon[i].key.gloss) {
+          if (sortedLexicon[lexicon[i].key.morpheme]) {
+            sortedLexicon[lexicon[i].key.morpheme].push({
+              gloss: lexicon[i].key.gloss,
+              value: lexicon[i].value
+            });
+          } else {
+            sortedLexicon[lexicon[i].key.morpheme] = [{
+              gloss: lexicon[i].key.gloss,
+              value: lexicon[i].value
+            }];
+          }
+        }
+      }
+      var sorter = function(a, b) {
+        return b.value - a.value;
+      };
+      // Sort each morpheme array by descending value
+      for (var key in sortedLexicon) {
+        sortedLexicon[key].sort(sorter);
+      }
+      localStorage.setItem(
+        $rootScope.corpus.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
+    }, function(error) {
+      console.log("Error retrieving lexicon.", error);
+    });
   };
 
 
@@ -805,12 +846,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   corpus.pouchname = scopeDBs[index];
                   corpus.title = scopeDBs[index];
                 }
-                // If this is the corpus the user is looking at, update to the latest corpus details from the database.
-                if ($rootScope.DB && $rootScope.DB.pouchname === corpus.pouchname) {
-                  $rootScope.DB = corpus;
-                  $scope.setTemplateUsingCorpusPreferedTemplate(corpus);
-                }
                 corpus.gravatar = md5.createHash(corpus.pouchname);
+                // If this is the corpus the user is looking at, update to the latest corpus details from the database.
+                if ($rootScope.corpus && $rootScope.corpus.pouchname === corpus.pouchname) {
+                  $scope.selectCorpus(corpus);
+                }
                 $scope.corpora.push(corpus);
               }, function(error) {
                 console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error);
@@ -840,47 +880,83 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.reloadPage();
   };
 
-  $scope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
+  $rootScope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
     // If the currently choosen corpus has a default template, overwrite the user's preferences
     if ($rootScope.mcgillOnly) {
       console.warn("not using the databases' preferredTemplate, this is the mcgill dashboard");
       //$rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
 
     } else if (corpus.preferredTemplate) {
-      var fieldsForTemplate = {};
-      if (window.defaultPreferences[corpus.preferredTemplate]) {
+      var fieldsForTemplate = $rootScope.availableFieldsInCurrentCorpus;
+      if (corpus.preferredTemplate !== "fulltemplate" && window.defaultPreferences[corpus.preferredTemplate]) {
         fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
       }
       $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
     }
   };
 
-  $scope.selectDB = function(selectedDB) {
-    if (!selectedDB) {
+  $scope.selectCorpus = function(selectedCorpus) {
+    if (!selectedCorpus) {
       $rootScope.notificationMessage = "Please select a database.";
       $rootScope.openNotification();
-    } else {
-      try {
-        selectedDB = JSON.parse(selectedDB);
-      } catch (e) {
-        console.log("must have been an object...", e, selectedDB);
+      return;
+    }
+    if (typeof selectedCorpus === "string") {
+      selectedCorpus = {
+        pouchname: selectedCorpus
+      };
+    }
+
+    if (FieldDB && FieldDB.Corpus) {
+      if (!(selectedCorpus instanceof FieldDB.Corpus)) {
+        try {
+          selectedCorpus = JSON.parse(selectedCorpus);
+        } catch (e) {
+          console.log("must have been an object...", e, selectedCorpus);
+        }
+        if ($rootScope.corpus instanceof FieldDB.Corpus && selectedCorpus.pouchname === $rootScope.corpus.pouchname) {
+          console.log("requested load of a corpus which was already loaded.");
+          return;
+        }
+
+        if (!selectedCorpus.datumFields) {
+          $rootScope.corpus = new FieldDB.Corpus();
+          $rootScope.corpus.loadOrCreateCorpusByPouchName(selectedCorpus.pouchname).then(function(results) {
+            console.log("loaded the corpus", results);
+            $scope.selectCorpus($rootScope.corpus);
+          });
+          return;
+        } else {
+          selectedCorpus = new FieldDB.Corpus(selectedCorpus);
+        }
       }
-      $rootScope.DB = selectedDB;
-      $rootScope.availableFieldsInCurrentCorpus = selectedDB.datumFields;
-      if (!$rootScope.availableFieldsInCurrentCorpus) {
-        $rootScope.availableFieldsInCurrentCorpus = [];
+    }
+    $rootScope.corpus = $scope.corpus = selectedCorpus;
+
+    $rootScope.availableFieldsInCurrentCorpus = selectedCorpus.datumFields._collection;
+
+    // Update saved state in Preferences
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedCorpus.pouchname;
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+
+    $scope.availableFields = $rootScope.corpus.datumFields._collection;
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.availableFields);
+    $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
+
+    $scope.loadSessions();
+    $scope.loadUsersAndRoles();
+
+    console.log("setting current corpus details: " + $rootScope.corpus);
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+      if (!FieldDB.FieldDBObject.application.corpus) {
+        FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
+      } else {
+        if (FieldDB.FieldDBObject.application.corpus.dbname !== selectedCorpus.dbname) {
+          console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedCorpus.dbname);
+          FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
+        }
       }
-
-      // Update saved state in Preferences
-      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-      $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedDB.pouchname;
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-
-      $scope.setTemplateUsingCorpusPreferedTemplate(selectedDB);
-
-      $scope.loadSessions();
-      $scope.loadUsersAndRoles();
-
     }
   };
 
@@ -972,10 +1048,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
       }
       // Save session record
-      Data.saveCouchDoc($rootScope.DB.pouchname, newSession)
+      Data.saveCouchDoc($rootScope.corpus.pouchname, newSession)
         .then(function() {
           var directobject = $scope.currentSessionName || "an elicitation session";
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+          var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
           $scope.addActivity([{
             verb: "modified",
             verbicon: "icon-pencil",
@@ -994,12 +1070,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
           var doSomething = function(index) {
             if (scopeDataToEdit[index].sessionID === newSession._id) {
-              Data.async($rootScope.DB.pouchname, scopeDataToEdit[index].id)
+              Data.async($rootScope.corpus.pouchname, scopeDataToEdit[index].id)
                 .then(function(editedRecord) {
                     // Edit record with updated session info
                     // and save
                     editedRecord.session = newSession;
-                    Data.saveCouchDoc($rootScope.DB.pouchname, editedRecord)
+                    Data.saveCouchDoc($rootScope.corpus.pouchname, editedRecord)
                       .then(function() {
                         $rootScope.loading = false;
                       });
@@ -1027,20 +1103,20 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       var r = confirm("Are you sure you want to put this session in the trash?");
       if (r === true) {
-        Data.async($rootScope.DB.pouchname, activeSessionID)
+        Data.async($rootScope.corpus.pouchname, activeSessionID)
           .then(function(sessionToMarkAsDeleted) {
             sessionToMarkAsDeleted.trashed = "deleted";
             var rev = sessionToMarkAsDeleted._rev;
             if (debugging) {
               console.log(rev);
             }
-            Data.saveCouchDoc($rootScope.DB.pouchname, sessionToMarkAsDeleted)
+            Data.saveCouchDoc($rootScope.corpus.pouchname, sessionToMarkAsDeleted)
               .then(function(response) {
 
                 if (debugging) {
                   console.log(response);
                 }
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+                var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
                 $scope.addActivity([{
                   verb: "deleted",
                   verbicon: "icon-trash",
@@ -1079,7 +1155,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Get blank template to build new record
     Data.blankSessionTemplate()
       .then(function(newSessionRecord) {
-        newSessionRecord.pouchname = $rootScope.DB.pouchname;
+        newSessionRecord.pouchname = $rootScope.corpus.pouchname;
         newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
         newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
         newSessionRecord.lastModifiedBy = $rootScope.user.username;
@@ -1099,7 +1175,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             }
           }
         }
-        Data.saveCouchDoc($rootScope.DB.pouchname, newSessionRecord)
+        Data.saveCouchDoc($rootScope.corpus.pouchname, newSessionRecord)
           .then(function(savedRecord) {
 
 
@@ -1111,7 +1187,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               }
             }
             var directobject = newSessionRecord.title || "an elicitation session";
-            var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+            var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
             $scope.addActivity([{
               verb: "added",
               verbicon: "icon-pencil",
@@ -1166,7 +1242,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       var r = confirm("Are you sure you want to put this datum in the trash?");
       if (r === true) {
 
-        Data.async($rootScope.DB.pouchname, datum.id)
+        Data.async($rootScope.corpus.pouchname, datum.id)
           .then(function(recordToMarkAsDeleted) {
             recordToMarkAsDeleted.trashed = "deleted";
             var rev = recordToMarkAsDeleted._rev;
@@ -1175,13 +1251,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             if (recordToMarkAsDeleted.attachmentInfo) {
               delete recordToMarkAsDeleted.attachmentInfo;
             }
-            Data.saveCouchDoc($rootScope.DB.pouchname, recordToMarkAsDeleted)
+            Data.saveCouchDoc($rootScope.corpus.pouchname, recordToMarkAsDeleted)
               .then(function(response) {
                 // Remove record from scope
                 if (debugging) {
                   console.log(response);
                 }
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+                var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
                 $scope.addActivity([{
                   verb: "deleted",
                   verbicon: "icon-trash",
@@ -1300,6 +1376,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.allData.push(fieldData); //inserts new data at the bottom for future pagination.
     $scope.data.push(fieldData);
     // $scope.loadPaginatedData("newDatum"); //dont change pagination, just show it on this screen.
+    $scope.activeDatumIndex = "newEntry";
 
     $scope.newFieldDatahasAudio = false;
     $scope.saved = "no";
@@ -1309,8 +1386,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.newRecordHasBeenEdited = true;
   };
 
+  $rootScope.markAsNotSaved = function(datum) {
+    datum.saved = "no";
+    $scope.saved = "no";
+  };
+
   // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
   $rootScope.markAsEdited = function(fieldData, datum, $event) {
+    if (FieldDB && FieldDB.FieldDBObject) {
+      var previous = new FieldDB.FieldDBObject(datum.fossil);
+      var current = new FieldDB.FieldDBObject(datum);
+      delete current.fossil;
+      delete current.$$hashKey;
+      if (previous.equals(current)) {
+        console.log("The datum didnt actually change. Not marking as editied");
+        return;
+      } else {
+        datum.saved = "no";
+      }
+    }
+
     var utterance = "Datum";
     for (var key in fieldData) {
       if (key === "datumTags" && typeof fieldData.datumTags === 'string') {
@@ -1338,7 +1433,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var modifiedByUser = {
       "username": $rootScope.user.username,
       "gravatar": $rootScope.user.gravatar,
-      "appVersion": $rootScope.appVersion
+      "appVersion": $rootScope.appVersion,
+      "timestamp": datum.timestamp
     };
 
     if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
@@ -1348,12 +1444,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     datum.modifiedByUser.users.push(modifiedByUser);
 
-    // Limit users array to unique usernames
-    datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
-      return x.username;
-    }), function(grouped) {
-      return grouped[0];
-    });
+    // Dont Limit users array to unique usernames
+    // datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
+    //   return x.username;
+    // }), function(grouped) {
+    //   return grouped[0];
+    // });
 
     $scope.saved = "no";
 
@@ -1361,19 +1457,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!datum.saved || datum.saved === "yes") {
       datum.saved = "no";
       // Update activity feed
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-list",
-        directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+        directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "personal"
       }, {
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-list",
-        directobject: "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+        directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "team"
       }]);
@@ -1409,7 +1505,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // $rootScope.currentPage = 0;
     // $rootScope.editsHaveBeenMade = true;
 
-    var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.DB.title + "</a>";
+    var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.corpus.title + "</a>";
     // Update activity feed
     $scope.addActivity([{
       verb: "commented",
@@ -1466,7 +1562,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         utteranceForActivityFeed = recordToBeSaved.utterance;
       }
 
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       var activities = [{
         verb: "added",
         verbicon: "icon-plus",
@@ -1495,7 +1591,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
 
       $scope.saved = "saving";
-      recordToBeSaved.pouchname = $rootScope.DB.pouchname;
+      recordToBeSaved.pouchname = $rootScope.corpus.pouchname;
       // spreadsheetDatum.dateModified =
       // recordToBeSaved.timestamp = Date.now(); // these come from the edit function, and from the create function because the save can happen minutes or hours after the user actually modifies/creates the datum.
       promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
@@ -1504,7 +1600,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       promiseToSaveThisDatum
         .then(function(spreadSheetDatum) {
           spreadSheetDatum.saved = "yes";
-          activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.DB.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
+          activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.corpus.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
           $scope.addActivity(activities, "uploadnow");
         }, function(reason) {
           console.log(reason);
@@ -1592,6 +1688,39 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadData($scope.activeSession);
   };
 
+  $scope.updateCorpusDetails = function(corpus) {
+    console.log("Saving corpus details, corpus passed in", corpus);
+    Data.saveCouchDoc($rootScope.corpus.pouchname, $rootScope.corpus).then(function(result) {
+      if (result && result.data && result.data.ok) {
+        console.log("Saved corpus details ", result);
+        var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
+
+        $scope.addActivity([{
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-cloud",
+          directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "personal"
+        }, {
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-cloud",
+          directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "team"
+        }], "uploadnow");
+      } else {
+        console.log("Error saving corpus details.", result);
+        alert("Error saving corpus details.");
+      }
+
+    }, function(reason) {
+      console.log("Error saving corpus details.", reason);
+      alert("Error saving corpus details.");
+    });
+  };
+
   $scope.runSearch = function(searchTerm) {
     // Create object from fields displayed in scope to later be able to
     // notify user if search result is from a hidden field
@@ -1675,7 +1804,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (newScopeData.length > 0) {
       $scope.allData = newScopeData;
-      $scope.data = $scope.allData.slice(0, $rootScope.resultSize);
+      var resultSize = $rootScope.resultSize;
+      if (resultSize === "all") {
+        resultSize = $scope.allData.length;
+      }
+      $scope.data = $scope.allData.slice(0, resultSize);
     } else {
       $rootScope.notificationMessage = "No records matched your search.";
       $rootScope.openNotification();
@@ -1772,7 +1905,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if ($scope.activities[index]) {
           var activitydb;
           if ($scope.activities[index].teamOrPersonal === "team") {
-            activitydb = $rootScope.DB.pouchname + "-activity_feed";
+            activitydb = $rootScope.corpus.pouchname + "-activity_feed";
           } else {
             activitydb = $rootScope.user.username + "-activity_feed";
           }
@@ -1902,7 +2035,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.password = $rootScope.loginInfo.password;
     dataToPost.serverCode = $rootScope.serverCode;
     dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
-    dataToPost.pouchname = $rootScope.DB.pouchname;
+    dataToPost.pouchname = $rootScope.corpus.pouchname;
 
 
     Data.getallusers(dataToPost)
@@ -1929,16 +2062,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             $rootScope.writePermissions = false;
             $rootScope.commentPermissions = false;
 
-            if (response.roles.indexOf($rootScope.DB.pouchname + "_admin") > -1) {
+            if (response.roles.indexOf($rootScope.corpus.pouchname + "_admin") > -1) {
               $rootScope.admin = true;
             }
-            if (response.roles.indexOf($rootScope.DB.pouchname + "_reader") > -1) {
+            if (response.roles.indexOf($rootScope.corpus.pouchname + "_reader") > -1) {
               $rootScope.readPermissions = true;
             }
-            if (response.roles.indexOf($rootScope.DB.pouchname + "_writer") > -1) {
+            if (response.roles.indexOf($rootScope.corpus.pouchname + "_writer") > -1) {
               $rootScope.writePermissions = true;
             }
-            if (response.roles.indexOf($rootScope.DB.pouchname + "_commenter") > -1) {
+            if (response.roles.indexOf($rootScope.corpus.pouchname + "_commenter") > -1) {
               $rootScope.commentPermissions = true;
             }
           });
@@ -2010,7 +2143,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         break;
     }
 
-    newUserRoles.pouchname = $rootScope.DB.pouchname;
+    newUserRoles.pouchname = $rootScope.corpus.pouchname;
 
     var dataToPost = {};
     dataToPost.username = $rootScope.user.username.trim();
@@ -2025,7 +2158,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (debugging) {
           console.log(response);
         }
-        var indirectObjectString = "on <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a> as " + rolesString;
+        var indirectObjectString = "on <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> as " + rolesString;
         $scope.addActivity([{
           verb: "modified",
           verbicon: "icon-pencil",
@@ -2071,7 +2204,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
       dataToPost.userRoleInfo = {};
       dataToPost.userRoleInfo.usernameToModify = userid;
-      dataToPost.userRoleInfo.pouchname = $rootScope.DB.pouchname;
+      dataToPost.userRoleInfo.pouchname = $rootScope.corpus.pouchname;
       dataToPost.userRoleInfo.removeUser = true;
 
       Data.updateroles(dataToPost)
@@ -2079,7 +2212,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           if (debugging) {
             console.log(response);
           }
-          var indirectObjectString = "from <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+          var indirectObjectString = "from <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
           $scope.addActivity([{
             verb: "removed",
             verbicon: "icon-remove-sign",
@@ -2126,15 +2259,23 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!numberOfRecords) {
       return 0;
     }
-    var numberOfPages = Math.ceil(numberOfRecords / $rootScope.resultSize);
+    var resultSize = $rootScope.resultSize;
+    if (resultSize === "all") {
+      resultSize = $scope.allData.length;
+    }
+    var numberOfPages = Math.ceil(numberOfRecords / resultSize);
     // console.log("requesting numberOfResultPages" + numberOfPages);
     return numberOfPages;
   };
 
   $scope.loadPaginatedData = function(why) {
     console.log("Loading paginated data ", why);
-    var lastRecordOnPage = (($rootScope.currentPage + 1) * $rootScope.resultSize);
-    var firstRecordOnPage = lastRecordOnPage - $rootScope.resultSize;
+    var resultSize = $rootScope.resultSize;
+    if (resultSize === "all") {
+      resultSize = $scope.allData.length;
+    }
+    var lastRecordOnPage = (($rootScope.currentPage + 1) * resultSize);
+    var firstRecordOnPage = lastRecordOnPage - resultSize;
 
     if ($scope.allData) {
       $scope.data = $scope.allData.slice(firstRecordOnPage, lastRecordOnPage);
@@ -2180,362 +2321,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   });
 
-  // Audio recording
-  var hasGetUserMedia = function() {
-    return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia || navigator.msGetUserMedia);
-  };
-
-  if (hasGetUserMedia()) {
-    $rootScope.audioCompatible = true;
-  } else {
-    $rootScope.audioCompatible = false;
-  }
-
-  var onAudioFail = function(e) {
-    $scope.recordingStatus = "Record";
-    $scope.recordingButtonClass = "btn btn-success";
-    $scope.recordingIcon = "fa-microphone";
-    console.log('Audio Rejected!', e);
-    $rootScope.notificationMessage = "Unable to record audio.";
-    $rootScope.openNotification();
-  };
-
-  var onAudioSuccess = function(s) {
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    var context = new AudioContext();
-    var mediaStreamSource = context.createMediaStreamSource(s);
-    try {
-      recorder = new Recorder(mediaStreamSource);
-      recorder.record();
-    } catch (error) {
-      onAudioFail(error);
+  $scope.flagAsDeleted = function(json, datum) {
+    json.trashed = "deleted";
+    if (datum) {
+      $rootScope.markAsNotSaved(datum);
     }
-  };
-
-  window.URL = window.URL || window.webkitURL;
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-  var recorder;
-
-  // Functions to open/close audio warning modal
-  var openAudioWarning = function() {
-    $scope.audioWarningShouldBeOpen = true;
-  };
-
-  $scope.closeAudioWarning = function() {
-    $scope.audioWarningShouldBeOpen = false;
-  };
-
-  var audioRecordingInterval;
-
-  $scope.startRecording = function(datum) {
-    if (navigator.getUserMedia) {
-      $scope.datumForAudio = datum;
-      openAudioWarning();
-      $scope.timeLeftForAudio = "5 minutes 0 seconds";
-      // Begin countdown
-      var minutes = 5;
-      var seconds = 0;
-      audioRecordingInterval = setInterval(function() {
-        if (seconds === 0) {
-          if (minutes === 0) {
-            clearInterval(audioRecordingInterval);
-            stopRecording(datum);
-            $scope.audioWarningShouldBeOpen = false;
-            return;
-          } else {
-            minutes--;
-            seconds = 59;
-          }
-        }
-        var minuteText;
-        if (minutes > 0) {
-          minuteText = minutes + (minutes > 1 ? ' minutes' : ' minute');
-        } else {
-          minuteText = '';
-        }
-        var secondText = seconds + (seconds > 1 ? ' seconds' : ' second');
-        seconds--;
-        $scope.$apply(function() {
-          $scope.timeLeftForAudio = minuteText + " " + secondText;
-        });
-      }, 1000);
-      $scope.recordingButtonClass = "btn btn-success disabled";
-      $scope.recordingStatus = "Recording";
-      $scope.recordingIcon = "fa fa-rss";
-      navigator.getUserMedia({
-        audio: true
-      }, onAudioSuccess, onAudioFail);
-    } else {
-      $scope.recordingStatus = "Record";
-      console.log('navigator.getUserMedia not present');
-    }
-  };
-
-  $scope.stopRecording = function(datum) {
-    if (recorder) {
-      recorder.stop();
-      $scope.closeAudioWarning();
-      clearInterval(audioRecordingInterval);
-      $scope.recordingStatus = "Record";
-      $scope.recordingButtonClass = "btn btn-success";
-      $scope.recordingIcon = "fa-microphone";
-      if ($scope.processingAudio) {
-        return; //avoid double events which were leading to double audio.
-      }
-      $scope.processingAudio = true;
-
-      recorder.exportWAV(function(s) {
-        $scope.uploadFile(datum, s);
-      });
-    } else {
-      $scope.closeAudioWarning();
-      $scope.recordingStatus = "Record doesn't appear to be working currently in your browser";
-      $scope.recordingButtonClass = "btn";
-      $scope.recordingIcon = "fa-microphone-slash";
-    }
-  };
-
-  $scope.uploadFile = function(datum, file) {
-    if (!datum || !datum.id) {
-      $rootScope.newRecordHasBeenEdited = true;
-    }
-
-    // if($scope.processingAudio){
-    //   return; //avoid double events which were leading to double audio.
-    // }
-    $scope.processingAudio = true;
-
-    var blobToBase64 = function(blob, cb) {
-      var reader = new FileReader();
-      reader.onload = function() {
-        var dataUrl = reader.result;
-        var base64 = dataUrl.split(',')[1];
-        cb(base64);
-      };
-      reader.readAsDataURL(blob);
-    };
-
-    var base64File;
-    var inputBoxPrefix;
-    // Test to see if this is a new datum
-    if (!datum || !datum.id) {
-      inputBoxPrefix = "new_datum";
-    } else {
-      inputBoxPrefix = datum.id;
-    }
-
-    // Create attachments
-
-    var newAttachments = {};
-
-    // // If a new file, set up attachments structure, to be saved later
-    if (!datum || !datum.id) {
-      if (!datum) {
-        datum = {};
-      }
-      datum._attachments = {};
-      datum.audioVideo = [];
-    }
-
-    var numberOfFiles;
-    if (file) {
-      numberOfFiles = 1;
-    } else {
-      numberOfFiles = document.getElementById(inputBoxPrefix + "_audio-file").files.length;
-      // Disable upload button after uploading file(s) once in new datum; cannot reset file input in non-async task
-      if (!datum || !datum.id) {
-        $scope.newDatumHasAudioToUpload = true;
-      }
-    }
-
-    // Check to see if user has clicked on upload without recording or uploading files
-    if (numberOfFiles === 0 || numberOfFiles === null) {
-      // $rootScope.editsHaveBeenMade = false;
-      $scope.processingAudio = false;
-      $scope.newDatumHasAudioToUpload = false;
-      document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
-      $rootScope.notificationMessage = "Please record or select audio to upload.";
-      $rootScope.openNotification();
-      return;
-    }
-    var doSomethingWithAudio = function(index) {
-      blobToBase64(file || document.getElementById(inputBoxPrefix + "_audio-file").files[index], function(x) {
-        base64File = x;
-        var filename;
-        var description;
-        var contentType;
-        if (file) {
-          filename = Date.now() + ".wav";
-          contentType = "audio\/wav";
-          description = "";
-        } else {
-          // Test to see if this is a new datum
-          var fileExt;
-          if (!datum || !datum.id) {
-            fileExt = document.getElementById("new_datum_audio-file").files[index].type.split("\/").pop();
-          } else {
-            fileExt = document.getElementById(datum.id + "_audio-file").files[index].type.split("\/").pop();
-          }
-          if (fileExt !== ("mp3" || "mpeg" || "wav" || "ogg")) {
-            $rootScope.notificationMessage = "Upload is turned off for this release."; //You can only upload audio files with extensions '.mp3', '.mpeg', '.wav', or '.ogg'.";
-            $rootScope.openNotification();
-            return;
-          }
-          filename = Date.now() + "" + index + "." + fileExt; // appending index in case of super-rapid processing on multi-file upload, to avoid duplicate filenames
-          contentType = "audio\/" + fileExt;
-          description = document.getElementById(inputBoxPrefix + "_audio-file").files[index].name;
-        }
-
-        var newAttachment = {};
-        newAttachment = {
-          "contentType": contentType,
-          "data": base64File
-        };
-        // if(newAttachments[filename]){
-        //   return; //try to avoid double of the same file...
-        // }
-        newAttachments[filename] = newAttachment;
-        newAttachments[filename].description = description;
-
-        // Push attachment to scope if new record, to be saved later
-        if (!datum || !datum.id) {
-          var newScopeAttachment = {
-            "filename": filename,
-            "description": newAttachments[filename].description,
-            "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + filename,
-            "type": "audio"
-          };
-
-          $scope.$apply(function() {
-            if (datum._attachments[filename]) {
-              return; //try to avoid double of the same file...
-            }
-            datum._attachments[filename] = newAttachments[filename];
-            if (!Array.isArray(datum.audioVideo)) {
-              console.log("Upgrading audioVideo to a collection", datum.audioVideo);
-              var audioVideoArray = [];
-              if (datum.audioVideo.URL) {
-                var audioVideoURL = datum.audioVideo.URL;
-                var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
-                audioVideoArray.push({
-                  "filename": fileFromUrl,
-                  "description": fileFromUrl,
-                  "URL": audioVideoURL,
-                  "type": "audio"
-                });
-              }
-              datum.audioVideo = audioVideoArray;
-            }
-            datum.audioVideo.push(newScopeAttachment);
-          });
-        }
-      });
-    };
-    for (var i = 0; i < numberOfFiles; i++) {
-      doSomethingWithAudio(i);
-    }
-
-    // Stop here if new datum record (i.e. do not upload yet)
-    if (!datum || !datum.id) {
-
-      // Force digest after recording audio
-      if (file) {
-        $scope.$apply(function() {
-          $scope.newFieldDatahasAudio = true;
-          $scope.processingAudio = false;
-        });
-      } else {
-        $scope.newFieldDatahasAudio = true;
-        $scope.processingAudio = false;
-      }
-      return;
-    }
-
-    // Save new attachments for existing record
-    Data.async($rootScope.DB.pouchname, datum.id)
-      .then(function(originalDoc) {
-        var rev = originalDoc._rev;
-        console.log(rev);
-        var key;
-        if (originalDoc._attachments === undefined) {
-          originalDoc._attachments = {};
-        }
-
-        for (key in newAttachments) {
-          originalDoc._attachments[key] = newAttachments[key];
-        }
-        // Update scope attachments
-        if (!datum.audioVideo) {
-          datum.audioVideo = [];
-        }
-        if (!Array.isArray(datum.audioVideo)) {
-          console.log("Upgrading audioVideo to a collection", datum.audioVideo);
-          var audioVideoArray = [];
-          for (var audioVideoItem in datum.audioVideo) {
-            if (datum.audioVideo.hasOwnProperty(audioVideoItem) && datum.audioVideo.audioVideoItem.URL) {
-              var audioVideoURL = datum.audioVideo.audioVideoItem.URL;
-              var fileFromUrl = audioVideoURL.substring(audioVideoURL.lastIndexOf("/"));
-              audioVideoArray.push({
-                "filename": fileFromUrl,
-                "description": fileFromUrl,
-                "URL": audioVideoURL,
-                "type": "audio"
-              });
-            }
-          }
-          datum.audioVideo = audioVideoArray;
-        }
-        for (key in newAttachments) {
-          var newScopeAttachment = {
-            "filename": key,
-            "description": newAttachments[key].description,
-            "URL": $rootScope.server + "/" + $rootScope.DB.pouchname + "/" + datum.id + "/" + key,
-            "type": "audio"
-          };
-
-          datum.audioVideo.push(newScopeAttachment);
-
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
-          $scope.addActivity([{
-            verb: "recorded",
-            verbicon: "icon-plus",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "personal"
-          }, {
-            verb: "recorded",
-            verbicon: "icon-plus",
-            directobjecticon: "icon-list",
-            directobject: "<a href='#data/" + datum.id + "/" + newScopeAttachment.filename + "'>the audio file " + newScopeAttachment.description + " (" + newScopeAttachment.filename + ") on " + datum.utterance + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
-          }], "uploadnow");
-        }
-        datum.hasAudio = true;
-        originalDoc.audioVideo = datum.audioVideo;
-        //Upgrade to v1.90
-        if (originalDoc.attachmentInfo) {
-          delete originalDoc.attachmentInfo;
-        }
-        // console.log(originalDoc.audioVideo);
-        Data.saveCouchDoc($rootScope.DB.pouchname, originalDoc)
-          .then(function(response) {
-            console.log("Successfully uploaded attachment.");
-            if (debugging) {
-              console.log(response);
-            }
-
-
-            // Reset file input field
-            document.getElementById("form_" + inputBoxPrefix + "_audio-file").reset();
-
-            $scope.processingAudio = false;
-          });
-      });
   };
 
   $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
@@ -2548,7 +2338,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (r === true) {
       var record = datum.id + "/" + filename;
       console.log(record);
-      Data.async($rootScope.DB.pouchname, datum.id)
+      Data.async($rootScope.corpus.pouchname, datum.id)
         .then(function(originalRecord) {
           // mark as trashed in scope
           var inDatumAudioFiles = false;
@@ -2574,13 +2364,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             delete originalRecord.attachmentInfo;
           }
           // console.log(originalRecord);
-          Data.saveCouchDoc($rootScope.DB.pouchname, originalRecord)
+          Data.saveCouchDoc($rootScope.corpus.pouchname, originalRecord)
             .then(function(response) {
               console.log("Saved attachment as trashed.");
               if (debugging) {
                 console.log(response);
               }
-              var indirectObjectString = "in <a href='#corpus/" + $rootScope.DB.pouchname + "'>" + $rootScope.DB.title + "</a>";
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
               $scope.addActivity([{
                 verb: "deleted",
                 verbicon: "icon-trash",
@@ -2598,7 +2388,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               }], "uploadnow");
 
               // Dont actually let users delete data...
-              // Data.async($rootScope.DB.pouchname, datum.id)
+              // Data.async($rootScope.corpus.pouchname, datum.id)
               // .then(function(record) {
               //   // Delete attachment info for deleted record
               //   for (var key in record.attachmentInfo) {
@@ -2606,7 +2396,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               //       delete record.attachmentInfo[key];
               //     }
               //   }
-              //   Data.saveCouchDoc($rootScope.DB.pouchname, datum.id, record, record._rev)
+              //   Data.saveCouchDoc($rootScope.corpus.pouchname, datum.id, record, record._rev)
               // .then(function(response) {
               //     if (datum.audioVideo.length === 0) {
               //       datum.hasAudio = false;
@@ -2618,8 +2408,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         });
     }
   };
-
-
 
   $scope.triggerExpandCollapse = function() {
     if ($scope.expandCollapse === true) {
@@ -2697,9 +2485,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           delete $scope.scopePreferences.savedState.DB;
         }
         if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
-          $rootScope.DB = {
+          /* load details for the most receent database */
+          $scope.selectCorpus({
             pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
-          };
+          });
+
           if ($scope.scopePreferences.savedState.sessionID) {
             // Load all sessions and go to current session
             $scope.loadSessions($scope.scopePreferences.savedState.sessionID);
@@ -2786,5 +2576,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 };
-SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log'];
+SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http'];
 angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);

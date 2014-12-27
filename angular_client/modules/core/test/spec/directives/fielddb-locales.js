@@ -1,6 +1,9 @@
-/* globals FieldDB */
+/* globals FieldDB, localStorage */
 "use strict";
-var debugMode = true;
+var debugMode = false;
+localStorage.setItem("_userOverridenLocalePreference", JSON.stringify({
+  iso: "ka"
+}));
 
 describe("Directive: fielddb-locales", function() {
 
@@ -70,4 +73,13 @@ describe("Directive: fielddb-locales", function() {
   //   expect(el.scope().locales).toBeDefined();
   // });
 
+  //http://stackoverflow.com/questions/15272414/how-can-i-test-events-in-angular/15282932#15282932
+  it("should persist the users choice across page loads", function() {
+    compileFunction(scope); // <== the html {{}} are bound
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.contextualizer) {
+      expect(FieldDB.FieldDBObject.application.contextualizer.currentLocale.iso).toEqual("ka");
+    }
+
+    // expect(angular.element(el.find("select")[0]).scope().locales).toBeDefined();
+  });
 });

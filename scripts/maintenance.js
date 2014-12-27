@@ -1,3 +1,109 @@
+// http://tobyho.com/2009/10/07/retrieve-the-top-n-tags-in/
+var estimationOfAcademicUsers = function() {
+  var map = function(doc) {
+    if (!doc.email || doc.email.indexOf("@") == -1 || doc.username.indexOf("test") > -1 || doc.username.indexOf("anonymous") > -1) {
+      return;
+    }
+    var affiliation = doc.email.substring(doc.email.lastIndexOf("@") + 1);
+    if (affiliation.lastIndexOf("edu") !== affiliation.length - 3) {
+      //return;
+    }
+    emit(null, affiliation);
+  };
+
+  var reduce = function(key, values, rereduce) {
+    var minimumCountRequiredToProtectPrivacy = 1;
+    var maxEduToShow = 100;
+    var maxNonEduToShow = 10;
+
+    var eduDomain = {};
+    var nonEduDomain = {};
+    var i,
+      emailDomain,
+      key;
+
+    var allAffiliations = {
+      topEduAffiliations: [],
+      topNonEduAffiliations: []
+    }
+    if (!rereduce) {
+      for (i in values) {
+        emailDomain = values[i];
+        if (emailDomain.lastIndexOf(".edu") === emailDomain.length - 4 || emailDomain.lastIndexOf(".ca") === emailDomain.length - 3) {
+          eduDomain[emailDomain] = (eduDomain[emailDomain] || 0) + 1;
+        } else {
+          nonEduDomain[emailDomain] = (nonEduDomain[emailDomain] || 0) + 1;
+        }
+      }
+    } else {
+      for (i in values) {
+        var topN = values[i].topEduAffiliations;
+
+        allAffiliations.eduCount = values[i].eduCount;
+        allAffiliations.nonEduCount = values[i].nonEduCount;
+
+        for (var j in topN) {
+          // log(topN);
+          var pair = topN[j];
+          emailDomain = pair[0];
+          eduDomain[emailDomain] = (eduDomain[emailDomain] || 0) + pair[1];
+        }
+        topN = values[i].topNonEduAffiliations;
+        for (var j in topN) {
+          // log(topN);
+          var pair = topN[j];
+          emailDomain = pair[0];
+          nonEduDomain[emailDomain] = (nonEduDomain[emailDomain] || 0) + pair[1];
+        }
+      }
+    }
+    var allEduCount = 0;
+    var allNonEduCount = 0;
+    for (key in eduDomain) {
+      if (eduDomain[key] > minimumCountRequiredToProtectPrivacy) {
+        allAffiliations.topEduAffiliations.push([key, eduDomain[key]]);
+      }
+      allEduCount += 1;
+    }
+    for (key in nonEduDomain) {
+      if (nonEduDomain[key] > minimumCountRequiredToProtectPrivacy) {
+        allAffiliations.topNonEduAffiliations.push([key, nonEduDomain[key]]);
+      }
+      allNonEduCount += 1;
+    }
+    // return ["hi"];
+    // return {
+    //   distinctEduAffiliations: allEduCount,
+    //   distinctNonEduAffiliations: allNonEduCount
+    // };
+
+    allAffiliations.topEduAffiliations = allAffiliations.topEduAffiliations.sort(function(a, b) {
+      return b[1] - a[1]
+    }).slice(0, maxEduToShow);
+
+
+    allAffiliations.topNonEduAffiliations = allAffiliations.topNonEduAffiliations.sort(function(a, b) {
+      return b[1] - a[1]
+    }).slice(0, maxNonEduToShow);
+
+    allAffiliations.eduCount = allAffiliations.eduCount || allEduCount;
+    allAffiliations.nonEduCount = allAffiliations.nonEduCount || allNonEduCount;
+
+    allAffiliations.metadata = {
+      minimumCountRequiredToProtectPrivacy: minimumCountRequiredToProtectPrivacy,
+      maxEduToShow: maxEduToShow,
+      maxNonEduToShow: maxNonEduToShow,
+      totalEduCount: allAffiliations.eduCount,
+      totalNonEduCount: allAffiliations.nonEduCount
+    };
+
+    return allAffiliations;
+
+  };
+
+};
+
+
 $.couch.allDbs({
   success: function(results) {
     console.log(results);
@@ -448,9 +554,8 @@ $.couch.allDbs({
         } else {
           if (dbname.indexOf("anonymous") > -1) {
             return;
-          } else {
-          }
-          return;  //deploy to only beta testers and/or phophlo users
+          } else {}
+          return; //deploy to only beta testers and/or phophlo users
         }
         var sourceDB = "";
         if (dbname.indexOf("activity_feed") > -1) {

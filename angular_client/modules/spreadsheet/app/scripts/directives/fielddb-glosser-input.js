@@ -67,7 +67,7 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         $rootScope.newRecordHasBeenEdited = true;
       }
 
-      datumornewdatum.pouchname = $scope.DB.pouchname;
+      datumornewdatum.pouchname = $scope.corpus.pouchname;
       if (label === 'utterance') {
         datumornewdatum = Glosser.guessMorphemesFromUtterance(datumornewdatum, !$scope.useAutoGlosser);
       } else if (label === 'morphemes') {
@@ -82,11 +82,11 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
     template: function(element, attrs) {
       console.log('loading template for fielddbGlosserInput', attrs);
       var templateString = '<input ' +
-        'ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + '"' +
+        'ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
         'class="span5"' +
         'type="text"' +
         'ng-model="' + attrs.datumornewdatum + '[corpusField.label]"' +
-        'placeholder="{{corpusField.title}}"' +
+        'placeholder="{{corpusField.label}}"' +
         'title="{{corpusField.hint}}"' +
         'ng-blur="runGlosserUsingThisField(corpusField.label, ' + attrs.datumornewdatum + '[corpusField.label], ' + attrs.datumornewdatum + ', $event)" />';
 

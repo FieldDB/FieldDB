@@ -34,14 +34,14 @@ module.exports = function(grunt) {
       js: {
         files: ["<%= yeoman.app %>/scripts/{,*/}*.js", "<%= yeoman.app %>/bower_components/fielddb/{,*/}*.js"],
         // tasks: ["newer:jshint:all"],
-        tasks: ["default"],
+        tasks: ["newer:jshint", "build"],
         options: {
           livereload: 35726
         }
       },
       templates: {
         files: ["<%= yeoman.app %>/views/{,*/}*.html"],
-        tasks: ["default"],
+        tasks: ["build"],
         options: {
           livereload: 35726
         }
@@ -49,6 +49,10 @@ module.exports = function(grunt) {
       jsTest: {
         files: ["test/spec/{,*/}*.js"],
         tasks: ["newer:jshint:test", "karma"]
+      },
+      karma: {
+        files: ["test/spec/{,*/}*.js"],
+        tasks: ["newer:jshint:test", "karma:unit:run"] //https://github.com/karma-runner/grunt-karma#karma-server-with-grunt-watch
       },
       styles: {
         files: ["<%= yeoman.app %>/styles/{,*/}*.css"],
@@ -194,7 +198,7 @@ module.exports = function(grunt) {
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ["<%= yeoman.dist %>/{,*/}*.html"],
+      html: ["<%= yeoman.dist %>/*.html"],
       css: ["<%= yeoman.dist %>/styles/{,*/}*.css"],
       options: {
         assetsDirs: ["<%= yeoman.dist %>"]
@@ -345,10 +349,15 @@ module.exports = function(grunt) {
     // },
 
     // Test settings
+    // https://github.com/karma-runner/grunt-karma#karma-server-with-grunt-watch
     karma: {
       unit: {
         configFile: "karma.conf.js",
+        // background: true,
+        // singleRun: false,
         singleRun: true
+        // autoWatch: true,
+        // browsers: ["Chrome"]
       }
     }
   });
@@ -385,7 +394,7 @@ module.exports = function(grunt) {
   /* might want to run $ grunt browserify in the FieldDB root to ensure the api build is up to date. */
   grunt.registerTask("build", [
     "clean:dist",
-    "bowerInstall",
+    // "bowerInstall",
     "useminPrepare",
     "concurrent:dist",
     "autoprefixer",
@@ -406,4 +415,5 @@ module.exports = function(grunt) {
     "test",
     "build"
   ]);
+
 };
