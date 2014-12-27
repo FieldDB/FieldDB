@@ -19,7 +19,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = null;
 
 
-  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && $rootScope.contextualize) {
     if ($rootScope.contextualize("locale_faq") === "FAQ") {
       console.log("Locales already loaded.");
     } else {
