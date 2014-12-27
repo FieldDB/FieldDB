@@ -940,15 +940,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedCorpus.pouchname;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
+    $scope.availableFields = $rootScope.corpus.datumFields._collection;
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.availableFields);
     $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
 
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
 
-
     console.log("setting current corpus details: " + $rootScope.corpus);
-    $scope.availableFields = $rootScope.corpus.datumFields._collection;
-
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       if (!FieldDB.FieldDBObject.application.corpus) {
         FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
