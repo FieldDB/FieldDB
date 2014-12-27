@@ -1,3 +1,4 @@
+/* globals FieldDB */
 "use strict";
 var debugMode = false;
 
