@@ -1413,6 +1413,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       if (previous.equals(current)) {
         console.log("The datum didnt actually change. Not marking as editied");
         return;
+      } else {
+        datum.saved = "no";
       }
     }
 
@@ -1443,7 +1445,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var modifiedByUser = {
       "username": $rootScope.user.username,
       "gravatar": $rootScope.user.gravatar,
-      "appVersion": $rootScope.appVersion
+      "appVersion": $rootScope.appVersion,
+      "timestamp": datum.timestamp
     };
 
     if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
@@ -1453,12 +1456,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     datum.modifiedByUser.users.push(modifiedByUser);
 
-    // Limit users array to unique usernames
-    datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
-      return x.username;
-    }), function(grouped) {
-      return grouped[0];
-    });
+    // Dont Limit users array to unique usernames
+    // datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
+    //   return x.username;
+    // }), function(grouped) {
+    //   return grouped[0];
+    // });
 
     $scope.saved = "no";
 
