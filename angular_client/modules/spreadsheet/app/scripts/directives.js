@@ -120,7 +120,7 @@ angular.module('spreadsheetApp')
         if (scope.activeDatumIndex === 'newEntry' || scope.activeDatumIndex === scope.$index) {
           $timeout(function() {
 
-            if (document.activeElement !== selfElement.find("input")[0]) {
+            if (document.activeElement !== selfElement.find("input")[0] && selfElement.find("input")[0]) {
               // console.log("arrow old focus", document.activeElement);
               // element[0].focus();
               selfElement.find("input")[0].focus();

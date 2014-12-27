@@ -148,6 +148,8 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
     });
   }
 
+  spreadsheetDatum.saved = "fresh";
+  spreadsheetDatum.fossil = JSON.parse(JSON.stringify(spreadsheetDatum));
   return spreadsheetDatum;
 };
 
@@ -194,7 +196,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     }
 
     /* If the key wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
-    if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "saved" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
+    if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "saved" && key !== "fossil" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
       fieldDBDatum.datumFields.push({
         "label": key,

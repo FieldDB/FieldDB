@@ -67,7 +67,7 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         $rootScope.newRecordHasBeenEdited = true;
       }
 
-      datumornewdatum.pouchname = $scope.DB.pouchname;
+      datumornewdatum.pouchname = $scope.corpus.pouchname;
       if (label === 'utterance') {
         datumornewdatum = Glosser.guessMorphemesFromUtterance(datumornewdatum, !$scope.useAutoGlosser);
       } else if (label === 'morphemes') {

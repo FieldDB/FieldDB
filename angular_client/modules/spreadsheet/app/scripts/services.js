@@ -71,8 +71,8 @@ angular.module('spreadsheetApp')
       var promise = $http.get('data/blank_datum_template.json').then(
         function(response) {
           /* Override default datum fields with the ones in the currently loaded corpus */
-          if ($rootScope.DB && $rootScope.DB.datumFields) {
-            response.data.datumFields = JSON.parse(JSON.stringify($rootScope.DB.datumFields));
+          if ($rootScope.corpus && $rootScope.corpus.datumFields) {
+            response.data.datumFields = JSON.parse(JSON.stringify($rootScope.corpus.datumFields));
           }
           return response.data;
         });
