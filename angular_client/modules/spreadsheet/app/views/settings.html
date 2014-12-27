@@ -1,13 +1,13 @@
 <br />
 <br />
 <div>
-  <h3>User Interface Settings</h3>
+  <h3>{{locale_user_interface_settings}}</h3>
   <br />
 
   <!-- Number of records to display -->
   <div class="form-horizontal">
     <div class="settings_section_header">
-      <h2>Number of records to display per page</h2>
+      <h2>{{locale_records_to_display}}</h2>
     </div>
     <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems">
@@ -17,24 +17,24 @@
       <option value="10">10</option>
       <option value="25" selected>25</option>
       <option value="50">50</option>
-      <option value={{data.length}}>All {{data.length}}</option>
+      <option value={{data.length}}>{{locale_all_dropdown}} {{data.length}}</option>
     </select>
     &nbsp;<button class="btn btn-primary"
-    ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">Save</button>
+    ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">{{locale_save_button}}</button>
   </div>
 </div>
 <hr />
 
 <div class="settings_section_header">
-  <h2>Templates</h2>
+  <h2>{{locale_templates}}</h2>
 </div>
 <div class="clearDiv">&nbsp;</div>
 <div class="settingsItems">
   <div ng-hide="mcgillOnly">
     <!-- Full TEMPLATE -->
     <h3>
-      <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> Full Template
-      <small ng-show="DB.preferredTemplate == 'fulltemplate'">Default template for {{DB.title}}</small>
+      <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> {{locale_full_template}}
+      <small ng-show="DB.preferredTemplate == 'fulltemplate'">{{locale_default_template}} {{DB.title}}</small>
     </h3>
     <div class="row settingsTemplate">
 
@@ -64,22 +64,21 @@
         placeholder="Tags"></textarea> -->
         <!-- <span class="span4" rows="3">Comments</span> -->
         <div class="span1">
-          Audio &amp; Comments
+          {{locale_audio_and_comments}}
         </div>
 
       </div>
       <br />
-      Number of Columns:
+      {{locale_number_columns}}
       <select ng-model="fullTemplateDefaultNumberOfColumns">
         <option>1</option>
         <option>2</option>
         <option>3</option>
       </select>
       <button class="btn btn-primary"
-      ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2)">Save/Activate
-      Full Template</button>
+      ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2)">{{locale_activate_full_button}}</button>
       <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'fulltemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('fulltemplate')">Set as default template for {{DB.title}}</button>
+      ng-click="setAsDefaultCorpusTemplate('fulltemplate')">{{locale_set_as_default_button}} {{DB.title}}</button>
       <!-- End Full TEMPLATE -->
 
       <center>
@@ -88,34 +87,34 @@
 
       <!-- Compact TEMPLATE 1 -->
       <h3>
-        <span ng-show="templateId=='compacttemplate'"><b>✓</b></span> Compact Template
-        <small ng-show="DB.preferredTemplate == 'compacttemplate'">Default template for {{DB.title}}</small>
+        <span ng-show="templateId=='compacttemplate'"><b>✓</b></span> {{locale_compact_template}}
+        <small ng-show="DB.preferredTemplate == 'compacttemplate'">{{locale_default_template}} {{DB.title}}</small>
       </h3>
       <div class="row settingsTemplate">
         <div class="span3">
           <select class="span3" ng-model="newFieldPreferences1.field1">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-default-compact-template="field1"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
         </div>
         <div class="span3">
           <select class="span3" ng-model="newFieldPreferences1.field2">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-default-compact-template="field2"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
         </div>
         <div class="span3">
           <select class="span3" ng-model="newFieldPreferences1.field3">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-default-compact-template="field3"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
         </div>
         <div class="span3">
           <select class="span3" ng-model="newFieldPreferences1.field4">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-default-compact-template="field4"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
@@ -123,10 +122,9 @@
       </div>
       <br />
       <button class="btn btn-primary"
-      ng-click="saveNewPreferences('compacttemplate', newFieldPreferences1)">Save/Activate
-      Compact Template</button>
+      ng-click="saveNewPreferences('compacttemplate', newFieldPreferences1)">{{locale_activate_compact_button}}</button>
       <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'compacttemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('compacttemplate')">Set as default template for {{DB.title}}</button>
+      ng-click="setAsDefaultCorpusTemplate('compacttemplate')">{{locale_set_as_default_button}} {{DB.title}}</button>
       <!-- End Compact TEMPLATE 1 -->
 
       <center>
@@ -135,50 +133,50 @@
 
       <!-- Yale Field Methods TEMPLATE 3 -->
       <h3>
-        <span ng-show="templateId=='yalefieldmethodsspring2014template'"><b>✓</b></span> Yale Field Methods Template
-        <small ng-show="DB.preferredTemplate == 'yalefieldmethodsspring2014template'">Default template for {{DB.title}}</small>
+        <span ng-show="templateId=='yalefieldmethodsspring2014template'"><b>✓</b></span> {{locale_yale_template}}
+        <small ng-show="DB.preferredTemplate == 'yalefieldmethodsspring2014template'">{{locale_default_template}} {{DB.title}}</small>
       </h3>
       <div class="row settingsTemplate">
         <div class="span5">
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field1">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field1"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field2">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field2"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field3">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field3"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field4">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field4"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
         </div>
         <div class="span5">
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field5">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field5"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field6">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field6"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field7">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field7"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
           <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field8">
-            <option value="">Empty</option>
+            <option value="">{{locale_empty_dropdown}}</option>
             <option select-field-from-yale-field-methods-spring-2014-template="field8"
             ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
           </select>
@@ -188,16 +186,15 @@
 
       </div>
       <div class="span1">
-        Audio &amp; Comments
+        {{locale_audio_and_comments}}
       </div>
 
     </div>
 
     <button class="btn btn-primary"
-    ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">Save/Activate
-    Yale Field Methods Template</button>
+    ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">{{locale_activate_yale_button}}</button>
     <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'yalefieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">Set as default template for {{DB.title}}</button>
+    ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">{{locale_set_as_default_button}} {{DB.title}}</button>
 
     <center>
       <hr width="80%">
@@ -207,86 +204,84 @@
 
   <!-- McGill TEMPLATE -->
   <h3>
-    <span ng-show="templateId=='mcgillfieldmethodsfall2014template'"><b>✓</b></span> McGill Field Methods Template Fall 2014
-    <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsfall2014template'">Default template for {{DB.title}}</small>
+    <span ng-show="templateId=='mcgillfieldmethodsfall2014template'"><b>✓</b></span> {{locale_mcgill_fall_2014_template}}
+    <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsfall2014template'">{{locale_default_template}} {{DB.title}}</small>
   </h3>
   <div class="row settingsTemplate">
     <div class="span5">
       <select class="span5" disabled="disabled">
-        <option value="">Utterance</option>
+        <option value="">{{locale_utterance}}</option>
       </select>
       <select class="span5" disabled="disabled">
-        <option value="">Morphemes</option>
+        <option value="">{{locale_morphemes}}</option>
       </select>
       <select class="span5" disabled="disabled">
-        <option value="">Gloss</option>
+        <option value="">{{locale_gloss}}</option>
       </select>
     </div>
     <div class="span5" >
       <select class="span5" disabled="disabled">
-        <option value="">Translation</option>
+        <option value="">{{locale_translation}}</option>
       </select>
       <select class="span5" disabled="disabled">
-        <option value="">IPA</option>
+        <option value="">{{locale_ipa}}</option>
       </select>
       <select class="span5" disabled="disabled">
-        <option value="">Notes</option>
+        <option value="">{{locale_notes}}</option>
       </select>
 
     </div>
     <div class="span1">
-      Audio &amp; Comments
+      {{locale_audio_and_comments}}
     </div>
 
   </div>
   <br />
   <button  ng-hide="mcgillOnly" class="btn btn-primary"
-  ng-click="saveNewPreferences('mcgillfieldmethodsfall2014template', newFieldPreferences2)">Save/Activate
-  McGill Template</button>
+  ng-click="saveNewPreferences('mcgillfieldmethodsfall2014template', newFieldPreferences2)">{{locale_activate_mcgill_button}}</button>
   <button  ng-hide="mcgillOnly" ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
-  ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">Set as default template for {{DB.title}}</button>
+  ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">{{locale_set_as_default_button}} {{DB.title}}</button>
   <!-- End McGill TEMPLATE -->
   <div ng-hide="mcgillOnly">
     <!-- McGill TEMPLATE -->
     <h3>
-      <span ng-show="templateId=='mcgillfieldmethodsspring2014template'"><b>✓</b></span> McGill Field Methods Template Spring 2014
-      <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsspring2014template'">Default template for {{DB.title}}</small>
+      <span ng-show="templateId=='mcgillfieldmethodsspring2014template'"><b>✓</b></span> {{locale_mcgill_spring_2014template}}
+      <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsspring2014template'">{{locale_default_template}} {{DB.title}}</small>
     </h3>
     <div class="row settingsTemplate">
       <div class="span5">
         <select class="span5" disabled="disabled">
-          <option value="">Utterance</option>
+          <option value="">{{locale_utterance}}</option>
         </select>
         <select class="span5" disabled="disabled">
-          <option value="">Morphemes</option>
+          <option value="">{{locale_morphemes}}</option>
         </select>
         <select class="span5" disabled="disabled">
-          <option value="">Gloss</option>
+          <option value="">{{locale_gloss}}</option>
         </select>
       </div>
       <div class="span5" >
         <select class="span5" disabled="disabled">
-          <option value="">Translation</option>
+          <option value="">{{locale_translation}}</option>
         </select>
         <select class="span5" disabled="disabled">
-          <option value="">IPA</option>
+          <option value="">{{locale_ipa}}</option>
         </select>
         <select class="span5" disabled="disabled">
-          <option value="">Notes</option>
+          <option value="">{{locale_notes}}</option>
         </select>
 
       </div>
       <div class="span1">
-        Audio &amp; Comments
+        {{locale_audio_and_comments}}
       </div>
 
     </div>
     <br />
     <button class="btn btn-primary"
-    ng-click="saveNewPreferences('mcgillfieldmethodsspring2014template', newFieldPreferences2)">Save/Activate
-    McGill Template</button>
+    ng-click="saveNewPreferences('mcgillfieldmethodsspring2014template', newFieldPreferences2)">{{locale_activate_mcgill_button}}</button>
     <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">Set as default template for {{DB.title}}</button>
+    ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">{{locale_set_as_default_button}} {{DB.title}}</button>
     <!-- End McGill TEMPLATE -->
   </div> <!-- hide old mcgil tempalte -->
 </div>
@@ -297,14 +292,11 @@
   <br />
   <div class="row">
     <div class="span8 offset1">
-      <button class="btn btn-primary" ng-click="editTags=!editTags">Click
-        here to edit tags</button>
+      <button class="btn btn-primary" ng-click="editTags=!editTags">{{locale_edit_tags_button}}</button>
         &nbsp;
-        <button class="btn btn-primary" ng-click="deleteDuplicateTags();">Delete
-          Duplicate Tags</button>
+        <button class="btn btn-primary" ng-click="deleteDuplicateTags();">{{locale_delete_duplicate_tags_button}}</button>
           &nbsp;
-          <button class="btn btn-primary" ng-click="editFields=!editFields">Click
-            here to edit fields</button>
+          <button class="btn btn-primary" ng-click="editFields=!editFields">{{locale_edit_fields_button}}</button>
           </div>
         </div>
 
@@ -313,14 +305,14 @@
 
         <div class="row" ng-show="editTags==true">
           <div class="span8">
-            Click EDIT button to rename tag:
+            {{locale_rename_tags}}
             <div ng-repeat="tag in tags">
               <input type="text" value="{{tag}}" disabled="true" ng-model="none">
-              <button class="btn btn-primary" ng-click="changeTagToEdit(tag)">Edit</button>
+              <button class="btn btn-primary" ng-click="changeTagToEdit(tag)">{{locale_Edit_button}}</button>
               <span ng-show="tagToEdit==tag"><input type="text"
                 ng-model="newTag" placeholder="Change to ...">
                 <button class="btn btn-primary"
-                ng-click="editTagInfo(tag, newTag)">Update</button> </span> <img
+                ng-click="editTagInfo(tag, newTag)">{{locale_update_button}}</button> </span> <img
                 ng-show="loading==true" src="images/spinner-small.gif">
               </div>
             </div>
@@ -329,15 +321,15 @@
           <!-- FIELDS -->
           <div class="row" ng-show="editFields==true">
             <div class="span8">
-              Click EDIT button to rename field:
+              {{locale_rename_fields}}
               <div ng-repeat="field in availableFields">
                 <input type="text" value="{{field.title}}" disabled="true"
                 ng-model="none">
-                <button class="btn btn-primary" ng-click="changeFieldToEdit(field)">Edit</button>
+                <button class="btn btn-primary" ng-click="changeFieldToEdit(field)">{{locale_Edit_button}}</button>
                 <span ng-show="fieldToEdit==field"><input type="text"
                   ng-model="newFieldTitle" placeholder="Change to ...">
                   <button class="btn btn-primary"
-                  ng-click="editFieldTitle(field, newFieldTitle)">Update</button> </span>
+                  ng-click="editFieldTitle(field, newFieldTitle)">{{locale_update_button}}</button> </span>
                   <img ng-show="loading==true" src="images/spinner-small.gif">
                 </div>
               </div>
