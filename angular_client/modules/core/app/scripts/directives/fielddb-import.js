@@ -10,8 +10,9 @@
  * # fielddbImport
  */
 angular.module("fielddbAngularApp").directive("fielddbImport", function() {
-
-  var controller = function($scope, $upload) {
+  var rootScope;
+  var controller = function($scope, $upload, $rootScope) {
+    rootScope = $rootScope;
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       $scope.application = FieldDB.FieldDBObject.application;
     }
@@ -21,6 +22,8 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       username: "testupload",
       returnTextGrid: true
     };
+
+
 
     var progress = function(evt) {
       console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
@@ -156,7 +159,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
   };
 
-  controller.$inject = ["$scope", "$upload"];
+  controller.$inject = ["$scope", "$upload", "$rootScope"];
 
   var directiveDefinitionObject = {
     templateUrl: "views/import.html",
@@ -167,7 +170,25 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       // application: "=application"
     },
     controller: controller,
-    link: function postLink() {},
+    link: function postLink(scope) {
+      if (!scope.importer) {
+        return;
+      }
+      if (scope.importer && scope.importer.corpus) {
+        return;
+      }
+      if (!scope.importer.corpus && scope.corpus) {
+        scope.importer.warn("The importers corpus was undefined, using the corpus in local scope, although this might have consequences.");
+        scope.importer.corpus = scope.corpus;
+        return;
+      }
+      if (!scope.importer.corpus && rootScope.corpus) {
+        scope.importer.warn("The importers corpus was undefined, using the corpus in root scope, although this might have consequences.");
+        scope.importer.corpus = rootScope.corpus;
+        return;
+      }
+
+    },
     priority: 0,
     replace: false,
     controllerAs: "stringAlias"
