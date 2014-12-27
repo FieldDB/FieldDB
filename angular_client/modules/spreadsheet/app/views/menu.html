@@ -15,7 +15,7 @@
         <a class="menuitem" ng-click="loadDataEntryScreen();">
           <i class="fa whiteicon fa-list">
           </i>
-          Data Entry
+          {{locale_data_entry}}
         </a>
       </span>
       |
@@ -23,7 +23,7 @@
         <a class="menuitem" ng-click="navigateVerifySaved('searchMenu');">
           <i class="fa whiteicon fa-search">
           </i>
-          Search
+          {{locale_search}}
         </a>
       </span>
       |
@@ -31,7 +31,7 @@
         <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
           <i class="fa whiteicon fa-calendar">
           </i>
-          Session
+          {{locale_session}}
         </a>
       </span>
       |
@@ -48,14 +48,14 @@
                 <a ng-click="navigateVerifySaved('corpusSettings')">
                   <i class="fa whiteicon fa-cloud">
                   </i>
-                  Corpus
+                  {{locale_corpus}}
                 </a>
               </li>
               <li ng-hide="DB.pouchname==undefined">
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
-                  User Interface
+                  {{locale_user_interface}}
                 </a>
               </li>
             </ul>
@@ -67,7 +67,7 @@
         <a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;">
           <i class="fa whiteicon fa-question-circle">
           </i>
-          FAQ
+          {{locale_faq}}
         </a>
       </span>
       |
@@ -75,7 +75,7 @@
         <input type="checkbox" ng-model="useAutoGlosser">
         <i class="fa whiteicon fa-bar-chart-o">
         </i>
-        Semi-auto Glosser
+        {{locale_glosser}}
       </span>
       <span class="rightMenuItems" ng-show="authenticated==true">
         <div class="rightMenuItemsDiv">
@@ -100,7 +100,7 @@
             <button class="btn btn-warning" ng-click="logOut()">
               <i class="fa whiteicon fa-arrow-right">
               </i>
-              Log out
+              {{locale_logout}}
             </button>
             <a href="http://lingsync.org/{{user.username}}" target="_blank" title="Visit your share page">
               <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0">
@@ -113,7 +113,7 @@
       <span ng-hide="authenticated">
         <div class="rightMenuItemsDiv">
           <button ng-click="navigateVerifySaved('register');" class="btn btn-primary">
-            Register
+            {{locale_register}}
           </button>
         </div>
       </span>
@@ -123,16 +123,16 @@
         <span>
           <i class="fa whiteicon fa-calendar">
           </i>
-          Change Session:
+          {{locale_change_session}}
         </span>
         <select class="span3" ng-model='activeSessionToSwitchTo'>
           <option value="" disabled selected>
-            Choose session...
+            {{locale_choose_session}}
           </option>
           <option value='none'>
             <i class="fa whiteicon fa-cogs">
             </i>
-            All sessions
+            {{locale_all_sessions}}
           </option>
           <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value={{session._id}}>
             {{session.dateCreated | shortDate}} {{session.title}}
@@ -140,12 +140,12 @@
         </select>
         &nbsp;
         <button class="btn btn-primary" ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">
-          Activate Session
+          {{locale_activate_session_button}}
         </button>
         &nbsp;&nbsp;
         <span ng-hide="activeSession==undefined">
           <button ng-show="writePermissions==true" class="btn btn-success" ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
-            Edit Session Info
+            {{locale_edit_session_info_button}}
           </button>
           &nbsp;&nbsp;
         </span>
@@ -153,14 +153,14 @@
           <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">
             <i class="fa whiteicon fa-trash-o">
             </i>
-            Delete Session
+            {{locale_delete_session}}
           </button>
           &nbsp;&nbsp;
         </span>
         <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-plus">
           </i>
-          Create New Elicitation Session
+          {{locale_create_new_elicitation_session_button}}
         </button>
       </div>
       <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSession!=undefined"ng-cloak>
@@ -170,7 +170,7 @@
               <td>
                 <i class="fa whiteicon fa-calendar">
                 </i>
-                Goal:
+                {{locale_goal_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
@@ -178,7 +178,7 @@
               <td>
                 <i class="fa whiteicon fa-user">
                 </i>
-                Consultants:
+                {{locale_consultants_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
@@ -186,7 +186,7 @@
               <td>
                 <i class="fa whiteicon fa-user">
                 </i>
-                User:
+                {{locale_user_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
@@ -194,19 +194,19 @@
             </tr>
             <tr>
               <td>
-                Language:
+                {{locale_language_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
               </td>
               <td>
-                Dialect:
+                {{locale_dialect_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
               </td>
               <td>
-                Date Elicited:
+                {{locale_date_elicited_textbox}}
               </td>
               <td>
                 <input class="span3" type="date" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
@@ -218,11 +218,11 @@
           <button class="btn" ng-click="editSession(editSessionInfo, data);">
             <i class="fa whiteicon fa-save">
             </i>
-            Save Changes
+            {{locale_save_changes_button}}
           </button>
           &nbsp;
           <button class="btn" ng-click="editSessionDetails=false">
-            Cancel
+            {{locale_cancel_button}}
           </button>
         </div>
       </div>
@@ -233,7 +233,7 @@
               <td>
                 <i class="fa whiteicon fa-calendar">
                 </i>
-                Goal:
+                {{locale_cancel_button}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
@@ -241,7 +241,7 @@
               <td>
                 <i class="fa whiteicon fa-user">
                 </i>
-                Consultants:
+                {{locale_consultants_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
@@ -249,7 +249,7 @@
               <td>
                 <i class="fa whiteicon fa-user">
                 </i>
-                User:
+                {{locale_user_textbox}}
               </td>
               <td>
                 <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
@@ -257,19 +257,19 @@
             </tr>
             <tr>
               <td>
-                Language:
+                {{locale_language_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
               </td>
               <td>
-                Dialect:
+                {{locale_dialect_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
               </td>
               <td>
-                Date Elicited:
+                {{locale_date_elicited_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
@@ -281,11 +281,11 @@
           <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
             <i class="fa whiteicon fa-save">
             </i>
-            Create Session
+            {{locale_create_session_button}}
           </button>
           &nbsp;
           <button class="btn" ng-click="createNewSessionDropdown=false">
-            Cancel
+            {{locale_cancel_button}}
           </button>
         </div>
       </div>
@@ -294,23 +294,23 @@
       <form class="form-horizontal">
         <i class="fa whiteicon fa-search">
         </i>
-        Search:&nbsp;
+        {{locale_search_text_box}}&nbsp;
         <input type="text" class="input-medium search-query" ng-model='searchTerm'>
         &nbsp;
         <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
-          Go
+          {{locale_go_button}}
         </button>
         &nbsp;
         <button class="btn btn-primary" ng-click="selectAll();">
-          Select All
+          {{locale_select_all_button}}
         </button>
         &nbsp;
         <button class="btn btn-primary" ng-click="exportResults();">
-          Export
+          {{locale_export_button}}
         </button>
         &nbsp;
         <button class="btn btn-warning" ng-click="clearSearch()">
-          Clear Results
+          {{locale_clear_results_button}}
         </button>
         &nbsp;
         <span>
@@ -415,14 +415,14 @@
       <span ng-hide="authenticated">
         <span>
           <button ng-click="navigateVerifySaved('register');" class="btn btn-primary">
-            Register
+            {{locale_register}}
           </button>
         </span>
       </span>
     </div>
     <div class="subMenubar" ng-show="activeSubMenu=='editSession'" ng-cloak>
       <span>
-        Change Session:
+        {{locale_change_session}}
       </span>
       <select class="span3" ng-model='activeSessionToSwitchTo'>
         <option value='none'>
@@ -435,14 +435,14 @@
       <button class="btn btn-primary" ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">
         <i class="fa whiteicon fa-calendar">
         </i>
-        Activate Session
+        {{locale_activate_session_button}}
       </button>
       &nbsp;&nbsp;
       <span ng-hide="activeSession==undefined">
         <button class="btn btn-success" ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
-          Edit Session Info
+          {{locale_edit_session_info_button}}
         </button>
         &nbsp;&nbsp;
       </span>
@@ -450,33 +450,33 @@
         <button class="btn btn-danger" ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-trash-o">
           </i>
-          Delete Session
+          {{locale_delete_session}}
         </button>
         &nbsp;&nbsp;
       </span>
       <button class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
         <i class="fa whiteicon fa-plus">
         </i>
-        Create New Session
+        {{locale_create_new_session}}
       </button>
       <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSession!=undefined" ng-cloak>
         <form ng-model='editSessionInfo'>
           <table cellpadding="5px">
             <tr>
               <td>
-                Goal:
+                {{locale_goal_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
               </td>
               <td>
-                Consultants:
+                {{locale_consultants_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
               </td>
               <td>
-                User:
+                {{locale_user_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
@@ -484,19 +484,19 @@
             </tr>
             <tr>
               <td>
-                Language:
+                {{locale_language_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
               </td>
               <td>
-                Dialect:
+                {{locale_dialect_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
               </td>
               <td>
-                Date Elicited:
+                {{locale_date_elicited_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
@@ -508,11 +508,11 @@
           <button class="btn" ng-click="editSession(editSessionInfo, data);">
             <i class="fa whiteicon fa-save">
             </i>
-            Save Changes
+            {{locale_save_changes_button}}
           </button>
           &nbsp;
           <button class="btn" ng-click="editSessionDetails=false">
-            Cancel
+            {{locale_cancel_button}}
           </button>
         </div>
       </div>
@@ -523,7 +523,7 @@
               <td>
                 <i class="fa whiteicon fa-calendar">
                 </i>
-                Goal:
+                {{locale_goal_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
@@ -531,7 +531,7 @@
               <td>
                 <i class="fa whiteicon fa-group">
                 </i>
-                Consultants:
+                {{locale_consultants_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
@@ -539,7 +539,7 @@
               <td>
                 <i class="fa whiteicon fa-user">
                 </i>
-                User:
+                {{locale_user_textbox}}
               </td>
               <td>
                 <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
@@ -547,19 +547,19 @@
             </tr>
             <tr>
               <td>
-                Language:
+                {{locale_language_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
               </td>
               <td>
-                Dialect:
+                {{locale_dialect_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
               </td>
               <td>
-                Date Elicited:
+                {{locale_date_elicited_textbox}}
               </td>
               <td>
                 <input class="span3" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
@@ -571,11 +571,11 @@
           <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
             <i class="fa whiteicon fa-save">
             </i>
-            Create Session
+            {{locale_create_session_button}}
           </button>
           &nbsp;
           <button class="btn" ng-click="createNewSessionDropdown=false">
-            Cancel
+            {{locale_cancel_button}}
           </button>
         </div>
       </div>
@@ -585,24 +585,24 @@
         <span>
           <i class="fa whiteicon fa-search">
           </i>
-          Search:&nbsp;
+          {{locale_search_text_box}}&nbsp;
           <input type="text" class="input-medium search-query" ng-model='searchTerm'>
           &nbsp;
           <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
-            Go
+            {{locale_go_button}}
           </button>
           &nbsp;
           <button class="btn btn-primary" ng-click="selectAll();">
-            Select All
+            {{locale_select_all_button}}
           </button>
           &nbsp;
           <button class="btn btn-primary" ng-click="exportResults();">
-            Export
+            {{locale_export_button}}
           </button>
         </span>
         &nbsp;
         <button class="btn btn-warning" ng-click="clearSearch()">
-          Clear Results
+          {{locale_clear_results_button}}
         </button>
         <span>
           {{searchHistory}}
