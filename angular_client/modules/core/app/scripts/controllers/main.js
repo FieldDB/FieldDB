@@ -15,6 +15,10 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
         return message;
       }
       var result = FieldDB.FieldDBObject.application.contextualize(message);
+      if (result.indexOf("{{") > -1) {
+        console.log("TODO interpolate this", result);
+        result = result.replace(/{{/g,"").replace(/}}/g,"");
+      }
       // if (!$scope.$$phase) {
       //   $scope.$digest(); //$digest or $apply
       // }
