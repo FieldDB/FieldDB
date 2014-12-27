@@ -15,6 +15,7 @@
   var PsycholinguisticsApp = require("./app/PsycholinguisticsApp").PsycholinguisticsApp;
   var Export = require("./export/Export");
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
+  var Collection = require("./Collection").Collection;
   var Document = require("./datum/Document").Document;
   var CORS = require("./CORS").CORS;
   CORS.bug = FieldDBObject.prototype.bug;
@@ -50,6 +51,7 @@
   FieldDB.PsycholinguisticsApp = PsycholinguisticsApp;
   FieldDB.Export = Export;
   FieldDB.FieldDBObject = FieldDBObject;
+  FieldDB.Collection = Collection;
   FieldDB.Document = Document;
   FieldDB.CORS = CORS;
   FieldDB.DataList = DataList;
