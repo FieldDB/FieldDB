@@ -8,9 +8,9 @@
  */
 angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
 
-  var fetchDatalistDocsExponentialDecay = 2000;
 
   var controller = function($scope, $timeout) {
+    var fetchDatalistDocsExponentialDecay = 2000;
 
     // $scope.dropSuccessHandler = function($event, index, array) {
     //   // array.splice(index, 1);
