@@ -126,6 +126,7 @@
     </div>
     <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems row">
+      <div data-fielddb-collection json='corpus.datumFields'></div>
       <div ng-repeat="field in availableFieldsInCurrentCorpus">
         <a class="delete_button" ng-click="removeFieldFromCorpus(field)">ⓧ</a>
         {{field.label}}
