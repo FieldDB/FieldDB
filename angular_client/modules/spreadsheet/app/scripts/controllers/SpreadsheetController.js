@@ -368,7 +368,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (incomingFields && typeof incomingFields.splice !== "function") {
       for (var field in incomingFields) {
         if (incomingFields.hasOwnProperty(field)) {
-          if (defaultPreferences.availableFields[incomingFields[field].label]) {
+          if (!incomingFields[field].hint && defaultPreferences.availableFields[incomingFields[field].label]) {
             incomingFields[field].hint = defaultPreferences.availableFields[incomingFields[field].label].hint;
           }
           // add only unique fields
