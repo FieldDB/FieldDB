@@ -46,7 +46,7 @@
     <!-- Full TEMPLATE -->
     <h3>
       <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> Full Template
-      <small ng-show="DB.preferredTemplate == 'fulltemplate'">Default template for {{DB.title}}</small>
+      <small ng-show="corpus.preferredTemplate == 'fulltemplate'">Default template for {{corpus.title}}</small>
     </h3>
     <div class="row settingsTemplate">
 
@@ -91,8 +91,8 @@
       <button class="btn btn-primary"
       ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn)">Save/Activate
       Full Template</button>
-      <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'fulltemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('fulltemplate')">Set as default template for {{DB.title}}</button>
+      <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'fulltemplate'}"
+      ng-click="setAsDefaultCorpusTemplate('fulltemplate')">Set as default template for {{corpus.title}}</button>
       <!-- End Full TEMPLATE -->
 
       <center>
@@ -102,7 +102,7 @@
       <!-- Compact TEMPLATE 1 -->
       <h3>
         <span ng-show="templateId=='compacttemplate'"><b>✓</b></span> Compact Template
-        <small ng-show="DB.preferredTemplate == 'compacttemplate'">Default template for {{DB.title}}</small>
+        <small ng-show="corpus.preferredTemplate == 'compacttemplate'">Default template for {{corpus.title}}</small>
       </h3>
       <div class="row settingsTemplate">
         <div class="span3">
@@ -138,8 +138,8 @@
       <button class="btn btn-primary"
       ng-click="saveNewPreferences('compacttemplate', newFieldPreferences1)">Save/Activate
       Compact Template</button>
-      <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'compacttemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('compacttemplate')">Set as default template for {{DB.title}}</button>
+      <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'compacttemplate'}"
+      ng-click="setAsDefaultCorpusTemplate('compacttemplate')">Set as default template for {{corpus.title}}</button>
       <!-- End Compact TEMPLATE 1 -->
 
       <center>
@@ -149,7 +149,7 @@
       <!-- Yale Field Methods TEMPLATE 3 -->
       <h3>
         <span ng-show="templateId=='yalefieldmethodsspring2014template'"><b>✓</b></span> Yale Field Methods Template
-        <small ng-show="DB.preferredTemplate == 'yalefieldmethodsspring2014template'">Default template for {{DB.title}}</small>
+        <small ng-show="corpus.preferredTemplate == 'yalefieldmethodsspring2014template'">Default template for {{corpus.title}}</small>
       </h3>
       <div class="row settingsTemplate">
         <div class="span5">
@@ -209,8 +209,8 @@
     <button class="btn btn-primary"
     ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">Save/Activate
     Yale Field Methods Template</button>
-    <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'yalefieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">Set as default template for {{DB.title}}</button>
+    <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'yalefieldmethodsspring2014template'}"
+    ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">Set as default template for {{corpus.title}}</button>
 
     <center>
       <hr width="80%">
@@ -221,7 +221,7 @@
   <!-- McGill TEMPLATE -->
   <h3>
     <span ng-show="templateId=='mcgillfieldmethodsfall2014template'"><b>✓</b></span> McGill Field Methods Template Fall 2014
-    <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsfall2014template'">Default template for {{DB.title}}</small>
+    <small ng-show="corpus.preferredTemplate == 'mcgillfieldmethodsfall2014template'">Default template for {{corpus.title}}</small>
   </h3>
   <div class="row settingsTemplate">
     <div class="span5">
@@ -256,14 +256,14 @@
   <button  ng-hide="mcgillOnly" class="btn btn-primary"
   ng-click="saveNewPreferences('mcgillfieldmethodsfall2014template', newFieldPreferences2)">Save/Activate
   McGill Template</button>
-  <button  ng-hide="mcgillOnly" ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
-  ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">Set as default template for {{DB.title}}</button>
+  <button  ng-hide="mcgillOnly" ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
+  ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">Set as default template for {{corpus.title}}</button>
   <!-- End McGill TEMPLATE -->
   <div ng-hide="mcgillOnly">
     <!-- McGill TEMPLATE -->
     <h3>
       <span ng-show="templateId=='mcgillfieldmethodsspring2014template'"><b>✓</b></span> McGill Field Methods Template Spring 2014
-      <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsspring2014template'">Default template for {{DB.title}}</small>
+      <small ng-show="corpus.preferredTemplate == 'mcgillfieldmethodsspring2014template'">Default template for {{corpus.title}}</small>
     </h3>
     <div class="row settingsTemplate">
       <div class="span5">
@@ -298,8 +298,8 @@
     <button class="btn btn-primary"
     ng-click="saveNewPreferences('mcgillfieldmethodsspring2014template', newFieldPreferences2)">Save/Activate
     McGill Template</button>
-    <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">Set as default template for {{DB.title}}</button>
+    <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'mcgillfieldmethodsspring2014template'}"
+    ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">Set as default template for {{corpus.title}}</button>
     <!-- End McGill TEMPLATE -->
   </div> <!-- hide old mcgil tempalte -->
 </div>
