@@ -21,7 +21,10 @@ angular.module("fielddbAngularApp").directive("fielddbDatumField", function() {
     //   console.log("in controller");
     //   console.log($element.html());
     // },
-    link: function postLink() {},
+    link: function postLink(scope) {
+      console.log("linking datumfield", scope.datumField, scope.contextualizer);
+      scope.contextualize = scope.$root.contextualize;
+    },
     priority: 0,
     replace: false,
     controllerAs: "stringAlias"
