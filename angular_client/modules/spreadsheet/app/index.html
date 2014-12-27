@@ -1,15 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="spreadsheetApp" ng-controller="FieldDBController">
   <head>
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" type="text/css"
-    - href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
+    - href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/fielddb-angular/dist/styles/main.css" />
     <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
     <!-- endbower -->
@@ -18,7 +19,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="spreadsheetApp" id="app" ng-controller="SpreadsheetStyleDataEntryController" ng-cloak>
+  <body id="app" ng-controller="SpreadsheetStyleDataEntryController" ng-cloak>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -31,16 +32,6 @@
     <div class="loading_trouble_message" ng-hide="clickSuccess==true" class="clearCacheMessage">
       If you are having trouble viewing the page, you may need to empty your browser's cache.
     </div>
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>
 
     <!-- build:js(.) scripts/oldieshim.js -->
     <!--[if lt IE 9]>
@@ -51,21 +42,20 @@
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
+    <script src="bower_components/fielddb-angular/dist/scripts/vendor.js"></script>
+    <script src="bower_components/fielddb-angular/dist/scripts/scripts.js"></script>
+    <script src="bower_components/fielddb-angular/dist/scripts/templates.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/fielddb-glosser/fielddb-glosser.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
+
     <script src="bower_components/angular-md5/angular-md5.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/q/q.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/sjcl/sjcl.js"></script>
+    <script src="bower_components/autofill-event/src/autofill-event.js"></script>
+
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -88,7 +78,9 @@
         <script src="scripts/directives/fielddb-glosser-input.js"></script>
         <!-- endbuild -->
 
-        <script src="scripts/templates.js"></script>
+    <script src="scripts/templates.js"></script>
+    <script src="scripts/private_services.js"></script>
+
 
 </body>
 </html>

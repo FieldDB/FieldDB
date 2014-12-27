@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "2.30.0",
+  "version": "2.35.0",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -38,10 +38,13 @@
   "dependencies": {
     "MD5": "1.2.1",
     "atob": "^1.1.2",
+    "browserify-mime": "^1.2.9",
     "btoa": "^1.1.2",
     "crypto-js": "^3.1.2-5",
     "diacritic": "0.0.2",
+    "mime": "^1.2.11",
     "q": "1.0.1",
+    "recordmp3js": "~0.3.0",
     "textgrid": "2.2.0",
     "underscore": "^1.6.0"
   },
@@ -56,6 +59,7 @@
     "grunt-exec": "^0.4.6",
     "grunt-jasmine-node": "git://github.com/cesine/grunt-jasmine-node.git",
     "grunt-jsdoc": "0.4.3",
+    "grunt-newer": "^0.8.0",
     "jasmine-node": "^1.14.5"
   },
   "main": "./scripts/build_template_databases_using_fielddb.sh",

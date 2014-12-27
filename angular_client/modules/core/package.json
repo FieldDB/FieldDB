@@ -1,6 +1,6 @@
 {
   "name": "fielddb-angular",
-  "version": "2.30.0",
+  "version": "2.35.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -20,7 +20,7 @@
     "grunt-contrib-watch": "~0.5.2",
     "grunt-google-cdn": "~0.2.0",
     "grunt-karma": "^0.8.2",
-    "grunt-newer": "~0.6.1",
+    "grunt-newer": "^0.8.0",
     "grunt-ngmin": "~0.0.2",
     "grunt-rev": "~0.1.0",
     "grunt-svgmin": "~0.2.0",

@@ -10,9 +10,20 @@
  * # fielddbImport
  */
 angular.module("fielddbAngularApp").directive("fielddbImport", function() {
-
-  var controller = function($scope, $upload) {
+  var rootScope;
+  var controller = function($scope, $upload, $rootScope) {
+    rootScope = $rootScope;
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+      $scope.application = FieldDB.FieldDBObject.application;
+    }
     var processOffline = true;
+    $scope.uploadInfo = {
+      token: "uploadingfromspreadsheet",
+      username: "testupload",
+      returnTextGrid: true
+    };
+
+
 
     var progress = function(evt) {
       console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
@@ -23,42 +34,54 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
     $scope.removeRow = function(row) {
       console.log("remove ", row);
-      var removed = $scope.application.importer.asCSV.splice(row, 1);
+      var removed = $scope.importer.asCSV.splice(row, 1);
       console.log(removed);
     };
 
     $scope.dropSuccessHandler = function(participantFieldLabel) {
-      $scope.application.importer.debug("dropSuccessHandler", participantFieldLabel);
-      $scope.application.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
-      $scope.application.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
+      $scope.importer.debug("dropSuccessHandler", participantFieldLabel);
+      $scope.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
+      $scope.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
     };
     $scope.onDropRecieved = function(data, extractedHeader, headerCellIndex) {
-      $scope.application.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
+      $scope.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
       extractedHeader[headerCellIndex] = data;
-      $scope.application.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
+      $scope.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
+    };
+
+    var verifyImporterIsSetup = function() {
+      if (!FieldDB) {
+        console.warn("you catn import very much with out FieldDB, it is not loaded");
+        return;
+      }
+      $scope.importer = $scope.importer || new FieldDB.Import();
+      $scope.importer.status = "";
+      $scope.importer.error = "";
+      $scope.importer.importType = $scope.importer.importType || "data";
+      $scope.importer.corpus = $scope.application.corpus;
+      $scope.importer.dbname = $scope.application.corpus.dbname || "default";
     };
 
     $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
+      $scope.importer.uploadtoken = $scope.uploadInfo.token;
+      $scope.importer.username = $scope.uploadInfo.username;
+      $scope.importer.returnTextGrid = $scope.uploadInfo.returnTextGrid;
+
       if (processOffline) {
         if (!$scope.application || !$scope.application.corpus) {
-          $scope.application.importer.bug("The corpus is not loaded yet. Please report this.");
+          $scope.importer.bug("The corpus is not loaded yet. Please report this.");
           return;
         }
-        $scope.application.importer = $scope.application.importer || new FieldDB.Import();
-        $scope.application.importer.status = "";
-        $scope.application.importer.error = "";
-        $scope.application.importer.rawText = "";
-        $scope.application.importer.importType = $scope.application.importer.importType || "data";
-        $scope.application.importer.corpus = $scope.application.corpus;
-        $scope.application.importer.dbname = $scope.application.corpus.dbname || "default";
-        $scope.application.importer.files = $files;
+        verifyImporterIsSetup();
+        $scope.importer.rawText = "";
+        $scope.importer.files = $files;
 
-        console.log($scope.application.importer);
-        $scope.application.importer.readFiles({}).then(function(sucessfullOptions) {
+        console.log($scope.importer);
+        $scope.importer.readFiles({}).then(function(sucessfullOptions) {
           console.log("Finished reading files ", sucessfullOptions);
           $scope.$digest();
-          $scope.application.importer.guessFormatAndPreviewImport();
+          $scope.importer.guessFormatAndPreviewImport();
           $scope.$digest();
 
         }, function(failedOptions) {
@@ -66,6 +89,14 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
           $scope.$digest();
         });
       } else {
+        $scope.importer.uploadFiles($files).then(function(result) {
+          $scope.importer.todo(" Got an upload result in the angular directive", result);
+          $scope.$digest();
+        }, function(reason) {
+          console.log(reason);
+        });
+
+
         for (var i = 0; i < $files.length; i++) {
           var file = $files[i];
 
@@ -96,13 +127,23 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       // $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
     };
 
-    $scope.runImport = function() {
-      if (!$scope.application.importer) {
+    $scope.guessFormatAndPreviewImport = function() {
+      if (!$scope.importer) {
+        console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
         return;
       }
-      $scope.application.importer.convertTableIntoDataList().then(function(results) {
+      verifyImporterIsSetup();
+      $scope.importer.guessFormatAndPreviewImport();
+    };
+
+    $scope.runImport = function() {
+      if (!$scope.importer) {
+        console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
+        return;
+      }
+      $scope.importer.convertTableIntoDataList().then(function(results) {
         console.log("Import is completed. ", results);
-        console.log(" Progress ", $scope.application.importer.progress);
+        console.log(" Progress ", $scope.importer.progress);
         // $scope.$digest();
       });
     };
@@ -118,17 +159,36 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     };
   };
 
-  controller.$inject = ["$scope", "$upload"];
+  controller.$inject = ["$scope", "$upload", "$rootScope"];
 
   var directiveDefinitionObject = {
     templateUrl: "views/import.html",
     restrict: "A",
     transclude: false,
-    // scope: {
-    //   importDetails: "=json"
-    // },
+    scope: {
+      importer: "=json",
+      // application: "=application"
+    },
     controller: controller,
-    link: function postLink() {},
+    link: function postLink(scope) {
+      if (!scope.importer) {
+        return;
+      }
+      if (scope.importer && scope.importer.corpus) {
+        return;
+      }
+      if (!scope.importer.corpus && scope.corpus) {
+        scope.importer.warn("The importers corpus was undefined, using the corpus in local scope, although this might have consequences.");
+        scope.importer.corpus = scope.corpus;
+        return;
+      }
+      if (!scope.importer.corpus && rootScope.corpus) {
+        scope.importer.warn("The importers corpus was undefined, using the corpus in root scope, although this might have consequences.");
+        scope.importer.corpus = rootScope.corpus;
+        return;
+      }
+
+    },
     priority: 0,
     replace: false,
     controllerAs: "stringAlias"

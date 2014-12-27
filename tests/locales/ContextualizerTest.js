@@ -1,6 +1,6 @@
-var Contextualizer = require('./../../api/locales/Contextualizer').Contextualizer;
-var ContextualizableObject = require('./../../api/locales/ContextualizableObject').ContextualizableObject;
-var FieldDBObject = require('./../../api/FieldDBObject').FieldDBObject;
+var Contextualizer = require("./../../api/locales/Contextualizer").Contextualizer;
+var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
+var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
 
 var specIsRunningTooLong = 5000;
 
@@ -67,6 +67,29 @@ describe("Contextualizer", function() {
       });
     });
 
+    it("should remember the user specified locale", function() {
+      var userChoseFrenchLocale = new Contextualizer();
+      userChoseFrenchLocale.currentLocale = {
+        iso: "fr",
+        name: "French"
+      };
+      userChoseFrenchLocale.userOverridenLocalePreference = userChoseFrenchLocale.currentLocale;
+      expect(userChoseFrenchLocale.currentLocale).toEqual({
+        iso: "fr",
+        name: "French"
+      });
+
+      // var nextLoadOfLocale = new Contextualizer();
+      // expect(nextLoadOfLocale.currentLocale).toEqual({
+      //   iso: "en"
+      // });
+      // nextLoadOfLocale.currentLocale = nextLoadOfLocale.userOverridenLocalePreference;
+      expect(userChoseFrenchLocale.currentLocale).toEqual({
+        iso: "fr",
+        name: "French"
+      });
+
+    });
   });
 
 
@@ -327,12 +350,12 @@ describe("Contextualizer", function() {
         expect(obj.contextualizer).toBeDefined();
         expect(obj.contextualizer).toBe(FieldDBObject.application.contextualizer);
 
-        expect(obj._for_child).toEqual('locale_practice_description_for_child');
-        expect(obj.contextualizer.contextualize('locale_practice_description_for_child')).toEqual('In this game, you will help the mouse eat all the cheese!');
+        expect(obj._for_child).toEqual("locale_practice_description_for_child");
+        expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game, you will help the mouse eat all the cheese!");
       });
 
       it("should be able to use dot notation to get contextualization", function() {
-        expect(obj.for_child).toEqual('In this game, you will help the mouse eat all the cheese!');
+        expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
       });
 
       it("should be able to serialize back into the same object as it was when created", function() {
@@ -347,11 +370,11 @@ describe("Contextualizer", function() {
       });
 
       it("should be able to modify localization using dot notation", function(done) {
-        expect(obj.for_child).toEqual('In this game, you will help the mouse eat all the cheese!');
+        expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
         obj.for_child = "In this game the mouse will eat all the cheese with your help.";
         setTimeout(function() {
           expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.contextualizer.contextualize('locale_practice_description_for_child')).toEqual("In this game the mouse will eat all the cheese with your help.");
+          expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
           expect(obj.toJSON().for_child).toEqual("locale_practice_description_for_child");
           done();
         }, 10);

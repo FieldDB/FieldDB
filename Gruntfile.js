@@ -69,14 +69,14 @@ module.exports = function(grunt) {
         options: {
           jshintrc: ".jshintrc"
         },
-        src: ["api/fielddb.js", "api/FieldDBObject.js", "api/Collection.js", "api/CORS.js", "api/FieldDBConnection.js", "api/app/App.js", "api/audio_video/AudioPlayer.js", "api/audio_video/HTML5Audio.js", "api/audio_video/AudioVideo.js", "api/audio_video/AudioVideos.js", "api/confidentiality_encryption/Confidential.js", "api/corpus/Corpus.js", "api/corpus/PsycholinguisticsDatabase.js", "api/datum/Datum.js", "api/datum/DatumTag.js", "api/datum/DatumTags.js", "api/datum/DatumField.js", "api/datum/Document.js", "api/datum/DocumentCollection.js", "api/data_list/DataList.js", "api/corpus/Database.js", "api/import/Import.js", "api/locales/ContextualizableObject.js", "api/locales/Contextualizer.js", "api/user/UserMask.js", "api/user/User.js", "api/user/UserPreference.js", "api/user/Speaker.js", "api/user/Consultant.js", "api/user/Participant.js", "api/corpus/CorpusMask.js"]
+        src: ["api/fielddb.js", "api/FieldDBObject.js", "api/Collection.js", "api/CORS.js", "api/FieldDBConnection.js", "api/app/App.js", "api/audio_video/AudioPlayer.js", "api/audio_video/AudioVideoRecorder.js", "api/audio_video/HTML5Audio.js", "api/audio_video/AudioVideo.js", "api/audio_video/AudioVideos.js", "api/confidentiality_encryption/Confidential.js", "api/corpus/Corpus.js", "api/corpus/PsycholinguisticsDatabase.js", "api/datum/Datum.js", "api/datum/DatumTag.js", "api/datum/DatumTags.js", "api/datum/DatumField.js", "api/datum/Document.js", "api/datum/DocumentCollection.js", "api/data_list/DataList.js", "api/corpus/Database.js", "api/import/Import.js", "api/locales/ContextualizableObject.js", "api/locales/Contextualizer.js", "api/user/UserMask.js", "api/user/User.js", "api/user/UserPreference.js", "api/user/Speaker.js", "api/user/Consultant.js", "api/user/Participant.js", "api/corpus/CorpusMask.js"]
       },
       test: {
         options: {
           jshintrc: "tests/.jshintrc",
           ignores: ["tests/libs/**/*js"]
         },
-        src: ["tests/FieldDBTest.js", "tests/FieldDBObjectTest.js", "tests/CollectionTest.js", "tests/activity/*.js", "tests/app/*.js", "tests/audioVideo/*.js", "tests/authentication/*.js", "tests/comment/*.js", "tests/confidentiality_encryption/*.js", "tests/corpus/*.js", "tests/data_list/*.js", "tests/datum/*.js", "tests/export/*.js", "tests/glosser/*.js", "tests/hotkey/*.js", "tests/image/*.js", "tests/import/*.js", "tests/insert_unicode/*.js", "tests/lexicon/*.js", "tests/permission/*.js", "tests/search/*.js", "tests/user/*.js"]
+        src: ["tests/FieldDBTest.js", "tests/FieldDBObjectTest.js", "tests/CollectionTest.js", "tests/activity/*.js", "tests/app/*.js", "tests/audioVideo/*.js", "tests/authentication/*.js", "tests/comment/*.js", "tests/confidentiality_encryption/*.js", "tests/corpus/*.js", "tests/data_list/*.js", "tests/datum/*.js", "tests/export/*.js", "tests/glosser/*.js", "tests/hotkey/*.js", "tests/image/*.js", "tests/import/*.js", "tests/insert_unicode/*.js", "tests/locales/*.js", "tests/lexicon/*.js", "tests/permission/*.js", "tests/search/*.js", "tests/user/*.js"]
       },
     },
     jsdoc: {
@@ -96,11 +96,11 @@ module.exports = function(grunt) {
       },
       lib: {
         files: "<%= jshint.lib.src %>",
-        tasks: ["jshint:lib", "jasmine_node", "browserify"]
+        tasks: ["newer:jshint:lib", "browserify"]
       },
       test: {
         files: "<%= jshint.test.src %>",
-        tasks: ["jshint:test", "jasmine_node"]
+        tasks: ["newer:jshint:test", "newer:jasmine_node"]
       },
     },
     exec: {
@@ -123,6 +123,7 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadNpmTasks("grunt-newer");
   grunt.loadNpmTasks("grunt-exec");
   grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-uglify");

@@ -17,10 +17,22 @@
       <option value="10">10</option>
       <option value="25" selected>25</option>
       <option value="50">50</option>
-      <option value={{data.length}}>{{locale_all_dropdown}} {{data.length}}</option>
+      <option value="all">{{locale_all_dropdown}}</option>
     </select>
     &nbsp;<button class="btn btn-primary"
     ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">{{locale_save_button}}</button>
+  </div>
+</div>
+<hr />
+
+<!-- Language of user interface -->
+<div class="form-horizontal">
+  <div class="settings_section_header">
+    <h2>Interface Language</h2>
+  </div>
+  <div class="clearDiv">&nbsp;</div>
+  <div class="settingsItems">
+    <span data-fielddb-locales fielddb-show-locale-key="nativeName" fielddb-full-view="true"></span>
   </div>
 </div>
 <hr />
@@ -34,7 +46,7 @@
     <!-- Full TEMPLATE -->
     <h3>
       <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> {{locale_full_template}}
-      <small ng-show="DB.preferredTemplate == 'fulltemplate'">{{locale_default_template}} {{DB.title}}</small>
+      <small ng-show="corpus.preferredTemplate == 'fulltemplate'"> {{locale_default_template}} {{corpus.title}}</small>
     </h3>
     <div class="row settingsTemplate">
 
@@ -43,20 +55,20 @@
         *#?
       </div>
       <div class="span5">
-        <div ng-repeat="corpusField in fieldsInColumns.first">
-          {{corpusField.title}}
+        <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.hint}}">
+          {{corpusField.label}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.second">
-        <div ng-repeat="corpusField in fieldsInColumns.second">
-          {{corpusField.title}}
+        <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.hint}}">
+          {{corpusField.label}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.third">
-        <div ng-repeat="corpusField in fieldsInColumns.third">
-          {{corpusField.title}}
+        <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.hint}}">
+          {{corpusField.label}}
         </div>
       </div>
 
@@ -73,12 +85,13 @@
       <select ng-model="fullTemplateDefaultNumberOfColumns">
         <option>1</option>
         <option>2</option>
-        <option>3</option>
       </select>
+      Number of Fields per column:
+      <input type="number" ng-model="fullTemplateDefaultNumberOfFieldsPerColumn"/>
       <button class="btn btn-primary"
-      ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2)">{{locale_activate_full_button}}</button>
-      <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'fulltemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('fulltemplate')">{{locale_set_as_default_button}} {{DB.title}}</button>
+      ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn)">{{locale_activate_full_button}}</button>
+      <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'fulltemplate'}"
+      ng-click="setAsDefaultCorpusTemplate('fulltemplate')">{{locale_set_as_default_button}} {{corpus.title}}</button>
       <!-- End Full TEMPLATE -->
 
       <center>
@@ -88,7 +101,7 @@
       <!-- Compact TEMPLATE 1 -->
       <h3>
         <span ng-show="templateId=='compacttemplate'"><b>✓</b></span> {{locale_compact_template}}
-        <small ng-show="DB.preferredTemplate == 'compacttemplate'">{{locale_default_template}} {{DB.title}}</small>
+        <small ng-show="corpus.preferredTemplate == 'compacttemplate'">{{locale_default_template}} {{corpus.title}}</small>
       </h3>
       <div class="row settingsTemplate">
         <div class="span3">
@@ -123,8 +136,8 @@
       <br />
       <button class="btn btn-primary"
       ng-click="saveNewPreferences('compacttemplate', newFieldPreferences1)">{{locale_activate_compact_button}}</button>
-      <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'compacttemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('compacttemplate')">{{locale_set_as_default_button}} {{DB.title}}</button>
+      <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'compacttemplate'}"
+      ng-click="setAsDefaultCorpusTemplate('compacttemplate')">{{locale_set_as_default_button}} {{corpus.title}}</button>
       <!-- End Compact TEMPLATE 1 -->
 
       <center>
@@ -134,7 +147,7 @@
       <!-- Yale Field Methods TEMPLATE 3 -->
       <h3>
         <span ng-show="templateId=='yalefieldmethodsspring2014template'"><b>✓</b></span> {{locale_yale_template}}
-        <small ng-show="DB.preferredTemplate == 'yalefieldmethodsspring2014template'">{{locale_default_template}} {{DB.title}}</small>
+        <small ng-show="corpus.preferredTemplate == 'yalefieldmethodsspring2014template'">{{locale_default_template}} {{corpus.title}}</small>
       </h3>
       <div class="row settingsTemplate">
         <div class="span5">
@@ -192,9 +205,9 @@
     </div>
 
     <button class="btn btn-primary"
-    ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">{{locale_activate_yale_button}}</button>
-    <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'yalefieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">{{locale_set_as_default_button}} {{DB.title}}</button>
+    ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">{{locale_activate_yale_button</button>
+    <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'yalefieldmethodsspring2014template'}"
+    ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">{{locale_set_as_default_button}} {{corpus.title}}</button>
 
     <center>
       <hr width="80%">
@@ -205,7 +218,7 @@
   <!-- McGill TEMPLATE -->
   <h3>
     <span ng-show="templateId=='mcgillfieldmethodsfall2014template'"><b>✓</b></span> {{locale_mcgill_fall_2014_template}}
-    <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsfall2014template'">{{locale_default_template}} {{DB.title}}</small>
+    <small ng-show="corpus.preferredTemplate == 'mcgillfieldmethodsfall2014template'">{{locale_default_template}} {{corpus.title}}</small>
   </h3>
   <div class="row settingsTemplate">
     <div class="span5">
@@ -239,14 +252,14 @@
   <br />
   <button  ng-hide="mcgillOnly" class="btn btn-primary"
   ng-click="saveNewPreferences('mcgillfieldmethodsfall2014template', newFieldPreferences2)">{{locale_activate_mcgill_button}}</button>
-  <button  ng-hide="mcgillOnly" ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
-  ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">{{locale_set_as_default_button}} {{DB.title}}</button>
+  <button  ng-hide="mcgillOnly" ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
+  ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">{{locale_set_as_default_button}} {{corpus.title}}</button>
   <!-- End McGill TEMPLATE -->
   <div ng-hide="mcgillOnly">
     <!-- McGill TEMPLATE -->
     <h3>
       <span ng-show="templateId=='mcgillfieldmethodsspring2014template'"><b>✓</b></span> {{locale_mcgill_spring_2014template}}
-      <small ng-show="DB.preferredTemplate == 'mcgillfieldmethodsspring2014template'">{{locale_default_template}} {{DB.title}}</small>
+      <small ng-show="corpus.preferredTemplate == 'mcgillfieldmethodsspring2014template'">{{locale_default_template}} {{corpus.title}}</small>
     </h3>
     <div class="row settingsTemplate">
       <div class="span5">
@@ -280,8 +293,8 @@
     <br />
     <button class="btn btn-primary"
     ng-click="saveNewPreferences('mcgillfieldmethodsspring2014template', newFieldPreferences2)">{{locale_activate_mcgill_button}}</button>
-    <button ng-show="admin" class="btn" ng-class="{'btn-primary': DB.preferredTemplate != 'mcgillfieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">{{locale_set_as_default_button}} {{DB.title}}</button>
+    <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'mcgillfieldmethodsspring2014template'}"
+    ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">{{locale_set_as_default_button}} {{corpus.title}}</button>
     <!-- End McGill TEMPLATE -->
   </div> <!-- hide old mcgil tempalte -->
 </div>

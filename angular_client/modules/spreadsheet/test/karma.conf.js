@@ -7,6 +7,7 @@ module.exports = function(config) {
   'use strict';
 
   config.set({
+
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
@@ -18,26 +19,34 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'bower_components/fielddb-angular/dist/scripts/vendor.js',
+      'bower_components/fielddb-angular/dist/scripts/scripts.js',
+      'bower_components/fielddb-angular/dist/scripts/templates.js',
+
       'bower_components/d3/d3.js',
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/underscore/underscore.js',
-      'bower_components/fielddb-glosser/fielddb-glosser.js',
       'bower_components/q/q.js',
       'bower_components/sjcl/sjcl.js',
-      'bower_components/angular/angular.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/angular-animate/angular-animate.js',
-      'bower_components/angular-cookies/angular-cookies.js',
-      'bower_components/angular-resource/angular-resource.js',
-      'bower_components/angular-route/angular-route.js',
-      'bower_components/angular-sanitize/angular-sanitize.js',
-      'bower_components/angular-touch/angular-touch.js',
+
+      'bower_components/fielddb-glosser/fielddb-glosser.js',
       'bower_components/angular-md5/angular-md5.js',
       'bower_components/angular-bootstrap/ui-bootstrap.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+
+      'bower_components/angular-mocks/angular-mocks.js',
       'app/scripts/**/*.js',
-      'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      // 'test/mock/**/*.js',
+      'test/spec/**/*.js',
+
+      //location of templates
+      'app/views/**/*.html'
     ],
+
+    preprocessors: {
+        //location of templates
+        'app/views/**/*.html': 'html2js'
+    },
 
     // list of files / patterns to exclude
     exclude: [],
@@ -59,8 +68,11 @@ module.exports = function(config) {
 
     // Which plugins to enable
     plugins: [
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
       'karma-phantomjs-launcher',
-      'karma-jasmine'
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
     ],
 
     // Continuous Integration mode

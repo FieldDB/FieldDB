@@ -31,7 +31,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   todo("$scope.appReloaded is true, loading the SettingsController completely");
 
 
-  $scope.removeFieldFromCorpus=function(field){
+  $scope.removeFieldFromCorpus = function(field) {
     console.log("TODO remove the field.", field);
   };
 
@@ -72,7 +72,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
         }
         if (changeThisRecord === true) {
           $rootScope.loading = true;
-          Data.async($rootScope.DB.pouchname, UUID)
+          Data.async($rootScope.corpus.pouchname, UUID)
             .then(
               function(editedRecord) {
                 // Edit record with updated tag data
@@ -85,7 +85,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
                   editRecordWithUpdatedTagData(k);
                 }
                 // Save edited record
-                Data.saveEditedCouchDoc($rootScope.DB.pouchname, UUID, editedRecord, editedRecord._rev)
+                Data.saveEditedCouchDoc($rootScope.corpus.pouchname, UUID, editedRecord, editedRecord._rev)
                   .then(
                     function() {
                       console.log("Changed " + oldTag + " to " + newTag + " in " + UUID);
@@ -138,7 +138,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
   // Get all tags
   $scope.getTags = function() {
-    Data.async($rootScope.DB.pouchname)
+    Data.async($rootScope.corpus.pouchname)
       .then(
         function(dataFromServer) {
           var tags = {};
@@ -165,9 +165,9 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
 
 
-  $scope.saveNewPreferences = function(templateId, newFieldPreferences) {
-    if ($rootScope.DB && $rootScope.DB.preferredTemplate && $rootScope.DB.preferredTemplate !== templateId) {
-      window.alert("Sorry, you can't use a different template. Your team has decided to use the " + $rootScope.DB.preferredTemplate + " for " + $rootScope.DB.title);
+  $scope.saveNewPreferences = function(templateId, newFieldPreferences, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn) {
+    if ($rootScope.corpus && $rootScope.corpus.preferredTemplate && $rootScope.corpus.preferredTemplate !== templateId) {
+      window.alert("Sorry, you can't use a different template. Your team has decided to use the " + $rootScope.corpus.preferredTemplate + " for " + $rootScope.corpus.title);
       return;
     }
 
@@ -188,12 +188,19 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
         }
       }
     }
-
+    if (fullTemplateDefaultNumberOfColumns) {
+      Preferences.fullTemplateDefaultNumberOfColumns = fullTemplateDefaultNumberOfColumns;
+    }
+    if (fullTemplateDefaultNumberOfFieldsPerColumn) {
+      Preferences.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
+      $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
+    }
     Preferences.userChosenTemplateId = templateId;
     $scope.scopePreferences = Preferences;
     $rootScope.templateId = Preferences.userChosenTemplateId;
-    $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
+    $rootScope.setTemplateUsingCorpusPreferedTemplate($rootScope.corpus);
+    // $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
+    // $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
 
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     window.alert("Settings saved.");

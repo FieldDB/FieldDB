@@ -276,11 +276,11 @@
         "description": "title for create new corpus div"
     },
     "locale_not_admin_message": {
-        "message": "You are not an admin for <b>{{DB.title}}</b>. Please contact an admin if you wish to alter user access to this corpus.",
+        "message": "You are not an admin for <b>{{corpus.title}}</b>. Please contact an admin if you wish to alter user access to this corpus.",
         "description": "warning message for non-admin users in corpus settings. Do double curly brackets embedded inside double curly brackets work?"
     },
     "locale_add_existing_user_message": {
-        "message": "Add an existing user to ",
+        "message": "Add an existing user to <b>{{corpus.title}}",
         "description": "title for adding existing user div"
     },
     "locale_only_add_registered_users_message": {
@@ -308,7 +308,7 @@
         "description": "add button"
     },
     "locale_users_with_access_message": {
-        "message": "Users with access to ",
+        "message": "Users with access to <b>{{corpus.title}}</b>",
         "description": "over-arching title for lists of users with different access types"
     },
     "locale_admins": {
@@ -640,7 +640,8 @@
         "description": " "
     },
     "locale_export_answer": {
-        "message": "You can export your entire database as <a target=\"_blank\" href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"{{server}}/{{DB.pouchname}}/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"http://lingsync.org/{{DB.pouchname.replace('-','/')}}\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"{{server}}/{{DB.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+        "message": "You can export your entire database as <a target=\"_blank\" href=\"{{server}}/{{corpus.pouchname}}/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"{{server}}/{{corpus.pouchname}}/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"http://lingsync.org/{{corpus.pouchname.replace('-','/')}}\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"{{server}}/{{corpus.pouchname}}/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"{{server}}/{{corpus.pouchname}}/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"{{server}}/{{corpus.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+        "prevMessage": "You can export your entire database as <a target=\"_blank\" href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"http://lingsync.org/{{COrPUS.pouchname.replace('-','/')}}\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"{{server}}/{{COrPUS.pouchname}}/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
         "description": "links screw up the json format so i leave it empty for the moment"
     },
     "locale_share_session_question": {
@@ -648,7 +649,7 @@
         "description": " "
     },
     "locale_share_session_answer": {
-        "message": "If you want to share an elicitation session with someone, you must <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> to say which session you want to share. We will send you a widget that accesses only data in that session and lets the user log into that widget to read (if they are allowed) and/or edit (if they are allowed) data. You must put the widget in your own website and/or wordpress blog and provide the url to the user(s). If the user is not permitted to see other things in your corpus you need to provide us with their username(s) so we can add conditional permissions to their account.",
+        "message": "If you want to share a elicitation session with someone, you should <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> to say which session you want to share. We will send you a web widget that accesses only data in that session and lets the user log into that widget to read (if they are allowed) and/or edit (if they are allowed) data. You must put the widget in your own website and/or WordPress blog and provide the url to the user(s). If the user does not have read access on your corpus, you can to provide us with their username(s) so we can add conditional permissions to their account. ",
         "description": " "
     },
     "locale_multiple_language_question": {
@@ -672,7 +673,7 @@
         "description": " "
     },
     "locale_combine_corpora_answer": {
-        "message": "If you want to combine corpora you must <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> to tell us the names of the corpora to combine, and where to combine them to. We will verify that you have permission to do this, and do the combining and testing of the result.",
+        "message": "Yes, you can combine corpora. If you want to combine corpora you should <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> to tell us the names of the corpora to combine, and where to combine them to. We will verify that you have permission to do this, and do the combining and testing of the result.",
         "description": " "
     },
     "locale_combine_glossers_question": {
@@ -680,7 +681,23 @@
         "description": " "
     },
     "locale_combine_glossers_answer": {
-        "message": "By default, each corpus has its own glosser fed by the data in that corpus. If you have many corpora that you want to feed one glosser, you must <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> and tell us which corpora should feed which glosser.",
+        "message": "By default, each corpus has its own glosser fed by the data in that corpus. If you have many corpora that you want to feed one glosser, (for example two or more Quechua corpora), or one master corpus with a few smaller corpora which can use the master's glosser, you can <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> and tell us which corpora should feed which glosser and we will set up the glosser for you, provide you with more instructions.",
+        "description": " "
+    },
+    "locale_own_glossers_question": {
+        "message": "I have my own glosser for the language I work on, can I use it?",
+        "description": " "
+    },
+    "locale_own_glossers_answer": {
+        "message": "Yes, you can use any glosser as long as it is wrapped in a \"webservice.\" <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">Send us an email</a> and we will provide you with more instructions depending on the technology your glosser was implemented in.",
+        "description": " "
+    },
+    "locale_learn_scripting_question": {
+        "message": "I want to learn more about scripting/programming, can I help?",
+        "description": " "
+    },
+    "locale_learn_scripting_answer": {
+        "message": "Sure, we accept new \"interns\" on the team every semester. We can usually train you in things you want to learn, and find you a task to take on. <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">Send us an email</a> to introduce yourself, or join us on <a target=\"_blank\" href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues\">GitHub</a> by commenting on, or adding an item in the issue tracker if you already have an account. If you have friends in Software Engineering or related disciplines who are looking for OpenSource projects to build their portfolio, we would be happy to welcome them as well.",
         "description": " "
     },
     "locale_contact_question": {

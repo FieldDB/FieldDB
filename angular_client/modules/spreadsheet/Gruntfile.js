@@ -34,8 +34,15 @@ module.exports = function(grunt) {
         files: ['bower.json'],
         tasks: ['wiredep']
       },
+      vendor: {
+        files: ['bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
+        tasks: ['build'],
+        options: {
+          livereload: '<%= connect.options.livereload %>'
+        }
+      },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -43,7 +50,7 @@ module.exports = function(grunt) {
       },
       templates: {
         files: ['index.html', '<%= yeoman.app %>/views/{,*/}*.html'],
-        tasks: ['ngtemplates'],
+        tasks: ['ngtemplates', 'copy:templates'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -330,6 +337,7 @@ module.exports = function(grunt) {
             // 'views/{,*/}*.html',
             'images/*.png',
             'images/*.gif',
+            'bower_components/recordmp3js/js/*.js'
             // 'fonts/*'
           ]
         }, {
@@ -343,6 +351,10 @@ module.exports = function(grunt) {
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
+      },
+      templates: {
+        src:['<%= yeoman.dist %>/scripts/templates.js'],
+        dest: '<%= yeoman.app %>/scripts/templates.js'
       },
       styles: {
         expand: true,

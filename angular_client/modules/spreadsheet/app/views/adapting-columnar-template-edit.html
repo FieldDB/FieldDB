@@ -1,5 +1,6 @@
 <form ng-submit="markAsEdited(fieldData, datum, $event);">
   <div class="span1" >
+    <!-- todo try ng-change to reduce edits which are not edits -->
     <input
     ng-blur="markAsEdited(fieldData, datum)"
     class="span2"
@@ -41,7 +42,11 @@
       &nbsp;
     </span>
     <div class="expandCollapseButton">
-      <i ng-show="datum.hasAudio==true"class="fa whiteicon {{recordingIcon}}">
+      <i ng-show="datum.hasAudio" class="fa whiteicon fa-microphone">
+      </i>
+      <i ng-show="datum.hasImages" class="fa whiteicon fa-camera">
+      </i>
+      <i ng-show="datum.hasRelatedData" class="fa whiteicon fa-link">
       </i>
       <i ng-show="datum.comments.length >
         0" class="fa whiteicon fa-comment">
@@ -86,63 +91,83 @@
       </div>
     </div>
   </div>
-  <div class="row" >
-    <div class="span3 expandedData">
-      <div class="expandedDataInner">
-        <button ng-class="recordingButtonClass" ng-click="startRecording(datum);markAsEdited(fieldData, datum);" ng-show="audioCompatible==true" >
-          <i class="fa {{recordingIcon}}">
-          </i>
-          &nbsp;{{recordingStatus}}
-        </button>
-      </div>
-    </div>
-    <div class="span7 expandedData">
-      <div class="expandedDataInner">
-        <form id='form_{{datum.id}}_audio-file'>
-          <i class="fa fa-bullhorn">
-          </i>
-          &nbsp; <input  id="{{datum.id}}_audio-file" type="file" multiple ng-model='fileToUpload' />
-          <button class="btn btn-primary" ng-click="uploadFile(datum);" >
-            <i class="fa whiteicon fa-file">
-            </i>
-            {{locale_upload_files_button}}
-          </button>
-          &nbsp;&nbsp;
-        </form>
-      </div>
-    </div>
-    <div class="span1">
-      <span ng-show="processingAudio==true">
-        <img src="images/spinner-small.gif">
-      </span>
+  <div class="row expandedData">
+    <div class=" expandedDataInner">
+      <div fielddb-audio-video-recorder parent="datum"></div>
     </div>
   </div>
   <div class="row" >
-    <div class="span10">
+    <div class="span11">
       <table>
-        <tr ng-repeat="audioFile in datum.audioVideo" ng-hide="audioFile.trashed == 'deleted'">
+        <tr ng-repeat="image in datum.images track by $index" ng-hide="image.trashed == 'deleted'">
           <td>
             <span class="form-horizontal">
-              <a  class="delete_button btn btn-danger floatLeft" ng-click="deleteAttachmentFromCorpus(datum, audioFile.filename, audioFile.description)">
+              <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(image, datum)">
+                <i class="fa fa-trash-o whiteicon">
+                </i>
+              </a>
+              <a href="{{image.URL}}" target="_blank">
+                <img class="span6" ng-src="{{image.URL}}"/>
+              </a>
+            </span>
+          </td>
+          <td>
+            <span class="form-horizontal">
+              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='image.description' ng-blur="markAsNotSaved(datum)" />
+              &nbsp;
+            </span>
+          </td>
+          <td>
+            <a href="{{image.URL}}" target="_blank">
+              <i class="fa whiteicon fa-link">
+              </i>
+            </a>
+          </td>
+        </tr>
+        <tr ng-repeat="audioFile in datum.audioVideo.collection track by $index" ng-hide="audioFile.trashed == 'deleted'">
+          <td>
+            <span class="form-horizontal">
+              <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(audioFile, datum)">
                 <i class="fa fa-trash-o whiteicon">
                 </i>
               </a>
               <audio controls>
-                <source ng-src="{{audioFile.filename}}" type="audio/wav"/>
+                <source ng-src="{{audioFile.URL}}"/>
               </audio>
             </span>
           </td>
           <td>
             <span class="form-horizontal">
-              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' />
+              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='audioFile.description' ng-blur="markAsNotSaved(datum)" />
               &nbsp;
-              <button hidden class="btn-small btn-primary" ng-click="saveAttachmentInfo(audioFile, datum.id)"  >
-                {{locale_save_description_button}}
-              </button>
             </span>
           </td>
           <td>
-            <a href="{{audioFile.filename}}" target="_blank">
+            <a href="{{audioFile.URL}}" target="_blank">
+              <i class="fa whiteicon fa-link">
+              </i>
+            </a>
+          </td>
+        </tr>
+        <tr ng-repeat="relatedFile in datum.relatedData track by $index" ng-hide="relatedFile.trashed == 'deleted'">
+          <td>
+            <span class="form-horizontal">
+              <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(relatedFile, datum)">
+                <i class="fa fa-trash-o whiteicon">
+                </i>
+              </a>
+              <a href="{{relatedFile.URL}}" target="_blank">
+              </a>
+            </span>
+          </td>
+          <td>
+            <span class="form-horizontal">
+              <input  type="text" keypress-mark-as-edited placeholder="Optional description" title="Optional description" ng-model='relatedFile.description' ng-blur="markAsNotSaved(datum)" />
+              &nbsp;
+            </span>
+          </td>
+          <td>
+            <a href="{{relatedFile.URL}}" target="_blank">
               <i class="fa whiteicon fa-link">
               </i>
             </a>

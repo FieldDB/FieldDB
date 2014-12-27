@@ -26,26 +26,36 @@ var app = angular.module("fielddbAngularApp", [
     // Allow same origin resource loads.
     "self",
     // Allow loading from outer domain.
-    "https://*.lingsync.org/**"
+    "https://*.lingsync.org/**",
+    "https://localhost:3184/**",
+    "https://localhost/**"
   ]);
+  if (FieldDB && FieldDB.PsycholinguisticsApp && FieldDB.Contextualizer && FieldDB.User) {
+    var fieldDBApp = new FieldDB.PsycholinguisticsApp({
+      authentication: {
+        user: new FieldDB.User({
+          authenticated: false
+        })
+      },
+      contextualizer: new FieldDB.Contextualizer().loadDefaults(),
+      online: true,
+      apiURL: "https://localhost:3181/v2/",
+      offlineCouchURL: "https://localhost:6984",
+      brand: "LingSync",
+      website: "http://lingsync.org",
+      basePathname: "/",
+    });
+    if (window.location.pathname.indexOf("android_asset") > -1) {
+      fieldDBApp.basePathname = window.location.pathname;
+    }
+  }
+  // if (window.location.hash.indexOf("#") > -1) {
+  //   fieldDBApp.basePathname = window.location.pathname + "#";
+  // }
 
-  new FieldDB.PsycholinguisticsApp({
-    authentication: {
-      user: new FieldDB.User({
-        authenticated: false
-      })
-    },
-    contextualizer: new FieldDB.Contextualizer().loadDefaults(),
-    online: true,
-    apiURL: "https://localhost:3181/v2/",
-    offlineCouchURL: "https://localhost:6984",
-    brand: "LingSync",
-    website: "http://lingsync.org"
-  });
-
-  FieldDB.Database.prototype.BASE_DB_URL = "https://corpusdev.lingsync.org";
-  FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.lingsync.org";
-  FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.lingsync.org";
+  // FieldDB.Database.prototype.BASE_DB_URL = "https://corpusdev.example.org";
+  // FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.example.org";
+  // FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.example.org";
 
 });
 console.log(app);

@@ -1,0 +1,33 @@
+<button class="hide btn pull-right" ng-click="save()" ng-class="{'btn-default': collection.saving, 'btn-success': !collection.saving}">Save</button>
+<button class="hide btn pull-right" ng-click="undo()" ng-class="{'btn-default': collection.saving, 'btn-inverse': !collection.saving}">Undo</button>
+
+<div class="row" ng-class="{'drop-zone': collection.docsAreReorderable}" >
+  <div class="lead topRow" ng-show="collection.docsAreReorderable">Drag and drop a item's number to re-order it</div>
+  <div class="well"
+  ng-class="{'col-md-12': collection.showDocCheckboxes}"
+  ng-repeat="item in collection._collection track by $index"
+  drag-hover-class="drop-zone-instructions-can-reorder-here"
+  ui-on-Drop="onDrop($event, $data, $index, collection._collection)">
+    <div ng-class="{'col-md-1': collection.showDocCheckboxes || collection.showDocPosition}">
+      <span><input type="checkbox" ng-show="collection.showDocCheckboxes"/></span>
+      <span
+        class="badge badge-info"
+        ng-show="collection.showDocPosition"
+        title="Position in list"
+        ui-draggable="true"
+        drag="item"
+        on-drop-success="dropSuccessHandler($event, $index, collection._collection)">
+        N. {{$index +1}}
+      </span>
+      <span ng-click="removeItemFromList(item)"><i class="fa fa-times-circle"></i></span>
+    </div>
+    <div  ng-class="{'col-md-10': collection.showDocCheckboxes}" data-fielddb-doc json="item">
+    </div>
+  </div>
+</div>
+<div ng-show="canAddNewItemsToCollection()"><i class="fa fa-plus-circle"></i> Add </div>
+
+<blockquote hidden ng-hide="true" class="status">
+  {{collection.warnMessage}}
+  {{collection.warnMessage}}
+</blockquote>
