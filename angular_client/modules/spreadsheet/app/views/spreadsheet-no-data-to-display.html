@@ -1,7 +1,7 @@
 <div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined && writePermissions==true">
   <div class="span12 pagination-centered">
     <h2>
-      {{locale_select_session_message}}
+      {{contextualize('locale_select_session_message')}}
     </h2>
   </div>
 </div>
@@ -12,6 +12,6 @@
 </div>
 <div class="row" ng-show="data==undefined && loading!=true">
   <div class="span12 pagination-centered">
-    {{locale_no_data_message}}
+    {{contextualize('locale_no_data_message')}}
   </div>
 </div>

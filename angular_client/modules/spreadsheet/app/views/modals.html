@@ -2,7 +2,7 @@
 <div class="modal hide fade" modal="passwordNotificationShouldBeOpen" close="closePasswordNotification()" options="opts">
   <div class="modal-header">
     <h3>
-      {{locale_confirm_password_modal}}
+      {{contextualize('locale_confirm_password_modal')}}
     </h3>
   </div>
   <div class="modal-body">
@@ -10,13 +10,13 @@
       {{passwordNotificationMessage}}
     </p>
     <label>
-      {{locale_password_textbox}}
+      {{contextualize('locale_password_textbox')}}
     </label>
     <input type="password" ng-model="confirmPassword"/>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary cancel" ng-click="closePasswordNotification()">
-      {{locale_continue_button}}
+      {{contextualize('locale_continue_button')}}
     </button>
   </div>
 </div>
@@ -26,17 +26,17 @@
     <h3>
       <i class="fa whiteicon fa-cloud">
       </i>
-      {{locale_welcome_modal}}
+      {{contextualize('locale_welcome_modal')}}
     </h3>
   </div>
   <div class="modal-body">
     <p>
-      {{locale_welcome_message}}
+      {{contextualize('locale_welcome_message')}}
     </p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary cancel" ng-click="closeWelcomeNotification()">
-      {{locale_OK_button}}
+      {{contextualize('locale_OK_button')}}
     </button>
   </div>
 </div>
