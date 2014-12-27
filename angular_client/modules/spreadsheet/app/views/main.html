@@ -144,7 +144,7 @@
             <td>
               <img ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" />
             </td>
-            <td class="text-left"> Access {{item.title}}
+            <td class="text-left" title="{{item.pouchname}} - {{item.description}}"> Access {{item.title}}
             </td>
           </tr>
           <tr ng-click="selectCorpus({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading==true" >

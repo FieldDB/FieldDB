@@ -23,7 +23,27 @@
 </div>
 
 <div ng-hide="corpus==undefined || admin==false">
-	<div>
+
+  <div>
+    <div class="settings_section_header">
+      <h2>
+        Details of <b>{{corpus.title}}</b>
+      </h2>
+    </div>
+    <div class="clearDiv">&nbsp;</div>
+    <div class="settingsItems row">
+      <label>Title:</label>
+      <textarea ng-model="corpus.title"></textarea>
+
+      <label>Description:</label>
+      <textarea class="fielddb-large-textarea" ng-model="corpus.description"></textarea>
+      <button class="btn btn-primary"
+        ng-click="updateCorpusDetails(corpus)" ng-disabled="loading==true">Save</button>
+    </div>
+
+  </div>
+
+  <div>
 		<div class="settings_section_header">
 			<h2>
 				Add an existing user to <b>{{corpus.title}}</b>
