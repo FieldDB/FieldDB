@@ -1,8 +1,7 @@
-/*globals FieldDB, runs, waitsFor */
+/*globals FieldDB */
 
 "use strict";
 var debugMode = true;
-var specIsRunningTooLong = 500000;
 describe("Directive: fielddb-collection", function() {
 
   describe("multiple lists of collections", function() {
