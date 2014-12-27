@@ -8,7 +8,7 @@ describe("Directive: fielddb-collection", function() {
   describe("multiple lists of collections", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/collection.html"));
+    beforeEach(module("fielddbAngularApp", "views/datum-field.html", "views/collection.html"));
     var el, scope, compileFunction;
 
     beforeEach(inject(function($rootScope, $compile) {
