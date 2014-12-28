@@ -1,6 +1,6 @@
 /* source: https://gist.github.com/xalakox/3026004
-This function itterates through the data and figures out the headers and 
-exports the id, key (and all its children) and value  (and all its children) as csv 
+This function itterates through the data and figures out the headers and
+exports the id, key (and all its children) and value  (and all its children) as csv
 */
 function(head, req) {
     start({
@@ -33,9 +33,9 @@ function(head, req) {
                 ret = ret + parent + "[" + name + "],";
             } else {
                 if (parent != "") {
-                    ret = ret + parent + "." + name + ",";
+                    ret = ret + "\"" + parent + "." + name + "\",";
                 } else {
-                    ret = ret + name + ",";
+                    ret = ret + "\"" + name + "\",";
                 }
             }
         }
@@ -57,9 +57,10 @@ function(head, req) {
                 valor = valor.toString().replace(/, /gi, ' ');
                 valor = valor.toString().replace(/(\r\n|\n|\r)/gm, '');
             } catch (er) {
-                valor = '';
+                valor = "";
+                log(er);
             }
-            ret = ret + valor + ',';
+            ret = ret + "\"" + valor + "\",";
         }
         return ret;
     };
