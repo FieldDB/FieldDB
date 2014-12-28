@@ -15,9 +15,11 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
         return message;
       }
       var result = FieldDB.FieldDBObject.application.contextualize(message);
-      if (result.indexOf("{{") > -1) {
-        console.log("TODO interpolate this", result);
-        result = result.replace(/{{/g,"").replace(/}}/g,"");
+      if ($rootScope.corpus && $rootScope.corpus.pouchname && FieldDB) {
+        var url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.pouchname;
+        result = result
+          .replace(/CORPUS_DB_URL/g, url)
+          .replace(/CORPUS_PAGE_URL/g, "http://lingsync.org/" + $rootScope.corpus.pouchname.replace("-", "/") + "/" + $rootScope.corpus.titleAsUrl);
       }
       // if (!$scope.$$phase) {
       //   $scope.$digest(); //$digest or $apply
