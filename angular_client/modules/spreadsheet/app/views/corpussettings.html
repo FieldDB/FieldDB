@@ -4,7 +4,7 @@
 <br />
 <div ng-hide="loginInfo==undefined" class="form-horizontal">
 	<div class="settings_section_header">
-		<h2>{{contextualize('locale_create_new_corpus')}}</h2>
+		<h2>{{contextualize('locale_create_new_corpus')}} {{corpus.title}}</h2>
 	</div>
 	<div class="clearDiv">&nbsp;</div>
 	<div class="settingsItems">
@@ -75,7 +75,7 @@
 	<div>
 		<div class="settings_section_header">
 			<h2>
-				{{contextualize('locale_users_with_access_message')}}
+				{{contextualize('locale_users_with_access_message')}} {{corpus.title}}
 			</h2>
 		</div>
 		<div class="clearDiv">&nbsp;</div>
