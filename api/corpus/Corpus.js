@@ -1,6 +1,7 @@
 /* global window, OPrime */
 var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../datum/Datum").Datum;
+var DatumField = require("./../datum/DatumField").DatumField;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Session = require("./../FieldDBObject").FieldDBObject;
 var Speaker = require("./../user/Speaker").Speaker;
@@ -665,6 +666,18 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         deferred.resolve(datum);
       });
       return deferred.promise;
+    }
+  },
+
+  newDatumField: {
+    value: function(field) {
+      if (!field.id && field.label) {
+        field.id = field.label;
+      }
+      if (!(field instanceof DatumField)) {
+        field = new DatumField(field);
+      }
+      this.datumFields.add(field);
     }
   },
 
