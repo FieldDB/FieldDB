@@ -114,10 +114,8 @@
     "dateModified": "",
     "collection": "sessions"
   },
-  "audioVideo": {
-    "URL": "",
-    "type": "audio"
-  },
+  "audioVideo": [],
+  "images": [],
   "comments": [],
   "datumTags": [],
   "dateEntered": "",
