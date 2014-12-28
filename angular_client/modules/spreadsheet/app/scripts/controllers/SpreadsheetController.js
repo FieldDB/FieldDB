@@ -1687,34 +1687,39 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.searchHistory = null;
     $scope.loadData($scope.activeSession);
   };
+  if (FieldDB && FieldDB.DatumField) {
+    $scope.addedDatumField = new FieldDB.DatumField({
+      id: Date.now(),
+      label: "New Field " + Date.now()
+    });
+  } else {
+    $scope.addedDatumField = {
+      id: Date.now(),
+      label: "New Field " + Date.now()
+    };
+  }
 
   $scope.updateCorpusDetails = function(corpus) {
     console.log("Saving corpus details, corpus passed in", corpus);
-    Data.saveCouchDoc($rootScope.corpus.pouchname, $rootScope.corpus).then(function(result) {
-      if (result && result.data && result.data.ok) {
-        console.log("Saved corpus details ", result);
-        var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
-
-        $scope.addActivity([{
-          verb: "modified",
-          verbicon: "icon-pencil",
-          directobjecticon: "icon-cloud",
-          directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
-          indirectobject: indirectObjectString,
-          teamOrPersonal: "personal"
-        }, {
-          verb: "modified",
-          verbicon: "icon-pencil",
-          directobjecticon: "icon-cloud",
-          directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
-          indirectobject: indirectObjectString,
-          teamOrPersonal: "team"
-        }], "uploadnow");
-      } else {
-        console.log("Error saving corpus details.", result);
-        alert("Error saving corpus details.");
-      }
-
+    $rootScope.corpus.url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.pouchname;
+    $rootScope.corpus.save($rootScope.user).then(function(result) {
+      console.log("Saved corpus details ", result);
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
+      $scope.addActivity([{
+        verb: "modified",
+        verbicon: "icon-pencil",
+        directobjecticon: "icon-cloud",
+        directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
+        indirectobject: indirectObjectString,
+        teamOrPersonal: "personal"
+      }, {
+        verb: "modified",
+        verbicon: "icon-pencil",
+        directobjecticon: "icon-cloud",
+        directobject: "<a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> ",
+        indirectobject: indirectObjectString,
+        teamOrPersonal: "team"
+      }], "uploadnow");
     }, function(reason) {
       console.log("Error saving corpus details.", reason);
       alert("Error saving corpus details.");

@@ -11,16 +11,20 @@
     </div>
     <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems">
-      <select ng-model="numberOfRecordsToDisplay"
-      ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
-      <option value="5">5</option>
-      <option value="10">10</option>
-      <option value="25" selected>25</option>
-      <option value="50">50</option>
-      <option value="all">{{contextualize('locale_all_dropdown')}}</option>
-    </select>
-    &nbsp;<button class="btn btn-primary"
-    ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">{{contextualize('locale_save_button')}}</button>
+      <select ng-model="numberOfRecordsToDisplay" ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="25" selected>25</option>
+        <option value="50">50</option>
+        <option value="all">
+          {{contextualize('locale_all_dropdown')}}
+        </option>
+      </select>
+      &nbsp;
+      <button class="btn btn-primary"
+      ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">
+      {{contextualize('locale_save_button')}}
+    </button>
   </div>
 </div>
 <hr />
@@ -42,311 +46,54 @@
 </div>
 <div class="clearDiv">&nbsp;</div>
 <div class="settingsItems">
-  <div ng-hide="mcgillOnly">
-    <!-- Full TEMPLATE -->
-    <h3>
-      <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> {{contextualize('locale_full_template')}}
-      <small ng-show="corpus.preferredTemplate == 'fulltemplate'"> {{contextualize('locale_default_template')}} {{corpus.title}}</small>
-    </h3>
-    <div class="row settingsTemplate">
-
-
-      <div class="span1" title="Grammaticality Judgement">
-        *#?
-      </div>
-      <div class="span5">
-        <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.hint}}">
-          {{corpusField.label}}
-        </div>
-      </div>
-
-      <div class="span5" ng-show="fieldsInColumns.second">
-        <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.hint}}">
-          {{corpusField.label}}
-        </div>
-      </div>
-
-      <div class="span5" ng-show="fieldsInColumns.third">
-        <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.hint}}">
-          {{corpusField.label}}
-        </div>
-      </div>
-
-        <!-- <input class="span5" type="text" disabled="disabled"
-        placeholder="Tags"></textarea> -->
-        <!-- <span class="span4" rows="3">Comments</span> -->
-        <div class="span1">
-          {{contextualize('locale_audio_and_comments')}}
-        </div>
-
-      </div>
-      <br />
-      {{contextualize('locale_number_columns')}}
-      <select ng-model="fullTemplateDefaultNumberOfColumns">
-        <option>1</option>
-        <option>2</option>
-      </select>
-      Number of Fields per column:
-      <input type="number" ng-model="fullTemplateDefaultNumberOfFieldsPerColumn"/>
-      <button class="btn btn-primary"
-      ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn)">{{contextualize('locale_activate_full_button')}}</button>
-      <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'fulltemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('fulltemplate')">{{contextualize('locale_set_as_default_button')}} {{corpus.title}}</button>
-      <!-- End Full TEMPLATE -->
-
-      <center>
-        <hr width="80%">
-      </center>
-
-      <!-- Compact TEMPLATE 1 -->
-      <h3>
-        <span ng-show="templateId=='compacttemplate'"><b>✓</b></span> {{contextualize('locale_compact_template')}}
-        <small ng-show="corpus.preferredTemplate == 'compacttemplate'">{{contextualize('locale_default_template')}} {{corpus.title}}</small>
-      </h3>
-      <div class="row settingsTemplate">
-        <div class="span3">
-          <select class="span3" ng-model="newFieldPreferences1.field1">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-default-compact-template="field1"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-        </div>
-        <div class="span3">
-          <select class="span3" ng-model="newFieldPreferences1.field2">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-default-compact-template="field2"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-        </div>
-        <div class="span3">
-          <select class="span3" ng-model="newFieldPreferences1.field3">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-default-compact-template="field3"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-        </div>
-        <div class="span3">
-          <select class="span3" ng-model="newFieldPreferences1.field4">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-default-compact-template="field4"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-        </div>
-      </div>
-      <br />
-      <button class="btn btn-primary"
-      ng-click="saveNewPreferences('compacttemplate', newFieldPreferences1)">{{contextualize('locale_activate_compact_button')}}</button>
-      <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'compacttemplate'}"
-      ng-click="setAsDefaultCorpusTemplate('compacttemplate')">{{contextualize('locale_set_as_default_button')}} {{corpus.title}}</button>
-      <!-- End Compact TEMPLATE 1 -->
-
-      <center>
-        <hr width="80%">
-      </center>
-
-      <!-- Yale Field Methods TEMPLATE 3 -->
-      <h3>
-        <span ng-show="templateId=='yalefieldmethodsspring2014template'"><b>✓</b></span> {{contextualize('locale_yale_template')}}
-        <small ng-show="corpus.preferredTemplate == 'yalefieldmethodsspring2014template'">{{contextualize('locale_default_template')}} {{corpus.title}}</small>
-      </h3>
-      <div class="row settingsTemplate">
-        <div class="span5">
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field1">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field1"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field2">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field2"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field3">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field3"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field4">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field4"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-        </div>
-        <div class="span5">
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field5">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field5"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field6">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field6"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field7">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field7"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-          <select class="span5" disabled="disabled" ng-model="newFieldPreferences3.field8">
-            <option value="">{{contextualize('locale_empty_dropdown')}}</option>
-            <option select-field-from-yale-field-methods-spring-2014-template="field8"
-            ng-repeat="field in availableFields" value="{{field.label}}">{{field.title}}</option>
-          </select>
-        <!-- <input class="span5" type="text" disabled="disabled"
-        placeholder="Tags"></textarea> -->
-        <!-- <span class="span4" rows="3">Comments</span> -->
-
-      </div>
-      <div class="span1">
-        {{contextualize('locale_audio_and_comments')}}
-      </div>
-
-    </div>
-
-    <button class="btn btn-primary"
-    ng-click="saveNewPreferences('yalefieldmethodsspring2014template', newFieldPreferences3)">{{locale_activate_yale_button</button>
-    <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'yalefieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('yalefieldmethodsspring2014template')">{{contextualize('locale_set_as_default_button')}} {{corpus.title}}</button>
-
-    <center>
-      <hr width="80%">
-    </center>
-    <!-- End Yale Field Methods TEMPLATE -->
-  </div><!-- end hidden templates for mcgill deploy workaround -->
-
-  <!-- McGill TEMPLATE -->
+  <!-- Full TEMPLATE -->
   <h3>
-    <span ng-show="templateId=='mcgillfieldmethodsfall2014template'"><b>✓</b></span> {{contextualize('locale_mcgill_fall_2014_template')}}
-    <small ng-show="corpus.preferredTemplate == 'mcgillfieldmethodsfall2014template'">{{contextualize('locale_default_template')}} {{corpus.title}}</small>
+    <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> {{contextualize('locale_full_template')}}
+    <small ng-show="corpus.preferredTemplate == 'fulltemplate'"> {{contextualize('locale_default_template')}} {{corpus.title}}</small>
   </h3>
   <div class="row settingsTemplate">
+
+    <div class="span1" title="Grammaticality Judgement">
+      *#?
+    </div>
     <div class="span5">
-      <select class="span5" disabled="disabled">
-        <option value="">{{contextualize('locale_utterance')}}</option>
-      </select>
-      <select class="span5" disabled="disabled">
-        <option value="">{{contextualize('locale_morphemes')}}</option>
-      </select>
-      <select class="span5" disabled="disabled">
-        <option value="">{{contextualize('locale_gloss')}}</option>
-      </select>
-    </div>
-    <div class="span5" >
-      <select class="span5" disabled="disabled">
-        <option value="">{{contextualize('locale_translation')}}</option>
-      </select>
-      <select class="span5" disabled="disabled">
-        <option value="">{{contextualize('locale_ipa')}}</option>
-      </select>
-      <select class="span5" disabled="disabled">
-        <option value="">{{contextualize('locale_notes')}}</option>
-      </select>
-
-    </div>
-    <div class="span1">
-      {{contextualize('locale_audio_and_comments')}}
+      <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.hint}}">
+        {{corpusField.label}}
+      </div>
     </div>
 
+    <div class="span5" ng-show="fieldsInColumns.second">
+      <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.hint}}">
+        {{corpusField.label}}
+      </div>
+    </div>
+
+    <div class="span5" ng-show="fieldsInColumns.third">
+      <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.hint}}">
+        {{corpusField.label}}
+      </div>
+    </div>
+
+<!-- <input class="span5" type="text" disabled="disabled"
+  placeholder="Tags"></textarea> -->
+  <!-- <span class="span4" rows="3">Comments</span> -->
+  <div class="span1">
+    {{contextualize('locale_audio_and_comments')}}
   </div>
-  <br />
-  <button  ng-hide="mcgillOnly" class="btn btn-primary"
-  ng-click="saveNewPreferences('mcgillfieldmethodsfall2014template', newFieldPreferences2)">{{contextualize('locale_activate_mcgill_button')}}</button>
-  <button  ng-hide="mcgillOnly" ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'mcgillfieldmethodsfall2014template'}"
-  ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsfall2014template')">{{contextualize('locale_set_as_default_button')}} {{corpus.title}}</button>
-  <!-- End McGill TEMPLATE -->
-  <div ng-hide="mcgillOnly">
-    <!-- McGill TEMPLATE -->
-    <h3>
-      <span ng-show="templateId=='mcgillfieldmethodsspring2014template'"><b>✓</b></span> {{contextualize('locale_mcgill_spring_2014template')}}
-      <small ng-show="corpus.preferredTemplate == 'mcgillfieldmethodsspring2014template'">{{contextualize('locale_default_template')}} {{corpus.title}}</small>
-    </h3>
-    <div class="row settingsTemplate">
-      <div class="span5">
-        <select class="span5" disabled="disabled">
-          <option value="">{{contextualize('locale_utterance')}}</option>
-        </select>
-        <select class="span5" disabled="disabled">
-          <option value="">{{contextualize('locale_morphemes')}}</option>
-        </select>
-        <select class="span5" disabled="disabled">
-          <option value="">{{contextualize('locale_gloss')}}</option>
-        </select>
-      </div>
-      <div class="span5" >
-        <select class="span5" disabled="disabled">
-          <option value="">{{contextualize('locale_translation')}}</option>
-        </select>
-        <select class="span5" disabled="disabled">
-          <option value="">{{contextualize('locale_ipa')}}</option>
-        </select>
-        <select class="span5" disabled="disabled">
-          <option value="">{{contextualize('locale_notes')}}</option>
-        </select>
 
-      </div>
-      <div class="span1">
-        {{contextualize('locale_audio_and_comments')}}
-      </div>
-
-    </div>
-    <br />
-    <button class="btn btn-primary"
-    ng-click="saveNewPreferences('mcgillfieldmethodsspring2014template', newFieldPreferences2)">{{contextualize('locale_activate_mcgill_button')}}</button>
-    <button ng-show="admin" class="btn" ng-class="{'btn-primary': corpus.preferredTemplate != 'mcgillfieldmethodsspring2014template'}"
-    ng-click="setAsDefaultCorpusTemplate('mcgillfieldmethodsspring2014template')">{{contextualize('locale_set_as_default_button')}} {{corpus.title}}</button>
-    <!-- End McGill TEMPLATE -->
-  </div> <!-- hide old mcgil tempalte -->
 </div>
+<br />
+{{contextualize('locale_number_columns')}}
+<select ng-model="fullTemplateDefaultNumberOfColumns">
+  <option>1</option>
+  <option>2</option>
+<!-- TODO css for these <option>3</option>
+  <option>4</option> -->
+</select>
+Number of Fields per column:
+<input type="number" ng-model="fullTemplateDefaultNumberOfFieldsPerColumn"/>
+<button class="btn btn-primary"
+ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn)">
+{{contextualize('locale_activate_full_button')}}
+</button>
 
-
-<div ng-show="developer==true">
-  <!-- EDIT BUTTONS -->
-  <br />
-  <div class="row">
-    <div class="span8 offset1">
-      <button class="btn btn-primary" ng-click="editTags=!editTags">{{contextualize('locale_edit_tags_button')}}</button>
-        &nbsp;
-        <button class="btn btn-primary" ng-click="deleteDuplicateTags();">{{contextualize('locale_delete_duplicate_tags_button')}}</button>
-          &nbsp;
-          <button class="btn btn-primary" ng-click="editFields=!editFields">{{contextualize('locale_edit_fields_button')}}</button>
-          </div>
-        </div>
-
-        <!-- TAGS -->
-        <br />
-
-        <div class="row" ng-show="editTags==true">
-          <div class="span8">
-            {{contextualize('locale_rename_tags')}}
-            <div ng-repeat="tag in tags">
-              <input type="text" value="{{tag}}" disabled="true" ng-model="none">
-              <button class="btn btn-primary" ng-click="changeTagToEdit(tag)">{{contextualize('locale_Edit_button')}}</button>
-              <span ng-show="tagToEdit==tag"><input type="text"
-                ng-model="newTag" placeholder="Change to ...">
-                <button class="btn btn-primary"
-                ng-click="editTagInfo(tag, newTag)">{{contextualize('locale_update_button')}}</button> </span> <img
-                ng-show="loading==true" src="images/spinner-small.gif">
-              </div>
-            </div>
-          </div>
-
-          <!-- FIELDS -->
-          <div class="row" ng-show="editFields==true">
-            <div class="span8">
-              {{contextualize('locale_rename_fields')}}
-              <div ng-repeat="field in availableFields">
-                <input type="text" value="{{field.title}}" disabled="true"
-                ng-model="none">
-                <button class="btn btn-primary" ng-click="changeFieldToEdit(field)">{{contextualize('locale_Edit_button')}}</button>
-                <span ng-show="fieldToEdit==field"><input type="text"
-                  ng-model="newFieldTitle" placeholder="Change to ...">
-                  <button class="btn btn-primary"
-                  ng-click="editFieldTitle(field, newFieldTitle)">{{contextualize('locale_update_button')}}</button> </span>
-                  <img ng-show="loading==true" src="images/spinner-small.gif">
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>

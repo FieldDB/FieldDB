@@ -5,10 +5,10 @@
 
 <label>{{contextualize('locale_Title')}}</label>
 
-<input class="{'choose-field: datumField.userchooseable}" value="{{datumField.labelFieldLinguists}}"
+<input class="{'choose-field: datumField.userchooseable}" ng-model="datumField.labelFieldLinguists"
 	type="text" />
 
 
 
 <label>{{contextualize('locale_Help_Text')}}</label>
-<textarea class="help-text" placeholder="{{contextualize('locale_Help_Text_Placeholder')}}">{{datumField.helpLinguists}}</textarea>
+<textarea class="help-text" placeholder="{{contextualize('locale_Help_Text_Placeholder')}}" ng-model="datumField.helpLinguists"></textarea>
