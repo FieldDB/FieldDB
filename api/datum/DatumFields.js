@@ -41,6 +41,46 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
 
   capitalizeFirstCharacterOfPrimaryKeys: {
     value: false
+  },
+
+  /**
+   *  Docs/items in a DatumFields are reorderable by default
+   * @type {Boolean}
+   */
+  docsAreReorderable: {
+    get: function() {
+      if (this._docsAreReorderable !== null && this._docsAreReorderable !== undefined) {
+        return this._docsAreReorderable;
+      }
+      return true;
+    },
+    set: function(value) {
+      if (value === null || value === undefined) {
+        delete this._docsAreReorderable;
+        return;
+      }
+      this._docsAreReorderable = value;
+    }
+  },
+
+  /**
+   *  Docs/items in a DatumFields are reorderable by default
+   * @type {Boolean}
+   */
+  showDocPosition: {
+    get: function() {
+      if (this._showDocPosition !== null && this._showDocPosition !== undefined) {
+        return this._showDocPosition;
+      }
+      return true;
+    },
+    set: function(value) {
+      if (value === null || value === undefined) {
+        delete this._showDocPosition;
+        return;
+      }
+      this._showDocPosition = value;
+    }
   }
 
 });

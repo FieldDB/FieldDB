@@ -8,11 +8,11 @@
   ng-repeat="item in collection._collection track by $index"
   drag-hover-class="drop-zone-instructions-can-reorder-here"
   ui-on-Drop="onDrop($event, $data, $index, collection._collection)">
-    <div ng-class="{'col-md-1': collection.showDocCheckboxes || collection.showDocPosition}">
+    <div ng-class="{'col-md-1': collection.showDocCheckboxes || collection.docsAreReorderable}">
       <span><input type="checkbox" ng-show="collection.showDocCheckboxes"/></span>
       <span
         class="badge badge-info"
-        ng-show="collection.showDocPosition"
+        ng-show="collection.docsAreReorderable"
         title="Position in list"
         ui-draggable="true"
         drag="item"
