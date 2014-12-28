@@ -126,9 +126,14 @@
     <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems row">
       <button class="btn btn-primary"
-        ng-click="updateCorpusDetails(corpus)" ng-disabled="loading==true">Save</button>
+        ng-click="updateCorpusDetails(corpus)"
+        ng-class="{'pulsing': corpus.saving}"
+        ng-disabled="loading==true">Save</button>
       <div data-fielddb-collection json='corpus.datumFields'></div>
+      <button class="btn btn-info"
+        ng-click="corpus.newDatumField(addedDatumField)" ng-disabled="loading==true">Add Field</button>
       <button class="btn btn-primary"
+        ng-class="{'pulsing': corpus.saving}"
         ng-click="updateCorpusDetails(corpus)" ng-disabled="loading==true">Save</button>
     </div>
 
