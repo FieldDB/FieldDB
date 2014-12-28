@@ -5,5 +5,6 @@
     {{notificationMessage}}
 </div>
 <div class="modal-footer">
+    <small ng-show="showForgotPasswordInstructions">* Forgot your username and/or password? You can try to login up to 5 times. If you enter a wrong password 5 times, a new password will be emailed to you automatically if you registered your email. You can then use this new password to login and change your password.</small>
     <button class="btn btn-primary" ng-click="ok()">{{contextualize('locale_OK_button')}}</button>
 </div>
