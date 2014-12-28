@@ -1159,6 +1159,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var source = json._id;
       if (json._rev) {
         source = source + "?rev=" + json._rev;
+      } else {
+        if (this.parent && this.parent._rev) {
+          source = this.parent._id + "?rev=" + this.parent._rev;
+        }
       }
       relatedData.push({
         URI: source,
@@ -1168,6 +1172,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       /* Clear the current object's info which we shouldnt clone */
       delete json._id;
       delete json._rev;
+      delete json.parent;
 
       return json;
     }
