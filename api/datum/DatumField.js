@@ -822,6 +822,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      includeEvenEmptyAttributes = true;
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
       delete json.dateCreated;
       delete json.dateModified;
@@ -831,6 +832,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       // TODO eventually dont include the label and hint but now include it for backward compaitibilty
       json.label = this.label;
       json.hint = this.hint;
+
+      json.value = this.value || "";
+      json.mask = this.mask || "";
 
       json.id = json._id;
       delete json._id;

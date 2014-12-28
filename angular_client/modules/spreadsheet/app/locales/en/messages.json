@@ -412,12 +412,12 @@
         "description": "bottom of the main page, opens Contact Us/Bug Report form"
     },
     "locale_reset_password_button_1": {
-        "message": "Reset Password...",
-        "description": "button opens password reset page"
+        "message": "Change Password...",
+        "description": "button opens password change page"
     },
     "locale_password_reset": {
-        "message": "Password Reset",
-        "description": "title for Password Reset page"
+        "message": "Password Change",
+        "description": "title for Password Change page"
     },
     "locale_old_password": {
         "message": "Old Password:",
@@ -432,7 +432,7 @@
         "description": "label for Confirm new password textbox"
     },
     "locale_reset_password_button_2": {
-        "message": "Reset Password",
+        "message": "Change Password",
         "description": "button to contact the server to reset password, different from reset_password_button_1. see #426"
     },
     "locale_server": {

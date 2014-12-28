@@ -72,7 +72,11 @@ angular.module('spreadsheetApp')
         function(response) {
           /* Override default datum fields with the ones in the currently loaded corpus */
           if ($rootScope.corpus && $rootScope.corpus.datumFields) {
-            response.data.datumFields = JSON.parse(JSON.stringify($rootScope.corpus.datumFields));
+            if ($rootScope.corpus.datumFields.clone) {
+              response.data.datumFields = $rootScope.corpus.datumFields.clone();
+            } else {
+              response.data.datumFields = JSON.parse(JSON.stringify($rootScope.corpus.datumFields));
+            }
           }
           return response.data;
         });

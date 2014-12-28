@@ -1,5 +1,5 @@
 define([
-    "backbone", 
+    "backbone",
     "handlebars",
     "datum/Datum",
     "datum/Datums",
@@ -21,9 +21,9 @@ define([
     /**
      * @class The area where Datum appear. The number of datum that appear
      * is in UserPreference.
-     * 
+     *
      * @property {String} format Valid values are "centreWell" or "fullscreen".
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
@@ -36,16 +36,16 @@ define([
         childViewClass       : "well",
         childViewFormat      : "well"
       });
-      
+
       // Listen for changes in the number of Datum to display
       app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this); //we might have to bind this in the other direction since the user's preferences are craeted later than the datum container.
     },
-    
+
     /**
      * The underlying model of the DatumContainerEditView is a Datums.
      */
     model: Datums,
-    
+
     /**
      * Events that the DatumContainerEditView is listening to and their handlers.
      */
@@ -54,25 +54,25 @@ define([
       "click .icon-resize-full" : "resizeFullscreen",
       "click .icon-book" : "showReadonly"
     },
-    
-    /** 
+
+    /**
      * The Handlebars template rendered as embedded.
      */
     templateEmbedded : Handlebars.templates.datum_container_edit_embedded,
-    
+
     /**
      * The Handlebars template rendered as fullscreen.
      */
     templateFullscreen : Handlebars.templates.datum_container_edit_fullscreen,
-    
+
     render : function() {
-      
+
       var jsonToRender = this.model.toJSON();
       jsonToRender.locale_Data_Entry_Area = Locale.get("locale_Data_Entry_Area");
       jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
       jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
       jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
-      
+
       // Display the DatumContainerEditView
       if (this.format == "centreWell") {
         this.setElement($("#datums-embedded"));
@@ -88,7 +88,7 @@ define([
 
       return this;
     },
-    
+
     /**
      * Saves the Datum pages (if necessary) after a timeout.
      */
@@ -97,7 +97,7 @@ define([
         this.datumsView._childViews[i].saveScreen();
       }
     },
-    
+
     resizeSmall : function(e) {
       if(e){
         e.stopPropagation();
@@ -106,7 +106,7 @@ define([
 //      window.app.router.showEditableDatums("centreWell");
       window.location.href = "#render/true";
     },
-    
+
     resizeFullscreen : function(e) {
       if(e){
         e.stopPropagation();
@@ -114,7 +114,7 @@ define([
       }
       window.app.router.showEditableDatums("fullscreen");
     },
- 
+
     showReadonly : function(e) {
       if(e){
         e.stopPropagation();
@@ -122,11 +122,11 @@ define([
       }
       window.app.router.showReadonlyDatums(this.format);
     },
-    
+
     showMostRecentDatum : function() {
       var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
       var showDatumOnTopOrBottomOfDataEntryArea = app.get("authentication").get("userPrivate").get("prefs").get("showNewDatumAtTopOrBottomOfDataEntryArea");
-      
+
       // Get the current Corpus' Datum based on their date entered
       var self = this;
       (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(nextNumberOfDatum, function(rows) {
@@ -136,7 +136,7 @@ define([
           for (var i = 0; i < self.model.length; i++) {
             self.model.pop();
           }
-            
+
           /* If there are no datum in the corpus, or currently showing, add a single, blank Datum (if the user has an empty corpus, they can stil doubleclick on an item they are importing and therefore have a non empty datum container) */
           if(self.datumsView._childViews.length == 0){
             self.newDatum();
@@ -153,7 +153,7 @@ define([
               self.model.pop();
             }
           }
-          
+
           for (var i = 0; i < rows.length; i++) {
             //If you've filled it up, stop filling.
             if(self.model.length >= nextNumberOfDatum){
@@ -189,7 +189,7 @@ define([
         }
       });
     },
-    
+
     /**
      * Adds a new Datum to the current Corpus in the current Session.
      */
@@ -199,6 +199,9 @@ define([
       for(var x in datumfields){
         datumfields[x].mask = "";
         datumfields[x].value = "";
+        if (datumfields[x].users) {
+          datumfields[x].users = [];
+        }
       }
       this.prependDatum(new Datum({
         filledWithDefaults : true,
@@ -211,7 +214,7 @@ define([
     /**
      * Prepends the given Datum to the top of the Datum stack.
      * Saves and bumps the bottom Datum off the stack, if necessary.
-     * 
+     *
      * @param {Datm} datum The Datum to prepend.
      */
     prependDatum : function(datum) {
@@ -224,13 +227,13 @@ define([
         if (previousDateModified) {
           var currentDate = new Date();
           var lastSaveDate;
-            // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
+            // 86400000 = 24h * 60m * 60s * 1000ms = 1 day
             try{
               lastSaveDate = new Date(JSON.parse(previousDateModified));
             }catch(e){
               lastSaveDate = new Date(previousDateModified);
             }
-            
+
             if (currentDate - lastSaveDate > 86400000) {
               tooOld = true;
             }
@@ -241,7 +244,7 @@ define([
             // Display the new Session modal
             window.app.get("corpus").newSession();
             return;
-          } 
+          }
         }
       // If the datum is already being displayed by the datumContainer
       } else if (this.model.get(datum.id)) {
@@ -251,15 +254,15 @@ define([
           if (view.model.id == datum.id) {
             // Save it
             view.saveScreen();
-            
+
             // Remove it
             this.model.remove(view.model);
-            
+
             break;
           }
         }
       }
-        
+
       // Add the new, blank, Datum
       var showDatumOnTopOrBottomOfDataEntryArea = app.get("authentication").get("userPrivate").get("prefs").get("showNewDatumAtTopOrBottomOfDataEntryArea");
       if (showDatumOnTopOrBottomOfDataEntryArea === "bottom") {
@@ -269,7 +272,7 @@ define([
         //put most recent datum at the top
         this.model.unshift(datum);
       }
-       
+
       // If there are too many datum on the screen, remove the bottom one and save it, if necessary
       if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
         var view = this.datumsView._childViews[this.model.length - 1];
@@ -281,12 +284,12 @@ define([
           //put most recent datum at the top
           this.model.pop();
         }
-        
+
       }
       try{
         //bring the user to the top of the page where the prepended datum is, or show the dashboard if the datums arent showing.
         if($("#datums-embedded").attr("style").indexOf("display: none;") > -1 && $("#datum-container-fullscreen").attr("style").indexOf("display: none;") > -1){
-          window.location.href = "#render/true"; 
+          window.location.href = "#render/true";
         }else{
           window.scrollTo(0,0);
           $($($(this.el).find(".utterance")[0]).find(".datum_field_input")[0]).focus();
@@ -296,6 +299,6 @@ define([
       }
     }
   });
-  
+
   return DatumContainerEditView;
 });

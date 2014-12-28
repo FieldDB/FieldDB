@@ -645,6 +645,9 @@ define( [
         for(var x in datumfields){
           datumfields[x].mask = "";
           datumfields[x].value = "";
+          if (datumfields[x].users) {
+            datumfields[x].users = [];
+          }
         }
         var fields = new DatumFields(datumfields);
         var audioVideo = null;

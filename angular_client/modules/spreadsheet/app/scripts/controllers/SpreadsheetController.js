@@ -56,8 +56,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.appVersion = "2.35.0ss";
 
   // Functions to open/close generic notification modal
-  $rootScope.openNotification = function(size) {
-
+  $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
+    if (showForgotPasswordInstructions) {
+      $rootScope.showForgotPasswordInstructions = showForgotPasswordInstructions;
+    } else {
+      $rootScope.showForgotPasswordInstructions = false;
+    }
     var modalInstance = $modal.open({
       templateUrl: 'views/notification-modal.html',
       controller: 'SpreadsheetNotificationController',
@@ -867,7 +871,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.loading = false;
         }, /* login failure */ function(reason) {
           $rootScope.notificationMessage = "Error logging in.\n" + reason;
-          $rootScope.openNotification();
+          $rootScope.openNotification(null, true);
           $rootScope.loading = false;
         });
     }
