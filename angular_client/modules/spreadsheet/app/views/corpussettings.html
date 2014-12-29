@@ -7,12 +7,15 @@
 		<h2>{{contextualize('locale_create_new_corpus')}} {{corpus.title}}</h2>
 	</div>
 	<div class="clearDiv">&nbsp;</div>
-	<div class="settingsItems">
-		<input type="text" ng-model='newCorpusInfo.newCorpusName'
-			placeholder="New corpus name">
-		&nbsp;<button class="btn btn-primary"
-			ng-click="createNewCorpus(newCorpusInfo)" ng-disabled="loading==true">{{contextualize('locale_create_button')}}</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading==true">
-	</div>
+	<form ng-submit="createNewCorpus(newCorpusInfo)">
+    <div class="settingsItems">
+  		<input type="text" ng-model='newCorpusInfo.newCorpusName'
+  			placeholder="New corpus name">
+  		&nbsp;
+      <button class="btn btn-primary"
+  			ng-disabled="loading==true">{{contextualize('locale_create_button')}}</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading==true">
+  	</div>
+  <form>
 </div>
 
 <hr />
