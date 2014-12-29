@@ -405,10 +405,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       if (this.fetching) {
         self.warn("Fetching is in process, can't save right now...");
+        Q.nextText(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
         return;
       }
       if (this.saving) {
         self.warn("Save was already in process...");
+        Q.nextText(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
         return;
       }
       this.saving = true;
