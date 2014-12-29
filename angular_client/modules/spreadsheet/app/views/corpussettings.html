@@ -4,7 +4,7 @@
 <br />
 <div ng-hide="loginInfo==undefined" class="form-horizontal">
 	<div class="settings_section_header">
-		<h2>{{contextualize('locale_create_new_corpus')}} {{corpus.title}}</h2>
+		<h2>{{contextualize('locale_create_new_corpus')}}</h2>
 	</div>
 	<div class="clearDiv">&nbsp;</div>
 	<form ng-submit="createNewCorpus(newCorpusInfo)">
@@ -21,7 +21,7 @@
 <hr />
 
 <div class="settingsItems" ng-show="admin==false">
-	{{contextualize('locale_not_admin_message')}}
+	{{contextualize('locale_not_admin_message')}}  {{corpus.title}}
 </div>
 
 <div ng-hide="corpus==undefined || admin==false">
