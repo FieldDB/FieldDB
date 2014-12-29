@@ -41,6 +41,7 @@
       <textarea class="fielddb-large-textarea" ng-model="corpus.description"></textarea>
       <button class="btn btn-primary"
         ng-click="updateCorpusDetails(corpus)" ng-disabled="loading==true">Save</button>
+        <img src="images/loading-spinner.gif" width="100px" ng-show="corpus.saving==true">
     </div>
 
   </div>
@@ -132,12 +133,15 @@
         ng-click="updateCorpusDetails(corpus)"
         ng-class="{'pulsing': corpus.saving}"
         ng-disabled="loading==true">Save</button>
+      <img src="images/loading-spinner.gif" width="100px" ng-show="corpus.saving==true"/>
       <div data-fielddb-collection json='corpus.datumFields'></div>
       <button class="btn btn-info"
         ng-click="corpus.newDatumField(addedDatumField)" ng-disabled="loading==true">Add Field</button>
       <button class="btn btn-primary"
         ng-class="{'pulsing': corpus.saving}"
         ng-click="updateCorpusDetails(corpus)" ng-disabled="loading==true">Save</button>
+      <img src="images/loading-spinner.gif" width="100px" ng-show="corpus.saving==true"/>
+
     </div>
 
   </div>
