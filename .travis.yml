@@ -47,8 +47,8 @@ after_success:
   # on:
   #   branch: master
   #   condition: $TRAVIS_REPO = "OpenSourceFieldlinguistics/FieldDB"
-    - echo branch: $TRAVIS_BRANCH
-    - echo repo: $TRAVIS_REPO
+    - echo branch $TRAVIS_BRANCH
+    - echo repo $TRAVIS_REPO
     - touch "angular_client/modules/spreadsheet/dist/deployed at `date`"
     - NOW=`date` && sed "s/\(appVersion = \"[^,]*ss\)\"/\1 $NOW\"/" angular_client/modules/spreadsheet/dist/scripts/scripts.js  > output && echo $NOW
     - mv output angular_client/modules/spreadsheet/dist/scripts/scripts.js
