@@ -20,12 +20,14 @@ notifications:
     on_success: change
     on_failure: always
 
-env:
-  matrix:
+# env:
+#   matrix:
     # see set_up_new_machine.sh
 
 before_install:
   # Download and configure deps
+  - export TZ=Canada/Eastern # http://stackoverflow.com/questions/23371542/how-do-i-configure-travis-ci-to-use-the-correct-time-zone-for-a-rails-app
+  - echo n | bash scripts/set_fielddb_version.sh
   - sudo apt-get install ncftp
   - npm install -g grunt-cli
   - npm install -g bower
@@ -46,6 +48,10 @@ env:
 after_success:
   # on:
   #   branch: master
-    - echo $TRAVIS_BRANCH
-    - touch "angular_client/modules/spreadsheet/dist/deployed at `date`"
-    - "ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*"
+  #   condition: $TRAVIS_REPO_SLUG = "OpenSourceFieldlinguistics/FieldDB"
+  - echo branch $TRAVIS_BRANCH
+  - echo repo $TRAVIS_REPO_SLUG
+  - touch "angular_client/modules/spreadsheet/dist/deployed at `date`"
+  - NOW=`date` && sed "s/\(appVersion = \"[^,]*ss\)\"/\1 $NOW\"/" angular_client/modules/spreadsheet/dist/scripts/scripts.js  > output && echo $NOW
+  - mv output angular_client/modules/spreadsheet/dist/scripts/scripts.js
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ]  && [ "${TRAVIS_REPO_SLUG}" = "OpenSourceFieldlinguistics/FieldDB" ]  && ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*'

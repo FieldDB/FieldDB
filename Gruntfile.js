@@ -116,7 +116,12 @@ module.exports = function(grunt) {
       },
       updateFieldDBVersion: {
         cmd: function() {
-          return "echo y | bash scripts/set_fielddb_version.sh";
+          return "echo n | bash scripts/set_fielddb_version.sh";
+        }
+      },
+      jasmineAllTestsErrorWorkaround: {
+        cmd: function() {
+          return "echo y | bash scripts/jasmine_all_tests_workaround.sh";
         }
       }
     }
@@ -139,6 +144,6 @@ module.exports = function(grunt) {
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
-  grunt.registerTask("travis", ["jshint", "jasmine_node", "browserify", "uglify", "docs", "fielddb-angular", "spreadsheet-angular"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node", "browserify", "uglify", "docs", "fielddb-angular", "spreadsheet-angular"]);
 
 };
