@@ -144,6 +144,6 @@ module.exports = function(grunt) {
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
-  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "jshint", "jasmine_node", "browserify", "uglify", "docs", "fielddb-angular", "spreadsheet-angular"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node", "browserify", "uglify", "docs", "fielddb-angular", "spreadsheet-angular"]);
 
 };

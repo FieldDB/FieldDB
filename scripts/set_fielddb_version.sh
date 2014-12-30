@@ -1,7 +1,7 @@
 #!/bin/bash
 
-BIRTHDAY="Tue Apr 20 00:00:00 EDT 2012";
-BIRTHDAY_TIMESTAMP=$(echo `date -j -f "%a %b %d %T %Z %Y" "$BIRTHDAY" "+%s"`);
+BIRTHDAY="Tue Apr 20 10:00:00 2012";
+BIRTHDAY_TIMESTAMP=$(echo `date -j -f "%a %b %d %T %Y" "$BIRTHDAY" "+%s"`);
 
 today="$(echo `date`)"
 todayTimestamp="$(echo `date  +%s`)"
@@ -33,8 +33,10 @@ elif [ "$WEEK_DIFF" -gt 52 ]
 else
   YEAR_DIFF=0
 fi
+# NOW=`date +%Y.%m.%d.%H.%M`
+MINOR_VERSION=`date +%d.%H.%M`
 
-version="$YEAR_DIFF.$WEEK_DIFF.0"
+version="$YEAR_DIFF.$WEEK_DIFF.$MINOR_VERSION"
 echo " Birthday: $BIRTHDAY"
 echo " Today: $today"
 echo " Years: $YEAR_DIFF"
