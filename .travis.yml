@@ -44,11 +44,11 @@ env:
     - secure: R7DYAAHx52YfRc2vJquODs/02U+D+TqcU9yYG67nvVzk5udWCjOdMFct8t3+1hFig+ITEy05cNr01r8rMnQmHbqILenmQgv9poiOncM8W4eeWi0x13exJT7BAJ8SCMyi4vWy+3qE0T1IPyI2XDdzLWBU8eocWRe9TtO0d/yseKw=
 
 after_success:
-  # on:
-  #   branch: master
-  #   condition: $TRAVIS_REPO = "OpenSourceFieldlinguistics/FieldDB"
+  on:
+    branch: master
+    condition: $TRAVIS_REPO_SLUG = "OpenSourceFieldlinguistics/FieldDB"
     - echo branch $TRAVIS_BRANCH
-    - echo repo $TRAVIS_REPO
+    - echo repo $TRAVIS_REPO_SLUG
     - touch "angular_client/modules/spreadsheet/dist/deployed at `date`"
     - NOW=`date` && sed "s/\(appVersion = \"[^,]*ss\)\"/\1 $NOW\"/" angular_client/modules/spreadsheet/dist/scripts/scripts.js  > output && echo $NOW
     - mv output angular_client/modules/spreadsheet/dist/scripts/scripts.js
