@@ -116,7 +116,7 @@ module.exports = function(grunt) {
       },
       updateFieldDBVersion: {
         cmd: function() {
-          return "echo y | bash scripts/set_fielddb_version.sh";
+          return "echo n | bash scripts/set_fielddb_version.sh";
         }
       },
       jasmineAllTestsErrorWorkaround: {
