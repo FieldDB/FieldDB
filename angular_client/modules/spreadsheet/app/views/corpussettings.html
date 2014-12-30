@@ -4,21 +4,25 @@
 <br />
 <div ng-hide="loginInfo==undefined" class="form-horizontal">
 	<div class="settings_section_header">
-		<h2>{{contextualize('locale_create_new_corpus')}} {{corpus.title}}</h2>
+		<h2>{{contextualize('locale_create_new_corpus')}}</h2>
 	</div>
 	<div class="clearDiv">&nbsp;</div>
-	<div class="settingsItems">
-		<input type="text" ng-model='newCorpusInfo.newCorpusName'
-			placeholder="New corpus name">
-		&nbsp;<button class="btn btn-primary"
-			ng-click="createNewCorpus(newCorpusInfo)" ng-disabled="loading==true">{{contextualize('locale_create_button')}}</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading==true">
-	</div>
+	<form ng-submit="createNewCorpus(newCorpusInfo)">
+    <div class="settingsItems">
+  		<input type="text" ng-model='newCorpusInfo.newCorpusName'
+  			placeholder="New corpus name">
+  		&nbsp;
+      <button class="btn btn-primary"
+  			ng-disabled="corpus.saving==true">{{contextualize('locale_create_button')}}</button>&nbsp;
+        <img src="images/spinner-small-mainbg.gif" ng-show="loading==true"/>
+  	</div>
+  <form>
 </div>
 
 <hr />
 
 <div class="settingsItems" ng-show="admin==false">
-	{{contextualize('locale_not_admin_message')}}
+	{{contextualize('locale_not_admin_message')}}  {{corpus.title}}
 </div>
 
 <div ng-hide="corpus==undefined || admin==false">
@@ -37,7 +41,8 @@
       <label>Description:</label>
       <textarea class="fielddb-large-textarea" ng-model="corpus.description"></textarea>
       <button class="btn btn-primary"
-        ng-click="updateCorpusDetails(corpus)" ng-disabled="loading==true">Save</button>
+        ng-click="updateCorpusDetails(corpus)" ng-disabled="corpus.saving==true">Save</button>
+        <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true">
     </div>
 
   </div>
@@ -128,13 +133,16 @@
       <button class="btn btn-primary"
         ng-click="updateCorpusDetails(corpus)"
         ng-class="{'pulsing': corpus.saving}"
-        ng-disabled="loading==true">Save</button>
+        ng-disabled="corpus.saving==true">Save</button>
+      <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
       <div data-fielddb-collection json='corpus.datumFields'></div>
       <button class="btn btn-info"
         ng-click="corpus.newDatumField(addedDatumField)" ng-disabled="loading==true">Add Field</button>
       <button class="btn btn-primary"
         ng-class="{'pulsing': corpus.saving}"
-        ng-click="updateCorpusDetails(corpus)" ng-disabled="loading==true">Save</button>
+        ng-click="updateCorpusDetails(corpus)" ng-disabled="corpus.saving==true">Save</button>
+      <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
+
     </div>
 
   </div>
