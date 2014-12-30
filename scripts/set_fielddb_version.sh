@@ -1,7 +1,7 @@
 #!/bin/bash
 
-BIRTHDAY="Tue Apr 20 00:00:00 EST 2012";
-BIRTHDAY_TIMESTAMP=$(echo `date -j -f "%a %b %d %T %Z %Y" "$BIRTHDAY" "+%s"`);
+BIRTHDAY="Tue Apr 20 00:00:00 EDT 2012";
+BIRTHDAY_TIMESTAMP=1334854800;
 
 today="$(echo `date`)"
 todayTimestamp="$(echo `date  +%s`)"
