@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BIRTHDAY="Tue Apr 20 10:00:00 EDT 2012";
-BIRTHDAY_TIMESTAMP=$(echo `date -j -f "%a %b %d %T %Z %Y" "$BIRTHDAY" "+%s"`);
+BIRTHDAY_TIMESTAMP=$(echo `date -f "%a %b %d %T %Z %Y" "$BIRTHDAY" "+%s"`);
 
 today="$(echo `date`)"
 todayTimestamp="$(echo `date  +%s`)"
@@ -13,7 +13,7 @@ echo " Today: $today"
 # echo "Birthday: $BIRTHDAY , $BIRTHDAY_TIMESTAMP "
 # echo "Today: $today , $todayTimestamp"
 
-let WEEK_DIFF=`expr $todayTimestamp - $BIRTHDAY_TIMESTAMP`/60/60/24/7 || exit 4;
+let WEEK_DIFF=`expr $todayTimestamp - $BIRTHDAY_TIMESTAMP`/60/60/24/7 || date --help && exit 4;
 
 if [ "$WEEK_DIFF" -gt 208 ]
   then
