@@ -8,7 +8,8 @@ todayTimestamp="$(echo `date  +%s`)"
 
 echo ""
 echo "____========== Getting the version code for today =============_______"
-
+echo " Birthday: $BIRTHDAY"
+echo " Today: $today"
 # echo "Birthday: $BIRTHDAY , $BIRTHDAY_TIMESTAMP "
 # echo "Today: $today , $todayTimestamp"
 
