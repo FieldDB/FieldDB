@@ -20,8 +20,8 @@ notifications:
     on_success: change
     on_failure: always
 
-env:
-  matrix:
+# env:
+#   matrix:
     # see set_up_new_machine.sh
 
 before_install:
@@ -52,4 +52,4 @@ after_success:
     - touch "angular_client/modules/spreadsheet/dist/deployed at `date`"
     - NOW=`date` && sed "s/\(appVersion = \"[^,]*ss\)\"/\1 $NOW\"/" angular_client/modules/spreadsheet/dist/scripts/scripts.js  > output && echo $NOW
     - mv output angular_client/modules/spreadsheet/dist/scripts/scripts.js
-    -'[ "${TRAVIS_PULL_REQUEST}" = "false" ]  && ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*'
+    - '[ "${TRAVIS_PULL_REQUEST}" = "false" ]  && ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*'
