@@ -27,7 +27,7 @@ notifications:
 before_install:
   # Download and configure deps
   - export TZ=Canada/Eastern # http://stackoverflow.com/questions/23371542/how-do-i-configure-travis-ci-to-use-the-correct-time-zone-for-a-rails-app
-  - bash scripts/set_fielddb_version.sh
+  - echo n | bash scripts/set_fielddb_version.sh
   - sudo apt-get install ncftp
   - npm install -g grunt-cli
   - npm install -g bower
