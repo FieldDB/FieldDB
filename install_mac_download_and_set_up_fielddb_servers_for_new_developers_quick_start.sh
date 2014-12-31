@@ -106,7 +106,13 @@ which bower || {
   sudo npm install -g bower
 }
 
-npm install
+npm install || {
+  sudo chown -R `whoami` ~/.npm
+  npm install || {
+    echo "Error running npm install, please read it and fix it if you can. "
+    exit 1
+  }
+}
 echo " Running jshint, tests and building core and setting up symblic links"
 grunt travis
 
