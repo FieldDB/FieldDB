@@ -78,8 +78,12 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         // $scope.datalist.docs = {
         //   _collection: []
         // };
-        if (!$scope.$$phase) {
-          $scope.$digest(); //$digest or $apply
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch (e) {
+          console.log("problem running angular render", e);
         }
         return;
       }
