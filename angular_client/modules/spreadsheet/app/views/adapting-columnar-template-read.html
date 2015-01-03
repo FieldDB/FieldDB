@@ -8,12 +8,12 @@
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
   <span ng-repeat="corpusField in fieldsInColumns.first track by $index" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
-    {{datum[corpusField.label] | neverEmpty}}
+    {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
   <span ng-repeat="corpusField in fieldsInColumns.second track by $index" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
-    {{datum[corpusField.label] | neverEmpty}}
+    {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
 <div class="span2 entered_modified_info">

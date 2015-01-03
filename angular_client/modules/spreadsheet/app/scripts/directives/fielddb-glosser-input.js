@@ -85,10 +85,10 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         'ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
         'class="span5"' +
         'type="text"' +
-        'ng-model="' + attrs.datumornewdatum + '[corpusField.label]"' +
+        'ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
         'placeholder="{{corpusField.label}}"' +
         'title="{{corpusField.hint}}"' +
-        'ng-blur="runGlosserUsingThisField(corpusField.label, ' + attrs.datumornewdatum + '[corpusField.label], ' + attrs.datumornewdatum + ', $event)" />';
+        'ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)" />';
 
       return templateString;
     },
