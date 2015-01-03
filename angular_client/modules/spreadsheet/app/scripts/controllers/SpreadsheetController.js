@@ -1434,32 +1434,30 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     datum.dateModified = JSON.parse(JSON.stringify(new Date()));
     datum.timestamp = Date.now();
-    var modifiedByUser = {
-      "username": $rootScope.user.username,
-      "gravatar": $rootScope.user.gravatar,
-      "appVersion": $rootScope.appVersion,
-      "timestamp": datum.timestamp
-    };
-
-    if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
-      datum.modifiedByUser = {
-        "users": []
-      };
-    }
-    datum.modifiedByUser.users.push(modifiedByUser);
-
-    // Dont Limit users array to unique usernames
-    // datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
-    //   return x.username;
-    // }), function(grouped) {
-    //   return grouped[0];
-    // });
-
-    $scope.saved = "no";
 
     // Limit activity to one instance in the case of multiple edits to the same datum before 'save'
-    if (!datum.saved || datum.saved === "yes") {
-      datum.saved = "no";
+    if (!datum.saved || datum.saved === "fresh" || datum.saved === "yes") {
+
+      // Dont Limit users array to unique usernames
+      // datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
+      //   return x.username;
+      // }), function(grouped) {
+      //   return grouped[0];
+      // });
+      var modifiedByUser = {
+        "username": $rootScope.user.username,
+        "gravatar": $rootScope.user.gravatar,
+        "appVersion": $rootScope.appVersion,
+        "timestamp": datum.timestamp
+      };
+
+      if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
+        datum.modifiedByUser = {
+          "users": []
+        };
+      }
+      datum.modifiedByUser.users.push(modifiedByUser);
+
       // Update activity feed
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
@@ -1477,9 +1475,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         indirectobject: indirectObjectString,
         teamOrPersonal: "team"
       }]);
-    } else {
-      datum.saved = "no";
     }
+    datum.saved = "no";
 
     if ($event && $event.type && $event.type === "submit") {
       $scope.selectRow($scope.activeDatumIndex + 1);
