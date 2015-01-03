@@ -1403,7 +1403,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log("The datum didnt actually change. Not marking as editied");
         return;
       } else {
-        datum.saved = "no";
+        // datum.saved = "no";
       }
     }
 
