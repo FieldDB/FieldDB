@@ -8,7 +8,7 @@ angular.module('spreadsheetApp')
 
 
     var localhost = false;
-    if (window.location.host.indexOf("localhost") === -1) {
+    if (window.location.host.indexOf("localhost") > -1) {
       localhost = true;
     }
     var servers = {};
