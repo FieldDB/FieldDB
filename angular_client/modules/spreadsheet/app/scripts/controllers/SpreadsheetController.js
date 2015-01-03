@@ -1157,64 +1157,61 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.createNewSession = function(newSession) {
     $rootScope.loading = true;
     // Get blank template to build new record
-    Data.blankSessionTemplate()
-      .then(function(newSessionRecord) {
-        newSessionRecord.pouchname = $rootScope.corpus.pouchname;
-        newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
-        newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
-        newSessionRecord.lastModifiedBy = $rootScope.user.username;
-        for (var key in newSession) {
-          for (var i in newSessionRecord.sessionFields) {
-            if (newSessionRecord.sessionFields[i].label === "user") {
-              newSessionRecord.sessionFields[i].value = $rootScope.user.username;
-              newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
-            }
-            if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
-              newSessionRecord.sessionFields[i].value = new Date().toString();
-              newSessionRecord.sessionFields[i].mask = new Date().toString();
-            }
-            if (key === newSessionRecord.sessionFields[i].label) {
-              newSessionRecord.sessionFields[i].value = newSession[key];
-              newSessionRecord.sessionFields[i].mask = newSession[key];
-            }
+    var newSessionRecord = Data.blankSessionTemplate();
+    newSessionRecord.pouchname = $rootScope.corpus.pouchname;
+    newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
+    newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
+    newSessionRecord.lastModifiedBy = $rootScope.user.username;
+    for (var key in newSession) {
+      for (var i in newSessionRecord.sessionFields) {
+        if (newSessionRecord.sessionFields[i].label === "user") {
+          newSessionRecord.sessionFields[i].value = $rootScope.user.username;
+          newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
+        }
+        if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
+          newSessionRecord.sessionFields[i].value = new Date().toString();
+          newSessionRecord.sessionFields[i].mask = new Date().toString();
+        }
+        if (key === newSessionRecord.sessionFields[i].label) {
+          newSessionRecord.sessionFields[i].value = newSession[key];
+          newSessionRecord.sessionFields[i].mask = newSession[key];
+        }
+      }
+    }
+    Data.saveCouchDoc($rootScope.corpus.pouchname, newSessionRecord)
+      .then(function(savedRecord) {
+
+        newSessionRecord._id = savedRecord.data.id;
+        newSessionRecord._rev = savedRecord.data.rev;
+        for (var i in newSessionRecord.sessionFields) {
+          if (newSessionRecord.sessionFields[i].label === "goal") {
+            newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0, 20);
           }
         }
-        Data.saveCouchDoc($rootScope.corpus.pouchname, newSessionRecord)
-          .then(function(savedRecord) {
+        var directobject = newSessionRecord.title || "an elicitation session";
+        var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
+        $scope.addActivity([{
+          verb: "added",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-calendar",
+          directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "personal"
+        }, {
+          verb: "added",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-calendar",
+          directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "team"
+        }], "uploadnow");
 
-
-            newSessionRecord._id = savedRecord.data.id;
-            newSessionRecord._rev = savedRecord.data.rev;
-            for (var i in newSessionRecord.sessionFields) {
-              if (newSessionRecord.sessionFields[i].label === "goal") {
-                newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0, 20);
-              }
-            }
-            var directobject = newSessionRecord.title || "an elicitation session";
-            var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
-            $scope.addActivity([{
-              verb: "added",
-              verbicon: "icon-pencil",
-              directobjecticon: "icon-calendar",
-              directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
-              indirectobject: indirectObjectString,
-              teamOrPersonal: "personal"
-            }, {
-              verb: "added",
-              verbicon: "icon-pencil",
-              directobjecticon: "icon-calendar",
-              directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
-              indirectobject: indirectObjectString,
-              teamOrPersonal: "team"
-            }], "uploadnow");
-
-            $scope.sessions.push(newSessionRecord);
-            $scope.dataentry = true;
-            $scope.selectSession(savedRecord.data.id);
-            window.location.assign("#/spreadsheet/" + $rootScope.templateId);
-          });
-        $rootScope.loading = false;
+        $scope.sessions.push(newSessionRecord);
+        $scope.dataentry = true;
+        $scope.selectSession(savedRecord.data.id);
+        window.location.assign("#/spreadsheet/" + $rootScope.templateId);
       });
+    $rootScope.loading = false;
 
   };
 
