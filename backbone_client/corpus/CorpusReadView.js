@@ -521,7 +521,7 @@ define([
       }
       var self = this;
       if(this.format == "modal"){
-        $("#new-corpus-modal").modal("hide");
+        $("#new-corpus-modal").hide();
       }
       this.model.saveAndInterConnectInApp(function(){
         self.render();

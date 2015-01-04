@@ -507,3 +507,7 @@ input:focus {
 .exportLine {
 
 }
+
+.corpus-selected {
+  background-color: #F8FaFF
+}

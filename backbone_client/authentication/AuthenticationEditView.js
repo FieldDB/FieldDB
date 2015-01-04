@@ -396,7 +396,7 @@ define([
       window.hub.unsubscribe("quickAuthenticationClose", null, this);
       if( this.model.get("userPrivate").get("username") == "lingllama" ){
         / * Show the quick auth but fill in the password, to simulate a user */
-        $("#quick-authenticate-modal").modal("show");
+        $("#quick-authenticate-modal").show();
         var preKnownPassword = "phoneme";
         $("#quick-authenticate-password").val(preKnownPassword);
         window.hub.subscribe("quickAuthenticationClose",function(){
@@ -407,7 +407,7 @@ define([
               , authfailurecallback
               , corpusloginsuccesscallback
               , corpusloginfailcallback );
-          $("#quick-authenticate-modal").modal("hide");
+          $("#quick-authenticate-modal").hide();
           $("#quick-authenticate-password").val("");
           window.hub.unsubscribe("quickAuthenticationClose", null, this); //TODO why was this off, this si probably why we were getting lots of authentications
         }, self);
@@ -421,7 +421,7 @@ define([
             , corpusloginsuccesscallback
             , corpusloginfailcallback );
       }else {
-        $("#quick-authenticate-modal").modal("show");
+        $("#quick-authenticate-modal").show();
         window.hub.subscribe("quickAuthenticationClose",function(){
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val()
@@ -430,7 +430,7 @@ define([
               , authfailurecallback
               , corpusloginsuccesscallback
               , corpusloginfailcallback );
-          $("#quick-authenticate-modal").modal("hide");
+          $("#quick-authenticate-modal").hide();
           $("#quick-authenticate-password").val("");
           window.hub.unsubscribe("quickAuthenticationClose", null, this);//TODO why was this off, this si probably why we were getting lots of authentications
         }, self);
@@ -673,8 +673,13 @@ define([
              * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)
              */
             var potentialpouch = serverResults.user.username+"-firstcorpus";
-            if(serverResults.user.mostRecentIds.couchConnection){
-              potentialpouch= serverResults.user.mostRecentIds.couchConnection.pouchname;
+            if(serverResults.user && serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection){
+              potentialpouch = serverResults.user.mostRecentIds.couchConnection.pouchname;
+            }
+            if (!serverResults.user.mostRecentIds || !serverResults.user.mostRecentIds.couchConnection) {
+              serverResults.user.mostRecentIds = {
+                couchConnection: serverResults.user.corpuses[0]
+              };
             }
             var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouch);
             window.app.logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.couchConnection, dataToPost.username, dataToPost.password, function(){

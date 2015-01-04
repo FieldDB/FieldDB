@@ -107,7 +107,7 @@ require([
     // Create a UserWelcomeView modal
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
-    
+
     var modal_width = ($(document).width() * .8 );
     if(modal_width > 600){
       modal_width = 600;
@@ -116,7 +116,7 @@ require([
 //    if(modal_height > 400){
 //      modal_height = 400;
 //    }
-    
+
     $('#user-welcome-modal').modal({
       backdrop : true,
       keyboard : true
@@ -134,19 +134,19 @@ require([
         return -($(this).height() * .5 );
       }
     });
-    $('#user-welcome-modal').modal("show");
+    $('#user-welcome-modal').show();
   };
   /*
    * End functions
    */
-  
+
   /*
    * Start the pub sub hub
    */
   window.hub = {};
   OPrime.makePublisher(window.hub);
- 
-    
+
+
   /*
    * Check for user's cookie and the dashboard so we can load it
    */
@@ -183,7 +183,7 @@ require([
           var u = localStorage.getItem("encryptedUser");
           auth.loadEncryptedUser(u, function(success, errors){
             if(success == null){
-              alert("We couldn't load your user."+errors.join("<br/>") + " " + OPrime.contactUs);  
+              alert("We couldn't load your user."+errors.join("<br/>") + " " + OPrime.contactUs);
               loadFreshApp();
               return;
             }else{
@@ -198,6 +198,6 @@ require([
     loadFreshApp();
 
  }
-  
-  
+
+
 });

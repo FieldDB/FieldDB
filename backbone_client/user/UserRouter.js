@@ -39,7 +39,7 @@ define([
      */
     showDashboard : function(renderOrNot) {
       if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
-//      $("#user-modal").modal("show");
+//      $("#user-modal").show();
 
     },
     /**
