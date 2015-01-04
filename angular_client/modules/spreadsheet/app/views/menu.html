@@ -79,7 +79,7 @@
       </span>
       <span class="rightMenuItems" ng-show="authenticated==true">
         <div class="rightMenuItemsDiv">
-          <div ng-hide="DB==undefined">
+          <div ng-hide="corpus==undefined">
             <a class="floatLeft" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this {{corpus.pouchname}}'s webpage">
               <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
             </a>
@@ -389,7 +389,7 @@
         </i>
       </span>
       <span class="smallMenuBarInfo" ng-show="authenticated==true">
-        <span class=" smallMenuBarInfoItem" ng-hide="DB==undefined">
+        <span class=" smallMenuBarInfoItem" ng-hide="corpus==undefined">
           <a class="" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this corpus' webpage">
             <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
           </a>
