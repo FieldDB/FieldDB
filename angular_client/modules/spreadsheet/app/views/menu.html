@@ -428,7 +428,7 @@
         <option value='none'>
           All sessions
         </option>
-        <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value={{session._id}}>
+        <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value="{{session._id}}">
           {{session.dateCreated | shortDate}} {{session.title}}
         </option>
       </select>
