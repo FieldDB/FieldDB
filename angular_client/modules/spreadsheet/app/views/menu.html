@@ -125,21 +125,10 @@
           </i>
           {{contextualize('locale_change_session')}}
         </span>
-        <select class="span3" ng-model='activeSessionToSwitchTo'>
-          <option value="" disabled selected>
-            {{contextualize('locale_choose_session')}}
-          </option>
-          <option value='none'>
-            <i class="fa whiteicon fa-cogs">
-            </i>
-            {{contextualize('locale_all_sessions')}}
-          </option>
-          <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value={{session._id}}>
-            {{session.dateCreated | shortDate}} {{session.title}}
-          </option>
+        <select class="span3" ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
         </select>
         &nbsp;
-        <button class="btn btn-primary" ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">
+        <button class="btn btn-primary" ng-click="selectSession(fullCurrentSession._id);navigateVerifySaved('none')">
           {{contextualize('locale_activate_session_button')}}
         </button>
         &nbsp;&nbsp;
