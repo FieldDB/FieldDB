@@ -31,16 +31,11 @@
     </span>
     <br>
     <div class="form-horizontal">
-      <form ng-submit="selectSession(activeSessionToView)">
-        <select ng-model='activeSessionToView'>
-          <option value="" disabled selected>{{contextualize('locale_choose_existing_session_dropdown')}}
-          </option>
-          <option value='none'>{{contextualize('locale_view_all_sessions_dropdown')}}
-          </option>
-          <option ng-repeat="session in sessions | orderBy:'dateCreated'" value="{{session._id}}">{{session.dateCreated | shortDate}} {{session.title}}
-          </option>
+      <form ng-submit="selectSession(fullCurrentSession._id)">
+        <select ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
         </select>
-        <button class="btn btn-primary">{{contextualize('locale_go_button')}}
+        <button type="submit"
+        class="btn btn-primary">{{contextualize('locale_go_button')}}
         </button>&nbsp;
         <button class="btn btn-info" type='button'  ng-click="showCreateSessionDiv=!showCreateSessionDiv">
           <i class="fa whiteicon fa-plus">
