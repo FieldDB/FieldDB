@@ -81,7 +81,7 @@
         <div class="rightMenuItemsDiv">
           <div ng-hide="corpus==undefined">
             <a class="floatLeft" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this {{corpus.pouchname}}'s webpage">
-              <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+              <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
             </a>
             <i class="fa whiteicon fa-calendar">
             </i>
@@ -103,7 +103,7 @@
               {{contextualize('locale_logout')}}
             </button>
             <a href="http://lingsync.org/{{user.username}}" target="_blank" title="Visit your share page">
-              <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0">
+              <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0">
             </a>
           </div>
         </div>
