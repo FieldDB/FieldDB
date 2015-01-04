@@ -855,7 +855,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   corpus.title = scopeDBs[index];
                   console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response, corpus);
                 }
-                corpus.gravatar = md5.createHash(corpus.pouchname);
+                corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
+                if(corpus.team && corpus.team.gravatar){
+                  corpus.gravatar = corpus.team.gravatar;
+                }
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
                 if ($rootScope.corpus && $rootScope.corpus.pouchname === corpus.pouchname) {
                   $scope.selectCorpus(corpus);
@@ -865,7 +868,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 var corpus = {};
                 corpus.pouchname = scopeDBs[index];
                 corpus.title = scopeDBs[index];
-                corpus.gravatar = md5.createHash(corpus.pouchname);
+                corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
+                corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
+                if(corpus.team && corpus.team.gravatar){
+                  corpus.gravatar = corpus.team.gravatar;
+                }
                 console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error, corpus);
                 $scope.corpora.push(corpus);
               });
