@@ -34,13 +34,19 @@ angular
     }).when('/faq', {
       templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
-      templateUrl: 'views/compacttemplate.html'
+      // templateUrl: 'views/compacttemplate.html'
+      redirectTo: '/spreadsheet/fulltemplate'
     }).when('/spreadsheet/fulltemplate', {
       templateUrl: 'views/fulltemplate.html'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
-      templateUrl: 'views/yalefieldmethodsspring2014template.html'
+      // templateUrl: 'views/yalefieldmethodsspring2014template.html'
+      redirectTo: '/spreadsheet/fulltemplate'
     }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
-      templateUrl: 'views/mcgillfieldmethodsfall2014template.html'
+      // templateUrl: 'views/mcgillfieldmethodsfall2014template.html'
+      redirectTo: '/spreadsheet/fulltemplate'
+    }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
+      // templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
+      redirectTo: '/spreadsheet/fulltemplate'
     }).otherwise({
       redirectTo: '/corpora_list'
     });
