@@ -52,8 +52,8 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
       }
     };
 
-    $scope.runGlosserUsingThisField = function(label, originalvalue, datumornewdatum) {
-      var currentValue = datumornewdatum[label];
+    $scope.runGlosserUsingThisField = function(fieldKey, originalvalue, datumornewdatum) {
+      var currentValue = datumornewdatum[fieldKey];
       if (debuggingMode) {
         console.log('requesting semi-automatic glosser: ' + originalvalue + '->' + currentValue);
       }
@@ -66,11 +66,14 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         }
         $rootScope.newRecordHasBeenEdited = true;
       }
+      if (datumornewdatum.fossil && datumornewdatum.fossil[fieldKey] === currentValue) {
+        return;
+      }
 
       datumornewdatum.pouchname = $scope.corpus.pouchname;
-      if (label === 'utterance') {
+      if (fieldKey === 'utterance') {
         datumornewdatum = Glosser.guessMorphemesFromUtterance(datumornewdatum, !$scope.useAutoGlosser);
-      } else if (label === 'morphemes') {
+      } else if (fieldKey === 'morphemes') {
         datumornewdatum = Glosser.guessUtteranceFromMorphemes(datumornewdatum, !$scope.useAutoGlosser);
         datumornewdatum = Glosser.guessGlossFromMorphemes(datumornewdatum, !$scope.useAutoGlosser);
       }
@@ -85,10 +88,10 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         'ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
         'class="span5"' +
         'type="text"' +
-        'ng-model="' + attrs.datumornewdatum + '[corpusField.label]"' +
+        'ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
         'placeholder="{{corpusField.label}}"' +
         'title="{{corpusField.hint}}"' +
-        'ng-blur="runGlosserUsingThisField(corpusField.label, ' + attrs.datumornewdatum + '[corpusField.label], ' + attrs.datumornewdatum + ', $event)" />';
+        'ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)" />';
 
       return templateString;
     },

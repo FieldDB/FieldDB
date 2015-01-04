@@ -83,8 +83,7 @@
   </div>
 </div>
 <div class="row" ng-show="data==undefined && loading!=true">
-  <div class="span12 pagination-centered">
-    {{contextualize('locale_no_data_message')}}
+  <div class="span12 pagination-centered" ng-bind-html="contextualize('locale_no_data_message')">
   </div>
 </div>
 

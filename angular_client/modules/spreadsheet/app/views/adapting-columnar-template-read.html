@@ -8,12 +8,12 @@
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
   <span ng-repeat="corpusField in fieldsInColumns.first track by $index" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
-    {{datum[corpusField.label] | neverEmpty}}
+    {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
 <div ng-class="{span5: searching!=true, span4: searching==true}">
   <span ng-repeat="corpusField in fieldsInColumns.second track by $index" ng-class="{span5: searching!=true, span4: searching==true}" title="{{corpusField.hint}}">
-    {{datum[corpusField.label] | neverEmpty}}
+    {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
 <div class="span2 entered_modified_info">
@@ -41,7 +41,7 @@
   </span>
   <!-- <span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa fa-group"> </i> </span> -->
   <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
-    <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}}" />
+    <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}} at {{modifiedByUser.timestamp | fielddbPrettyDate}}" />
   </span>
   <span class="expandCollapseButton">
     <br />

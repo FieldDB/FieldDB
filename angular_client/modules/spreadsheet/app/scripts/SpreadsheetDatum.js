@@ -3,25 +3,29 @@
 console.log("Declaring the SpreadsheetDatum.");
 
 var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDBDatum, guessedAudioUrl) {
-  var j;
+  var j,
+    fieldKeyName = "label";
 
   spreadsheetDatum.pouchname = fieldDBDatum.pouchname;
   spreadsheetDatum.id = fieldDBDatum._id;
   spreadsheetDatum.rev = fieldDBDatum._rev;
 
   for (j in fieldDBDatum.datumFields) {
+    if (fieldDBDatum.datumFields[j].id) {
+      fieldKeyName = "id";
+    }
     // Get enteredByUser object
-    if (fieldDBDatum.datumFields[j].label === "enteredByUser") {
+    if (fieldDBDatum.datumFields[j][fieldKeyName] === "enteredByUser") {
       spreadsheetDatum.enteredByUser = fieldDBDatum.datumFields[j].user;
-    } else if (fieldDBDatum.datumFields[j].label === "modifiedByUser") {
+    } else if (fieldDBDatum.datumFields[j][fieldKeyName] === "modifiedByUser") {
       spreadsheetDatum.modifiedByUser = {
         users: fieldDBDatum.datumFields[j].users
       };
-    } else if (fieldDBDatum.datumFields[j].label === "comments") {
+    } else if (fieldDBDatum.datumFields[j][fieldKeyName] === "comments") {
       // if their corpus has comments datum field, dont overwrite the comments with it ...
       console.log("This datum had a comments datum field... :( ", fieldDBDatum.datumFields[j], fieldDBDatum.comments);
     } else {
-      spreadsheetDatum[fieldDBDatum.datumFields[j].label] = fieldDBDatum.datumFields[j].mask;
+      spreadsheetDatum[fieldDBDatum.datumFields[j][fieldKeyName]] = fieldDBDatum.datumFields[j].mask;
     }
   }
 
@@ -93,7 +97,7 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   // upgrade to v2.0+
   spreadsheetDatum.images = fieldDBDatum.images || [];
   fieldDBDatum.datumFields.map(function(datumField) {
-    if (datumField.label === "relatedData") {
+    if (datumField[fieldKeyName] === "relatedData") {
       spreadsheetDatum.relatedData = datumField.json;
     }
   });
@@ -157,6 +161,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   var key,
     hasModifiedByUser,
     spreadsheetKeyWasInDatumFields,
+    fieldKeyName = "label",
     i;
 
   if (fieldDBDatum._id && fieldDBDatum.pouchname !== spreadsheetDatum.pouchname) {
@@ -168,7 +173,10 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
 
     /* find the datum field that corresponds to this key in the spreadsheetDatum */
     for (i = 0; i < fieldDBDatum.datumFields.length; i++) {
-      if (fieldDBDatum.datumFields[i].label === key) {
+      if (fieldDBDatum.datumFields[i].id) {
+        fieldKeyName = "id";
+      }
+      if (fieldDBDatum.datumFields[i][fieldKeyName] === key) {
         spreadsheetKeyWasInDatumFields = true;
         // Check for (existing) modifiedByUser field in original record and update correctly
         if (key === "modifiedByUser") {
@@ -257,7 +265,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   // Save relatedData TODO what if someone else modified it? need to merge the info...
   if (spreadsheetDatum.relatedData && spreadsheetDatum.relatedData.length > 0) {
     fieldDBDatum.datumFields.map(function(datumField) {
-      if (datumField.label === "relatedData") {
+      if (datumField[fieldKeyName] === "relatedData") {
         datumField.json = spreadsheetDatum.relatedData;
         datumField.value = spreadsheetDatum.relatedData.map(function(json) {
           return json.filename;
