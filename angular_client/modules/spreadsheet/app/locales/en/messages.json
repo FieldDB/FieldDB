@@ -308,7 +308,7 @@
         "description": "add button"
     },
     "locale_users_with_access_message": {
-        "message": "Users with access to </b>",
+        "message": "Users with access to ",
         "description": "over-arching title for lists of users with different access types"
     },
     "locale_admins": {
@@ -376,7 +376,7 @@
         "description": "log in message"
     },
     "locale_login_button": {
-        "message": "Log In",
+        "message": "Login",
         "description": "button"
     },
     "locale_corpora": {
