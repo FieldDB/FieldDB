@@ -673,8 +673,13 @@ define([
              * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)
              */
             var potentialpouch = serverResults.user.username+"-firstcorpus";
-            if(serverResults.user.mostRecentIds.couchConnection){
-              potentialpouch= serverResults.user.mostRecentIds.couchConnection.pouchname;
+            if(serverResults.user && serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection){
+              potentialpouch = serverResults.user.mostRecentIds.couchConnection.pouchname;
+            }
+            if (!serverResults.user.mostRecentIds || !serverResults.user.mostRecentIds.couchConnection) {
+              serverResults.user.mostRecentIds = {
+                couchConnection: serverResults.user.corpuses[0]
+              };
             }
             var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouch);
             window.app.logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.couchConnection, dataToPost.username, dataToPost.password, function(){
