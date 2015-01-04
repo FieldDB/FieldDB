@@ -376,7 +376,7 @@
         "description": "log in message"
     },
     "locale_login_button": {
-        "message": "Log In",
+        "message": "Login",
         "description": "button"
     },
     "locale_corpora": {
