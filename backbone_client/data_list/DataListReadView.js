@@ -108,7 +108,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "latexitDataList", true);
         return false;
@@ -118,7 +118,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsPlainText", true);
         return false;
@@ -128,7 +128,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
         return false;
@@ -138,7 +138,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsWordPress", true);
         return false;
@@ -148,7 +148,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsIGTXML", true);
         return false;
@@ -158,7 +158,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsIGTJSON", true);
         return false;
@@ -494,7 +494,7 @@ define( [
         }
         var self = this;
         if(this.format == "modal"){
-          $("#new-corpus-modal").modal("hide");
+          $("#new-corpus-modal").hide();
         }
         this.model.saveAndInterConnectInApp(function(){
           self.render();

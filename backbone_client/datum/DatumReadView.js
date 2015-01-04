@@ -91,15 +91,15 @@ define([
       /* Menu */
       "click .LaTeX" : function(){
         this.model.latexitDatum(true);
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
       },
       "click .icon-paste" : function(){
         this.model.exportAsPlainText(true);
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
       },
       "click .CSV" : function(){
         this.model.exportAsCSV(true, null);
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
       },
 
       "click .add-comment-datum" : 'insertNewComment',

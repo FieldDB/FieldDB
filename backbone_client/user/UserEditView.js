@@ -50,7 +50,7 @@ define([
     events : {
       "click #close_user_profile" : function() {
         console.log("hiding user profile");
-        this.$el.modal("hide");
+        this.$el.hide();
       },
       "click .save-user-profile" : "saveProfile",
       "blur .email" : "updateGravatar",
@@ -67,7 +67,7 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }        
-        $("#user-modal").modal("hide");
+        $("#user-modal").hide();
         window.app.router.showFullscreenUser();
         window.appView.publicEditUserView.render();
       }
@@ -200,7 +200,7 @@ define([
     showReadVersion : function(){
       if(this.format == "modal"){
         window.appView.modalReadUserView.render();
-//        $("#user-modal").modal("hide");
+//        $("#user-modal").hide();
       }else{
         window.appView.publicReadUserView.render();
       }
