@@ -140,7 +140,7 @@
         <br />
         <table class="table">
           <tbody>
-          <tr ng-repeat="item in corpora" ng-click="selectCorpus(item);corpusSelected=true;" ng-disabled="loading==true" >
+          <tr ng-repeat="item in corpora" ng-click="selectCorpus(item);corpusSelected=true;" ng-disabled="loading==true" ng-class="{'corpus-selected': corpus.pouchname==item.pouchname}">
             <td>
               <img ng-hide="item.gravatar==undefined"  ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="Corpus image" />
             </td>
