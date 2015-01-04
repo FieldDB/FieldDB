@@ -121,6 +121,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   var defaultPreferences = {
     "userChosenTemplateId": "fulltemplate",
     "resultSize": 10,
+    "version": $rootScope.appVersion,
     "savedState": {
       "server": "",
       "username": "",
@@ -439,19 +440,23 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.log("No preferences. Setting default preferences in localStorage.");
       // localStorage.clear(); //why?? left over from debugging?
       localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
-      return defaultPreferences;
+      existingPreferences = JSON.stringify(defaultPreferences);
+      // return defaultPreferences;
     }
 
-    console.log("Loaded Preferences from localStorage. TODO test this");
-    existingPreferences = JSON.parse(existingPreferences);
+    // console.log("Loaded Preferences from localStorage. TODO test this",JSON.stringify(existingPreferences));
+    try {
+      existingPreferences = JSON.parse(existingPreferences);
+    } catch (e) {
+      console.warn("cant set existingPreferences, might have already been an object", e);
+    }
 
-    /** Prior to 1.3 wipe personalization and use current defaults */
-    if ((existingPreferences.template1 !== undefined) || (existingPreferences.availableFields && existingPreferences.availableFields.notes)) {
-      // Update to v1.3
-      console.log("Preferences need to be upgraded. Clearing all and setting defaults.");
+    /** Prior to 1.37 wipe personalization and use current defaults */
+    if (!existingPreferences.version) {
+      alert("Your preferences need to be upgraded to the new version of the app.");
       // localStorage.clear(); //why?? left over from debugging?
       localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
-      return defaultPreferences;
+      // return defaultPreferences;
     }
 
     var updatedPreferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
@@ -470,10 +475,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     /* upgrade fulltemplate to v1.923ss instead update to 2.22+ */
-    if (existingPreferences.fulltemplate.field7) {
+    if (existingPreferences.fulltemplate && existingPreferences.fulltemplate.field7) {
       updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
     }
-    if (existingPreferences.fulltemplate.field6.label === 'judgement') {
+    if (existingPreferences.fulltemplate && existingPreferences.fulltemplate.field6.label === 'judgement') {
       updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
     }
 
@@ -846,9 +851,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if (response.rows[0]) {
                   corpus = response.rows[0].value;
                 } else {
-                  console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response);
                   corpus.pouchname = scopeDBs[index];
                   corpus.title = scopeDBs[index];
+                  console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response, corpus);
                 }
                 corpus.gravatar = md5.createHash(corpus.pouchname);
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
@@ -857,11 +862,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 }
                 $scope.corpora.push(corpus);
               }, function(error) {
-                console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error);
                 var corpus = {};
                 corpus.pouchname = scopeDBs[index];
                 corpus.title = scopeDBs[index];
                 corpus.gravatar = md5.createHash(corpus.pouchname);
+                console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error, corpus);
                 $scope.corpora.push(corpus);
               });
           };
