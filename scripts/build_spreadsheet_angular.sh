@@ -2,6 +2,9 @@
 CURRENTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
 cd angular_client/modules/spreadsheet &&
+rm -rf node_modules
+rm -rf bower_components
+
 npm install || exit 1;
 bower install || exit 1;
 echo "Using local fielddb angular";
