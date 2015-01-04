@@ -99,15 +99,15 @@ define([
       /* Menu */
       "click .LaTeX" : function(){
         this.model.latexitDatum(true);
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
       },
       "click .icon-paste" : function(){
         this.model.exportAsPlainText(true);
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
       },
       "click .CSV" : function(){
         this.model.exportAsCSV(true, null, true);
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",

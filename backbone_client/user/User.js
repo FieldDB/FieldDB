@@ -84,22 +84,28 @@ define([
         originalModel.activityCouchConnection.pouchname = tmp.pouchname;
       }
 
-
-
       var couchConnection = originalModel.mostRecentIds.couchConnection;
-      if(!couchConnection){
-        OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
-        window.location.replace("user.html");
-        return;
+      if (!couchConnection) {
+        couchConnection = originalModel.corpuses[0];
+        originalModel.mostRecentIds.couchConnection = couchConnection;
+      }
+      if (!couchConnection) {
+        if (window.location.pathname.indexOf("user.html") === -1) {
+          OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
+          window.location.replace("user.html");
+          return;
+        } else {
+          alert("There was an error loading your user, please report this");
+        }
       }
 
       /* Upgrade chrome app user corpora's to v1.38+ */
-      if(couchConnection.domain == "ifielddevs.iriscouch.com"){
+      if(couchConnection && couchConnection.domain == "ifielddevs.iriscouch.com"){
         couchConnection.domain  = "corpus.lingsync.org";
         couchConnection.port = "";
       }
       /* Upgrade chrome app user corpora's to v1.90+ */
-      if(couchConnection.domain == "corpusdev.lingsync.org"){
+      if(couchConnection && couchConnection.domain == "corpusdev.lingsync.org"){
         couchConnection.domain  = "corpus.lingsync.org";
       }
 

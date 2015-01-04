@@ -222,7 +222,7 @@ define([
       this.currentSessionReadView.format = "leftSide";
 
       //Only make a new session modal if it was not already created
-      if(! this.sessionNewModalView){
+      if(! this.sessionNewModalView && window.app.get("currentSession") && window.app.get("currentSession").get("sessionFields")){
         if (OPrime.debugMode) OPrime.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({

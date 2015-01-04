@@ -159,9 +159,10 @@ define([
       if (originalModel.ok) {
         return this.originalParse.apply(this, [originalModel]);
       }
+      originalModel.sessionFields = originalModel.sessionFields || [];
       OPrime.debug("Edit this function to update session to the latest schema.");
 
-      if(window.app.get("corpus")){
+      if(window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
         /* Add any new corpus fields to this session so they can be edited */
         var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
         window.corpusfieldsforSessionParse = window.corpusfieldsforSessionParse || window.app.get("corpus").get("sessionFields").toJSON()

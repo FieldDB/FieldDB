@@ -135,7 +135,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "latexitDataList", true);
         return false;
@@ -145,7 +145,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsPlainText", true);
         return false;
@@ -155,7 +155,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#export-modal").modal("show");
+        $("#export-modal").show();
         $("#export-text-area").val("");
         var datumWithAllCorpusFieldsToPrintHeader = new Datum({filledWithDefaults : true});
         datumWithAllCorpusFieldsToPrintHeader.exportAsCSV(true, null, true);
