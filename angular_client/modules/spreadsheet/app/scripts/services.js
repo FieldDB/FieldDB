@@ -67,20 +67,37 @@ angular.module('spreadsheetApp')
       return promise;
     };
 
-    var getBlankDatumTemplate = function() {
-      var promise = $http.get('data/blank_datum_template.json').then(
-        function(response) {
-          /* Override default datum fields with the ones in the currently loaded corpus */
-          if ($rootScope.corpus && $rootScope.corpus.datumFields) {
-            if ($rootScope.corpus.datumFields.clone) {
-              response.data.datumFields = $rootScope.corpus.datumFields.clone();
-            } else {
-              response.data.datumFields = JSON.parse(JSON.stringify($rootScope.corpus.datumFields));
-            }
-          }
-          return response.data;
-        });
-      return promise;
+    var getBlankDataTemplateFromCorpus = function(fieldsType) {
+      var newDoc = {
+        "session": {},
+        "audioVideo": [],
+        "images": [],
+        "comments": [],
+        "dateEntered": "",
+        "dateModified": "",
+        "timestamp": 0,
+        "jsonType": "Datum",
+        "collection": "datums"
+      };
+      if (fieldsType === "sessionFields") {
+        newDoc = {
+          "comments": [],
+          "collection": "sessions",
+          "dateCreated": "",
+          "dateModified": ""
+        };
+      }
+      if ($rootScope.corpus && $rootScope.corpus[fieldsType]) {
+        if ($rootScope.corpus[fieldsType].clone) {
+          newDoc[fieldsType] = $rootScope.corpus[fieldsType].clone();
+        } else {
+          newDoc[fieldsType] = JSON.parse(JSON.stringify($rootScope.corpus[fieldsType]));
+        }
+        return newDoc;
+      } else {
+        console.warn("Corpus is not ready.");
+        throw "Corpus is not ready.";
+      }
     };
 
     return {
@@ -409,19 +426,15 @@ angular.module('spreadsheetApp')
               deferred.reject(reason);
             });
           } else {
-            getBlankDatumTemplate().then(convertAndSaveAsFieldDBDatum);
+            convertAndSaveAsFieldDBDatum(getBlankDataTemplateFromCorpus("datumFields"));
           }
 
         });
         return deferred.promise;
       },
-      'blankDatumTemplate': getBlankDatumTemplate,
+      'blankDatumTemplate': getBlankDataTemplateFromCorpus,
       'blankSessionTemplate': function() {
-        var promise = $http.get('data/blank_session_template.json')
-          .then(function(response) {
-            return response.data;
-          });
-        return promise;
+        return getBlankDataTemplateFromCorpus("sessionFields");
       },
       'blankActivityTemplate': function() {
         var promise = $http
