@@ -846,9 +846,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if (response.rows[0]) {
                   corpus = response.rows[0].value;
                 } else {
-                  console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response);
                   corpus.pouchname = scopeDBs[index];
                   corpus.title = scopeDBs[index];
+                  console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response, corpus);
                 }
                 corpus.gravatar = md5.createHash(corpus.pouchname);
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
@@ -857,11 +857,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 }
                 $scope.corpora.push(corpus);
               }, function(error) {
-                console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error);
                 var corpus = {};
                 corpus.pouchname = scopeDBs[index];
                 corpus.title = scopeDBs[index];
                 corpus.gravatar = md5.createHash(corpus.pouchname);
+                console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error, corpus);
                 $scope.corpora.push(corpus);
               });
           };
