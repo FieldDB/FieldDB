@@ -292,7 +292,7 @@ define([
         if (OPrime.debugMode) OPrime.debug("Session format is "+self.format);
         if(self.format == "modal"){
           self.model.setAsCurrentSession(function(){
-            $("#new-session-modal").modal("hide");
+            $("#new-session-modal").hide();
             window.appView.currentSessionReadView.render();
           });
         }else{

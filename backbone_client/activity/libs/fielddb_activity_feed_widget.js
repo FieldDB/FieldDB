@@ -6849,7 +6849,7 @@ function $RouteProvider(){
    *    Object properties:
    *
    *    - `controller` – `{(string|function()=}` – Controller fn that should be associated with newly
-   *      created scope or the name of a {@link angular.Module#controller registered controller} 
+   *      created scope or the name of a {@link angular.Module#controller registered controller}
    *      if passed as a string.
    *    - `template` – `{string=}` –  html template as a string that should be used by
    *      {@link ng.directive:ngView ngView} or
@@ -14549,7 +14549,7 @@ OPrime.makePublisher = function(o) {
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
  * the cookie, and the number of days until the cookie expires.
- * 
+ *
  * @param c_name
  * @param value
  * @param exdays
@@ -14612,7 +14612,7 @@ OPrime.isTouchDBApp = function() {
 /**
  * If not running offline on an android or in a chrome extension, assume we are
  * online.
- * 
+ *
  * @returns {Boolean} true if not on offline Android or on a Chrome Extension
  */
 OPrime.onlineOnly = function() {
@@ -15097,7 +15097,7 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
           }
           window.setTimeout(failcallback, 2000);
 
-          // $("#user-welcome-modal").modal("show");
+          // $("#user-welcome-modal").show();
 
         },
         dataType : "json"
@@ -15124,7 +15124,7 @@ console.log("Loading CouchDBServices");
  * http://docs-next.angularjs.org/api/angular.module.ngCookies.$cookies
  * https://groups.google.com/forum/#!topic/angular/yc8tODmDm18
  * http://mail-archives.apache.org/mod_mbox/couchdb-user/201011.mbox/%3CAANLkTimSxUWQhwYfTTGe1vNkhkf2xnMiWmt9eriKMU8P@mail.gmail.com%3E
- * 
+ *
  */
 
 
@@ -15212,7 +15212,7 @@ define(
        * TODO We probably dont need two controllers one for users one for teams,
        * but rather maybe two controllers, once simple feed, one
        * searchable/filtered?
-       * 
+       *
        * @param $scope
        * @param $resource
        * @param MostRecentActivities
@@ -15435,7 +15435,7 @@ define(
                         }).then(function(response) {
                       // + JSON.stringify(response));
                       // OPrime.debug("response", response);
-                      
+
                       return response.data;
                     });
                     return promise;
@@ -15456,7 +15456,7 @@ define('js/directives',[ "angular", "OPrime" ], function(angular, OPrime) {
           elm.text(version);
         };
       } ]);
-  
+
   OPrime.debug("Defining ActivityFeedDirectives.");
 
   return ActivityFeedDirectives;
