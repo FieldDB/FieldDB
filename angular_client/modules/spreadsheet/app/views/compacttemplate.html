@@ -73,7 +73,7 @@
 
 <div class="row" ng-show="activeSession==undefined && loading==false && searching==false && documentReady==true && data!=undefined">
   <div class="span12 pagination-centered">
-    <h2>{{contextualize('locale_select_session_message')}}</h2>
+    <h2 ng-bind-html="contextualize('locale_select_session_message')"></h2>
   </div>
 </div>
 
