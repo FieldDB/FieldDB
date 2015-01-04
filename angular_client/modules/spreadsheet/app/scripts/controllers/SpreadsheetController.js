@@ -626,12 +626,24 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         for (var k in response) {
           scopeSessions.push(response[k].value);
         }
+        scopeSessions.push({
+          title: $rootScope.contextualize('locale_view_all_sessions_dropdown') || "All",
+          _id: "none"
+        });
 
         for (var i in scopeSessions) {
-          for (var j in scopeSessions[i].sessionFields) {
-            if (scopeSessions[i].sessionFields[j].label === "goal") {
-              if (scopeSessions[i].sessionFields[j].mask) {
-                scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask.substr(0, 20);
+          if (scopeSessions[i]._id !== "none") {
+            scopeSessions[i].title = "";
+            for (var j in scopeSessions[i].sessionFields) {
+              if (scopeSessions[i].sessionFields[j].label === "goal") {
+                if (scopeSessions[i].sessionFields[j].mask) {
+                  scopeSessions[i].title = scopeSessions[i].title + " " + scopeSessions[i].sessionFields[j].mask.substr(0, 20);
+                }
+              }
+              if (scopeSessions[i].sessionFields[j].label === "dateElicited") {
+                if (scopeSessions[i].sessionFields[j].mask) {
+                  scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask.substr(0, 20) + " " + scopeSessions[i].title;
+                }
               }
             }
           }
@@ -639,6 +651,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.sessions = scopeSessions;
         if (sessionID) {
           $scope.selectSession(sessionID);
+        } else {
+          $scope.fullCurrentSession = scopeSessions[scopeSessions.length - 2];
         }
         $scope.documentReady = true;
       }, function(error) {
@@ -856,7 +870,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response, corpus);
                 }
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
-                if(corpus.team && corpus.team.gravatar){
+                if (corpus.team && corpus.team.gravatar) {
                   corpus.gravatar = corpus.team.gravatar;
                 }
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
@@ -870,7 +884,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 corpus.title = scopeDBs[index];
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
-                if(corpus.team && corpus.team.gravatar){
+                if (corpus.team && corpus.team.gravatar) {
                   corpus.gravatar = corpus.team.gravatar;
                 }
                 console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error, corpus);
@@ -977,7 +991,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 
-
   $scope.selectSession = function(activeSessionID) {
     $scope.changeActiveSession(activeSessionID);
     // Make sure that following variable is set (ng-model in select won't
@@ -997,6 +1010,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.changeActiveSession = function(activeSessionToSwitchTo) {
     if (activeSessionToSwitchTo === 'none' || activeSessionToSwitchTo === undefined) {
       $scope.activeSession = undefined;
+      $scope.fullCurrentSession = undefined;
+      $scope.editSessionInfo = undefined;
     } else {
       $scope.activeSession = activeSessionToSwitchTo;
       for (var i in $scope.sessions) {
