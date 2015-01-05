@@ -635,12 +635,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           if (scopeSessions[i]._id !== "none") {
             scopeSessions[i].title = "";
             for (var j in scopeSessions[i].sessionFields) {
-              if (scopeSessions[i].sessionFields[j].label === "goal") {
+              if (scopeSessions[i].sessionFields[j].label.toLowerCase() === "goal") {
                 if (scopeSessions[i].sessionFields[j].mask) {
                   scopeSessions[i].title = scopeSessions[i].title + " " + scopeSessions[i].sessionFields[j].mask.substr(0, 20);
                 }
-              }
-              if (scopeSessions[i].sessionFields[j].label === "dateElicited") {
+              } else if (scopeSessions[i].sessionFields[j].label.toLowerCase() === "dateelicited") {
                 if (scopeSessions[i].sessionFields[j].mask) {
                   scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask.substr(0, 20) + " " + scopeSessions[i].title;
                 }
@@ -1023,7 +1022,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           editSessionInfo._id = $scope.fullCurrentSession._id;
           editSessionInfo._rev = $scope.fullCurrentSession._rev;
           for (var k in $scope.fullCurrentSession.sessionFields) {
-            editSessionInfo[$scope.fullCurrentSession.sessionFields[k].label] = $scope.fullCurrentSession.sessionFields[k].mask;
+            editSessionInfo[$scope.fullCurrentSession.sessionFields[k].id] = $scope.fullCurrentSession.sessionFields[k].mask;
           }
           $scope.editSessionInfo = editSessionInfo;
         }
@@ -1047,7 +1046,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       for (var i in $scope.sessions) {
         if ($scope.sessions[i]._id === $scope.activeSession) {
           for (var j in $scope.sessions[i].sessionFields) {
-            if ($scope.sessions[i].sessionFields[j].label === "goal") {
+            if ($scope.sessions[i].sessionFields[j].id === "goal") {
               if ($scope.sessions[i].sessionFields[j].mask) {
                 $scope.currentSessionName = $scope.sessions[i].sessionFields[j].mask;
                 return $scope.sessions[i].sessionFields[j].mask.substr(0,
@@ -1072,7 +1071,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       var newSession = $scope.fullCurrentSession;
       for (var i in newSession.sessionFields) {
         for (var key in editSessionInfo) {
-          if (newSession.sessionFields[i].label === key) {
+          if (newSession.sessionFields[i].id === key) {
             newSession.sessionFields[i].value = editSessionInfo[key];
             newSession.sessionFields[i].mask = editSessionInfo[key];
           }
@@ -1191,15 +1190,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSessionRecord.lastModifiedBy = $rootScope.user.username;
     for (var key in newSession) {
       for (var i in newSessionRecord.sessionFields) {
-        if (newSessionRecord.sessionFields[i].label === "user") {
+        if (newSessionRecord.sessionFields[i].id === "user") {
           newSessionRecord.sessionFields[i].value = $rootScope.user.username;
           newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
         }
-        if (newSessionRecord.sessionFields[i].label === "dateSEntered") {
+        if (newSessionRecord.sessionFields[i].id === "dateSEntered" || newSessionRecord.sessionFields[i].id === "dateSessionEntered") {
           newSessionRecord.sessionFields[i].value = new Date().toString();
           newSessionRecord.sessionFields[i].mask = new Date().toString();
         }
-        if (key === newSessionRecord.sessionFields[i].label) {
+        if (key === newSessionRecord.sessionFields[i].id) {
           newSessionRecord.sessionFields[i].value = newSession[key];
           newSessionRecord.sessionFields[i].mask = newSession[key];
         }
@@ -1211,7 +1210,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         newSessionRecord._id = savedRecord.data.id;
         newSessionRecord._rev = savedRecord.data.rev;
         for (var i in newSessionRecord.sessionFields) {
-          if (newSessionRecord.sessionFields[i].label === "goal") {
+          if (newSessionRecord.sessionFields[i].id === "goal") {
             newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0, 20);
           }
         }
@@ -1408,6 +1407,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $scope.newFieldDatahasAudio = false;
     $scope.saved = "no";
+
+    if (!$scope.$$phase) {
+      $scope.$digest(); //$digest or $apply
+    }
   };
 
   $rootScope.markNewAsEdited = function() {
@@ -1949,7 +1952,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 delete $scope.activities[index];
               },
               function(reason) {
-                window.alert("There was an error saving the activity. " + reason);
+                console.warn("There was an error saving the activity. ", $scope.activities[index], reason);
+                window.alert("There was an error saving the activity. ");
                 $scope.saved = "no";
               });
         }
