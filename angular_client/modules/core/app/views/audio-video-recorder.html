@@ -3,15 +3,15 @@
   <form class="btn-toolbar">
     <div class="btn-group">
       <button class="btn" ng-click="peripheralsCheck('audio')">
-        <i class="fa" ng-class="{'fa-microphone': application.audioRecordingVerified==true, 'fa-microphone': application.audioRecordingVerified==null, 'fa-microphone-slash': application.audioRecordingVerified==false }">
+        <i class="fa" ng-class="{'fa-microphone': (application.audioRecordingVerified || application.audioRecordingVerified==undefined), 'fa-microphone-slash': application.audioRecordingVerified==false }">
         </i>
       </button>
       <button class="btn" ng-click="peripheralsCheck('video')" ng-disabled="application.videoRecordingVerified==false" >
-        <i class="fa" ng-class="{'fa-video-camera': application.videoRecordingVerified==true, 'fa-video-camera': application.videoRecordingVerified==null, 'fa-microphone-slash ': application.videoRecordingVerified==false }">
+        <i class="fa" ng-class="{'fa-video-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-microphone-slash ': application.videoRecordingVerified==false }">
         </i>
       </button>
       <button class="btn" ng-click="peripheralsCheck('picture')" ng-disabled="application.videoRecordingVerified==false">
-        <i class="fa" ng-class="{'fa-camera': application.videoRecordingVerified==true, 'fa-camera': application.videoRecordingVerified==null, 'fa-eye-close': application.videoRecordingVerified==false }">
+        <i class="fa" ng-class="{'fa-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-eye-close': application.videoRecordingVerified==false }">
         </i>
       </button>
     </div>
@@ -22,7 +22,7 @@
 
   <p class="">
     <span ng-show="showPictureInstructions">Click preview when ready to take a picture</span>
-    <h3 ng-show="application.audioRecordingVerified==true">Preview Audio/Video/Image</h3>
+    <h3 ng-show="application.audioRecordingVerified">Preview Audio/Video/Image</h3>
     <small ng-show="mutedAudioInstructions">Note: audio/video is muted to reduce audio feedback noises. If you are using a headset, you can unmute them to listen to the audio as you record.</small>
     <audio hidden class="hide" autoplay controls> </audio>
     <video hidden class="hide" autoplay controls> </video>
