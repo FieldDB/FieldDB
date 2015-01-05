@@ -144,6 +144,11 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
       };
 
       Q.nextTick(function() {
+        if(self.peripheralsCheckRunning){
+          deferred.reject("Already running");
+          return;
+        }
+        self.peripheralsCheckRunning = true;
 
         var waitUntilVideoElementIsRendered = function() {
           if (!optionalElements) {
@@ -337,14 +342,17 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
           // Add audio element and download URL to page.
           var showAudioArea = document.createElement("p");
           var au = document.createElement("audio");
+          au.classList = ["fielddb-audio-temp-play-audio"];
           var hf = document.createElement("a");
-
+          hf.classList = ["fielddb-audio-temp-save-link"];
+          hf.innerText = "Save to this device";
           au.controls = true;
           au.src = url;
           hf.href = url;
           hf.download = mp3Name;
           hf.innerHTML = mp3Name;
           showAudioArea.appendChild(au);
+          au.play();
           showAudioArea.appendChild(hf);
           console.log("todo dont need to append this audio after upload");
 
