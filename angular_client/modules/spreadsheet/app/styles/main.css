@@ -511,3 +511,11 @@ input:focus {
 .corpus-selected {
   background-color: #F8FaFF
 }
+
+.RecordMP3js-recorder audio {
+  display: none;
+}
+
+.RecordMP3js-recorder a {
+  display: none;
+}

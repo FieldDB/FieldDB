@@ -41,6 +41,9 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
       }
 
       var onAudioFail = function(e) {
+        if(e === "Already running"){
+          return;
+        }
         $scope.datum.warn("Audio peripheralsCheck failed", e);
         if (!$scope.$$phase) {
           $scope.$digest(); //$digest or $apply
@@ -86,7 +89,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         $scope.parent.audioVideo = $scope.parent.audioVideo || [];
         $scope.parent.images = $scope.parent.images || [];
         $scope.parent.relatedData = $scope.parent.relatedData || [];
-
+        $scope.parent.save();
         if (!newAudioFile.filename) {
           console.warn("Filename not specified.");
           return;

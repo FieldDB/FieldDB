@@ -1407,6 +1407,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $scope.newFieldDatahasAudio = false;
     $scope.saved = "no";
+
+    if (!$scope.$$phase) {
+      $scope.$digest(); //$digest or $apply
+    }
   };
 
   $rootScope.markNewAsEdited = function() {
