@@ -5,11 +5,11 @@
         <i class="fa" ng-class="{'fa-microphone': (application.audioRecordingVerified || application.audioRecordingVerified==undefined), 'fa-microphone-slash': application.audioRecordingVerified==false }">
         </i>
       </button>
-      <button class="btn" ng-click="peripheralsCheck('video')" ng-disabled="application.videoRecordingVerified==false" >
+      <button class="btn hide hidden" ng-click="peripheralsCheck('video')" ng-disabled="application.videoRecordingVerified==false" >
         <i class="fa" ng-class="{'fa-video-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-microphone-slash ': application.videoRecordingVerified==false }">
         </i>
       </button>
-      <button class="btn" ng-click="peripheralsCheck('picture')" ng-disabled="application.videoRecordingVerified==false">
+      <button class="btn hide hidden" ng-click="peripheralsCheck('picture')" ng-disabled="application.videoRecordingVerified==false">
         <i class="fa" ng-class="{'fa-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-eye-close': application.videoRecordingVerified==false }">
         </i>
       </button>

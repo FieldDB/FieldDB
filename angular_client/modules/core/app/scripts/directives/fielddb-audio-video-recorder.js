@@ -29,7 +29,8 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
             importType: "audioVideo",
             parent: $scope.parent,
             dbname: $scope.parent.pouchname,
-            corpus: FieldDB.FieldDBObject.application.corpus
+            corpus: FieldDB.FieldDBObject.application.corpus,
+            dontShowSecondStep: true
           });
         }
         // $scope.importer = $scope.application.importer;
