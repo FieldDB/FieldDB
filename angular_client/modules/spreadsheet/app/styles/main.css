@@ -517,3 +517,7 @@ input:focus {
 .RecordMP3js-recorder a {
   display: none;
 }
+
+.fielddb-large-textarea {
+  height: 3em !important;
+}
