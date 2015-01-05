@@ -2113,6 +2113,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             if (response.roles.indexOf($rootScope.corpus.pouchname + "_commenter") > -1) {
               $rootScope.commentPermissions = true;
             }
+            if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
+              $rootScope.commentPermissions = true;
+            }
           });
       });
   };
