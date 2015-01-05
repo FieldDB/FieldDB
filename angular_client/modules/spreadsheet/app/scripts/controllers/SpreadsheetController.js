@@ -855,6 +855,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             }
           }
           $scope.corpora = [];
+          var corporaAlreadyIn = {};
           var processCorpora = function(index) {
             // Use map-reduce to get corpus title
 
@@ -876,7 +877,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if ($rootScope.corpus && $rootScope.corpus.pouchname === corpus.pouchname) {
                   $scope.selectCorpus(corpus);
                 }
-                $scope.corpora.push(corpus);
+                if (!corporaAlreadyIn[corpus.pouchname]) {
+                  $scope.corpora.push(corpus);
+                  corporaAlreadyIn[corpus.pouchname] = true;
+                }
+
               }, function(error) {
                 var corpus = {};
                 corpus.pouchname = scopeDBs[index];
