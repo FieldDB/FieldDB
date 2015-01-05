@@ -154,6 +154,9 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
 
   spreadsheetDatum.saved = "fresh";
   spreadsheetDatum.fossil = JSON.parse(JSON.stringify(spreadsheetDatum));
+  spreadsheetDatum.save = function(){
+    this.saved = "no";
+  };
   return spreadsheetDatum;
 };
 
