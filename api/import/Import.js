@@ -125,6 +125,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   showImportSecondStep: {
     get: function() {
+      if(this.dontShowSecondStep){
+        return false;
+      }
       return this.asCSV && this.asCSV.length > 0;
     }
   },
