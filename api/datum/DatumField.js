@@ -830,7 +830,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       delete json.dbname;
 
       // TODO eventually dont include the label and hint but now include it for backward compaitibilty
-      json.label = this.label;
+      json.label = this.id;
       json.hint = this.hint;
 
       json.value = this.value || "";
