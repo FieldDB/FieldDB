@@ -38,8 +38,8 @@ describe("Directive: fielddb-audio-video-recorder", function() {
       }
 
       var firstAudioRecorder = angular.element(angular.element(el[0]).find("p")[0]);
-      expect(firstAudioRecorder.text().trim()).toEqual("Audio Recorder Element");
-      // expect(firstAudioRecorder.scope().audioRecorder).toEqual("Audio Recorder Element");
+      expect(firstAudioRecorder.text().trim()).toEqual("");
+      // expect(firstAudioRecorder.scope().audioRecorder).toEqual("");
 
       expect(typeof firstAudioRecorder.scope().peripheralsCheck).toBe("function");
       expect(typeof firstAudioRecorder.scope().addFile).toBe("function");
