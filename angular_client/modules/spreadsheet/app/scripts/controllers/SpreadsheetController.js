@@ -411,6 +411,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
 
     console.log("notUserInitited", notUserInitited);
+
+    if (!$scope.$$phase) {
+      $scope.$digest(); //$digest or $apply
+    }
   };
 
   $rootScope.setAsDefaultCorpusTemplate = function(templateId) {
@@ -1742,6 +1746,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.corpus.url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.pouchname;
     $rootScope.corpus.save($rootScope.user).then(function(result) {
       console.log("Saved corpus details ", result);
+      $scope.overrideTemplateSetting();
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
