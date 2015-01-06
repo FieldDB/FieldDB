@@ -1763,9 +1763,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Create object from fields displayed in scope to later be able to
     // notify user if search result is from a hidden field
     var fieldsInScope = {};
-    for (var key in $scope.fields) {
-      fieldsInScope[$scope.fields[key].label] = true;
+    var mapFieldsToTrue = function(datumField) {
+      fieldsInScope[datumField.id] = true;
+    };
+    for (var column in $scope.fieldsInColumns) {
+      if ($scope.fieldsInColumns.hasOwnProperty(column)) {
+        $scope.fieldsInColumns[column].map(mapFieldsToTrue);
+      }
     }
+    fieldsInScope.judgement = true;
+
 
     /* make the datumtags and comments always true since its only the compact view that doesnt show them? */
     // if ($rootScope.templateId === "fulltemplate" || $rootScope.templateId === "mcgillfieldmethodsspring2014template" || $rootScope.templateId === "yalefieldmethodsspring2014template") {
