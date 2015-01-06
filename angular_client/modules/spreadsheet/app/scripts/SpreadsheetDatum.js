@@ -11,8 +11,10 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   spreadsheetDatum.rev = fieldDBDatum._rev;
 
   for (j in fieldDBDatum.datumFields) {
-    if (fieldDBDatum.datumFields[j].id) {
+    if (fieldDBDatum.datumFields[j].id && fieldDBDatum.datumFields[j].id.length > 0) {
       fieldKeyName = "id";
+    }else{
+      fieldKeyName = "label";
     }
     // Get enteredByUser object
     if (fieldDBDatum.datumFields[j][fieldKeyName] === "enteredByUser") {

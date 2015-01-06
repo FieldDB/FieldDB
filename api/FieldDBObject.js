@@ -1112,7 +1112,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json.perObjectAlwaysConfirmOkay;
       delete json.application;
       delete json.contextualizer;
-      if (this._collection !== "private_corpuses") {
+      if (this.collection !== "private_corpuses") {
         delete json.confidential;
         delete json.confidentialEncrypter;
       } else {
