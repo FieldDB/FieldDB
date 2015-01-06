@@ -402,9 +402,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $rootScope.overrideTemplateSetting = function(templateId, newFieldPreferences, notUserInitited) {
-    $rootScope.templateId = templateId;
-    $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(newFieldPreferences);
+    $rootScope.templateId = "fulltemplate"; // templateId;
+    if ($rootScope.templateId !== templateId) {
+      console.warn("Not using users prefered template " + templateId);
+    }
+    // $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.availableFieldsInCurrentCorpus);
 
     console.log("notUserInitited", notUserInitited);
   };
