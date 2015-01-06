@@ -366,6 +366,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!incomingFields || !$rootScope.corpus) {
       return {};
     }
+    incomingFields = $rootScope.availableFieldsInCurrentCorpus;
     if (!numberOfColumns) {
       numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
     }
@@ -407,7 +408,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("Not using users prefered template " + templateId);
     }
     // $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.availableFieldsInCurrentCorpus);
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
 
     console.log("notUserInitited", notUserInitited);
   };
@@ -978,7 +979,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
     $scope.availableFields = $rootScope.corpus.datumFields._collection;
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.availableFields);
+    $rootScope.availableFieldsInCurrentCorpus = $rootScope.corpus.datumFields._collection;
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
     $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
 
     $scope.loadSessions();
