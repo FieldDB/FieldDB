@@ -1,21 +1,37 @@
-function(doc) {
+function(doc) { var convertDatumIntoSimpleObject = function(datum) {
+    var obj = {},
+      fieldKeyName = "label";
+
+    for (var i = 0; i < datum.datumFields.length; i++) {
+      if (datum.datumFields[i].id && datum.datumFields[i].id.length > 0) {
+        fieldKeyName = "id"; /* update to version 2.35+ */
+      } else {
+        fieldKeyName = "label";
+      }
+      if (datum.datumFields[i].mask) {
+        obj[datum.datumFields[i][fieldKeyName]] = datum.datumFields[i].mask;
+      }
+    }
+    if (datum.session.sessionFields) {
+      for (var j = 0; j < datum.session.sessionFields.length; j++) {
+        if (datum.session.sessionFields[j].id && datum.session.sessionFields[j].id.length > 0) {
+          fieldKeyName = "id"; /* update to version 2.35+ */
+        } else {
+          fieldKeyName = "label";
+        }
+        if (datum.session.sessionFields[j].mask) {
+          obj[datum.session.sessionFields[j][fieldKeyName]] = datum.session.sessionFields[j].mask;
+        }
+      }
+    }
+    return obj;
+  };
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
-    if ((doc.datumFields) && (doc.session)) {
-      var obj = {};
-      for (i = 0; i < doc.datumFields.length; i++) {
-        if (doc.datumFields[i].mask) {
-          obj[doc.datumFields[i].label] = doc.datumFields[i].mask;
-        }
-      }
-      if (doc.session.sessionFields) {
-        for (j = 0; j < doc.session.sessionFields.length; j++) {
-          if (doc.session.sessionFields[j].mask) {
-            obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;
-          }
-        }
-      }
+    if (doc.datumFields && doc.session) {
+      var obj = convertDatumIntoSimpleObject(doc);
+
       if (doc.comments) {
         obj["comments"] = JSON.stringify(doc.comments);
       }
