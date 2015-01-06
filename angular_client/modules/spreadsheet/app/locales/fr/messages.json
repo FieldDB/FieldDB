@@ -255,6 +255,10 @@
     "message": "Créer un nouveau corpus",
     "description": "title for create new corpus div"
   },
+  "locale_details_of": {
+    "message": "Metadonnées de ",
+    "description": "header for editing corpus metadata"
+  },
   "locale_not_admin_message": {
     "message": "Vous n'êtes pas un admin pour ce corpus. Se il vous plaît contacter un admin si vous souhaitez modifier l'accès des utilisateurs à ce corpus.",
     "description": "warning message for non-admin users in corpus settings. Do double curly brackets embedded inside double curly brackets work?"
@@ -292,7 +296,7 @@
     "description": "over-arching title for lists of users with different access types"
   },
   "locale_admins": {
-    "message": "Administrateur(s)",
+    "message": "Administrer",
     "description": "title for the admin list"
   },
   "locale_readers": {
@@ -652,12 +656,16 @@
     "message": "Sauvegarder",
     "description": " "
   },
+  "locale_add_field_button": {
+    "message": "Adjouter un champ",
+    "description": " "
+  },
   "locale_commenters": {
-    "message": "Les commentateurs",
+    "message": "Adjouter des commentaires",
     "description": "Title for the commenter list "
   },
   "locale_fields_in": {
-    "message": "Champs in ",
+    "message": "Champs dans ",
     "description": "corpus settings selection header "
   },
   "locale_wp_gloss": {

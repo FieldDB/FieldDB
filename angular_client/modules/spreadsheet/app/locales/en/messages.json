@@ -275,6 +275,10 @@
         "message": "Create a new corpus",
         "description": "title for create new corpus div"
     },
+    "locale_details_of": {
+        "message": "Details of ",
+        "description": "header for editing corpus metadata"
+    },
     "locale_not_admin_message": {
         "message": "You are not an admin for this corpus. Please contact an admin if you wish to alter user access to this corpus.",
         "description": "warning message for non-admin users in corpus settings. Do double curly brackets embedded inside double curly brackets work?"
@@ -462,6 +466,10 @@
     "locale_templates": {
         "message": "Templates",
         "description": "title for template setting"
+    },
+    "locale_interface_language": {
+        "message": "Interface Language",
+        "description": "title for ui locales setting"
     },
     "locale_full_template": {
         "message": "Full Template",
@@ -714,6 +722,10 @@
     },
     "locale_save_button": {
         "message": "Save",
+        "description": " "
+    },
+    "locale_add_field_button": {
+        "message": "Add a field",
         "description": " "
     },
     "locale_commenters": {
