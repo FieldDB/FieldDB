@@ -732,10 +732,6 @@
         "message": "As ",
         "description": "search resutl showing as ... in export modal "
     },
-    "locale_new_session_for": {
-        "message": "New session for ",
-        "description": " "
-    },
     "locale_number_columns": {
         "message": "Number of Columns: ",
         "description": "number of columns settings"
