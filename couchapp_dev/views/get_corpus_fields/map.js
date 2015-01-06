@@ -1,21 +1,45 @@
 function(doc) {
-  try {
-    /* if this document has been deleted, the ignore it and return immediately */
-    if (doc.trashed && doc.trashed.indexOf('deleted') > -1) return;
-    if ((doc.datumFields) && (doc.session)) {
-      for (var i in doc.datumFields) {
-        if (doc.datumFields[i].mask) {
-          emit({
-            original: doc.datumFields[i].label,
-            typed: doc.datumFields[i].label + '_t'
-          }, 1);
+  var convertDatumIntoSimpleObject = function(datum) {
+    var obj = {},
+      fieldKeyName = "label";
+
+    for (var i = 0; i < datum.datumFields.length; i++) {
+      if (datum.datumFields[i].id && datum.datumFields[i].id.length > 0) {
+        fieldKeyName = "id"; /* update to version 2.35+ */
+      } else {
+        fieldKeyName = "label";
+      }
+      if (datum.datumFields[i].mask) {
+        obj[datum.datumFields[i][fieldKeyName]] = datum.datumFields[i].mask;
+      }
+    }
+    if (datum.session.sessionFields) {
+      for (var j = 0; j < datum.session.sessionFields.length; j++) {
+        if (datum.session.sessionFields[j].id && datum.session.sessionFields[j].id.length > 0) {
+          fieldKeyName = "id"; /* update to version 2.35+ */
+        } else {
+          fieldKeyName = "label";
+        }
+        if (datum.session.sessionFields[j].mask) {
+          obj[datum.session.sessionFields[j][fieldKeyName]] = datum.session.sessionFields[j].mask;
         }
       }
-      for (var i in doc.session.sessionFields) {
-        if (doc.session.sessionFields[i].mask) {
+    }
+    return obj;
+  };
+  try {
+    /* if this document has been deleted, the ignore it and return immediately */
+    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+      return;
+    }
+    if (doc.datumFields && doc.session) {
+      var datum = convertDatumIntoSimpleObject(doc);
+
+      for (var field in datum) {
+        if (datum[field]) {
           emit({
-            original: doc.session.sessionFields[i].label,
-            typed: doc.session.sessionFields[i].label + '_t'
+            original: field,
+            typed: field + "_t"
           }, 1);
         }
       }

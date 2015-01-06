@@ -283,6 +283,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         FieldDBObject.application.corpus.getCorpusSpecificLocalizations();
         this.requestedCorpusSpecificLocalizations = true;
       }
+      result = result.replace(/^locale_/,"");
       return result;
     }
   },

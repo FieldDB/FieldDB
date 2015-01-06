@@ -53,7 +53,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "2.36.30.16.09ss";
+  $rootScope.appVersion = "2.37.06.13.09ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -366,6 +366,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!incomingFields || !$rootScope.corpus) {
       return {};
     }
+    incomingFields = $rootScope.availableFieldsInCurrentCorpus;
     if (!numberOfColumns) {
       numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
     }
@@ -402,11 +403,21 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $rootScope.overrideTemplateSetting = function(templateId, newFieldPreferences, notUserInitited) {
-    $rootScope.templateId = templateId;
-    $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(newFieldPreferences);
+    $rootScope.templateId = "fulltemplate"; // templateId;
+    if ($rootScope.templateId !== templateId) {
+      console.warn("Not using users prefered template " + templateId);
+    }
+    // $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
 
     console.log("notUserInitited", notUserInitited);
+    try {
+      if (!$scope.$$phase) {
+        $scope.$digest(); //$digest or $apply
+      }
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   $rootScope.setAsDefaultCorpusTemplate = function(templateId) {
@@ -975,7 +986,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
     $scope.availableFields = $rootScope.corpus.datumFields._collection;
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($scope.availableFields);
+    $rootScope.availableFieldsInCurrentCorpus = $rootScope.corpus.datumFields._collection;
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
     $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
 
     $scope.loadSessions();
@@ -1737,6 +1749,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.corpus.url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.pouchname;
     $rootScope.corpus.save($rootScope.user).then(function(result) {
       console.log("Saved corpus details ", result);
+      $scope.overrideTemplateSetting();
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",

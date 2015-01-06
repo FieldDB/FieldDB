@@ -64,7 +64,7 @@
         "description": ""
     },
     "locale_create_new_elicitation_session_button": {
-        "message": "Create New Elicitaton Session",
+        "message": "Create New Elicitation Session",
         "description": "submenu button under Session"
     },
     "locale_goal_textbox": {
@@ -275,6 +275,10 @@
         "message": "Create a new corpus",
         "description": "title for create new corpus div"
     },
+    "locale_details_of": {
+        "message": "Details of ",
+        "description": "header for editing corpus metadata"
+    },
     "locale_not_admin_message": {
         "message": "You are not an admin for this corpus. Please contact an admin if you wish to alter user access to this corpus.",
         "description": "warning message for non-admin users in corpus settings. Do double curly brackets embedded inside double curly brackets work?"
@@ -404,7 +408,7 @@
         "description": "appears when user clicks the logo after selectig a corpus, indicating which corpus they are in currently"
     },
     "locale_select_different_corpus_button": {
-        "message": "Select a Different Corputs",
+        "message": "Select a Different Corpus",
         "description": "button opens the corpora list"
     },
     "locale_contact_us_button": {
@@ -462,6 +466,10 @@
     "locale_templates": {
         "message": "Templates",
         "description": "title for template setting"
+    },
+    "locale_interface_language": {
+        "message": "Interface Language",
+        "description": "title for ui locales setting"
     },
     "locale_full_template": {
         "message": "Full Template",
@@ -716,6 +724,10 @@
         "message": "Save",
         "description": " "
     },
+    "locale_add_field_button": {
+        "message": "Add a field",
+        "description": " "
+    },
     "locale_commenters": {
         "message": "Commenters",
         "description": "Title for the commenter list "
@@ -731,10 +743,6 @@
     "locale_as": {
         "message": "As ",
         "description": "search resutl showing as ... in export modal "
-    },
-    "locale_new_session_for": {
-        "message": "New session for ",
-        "description": " "
     },
     "locale_number_columns": {
         "message": "Number of Columns: ",

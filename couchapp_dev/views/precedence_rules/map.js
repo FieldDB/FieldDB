@@ -4,18 +4,26 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
     // If the document is a Datum
     if (doc.audioVideo) {
-      // Loop over all its DatumFields
-      for (var key in doc.datumFields) {
-        // If the DatumField contains the Judgement
-        if (doc.datumFields[key].label == 'judgement') {
-          // If the Judgement contains a '*', don't count the words in it
-          if (doc.datumFields[key].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
-            return;
-          }
-          break;
-        }
+      return;
+    }
+    // Loop over all its DatumFields
+    for (var key in doc.datumFields) {
+      var fieldKeyName = "label";
+      if (doc.datumFields[key].id && doc.datumFields[key].id.length > 0) {
+        fieldKeyName = "id"; /* update to version 2.35+ */
+      } else {
+        fieldKeyName = "label";
       }
-      var processPrecedenceRules = function(word) {
+      // If the DatumField contains the Judgement
+      if (doc.datumFields[key][fieldKeyName] == 'judgement') {
+        // If the Judgement contains a '*', don't count the words in it
+        if (doc.datumFields[key].mask && doc.datumFields[key].mask.indexOf('*') >= 0) {
+          return;
+        }
+        break;
+      }
+    }
+    var processPrecedenceRules = function(word) {
         if (word == '') {
           return;
         }
@@ -37,40 +45,45 @@ function(doc) {
         }
       }
       // Loop over all its DatumFields
-      for (var key in doc.datumFields) {
-        // If the DatumField contains the Utterance
-        if (doc.datumFields[key].label == 'morphemes') {
-          // Trim whitespace
-          var morphemesLine = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
-          // If the morphemesLine is ungrammatical, don't count the words
-          // in it
-          if (morphemesLine.indexOf('*') == 0) {
-            return;
-          }
-          // Tokenize the morphemesLine
-          var words = morphemesLine.toLowerCase().split(/[#?!.,/ ]+/);
-          // For each token
-          for (var word in words) {
-            // If the token it not null or the empty string
-            if (words[word]) {
-              // Replace (*_) with ''
-              var feederWord = words[word].replace(/\(\*[^)]*\)/g, '');
-              // Replace *(_) with _
-              feederWord = feederWord.replace(/\*\(([^)]*)\)/, '$1');
-              // Remove all parentheses and *
-              var fullWord = feederWord.replace(/[(*)]/g, '');
-              // Remove parentheses and all characters between the
+    for (var key in doc.datumFields) {
+      var fieldKeyName = "label";
+      if (doc.datumFields[key].id && doc.datumFields[key].id.length > 0) {
+        fieldKeyName = "id"; /* update to version 2.35+ */
+      } else {
+        fieldKeyName = "label";
+      }
+      // If the DatumField contains the Utterance
+      if (doc.datumFields[key][fieldKeyName] == 'morphemes') {
+        // Trim whitespace
+        var morphemesLine = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
+        // If the morphemesLine is ungrammatical, don't count the words
+        // in it
+        if (morphemesLine.indexOf('*') == 0) {
+          return;
+        }
+        // Tokenize the morphemesLine
+        var words = morphemesLine.toLowerCase().split(/[#?!.,/ ]+/);
+        // For each token
+        for (var word in words) {
+          // If the token it not null or the empty string
+          if (words[word]) {
+            // Replace (*_) with ''
+            var feederWord = words[word].replace(/\(\*[^)]*\)/g, '');
+            // Replace *(_) with _
+            feederWord = feederWord.replace(/\*\(([^)]*)\)/, '$1');
+            // Remove all parentheses and *
+            var fullWord = feederWord.replace(/[(*)]/g, '');
+            // Remove parentheses and all characters between the
+            // parentheses
+            var option1 = feederWord.replace(/\([^)]*\)/g, '');
+            // If those two removals ended up with difference strings
+            if (fullWord != option1) {
+              // Emit the version without the characters between the
               // parentheses
-              var option1 = feederWord.replace(/\([^)]*\)/g, '');
-              // If those two removals ended up with difference strings
-              if (fullWord != option1) {
-                // Emit the version without the characters between the
-                // parentheses
-                processPrecedenceRules(option1);
-              }
-              // Emit the version without parentheses
-              processPrecedenceRules(fullWord);
+              processPrecedenceRules(option1);
             }
+            // Emit the version without parentheses
+            processPrecedenceRules(fullWord);
           }
         }
       }
