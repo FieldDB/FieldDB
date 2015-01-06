@@ -411,9 +411,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
 
     console.log("notUserInitited", notUserInitited);
-
-    if (!$scope.$$phase) {
-      $scope.$digest(); //$digest or $apply
+    try {
+      if (!$scope.$$phase) {
+        $scope.$digest(); //$digest or $apply
+      }
+    } catch (e) {
+      console.warn(e);
     }
   };
 
