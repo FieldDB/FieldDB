@@ -24,13 +24,13 @@
 
     <ul ng-hide="useWordpressIGTFormat" class="unstyled" ng-repeat="result in resultsFromExternalController">
         <li ng-repeat="corpusField in fieldsInColumns.first">
-          {{result[corpusField.label]}}
+          {{result[corpusField.id]}}
         </li>
         <li ng-repeat="corpusField in fieldsInColumns.second">
-          {{result[corpusField.label]}}
+          {{result[corpusField.id]}}
         </li>
         <li ng-repeat="corpusField in fieldsInColumns.third">
-          {{result[corpusField.label]}}
+          {{result[corpusField.id]}}
         </li>
         <li>
             {{contextualize('locale_tags_modal')}} {{commaList(result.datumTags)}}
