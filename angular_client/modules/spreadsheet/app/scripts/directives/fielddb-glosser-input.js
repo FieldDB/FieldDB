@@ -90,7 +90,7 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         'type="text"' +
         'ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
         'placeholder="{{corpusField.label}}"' +
-        'title="{{corpusField.hint}}"' +
+        'title="{{corpusField.help}}"' +
         'ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)" />';
 
       return templateString;
