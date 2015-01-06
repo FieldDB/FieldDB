@@ -881,7 +881,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response, corpus);
                 }
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
-                if (corpus.team && corpus.team.gravatar) {
+                if (corpus.team && corpus.team.gravatar && corpus.team.gravatar.indexOf("user") === -1) {
                   corpus.gravatar = corpus.team.gravatar;
                 }
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
