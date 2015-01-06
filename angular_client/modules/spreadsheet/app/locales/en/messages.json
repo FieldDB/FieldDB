@@ -64,7 +64,7 @@
         "description": ""
     },
     "locale_create_new_elicitation_session_button": {
-        "message": "Create New Elicitaton Session",
+        "message": "Create New Elicitation Session",
         "description": "submenu button under Session"
     },
     "locale_goal_textbox": {
@@ -404,7 +404,7 @@
         "description": "appears when user clicks the logo after selectig a corpus, indicating which corpus they are in currently"
     },
     "locale_select_different_corpus_button": {
-        "message": "Select a Different Corputs",
+        "message": "Select a Different Corpus",
         "description": "button opens the corpora list"
     },
     "locale_contact_us_button": {
