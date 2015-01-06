@@ -855,6 +855,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             }
           }
           $scope.corpora = [];
+          var corporaAlreadyIn = {};
           var processCorpora = function(index) {
             // Use map-reduce to get corpus title
 
@@ -876,7 +877,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if ($rootScope.corpus && $rootScope.corpus.pouchname === corpus.pouchname) {
                   $scope.selectCorpus(corpus);
                 }
-                $scope.corpora.push(corpus);
+                if (!corporaAlreadyIn[corpus.pouchname]) {
+                  $scope.corpora.push(corpus);
+                  corporaAlreadyIn[corpus.pouchname] = true;
+                }
+
               }, function(error) {
                 var corpus = {};
                 corpus.pouchname = scopeDBs[index];
@@ -1758,9 +1763,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Create object from fields displayed in scope to later be able to
     // notify user if search result is from a hidden field
     var fieldsInScope = {};
-    for (var key in $scope.fields) {
-      fieldsInScope[$scope.fields[key].label] = true;
+    var mapFieldsToTrue = function(datumField) {
+      fieldsInScope[datumField.id] = true;
+    };
+    for (var column in $scope.fieldsInColumns) {
+      if ($scope.fieldsInColumns.hasOwnProperty(column)) {
+        $scope.fieldsInColumns[column].map(mapFieldsToTrue);
+      }
     }
+    fieldsInScope.judgement = true;
+
 
     /* make the datumtags and comments always true since its only the compact view that doesnt show them? */
     // if ($rootScope.templateId === "fulltemplate" || $rootScope.templateId === "mcgillfieldmethodsspring2014template" || $rootScope.templateId === "yalefieldmethodsspring2014template") {
@@ -2106,6 +2118,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               $rootScope.writePermissions = true;
             }
             if (response.roles.indexOf($rootScope.corpus.pouchname + "_commenter") > -1) {
+              $rootScope.commentPermissions = true;
+            }
+            if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
               $rootScope.commentPermissions = true;
             }
           });
