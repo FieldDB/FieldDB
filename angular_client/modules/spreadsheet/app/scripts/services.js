@@ -68,6 +68,9 @@ angular.module('spreadsheetApp')
     };
 
     var getBlankDataTemplateFromCorpus = function(fieldsType) {
+      if (!fieldsType) {
+        throw "You must specify a type of fields: datumFields or sessionFields or participantFields etc";
+      }
       var newDoc = {
         "session": {},
         "audioVideo": [],
@@ -432,7 +435,9 @@ angular.module('spreadsheetApp')
         });
         return deferred.promise;
       },
-      'blankDatumTemplate': getBlankDataTemplateFromCorpus,
+      'blankDatumTemplate': function() {
+        return getBlankDataTemplateFromCorpus("datumFields");
+      },
       'blankSessionTemplate': function() {
         return getBlankDataTemplateFromCorpus("sessionFields");
       },

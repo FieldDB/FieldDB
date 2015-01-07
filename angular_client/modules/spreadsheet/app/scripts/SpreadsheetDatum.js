@@ -2,7 +2,7 @@
 'use strict';
 console.log("Declaring the SpreadsheetDatum.");
 
-var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDBDatum, guessedAudioUrl) {
+var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDBDatum, guessedAudioUrl, $scope) {
   var j,
     fieldKeyName = "label";
 
@@ -13,7 +13,7 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   for (j in fieldDBDatum.datumFields) {
     if (fieldDBDatum.datumFields[j].id && fieldDBDatum.datumFields[j].id.length > 0) {
       fieldKeyName = "id";
-    }else{
+    } else {
       fieldKeyName = "label";
     }
     // Get enteredByUser object
@@ -156,8 +156,16 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
 
   spreadsheetDatum.saved = "fresh";
   spreadsheetDatum.fossil = JSON.parse(JSON.stringify(spreadsheetDatum));
-  spreadsheetDatum.save = function(){
+  spreadsheetDatum.markAsNeedsToBeSaved = function() {
     this.saved = "no";
+    $scope.saved = "no";
+    try {
+      if (!$scope.$$phase) {
+        $scope.$digest(); //$digest or $apply
+      }
+    } catch (e) {
+      console.warn("Digest errored", e);
+    }
   };
   return spreadsheetDatum;
 };

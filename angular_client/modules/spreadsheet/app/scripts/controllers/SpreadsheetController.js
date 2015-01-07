@@ -686,7 +686,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         var scopeData = [];
         for (var i = 0; i < dataFromServer.length; i++) {
           if (dataFromServer[i].value.datumFields) {
-            var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.corpus.pouchname + "/");
+            var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.corpus.pouchname + "/", $scope);
 
             // Load data from current session into scope
             if (!sessionID || sessionID === "none") {
@@ -959,7 +959,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         } catch (e) {
           console.log("must have been an object...", e, selectedCorpus);
         }
-        if ($rootScope.corpus instanceof FieldDB.Corpus && selectedCorpus.pouchname === $rootScope.corpus.pouchname) {
+        if (($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) && !selectedCorpus.datumFields) {
           console.log("requested load of a corpus which was already loaded.");
           return;
         }
@@ -1343,7 +1343,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   //   "field1": "hi does this call createRecord"
   // }
 
-  $scope.createRecord = function(fieldData, $event) {
+  $scope.createRecord = function(onlyContentfulFields, $event) {
     if ($event && $event.type && $event.type === "submit" && $event.target) {
       $scope.setDataEntryFocusOn($event.target);
     }
@@ -1356,77 +1356,42 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.newRecordHasBeenEdited = false;
     $scope.newFieldData = {};
 
-    if (!fieldData) {
-      fieldData = {};
-    }
+    var newSpreadsheetDatum = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, Data.blankDatumTemplate(), null, $scope);
 
     // Edit record fields with labels from prefs
-    for (var dataKey in fieldData) {
-      for (var fieldKey in $scope.fields) {
-        if (dataKey === fieldKey) {
-          // console.log(dataKey);
-          var newDataKey = $scope.fields[fieldKey].label;
-          fieldData[newDataKey] = fieldData[dataKey];
-          delete fieldData[dataKey];
-        }
-      }
-    }
-    // console.log(fieldData);
-    // Save tags
-    if (fieldData.datumTags) {
-      var newDatumFields = fieldData.datumTags.split(",");
-      var newDatumFieldsArray = [];
-      for (var i in newDatumFields) {
-        var newDatumTagObject = {};
-        // Trim spaces
-        var trimmedTag = newDatumFields[i].trim();
-        newDatumTagObject.tag = trimmedTag;
-        newDatumFieldsArray.push(newDatumTagObject);
-      }
-      fieldData.datumTags = newDatumFieldsArray;
-    } else {
-      fieldData.datumTags = [];
+    for (var dataKey in onlyContentfulFields) {
+      newSpreadsheetDatum[dataKey] = onlyContentfulFields[dataKey];
+      delete onlyContentfulFields[dataKey];
     }
 
-    // Save comments
-    if (fieldData.comments) {
-      var comment = {};
-      comment.text = fieldData.comments;
-      comment.username = $rootScope.user.username;
-      comment.timestamp = Date.now();
-      comment.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
-      comment.timestampModified = Date.now();
-      fieldData.comments = [];
-      fieldData.comments.push(comment);
-    }
-
-    fieldData.enteredByUser = {
+    newSpreadsheetDatum.enteredByUser = {
       "username": $rootScope.user.username,
       "gravatar": $rootScope.user.gravatar,
       "appVersion": $rootScope.appVersion
     };
 
-    fieldData.timestamp = Date.now();
-    fieldData.dateEntered = JSON.parse(JSON.stringify(new Date(fieldData.timestamp)));
-    fieldData.dateModified = fieldData.dateEntered;
-    // fieldData.lastModifiedBy = $rootScope.user.username;
-    fieldData.sessionID = $scope.activeSession;
-    fieldData.saved = "no";
-    if (fieldData.audioVideo) {
-      fieldData.hasAudio = true;
-    }
+    newSpreadsheetDatum.timestamp = Date.now();
+    newSpreadsheetDatum.dateEntered = JSON.parse(JSON.stringify(new Date(newSpreadsheetDatum.timestamp)));
+    newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
+    // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
+    newSpreadsheetDatum.sessionID = $scope.activeSession;
+    newSpreadsheetDatum.saved = "no";
 
     // Add record to all scope data and update
-    $scope.allData.push(fieldData); //inserts new data at the bottom for future pagination.
-    $scope.data.push(fieldData);
+    $scope.allData.push(newSpreadsheetDatum); //inserts new data at the bottom for future pagination.
+    $scope.data.push(newSpreadsheetDatum);
     // $scope.loadPaginatedData("newDatum"); //dont change pagination, just show it on this screen.
     $scope.activeDatumIndex = "newEntry";
 
     $scope.newFieldDatahasAudio = false;
     $scope.saved = "no";
 
-    if (!$scope.$$phase) {
-      $scope.$digest(); //$digest or $apply
+    try {
+      if (!$scope.$$phase) {
+        $scope.$digest(); //$digest or $apply
+      }
+    } catch (e) {
+      console.warn("Digest errored", e);
     }
   };
 
