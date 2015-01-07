@@ -42,7 +42,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
       }
 
       var onAudioFail = function(e) {
-        if(e === "Already running"){
+        if (e === "Already running") {
           return;
         }
         $scope.datum.warn("Audio peripheralsCheck failed", e);
@@ -90,7 +90,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         $scope.parent.audioVideo = $scope.parent.audioVideo || [];
         $scope.parent.images = $scope.parent.images || [];
         $scope.parent.relatedData = $scope.parent.relatedData || [];
-        $scope.parent.save();
+        $scope.parent.markAsNeedsToBeSaved();
         if (!newAudioFile.filename) {
           console.warn("Filename not specified.");
           return;
@@ -102,7 +102,16 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         }
         if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.corpus) {
           $scope.importer.corpus = FieldDB.FieldDBObject.application.corpus;
-          $scope.importer.uploadFiles(newAudioFile.data);
+          $scope.importer.uploadFiles(newAudioFile.data).then(function() {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          }, function(error) {
+            console.log(error);
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          });
         }
 
         // if (audioVideoImageOrOtherFile.type.indexOf("audio") === 0) {
@@ -115,9 +124,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         //   $scope.parent.relatedData.push(audioVideoImageOrOtherFile);
         // }
 
-        if (!$scope.$$phase) {
-          $scope.$digest(); //$digest or $apply
-        }
+        // i
       };
 
     },
