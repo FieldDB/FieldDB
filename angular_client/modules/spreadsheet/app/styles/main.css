@@ -513,15 +513,15 @@ input:focus {
 .RecordMP3js-recorder .icon-upload:before {
   content: "\f01b";
 }
-.RecordMP3js-recorder  {
-  content: "\f111";
+.RecordMP3js-recorder .icon-play:before {
+  content: "";
 }
 .RecordMP3js-recorder .icon-pause:before {
   content: "\f04c";
 }
-.RecordMP3js-recorder .icon-record:before {
+/*.RecordMP3js-recorder .icon-record:before {
   content: "\f111";
-}
+}*/
 .RecordMP3js-recorder .icon-stop:before {
   content: "\f04d";
 }
