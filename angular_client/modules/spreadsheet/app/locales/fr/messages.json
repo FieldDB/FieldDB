@@ -28,7 +28,7 @@
     "description": "appears in Top navgation bar"
   },
   "locale_glosser": {
-    "message": "Glosser semi-automatique",
+    "message": "Glosage sémi-automatisé",
     "description": "appears in Top menu bar"
   },
   "locale_logout": {
@@ -112,7 +112,7 @@
     "description": "title for serach textbox. Enter search text."
   },
   "locale_go_button": {
-    "message": "Ouvrir",
+    "message": "Lancer",
     "description": "button in Search submenu, top page after login, choose session after a corpus is loaded"
   },
   "locale_select_all_button": {
@@ -244,7 +244,7 @@
     "description": "edit button"
   },
   "locale_create_new_button": {
-    "message": "Créer un nouveau",
+    "message": "Créer",
     "description": "button"
   },
   "locale_corpus_settings": {
@@ -697,5 +697,8 @@
   },
   "locale_tags": {
     "message": "Étiquettes"
+  },
+  "locale_syntacticCategory": {
+    "message": "Catégorie syntactique"
   }
 }
