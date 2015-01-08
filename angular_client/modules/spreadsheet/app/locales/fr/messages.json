@@ -35,8 +35,12 @@
     "message": "Déconnexion",
     "description": "button in Top menu bar"
   },
-  "locale_register": {
+  "locale_registration": {
     "message": "Inscription",
+    "description": "button in Top menu bar, opens Register page"
+  },
+  "locale_register": {
+    "message": "S’inscrire",
     "description": "button in Top menu bar, opens Register page"
   },
   "locale_change_session": {
@@ -424,11 +428,11 @@
     "description": "title for the server dropbox on Register page"
   },
   "locale_data_shared_message": {
-    "message": "*Les données peuvent être partagées entre les utilisateurs sur ne importe quel serveur.",
+    "message": "*Les données peuvent être partagées entre les utilisateurs sur n’importe quel serveur",
     "description": ""
   },
   "locale_username_warnig_message": {
-    "message": "*nom d'utilisateur doit contenir que des lettres minuscules (a-z) et/ou des chiffres.",
+    "message": "*Le nom d'utilisateur ne peut contenir que des lettres minuscules (a-z) et des chiffres",
     "description": "footnote for registering username"
   },
   "locale_user_interface_settings": {
