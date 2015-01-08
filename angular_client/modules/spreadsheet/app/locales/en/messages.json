@@ -35,6 +35,10 @@
         "message": "Log out",
         "description": "button in Top menu bar"
     },
+    "locale_registration": {
+        "message": "Register",
+        "description": "button in Top menu bar, opens Register page"
+    },
     "locale_register": {
         "message": "Register",
         "description": "button in Top menu bar, opens Register page"
