@@ -45,7 +45,7 @@ describe("Corpus", function() {
 
   describe("prefs", function() {
     it("should be possible to set team preferences for a view", function() {
-      var corpus = new Corpus();
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
       expect(corpus.prefs).toBeUndefined();
       corpus.preferredDashboardLayout = "layoutEverythingAtOnce";
       corpus.preferredDatumTemplate = "yalefieldmethodsspring2014template";
@@ -54,12 +54,30 @@ describe("Corpus", function() {
       var serialized = corpus.toJSON();
       expect(serialized.prefs.fieldDBtype).toEqual("UserPreference");
       expect(serialized.prefs.preferredDashboardLayout).toEqual("layoutEverythingAtOnce");
-      expect(serialized.prefs.preferredDatumTemplate).toEqual("yalefieldmethodsspring2014template");
+      expect(serialized.prefs.preferredDatumTemplate).toBeUndefined();
       expect(serialized.prefs.preferredLocale).toEqual("fr");
 
       corpus.preferredDatumTemplate = "default";
       expect(corpus.preferredDatumTemplate).toBeUndefined();
     });
+
+    it("should be able to reorder corpus fields for spreadsheet fields order", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      expect(corpus.datumFields.fieldDBtype).toEqual("DatumFields");
+      expect(corpus.prefs).toBeUndefined();
+      expect(corpus.datumFields.map(function(field) {
+        return field.id;
+      })).toEqual(["judgement", "utterance", "morphemes", "gloss", "translation", "dateElicited", "notes", "checkedWithConsultant", "dialect"]);
+
+      corpus.preferredDatumTemplate = "yalefieldmethodsspring2014template";
+      expect(corpus.datumFields.map(function(field) {
+        return field.id;
+      })).toEqual(["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags", "dateElicited", "notes", "checkedWithConsultant", "dialect"]);
+      expect(corpus.preferredDatumTemplate).toBeUndefined();
+    });
+
+
+
   });
 
   describe("datum creation", function() {
@@ -148,55 +166,55 @@ describe("Corpus", function() {
       // console.log(speaker.toJSON());
     }, specIsRunningTooLong);
 
-it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
-  corpus.newSpeaker().then(function(speaker) {
-    // console.log(speaker);
-    expect(speaker.fields.length).toEqual(8);
-    expect(speaker.fields.indexOf("lastname")).toEqual(2);
-    speaker.fields = [];
-    speaker.fields.add({
-      "type": "",
-      "_id": "lastname",
-      "shouldBeEncrypted": true,
-      "encrypted": true,
-      "showToUserTypes": "all",
-      "defaultfield": true,
-      "help": "The last name of the speaker/participant (encrypted)",
-      "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)",
-      "version": "v2.0.1",
-      "comments": [],
-      "labelExperimenters": "Nom de famille",
-      "encryptedValue": "confidential:VTJGc2RHVmtYMStRd0JOWGFrQk9sZlp3ZFh3cldNa3NqbWVRMVY4ektSND0=",
-      "mask": "xxxxxx",
-      "value": "xxxxxx",
-      "dbname": "",
-      "dateCreated": 0,
-      "dateModified": 0
-    });
-    speaker.fields.add({
-      "id": "aFieldFromImport",
-      "shouldBeEncrypted": true,
-      "encrypted": true,
-      "encryptedValue": "confidential:VTJGc2RHVmtYMStRd0JOWGFrQk9sZlp3ZFh3cldNa3NqbWVRMVY4ektSND0=",
-      "mask": "xxxxxx xxxxxxxxxxxx ",
-      "value": "xxxxxx xxxxxxxxxxxx ",
-      "showToUserTypes": "all",
-      "defaultfield": true,
-      "help": "This field came from import.",
-    });
-    expect(speaker.fields.lastname.value).toEqual("xxxxxx");
-    expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
-    expect(speaker.fields.length).toEqual(2);
-    corpus.updateParticipantToCorpusFields(speaker);
-    expect(speaker.fields.length).toEqual(11);
-    expect(speaker.fields.lastname.value).toEqual("xxxxxx");
-    expect(corpus.speakerFields.lastname.value).toEqual("");
-    expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
-    expect(speaker.fields.indexOf("lastname")).toEqual(corpus.speakerFields.indexOf("lastname"));
+    it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
+      corpus.newSpeaker().then(function(speaker) {
+        // console.log(speaker);
+        expect(speaker.fields.length).toEqual(8);
+        expect(speaker.fields.indexOf("lastname")).toEqual(2);
+        speaker.fields = [];
+        speaker.fields.add({
+          "type": "",
+          "_id": "lastname",
+          "shouldBeEncrypted": true,
+          "encrypted": true,
+          "showToUserTypes": "all",
+          "defaultfield": true,
+          "help": "The last name of the speaker/participant (encrypted)",
+          "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)",
+          "version": "v2.0.1",
+          "comments": [],
+          "labelExperimenters": "Nom de famille",
+          "encryptedValue": "confidential:VTJGc2RHVmtYMStRd0JOWGFrQk9sZlp3ZFh3cldNa3NqbWVRMVY4ektSND0=",
+          "mask": "xxxxxx",
+          "value": "xxxxxx",
+          "dbname": "",
+          "dateCreated": 0,
+          "dateModified": 0
+        });
+        speaker.fields.add({
+          "id": "aFieldFromImport",
+          "shouldBeEncrypted": true,
+          "encrypted": true,
+          "encryptedValue": "confidential:VTJGc2RHVmtYMStRd0JOWGFrQk9sZlp3ZFh3cldNa3NqbWVRMVY4ektSND0=",
+          "mask": "xxxxxx xxxxxxxxxxxx ",
+          "value": "xxxxxx xxxxxxxxxxxx ",
+          "showToUserTypes": "all",
+          "defaultfield": true,
+          "help": "This field came from import.",
+        });
+        expect(speaker.fields.lastname.value).toEqual("xxxxxx");
+        expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
+        expect(speaker.fields.length).toEqual(2);
+        corpus.updateParticipantToCorpusFields(speaker);
+        expect(speaker.fields.length).toEqual(11);
+        expect(speaker.fields.lastname.value).toEqual("xxxxxx");
+        expect(corpus.speakerFields.lastname.value).toEqual("");
+        expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
+        expect(speaker.fields.indexOf("lastname")).toEqual(corpus.speakerFields.indexOf("lastname"));
 
-  }).then(done, done);
-  // console.log(speaker.toJSON());
-}, specIsRunningTooLong);
+      }).then(done, done);
+      // console.log(speaker.toJSON());
+    }, specIsRunningTooLong);
   });
 
   xdescribe("serialization ", function() {
