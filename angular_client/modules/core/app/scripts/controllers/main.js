@@ -6,6 +6,15 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
 
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       $scope.application = FieldDB.FieldDBObject.application;
+      FieldDB.FieldDBObject.render = function() {
+        try {
+          if (!$scope.$$phase) {
+            $scope.$apply(); //$digest or $apply
+          }
+        } catch (e) {
+          console.warn("Rendering generated an erorr", e);
+        }
+      };
     } else {
       console.warn("The fielddb application was never created, are you sure you did new FieldDB.APP() somewhere?");
       window.alert("The app cannot load, please report this. ");
@@ -25,12 +34,6 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
       //   $scope.$digest(); //$digest or $apply
       // }
       return result;
-    };
-
-    $scope.application.render = function() {
-      if (!$scope.$$phase) {
-        $scope.$apply(); //$digest or $apply
-      }
     };
 
     $scope.loginDetails = $scope.loginDetails || {
