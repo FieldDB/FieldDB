@@ -343,7 +343,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: '',
           dest: '<%= yeoman.dist %>',
-          src: ['bower_components/recordmp3js/js/*.js']
+          src: ['bower_components/recordmp3js/js/*.js','bower_components/recordmp3js/css/fonts/icomoon.woff']
         }, {
           expand: true,
           cwd: '.tmp/images',
