@@ -39,6 +39,7 @@ fi
 # NOW=`date +%Y.%m.%d.%H.%M`
 MINOR_VERSION=`date +%d.%H.%M`
 
+SHORT_VERSION="$YEAR_DIFF.$WEEK_DIFF.0"
 version="$YEAR_DIFF.$WEEK_DIFF.$MINOR_VERSION"
 echo " Birthday: $BIRTHDAY"
 echo " Today: $today"
@@ -54,7 +55,7 @@ echo "... setting version on fielddb npm"
 sed 's/"version": "[^,]*"/"version": "'$version'"/' package.json  > output
 mv output package.json
 echo "... setting version on fielddb chrome"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' manifest.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' manifest.json  > output
 mv output manifest.json
 
 echo "... setting version on fielddb-angular bower"
@@ -77,19 +78,19 @@ mv output angular_client/modules/spreadsheet/app/scripts/controllers/Spreadsheet
 
 
 echo "... setting version on fielddb-prototype chrome manifest"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/manifest.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/manifest.json  > output
 mv output backbone_client/manifest.json
 echo "... setting version on fielddb-prototype chrome manifest dev"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/manifest_dev.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/manifest_dev.json  > output
 mv output backbone_client/manifest_dev.json
 echo "... setting version on fielddb-prototype chrome manifest local"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/manifest_local.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/manifest_local.json  > output
 mv output backbone_client/manifest_local.json
 echo "... setting version on fielddb-prototype chrome manifest packaged"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/manifest_dev_packaged.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/manifest_dev_packaged.json  > output
 mv output backbone_client/manifest_dev_packaged.json
 echo "... setting version on fielddb-prototype chrome manifest miami"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/manifest_miami.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/manifest_miami.json  > output
 mv output backbone_client/manifest_miami.json
 echo "... setting version on fielddb-prototype bower"
 sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/bower.json  > output
@@ -143,7 +144,7 @@ mv output ../AndroidLanguageLearningClientForFieldDB/AndroidManifest.xml
 echo ""
 echo "Chrome clients: "
 echo "... setting version on dictionary chrome extension"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../DictionaryChromeExtension/extension/manifest.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../DictionaryChromeExtension/extension/manifest.json  > output
 mv output ../DictionaryChromeExtension/extension/manifest.json
 
 
