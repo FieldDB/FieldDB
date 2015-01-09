@@ -510,20 +510,8 @@ input:focus {
   background-color: #F8FaFF
 }
 
-.RecordMP3js-recorder .icon-upload:before {
-  content: "\f01b";
-}
-.RecordMP3js-recorder .icon-play:before {
-  content: "";
-}
-.RecordMP3js-recorder .icon-pause:before {
-  content: "\f04c";
-}
-/*.RecordMP3js-recorder .icon-record:before {
-  content: "\f111";
-}*/
-.RecordMP3js-recorder .icon-stop:before {
-  content: "\f04d";
+button .btn-play {
+  display: none !important;
 }
 
 .RecordMP3js-recorder audio {
@@ -535,7 +523,7 @@ input:focus {
 }
 
 .fielddb-large-textarea {
-  height: 3em !important;
+  height: 3em;
 }
 
 .import-progress {
