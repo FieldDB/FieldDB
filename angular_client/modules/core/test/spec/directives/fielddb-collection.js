@@ -1,7 +1,7 @@
 /*globals FieldDB */
 
 "use strict";
-var debugMode = true;
+var debugMode = false;
 describe("Directive: fielddb-collection", function() {
 
   describe("multiple lists of collections", function() {

@@ -313,8 +313,10 @@ describe("Directive: fielddb-datalist", function() {
         expect(value).toBeGreaterThan(0);
         scope.$digest(); // <== digest to get the render to show the bound values
 
-        console.log("el scope participantsList", el.scope().participantsList);
-        console.log("el scope corpus", el.scope().corpus);
+        if (debugMode) {
+          console.log("el scope participantsList", el.scope().participantsList);
+          console.log("el scope corpus", el.scope().corpus);
+        }
         // expect(el.scope().participantsList.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);
         // expect(angular.element(el.find("h1")[0]).text().trim()).toEqual("Participant List");
         // expect(angular.element(el.find("p")[0]).text().trim()).toContain("This is a list of all participants");

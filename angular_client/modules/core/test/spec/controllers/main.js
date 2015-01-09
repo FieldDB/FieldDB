@@ -1,4 +1,5 @@
 "use strict";
+var debugMode = false;
 
 describe("Controller: FieldDBController", function() {
 
@@ -44,7 +45,9 @@ xdescribe("FieldDBController Routes", function() {
       $httpBackend.expectGET("views/corpus-page.html").respond(200);
       $location.path("/lingllama/community_corpus");
       $rootScope.$digest();
-      console.log($route);
+      if(debugMode){
+        console.log($route);
+      }
 
       expect($route.current).toBeDefined();
       expect($route.current.templateUrl).toBe("views/corpus-page.html");
