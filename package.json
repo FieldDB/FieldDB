@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "2.37.06.13.09",
+  "version": "2.37.09",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -44,7 +44,7 @@
     "diacritic": "0.0.2",
     "mime": "^1.2.11",
     "q": "1.0.1",
-    "recordmp3js": "~0.3.0",
+    "recordmp3js": "0.5.0",
     "textgrid": "2.2.0",
     "underscore": "^1.6.0"
   },
