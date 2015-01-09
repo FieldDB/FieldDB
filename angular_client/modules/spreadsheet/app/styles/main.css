@@ -523,7 +523,7 @@ button .btn-play {
 }
 
 .fielddb-large-textarea {
-  height: 3em !important;
+  height: 3em;
 }
 
 .import-progress {
