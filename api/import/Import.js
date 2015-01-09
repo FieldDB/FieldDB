@@ -451,9 +451,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             });
             savePromises.push(promise);
           } else if (self.importType === "audioVideo") {
-            console.log("not doing anything for an audio video import");
+            self.debug("not doing any save for an audio video import");
           } else {
-            console.log("not doing anything for a datum import");
+            self.debug("not doing any save for a datum import");
           }
         });
 
