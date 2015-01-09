@@ -372,14 +372,16 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         return;
       }
       if (!value) {
-        var fieldCanBeDeleted = !this._shouldBeEncrypted || (this._shouldBeEncrypted && this.decryptedMode);
-        if (fieldCanBeDeleted) {
-          delete this._value;
-          delete this._mask;
-          delete this._encryptedValue;
+        var fieldCanBeEmptied = !this._shouldBeEncrypted || (this._shouldBeEncrypted && this.decryptedMode);
+        if (fieldCanBeEmptied) {
+          this._value = "";
+          this._mask = "";
+          this._encryptedValue = "";
           return;
         } else {
-          this.warn("The value " + this._value + " of " + this.id + " was requested to be removed by the user, but they are not able to edit the field currently. No changes were made ");
+          if (this._value) {
+            this.warn("The value " + this._value + " of " + this.id + " was requested to be removed by the user, but they are not able to edit the field currently. No changes were made ");
+          }
           return;
         }
       }
