@@ -387,6 +387,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       fields = incomingFields;
     }
     var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || Math.ceil(fields.length / numberOfColumns);
+    if ($rootScope.corpus && $rootScope.corpus.prefs && $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn) {
+      columnHeight = $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn;
+    }
+    if ($rootScope.corpus.datumFields.indexOf("syntacticTreeLatex") < 6) {
+      $rootScope.corpus.upgradeCorpusFieldsToMatchDatumTemplate("fulltemplate");
+    }
+
     var columns = {};
 
     if (numberOfColumns === 1) {
