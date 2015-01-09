@@ -1357,6 +1357,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         });
         if (self.rawText && self.rawText.trim()) {
           window.alert("rendering import");
+          self.rawText = self.rawText.trim();
           self.render();
         }
 
@@ -1493,6 +1494,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           fileDetails.filename = fileDetails.fileBaseName + ".mp3";
           fileDetails.URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + fileDetails.fileBaseName + ".mp3";
           self.addAudioVideoFile(fileDetails);
+          self.rawText = self.rawText.trim();
+
         } else {
           self.debug(results);
           fileDetails.textgrid = "Error result was empty. " + results;
@@ -1539,6 +1542,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         this.parent.audioVideo.add(audioVideo);
         this.parent.saved = "no";
+        this.render();
         // this.asCSV = [];
       }
     }
