@@ -884,6 +884,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if (corpus.team && corpus.team.gravatar && corpus.team.gravatar.indexOf("user") === -1) {
                   corpus.gravatar = corpus.team.gravatar;
                 }
+                if (!corpus.gravatar || !corpus.gravatar.trim()) {
+                  corpus.gravatar = md5.createHash(corpus.pouchname);
+                }
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
                 if ($rootScope.corpus && $rootScope.corpus.pouchname === corpus.pouchname) {
                   $scope.selectCorpus(corpus);
