@@ -45,7 +45,7 @@ env:
     - secure: sx0nyAy4yp4SACA05Q69CoUeeRuEu08rUqB448Ap1MVJgA5UAYlSht1g9nJdvCqBg8V3YEdIcGdov8vUmzwwU+mbdf7ssmrc9ecmq2j/iym6DCgrV5fJgRH4Fti0RGs9QcqgvpXejKWeHz/JIxlLqvcAKgZMcImMvF2gUfi6neQ=
     - secure: RiN997luw/gns/SKnHXeJQlFv6RQoVqpwIGslImO9Eam3NmNjL6OvDMFkKsxIFvtnOwH8+sixcd854IvcvxH0nONDT+aGm3PEIN0hI6O+7jya8XHWfTMaHrLX3D+iPsyq69QBN43hnyoT6e3WUxokJVq1LZeU2Rdi6rw04uuV/0=
     - secure: R7DYAAHx52YfRc2vJquODs/02U+D+TqcU9yYG67nvVzk5udWCjOdMFct8t3+1hFig+ITEy05cNr01r8rMnQmHbqILenmQgv9poiOncM8W4eeWi0x13exJT7BAJ8SCMyi4vWy+3qE0T1IPyI2XDdzLWBU8eocWRe9TtO0d/yseKw=
-
+    - TIMEOUT=1000
 after_success:
   # on:
   #   branch: master
