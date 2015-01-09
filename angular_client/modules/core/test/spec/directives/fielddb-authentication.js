@@ -11,7 +11,9 @@ describe("Directive: fielddb-authentication", function() {
   beforeEach(inject(function($rootScope, $compile) {
     el = angular.element("<div data-fielddb-authentication json='authentication'></div>");
     scope = $rootScope.$new();
-    console.log("scope.application", scope.application);
+    if (debugMode) {
+      console.log("scope.application", scope.application);
+    }
     scope.application = {
       authentication: {
         user: new FieldDB.User({
