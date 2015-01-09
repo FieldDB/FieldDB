@@ -72,7 +72,7 @@ describe("Corpus", function() {
       corpus.preferredDatumTemplate = "yalefieldmethodsspring2014template";
       expect(corpus.datumFields.map(function(field) {
         return field.id;
-      })).toEqual(["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags", "dateElicited", "notes", "checkedWithConsultant", "dialect"]);
+      })).toEqual(["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "housekeeping", "tags", "dateElicited", "notes", "checkedWithConsultant", "dialect"]);
       expect(corpus.preferredDatumTemplate).toBeUndefined();
       expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
     });
