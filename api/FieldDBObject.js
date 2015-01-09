@@ -398,6 +398,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   render: {
+    configurable: true,
     value: function(options) {
       this.debug("Calling render with options", options);
       FieldDBObject.render.apply(this, arguments);
