@@ -12,6 +12,7 @@ node_js:
 # branches:
 #  only:
 #    - master
+bundler_args: --retry 3
 
 notifications:
   email:
