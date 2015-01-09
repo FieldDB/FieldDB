@@ -252,7 +252,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       try {
         connectionInfo = localStorage.getItem("_connectionInfo");
       } catch (e) {
-        this.warn("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
+        this.warn("Localstorage is not available, using the object there will be no persistance across loads");
+        this.debug("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
         connectionInfo = this._connectionInfo;
       }
       if (!connectionInfo) {

@@ -103,14 +103,10 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.corpus) {
           $scope.importer.corpus = FieldDB.FieldDBObject.application.corpus;
           $scope.importer.uploadFiles(newAudioFile.data).then(function() {
-            if (!$scope.$$phase) {
-              $scope.$digest(); //$digest or $apply
-            }
+            $scope.parent.render();
           }, function(error) {
             console.log(error);
-            if (!$scope.$$phase) {
-              $scope.$digest(); //$digest or $apply
-            }
+            $scope.parent.render();
           });
         }
 

@@ -119,11 +119,6 @@ var FieldDBObject = function FieldDBObject(json) {
     this.dateCreated = Date.now();
   }
 
-  if (!this.render) {
-    this.render = function(options) {
-      this.warn("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
-    };
-  }
 };
 
 FieldDBObject.software = {};
@@ -135,6 +130,10 @@ FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
 FieldDBObject.DEFAULT_VERSION = "v" + package.version;
 FieldDBObject.DEFAULT_DATE = 0;
+
+FieldDBObject.render = function(options) {
+  this.warn("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
+};
 
 FieldDBObject.bug = function(message) {
   try {
@@ -395,6 +394,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (message4) {
         console.warn(message4);
       }
+    }
+  },
+
+  render: {
+    configurable: true,
+    value: function(options) {
+      this.debug("Calling render with options", options);
+      FieldDBObject.render.apply(this, arguments);
     }
   },
 

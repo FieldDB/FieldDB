@@ -30,10 +30,10 @@ module.exports = function(grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
-      bower: {
-        files: ['bower.json'],
-        tasks: ['wiredep']
-      },
+      // bower: {
+      //   files: ['bower.json'],
+      //   tasks: ['wiredep']
+      // },
       vendor: {
         files: ['bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
         tasks: ['build'],
@@ -343,6 +343,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: '',
           dest: '<%= yeoman.dist %>',
+          // src: ['bower_components/recordmp3js/js/*.js','bower_components/recordmp3js/css/fonts/icomoon.woff']
           src: ['bower_components/recordmp3js/js/*.js']
         }, {
           expand: true,

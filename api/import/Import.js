@@ -125,7 +125,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   showImportSecondStep: {
     get: function() {
-      if(this.dontShowSecondStep){
+      if (this.dontShowSecondStep) {
         return false;
       }
       return this.asCSV && this.asCSV.length > 0;
@@ -451,9 +451,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             });
             savePromises.push(promise);
           } else if (self.importType === "audioVideo") {
-            console.log("not doing anything for an audio video import");
+            self.debug("not doing any save for an audio video import");
           } else {
-            console.log("not doing anything for a datum import");
+            self.debug("not doing any save for a datum import");
           }
         });
 
@@ -1348,10 +1348,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           files = [blob];
 
         }
-
+        self.rawText = "";
         $.each(files, function(i, file) {
           data.append(i, file);
+          if (file.name) {
+            self.rawText = self.rawText + " " + file.name;
+          }
         });
+        if (self.rawText && self.rawText.trim()) {
+          window.alert("rendering import");
+          self.rawText = self.rawText.trim();
+          self.render();
+        }
 
         // data.append("files", files);
         data.append("token", self.uploadtoken);
@@ -1396,6 +1404,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               }
               if (messages.length > 0) {
                 self.status = messages.join(", ");
+                deferred.resolve(self.status);
                 // $(self.el).find(".status").html(self.get("status"));
                 // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(messages.join(", "), "alert-danger", "Import:");
               }
@@ -1403,6 +1412,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               console.log(results);
               var message = "Upload might have failed to complete processing on your file(s). Please report this error to us at support@lingsync.org ";
               self.status = message + ": " + JSON.stringify(results);
+              deferred.reject(message);
+
               // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(message, "alert-danger", "Import:");
             }
             // $(self.el).find(".status").html(self.get("status"));
@@ -1433,6 +1444,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
               // $(self.el).find(".status").html(self.get("status"));
             }
+            deferred.reject(self.error);
           }
         });
         self.status = "Contacting server...";
@@ -1482,6 +1494,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           fileDetails.filename = fileDetails.fileBaseName + ".mp3";
           fileDetails.URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + fileDetails.fileBaseName + ".mp3";
           self.addAudioVideoFile(fileDetails);
+          self.rawText = self.rawText.trim();
+
         } else {
           self.debug(results);
           fileDetails.textgrid = "Error result was empty. " + results;
@@ -1528,6 +1542,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         this.parent.audioVideo.add(audioVideo);
         this.parent.saved = "no";
+        this.render();
         // this.asCSV = [];
       }
     }
