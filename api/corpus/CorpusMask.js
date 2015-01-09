@@ -279,7 +279,12 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
   preferredDatumTemplate: {
     get: function() {
       if (this.prefs && this.prefs.preferredDatumTemplate) {
-        return this.prefs.preferredDatumTemplate;
+        var upgradeSucess = this.upgradeCorpusFieldsToMatchDatumTemplate(this.prefs.preferredDatumTemplate);
+        if (!upgradeSucess) {
+          return this.prefs.preferredDatumTemplate;
+        } else {
+          this.warn("preferredDatumTemplate is no longer needed");
+        }
       }
     },
     set: function(value) {
@@ -293,7 +298,79 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
-      this.prefs.preferredDatumTemplate = value.trim();
+      var upgradeSucess = this.upgradeCorpusFieldsToMatchDatumTemplate(value.trim());
+      if (!upgradeSucess) {
+        this.prefs.preferredDatumTemplate = value.trim();
+      } else {
+        this.warn("preferredDatumTemplate is no longer needed");
+      }
+    }
+  },
+
+  upgradeCorpusFieldsToMatchDatumTemplate: {
+    value: function(value) {
+      if (this.preferredDatumTemplateAtVersion) {
+        return true;
+      }
+      if (!this.datumFields.reorder) {
+        this.warn("could not upgrade corpus fields order to match data entry template for the spreadsheet app ");
+        return false;
+      }
+      this.preferredDatumTemplateAtVersion = this.version;
+      this.preferredDatumTemplate = null;
+
+      var order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
+      if (value === "compacttemplate") {
+        order = ["judgement", "utterance", "morphemes", "gloss", "translation"];
+
+      } else if (value === "fulltemplate") {
+        order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
+
+      } else if (value === "mcgillfieldmethodsspring2014template") {
+        order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
+
+      } else if (value === "mcgillfieldmethodsfall2014template") {
+        order = ["judgement", "utterance", "morphemes", "gloss", "translation", "phonetic", "notes"];
+
+      } else if (value === "yalefieldmethodsspring2014template") {
+        order = ["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags"];
+        this.prefs.fullTemplateDefaultNumberOfFieldsPerColumn = 4;
+      }
+
+
+      var fieldTemplate = {
+        "label": "",
+        "shouldBeEncrypted": false,
+        "showToUserTypes": "all",
+        "defaultfield": false,
+        "value": "",
+        "mask": "",
+        "json": {},
+        "help": "You can add help/conventions here which explain what this data entry field is for your teammates."
+      };
+      for (var expectedPosition = 0; expectedPosition < order.length; expectedPosition++) {
+        var currentPosition = this.datumFields.indexOf(order[expectedPosition]);
+        if (currentPosition === -1) {
+          var newField = JSON.parse(JSON.stringify(fieldTemplate));
+          // newField.id = order[expectedPosition];
+          newField.label = order[expectedPosition];
+          this.datumFields.add(newField);
+          currentPosition = this.datumFields.length - 1;
+        }
+        if (currentPosition === expectedPosition) {
+          this.debug(order[expectedPosition] + " Field was in the correct order. ");
+        } else {
+          this.debug(currentPosition + " moving to" + expectedPosition);
+
+          this.datumFields.reorder(currentPosition, expectedPosition);
+        }
+      }
+      var resultingOrder = this.datumFields.map(function(field) {
+        return field.id;
+      });
+      this.warn("reordered fields to " + resultingOrder);
+
+      return true;
     }
   },
 

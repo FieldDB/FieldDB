@@ -464,7 +464,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     /** Prior to 1.37 wipe personalization and use current defaults */
     if (!existingPreferences.version) {
-      alert("Your preferences need to be upgraded to the new version of the app.");
+      alert("Welcome to " + $rootScope.appVersion + "\n\n We have introduced a new data entry template in this version. \nYou might want to review your settings to change the order and number of fields in the data entry template. Current defaults are set to 2 columns, with 3 rows each.");
       // localStorage.clear(); //why?? left over from debugging?
       localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
       // return defaultPreferences;
