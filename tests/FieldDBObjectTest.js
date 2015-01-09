@@ -439,12 +439,23 @@ describe("FieldDBObject", function() {
 
     it("should accept a render function from the containing app or framework", function() {
       var app = new FieldDBObject();
-      app.render = function() {
+      var oldRender = FieldDBObject.render;
+      FieldDBObject.render = function() {
         console.log("I rendered.");
       };
       expect(app.render).toBeDefined();
       app.render();
       expect(app.warnMessage).toBeUndefined();
+      FieldDBObject.render = oldRender;
+    });
+
+    xit("should accept a render function for each object", function() {
+      var app = new FieldDBObject();
+      app.render = function() {
+        this.warn("I rendered.");
+      };
+      app.render();
+      expect(app.warnMessage).toEqual("I rendered");
     });
   });
 
