@@ -74,6 +74,7 @@ describe("Corpus", function() {
         return field.id;
       })).toEqual(["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags", "dateElicited", "notes", "checkedWithConsultant", "dialect"]);
       expect(corpus.preferredDatumTemplate).toBeUndefined();
+      expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
     });
 
 
