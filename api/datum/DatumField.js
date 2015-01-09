@@ -379,7 +379,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           delete this._encryptedValue;
           return;
         } else {
-          this.warn("The value was removed by the user, but they are not able to edit the field currently.");
+          this.warn("The value " + this._value + " of " + this.id + " was requested to be removed by the user, but they are not able to edit the field currently. No changes were made ");
           return;
         }
       }
