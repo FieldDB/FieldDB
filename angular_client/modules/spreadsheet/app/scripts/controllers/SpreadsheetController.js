@@ -887,6 +887,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 if (!corpus.gravatar || !corpus.gravatar.trim()) {
                   corpus.gravatar = md5.createHash(corpus.pouchname);
                 }
+                corpus.team = corpus.team || {
+                  "_id": "team",
+                  "gravatar": corpus.gravatar,
+                  "username": corpus.pouchname.split("-")[0],
+                  "collection": "users",
+                  "firstname": "",
+                  "lastname": "",
+                  "subtitle": "",
+                  "email": "",
+                  "researchInterest": "No public information available",
+                  "affiliation": "No public information available",
+                  "description": "No public information available"
+                };
                 // If this is the corpus the user is looking at, update to the latest corpus details from the database.
                 if ($rootScope.corpus && $rootScope.corpus.pouchname === corpus.pouchname) {
                   $scope.selectCorpus(corpus);
