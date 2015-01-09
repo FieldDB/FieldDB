@@ -38,8 +38,9 @@ else
 fi
 # NOW=`date +%Y.%m.%d.%H.%M`
 MINOR_VERSION=`date +%d.%H.%M`
+DAY=`date +%d`
 
-SHORT_VERSION="$YEAR_DIFF.$WEEK_DIFF.0"
+SHORT_VERSION="$YEAR_DIFF.$WEEK_DIFF.$DAY"
 version="$YEAR_DIFF.$WEEK_DIFF.$MINOR_VERSION"
 echo " Birthday: $BIRTHDAY"
 echo " Today: $today"
@@ -49,27 +50,27 @@ echo "  ->    Version: $version"
 echo ""
 
 echo "... setting version on fielddb bower"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' bower.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' bower.json  > output
 mv output bower.json
 echo "... setting version on fielddb npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' package.json  > output
 mv output package.json
 echo "... setting version on fielddb chrome"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' manifest.json  > output
 mv output manifest.json
 
 echo "... setting version on fielddb-angular bower"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' angular_client/modules/core/bower.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/core/bower.json  > output
 mv output angular_client/modules/core/bower.json
 echo "... setting version on fielddb-angular npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' angular_client/modules/core/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/core/package.json  > output
 mv output angular_client/modules/core/package.json
 
 echo "... setting version on fielddb-spreadsheet bower"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' angular_client/modules/spreadsheet/bower.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/spreadsheet/bower.json  > output
 mv output angular_client/modules/spreadsheet/bower.json
 echo "... setting version on fielddb-spreadsheet npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' angular_client/modules/spreadsheet/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/spreadsheet/package.json  > output
 mv output angular_client/modules/spreadsheet/package.json
 
 echo "... setting version on fielddb-spreadsheet npm"
@@ -93,10 +94,10 @@ echo "... setting version on fielddb-prototype chrome manifest miami"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/manifest_miami.json  > output
 mv output backbone_client/manifest_miami.json
 echo "... setting version on fielddb-prototype bower"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/bower.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/bower.json  > output
 mv output backbone_client/bower.json
 # echo "... setting version on fielddb-prototype npm"
-# sed 's/"version": "[^,]*"/"version": "'$version'"/' backbone_client/package.json  > output
+# sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/package.json  > output
 # mv output backbone_client/package.json
 #
 #
@@ -116,28 +117,28 @@ esac
 echo ""
 echo "Commonjs libs: "
 echo "... setting version on fielddb-glosser bower"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../FieldDBGlosser/bower.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../FieldDBGlosser/bower.json  > output
 mv output ../FieldDBGlosser/bower.json
 echo "... setting version on fielddb-glosser npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../FieldDBGlosser/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../FieldDBGlosser/package.json  > output
 mv output ../FieldDBGlosser/package.json
 
 echo "... setting version on praat textgrid js lib bower"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../PraatTextGridJS/bower.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../PraatTextGridJS/bower.json  > output
 mv output ../PraatTextGridJS/bower.json
 echo "... setting version on praat textgrid js lib npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../PraatTextGridJS/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../PraatTextGridJS/package.json  > output
 mv output ../PraatTextGridJS/package.json
 
 
 echo ""
 echo "Android clients: "
 echo "... setting version on fielddb android lib"
-sed 's/android:versionName="[^,]*"/android:versionName="'$version'"/' ../AndroidFieldDB/AndroidManifest.xml  > output
+sed 's/android:versionName="[^,]*"/android:versionName="'$SHORT_VERSION'"/' ../AndroidFieldDB/AndroidManifest.xml  > output
 mv output ../AndroidFieldDB/AndroidManifest.xml
 
 echo "... setting version on learn x "
-sed 's/android:versionName="[^,]*"/android:versionName="'$version'"/' ../AndroidLanguageLearningClientForFieldDB/AndroidManifest.xml  > output
+sed 's/android:versionName="[^,]*"/android:versionName="'$SHORT_VERSION'"/' ../AndroidLanguageLearningClientForFieldDB/AndroidManifest.xml  > output
 mv output ../AndroidLanguageLearningClientForFieldDB/AndroidManifest.xml
 
 
@@ -151,34 +152,34 @@ mv output ../DictionaryChromeExtension/extension/manifest.json
 echo ""
 echo "Node.js services: "
 echo "... setting version on fielddb-audio service npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../AudioWebService/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../AudioWebService/package.json  > output
 mv output ../AudioWebService/package.json
 
 # echo "... setting version on fielddb-corpus service npm"
-# sed 's/"version": "[^,]*"/"version": "'$version'"/' ../CorpusWebService/package.json  > output
+# sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../CorpusWebService/package.json  > output
 # mv output ../CorpusWebService/package.json
 
 echo "... setting version on fielddb-auth service npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../AuthenticationWebService/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../AuthenticationWebService/package.json  > output
 mv output ../AuthenticationWebService/package.json
 
 echo "... setting version on fielddb web server npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../FieldDBWebServer/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../FieldDBWebServer/package.json  > output
 mv output ../FieldDBWebServer/package.json
 
 echo "... setting version on fielddb-audio service npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../AudioWebService/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../AudioWebService/package.json  > output
 mv output ../AudioWebService/package.json
 
 echo "... setting version on fielddb-lexicon service npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../LexiconWebService/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../LexiconWebService/package.json  > output
 mv output ../LexiconWebService/package.json
 
 
 echo ""
 echo "Node.js libs: "
 echo "... setting version on praat scripts npm"
-sed 's/"version": "[^,]*"/"version": "'$version'"/' ../Praat-Scripts/package.json  > output
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../Praat-Scripts/package.json  > output
 mv output ../Praat-Scripts/package.json
 
 
