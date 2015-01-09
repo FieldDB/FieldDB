@@ -36,8 +36,11 @@
     "angular-dragdrop": "https://github.com/cesine/angular-dragdrop.git#~1.0.6",
     "angular-mocks": "1.2.26",
     "angular-scenario": "1.2.26",
-    "recordmp3js": "~0.3.0"
+    "recordmp3js": "*"
   },
   "license": "Apache 2.0",
-  "ignore": []
+  "ignore": [],
+  "resolutions": {
+    "bootstrap": "~3.2.0"
+  }
 }
