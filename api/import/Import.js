@@ -125,7 +125,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   showImportSecondStep: {
     get: function() {
-      if(this.dontShowSecondStep){
+      if (this.dontShowSecondStep) {
         return false;
       }
       return this.asCSV && this.asCSV.length > 0;
@@ -1351,8 +1351,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self.rawText = "";
         $.each(files, function(i, file) {
           data.append(i, file);
-          self.rawText = self.rawText + " " + file.name;
+          if (file.name) {
+            self.rawText = self.rawText + " " + file.name;
+          }
         });
+        if (self.rawText && self.rawText.trim()) {
+          window.alert("rendering import");
+          self.render();
+        }
 
         // data.append("files", files);
         data.append("token", self.uploadtoken);
