@@ -1348,9 +1348,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           files = [blob];
 
         }
-
+        self.rawText = "";
         $.each(files, function(i, file) {
           data.append(i, file);
+          self.rawText = self.rawText + " " + file.name;
         });
 
         // data.append("files", files);
@@ -1396,6 +1397,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               }
               if (messages.length > 0) {
                 self.status = messages.join(", ");
+                deferred.resolve(self.status);
                 // $(self.el).find(".status").html(self.get("status"));
                 // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(messages.join(", "), "alert-danger", "Import:");
               }
@@ -1403,6 +1405,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               console.log(results);
               var message = "Upload might have failed to complete processing on your file(s). Please report this error to us at support@lingsync.org ";
               self.status = message + ": " + JSON.stringify(results);
+              deferred.reject(message);
+
               // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(message, "alert-danger", "Import:");
             }
             // $(self.el).find(".status").html(self.get("status"));
@@ -1433,6 +1437,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               // if(window && window.appView && typeof window.appView.toastUser === "function") window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
               // $(self.el).find(".status").html(self.get("status"));
             }
+            deferred.reject(self.error);
           }
         });
         self.status = "Contacting server...";
