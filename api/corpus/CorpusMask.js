@@ -339,7 +339,6 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
 
       var fieldTemplate = {
-        "id": "",
         "label": "",
         "shouldBeEncrypted": false,
         "showToUserTypes": "all",
@@ -349,13 +348,13 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         "json": {},
         "help": "You can add help/conventions here which explain what this data entry field is for your teammates."
       };
-      for (var expectedPosition in order) {
+      for (var expectedPosition = 0; expectedPosition < order.length; expectedPosition++) {
         var currentPosition = this.datumFields.indexOf(order[expectedPosition]);
         if (currentPosition === -1) {
           var newField = JSON.parse(JSON.stringify(fieldTemplate));
-          newField.id = order[expectedPosition];
-          // newField.label = order[expectedPosition];
-          this.datumFields.push(newField);
+          // newField.id = order[expectedPosition];
+          newField.label = order[expectedPosition];
+          this.datumFields.add(newField);
           currentPosition = this.datumFields.length - 1;
         }
         if (currentPosition === expectedPosition) {
