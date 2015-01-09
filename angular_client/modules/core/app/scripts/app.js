@@ -26,6 +26,9 @@ var app = angular.module("fielddbAngularApp", [
     // Allow same origin resource loads.
     "self",
     // Allow loading from outer domain.
+    "https://youtube.com/**",
+    "https://youtu.be/**",
+    "https://soundcloud.com/**",
     "https://*.lingsync.org/**",
     "https://localhost:3184/**",
     "https://localhost/**"
