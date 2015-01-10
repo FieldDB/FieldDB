@@ -53,7 +53,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "2.37.06.13.09ss";
+  $rootScope.appVersion = "2.37.09.19.08ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -1509,6 +1509,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }]);
     }
     datum.saved = "no";
+    $scope.saved = "no";
 
     if ($event && $event.type && $event.type === "submit") {
       $scope.selectRow($scope.activeDatumIndex + 1);
