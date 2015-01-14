@@ -1305,6 +1305,69 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
+  importMorphChallengeSegmentation: {
+    value: function(text, self, callback) {
+      var rows = text.trim().split("\n");
+      if (rows.length < 3) {
+        rows = text.split("\r");
+        self.status = self.status + " Detected a \n line ending.";
+      }
+      var row,
+        original,
+        twoPieces,
+        word,
+        alternates,
+        morphemes,
+        gloss,
+        source,
+        l,
+        filename = self.files[0].name;
+      var header = ["orthography", "utterance", "morphemes", "gloss", "alternatesAnalyses", "alternates", "original", "source"];
+      var convertFlatIGTtoObject = function(alternateParse) {
+        morphemes = alternateParse.trim().split(" ");
+        // console.log("working on alternateParse", morphemes);
+        return morphemes.map(function(morpheme) {
+          return {
+            morphemes: morpheme.split(":")[0],
+            gloss: morpheme.split(":")[1]
+          };
+        });
+      };
+      var extractMorphemesFromIGT = function(alternate) {
+        return alternate.morphemes.replace("+", "");
+      };
+      var extractGlossFromIGT = function(alternate) {
+        return alternate.gloss.replace("+", "");
+      };
+      for (l in rows) {
+        row = original = rows[l] + "";
+        source = filename + ":line:" + l;
+        twoPieces = row.split(/\t/);
+        word = twoPieces[0];
+        if (!twoPieces || !twoPieces[1]) {
+          continue;
+        }
+        alternates = twoPieces[1].split(",");
+        alternates = alternates.map(convertFlatIGTtoObject);
+        morphemes = alternates[0].map(extractMorphemesFromIGT).join("-");
+        gloss = alternates[0].map(extractGlossFromIGT).join("-");
+        alternates.shift();
+        // get alternative morpheme analyses so they show in the app.
+        var alternateMorphemes = [];
+        for (var alternateIndex = 0; alternateIndex < alternates; alternateIndex++) {
+          alternateMorphemes.push(alternates[alternateIndex].map(extractMorphemesFromIGT).join("-"));
+        }
+        rows[l] = [word, word, morphemes, gloss, twoPieces[1], alternateMorphemes.join(","), original + "", source];
+      }
+      self.extractedHeader = header;
+      self.asCSV = rows;
+
+      if (typeof callback === "function") {
+        callback();
+      }
+    }
+  },
+
   uploadFiles: {
     value: function(files) {
       var deferred = Q.defer(),
