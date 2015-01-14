@@ -352,6 +352,54 @@ define([
         callback();
       }
     },
+
+    importMorphChallengeSegmentation : function(text, self, callback){
+      var rows = text.split("\n");
+      if(rows.length < 3){
+        rows = text.split("\r");
+        self.set("status", self.get("status","Detected a \n line ending."));
+      }
+      var row,
+        twoPieces,
+        word,
+        alternates,
+        morphemes,
+        l,
+      filename = self.files[0].name;
+      var header = ["utterance", "morphemes", "gloss", "alternates", "original", "source"]
+      for (l in rows) {
+        row = original = rows[l];
+        source = filename + ":line:" + l;
+        twoPieces = row.split(/\t/);
+        word = twoPieces[0];
+        alternates = twoPieces[1].split(',');
+        alternates = alternates.map(function(alternateParse) {
+          morphemes = alternateParse.trim().split(' ');
+          // console.log('working on alternateParse', morphemes);
+          return morphemes.map(function(morpheme) {
+            return {
+              morphemes: morpheme.split(':')[0],
+              gloss: morpheme.split(':')[1]
+            }
+          });
+        });
+        morphemes = alternates[0].map(function(alternates){
+          return alternate.morphemes;
+        }).join(" ");
+        gloss = alternates[0].map(function(alternates){
+          return alternate.gloss;
+        }).join(" ");
+
+        rows[l] = [word, morphemes, gloss, alternates, original + "", source];
+      }
+
+      self.set("asCSV", rows);
+      self.set("extractedHeader",header);
+
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * This function accepts text which uses \t tabs between columns. If
      * you have your data in ELAN or in Microsoft Excel or OpenOffice
@@ -659,6 +707,8 @@ define([
         callback();
       }
     },
+
+
     /**
      * This function accepts text using double (or triple etc) spaces to indicate
      * separate datum. Each line in the block is treated as a column in
@@ -759,6 +809,7 @@ define([
         ,praatTextgrid: { confidence: 0, importFunction : this.importTextGrid }
         ,latex: { confidence: 0, importFunction : this.importLatex }
         ,handout: { confidence: 0, importFunction : this.importText }
+        ,morphoChallenge; { confidence: 0, importFunction : this.importMorphChallengeSegmentation }
       };
 
       //if the user is just typing, try raw text
@@ -789,6 +840,12 @@ define([
           importType.praatTextgrid.confidence++;
         }else if(fileExtension == "mp3"){
           importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "tur"){
+          importType.morphoChallenge.confidence++;
+        }else if(fileExtension == "fin"){
+          importType.morphoChallenge.confidence++;
+        }else if(fileExtension == "eng"){
+          importType.morphoChallenge.confidence++;
         }
       }
       var mostLikelyImport = _.max(importType, function(obj) { return obj.confidence; });

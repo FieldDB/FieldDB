@@ -1,127 +1,129 @@
 <div class="container-fluid well">
-	<div class="row-fluid ">
+  <div class="row-fluid ">
 
-		<div>
-			<!--Body content-->
-			<h1>
-				<span>{{locale_Import}}</span> <small>{{pouchname}}</small>
-			</h1>
+    <div>
+      <!--Body content-->
+      <h1>
+        <span>{{locale_Import}}</span> <small>{{pouchname}}</small>
+      </h1>
 
-			<h5>
-				<span>{{{locale_Import_Instructions}}}</span> <a
-					href="http://www.facebook.com/LingSyncApp" target="_blank"><i
-					class="icons icon-facebook"></i></a> <a
-					href="https://twitter.com/lingsync" target="_blank"><i
-					class="icons icon-twitter"></i></a>
-			</h5>
-			<blockquote class="status">
-				{{{status}}}
-			</blockquote>
+      <h5>
+        <span>{{{locale_Import_Instructions}}}</span> <a
+          href="http://www.facebook.com/LingSyncApp" target="_blank"><i
+          class="icons icon-facebook"></i></a> <a
+          href="https://twitter.com/lingsync" target="_blank"><i
+          class="icons icon-twitter"></i></a>
+      </h5>
+      <blockquote class="status">
+        {{{status}}}
+      </blockquote>
 
-		</div>
-	</div>
-	<div class="row-fluid "></div>
+    </div>
+  </div>
+  <div class="row-fluid "></div>
 
-	<div class="well" id="import-first-step">
-		<span>{{{locale_Import_First_Step}}}</span>
-		<form class="form-inline button-group" id="uploadAudioForTextGridform" enctype="multipart/form-data" action="{{audioServerUrl}}/upload/extract/utterances" method="post">
-			<label>
-				<i class="icon-gift"></i> 
-				<span>New! Import long audio/video elicitation session(s) </span>
-			</label>
-			<div class="input-prepend">
-				<span class="btn btn-default btn-file btn-info btn-mini">
-					<span>
-						<i class="icon-file"></i> 
-						Choose file(s)
-					</span>
-					<input id="uploadAudioForTextGridformFiles" type="file" multiple="true" name="files" value="Audio/Video files to be imported"/>
-				</span>
-			</div>
-			<div class="input-append">
-				<button class="btn btn-info btn-mini" type="submit">
-					<i class="icon-upload"></i>
-					<span> Upload</span>
-				</button>
-			</div>
-			<input class="hidden" type="text" name="token" value="{{audiouploadtoken}}"/>
-			<input class="hidden" type="text" name="username" value="{{username}}"/>
-			<input class="hidden" type="text" name="dbname" value="{{pouchname}}"/>
-			<input class="hidden" type="text" name="returnTextGrid" value="true"/>
-		</form>
-		
-		<textarea
-			class="export-large-textarea  drop-zone" placeholder="{{locale_Drag_and_Drop_Placeholder}}">{{rawText}}</textarea>
+  <div class="well" id="import-first-step">
+    <span>{{{locale_Import_First_Step}}}</span>
+    <form class="form-inline button-group" id="uploadAudioForTextGridform" enctype="multipart/form-data" action="{{audioServerUrl}}/upload/extract/utterances" method="post">
+      <label>
+        <i class="icon-gift"></i>
+        <span>New! Import long audio/video elicitation session(s) </span>
+      </label>
+      <div class="input-prepend">
+        <span class="btn btn-default btn-file btn-info btn-mini">
+          <span>
+            <i class="icon-file"></i>
+            Choose file(s)
+          </span>
+          <input id="uploadAudioForTextGridformFiles" type="file" multiple="true" name="files" value="Audio/Video files to be imported"/>
+        </span>
+      </div>
+      <div class="input-append">
+        <button class="btn btn-info btn-mini" type="submit">
+          <i class="icon-upload"></i>
+          <span> Upload</span>
+        </button>
+      </div>
+      <input class="hidden" type="text" name="token" value="{{audiouploadtoken}}"/>
+      <input class="hidden" type="text" name="username" value="{{username}}"/>
+      <input class="hidden" type="text" name="dbname" value="{{pouchname}}"/>
+      <input class="hidden" type="text" name="returnTextGrid" value="true"/>
+    </form>
 
-		<div class="btn-group pull-right">
-			<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-				<span>Import from</span> <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li><a class="import-format" id="format-csv" tabindex="-1"
-					href="#">CSV</a></li>
-				<li><a class="import-format" id="format-tabbed" tabindex="-1"
-					href="#">Tabbed</a></li>
-				<li><a class="import-format" id="format-xml" tabindex="-1"
-					href="#">XML</a></li>
-				<li><a class="import-format" id="format-elanxml" tabindex="-1"
-					href="#">ElanXML</a></li>
-				<li><a class="import-format" id="format-toolbox" tabindex="-1"
-					href="#">Toolbox</a></li>
-				<li><a class="import-format" id="format-praat" tabindex="-1"
-					href="#">Praat Text Grid</a></li>
-				<li><a class="import-format" id="format-latex" tabindex="-1"
-					href="#">LaTex</a></li>
-				<li><a class="import-format" id="format-handout" tabindex="-1"
-					href="#">Handout</a></li>
-			</ul>
-		</div>
-		<span class="pull-right">Did the app guess the wrong format?</span>
-	</div>
+    <textarea
+      class="export-large-textarea  drop-zone" placeholder="{{locale_Drag_and_Drop_Placeholder}}">{{rawText}}</textarea>
 
-	<div class="well hidden " id="import-second-step">
-		<span>{{{locale_Import_Second_Step}}}</span>
+    <div class="btn-group pull-right">
+      <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+        <span>Import from</span> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="import-format" id="format-csv" tabindex="-1"
+          href="#">CSV</a></li>
+        <li><a class="import-format" id="format-tabbed" tabindex="-1"
+          href="#">Tabbed</a></li>
+        <li><a class="import-format" id="format-xml" tabindex="-1"
+          href="#">XML</a></li>
+        <li><a class="import-format" id="format-elanxml" tabindex="-1"
+          href="#">ElanXML</a></li>
+        <li><a class="import-format" id="format-toolbox" tabindex="-1"
+          href="#">Toolbox</a></li>
+        <li><a class="import-format" id="format-praat" tabindex="-1"
+          href="#">Praat Text Grid</a></li>
+        <li><a class="import-format" id="format-latex" tabindex="-1"
+          href="#">LaTex</a></li>
+        <li><a class="import-format" id="format-handout" tabindex="-1"
+          href="#">Handout</a></li>
+        <li><a class="import-format" id="format-morpho-challenge" tabindex="-1"
+          href="#">Morpho Challenge Segmentation File</a></li>
+      </ul>
+    </div>
+    <span class="pull-right">Did the app guess the wrong format?</span>
+  </div>
 
-		<button
-			class="btn btn-info add-column pull-right hide">{{locale_Add_Extra_Columns}}</button>
+  <div class="well hidden " id="import-second-step">
+    <span>{{{locale_Import_Second_Step}}}</span>
 
-		<div class=" container span11">
+    <button
+      class="btn btn-info add-column pull-right hide">{{locale_Add_Extra_Columns}}</button>
 
-			<div id="import-datum-field-labels" class="row-fluid"></div>
-		</div>
+    <div class=" container span11">
 
-		<div class="scrollable">
-			<table id="csv-table-area"
-				class=" table table-striped table-bordered table-condensed "></table>
-		</div>
+      <div id="import-datum-field-labels" class="row-fluid"></div>
+    </div>
 
-		<button
-			class="btn btn-success approve-import hide">{{locale_Attempt_Import}}</button>
+    <div class="scrollable">
+      <table id="csv-table-area"
+        class=" table table-striped table-bordered table-condensed "></table>
+    </div>
 
-	</div>
+    <button
+      class="btn btn-success approve-import hide">{{locale_Attempt_Import}}</button>
 
-	<div class="well hidden container-fluid " id="import-third-step">
-		<span>{{{locale_Import_Third_Step}}}</span>
+  </div>
 
-		<div id="import-data-list" class=" row-fluid">
+  <div class="well hidden container-fluid " id="import-third-step">
+    <span>{{{locale_Import_Third_Step}}}</span>
 
-			<div id="import-data-list-header"  ></div>
-			<div class=" container span11 ">
-				<ul class="unstyled  import-data-list-paginated-view"></ul>
-				<div class="pagination-control row span11"></div>
-			</div>
+    <div id="import-data-list" class=" row-fluid">
 
-		</div>
+      <div id="import-data-list-header"  ></div>
+      <div class=" container span11 ">
+        <ul class="unstyled  import-data-list-paginated-view"></ul>
+        <div class="pagination-control row span11"></div>
+      </div>
+
+    </div>
 
 
-		<div id="import-session" class="well"></div>
+    <div id="import-session" class="well"></div>
 
-		<button
-			class="btn btn-success approve-save disabled">{{locale_Save_And_Import}}</button>
+    <button
+      class="btn btn-success approve-save disabled">{{locale_Save_And_Import}}</button>
 
-		<progress class="import-progress" max="5" value="0">
-			<strong>{{locale_percent_completed}}</strong>
-		</progress>
+    <progress class="import-progress" max="5" value="0">
+      <strong>{{locale_percent_completed}}</strong>
+    </progress>
 
-	</div>
+  </div>
 </div>
