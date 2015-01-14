@@ -364,6 +364,7 @@ define([
         twoPieces,
         word,
         alternates,
+        orthography,
         morphemes,
         gloss,
         source,
@@ -407,7 +408,8 @@ define([
         for (var alternateIndex = 0; alternateIndex < alternates.length; alternateIndex++) {
           alternateMorphemes.push(alternates[alternateIndex].map(extractMorphemesFromIGT).join("-"));
         }
-        rows[l] = [word, word, morphemes, gloss, twoPieces[1], alternateMorphemes.join(","), original + "", source];
+        orthography = self.undoMorphochallengeEncoding(word, filename);
+        rows[l] = [orthography, word, morphemes, gloss, twoPieces[1], alternateMorphemes.join(","), original + "", source];
       }
 
       self.set("asCSV", rows);
@@ -416,6 +418,23 @@ define([
         callback();
       }
     },
+
+    undoMorphochallengeEncoding: function(ascii, filename) {
+      var extension = filename.substring(filename.lastIndexOf("."));
+      if (extension === ".tur") {
+        return ascii
+          .replace(/I/g, "ı")
+          .replace(/O/g, "ö")
+          .replace(/U/g, "ü")
+          .replace(/C/g, "ç")
+          .replace(/G/g, "ğ")
+          .replace(/S/g, "ş");
+      } else if (extension === ".fin") {
+        return ascii;
+      }
+      return ascii;
+    },
+
     /**
      * This function accepts text which uses \t tabs between columns. If
      * you have your data in ELAN or in Microsoft Excel or OpenOffice
