@@ -37,7 +37,7 @@
       <span class="btn btn-file btn-info">
         <span>
           <i class="fa fa-file"></i>
-          Choose file(s)
+          {{contextualize('locale_choose_files')}}
         </span>
         <input class="uploadAudioForTextGridformFiles" type="file" multiple="true" name="files" ng-file-select="onFileSelect($files)" data-multiple="true" value="Audio/Video/Image/Text files to be imported"/>
       </span>
@@ -47,7 +47,7 @@
       <input class="hidden hide" hidden type="text" name="returnTextGrid" ng-model="uploadInfo.returnTextGrid"/>
     </form>
 
-    <textarea class="fielddb-large-textarea drop-zone" ng-blur="guessFormatAndPreviewImport()" placeholder="{{locale.locale_Drag_and_Drop_Placeholder}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="drop-zone-can-drop-now" ng-file-drag-over-delay="200" ng-model="importer.rawText"></textarea>
+    <textarea class="fielddb-large-textarea drop-zone" ng-blur="guessFormatAndPreviewImport()" placeholder="{{contextualize('locale_Drag_and_Drop_Placeholder')}}" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="drop-zone-can-drop-now" ng-file-drag-over-delay="200" ng-model="importer.rawText"></textarea>
 
     <div class="btn-group pull-right" ng-hide="importer.importType=='audioVideo'">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">

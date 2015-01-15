@@ -143,6 +143,13 @@
     "message": "Fermer",
     "description": "button"
   },
+  "locale_choose_files": {
+    "message": "Ajouter un(des) fichier(s)",
+    "description": "button to choose files for import audio/video/text etc"
+  },
+  "locale_Drag_and_Drop_Placeholder" : {
+    "message" : "Vous pouvez glisser-déposer, copier-coller, ou taper vos données ici, ou bien utiliser le bouton ci-dessus pour ajouter un fichier."
+  },
   "locale_notification_modal": {
     "message": "Notification",
     "description": "modal header in Generic Notification Modal"
@@ -287,6 +294,10 @@
     "message": "Lecture seulement",
     "description": "read-only radio button"
   },
+  "locale_read_comment_only_radio": {
+    "message": "Lecture et commentaires seulement",
+    "description": "read and comment only radio button"
+  },
   "locale_write_only_radio": {
     "message": "Modifier seulement",
     "description": "write-only radio button"
@@ -352,7 +363,11 @@
     "description": "title indicating the corpus to which the new session blongs"
   },
   "locale_date_entered": {
-    "message": "Date saisie:",
+    "message": "Date de saisie:",
+    "description": ""
+  },
+  "locale_date_modified": {
+    "message": "Date de modification:",
     "description": ""
   },
   "locale_create_access_new_session_button": {
@@ -661,11 +676,11 @@
     "description": " "
   },
   "locale_add_field_button": {
-    "message": "Adjouter un champ",
+    "message": "Ajouter un champ",
     "description": " "
   },
   "locale_commenters": {
-    "message": "Adjouter des commentaires",
+    "message": "Ajouter des commentaires",
     "description": "Title for the commenter list "
   },
   "locale_fields_in": {
