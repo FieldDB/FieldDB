@@ -143,6 +143,13 @@
         "message": "Close",
         "description": "button"
     },
+    "locale_choose_files": {
+        "message": "Choose file(s)",
+        "description": "button to choose files for import audio/video/text etc"
+    },
+    "locale_Drag_and_Drop_Placeholder": {
+        "message": "Drag and drop, copy-paste or type your data here."
+    },
     "locale_recording_audio_modal": {
         "message": "Recording Audio",
         "description": "modal header in Audio Warning Modal"
@@ -307,6 +314,10 @@
         "message": "Read-only",
         "description": "read-only radio button"
     },
+    "locale_read_comment_only_radio": {
+        "message": "Read/Comment-only",
+        "description": "read and comment only radio button"
+    },
     "locale_write_only_radio": {
         "message": "Write-only",
         "description": "write-only radio button"
@@ -373,6 +384,10 @@
     },
     "locale_date_entered": {
         "message": "Date Entered:",
+        "description": ""
+    },
+    "locale_date_modified": {
+        "message": "Date modified: ",
         "description": ""
     },
     "locale_create_access_new_session_button": {

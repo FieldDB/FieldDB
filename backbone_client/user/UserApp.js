@@ -1,5 +1,8 @@
 define([
     "backbone",
+    "bootstrap",
+    "libs/backbone_couchdb/backbone-couchdb",
+    "handlebars",
     "authentication/Authentication",
     "corpus/Corpus",
     "user/UserAppView",
@@ -11,6 +14,9 @@ define([
     "OPrime"
 ], function(
     Backbone,
+    bootstrap,
+    backbonecouch,
+    Handlebars,
     Authentication,
     Corpus,
     UserAppView,

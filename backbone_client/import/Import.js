@@ -352,6 +352,89 @@ define([
         callback();
       }
     },
+
+    importMorphChallengeSegmentation: function(text, self, callback) {
+      var rows = text.trim().split("\n");
+      if (rows.length < 3) {
+        rows = text.split("\r");
+        self.set("status", self.get("status","Detected a \n line ending."));
+      }
+      var row,
+        original,
+        twoPieces,
+        word,
+        alternates,
+        orthography,
+        morphemes,
+        gloss,
+        source,
+        l,
+        filename = self.get("files")[0].name;
+
+      var header = ["orthography", "utterance", "morphemes", "gloss", "alternatesAnalyses", "alternates", "original", "source"];
+      self.set("extractedHeader",header);
+
+      var convertFlatIGTtoObject = function(alternateParse) {
+        morphemes = alternateParse.trim().split(" ");
+        // console.log("working on alternateParse", morphemes);
+        return morphemes.map(function(morpheme) {
+          return {
+            morphemes: morpheme.split(":")[0],
+            gloss: morpheme.split(":")[1]
+          };
+        });
+      };
+      var extractMorphemesFromIGT = function(alternate) {
+        return alternate.morphemes.replace("+", "");
+      };
+      var extractGlossFromIGT = function(alternate) {
+        return alternate.gloss.replace("+", "");
+      };
+      for (l in rows) {
+        row = original = rows[l] + "";
+        source = filename + ":line:" + l;
+        twoPieces = row.split(/\t/);
+        word = twoPieces[0];
+        if (!twoPieces || !twoPieces[1]) {
+          continue;
+        }
+        alternates = twoPieces[1].split(",");
+        alternates = alternates.map(convertFlatIGTtoObject);
+        morphemes = alternates[0].map(extractMorphemesFromIGT).join("-");
+        gloss = alternates[0].map(extractGlossFromIGT).join("-");
+        alternates.shift();
+        // get alternative morpheme analyses so they show in the app.
+        var alternateMorphemes = [];
+        for (var alternateIndex = 0; alternateIndex < alternates.length; alternateIndex++) {
+          alternateMorphemes.push(alternates[alternateIndex].map(extractMorphemesFromIGT).join("-"));
+        }
+        orthography = self.undoMorphochallengeEncoding(word, filename);
+        rows[l] = [orthography, word, morphemes, gloss, twoPieces[1], alternateMorphemes.join(","), original + "", source];
+      }
+
+      self.set("asCSV", rows);
+
+      if (typeof callback === "function") {
+        callback();
+      }
+    },
+
+    undoMorphochallengeEncoding: function(ascii, filename) {
+      var extension = filename.substring(filename.lastIndexOf("."));
+      if (extension === ".tur") {
+        return ascii
+          .replace(/I/g, "ı")
+          .replace(/O/g, "ö")
+          .replace(/U/g, "ü")
+          .replace(/C/g, "ç")
+          .replace(/G/g, "ğ")
+          .replace(/S/g, "ş");
+      } else if (extension === ".fin") {
+        return ascii;
+      }
+      return ascii;
+    },
+
     /**
      * This function accepts text which uses \t tabs between columns. If
      * you have your data in ELAN or in Microsoft Excel or OpenOffice
@@ -659,6 +742,8 @@ define([
         callback();
       }
     },
+
+
     /**
      * This function accepts text using double (or triple etc) spaces to indicate
      * separate datum. Each line in the block is treated as a column in
@@ -759,6 +844,7 @@ define([
         ,praatTextgrid: { confidence: 0, importFunction : this.importTextGrid }
         ,latex: { confidence: 0, importFunction : this.importLatex }
         ,handout: { confidence: 0, importFunction : this.importText }
+        ,morphoChallenge: { confidence: 0, importFunction : this.importMorphChallengeSegmentation }
       };
 
       //if the user is just typing, try raw text
@@ -789,6 +875,12 @@ define([
           importType.praatTextgrid.confidence++;
         }else if(fileExtension == "mp3"){
           importType.praatTextgrid.confidence++;
+        }else if(fileExtension == "tur"){
+          importType.morphoChallenge.confidence++;
+        }else if(fileExtension == "fin"){
+          importType.morphoChallenge.confidence++;
+        }else if(fileExtension == "eng"){
+          importType.morphoChallenge.confidence++;
         }
       }
       var mostLikelyImport = _.max(importType, function(obj) { return obj.confidence; });

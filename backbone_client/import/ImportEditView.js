@@ -103,6 +103,12 @@ define( [
           this.model.importText(text, this.model);
           this.showSecondStep();
       },
+      "click #format-morpho-challenge" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importMorphChallengeSegmentation(text, this.model);
+          this.showSecondStep();
+      },
 
       "click .icon-resize-small" : function(e){
         if(e){

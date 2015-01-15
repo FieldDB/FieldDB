@@ -29,14 +29,14 @@ if (window.location.origin.indexOf("localhost") == -1) {
 
 // Set the RequireJS configuration
 require.config({
-  paths : {
-   /* Bootstrap user interface javascript files */
+  paths: {
+    /* Bootstrap user interface javascript files */
     "bootstrap": "libs/bootstrap/js/bootstrap.min",
 
     "CryptoJS": "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "jquery": "bower_components/jquery/dist/jquery",
+    "jquery": "bower_components/jquery/dist/jquery.min",
     "wikitext": "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
@@ -58,7 +58,7 @@ require.config({
     "oprime": "libs/OPrime",
     "OPrime": "libs/webservicesconfig_devserver"
   },
-  shim : {
+  shim: {
 
     "xml2json": {
       deps: ["jquery"],
@@ -111,19 +111,7 @@ require.config({
 });
 
 // Initialization
-require([
-    "backbone",
-    "jquerycouch",
-    "libs/backbone_couchdb/backbone-couchdb",
-    "handlebars",
-    "user/UserApp",
-    "OPrime"
-  ], function(
-    Backbone,
-    jquerycouch,
-    backbonecouch,
-    Handlebars,
-    App) {
+require(["user/UserApp", "OPrime"], function(App) {
   try {
     var pieces = window.location.pathname.replace(/^\//, "").split("/");
     var pouchName = pieces[0];

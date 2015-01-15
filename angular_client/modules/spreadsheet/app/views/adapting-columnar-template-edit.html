@@ -7,7 +7,7 @@
     type="text"
     ng-model="datum['judgement']"
     placeholder=""
-    title="Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you team can choose any symbol for this meaning." />
+    title="{{judgementHelpText}}" />
   </div>
   <div class="span5" fielddb-glosser-input datumornewdatum="datum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
   </div>
@@ -21,7 +21,7 @@
       <br />
       <br />
     </span>
-    <span title="Date entered {{datum.dateEntered | standardDate}}">
+    <span title="{{contextualize('locale_date_entered')}} {{datum.dateEntered | standardDate}}">
       <i class="fa whiteicon fa-clock-o">
       </i>
       {{datum.dateEntered | standardDate}}
@@ -31,7 +31,7 @@
       <br />
     </span>
     <br />
-    <span title="Date modified {{datum.dateModified | standardDate}}">
+    <span title="{{contextualize('locale_date_entered')}}  {{datum.dateModified | standardDate}}">
       <i class="fa whiteicon fa-save">
       </i>
       {{datum.dateModified | standardDate}}

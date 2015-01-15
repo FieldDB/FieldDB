@@ -602,6 +602,9 @@ define([
           label: "morphemes"
         })[0];
         var alternates = morphemesField.get("alternates") || [];
+        if (typeof alternates === "string") {
+          alternates = alternates.split(",");
+        }
         alternates.push(utteranceLine);
 
         // If the guessed morphemes is different than the unparsed utterance, and different than the previous morphemes line we guessed on
