@@ -386,6 +386,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       fields = incomingFields;
     }
+    try {
+      $scope.judgementHelpText = $rootScope.availableFieldsInCurrentCorpus[0].help;
+    } catch (e) {
+      console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
+    }
     var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || Math.ceil(fields.length / numberOfColumns);
     if ($rootScope.corpus && $rootScope.corpus.prefs && $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn) {
       columnHeight = $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn;
