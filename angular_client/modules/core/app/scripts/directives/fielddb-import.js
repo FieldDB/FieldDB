@@ -15,6 +15,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
     rootScope = $rootScope;
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       $scope.application = FieldDB.FieldDBObject.application;
+      $scope.contextualize = rootScope.contextualize;
     }
     var processOffline = true;
     $scope.uploadInfo = {
