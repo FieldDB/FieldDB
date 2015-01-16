@@ -99,6 +99,18 @@
         "message": "Save Changes",
         "description": "button"
     },
+    "locale_Save": {
+        "message": "Save",
+        "description": "button"
+    },
+    "locale_Saving": {
+        "message": "Saving",
+        "description": "button"
+    },
+    "locale_Saved": {
+        "message": "Saved",
+        "description": "button"
+    },
     "locale_cancel_button": {
         "message": "Cancel",
         "description": "button"

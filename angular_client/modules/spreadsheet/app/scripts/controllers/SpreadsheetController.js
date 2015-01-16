@@ -476,7 +476,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     /** Prior to 1.37 wipe personalization and use current defaults */
     if (!existingPreferences.version) {
-      alert("Welcome to " + $rootScope.appVersion + "\n\n We have introduced a new data entry template in this version. \nYou might want to review your settings to change the order and number of fields in the data entry template. Current defaults are set to 2 columns, with 3 rows each.");
+      alert("Welcome to  to the Spring Field Methods session!\n\n We have introduced a new data entry template in this version. \nYou might want to review your settings to change the order and number of fields in the data entry template. Current defaults are set to 2 columns, with 3 rows each.");
       // localStorage.clear(); //why?? left over from debugging?
       localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
       // return defaultPreferences;
@@ -2475,14 +2475,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.getSavedState = function() {
     if ($scope.saved === "yes") {
-      $scope.savedStateButtonClass = "btn btn-success";
-      return "Saved";
+      return {
+        state: "Saved",
+        class: "btn btn-success",
+        icon: "fa whiteicon fa-folder",
+        text: $rootScope.contextualize("locale_Saved")
+      };
     } else if ($scope.saved === "no") {
-      $scope.savedStateButtonClass = "btn btn-danger";
-      return "Save";
+      return {
+        state: "Save",
+        class: "btn btn-danger",
+        icon: "fa whiteicon fa-save",
+        text: $rootScope.contextualize("locale_Save")
+      };
     } else {
-      $scope.savedStateButtonClass = "pulsing";
-      return "Saving";
+      return {
+        state: "Saving",
+        class: "pulsing",
+        icon: "fa whiteicon fa-folder-open",
+        text: $rootScope.contextualize("locale_Saving")
+      };
     }
   };
 
