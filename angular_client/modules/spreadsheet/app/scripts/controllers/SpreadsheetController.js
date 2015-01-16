@@ -2475,14 +2475,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.getSavedState = function() {
     if ($scope.saved === "yes") {
-      $scope.savedStateButtonClass = "btn btn-success";
-      return "Saved";
+      return {
+        state: "Saved",
+        class: "btn btn-success",
+        icon: "fa whiteicon fa-folder",
+        text: $rootScope.contextualize("locale_Saved")
+      };
     } else if ($scope.saved === "no") {
-      $scope.savedStateButtonClass = "btn btn-danger";
-      return "Save";
+      return {
+        state: "Save",
+        class: "btn btn-danger",
+        icon: "fa whiteicon fa-save",
+        text: $rootScope.contextualize("locale_Save")
+      };
     } else {
-      $scope.savedStateButtonClass = "pulsing";
-      return "Saving";
+      return {
+        state: "Saving",
+        class: "pulsing",
+        icon: "fa whiteicon fa-folder-open",
+        text: $rootScope.contextualize("locale_Saving")
+      };
     }
   };
 

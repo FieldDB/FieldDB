@@ -675,6 +675,18 @@
     "message": "Sauvegarder",
     "description": " "
   },
+  "locale_Save": {
+      "message": "Enregistrer",
+      "description": "button"
+  },
+  "locale_Saving": {
+      "message": "En cours",
+      "description": "button"
+  },
+  "locale_Saved": {
+      "message": "Enregistré",
+      "description": "button"
+  },
   "locale_add_field_button": {
     "message": "Ajouter un champ",
     "description": " "

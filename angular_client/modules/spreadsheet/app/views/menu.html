@@ -93,8 +93,8 @@
           </div>
           <div>
             &nbsp;
-            <button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">
-              {{getSavedState()}}
+            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">
+              {{getSavedState().text}}
             </button>
             &nbsp;
             <button class="btn btn-warning" ng-click="logOut()">
@@ -385,10 +385,8 @@
         </span>
         <span class="smallMenuBarInfoItem">
           &nbsp;
-          <button ng-class="savedStateButtonClass" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">
-            <i ng-class="{'fa whiteicon fa-folder': (getSavedState=='Saved'), 'fa whiteicon fa-folder-open': (getSavedState=='Saving'), 'fa whiteicon fa-save': (getSavedState=='Save')} ">
-            </i>
-            <i class="fa whiteicon fa-save">
+          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">
+            <i ng-class="getSavedState().icon">
             </i>
           </button>
           &nbsp;
