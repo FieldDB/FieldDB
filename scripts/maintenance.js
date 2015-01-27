@@ -1,3 +1,177 @@
+/*
+Merge sessions into another
+ */
+var pouchname = "default";
+var corpustitle = "Default";
+var corpusid = "123";
+var name = "sessionmergingbot";
+var gravatar = "968b8e7fb72b5ffe2915256c28a9414c";
+var sessions = ["b0f1bbcfdd6bf0bf38197a986f4c3ed8",
+  "c0a9d2c172ca460665d8861673a032a9",
+  "c0a9d2c172ca460665d8861673a968c1",
+  "04fe4b75f89a46ad3d420b8f1a0ce677",
+  "4f868ba9a79e57479ddbe4f62ae0a37c",
+  "a57e8874b5a0a94a8b5850f347c5d4c4"
+];
+var mergeIntoSession = {
+  _id: "b0f1bbcfdd6bf0bf38197a986f481e44",
+  _rev: "1-b646e5c7fcfb1f5935403250c623f627",
+  pouchname: "andrewcarnie-scottish_gaelic",
+  sessionFields: [{
+    label: "goal",
+    value: "Transcription",
+    mask: "Transcription",
+    encrypted: "",
+    shouldBeEncrypted: "",
+    help: "This describes the goals of the session.",
+    userchooseable: "disabled"
+  }, {
+    label: "consultants",
+    value: "AC",
+    mask: "AC",
+    encrypted: "",
+    shouldBeEncrypted: "",
+    help: "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    userchooseable: "disabled"
+  }, {
+    label: "dialect",
+    value: "",
+    mask: "",
+    encrypted: "",
+    shouldBeEncrypted: "",
+    help: "You can use this field to be as precise as you would like about the dialect of this session.",
+    userchooseable: "disabled"
+  }, {
+    label: "language",
+    value: "Scots-Gaelic",
+    mask: "Scots-Gaelic",
+    encrypted: "",
+    shouldBeEncrypted: "",
+    help: "This is the langauge (or language family) if you would like to use it.",
+    userchooseable: "disabled"
+  }, {
+    label: "dateElicited",
+    value: "",
+    mask: "",
+    encrypted: "",
+    shouldBeEncrypted: "",
+    help: "This is the date in which the session took place.",
+    userchooseable: "disabled"
+  }, {
+    label: "user",
+    value: "andreaf",
+    mask: "andreaf",
+    encrypted: "",
+    shouldBeEncrypted: "",
+    help: "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    userchooseable: "disabled"
+  }, {
+    label: "dateSEntered",
+    value: "Wed Oct 01 2014 19:40:38 GMT-0700 (US Mountain Standard Time)",
+    mask: "Wed Oct 01 2014 19:40:38 GMT-0700 (US Mountain Standard Time)",
+    encrypted: "",
+    shouldBeEncrypted: "",
+    help: "This is the date in which the session was entered.",
+    userchooseable: "disabled"
+  }],
+  comments: [],
+  collection: "sessions",
+  dateCreated: "2014-10-02T02:40:38.436Z",
+  dateModified: "2014-10-02T02:40:38.436Z",
+  lastModifiedBy: "default"
+};
+
+var database = $.couch.db(pouchname);
+var activities = $.couch.db(pouchname + "-activity_feed");
+var count = 0;
+database.allDocs({
+  success: function(result) {
+    //console.log(result);
+    var data = result.rows;
+    for (var couchdoc in data) {
+      count++;
+      if (count > 10000) {
+        return;
+      }
+      database.openDoc(data[couchdoc].id, {
+        success: function(originalDoc) {
+          if (!originalDoc.session) {
+            return;
+          }
+          console.log(originalDoc.session);
+          if (!originalDoc.session._id) {
+            console.log("strange, this has a session, but no session id, not merging it if its supposed to be merged. ", originalDoc);
+            return;
+          }
+          if (sessions.indexOf(originalDoc.session._id) === -1) {
+            // console.log("This is not a datum which needs to be merged into this session.", originalDoc.session);
+            return;
+          }
+          console.log("old session", originalDoc.session);
+          originalDoc.session = mergeIntoSession;
+          originalDoc.comments = originalDoc.comments || [];
+          var timestamp = Date.now();
+          originalDoc.comments.push({
+            "text": "Merged into Oct 1 2014 session",
+            "username": name,
+            "timestamp": timestamp,
+            "gravatar": gravatar,
+            "timestampModified": timestamp
+          });
+          console.log("saving ", originalDoc);
+
+          database.saveDoc(originalDoc, {
+            success: function(serverResults) {
+              console.log("updated " + originalDoc._id);
+
+              var activity = {
+                "verb": "<a target='_blank' href='#diff/oldrev/" + originalDoc._rev + "/newrev/" + serverResults.rev + "'>updated</a> ",
+                "verbicon": "icon-pencil",
+                "directobjecticon": "icon-list",
+                "directobject": "<a target='_blank' href='#data/" + originalDoc._id + "'>Merged into Oct 1 2014 Transcription</a> ",
+                "indirectobject": "in <a target='_blank' href='#corpus/" + corpusid + "'>" + corpustitle + "</a>",
+                "teamOrPersonal": "team",
+                "context": " via Futon Bot.",
+                "user": {
+                  "gravatar": gravatar,
+                  "username": name,
+                  "_id": name,
+                  "collection": "bots",
+                  "firstname": "Session Merging",
+                  "lastname": "Bot",
+                  "email": ""
+                },
+                "timestamp": timestamp,
+                "dateModified": JSON.parse(JSON.stringify(new Date(timestamp)))
+              };
+              activities.saveDoc(activity, {
+                success: function(message) {
+                  console.log("Saved activity", activity, message);
+                },
+                error: function(error) {
+                  console.log("Problem saving " + JSON.stringify(activity), error);
+                }
+              });
+            },
+            error: function(serverResults) {
+              console.log("There was a problem saving the doc." + originalDoc._id, +JSON.stringify(originalDoc));
+            }
+          });
+
+        },
+        error: function(error) {
+          console.log("Error opening your docs ", error);
+        }
+      });
+    }
+  },
+  error: function(error) {
+    console.log("Error opening the database ", error);
+  }
+});
+
+
+
 // http://tobyho.com/2009/10/07/retrieve-the-top-n-tags-in/
 var estimationOfAcademicUsers = function() {
   var map = function(doc) {
