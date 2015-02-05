@@ -504,6 +504,15 @@ define([
       for (x in originalModel.datumFields) {
         originalModel.datumFields[x].mask = "";
         originalModel.datumFields[x].value = "";
+        if (originalModel.datumFields[x].users) {
+          originalModel.datumFields[x].users = [];
+        }
+        if (originalModel.datumFields[x].user) {
+          originalModel.datumFields[x].user = {};
+        }
+        if (originalModel.datumFields[x].json) {
+          originalModel.datumFields[x].json = {};
+        }
       }
       for (x in originalModel.sessionFields) {
         originalModel.sessionFields[x].mask = "";
