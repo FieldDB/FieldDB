@@ -428,6 +428,11 @@ define( [
       if(rows == undefined){
         rows = this.model.get("asCSV");
       }
+      if (!rows) {
+        OPrime.bug("No datum were detected in this format, try another format.");
+        // return;
+        rows = [];
+      }
       var tableResult = document.getElementById("csv-table-area");
       $(tableResult).empty();
 
@@ -646,13 +651,28 @@ define( [
           filledWithDefaults : true,
           pouchname : window.app.get("corpus").get("pouchname")
         });
-      //copy the corpus's datum fields and empty them.
+        //copy the corpus's datum fields and empty them.
         var datumfields = app.get("corpus").get("datumFields").toJSON();
         for(var x in datumfields){
           datumfields[x].mask = "";
           datumfields[x].value = "";
-          if (datumfields[x].users) {
+          if (datumfields[x].label === "modifiedByUser") {
             datumfields[x].users = [];
+          } else if (datumfields[x].label === "enteredByUser") {
+            var user = {
+              username: window.app.get("authentication").get("userPublic").get("username"),
+              gravatar: window.app.get("authentication").get("userPublic").get("gravatar"),
+              firstname: window.app.get("authentication").get("userPublic").get("firstname"),
+              lastname: window.app.get("authentication").get("userPublic").get("lastname")
+            };
+            var usersName = user.firstname + " " + user.lastname;
+            usersName = usersName.replace(/undefined/g, "");
+            if (!usersName || usersName.trim().length < 2) {
+              usersName = user.username;
+            }
+            datumfields[x].user = user;
+            datumfields[x].mask = usersName;
+            datumfields[x].value = usersName;
           }
         }
         var fields = new DatumFields(datumfields);
