@@ -34,6 +34,6 @@
     "underscore": "~1.6.0",
     "jquery": "~2.1.1",
     "handlebars": "~1.3.0",
-    "fielddb-glosser": "1.82.2"
+    "fielddb-glosser": "1.82.3"
   }
 }

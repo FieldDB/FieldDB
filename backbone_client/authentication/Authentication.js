@@ -284,10 +284,11 @@ define([
         var week = birthday[1];
         console.log("The app's week this user was created: ", birthday);
         if(year <= 1 && week <= 38){
-          localStorage.setItem("username_to_update",data.user.username);
-          alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
-          window.location.replace("backup_pouches.html");
-          return;
+          console.log("No longer kicking the user out of the app, some users have to use the Prototype because it can handle more data than the Spreadsheet app.");
+          // localStorage.setItem("username_to_update",data.user.username);
+          // alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
+          // window.location.replace("backup_pouches.html");
+          // return;
         }
       }
       /* As of version v1.90 take all stable and mcgill users to the online app */

@@ -987,7 +987,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         } catch (e) {
           console.log("must have been an object...", e, selectedCorpus);
         }
-        if (($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) && !selectedCorpus.datumFields) {
+        if (($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) && selectedCorpus.datumFields) {
           console.log("requested load of a corpus which was already loaded.");
           return;
         }
