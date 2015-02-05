@@ -498,6 +498,18 @@ define([
       if(originalModel.terms){
         delete originalModel.terms;
       }
+
+      var x;
+      /* clean the datum fields for search */
+      for (x in originalModel.datumFields) {
+        originalModel.datumFields[x].mask = "";
+        originalModel.datumFields[x].value = "";
+      }
+      for (x in originalModel.sessionFields) {
+        originalModel.sessionFields[x].mask = "";
+        originalModel.sessionFields[x].value = "";
+      }
+
       return this.originalParse(originalModel);
     },
 
