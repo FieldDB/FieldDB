@@ -498,6 +498,27 @@ define([
       if(originalModel.terms){
         delete originalModel.terms;
       }
+
+      var x;
+      /* clean the datum fields for search */
+      for (x in originalModel.datumFields) {
+        originalModel.datumFields[x].mask = "";
+        originalModel.datumFields[x].value = "";
+        if (originalModel.datumFields[x].users) {
+          originalModel.datumFields[x].users = [];
+        }
+        if (originalModel.datumFields[x].user) {
+          originalModel.datumFields[x].user = {};
+        }
+        if (originalModel.datumFields[x].json) {
+          originalModel.datumFields[x].json = {};
+        }
+      }
+      for (x in originalModel.sessionFields) {
+        originalModel.sessionFields[x].mask = "";
+        originalModel.sessionFields[x].value = "";
+      }
+
       return this.originalParse(originalModel);
     },
 
@@ -728,8 +749,8 @@ define([
 //      attributes.sessionFields = new DatumFields(attributes.sessionFields);
       attributes.pouchname = this.get("pouchname")+"copy";
       attributes.couchConnection.pouchname = this.get("pouchname")+"copy";
-//      attributes.dataLists = [];
-//      attributes.sessions = [];
+      attributes.dataLists = [];
+      attributes.sessions = [];
       attributes.comments = [];
       attributes.publicSelf = {filledWithDefaults: true};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();

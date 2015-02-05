@@ -756,22 +756,28 @@ define([
      * @param text
      */
     importText : function(text, self) {
-      var rows = text.split(/\n\n+/);
-      var macLineEndings = false;
-      if(rows.length < 3){
-        rows = text.split("\r\r");
-        macLineEndings = true;
-        self.set("status", self.get("status","Detected a MAC line ending."));
+      if (!text) {
+        return;
       }
-      for(l in rows){
-        if(macLineEndings){
-          rows[l] = rows[l].replace(/  +/g," ").split("\r");
-        }else{
-          rows[l] = rows[l].replace(/  +/g," ").split("\n");
+      var rows = text.split("\n");
+      if (rows.length < 2) {
+        var macrows = text.split("\r");
+        if (macrows.length > rows.length) {
+          rows = text.split(/\r\r+/);
+          this.status = this.status + " Detected a \r line ending.";
         }
+      } else {
+        rows = text.split(/\n\n+/);
+      }
+      var l;
+      for (l = 0; l < rows.length; l++) {
+        rows[l] = rows[l].replace(/  +/g, " ").replace(/\t+/g, " ").split(/[\r\n]/);
+      }
+      if (rows && rows.length > 0) {
+        self.set("extractedHeader", rows[0]);
       }
       self.set("asCSV", rows);
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
