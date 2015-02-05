@@ -16,7 +16,7 @@ var sessions = ["b0f1bbcfdd6bf0bf38197a986f4c3ed8",
 var mergeIntoSession = {
   _id: "b0f1bbcfdd6bf0bf38197a986f481e44",
   _rev: "1-b646e5c7fcfb1f5935403250c623f627",
-  pouchname: "andrewcarnie-scottish_gaelic",
+  pouchname: "default",
   sessionFields: [{
     label: "goal",
     value: "Transcription",
