@@ -728,8 +728,8 @@ define([
 //      attributes.sessionFields = new DatumFields(attributes.sessionFields);
       attributes.pouchname = this.get("pouchname")+"copy";
       attributes.couchConnection.pouchname = this.get("pouchname")+"copy";
-//      attributes.dataLists = [];
-//      attributes.sessions = [];
+      attributes.dataLists = [];
+      attributes.sessions = [];
       attributes.comments = [];
       attributes.publicSelf = {filledWithDefaults: true};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
