@@ -41,6 +41,9 @@ function(doc) {
     if (datum.utterance && datum.utterance.indexOf("*") >= 0) {
       return;
     }
+    if (!datum.utterance) {
+      return;
+    }
     var words = datum.utterance.toLowerCase().replace(/#?!.,\//g, "").split(/[ ]+/);
     for (var word in words) {
       // If the token it not null or the empty string
@@ -156,7 +159,9 @@ function(doc) {
             }
           }
         };
-        emit(rdf, 1);
+        if (morphItems[i]) {
+          emit(rdf, 1);
+        }
       }
     }
   } catch (e) {

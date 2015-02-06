@@ -25,6 +25,9 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
     return obj;
   };
 
@@ -36,6 +39,9 @@ function(doc) {
       return;
     }
     if (datum.utterance && datum.utterance.indexOf("*") >= 0) {
+      return;
+    }
+    if (!datum.utterance) {
       return;
     }
     var words = datum.utterance.toLowerCase().replace(/#?!.,\//g, "").split(/[ ]+/);
