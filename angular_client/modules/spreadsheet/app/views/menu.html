@@ -132,14 +132,14 @@
           {{contextualize('locale_activate_session_button')}}
         </button>
         &nbsp;&nbsp;
-        <span ng-hide="activeSession==undefined">
-          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
+        <span ng-hide="activeSessionID==undefined">
+          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <span ng-show="(data | filter: activeSession).length==0">
-          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">
+        <span ng-show="(data | filter: activeSessionID).length==0">
+          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
             <i class="fa whiteicon fa-trash-o">
             </i>
             {{contextualize('locale_delete_session')}}
@@ -152,7 +152,7 @@
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSession!=undefined"ng-cloak>
+      <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSessionID!=undefined"ng-cloak>
         <form ng-model='editSessionInfo'>
           <table cellpadding="5px">
             <tr>
@@ -411,7 +411,7 @@
       <span>
         {{contextualize('locale_change_session')}}
       </span>
-      <select class="span3" ng-model='activeSessionToSwitchTo'>
+      <select class="span3" ng-model='activeSessionIDToSwitchTo'>
         <option value='none'>
           All sessions
         </option>
@@ -419,22 +419,22 @@
           {{session.dateCreated | shortDate}} {{session.title}}
         </option>
       </select>
-      <button class="btn btn-primary" ng-click="selectSession(activeSessionToSwitchTo);navigateVerifySaved('none')">
+      <button class="btn btn-primary" ng-click="selectSession(activeSessionIDToSwitchTo);navigateVerifySaved('none')">
         <i class="fa whiteicon fa-calendar">
         </i>
         {{contextualize('locale_activate_session_button')}}
       </button>
       &nbsp;&nbsp;
-      <span ng-hide="activeSession==undefined">
-        <button class="btn btn-success" ng-click="selectSession(activeSessionToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
+      <span ng-hide="activeSessionID==undefined">
+        <button class="btn btn-success" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
           {{contextualize('locale_edit_session_info_button')}}
         </button>
         &nbsp;&nbsp;
       </span>
-      <span ng-show="(data | filter: activeSession).length==0">
-        <button class="btn btn-danger" ng-click="deleteEmptySession(activeSession)" ng-disabled="readOnly==true">
+      <span ng-show="(data | filter: activeSessionID).length==0">
+        <button class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-trash-o">
           </i>
           {{contextualize('locale_delete_session')}}
@@ -446,7 +446,7 @@
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSession!=undefined" ng-cloak>
+      <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSessionID!=undefined" ng-cloak>
         <form ng-model='editSessionInfo'>
           <table cellpadding="5px">
             <tr>
