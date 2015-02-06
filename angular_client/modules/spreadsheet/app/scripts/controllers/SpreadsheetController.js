@@ -544,7 +544,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.dataentry = false;
   $scope.searching = false;
   $rootScope.activeSubMenu = 'none';
-  $scope.activeSession = undefined;
+  $scope.activeSessionID = undefined;
   $scope.currentSessionName = "All Sessions";
   $scope.showCreateSessionDiv = false;
   $scope.editSessionDetails = false;
@@ -674,7 +674,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (sessionID) {
           $scope.selectSession(sessionID);
         } else {
-          $scope.fullCurrentSession = scopeSessions[scopeSessions.length - 2];
+          $scope.fullCurrentSession = $scope.sessions[scopeSessions.length - 2];
         }
         $scope.documentReady = true;
       }, function(error) {
@@ -697,15 +697,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       .then(function(dataFromServer) {
         var scopeData = [];
         for (var i = 0; i < dataFromServer.length; i++) {
-          if (dataFromServer[i].value.datumFields) {
+          if (dataFromServer[i].value.datumFields && dataFromServer[i].value.session) {
             var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.corpus.pouchname + "/", $scope);
 
             // Load data from current session into scope
             if (!sessionID || sessionID === "none") {
               scopeData.push(newDatumFromServer);
-            } else if (newDatumFromServer.sessionID === sessionID) {
+            } else if (dataFromServer[i].value.session._id === sessionID) {
               scopeData.push(newDatumFromServer);
             }
+          } else {
+            console.warn("This is a strange datum, it will not be loadable in this app", dataFromServer[i].value);
           }
         }
 
@@ -879,18 +881,37 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }
           $scope.corpora = [];
           var corporaAlreadyIn = {};
-          var processCorpora = function(index) {
-            // Use map-reduce to get corpus title
+          var processCorpora = function(corpusIdentifierToRetrieve) {
+            if (!corpusIdentifierToRetrieve) {
+              return;
+            }
+            // Use map-reduce to get corpus details
 
-            Data.async(scopeDBs[index], "_design/pages/_view/private_corpuses")
+            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/private_corpuses")
               .then(function(response) {
                 var corpus = {};
-                if (response.rows[0]) {
+                if (response.rows.length > 1) {
+                  response.rows.map(function(row) {
+                    if (row.value.pouchname === corpusIdentifierToRetrieve) {
+                      corpus = row.value;
+                    } else {
+                      console.warn("There were multiple corpora details in this database, it is probaly one of the old offline databases prior to v1.30 or the result of merged corpora. This is not really a problem, the correct details will be used, and this corpus details will be marked as deleted. " + row.value);
+                      row.value.trashed = "deleted";
+                      Data.saveCouchDoc(corpusIdentifierToRetrieve, row.value).then(function(result) {
+                        console.log("flag as deleted succedded", result);
+                      }, function(reason) {
+                        console.warn("flag as deleted failed", reason, row.value);
+                      });
+                    }
+                  });
+                } else if (response.rows.length === 1 && response.rows[0].value && response.rows[0].value.pouchname === corpusIdentifierToRetrieve) {
                   corpus = response.rows[0].value;
                 } else {
-                  corpus.pouchname = scopeDBs[index];
-                  corpus.title = scopeDBs[index];
-                  console.log("Error finding a corpus in this database. This database is broken and someone should dbe notified to fix it.", response, corpus);
+                  corpus.pouchname = corpusIdentifierToRetrieve;
+                  corpus.title = corpusIdentifierToRetrieve;
+                  console.warn("Error finding a corpus in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org ", response, corpus);
+                  alert("Error finding corpus details in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org  " + corpusIdentifierToRetrieve);
+                  return;
                 }
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
                 if (corpus.team && corpus.team.gravatar && corpus.team.gravatar.indexOf("user") === -1) {
@@ -923,19 +944,22 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
               }, function(error) {
                 var corpus = {};
-                corpus.pouchname = scopeDBs[index];
-                corpus.title = scopeDBs[index];
+                corpus.pouchname = corpusIdentifierToRetrieve;
+                corpus.title = corpusIdentifierToRetrieve;
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
                 if (corpus.team && corpus.team.gravatar) {
                   corpus.gravatar = corpus.team.gravatar;
                 }
-                console.log("Error finding a corpus in this database. Either his database is out of date or the server contact failed. ", error, corpus);
-                $scope.corpora.push(corpus);
+                console.warn("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us of this error if you are online and the connection should have succeeded.", error, corpus);
+                alert("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us support@lingsync.org about this error if you are online and the connection should have succeeded.");
+                // $scope.corpora.push(corpus);
               });
           };
           for (var m = 0; m < scopeDBs.length; m++) {
-            processCorpora(m);
+            if (scopeDBs[m]) {
+              processCorpora(scopeDBs[m]);
+            }
           }
           $rootScope.loading = false;
         }, /* login failure */ function(reason) {
@@ -1036,10 +1060,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   $scope.selectSession = function(activeSessionID) {
-    $scope.changeActiveSession(activeSessionID);
+    $scope.changeActiveSessionID(activeSessionID);
     // Make sure that following variable is set (ng-model in select won't
     // assign variable until chosen)
-    $scope.activeSessionToSwitchTo = activeSessionID;
+    $scope.activeSessionIDToSwitchTo = activeSessionID;
     $scope.dataentry = true;
 
     // Update saved state in Preferences
@@ -1051,15 +1075,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     window.location.assign("#/spreadsheet/" + $rootScope.templateId);
   };
 
-  $scope.changeActiveSession = function(activeSessionToSwitchTo) {
-    if (activeSessionToSwitchTo === 'none' || activeSessionToSwitchTo === undefined) {
-      $scope.activeSession = undefined;
+  $scope.changeActiveSessionID = function(activeSessionIDToSwitchTo) {
+    if (activeSessionIDToSwitchTo === 'none' || activeSessionIDToSwitchTo === undefined) {
+      $scope.activeSessionID = undefined;
       $scope.fullCurrentSession = undefined;
       $scope.editSessionInfo = undefined;
     } else {
-      $scope.activeSession = activeSessionToSwitchTo;
+      $scope.activeSessionID = activeSessionIDToSwitchTo;
       for (var i in $scope.sessions) {
-        if ($scope.sessions[i]._id === activeSessionToSwitchTo) {
+        if ($scope.sessions[i]._id === activeSessionIDToSwitchTo) {
           $scope.fullCurrentSession = $scope.sessions[i];
 
           // Set up object to make session editing easier
@@ -1068,6 +1092,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           editSessionInfo._rev = $scope.fullCurrentSession._rev;
           for (var k in $scope.fullCurrentSession.sessionFields) {
             editSessionInfo[$scope.fullCurrentSession.sessionFields[k].id] = $scope.fullCurrentSession.sessionFields[k].mask;
+            if ($scope.fullCurrentSession.sessionFields[k].label === "goal") {
+              $scope.currentSessionName = $scope.fullCurrentSession.sessionFields[k].mask;
+            }
           }
           $scope.editSessionInfo = editSessionInfo;
         }
@@ -1075,13 +1102,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     // Update saved state in Preferences
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.sessionID = $scope.activeSession;
+    $scope.scopePreferences.savedState.sessionID = $scope.activeSessionID;
     $scope.scopePreferences.savedState.sessionTitle = $scope.currentSessionName;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
   };
 
   $scope.getCurrentSessionName = function() {
-    if ($scope.activeSession === undefined) {
+    if ($scope.activeSessionID === undefined) {
       return "All Sessions";
     } else {
       var sessionTitle;
@@ -1089,7 +1116,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log(sessionTitle);
       }
       for (var i in $scope.sessions) {
-        if ($scope.sessions[i]._id === $scope.activeSession) {
+        if ($scope.sessions[i]._id === $scope.activeSessionID) {
           for (var j in $scope.sessions[i].sessionFields) {
             if ($scope.sessions[i].sessionFields[j].id === "goal") {
               if ($scope.sessions[i].sessionFields[j].mask) {
@@ -1144,7 +1171,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }], "uploadnow");
 
           var doSomething = function(index) {
-            if (scopeDataToEdit[index].sessionID === newSession._id) {
+            if (scopeDataToEdit[index].session._id === newSession._id) {
               Data.async($rootScope.corpus.pouchname, scopeDataToEdit[index].id)
                 .then(function(editedRecord) {
                     // Edit record with updated session info
@@ -1215,7 +1242,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   }
                 }
                 // Set active session to All Sessions
-                $scope.activeSession = undefined;
+                $scope.activeSessionID = undefined;
               }, function(error) {
                 console.warn("there was an error deleting a session", error);
                 window.alert("Error deleting session.\nTry refreshing the page.");
@@ -1402,7 +1429,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateEntered = JSON.parse(JSON.stringify(new Date(newSpreadsheetDatum.timestamp)));
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
-    newSpreadsheetDatum.sessionID = $scope.activeSession;
+    newSpreadsheetDatum.session = $scope.fullCurrentSession;
+    // newSpreadsheetDatum.sessionID = $scope.activeSessionID;
     newSpreadsheetDatum.saved = "no";
 
     // Add record to all scope data and update
@@ -1718,13 +1746,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.loadDataEntryScreen = function() {
     $scope.dataentry = true;
     $scope.navigateVerifySaved('none');
-    $scope.loadData($scope.activeSession);
+    $scope.loadData($scope.activeSessionID);
   };
 
   $scope.clearSearch = function() {
     $scope.searchTerm = '';
     $scope.searchHistory = null;
-    $scope.loadData($scope.activeSession);
+    $scope.loadData($scope.activeSessionID);
   };
   if (FieldDB && FieldDB.DatumField) {
     $scope.addedDatumField = new FieldDB.DatumField({
@@ -1837,14 +1865,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return false;
     };
 
-    // if (!$scope.activeSession) {
+    // if (!$scope.activeSessionID) {
     // Search allData in scope
     for (var i in $scope.allData) {
       // Determine if record should be included in session search
       var searchTarget = false;
-      if (!$scope.activeSession) {
+      if (!$scope.activeSessionID) {
         searchTarget = true;
-      } else if ($scope.allData[i].sessionID === $scope.activeSession) {
+      } else if ($scope.allData[i].session._id === $scope.activeSessionID) {
         searchTarget = true;
       }
       if (searchTarget === true) {
@@ -1869,9 +1897,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.selectAll = function() {
     for (var i in $scope.allData) {
-      if (!$scope.activeSession) {
+      if (!$scope.activeSessionID) {
         $scope.allData[i].checked = true;
-      } else if ($scope.allData[i].sessionID === $scope.activeSession) {
+      } else if ($scope.allData[i].session._id === $scope.activeSessionID) {
         $scope.allData[i].checked = true;
       }
     }
