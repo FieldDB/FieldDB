@@ -32,11 +32,6 @@ mv output backbone_client/user_online_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' backbone_client/welcome_online_dashboard.js  > output
 mv output backbone_client/welcome_online_dashboard.js
 
-echo ""
-echo ""
-echo "Making localhost available in the spreadsheet app"
-sed 's/scope.localhost = true/scope.localhost = false/' angular_client/modules/spreadsheet/js/controllers/SpreadsheetController.js  > output
-mv output angular_client/modules/spreadsheet/js/controllers/SpreadsheetController.js
 
 echo ""
 echo ""
