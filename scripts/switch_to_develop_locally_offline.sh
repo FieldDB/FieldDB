@@ -31,12 +31,6 @@ mv output backbone_client/user_online_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_local"/' backbone_client/welcome_online_dashboard.js  > output
 mv output backbone_client/welcome_online_dashboard.js
 
-echo "" 
-echo ""
-echo "Making localhost available in the spreadsheet app"
-sed 's/scope.localhost = false/scope.localhost = true/' angular_client/modules/spreadsheet/js/controllers/SpreadsheetController.js  > output
-mv output angular_client/modules/spreadsheet/js/controllers/SpreadsheetController.js
-
 echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the local manifest for testing local webservices running on the same computer as the chrome extension"
