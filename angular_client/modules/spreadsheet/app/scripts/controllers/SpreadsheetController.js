@@ -1199,7 +1199,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.deleteEmptySession = function(activeSessionID) {
-    if ($scope.currentSessionName === "All Sessions") {
+    if ($scope.fullCurrentSession._id === "none") {
       $rootScope.notificationMessage = "You must select a session to delete.";
       $rootScope.openNotification();
     } else {
