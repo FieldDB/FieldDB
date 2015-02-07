@@ -102,7 +102,7 @@ function(doc) {
         var morphemesInUtterance = context.morphemes[j].split('-');
         var gs = context.glosses[j].split('-');
         for (var i in morphemesInUtterance) {
-          var morphemeToEmit = morphemesInUtterance[i] ? morphemesInUtterance[i].toLocaleLowerCase() : "";
+          var morphemeToEmit = morphemesInUtterance[i] ? morphemesInUtterance[i].toLowerCase() : "";
           morphemeToEmit =  morphemeToEmit.replace(punctuationToRemove, " ").trim()
           w = w.replace(punctuationToRemove, " ").trim();
           if (morphemeToEmit) {
