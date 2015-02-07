@@ -39,7 +39,7 @@ function(doc) {
         var tags = datum.tags.split(/[, ]/);
         for (var tagIndex in tags) {
           var tag = tags[tagIndex] || "";
-          tag = tag.toLocaleLowerCase().replace(/[,!@#$%^&*()]/g, "").trim();
+          tag = tag.toLowerCase().replace(/[,!@#$%^&*()]/g, "").trim();
           if (tag) {
             tag = tag.replace(/\w\S*/g, function(txt) {
               return txt.charAt(0).toUpperCase() + txt.substr(1);
