@@ -25,6 +25,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
 
@@ -101,14 +105,17 @@ function(doc) {
       return;
     }
     var datum = convertDatumIntoSimpleObject(doc);
+    if (!datum) {
+      return;
+    }
     var context = convertDatumIntoIGT(datum);
     if (!context) {
       return;
     }
-    var punctuationToRemove = /[#?!.,\/\(\)\*\#0-9]/g;
+    var punctuationToRemove = /[#?!.|,\/\(\)\*\#0-9]/g;
 
     // Build triples
-    for (var j in context.words) {
+    for (var j = 0; j < context.words.length; j++) {
       // var w = context.words[j];
       var morphemesInGloss = context.morphemes[j].split("-");
       var gs = context.glosses[j].split("-");

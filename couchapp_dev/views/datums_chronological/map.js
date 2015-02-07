@@ -20,7 +20,7 @@ function(doc) {
     if (!dateEntered) {
       dateEntered = 0;
     }
-    doc.fieldDBtype = "Datum";
+    //doc.fieldDBtype = "Datum";
     emit(dateEntered, doc);
   }
 }

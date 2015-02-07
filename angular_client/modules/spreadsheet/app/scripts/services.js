@@ -138,7 +138,7 @@ angular.module('spreadsheetApp')
 
         console.log("Contacting the DB to get sessions for " + config.url);
         var promise = $http(config).then(function(response) {
-          console.log("Receiving datum fields ");
+          console.log("Receiving sessions ");
           return response.data.rows;
         });
         return promise;

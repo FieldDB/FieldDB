@@ -25,6 +25,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
   try {
@@ -34,9 +38,11 @@ function(doc) {
     }
     if (doc.datumFields && doc.session) {
       var datum = convertDatumIntoSimpleObject(doc);
-
+      if (!datum) {
+        return;
+      }
       for (var field in datum) {
-        if (datum[field]) {
+        if (datum.hasOwnProperty(field) && datum[field]) {
           emit({
             original: field,
             typed: field + "_t"

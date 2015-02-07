@@ -32,6 +32,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
 
@@ -43,6 +47,9 @@ function(doc) {
     /* If its a datum (datum have datumFields and session) */
     if (doc.datumFields && doc.session) {
       var datum = convertDatumIntoSimpleObject(doc);
+      if (!datum) {
+        return;
+      }
 
       /*
        * if the datum's gloss has PL (if the index of "PL" is greater than

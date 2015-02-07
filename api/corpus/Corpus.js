@@ -93,9 +93,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   couchConnection: {
     get: function() {
       this.debug("couchConnection is deprecated");
+      return this._couchConnection;
     },
-    set: function() {
+    set: function(value) {
       this.debug("couchConnection is deprecated");
+      this._couchConnection = value;
     }
   },
 

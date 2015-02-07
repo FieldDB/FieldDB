@@ -52,7 +52,7 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   // spreadsheetDatum.datumTags = fieldDBDatum.datumTags;
   spreadsheetDatum.comments = fieldDBDatum.comments;
   if (fieldDBDatum.session) {
-    spreadsheetDatum.sessionID = fieldDBDatum.session._id;
+    // spreadsheetDatum.sessionID = fieldDBDatum.session._id;
     spreadsheetDatum.session = fieldDBDatum.session;
   } else {
     window.alert("This record is missing a session, please report this to support@lingsync.org " + fieldDBDatum._id);
@@ -216,13 +216,13 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
       }
     }
 
-    /* If the key wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
-    if (!spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "saved" && key !== "fossil" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
+    /* If the key isnt empty, and it wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
+    if (spreadsheetDatum[key] !== undefined && !spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "markAsNeedsToBeSaved" && key !== "saved" && key !== "fossil" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
       fieldDBDatum.datumFields.push({
         "label": key,
-        "value": spreadsheetDatum[key],
-        "mask": spreadsheetDatum[key],
+        "value": spreadsheetDatum[key] || "",
+        "mask": spreadsheetDatum[key] || "",
         "encrypted": "",
         "shouldBeEncrypted": "checked",
         "help": "Entered by user in Field Methods App, conventions are not known.",

@@ -1,6 +1,6 @@
 {
   "name": "LingSync Prototype",
-  "version": "2.38.10",
+  "version": "2.41.5",
   "description": "A bleeding edge version, with new features faster",
   "app": {
     "launch": {
