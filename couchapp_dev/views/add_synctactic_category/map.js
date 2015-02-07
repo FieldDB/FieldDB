@@ -39,6 +39,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
   try {
@@ -57,54 +61,57 @@ function(doc) {
     }
 
     var datum = convertDatumIntoSimpleObject(doc);
+    if (!datum) {
+      return;
+    }
 
     /* Now find all the words in the utterance */
-    var words = datum.utterance.toLowerCase().replace(/#?!.,\//g, '').split(
+    var words = datum.utterance.toLowerCase().replace(/#?!.,\//g, "").split(
       /[ ]+/);
-    for (var word in words) {
+    for (var word = 0; word < words.length; words++) {
       // If the token it not null or the empty string
       if (words[word]) {
-        // Replace (*_) with ''
-        var feederWord = words[word].replace(/\(\*[^)]*\)/g, '');
+        // Replace (*_) with ""
+        var feederWord = words[word].replace(/\(\*[^)]*\)/g, "");
         // Replace *(_) with _
         feederWord = feederWord.replace(/\*\(([^)]*)\)/, '$1');
         // Remove all parentheses and *
-        var fullWord = feederWord.replace(/[(*)]/g, '');
+        var fullWord = feederWord.replace(/[(*)]/g, "");
         words[word] = fullWord;
       }
     }
     datum.individualwords = words;
 
     /* Now find all the individual morphemes in the morphemes line */
-    var morphemes = datum.morphemes.replace(/#!,\//g, '').split(/[ ]+/);
-    for (var morphemegroup in morphemes) {
+    var morphemes = datum.morphemes.replace(/#!,\//g, "").split(/[ ]+/);
+    for (var morphemegroup = 0; morphemegroup < morphemes.length; morphemegroup++) {
       // If the token it not null or the empty string
       if (morphemes[morphemegroup]) {
         /*
-         * Replace (*_) with '' but DONT replace ? it is used to indicate
+         * Replace (*_) with "" but DONT replace ? it is used to indicate
          * uncertainty with the data, . is used for fusional morphemes Replace
          * *(_) with _
          */
-        var feederWord = morphemes[morphemegroup].replace(/\(\*[^)]*\)/g, '');
-        feederWord = feederWord.replace(/\*\(([^)]*)\)/, '$1');
+        var feederWord = morphemes[morphemegroup].replace(/\(\*[^)]*\)/g, "");
+        feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
         // Remove all parentheses and *
-        var fullWord = feederWord.replace(/[(*)]/g, '');
+        var fullWord = feederWord.replace(/[(*)]/g, "");
         morphemes[morphemegroup] = fullWord;
       }
     }
     datum.individualmorphemes = morphemes;
 
     /* Now find all the glosses in the glosses line */
-    var glosses = datum.gloss.replace(/#!,\//g, '').split(/[ ]+/);
-    for (var glossgroup in glosses) {
+    var glosses = datum.gloss.replace(/#!,\//g, "").split(/[ ]+/);
+    for (var glossgroup = 0; glossgroup < glosses.length; glossgroup++) {
       // If the token it not null or the empty string
       if (glosses[glossgroup]) {
-        // Replace (*_) with ''
-        var feederWord = glosses[glossgroup].replace(/\(\*[^)]*\)/g, '');
+        // Replace (*_) with ""
+        var feederWord = glosses[glossgroup].replace(/\(\*[^)]*\)/g, "");
         // Replace *(_) with _
-        feederWord = feederWord.replace(/\*\(([^)]*)\)/, '$1');
+        feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
         // Remove all parentheses and *
-        var fullWord = feederWord.replace(/[(*)]/g, '');
+        var fullWord = feederWord.replace(/[(*)]/g, "");
         glosses[glossgroup] = fullWord;
       }
     }
@@ -123,16 +130,16 @@ function(doc) {
      * Now lets use these 3 lines to build tuples, ie blocks of morphems and
      * glosses
      */
-    for (var word in datum.individualwords) {
+    for (var word = 0; word < datum.individualwords.length; word++) {
       /* get the word, morphemes, gloss set for this word */
       var aword = datum.individualwords[word];
-      var awordofmorphemes = datum.individualmorphemes[word].split('-');
-      var awordofglosss = datum.individualglosses[word].split('-');
+      var awordofmorphemes = datum.individualmorphemes[word].split("-");
+      var awordofglosss = datum.individualglosses[word].split("-");
       /*
        * Now loop through the pieces in the morphemes to find each morphemes
        * corresponding gloss, and guess its syntactic category.
        */
-      for (var morph in awordofmorphemes) {
+      for (var morph = 0; morph < awordofmorphemes.length; morph++) {
         /* lets make a variable to refer to this morpheme of this word */
         var thismorpheme = awordofmorphemes[morph];
         /*
@@ -182,7 +189,7 @@ function(doc) {
         }
         emit({
           morpheme: thismorpheme,
-          gloss: thisgloss || '??',
+          gloss: thisgloss || "??",
           syntacticCategory: syntacticCategory
         }, datum);
       }

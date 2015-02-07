@@ -10,7 +10,7 @@ function(head, req) {
   var datumFieldsAsLuceneSchema = [];
   var datumFields = [];
 
-  /*  Rearrange the retrieved data fields into an array, and then send the 
+  /*  Rearrange the retrieved data fields into an array, and then send the
   joined array as column headers.*/
   for (var i in datum_fields.rows) {
     datumFieldsAsLuceneSchema.push(datum_fields.rows[i].key.typed);
@@ -24,7 +24,7 @@ function(head, req) {
   while (row = getRow()) {
 
     var rowAsCsv = row.value;
-    for (var field in datumFields) {
+    for (var field = 0; field < datumFields.length; field++) {
       rowAsCsv += ',';
       if (row.key[datumFields[field]]) {
         rowAsCsv += '\"' + row.key[datumFields[field]] + '\"';

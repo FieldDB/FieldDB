@@ -27,6 +27,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
   try {
@@ -36,6 +40,9 @@ function(doc) {
     }
     if (doc.collection === "datums" || (doc.datumFields && doc.session)) {
       var datum = convertDatumIntoSimpleObject(doc);
+      if (!datum) {
+        return;
+      }
       var enteredByUser = datum.enteredByUser || datum.user;
       emit(enteredByUser, datum);
     }
