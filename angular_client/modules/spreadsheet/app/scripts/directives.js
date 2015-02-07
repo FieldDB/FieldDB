@@ -28,8 +28,8 @@ angular.module('spreadsheetApp')
   })
   .directive('selectDropdownSession', function() {
     return function(scope, element) {
-      scope.$watch('activeSession', function() {
-        if (scope.session._id === scope.activeSession) {
+      scope.$watch('activeSessionID', function() {
+        if (scope.session._id === scope.activeSessionID) {
           element[0].selected = true;
         }
       });

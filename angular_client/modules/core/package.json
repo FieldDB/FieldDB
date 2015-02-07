@@ -1,6 +1,6 @@
 {
   "name": "fielddb-angular",
-  "version": "2.38.10",
+  "version": "2.41.05",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

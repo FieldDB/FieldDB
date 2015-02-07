@@ -25,6 +25,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
   var uppercaseFirstLetter = function(txt) {
@@ -37,6 +41,9 @@ function(doc) {
     }
     if (doc.datumFields && doc.session) {
       var datum = convertDatumIntoSimpleObject(doc);
+      if (!datum) {
+        return;
+      }
       if (datum.validationStatus) {
         datum.validationStatus = datum.validationStatus.replace(/ be/g, "Be").replace(/ to/g, "To").replace(/ checked/g, "Checked");
         var stati = datum.validationStatus.split(/[, ]/);

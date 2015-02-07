@@ -25,6 +25,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
 
@@ -99,8 +103,13 @@ function(doc) {
     }
 
     var datum = convertDatumIntoSimpleObject(doc);
+    if (!datum) {
+      return;
+    }
     var context = convertDatumIntoIGT(datum);
-
+    if (!context) {
+      return;
+    }
     // Build triples
     for (var j in context.words) {
       // var w = context.words[j];

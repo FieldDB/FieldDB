@@ -220,7 +220,7 @@
         "description": "Person List Bio Header"
     },
     "locale_no_data_message": {
-        "message": "TODO traslate No data to display. Please click on <img src=\"images/icon16_dev.png\" border=\"0 \" /> above and log in.",
+        "message": "TODO traslate No data to display. Please click on <img src=\"images/icon16_dev.png\" border=\"0 \" /> above and/or log in.",
         "description": ""
     },
     "locale_done_button": {

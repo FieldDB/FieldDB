@@ -501,6 +501,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       // optionalUserWhoSaved.browser = browser;
 
+      var userWhoSaved = {
+        username: optionalUserWhoSaved.username,
+        name: optionalUserWhoSaved.name,
+        lastname: optionalUserWhoSaved.lastname,
+        firstname: optionalUserWhoSaved.firstname,
+        gravatar: optionalUserWhoSaved.gravatar
+      };
+
       if (!this._rev) {
         this._dateCreated = Date.now();
         var enteredByUser = this.enteredByUser || {};
@@ -509,9 +517,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         } else if (!this.enteredByUser) {
           this.enteredByUser = enteredByUser;
         }
-        enteredByUser.value = optionalUserWhoSaved.name || optionalUserWhoSaved.username;
+        enteredByUser.value = userWhoSaved.name || userWhoSaved.username;
         enteredByUser.json = enteredByUser.json || {};
-        enteredByUser.json.user = optionalUserWhoSaved;
+        enteredByUser.json.user = userWhoSaved;
         enteredByUser.json.software = FieldDBObject.software;
         try {
           enteredByUser.json.hardware = Android ? Android.deviceDetails : FieldDBObject.hardware;
@@ -539,16 +547,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
 
         modifiedByUser.value = modifiedByUser.value ? modifiedByUser.value + ", " : "";
-        modifiedByUser.value += optionalUserWhoSaved.name || optionalUserWhoSaved.username;
+        modifiedByUser.value += userWhoSaved.name || userWhoSaved.username;
         modifiedByUser.json = modifiedByUser.json || {};
         if (modifiedByUser.users) {
           modifiedByUser.json.users = modifiedByUser.users;
           delete modifiedByUser.users;
         }
         modifiedByUser.json.users = modifiedByUser.json.users || [];
-        optionalUserWhoSaved.software = FieldDBObject.software;
-        optionalUserWhoSaved.hardware = FieldDBObject.hardware;
-        modifiedByUser.json.users.push(optionalUserWhoSaved);
+        userWhoSaved.software = FieldDBObject.software;
+        userWhoSaved.hardware = FieldDBObject.hardware;
+        modifiedByUser.json.users.push(userWhoSaved);
       }
 
       if (FieldDBObject.software && FieldDBObject.software.location) {

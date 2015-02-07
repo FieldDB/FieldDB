@@ -25,6 +25,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
 
@@ -100,6 +104,9 @@ function(doc) {
     }
 
     var datum = convertDatumIntoSimpleObject(doc);
+    if (!datum) {
+      return;
+    }
     var context = convertDatumIntoIGT(datum);
     if (!context) {
       return;
@@ -111,9 +118,9 @@ function(doc) {
       var ms = context.morphemes[j].split("-");
       var gs = context.glosses[j].split("-");
       for (var i in ms) {
-        var caseInsensitiveMorpheme = ms[i].toLocaleLowerCase();
+        var caseInsensitiveMorpheme = ms[i].toLowerCase();
         caseInsensitiveMorpheme = caseInsensitiveMorpheme.replace(punctuationToRemove, " ").trim();
-        var caseInsensitiveGloss = gs[i] ? gs[i].toLocaleLowerCase() : "??";
+        var caseInsensitiveGloss = gs[i] ? gs[i].toLowerCase() : "??";
         caseInsensitiveGloss = caseInsensitiveGloss.replace(punctuationToRemove, " ").trim();
         emit({
           morpheme: caseInsensitiveMorpheme,
