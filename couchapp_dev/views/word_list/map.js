@@ -163,7 +163,7 @@ function(doc) {
     var utterance = datum.utterance;
     // Tokenize the utterance
     var punctuationToRemove = /[#?!.|,\/\(\)\*\#0-9]/g;
-    var words = utterance.toLocaleLowerCase().replace(punctuationToRemove, " ").split(/[ ]+/);
+    var words = utterance.toLowerCase().replace(punctuationToRemove, " ").split(/[ ]+/);
     for (var word in words) {
       // If the token it not null or the empty string
       if (words[word]) {
