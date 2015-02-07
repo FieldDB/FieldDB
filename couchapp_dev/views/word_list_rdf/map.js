@@ -104,7 +104,9 @@ function(doc) {
       return;
     }
     var datum = convertDatumIntoSimpleObject(doc);
-
+    if (!datum) {
+      return;
+    }
     var context = convertDatumIntoIGT(datum);
     if (!context) {
       return;

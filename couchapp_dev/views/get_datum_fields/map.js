@@ -26,6 +26,10 @@ function(doc) {
         }
       }
     }
+    obj.utterance = obj.utterance || "";
+    obj.morphemes = obj.morphemes || "";
+    obj.gloss = obj.gloss || "";
+
     return obj;
   };
   try {
@@ -35,6 +39,9 @@ function(doc) {
     }
     if (doc.datumFields && doc.session) {
       var datum = convertDatumIntoSimpleObject(doc);
+      if (!datum) {
+        return;
+      }
       emit(datum, doc._id);
     }
   } catch (e) {

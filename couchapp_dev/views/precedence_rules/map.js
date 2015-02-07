@@ -11,7 +11,7 @@ function(doc) {
     var key,
       fieldKeyName;
     // Loop over all its DatumFields
-    for (key in doc.datumFields) {
+    for (key = 0; key < doc.datumFields.length; key++) {
       fieldKeyName = "label";
       if (doc.datumFields[key].id && doc.datumFields[key].id.length > 0) {
         fieldKeyName = "id"; /* update to version 2.35+ */
