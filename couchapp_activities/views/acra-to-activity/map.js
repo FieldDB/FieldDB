@@ -122,6 +122,9 @@ function(doc) {
         }
 
         if (androidCustomData && androidCustomData.urlString) {
+          if (Object.prototype.toString.call(androidCustomData.urlString) === "[object Array]") {
+            androidCustomData.urlString = androidCustomData.urlString[0];
+          }
           docid = androidCustomData.urlString.substring(androidCustomData.urlString.lastIndexOf("/") + 1);
           if (androidCustomData.action && androidCustomData.action.indexOf("totalDatumEditsOnPause") > -1) {
             if (androidCustomData.action === "{totalDatumEditsOnPause : []}") {
