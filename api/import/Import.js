@@ -1419,7 +1419,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
         });
         if (self.rawText && self.rawText.trim()) {
-          window.alert("rendering import");
+          // window.alert("rendering import");
           self.rawText = self.rawText.trim();
           self.render();
         }
