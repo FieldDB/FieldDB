@@ -47,7 +47,7 @@ ls /Applications/SmartGitHg.app/Contents/MacOS/SmartGit || {
 }
 
 ls /Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 || {
-  echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshintto make sure your javascript is well formed. ' ;
+  echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshint to make sure your javascript is well formed. ' ;
   echo 'Please install it, Opening... http://www.sublimetext.com/2';
   echo ''
   echo ''
