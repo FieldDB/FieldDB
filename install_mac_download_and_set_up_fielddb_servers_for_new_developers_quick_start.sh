@@ -36,14 +36,14 @@ git --version || {
   exit 1;
 }
 
-ls /Applications/SmartGitHg\ 5.app/Contents/MacOS/SmartGit || {
-  echo 'You dont have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. ' ;
-  echo 'Please install it, Opening... http://www.syntevo.com/smartgithg/';
+ls /Applications/SmartGitHg.app/Contents/MacOS/SmartGit || {
+  echo 'You dont have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
+  echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
   echo ''
   echo ''
   sleep 3
   open -a Google\ Chrome http://www.syntevo.com/smartgithg/;
-  exit 1;
+  # exit 1;
 }
 
 ls /Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 || {
