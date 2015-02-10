@@ -1,5 +1,25 @@
 #!/bin/bash
 
+# This script should run as an unpriviledged user. when it needs su privileges for dependancies that you
+# dont yet have installed, it uses sudo for that line only.
+if [ "$(whoami)" == "root" ]
+  then {
+    echo ""
+    echo ""
+    echo "Please do NOT run this script as root/sudo."
+    echo ""
+    echo "This script should run as an unpriviledged user, when it needs su privileges"
+    echo "for dependancies that you dont yet have installed, it uses sudo for that line only."
+    echo ""
+    echo "eg:"
+    echo ""
+    echo "$ bash "`basename $0`
+    echo ""
+    exit 1;
+  }
+fi
+
+
 #IF you want to customize the home's location, change this variable
 FIELDDB_HOME=$HOME/fielddbhome
 
