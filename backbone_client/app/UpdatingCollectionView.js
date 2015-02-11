@@ -1,4 +1,4 @@
-define([ 
+define([
     "backbone",
 ], function(Backbone) {
 var UpdatingCollectionView = Backbone.View.extend({
@@ -26,35 +26,35 @@ var UpdatingCollectionView = Backbone.View.extend({
       }
 
     },
-    
+
     tagName: "ul",
-    
+
     add : function(model, collection, options) {
       var childView = new this._childViewConstructor({
         tagName : this._childViewTagName,
         className : this._childViewClass,
         model : model
       });
-      
+
       if (this._childViewFormat) {
         childView.format = this._childViewFormat;
       }
-      
+
       if(options == undefined || options == null){
         options = {};
         options.index = 1;
       }
       // Add to the top of the list
-      if (options.index == 0) {
+      if (options.index == 0 || options.at == 0) {
         this._childViews.unshift(childView);
-  
+
         if (this._rendered) {
           $(this.el).prepend(childView.render().el);
         }
       // Add to the bottom of the list
       } else {
         this._childViews.push(childView);
-  
+
         if (this._rendered) {
           $(this.el).append(childView.render().el);
         }

@@ -1,4 +1,17 @@
 /*
+Remove extra modifiedByUsers
+ */
+
+/*
+Remove extra user info in modifiedByUsers
+ */
+
+/*
+Remove extra user info in markAsNeedsToBeSaved
+ */
+
+
+/*
 Merge sessions into another
  */
 var pouchname = "default";
@@ -1703,7 +1716,7 @@ $.couch.allDbs({
 Convert ACRA activities into fielddb activies
  */
 // var lastPosition = 1403805265615; // 1403792172786 // 1402818525880 // 1403792172786
-var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1400736954477", "anonymous1399110330026", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397770209950", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397045636195", "anonymous1396806997435", "anonymous1401873037326", "anonymous1406914718135", "anonymous1406763577954", "anonymous1406297431603", "anonymous1406234565430", "anonymous1402474075836", "anonymous1405713207104", "anonymous1405713402347", "anonymous1404380629344", "anonymous1404965136766", "anonymous1404797396604", "anonymous1404357779017", "anonymous1407418050247", "anonymouskartulispeechrecognition1407415600066", "anonymouskartulispeechrecognition1407340889235", "anonymous1406189989271", "anonymous1406137962123", "anonymous1402771637598", "anonymous1404546617895", "anonymous1404543172048", "anonymous1404510294987", "anonymous1404477292397", "anonymous1404379286889", "anonymouskartulispeechrecognition1404251000382", "anonymous1403954098791", "anonymous1403820277996", "anonymous1403770114403", "anonymous1403695449072", "anonymous1403614517620", "anonymous1403215176702", "anonymous1401396176832", "anonymous1397372490908", "anonymous1396791663422", "anonymous1396717008518", "anonymous1409178041951", "anonymous1409083978482", "anonymous1409076300415", "anonymous1409059894468", "anonymous1408790883646", "anonymous1408786327026", "anonymous1408521814189", "anonymous1408491280401", "anonymous1407738363221", "anonymous1408093521792", "anonymous1407980250076", "anonymous1405161268203", "anonymous1403293874554", "anonymous1406620532197"];
+var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1400736954477", "anonymous1399110330026", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397770209950", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397045636195", "anonymous1396806997435", "anonymous1401873037326", "anonymous1406914718135", "anonymous1406763577954", "anonymous1406297431603", "anonymous1406234565430", "anonymous1402474075836", "anonymous1405713207104", "anonymous1405713402347", "anonymous1404380629344", "anonymous1404965136766", "anonymous1404797396604", "anonymous1404357779017", "anonymous1407418050247", "anonymouskartulispeechrecognition1407415600066", "anonymouskartulispeechrecognition1407340889235", "anonymous1406189989271", "anonymous1406137962123", "anonymous1402771637598", "anonymous1404546617895", "anonymous1404543172048", "anonymous1404510294987", "anonymous1404477292397", "anonymous1404379286889", "anonymouskartulispeechrecognition1404251000382", "anonymous1403954098791", "anonymous1403820277996", "anonymous1403770114403", "anonymous1403695449072", "anonymous1403614517620", "anonymous1403215176702", "anonymous1401396176832", "anonymous1397372490908", "anonymous1396791663422", "anonymous1396717008518", "anonymous1409178041951", "anonymous1409083978482", "anonymous1409076300415", "anonymous1409059894468", "anonymous1408790883646", "anonymous1408786327026", "anonymous1408521814189", "anonymous1408491280401", "anonymous1407738363221", "anonymous1408093521792", "anonymous1407980250076", "anonymous1405161268203", "anonymous1403293874554", "anonymous1406620532197", "anonymous1415137904589", "anonymous1415130236236", "anonymous1414869108810", "anonymous1414520985437", "anonymous1414359340237", "anonymous1414608957461", "anonymous1413891761722", "anonymous1412105474663", "anonymous1413623812125", "anonymous1413543115674", "anonymous1413307565297", "anonymous1411160635506", "anonymous1412956621924", "anonymous1412674529466", "anonymous1402993216329", "anonymous1412160235747", "anonymous1411977674968", "anonymous1409316294803", "anonymous1410577417533", "anonymous1411779581625", "anonymous1411722112693", "anonymous1409660863084", "anonymous1410865935416", "anonymous1409632984145", "anonymous1409337615049", "anonymous1399557384107", "anonymous1402269371238"];
 var database = $.couch.db("acra-learnx");
 var limit = 4000;
 var saved = 0;
@@ -1717,6 +1730,11 @@ database.view("fielddb/activities?limit=" + limit, {
       // }
       saved += 1;
       var activity = row.value;
+      if (!activity || !activity._id) {
+        console.warn("This entry has no id! very strange ", row);
+        return;
+      }
+
       // if (activity.timestamp < lastPosition) {
       // return;
       // }

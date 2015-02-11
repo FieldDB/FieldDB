@@ -70,8 +70,12 @@ function(doc) {
       //   registerUser: "anonymous1398450847034",
       //   androidTimestamp: 1398450927746
       // };
-      var androidCustomData = doc.CUSTOM_DATA;
+      var androidCustomData = JSON.parse(JSON.stringify(doc.CUSTOM_DATA));
       if (androidCustomData) {
+        if (androidCustomData && androidCustomData.urlString && typeof androidCustomData.urlString === "object" && androidCustomData.urlString[0]) {
+          androidCustomData.urlString = androidCustomData.urlString[0];
+        }
+
         if (doc.user_ip) {
           personalCorpusActivity.ip = doc.user_ip;
           teamActivity.ip = doc.user_ip;
