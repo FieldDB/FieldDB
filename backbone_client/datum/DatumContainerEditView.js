@@ -286,16 +286,27 @@ define([
         }
 
       }
+      var self = this;
       try{
         //bring the user to the top of the page where the prepended datum is, or show the dashboard if the datums arent showing.
         if($("#datums-embedded").attr("style").indexOf("display: none;") > -1 && $("#datum-container-fullscreen").attr("style").indexOf("display: none;") > -1){
           window.location.href = "#render/true";
         }else{
-          window.scrollTo(0,0);
-          $($($(this.el).find(".utterance")[0]).find(".datum_field_input")[0]).focus();
+          window.setTimeout(function() {
+            var datumToSee = $("[name='" + datum.id + "']")[0]
+            if (datumToSee && datumToSee.scrollIntoView) {
+              datumToSee.scrollIntoView();
+              $($($(datumToSee).parent().find(".utterance")[0]).find(".datum_field_input")[0]).focus();
+            } else {
+              if (showDatumOnTopOrBottomOfDataEntryArea === "top") {
+                window.scrollTo(0, 0);
+                $($($(self.el).find(".utterance")[0]).find(".datum_field_input")[0]).focus();
+              }
+            }
+          }, 500);
         }
       }catch(e){
-        if (OPrime.debugMode) OPrime.debug("Wasnt able to put the cursor in the first datum's first field.");
+        if (OPrime.debugMode) OPrime.debug("Wasnt able to put the cursor in the first datum's first field.", e);
       }
     }
   });
