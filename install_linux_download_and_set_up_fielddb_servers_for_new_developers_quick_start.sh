@@ -8,6 +8,26 @@
 # sudo apt-get install erlang-base erlang-dev erlang-eunit erlang-nox (ubuntu)
 
 
+# This script should run as an unpriviledged user. when it needs su privileges for dependancies that you
+# dont yet have installed, it uses sudo for that line only.
+if [ "$(whoami)" == "root" ]
+  then {
+    echo ""
+    echo ""
+    echo "Please do NOT run this script as root/sudo."
+    echo ""
+    echo "This script should run as an unpriviledged user, when it needs su privileges"
+    echo "for dependancies that you dont yet have installed, it uses sudo for that line only."
+    echo ""
+    echo "eg:"
+    echo ""
+    echo "$ bash "`basename $0`
+    echo ""
+    exit 1;
+  }
+fi
+
+
 
 #IF you want to customize the home's location, change this variable
 FIELDDB_HOME=$HOME/fielddbhome
@@ -20,9 +40,9 @@ git --version || {
   sudo apt-get install git
 }
 
-ls /Applications/SmartGitHg\ 5.app/Contents/MacOS/SmartGit || {
-  echo 'You might not have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. ' ;
-  echo 'Please install it, Opening... http://www.syntevo.com/smartgithg/';
+which SmartGit || {
+  echo 'You dont have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
+  echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
   echo ''
   echo ''
   sleep 3

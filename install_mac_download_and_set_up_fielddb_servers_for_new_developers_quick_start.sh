@@ -1,5 +1,25 @@
 #!/bin/bash
 
+# This script should run as an unpriviledged user. when it needs su privileges for dependancies that you
+# dont yet have installed, it uses sudo for that line only.
+if [ "$(whoami)" == "root" ]
+  then {
+    echo ""
+    echo ""
+    echo "Please do NOT run this script as root/sudo."
+    echo ""
+    echo "This script should run as an unpriviledged user, when it needs su privileges"
+    echo "for dependancies that you dont yet have installed, it uses sudo for that line only."
+    echo ""
+    echo "eg:"
+    echo ""
+    echo "$ bash "`basename $0`
+    echo ""
+    exit 1;
+  }
+fi
+
+
 #IF you want to customize the home's location, change this variable
 FIELDDB_HOME=$HOME/fielddbhome
 
@@ -16,18 +36,18 @@ git --version || {
   exit 1;
 }
 
-ls /Applications/SmartGitHg\ 5.app/Contents/MacOS/SmartGit || {
-  echo 'You dont have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. ' ;
-  echo 'Please install it, Opening... http://www.syntevo.com/smartgithg/';
+ls /Applications/SmartGitHg.app/Contents/MacOS/SmartGit || {
+  echo 'You dont have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
+  echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
   echo ''
   echo ''
   sleep 3
   open -a Google\ Chrome http://www.syntevo.com/smartgithg/;
-  exit 1;
+  # exit 1;
 }
 
 ls /Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 || {
-  echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshintto make sure your javascript is well formed. ' ;
+  echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshint to make sure your javascript is well formed. ' ;
   echo 'Please install it, Opening... http://www.sublimetext.com/2';
   echo ''
   echo ''

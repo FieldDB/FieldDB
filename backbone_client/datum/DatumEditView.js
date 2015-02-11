@@ -362,7 +362,7 @@ define([
       }
       $(this.el).find(".extra-datum-info-which-can-be-hidden").hide();
       this.rareFields = [];
-      if(!this.frequentFields){
+      if(!this.frequentFields || this.frequentFields.length === 0){
         return;
       }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
