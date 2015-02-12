@@ -390,8 +390,8 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
-        this.warn("The primary key " + this.primaryKey + " is undefined on this object, it cannot be added! ", value);
-        throw "The primary key is undefined on this object, it cannot be added! " + value;
+        this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
+        throw "The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! " + value.fieldDBtype;
       }
       this.debug("adding " + dotNotationKey);
       this.set(dotNotationKey, value);
@@ -845,9 +845,13 @@ Collection.prototype = Object.create(Object.prototype, {
         });
       }
     }
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      item: FieldDBObject
+    }
   }
-
-
 
 });
 

@@ -205,7 +205,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         return;
       } else {
         if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["sessionFields"](value);
+          value = new this.INTERNAL_MODELS["sessions"](value);
         }
       }
       this.unserializedSessions = value;

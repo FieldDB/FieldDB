@@ -11,7 +11,7 @@ describe("Corpus", function() {
 
   describe("construction options", function() {
 
-    it("should accept v1.22.1 json", function() {
+    it("should serialize the pouchname", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
       expect(corpus.dbname).toEqual("sapir-firstcorpus");
       expect(corpus.pouchname).toEqual("sapir-firstcorpus");
@@ -20,7 +20,7 @@ describe("Corpus", function() {
       expect(serialized.pouchname).toBeDefined();
     });
 
-    it("should accept v2.2 json", function() {
+    it("should not add datumfields if they werent there", function() {
       var corpus = new Corpus({
         dbname: "lingllama-communitycorpus"
       });
@@ -218,8 +218,19 @@ describe("Corpus", function() {
     }, specIsRunningTooLong);
   });
 
-  xdescribe("serialization ", function() {
+  describe("serialization ", function() {
 
+    it("should serialize v1.22.1 to a standard json", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      var serialization = corpus.toJSON()
+      expect(serialization.team).toEqual({});
+    });
+
+    it("should serialize v2.30.x to a standard json", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[1])));
+      var serialization = corpus.toJSON()
+      expect(serialization.team).toEqual("");
+    });
 
     xit("should clean v1.22.1 to a maximal json", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
