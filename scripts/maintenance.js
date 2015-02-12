@@ -3,11 +3,15 @@ Remove extra modifiedByUsers
  */
 
 /*
-Remove extra user info in modifiedByUsers
+Remove extra info in modifiedByUsers
  */
 
 /*
 Remove extra user info in markAsNeedsToBeSaved
+ */
+
+/*
+Make sure team is in the corpus doc?
  */
 
 
