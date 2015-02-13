@@ -68,6 +68,30 @@ node --version || {
   exit 1;
 }
 
+
+echo " Installing grunt, browserify, jasmine-node, jshint, bower and other development dependancies"
+which grunt || {
+  echo "Installing grunt globally (required to build and manage modules) "
+  sudo npm install -g grunt-cli
+  sudo chown -R `whoami` ~/.npm
+}
+which jasmine-node || {
+  echo "Installing jasmine-node globally (required to run our test suites) "
+  sudo npm install -g git://github.com/kacperus/jasmine-node.git
+  sudo chown -R `whoami` ~/.npm
+}
+which jshint || {
+  echo "Installing jshint globally (required to make sure your code is well-formed) "
+  sudo npm install -g jshint
+  sudo chown -R `whoami` ~/.npm
+}
+which bower || {
+  echo "Installing bower globally (required to install client side dependancies for many modules) "
+  sudo npm install -g bower
+  sudo chown -R `whoami` ~/.npm
+}
+
+
 # We decided not to force interns to have XCode on their macs
 #gcc --version || { echo 'You dont have a C++ compiler installed, please install it and other developer tools: sudo apt-get build-dep nodejs  or http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12' ; exit 1; }
 
@@ -82,7 +106,7 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
   echo 'I already copied it into your clipboard so you can paste it in an New Key on GitHub. ';
   echo ''
   echo 'Please paste it (Command+V) into your ssh keys, Opening... https://github.com/settings/ssh';
-  pbcopy  < ~/.ssh/id_rsa.pub;
+  cat ~/.ssh/id_rsa.pub | pbcopy;
   sleep 3
   open -a Google\ Chrome https://github.com/settings/ssh;
   echo "Continuing with the rest of the downloads while you paste your key on github ... "
@@ -93,8 +117,16 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
 
 echo "Making fielddb directory which will house the fielddb code, in case you need it"
 echo "export FIELDDB_HOME=$FIELDDB_HOME" >> $HOME/.bash_profile
+
+
 mkdir $FIELDDB_HOME
+mkdir $FIELDDB_HOME/logs
 cd $FIELDDB_HOME
+
+echo "Making pm2 log directory point to the logs directory"
+# mkdir /usr/local/var/log/fielddb
+# ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
+ln -s $FIELDDB_HOME/logs ~/.pm2/logs
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
 echo ''
@@ -108,31 +140,9 @@ git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDB.git
 git remote rm origin
 
-echo " Installing grunt, browserify, jasmine and other development dependancies"
-which grunt || {
-  echo "Installing grunt globally (required to build and manage modules) "
-  sudo npm install -g grunt
-}
-which jasmine-node || {
-  echo "Installing jasmine-node globally (required to run our test suites) "
-  sudo npm install -g git://github.com/kacperus/jasmine-node.git
-}
-which jshint || {
-  echo "Installing jshint globally (required to make sure your code is well-formed) "
-  sudo npm install -g jshint
-}
-which bower || {
-  echo "Installing bower globally (required to install client side dependancies for many modules) "
-  sudo npm install -g bower
-}
+echo " Installing build dependancies (managed by NPM)"
+npm install
 
-npm install || {
-  sudo chown -R `whoami` ~/.npm
-  npm install || {
-    echo "Error running npm install, please read it and fix it if you can. "
-    exit 1
-  }
-}
 echo " Running jshint, tests and building core and setting up symblic links"
 grunt travis
 
@@ -338,7 +348,11 @@ npm install
 ls /Applications/Praat.app/Contents/MacOS/Praat || {
   echo "Please download Praat and put it in your Applications folder if you want to develop on the AudioWebService."
   echo 'Opening the download page if you want it... http://www.fon.hum.uva.nl/praat/download_mac.html';
-  echo ''
+  echo 'Example on commandline:'
+  echo '$ curl -O --retry 999 --retry-max-time 0 -C - http://www.fon.hum.uva.nl/praat/praat5404_mac64.dmg'
+  echo '$ hdiutil attach  praat5404_mac64.dmg'
+  echo '$ sudo cp -R /Volumes/Praat64_5404/Praat.app /Applications/'
+  echo '$ brew install ffmpeg'
   echo ''
   sleep 3
   open -a Google\ Chrome http://www.fon.hum.uva.nl/praat/download_mac.html;
@@ -454,6 +468,52 @@ erica --version || {
     fi
 }
 
+
+read -p "Do you want to use this as a production server?" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+  then {
+
+    which pm2 || {
+      echo "Installing pm2 globally (required to keep web services on if they fail) "
+      sudo npm install -g pm2
+      sudo chown -R `whoami` ~/.npm
+    }
+
+    echo "Setting up fielddb logs to be in /usr/local/var "
+    sudo mkdir -p /usr/local/var/log/fielddb
+    sudo ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
+    sudo chown -R fielddb /usr/local/var/log/fielddb
+
+    echo "Setting up fielddb audio/video/image user uploads to be in /usr/local/var/lib "
+    sudo mkdir -p /usr/local/var/lib/fielddb/rawdata
+    sudo mkdir -p /usr/local/var/lib/fielddb/bycorpus
+    sudo ln -s /usr/local/var/lib/fielddb/rawdata /Users/fielddb/fielddbhome/AudioWebService/rawdata
+    sudo ln -s /usr/local/var/lib/fielddb/bycorpus /Users/fielddb/fielddbhome/AudioWebService/bycorpus
+    sudo chown -R fielddb /usr/local/var/lib/fielddb
+
+    echo "Setting up  NODE_DEPLOY_TARGET='production'"
+    echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bash_profile
+
+    echo "Downloading server configs from a private repo"
+    git clone username@git.example.ca:/example/FieldDBServerConfig
+    sudo cp -R FieldDBServerConfig/fielddbhome $FIELDDB_HOME
+    sudo chown -R fielddb $FIELDDB_HOME
+
+    echo "Setting up nginx"
+    brew install nginx
+    sudo cp -R /usr/local/etc/nginx /usr/local/etc/nginxbackup
+    sudo cp -R FieldDBServerConfig/etc/nginx /usr/local/etc/
+
+    echo "Setting up plist daemons"
+    sudo cp -R FieldDBServerConfig/Library/LaunchDaemons /Library
+    sudo launchctl load -w /Library/LaunchDaemons/*
+
+  }
+else {
+  echo " Not setting up this server as a production server, see script source for commands as instructions."
+}
+fi
+
 ## Running tests to see if everything downloaded and works ###################################################
 echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
 cd $FIELDDB_HOME/AuthenticationWebService
@@ -508,4 +568,5 @@ echo ""
 echo "If you got the code in order to could edit something specific, you could try doing a CMD+Shift+F in Sublime and looking for it the text you want to edit, or search for FieldDB on YouTube "
 
 #echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
+
 
