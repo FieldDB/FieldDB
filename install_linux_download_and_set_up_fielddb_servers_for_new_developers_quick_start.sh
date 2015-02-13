@@ -72,7 +72,29 @@ node --version || {
   exit 1;
 }
 
-# We decided not to force interns to have XCode on their macs, linux devs need it
+
+echo " Installing grunt, browserify, jasmine-node, jshint, bower and other development dependancies"
+which grunt || {
+  echo "Installing grunt globally (required to build and manage modules) "
+  sudo npm install -g grunt-cli
+  sudo chown -R `whoami` ~/.npm
+}
+which jasmine-node || {
+  echo "Installing jasmine-node globally (required to run our test suites) "
+  sudo npm install -g git://github.com/kacperus/jasmine-node.git
+  sudo chown -R `whoami` ~/.npm
+}
+which jshint || {
+  echo "Installing jshint globally (required to make sure your code is well-formed) "
+  sudo npm install -g jshint
+  sudo chown -R `whoami` ~/.npm
+}
+which bower || {
+  echo "Installing bower globally (required to install client side dependancies for many modules) "
+  sudo npm install -g bower
+  sudo chown -R `whoami` ~/.npm
+}
+
 gcc --version || {
 echo 'You dont have a C++ compiler installed, please install it' ;
  sudo apt-get build-dep
@@ -89,7 +111,8 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
   echo 'I already copied it into your clipboard so you can paste it in an New Key on GitHub. ';
   echo ''
   echo 'Please paste it (Command+V) into your ssh keys, Opening... https://github.com/settings/ssh';
-  pbcopy  < ~/.ssh/id_rsa.pub;
+  sudo apt-get install xclip;
+  cat ~/.ssh/id_rsa.pub | xclip;
   sleep 3
   firefox https://github.com/settings/ssh;
   echo "Continuing with the rest of the downloads while you paste your key on github ... "
@@ -103,12 +126,18 @@ echo "export FIELDDB_HOME=$FIELDDB_HOME" >> $HOME/.bashrc
 
 echo "Making pm2 log directory point to the logs directory"
 # mkdir /usr/local/var/log/fielddb
-# ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
+# ln -s /usr/local/var/log/fielddb /home/fielddb/fielddbhome/logs
 mkdir ~/.pm2/
-ln -s /Users/fielddb/fielddbhome/logs ~/.pm2/logs
+ln -s /home/fielddb/fielddbhome/logs ~/.pm2/logs
 
 mkdir $FIELDDB_HOME
+mkdir $FIELDDB_HOME/logs
 cd $FIELDDB_HOME
+
+echo "Making pm2 log directory point to the logs directory"
+# mkdir /usr/local/var/log/fielddb
+# ln -s /usr/local/var/log/fielddb /home/fielddb/fielddbhome/logs
+ln -s $FIELDDB_HOME/logs ~/.pm2/logs
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
 echo ''
@@ -122,25 +151,9 @@ git remote rm upstream
 git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDB.git
 git remote rm origin
 
-echo " Installing grunt, browserify, jasmine and other development dependancies"
-which grunt || {
-  echo "Installing grunt globally (required to build and manage modules) "
-  sudo npm install -g grunt
-}
-which jasmine-node || {
-  echo "Installing jasmine-node globally (required to run our test suites) "
-  sudo npm install -g git://github.com/kacperus/jasmine-node.git
-}
-which jshint || {
-  echo "Installing jshint globally (required to make sure your code is well-formed) "
-  sudo npm install -g jshint
-}
-which bower || {
-  echo "Installing bower globally (required to install client side dependancies for many modules) "
-  sudo npm install -g bower
-}
-
+echo " Installing build dependancies (managed by NPM)"
 npm install
+
 echo " Running jshint, tests and building core and setting up symblic links"
 grunt travis
 
@@ -344,8 +357,14 @@ npm install
 #TODO get local copies of dependancies ie prosody lab aligner
 
 praat -v || {
-  echo "Please install Praat "
-   sudo apt-get install praat
+  echo "Please install Praat (used for automatically detecting utterances)"
+   sudo apt-get install praat;
+   sudo apt-get install ffmpeg;
+}
+
+ffmpeg -v || {
+  echo "Please install FFMPEG (used for converting any audio or video file into an audio track for the audio service) "
+   sudo apt-get install ffmpeg;
 }
 
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
@@ -452,6 +471,50 @@ erica --version || {
     fi
 }
 
+
+read -p "Do you want to use this as a production server?" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+  then {
+
+    which pm2 || {
+      echo "Installing pm2 globally (required to keep web services on if they fail) "
+      sudo npm install -g pm2
+      sudo chown -R `whoami` ~/.npm
+    }
+
+    echo "Setting up fielddb logs to be in /usr/local/var "
+    sudo mkdir -p /usr/local/var/log/fielddb
+    sudo ln -s /usr/local/var/log/fielddb /home/fielddb/fielddbhome/logs
+    sudo chown -R fielddb /usr/local/var/log/fielddb
+
+    echo "Setting up fielddb audio/video/image user uploads to be in /usr/local/var/lib "
+    sudo mkdir -p /usr/local/var/lib/fielddb/rawdata
+    sudo mkdir -p /usr/local/var/lib/fielddb/bycorpus
+    sudo ln -s /usr/local/var/lib/fielddb/rawdata /home/fielddb/fielddbhome/AudioWebService/rawdata
+    sudo ln -s /usr/local/var/lib/fielddb/bycorpus /home/fielddb/fielddbhome/AudioWebService/bycorpus
+    sudo chown -R fielddb /usr/local/var/lib/fielddb
+
+    echo "Setting up  NODE_DEPLOY_TARGET='production'"
+    echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bash_profile
+
+    echo "Downloading server configs from a private repo"
+    git clone username@git.example.ca:/example/FieldDBServerConfig
+    sudo cp -R FieldDBServerConfig/fielddbhome $FIELDDB_HOME
+    sudo chown -R fielddb $FIELDDB_HOME
+
+    echo "Setting up nginx"
+    sudo apt-get install nginx
+    sudo cp -R /usr/local/etc/nginx /usr/local/etc/nginxbackup
+    sudo cp -R FieldDBServerConfig/etc/nginx /usr/local/etc/
+
+    echo "TODO up daemons"
+
+  }
+else {
+  echo " Not setting up this server as a production server, see script source for commands as instructions."
+}
+fi
+
 ## Running tests to see if everything downloaded and works ###################################################
 echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
 cd $FIELDDB_HOME/AuthenticationWebService
@@ -507,16 +570,6 @@ echo "If you got the code in order to could edit something specific, you could t
 sleep 3
 firefox https://www.youtube.com/results?search_query=lingsync
 #echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
-
-read -p "Do you want to use this as a production server?" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-  then {
-    echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bashrc
-  }
-else {
-  echo " Not exporting deploy target as production."
-}
-fi
 
 
 
