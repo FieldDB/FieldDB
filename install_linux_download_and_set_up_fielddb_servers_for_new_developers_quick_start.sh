@@ -100,6 +100,13 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
 
 echo "Making fielddb directory which will house the fielddb code, in case you need it"
 echo "export FIELDDB_HOME=$FIELDDB_HOME" >> $HOME/.bashrc
+
+echo "Making pm2 log directory point to the logs directory"
+# mkdir /usr/local/var/log/fielddb
+# ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
+mkdir ~/.pm2/
+ln -s /Users/fielddb/fielddbhome/logs ~/.pm2/logs
+
 mkdir $FIELDDB_HOME
 cd $FIELDDB_HOME
 
@@ -500,5 +507,17 @@ echo "If you got the code in order to could edit something specific, you could t
 sleep 3
 firefox https://www.youtube.com/results?search_query=lingsync
 #echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
+
+read -p "Do you want to use this as a production server?" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+  then {
+    echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bashrc
+  }
+else {
+  echo " Not exporting deploy target as production."
+}
+fi
+
+
 
 
