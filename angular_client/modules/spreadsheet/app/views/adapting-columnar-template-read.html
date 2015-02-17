@@ -6,7 +6,7 @@
     {{datum['judgement']}}
   </span>
 </div>
-<div class="{{fieldSpanWidthClassName}}">
+<div class="{{columnWidthClass}}">
   <span class="{{fieldSpanWidthClassName}}"
   ng-repeat="corpusField in fieldsInColumns.first track by $index"
   ng-hide="corpusField.showToUserTypes == 'readonly'"
@@ -14,7 +14,7 @@
     {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
-<div ng-show="fieldsInColumns.second.length > 0" class="{{fieldSpanWidthClassName}}">
+<div ng-show="fieldsInColumns.second.length > 0" class="{{columnWidthClass}}">
   <span class="full-width"
     ng-repeat="corpusField in fieldsInColumns.second track by $index"
     ng-hide="corpusField.showToUserTypes == 'readonly'"
@@ -22,7 +22,7 @@
     {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
-<div ng-show="fieldsInColumns.third.length > 0" class="{{fieldSpanWidthClassName}}">
+<div ng-show="fieldsInColumns.third.length > 0" class="{{columnWidthClass}}">
   <span class="full-width"
     ng-repeat="corpusField in fieldsInColumns.third track by $index"
     ng-hide="corpusField.showToUserTypes == 'readonly'"
