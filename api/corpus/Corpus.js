@@ -856,7 +856,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   /**
    *  This function looks for the field's details from the corpus fields, if it exists it returns that field template.
    *
-   * If the field isnt in the importFields, it looks for fields which this field should map to (eg, if the field is codepermanent it can be mapped to anonymouscode)
+   * If the field isnt in the corpus' fields exactly, it looks for fields which this field should map to (eg, if the field is codepermanent it can be mapped to anonymouscode)
    * @param  {String/Object} field A datumField to look for, or the label/id of a datum field to look for.
    * @return {DatumField}       A datum field with details filled in from the corresponding field in the corpus, or from a template.
    */
@@ -905,7 +905,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
             correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
           }
-        } else if (fuzzyLabel.indexOf("prenom") > -1) {
+        } else if (fuzzyLabel.indexOf("prenom") > -1 || fuzzyLabel.indexOf("prnom") > -1) {
           correspondingDatumField = allFields.find("firstname");
           if (correspondingDatumField.length > 0) {
             this.debug("This header matches an existing corpus field. ", correspondingDatumField);

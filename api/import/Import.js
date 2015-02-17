@@ -280,19 +280,22 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             return item.id;
           }));
 
-          self.extractedHeaderObjects = [];
-          self.extractedHeader.map(function(fieldLabelFromExtractedHeader) {
-            // self.importFields.debugMode = true;
-            var correspondingDatumField = self.normalizeImportFieldWithExistingCorpusFields(fieldLabelFromExtractedHeader);
+          self.extractedHeaderObjects = self.extractedHeader.concat([]);
+          var fieldLabelFromExtractedHeader,
+            correspondingDatumField;
+          for (var columnIndex = 0; columnIndex < self.extractedHeaderObjects.length; columnIndex++) {
+            fieldLabelFromExtractedHeader = self.extractedHeaderObjects[columnIndex];
+            self.debugMode = true;
+            correspondingDatumField = self.normalizeImportFieldWithExistingCorpusFields(fieldLabelFromExtractedHeader);
             if (self.extractedHeader.indexOf(correspondingDatumField.id) >= 0) {
               self.bug("You seem to have some column labels that are duplicated" +
                 " (the same label on two columns). This will result in a strange " +
                 "import where only the second of the two will be used in the import. " +
                 "Is this really what you want?.");
             }
-            self.extractedHeaderObjects.push(correspondingDatumField[0]);
-            return fieldLabelFromExtractedHeader;
-          });
+            self.debug(columnIndex + "correspondingDatumField", correspondingDatumField);
+            self.extractedHeaderObjects[columnIndex] = correspondingDatumField;
+          }
 
           self.debug("importFields which will be used for this import", self.importFields.map(function(item) {
             return item.id;
@@ -331,6 +334,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             var testForEmptyness = "";
             for (var index = 0; index < row.length; index++) {
               var item = row[index];
+              if (!self.extractedHeaderObjects[index]) {
+                self.debug("Skipping column " + index + " :" + item);
+                continue;
+              }
               // var newfieldValue = $(item).html().trim();
               /*
                * the import sometimes inserts &nbsp into the data,
