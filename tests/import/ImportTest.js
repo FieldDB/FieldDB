@@ -210,6 +210,7 @@ describe("Build fields using fields in the corpus", function() {
     var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
     expect(normalizedField.id).toEqual("anonymousCode");
     expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
+    expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
   });
 
 });
@@ -325,10 +326,13 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     importer.convertTableIntoDataList().then(function(results) {
 
       expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
+      expect(importer.extractedHeader.length).toEqual(importer.extractedHeaderObjects.length);
+      expect(importer.extractedHeader.length).toEqual(5);
 
       expect(importer.extractedHeaderObjects.map(function(item) {
         return item.id
-      })).toEqual("");
+      })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
+
       expect(importer.extractedHeaderObjects[0].id).toEqual("anonymousCode");
       expect(importer.extractedHeaderObjects[1].id).toEqual("courseNumber");
       expect(importer.extractedHeaderObjects[2].id).toEqual("firstname");
