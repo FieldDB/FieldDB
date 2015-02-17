@@ -11,7 +11,7 @@
 <body>
 
 	<form id="uploadForm" enctype="multipart/form-data" action="https://localhost:3184/upload" method="post">
-   <input type="text" name="filesToBeAligned" value="Files to be Aligned"><br/> 
+   <input type="text" name="filesToBeAligned" value="Files to be Aligned"><br/>
    <input type="text" name="user" value="lingllama"><br/>
    <input type="text" name="dictionary" value="Url goes here"><br/>
    <input type="text" name="dialect" value="AmericanEnglish"><br/>
@@ -21,6 +21,7 @@
    <input type="file" id="userFileInput" name="filesToUpload[]" multiple="multiple" /><br/>
    <input type="submit" value="Upload to server" />
  </form>
+ <script type="text/javascript" src="./../fielddb.js"></script>
 
 
  <script type="text/javascript" src="libs/jasmine/jasmine.js"></script>
@@ -70,16 +71,16 @@
 
   <!-- "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
-    "../tests/corpus/CorpusTest", 
-//    "../tests/corpus/CorpusWebServiceTest", 
+    "../tests/corpus/CorpusTest",
+//    "../tests/corpus/CorpusWebServiceTest",
     "../tests/export/ExportTest",
-    "../tests/glosser/GlosserTest", 
+    "../tests/glosser/GlosserTest",
     "../tests/hotkey/",
-    "../tests/import/ImportTest", 
+    "../tests/import/ImportTest",
     "../tests/insert_unicode/InsertUnicodeTest",
-    "../tests/lexicon/LexiconTest", 
+    "../tests/lexicon/LexiconTest",
     "../tests/permission/PermissionTest",
-    "../tests/search/SearchTest", 
+    "../tests/search/SearchTest",
     "../tests/datum/SessionTest",
     "../tests/user/UserTest", -->
 

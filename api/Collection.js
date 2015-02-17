@@ -382,7 +382,7 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
 
-      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
+      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && ! (value instanceof this.INTERNAL_MODELS.item)) {
         // console.log("adding a internamodel ", value);
         if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
           this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
