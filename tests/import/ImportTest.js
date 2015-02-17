@@ -326,12 +326,12 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     // importer.debugMode = true;
     importer.convertTableIntoDataList().then(function(results) {
 
-      expect(importer.extractedHeader).toEqual(['Code Permanent', 'N° section', 'Prénom', 'Nom de famille', 'Date de naissance']);
+      expect(importer.extractedHeader).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
       expect(importer.extractedHeader.length).toEqual(importer.extractedHeaderObjects.length);
       expect(importer.extractedHeader.length).toEqual(5);
 
       expect(importer.extractedHeaderObjects.map(function(item) {
-        return item.id
+        return item.id;
       })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
 
       expect(importer.extractedHeaderObjects[0].id).toEqual("anonymousCode");
