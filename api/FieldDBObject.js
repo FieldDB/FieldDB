@@ -82,7 +82,7 @@ var FieldDBObject = function FieldDBObject(json) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "FieldDBObject";
   }
-  if (json.id) {
+  if (json && json.id) {
     this.useIdNotUnderscore = true;
   }
   this.verbose("In parent an json", json);
