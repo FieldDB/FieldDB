@@ -340,7 +340,7 @@ var template_corpus_doc = function() {
     "description": "The details of this corpus are not public.",
     "couchConnection": {
       "protocol": "https://",
-      "domain": "corpus.lingsync.org",
+      "domain": "corpus.example.org",
       "port": "443",
       "pouchname": "default",
       "path": "",
@@ -529,7 +529,7 @@ $.couch.allDbs({
               // console.log("This was the couchconnection before we removed its corpusid and checked its terms of use ", results.couchConnection);
               // results.couchConnection = {
               //     "protocol": "https://",
-              //     "domain": "corpus.lingsync.org",
+              //     "domain": "corpus.example.org",
               //     "port": "443",
               //     "pouchname": dbname,
               //     "path": "",
@@ -545,7 +545,7 @@ $.couch.allDbs({
             if (results && !results.couchConnection) {
               results.couchConnection = {
                 "protocol": "https://",
-                "domain": "corpus.lingsync.org",
+                "domain": "corpus.example.org",
                 "port": "443",
                 "pouchname": dbname,
                 "path": "",
@@ -848,7 +848,9 @@ databaseStats.map(function(databaseDetails) {
 /*
 Replicate all databases
  */
-$.couch.urlPrefix = "https://corpus.lingsync.org"
+$.couch.urlPrefix = "https://corpus.example.org";
+var replicationCount = 0;
+var dbsToBeReplicatedAndMightBeMissingSecurityDocs = ""
 $.couch.allDbs({
   success: function(results) {
     console.log(results);
@@ -858,6 +860,18 @@ $.couch.allDbs({
         if (dbname.indexOf("-") === -1) {
           console.log(dbname + "  is not a corpus or activity feed ");
           return;
+        }
+        if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
+          console.log("turning on continuous replication for a beta tester");
+          // return;
+        } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
+          console.log("turning on continuous replication for a phophlo user");
+          // return;
+        } else {
+          if (dbname.indexOf("anonymous") > -1) {
+            return;
+          } else {}
+          return; //turn on continuous replication for only beta testers and/or phophlo users
         }
         var sourceDB = "";
         if (dbname.indexOf("activity_feed") > -1) {
@@ -870,17 +884,23 @@ $.couch.allDbs({
           sourceDB = "new_corpus";
         }
         console.log(dbname + " is a " + sourceDB);
-
-        $.couch.replicate(dbname, "https://admin:none@corpusdev.lingsync.org/" + dbname, {
-          success: function(result) {
-            console.log(dbname, result);
-          },
-          error: function(error) {
-            console.log("Error replicating to db" + dbname, error);
-          }
-        });
+        var replicationOptions = {
+          create_target: true,
+          continuous: true
+        };
+        replicationCount += 1;
+        dbsToBeReplicatedAndMightBeMissingSecurityDocs = dbsToBeReplicatedAndMightBeMissingSecurityDocs + " " + dbname;
+        // $.couch.replicate(dbname,
+        //   "https://adminuser:adminpass@corpusdev.example.org/" + dbname, {
+        //     success: function(result) {
+        //       console.log(dbname, result);
+        //     },
+        //     error: function(error) {
+        //       console.log("Error replicating to db" + dbname, error);
+        //     }
+        //   },
+        //   replicationOptions);
       })(results[db]);
-
     }
   },
   error: function(error) {
