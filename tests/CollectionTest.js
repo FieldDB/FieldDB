@@ -100,6 +100,16 @@ describe("lib/Collection", function() {
       expect(collection.collection[0]).toEqual(useDefaults()[2]);
     });
 
+    it("should permit add of an array", function() {
+      expect(collection.length).toEqual(2);
+      collection.add([{
+        validationStatus: "CheckedWithSam"
+      }, {
+        validationStatus: "ToBeCheckedWithSam"
+      }]);
+      expect(collection.length).toEqual(4);
+    });
+
     it("should permit constrution with just an array", function() {
       var newcollection = new Collection([{
         id: "a",
@@ -833,7 +843,7 @@ describe("lib/Collection", function() {
       expect(result).toBe(aBaseCollection);
       expect(aBaseCollection._collection.length).toEqual(8);
       expect(aBaseCollection.willbeoverwritten.confirmMessage).toContain("I found a conflict for internalObject, Do you want to overwrite it from {\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
-        // "I found a conflict for willbeoverwritten, Do you want to overwrite it from {\"id\":\"willBeOverwritten\",\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"id\":\"willBeOverwritten\",\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
+      // "I found a conflict for willbeoverwritten, Do you want to overwrite it from {\"id\":\"willBeOverwritten\",\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"id\":\"willBeOverwritten\",\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
       expect(aBaseCollection.conflictingcontents).toEqual(aBaseCollection._collection[6]);
       setTimeout(function() {
         expect(aBaseCollection.conflictingcontents.conflicting).toEqual("in first collection");

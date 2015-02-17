@@ -374,6 +374,14 @@ Collection.prototype = Object.create(Object.prototype, {
 
   add: {
     value: function(value) {
+      if (Object.prototype.toString.call(value) === "[object Array]") {
+        var self = this;
+        value.map(function(item) {
+          self.add(item);
+        });
+        return;
+      }
+
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
         // console.log("adding a internamodel ", value);
         if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
