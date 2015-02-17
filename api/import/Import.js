@@ -285,10 +285,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             correspondingDatumField;
           for (var columnIndex = 0; columnIndex < self.extractedHeaderObjects.length; columnIndex++) {
             fieldLabelFromExtractedHeader = self.extractedHeaderObjects[columnIndex];
-            self.debugMode = true;
+            // self.debugMode = true;
             correspondingDatumField = self.normalizeImportFieldWithExistingCorpusFields(fieldLabelFromExtractedHeader);
-            if (self.extractedHeader.indexOf(correspondingDatumField.id) >= 0) {
-              self.bug("You seem to have some column labels that are duplicated" +
+            if (correspondingDatumField.id && self.extractedHeader.indexOf(correspondingDatumField.id) >= 0) {
+              self.bug("You seem to have some column labels '" + correspondingDatumField.id + "' that are duplicated" +
                 " (the same label on two columns). This will result in a strange " +
                 "import where only the second of the two will be used in the import. " +
                 "Is this really what you want?.");
@@ -351,15 +351,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
               //            }
 
-              console.log("finding the matching label in the csv ", self.extractedHeader[index]);
-              console.log("finding the matching label in the csv ", self.importFields.find(self.extractedHeader[index], null, "match as close as possible"));
+              var headerLabel = self.extractedHeaderObjects[index].id;
+              console.log("finding the matching label in the csv ", headerLabel);
+              self.debug("finding the matching label in the csv ", self.importFields.find(headerLabel, null, "match as close as possible"));
               if (self.importType === "participants") {
-                docToSave.fields[self.extractedHeaderObjects[index].id].value = item.trim();
+                docToSave.fields[headerLabel].value = item.trim();
               } else if (self.importType === "audioVideo") {
                 console.log("this is an audioVideo but we arent doing anything with the self.importFields");
                 // docToSave.datumFields[self.importFields.find(self.extractedHeader[index])[0].id].value = item.trim();
               } else {
-                docToSave.datumFields[self.extractedHeaderObjects[index].id].value = item.trim();
+                docToSave.datumFields[headerLabel].value = item.trim();
               }
               self.debug("new doc", docToSave);
 
@@ -759,7 +760,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         correspondingDatumField = correspondingDatumField[0];
       }
 
-      console.log("correspondingDatumField ", correspondingDatumField);
+      this.debug("correspondingDatumField ", correspondingDatumField);
 
       return new DatumField(correspondingDatumField);
     }
