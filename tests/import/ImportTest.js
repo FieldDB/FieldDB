@@ -313,7 +313,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       importType: "participants"
     });
 
-    importer.debugMode = true;
+    // importer.debugMode = true;
 
     // Step 1: import CSV
     importer.importCSV(importer.rawText, importer);
@@ -339,10 +339,14 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       expect(importer.extractedHeaderObjects[3].id).toEqual("lastname");
       expect(importer.extractedHeaderObjects[4].id).toEqual("dateOfBirth");
 
+      expect(importer.documentCollection).toBeDefined();
+      expect(importer.documentCollection._collection[1]).toBeDefined();
       importer.documentCollection._collection[1].debugMode = true;
+      expect(importer.documentCollection._collection[1].lastname).toEqual(" "); /* the fields getter is broken */
       expect(importer.documentCollection._collection[1].debugMode).toBeTruthy();
+      expect(importer.documentCollection._collection[1]._fields).toBeDefined();
+      expect(importer.documentCollection._collection[1]._fields.length).toEqual(10);
       expect(importer.documentCollection._collection[1].fields).toBeDefined();
-      // expect(importer.documentCollection._collection[1].fields).toEqual(" ");
       // expect(importer.documentCollection._collection[1]._fields).toEqual(" ");
       expect(importer.documentCollection._collection[1]._fields.fieldDBtype).toEqual("DatumFields");
 
@@ -393,7 +397,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     expect(importer.showImportSecondStep).toBeTruthy();
 
     // Step 2: build participants
-    importer.debugMode = true;
+    // importer.debugMode = true;
     importer.convertTableIntoDataList().then(function(results) {
 
       importer.documentCollection._collection[2].fields.decryptedMode = true;
