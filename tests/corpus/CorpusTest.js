@@ -383,6 +383,47 @@ xdescribe("Corpus: as a team we want to be able to go back in time in the corpus
   });
 });
 
+
+describe("Build fields using fields in the corpus", function() {
+
+  it("should find existing fields", function() {
+    var corpus = new Corpus();
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("lastname");
+    expect(normalizedField.id).toEqual("lastname");
+    expect(normalizedField.help).toEqual("The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)");
+  });
+
+  it("should create new fields", function() {
+    var corpus = new Corpus();
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Seat number");
+    expect(normalizedField.id).toEqual("seatNumber");
+    expect(normalizedField.labelFieldLinguists).toEqual("Seat number");
+    expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
+  });
+
+  it("should normalize french fields to their english equivalents", function() {
+    var corpus = new Corpus();
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Code Permanent");
+    expect(normalizedField.id).toEqual("anonymousCode");
+    expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
+    expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+  });
+
+  it("should find existing non default fields", function() {
+    var corpus = new Corpus({
+      datumFields: [{
+        label: "nodefaultfieldsinthiscorpus"
+      }]
+    });
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("syntacticTreeLatex");
+    expect(normalizedField.id).toEqual("syntacticTreeLatex");
+    normalizedField = corpus.normalizeFieldWithExistingCorpusFields("utterance");
+    expect(normalizedField.id).toEqual("utterance");
+    expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
+  });
+
+});
+
 xdescribe("Corpus: as a user I want to be able to import via drag and drop", function() {
   it("should detect drag and drop", function() {
     expect(true).toBeTruthy();
