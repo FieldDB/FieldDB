@@ -1,4 +1,5 @@
 var Import = require("./../../api/import/Import").Import;
+var Participant = require("./../../api/user/Participant").Participant;
 var Corpus = require("./../../api/corpus/Corpus").Corpus;
 var Q = require("q");
 var fs = require("fs");
@@ -342,13 +343,17 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       expect(importer.documentCollection).toBeDefined();
       expect(importer.documentCollection._collection[1]).toBeDefined();
       importer.documentCollection._collection[1].debugMode = true;
-      expect(importer.documentCollection._collection[1].lastname).toEqual(" "); /* the fields getter is broken */
+
+      /* make sure that the doc is a participant */
+      expect(importer.documentCollection._collection[1] instanceof Object).toBeTruthy();
+      expect(importer.documentCollection._collection[1] instanceof Participant).toBeTruthy();
       expect(importer.documentCollection._collection[1].debugMode).toBeTruthy();
       expect(importer.documentCollection._collection[1]._fields).toBeDefined();
       expect(importer.documentCollection._collection[1]._fields.length).toEqual(10);
+      expect(importer.documentCollection._collection[1].api).toEqual("participants");
       expect(importer.documentCollection._collection[1].fields).toBeDefined();
-      // expect(importer.documentCollection._collection[1]._fields).toEqual(" ");
-      expect(importer.documentCollection._collection[1]._fields.fieldDBtype).toEqual("DatumFields");
+      expect(importer.documentCollection._collection[1].fields.fieldDBtype).toEqual("DatumFields");
+      expect(importer.documentCollection._collection[1].lastname).toEqual("xxxxxxxxx"); /* the fields getter is broken */
 
       importer.documentCollection._collection[1].fields.decryptedMode = true;
       expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual("Damiane");
