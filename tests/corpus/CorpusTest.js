@@ -222,13 +222,13 @@ describe("Corpus", function() {
 
     it("should serialize v1.22.1 to a standard json", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
-      var serialization = corpus.toJSON()
+      var serialization = corpus.toJSON();
       expect(serialization.team).toEqual({});
     });
 
     it("should serialize v2.30.x to a standard json", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[1])));
-      var serialization = corpus.toJSON()
+      var serialization = corpus.toJSON();
       expect(serialization.team.gravatar).toEqual("888888we8888888888888");
       expect(serialization.team.username).toEqual("lingllama");
     });
