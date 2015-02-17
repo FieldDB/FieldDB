@@ -82,6 +82,9 @@ var FieldDBObject = function FieldDBObject(json) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "FieldDBObject";
   }
+  if (json.id) {
+    this.useIdNotUnderscore = true;
+  }
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
@@ -1077,6 +1080,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       /* force id to be set if possible */
       // this.id = this.id;
 
+      if (this.useIdNotUnderscore) {
+        json.id = this.id;
+      }
+
       for (aproperty in this) {
         if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
           underscorelessProperty = aproperty.replace(/^_/, "");
@@ -1109,6 +1116,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (!json._id) {
         delete json._id;
       }
+      if (this.useIdNotUnderscore) {
+        delete json._id;
+      }
+
       if (!json._rev) {
         delete json._rev;
       }
@@ -1120,6 +1131,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json.saving;
       delete json.fetching;
       delete json.loaded;
+      delete json.useIdNotUnderscore;
       delete json.decryptedMode;
       delete json.bugMessage;
       delete json.warnMessage;
