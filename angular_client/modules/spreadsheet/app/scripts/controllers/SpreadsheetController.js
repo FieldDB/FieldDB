@@ -407,13 +407,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (numberOfColumns === 1) {
       columns.first = fields.slice(1, columnHeight + 1);
+      columns.second = [];
+      columns.third = [];
+      $scope.fieldSpanWidthClassName = "span10";
     } else if (numberOfColumns === 2) {
       columns.first = fields.slice(1, columnHeight + 1);
       columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
+      columns.third = [];
+      $scope.fieldSpanWidthClassName = "span10";
     } else if (numberOfColumns === 3) {
       columns.first = fields.slice(1, columnHeight + 1);
       columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
       columns.third = fields.slice(columnHeight * 2 + 1, columnHeight * 3 + 1);
+      $scope.fieldSpanWidthClassName = "span10";
     }
     return columns;
   };

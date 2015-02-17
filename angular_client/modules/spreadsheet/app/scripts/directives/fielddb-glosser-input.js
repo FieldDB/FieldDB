@@ -87,7 +87,7 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
       var templateString =
         '<input ' +
         '  ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
-        '  class="span5"' +
+        '  class="{{fieldSpanWidthClassName}}"' +
         '  type="text"' +
         '  ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
         '  placeholder="{{corpusField.label}}"' +
