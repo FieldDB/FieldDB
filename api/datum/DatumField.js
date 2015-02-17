@@ -113,7 +113,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           this.labelFieldLinguists = value;
         }
       }
-      this.id = value;
+      if (!this.id) {
+        this.id = value;
+      }
     }
   },
 
@@ -833,12 +835,12 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
       // TODO eventually dont include the label and hint but now include it for backward compaitibilty
       json.label = this.id;
-      json.hint = this.hint;
+      json.hint = this.hint || "";
 
       json.value = this.value || "";
       json.mask = this.mask || "";
 
-      json.id = json._id;
+      json.id = this.id;
       delete json._id;
 
       json.fieldDBtype = this.fieldDBtype;
