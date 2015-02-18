@@ -1,4 +1,5 @@
 var Import = require("./../../api/import/Import").Import;
+var Participant = require("./../../api/user/Participant").Participant;
 var Corpus = require("./../../api/corpus/Corpus").Corpus;
 var Q = require("q");
 var fs = require("fs");
@@ -184,6 +185,37 @@ describe("Batch Import: as a morphologist I want to import directories of text f
   });
 
 });
+
+describe("Build fields using fields in the corpus", function() {
+  var importer;
+  beforeEach(function() {
+    importer = new Import({
+      importType: "participants",
+      corpus: new Corpus(Corpus.prototype.defaults)
+    });
+  });
+
+  it("should find existing fields", function() {
+    var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("lastname");
+    expect(normalizedField.id).toEqual("lastname");
+  });
+
+  it("should create new fields", function() {
+    var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Seat number");
+    expect(normalizedField.id).toEqual("seatNumber");
+    expect(normalizedField.labelExperimenters).toEqual("Seat number");
+    expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
+  });
+
+  it("should normalize french fields to their english equivalents", function() {
+    var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
+    expect(normalizedField.id).toEqual("anonymousCode");
+    expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
+    expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+  });
+
+});
+
 describe("Batch Import: as a Field Methods instructor or psycholinguistics experiment administrator I want to import a class list of users/informants/participants", function() {
   var importer;
   beforeEach(function() {
@@ -282,6 +314,8 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       importType: "participants"
     });
 
+    // importer.debugMode = true;
+
     // Step 1: import CSV
     importer.importCSV(importer.rawText, importer);
     expect(importer.extractedHeader).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
@@ -291,12 +325,35 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     // Step 2: build participants
     // importer.debugMode = true;
     importer.convertTableIntoDataList().then(function(results) {
-      var headers = importer.discoveredHeaders;
-      expect(headers[0].id).toEqual("anonymousCode");
-      expect(headers[1].id).toEqual("courseNumber");
-      expect(headers[2].id).toEqual("firstname");
-      expect(headers[3].id).toEqual("lastname");
-      expect(headers[4].id).toEqual("dateOfBirth");
+
+      expect(importer.extractedHeader).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
+      expect(importer.extractedHeader.length).toEqual(importer.extractedHeaderObjects.length);
+      expect(importer.extractedHeader.length).toEqual(5);
+
+      expect(importer.extractedHeaderObjects.map(function(item) {
+        return item.id;
+      })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
+
+      expect(importer.extractedHeaderObjects[0].id).toEqual("anonymousCode");
+      expect(importer.extractedHeaderObjects[1].id).toEqual("courseNumber");
+      expect(importer.extractedHeaderObjects[2].id).toEqual("firstname");
+      expect(importer.extractedHeaderObjects[3].id).toEqual("lastname");
+      expect(importer.extractedHeaderObjects[4].id).toEqual("dateOfBirth");
+
+      expect(importer.documentCollection).toBeDefined();
+      expect(importer.documentCollection._collection[1]).toBeDefined();
+      importer.documentCollection._collection[1].debugMode = true;
+
+      /* make sure that the doc is a participant */
+      expect(importer.documentCollection._collection[1] instanceof Object).toBeTruthy();
+      expect(importer.documentCollection._collection[1] instanceof Participant).toBeTruthy();
+      expect(importer.documentCollection._collection[1].debugMode).toBeTruthy();
+      expect(importer.documentCollection._collection[1]._fields).toBeDefined();
+      expect(importer.documentCollection._collection[1]._fields.length).toEqual(10);
+      expect(importer.documentCollection._collection[1].api).toEqual("participants");
+      expect(importer.documentCollection._collection[1].fields).toBeDefined();
+      expect(importer.documentCollection._collection[1].fields.fieldDBtype).toEqual("DatumFields");
+      expect(importer.documentCollection._collection[1].lastname).toEqual("xxxxxxxxx"); /* the fields getter is broken */
 
       importer.documentCollection._collection[1].fields.decryptedMode = true;
       expect(importer.documentCollection._collection[1].fields.firstname.value).toEqual("Damiane");
@@ -448,7 +505,7 @@ describe("Import: as a morphologist I want to import my data from CSV", function
       // Build data
       expect(importer.extractedHeader).toEqual(["Date Elicited", "utterance", "morphemes", "gloss", "translation", "comments", "", "tags", "CheckedWithConsultant", "source/publication", "a.field-with*dangerous characters (for import)"]);
       importer.convertTableIntoDataList().then(function() {
-        var headers = importer.discoveredHeaders;
+        var headers = importer.extractedHeaderObjects;
         importer.debug(JSON.stringify(headers));
         expect(headers[0].id).toEqual("dateElicited");
         expect(headers[8].id).toEqual("validationStatus");
@@ -478,7 +535,7 @@ describe("Import: as a synctactician I want to import my data from Word/text exa
       "Noqa-ta qan qapari-nay-wanki\n" +
       "me-ACC you-NOM yell-DES-2SG.1OM\n" +
       "`I feel like yelling at you, I feel like yelling at all of you.’\n" +
-    importer.guessFormatAndPreviewImport();
+      importer.guessFormatAndPreviewImport();
   });
 
   it("should detect handout style data", function() {
@@ -493,7 +550,7 @@ describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import 
   beforeEach(function() {
     importer = new Import();
     importer.rawText =
-      "<ANNOTATION_DOCUMENT AUTHOR=\"\" DATE=\"2012-05-13T20:23:00-08:00\" FORMAT=\"2.7\" VERSION=\"2.7\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://www.mpi.nl/tools/elan/EAFv2.7.xsd\">\n"+
+      "<ANNOTATION_DOCUMENT AUTHOR=\"\" DATE=\"2012-05-13T20:23:00-08:00\" FORMAT=\"2.7\" VERSION=\"2.7\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://www.mpi.nl/tools/elan/EAFv2.7.xsd\">\n" +
       "<ANNOTATION>\n" +
       "      <ALIGNABLE_ANNOTATION ANNOTATION_ID=\"a48\" TIME_SLOT_REF1=\"ts49\" TIME_SLOT_REF2=\"ts50\">\n" +
       "          <ANNOTATION_VALUE></ANNOTATION_VALUE>\n" +
@@ -545,31 +602,31 @@ describe("Import: as a phonetican I want to import my data in Praat TextGrid ", 
   beforeEach(function() {
     importer = new Import();
     importer.rawText =
-      "File type = \"ooTextFile\"\n"+
-      "Object class = \"TextGrid\"\n"+
-      "\n"+
-      "xmin = 0 \n"+
-      "xmax = 2.2413151927437642 \n"+
-      "tiers? <exists> \n"+
-      "size = 6 \n"+
-      "item []: \n"+
-      "    item [1]:\n"+
-      "        class = \"IntervalTier\" \n"+
-      "        name = \"phones\" \n"+
-      "        xmin = 0 \n"+
-      "        xmax = 2.2413151927437642 \n"+
-      "        intervals: size = 19 \n"+
-      "         intervals [112]\n"+
-      "                xmin = 185.0\n"+
-      "                xmax = 186.23\n"+
-      "                text = \"maxtyota' añ  kartera che'\"\n"+
-      "            intervals [113]\n"+
-      "                xmin = 186.23\n"+
-      "                xmax = 186.58\n"+
-      "                text = \"\"\n"+
-      "            intervals [114]\n"+
-      "                xmin = 186.58\n"+
-      "                xmax = 188.3\n"+
+      "File type = \"ooTextFile\"\n" +
+      "Object class = \"TextGrid\"\n" +
+      "\n" +
+      "xmin = 0 \n" +
+      "xmax = 2.2413151927437642 \n" +
+      "tiers? <exists> \n" +
+      "size = 6 \n" +
+      "item []: \n" +
+      "    item [1]:\n" +
+      "        class = \"IntervalTier\" \n" +
+      "        name = \"phones\" \n" +
+      "        xmin = 0 \n" +
+      "        xmax = 2.2413151927437642 \n" +
+      "        intervals: size = 19 \n" +
+      "         intervals [112]\n" +
+      "                xmin = 185.0\n" +
+      "                xmax = 186.23\n" +
+      "                text = \"maxtyota' añ  kartera che'\"\n" +
+      "            intervals [113]\n" +
+      "                xmin = 186.23\n" +
+      "                xmax = 186.58\n" +
+      "                text = \"\"\n" +
+      "            intervals [114]\n" +
+      "                xmin = 186.58\n" +
+      "                xmax = 188.3\n" +
       "                text = \"puru tyi bijta' mi xiñob che'\"";
     importer.guessFormatAndPreviewImport();
   });

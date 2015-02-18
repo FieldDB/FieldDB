@@ -11,7 +11,7 @@ describe("Corpus", function() {
 
   describe("construction options", function() {
 
-    it("should accept v1.22.1 json", function() {
+    it("should serialize the pouchname", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
       expect(corpus.dbname).toEqual("sapir-firstcorpus");
       expect(corpus.pouchname).toEqual("sapir-firstcorpus");
@@ -20,7 +20,7 @@ describe("Corpus", function() {
       expect(serialized.pouchname).toBeDefined();
     });
 
-    it("should accept v2.2 json", function() {
+    it("should not add datumfields if they werent there", function() {
       var corpus = new Corpus({
         dbname: "lingllama-communitycorpus"
       });
@@ -218,8 +218,20 @@ describe("Corpus", function() {
     }, specIsRunningTooLong);
   });
 
-  xdescribe("serialization ", function() {
+  describe("serialization ", function() {
 
+    it("should serialize v1.22.1 to a standard json", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      var serialization = corpus.toJSON();
+      expect(serialization.team).toEqual({});
+    });
+
+    it("should serialize v2.30.x to a standard json", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[1])));
+      var serialization = corpus.toJSON();
+      expect(serialization.team.gravatar).toEqual("888888we8888888888888");
+      expect(serialization.team.username).toEqual("lingllama");
+    });
 
     xit("should clean v1.22.1 to a maximal json", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
@@ -369,6 +381,47 @@ xdescribe("Corpus: as a team we want to be able to go back in time in the corpus
   it("should be able to import from GitHub repository", function() {
     expect(true).toBeTruthy();
   });
+});
+
+
+describe("Build fields using fields in the corpus", function() {
+
+  it("should find existing fields", function() {
+    var corpus = new Corpus();
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("lastname");
+    expect(normalizedField.id).toEqual("lastname");
+    expect(normalizedField.help).toEqual("The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)");
+  });
+
+  it("should create new fields", function() {
+    var corpus = new Corpus();
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Seat number");
+    expect(normalizedField.id).toEqual("seatNumber");
+    expect(normalizedField.labelFieldLinguists).toEqual("Seat number");
+    expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
+  });
+
+  it("should normalize french fields to their english equivalents", function() {
+    var corpus = new Corpus();
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Code Permanent");
+    expect(normalizedField.id).toEqual("anonymousCode");
+    expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
+    expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+  });
+
+  it("should find existing non default fields", function() {
+    var corpus = new Corpus({
+      datumFields: [{
+        label: "nodefaultfieldsinthiscorpus"
+      }]
+    });
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("syntacticTreeLatex");
+    expect(normalizedField.id).toEqual("syntacticTreeLatex");
+    normalizedField = corpus.normalizeFieldWithExistingCorpusFields("utterance");
+    expect(normalizedField.id).toEqual("utterance");
+    expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
+  });
+
 });
 
 xdescribe("Corpus: as a user I want to be able to import via drag and drop", function() {

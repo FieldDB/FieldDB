@@ -165,7 +165,7 @@
   },
   "pouchname": "sapir-firstcorpus",
   "confidential": {
-    "secretkey": "8acfb0d3-9ce4-3c02-e7c1-f56b78b705dd"
+    "secretkey": "aaa"
   },
   "publicSelf": {},
   "publicCorpus": "Private",
@@ -174,4 +174,697 @@
   "sessions": [],
   "team": {},
   "dateOfLastDatumModifiedToCheckForOldSession": "\"2012-09-26T14:20:14.130Z\""
+}, {
+  "_id": "723a8b707e579087aa36c2e33865ebef",
+  "_rev": "65-683c881ec8e102fb9cd16f58f43372c5",
+  "pouchname": "lingllama-georgian",
+  "couchConnection": {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "lingllama-georgian",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "723a8b707e579087aa36c2e33865ebef"
+  },
+  "title": "Georgian",
+  "titleAsUrl": "georgian",
+  "description": "Fieldwork in Batumi Georgia 2014\n\nReferences/Tools:\n\n * Georgian transliterator (but just installing the keyboard seems to work well for typing in Georgian) http://ge.translit.cc/\n * Georgian romanization standards (including ipa) http://en.wikipedia.org/wiki/Romanization_of_Georgian\n * Georgian phrases with audio http://ggdavid.tripod.com/georgia/language/gphrases.htm\n * Georgian Phrases http://www.omniglot.com/language/phrases/georgian.php\n * Georgian Phrases http://mylanguages.org/georgian_phrases.php\n * Phrases and some discussion of pronunciation http://wikitravel.org/en/Georgian_phrasebook\n * http://www.inyourpocket.com/Georgia/Batumi\n * https://www.facebook.com/groups/Georgianwanderers/\n * http://omnestour.ge/travel-info/useful-georgian-phrases\n * Phrases with rather natural audio: http://ilanguages.org/georgian_phrases.php\n * Georgian news: http://www.reportiori.ge/?menuid=1&lang=1\n * Georgian OCR site (have to register but it works after that) http://www.targmne.com/OCR\n * Georgian Classifieds http://gancxadebebi.ge/\n * Georgian Alphabet Practice | Alphabet Training http://alphabettraining.com/mkhedruli-practice",
+  "consultants": [],
+  "datumStates": [{
+    "color": "success",
+    "showInSearchResults": "checked",
+    "selected": "selected",
+    "state": "Checked",
+    "consultant": {
+      "gravatar": "./../user/user_gravatar.png"
+    }
+  }, {
+    "color": "warning",
+    "showInSearchResults": "checked",
+    "selected": "",
+    "state": "To be checked",
+    "consultant": {
+      "gravatar": "./../user/user_gravatar.png"
+    }
+  }, {
+    "color": "important",
+    "showInSearchResults": "",
+    "selected": "",
+    "state": "Deleted",
+    "consultant": {
+      "gravatar": "./../user/user_gravatar.png"
+    }
+  }],
+  "datumFields": [{
+    "label": "judgement",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning.",
+    "size": "3",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "utterance",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "morphemes",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "gloss",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "syntacticCategory",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "syntacticTreeLatex",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: Tree [.S NP VP ]",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "translation",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "tags",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "validationStatus",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc...",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "enteredByUser",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "The user who orilingllamally entered the datum",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "user": {},
+    "userchooseable": "disabled"
+  }, {
+    "label": "modifiedByUser",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "An array of users who modified the datum",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "users": [],
+    "userchooseable": "disabled"
+  }, {
+    "label": "orthography",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "The written form"
+  }, {
+    "label": "context",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "In what context is the utterance used?"
+  }, {
+    "label": "speakers",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This field came from file import ",
+    "userchooseable": ""
+  }, {
+    "label": "modality",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This field came from file import ",
+    "userchooseable": ""
+  }, {
+    "label": "numberintext",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is for if this item is part of a larger text."
+  }],
+  "conversationFields": [{
+    "label": "speakers",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "modality",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality.",
+    "userchooseable": "disabled"
+  }],
+  "sessionFields": [{
+    "label": "goal",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This describes the goals of the session.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "consultants",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dialect",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "language",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the langauge (or language family) if you would like to use it.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateElicited",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session took place.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "user",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateSEntered",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session was entered.",
+    "userchooseable": "disabled"
+  }],
+  "searchFields": [],
+  "confidential": {
+    "secretkey": "abc"
+  },
+  "publicSelf": {
+    "title": "Private Corpus",
+    "titleAsUrl": "private_corpus",
+    "description": "The details of this corpus are not public.",
+    "id": "corpus",
+    "datumStates": [],
+    "datumFields": [{
+      "label": "judgement",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)",
+      "size": "3",
+      "userchooseable": "disabled"
+    }, {
+      "label": "utterance",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)",
+      "userchooseable": "disabled"
+    }, {
+      "label": "morphemes",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "gloss",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. ",
+      "userchooseable": "disabled"
+    }, {
+      "label": "translation",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. ",
+      "userchooseable": "disabled"
+    }],
+    "sessionFields": [{
+      "label": "dialect",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "language",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the langauge (or language family) if you would like to use it.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateElicited",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session took place.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "user",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Put your team's data entry conventions here (if any)...",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateSEntered",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session was entered.",
+      "userchooseable": "disabled"
+    }],
+    "comments": [],
+    "pouchname": "lingllama-georgian",
+    "_id": "corpus",
+    "_rev": "64-c6aefb66c8591a1efeb58e4a442145c7",
+    "corpusid": "723a8b707e579087aa36c2e33865ebef",
+    "timestamp": 1423377014003,
+    "collection": "corpuses",
+    "termsOfUse": {
+      "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+    },
+    "license": {
+      "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+      "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+      "link": "http://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    "copyright": "Default: Add names of the copyright holders of the corpus."
+  },
+  "publicCorpus": "Private",
+  "comments": [],
+  "dataLists": [{
+    "title": "morphemes:naya OR gloss:des ",
+    "description": "This is the result of searching for : morphemes:naya OR gloss:des in lingllama's Corpus on \"2012-12-30T04:21:44.573Z\"",
+    "datumIds": [
+      "5E0FFC8F-2F0E-4834-B800-7140141979F6",
+      "F8BE218B-0569-4A67-B405-5C72258C4B3E",
+      "853C5EF0-436A-4AC8-B44C-F285AEB93B1C",
+      "7C69EE6F-5B84-42AF-8512-DCBDE372C8D5",
+      "0CAB10E5-331E-4420-9BFD-550D889516A8",
+      "B969EC6D-CA9D-403F-88E4-71202C637933",
+      "BF303723-A20F-402C-9202-D94E9285302C",
+      "5052E3EE-2CFF-47F3-8FAA-ACD8577A7DAB",
+      "33BAA35E-9531-4D5B-AD6B-F814A1992968",
+      "3410FB90-E5B3-4331-97ED-FA3514E2352D",
+      "D6B732EE-4391-492B-8B3E-8783BF179D68",
+      "F0B6FBAF-3538-414A-8548-BA37B30AAC76",
+      "F3C2B808-98AC-4CFF-9D04-E2BDA3458221",
+      "11ACE9F7-7975-4BEF-8081-2BCCE0FBF672",
+      "7AB6A903-0A0A-4514-8B8B-49C17F3D1074",
+      "22A07FDB-2FD1-48E5-9B3D-CA0E6CE92C89",
+      "A7228BCC-E7CE-4EA3-85A7-290C9D1A5339",
+      "F60245BE-0F3F-46F2-AFAF-0BD34539CA37",
+      "5D81EE99-D7AE-42F4-AE9A-853DED71E9AF",
+      "146BAAD4-BBE8-4E19-9DD8-A40DDED2417B",
+      "9BA1901B-94A4-4358-A808-CAB427DC2F0A",
+      "5C5E7F77-E48B-4818-95F1-653BC33105E6",
+      "8FBC5BCC-11F4-473B-9FF9-74E1C90C6B75",
+      "EE923B92-DE37-40EF-BAC2-F1C912A6538D",
+      "54A03951-03CF-4F16-BD23-8A23B9CE72FF",
+      "1D4E1397-2288-4107-BAEF-5A70BA3B3753",
+      "FDF620D9-16DA-49A5-98C5-1132C2DA79F1",
+      "48FEC36E-0CAE-4503-8CC7-714D2293C92C",
+      "53272959-44EC-445B-B444-FC5B2278624D",
+      "FF5B1B9D-4730-4B48-8F72-2AC708597534",
+      "714E4A98-B7AD-4423-A44E-5FA7ACB83575",
+      "F8989234-88BA-4433-99E7-FA2FEF0FB8DF",
+      "EE932FD8-96FB-492A-8A94-5F742B0457D3",
+      "8909F51A-C157-494D-AC3F-FBD3C0082E53",
+      "70A6DC00-E916-41A1-8D2D-45E3C1086E4D",
+      "9FA598CA-3ACD-48C0-A28D-40A91FAEF88B",
+      "A3A6DBAD-7ECF-4513-8A5E-B268F304305C",
+      "BFB18B07-5B7F-4644-BD89-589875FD4770",
+      "525CFBDA-7954-4BF9-8C5C-6107823736CB",
+      "99924E86-A3DB-4B71-B9F4-3B4953425F74",
+      "337268E7-B1EB-4309-BB65-8B7DAF691F5A",
+      "9F415D46-A2DC-4451-B75D-BD1BE82F92A8",
+      "1D446121-EDD3-4EBE-BC6C-6E12511AB17A",
+      "C00343C8-11D5-45A2-8AA4-B475EA105242",
+      "419A8A12-372E-4CD0-9EA3-206D456EE6CF",
+      "C7C0A1FD-27F0-4501-944A-2CED61B7011E",
+      "FFEA25C3-B421-4D4F-915B-7CDC978CB157",
+      "E2A40C7F-C525-4C63-B582-22579E89E08C",
+      "616778F4-06F4-4603-87E2-395FC8628D9C",
+      "DFE496D7-80C8-4FA9-B402-7608F42DEB9D",
+      "AEA228D6-1786-4557-AEBA-5CBBF7657507",
+      "37737630-9544-4CF1-9E67-C23629B6F4C3",
+      "47BB1BE3-E940-46AA-A718-AD94935417E5",
+      "4AC906B0-4262-42D7-B8C4-2E3047DE198C",
+      "6E4CBDD2-8B86-4E78-8479-40B2E2FF8985",
+      "40BEBBC9-F326-4BB1-BF8B-9E433EEC36E8",
+      "AE5ED8E7-0854-4B69-B6BA-B76E2F076305",
+      "A08069C3-067D-4B1B-AEDE-2713A32D8C47",
+      "222876E0-9BBE-441B-97ED-3961737A4616"
+    ],
+    "pouchname": "lingllama-firstcorpus",
+    "comments": [],
+    "dateCreated": "\"2012-12-30T04:21:50.565Z\"",
+    "dateModified": "\"2012-12-30T04:24:53.831Z\"",
+    "_id": "B699FF90-93B7-4B1E-973A-AEDF7EEC7DA4",
+    "_rev": "5-950a101c11ce132da8bf4dc4d2528499"
+  }, {
+    "title": "Data from sample_filemaker.csv",
+    "description": "This is the data list which results from the import of these file(s). sample_filemaker.csv text/csv - 12641 bytes, last modified: Sunday, December 09, 2012",
+    "datumIds": [
+      "714E4A98-B7AD-4423-A44E-5FA7ACB83575",
+      "3062EA69-7001-43D9-BEE6-06438DDBB937",
+      "C1837A1C-79FF-4EC4-B79E-0AB9D91A4A91",
+      "B969EC6D-CA9D-403F-88E4-71202C637933",
+      "70A6DC00-E916-41A1-8D2D-45E3C1086E4D",
+      "AEA228D6-1786-4557-AEBA-5CBBF7657507",
+      "F3C2B808-98AC-4CFF-9D04-E2BDA3458221",
+      "11ACE9F7-7975-4BEF-8081-2BCCE0FBF672",
+      "F0B6FBAF-3538-414A-8548-BA37B30AAC76",
+      "9FA598CA-3ACD-48C0-A28D-40A91FAEF88B",
+      "48FEC36E-0CAE-4503-8CC7-714D2293C92C",
+      "0CAB10E5-331E-4420-9BFD-550D889516A8",
+      "7C69EE6F-5B84-42AF-8512-DCBDE372C8D5",
+      "8909F51A-C157-494D-AC3F-FBD3C0082E53",
+      "F8BE218B-0569-4A67-B405-5C72258C4B3E",
+      "161672AC-4152-4392-A475-BD3AA0FA942B",
+      "853C5EF0-436A-4AC8-B44C-F285AEB93B1C",
+      "E10342C3-C770-4701-9019-34F3D22AB388",
+      "A3A6DBAD-7ECF-4513-8A5E-B268F304305C",
+      "99924E86-A3DB-4B71-B9F4-3B4953425F74",
+      "525CFBDA-7954-4BF9-8C5C-6107823736CB",
+      "BFB18B07-5B7F-4644-BD89-589875FD4770",
+      "5052E3EE-2CFF-47F3-8FAA-ACD8577A7DAB",
+      "B26C05EA-E19A-4236-BC19-142995AE0869",
+      "DFE496D7-80C8-4FA9-B402-7608F42DEB9D",
+      "C00343C8-11D5-45A2-8AA4-B475EA105242",
+      "FFEA25C3-B421-4D4F-915B-7CDC978CB157",
+      "37737630-9544-4CF1-9E67-C23629B6F4C3",
+      "9BA1901B-94A4-4358-A808-CAB427DC2F0A",
+      "40BEBBC9-F326-4BB1-BF8B-9E433EEC36E8",
+      "7AB6A903-0A0A-4514-8B8B-49C17F3D1074",
+      "BF303723-A20F-402C-9202-D94E9285302C",
+      "E8621AD5-4D35-4241-8BD7-78A9F95762BB",
+      "54A03951-03CF-4F16-BD23-8A23B9CE72FF",
+      "5D81EE99-D7AE-42F4-AE9A-853DED71E9AF",
+      "47BB1BE3-E940-46AA-A718-AD94935417E5",
+      "222876E0-9BBE-441B-97ED-3961737A4616",
+      "AE5ED8E7-0854-4B69-B6BA-B76E2F076305",
+      "33BAA35E-9531-4D5B-AD6B-F814A1992968",
+      "6E4CBDD2-8B86-4E78-8479-40B2E2FF8985",
+      "3410FB90-E5B3-4331-97ED-FA3514E2352D",
+      "6B7E03FF-487D-452D-B0AE-6E041E603D44",
+      "A7228BCC-E7CE-4EA3-85A7-290C9D1A5339",
+      "E2A40C7F-C525-4C63-B582-22579E89E08C",
+      "D6B732EE-4391-492B-8B3E-8783BF179D68",
+      "A08069C3-067D-4B1B-AEDE-2713A32D8C47",
+      "1D446121-EDD3-4EBE-BC6C-6E12511AB17A",
+      "22A07FDB-2FD1-48E5-9B3D-CA0E6CE92C89",
+      "F60245BE-0F3F-46F2-AFAF-0BD34539CA37",
+      "5C5E7F77-E48B-4818-95F1-653BC33105E6",
+      "616778F4-06F4-4603-87E2-395FC8628D9C",
+      "146BAAD4-BBE8-4E19-9DD8-A40DDED2417B",
+      "419A8A12-372E-4CD0-9EA3-206D456EE6CF",
+      "C7C0A1FD-27F0-4501-944A-2CED61B7011E",
+      "FDF620D9-16DA-49A5-98C5-1132C2DA79F1",
+      "FF5B1B9D-4730-4B48-8F72-2AC708597534",
+      "53272959-44EC-445B-B444-FC5B2278624D",
+      "1D4E1397-2288-4107-BAEF-5A70BA3B3753",
+      "EE932FD8-96FB-492A-8A94-5F742B0457D3",
+      "F8989234-88BA-4433-99E7-FA2FEF0FB8DF",
+      "337268E7-B1EB-4309-BB65-8B7DAF691F5A",
+      "9F415D46-A2DC-4451-B75D-BD1BE82F92A8",
+      "686AA773-F979-4542-A19B-58E02DBBDB0D",
+      "4AC906B0-4262-42D7-B8C4-2E3047DE198C",
+      "EE923B92-DE37-40EF-BAC2-F1C912A6538D",
+      "8FBC5BCC-11F4-473B-9FF9-74E1C90C6B75",
+      "7BC06CA7-D5AB-4CBD-8513-B939255CC84C",
+      "DC474ECE-4590-4F9C-B265-A4F950171E99",
+      "3C896A88-842B-40BA-B4BA-EAD8280CB4FA",
+      "8763C271-BBED-4D9A-9B4D-4FFA7E7399E6",
+      "F8CC7AE7-533D-44DD-B26B-B759B4834E23",
+      "5E0FFC8F-2F0E-4834-B800-7140141979F6"
+    ],
+    "pouchname": "lingllama-firstcorpus",
+    "comments": [],
+    "dateCreated": "\"2012-12-30T04:20:37.098Z\"",
+    "dateModified": "\"2012-12-30T04:20:45.817Z\"",
+    "_rev": "2-77712117e5e2d246073af726e42ba298",
+    "_id": "B1208083-BCCC-4DE5-B9BE-4993806F0A06"
+  }, {
+    "title": "Datalist instructions",
+    "description": "This list explains what datalists are and how to make them. Data lists can be used to create handouts, prepare for sessions with consultants, export to LaTeX, or share with collaborators.",
+    "datumIds": [],
+    "pouchname": "lingllama-firstcorpus",
+    "comments": [],
+    "dateCreated": "\"2012-10-25T15:29:33.098Z\"",
+    "dateModified": "\"2012-11-24T03:22:41.761Z\"",
+    "_id": "171E1F75-C9E0-4FCD-9EEC-F08D6F9D365B",
+    "_rev": "15-86943bb095df29fccd2c8f7cc0be2371"
+  }],
+  "sessions": [{
+    "pouchname": "lingllama-firstcorpus",
+    "comments": [],
+    "sessionFields": [{
+      "label": "goal",
+      "value": "Change this session goal to the describe your first elicitiation session.",
+      "mask": "Change this session goal to the describe your first elicitiation session.",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This describes the goals of the session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "consultants",
+      "value": "XY",
+      "mask": "XY",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dialect",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "language",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the langauge (or language family) if you would like to use it.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateElicited",
+      "value": "Change this to a time period for example: A few months ago, probably on a Monday night.",
+      "mask": "Change this to a time period for example: A few months ago, probably on a Monday night.",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session took place.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "user",
+      "value": "lingllama",
+      "mask": "lingllama",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateSEntered",
+      "value": "2012-10-25T15:29:33.158Z",
+      "mask": "2012-10-25T15:29:33.158Z",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session was entered.",
+      "userchooseable": "disabled"
+    }],
+    "dateCreated": "\"2012-10-25T15:29:33.158Z\"",
+    "dateModified": "\"2012-12-30T04:24:53.776Z\"",
+    "_id": "C09FA7E7-DC53-48F3-8DF2-56D18753ABC3",
+    "_rev": "19-c6fda397a1e83c22a9b1ce95971f83db"
+  }, {
+    "sessionFields": [{
+      "label": "goal",
+      "value": "Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: Sunday, December 09, 2012",
+      "mask": "Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: Sunday, December 09, 2012",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This describes the goals of the session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "consultants",
+      "value": "Unknown",
+      "mask": "Unknown",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dialect",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "language",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the langauge (or language family) if you would like to use it.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateElicited",
+      "value": "Probably Prior to Sunday, December 09, 2012",
+      "mask": "Probably Prior to Sunday, December 09, 2012",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session took place.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "user",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateSEntered",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session was entered.",
+      "userchooseable": "disabled"
+    }],
+    "pouchname": "lingllama-firstcorpus",
+    "comments": [],
+    "dateCreated": "\"2012-12-30T04:20:37.029Z\"",
+    "dateModified": "\"2012-12-30T04:20:37.030Z\"",
+    "_rev": "1-1f7f23884d7f8a28a30fa28adb571141",
+    "_id": "1BAF09F4-EE8C-45EA-A5A5-80C1E572AD63"
+  }],
+  "team": {
+    "gravatar": "888888we8888888888888",
+    "username": "lingllama",
+    "authUrl": "https://auth.example.org",
+    "id": "lingllama",
+    "_id": "lingllama",
+    "_rev": "52-73c4b8f1650221dde94ee7f5e722081f",
+    "collection": "users",
+    "firstname": "",
+    "lastname": "",
+    "email": "",
+    "researchInterest": " \n      ",
+    "affiliation": " \n      ",
+    "description": " \n      ",
+    "pouchname": "lingllama-georgian"
+  },
+  "dateOfLastDatumModifiedToCheckForOldSession": "\"2014-11-18T01:09:37.793Z\"",
+  "copyright": "Default: Add names of the copyright holders of the corpus.",
+  "license": {
+    "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+    "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+    "link": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "termsOfUse": {
+    "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+  },
+  "timestamp": 1423377513263,
+  "collection": "private_corpuses",
+  "searchKeywords": "lingllama"
 }]

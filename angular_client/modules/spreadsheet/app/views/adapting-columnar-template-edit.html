@@ -9,9 +9,11 @@
     placeholder=""
     title="{{judgementHelpText}}" />
   </div>
-  <div class="span5" fielddb-glosser-input datumornewdatum="datum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
+  <div class="{{fieldSpanWidthClassName}}" fielddb-glosser-input datumornewdatum="datum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
   </div>
-  <div class="span5" fielddb-glosser-input datumornewdatum="datum" columnlabel="second">
+  <div ng-show="fieldsInColumns.second.length > 0" class="{{fieldSpanWidthClassName}}" fielddb-glosser-input datumornewdatum="datum" columnlabel="second">
+  </div>
+  <div ng-show="fieldsInColumns.third.length > 0" class="{{fieldSpanWidthClassName}}" fielddb-glosser-input datumornewdatum="datum" columnlabel="third">
   </div>
   <div class="span2 entered_modified_info">
     <span ng-show="searching==true">

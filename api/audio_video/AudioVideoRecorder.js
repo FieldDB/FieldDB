@@ -181,8 +181,8 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
               optionalElements.video.src = window.URL.createObjectURL(localMediaStream);
             } else {
               self.type = "audio";
-              optionalElements.audio.removeAttribute("hidden");
-              optionalElements.audio.removeAttribute("class");
+              // optionalElements.audio.removeAttribute("hidden");
+              // optionalElements.audio.removeAttribute("class");
               optionalElements.audio.src = window.URL.createObjectURL(localMediaStream);
             }
 

@@ -370,6 +370,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!numberOfColumns) {
       numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
     }
+    numberOfColumns = parseInt(numberOfColumns, 10);
     var fields = [];
     if (incomingFields && typeof incomingFields.splice !== "function") {
       for (var field in incomingFields) {
@@ -391,9 +392,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } catch (e) {
       console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
     }
-    var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || Math.ceil(fields.length / numberOfColumns);
+    var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn;
     if ($rootScope.corpus && $rootScope.corpus.prefs && $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn) {
       columnHeight = $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn;
+    }
+    if (columnHeight > fields.length - 1) {
+      columnHeight = columnHeight || Math.ceil(fields.length / numberOfColumns);
     }
     if ($rootScope.corpus.datumFields.indexOf("syntacticTreeLatex") < 6) {
       $rootScope.corpus.upgradeCorpusFieldsToMatchDatumTemplate("fulltemplate");
@@ -403,13 +407,22 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (numberOfColumns === 1) {
       columns.first = fields.slice(1, columnHeight + 1);
+      columns.second = [];
+      columns.third = [];
+      $scope.fieldSpanWidthClassName = "span10";
+      $scope.columnWidthClass = "span10";
     } else if (numberOfColumns === 2) {
       columns.first = fields.slice(1, columnHeight + 1);
       columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
+      columns.third = [];
+      $scope.fieldSpanWidthClassName = "span5";
+      $scope.columnWidthClass = "span5";
     } else if (numberOfColumns === 3) {
       columns.first = fields.slice(1, columnHeight + 1);
       columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
       columns.third = fields.slice(columnHeight * 2 + 1, columnHeight * 3 + 1);
+      $scope.fieldSpanWidthClassName = "span3";
+      $scope.columnWidthClass = "span3";
     }
     return columns;
   };

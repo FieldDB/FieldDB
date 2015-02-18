@@ -165,10 +165,14 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
 
   anonymousCode: {
     get: function() {
-      if (this.fields && this.fields.anonymousCode) {
-        return this.fields.anonymousCode.value.toUpperCase();
-      } else {
-        return;
+      try {
+        if (this.fields && this.fields.anonymousCode) {
+          return this.fields.anonymousCode.value.toUpperCase();
+        } else {
+          return;
+        }
+      } catch (e) {
+        this.warn("there was a problem getting the anonymousCode of this speaker", e);
       }
     },
     set: function(value) {
