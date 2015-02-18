@@ -8,9 +8,11 @@
     placeholder="*#?"
     title="{{judgementHelpText}}" />
   </div>
-  <div class="span5" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
+  <div class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
   </div>
-  <div class="span5" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="second">
+  <div ng-show="fieldsInColumns.second.length > 0" class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="second">
+  </div>
+  <div ng-show="fieldsInColumns.third.length > 0" class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="third">
   </div>
   <div class="span2">
     <button ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false">

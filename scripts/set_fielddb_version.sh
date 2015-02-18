@@ -155,9 +155,9 @@ echo "... setting version on fielddb-audio service npm"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../AudioWebService/package.json  > output
 mv output ../AudioWebService/package.json
 
-# echo "... setting version on fielddb-corpus service npm"
-# sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../CorpusWebService/package.json  > output
-# mv output ../CorpusWebService/package.json
+echo "... setting version on fielddb-corpus service npm"
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../CorpusWebService/package.json  > output
+mv output ../CorpusWebService/package.json
 
 echo "... setting version on fielddb-auth service npm"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../AuthenticationWebService/package.json  > output

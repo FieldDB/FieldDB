@@ -50,6 +50,13 @@ var useDefaults = function() {
   return JSON.parse(JSON.stringify(DEFAULT_DATUM_VALIDATION_STATI));
 };
 
+var removeFieldDBFields = function(item) {
+  delete item.fieldDBtype;
+  delete item.version;
+  delete item.dateCreated;
+  return item;
+};
+
 describe("lib/Collection", function() {
 
   it("should load", function() {
@@ -75,12 +82,12 @@ describe("lib/Collection", function() {
     });
 
     it("should use the primary key to get members using dot notation", function() {
-      expect(collection.Published).toEqual(useDefaults()[1]);
-      expect(collection.published).toEqual(useDefaults()[1]);
+      expect(collection.Published.validationStatus).toEqual(useDefaults()[1].validationStatus);
+      expect(collection.published.validationStatus).toEqual(useDefaults()[1].validationStatus);
     });
 
     it("should accept inverted", function() {
-      expect(collection.collection[0]).toEqual(useDefaults()[1]);
+      expect(collection.collection[0].validationStatus).toEqual(useDefaults()[1].validationStatus);
     });
 
     it("should permit push to add to the bottom", function() {
@@ -91,6 +98,16 @@ describe("lib/Collection", function() {
     it("should permit unshift to add to the top", function() {
       collection.unshift(useDefaults()[2]);
       expect(collection.collection[0]).toEqual(useDefaults()[2]);
+    });
+
+    it("should permit add of an array", function() {
+      expect(collection.length).toEqual(2);
+      collection.add([{
+        validationStatus: "CheckedWithSam"
+      }, {
+        validationStatus: "ToBeCheckedWithSam"
+      }]);
+      expect(collection.length).toEqual(4);
     });
 
     it("should permit constrution with just an array", function() {
@@ -118,8 +135,8 @@ describe("lib/Collection", function() {
       expect(newcollection.primaryKey).toEqual("id");
       expect(newcollection.length).toEqual(1);
       expect(newcollection.warnMessage).toBeUndefined();
-      expect(newcollection.A).toEqual({
-        id: " A",
+      expect(removeFieldDBFields(newcollection.A.toJSON())).toEqual({
+        id: "A",
         tipa: "llamda"
       });
     });
@@ -140,11 +157,11 @@ describe("lib/Collection", function() {
     });
 
     it("should seem like an object by providing dot notation for primaryKeys ", function() {
-      expect(collection.Checked).toEqual(useDefaults()[0]);
+      expect(collection.Checked.validationStatus).toEqual(useDefaults()[0].validationStatus);
     });
 
     it("should seem like an object by providing case insensitive cleaned dot notation for primaryKeys ", function() {
-      expect(collection.checked).toEqual(useDefaults()[0]);
+      expect(collection.checked.validationStatus).toEqual(useDefaults()[0].validationStatus);
     });
 
     it("should return undefined for items which are not in the collection", function() {
@@ -152,7 +169,8 @@ describe("lib/Collection", function() {
     });
 
     it("should be able to find items by primary key", function() {
-      expect(collection.find("Checked*")).toEqual([useDefaults()[0]]);
+      expect(collection.find("Checked*").length).toEqual(1);
+      expect(removeFieldDBFields(collection.find("Checked*")[0].toJSON())).toEqual(useDefaults()[0]);
     });
 
     it("should be return an empty array if nothing was searched for", function() {
@@ -168,60 +186,58 @@ describe("lib/Collection", function() {
         validationStatus: "CheckedBySeberina",
         color: "green"
       });
-      expect(collection.find(/^Checked*/)).toEqual([useDefaults()[0], {
+      expect(collection.find(/^Checked*/).map(function(item) {
+        return {
+          validationStatus: item.validationStatus,
+          color: item.color,
+          default: item.default
+        };
+      })).toEqual([useDefaults()[0], {
         validationStatus: "CheckedBySeberina",
         color: "green"
       }]);
     });
 
     it("should be able to find items by any attribute", function() {
-      expect(collection.find("color", "green")).toEqual([{
+      expect(collection.find("color", "green").map(function(item) {
+        return {
+          validationStatus: item.validationStatus,
+          color: item.color
+        };
+      })).toEqual([{
         validationStatus: "Checked*",
-        color: "green",
-        default: true
+        color: "green"
       }, {
         validationStatus: "ApprovedLanguageLearningContent*",
-        color: "green",
-        showInLanguageLearnignApps: true
+        color: "green"
       }]);
     });
 
     it("should accpet a RegExp to find items", function() {
-      expect(collection.find("color", /(red|black)/i)).toEqual([{
+      expect(collection.find("color", /(red|black)/i).map(function(item) {
+        return {
+          validationStatus: item.validationStatus,
+          color: item.color
+        };
+      })).toEqual([{
         validationStatus: "Deleted*",
-        color: "red",
-        showInSearchResults: false,
-        showInLanguageLearnignApps: false
+        color: "red"
       }, {
         validationStatus: "Duplicate*",
-        color: "red",
-        showInSearchResults: false,
-        showInLanguageLearnignApps: false
+        color: "red"
       }]);
     });
 
     /*TODO chagne this to "ren" once we have fuzzy find for real */
     it("should be able to fuzzy find items by any attribute", function() {
-      expect(collection.fuzzyFind("color", "r.*n")).toEqual([{
-        validationStatus: "Checked*",
-        color: "green",
-        default: true
-      }, {
-        validationStatus: "ToBeChecked*",
-        color: "orange"
-      }, {
-        validationStatus: "ApprovedLanguageLearningContent*",
-        color: "green",
-        showInLanguageLearnignApps: true
-      }, {
-        validationStatus: "ContributedLanguageLearningContent*",
-        color: "orange"
-      }]);
+      expect(collection.fuzzyFind("color", "r.*n").map(function(item) {
+        return item.color;
+      })).toEqual(["green", "orange", "green", "orange"]);
     });
 
     it("should be able to clone an existing collection", function() {
       var newbarecollection = collection.clone();
-      expect(newbarecollection).toEqual(useDefaults());
+      expect(newbarecollection.map(removeFieldDBFields)).toEqual(useDefaults());
       var newcollection = new Collection({
         primaryKey: "validationStatus",
         collection: newbarecollection
@@ -230,7 +246,7 @@ describe("lib/Collection", function() {
         validationStatus: "Checked",
         color: "blue"
       };
-      expect(collection.checked).toEqual(useDefaults()[0]);
+      expect(removeFieldDBFields(collection.checked.toJSON())).toEqual(useDefaults()[0]);
       expect(newcollection.checked).not.toEqual(useDefaults()[0]);
       expect(collection.checked).not.toEqual(newcollection.checked);
     });
@@ -559,13 +575,13 @@ describe("lib/Collection", function() {
   describe("non-lossy persistance", function() {
     var collection,
       collectionToLoad = [{
-        id: "a",
+        _id: "a",
         type: "datum"
       }, {
-        id: "z",
+        _id: "z",
         type: "datum"
       }, {
-        id: "c",
+        _id: "c",
         type: "datum"
       }];
 
@@ -587,8 +603,8 @@ describe("lib/Collection", function() {
     });
 
     it("should seem like an array when serialized", function() {
-      expect(collection.toJSON()).toEqual(collectionToLoad);
-      expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
+      expect(collection.toJSON().map(removeFieldDBFields)).toEqual(collectionToLoad);
+      expect(Object.prototype.toString.call(collection.toJSON())).toEqual("[object Array]");
     });
 
     it("should seem not loose information when serialized and reloaded", function() {
@@ -596,8 +612,8 @@ describe("lib/Collection", function() {
       collection = new Collection({
         collection: JSON.parse(collectionFromDB)
       });
-      expect(collection.toJSON()).toEqual(collectionToLoad);
-      expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
+      expect(collection.toJSON().map(removeFieldDBFields)).toEqual(collectionToLoad);
+      // expect(collection.map(removeFieldDBFields)).toEqual(collectionToLoad);
     });
 
     it("should seem not loose information when toJSONed and reloaded", function() {
@@ -605,8 +621,8 @@ describe("lib/Collection", function() {
       collection = new Collection({
         collection: collectionFromDB
       });
-      expect(collection.toJSON()).toEqual(collectionToLoad);
-      expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionToLoad));
+      expect(collection.toJSON().map(removeFieldDBFields)).toEqual(collectionToLoad);
+      // expect(collection.map(removeFieldDBFields)).toEqual(collectionToLoad);
     });
 
   });
@@ -663,7 +679,9 @@ describe("lib/Collection", function() {
           id: "onlyinTarget"
         }, {
           id: "willBeOverwritten",
-          missingInNew: "this isnt a FieldDBObject so it will be undefined after merge."
+          internalObject: {
+            missingInNew: "this isnt a FieldDBObject so it will be undefined after merge."
+          }
         },
         new FieldDBObject({
           id: "conflictingContents",
@@ -678,7 +696,9 @@ describe("lib/Collection", function() {
           missingInOriginal: "hi there"
         }), {
           id: "willBeOverwritten",
-          missingInOriginal: "this isnt a FieldDBObject so it will be fully overwritten."
+          internalObject: {
+            missingInOriginal: "this isnt a FieldDBObject so it will be fully overwritten."
+          }
         },
         new FieldDBObject({
           id: "robin",
@@ -822,7 +842,8 @@ describe("lib/Collection", function() {
       expect(result).toBeDefined();
       expect(result).toBe(aBaseCollection);
       expect(aBaseCollection._collection.length).toEqual(8);
-      expect(aBaseCollection.confirmMessage).toContain("I found a conflict for willbeoverwritten, Do you want to overwrite it from {\"id\":\"willBeOverwritten\",\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"id\":\"willBeOverwritten\",\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
+      expect(aBaseCollection.willbeoverwritten.confirmMessage).toContain("I found a conflict for internalObject, Do you want to overwrite it from {\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
+      // "I found a conflict for willbeoverwritten, Do you want to overwrite it from {\"id\":\"willBeOverwritten\",\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"id\":\"willBeOverwritten\",\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
       expect(aBaseCollection.conflictingcontents).toEqual(aBaseCollection._collection[6]);
       setTimeout(function() {
         expect(aBaseCollection.conflictingcontents.conflicting).toEqual("in first collection");

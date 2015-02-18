@@ -238,6 +238,7 @@ describe("lib/DatumFields", function() {
         collection: collectionFromDB
       });
 
+      expect(collectionReloaded._collection[0].type).toEqual(collectionFromDB[0].type);
       expect(collectionReloaded._collection[0].id).toEqual(collectionFromDB[0].id);
       expect(collectionReloaded._collection[0].fieldDBtype).toEqual(collectionFromDB[0].fieldDBtype);
       expect(collectionReloaded._collection[1].mask).toEqual(collectionFromDB[1].value);

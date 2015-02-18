@@ -374,7 +374,15 @@ Collection.prototype = Object.create(Object.prototype, {
 
   add: {
     value: function(value) {
-      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && value.constructor !== this.INTERNAL_MODELS.item) {
+      if (Object.prototype.toString.call(value) === "[object Array]") {
+        var self = this;
+        value.map(function(item) {
+          self.add(item);
+        });
+        return;
+      }
+
+      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && ! (value instanceof this.INTERNAL_MODELS.item)) {
         // console.log("adding a internamodel ", value);
         if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
           this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
@@ -390,8 +398,8 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
-        this.warn("The primary key " + this.primaryKey + " is undefined on this object, it cannot be added! ", value);
-        throw "The primary key is undefined on this object, it cannot be added! " + value;
+        this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
+        throw "The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! " + value.fieldDBtype;
       }
       this.debug("adding " + dotNotationKey);
       this.set(dotNotationKey, value);
@@ -845,9 +853,13 @@ Collection.prototype = Object.create(Object.prototype, {
         });
       }
     }
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      item: FieldDBObject
+    }
   }
-
-
 
 });
 

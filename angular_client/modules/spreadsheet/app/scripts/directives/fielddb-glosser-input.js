@@ -84,14 +84,17 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
   return {
     template: function(element, attrs) {
       console.log('loading template for fielddbGlosserInput', attrs);
-      var templateString = '<input ' +
-        'ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
-        'class="span5"' +
-        'type="text"' +
-        'ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
-        'placeholder="{{corpusField.label}}"' +
-        'title="{{corpusField.help}}"' +
-        'ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)" />';
+      var templateString =
+        '<input ' +
+        '  ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
+        '  class="{{fieldSpanWidthClassName}}"' +
+        '  type="text"' +
+        '  ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
+        '  placeholder="{{corpusField.label}}"' +
+        '  title="{{corpusField.help}}"' +
+        '  ng-hide="corpusField.showToUserTypes == \'readonly\'"' +
+        '  ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)"' +
+        '/>';
 
       return templateString;
     },

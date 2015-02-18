@@ -205,7 +205,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         return;
       } else {
         if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["sessionFields"](value);
+          value = new this.INTERNAL_MODELS["sessions"](value);
         }
       }
       this.unserializedSessions = value;
@@ -266,33 +266,35 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-  teamExternalObject: {
-    value: null
-  },
+  /**
+   * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
+   * @type {Object}
+   */
   team: {
     get: function() {
-      return this.teamExternalObject;
+      return this._team;
     },
     set: function(value) {
-      if (value === this.teamExternalObject) {
+      if (value === this._team) {
         return;
       }
-      this.teamExternalObject = value;
+      this._team = value;
     }
   },
 
-  publicSelfExternalObject: {
-    value: null
-  },
+  /**
+   * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
+   * @type {Object}
+   */
   publicSelf: {
     get: function() {
-      return this.publicSelfExternalObject;
+      return this._publicSelf;
     },
     set: function(value) {
-      if (value === this.publicSelfExternalObject) {
+      if (value === this._publicSelf) {
         return;
       }
-      this.publicSelfExternalObject = value;
+      this._publicSelf = value;
     }
   },
 
@@ -848,6 +850,101 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       });
 
       return deferred.promise;
+    }
+  },
+
+  /**
+   *  This function looks for the field's details from the corpus fields, if it exists it returns that field template.
+   *
+   * If the field isnt in the corpus' fields exactly, it looks for fields which this field should map to (eg, if the field is codepermanent it can be mapped to anonymouscode)
+   * @param  {String/Object} field A datumField to look for, or the label/id of a datum field to look for.
+   * @return {DatumField}       A datum field with details filled in from the corresponding field in the corpus, or from a template.
+   */
+  normalizeFieldWithExistingCorpusFields: {
+    value: function(field) {
+      if (field && typeof field.trim === "function") {
+        field = field.trim();
+      }
+      if (field === undefined || field === null || field === "") {
+        return;
+      }
+      var incomingLabel = field.id || field.label || field;
+      var fuzzyLabel = incomingLabel.toLowerCase().replace(/[^a-z]/g, "");
+      var allFields = new DatumFields();
+      if (this.datumFields && this.datumFields.length > 0) {
+        allFields.add(this.datumFields.toJSON());
+      } else {
+        allFields.add(DEFAULT_CORPUS_MODEL.datumFields);
+      }
+      if (this.participantFields && this.participantFields.length > 0) {
+        allFields.add(this.participantFields.toJSON());
+      } else {
+        allFields.add(DEFAULT_CORPUS_MODEL.participantFields);
+      }
+      var correspondingDatumField = allFields.find(field, null, true);
+      /* if there is no corresponding field yet in the allFields, then maybe there is a field which is normalized to this label */
+      if (!correspondingDatumField || correspondingDatumField.length === 0) {
+        if (fuzzyLabel.indexOf("checkedwith") > -1 || fuzzyLabel.indexOf("checkedby") > -1 || fuzzyLabel.indexOf("publishedin") > -1) {
+          correspondingDatumField = allFields.find("validationStatus");
+          if (correspondingDatumField.length > 0) {
+            this.debug("This header matches an existing corpus field. ", correspondingDatumField);
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+          }
+        } else if (fuzzyLabel.indexOf("codepermanent") > -1) {
+          correspondingDatumField = allFields.find("anonymouscode");
+          if (correspondingDatumField.length > 0) {
+            this.debug("This header matches an existing corpus field. ", correspondingDatumField);
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+          }
+        } else if (fuzzyLabel.indexOf("nsection") > -1) {
+          correspondingDatumField = allFields.find("courseNumber");
+          if (correspondingDatumField.length > 0) {
+            this.debug("This header matches an existing corpus field. ", correspondingDatumField);
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+          }
+        } else if (fuzzyLabel.indexOf("prenom") > -1 || fuzzyLabel.indexOf("prnom") > -1) {
+          correspondingDatumField = allFields.find("firstname");
+          if (correspondingDatumField.length > 0) {
+            this.debug("This header matches an existing corpus field. ", correspondingDatumField);
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+          }
+        } else if (fuzzyLabel.indexOf("nomdefamille") > -1) {
+          correspondingDatumField = allFields.find("lastname");
+          if (correspondingDatumField.length > 0) {
+            this.debug("This header matches an existing corpus field. ", correspondingDatumField);
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+          }
+        } else if (fuzzyLabel.indexOf("datedenaissance") > -1) {
+          correspondingDatumField = allFields.find("dateofbirth");
+          if (correspondingDatumField.length > 0) {
+            this.debug("This header matches an existing corpus field. ", correspondingDatumField);
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+          }
+        }
+
+      }
+
+      /* if the field is still not defined inthe corpus, construct a blank field with this label */
+      if (!correspondingDatumField || correspondingDatumField.length === 0) {
+        correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
+        correspondingDatumField[0].id = incomingLabel;
+        correspondingDatumField[0].labelExperimenters = incomingLabel;
+        correspondingDatumField[0].labelFieldLinguists = incomingLabel;
+        allFields.add(correspondingDatumField[0]);
+      }
+      if (correspondingDatumField && correspondingDatumField[0]) {
+        correspondingDatumField = correspondingDatumField[0];
+      }
+
+      this.debug("correspondingDatumField ", correspondingDatumField);
+
+      return new DatumField(correspondingDatumField);
     }
   },
 
