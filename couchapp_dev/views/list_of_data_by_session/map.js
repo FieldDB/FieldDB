@@ -5,7 +5,7 @@ function(doc) {
   if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
     return;
   }
-  var debugMode = true;
+  var debugMode = false;
   if (doc.collection === "datums" || (doc.datumFields && doc.session && doc.session._id)) {
     var dateEntered = doc.dateEntered;
     if (dateEntered) {
