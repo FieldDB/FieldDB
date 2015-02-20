@@ -95,13 +95,13 @@ describe("Corpus", function() {
       expect(corpus.datumFields.constructor === DatumFields);
       // console.log(corpus.datumFields.utterance);
       // console.log(corpus.datumFields.toJSON());
-      expect(corpus.datumFields.utterance.labelFieldLinguists).toEqual("Utterance");
+      expect(corpus.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       expect(corpus.datumFields.clone()).toBeDefined();
     });
 
     it("should create a datum with the datumFields", function(done) {
       corpus.newDatum().then(function(datum) {
-        expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Utterance");
+        expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       }).then(done, done);
       // console.log(datum.toJSON());
     }, specIsRunningTooLong);
