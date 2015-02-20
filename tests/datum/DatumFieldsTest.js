@@ -139,7 +139,7 @@ describe("lib/DatumFields", function() {
     });
 
     it("should be able to find items by primary key", function() {
-      expect(collection.find("utterance")[0].labelFieldLinguists).toEqual("Utterance");
+      expect(collection.find("morphemes")[0].labelFieldLinguists).toEqual("Morphemes");
     });
 
     it("should be able to find items by any attribute", function() {
@@ -150,13 +150,13 @@ describe("lib/DatumFields", function() {
     it("should accpet a RegExp to find items", function() {
       expect(collection.find("type", /(tags|parallelText)/i).map(function(item) {
         return item.labelFieldLinguists;
-      })).toEqual(["Orthography", "Utterance", "Translation", "Tags", "Data validity/verification Status"]);
+      })).toEqual(["Orthography", "Transcription", "Translation", "Tags", "Data validity/verification Status"]);
     });
 
     it("should be able to fuzzy find items by any attribute", function() {
       expect(collection.fuzzyFind("value", "nay").map(function(item) {
         return item.labelFieldLinguists;
-      })).toEqual(["Utterance", "Morphemes"]);
+      })).toEqual(["Transcription", "Morphemes"]);
     });
 
 
