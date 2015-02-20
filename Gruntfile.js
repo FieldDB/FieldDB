@@ -139,6 +139,7 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask("docs", ["jsdoc"]);
+  grunt.registerTask("test", ["jasmine_node"]);
   grunt.registerTask("build", ["jshint", "browserify"]);
   grunt.registerTask("dist", ["jshint", "jasmine_node", "exec:updateFieldDBVersion", "browserify", "uglify"]);
   grunt.registerTask("default", ["dist"]);
