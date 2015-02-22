@@ -50,6 +50,7 @@ require.config({
 
     "xml2json": "libs/xml2json",
 
+    "FieldDB": "bower_components/fielddb/fielddb",
     "oprime": "libs/OPrime",
     "OPrime": "libs/webservicesconfig_devserver"
   },
@@ -106,7 +107,7 @@ require.config({
 });
 
 // Initialization
-require(["app/App", "OPrime"], function(App) {
+require(["app/App", "OPrime", "FieldDB"], function(App) {
 
   console.warn("removing old lexicons to reduce storage use, and force fresh");
   for (var i = 0; i < localStorage.length; i++) {

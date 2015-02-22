@@ -10,6 +10,9 @@
 #
 # Note: If you have requirejs installed globally, replace the backbone_client/node_modules/requirejs/bin/r.js below with the global executable
 
+rm backbone_client/bower_components/fielddb/fielddb.js
+ln -s $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
+
 #welcome is just a redirect to either user or corpus
 rm -rf couchapp_minified/_attachments
 
