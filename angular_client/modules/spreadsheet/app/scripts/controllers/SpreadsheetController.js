@@ -53,7 +53,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "2.42.11.13.23ss";
+  $rootScope.appVersion = "2.44.22.12.35ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -2640,7 +2640,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         $scope.resetPasswordInfo = {};
         $scope.showResetPassword = false;
-        $rootScope.notificationMessage = "Successfully updated password";
+        $rootScope.notificationMessage = "Successfully updated password.";
         $rootScope.openNotification();
 
 

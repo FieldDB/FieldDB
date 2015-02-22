@@ -257,15 +257,20 @@ angular.module('spreadsheetApp')
           },
           function(err) {
             console.warn(err);
-            var message = "please report this.";
+            var message = "";
             if (err.status === 0) {
               message = "are you offline?";
               if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "have you accepted the server's security certificate? (please refer to your registration email)";
+                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
+            if (err && err.status >= 400 && err.userFriendlyErrors) {
+              message = err.userFriendlyErrors;
+            } else {
+              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+            }
+            deferred.reject(message);
 
-            deferred.reject("Cannot contact " + $rootScope.serverCode + " server, " + message);
           });
         return deferred.promise;
       },
@@ -292,8 +297,21 @@ angular.module('spreadsheetApp')
             }
             return response;
           }, function(err) {
-            console.log(JSON.stringify(err));
-            $rootScope.notificationMessage = "Error registering a new user, please contact us. Opening the Contact Us page... ";
+            console.warn(err);
+            var message = "";
+            if (err.status === 0) {
+              message = "are you offline?";
+              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+              }
+            }
+            if (err && err.status >= 400 && err.userFriendlyErrors) {
+              message = err.userFriendlyErrors.join(" ");
+            } else {
+              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+            }
+
+            $rootScope.notificationMessage = message;
             $rootScope.openNotification();
             $rootScope.loading = false;
             window.setTimeout(function() {
@@ -325,13 +343,27 @@ angular.module('spreadsheetApp')
                 $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
                 $rootScope.openNotification();
               } else {
-                $rootScope.notificationMessage = JSON.stringify(response.data.info[0]) + "\nYou may now log in to this corpus.";
+                $rootScope.notificationMessage = JSON.stringify(response.data.info[0]) + "\nYou may now select this corpus.";
                 $rootScope.openNotification();
               }
               return response.data;
             }, function(err) {
-              console.log(JSON.stringify(err));
-              $rootScope.notificationMessage = "Error creating new corpus.";
+
+              console.warn(err);
+              var message = "";
+              if (err.status === 0) {
+                message = "are you offline?";
+                if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+                  message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+                }
+              }
+              if (err && err.status >= 400 && err.userFriendlyErrors) {
+                message = err.userFriendlyErrors.join(" ");
+              } else {
+                message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              }
+
+              $rootScope.notificationMessage = message;
               $rootScope.openNotification();
               $rootScope.loading = false;
             });
@@ -369,8 +401,21 @@ angular.module('spreadsheetApp')
               return response;
             },
             function(err) {
-              console.log(JSON.stringify(err));
-              $rootScope.notificationMessage = "Error updating user roles.";
+              console.warn(err);
+              var message = "";
+              if (err.status === 0) {
+                message = "are you offline?";
+                if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+                  message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+                }
+              }
+              if (err && err.status >= 400 && err.userFriendlyErrors) {
+                message = err.userFriendlyErrors.join(" ");
+              } else {
+                message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              }
+
+              $rootScope.notificationMessage = message;
               $rootScope.openNotification();
               $rootScope.loading = false;
             });
