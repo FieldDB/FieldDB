@@ -10,7 +10,7 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
  *           text area. Some of them, such as the judgment one will be very
  *           short, while others context can be infinitely long.
  * @property label The label that is associated with the field, such as
- *           Utterance, Morphemes, etc.
+ *           Transcription, Morphemes, etc.
  * @property value This is what the user will enter when entering data into
  *           the data fields.
  * @property mask This allows users to mask fields for confidentiality.
