@@ -17,11 +17,11 @@ var Session = require("./../FieldDBObject").FieldDBObject;
  * @class The Datum widget is the place where all linguistic data is
  *        entered; one at a time.
  *
- * @property {DatumField} utterance The utterance field generally
+ * @property {DatumField} transcription The transcription field generally
  *           corresponds to the first line in linguistic examples that can
  *           either be written in the language's orthography or a
  *           romanization of the language. An additional field can be added
- *           if the language has a non-roman script.
+ *           if the language has a non-roman script. (This was previously called the utterance field).
  * @property {DatumField} gloss The gloss field corresponds to the gloss
  *           line in linguistic examples where the morphological details of
  *           the words are displayed.
