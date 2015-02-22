@@ -976,7 +976,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }
           $rootScope.loading = false;
         }, /* login failure */ function(reason) {
-          $rootScope.notificationMessage = "Error logging in.*\n" + reason;
+          $rootScope.notificationMessage = "Error logging in.\n" + reason;
           $rootScope.openNotification(null, true);
           $rootScope.loading = false;
         });
