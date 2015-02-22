@@ -92,17 +92,16 @@ define([
                 OPrime.bug("There was a problem loading your corpus. Please report this error.");
               };
               var corpusself = this;
-              OPrime.makeCORSRequest({
-                type : 'GET',
-                url : queryUrl,
-                success : function(serverResults) {
-                  if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
-                    errorfunction("No corpus doc! this corpus is broken.");
-                  }
-                  var corpusidfromCorpusMask = serverResults.rows[0].id;
-                  window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
-                }, error: errorfunction
-              });
+              FieldDB.CORS.makeCORSRequest({
+                type: 'GET',
+                url: queryUrl
+              }).then(function(serverResults) {
+                if (!serverResults || !serverResults.rows || serverResults.rows.length === 0) {
+                  errorfunction("No corpus doc! this corpus is broken.");
+                }
+                var corpusidfromCorpusMask = serverResults.rows[0].id;
+                window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
+              }, errorfunction);
               return;
             }
 

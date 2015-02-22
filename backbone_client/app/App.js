@@ -941,19 +941,17 @@ define([
       }
       var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
 
-      OPrime.makeCORSRequest({
-        type : 'POST',
-        url : couchurl,
-        data : backboneActivity.toJSON(),
-        success : function(resp) {
-          if (OPrime.debugMode) OPrime.debug("Successfully saved activity to your activity couch.", resp);
-        },
-        error : function(e,f,g){
-          if (OPrime.debugMode) OPrime.debug("Error saving activity", e,f,g);
-          localStorage.setItem("activity"+Date.now(), backboneActivity.toJSON());
-        }
-        });
-
+      FieldDB.CORS.makeCORSRequest({
+        type: 'POST',
+        withCredentials: true,
+        url: couchurl,
+        data: backboneActivity.toJSON()
+      }).then(function(resp) {
+        if (OPrime.debugMode) OPrime.debug("Successfully saved activity to your activity couch.", resp);
+      }, function(e, f, g) {
+        if (OPrime.debugMode) OPrime.debug("Error saving activity", e, f, g);
+        localStorage.setItem("activity" + Date.now(), backboneActivity.toJSON());
+      });
 
 //      if (bareActivityObject.get("teamOrPersonal") == "team") {
 //        window.app.get("currentCorpusTeamActivityFeed").addActivity(bareActivityObject);
