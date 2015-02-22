@@ -147,50 +147,45 @@ define([
       // };
 
       var corpusself = this;
-      OPrime.makeCORSRequest({
-        type : 'GET',
-        url : queryUrl,
-        success : function(serverResults) {
+      FieldDB.CORS.makeCORSRequest({
+        type: 'GET',
+        url: queryUrl
+      }).then(function(serverResults) {
 
-          if(!serverResults || !serverResults.rows || serverResults.rows.length === 0){
-            errorfunction("No corpus doc! this corpus is broken.");
-          }
-          var model = serverResults.rows[0].value;
-          couchConnection.corpusid = model._id;
-          // appids.corpusid = model._id;
-          model.couchConnection = couchConnection;
-          // corpusself.set(corpusself.parse(model));
+        if (!serverResults || !serverResults.rows || serverResults.rows.length === 0) {
+          errorfunction("No corpus doc! this corpus is broken.");
+        }
+        var model = serverResults.rows[0].value;
+        couchConnection.corpusid = model._id;
+        // appids.corpusid = model._id;
+        model.couchConnection = couchConnection;
+        // corpusself.set(corpusself.parse(model));
 
-          if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
-          $(".spinner-status").html("Loading Datalist...");
-          corpusself.makeSureCorpusHasADataList(function(){
-            corpusself.datalists.at(0).setAsCurrentDataList(function(){
-              $(".spinner-status").html("Datalist loaded.");
+        if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
+        $(".spinner-status").html("Loading Datalist...");
+        corpusself.makeSureCorpusHasADataList(function() {
+          corpusself.datalists.at(0).setAsCurrentDataList(function() {
+            $(".spinner-status").html("Datalist loaded.");
+          });
+          $(".spinner-status").html("Loading Elicitation Session...");
+          corpusself.makeSureCorpusHasASession(function() {
+            corpusself.sessions.at(0).setAsCurrentSession(function() {
+              $(".spinner-status").html("Session loaded.");
+              if (typeof sucessloadingorCreatingcallback == "function") {
+                sucessloadingorCreatingcallback();
+              }
             });
-            $(".spinner-status").html("Loading Elicitation Session...");
-            corpusself.makeSureCorpusHasASession(function(){
-              corpusself.sessions.at(0).setAsCurrentSession(function(){
-                $(".spinner-status").html("Session loaded.");
-                if(typeof sucessloadingorCreatingcallback == "function"){
-                  sucessloadingorCreatingcallback();
-                }
-              });
 
-              //end success to create new data list
-            },function(){
-              alert("Failed to create a session. ");
-            });//end failure to create new data list
             //end success to create new data list
-          },function(){
-            alert("Failed to create a datalist. ");
-          });//end failure to create new data list
+          }, function() {
+            alert("Failed to create a session. ");
+          }); //end failure to create new data list
+          //end success to create new data list
+        }, function() {
+          alert("Failed to create a datalist. ");
+        }); //end failure to create new data list
 
-
-
-        },// end successful fetch
-        error : errorfunction,
-        dataType : "json"
-      });
+      }, errorfunction);
     },
     fetchPublicSelf : function(){
       try{
@@ -859,9 +854,9 @@ define([
       };
       var config = {
         method: "POST",
+        withCredentials: true,
         url: dataToPost.authUrl + "/newcorpus",
         data: dataToPost,
-        withCredentials: true,
         success: function(response) {
           console.log("Created new corpus.");
           console.log(JSON.stringify(response));
@@ -898,13 +893,12 @@ define([
             });
 
           }
-        },
-        error: functionForError
+        }
       };
       window.app.router.hideEverything();
       window.app.showSpinner();
       $(".spinner-status").html("Contacting the server to create a database for your corpus...");
-      OPrime.makeCORSRequest(config);
+      FieldDB.CORS.makeCORSRequest(config).then(config.success, functionForError);
 
     },
     /**
@@ -1509,66 +1503,61 @@ define([
       }
 
       var self = this;
-      OPrime.makeCORSRequest({
-        type : 'GET',
-        url : jsonUrl,
-        success : function(serverResults) {
-          OPrime.debug("serverResults"
-              + JSON.stringify(serverResults));
+      FieldDB.CORS.makeCORSRequest({
+        type: 'GET',
+        url: jsonUrl
+      }).then(function(serverResults) {
+        OPrime.debug("serverResults" + JSON.stringify(serverResults));
 
-          var counts = _.pluck(serverResults.rows, "value");
-          if (OPrime.debugMode) OPrime.debug(counts);
-          var frequentFields = [];
-          try{
-            var totalDatumCount = serverResults.rows[(_.pluck(
-                serverResults.rows, "key").indexOf("datumTotal"))].value;
+        var counts = _.pluck(serverResults.rows, "value");
+        if (OPrime.debugMode) OPrime.debug(counts);
+        var frequentFields = [];
+        try {
+          var totalDatumCount = serverResults.rows[(_.pluck(
+            serverResults.rows, "key").indexOf("datumTotal"))].value;
 
-            for ( var field in serverResults.rows) {
-              if(serverResults.rows[field].key == "datumTotal"){
-                continue;
-              }
-              if (serverResults.rows[field].value / totalDatumCount * 100 > 50) {
-                if (OPrime.debugMode) OPrime.debug("Considering "+ serverResults.rows[field].key+ " as frequent (in more than 50% of datum) : "+ serverResults.rows[field].value / totalDatumCount * 100 );
-                frequentFields.push( serverResults.rows[field].key );
-              }
+          for (var field in serverResults.rows) {
+            if (serverResults.rows[field].key == "datumTotal") {
+              continue;
             }
-          }catch(e){
-            if (OPrime.debugMode) OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
-            frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
+            if (serverResults.rows[field].value / totalDatumCount * 100 > 50) {
+              if (OPrime.debugMode) OPrime.debug("Considering " + serverResults.rows[field].key + " as frequent (in more than 50% of datum) : " + serverResults.rows[field].value / totalDatumCount * 100);
+              frequentFields.push(serverResults.rows[field].key);
+            }
           }
-          if(frequentFields == []){
-            frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
-          }
+        } catch (e) {
+          if (OPrime.debugMode) OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ", e);
+          frequentFields = ["judgement", "utterance", "morphemes", "gloss", "translation"];
+        }
+        if (frequentFields == []) {
+          frequentFields = ["judgement", "utterance", "morphemes", "gloss", "translation"];
+        }
 
-          /*
-           * Hide machine only fields:
-           */
-          var doesThisCorpusHaveSyntacticCategory = frequentFields.indexOf("syntacticCategory");
-          if(doesThisCorpusHaveSyntacticCategory > -1){
-            frequentFields.splice(doesThisCorpusHaveSyntacticCategory, 1);
-          }
-          var doesThisCorpusHaveSyntacticTreeLatex = frequentFields.indexOf("syntacticTreeLatex");
-          if(doesThisCorpusHaveSyntacticTreeLatex > -1){
-            frequentFields.splice(doesThisCorpusHaveSyntacticTreeLatex, 1);
-          }
+        /*
+         * Hide machine only fields:
+         */
+        var doesThisCorpusHaveSyntacticCategory = frequentFields.indexOf("syntacticCategory");
+        if (doesThisCorpusHaveSyntacticCategory > -1) {
+          frequentFields.splice(doesThisCorpusHaveSyntacticCategory, 1);
+        }
+        var doesThisCorpusHaveSyntacticTreeLatex = frequentFields.indexOf("syntacticTreeLatex");
+        if (doesThisCorpusHaveSyntacticTreeLatex > -1) {
+          frequentFields.splice(doesThisCorpusHaveSyntacticTreeLatex, 1);
+        }
 
-          self.frequentDatumFields = frequentFields;
-          if (typeof callback == "function") {
-            callback(frequentFields);
-          }
-        },// end successful fetch
-        error : function(response) {
-          OPrime
-          .debug("There was a problem getting the frequent datum fields, using defaults."
-              + JSON.stringify(response));
-          if (typeof callback == "function") {
-            callback(["judgement","utterance","morphemes","gloss","translation"]);
-          }
+        self.frequentDatumFields = frequentFields;
+        if (typeof callback == "function") {
+          callback(frequentFields);
+        }
+      }, function(response) {
+        OPrime
+          .debug("There was a problem getting the frequent datum fields, using defaults." + JSON.stringify(response));
+        if (typeof callback == "function") {
+          callback(["judgement", "utterance", "morphemes", "gloss", "translation"]);
+        }
 
-          //end error
-        },
-          dataType : "json"
-        });
+        //end error
+      });
     },
     /**
      * This function takes in a pouchname, which could be different
@@ -1612,41 +1601,36 @@ define([
       }
 
       var self = this;
-      OPrime.makeCORSRequest({
-        type : 'GET',
-        url : jsonUrl,
-        success : function(serverResults) {
-          OPrime.debug("serverResults"
-              + JSON.stringify(serverResults));
+      FieldDB.CORS.makeCORSRequest({
+        type: 'GET',
+        url: jsonUrl
+      }).then(function(serverResults) {
+        OPrime.debug("serverResults" + JSON.stringify(serverResults));
 
-          var counts = _.pluck(serverResults.rows, "value");
-          if (OPrime.debugMode) OPrime.debug(counts);
-          var frequentStates = _.pluck(serverResults.rows, "key");
-          if(frequentStates == []){
-            frequentStates = ["Checked","Deleted","ToBeCheckedWithAnna","ToBeCheckedWithBill", "ToBeCheckedWithClaude"];
-          }
+        var counts = _.pluck(serverResults.rows, "value");
+        if (OPrime.debugMode) OPrime.debug(counts);
+        var frequentStates = _.pluck(serverResults.rows, "key");
+        if (frequentStates == []) {
+          frequentStates = ["Checked", "Deleted", "ToBeCheckedWithAnna", "ToBeCheckedWithBill", "ToBeCheckedWithClaude"];
+        }
 
 
-          self.frequentDatumValidationStates = frequentStates;
-          if (typeof callback == "function") {
-            callback(frequentStates);
-          }
-          window.getFrequentDatumValidationStatesPending = false;
+        self.frequentDatumValidationStates = frequentStates;
+        if (typeof callback == "function") {
+          callback(frequentStates);
+        }
+        window.getFrequentDatumValidationStatesPending = false;
 
-        },// end successful fetch
-        error : function(response) {
-          OPrime
-          .debug("There was a problem getting the frequentDatumValidationStates, using defaults."
-              + JSON.stringify(response));
-          if (typeof callback == "function") {
-            callback(["Checked","Deleted","ToBeCheckedWithAnna","ToBeCheckedWithBill", "ToBeCheckedWithClaude"]);
-          }
-          window.getFrequentDatumValidationStatesPending = false;
+      }, function(response) {
+        OPrime
+          .debug("There was a problem getting the frequentDatumValidationStates, using defaults." + JSON.stringify(response));
+        if (typeof callback == "function") {
+          callback(["Checked", "Deleted", "ToBeCheckedWithAnna", "ToBeCheckedWithBill", "ToBeCheckedWithClaude"]);
+        }
+        window.getFrequentDatumValidationStatesPending = false;
 
-          //end error
-        },
-          dataType : "json"
-        });
+        //end error
+      });
     },
     /**
      * This function takes in a pouchname, which could be different
@@ -1690,40 +1674,35 @@ define([
       }
 
       var self = this;
-      OPrime.makeCORSRequest({
-        type : 'GET',
-        url : jsonUrl,
-        success : function(serverResults) {
-          OPrime.debug("serverResults"
-              + JSON.stringify(serverResults));
+      FieldDB.CORS.makeCORSRequest({
+        type: 'GET',
+        url: jsonUrl
+      }).then(function(serverResults) {
+        OPrime.debug("serverResults" + JSON.stringify(serverResults));
 
-          var counts = _.pluck(serverResults.rows, "value");
-          if (OPrime.debugMode) OPrime.debug(counts);
-          var frequentTags = _.pluck(serverResults.rows, "key");
-          if(frequentTags == []){
-            frequentTags = ["Passive","WH","Indefinte","Generic", "Agent-y","Causative","Pro-drop","Ambigous"];
-          }
+        var counts = _.pluck(serverResults.rows, "value");
+        if (OPrime.debugMode) OPrime.debug(counts);
+        var frequentTags = _.pluck(serverResults.rows, "key");
+        if (frequentTags == []) {
+          frequentTags = ["Passive", "WH", "Indefinte", "Generic", "Agent-y", "Causative", "Pro-drop", "Ambigous"];
+        }
 
-          self.frequentDatumTags = frequentTags;
-          if (typeof callback == "function") {
-            callback(frequentTags);
-          }
-          window.getFrequentDatumTagsPending = false;
+        self.frequentDatumTags = frequentTags;
+        if (typeof callback == "function") {
+          callback(frequentTags);
+        }
+        window.getFrequentDatumTagsPending = false;
 
-        },// end successful fetch
-        error : function(response) {
-          OPrime
-          .debug("There was a problem getting the frequentDatumTags, using defaults."
-              + JSON.stringify(response));
-          if (typeof callback == "function") {
-            callback(["Passive","WH","Indefinte","Generic", "Agent-y","Causative","Pro-drop","Ambigous"]);
-          }
-          window.getFrequentDatumTagsPending = false;
+      }, function(response) {
+        OPrime
+          .debug("There was a problem getting the frequentDatumTags, using defaults." + JSON.stringify(response));
+        if (typeof callback == "function") {
+          callback(["Passive", "WH", "Indefinte", "Generic", "Agent-y", "Causative", "Pro-drop", "Ambigous"]);
+        }
+        window.getFrequentDatumTagsPending = false;
 
-          //end error
-        },
-          dataType : "json"
-        });
+        //end error
+      });
     },
     changeCorpusPublicPrivate : function(){
 //      alert("TODO contact server to change the public private of the corpus");

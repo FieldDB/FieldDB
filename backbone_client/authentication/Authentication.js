@@ -94,51 +94,49 @@ define([
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server, the server will overwrite their details. should we automatically check here, or should we make htem a button when they are authetnticated to test if they ahve lost their prefs etc?
       }
       var self= this;
-      var authUrl = user.get("authUrl");
-      OPrime.makeCORSRequest({
-        type : 'POST',
-        url : authUrl + "/login",
-        data : dataToPost,
-        success : function(serverResults) {
-          var userFriendlyErrors = serverResults.userFriendlyErrors || "";
-          if (userFriendlyErrors) {
-            window.appView.toastUser(userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
-            if (typeof failcallback == "function") {
-              failcallback(userFriendlyErrors.join("<br/>"));
-            }
-            if (typeof successcallback == "function") {
-              successcallback(null, userFriendlyErrors); // tell caller that the user failed to
-              // authenticate
-            }
-          } else if (serverResults.user != null) {
-
-            this.staleAuthentication = false;
-
-            if(OPrime.isTouchDBApp()){
-              /* if on android, turn on replication. */
-              var db = dataToPost.username + "-firstcorpus";
-              var dbServer = serverResults.user.corpuses[0].domain;
-              if(serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.pouchname ){
-                db = serverResults.user.mostRecentIds.couchConnection.pouchname;
-                dbServer = serverResults.user.mostRecentIds.couchConnection.domain;
-              }
-              Android.setCredentialsAndReplicate(db, username, password, dbServer);
-            }
-
-            self.saveServerResponseToUser(serverResults, successcallback);
-          }
-        },//end successful login
-        error: function(e){
-          if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
-          if(window.appView){
-            window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs, "alert-danger","Connection errors:");
-          }
-
+      var authUrl = OPrime.getAuthUrl(user.get("authUrl"));
+      FieldDB.CORS.makeCORSRequest({
+        type: 'POST',
+        withCredentials: true,
+        url: authUrl + "/login",
+        data: dataToPost
+      }).then(function(serverResults) {
+        var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+        if (userFriendlyErrors) {
+          window.appView.toastUser(userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger", "Login errors:");
           if (typeof failcallback == "function") {
-            failcallback("There was an error in contacting the authentication server to confirm your identity. Maybe you're offline?");
+            failcallback(userFriendlyErrors.join("<br/>"));
           }
-        },
-        dataType : ""
+          if (typeof successcallback == "function") {
+            successcallback(null, userFriendlyErrors); // tell caller that the user failed to
+            // authenticate
+          }
+        } else if (serverResults.user != null) {
+
+          this.staleAuthentication = false;
+
+          if (OPrime.isTouchDBApp()) {
+            /* if on android, turn on replication. */
+            var db = dataToPost.username + "-firstcorpus";
+            var dbServer = serverResults.user.corpuses[0].domain;
+            if (serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.pouchname) {
+              db = serverResults.user.mostRecentIds.couchConnection.pouchname;
+              dbServer = serverResults.user.mostRecentIds.couchConnection.domain;
+            }
+            Android.setCredentialsAndReplicate(db, username, password, dbServer);
+          }
+
+          self.saveServerResponseToUser(serverResults, successcallback);
+        }
+      }, function(e) {
+        if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+        if (window.appView) {
+          window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs, "alert-danger", "Connection errors:");
+        }
+
+        if (typeof failcallback == "function") {
+          failcallback("There was an error in contacting the authentication server to confirm your identity. Maybe you're offline?");
+        }
       });
     },
 
@@ -398,40 +396,37 @@ define([
           dataToPost.couchConnection.path ="";
           window.app.get("corpus").get("couchConnection").path = "";
         }
-        authUrl = this.get("userPrivate").get("authUrl");
+        authUrl = OPrime.getAuthUrl(this.get("userPrivate").get("authUrl"));
       }else{
         return;
       }
       var self= this;
-      OPrime.makeCORSRequest({
-        type : 'POST',
-        url : authUrl + "/corpusteam",
-        data : dataToPost,
-        success : function(serverResults) {
+      FieldDB.CORS.makeCORSRequest({
+        type: 'POST',
+        withCredentials: true,
+        url: authUrl + "/corpusteam",
+        data: dataToPost
+      }).then(function(serverResults) {
           var userFriendlyErrors = serverResults.userFriendlyErrors || "";
           if (userFriendlyErrors) {
-            window.appView.toastUser(userFriendlyErrors.join("<br/>")
-                  , "alert-warning","Error connecting to populate corpus permissions:");
+            window.appView.toastUser(userFriendlyErrors.join("<br/>"), "alert-warning", "Error connecting to populate corpus permissions:");
             if (typeof failcallback == "function") {
               failcallback(userFriendlyErrors.join("<br/>"));
             }
           } else if (serverResults.users != null) {
             if (typeof successcallback == "function") {
               serverResults.users.timestamp = Date.now();
-              localStorage.setItem(dataToPost.pouchname+"Permissions", JSON.stringify(serverResults.users));
+              localStorage.setItem(dataToPost.pouchname + "Permissions", JSON.stringify(serverResults.users));
               successcallback(serverResults.users);
             }
           }
-        },//end successful fetch
-        error: function(e){
+        }, function(e) {
           if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
 
           if (typeof failcallback == "function") {
             failcallback("There was an error in contacting the authentication server to get the list of users on your corpus team. Maybe you're offline?");
           }
-        },
-        dataType  : ""
-      });
+        });
     },
     addCorpusRoleToUser : function(role, userToAddToCorpus, successcallback, failcallback){
       var self = this;
@@ -456,35 +451,33 @@ define([
           dataToPost.roles = [role];
           dataToPost.userToAddToRole = userToAddToCorpus.username;
 
-          authUrl = this.get("userPrivate").get("authUrl");
+          authUrl = OPrime.getAuthUrl(this.get("userPrivate").get("authUrl"));
         }else{
           return;
         }
-        OPrime.makeCORSRequest({
-          type : 'POST',
-          url : authUrl + "/addroletouser",
-          data : dataToPost,
-          success : function(serverResults) {
-            if (serverResults.userFriendlyErrors != null) {
-              if (OPrime.debugMode) OPrime.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
-              if (typeof failcallback == "function") {
-                failcallback(serverResults.userFriendlyErrors.join("<br/>"));
-              }
-            } else if (serverResults.roleadded != null) {
-              if (OPrime.debugMode) OPrime.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
-              if (typeof successcallback == "function") {
-                successcallback(userToAddToCorpus);
-              }
-            }
-          },//end successful fetch
-          error: function(e){
-            if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
-
+        FieldDB.CORS.makeCORSRequest({
+          type: 'POST',
+          withCredentials: true,
+          url: authUrl + "/addroletouser",
+          data: dataToPost
+        }).then(function(serverResults) {
+          if (serverResults.userFriendlyErrors != null) {
+            if (OPrime.debugMode) OPrime.debug("User " + userToAddToCorpus.username + " not added to the corpus as " + role);
             if (typeof failcallback == "function") {
-              failcallback("There was an error in contacting the authentication server to add "+userToAddToCorpus.username+" on your corpus team. Maybe you're offline?");
+              failcallback(serverResults.userFriendlyErrors.join("<br/>"));
             }
-          },
-          dataType : ""
+          } else if (serverResults.roleadded != null) {
+            if (OPrime.debugMode) OPrime.debug("User " + userToAddToCorpus.username + " added to the corpus as " + role);
+            if (typeof successcallback == "function") {
+              successcallback(userToAddToCorpus);
+            }
+          }
+        }, function(e) {
+          if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+
+          if (typeof failcallback == "function") {
+            failcallback("There was an error in contacting the authentication server to add " + userToAddToCorpus.username + " on your corpus team. Maybe you're offline?");
+          }
         });
         //end send call
 

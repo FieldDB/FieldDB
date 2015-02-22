@@ -141,17 +141,15 @@ define([
 
         var couchConnection = window.app.get("couchConnection");
         var self = this;
-        OPrime.makeCORSRequest({
+        FieldDB.CORS.makeCORSRequest({
           type: 'GET',
-          url: OPrime.getCouchUrl(couchConnection, "/_session"),
-          success: function(serverResults) {
-            if (self.model && self.model.updateListOfCorpora) {
-              self.model.updateListOfCorpora(serverResults.userCtx.roles);
-              self.changeViewsOfInternalModels();
-            }
+          url: OPrime.getCouchUrl(couchConnection, "/_session")
+        }).then(function(serverResults) {
+          if (self.model && self.model.updateListOfCorpora) {
+            self.model.updateListOfCorpora(serverResults.userCtx.roles);
+            self.changeViewsOfInternalModels();
           }
         });
-
       }
 
       return this;

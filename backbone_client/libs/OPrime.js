@@ -762,93 +762,6 @@ OPrime.useUnsecureCouchDB = function() {
   return false;
 };
 
-/*
- * Functions for well formed CORS requests
- */
-OPrime.makeCORSRequest = function(options) {
-  OPrime.debugMode = false;
-  if(!options.method){
-    options.method = options.type || "GET";
-  }
-  if(!options.url){
-    OPrime.bug("There was an error. Please report this.");
-  }
-  if(!options.data){
-    options.data = "";
-  }
-  options.dataToSend = JSON.stringify(options.data).replace(/,/g,"&").replace(/:/g,"=").replace(/"/g,"").replace(/[}{]/g,"");
-
-  if(options.method == "GET" && options.data){
-    options.url = options.url + "?" + options.dataToSend;
-  }
-  /*
-   * Helper function which handles IE
-   */
-  var createCORSRequest = function(method, url){
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-      // XHR for Chrome/Firefox/Opera/Safari.
-      xhr.open(method, url, true);
-    } else if (typeof XDomainRequest != "undefined") {
-      // XDomainRequest for IE.
-      xhr = new XDomainRequest();
-      xhr.open(method, url);
-    } else {
-      // CORS not supported.
-      xhr = null;
-    }
-    return xhr;
-  };
-
-  var xhr = createCORSRequest(options.method, options.url);
-  if (!xhr) {
-    OPrime.bug('CORS not supported, your browser is unable to contact the database.');
-    return;
-  }
-
-//  if(options.method == "POST"){
-    //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Content-type","application/json");
-    xhr.withCredentials = true;
-//  }
-
-  xhr.onload = function(e,f,g) {
-    var text = xhr.responseText;
-    if (OPrime.debugMode) OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
-    if(typeof options.success == "function"){
-      if(text){
-        options.success(JSON.parse(text));
-      }else{
-        OPrime.bug("There was no content in the server's response text. Please report this.");
-        options.error(e,f,g);
-      }
-    }
-    OPrime.debugMode = false;
-  };
-
-  xhr.onerror = function(e,f,g) {
-    if (OPrime.debugMode) OPrime.debug(e,f,g);
-    var message = 'There was an error making the CORS request to '+options.url+ " from "+window.location.href+" the app will not function normally";
-    if (options.url.indexOf("localhost") > 0) {
-      message = message + " Please turn on your CouchDB by going into the Applications (on Mac), and then re-load the page.";
-    } else {
-      message = message + " Please report this."
-    }
-    OPrime.bug(message);
-    if(typeof options.error == "function"){
-      options.error(e,f,g);
-    }
-  };
-  if (options.method == "POST") {
-    xhr.send(JSON.stringify(options.data));
-  } else {
-    xhr.send();
-  }
-
-};
-
-
-
 OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback, failcallback) {
   if (readycallback) {
     OPrime.checkToSeeIfCouchAppIsReadyreadycallback = readycallback;
@@ -874,49 +787,46 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback,
     window.setTimeout(failcallback, 2000);
   };
 
-  OPrime.makeCORSRequest({
+  FieldDB.CORS.makeCORSRequest({
     type: 'GET',
     url: urlIsCouchAppReady,
-    data: {},
-    dataType: "json",
-    success: function(serverResults) {
-      console.log("serverResults" + JSON.stringify(serverResults));
-      if (serverResults) {
-        if (serverResults.error) {
-          continueWaiting();
-        } else if (serverResults.rows) {
-          finishedWaiting();
-        }
+    data: {}
+  }).then(function(serverResults) {
+    console.log("serverResults" + JSON.stringify(serverResults));
+    if (serverResults) {
+      if (serverResults.error) {
+        continueWaiting();
+      } else if (serverResults.rows) {
+        finishedWaiting();
       }
-    }, // end successful fetch
-    error: function(response) {
-      // alert("Error contacting the server.");
+    }
+  }, function(response) {
+    // alert("Error contacting the server.");
 
-      console.log("error response." + JSON.stringify(response));
-      // alert("error response." + JSON.stringify(response));
+    console.log("error response." + JSON.stringify(response));
+    // alert("error response." + JSON.stringify(response));
 
 
-      if (response.responseJSON) {
-        if (response.responseJSON.error) {
-          continueWaiting();
-        } else if (response.responseJSON.rows && response.responseJSON.rows.length > 0) {
+    if (response.responseJSON) {
+      if (response.responseJSON.error) {
+        continueWaiting();
+      } else if (response.responseJSON.rows && response.responseJSON.rows.length > 0) {
+        finishedWaiting();
+      }
+    } else {
+      if (response.responseText) {
+        if (response.responseText.indexOf("<html") >= 0) {
           finishedWaiting();
+          return;
         }
-      } else {
-        if (response.responseText) {
-          if (response.responseText.indexOf("<html") >= 0) {
-            finishedWaiting();
-            return;
-          }
-          var error = JSON.parse(response.responseText);
-          if (error.error == "unauthorized") {
-            alert("CouchDB ready but you need to get a session token, this can only happen when you are online.");
-          } else {
-            continueWaiting();
-          }
+        var error = JSON.parse(response.responseText);
+        if (error.error == "unauthorized") {
+          alert("CouchDB ready but you need to get a session token, this can only happen when you are online.");
         } else {
           continueWaiting();
         }
+      } else {
+        continueWaiting();
       }
     }
   });
