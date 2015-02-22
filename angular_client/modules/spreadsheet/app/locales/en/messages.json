@@ -446,6 +446,12 @@
         "message": "Contact Us",
         "description": "bottom of the main page, opens Contact Us/Bug Report form"
     },
+    "locale_forgot_password": {
+        "message": "Forgot Password"
+    },
+    "locale_email": {
+        "message": "Email"
+    },
     "locale_reset_password_button_1": {
         "message": "Change Password...",
         "description": "button opens password change page"

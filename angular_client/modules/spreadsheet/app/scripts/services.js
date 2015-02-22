@@ -242,7 +242,19 @@ angular.module('spreadsheetApp')
             },
             function(err) {
               console.warn(err);
-              deferred.reject("Please report this.");
+              var message = "";
+              if (err.status === 0) {
+                message = "are you offline?";
+                if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+                  message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+                }
+              }
+              if (err && err.status >= 400 && err.data && err.data.reason) {
+                message = err.data.reason;
+              } else {
+                message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              }
+              deferred.reject(message);
             });
         };
 
@@ -264,8 +276,8 @@ angular.module('spreadsheetApp')
                 message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
-            if (err && err.status >= 400 && err.userFriendlyErrors) {
-              message = err.userFriendlyErrors;
+            if (err && err.status >= 400 && err.data && err.data.userFriendlyErrors) {
+              message = err.data.userFriendlyErrors;
             } else {
               message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
             }
@@ -305,8 +317,8 @@ angular.module('spreadsheetApp')
                 message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
-            if (err && err.status >= 400 && err.userFriendlyErrors) {
-              message = err.userFriendlyErrors.join(" ");
+            if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+              message = err.data.userFriendlyErrors.join(" ");
             } else {
               message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
             }
@@ -357,8 +369,8 @@ angular.module('spreadsheetApp')
                   message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
                 }
               }
-              if (err && err.status >= 400 && err.userFriendlyErrors) {
-                message = err.userFriendlyErrors.join(" ");
+              if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+                message = err.data.userFriendlyErrors.join(" ");
               } else {
                 message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
               }
@@ -409,8 +421,8 @@ angular.module('spreadsheetApp')
                   message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
                 }
               }
-              if (err && err.status >= 400 && err.userFriendlyErrors) {
-                message = err.userFriendlyErrors.join(" ");
+              if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+                message = err.data.userFriendlyErrors.join(" ");
               } else {
                 message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
               }
@@ -514,6 +526,25 @@ angular.module('spreadsheetApp')
         //   return response;
         // });
         // return promise;
+      },
+      'forgotPassword': function(forgotPasswordInfo) {
+        if (!$rootScope.serverCode) {
+          console.log("Sever code is undefined");
+          window.location.assign("#/corpora_list");
+          return;
+        }
+        var config = {
+          method: "POST",
+          data: forgotPasswordInfo,
+          url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/forgotpassword",
+          withCredentials: true
+        };
+
+        console.log("Contacting the server to forgot password. " + config.url);
+        var promise = $http(config).then(function(response) {
+          return response;
+        });
+        return promise;
       },
       'changePassword': function(changePasswordInfo) {
         if (!$rootScope.serverCode) {

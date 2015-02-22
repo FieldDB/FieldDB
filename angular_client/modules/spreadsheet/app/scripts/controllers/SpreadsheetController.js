@@ -115,6 +115,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
    */
   $rootScope.servers = Servers.getAvailable();
   $rootScope.selectedServer = $rootScope.servers[0];
+  $rootScope.serverCode = $rootScope.selectedServer.serverCode;
 
 
   // Set/get/update user preferences
@@ -2616,7 +2617,55 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   });
 
+  $scope.forgotPasswordInfo = {};
+  $scope.forgotPasswordSubmit = function() {
+    if (!$scope.forgotPasswordInfo.email) {
+      $rootScope.notificationMessage = "You must enter the email you used when you registered (email is optional, If you did not provde an email you will need to contact us for help).";
+      $rootScope.openNotification();
+      return;
+    }
 
+    Data.forgotPassword($scope.forgotPasswordInfo)
+      .then(function(response) {
+        if (debugging) {
+          console.log(response);
+        }
+
+        $scope.forgotPasswordInfo = {};
+        $scope.showForgotPassword = false;
+        $rootScope.notificationMessage = response.data.info.join(" ") || "Successfully emailed password.";
+        $rootScope.openNotification();
+
+      }, function(err) {
+        console.warn(err);
+        var message = "";
+        if (err.status === 0) {
+          message = "are you offline?";
+          if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+          }
+        }
+        if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+          message = err.data.userFriendlyErrors.join(" ");
+        } else {
+          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+        }
+
+        $scope.showForgotPassword = false;
+        $rootScope.notificationMessage = message;
+        $rootScope.openNotification();
+
+        // console.log(reason);
+        // var message = "Please report this.";
+        // if (reason.status === 0) {
+        //   message = "Are you offline?";
+        // } else {
+        //   message = reason.data.userFriendlyErrors.join(" ");
+        // }
+        // $rootScope.notificationMessage = "Error updating password. " + message;
+        // $rootScope.openNotification();
+      });
+  };
 
   $scope.resetPasswordInfo = {};
   $scope.changePasswordSubmit = function() {
@@ -2640,20 +2689,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         $scope.resetPasswordInfo = {};
         $scope.showResetPassword = false;
-        $rootScope.notificationMessage = "Successfully updated password.";
+        $rootScope.notificationMessage = response.data.info.join(" ") || "Successfully updated password.";
         $rootScope.openNotification();
 
 
-      }, function(reason) {
-        console.log(reason);
-        var message = "Please report this.";
-        if (reason.status === 0) {
-          message = "Are you offline?";
-        } else {
-          message = reason.data.userFriendlyErrors.join(" ");
+      }, function(err) {
+        console.warn(err);
+        var message = "";
+        if (err.status === 0) {
+          message = "are you offline?";
+          if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+          }
         }
-        $rootScope.notificationMessage = "Error updating password. " + message;
+        if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+          message = err.data.userFriendlyErrors.join(" ");
+        } else {
+          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+        }
+        $scope.showResetPassword = false;
+
+        $rootScope.notificationMessage = message;
         $rootScope.openNotification();
+
       });
   };
 
