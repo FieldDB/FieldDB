@@ -1,4 +1,11 @@
+var Permissions = require("./../../api/permission/Permissions").Permissions;
+
 describe("Permission Tests", function() {
+  it("should load", function() {
+    var permissions = new Permissions();
+    expect(permission).toBeDefined();
+  });
+
   it("should have a read permission by default", function() {
     // var permission = new Permission();
     // expect(permission.get("type")).toEqual("r");
@@ -14,7 +21,7 @@ describe("Permission Tests", function() {
 
   });
 
-  it("should have an exportt permission", function() {
+  it("should have an export permission", function() {
     // var permission = new Permission();
     // permission.set("type", "e");
     // expect(permission.get("type")).toEqual("e");
