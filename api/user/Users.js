@@ -1,46 +1,45 @@
-define(
-    ["backbone",
-     "user/UserMask"],
-    function(Backbone, UserMask) {
-  
-  var Users = Backbone.Collection.extend(
-      
-    /** @lends Users.prototype */ 
-        
-    {
-      /**
-       * @class A collection of user masks (used mostly for permissions groups)
+var Collection = require("./../Collection").Collection;
+var UserMask = require("./UserMask").UserMask;
 
-       * @description A collection of user masks (used mostly for permissions groups)
-       * 
-       * @extends Backbone.Model
-       * 
-       * @constructs
-       * 
-       */
-      
-      /**
-       * backbone-couchdb adaptor set up
-       */
-      db : {
-        view : "users",
-        changes : false,
-        filter : Backbone.couch_connector.config.ddoc_name + "/users"
-      },
-      // The couchdb-connector is capable of mapping the url scheme
-      // proposed by the authors of Backbone to documents in your database,
-      // so that you don't have to change existing apps when you switch the sync-strategy
-      url : "/users",
-      // The messages should be ordered by date
-      comparator : function(doc){
-        return doc.get("_id");
-      },
-      
-      internalModels: UserMask,
-      model: UserMask
-  
-  }); 
-  
-  return Users; 
-  
-}); 
+/**
+ * @class Collection of Datum validation states
+
+ * @name  Users
+ * @description The Users is a minimal customization of the Collection
+ * to add an internal model of UserMask.
+ *
+ * @extends Collection
+ * @constructs
+ */
+var Users = function Users(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Users";
+  }
+  this.debug("Constructing Users ", options);
+  Collection.apply(this, arguments);
+};
+
+Users.prototype = Object.create(Collection.prototype, /** @lends Users.prototype */ {
+  constructor: {
+    value: Users
+  },
+
+  primaryKey: {
+    value: "username"
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      item: UserMask
+    }
+  },
+
+  sanitizeStringForPrimaryKey: {
+    value: function(value) {
+      return value;
+    }
+  }
+
+});
+
+exports.Users = Users;
