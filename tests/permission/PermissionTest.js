@@ -53,6 +53,27 @@ describe("Permission Tests", function() {
       expect(permissions.exporters.helpLinguists).toEqual("These users can perform export operations on the corpus");
     });
 
+    describe("adding users", function() {
+      var permissions;
+
+      beforeEach(function() {
+        permissions = new Permissions();
+        permissions.populate("defaults");
+      });
+
+
+      it("should add users with one or more roles", function() {
+        permissions.addUser({
+          username: "lingllama",
+          gravatar: "133",
+          roles: ["reader", "commenter"]
+        });
+        expect(permissions.readers).toBeDefined();
+        expect(permissions.readers.length).toEqual(1);
+        expect(permissions.readers.users.lingllama).toBeDefined();
+      });
+
+    });
 
   });
 
@@ -97,16 +118,16 @@ describe("Permission Tests", function() {
       var isReaderAlsoAWriter;
       var isReaderAlsoACommenter;
       permissions.readers.users.map(function(reader) {
-        isReaderAlsoAWriter = !!(permissions.writers.users.indexOf(reader) > -1)
+        isReaderAlsoAWriter = permissions.writers.users.indexOf(reader) > -1;
         expect(isReaderAlsoAWriter).toBeTruthy();
 
-        isReaderAlsoACommenter = !!(permissions.commenters.users.indexOf(reader) > -1)
+        isReaderAlsoACommenter = permissions.commenters.users.indexOf(reader) > -1;
         expect(isReaderAlsoACommenter).toBeTruthy();
       });
 
       var isAnyAdminNotAWriter = [];
       permissions.admins.users.map(function(admin) {
-        isAnyAdminNotAWriter.push(!(permissions.writers.users.indexOf(admin) > -1));
+        isAnyAdminNotAWriter.push(permissions.writers.users.indexOf(admin) === -1);
       });
       expect(isAnyAdminNotAWriter[0]).toBeTruthy();
     });
@@ -118,7 +139,7 @@ describe("Permission Tests", function() {
     var permissions;
     beforeEach(function() {
       permissions = new Permissions({
-        debugMode: true
+        // debugMode: true
       });
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[1].users)));
 
@@ -154,7 +175,7 @@ describe("Permission Tests", function() {
   describe("support crowdsourcing language lession corpora", function() {
     it("should populate from a field linguistics course permissions", function() {
       var permissions = new Permissions({
-        debugMode: true
+        // debugMode: true
       });
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[3].users)));
 
@@ -184,7 +205,7 @@ describe("Permission Tests", function() {
 
     it("should populate from a psycholinguistics corpus permissions", function() {
       var permissions = new Permissions({
-        debugMode: true
+        // debugMode: true
       });
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[4].users)));
 
@@ -197,6 +218,7 @@ describe("Permission Tests", function() {
       expect(permissions.writers.users.toJSON()[0].username).toEqual("public");
 
       var generalPublicCanWriteButNotRead = permissions.writers.users.indexOf("public") > -1 && permissions.readers.users.indexOf("public") === -1;
+      expect(generalPublicCanWriteButNotRead).toBeTruthy();
 
       expect(permissions.readers).toBeDefined();
       expect(permissions.readers.users.length).toEqual(1);
