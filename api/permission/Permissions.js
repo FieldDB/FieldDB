@@ -388,11 +388,11 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
         readerCommenterOnlys: this.readerCommenterOnlys,
         readerWriters: this.readerCommenterWriters,
         admins: this.readerCommenterWriterAdmins
-        // commenterOnlys: this.commenterOnlys,
-        // readerCommenterWriters: readerCommenterWriters,
-        //writerCommenterOnlys
-        //writerAdminOnlys
-        //writerCommenterAdminOnlys
+          // commenterOnlys: this.commenterOnlys,
+          // readerCommenterWriters: readerCommenterWriters,
+          //writerCommenterOnlys
+          //writerAdminOnlys
+          //writerCommenterAdminOnlys
       };
     }
   },
@@ -433,14 +433,62 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     }
   },
 
+  addUser: {
+    value: function(user) {
+      if (!user || !user.roles) {
+        this.warn("You should provide roles you want to add... doing nothing.");
+        return;
+      }
+      this.debugMode = true;
+      this.debug(user.roles);
+      var roles = user.roles;
+      delete user.roles;
 
+      for (var roleIndex = roles.length - 1; roleIndex >= 0; roleIndex--) {
+        var permissionType = roles[roleIndex];
+        if (!this[permissionType]) {
+          permissionType = permissionType.toLowerCase() + "s";
+          if (!this[permissionType]) {
+            var newPermission = this.buildPermissionFromAPermissionType(permissionType);
+            this.debug(" Creating a permssion group for " + permissionType, newPermission);
+
+            this.add(newPermission);
+          }
+        }
+        this[permissionType].users.add(user);
+        this.debug("the user was added to the permission group " + permissionType + " there are a total of " + this[permissionType].length + " users with this sort of access ", this[permissionType].users);
+      }
+    }
+  },
+
+  buildPermissionFromAPermissionType: {
+    value: function(permissionType) {
+      var verb = permissionType.replace(/s/, "").replace(/writer/, "write").replace(/er/, "");
+      var label = permissionType;
+      if (label && label.length > 2) {
+        label = label[0].toUpperCase() + label.substring(1, label.length);
+      }
+      var helpLinguists = "These users can perform " + verb + " operations on the corpus";
+
+      return {
+        users: [],
+        verb: verb,
+        id: permissionType,
+        labelFieldLinguists: label,
+        helpLinguists: helpLinguists,
+        directObject: "corpus",
+        // debugMode: true
+      };
+    }
+  },
+
+  /**
+   * Accepts an object containing permission groups which are an array of
+   * users masks which have this permission. This simple object is used to populate the permissions model.
+   *
+   * @param  {Object} users an object containing keys which are verbs (permission types) and the value is an array of users who are in this category
+   */
   populate: {
-    /**
-     * Accepts an object containing permission groups which are an array of
-     * users masks which have this permission. This simple object is used to populate the permissions model.
-     *
-     * @param  {Object} users an object containing keys which are verbs (permission types) and the value is an array of users who are in this category
-     */
     value: function(users) {
       if (!users || users === "defaults") {
         users = {};
@@ -469,21 +517,9 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
         if (users.hasOwnProperty(permissionType) && permissionType) {
           /* if the permission is just an array of users, construct basic permission meta data around it */
           if (Object.prototype.toString.call(users[permissionType]) === "[object Array]") {
-            verb = permissionType.replace(/s/, "").replace(/writer/, "write").replace(/er/, "");
-            label = permissionType;
-            if (label && label.length > 2) {
-              label = label[0].toUpperCase() + label.substring(1, label.length);
-            }
-            helpLinguists = "These users can perform " + verb + " operations on the corpus";
-            users[permissionType] = {
-              users: users[permissionType],
-              verb: verb,
-              id: permissionType,
-              labelFieldLinguists: label,
-              helpLinguists: helpLinguists,
-              directObject: "corpus",
-              // debugMode: true
-            }
+            var usersArray = users[permissionType];
+            users[permissionType] = this.buildPermissionFromAPermissionType(permissionType);
+            users[permissionType].users = usersArray
           }
           this.debug("adding " + permissionType, users[permissionType]);
           this.add(new Permission(users[permissionType]));

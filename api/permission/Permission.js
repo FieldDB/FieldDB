@@ -45,6 +45,15 @@ Permission.prototype = Object.create(FieldDBObject.prototype, /** @lends Permiss
     value: {
       users: Users
     }
+  },
+
+  length: {
+    get: function() {
+      if (this.users && this.users.length) {
+        return this.users.length;
+      }
+      return 0;
+    }
   }
 });
 exports.Permission = Permission;
