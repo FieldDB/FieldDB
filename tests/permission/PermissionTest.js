@@ -53,6 +53,10 @@ describe("Permission Tests", function() {
       expect(permissions.exporters.helpLinguists).toEqual("These users can perform export operations on the corpus");
     });
 
+    it("should provide a list of current hats on the team", function() {
+      expect(permissions.currentPermissions).toEqual(["admins", "writers", "readers", "commenters", "exporters"]);
+    });
+
     describe("adding users", function() {
       var permissions;
 

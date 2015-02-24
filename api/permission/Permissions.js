@@ -500,9 +500,19 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     }
   },
 
+  /**
+   * A list of "hats" which team members can wear in this team.
+   */
   currentPermissions: {
     get: function() {
-      return ["admins", "writers", "readers", "commenters"];
+      if (!this._collection || this._collection === 0) {
+        return [];
+      }
+      var self = this;
+      return this._collection.map(function(permission) {
+        return permission[self.primaryKey];
+      });
+
     }
   },
 
