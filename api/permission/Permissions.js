@@ -442,109 +442,53 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
      * @param  {Object} users an object containing keys which are verbs (permission types) and the value is an array of users who are in this category
      */
     value: function(users) {
-      if (!this.get("team")) {
-        //If app is completed loaded use the user, otherwise put a blank user
-        if (window.appView) {
-          this.set("team", window.app.get("authentication").get("userPublic"));
-          //          this.get("team").id = window.app.get("authentication").get("userPublic").id;
-        } else {
-          //          this.set("team", new UserMask({pouchname: this.get("pouchname")}));
+      if (!users || users === "defaults") {
+        users = {};
+        this.warn("Using default permission types");
+      }
+      users.admins = users.admins || [];
+      users.writers = users.writers || [];
+      users.readers = users.readers || [];
+      users.commenters = users.commenters || [];
+      users.exporters = users.exporters || [];
+
+      users.notonteam = users.notonteam || [];
+      users.allusers = users.allusers || [];
+
+      this.usersNotOnTeam = new Users(users.notonteam);
+      this.allUsers = new Users(users.allusers);
+
+      delete users.allusers;
+      delete users.notonteam;
+
+      var permissionType,
+        verb,
+        label,
+        help;
+      for (permissionType in users) {
+        if (users.hasOwnProperty(permissionType) && permissionType) {
+          /* if the permission is just an array of users, construct basic permission meta data around it */
+          if (Object.prototype.toString.call(users[permissionType]) === "[object Array]") {
+            verb = permissionType.replace(/s/, "").replace(/writer/, "write").replace(/er/, "");
+            label = permissionType;
+            if (label && label.length > 2) {
+              label = label[0].toUpperCase() + label.substring(1, label.length);
+            }
+            helpLinguists = "These users can perform " + verb + " operations on the corpus";
+            users[permissionType] = {
+              users: users[permissionType],
+              verb: verb,
+              id: permissionType,
+              labelFieldLinguists: label,
+              helpLinguists: helpLinguists,
+              directObject: "corpus",
+              // debugMode: true
+            }
+          }
+          this.debug("adding " + permissionType, users[permissionType]);
+          this.add(new Permission(users[permissionType]));
         }
       }
-
-      var self = this;
-      // load the permissions in from the server.
-      window.app.get("authentication").fetchListOfUsersGroupedByPermissions(function(users) {
-        var typeaheadusers = [];
-        for (var userX in users.notonteam) {
-          if (users.notonteam[userX].username) {
-            typeaheadusers.push(users.notonteam[userX].username);
-          } else {
-            if (OPrime.debugMode) {
-              OPrime.debug("This user is invalid", users.notonteam[userX]);
-            }
-          }
-        }
-        typeaheadusers = JSON.stringify(typeaheadusers);
-        var potentialusers = users.allusers || [];
-
-        var admins = new Users();
-        self.add(new Permission({
-          users: admins,
-          role: "admin",
-          typeaheadusers: typeaheadusers,
-          potentialusers: potentialusers,
-          pouchname: self.get("pouchname")
-        }));
-
-        var writers = new Users();
-        self.add(new Permission({
-          users: writers,
-          role: "writer",
-          typeaheadusers: typeaheadusers,
-          potentialusers: potentialusers,
-          pouchname: self.get("pouchname")
-        }));
-
-        var readers = new Users();
-        self.add(new Permission({
-          users: readers,
-          role: "reader",
-          typeaheadusers: typeaheadusers,
-          potentialusers: potentialusers,
-          pouchname: self.get("pouchname")
-        }));
-
-        var u;
-        var user;
-        if (users.admins && users.admins.length > 0) {
-          for (u in users.admins) {
-            if (!users.admins[u].username) {
-              continue;
-            }
-            user = {
-              "username": users.admins[u].username
-            };
-            if (users.admins[u].gravatar) {
-              user.gravatar = users.admins[u].gravatar;
-            }
-            admins.models.push(new UserMask(user));
-          }
-        }
-        if (users.writers && users.writers.length > 0) {
-          for (u in users.writers) {
-            if (!users.writers[u].username) {
-              continue;
-            }
-            user = {
-              "username": users.writers[u].username
-            };
-            if (users.writers[u].gravatar) {
-              user.gravatar = users.writers[u].gravatar;
-            }
-            writers.models.push(new UserMask(user));
-          }
-        }
-        if (users.readers && users.readers.length > 0) {
-          for (u in users.readers) {
-            if (!users.readers[u].username) {
-              continue;
-            }
-            user = {
-              "username": users.readers[u].username
-            };
-            if (users.readers[u].gravatar) {
-              user.gravatar = users.readers[u].gravatar;
-            }
-            readers.models.push(new UserMask(user));
-          }
-        }
-        //Set up the typeahead for the permissions edit
-
-        if (typeof doneLoadingPermissions === "function") {
-          doneLoadingPermissions();
-        }
-      });
     }
   },
 
