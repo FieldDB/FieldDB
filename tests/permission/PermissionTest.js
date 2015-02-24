@@ -133,6 +133,7 @@ describe("Permission Tests", function() {
   });
 
 
+
   describe("sample permissions", function() {
 
     it("should have a few examples", function() {
@@ -147,11 +148,13 @@ describe("Permission Tests", function() {
 
   });
 
-  xdescribe("support field methods corpora", function() {
+
+
+  describe("support field methods corpora", function() {
 
     it("should populate from a field linguistics course permissions", function() {
       var permissions = new Permissions({
-        debugMode: true
+        // debugMode: true
       });
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
@@ -190,7 +193,7 @@ describe("Permission Tests", function() {
   });
 
 
-  xdescribe("support research & language community team corpora", function() {
+  describe("support research & language community team corpora", function() {
     var permissions;
     beforeEach(function() {
       permissions = new Permissions({
@@ -227,7 +230,7 @@ describe("Permission Tests", function() {
 
   });
 
-  xdescribe("support crowdsourcing language lession corpora", function() {
+  describe("support crowdsourcing language lession corpora", function() {
     it("should populate from a field linguistics course permissions", function() {
       var permissions = new Permissions({
         // debugMode: true
@@ -255,7 +258,7 @@ describe("Permission Tests", function() {
 
   });
 
-  xdescribe("support pyscholinguistics corpora", function() {
+  describe("support pyscholinguistics corpora", function() {
 
 
     it("should populate from a psycholinguistics corpus permissions", function() {
@@ -285,4 +288,39 @@ describe("Permission Tests", function() {
     });
 
   });
+
+  describe("ways to view permissions sytems", function() {
+
+    it("should present a view that is like PHPMyAdmin", function() {
+      var permissions = new Permissions();
+      permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
+
+      expect(permissions.admins).toBeDefined();
+      expect(permissions.admins.length).toEqual(2);
+
+      expect(permissions.readerCommenterWriterAdmins).toBeDefined();
+      expect(permissions.readerCommenterWriterAdmins.length).toEqual(1);
+      expect(permissions.readerCommenterWriterAdmins._collection[0].username).toEqual("rplyrde");
+
+      expect(permissions.readerCommenterWriters).toBeDefined();
+      expect(permissions.readerCommenterWriters.length).toEqual(15);
+      expect(permissions.readerCommenterWriters._collection[4].username).toEqual("aivgeniia");
+
+      expect(permissions.readerCommenterOnlys).toBeDefined();
+      expect(permissions.readerCommenterOnlys.length).toEqual(0);
+
+      expect(permissions.viewAsDataBasePermissionSystem.admins).toBeDefined();
+      expect(permissions.viewAsDataBasePermissionSystem.writers).toBeDefined();
+      expect(permissions.viewAsDataBasePermissionSystem.readers).toBeDefined();
+      expect(permissions.viewAsDataBasePermissionSystem.commenters).toBeDefined();
+
+      expect(permissions.viewAsDataBasePermissionSystem.admins.length).toEqual(1);
+      expect(permissions.viewAsDataBasePermissionSystem.writers.length).toEqual(15);
+      expect(permissions.viewAsDataBasePermissionSystem.readers.length).toEqual(0);
+      expect(permissions.viewAsDataBasePermissionSystem.commenters.length).toEqual(0);
+
+    });
+
+  });
+
 });
