@@ -439,7 +439,6 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
         this.warn("You should provide roles you want to add... doing nothing.");
         return;
       }
-      this.debugMode = true;
       this.debug(user.roles);
       var roles = user.roles;
       delete user.roles;
@@ -458,6 +457,52 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
         this[permissionType].users.add(user);
         this.debug("the user was added to the permission group " + permissionType + " there are a total of " + this[permissionType].length + " users with this sort of access ", this[permissionType].users);
       }
+    }
+  },
+
+  /**
+   * Removes user from roles on this permissions team, or removes user entirely if only a username is supplied.
+   *
+   * @param  {Object} user A user with minimally a username and roles which should be removed, or alternatively can be just a username if you want to remove the user entirely from the team.
+   */
+  removeUser: {
+    value: function(user) {
+      if (typeof user === "string") {
+        user = {
+          username: user,
+          roles: this.currentPermissions
+        };
+        this.warn("Remove was requested of a username, removing the username from the permission team.");
+      }
+      if (!user || !user.roles) {
+        this.warn("You should provide roles you want to remove... doing nothing.");
+        return;
+      }
+      this.debugMode = true;
+      this.debug(user.roles);
+      var roles = user.roles;
+      delete user.roles;
+
+      for (var roleIndex = roles.length - 1; roleIndex >= 0; roleIndex--) {
+        var permissionType = roles[roleIndex];
+        if (!this[permissionType]) {
+          permissionType = permissionType.toLowerCase() + "s";
+        }
+        if (this[permissionType]) {
+          this[permissionType].users.debugMode = true;
+          var userWasInThisPermission = this[permissionType].users.remove(user);
+          if (userWasInThisPermission && userWasInThisPermission.length > 0) {
+            this.warn("The user " + user.username + " was not in the " + permissionType + " anyway.", this[permissionType].users, userWasInThisPermission);
+          }
+          this.debug("the user " + user.username + " is not in " + permissionType + " there are a total of " + this[permissionType].length + " users with this sort of access ", this[permissionType].users);
+        }
+      }
+    }
+  },
+
+  currentPermissions: {
+    get: function() {
+      return ["admins", "writers", "readers", "commenters"];
     }
   },
 
