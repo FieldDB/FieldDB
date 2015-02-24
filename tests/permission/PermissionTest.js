@@ -73,6 +73,29 @@ describe("Permission Tests", function() {
         expect(permissions.readers.users.lingllama).toBeDefined();
       });
 
+
+
+      it("should add roles to users who are already on the team", function() {
+        permissions.addUser({
+          username: "lingllama",
+          gravatar: "133",
+          roles: ["reader", "commenter"]
+        });
+
+        expect(permissions.readers).toBeDefined();
+        expect(permissions.readers.length).toEqual(1);
+        expect(permissions.readers.users.lingllama).toBeDefined();
+        permissions.addUser({
+          username: "lingllama",
+          gravatar: "133",
+          roles: ["writer"]
+        });
+        expect(permissions.writers).toBeDefined();
+        expect(permissions.writers.length).toEqual(1);
+        expect(permissions.writers.users.lingllama).toBeDefined();
+      });
+
+
     });
 
   });
