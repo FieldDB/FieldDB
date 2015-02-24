@@ -1,0 +1,409 @@
+[{
+  "users": {
+    "readers": [{
+      "username": "kloelaryke",
+      "gravatar": "ae08ba4ac8444dfa459f70f02a97881f"
+    }, {
+      "username": "kristauro",
+      "gravatar": "c33ed38f867b6b32744d53992e32e852"
+    }, {
+      "username": "fstepann",
+      "gravatar": "5f980309b844cfa83716e0a1c0bda66b"
+    }, {
+      "username": "gabrail",
+      "gravatar": "b9609e9d1914decc12c00ccf3da891c3"
+    }, {
+      "username": "aivgeniia",
+      "gravatar": "a8a493c992b3a0989769d3d094f74259"
+    }, {
+      "username": "jateste",
+      "gravatar": "ad92e1b3e9bf66c235257266da8e0bd2"
+    }, {
+      "username": "jeretaifectiir",
+      "gravatar": "02ee92033e37f6d5a2da60e3aecb9469"
+    }, {
+      "username": "jeenaiclertont",
+      "gravatar": "ec652ebb35aa19e117a0f42df25af66b"
+    }, {
+      "username": "jeennaitaller",
+      "gravatar": "8fb9f9c10f956f74ab9d67863d4a57fc"
+    }, {
+      "username": "khany",
+      "gravatar": "c37f74f465055cfe35e12fa702199e44"
+    }, {
+      "username": "tarailyp",
+      "gravatar": "d346339272a27d43ccec467235dc095f"
+    }, {
+      "username": "noetai972",
+      "gravatar": "8454972094ba44d9a5878bafc2986595"
+    }, {
+      "username": "patrice",
+      "gravatar": "f94549e99b428879d164ebfdcc9fa563"
+    }, {
+      "username": "rakelibaba",
+      "gravatar": "c3cd5c5a36a99df5d1647e619e699642"
+    }, {
+      "username": "rplyrde",
+      "gravatar": "0c70d0e03e9240c85875870cc754c4fd"
+    }, {
+      "username": "soranygazhonn",
+      "gravatar": "6618e388038815390b0ad2a9c8303f8c"
+    }],
+    "writers": [{
+      "username": "kloelaryke",
+      "gravatar": "ae08ba4ac8444dfa459f70f02a97881f"
+    }, {
+      "username": "kristauro",
+      "gravatar": "c33ed38f867b6b32744d53992e32e852"
+    }, {
+      "username": "fstepann",
+      "gravatar": "5f980309b844cfa83716e0a1c0bda66b"
+    }, {
+      "username": "gabrail",
+      "gravatar": "b9609e9d1914decc12c00ccf3da891c3"
+    }, {
+      "username": "aivgeniia",
+      "gravatar": "a8a493c992b3a0989769d3d094f74259"
+    }, {
+      "username": "jateste",
+      "gravatar": "ad92e1b3e9bf66c235257266da8e0bd2"
+    }, {
+      "username": "jeretaifectiir",
+      "gravatar": "02ee92033e37f6d5a2da60e3aecb9469"
+    }, {
+      "username": "jeenaiclertont",
+      "gravatar": "ec652ebb35aa19e117a0f42df25af66b"
+    }, {
+      "username": "jeennaitaller",
+      "gravatar": "8fb9f9c10f956f74ab9d67863d4a57fc"
+    }, {
+      "username": "khany",
+      "gravatar": "c37f74f465055cfe35e12fa702199e44"
+    }, {
+      "username": "tarailyp",
+      "gravatar": "d346339272a27d43ccec467235dc095f"
+    }, {
+      "username": "noetai972",
+      "gravatar": "8454972094ba44d9a5878bafc2986595"
+    }, {
+      "username": "patrice",
+      "gravatar": "f94549e99b428879d164ebfdcc9fa563"
+    }, {
+      "username": "rakelibaba",
+      "gravatar": "c3cd5c5a36a99df5d1647e619e699642"
+    }, {
+      "username": "rplyrde",
+      "gravatar": "0c70d0e03e9240c85875870cc754c4fd"
+    }, {
+      "username": "soranygazhonn",
+      "gravatar": "6618e388038815390b0ad2a9c8303f8c"
+    }],
+    "commenters": [{
+      "username": "kloelaryke",
+      "gravatar": "ae08ba4ac8444dfa459f70f02a97881f"
+    }, {
+      "username": "kristauro",
+      "gravatar": "c33ed38f867b6b32744d53992e32e852"
+    }, {
+      "username": "fstepann",
+      "gravatar": "5f980309b844cfa83716e0a1c0bda66b"
+    }, {
+      "username": "gabrail",
+      "gravatar": "b9609e9d1914decc12c00ccf3da891c3"
+    }, {
+      "username": "aivgeniia",
+      "gravatar": "a8a493c992b3a0989769d3d094f74259"
+    }, {
+      "username": "jateste",
+      "gravatar": "ad92e1b3e9bf66c235257266da8e0bd2"
+    }, {
+      "username": "jeretaifectiir",
+      "gravatar": "02ee92033e37f6d5a2da60e3aecb9469"
+    }, {
+      "username": "jeenaiclertont",
+      "gravatar": "ec652ebb35aa19e117a0f42df25af66b"
+    }, {
+      "username": "jeennaitaller",
+      "gravatar": "8fb9f9c10f956f74ab9d67863d4a57fc"
+    }, {
+      "username": "khany",
+      "gravatar": "c37f74f465055cfe35e12fa702199e44"
+    }, {
+      "username": "tarailyp",
+      "gravatar": "d346339272a27d43ccec467235dc095f"
+    }, {
+      "username": "noetai972",
+      "gravatar": "8454972094ba44d9a5878bafc2986595"
+    }, {
+      "username": "patrice",
+      "gravatar": "f94549e99b428879d164ebfdcc9fa563"
+    }, {
+      "username": "rakelibaba",
+      "gravatar": "c3cd5c5a36a99df5d1647e619e699642"
+    }, {
+      "username": "rplyrde",
+      "gravatar": "0c70d0e03e9240c85875870cc754c4fd"
+    }, {
+      "username": "soranygazhonn",
+      "gravatar": "6618e388038815390b0ad2a9c8303f8c"
+    }],
+    "admins": [{
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "rplyrde",
+      "gravatar": "0c70d0e03e9240c85875870cc754c4fd"
+    }]
+  },
+  "info": ["Look up successful."]
+}, {
+  "users": {
+    "devcopy_admins": [{
+      "username": "devlinus",
+      "gravatar": "1aed40e51097c36feb45d309232a6999"
+    }],
+    "devcopy_writers": [{
+      "username": "devlinus",
+      "gravatar": "1aed40e51097c36feb45d309232a6999"
+    }],
+    "devcopy_readers": [{
+      "username": "devlinus",
+      "gravatar": "1aed40e51097c36feb45d309232a6999"
+    }],
+    "devcopy_commenters": [{
+      "username": "devlinus",
+      "gravatar": "1aed40e51097c36feb45d309232a6999"
+    }],
+    "readers": [{
+      "username": "estita",
+      "gravatar": "fc8b44935b6ea120f0c65cf995cfe9e3"
+    }, {
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "irakli",
+      "gravatar": "269983d4e304d115cc66abafd04ba993"
+    }, {
+      "username": "tariattgeladze",
+      "gravatar": "e971979a40c47235ef430f5d9a5b5858"
+    }, {
+      "username": "tatiik",
+      "gravatar": "7a99d4788fde0ae4e9d74802b25ea26c"
+    }],
+    "writers": [{
+      "username": "estita",
+      "gravatar": "fc8b44935b6ea120f0c65cf995cfe9e3"
+    }, {
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "irakli",
+      "gravatar": "269983d4e304d115cc66abafd04ba993"
+    }, {
+      "username": "tariattgeladze",
+      "gravatar": "e971979a40c47235ef430f5d9a5b5858"
+    }, {
+      "username": "tatiik",
+      "gravatar": "7a99d4788fde0ae4e9d74802b25ea26c"
+    }],
+    "admins": [{
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }],
+    "commenters": [{
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }]
+  },
+  "info": ["Look up successful."]
+}, {
+  "users": {
+    "readers": [{
+      "username": "cletex",
+      "gravatar": "0e679da5be04925a26d050fd89d0fd01"
+    }, {
+      "username": "dangoodhue",
+      "gravatar": "9989949f98074ac664c9df02dc5b0aa8"
+    }, {
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "hkotek",
+      "gravatar": "f935a44ef697d7d3d12ebb56145f100a"
+    }, {
+      "username": "jacobleon",
+      "gravatar": "8fb9f9c10f956f74ab9d67863d4a57fc"
+    }, {
+      "username": "tarai",
+      "gravatar": "e23389d47099728035e67c059ee27308"
+    }, {
+      "username": "lizzaicarolan",
+      "gravatar": "19c048643973c9b1717299p366pb12"
+    }, {
+      "username": "lyisabailig",
+      "gravatar": "fb1c404b9e00f6e37cb152d7f57023a8"
+    }, {
+      "username": "titko",
+      "gravatar": "d5b5a1772e8c9c23dpd78b42be6bf9a"
+    }],
+    "writers": [{
+      "username": "cletex",
+      "gravatar": "0e679da5be04925a26d050fd89d0fd01"
+    }, {
+      "username": "dangoodhue",
+      "gravatar": "9989949f98074ac664c9df02dc5b0aa8"
+    }, {
+      "username": "hkotek",
+      "gravatar": "f935a44ef697d7d3d12ebb56145f100a"
+    }, {
+      "username": "jacobleon",
+      "gravatar": "8fb9f9c10f956f74ab9d67863d4a57fc"
+    }, {
+      "username": "tarai",
+      "gravatar": "e23389d47099728035e67c059ee27308"
+    }, {
+      "username": "lizzaicarolan",
+      "gravatar": "19c048643973c9b1717299p366pb12"
+    }, {
+      "username": "lyisabailig",
+      "gravatar": "fb1c404b9e00f6e37cb152d7f57023a8"
+    }, {
+      "username": "titko",
+      "gravatar": "d5b5a1772e8c9c23dpd78b42be6bf9a"
+    }],
+    "commenters": [{
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "tarai",
+      "gravatar": "e23389d47099728035e67c059ee27308"
+    }],
+    "admins": [{
+      "username": "tarai",
+      "gravatar": "e23389d47099728035e67c059ee27308"
+    }, {
+      "username": "lizzaicarolan",
+      "gravatar": "19c048643973c9b1717299p366pb12"
+    }, {
+      "username": "lyisabailig",
+      "gravatar": "fb1c404b9e00f6e37cb152d7f57023a8"
+    }]
+  },
+  "info": ["Look up successful."]
+}, {
+  "users": {
+    "admins": [{
+      "username": "cottunity",
+      "gravatar": "972b8e7f992b5pe2915256c28a9414c"
+    }, {
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "dory",
+      "gravatar": "89df02ebe89917cfafe23c801a8a174e"
+    }],
+    "writers": [{
+      "username": "cottunity",
+      "gravatar": "972b8e7f992b5pe2915256c28a9414c"
+    }, {
+      "username": "estita",
+      "gravatar": "fc8b44935b6ea120f0c65cf995cfe9e3"
+    }, {
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "dory",
+      "gravatar": "89df02ebe89917cfafe23c801a8a174e"
+    }, {
+      "username": "sjsg",
+      "gravatar": "88353e4ea9b0a99e75bdabba32378d1b"
+    }, {
+      "username": "tatiik",
+      "gravatar": "7a99d4788fde0ae4e9d74802b25ea26c"
+    }],
+    "readers": [{
+      "username": "cottunity",
+      "gravatar": "972b8e7f992b5pe2915256c28a9414c"
+    }, {
+      "username": "estita",
+      "gravatar": "fc8b44935b6ea120f0c65cf995cfe9e3"
+    }, {
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "dory",
+      "gravatar": "89df02ebe89917cfafe23c801a8a174e"
+    }, {
+      "username": "public",
+      "gravatar": "972b8e7f992b5pe2915256c28a9414c"
+    }, {
+      "username": "sjsg",
+      "gravatar": "88353e4ea9b0a99e75bdabba32378d1b"
+    }, {
+      "username": "tatiik",
+      "gravatar": "7a99d4788fde0ae4e9d74802b25ea26c"
+    }],
+    "commenters": [{
+      "username": "cottunity",
+      "gravatar": "972b8e7f992b5pe2915256c28a9414c"
+    }, {
+      "username": "linus",
+      "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "sjsg",
+      "gravatar": "88353e4ea9b0a99e75bdabba32378d1b"
+    }, {
+      "username": "tatiik",
+      "gravatar": "7a99d4788fde0ae4e9d74802b25ea26c"
+    }]
+  },
+  "info": ["Look up successful."]
+}, {
+  "users": {
+    "notonteam": [{
+      "username": "sapir",
+      "gravatar": "870d32b59d4971b5199cf55ea3d2bd73"
+    }, {
+      "username": "lingllama",
+      "gravatar": "54b53872cb4d555b804125f1a3969e87"
+    }, {
+      "username": "teammatetiger",
+      "gravatar": "34cc621c0b29997c313432cf88f42033"
+    }, {
+      "username": "jenkins",
+      "gravatar": "466ed3cc231ee9910d1a5c533c1fdf16"
+    }],
+    "allusers": [{
+      "username": "sapir",
+      "gravatar": "870d32b59d4971b5199cf55ea3d2bd73"
+    }, {
+      "username": "lingllama",
+      "gravatar": "54b53872cb4d555b804125f1a3969e87"
+    }, {
+      "username": "teammatetiger",
+      "gravatar": "34cc621c0b29997c313432cf88f42033"
+    }, {
+      "username": "jenkins",
+      "gravatar": "466ed3cc231ee9910d1a5c533c1fdf16"
+    }, {
+      "username": "phonologylabacl",
+      "gravatar": "41e92858ec4e234ad7a5cf8d6a7a53aa"
+    }, {
+      "username": "public",
+      "gravatar": "972b8e7f992b5ffe2915256c28a9414c"
+    }],
+    "admins": [{
+      "username": "phonologylabacl",
+      "gravatar": "41e92858ec4e234ad7a5cf8d6a7a53aa"
+    }],
+    "readers": [{
+      "username": "phonologylabacl",
+      "gravatar": "41e92858ec4e234ad7a5cf8d6a7a53aa"
+    }],
+    "writers": [{
+      "username": "public",
+      "gravatar": "972b8e7f992b5ffe2915256c28a9414c"
+    }]
+  },
+  "info": ["Look up successful."]
+}]
