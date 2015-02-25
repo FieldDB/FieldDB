@@ -142,6 +142,11 @@ Collection.prototype = Object.create(Object.prototype, {
       return FieldDBObject.prototype.todo.apply(this, arguments);
     }
   },
+  render: {
+    value: function() {
+      return FieldDBObject.prototype.render.apply(this, arguments);
+    }
+  },
 
   collection: {
     get: function() {
