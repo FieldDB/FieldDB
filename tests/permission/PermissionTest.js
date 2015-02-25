@@ -291,7 +291,7 @@ describe("Permission Tests", function() {
 
   describe("ways to view permissions sytems", function() {
 
-    xit("should present a view that is implicational like PHPMyAdmin", function() {
+    it("should present a view that is implicational like PHPMyAdmin", function() {
       var permissions = new Permissions();
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
@@ -318,117 +318,126 @@ describe("Permission Tests", function() {
       expect(permissions.viewAsDataBasePermissionSystem.writers.length).toEqual(15);
       expect(permissions.viewAsDataBasePermissionSystem.readers.length).toEqual(0);
       expect(permissions.viewAsDataBasePermissionSystem.commenters.length).toEqual(0);
-
     });
 
 
-    it("should be able to build custom groups ", function() {
-      var permissions = new Permissions();
-      permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
-      expect(permissions.admins).toBeDefined();
-      expect(permissions.admins.length).toEqual(2);
-      expect(permissions.admins.map(function(user) {
-        return user.username;
-      })).toEqual(["linus", "rplyrde"]);
+    describe("syntactic sugar for groups", function() {
 
-      var myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles();
-      expect(permissions.bugMessage).toBeDefined();
-      expect(permissions.bugMessage).toContain("must supply the roles you want");
+      it("should be able to build custom groups ", function() {
+        var permissions = new Permissions();
+        permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
-      delete permissions.bugMessage;
-      myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles("admin", "writer");
-      expect(permissions.bugMessage).toBeDefined();
-      expect(permissions.bugMessage).toContain("must supply an array of the roles you want");
+        expect(permissions.admins).toBeDefined();
+        expect(permissions.admins.length).toEqual(2);
+        expect(permissions.admins.map(function(user) {
+          return user.username;
+        })).toEqual(["linus", "rplyrde"]);
 
-      delete permissions.bugMessage;
-      myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["admin"], []);
-      expect(permissions.bugMessage).toBeUndefined();
-      expect(myCustomGroup.length).toEqual(permissions.admins.length);
+        var myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles();
+        expect(permissions.bugMessage).toBeDefined();
+        expect(permissions.bugMessage).toContain("must supply the roles you want");
 
-      myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["admin"], ["writer", "reader"]);
-      expect(myCustomGroup.length).toEqual(1);
+        delete permissions.bugMessage;
+        myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles("admin", "writer");
+        expect(permissions.bugMessage).toBeDefined();
+        expect(permissions.bugMessage).toContain("must supply an array of the roles you want");
 
-      myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader"], ["writers"]);
-      expect(myCustomGroup.length).toEqual(0);
+        delete permissions.bugMessage;
+        myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["admin"], []);
+        expect(permissions.bugMessage).toBeUndefined();
+        expect(myCustomGroup.length).toEqual(permissions.admins.length);
 
-      myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "writer"], ["admin"]);
-      expect(myCustomGroup.length).toEqual(15);
+        myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["admin"], ["writer", "reader"]);
+        expect(myCustomGroup.length).toEqual(1);
 
-    });
+        myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader"], ["writers"]);
+        expect(myCustomGroup.length).toEqual(0);
 
-    it("should present a view that is like grouped ", function() {
-      // Load the field methods group sample corpus team
-      var permissions = new Permissions();
-      permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
+        myCustomGroup = permissions.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "writer"], ["admin"]);
+        expect(myCustomGroup.length).toEqual(15);
 
-      expect(permissions.admins.users.linus).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.adminOnlys).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.adminOnlys.length).toEqual(1);
-      expect(permissions.viewAsGroupedPermissionSystem.adminOnlys._collection[0].username).toEqual("linus");
+      });
 
-      // it should be fast
-      // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(1); //admin only
-      // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(7); //writer only and above
-      // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(13); //reader only and above
-      // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(40); //readerCommenter only and above
-      // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(47); //readerCommenterWriter only and above
-      expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(60); //commentOnly only and above
+      it("should be able to show groups that could happen in a field methods class", function() {
+        var permissions = new Permissions();
+        permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
+
+        expect(permissions.admins.users.linus).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.adminOnlys).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.adminOnlys.length).toEqual(1);
+        expect(permissions.viewAsGroupedPermissionSystem.adminOnlys._collection[0].username).toEqual("linus");
+
+        // it should be fast
+        // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(1); //admin only
+        // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(7); //writer only and above
+        // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(13); //reader only and above
+        // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(40); //readerCommenter only and above
+        // expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(47); //readerCommenterWriter only and above
+        expect(Date.now() - permissions._adminOnlys.timestamp).toBeLessThan(60); //commentOnly only and above
+      });
+
+      it("should be able to show groups that could happen in an experiment team ", function() {
+        permissions = new Permissions();
+        permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[4].users)));
+
+        expect(permissions.writers.users.public).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.writeOnlys).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.writeOnlys.length).toEqual(1);
+        expect(permissions.viewAsGroupedPermissionSystem.writeOnlys._collection[0].username).toEqual("public");
+      });
+
+      it("should be able to show groups that could happen in a browseable language learning corpus ", function() {
+        permissions = new Permissions();
+        permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[3].users)));
+
+        expect(permissions.readers.users.public).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.readOnlys).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.readOnlys.length).toEqual(1);
+        expect(permissions.viewAsGroupedPermissionSystem.readOnlys._collection[0].username).toEqual("public");
+      });
+
+      it("should be able to show groups that could happen in a research team with consultants ", function() {
+        permissions = new Permissions();
+        permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[1].users)));
+        // permissions.debugMode = true;
+
+        expect(permissions.readers.users.irakli).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.readerCommenterOnlys).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.readerCommenterOnlys.length).toEqual(1);
+        expect(permissions.viewAsGroupedPermissionSystem.readerCommenterOnlys._collection[0].username).toEqual("irakli");
+
+        expect(permissions.commenters.users.qaxa).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.commentOnlys).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.commentOnlys.length).toEqual(1);
+        expect(permissions.viewAsGroupedPermissionSystem.commentOnlys._collection[0].username).toEqual("qaxa");
+
+        expect(permissions.viewAsGroupedPermissionSystem.readerWriters).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.readerWriters.length).toEqual(3);
+        expect(permissions.viewAsGroupedPermissionSystem.readerWriters.map(function(user) {
+          return user.username;
+        })).toEqual(["estita", "tariattgeladze", "tatiik"]);
+      });
 
 
-      // // Load the psycholing experiment sample corpus team
-      permissions = new Permissions();
-      permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[4].users)));
+      it("should be able to show groups whta could happen in a research team with RAs ", function() {
+        permissions = new Permissions();
+        permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[2].users)));
 
-      expect(permissions.writers.users.public).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.writeOnlys).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.writeOnlys.length).toEqual(1);
-      expect(permissions.viewAsGroupedPermissionSystem.writeOnlys._collection[0].username).toEqual("public");
-
-      // Load the language learning sample corpus team
-      permissions = new Permissions();
-      permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[3].users)));
-
-      expect(permissions.readers.users.public).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.readOnlys).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.readOnlys.length).toEqual(1);
-      expect(permissions.viewAsGroupedPermissionSystem.readOnlys._collection[0].username).toEqual("public");
-
-      // Load the research team with external collaborators sample corpus team
-      permissions = new Permissions();
-      permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[1].users)));
-
-      expect(permissions.readers.users.irakli).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.readerCommenterOnlys).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.readerCommenterOnlys.length).toEqual(1);
-      expect(permissions.viewAsGroupedPermissionSystem.readerCommenterOnlys._collection[0].username).toEqual("irakli");
-
-      expect(permissions.commenters.users.qaxa).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.commentOnlys).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.commentOnlys.length).toEqual(1);
-      expect(permissions.viewAsGroupedPermissionSystem.commentOnlys._collection[0].username).toEqual("qaxa");
-
-      expect(permissions.viewAsGroupedPermissionSystem.readerWriters).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.readerWriters.length).toEqual(3);
-      expect(permissions.viewAsGroupedPermissionSystem.readerWriters.map(function(user) {
-        return user.username;
-      })).toEqual(["estita", "tariattgeladze", "tatiik"]);
-
-      // Load the research team which has a few RAs
-      permissions = new Permissions();
-      permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[2].users)));
-
-      expect(permissions.admins.users.tarai).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.admins).toBeDefined();
-      expect(permissions.viewAsGroupedPermissionSystem.admins.length).toEqual(3);
-      expect(permissions.viewAsGroupedPermissionSystem.admins.map(function(user) {
-        return user.username;
-      })).toEqual(["tarai", "lizzaicarolan", "lyisabailig"]);
+        expect(permissions.admins.users.tarai).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.admins).toBeDefined();
+        expect(permissions.viewAsGroupedPermissionSystem.admins.length).toEqual(3);
+        expect(permissions.viewAsGroupedPermissionSystem.admins.map(function(user) {
+          return user.username;
+        })).toEqual(["tarai", "lizzaicarolan", "lyisabailig"]);
+      });
 
     });
 
     xit("should present a view that is like github like", function() {
-      var permissions = new Permissions();
+      var permissions = new Permissions({
+        debugMode: true
+      });
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
       expect(permissions.viewAsEmailingTeamPermissionSystem.contributors).toBeDefined();
