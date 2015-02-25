@@ -1,7 +1,7 @@
 var Permissions = require("./../../api/permission/Permissions").Permissions;
 var SAMPLE_v1_PERMISSIONS_SYSTEMS = require("./../../sample_data/permissions_v1.22.1.json");
 describe("Permission Tests", function() {
-  xdescribe("construction", function() {
+  describe("construction", function() {
     var permissions;
 
     beforeEach(function() {
@@ -57,7 +57,7 @@ describe("Permission Tests", function() {
       expect(permissions.currentPermissions).toEqual(["admins", "writers", "readers", "commenters", "exporters"]);
     });
 
-    xdescribe("adding users", function() {
+    describe("adding users", function() {
       var permissions;
 
       beforeEach(function() {
@@ -134,7 +134,7 @@ describe("Permission Tests", function() {
 
 
 
-  xdescribe("sample permissions", function() {
+  describe("sample permissions", function() {
 
     it("should have a few examples", function() {
       expect(SAMPLE_v1_PERMISSIONS_SYSTEMS).toBeDefined();
@@ -150,7 +150,7 @@ describe("Permission Tests", function() {
 
 
 
-  xdescribe("support field methods corpora", function() {
+  describe("support field methods corpora", function() {
 
     it("should populate from a field linguistics course permissions", function() {
       var permissions = new Permissions({
@@ -193,7 +193,7 @@ describe("Permission Tests", function() {
   });
 
 
-  xdescribe("support research & language community team corpora", function() {
+  describe("support research & language community team corpora", function() {
     var permissions;
     beforeEach(function() {
       permissions = new Permissions({
@@ -209,7 +209,7 @@ describe("Permission Tests", function() {
       expect(permissions.admins.users.toJSON()[0].username).toEqual("linus");
 
       expect(permissions.writers).toBeDefined();
-      expect(permissions.writers.users.length).toEqual(5);
+      expect(permissions.writers.users.length).toEqual(4);
       expect(permissions.writers.users.toJSON()[0].username).toEqual("estita");
 
       expect(permissions.readers).toBeDefined();
@@ -217,7 +217,7 @@ describe("Permission Tests", function() {
       expect(permissions.readers.users.toJSON()[0].username).toEqual("estita");
 
       expect(permissions.commenters).toBeDefined();
-      expect(permissions.commenters.users.length).toEqual(1);
+      expect(permissions.commenters.users.length).toEqual(6);
     });
 
     it("should accept new permissions", function() {
@@ -230,7 +230,7 @@ describe("Permission Tests", function() {
 
   });
 
-  xdescribe("support crowdsourcing language lession corpora", function() {
+  describe("support crowdsourcing language lession corpora", function() {
     it("should populate from a field linguistics course permissions", function() {
       var permissions = new Permissions({
         // debugMode: true
@@ -258,7 +258,7 @@ describe("Permission Tests", function() {
 
   });
 
-  xdescribe("support pyscholinguistics corpora", function() {
+  describe("support pyscholinguistics corpora", function() {
 
 
     it("should populate from a psycholinguistics corpus permissions", function() {
@@ -291,7 +291,7 @@ describe("Permission Tests", function() {
 
   describe("ways to view permissions sytems", function() {
 
-    xit("should present a view that is implicational like PHPMyAdmin", function() {
+    it("should present a view that is implicational like PHPMyAdmin", function() {
       var permissions = new Permissions();
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
@@ -322,7 +322,7 @@ describe("Permission Tests", function() {
 
 
 
-    xdescribe("syntactic sugar for groups", function() {
+    describe("syntactic sugar for groups", function() {
 
       it("should be able to build custom groups ", function() {
         var permissions = new Permissions();
